@@ -1,6 +1,16 @@
 2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/reports/filterdialog.js,
+	src/html/classic/ng/src/web/reports/importdialog.js,
+	src/html/classic/ng/src/web/reports/reportspage.js,
+	src/html/classic/ng/src/web/reports/row.js,
+	src/html/classic/ng/src/web/reports/table.js: Add reports page by using the
+	new entities components.
+
+2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/actions.js,
 	src/html/classic/ng/src/web/entities/container.js,
 	src/html/classic/ng/src/web/entities/page.js,
