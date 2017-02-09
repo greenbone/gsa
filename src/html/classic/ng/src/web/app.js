@@ -52,6 +52,8 @@ import ResultsPage from './results/resultspage.js';
 
 import NotesPage from './notes/notespage.js';
 
+import ReportsPage from './reports/reportspage.js';
+
 import './css/gsa-base.css';
 
 const gmp = new Gmp(window.config);
@@ -137,6 +139,8 @@ ReactDOM.render(
         <Route path="results" component={ResultsPage} onEnter={is_logged_in}/>
         <Route path="notes" component={NotesPage} onEnter={is_logged_in}/>
         <Route path="overrides" component={OverridesPage}
+          onEnter={is_logged_in}/>
+        <Route path="reports" component={ReportsPage}
           onEnter={is_logged_in}/>
         <Route path="dashboards/scans" component={ScansPage}
           onEnter={is_logged_in}/>

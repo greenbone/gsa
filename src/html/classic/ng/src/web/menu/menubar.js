@@ -45,8 +45,13 @@ export const MenuBar = (props, context) => {
     return null;
   }
 
-  let may_op_scans = caps.mayOp('get_tasks') || caps.mayOp('get_reports') ||
-    caps.mayOp('get_results') || caps.mayOp('get_overrides');
+  const may_op_tasks = caps.mayOp('get_tasks');
+  const may_op_reports = caps.mayOp('get_reports');
+  const may_op_results = caps.mayOp('get_results');
+  const may_op_overrides = caps.mayOp('get_overrides');
+
+  const may_op_scans = may_op_tasks || may_op_reports || may_op_results ||
+    may_op_overrides;
   return (
     <Sticky className="menubar">
       <ul>
@@ -65,7 +70,7 @@ export const MenuBar = (props, context) => {
           <Menu title={_('Scans')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/scans"/>
             <MenuEntry section title={_('Tasks')} to="tasks" caps="get_tasks"/>
-            <MenuEntry legacy title={_('Reports')} cmd="get_reports"
+            <MenuEntry legacy title={_('Reports')} to="reports"
               caps="get_reports"/>
             <MenuEntry legacy title={_('Results')} to="results"
               caps="get_results"/>
