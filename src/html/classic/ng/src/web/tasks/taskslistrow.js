@@ -28,6 +28,7 @@ import {is_defined, is_empty} from '../../utils.js';
 
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
+import Link from '../link.js';
 import SeverityBar from '../severitybar.js';
 import StatusBar from '../statusbar.js';
 
@@ -313,21 +314,19 @@ export class TasksListRow extends EntityListRow {
         <td>
           {task.report_count.total > 0 &&
             <span>
-              <LegacyLink cmd="get_reports" replace_task_id="1"
-                filter={'task_id=' + task.id +
-                  ' and status=Done sort-reverse=date'}
-                filt_id="-2"
+              <Link to={'reports?replace_task_id=1&' +
+                'filter=task_id=' + task.id + ' and status=Done ' +
+                'sort-reverse=date&filt_id=-2'}
                 title={_('View list of all finished reports for Task {{name}}',
                   {name: task.name})}>
                 {task.report_count.finished}
-              </LegacyLink>
-              (<LegacyLink cmd="get_reports" replace_task_id="1"
-                filter={'task_id=' + task.id + ' sort-reverse=date'}
-                filt_id="-2"
+              </Link>
+              (<Link to={'reports?replace_task_id=1&' +
+                'filter=task_id=' + task.id + ' sort-reverse=date&filt_id=-2'}
                 title={_('View list of all reports for Task {{name}},' +
                   ' including unfinished ones', {name: task.name})}>
                 {task.report_count.total}
-              </LegacyLink>)
+              </Link>)
             </span>
           }
         </td>
