@@ -25,25 +25,37 @@ import {for_each, is_string, is_defined, parse_int} from '../../utils.js';
 
 import Model from '../model.js';
 
-function parse_boolean_int(value) {
-  return parse_int(value) >= 1 ? 1 : 0;
+function convert_boolean_int(keyword, value, relation) {
+  return {keyword, value: parse_int(value) >= 1 ? 1 : 0, relation};
+}
+
+function convert_int(keyword, value, relation) {
+  return {keyword, value: parse_int(value), relation};
+}
+
+function convert_no_relation(keyword, value, relation) {
+  return {keyword, value, relation: ''};
 }
 
 const CONVERTERS = {
-  min_qod: parse_int,
-  apply_overrides: parse_boolean_int,
-  rows: parse_int,
-  first: parse_int,
-  autofp: parse_int,
+  min_qod: convert_int,
+  apply_overrides: convert_boolean_int,
+  rows: convert_int,
+  first: convert_int,
+  autofp: convert_int,
+  and: convert_no_relation,
+  or: convert_no_relation,
+  re: convert_no_relation,
+  regexp: convert_no_relation,
+  not: convert_no_relation,
 };
 
-function convert(key, value) {
-  let converter = CONVERTERS[key];
+function convert(keyword, value, relation) {
+  let converter = CONVERTERS[keyword];
   if (is_defined(converter)) {
-    let val = converter(value);
-    return val;
+    return converter(keyword, value, relation);
   }
-  return value;
+  return {value, keyword, relation};
 }
 
 const RELATIONS = [
@@ -130,9 +142,10 @@ class FilterTerm {
     for (let rel of RELATIONS) {
       if (termstring.includes(rel)) {
         let index = termstring.indexOf(rel);
-        let keyword = termstring.slice(0, index);
-        let value = convert(keyword, termstring.slice(index + 1));
-        return new FilterTerm(keyword, value, rel);
+        let key = termstring.slice(0, index);
+        let {value, keyword, relation} = convert(key,
+          termstring.slice(index + 1), rel);
+        return new FilterTerm(keyword, value, relation);
       }
     }
     return new FilterTerm(termstring);
@@ -304,18 +317,19 @@ export class Filter extends Model {
       for_each(elem.keywords.keyword, keyword => {
 
         let key = keyword.column;
-        let value;
+        let relation = keyword.relation;
+        let value = keyword.value;
 
         if (is_string(key) && key.length === 0) {
-          key = keyword.value;
+          key = value;
           value = '';
         }
-        else {
-          value = convert(key, keyword.value);
-        }
+
+        let converted = convert(key, value, relation);
 
         if (is_string(key) && key.length > 0) {
-          this.addTerm(new FilterTerm(key, value, keyword.relation));
+          this.addTerm(new FilterTerm(converted.keyword, converted.value,
+            converted.relation));
         }
       });
       delete elem.keywords;
