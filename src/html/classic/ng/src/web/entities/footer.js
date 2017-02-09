@@ -87,13 +87,10 @@ export const EntitiesFooter = props => {
 };
 
 EntitiesFooter.propTypes = {
-  span: PropTypes.number,
+  span: PropTypes.number.isRequired,
   selection: React.PropTypes.bool,
   selectionType: React.PropTypes.string,
-  download: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.string,
-  ]),
+  download: PropTypes.stringOrFalse,
   delete: React.PropTypes.bool,
   trash: React.PropTypes.bool,
   onSelectionTypeChange: React.PropTypes.func,

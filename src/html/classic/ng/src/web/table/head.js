@@ -25,6 +25,7 @@ import React from 'react';
 
 import {is_defined} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
 import Sort from '../sortby.js';
 
 export const TableHead = props => {
@@ -47,10 +48,7 @@ export const TableHead = props => {
 
 TableHead.propTypes = {
   width: React.PropTypes.string,
-  sortby: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.oneOf([false]),
-  ]),
+  sortby: PropTypes.stringOrFalse,
   onSortChange: React.PropTypes.func,
 };
 

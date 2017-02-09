@@ -54,6 +54,11 @@ export const yesno = React.PropTypes.oneOf([
 
 export const id = React.PropTypes.string; // TODO improve checking for uuid
 
+export const stringOrFalse = React.PropTypes.oneOfType([
+  React.PropTypes.string,
+  React.PropTypes.oneOf([false]),
+]);
+
 export default {
   component,
   componentOrFalse,
@@ -61,6 +66,7 @@ export default {
   number,
   icon,
   id,
+  stringOrFalse,
   yesno,
 };
 
