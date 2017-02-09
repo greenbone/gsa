@@ -48,6 +48,8 @@ import {SSH_CREDENTIAL_TYPES, SMB_CREDENTIAL_TYPES, ESXI_CREDENTIAL_TYPES,
 import CredentialsDialog from '../credentials/dialog.js';
 import PortListsDialog from '../portlists/dialog.js';
 
+import PromiseFactory from '../../gmp/promise.js';
+
 const log = logger.getLogger('web.targets.dialog');
 
 const DEFAULT_PORT_LIST_ID = 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5';
@@ -92,7 +94,7 @@ export class TargetDialog extends Dialog {
 
     // load all data and show dialog after data is loaded
 
-    gmp.promise.all([
+    PromiseFactory.all([
       gmp.portlists.get(),
       gmp.credentials.get(),
     ]).then(([port_lists, credentials]) => {

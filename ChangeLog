@@ -1,3 +1,8 @@
+2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/targets/dialog.js: Fix opening Targets dialog.
+	gmp.promise got replaced by PromiseFactory.
+
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/tasks.js: Set comment to empty string
