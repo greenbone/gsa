@@ -171,4 +171,11 @@ export function render_nvt_name(nvt) {
   );
 }
 
+export function render_component(Component, props = {}) {
+  if (Component) {
+    return <Component {...props}/>;
+  }
+  return null;
+}
+
 // vim: set ts=2 sw=2 tw=80:
