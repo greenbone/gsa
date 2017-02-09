@@ -1,5 +1,20 @@
 2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/actions.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/entities/row.js,
+	src/html/classic/ng/src/web/entities/table.js: Add new base components for
+	entities list pages. These components will not use inheritence anymore.
+	Instead composition with higher order components is used. This allows much
+	more flexibility by sticking individual components together and moves (nearly)
+	all state to the top. State information is passed down the component tree as
+	properties. The downside of this approach is in more rendering cycles when
+	state has changed.
+
+2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/render.js: Add helper function to render a
 	component.
 
