@@ -242,10 +242,8 @@ export class TaskDialog extends Dialog {
   onTargetIdChange(value) {
     let {task} = this.state;
 
-    if (task) {
-      if (task.isContainer() || !task.isAlterable()) {
-        value = 0;
-      }
+    if (task && (task.isContainer() || !task.isAlterable())) {
+      value = 0;
     }
     log.debug('on targetid change', value);
     this.setState({target_id: value});
@@ -466,7 +464,7 @@ export class TaskDialog extends Dialog {
           <YesNoRadio
             name="alterable"
             value={alterable}
-            disabled={!task.isNew()}
+            disabled={task && !task.isNew()}
             onChange={this.onValueChange}/>
         </FormGroup>
 

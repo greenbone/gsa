@@ -67,6 +67,7 @@ export class TasksPage extends EntitiesListPage {
 
     this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
     this.showContainerTaskDialog = this.showContainerTaskDialog.bind(this);
+    this.showTaskDialog = this.showTaskDialog.bind(this);
   }
 
   handleSaveContainerTask(data) {
@@ -95,6 +96,10 @@ export class TasksPage extends EntitiesListPage {
     }, {
       title: task ? _('Edit Container Task') : _('New Container Task'),
     });
+  }
+
+  showTaskDialog() {
+    this.create_dialog.show();
   }
 
   renderFooter() {
@@ -184,7 +189,7 @@ export class TasksPage extends EntitiesListPage {
           <span>
             <TaskWizard ref={ref => this.task_wizard = ref}
               onSave={this.reload}
-              onNewClick={() => this.create_dialog.show()}/>
+              onNewClick={this.showTaskDialog}/>
             <AdvancedTaskWizard ref={ref => this.advanced_task_wizard = ref}
               onSave={this.reload}/>
             <ModifyTaskWizard ref={ref => this.modify_task_wizard = ref}
@@ -231,9 +236,9 @@ export class TasksPage extends EntitiesListPage {
 
         {caps.mayCreate('task') &&
           <IconMenu img="new.svg" size="small"
-            onClick={this.showContainerTaskDialog}>
+            onClick={this.showTaskDialog}>
             <MenuEntry title={_('New Task')}
-              onClick={() => { this.create_dialog.show(); }}/>
+              onClick={this.showTaskDialog}/>
             <MenuEntry title={_('New Container Task')}
               onClick={this.showContainerTaskDialog}/>
           </IconMenu>

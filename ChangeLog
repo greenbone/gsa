@@ -1,5 +1,13 @@
 2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Fix opening the Task create
+	dialog. Show task create dialog when clicking on the new icon at the tasks
+	list page. Move opening the task create dialog into an own function instead of
+	using several arrow functions.
+
+2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/targets/dialog.js: Fix opening Targets dialog.
 	gmp.promise got replaced by PromiseFactory.
 
