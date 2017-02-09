@@ -47,7 +47,10 @@ export const TableHead = props => {
 
 TableHead.propTypes = {
   width: React.PropTypes.string,
-  sortby: React.PropTypes.string,
+  sortby: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.oneOf([false]),
+  ]),
   onSortChange: React.PropTypes.func,
 };
 

@@ -1,5 +1,10 @@
 2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/table/head.js: Allow to disable sort in
+	TableHead components without complaining about wrong property type.
+
+2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/table/head.js: Add sorting directly into the
 	TableHead component.
 
