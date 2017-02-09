@@ -37,6 +37,8 @@ import EntitiesFooter from '../entities/footer.js';
 import IconMenu from '../menu/iconmenu.js';
 import MenuEntry from '../menu/menuentry.js';
 
+import ImportReportDialog from '../reports/importdialog.js';
+
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';
@@ -66,8 +68,10 @@ export class TasksPage extends EntitiesListPage {
     });
 
     this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
+    this.handleImportReport = this.handleImportReport.bind(this);
     this.showContainerTaskDialog = this.showContainerTaskDialog.bind(this);
     this.showTaskDialog = this.showTaskDialog.bind(this);
+    this.showImportReportDialog = this.showImportReportDialog.bind(this);
   }
 
   handleSaveContainerTask(data) {
@@ -82,6 +86,11 @@ export class TasksPage extends EntitiesListPage {
     }
 
     return promise.then(() => this.reload());
+  }
+
+  handleImportReport(data) {
+    let {gmp} = this.context;
+    return gmp.report.import(data).then(() => this.reload());
   }
 
   showContainerTaskDialog(task) {
@@ -100,6 +109,13 @@ export class TasksPage extends EntitiesListPage {
 
   showTaskDialog() {
     this.create_dialog.show();
+  }
+
+  showImportReportDialog(task) {
+    this.import_report_dialog.show({
+      task_id: task.id,
+      tasks: [task],
+    });
   }
 
   renderFooter() {
@@ -176,6 +192,7 @@ export class TasksPage extends EntitiesListPage {
         onDeselected={this.onDeselect}
         onDelete={this.reload}
         onCloned={this.reload}
+        onImportReportClick={this.showImportReportDialog}
         onEditContainerTask={this.showContainerTaskDialog}/>
     );
   }
@@ -206,6 +223,12 @@ export class TasksPage extends EntitiesListPage {
           <ContainerTaskDialog
             ref={ref => this.container_dialog = ref}
             onSave={this.handleSaveContainerTask}/>
+        }
+        {caps.mayCreate('report') &&
+          <ImportReportDialog
+            ref={ref => this.import_report_dialog = ref}
+            newContainerTask={false}
+            onSave={this.handleImportReport}/>
         }
 
         <TaskFilterDialog

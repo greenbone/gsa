@@ -55,6 +55,7 @@ export class TasksListRow extends EntityListRow {
     this.stopTask = this.stopTask.bind(this);
     this.resumeTask = this.resumeTask.bind(this);
     this.reportDate = this.reportDate.bind(this);
+    this.handleImportReportClick = this.handleImportReportClick.bind(this);
   }
 
   reportDate(report) {
@@ -83,6 +84,14 @@ export class TasksListRow extends EntityListRow {
     gmp.resume(this.state.task).then(task => {
       this.setState({task});
     });
+  }
+
+  handleImportReportClick() {
+    let {onImportReportClick} = this.props;
+
+    if (onImportReportClick) {
+      onImportReportClick(this.state.task);
+    }
   }
 
   renderStartButton(task) {
@@ -158,12 +167,15 @@ export class TasksListRow extends EntityListRow {
   }
 
   renderImportButton(task) {
-    if (!task.isContainer()) {
+    let {capabilities} = this.context;
+
+    if (!task.isContainer() || !capabilities.mayCreate('report')) {
       return null;
     }
 
     return (
       <Icon img="upload.svg"
+        onClick={this.handleImportReportClick}
         alt={_('Import Report')}
         title={_('Import Report')}/>
     );
@@ -363,6 +375,7 @@ TasksListRow.propTypes = {
   task: React.PropTypes.object.isRequired,
   onEditContainerTask: React.PropTypes.func,
   onSaveContainerTask: React.PropTypes.func,
+  onImportReportClick: React.PropTypes.func,
 };
 
 export default TasksListRow;
