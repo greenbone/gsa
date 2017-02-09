@@ -1,5 +1,11 @@
 2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/wizard/taskwizard.js: Fix opening the task
+	create dialog from within the task wizard. Event object isn't passed to the
+	Icon onClick handler anymore.
+
+2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/dialog.js,
 	src/html/classic/ng/src/web/tasks/taskspage.js: Fix opening the Task create
 	dialog. Show task create dialog when clicking on the new icon at the tasks

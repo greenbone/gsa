@@ -80,8 +80,7 @@ export class TaskWizard extends Dialog {
       });
   }
 
-  onNewClick(event) {
-    event.preventDefault();
+  onNewClick() {
     if (this.props.onNewClick) {
       this.props.onNewClick();
     }
