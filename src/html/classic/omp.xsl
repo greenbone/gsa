@@ -6523,7 +6523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <div class="form-item">
               <input type="text" name="min_qod" value="70" size="4"
                 class="spinner form-enable-item--in-assets"
-                data-type="float" min="0" max="100"/>
+                data-type="int" min="0" max="100"/>
             </div>
             <div class="form-item">
               <xsl:text>%</xsl:text>
@@ -7332,7 +7332,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="form-item">
             <input type="text" name="min_qod" value="{$min_qod/value}" size="4"
               class="spinner form-enable-item--in-assets"
-              data-type="float" min="0"/>
+              data-type="int" min="0"/>
           </div>
           <div class="form-item">
             <xsl:text>%</xsl:text>
