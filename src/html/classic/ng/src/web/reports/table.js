@@ -29,7 +29,7 @@ import PropTypes from '../proptypes.js';
 import {LabelHigh, LabelMedium, LabelLow, LabelLog, LabelFalsePositive
 } from '../severityclasslabels.js';
 
-import EntitiesFooter from '../entities/footer.js';
+import {createEntitiesFooter} from '../entities/footer.js';
 import {createEntitiesTable} from '../entities/table.js';
 
 import TableHead from '../table/head.js';
@@ -105,16 +105,10 @@ Header.propTypes = {
   onSortChange: React.PropTypes.func,
 };
 
-const Footer = ({onDeleteBulk, ...props}) => {
-  return (
-    <EntitiesFooter
-      {...props}
-      span={10}
-      delete
-      onDeleteClick={onDeleteBulk}
-      />
-  );
-};
+const Footer = createEntitiesFooter({
+  span: 10,
+  delete: true,
+});
 
 Footer.propTypes = {
   onDeleteBulk: React.PropTypes.func,
