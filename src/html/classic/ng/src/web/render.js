@@ -178,4 +178,9 @@ export function render_component(Component, props = {}) {
   return null;
 }
 
+export const withComponentDefaults = (Component, options = {}) => {
+  const CompentWrapper = props => <Component {...options} {...props}/>;
+  return CompentWrapper;
+};
+
 // vim: set ts=2 sw=2 tw=80:
