@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, exclude, includes} from '../../utils.js';
 
+import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import Section from '../section.js';
 import Toolbar from '../toolbar.js';
@@ -167,18 +168,24 @@ export class EntitiesPage extends React.Component {
       this.handleFilterEditClick : undefined;
 
     return (
-      <PowerFilterComponent
-        filter={filter}
-        filters={filters}
-        onEditClick={handler}
-        onCreateClick={onFilterCreateClick}
-        onResetClick={onFilterChanged}
-        onUpdate={onFilterChanged}/>
+      <Layout flex align="end" grow="1">
+        <PowerFilterComponent
+          filter={filter}
+          filters={filters}
+          onEditClick={handler}
+          onCreateClick={onFilterCreateClick}
+          onResetClick={onFilterChanged}
+          onUpdate={onFilterChanged}/>
+      </Layout>
     );
   }
 
   renderToolbarIcons() {
     let {toolBarIcons, ...other} = this.props;
+
+    if (!is_defined(toolBarIcons)) {
+      return null;
+    }
 
     if (React.isValidElement(toolBarIcons)) {
       return toolBarIcons;
