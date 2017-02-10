@@ -117,12 +117,6 @@ class Page extends React.Component {
       <Layout>
         <EntitiesPage
           {...this.props}
-          dashboard={Dashboard}
-          title={_('Reports')}
-          sectionIcon={'report.svg'}
-          filterEditDialog={ReportFilterDialog}
-          toolBarIcons={ToolBarIcons}
-          table={ReportsTable}
           onUploadReportClick={this.openImportDialog}
         />
         <ImportReportDialog
@@ -147,6 +141,13 @@ Page.contextTypes = {
 
 export default withEntitiesContainer(Page, 'reports', {
   filtersFilter: REPORTS_FILTER_FILTER,
+  dashboard: Dashboard,
+  title: _('Reports'),
+  sectionIcon: 'report.svg',
+  filterEditDialog: ReportFilterDialog,
+  toolBarIcons: ToolBarIcons,
+  table: ReportsTable,
+  actions: false,
 });
 
 // vim: set ts=2 sw=2 tw=80:
