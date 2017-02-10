@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -36,6 +37,12 @@ import EntitySelection from './selection.js';
 export const EntityActions = props => {
   let {selectionType, entity, onEntitySelected, onEntityDeselected,
     actionsComponent, ...other} = props;
+
+  if (!is_defined(actionsComponent) &&
+    selectionType !== SelectionType.SELECTION_USER) {
+    return null;
+  }
+
   return (
     <td className="table-actions">
       {selectionType === SelectionType.SELECTION_USER ?
@@ -50,7 +57,7 @@ export const EntityActions = props => {
 };
 
 EntityActions.propTypes = {
-  actionsComponent: PropTypes.component.isRequired,
+  actionsComponent: PropTypes.component,
   entity: React.PropTypes.object,
   selectionType: React.PropTypes.string,
   onEntitySelected: React.PropTypes.func,
