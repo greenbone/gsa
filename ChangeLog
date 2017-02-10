@@ -1,5 +1,11 @@
 2017-02-10 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/footer.js: Allow to deactivate
+	bulk actions and selection component in EntitiesFooter via props.
+	Also introduce withEntitiesFooter and createEntitiesFooter HOCs.
+
+2017-02-10 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/actions.js: Allow to not show action
 	table column at all via EntityActions. This is required for the results page.
 
