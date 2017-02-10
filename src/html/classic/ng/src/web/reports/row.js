@@ -128,7 +128,7 @@ Row.propTypes = {
   links: React.PropTypes.bool,
 };
 
-export default withEntityRow(Row, {actions: Actions});
+export default withEntityRow(Row, Actions);
 
 // vim: set ts=2 sw=2 tw=80:
 

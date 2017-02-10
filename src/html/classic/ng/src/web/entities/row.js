@@ -23,11 +23,19 @@
 
 import React from 'react';
 
-export const withEntityRow = (Component, options = {}) => {
+import {is_defined} from '../../utils.js';
+
+import EntityActions from './actions.js';
+
+export const withEntityRow = (Component, actions, options = {}) => {
+
+  if (!is_defined(actions)) {
+    actions = EntityActions;
+  }
 
   const EntityRowWrapper = props => {
     return (
-      <Component {...options} {...props}/>
+      <Component {...options} actions={actions} {...props}/>
     );
   };
   return EntityRowWrapper;
