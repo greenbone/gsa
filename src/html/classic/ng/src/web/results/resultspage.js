@@ -23,161 +23,50 @@
 
 import React from 'react';
 
-import {is_defined} from '../../utils.js';
 import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
-import Sort from '../sortby.js';
-import SelectionType from '../selectiontype.js';
 
-import EntitiesListPage from '../entities/listpage.js';
-import EntitiesFooter from '../entities/footer.js';
+import {withDashboard} from '../dashboard/dashboard.js';
 
-import Dashboard from '../dashboard/dashboard.js';
+import EntitiesPage from '../entities/page.js';
+import {withEntitiesContainer} from '../entities/container.js';
 
-import Icon from '../icons/icon.js';
-
-import TableRow from '../table/row.js';
-import TableHead from '../table/head.js';
-import TableHeader from '../table/header.js';
+import HelpIcon from '../icons/helpicon.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';
-import ResultsListRow from './resultslistrow.js';
+
+import ResultsTable from './table.js';
 
 import {RESULTS_FILTER_FILTER} from '../../gmp/models/filter.js';
 
-export class ResultsPage extends EntitiesListPage {
+const Dashboard2 = withDashboard(ResultCharts, {
+  'hide-filter-select': true,
+  'config-pref-id': '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e',
+  'default-controllers-string': 'result-by-severity-class|' +
+    'result-by-vuln-words|result-by-cvss',
+  'default-controller-string': 'result-by-cvss',
+});
 
-  constructor(props) {
-    super(props, {
-      name: 'results',
-      icon_name: 'result.svg',
-      download_name: 'results.xml',
-      title: _('Results'),
-      empty_title: _('No results available'),
-      filter_filter: RESULTS_FILTER_FILTER,
-    });
-  }
-
-  renderHeader() {
-    let entities = this.getEntities();
-
-    if (!is_defined(entities)) {
-      return null;
-    }
-
-    let {selection_type} = this.state;
-    return (
-      <TableHeader>
-        <TableRow>
-          <TableHead>
-            <Sort by="vulnerability" onClick={this.onSortChange}>
-              {_('Vulnerability')}
-            </Sort>
-          </TableHead>
-          <TableHead width="5em">
-            <Layout flex align="center">
-              <Sort by="solution_type" onClick={this.onSortChange}>
-                <Icon title={_('Solution type')} img="solution_type.svg"/>
-              </Sort>
-            </Layout>
-          </TableHead>
-          <TableHead width="10em">
-            <Layout flex align="space-between">
-              <Sort by="severity" onClick={this.onSortChange}>
-                {_('Severity')}
-              </Sort>
-            </Layout>
-          </TableHead>
-          <TableHead width="6em">
-            <Sort by="qod" onClick={this.onSortChange}>
-              {_('QoD')}
-            </Sort>
-          </TableHead>
-          <TableHead width="10em">
-            <Sort by="host" onClick={this.onSortChange}>
-              {_('Host')}
-            </Sort>
-          </TableHead>
-          <TableHead width="10em">
-            <Sort by="location" onClick={this.onSortChange}>
-              {_('Location')}
-            </Sort>
-          </TableHead>
-          <TableHead width="20em">
-            <Sort by="created" onClick={this.onSortChange}>
-              {_('Created')}
-            </Sort>
-          </TableHead>
-          {selection_type === SelectionType.SELECTION_USER &&
-            <TableHead width="6em">{_('Actions')}</TableHead>
-          }
-        </TableRow>
-      </TableHeader>
-    );
-  }
-
-  renderFooter() {
-    let {selection_type} = this.state;
-    let span = selection_type === SelectionType.SELECTION_USER ? 8 : 7;
-    return (
-      <EntitiesFooter span={span} download
-        selectionType={selection_type}
-        onDownloadClick={this.onDownloadBulk}
-        onSelectionTypeChange={this.onSelectionTypeChange}>
-      </EntitiesFooter>
-    );
-  }
-
-  renderRows() {
-    let entities = this.getEntities();
-
-    if (!is_defined(entities)) {
-      return null;
-    }
-
-    let {selection_type} = this.state;
-    return entities.map(result => {
-      return (
-        <ResultsListRow key={result.id}
-          result={result}
-          selection={selection_type}
-          onSelected={this.onSelect}
-          onDeselected={this.onDeselect}/>
-      );
-    });
-  }
-
-  renderDashboard() {
-    let {filter} = this.state;
-    return (
-      <Dashboard hide-filter-select
-        filter={filter}
-        config-pref-id="0b8ae70d-d8fc-4418-8a72-e65ac8d2828e"
-        default-controllers-string={'result-by-severity-class|' +
-          'result-by-vuln-words|result-by-cvss'}
-        default-controller-string="result-by-cvss">
-        <ResultCharts filter={filter}/>
-      </Dashboard>
-    );
-  }
-
-  renderFilterDialog() {
-    let {filter} = this.state;
-    return (
-      <ResultsFilterDialog
-        filter={filter}
-        ref={ref => this.filter_dialog = ref}
-        onFilterChanged={this.onFilterUpdate}/>
-    );
-  }
-}
-
-ResultsPage.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+const ToolBarIcons = props => {
+  return (
+    <Layout flex box>
+      <HelpIcon page="reports"/>
+    </Layout>
+  );
 };
 
-export default ResultsPage;
+export default withEntitiesContainer(EntitiesPage, 'results', {
+  filtersFilter: RESULTS_FILTER_FILTER,
+  dashboard: Dashboard2,
+  title: _('Results'),
+  sectionIcon: 'result.svg',
+  toolBarIcons: ToolBarIcons,
+  table: ResultsTable,
+  filterEditDialog: ResultsFilterDialog,
+});
+
+// export default ResultsPage;
 
 // vim: set ts=2 sw=2 tw=80:
