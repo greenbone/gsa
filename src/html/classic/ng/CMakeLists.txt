@@ -129,6 +129,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/actions.js
      ${NG_SRC_DIR}/src/web/entities/container.js
      ${NG_SRC_DIR}/src/web/entities/footer.js
+     ${NG_SRC_DIR}/src/web/entities/header.js
      ${NG_SRC_DIR}/src/web/entities/listpage.js
      ${NG_SRC_DIR}/src/web/entities/listrow.js
      ${NG_SRC_DIR}/src/web/entities/listtable.js
