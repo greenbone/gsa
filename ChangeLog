@@ -1,5 +1,10 @@
 2017-02-10 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/table.js: Use withComponentDefaults for
+	implementing createEntitiesTable HOC.
+
+2017-02-10 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/row.js,
 	src/html/classic/ng/src/web/reports/row.js: Change withEntityRow to take an
 	actions component as second parameter. Also use default EntityActions if

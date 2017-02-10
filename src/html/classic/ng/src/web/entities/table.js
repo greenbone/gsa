@@ -30,6 +30,7 @@ import FootNote from '../footnote.js';
 import Layout from '../layout.js';
 import Pagination from '../pagination.js';
 import PropTypes from '../proptypes.js';
+import {withComponentDefaults} from '../render.js';
 
 import StrippedTable from '../table/stripped.js';
 
@@ -131,14 +132,10 @@ EntitiesTable.propTypes = {
   onSortChange: React.PropTypes.func,
 };
 
-export const createEntitiesTable = (options = {}) => {
+export const withEntitiesTable = withComponentDefaults;
 
-  const EntitiesTableWrapper = props => {
-    return <EntitiesTable {...options} {...props}/>;
-  };
-
-  return EntitiesTableWrapper;
-};
+export const createEntitiesTable = options =>
+  withEntitiesTable(EntitiesTable, options);
 
 
 export default EntitiesTable;
