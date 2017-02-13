@@ -153,12 +153,13 @@ export class NotesPage extends EntitiesListPage {
   renderDashboard() {
     let {filter} = this.state;
     return (
-      <Dashboard hide-filter-select
+      <Dashboard
         filter={filter}
-        config-pref-id="ce7b121-c609-47b0-ab57-fd020a0336f4"
-        default-controllers-string={'note-by-active-days|note-by-created|' +
+        hideFilterSelect
+        configPrefId="ce7b121-c609-47b0-ab57-fd020a0336f4"
+        defaultControllersString={'note-by-active-days|note-by-created|' +
         'note-by-text-words'}
-        default-controller-string="note-by-active-days">
+        defaultControllerString="note-by-active-days">
         <NotesCharts filter={filter}/>
       </Dashboard>
     );

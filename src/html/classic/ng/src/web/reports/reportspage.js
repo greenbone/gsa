@@ -46,11 +46,11 @@ import ReportsTable from './table.js';
 import {REPORTS_FILTER_FILTER} from '../../gmp/models/filter.js';
 
 const Dashboard = withDashboard(ReportCharts, {
-  'hide-filter-select': true,
-  'config-pref-id': 'Äe599bb6b-b95a-4bb2-a6bb-fe8ac69bc071',
-  'default-controllers-string': 'report-by-severity-class|' +
-  'report-by-high-results|report-by-cvss',
-  'default-controller-string': 'report-by-cvss',
+  hideFilterSelect: true,
+  configPrefId: 'Äe599bb6b-b95a-4bb2-a6bb-fe8ac69bc071',
+  defaultControllersString: 'report-by-severity-class|' +
+    'report-by-high-results|report-by-cvss',
+  defaultControllerString: 'report-by-cvss',
 });
 
 const ToolBarIcons = props => {

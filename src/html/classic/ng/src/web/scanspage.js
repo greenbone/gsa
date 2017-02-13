@@ -42,12 +42,12 @@ export const ScansPage = () => {
     <Section title={_('Scans Dashboard')} img="scan.svg"
       extra={<DashboardControls/>}>
       <Dashboard
-        config-pref-id="c7584d7c-649f-4f8b-9ded-9e1dc20f24c8"
-        default-controllers-string={'result-by-severity-class|' +
+        configPrefId="c7584d7c-649f-4f8b-9ded-9e1dc20f24c8"
+        defaultControllersString={'result-by-severity-class|' +
           'report-by-severity-class#task-by-status|report-by-high-results|' +
           'task-by-severity-class'}
-        default-controller-string="task-by-severity-class"
-        max-components="8">
+        defaultControllerString="task-by-severity-class"
+        maxComponents="8">
         <TaskCharts/>
         <ReportCharts/>
         <ResultCharts/>

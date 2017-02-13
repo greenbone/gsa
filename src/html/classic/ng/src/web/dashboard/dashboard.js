@@ -26,6 +26,8 @@ import React from 'react';
 import {is_defined, for_each} from '../../utils.js';
 import logger from '../../log.js';
 
+import PropTypes from '../proptypes.js';
+
 import PromiseFactory from '../../gmp/promise.js';
 
 import './css/dashboard.css';
@@ -44,11 +46,12 @@ export class Dashboard extends React.Component {
     }
 
     let dashboard = new window.gsa.charts.Dashboard(id, undefined, {
-      config_pref_id: this.props['config-pref-id'],
+      config_pref_id: this.props.configPrefId,
       default_heights_string: '280',
-      default_controllers_string: this.props['default-controllers-string'],
-      default_controller_string: this.props['default-controller-string'],
-      hide_filter_select: this.props['hide-filter-select'],
+      default_controllers_string: this.props.defaultControllersString,
+      default_controller_string: this.props.defaultControllerString,
+      hide_filter_select: this.props.hideFilterSelect,
+      max_components: this.props.maxComponents,
       dashboard_controls: '#dashboard-controls',
     });
 
@@ -70,13 +73,13 @@ export class Dashboard extends React.Component {
   componentDidMount() {
     let {gmp} = this.context;
     let {dashboard} = this.state;
-    let pref_id = this.props['config-pref-id'];
+    let pref_id = this.props.configPrefId;
 
     let promises = [
       gmp.user.currentChartPreferences(),
     ];
 
-    if (!this.props['hide-filter-select']) {
+    if (!this.props.hideFilterSelect) {
       promises.push(gmp.filters.get());
     }
 
@@ -127,10 +130,11 @@ Dashboard.childContextTypes = {
 Dashboard.propTypes = {
   id: React.PropTypes.string,
   filter: React.PropTypes.object,
-  'config-pref-id': React.PropTypes.string,
-  'hide-filter-select': React.PropTypes.bool,
-  'default-controller-string': React.PropTypes.string,
-  'default-controllers-string': React.PropTypes.string,
+  configPrefId: React.PropTypes.string,
+  hideFilterSelect: React.PropTypes.bool,
+  defaultControllerString: React.PropTypes.string,
+  defaultControllersString: React.PropTypes.string,
+  maxComponents: PropTypes.number,
 };
 
 Dashboard.defaultProps = {

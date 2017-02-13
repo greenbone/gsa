@@ -180,12 +180,13 @@ export class OverridesPage extends EntitiesListPage {
   renderDashboard() {
     let {filter} = this.state;
     return (
-      <Dashboard hide-filter-select
+      <Dashboard
         filter={filter}
-        config-pref-id="054862fe-0781-4527-b1aa-2113bcd16ce7"
-        default-controllers-string={'override-by-active-days|' +
+        hideFilterSelect
+        configPrefId="054862fe-0781-4527-b1aa-2113bcd16ce7"
+        defaultControllersString={'override-by-active-days|' +
           'override-by-created|override-by-text-words'}
-        default-controller-string="override-by-active-days">
+        defaultControllerString="override-by-active-days">
         <OverridesCharts filter={filter}/>
       </Dashboard>
     );

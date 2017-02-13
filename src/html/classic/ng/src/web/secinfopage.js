@@ -43,12 +43,12 @@ export const SecinfoPage = () => {
     <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
       extra={<DashboardControls/>}>
       <Dashboard
-        config-pref-id="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
-        default-controllers-string={'nvt-by-severity-class|cve-by-created|' +
+        configPrefId="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
+        defaultControllersString={'nvt-by-severity-class|cve-by-created|' +
           'cve-by-severity-class#cert_bund_adv-by-created|' +
           'cert_bund_adv-by-cvss'}
-        default-controller-string="nvt-by-cvss"
-        max-components="8">
+        defaultControllerString="nvt-by-cvss"
+        maxComponents="8">
         <NvtCharts/>
         <OvaldefCharts/>
         <CertBundCharts/>

@@ -41,12 +41,12 @@ import ResultsTable from './table.js';
 
 import {RESULTS_FILTER_FILTER} from '../../gmp/models/filter.js';
 
-const Dashboard2 = withDashboard(ResultCharts, {
-  'hide-filter-select': true,
-  'config-pref-id': '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e',
-  'default-controllers-string': 'result-by-severity-class|' +
+const Dashboard = withDashboard(ResultCharts, {
+  hideFilterSelect: true,
+  configPrefId: '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e',
+  defaultControllersString: 'result-by-severity-class|' +
     'result-by-vuln-words|result-by-cvss',
-  'default-controller-string': 'result-by-cvss',
+  defaultControllerString: 'result-by-cvss',
 });
 
 const ToolBarIcons = props => {
@@ -59,7 +59,7 @@ const ToolBarIcons = props => {
 
 export default withEntitiesContainer(EntitiesPage, 'results', {
   filtersFilter: RESULTS_FILTER_FILTER,
-  dashboard: Dashboard2,
+  dashboard: Dashboard,
   title: _('Results'),
   sectionIcon: 'result.svg',
   toolBarIcons: ToolBarIcons,

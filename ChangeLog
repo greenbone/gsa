@@ -1,3 +1,18 @@
+2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/assetspage.js,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/homepage.js,
+	src/html/classic/ng/src/web/notes/notespage.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js,
+	src/html/classic/ng/src/web/reports/reportspage.js,
+	src/html/classic/ng/src/web/results/resultspage.js,
+	src/html/classic/ng/src/web/scanspage.js,
+	src/html/classic/ng/src/web/secinfopage.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Use camel case properties for
+	Dashboard component. Camel case seem to be more appropriate for react
+	components.
+
 2017-02-10 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,

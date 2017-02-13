@@ -273,12 +273,13 @@ export class TasksPage extends EntitiesListPage {
   renderDashboard() {
     let {filter} = this.state;
     return (
-      <Dashboard hide-filter-select
+      <Dashboard
         filter={filter}
-        config-pref-id="3d5db3c7-5208-4b47-8c28-48efc621b1e0"
-        default-controllers-string={'task-by-severity-class|' +
+        hideFilterSelect
+        configPrefId="3d5db3c7-5208-4b47-8c28-48efc621b1e0"
+        defaultControllersString={'task-by-severity-class|' +
           'task-by-most-high-results|task-by-status'}
-        default-controller-string="task-by-cvss">
+        defaultControllerString="task-by-cvss">
         <TaskCharts filter={filter}/>
       </Dashboard>
     );

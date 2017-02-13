@@ -38,12 +38,12 @@ export const AssetsPage = () => {
     <Section title={_('Assets Dashboard')} img="asset.svg"
       extra={<DashboardControls/>}>
       <Dashboard
-        config-pref-id="0320e0db-bf30-4d4f-9379-b0a022d07cf7"
-        default-controllers-string={'host-by-most-vulnerable|' +
+        configPrefId="0320e0db-bf30-4d4f-9379-b0a022d07cf7"
+        defaultControllersString={'host-by-most-vulnerable|' +
           'host-by-topology|os-by-most-vulnerable#os-by-severity-class|' +
           'host-by-modification-time'}
-        default-controller-string="host-by-severity-class"
-        max-components="8">
+        defaultControllerString="host-by-severity-class"
+        maxComponents="8">
         <HostCharts/>
         <OsCharts/>
       </Dashboard>

@@ -51,11 +51,11 @@ export const Home = () => {
     <Section title={_('Dashboard')} img="dashboard.svg"
       extra={<DashboardControls/>}>
       <Dashboard
-        config-pref-id="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
-        default-controllers-string={'task-by-severity-class|task-by-status#' +
+        configPrefId="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
+        defaultControllersString={'task-by-severity-class|task-by-status#' +
           'cve-by-created|host-by-topology|nvt-by-severity-class'}
-        default-controller-string="task-by-severity-class"
-        max-components="8">
+        defaultControllerString="task-by-severity-class"
+        maxComponents="8">
         <TaskCharts/>
         <ReportCharts/>
         <ResultCharts/>
