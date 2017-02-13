@@ -52,6 +52,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/index.js
      ${NG_SRC_DIR}/src/locale.js
      ${NG_SRC_DIR}/src/log.js
+     ${NG_SRC_DIR}/src/os.js
      ${NG_SRC_DIR}/src/timezones.js
      ${NG_SRC_DIR}/src/utils.js
      ${NG_SRC_DIR}/src/gmp/cache.js
@@ -190,7 +191,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/notes/notespage.js
      ${NG_SRC_DIR}/src/web/notes/noteslistrow.js
      ${NG_SRC_DIR}/src/web/nvts/charts.js
-     ${NG_SRC_DIR}/src/web/os.js
      ${NG_SRC_DIR}/src/web/overrides/charts.js
      ${NG_SRC_DIR}/src/web/overrides/dialog.js
      ${NG_SRC_DIR}/src/web/overrides/overridespage.js
