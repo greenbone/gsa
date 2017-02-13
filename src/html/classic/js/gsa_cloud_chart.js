@@ -127,7 +127,7 @@
     this.color_scale.domain(words);
 
     var generate_link = this.createGenerateLinkFunc(
-        data.column_info.group_columns[0],
+        data.column_info.group_column,
         data.column_info.columns[self.x_field].type,
         data.filter_info);
 

@@ -291,7 +291,7 @@
     var group_field = 'value';
 
     var column_info = {
-      group_columns: ['group_value'],
+      group_column: 'group_value',
       data_columns: ['size_value', 'color_value'],
       text_columns: ['label_value'],
       columns: {},

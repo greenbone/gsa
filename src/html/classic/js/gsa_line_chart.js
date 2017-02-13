@@ -1225,7 +1225,8 @@
     };
 
     var column_info = new_data.column_info;
-    column_info.group_columns = old_data.column_info.group_columns;
+    column_info.group_column = old_data.column_info.group_column;
+    column_info.subgroup_column = old_data.column_info.subgroup_column;
     column_info.data_columns = old_data.column_info.data_columns;
     column_info.columns = {};
 
@@ -1350,19 +1351,24 @@
 
         for (field in old_data.records[data_index]) {
           if (field !== self.t_field) {
+            var field_column_data = column_info.columns[field];
+
+            if (field.indexOf('value[') == 0)
+              field_column_data = column_info.columns['subgroup_value'];
+
             if (!gsa.is_defined(values[field])) {
               values[field] = old_data.records[data_index][field];
             }
-            else if (column_info.columns[field].stat === 'sum' ||
-                column_info.columns[field].stat === 'count') {
+            else if (field_column_data.stat === 'sum' ||
+                field_column_data.stat === 'count') {
               values[field] += Number(old_data.records[data_index][field]);
             }
-            else if (column_info.columns[field].stat === 'min') {
+            else if (field_column_data.stat === 'min') {
               values[field] = Math.min(values[field],
                   Number(old_data.records[data_index][field]));
             }
-            else if (column_info.columns[field].stat === 'max' ||
-                column_info.columns[field].stat === 'c_count') {
+            else if (field_column_data.stat === 'max' ||
+                field_column_data.stat === 'c_count') {
               values[field] = Math.max(values[field],
                   Number(old_data.records[data_index][field]));
             }

@@ -1,3 +1,25 @@
+2017-02-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_bubble_chart.js (simple_bubble_data): Replace
+	group_columns array with single group_column string.
+
+	* src/html/classic/js/gsa_chart_helpers.js (field_name_colors)
+	(extract_column_info, extract_column_info_json)
+	(data_quantile_histogram, data_severity_histogram)
+	(data_severity_level_counts, resource_type_counts)
+	(qod_type_counts, percentage_counts): Replace group_columns and
+	subgroup_columns arrays with single strings group_column and
+	subgroup_column.
+
+	* src/html/classic/js/gsa_cloud_chart.js
+	(CloudChartGenerator.prototype.generate): Replace group_columns array
+	with single group_column string.
+
+	* src/html/classic/js/gsa_line_chart.js
+	(LineChartGenerator.prototype.timeLine): Replace group_columns array
+	with single group_column string and also copy subgroup_column.  Add
+	special case for subgroup column values.
+
 2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/reports/reportspage.js: Re-enable reports page

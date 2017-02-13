@@ -254,9 +254,9 @@
     var scale = d3.scale.ordinal();
     var subgroup_scale;
 
-    if (column_info.group_columns && column_info.group_columns[1]) {
+    if (gsa.is_defined(column_info.subgroup_column)) {
       var type = column_info.columns.subgroup_value.type;
-      var column = column_info.group_columns[1];
+      var column = column_info.subgroup_column;
       subgroup_scale = gch.field_color_scale(type, column);
     }
 
@@ -586,8 +586,8 @@
    */
   gch.extract_column_info = function(xml_data, gen_params) {
     var column_info = {
-      group_columns: [],
-      subgroup_columns: [],
+      group_column: undefined,
+      subgroup_column: undefined,
       data_columns: [],
       text_columns: [],
       columns: {},
@@ -643,11 +643,19 @@
     }
 
     xml_data.selectAll('aggregate group_column').each(function() {
-      column_info.group_columns.push(d3.select(this).text());
+      if (column_info.group_column === undefined) {
+        column_info.group_column = d3.select(this).text();
+      } else {
+        console.warn('More than one group_column found');
+      }
     });
 
     xml_data.selectAll('aggregate subgroup_column').each(function() {
-      column_info.group_columns.push(d3.select(this).text());
+      if (column_info.subgroup_column === undefined) {
+        column_info.subgroup_column = d3.select(this).text();
+      } else {
+        console.warn('More than one subgroup_column found');
+      }
     });
 
     xml_data.selectAll('aggregate data_column').each(function() {
@@ -722,8 +730,8 @@
    */
   gch.extract_column_info_json = function(data, gen_params) {
     var column_info = {
-      group_columns: [],
-      subgroup_columns: [],
+      group_column: undefined,
+      subgroup_column: undefined,
       data_columns: [],
       text_columns: [],
       columns: {},
@@ -760,13 +768,9 @@
       });
     }
 
-    gsa.for_each(data.group_column, function(value) {
-      column_info.group_columns.push(value);
-    });
+    column_info.group_column = data.group_column;
 
-    gsa.for_each(data.subgroup_column, function(value) {
-      column_info.group_columns.push(value);
-    });
+    column_info.subgroup_column = data.subgroup_column;
 
     gsa.for_each(data.data_column, function(value) {
       column_info.data_columns.push(value);
@@ -1844,7 +1848,7 @@
     }
 
     var column_info = {
-      group_columns: [value_field],
+      group_column: value_field,
       data_columns: [count_field],
       columns: {}
     };
@@ -1953,7 +1957,7 @@
     }
 
     var column_info = {
-      group_columns: [severity_field],
+      group_column: severity_field,
       data_columns: [count_field],
       columns: {}
     };
@@ -2066,7 +2070,7 @@
     });
 
     var column_info = {
-      group_columns: [severity_field],
+      group_column: severity_field,
       data_columns: [count_field],
       columns: {}
     };
@@ -2150,7 +2154,8 @@
    */
   gch.resource_type_counts = function(old_data, params) {
     var new_column_info = {
-      group_columns: old_data.column_info.group_columns,
+      group_column: old_data.column_info.group_column,
+      subgroup_column: old_data.column_info.subgroup_column,
       data_columns: old_data.column_info.data_columns,
       text_columns: old_data.column_info.text_columns,
       columns: {}
@@ -2213,7 +2218,8 @@
    */
   gch.qod_type_counts = function(old_data, params) {
     var new_column_info = {
-      group_columns: old_data.column_info.group_columns,
+      group_column: old_data.column_info.group_column,
+      subgroup_column: old_data.column_info.subgroup_column,
       data_columns: old_data.column_info.data_columns,
       text_columns: old_data.column_info.text_columns,
       columns: {}
@@ -2315,7 +2321,8 @@
    */
   gch.percentage_counts = function(old_data, params) {
     var new_column_info = {
-      group_columns: old_data.column_info.group_columns,
+      group_column: old_data.column_info.group_column,
+      subgroup_column: old_data.column_info.subgroup_column,
       data_columns: old_data.column_info.data_columns,
       text_columns: old_data.column_info.text_columns,
       columns: {}
