@@ -147,7 +147,6 @@ export default withEntitiesContainer(Page, 'reports', {
   filterEditDialog: ReportFilterDialog,
   toolBarIcons: ToolBarIcons,
   table: ReportsTable,
-  actions: false,
 });
 
 // vim: set ts=2 sw=2 tw=80:
