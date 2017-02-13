@@ -27,20 +27,21 @@ import logger from '../log.js';
 
 import PromiseFactory from './promise.js';
 
-import './commands/tasks.js';
+import './commands/alerts.js';
+import './commands/credentials.js';
+import './commands/filters.js';
+import './commands/hosts.js';
+import './commands/notes.js';
+import './commands/overrides.js';
+import './commands/portlists.js';
 import './commands/reports.js';
+import './commands/results.js';
 import './commands/scanners.js';
 import './commands/schedules.js';
 import './commands/targets.js';
-import './commands/portlists.js';
-import './commands/credentials.js';
-import './commands/alerts.js';
-import './commands/wizard.js';
+import './commands/tasks.js';
 import './commands/users.js';
-import './commands/filters.js';
-import './commands/results.js';
-import './commands/notes.js';
-import './commands/overrides.js';
+import './commands/wizard.js';
 
 import {GmpHttp, TIMEOUT, build_server_url, build_url_params} from './http.js';
 import {get_commands} from './command.js';
