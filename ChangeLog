@@ -1,6 +1,12 @@
 2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/os.js,
+	src/html/classic/ng/src/web/icons/osicon.js: Implement an os icon component.
+
+2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/icons/editicon.js: Add an edit icon component.
 
 2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>

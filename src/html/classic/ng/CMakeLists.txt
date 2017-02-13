@@ -166,6 +166,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/icons/helpicon.js
      ${NG_SRC_DIR}/src/web/icons/icon.js
      ${NG_SRC_DIR}/src/web/icons/newicon.js
+     ${NG_SRC_DIR}/src/web/icons/osicon.js
      ${NG_SRC_DIR}/src/web/icons/trashicon.js
      ${NG_SRC_DIR}/src/web/img.js
      ${NG_SRC_DIR}/src/web/layout.js
@@ -182,6 +183,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/notes/notespage.js
      ${NG_SRC_DIR}/src/web/notes/noteslistrow.js
      ${NG_SRC_DIR}/src/web/nvts/charts.js
+     ${NG_SRC_DIR}/src/web/os.js
      ${NG_SRC_DIR}/src/web/overrides/charts.js
      ${NG_SRC_DIR}/src/web/overrides/dialog.js
      ${NG_SRC_DIR}/src/web/overrides/overridespage.js
