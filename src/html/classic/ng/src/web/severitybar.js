@@ -31,8 +31,7 @@ import {result_cvss_risk_factor, cvss_number_format} from './render.js';
 
 import './css/statusbar.css';
 
-export const SeverityBar = props => {
-  let {severity, scale = 10} = props;
+export const SeverityBar = ({severity, scale = 10}) => {
   let cvss = parse_float(severity);
   let threat = result_cvss_risk_factor(cvss);
   let title = _(threat);
@@ -41,7 +40,7 @@ export const SeverityBar = props => {
   let style = {width: fill + 'px'};
 
   let text;
-  if (cvss < 0) {
+  if (cvss < 0 || isNaN(cvss)) {
     text = title;
   }
   else {
