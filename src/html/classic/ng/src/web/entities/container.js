@@ -63,6 +63,7 @@ class EntitiesContainer extends React.Component {
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleDeleteEntity = this.handleDeleteEntity.bind(this);
     this.handleCloneEntity = this.handleCloneEntity.bind(this);
+    this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
   }
 
@@ -242,6 +243,19 @@ class EntitiesContainer extends React.Component {
     }, err => log.error(err));
   }
 
+  handleDownloadEntity(entity) {
+    let {command} = this;
+    let {gmpname} = this.props;
+
+    let filename = gmpname + '-' + entity.id + '.xml';
+
+    command.export([entity]).then(xhr => {
+      this.download.setFilename(filename);
+      this.download.setData(xhr.responseText);
+      this.download.download();
+    }, err => log.error(err));
+  }
+
   handleSortChange(field) {
     let {filter} = this.state;
 
@@ -279,6 +293,7 @@ class EntitiesContainer extends React.Component {
           onEntitySelected={this.handleSelected}
           onEntityDeselected={this.handleDeselected}
           onEntityDelete={this.handleDeleteEntity}
+          onEntityDownload={this.handleDownloadEntity}
           onEntityClone={this.handleCloneEntity}
         />
         <Download ref={ref => this.download = ref}
