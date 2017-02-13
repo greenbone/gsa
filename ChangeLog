@@ -1,6 +1,16 @@
 2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/hosts/dialog.js,
+	src/html/classic/ng/src/web/hosts/filterdialog.js,
+	src/html/classic/ng/src/web/hosts/hostspage.js,
+	src/html/classic/ng/src/web/hosts/row.js,
+	src/html/classic/ng/src/web/hosts/table.js: Add hosts page. Creating a target
+	from host(s) is still missing.
+
+2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/hosts.js,
 	src/html/classic/ng/src/gmp/gmp.js: Implement gmp api for hosts.
 

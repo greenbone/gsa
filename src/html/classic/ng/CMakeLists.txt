@@ -162,6 +162,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/header.js
      ${NG_SRC_DIR}/src/web/homepage.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
+     ${NG_SRC_DIR}/src/web/hosts/dialog.js
+     ${NG_SRC_DIR}/src/web/hosts/filterdialog.js
+     ${NG_SRC_DIR}/src/web/hosts/hostspage.js
+     ${NG_SRC_DIR}/src/web/hosts/row.js
+     ${NG_SRC_DIR}/src/web/hosts/table.js
      ${NG_SRC_DIR}/src/web/icons/deleteicon.js
      ${NG_SRC_DIR}/src/web/icons/editicon.js
      ${NG_SRC_DIR}/src/web/icons/exporticon.js
