@@ -37,7 +37,7 @@ import SortByGroup from './sortbygroup.js';
 
 import Filter from '../../gmp/models/filter.js';
 
-const DefaultFilterDialogComponent = props => {
+export const DefaultFilterDialog = props => {
 
   let {filter, filterstring, sortFields, onFilterStringChange,
     onFilterValueChange, onSortByChange, onSortOrderChange} = props;
@@ -70,9 +70,9 @@ export const DefaultFilterDialogPropTypes = {
   onFilterStringChange: React.PropTypes.func,
 };
 
-DefaultFilterDialogComponent.propTypes = DefaultFilterDialogPropTypes;
+DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
 
-export const withFilterDialog = FilterDialogComponent => {
+export const withFilterDialog = (FilterDialogComponent, options = {}) => {
   class FilterDialogWrapper extends React.Component {
     constructor(...args) {
       super(...args);
@@ -157,7 +157,7 @@ export const withFilterDialog = FilterDialogComponent => {
           width={800}
           onSaveClick={this.handleSave}>
           {filter &&
-            <FilterDialogComponent {...this.props}
+            <FilterDialogComponent {...options} {...this.props}
               onFilterValueChange={this.onFilterValueChange}
               onFilterStringChange={this.onFilterStringChange}
               onSortOrderChange={this.onSortOrderChange}
@@ -179,7 +179,7 @@ export const withFilterDialog = FilterDialogComponent => {
   return FilterDialogWrapper;
 };
 
-export const FilterDialog = withFilterDialog(DefaultFilterDialogComponent);
+export const FilterDialog = withFilterDialog(DefaultFilterDialog);
 
 export default FilterDialog;
 

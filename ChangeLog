@@ -1,5 +1,10 @@
 2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/powerfilter/dialog.js: Export also the
+	DefaultFilterDialog. Allow to set default properties in withFilterDialog HOC.
+
+2017-02-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/assetspage.js,
 	src/html/classic/ng/src/web/dashboard/dashboard.js,
 	src/html/classic/ng/src/web/homepage.js,
