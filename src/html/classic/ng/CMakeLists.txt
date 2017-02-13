@@ -80,6 +80,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/chartpreferences.js
      ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/filter.js
+     ${NG_SRC_DIR}/src/gmp/models/host.js
      ${NG_SRC_DIR}/src/gmp/models/login.js
      ${NG_SRC_DIR}/src/gmp/models/note.js
      ${NG_SRC_DIR}/src/gmp/models/override.js
