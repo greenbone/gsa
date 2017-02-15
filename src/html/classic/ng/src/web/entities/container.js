@@ -24,7 +24,7 @@
 import React from 'react';
 
 import logger from '../../log.js';
-import {is_defined, exclude, includes} from '../../utils.js';
+import {is_defined, is_array, exclude, includes} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -72,7 +72,23 @@ class EntitiesContainer extends React.Component {
     let filter_string = this.props.location.query.filter;
     let filter;
 
-    this.command = gmp[this.props.gmpname];
+    let {gmpname} = this.props;
+
+    let entity_command_name;
+    let entities_command_name;
+
+    if (is_array(gmpname)) {
+      entity_command_name = gmpname[0];
+      entities_command_name = gmpname[1];
+    }
+    else {
+      entity_command_name = gmpname;
+      entities_command_name  = gmpname + 's';
+    }
+
+    this.entity_command = gmp[entity_command_name];
+    this.entities_command = gmp[entities_command_name];
+
     this.refresh = gmp.globals.refresh;
 
     if (filter_string) {
@@ -89,11 +105,11 @@ class EntitiesContainer extends React.Component {
 
   load(filter, options = {}) {
     let {cache = true, force = false, refresh} = options;
-    let {command} = this;
+    let {entities_command} = this;
 
     this.clearTimer(); // remove possible running timer
 
-    command.get({filter}, {cache, force}).then(entities => {
+    entities_command.get({filter}, {cache, force}).then(entities => {
       filter = entities.getFilter();
 
       this.setState({entities, filter});
@@ -162,18 +178,18 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDownloadBulk(filename = 'export.xml') {
-    let {command} = this;
+    let {entities_command} = this;
     let {selected, selection_type, filter} = this.state;
     let promise;
 
     if (selection_type === SelectionType.SELECTION_USER) {
-      promise = command.export(selected);
+      promise = entities_command.export(selected);
     }
     else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = command.exportByFilter(filter);
+      promise = entities_command.exportByFilter(filter);
     }
     else {
-      promise = command.exportByFilter(filter.all());
+      promise = entities_command.exportByFilter(filter.all());
     }
 
     promise.then(xhr => {
@@ -184,18 +200,18 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDeleteBulk() {
-    let {command} = this;
+    let {entities_command} = this;
     let {selected, selection_type, filter} = this.state;
     let promise;
 
     if (selection_type === SelectionType.SELECTION_USER) {
-      promise = command.delete(selected);
+      promise = entities_command.delete(selected);
     }
     else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise  = command.deleteByFilter(filter);
+      promise  = entities_command.deleteByFilter(filter);
     }
     else {
-      promise  = command.deleteByFilter(filter.all());
+      promise  = entities_command.deleteByFilter(filter.all());
     }
 
     promise.then(deleted => {
@@ -221,30 +237,32 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDeleteEntity(entity) {
-    let {command} = this;
+    let {entity_command} = this;
 
-    command.delete(entity).then(() => {
+    entity_command.delete(entity).then(() => {
       this.reload();
       log.debug('successfully deleted entity', entity);
     }, err => log.error(err));
   }
 
   handleCloneEntity(entity) {
-    let {command} = this;
+    let {entity_command} = this;
 
-    command.clone(entity).then(() => {
+    entity_command.clone(entity).then(() => {
       this.reload();
       log.debug('successfully cloned entity', entity);
     }, err => log.error(err));
   }
 
   handleDownloadEntity(entity) {
-    let {command} = this;
+    let {entities_command} = this;
     let {gmpname} = this.props;
 
-    let filename = gmpname + '-' + entity.id + '.xml';
+    let name = is_array(gmpname) ? gmpname[0] : gmpname;
 
-    command.export([entity]).then(xhr => {
+    let filename = name + '-' + entity.id + '.xml';
+
+    entities_command.export([entity]).then(xhr => {
       this.download.setFilename(filename);
       this.download.setData(xhr.responseText);
       this.download.download();
@@ -268,13 +286,14 @@ class EntitiesContainer extends React.Component {
 
   render() {
     let {filter, filters, entities, selection_type, selected} = this.state;
-    let {command} = this;
+    let {entity_command, entities_command} = this;
     let Component = this.props.component;
     let other = exclude(this.props, key => includes(exclude_props, key));
     return (
       <Layout>
         <Component {...other}
-          command={command}
+          entitiesCommand={entities_command}
+          entityCommand={entity_command}
           entities={entities}
           entitiesSelected={selected}
           filter={filter}
@@ -305,7 +324,10 @@ EntitiesContainer.propTypes = {
   entities: PropTypes.collection,
   filter: PropTypes.filter,
   filtersFilter: PropTypes.filter,
-  gmpname: React.PropTypes.string.isRequired,
+  gmpname: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.arrayOf(React.PropTypes.string),
+  ]).isRequired,
 };
 
 EntitiesContainer.contextTypes = {

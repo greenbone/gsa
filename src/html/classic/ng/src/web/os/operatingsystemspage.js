@@ -58,7 +58,7 @@ const ToolbarIcons = props => {
   );
 };
 
-export default withEntitiesContainer(EntitiesPage, 'operatingsystems', {
+export default withEntitiesContainer(EntitiesPage, 'operatingsystem', {
   dashboard: Dashboard,
   filterEditDialog: OsFilterDialog,
   filtersFilter: ASSETS_FILTER_FILTER,

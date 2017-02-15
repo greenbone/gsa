@@ -27,6 +27,7 @@ import _ from '../../locale.js';
 import {select_save_id} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import {withDashboard} from '../dashboard/dashboard.js';
 
@@ -100,9 +101,8 @@ class Page extends React.Component {
   }
 
   handleDialogSave(data) {
-    let {gmp} = this.context;
-    let {onChanged} = this.props;
-    return gmp.report.import(data).then(() => onChanged());
+    let {entityCommand, onChanged} = this.props;
+    return entityCommand.import(data).then(() => onChanged());
   }
 
   handleCreateContainerTask(data) {
@@ -132,6 +132,7 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
+  entityCommand: PropTypes.entitycommand,
   onChanged: React.PropTypes.func,
 };
 
@@ -139,7 +140,7 @@ Page.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
 
-export default withEntitiesContainer(Page, 'reports', {
+export default withEntitiesContainer(Page, 'report', {
   filtersFilter: REPORTS_FILTER_FILTER,
   dashboard: Dashboard,
   title: _('Reports'),

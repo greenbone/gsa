@@ -177,7 +177,7 @@ Page.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
 
-export default withEntitiesContainer(Page, 'hosts', {
+export default withEntitiesContainer(Page, 'host', {
   filtersFilter: ASSETS_FILTER_FILTER,
   dashboard: Dashboard,
   filterEditDialog: HostsFilterDialog,

@@ -57,7 +57,7 @@ const ToolBarIcons = props => {
   );
 };
 
-export default withEntitiesContainer(EntitiesPage, 'results', {
+export default withEntitiesContainer(EntitiesPage, 'result', {
   filtersFilter: RESULTS_FILTER_FILTER,
   dashboard: Dashboard,
   title: _('Results'),
