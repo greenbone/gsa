@@ -49,6 +49,7 @@ set (NG_SRC_FILES
      ${NG_SRC_DIR}/public/config.js)
 
 set (NG_JS_SRC_FILES
+     ${NG_SRC_DIR}/src/cpe.js
      ${NG_SRC_DIR}/src/index.js
      ${NG_SRC_DIR}/src/locale.js
      ${NG_SRC_DIR}/src/log.js
@@ -169,6 +170,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/hosts/hostspage.js
      ${NG_SRC_DIR}/src/web/hosts/row.js
      ${NG_SRC_DIR}/src/web/hosts/table.js
+     ${NG_SRC_DIR}/src/web/icons/cpeicon.js
      ${NG_SRC_DIR}/src/web/icons/deleteicon.js
      ${NG_SRC_DIR}/src/web/icons/editicon.js
      ${NG_SRC_DIR}/src/web/icons/exporticon.js
