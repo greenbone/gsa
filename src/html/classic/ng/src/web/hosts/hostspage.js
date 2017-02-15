@@ -24,9 +24,11 @@
 import React from 'react';
 
 import  _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import {is_defined, map} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
+import SelectionType from '../selectiontype.js';
 
 import {withDashboard} from '../dashboard/dashboard.js';
 
@@ -35,6 +37,8 @@ import {withEntitiesContainer} from '../entities/container.js';
 
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
+
+import TargetDialogContainer from '../targets/dialogcontainer.js';
 
 import HostsCharts from './charts.js';
 import HostDialog from './dialog.js';
@@ -71,8 +75,10 @@ class Page extends React.Component {
     super(...args);
 
     this.openHostDialog = this.openHostDialog.bind(this);
+    this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
+    this.openCreateTargetSelectionDialog =
+      this.openCreateTargetSelectionDialog.bind(this);
     this.handleSaveHost = this.handleSaveHost.bind(this);
-    this.handleCreateTarget = this.handleCreateTarget.bind(this);
   }
 
   openHostDialog(host) {
@@ -81,6 +87,42 @@ class Page extends React.Component {
       id: is_defined(host) ? host.id : undefined,
       name: is_defined(host) ? host.name : '127.0.0.1',
       comment: is_defined(host) ? host.comment : '',
+    });
+  }
+
+  openCreateTargetDialog(host) {
+    this._openTargetDialog(1, 'uuid=' + host.id);
+  }
+
+  openCreateTargetSelectionDialog() {
+    let {entities, entitiesSelected, selectionType, filter} = this.props;
+
+    let size;
+    let filterstring;
+
+    if (selectionType === SelectionType.SELECTION_USER) {
+      let hosts = [...entitiesSelected]; // convert set to array
+      size = entitiesSelected.size;
+      filterstring = map(hosts, host => 'uuid=' + host.id).join(" ");
+
+    }
+    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      size = entities.length;
+      filterstring = filter.toFilterString();
+    }
+    else {
+      let counts = entities.getCounts();
+      size = counts.filtered;
+      filterstring = filter.all().toFilterString();
+    }
+    this._openTargetDialog(size, filterstring);
+  }
+
+  _openTargetDialog(count, filterstring) {
+    this.target_dialog.show({
+      target_source: 'asset_hosts',
+      hosts_count: count,
+      hosts_filter: filterstring,
     });
   }
 
@@ -98,16 +140,13 @@ class Page extends React.Component {
     return promise.then(() => onChanged());
   }
 
-  handleCreateTarget(host) {
-  }
-
   render() {
     return (
       <Layout>
         <EntitiesPage
           {...this.props}
-          onCreateTargetSelection={this.handleCreateTargetSelection}
-          onCreateTarget={this.handleCreateTarget}
+          onCreateTargetSelection={this.openCreateTargetSelectionDialog}
+          onCreateTarget={this.openCreateTargetDialog}
           onNewHostClick={this.openHostDialog}
           onEditHost={this.openHostDialog}
         />
@@ -115,12 +154,20 @@ class Page extends React.Component {
           ref={ref => this.hosts_dialog = ref}
           onSave={this.handleSaveHost}
         />
+        <TargetDialogContainer
+          ref={ref => this.target_dialog = ref}
+          onSave={this.handleCreateTarget}
+        />
       </Layout>
     );
   }
 }
 
 Page.propTypes = {
+  selectionType: PropTypes.number,
+  entities: PropTypes.collection,
+  entitiesSelected: PropTypes.set,
+  filter: PropTypes.filter,
   onChanged: React.PropTypes.func,
 };
 
