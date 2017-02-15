@@ -6730,8 +6730,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -7819,8 +7819,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="/envelope/params/bulk_select = 1">
             <td style="text-align:center">
-              <label style="width:100%">
-                <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+              <label>
+                <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
               </label>
             </td>
           </xsl:when>
@@ -8594,8 +8594,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -9140,8 +9140,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -11611,8 +11611,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -12676,8 +12676,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -13273,8 +13273,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -15350,8 +15350,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -17855,8 +17855,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -18689,8 +18689,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -19836,8 +19836,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -20106,8 +20106,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -20223,8 +20223,8 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="/envelope/params/bulk_select = 1">
           <td style="text-align:center" rowspan="2">
-            <label style="width:100%">
-              <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+            <label>
+              <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
             </label>
           </td>
         </xsl:when>
@@ -20336,8 +20336,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -20448,8 +20448,8 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="/envelope/params/bulk_select = 1">
           <td style="text-align:center" rowspan="2">
-            <label style="width:100%">
-              <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+            <label>
+              <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
             </label>
           </td>
         </xsl:when>
@@ -20517,8 +20517,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -20571,8 +20571,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -20647,8 +20647,8 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="/envelope/params/bulk_select = 1">
           <td style="text-align:center" rowspan="2">
-            <label style="width:100%">
-              <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+            <label>
+              <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
             </label>
           </td>
         </xsl:when>
@@ -23694,8 +23694,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -24996,8 +24996,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -25442,8 +25442,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -26280,8 +26280,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -27097,8 +27097,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -27861,8 +27861,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -31006,8 +31006,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -33853,8 +33853,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -35335,8 +35335,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -38421,8 +38421,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
@@ -38556,8 +38556,8 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{../@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
+          <label>
+            <input name="bulk_selected:{../@id}" type="checkbox" title="{gsa:i18n ('Select for bulk action')}"/>
           </label>
         </td>
       </xsl:when>
