@@ -1,5 +1,10 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/reports/table.js: Remove obsolete proptypes for
+	Footer.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/targets.js: Implement a TargetsCommand
 	class.
 

@@ -110,10 +110,6 @@ const Footer = createEntitiesFooter({
   delete: true,
 });
 
-Footer.propTypes = {
-  onDeleteBulk: React.PropTypes.func,
-};
-
 export const ReportsTable = createEntitiesTable({
   emptyTitle: _('No reports available'),
   header: Header,
