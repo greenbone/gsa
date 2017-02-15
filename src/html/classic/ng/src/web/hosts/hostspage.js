@@ -45,6 +45,8 @@ import HostDialog from './dialog.js';
 import HostsFilterDialog from './filterdialog.js';
 import HostsTable from './table.js';
 
+import {ASSETS_FILTER_FILTER} from '../../gmp/models/filter.js';
+
 const ToolBarIcons = ({onNewHostClick}) => {
   return (
     <Layout flex box>
@@ -176,6 +178,7 @@ Page.contextTypes = {
 };
 
 export default withEntitiesContainer(Page, 'hosts', {
+  filtersFilter: ASSETS_FILTER_FILTER,
   dashboard: Dashboard,
   filterEditDialog: HostsFilterDialog,
   sectionIcon: 'host.svg',
