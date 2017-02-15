@@ -182,7 +182,7 @@ export class Http {
 
   handleTimeout(resolve, reject, xhr, options) {
     let rej = new Rejection(xhr, 'timeout',
-      _('A timeout for the request to uri {{uri}} occured.',
+      _('A timeout for the request to uri {{uri}} occurred.',
         {uri: options.uri}));
     try {
       reject(this.transformRejection(rej, options));
@@ -262,9 +262,9 @@ export class GmpHttp extends Http {
       return xml2json(xhr.responseXML).envelope;
     }
     catch (error) {
-      log.error('An error occured while converting gmp response to js for ' +
+      log.error('An error occurred while converting gmp response to js for ' +
         'url', this.url, xhr);
-      throw new Rejection(xhr, 'error',  _('An error occured while ' +
+      throw new Rejection(xhr, 'error',  _('An error occurred while ' +
         'converting gmp response to js for uri {{uri}}', {uri: xhr.uri}));
     }
   }
@@ -283,7 +283,7 @@ export class GmpHttp extends Http {
           return rej.setMessage(root.action_result.message);
         }
 
-        return rej.setMessage(_('Unkown Error'));
+        return rej.setMessage(_('Unknown Error'));
       }
     }
     return rej;

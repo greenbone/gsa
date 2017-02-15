@@ -57,7 +57,7 @@ export function scanner_type_name(scanner_type) {
   else if (scanner_type === SLAVE_SCANNER_TYPE) {
     return _('OMP Slave');
   }
-  return _('Unkown type ({{type}})', scanner_type);
+  return _('Unknown type ({{type}})', scanner_type);
 }
 
 export class ScannersCommand extends EntitiesCommand {

@@ -115,7 +115,7 @@ export class LoginPage extends React.Component {
 
     if (error) {
       if (is_empty(error.message)) {
-        message = _('Unkown error on login');
+        message = _('Unknown error on login');
       }
       else {
         message = error.message;

@@ -51,7 +51,7 @@ export class Logger {
       this.level = level;
     }
     else {
-      console.error('Unkown loglevel ', level, ' for Logger ', this.name);
+      console.error('Unknown loglevel ', level, ' for Logger ', this.name);
       level = 5;
       this.level = 'silent';
     }
