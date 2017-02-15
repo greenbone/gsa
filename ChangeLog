@@ -1,5 +1,10 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/filter.js: Add a filter filter for
+	assets.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/scanners.js,
 	src/html/classic/ng/src/gmp/http.js,
 	src/html/classic/ng/src/log.js,

@@ -777,6 +777,7 @@ export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const NOTES_FILTER_FILTER = Filter.fromString('type=notes');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=overrides');
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=reports');
+export const ASSETS_FILTER_FILTER = Filter.fromString('type=assets');
 export const ALL_FILTER = new Filter().all();
 
 export default Filter;
