@@ -30,8 +30,7 @@ import Icon from './icon.js';
 
 import SelectionType from '../selectiontype.js';
 
-export const TrashIcon = props => {
-  let {selectionType, title, ...other} = props;
+export const TrashIcon = ({selectionType, title, active = true, ...other}) => {
   if (!is_defined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Move page contents to trashcan');
@@ -44,12 +43,14 @@ export const TrashIcon = props => {
     }
   }
   return (
-    <Icon img="trashcan.svg"
-      title={title} {...other}/>
+    <Icon  {...other}
+      img={active ? 'trashcan.svg' : 'trashcan_inactive.svg'}
+      title={title}/>
   );
 };
 
 TrashIcon.propTypes = {
+  active: React.PropTypes.bool,
   title: React.PropTypes.string,
   selectionType: React.PropTypes.string,
   onClick: React.PropTypes.func,
