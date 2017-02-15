@@ -60,6 +60,15 @@ export class Model {
     copy.id = elem._id;
     return copy;
   }
+
+  isInUse() {
+    return this.in_use === '1';
+  }
+
+  isWriteable() {
+    return this.writeable !== '0';
+  }
+
 }
 
 export default Model;

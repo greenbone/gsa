@@ -63,7 +63,6 @@ export class Host extends Model {
 
     delete elem.host;
 
-
     return elem;
   }
 }

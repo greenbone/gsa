@@ -54,14 +54,6 @@ export class Note extends Model {
     return this.active === '1';
   }
 
-  isWriteable() {
-    return this.writeable !== '0';
-  }
-
-  isInUse() {
-    return this.in_use === '1';
-  }
-
   isOrphan() {
     return this.orphan === '1';
   }

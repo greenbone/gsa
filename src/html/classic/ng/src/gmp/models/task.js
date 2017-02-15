@@ -59,10 +59,6 @@ export class Task extends Model {
     return this.status === 'Running';
   }
 
-  isWriteable() {
-    return this.writeable !== '0';
-  }
-
   isStopped() {
     return this.status === 'Stopped';
   }
@@ -77,10 +73,6 @@ export class Task extends Model {
 
   isContainer() {
     return this.target && this.target.id === '';
-  }
-
-  isInUse() {
-    return this.in_use === '1';
   }
 
   parseProperties(elem) {

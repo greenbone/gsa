@@ -48,10 +48,6 @@ export class OperatingSystem extends Model {
 
     return ret;
   }
-
-  isInUse() {
-    return this.in_use === '1';
-  }
 }
 
 export default OperatingSystem;

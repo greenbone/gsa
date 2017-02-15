@@ -1,5 +1,15 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js,
+	src/html/classic/ng/src/gmp/models/host.js,
+	src/html/classic/ng/src/gmp/models/note.js,
+	src/html/classic/ng/src/gmp/models/os.js,
+	src/html/classic/ng/src/gmp/models/override.js,
+	src/html/classic/ng/src/gmp/models/task.js: Move isInUse and isWriteable
+	methods to base Model class.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
