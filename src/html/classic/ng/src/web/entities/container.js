@@ -185,15 +185,17 @@ class EntitiesContainer extends React.Component {
 
   handleDeleteBulk() {
     let {command} = this;
-    let {selected, selection_type} = this.state;
+    let {selected, selection_type, filter} = this.state;
     let promise;
 
-    if (selection_type === SelectionType.SELECTION_FILTER) {
-      let filter = this.state.filter.all();
+    if (selection_type === SelectionType.SELECTION_USER) {
+      promise = command.delete(selected);
+    }
+    else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
       promise  = command.deleteByFilter(filter);
     }
     else {
-      promise = command.delete(selected);
+      promise  = command.deleteByFilter(filter.all());
     }
 
     promise.then(deleted => {
