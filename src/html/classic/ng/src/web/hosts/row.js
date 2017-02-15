@@ -84,7 +84,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
     <TableRow>
       <TableData flex="column">
         {links ?
-          <LegacyLink cmd="get_asset" asset_type="host">
+          <LegacyLink cmd="get_asset" asset_type="host" asset_id={entity.id}>
             {entity.name}
           </LegacyLink> :
           entity.name
