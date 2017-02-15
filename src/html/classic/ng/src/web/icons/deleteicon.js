@@ -30,8 +30,7 @@ import Icon from './icon.js';
 
 import SelectionType from '../selectiontype.js';
 
-export const DeleteIcon = props => {
-  let {selectionType, title, ...other} = props;
+export const DeleteIcon = ({selectionType, title, active = true, ...other}) => {
   if (!is_defined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Delete page contents');
@@ -44,12 +43,14 @@ export const DeleteIcon = props => {
     }
   }
   return (
-    <Icon img="delete.svg"
-      title={title} {...other}/>
+    <Icon  {...other}
+      img={active ? 'delete.svg' : 'delete_inactive.svg'}
+      title={title}/>
   );
 };
 
 DeleteIcon.propTypes = {
+  active: React.PropTypes.bool,
   title: React.PropTypes.string,
   selectionType: React.PropTypes.string,
   onClick: React.PropTypes.func,
