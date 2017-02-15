@@ -121,7 +121,10 @@ export class TasksPage extends EntitiesListPage {
   renderFooter() {
     let {selection_type} = this.state;
     return (
-      <EntitiesFooter span="8" download trash
+      <EntitiesFooter
+        span="8"
+        trash
+        download="tasks.xml"
         selectionType={selection_type}
         onTrashClick={this.onDeleteBulk}
         onDownloadClick={this.onDownloadBulk}
