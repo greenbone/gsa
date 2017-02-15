@@ -84,8 +84,7 @@ export const MenuBar = (props, context) => {
         {caps.mayOp('get_assets') &&
           <Menu title={_('Assets')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
-            <MenuEntry legacy section title={_('Hosts')} cmd="get_assets"
-              asset_type="host"/>
+            <MenuEntry section title={_('Hosts')} to="hosts"/>
             <MenuEntry legacy title={_('Operating Systems')} cmd="get_assets"
               asset_type="os"/>
             <MenuEntry legacy title={_('Hosts (Classic)')} cmd="get_report"

@@ -476,7 +476,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
           <divider/>
           <item>
-            <page>get_assets&amp;asset_type=host</page>
+            <url>/ng/hosts</url>
             <name><xsl:value-of select="gsa:i18n ('Hosts')"/></name>
           </item>
           <item>

@@ -26381,7 +26381,7 @@ should not have received it.
               <xsl:value-of select="resource/name"/> (<xsl:value-of select="gsa:i18n('Unavailable')"/>, <xsl:value-of select="gsa:i18n('UUID')"/>: <xsl:value-of select="resource/@id"/>)
             </xsl:when>
             <xsl:when test="(resource/type = 'host' or resource/type = 'os') and gsa:may-op ('get_assets')">
-              <a href="/omp?cmd=get_assets&amp;asset_type={resource/type}&amp;asset_id={resource/@id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_asset&amp;asset_type={resource/type}&amp;asset_id={resource/@id}&amp;token={/envelope/token}"
                  title="{gsa:i18n ('Details')}">
                 <xsl:value-of select="resource/name"/>
               </a>
@@ -37769,7 +37769,7 @@ should not have received it.
       <tr>
         <td><xsl:value-of select="gsa:i18n ('Hosts')"/>:</td>
         <td>
-          <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter=oss~&quot;{name}&quot;&amp;filt_id=&amp;token={/envelope/token}"
+          <a href="/ng/hosts?filter=oss~&quot;{name}&quot;&amp;filt_id="
              title="{gsa:i18n ('Hosts')}" style="margin-left:3px;">
             <xsl:value-of select="os/installs"/>
           </a>
@@ -37927,7 +37927,7 @@ should not have received it.
        class="new-action-icon icon icon-sm" data-type="host">
       <img src="/img/new.svg"/>
     </a>
-    <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/ng/hosts?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
       title="{gsa:i18n ('Hosts')}" class="icon icon-sm">
       <img src="/img/list.svg" alt="{gsa:i18n ('Hosts')}"/>
     </a>
@@ -37991,7 +37991,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}"
+      <a href="/ng/hosts"
          title="{gsa:i18n ('Hosts')}">
         <img class="icon icon-lg" src="/img/host.svg" alt="Hosts"/>
       </a>
@@ -38539,7 +38539,7 @@ should not have received it.
       </xsl:call-template>
     </td>
     <td>
-      <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter=oss~&quot;{../name}&quot;&amp;filt_id=&amp;token={/envelope/token}"
+      <a href="/ng/hosts?filter=oss~&quot;{../name}&quot;&amp;filt_id="
         title="{gsa:i18n ('Hosts')}" style="margin-left:3px;">
         <xsl:value-of select="installs"/>
       </a>
