@@ -1,5 +1,10 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/proptypes.js: Add new proptypes for Model,
+	EntityCommand and EntitiesCommand instance checks.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js,
 	src/html/classic/ng/src/gmp/models/host.js,
 	src/html/classic/ng/src/gmp/models/note.js,

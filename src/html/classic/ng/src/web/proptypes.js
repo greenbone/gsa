@@ -25,7 +25,11 @@ import React from 'react';
 
 import CollectionList from '../gmp/collectionlist.js';
 
+import Model from '../gmp/model.js';
+
 import Filter from '../gmp/models/filter.js';
+
+import {EntityCommand, EntitiesCommand} from '../gmp/command.js';
 
 export const component = React.PropTypes.oneOfType([
   React.PropTypes.func,
@@ -79,13 +83,21 @@ export const set = React.PropTypes.instanceOf(Set);
 
 export const filter = React.PropTypes.instanceOf(Filter);
 
+export const model = React.PropTypes.instanceOf(Model);
+
+export const entitycommand = React.PropTypes.instanceOf(EntityCommand);
+export const entitescommand = React.PropTypes.instanceOf(EntitiesCommand);
+
 export default {
   arrayLike,
   collection,
   component,
   componentOrFalse,
   componentOrElement,
+  entitycommand,
+  entitescommand,
   filter,
+  model,
   number,
   icon,
   id,
