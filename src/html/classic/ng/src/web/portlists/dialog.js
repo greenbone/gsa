@@ -23,103 +23,93 @@
 
 import React from 'react';
 
-import {extend} from '../../utils.js';
-import _ from '../../locale.js';
+import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
-import Dialog from '../dialog/dialog.js';
+import {withDialog} from '../dialog/dialog.js';
 
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
 import FileField from '../form/filefield.js';
+import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
+import TextField from '../form/textfield.js';
 
-export class PortListsDialog extends Dialog {
+const PortListsDialog = ({name, comment, from_file, port_range,
+    onValueChange}) => {
+  return (
+    <Layout flex="column">
 
-  defaultState() {
-    return extend(super.defaultState(), {
-      width: 800,
-      comment: '',
-      from_file: 0,
-      port_range: 'T:1-5,7,9,U:1-3,5,7,9',
-    });
-  }
+      <FormGroup title={_('Name')}>
+        <TextField
+          name="name"
+          value={name}
+          grow="1"
+          size="30"
+          onChange={onValueChange}
+          maxLength="80"/>
+      </FormGroup>
 
-  show() {
-    this.setState({
-      name: _('unnamed'),
-      visible: true,
-    });
-  }
+      <FormGroup title={_('Comment')}>
+        <TextField
+          name="comment"
+          value={comment}
+          grow="1"
+          size="30"
+          maxLength="400"
+          onChange={onValueChange}/>
+      </FormGroup>
 
-  save() {
-    let {gmp} = this.context;
-    return gmp.portlist.create(this.state).then(portlist => {
-      this.close();
-      return portlist;
-    }, xhr => {
-      this.showErrorMessage(xhr.action_result.message);
-      throw new Error('PortList creation failed. Reason: ' +
-        xhr.action_result.message);
-    });
-  }
-
-  renderContent() {
-    let {name, comment, from_file, port_range} = this.state;
-
-    return (
-      <Layout flex="column">
-
-        <FormGroup title={_('Name')}>
-          <TextField name="name"
+      <FormGroup title={_('Port Ranges')} flex="column">
+        <Layout flex box>
+          <Radio
+            title={_('Manual')}
+            name="from_file"
+            value="0"
+            onChange={onValueChange}
+            checked={from_file !== '1'}/>
+          <TextField
             grow="1"
-            value={name} size="30"
-            onChange={this.onValueChange}
-            maxLength="80"/>
-        </FormGroup>
+            name="port_range"
+            value={port_range}
+            disabled={from_file === '1'}
+            onChange={onValueChange}
+            size="30" maxLength="400"/>
+        </Layout>
 
-        <FormGroup title={_('Comment')}>
-          <TextField name="comment" value={comment}
-            grow="1"
-            size="30" maxLength="400"
-            onChange={this.onValueChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('Port Ranges')} flex="column">
-          <Layout flex box>
-            <Radio title={_('Manual')}
-              value="0"
-              name="from_file"
-              onChange={this.onValueChange}
-              checked={from_file !== '1'}/>
-            <TextField
-              grow="1"
-              disabled={from_file === '1'}
-              value={port_range}
-              onChange={this.onValueChange}
-              name="port_range"
-              size="30" maxLength="400"/>
-          </Layout>
-
-          <Layout flex box>
-            <Radio title={_('From file')}
-              value="1"
-              name="from_file"
-              onChange={this.onValueChange}
-              checked={from_file === '1'}/>
-            <FileField name="file" onChange={this.onValueChange}/>
-          </Layout>
-        </FormGroup>
-      </Layout>
-    );
-  }
-}
-
-PortListsDialog.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+        <Layout flex box>
+          <Radio title={_('From file')}
+            name="from_file"
+            value="1"
+            onChange={onValueChange}
+            checked={from_file === '1'}/>
+          <FileField
+            name="file"
+            onChange={onValueChange}/>
+        </Layout>
+      </FormGroup>
+    </Layout>
+  );
 };
 
-export default PortListsDialog;
+PortListsDialog.propTypes = {
+  name: React.PropTypes.string,
+  comment: React.PropTypes.string,
+  from_file: PropTypes.yesno,
+  port_range: React.PropTypes.string,
+  onValueChange: React.PropTypes.func,
+};
+
+
+export default withDialog(PortListsDialog, {
+  title: _('New Port List'),
+  footer: _('Save'),
+  defaultState: {
+    name: _('Unnamed'),
+    comment: '',
+    from_file: 0,
+    port_range: 'T:1-5,7,9,U:1-3,5,7,9',
+  },
+});
 
 // vim: set ts=2 sw=2 tw=80:

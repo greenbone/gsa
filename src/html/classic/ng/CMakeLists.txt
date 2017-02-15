@@ -117,6 +117,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/assetspage.js
      ${NG_SRC_DIR}/src/web/button.js
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
+     ${NG_SRC_DIR}/src/web/credentials/dialog2.js
      ${NG_SRC_DIR}/src/web/certbund/charts.js
      ${NG_SRC_DIR}/src/web/cpes/charts.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
@@ -240,6 +241,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/table/stripped.js
      ${NG_SRC_DIR}/src/web/table/table.js
      ${NG_SRC_DIR}/src/web/targets/dialog.js
+     ${NG_SRC_DIR}/src/web/targets/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/tasks/addresultstoassetsgroup.js
      ${NG_SRC_DIR}/src/web/tasks/autodeletereportsgroup.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js

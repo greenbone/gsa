@@ -48,7 +48,7 @@ import TextField from '../form/textfield.js';
 import NewIcon from '../icons/newicon.js';
 
 import ScheduleDialog from '../schedules/dialog.js';
-import TargetsDialog from '../targets/dialog.js';
+import TargetsDialogContainer from '../targets/dialogcontainer.js';
 import AlertDialog from '../alerts/dialog.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
@@ -62,6 +62,9 @@ export class TaskDialog extends Dialog {
     super(...args);
 
     autobind(this, 'on');
+
+    this.handleCreateTarget = this.handleCreateTarget.bind(this);
+    this.openTargetsDialog = this.openTargetsDialog.bind(this);
   }
 
   defaultState() {
@@ -288,8 +291,8 @@ export class TaskDialog extends Dialog {
     this.setState({schedules, schedule_id: schedule.id});
   }
 
-  onAddNewTarget(target) {
-    let {targets} = this.state;
+  addNewTarget(target) {
+    let {targets = []} = this.state;
 
     targets.push(target);
     log.debug('adding target to task dialog', target, targets);
@@ -309,6 +312,14 @@ export class TaskDialog extends Dialog {
     return scanners.find(sc => {
       return sc.id === scanner_id;
     });
+  }
+
+  openTargetsDialog() {
+    this.targets_dialog.show({});
+  }
+
+  handleCreateTarget(target) {
+    this.addNewTarget(target);
   }
 
   renderContent() {
@@ -390,7 +401,7 @@ export class TaskDialog extends Dialog {
           {change_task &&
             <Layout flex box>
               <NewIcon
-                onClick={() => this.targets_dialog.show()}
+                onClick={this.openTargetsDialog}
                 title={_('Create a new target')}/>
             </Layout>
           }
@@ -587,8 +598,9 @@ export class TaskDialog extends Dialog {
         <ScheduleDialog title={_('Create new Schedule')}
           ref={ref => this.schedule_dialog = ref}
           onSave={this.onAddNewSchedule}/>
-        <TargetsDialog title={_('Create new Target')}
-          ref={ref => this.targets_dialog = ref} onSave={this.onAddNewTarget}/>
+        <TargetsDialogContainer
+          ref={ref => this.targets_dialog = ref}
+          onSave={this.handleCreateTarget}/>
         <AlertDialog title={_('Create new Alert')}
           ref={ref => this.alert_dialog = ref} onSave={this.onAddNewAlert}/>
       </span>
