@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {KeyCode, is_defined} from '../../utils.js';
+import {KeyCode, is_defined, extend} from '../../utils.js';
 import _ from '../../locale.js';
 import logger from '../../log.js';
 
@@ -283,10 +283,20 @@ export const withDialog = (Component, options = {}) => {
       this.dialog.showErrorMessageFromRejection(error);
     }
 
+    setValue(name, value) {
+      this.onValueChange(value, name);
+    }
+
     show(data, opts) {
-      if (!is_defined(data)) {
-        data = {};
+      let {defaultState = {}} = options;
+
+      if (is_defined(data)) {
+        data = extend({}, defaultState, data);
       }
+      else {
+        data = defaultState;
+      }
+
       this.setState({data});
       this.dialog.show(opts);
     }

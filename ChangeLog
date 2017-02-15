@@ -1,5 +1,10 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dialog/dialog.js: Allow to set a dialog value
+	via ref and also set the default state via withDialog options object.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Allow to set the title of an export icon manually.
 
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
