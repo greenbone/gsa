@@ -23,6 +23,10 @@
 
 import React from 'react';
 
+import CollectionList from '../gmp/collectionlist.js';
+
+import Filter from '../gmp/models/filter.js';
+
 export const component = React.PropTypes.oneOfType([
   React.PropTypes.func,
   React.PropTypes.object,
@@ -54,18 +58,39 @@ export const yesno = React.PropTypes.oneOf([
 
 export const id = React.PropTypes.string; // TODO improve checking for uuid
 
+export const idOrZero = React.PropTypes.oneOfType([
+  id,
+  React.PropTypes.oneOf([0]),
+]);
+
 export const stringOrFalse = React.PropTypes.oneOfType([
   React.PropTypes.string,
   React.PropTypes.oneOf([false]),
 ]);
 
+export const collection = React.PropTypes.instanceOf(CollectionList);
+
+export const arrayLike = React.PropTypes.oneOfType([
+  React.PropTypes.array,
+  collection,
+]);
+
+export const set = React.PropTypes.instanceOf(Set);
+
+export const filter = React.PropTypes.instanceOf(Filter);
+
 export default {
+  arrayLike,
+  collection,
   component,
   componentOrFalse,
   componentOrElement,
+  filter,
   number,
   icon,
   id,
+  idOrZero,
+  set,
   stringOrFalse,
   yesno,
 };
