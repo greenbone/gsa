@@ -37673,7 +37673,7 @@ should not have received it.
       title="{concat(gsa:i18n('Help'),': ',gsa:i18n('Operating System'),' (',gsa:i18n('Operating System Details'),')')}">
       <img src="/img/help.svg"/>
     </a>
-    <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/ng/operatingsystems?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
       title="{gsa:i18n ('OSs')}"
       class="icon icon-sm">
       <img src="/img/list.svg" alt="{gsa:i18n ('OSs')}"/>
@@ -37708,7 +37708,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"
+      <a href="/ng/operatingsystems"
          title="{gsa:i18n ('Operating Systems')}">
         <img class="icon icon-lg" src="/img/os.svg" alt="Operating Systems"/>
       </a>

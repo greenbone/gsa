@@ -85,8 +85,8 @@ export const MenuBar = (props, context) => {
           <Menu title={_('Assets')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
             <MenuEntry section title={_('Hosts')} to="hosts"/>
-            <MenuEntry legacy title={_('Operating Systems')} cmd="get_assets"
-              asset_type="os"/>
+            <MenuEntry title={_('Operating Systems')}
+              to="operatingsystems"/>
             <MenuEntry legacy title={_('Hosts (Classic)')} cmd="get_report"
               type="assets" apply_overrides="1" levels="hm"
               caps="get_reports"/>

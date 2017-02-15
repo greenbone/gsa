@@ -480,7 +480,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('Hosts')"/></name>
           </item>
           <item>
-            <page>get_assets&amp;asset_type=os</page>
+            <url>/ng/operatingsystems</url>
             <name><xsl:value-of select="gsa:i18n ('Operating Systems')"/></name>
           </item>
         </xsl:if>
