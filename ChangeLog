@@ -1,6 +1,13 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/commands/os.js,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/models/os.js: Add gmp api for operating systems.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/cpe.js,
 	src/html/classic/ng/src/web/icons/cpeicon.js: Add a CpeIcon component. It will
 	be required for os page.

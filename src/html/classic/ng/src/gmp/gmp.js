@@ -32,6 +32,7 @@ import './commands/credentials.js';
 import './commands/filters.js';
 import './commands/hosts.js';
 import './commands/notes.js';
+import './commands/os.js';
 import './commands/overrides.js';
 import './commands/portlists.js';
 import './commands/reports.js';
