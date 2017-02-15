@@ -23,7 +23,7 @@
 
 import logger from '../../log.js';
 
-import {EntityCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Target from '../models/target.js';
 
@@ -69,6 +69,18 @@ export class TargetCommand extends EntityCommand {
   }
 }
 
+export class TargetsCommand extends EntitiesCommand {
+
+  constructor(http) {
+    super(http, 'target', Target);
+  }
+
+  getEntitiesResponse(root) {
+    return root.get_targets.get_targets_response;
+  }
+}
+
 register_command('target', TargetCommand);
+register_command('targets', TargetsCommand);
 
 // vim: set ts=2 sw=2 tw=80:
