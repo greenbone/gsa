@@ -94,15 +94,9 @@ class EntitiesContainer extends React.Component {
     this.clearTimer(); // remove possible running timer
 
     command.get({filter}, {cache, force}).then(entities => {
-      let {selection_type} = this.state;
-
       filter = entities.getFilter();
 
       this.setState({entities, filter});
-
-      if (selection_type !== SelectionType.SELECTION_USER) {
-        this.setState({selected: entities});
-      }
 
       this.startTimer(refresh);
     });
@@ -155,14 +149,13 @@ class EntitiesContainer extends React.Component {
   }
 
   handleSelectionTypeChange(selection_type) {
-    let {entities} = this.state;
     let selected;
 
     if (selection_type === SelectionType.SELECTION_USER) {
       selected = new Set();
     }
     else {
-      selected = entities;
+      selected = undefined;
     }
 
     this.setState({selection_type, selected});
@@ -272,7 +265,7 @@ class EntitiesContainer extends React.Component {
   }
 
   render() {
-    let {filter, filters, entities, selection_type} = this.state;
+    let {filter, filters, entities, selection_type, selected} = this.state;
     let {command} = this;
     let Component = this.props.component;
     let other = exclude(this.props, key => includes(exclude_props, key));
@@ -281,6 +274,7 @@ class EntitiesContainer extends React.Component {
         <Component {...other}
           command={command}
           entities={entities}
+          entitiesSelected={selected}
           filter={filter}
           filters={filters}
           selectionType={selection_type}
@@ -305,11 +299,11 @@ class EntitiesContainer extends React.Component {
 }
 
 EntitiesContainer.propTypes = {
-  gmpname: React.PropTypes.string.isRequired,
-  filter: React.PropTypes.object,
-  filtersFilter: React.PropTypes.object,
-  entities: React.PropTypes.object,
   component: PropTypes.component.isRequired,
+  entities: PropTypes.collection,
+  filter: PropTypes.filter,
+  filtersFilter: PropTypes.filter,
+  gmpname: React.PropTypes.string.isRequired,
 };
 
 EntitiesContainer.contextTypes = {

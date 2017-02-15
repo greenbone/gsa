@@ -1,5 +1,12 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: Pass the set of selected
+	entities to the child components. Now selected will undefined instead of
+	pointing to the entities if no entity has been selected yet.
+	Also update the proptypes of EntitiesContainer.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/table.js: Update proptypes of
 	EntitesTable.
 
