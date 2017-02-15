@@ -25,6 +25,7 @@ import {is_defined, extend, map} from '../utils.js';
 import logger from '../log.js';
 
 import {parse_collection_list} from './models/parser.js';
+import {ALL_FILTER} from './models/filter.js';
 
 const log = logger.getLogger('gmp.command');
 
@@ -114,6 +115,12 @@ export class EntitiesCommand extends HttpCommand {
     return this.httpGet(params, options).then(root => {
         return this.getCollectionListFromRoot(root);
     });
+  }
+
+  getAll(params = {}, options) {
+    params.filter = is_defined(params.filter) ?
+      params.filter.all() : ALL_FILTER;
+    return this.get(params, options);
   }
 
   export(entities) {

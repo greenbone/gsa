@@ -1,5 +1,11 @@
 2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/command.js: Add a EntitiesCommand getAll method.
+	This method always returns all entities without the default rows filter
+	applied.
+
+2017-02-15 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/filter.js: Add const filter to query all
 	results.
 
