@@ -29,10 +29,18 @@ export class Target extends Model {
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
+
     ret.port_list = new PortList(ret.port_list);
+
+    const creds = ['smb_credential', 'snmp_credential', 'ssh_credential',
+      'esxi_credential'];
+
+    for (let cred of creds) {
+      ret[cred] = new Model(ret[cred]);
+    }
+
     return ret;
   }
-
 }
 
 export default Target;
