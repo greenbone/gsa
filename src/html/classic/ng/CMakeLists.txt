@@ -172,6 +172,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/hosts/hostspage.js
      ${NG_SRC_DIR}/src/web/hosts/row.js
      ${NG_SRC_DIR}/src/web/hosts/table.js
+     ${NG_SRC_DIR}/src/web/icons/cloneicon.js
      ${NG_SRC_DIR}/src/web/icons/cpeicon.js
      ${NG_SRC_DIR}/src/web/icons/deleteicon.js
      ${NG_SRC_DIR}/src/web/icons/editicon.js
