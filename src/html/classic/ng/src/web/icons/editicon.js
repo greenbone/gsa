@@ -27,10 +27,14 @@ import _ from '../../locale.js';
 
 import Icon from './icon.js';
 
-export const EditIcon = props => {
+export const EditIcon = ({active = true, ...props}) => {
   return (
-    <Icon img="edit.svg" {...props}/>
+    <Icon {...props} img={active ? 'edit.svg' : 'edit_inactive.svg'}/>
   );
+};
+
+EditIcon.propTypes = {
+  active: React.PropTypes.bool,
 };
 
 export default EditIcon;
