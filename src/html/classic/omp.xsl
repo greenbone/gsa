@@ -22821,7 +22821,7 @@ should not have received it.
           class="icon icon-sm">
           <img src="/img/result.svg" title="{gsa:i18n ('Corresponding Results')}" alt="{gsa:i18n ('Results')}"/>
         </a>
-        <a href="/omp?cmd=get_vulns&amp;filter=uuid={info/nvt/@oid}&amp;token={/envelope/token}"
+        <a href="/ng/vulnerabilities?filter=uuid={info/nvt/@oid}"
           title="{gsa:i18n ('Corresponding Vulnerabilities')}"
           class="icon icon-sm">
           <img src="/img/vulnerability.svg" title="{gsa:i18n ('Corresponding Vulnerabilities')}" alt="{gsa:i18n ('Vulnerabilities')}"/>
@@ -32631,7 +32631,7 @@ should not have received it.
     class="icon icon-sm">
     <img src="/img/result.svg" alt="Results"/>
   </a>
-  <a href="?cmd=get_vulns&amp;filter=report_id={@id}&amp;token={/envelope/token}"
+  <a href="/ng/vulnerabilities?filter=report_id={@id}"
     title="{gsa:i18n ('Corresponding Vulnerabilities')}"
     class="icon icon-sm">
     <img src="/img/vulnerability.svg" alt="Vulnerabilities"/>

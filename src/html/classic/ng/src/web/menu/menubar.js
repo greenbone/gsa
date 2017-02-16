@@ -85,9 +85,8 @@ export const MenuBar = (props, context) => {
               to="results"
               caps="get_results"/>
             <MenuEntry
-              legacy
               title={_('Vulnerabilities')}
-              cmd="get_vulns"
+              to="vulnerabilities"
               caps="get_vulns"/>
             <MenuEntry
               section

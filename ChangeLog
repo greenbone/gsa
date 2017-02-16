@@ -1,5 +1,12 @@
 2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/omp.xsl: Use ng for vulnerabilities.
+
+2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/vulns/filterdialog.js,
 	src/html/classic/ng/src/web/vulns/row.js,

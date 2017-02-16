@@ -52,6 +52,7 @@ import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
 import TargetsPage from './targets/targetspage.js';
 import TasksPage from './tasks/taskspage.js';
+import VulnerabilitiesPage from './vulns/vulnspage.js';
 
 import './css/gsa-base.css';
 
@@ -161,6 +162,9 @@ ReactDOM.render(
         <Route
           path="targets"
           component={TargetsPage}/>
+        <Route
+          path="vulnerabilities"
+          component={VulnerabilitiesPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>
