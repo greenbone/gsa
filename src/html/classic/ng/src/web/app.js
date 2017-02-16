@@ -132,27 +132,44 @@ ReactDOM.render(
     <Route component={App}>
       <Route path="/login" component={LoginPage}/>
       <Route path="/ng/login" component={LoginPage}/>
-      <Route path="/ng" component={Page}>
-        <IndexRoute component={HomePage} onEnter={is_logged_in}/>
-        <Route path="tasks" component={TasksPage} onEnter={is_logged_in}/>
-        <Route path="results" component={ResultsPage} onEnter={is_logged_in}/>
-        <Route path="notes" component={NotesPage} onEnter={is_logged_in}/>
-        <Route path="overrides" component={OverridesPage}
-          onEnter={is_logged_in}/>
-        <Route path="operatingsystems" component={OperatingSystemsPage}
-          onEnter={is_logged_in}/>
-        <Route path="reports" component={ReportsPage}
-          onEnter={is_logged_in}/>
-        <Route path="hosts" component={HostsPage}
-          onEnter={is_logged_in}/>
-        <Route path="targets" component={TargetsPage}
-          onEnter={is_logged_in}/>
-        <Route path="dashboards/scans" component={ScansPage}
-          onEnter={is_logged_in}/>
-        <Route path="dashboards/assets" component={AssetsPage}
-          onEnter={is_logged_in}/>
-        <Route path="dashboards/secinfo" component={SecinfoPage}
-          onEnter={is_logged_in}/>
+      <Route
+        path="/ng"
+        component={Page}
+        onEnter={is_logged_in}>
+        <IndexRoute component={HomePage}/>
+        <Route
+          path="tasks"
+          component={TasksPage}/>
+        <Route
+          path="results"
+          component={ResultsPage}/>
+        <Route
+          path="notes"
+          component={NotesPage}/>
+        <Route
+          path="overrides"
+          component={OverridesPage}/>
+        <Route
+          path="operatingsystems"
+          component={OperatingSystemsPage}/>
+        <Route
+          path="reports"
+          component={ReportsPage}/>
+        <Route
+          path="hosts"
+          component={HostsPage}/>
+        <Route
+          path="targets"
+          component={TargetsPage}/>
+        <Route
+          path="dashboards/scans"
+          component={ScansPage}/>
+        <Route
+          path="dashboards/assets"
+          component={AssetsPage}/>
+        <Route
+          path="dashboards/secinfo"
+          component={SecinfoPage}/>
       </Route>
       <Redirect from="/" to="/ng"/>
       <Route path="*" component={PageNotFound} />

@@ -58,7 +58,10 @@ const Row = ({entity, links = true, actions, ...other}) => {
         {entity.qod.value} %
       </TableData>
       <TableData flex align="center">
-        <LegacyLink cmd="get_asset" type="host" asset_id={entity.host.id}>
+        <LegacyLink
+          cmd="get_asset"
+          type="host"
+          asset_id={entity.host.id}>
           {entity.host.name}
         </LegacyLink>
       </TableData>
