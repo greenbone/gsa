@@ -67,7 +67,7 @@ cmd_response_data_new ()
  * @brief Frees the memory of a cmd_response_data_t struct
  *
  * If content_disposition of data is not NULL the content_disposition is also
- * beeing freed.
+ * being freed.
  *
  * @param[in] data The cmd_response_data_t struct to free
  */
