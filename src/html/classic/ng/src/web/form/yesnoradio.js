@@ -27,6 +27,7 @@ import {parse_int} from '../../utils.js';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import Radio from './radio.js';
 
@@ -55,10 +56,10 @@ export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
 };
 
 YesNoRadio.propTypes = {
-  name: React.PropTypes.string,
-  onChange: React.PropTypes.func,
   disabled: React.PropTypes.bool,
-  value: React.PropTypes.number,
+  name: React.PropTypes.string,
+  value: PropTypes.number,
+  onChange: React.PropTypes.func,
 };
 
 export default YesNoRadio;
