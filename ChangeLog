@@ -1,5 +1,11 @@
 2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* .eslintrc.json,
+	src/html/classic/ng/.eslintrc.json: Add a config file for eslint. eslint is a
+	tool to check javascript for errors and coding style.
+
+2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js: Add targets page to ng. The menu
 	of the "old" (not ng) pages is still pointing the old page to allow
