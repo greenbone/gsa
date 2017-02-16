@@ -85,7 +85,7 @@ const TargetDialog = ({name, comment = '', target_source,
     port_list_id, port_lists, alive_tests, ssh_credential_id, credentials,
     port, smb_credential_id, esxi_credential_id, snmp_credential_id,
     hosts_count, onValueChange, onNewCredentialsClick, onNewPortListClick,
-    ...props},
+    in_use = false, ...props},
     {capabilities}) => {
 
   let ssh_credentials = credentials.filter(ssh_credential_filter);
@@ -124,11 +124,12 @@ const TargetDialog = ({name, comment = '', target_source,
             value="manual"
             title={_('Manual')}
             name="target_source"
+            disabled={in_use}
             onChange={onValueChange}
             checked={target_source === 'manual'}/>
           <TextField
             grow="1"
-            disabled={target_source !== 'manual'}
+            disabled={in_use || target_source !== 'manual'}
             value={hosts}
             name="hosts"
             onChange={onValueChange}/>
@@ -139,10 +140,12 @@ const TargetDialog = ({name, comment = '', target_source,
             title={_('From file')}
             name="target_source"
             value="file"
+            disabled={in_use}
             onChange={onValueChange}
             checked={target_source === 'file'}/>
           <FileField
             name="file"
+            disabled={in_use}
             onChange={onValueChange}/>
         </Layout>
 
@@ -153,6 +156,7 @@ const TargetDialog = ({name, comment = '', target_source,
                 {count: hosts_count})}
               name="target_source"
               value="asset_hosts"
+              disabled={in_use}
               onChange={onValueChange}
               checked={target_source === 'asset_hosts'}/>
           </Layout>
@@ -165,6 +169,7 @@ const TargetDialog = ({name, comment = '', target_source,
           name="exclude_hosts"
           value={exclude_hosts}
           grow="1"
+          disabled={in_use}
           onChange={onValueChange}/>
       </FormGroup>
 
@@ -172,6 +177,7 @@ const TargetDialog = ({name, comment = '', target_source,
         <YesNoRadio
           name="reverse_lookup_only"
           value={reverse_lookup_only}
+          disabled={in_use}
           onChange={onValueChange}/>
       </FormGroup>
 
@@ -179,6 +185,7 @@ const TargetDialog = ({name, comment = '', target_source,
         <YesNoRadio
           name="reverse_lookup_unify"
           value={reverse_lookup_unify}
+          disabled={in_use}
           onChange={onValueChange}/>
       </FormGroup>
 
@@ -187,14 +194,17 @@ const TargetDialog = ({name, comment = '', target_source,
           <Select2
             onChange={onValueChange}
             name="port_list_id"
+            disabled={in_use}
             value={port_list_id}>
             {render_options(port_lists)}
           </Select2>
-          <Layout box flex>
-            <NewIcon
-              title={_('Create a new port list')}
-              onClick={onNewPortListClick}/>
-          </Layout>
+          {!in_use &&
+            <Layout box flex>
+              <NewIcon
+                title={_('Create a new port list')}
+                onClick={onNewPortListClick}/>
+            </Layout>
+          }
         </FormGroup>
       }
 
@@ -224,6 +234,7 @@ const TargetDialog = ({name, comment = '', target_source,
             box
             name="ssh_credential_id"
             onChange={onValueChange}
+            disabled={in_use}
             value={ssh_credential_id}>
             {render_options(ssh_credentials, 0)}
           </Select2>
@@ -234,13 +245,16 @@ const TargetDialog = ({name, comment = '', target_source,
             size="6"
             name="port"
             value={port}
+            disabled={in_use}
             onChange={onValueChange}/>
-          <Layout box flex>
-            <NewIcon
-              value={NEW_SSH}
-              onClick={onNewCredentialsClick}
-              title={_('Create a new credential')}/>
-          </Layout>
+          {!in_use &&
+            <Layout box flex>
+              <NewIcon
+                value={NEW_SSH}
+                onClick={onNewCredentialsClick}
+                title={_('Create a new credential')}/>
+            </Layout>
+          }
         </FormGroup>
       }
 
@@ -249,49 +263,58 @@ const TargetDialog = ({name, comment = '', target_source,
           <Select2
             onChange={onValueChange}
             name="smb_credential_id"
+            disabled={in_use}
             value={smb_credential_id}>
             {render_options(up_credentials, 0)}
           </Select2>
-          <Layout box flex>
-            <NewIcon
-              value={NEW_SMB}
-              onClick={onNewCredentialsClick}
-              title={_('Create a new credential')}/>
-          </Layout>
+          {!in_use &&
+            <Layout box flex>
+              <NewIcon
+                value={NEW_SMB}
+                onClick={onNewCredentialsClick}
+                title={_('Create a new credential')}/>
+            </Layout>
+          }
         </FormGroup>
       }
 
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('ESXi')}>
           <Select2
+            disabled={in_use}
             onChange={onValueChange}
             name="esxi_credential_id"
             value={esxi_credential_id}>
             {render_options(up_credentials, 0)}
           </Select2>
-          <Layout box flex>
-            <NewIcon
-              value={NEW_ESXI}
-              onClick={onNewCredentialsClick}
-              title={_('Create a new credential')}/>
-          </Layout>
+          {!in_use &&
+            <Layout box flex>
+              <NewIcon
+                value={NEW_ESXI}
+                onClick={onNewCredentialsClick}
+                title={_('Create a new credential')}/>
+            </Layout>
+          }
         </FormGroup>
       }
 
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('SNMP')}>
           <Select2
+            disabled={in_use}
             onChange={onValueChange}
             name="snmp_credential_id"
             value={snmp_credential_id}>
             {render_options(snmp_credentials, 0)}
           </Select2>
-          <Layout box flex>
-            <NewIcon
-              value={NEW_SNMP}
-              onClick={onNewCredentialsClick}
-              title={_('Create a new credential')}/>
-          </Layout>
+          {!in_use &&
+            <Layout box flex>
+              <NewIcon
+                value={NEW_SNMP}
+                onClick={onNewCredentialsClick}
+                title={_('Create a new credential')}/>
+            </Layout>
+          }
         </FormGroup>
       }
     </Layout>
@@ -304,20 +327,21 @@ TargetDialog.propTypes = {
   target_source: React.PropTypes.oneOf([
     'manual', 'file', 'asset_hosts',
   ]),
-  hosts: React.PropTypes.string,
-  hosts_count: React.PropTypes.number,
-  exclude_hosts: React.PropTypes.string,
-  reverse_lookup_only: PropTypes.yesno,
-  reverse_lookup_unify: PropTypes.yesno,
-  port_list_id: PropTypes.idOrZero,
-  port_lists: PropTypes.arrayLike,
   alive_tests: React.PropTypes.oneOf(ALIVE_TESTS),
   credentials: PropTypes.arrayLike,
-  ssh_credential_id: PropTypes.idOrZero,
-  port: PropTypes.number,
-  smb_credential_id: PropTypes.idOrZero,
   esxi_credential_id: PropTypes.idOrZero,
+  exclude_hosts: React.PropTypes.string,
+  hosts_count: React.PropTypes.number,
+  hosts: React.PropTypes.string,
+  in_use: React.PropTypes.bool,
+  port_list_id: PropTypes.idOrZero,
+  port_lists: PropTypes.arrayLike,
+  port: PropTypes.number,
+  reverse_lookup_only: PropTypes.yesno,
+  reverse_lookup_unify: PropTypes.yesno,
+  smb_credential_id: PropTypes.idOrZero,
   snmp_credential_id: PropTypes.idOrZero,
+  ssh_credential_id: PropTypes.idOrZero,
   onValueChange: React.PropTypes.func,
   onNewCredentialsClick: React.PropTypes.func,
   onNewPortListClick: React.PropTypes.func,
