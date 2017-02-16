@@ -774,11 +774,11 @@ export class Filter extends Model {
 
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
-export const NOTES_FILTER_FILTER = Filter.fromString('type=notes');
-export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=overrides');
-export const REPORTS_FILTER_FILTER = Filter.fromString('type=reports');
-export const ASSETS_FILTER_FILTER = Filter.fromString('type=assets');
-export const TARGETS_FILTER_FILTER = Filter.fromString('type=targets');
+export const NOTES_FILTER_FILTER = Filter.fromString('type=note');
+export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
+export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
+export const ASSETS_FILTER_FILTER = Filter.fromString('type=asset');
+export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
 export const ALL_FILTER = new Filter().all();
 
 export default Filter;
