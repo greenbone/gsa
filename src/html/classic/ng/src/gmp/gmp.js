@@ -53,7 +53,7 @@ const log = logger.getLogger('gmp');
 export class Gmp {
 
   constructor(options = {}) {
-    let {server, protocol, storage = sessionStorage} = options;
+    let {server, protocol, storage = localStorage} = options;
 
     this._commands = {};
 
