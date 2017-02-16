@@ -686,12 +686,12 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
-                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory)$");
+                         "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln|"
+                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
   openvas_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|"
-                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|)$");
+                         "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|vuln|"
+                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|Vulnerability)$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
