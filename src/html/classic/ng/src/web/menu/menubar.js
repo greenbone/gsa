@@ -110,7 +110,7 @@ export const MenuBar = (props, context) => {
           </Menu>
         }
         <Menu title={_('Configuration')}>
-          <MenuEntry legacy title={_('Targets')} cmd="get_targets"
+          <MenuEntry title={_('Targets')} to="targets"
             caps="get_targets"/>
           <MenuEntry legacy title={_('Port Lists')} cmd="get_port_lists"
             caps="get_port_lists"/>

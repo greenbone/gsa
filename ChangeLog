@@ -1,5 +1,12 @@
 2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/menu/menubar.js: Add targets page to ng. The menu
+	of the "old" (not ng) pages is still pointing the old page to allow
+	comparision of both pages.
+
+2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/targets/filterdialog.js,
 	src/html/classic/ng/src/web/targets/row.js,
