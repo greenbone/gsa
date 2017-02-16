@@ -31,6 +31,8 @@ import FootNote from '../footnote.js';
 import Layout from '../layout.js';
 import {render_options} from '../render.js';
 
+import DeleteIcon from '../icons/deleteicon.js';
+import EditIcon from '../icons/editicon.js';
 import Icon from '../icons/icon.js';
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
@@ -67,6 +69,11 @@ export class PowerFilter extends React.Component {
 
   updateFilter(filter) {
     let {onUpdate} = this.props;
+
+    if (!is_defined(this.state.filter)) {
+      // filter hasn't been loaded yet
+      return;
+    }
 
     if (onUpdate) {
       onUpdate(filter);
@@ -184,14 +191,18 @@ export class PowerFilter extends React.Component {
       filtername.trim().length > 0;
 
     return (
-      <Layout flex align={['end', 'center']} className="powerfilter">
+      <Layout flex align={['end', 'center']}
+        className="powerfilter">
         <Layout flex="column" align={['center', 'start']}>
           <Layout flex align={['end', 'center']}>
             <FormGroup flex align={['start', 'center']}>
               <label className="control-label">
                 <b>{_('Filter')}</b>
               </label>
-              <TextField name="userfilter" size="53" maxLength="1000"
+              <TextField
+                name="userfilter"
+                size="53"
+                maxLength="1000"
                 value={userfilter}
                 onKeyDown={this.onUserFilterKeyPress}
                 onChange={this.onValueChange}/>
@@ -201,20 +212,28 @@ export class PowerFilter extends React.Component {
                 onClick={this.onUpdateFilter}/>
 
               {onResetClick &&
-                <Icon img="delete.svg" title={_('Reset Filter')}
+                <DeleteIcon
+                  img="delete.svg"
+                  title={_('Reset Filter')}
+                  active={is_defined(filter)}
                   onClick={this.onResetClick}/>
               }
 
               <HelpIcon page="powerfilter" />
 
               {onEditClick &&
-                <Icon img="edit.svg" title={_('Edit Filter')}
+                <EditIcon
+                  title={_('Edit Filter')}
+                  active={is_defined(filter)}
                   onClick={onEditClick}/>
               }
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
               {capabilities.mayOp('create_filter') &&
-                <TextField name="filtername" size="10" maxLength="80"
+                <TextField
+                  name="filtername"
+                  size="10"
+                  maxLength="80"
                   value={filtername}
                   onChange={this.onValueChange}/>
               }
