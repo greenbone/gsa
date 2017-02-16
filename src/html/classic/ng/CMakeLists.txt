@@ -269,6 +269,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js
      ${NG_SRC_DIR}/src/web/toolbar.js
+     ${NG_SRC_DIR}/src/web/vulns/charts.js
+     ${NG_SRC_DIR}/src/web/vulns/filterdialog.js
+     ${NG_SRC_DIR}/src/web/vulns/row.js
+     ${NG_SRC_DIR}/src/web/vulns/table.js
+     ${NG_SRC_DIR}/src/web/vulns/vulnspage.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/modifytaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/taskwizard.js

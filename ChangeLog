@@ -1,6 +1,15 @@
 2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/vulns/filterdialog.js,
+	src/html/classic/ng/src/web/vulns/row.js,
+	src/html/classic/ng/src/web/vulns/table.js,
+	src/html/classic/ng/src/web/vulns/vulnspage.js: Add page for the list of
+	vulnerabilities.
+
+2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/vulns.js,
 	src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/models/vulnerability.js: Add gmp api for
