@@ -40,7 +40,9 @@ const Row = ({entity, links = true, actions, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        <LegacyLink cmd="get_result" entity_id={entity.id}>
+        <LegacyLink
+          cmd="get_result"
+          result_id={entity.id}>
           {entity.name}
         </LegacyLink>
       </TableData>
