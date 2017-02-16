@@ -76,6 +76,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/targets.js
      ${NG_SRC_DIR}/src/gmp/commands/tasks.js
      ${NG_SRC_DIR}/src/gmp/commands/users.js
+     ${NG_SRC_DIR}/src/gmp/commands/vulns.js
      ${NG_SRC_DIR}/src/gmp/gmp.js
      ${NG_SRC_DIR}/src/gmp/http.js
      ${NG_SRC_DIR}/src/gmp/model.js
@@ -100,6 +101,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/target.js
      ${NG_SRC_DIR}/src/gmp/models/task.js
      ${NG_SRC_DIR}/src/gmp/models/user.js
+     ${NG_SRC_DIR}/src/gmp/models/vulnerability.js
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/web/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/alerts/emailmethodpart.js

@@ -42,6 +42,7 @@ import './commands/schedules.js';
 import './commands/targets.js';
 import './commands/tasks.js';
 import './commands/users.js';
+import './commands/vulns.js';
 import './commands/wizard.js';
 
 import {GmpHttp, TIMEOUT, build_server_url, build_url_params} from './http.js';
