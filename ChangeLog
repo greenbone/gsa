@@ -1,5 +1,11 @@
 2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/http.js: Increase http request timeout to 60
+	seconds. 10 seconds may not be long enough for big requests like results or
+	vulnerabilities.
+
+2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/powerfilter/powerfilter.js: Don't update filter
 	and allow to edit or delete filter if the current filter has not been loaded
 	yet. E.g. if a request may take a while it won't be possible to edit the
