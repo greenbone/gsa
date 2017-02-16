@@ -78,10 +78,18 @@ export class TargetDialogContainer extends React.Component {
     let {gmp} = this.context;
     let {onSave} = this.props;
 
-    return gmp.target.create(data).then(target => {
+    let promise;
+    if (data && data.id) {
+      promise = gmp.target.save(data);
+    }
+    else {
+      promise = gmp.target.create(data);
+    }
+    return promise.then(target => {
       if (onSave) {
-        onSave(target);
+        return onSave(target);
       }
+      return undefined;
     });
   }
 
