@@ -51,6 +51,31 @@ export const VulnCharts = props => {
           type="donut"
           template="info_by_class"/>
       </DataSource>
+      <DataSource
+        filter={filter}
+        name="vuln-host-count-source"
+        group-column="hosts"
+        aggregate-type="vuln">
+        <Chart
+          name="vuln-by-hosts"
+          title={_('Vulnerabilities by Hosts - Bar')}
+          title-count="count"
+          type="bar"
+          template="quantile_histogram"/>
+        <Chart
+          name="vuln-by-hosts-area"
+          title={_('Vulnerabilities by Hosts - Area')}
+          title-count="count"
+          type="line"
+          gen-params={{
+            is_timeline: 0,
+            y_area: 1,
+            y2_area: 0,
+            quantile_fill: 1,
+            fill_in_missing: 1
+          }}
+          template="quantile_split"/>
+      </DataSource>
     </div>
   );
 };
