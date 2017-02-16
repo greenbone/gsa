@@ -779,6 +779,7 @@ export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
 export const ASSETS_FILTER_FILTER = Filter.fromString('type=asset');
 export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
+export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 export const ALL_FILTER = new Filter().all();
 
 export default Filter;

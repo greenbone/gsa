@@ -1,5 +1,10 @@
 2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/filter.js: Add filter for vulnerability
+	filters.
+
+2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c: Update param validators for resource_type and
 	optional_resource_type to allow vulnerabilities. This fixes exporting
 	vulnerabilities.
