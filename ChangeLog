@@ -1,5 +1,10 @@
 2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/targets.js: Add TargetCommand save
+	method.
+
+2017-02-16 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/yesnoradio.js: Use own number proptype
 	validation for YesNoRadio value proptery. Now "1", "0", 1 and 0 are allowed
 	values.

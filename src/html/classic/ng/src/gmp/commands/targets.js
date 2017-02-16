@@ -23,6 +23,8 @@
 
 import logger from '../../log.js';
 
+import {is_string} from '../../utils.js';
+
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Target from '../models/target.js';
@@ -61,6 +63,36 @@ export class TargetCommand extends EntityCommand {
       snmp_credential_id,
       file,
       hosts_filter,
+    }).then(xhr => this.getModelFromResponse(xhr));
+  }
+
+  save(args) {
+    let {id, name, comment = '', target_source, hosts, exclude_hosts,
+      reverse_lookup_only, reverse_lookup_unify, port_list_id, alive_tests,
+      ssh_credential_id = 0, port, smb_credential_id = 0,
+      esxi_credential_id = 0, snmp_credential_id = 0, file,
+      in_use} = args;
+    log.debug('Saving target', args);
+    return this.httpPost({
+      cmd: 'save_target',
+      next: 'get_target',
+      target_id: id,
+      alive_tests,
+      comment,
+      esxi_credential_id,
+      exclude_hosts,
+      file,
+      hosts,
+      in_use: is_string(in_use) ? in_use : in_use ? '1' : '0',
+      name,
+      port,
+      port_list_id,
+      reverse_lookup_only,
+      reverse_lookup_unify,
+      smb_credential_id,
+      snmp_credential_id,
+      ssh_credential_id,
+      target_source,
     }).then(xhr => this.getModelFromResponse(xhr));
   }
 
