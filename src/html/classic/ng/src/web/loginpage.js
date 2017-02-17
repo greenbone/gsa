@@ -181,11 +181,19 @@ class LoginForm extends React.Component {
   render() {
     let {error} = this.props;
     let {username, password} = this.state;
+    let protocol_insecure = (window.location.protocol !== 'https:');
     return (
       <Layout flex="column">
         {error &&
           <div className="login-panel">
             <p className="error">{error}</p>
+          </div>
+        }
+        {protocol_insecure &&
+          <div className="login-panel">
+            <p className="error">{_('Warning: Connection unencrypted')}</p>
+            <p>{_('The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.')}</p>
+            <p>{_('Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.')}</p>
           </div>
         }
         <Layout flex align="space-around" className="login-panel">

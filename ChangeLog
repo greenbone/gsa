@@ -1,3 +1,8 @@
+2017-02-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/ng/src/web/loginpage.js: Show a warning if the page
+	is not accessed via HTTPS.
+
 2017-02-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* tools/js2pot, tools/po2json, tools/pot-test, tools/xml2po,
