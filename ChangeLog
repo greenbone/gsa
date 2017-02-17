@@ -1,4 +1,10 @@
-2017-02-1/ Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* tools/js2pot, tools/po2json, tools/pot-test, tools/xml2po,
+	tools/xsl2pot: Ensure the GPLv2+ license notice uses the paragraph
+	suggested by the Free Software Foundation.
+
+2017-02-17 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/parser.js: Allow to set a plural name
 	when parsing the collection counts. This is required for info.
