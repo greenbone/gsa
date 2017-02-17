@@ -48,8 +48,11 @@ export function parse_text(text) {
   };
 }
 
-export function parse_counts(element, name) {
-  let es = element[name + 's'];
+export function parse_counts(element, name, plural_name) {
+  if (!is_defined(plural_name)) {
+    plural_name = name + 's';
+  }
+  let es = element[plural_name];
   let ec = element[name + '_count'];
   return {
     first: es._start,
@@ -73,15 +76,15 @@ export function parse_entities(response, name, modelclass = Model) {
     element => new modelclass(element));
 }
 
-export function parse_collection_counts(response, name) {
-  return new CollectionCounts(parse_counts(response, name));
+export function parse_collection_counts(response, name, plural_name) {
+  return new CollectionCounts(parse_counts(response, name, plural_name));
 }
 
-export function parse_collection_list(response, name, modelclass) {
+export function parse_collection_list(response, name, modelclass, plural_name) {
   return new CollectionList({
     entries: parse_entities(response, name, modelclass),
     filter: parse_filter(response),
-    counts: parse_collection_counts(response, name),
+    counts: parse_collection_counts(response, name, plural_name),
   });
 }
 
