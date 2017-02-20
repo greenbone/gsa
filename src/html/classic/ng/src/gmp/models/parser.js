@@ -80,6 +80,18 @@ export function parse_collection_counts(response, name, plural_name) {
   return new CollectionCounts(parse_counts(response, name, plural_name));
 }
 
+/**
+ * Parse a {@link CollectionList} from a response object
+ *
+ * @param {Object} response       A response object e.g envelope.get_tasks_response
+ * @param {String} name           The name of the property containing the entities
+ * @param {Model}  modelclass     A Model class to use for creating the entities
+ * @param {String} [plural_name]  (optional) plural name. Defaults to name + 's'
+ *                                if undefined. Used to extract the collection
+ *                                counts from the response object.
+ *
+ * @return {CollectionList}  A new CollectionList instance.
+ */
 export function parse_collection_list(response, name, modelclass, plural_name) {
   return new CollectionList({
     entries: parse_entities(response, name, modelclass),
