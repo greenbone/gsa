@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,27 +21,49 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend} from '../../utils.js';
+import {extend, is_string} from '../../utils.js';
 
 import Model from '../model.js';
+
+const parse_tags = tags => {
+  let newtags = {};
+
+  if (tags) {
+    let splited = tags.split('|');
+    for (let t of splited) {
+      let [key, value] = t.split('=');
+      newtags[key] = value;
+    }
+  }
+
+  return newtags;
+};
+
+const parse_cve_ids = cve_ids => {
+  if (is_string(cve_ids) && cve_ids !== 'NOCVE') {
+    return cve_ids.split(',').map(id => id.trim());
+  }
+  return [];
+};
 
 export class Nvt extends Model {
 
   parseProperties(elem) {
-    let copy = extend({}, elem);
-    copy.oid = copy._oid;
+    let ret = super.parseProperties(elem);
 
-    let tags = {};
-    if (copy.tags) {
-      let splited = copy.tags.split('|');
-      for (let t of splited) {
-        let [key, value] = t.split('=');
-        tags[key] = value;
-      }
+    if (elem.nvt) { // we have an info element
+      extend(ret, elem.nvt);
+      delete ret.nvt;
     }
-    copy.tags = tags;
-    return copy;
+
+    ret.oid = ret._oid;
+    ret.tags = parse_tags(ret.tags);
+    ret.cve_ids = parse_cve_ids(ret.cve_id);
+
+    return ret;
   }
 }
 
 export default Nvt;
+
+// vim: set ts=2 sw=2 tw=80:
