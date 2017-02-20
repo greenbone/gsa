@@ -1,5 +1,10 @@
 2017-02-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/nvt.js: Fix getting the length, all and
+	filtered counts for nvts.
+
+2017-02-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/css/cveid.css,
 	src/html/classic/ng/src/web/cveid.js: Introduce a react component for

@@ -47,7 +47,7 @@ function parse_info_counts(response) {
 
   let infos = response.info;
   let es = infos[infos.length - 1];
-  let ec = response.info;
+  let ec = response.info_count;
   let counts =  {
     first: es._start,
     rows: es._max,
