@@ -46,6 +46,7 @@ import {get_severity_levels} from './render.js';
 
 import HostsPage from './hosts/hostspage.js';
 import NotesPage from './notes/notespage.js';
+import NvtsPage from './nvts/nvtspage.js';
 import OperatingSystemsPage from './os/operatingsystemspage.js';
 import OverridesPage from './overrides/overridespage.js';
 import ReportsPage from './reports/reportspage.js';
@@ -165,6 +166,9 @@ ReactDOM.render(
         <Route
           path="vulnerabilities"
           component={VulnerabilitiesPage}/>
+        <Route
+          path="nvts"
+          component={NvtsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

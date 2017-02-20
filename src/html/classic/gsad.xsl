@@ -505,7 +505,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
           <divider/>
           <item>
-            <page>get_info&amp;info_type=nvt</page>
+            <url>/ng/nvts</url>
             <name><xsl:value-of select="gsa:i18n ('NVTs')"/></name>
           </item>
           <item>
