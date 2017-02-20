@@ -1305,10 +1305,12 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
                      "<version>%s</version>"
                      "<vendor_version>%s</vendor_version>"
                      "<token>%s</token>"
+                     "<http_only>%d</http_only>"
                      "<time>%s</time>",
                      GSAD_VERSION,
                      vendor_version_get (),
                      token ? token : "",
+                     get_http_only (),
                      time);
 
   if (label)
