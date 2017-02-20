@@ -5791,6 +5791,8 @@ main (int argc, char **argv)
   http_guest_chart_x_frame_options = http_guest_chart_frame_opts;
   http_guest_chart_content_security_policy = http_guest_chart_csp;
 
+  set_http_only (!!http_only);
+
   if (http_only == FALSE && hsts_enabled)
     {
       http_strict_transport_security

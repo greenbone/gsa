@@ -942,6 +942,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="number(http_only)">
+        <div class="box container">
+          <div class="col-12">
+            <p class="error_message">
+              <xsl:value-of select="gsa:i18n ('Warning: Connection unencrypted')"/>
+            </p>
+            <p>
+              <xsl:value-of select="gsa:i18n ('The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.')"/>
+            </p>
+            <p>
+              <xsl:value-of select="gsa:i18n ('Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.')"/>
+            </p>
+          </div>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+      </xsl:otherwise>
+    </xsl:choose>
     <div class="box container">
       <div class="logo col-3">
         <xsl:choose>

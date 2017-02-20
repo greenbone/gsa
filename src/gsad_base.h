@@ -98,6 +98,8 @@ int gsad_base_init ();
 int gsad_base_cleanup ();
 int get_chroot_state ();
 void set_chroot_state (int);
+int get_http_only ();
+void set_http_only (int);
 void vendor_version_set (const gchar *);
 const gchar *vendor_version_get ();
 int label_name_set (const gchar *);

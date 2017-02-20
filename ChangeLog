@@ -1,3 +1,17 @@
+2017-02-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r27745.
+
+	* src/gsad.c (main): Set http_only state.
+
+	* src/gsad_base.c (get_http_only, set_http_only): New functions.
+	(login_xml): Add http_only element.
+
+	* src/gsad_base.h (get_http_only, set_http_only): New prototypes.
+
+	* src/html/classic/gsad.xsl (login_page): Add warning box if http_only
+	is enabled.
+
 2017-02-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Fix setting min_qod in create and edit task

@@ -74,6 +74,11 @@ gchar *label_name = NULL;
 static int chroot_state = 0;
 
 /**
+ * @brief The http_only state: 0 = using HTTPS, 1 = HTTP only
+ */
+static int http_only = 0;
+
+/**
  * @brief Base init.
  *
  * @return 0 success, 1 XML needs thread support.
@@ -125,6 +130,28 @@ void
 set_chroot_state (int state)
 {
   chroot_state = state;
+}
+
+/**
+ * @brief Gets the http_only state.
+ *
+ * @return  The http_only state: 0 = using HTTPS, 1 = HTTP only
+ */
+int
+get_http_only ()
+{
+  return http_only;
+}
+
+/**
+ * @brief Sets the http_only state.
+ *
+ * @param[in]  state The new http_only state.
+ */
+void
+set_http_only (int state)
+{
+  http_only = state;
 }
 
 /**
@@ -566,10 +593,12 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
                      "<version>%s</version>"
                      "<vendor_version>%s</vendor_version>"
                      "<token>%s</token>"
+                     "<http_only>%d</http_only>"
                      "<time>%s</time>",
                      GSAD_VERSION,
                      vendor_version_get (),
                      token ? token : "",
+                     get_http_only (),
                      time);
 
   if (label)
