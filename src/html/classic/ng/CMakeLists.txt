@@ -201,6 +201,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/notes/notespage.js
      ${NG_SRC_DIR}/src/web/notes/noteslistrow.js
      ${NG_SRC_DIR}/src/web/nvts/charts.js
+     ${NG_SRC_DIR}/src/web/nvts/filterdialog.js
+     ${NG_SRC_DIR}/src/web/nvts/nvtspage.js
+     ${NG_SRC_DIR}/src/web/nvts/row.js
+     ${NG_SRC_DIR}/src/web/nvts/table.js
      ${NG_SRC_DIR}/src/web/os/filterdialog.js
      ${NG_SRC_DIR}/src/web/os/operatingsystemspage.js
      ${NG_SRC_DIR}/src/web/os/row.js

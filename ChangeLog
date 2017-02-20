@@ -1,5 +1,13 @@
 2017-02-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/nvts/filterdialog.js,
+	src/html/classic/ng/src/web/nvts/nvtspage.js,
+	src/html/classic/ng/src/web/nvts/row.js,
+	src/html/classic/ng/src/web/nvts/table.js: Implement components for Nvts page.
+
+2017-02-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/nvt.js: Fix getting the length, all and
 	filtered counts for nvts.
 
