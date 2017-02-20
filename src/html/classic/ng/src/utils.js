@@ -124,6 +124,16 @@ export function map(array, func, empty = []) {
   return array.map(func);
 }
 
+export function filter(array, func, empty = []) {
+  if (!has_value(array) || !is_defined(func)) {
+    return empty;
+  }
+  if (!is_array(array)) {
+    array = [array];
+  }
+  return array.filter(func);
+};
+
 export const KeyCode = {
   ESC: 27,
   BACKSPACE: 8,
