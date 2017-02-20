@@ -125,6 +125,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/credentials/dialog2.js
      ${NG_SRC_DIR}/src/web/certbund/charts.js
+     ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cpes/charts.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/dashboard/dashboard.js
@@ -287,6 +288,7 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/button.css
+     ${NG_SRC_DIR}/src/web/css/cveid.css
      ${NG_SRC_DIR}/src/web/css/footer.css
      ${NG_SRC_DIR}/src/web/css/footnote.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
