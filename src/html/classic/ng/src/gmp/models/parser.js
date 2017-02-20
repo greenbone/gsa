@@ -90,13 +90,30 @@ export function parse_collection_counts(response, name, plural_name) {
  *                                if undefined. Used to extract the collection
  *                                counts from the response object.
  *
+ * @param {Function} [entities_parse_func] Function to parse Model instances
+ *                                         from the response. Defaults to
+ *                                         parse_entities if undefined.
+ *
+ * @param {Function} [collection_count_parse_func] Function to parse a
+ *                                                 CollectionCounts instance
+ *                                                 from the response. Defaults
+ *                                                 to parse_collection_counts if
+ *                                                 undefined.
+ *
+ * @param {Function} [filter_parse_func] Function to parse a Filter instance
+ *                                       from the response. Defaults to
+ *                                       parse_filter if undefined.
+ *
  * @return {CollectionList}  A new CollectionList instance.
  */
-export function parse_collection_list(response, name, modelclass, plural_name) {
+export function parse_collection_list(response, name, modelclass, plural_name,
+    entities_parse_func = parse_entities,
+    collection_count_parse_func = parse_collection_counts,
+    filter_parse_func = parse_filter) {
   return new CollectionList({
-    entries: parse_entities(response, name, modelclass),
-    filter: parse_filter(response),
-    counts: parse_collection_counts(response, name, plural_name),
+    entries: entities_parse_func(response, name, modelclass),
+    filter: filter_parse_func(response),
+    counts: collection_count_parse_func(response, name, plural_name),
   });
 }
 

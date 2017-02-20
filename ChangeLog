@@ -1,5 +1,11 @@
 2017-02-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/parser.js: Allow to extend collection
+	list parsing by adding params for parser functions. This is required for the
+	ugly info responses.
+
+2017-02-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/parser.js: Add jsdoc for
 	parse_collection_list function.
 
