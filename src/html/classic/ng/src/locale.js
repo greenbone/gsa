@@ -26,7 +26,7 @@ import i18next from 'i18next';
 import XHRBackend from 'i18next-xhr-backend';
 import BrowserDetector from 'i18next-browser-languagedetector';
 
-import {is_string} from './utils.js';
+import {is_defined, is_string} from './utils.js';
 import logger from './log.js';
 
 const log = logger.getLogger('locale');
@@ -78,6 +78,10 @@ export function translate(key, options) {
 }
 
 export function short_date(date) {
+  if (!is_defined(date)) {
+    return undefined;
+  }
+
   if (is_string(date)) {
     date = new Date(date);
   }
@@ -90,6 +94,10 @@ export function short_date(date) {
 }
 
 export function datetime(date) {
+  if (!is_defined(date)) {
+    return undefined;
+  }
+
   if (is_string(date)) {
     date = new Date(date);
   }
