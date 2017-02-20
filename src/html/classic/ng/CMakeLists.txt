@@ -66,6 +66,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/hosts.js
      ${NG_SRC_DIR}/src/gmp/commands/login.js
      ${NG_SRC_DIR}/src/gmp/commands/notes.js
+     ${NG_SRC_DIR}/src/gmp/commands/nvt.js
      ${NG_SRC_DIR}/src/gmp/commands/os.js
      ${NG_SRC_DIR}/src/gmp/commands/overrides.js
      ${NG_SRC_DIR}/src/gmp/commands/portlists.js
