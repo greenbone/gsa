@@ -1,6 +1,14 @@
 2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/cpes/cpespage.js,
+	src/html/classic/ng/src/web/cpes/filterdialog.js,
+	src/html/classic/ng/src/web/cpes/row.js,
+	src/html/classic/ng/src/web/cpes/table.js: Implement cpes list page.
+
+2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/cpes.js,
 	src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/models/cpe.js: Add gmp js api for cpes.
