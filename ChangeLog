@@ -1,5 +1,10 @@
 2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/comment.js: Add a Comment component.
+
+2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/powerfilter/powerfilter.js: Don't call
 	powerfilter event handler if no filter is set (yet).
 
