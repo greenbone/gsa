@@ -21749,7 +21749,7 @@ should not have received it.
       title="{concat(gsa:i18n('Help'),': ',gsa:i18n('CPE'),' (',gsa:i18n('CPE Details'),')')}">
       <img src="/img/help.svg"/>
     </a>
-    <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/ng/cpes?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
       class="icon icon-sm"
       title="{gsa:i18n ('CPEs')}">
       <img src="/img/list.svg" alt="{gsa:i18n ('CPEs')}"/>
@@ -21784,7 +21784,7 @@ should not have received it.
       </table>
     </div>
     <h1>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"
+      <a href="/ng/cpes"
          title="{gsa:i18n ('CPEs')}">
         <img class="icon icon-lg" src="/img/cpe.svg" alt="CPEs"/>
       </a>

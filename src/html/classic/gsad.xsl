@@ -513,7 +513,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('CVEs')"/></name>
           </item>
           <item>
-            <page>get_info&amp;info_type=cpe</page>
+            <url>/ng/cpes</url>
             <name><xsl:value-of select="gsa:i18n ('CPEs')"/></name>
           </item>
           <item>
