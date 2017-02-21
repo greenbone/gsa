@@ -1,5 +1,10 @@
 2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/cves/row.js: Fix stripped table rendering for
+	cve list by using the new TableBody component for each row.
+
+2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/table/body.js,
 	src/html/classic/ng/src/web/table/css/table.css: Add a TableBody component and

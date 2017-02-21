@@ -35,12 +35,13 @@ import {na, render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
+import TableBody from '../table/body.js';
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
 
 const Row = ({entity, links = true, actions, ...other}) => {
   return (
-    <tbody>
+    <TableBody>
       <TableRow>
         <TableData
           rowSpan="2">
@@ -87,7 +88,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
           {shorten(entity.description, 250)}
         </TableData>
       </TableRow>
-    </tbody>
+    </TableBody>
   );
 };
 
