@@ -1,5 +1,10 @@
 2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/nvts/table.js: Fix typo for sorting family nvt
+	column.
+
+2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/table/table.js: Allow to child components to set
 	an own body. This fixes an issue if a row component is going to add more then
 	one table row.

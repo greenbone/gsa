@@ -52,7 +52,7 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
         </TableHead>
         <TableHead
           width="20em"
-          sortby={sort ? 'Family' : false}
+          sortby={sort ? 'family' : false}
           onSortChange={onSortChange}>
           {_('Family')}
         </TableHead>
