@@ -1,3 +1,11 @@
+2017-02-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r26892 by Björn Ricks.
+
+	* src/html/classic/js/gsa_dashboard.js
+	(DashboardDisplay.prototype._rebuildFilterSelection): Fix removing sub
+	elements of selects. A jquery selectAll function is not available.
+
 2017-02-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r27745.
