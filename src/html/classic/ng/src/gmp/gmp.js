@@ -29,6 +29,7 @@ import PromiseFactory from './promise.js';
 
 import './commands/alerts.js';
 import './commands/credentials.js';
+import './commands/cves.js';
 import './commands/filters.js';
 import './commands/hosts.js';
 import './commands/notes.js';
