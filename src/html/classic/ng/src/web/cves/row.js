@@ -25,22 +25,18 @@ import React from 'react';
 
 import _, {datetime} from '../../locale.js';
 
-import {is_empty, shorten} from '../../utils.js';
+import {shorten} from '../../utils.js';
 
 import Comment from '../comment.js';
 import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
-import {render_component} from '../render.js';
+import {na, render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
-
-const na = value => {
-  return is_empty(value) ? _('N/A') : value;
-};
 
 const Row = ({entity, links = true, actions, ...other}) => {
   return (

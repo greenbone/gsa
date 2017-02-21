@@ -25,7 +25,7 @@ import d3 from 'd3';
 import React from 'react';
 
 import _ from '../locale.js';
-import {is_defined, map, shorten} from '../utils.js';
+import {is_defined, is_empty, map, shorten} from '../utils.js';
 
 /* eslint-disable no-unused-vars */
 /* add variables for translation message extractions */
@@ -38,9 +38,10 @@ const NONE = _('None');
 const FALSE_POSITIVE = _('False Positive');
 const ERROR = _('Error');
 const DEBUG = _('Debug');
-const N_A = _('N/A');
 
 /* eslint-enable no-unused-vars */
+
+const N_A = _('N/A');
 
 export function render_options(list, default_opt_value, default_opt = '--') {
   let options = map(list, entry => {
@@ -181,6 +182,10 @@ export function render_component(Component, props = {}) {
 export const withComponentDefaults = (Component, options = {}) => {
   const CompentWrapper = props => <Component {...options} {...props}/>;
   return CompentWrapper;
+};
+
+export const na = value => {
+  return is_empty(value) ? N_A : value;
 };
 
 // vim: set ts=2 sw=2 tw=80:
