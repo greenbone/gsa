@@ -36,11 +36,13 @@ table {
   background: #DDDDDD;
 }
 
-.table-stripped > tbody > tr:nth-child(odd) {
+.table-stripped > .table-body:nth-child(odd),
+.table-stripped > tr:nth-child(odd) {
   background-color: #EEEEEE;
 }
 
-.table-stripped > tbody > tr:hover {
+.table-stripped > .table-body:hover,
+.table-stripped > tr:hover {
   background: #DDDDDD;
 }
 
