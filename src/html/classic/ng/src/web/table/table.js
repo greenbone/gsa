@@ -35,9 +35,7 @@ export const Table = props => {
   return (
     <table className={className}>
       {header}
-      <tbody>
-        {children}
-      </tbody>
+      {children}
       <tfoot>
         {footer}
       </tfoot>
