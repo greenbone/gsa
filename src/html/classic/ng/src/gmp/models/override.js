@@ -24,9 +24,9 @@
 import {extend, is_defined} from '../../utils.js';
 
 import Model from '../model.js';
+import {parse_severity, parse_text} from '../parser.js';
 
 import Nvt from './nvt.js';
-import {parse_severity, parse_text} from './parser.js';
 
 export class Override extends Model {
 

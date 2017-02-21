@@ -21,14 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, parse_float, map} from '../../utils.js';
+import {is_defined, is_empty, parse_float, map} from '../utils.js';
 
-import CollectionList from '../collectionlist.js';
-import CollectionCounts from '../collectioncounts.js';
+import CollectionList from './collectionlist.js';
+import CollectionCounts from './collectioncounts.js';
 
-import Model from '../model.js';
+import Model from './model.js';
 
-import Filter from './filter.js';
+import Filter from './models/filter.js';
 
 export function parse_severity(value) {
   return is_empty(value) ? undefined : parse_float(value);

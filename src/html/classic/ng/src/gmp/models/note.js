@@ -24,9 +24,9 @@
 import {is_defined, extend} from '../../utils.js';
 
 import Model from '../model.js';
+import {parse_severity, parse_text} from '../parser.js';
 
 import Nvt from './nvt.js';
-import {parse_severity, parse_text} from './parser.js';
 
 export class Note extends Model {
 

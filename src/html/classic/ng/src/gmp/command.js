@@ -24,8 +24,9 @@
 import {is_defined, extend, map} from '../utils.js';
 import logger from '../log.js';
 
-import {parse_collection_list} from './models/parser.js';
 import {ALL_FILTER} from './models/filter.js';
+
+import {parse_collection_list} from './parser.js';
 
 const log = logger.getLogger('gmp.command');
 

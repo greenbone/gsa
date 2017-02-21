@@ -92,7 +92,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/os.js
      ${NG_SRC_DIR}/src/gmp/models/override.js
      ${NG_SRC_DIR}/src/gmp/models/nvt.js
-     ${NG_SRC_DIR}/src/gmp/models/parser.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
      ${NG_SRC_DIR}/src/gmp/models/result.js
@@ -103,6 +102,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/task.js
      ${NG_SRC_DIR}/src/gmp/models/user.js
      ${NG_SRC_DIR}/src/gmp/models/vulnerability.js
+     ${NG_SRC_DIR}/src/gmp/parser.js
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/web/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/alerts/emailmethodpart.js

@@ -26,7 +26,7 @@ import {is_defined, is_array} from '../../utils.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Nvt from '../models/nvt.js';
-import {parse_collection_list} from '../models/parser.js';
+import {parse_collection_list} from '../parser.js';
 
 import CollectionCounts from '../collectioncounts.js';
 

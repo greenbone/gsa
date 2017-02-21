@@ -1,3 +1,15 @@
+2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/nvt.js,
+	src/html/classic/ng/src/gmp/models/note.js,
+	src/html/classic/ng/src/gmp/models/os.js,
+	src/html/classic/ng/src/gmp/models/override.js,
+	src/html/classic/ng/src/gmp/models/parser.js,
+	src/html/classic/ng/src/gmp/parser.js: Move parser module from models to main
+	gmp directory. It is not only model related but also for commands.
+
 2017-02-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (main): Set http_only state.

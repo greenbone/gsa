@@ -22,8 +22,7 @@
  */
 
 import Model from '../model.js';
-
-import {parse_severity} from './parser.js';
+import {parse_severity} from '../parser.js';
 
 export class OperatingSystem extends Model {
 
