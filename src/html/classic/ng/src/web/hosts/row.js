@@ -24,8 +24,9 @@
 import React from 'react';
 
 import _, {datetime} from '../../locale.js';
-import {is_defined, is_empty} from '../../utils.js';
+import {is_defined} from '../../utils.js';
 
+import Comment from '../comment.js';
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
@@ -84,14 +85,15 @@ const Row = ({entity, links = true, actions, ...props}) => {
     <TableRow>
       <TableData flex="column">
         {links ?
-          <LegacyLink cmd="get_asset" asset_type="host" asset_id={entity.id}>
+          <LegacyLink
+            cmd="get_asset"
+            asset_type="host"
+            asset_id={entity.id}>
             {entity.name}
           </LegacyLink> :
           entity.name
         }
-        {!is_empty(entity.comment) &&
-          <div className="comment">({entity.comment})</div>
-        }
+        <Comment text={entity.comment}/>
       </TableData>
       <TableData>
         {entity.hostname}
