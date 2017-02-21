@@ -1,5 +1,10 @@
 2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/table/data.js: Allow to set col- and rowspan on
+	TableData components.
+
+2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/hosts/row.js: Use Comment component in host
 	table rows.
 

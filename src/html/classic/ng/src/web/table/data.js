@@ -24,11 +24,14 @@
 import React from 'react';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 export const TableData = props => {
-  let {children, className, ...other} = props;
+  let {children, className, rowSpan, colSpan, ...other} = props;
   return (
-    <td className={className}>
+    <td className={className}
+      colSpan={colSpan}
+      rowSpan={rowSpan}>
       <Layout {...other}>
         {children}
       </Layout>
@@ -38,6 +41,8 @@ export const TableData = props => {
 
 TableData.propTypes = {
   className: React.PropTypes.string,
+  rowSpan: PropTypes.number,
+  colSpan: PropTypes.number,
 };
 
 
