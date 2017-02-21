@@ -21,42 +21,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_array} from '../../utils.js';
+import {is_defined} from '../../utils.js';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Nvt from '../models/nvt.js';
-import {parse_collection_list} from '../parser.js';
+import {parse_collection_list, parse_info_entities,
+  parse_info_counts} from '../parser.js';
 
-import CollectionCounts from '../collectioncounts.js';
+const info_filter = info => is_defined(info.nvt);
 
-function parse_info_entities(response, name, modelclass = Nvt) {
-  if (!is_array(response.info)) {
-    return [];
-  }
-  return response.info
-    .filter(info => is_defined(info.nvt))
-    .map(info => new modelclass(info));
-}
-
-function parse_info_counts(response) {
-  // this is really ugly and more of a kind of a hack
-  //  we depend on the order of the array to be able to parse the counts
-  //  this should be fixed in gmp xml by using a different elements for counts
-  //  or by using the same pattern (with 's') for info
-
-  let infos = response.info;
-  let es = infos[infos.length - 1];
-  let ec = response.info_count;
-  let counts =  {
-    first: es._start,
-    rows: es._max,
-    length: ec.page,
-    all: ec.__text,
-    filtered: ec.filtered,
-  };
-  return new CollectionCounts(counts);
-}
+const parse_nvt_entities = (response, name, modelclass) => {
+  return parse_info_entities(response, name, modelclass, info_filter);
+};
 
 export class NvtCommand extends EntityCommand {
 
@@ -81,7 +58,7 @@ export class NvtsCommand extends EntitiesCommand {
   getCollectionListFromRoot(root) {
     let response = this.getEntitiesResponse(root);
     return parse_collection_list(response, this.name, this.clazz, 'info',
-      parse_info_entities, parse_info_counts);
+      parse_nvt_entities, parse_info_counts);
   }
 }
 

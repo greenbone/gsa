@@ -1,5 +1,12 @@
 2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/nvt.js,
+	src/html/classic/ng/src/gmp/parser.js: Move parse_info_counts and
+	parse_info_entities from nvt to parse module. Also change parse_info_entities
+	to take a filter function.
+
+2017-02-21 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/comment.js: Add a Comment component.
 

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, parse_float, map} from '../utils.js';
+import {is_defined, is_empty, is_array, parse_float, map} from '../utils.js';
 
 import CollectionList from './collectionlist.js';
 import CollectionCounts from './collectioncounts.js';
@@ -47,6 +47,37 @@ export function parse_text(text) {
     text_excerpt: '0',
   };
 }
+
+export function parse_info_entities(response, name, modelclass, filter_func) {
+  if (!is_array(response.info)) {
+    return [];
+  }
+  return response.info
+    .filter(filter_func)
+    .map(info => new modelclass(info));
+}
+
+export function parse_info_counts(response) {
+  // this is really ugly and more of a kind of a hack
+  //  we depend on the order of the array to be able to parse the counts
+  //  this should be fixed in gmp xml by using a different elements for counts
+  //  or by using the same pattern (with 's') for info
+
+  let infos = response.info;
+  // its getting even uglier... if no entites are returned we get a single info
+  // element for start and max counts.
+  let es = is_array(infos) ? infos[infos.length - 1] : infos;
+  let ec = response.info_count;
+  let counts =  {
+    first: es._start,
+    rows: es._max,
+    length: ec.page,
+    all: ec.__text,
+    filtered: ec.filtered,
+  };
+  return new CollectionCounts(counts);
+}
+
 
 export function parse_counts(element, name, plural_name) {
   if (!is_defined(plural_name)) {
