@@ -44,6 +44,7 @@ import ScansPage from './scanspage.js';
 import SecinfoPage from './secinfopage.js';
 import {get_severity_levels} from './render.js';
 
+import CvesPage from './cves/cvespage.js';
 import HostsPage from './hosts/hostspage.js';
 import NotesPage from './notes/notespage.js';
 import NvtsPage from './nvts/nvtspage.js';
@@ -169,6 +170,9 @@ ReactDOM.render(
         <Route
           path="nvts"
           component={NvtsPage}/>
+        <Route
+          path="cves"
+          component={CvesPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

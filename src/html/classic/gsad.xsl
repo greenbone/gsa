@@ -509,7 +509,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('NVTs')"/></name>
           </item>
           <item>
-            <page>get_info&amp;info_type=cve</page>
+            <url>/ng/cves</url>
             <name><xsl:value-of select="gsa:i18n ('CVEs')"/></name>
           </item>
           <item>

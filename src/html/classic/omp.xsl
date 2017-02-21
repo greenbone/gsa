@@ -21457,7 +21457,7 @@ should not have received it.
       title="{concat(gsa:i18n('Help'),': ',gsa:i18n('CVE'),' (',gsa:i18n('CVE Details'),')')}">
       <img src="/img/help.svg"/>
     </a>
-    <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/ng/cves?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
       class="icon icon-sm"
       title="{gsa:i18n ('CVEs')}">
       <img src="/img/list.svg" alt="{gsa:i18n ('CVEs')}"/>
@@ -21495,7 +21495,7 @@ should not have received it.
       </table>
     </div>
     <h1>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"
+      <a href="/ng/cves"
          title="{gsa:i18n ('CVEs')}">
         <img class="icon icon-lg" src="/img/cve.svg" alt="CVEs"/>
       </a>
