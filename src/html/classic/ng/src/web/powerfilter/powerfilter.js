@@ -216,7 +216,7 @@ export class PowerFilter extends React.Component {
                   img="delete.svg"
                   title={_('Reset Filter')}
                   active={is_defined(filter)}
-                  onClick={this.onResetClick}/>
+                  onClick={is_defined(filter) ? this.onResetClick : undefined}/>
               }
 
               <HelpIcon page="powerfilter" />
@@ -225,7 +225,7 @@ export class PowerFilter extends React.Component {
                 <EditIcon
                   title={_('Edit Filter')}
                   active={is_defined(filter)}
-                  onClick={onEditClick}/>
+                  onClick={is_defined(filter) ? onEditClick : undefined}/>
               }
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
