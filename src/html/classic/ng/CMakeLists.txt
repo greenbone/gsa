@@ -70,6 +70,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/notes.js
      ${NG_SRC_DIR}/src/gmp/commands/nvt.js
      ${NG_SRC_DIR}/src/gmp/commands/os.js
+     ${NG_SRC_DIR}/src/gmp/commands/ovaldefs.js
      ${NG_SRC_DIR}/src/gmp/commands/overrides.js
      ${NG_SRC_DIR}/src/gmp/commands/portlists.js
      ${NG_SRC_DIR}/src/gmp/commands/reports.js
@@ -94,6 +95,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/login.js
      ${NG_SRC_DIR}/src/gmp/models/note.js
      ${NG_SRC_DIR}/src/gmp/models/os.js
+     ${NG_SRC_DIR}/src/gmp/models/ovaldef.js
      ${NG_SRC_DIR}/src/gmp/models/override.js
      ${NG_SRC_DIR}/src/gmp/models/nvt.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
