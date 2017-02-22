@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,10 @@ export class CollectionList {
 
   find(func) {
     return this._entries.find(func);
+  }
+
+  sort(func) {
+    return this._entities.sort(func);
   }
 
   push(filter) {

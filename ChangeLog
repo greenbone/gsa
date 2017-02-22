@@ -1,5 +1,10 @@
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/collectionlist.js: Allow to sort a
+	CollectionList.
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/cpe.js: Fix parsing the severity of a
 	cpe.
 
