@@ -224,6 +224,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/os/operatingsystemspage.js
      ${NG_SRC_DIR}/src/web/os/row.js
      ${NG_SRC_DIR}/src/web/os/table.js
+     ${NG_SRC_DIR}/src/web/ovaldefs/filterdialog.js
+     ${NG_SRC_DIR}/src/web/ovaldefs/ovaldefspage.js
+     ${NG_SRC_DIR}/src/web/ovaldefs/row.js
+     ${NG_SRC_DIR}/src/web/ovaldefs/table.js
      ${NG_SRC_DIR}/src/web/overrides/charts.js
      ${NG_SRC_DIR}/src/web/overrides/dialog.js
      ${NG_SRC_DIR}/src/web/overrides/overridespage.js

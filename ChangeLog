@@ -1,6 +1,15 @@
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/ovaldefs/filterdialog.js,
+	src/html/classic/ng/src/web/ovaldefs/ovaldefspage.js,
+	src/html/classic/ng/src/web/ovaldefs/row.js,
+	src/html/classic/ng/src/web/ovaldefs/table.js: Add components for ovaldef list
+	page.
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/ovaldefs.js,
 	src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/models/ovaldef.js: Add gmp js api for ovaldefs.
