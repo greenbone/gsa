@@ -21900,7 +21900,7 @@ should not have received it.
       title="{concat(gsa:i18n('Help'),': OVALDEF (',gsa:i18n('OVAL Definition Details'),')')}">
       <img src="/img/help.svg"/>
     </a>
-    <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
+    <a href="/ng/ovaldefs?filter={str:encode-uri (gsa:envelope-filter (), true ())}"
       class="icon icon-sm"
       title="{gsa:i18n ('OVAL Definitions')}">
       <img src="/img/list.svg" alt="{gsa:i18n ('OVAL Definitions')}"/>
@@ -21927,7 +21927,7 @@ should not have received it.
       </table>
     </div>
     <h1>
-      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"
+      <a href="/ng/ovaldefs"
          title="{gsa:i18n ('OVAL Definitions')}">
         <img class="icon icon-lg" src="/img/ovaldef.svg" alt="OVAL Definitions"/>
       </a>

@@ -51,6 +51,7 @@ import HostsPage from './hosts/hostspage.js';
 import NotesPage from './notes/notespage.js';
 import NvtsPage from './nvts/nvtspage.js';
 import OperatingSystemsPage from './os/operatingsystemspage.js';
+import OvaldefsPage from './ovaldefs/ovaldefspage.js';
 import OverridesPage from './overrides/overridespage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
@@ -180,6 +181,9 @@ ReactDOM.render(
         <Route
           path="cpes"
           component={CpesPage}/>
+        <Route
+          path="ovaldefs"
+          component={OvaldefsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>
