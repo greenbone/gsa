@@ -35,8 +35,8 @@ export class Cve extends Model {
       delete ret.cve;
     }
 
-    elem.severity = elem.cvss;
-    delete elem.cvss;
+    ret.severity = ret.cvss;
+    delete ret.cvss;
 
     return ret;
   }
