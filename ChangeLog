@@ -1,5 +1,10 @@
 2016-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (start_https_daemon): Add mhd version guard removed in
+	previous commit.
+
+2016-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Allow setting multiple addresses with --listen calls.
 
 	* src/gsad.c (address): Rename to address_list.

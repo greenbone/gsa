@@ -2760,7 +2760,11 @@ start_https_daemon (int port, const char *key, const char *cert,
 
   if (address->ss_family == AF_INET6)
 /* LibmicroHTTPD 0.9.28 and higher. */
+#if MHD_VERSION >= 0x00092800
+    ipv6_flag = MHD_USE_DUAL_STACK;
+#else
     ipv6_flag = MHD_USE_IPv6;
+#endif
   else
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
