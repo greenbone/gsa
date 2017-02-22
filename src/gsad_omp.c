@@ -2237,6 +2237,8 @@ get_many (gvm_connection_t *connection, const char *type,
             {
               if (strcmp (params_value (params, "info_type"), "cve") == 0)
                 filter = "sort-reverse=published rows=-2";
+              else if (strcmp (params_value (params, "info_type"), "cpe") == 0)
+                filter = "sort-reverse=modified rows=-2";
               else
                 filter = "sort-reverse=created rows=-2";
             }
