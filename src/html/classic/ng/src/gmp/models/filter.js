@@ -686,6 +686,22 @@ export class Filter extends Model {
   }
 
   /**
+   * Returns a simplified filter without first, rows and sort/sort-reverse terms
+   *
+   * @return {Filter} Copy of this filter but without first, rows and
+   *                  sort/sort-reverse terms.
+   */
+  simple() {
+    let filter = this.copy();
+
+    filter.delete('first');
+    filter.delete('rows');
+    filter.delete(filter.getSortOrder());
+
+    return filter;
+  }
+
+  /**
    * Returns the sort order of the current filter
    *
    * @return {String} The sort order. 'sort' or 'sort-reverse'.
