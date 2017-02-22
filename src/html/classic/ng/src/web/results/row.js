@@ -40,11 +40,14 @@ const Row = ({entity, links = true, actions, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        <LegacyLink
-          cmd="get_result"
-          result_id={entity.id}>
-          {entity.name}
-        </LegacyLink>
+        {links ?
+          <LegacyLink
+            cmd="get_result"
+            result_id={entity.id}>
+            {entity.name}
+          </LegacyLink> :
+          entity.name
+        }
       </TableData>
       <TableData flex align="center">
         {entity && entity.nvt && entity.nvt.tags &&
@@ -58,12 +61,15 @@ const Row = ({entity, links = true, actions, ...other}) => {
         {entity.qod.value} %
       </TableData>
       <TableData flex align="center">
-        <LegacyLink
-          cmd="get_asset"
-          type="host"
-          asset_id={entity.host.id}>
-          {entity.host.name}
-        </LegacyLink>
+        {links ?
+          <LegacyLink
+            cmd="get_asset"
+            type="host"
+            asset_id={entity.host.id}>
+            {entity.host.name}
+          </LegacyLink> :
+          entity.host.name
+        }
       </TableData>
       <TableData>
         {entity.port}

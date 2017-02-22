@@ -1,5 +1,10 @@
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/results/row.js: Allow to deactive links in
+	result rows.
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dashboard/datasource.js: Don't update charts if
 	the new filter only has changed rows or first parameters.
 
