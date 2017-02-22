@@ -1,3 +1,15 @@
+2016-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r27771 and r27772. Allow setting multiple addresses with
+	--listen calls.
+
+	* src/gsad.c (address): Rename to address_list.
+	(start_http_daemon, start_https_daemon, gsad_address_set_port): Add
+	parameter for address, and adjust code accordingly.
+	(gsad_address_init): Allocate new address and append it to the list.
+	(main): Adjust to handle a list of addresses instead of a single
+	address.
+
 2017-02-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r26892 by Björn Ricks.
