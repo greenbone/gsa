@@ -35,8 +35,8 @@ export class Cpe extends Model {
       delete ret.cpe;
     }
 
-    elem.severity = elem.max_cvss;
-    delete elem.max_cvss;
+    ret.severity = ret.max_cvss;
+    delete ret.max_cvss;
 
     return ret;
   }
