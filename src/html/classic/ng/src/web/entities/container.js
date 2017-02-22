@@ -275,6 +275,8 @@ class EntitiesContainer extends React.Component {
     let sort = 'sort';
     let sort_field = filter.getSortBy();
 
+    filter = filter.first();
+
     if (sort_field && sort_field === field) {
       sort = filter.getSortOrder() === 'sort' ? 'sort-reverse' : 'sort';
     }
