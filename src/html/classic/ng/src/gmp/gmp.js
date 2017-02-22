@@ -170,12 +170,8 @@ export class Gmp {
     this.storage.globals = JSON.stringify(values);
   }
 
-  get interceptors() {
-    return this.http.interceptors;
-  }
-
-  addInterceptor(interceptor) {
-    this.http.interceptors.push(interceptor);
+  addHttpInterceptor(interceptor) {
+    this.http.addInterceptor(interceptor);
   }
 }
 

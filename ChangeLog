@@ -1,5 +1,15 @@
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/http.js,
+	src/html/classic/ng/src/web/app.js: Improve HttpInterceptor handling by
+	using promises. Interceptors can now transform errors into valid responses
+	and/or absorb specific errors. E.g. now the 401 responses won't be bubbling
+	as an error through the whole stack and therefore don't show up in the
+	browsers console anymore.
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Sort by modification time for get_info and
 	info_type is cpe as default.
 

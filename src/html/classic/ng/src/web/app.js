@@ -31,6 +31,7 @@ import {Router, Route, IndexRoute, Redirect, browserHistory
 
 import Gmp from '../gmp/gmp.js';
 import {HttpInterceptor} from '../gmp/http.js';
+import PromiseFactory from '../gmp/promise.js';
 
 import {is_defined} from '../utils.js';
 import _ from '../locale.js';
@@ -90,7 +91,9 @@ class AppHttpInterceptor extends HttpInterceptor {
   responseError(xhr) {
     if (xhr.status === 401) {
       this.app.toLoginPage();
+      return PromiseFactory.resolve(xhr);
     }
+    return PromiseFactory.reject(xhr);
   }
 }
 
@@ -99,7 +102,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    gmp.addInterceptor(new AppHttpInterceptor(this));
+    gmp.addHttpInterceptor(new AppHttpInterceptor(this));
   }
 
   getChildContext() {

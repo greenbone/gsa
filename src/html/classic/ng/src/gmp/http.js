@@ -167,17 +167,23 @@ export class Http {
   }
 
   handleError(resolve, reject, xhr, options) {
+    let promise = PromiseFactory.resolve(xhr);
+
     for (let interceptor of this.interceptors) {
-      interceptor.responseError(xhr);
+      promise = promise.then(interceptor.responseError);
     }
-    let rej = new Rejection(xhr, 'error');
-    try {
-      reject(this.transformRejection(rej, options));
-    }
-    catch (error) {
-      log.error('Error while transforming error rejection', error);
-      reject(error);
-    }
+
+    promise.catch(request => {
+
+      let rej = new Rejection(request, 'error');
+      try {
+        reject(this.transformRejection(rej, options));
+      }
+      catch (error) {
+        log.error('Error while transforming error rejection', error);
+        reject(error);
+      }
+    });
   }
 
   handleTimeout(resolve, reject, xhr, options) {
@@ -216,12 +222,23 @@ export class Http {
 
   clearCache() {
     this.cache.clear();
+    return this;
+  }
+
+  addInterceptor(interceptor) {
+    this.interceptors.unshift(interceptor);
+    return this;
   }
 }
 
 export class HttpInterceptor {
-  // eslint-disable-next-line
+
+  constructor() {
+    this.responseError = this.responseError.bind(this);
+  }
+
   responseError(xhr) {
+    return PromiseFactory.reject(xhr);
   }
 }
 
