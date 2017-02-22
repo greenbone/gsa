@@ -63,13 +63,13 @@ export class DataSource extends React.Component {
 
   componentWillReceiveProps(props) {
     let {datasource} = this.state;
-    let filter = this.props.filter ? this.props.filter.all() : undefined;
-    let newfilter = props.filter ? props.filter.all() : undefined;
+    let filter = this.props.filter ? this.props.filter.simple() : undefined;
+    let newfilter = props.filter ? props.filter.simple() : undefined;
 
     // TODO charts should decide themself if they need to redraw if a filter has
     // changed in future. This should be changed when the charts a completly
-    // converted to react. Until now we compare the filter without first and
-    // rows params.
+    // converted to react. Until now we compare the filter without first, rows
+    // and sort/sort-reverse params.
     let equals = filter ? filter.equals(newfilter) :
       !is_defined(newfilter);
 
