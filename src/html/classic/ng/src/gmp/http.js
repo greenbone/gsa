@@ -76,14 +76,18 @@ export function build_url_params(params) {
 
 export class Http {
 
-  constructor(url, timeout = TIMEOUT, promise_factory = PromiseFactory) {
+  constructor(url, options = {}) {
+    let {timeout = TIMEOUT, promise_factory = PromiseFactory,
+      cache = new Cache()} = options;
     this.url = url;
     this.params = {};
     this.timeout = timeout;
     this.promise_factory = promise_factory;
 
     this.interceptors = [];
-    this.cache = new Cache();
+    this.cache = cache;
+
+    log.debug('Using http options', options);
   }
 
   request(method, {args, data, uri = this.url, cache = false, force = false,
@@ -256,9 +260,9 @@ export function build_server_url(server, path = '', protocol) {
 
 export class GmpHttp extends Http {
 
-  constructor(server, protocol, timeout, promise_factory) {
+  constructor(server, protocol, options) {
     let url = build_server_url(server, 'omp', protocol);
-    super(url, timeout, promise_factory);
+    super(url, options);
 
     this.params.xml = 1;
   }

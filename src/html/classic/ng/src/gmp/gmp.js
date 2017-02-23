@@ -25,8 +25,6 @@ import {is_defined, is_empty} from '../utils.js';
 
 import logger from '../log.js';
 
-import PromiseFactory from './promise.js';
-
 import './commands/alerts.js';
 import './commands/certbund.js';
 import './commands/credentials.js';
@@ -52,7 +50,7 @@ import './commands/users.js';
 import './commands/vulns.js';
 import './commands/wizard.js';
 
-import {GmpHttp, TIMEOUT, build_server_url, build_url_params} from './http.js';
+import {GmpHttp, build_server_url, build_url_params} from './http.js';
 import {get_commands} from './command.js';
 import LoginCommand from './commands/login.js';
 
@@ -61,17 +59,15 @@ const log = logger.getLogger('gmp');
 export class Gmp {
 
   constructor(options = {}) {
-    let {server, protocol, storage = localStorage} = options;
+    let {server, protocol, storage = localStorage, ...httpoptions} = options;
 
     this._commands = {};
-
-    this.promise_factory = PromiseFactory;
 
     this.server = is_defined(server) ? server : window.location.host;
     this.protocol = is_defined(protocol) ? protocol : window.location.protocol;
 
-    this.http = new GmpHttp(this.server, this.protocol, TIMEOUT,
-      this.promise_factory);
+    this.http = new GmpHttp(this.server, this.protocol, httpoptions);
+
     this._login = new LoginCommand(this.http);
 
     this.storage = storage;
