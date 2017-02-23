@@ -276,6 +276,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/secinfopage.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
+     ${NG_SRC_DIR}/src/web/secinfo/filterdialog.js
+     ${NG_SRC_DIR}/src/web/secinfo/row.js
+     ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
+     ${NG_SRC_DIR}/src/web/secinfo/table.js
      ${NG_SRC_DIR}/src/web/section.js
      ${NG_SRC_DIR}/src/web/selectiontype.js
      ${NG_SRC_DIR}/src/web/severitybar.js
