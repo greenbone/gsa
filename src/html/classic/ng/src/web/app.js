@@ -45,6 +45,7 @@ import ScansPage from './scanspage.js';
 import SecinfoPage from './secinfopage.js';
 import {get_severity_levels} from './render.js';
 
+import CertBundAdvsPage from './certbund/certbundadvspage.js';
 import CpesPage from './cpes/cpespage.js';
 import CvesPage from './cves/cvespage.js';
 import HostsPage from './hosts/hostspage.js';
@@ -184,6 +185,9 @@ ReactDOM.render(
         <Route
           path="ovaldefs"
           component={OvaldefsPage}/>
+        <Route
+          path="certbundadvs"
+          component={CertBundAdvsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

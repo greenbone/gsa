@@ -521,7 +521,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('OVAL Definitions')"/></name>
           </item>
           <item>
-            <page>get_info&amp;info_type=cert_bund_adv</page>
+            <url>/ng/certbundadvs</url>
             <name><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories')"/></name>
           </item>
           <item>
