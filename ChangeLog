@@ -1,5 +1,13 @@
 2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/commands/certbund.js,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/models/certbund.js: Add gmp js api for cert bund
+	advisories.
+
+2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/cpes/row.js: Align cve refs to the right in the
 	cpe table.
 

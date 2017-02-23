@@ -61,6 +61,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/collectionlist.js
      ${NG_SRC_DIR}/src/gmp/command.js
      ${NG_SRC_DIR}/src/gmp/commands/alerts.js
+     ${NG_SRC_DIR}/src/gmp/commands/certbund.js
      ${NG_SRC_DIR}/src/gmp/commands/credentials.js
      ${NG_SRC_DIR}/src/gmp/commands/cpes.js
      ${NG_SRC_DIR}/src/gmp/commands/cves.js
@@ -86,6 +87,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/model.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js
      ${NG_SRC_DIR}/src/gmp/models/capabilities.js
+     ${NG_SRC_DIR}/src/gmp/models/certbund.js
      ${NG_SRC_DIR}/src/gmp/models/chartpreferences.js
      ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/cpe.js

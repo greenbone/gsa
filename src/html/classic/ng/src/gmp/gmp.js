@@ -28,6 +28,7 @@ import logger from '../log.js';
 import PromiseFactory from './promise.js';
 
 import './commands/alerts.js';
+import './commands/certbund.js';
 import './commands/credentials.js';
 import './commands/cpes.js';
 import './commands/cves.js';
