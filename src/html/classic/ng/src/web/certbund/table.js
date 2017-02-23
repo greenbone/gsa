@@ -88,7 +88,7 @@ const CertBundsFooter = createEntitiesFooter({
 });
 
 export default createEntitiesTable({
-  emptyTitle: _('No CERT-Bund Advisiotires available'),
+  emptyTitle: _('No CERT-Bund Advisories available'),
   row: CertBundRow,
   header: CertBundsHeader,
   footer: CertBundsFooter,

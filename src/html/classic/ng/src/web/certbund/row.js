@@ -46,7 +46,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
             <LegacyLink
               cmd="get_info"
               details="1"
-              info_type="cpe"
+              info_type="cert_bund_adv"
               info_id={entity.id}>
               {entity.name}
             </LegacyLink> :
