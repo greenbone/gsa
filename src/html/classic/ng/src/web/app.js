@@ -29,6 +29,7 @@ import ReactDOM from 'react-dom';
 import {Router, Route, IndexRoute, Redirect, browserHistory
 } from 'react-router';
 
+import Cache from '../gmp/cache.js';
 import Gmp from '../gmp/gmp.js';
 import {HttpInterceptor} from '../gmp/http.js';
 import PromiseFactory from '../gmp/promise.js';
@@ -64,7 +65,11 @@ import VulnerabilitiesPage from './vulns/vulnspage.js';
 
 import './css/gsa-base.css';
 
-const gmp = new Gmp(window.config);
+const {config = {}} = window;
+
+const {cache = new Cache(), ...other} = config;
+
+const gmp = new Gmp({cache, ...other});
 
 function is_logged_in(next_state, replace) {
   if (!gmp.token && !sessionStorage.token) {
