@@ -45,6 +45,7 @@ import './commands/reports.js';
 import './commands/results.js';
 import './commands/scanners.js';
 import './commands/schedules.js';
+import './commands/secinfo.js';
 import './commands/targets.js';
 import './commands/tasks.js';
 import './commands/users.js';
