@@ -156,6 +156,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/dfncert/charts.js
+     ${NG_SRC_DIR}/src/web/dfncert/dfncertadvspage.js
+     ${NG_SRC_DIR}/src/web/dfncert/row.js
+     ${NG_SRC_DIR}/src/web/dfncert/table.js
      ${NG_SRC_DIR}/src/web/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/dialog/error.js
      ${NG_SRC_DIR}/src/web/dialog/footer.js
