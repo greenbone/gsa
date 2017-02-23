@@ -2861,7 +2861,6 @@
 
   DataSource.prototype._setFilter = function(filter) {
     this.params.filter = filter;
-    this.cache.clear();
   };
 
   DataSource.prototype.getFilter = function() {
