@@ -37,6 +37,7 @@ import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
 
 const Row = ({entity, links = true, actions, ...other}) => {
+  let shown_name = entity.name ? entity.name : entity.nvt.oid;
   return (
     <TableRow>
       <TableData>
@@ -44,9 +45,9 @@ const Row = ({entity, links = true, actions, ...other}) => {
           <LegacyLink
             cmd="get_result"
             result_id={entity.id}>
-            {entity.name}
+            {shown_name}
           </LegacyLink> :
-          entity.name
+          shown_name
         }
       </TableData>
       <TableData flex align="center">
