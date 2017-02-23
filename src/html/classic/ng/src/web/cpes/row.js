@@ -60,7 +60,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
         <TableData>
           {datetime(entity.modification_time)}
         </TableData>
-        <TableData>
+        <TableData flex align="end">
           {entity.cve_refs}
         </TableData>
         <TableData flex align="center">
