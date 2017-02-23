@@ -2876,31 +2876,31 @@
    * @param gen_params  Generator params for the request.
    */
   DataSource.prototype.addRequest = function(controller, filter, gen_params) {
-    var filter_id = filter ? filter.id : '';
+    var uri = create_uri(this.command, this.token, filter, this.params,
+      this.prefix, false);
 
-    if (!gsa.is_defined(this.requesting_controllers[filter_id])) {
-      this.requesting_controllers[filter_id] = {};
+    if (!gsa.is_defined(this.requesting_controllers[uri])) {
+      this.requesting_controllers[uri] = {};
     }
 
-    this.requesting_controllers[filter_id][controller.id] = {
+    this.requesting_controllers[uri][controller.id] = {
       active: true,
       controller: controller,
       filter: filter,
       gen_params: gen_params
     };
 
-    this.checkRequests(filter);
+    this._checkRequests(uri);
   };
 
   /**
    * Removes a request of a controller from a data source.
    *
-   * @param controller  The controller cancelling the request.
-   * @param filter      The formerly requested filter.
+   * @param controller The controller cancelling the request.
+   * @param uri        URI of the request
    */
-  DataSource.prototype.removeRequest = function(controller, filter) {
-    var filter_id = filter ? filter.id : '';
-    var controllers = this.requesting_controllers[filter_id];
+  DataSource.prototype.removeRequest = function(controller, uri) {
+    var controllers = this.requesting_controllers[uri];
 
     if (controllers && controllers[controller.id]) {
       delete controllers[controller.id];
@@ -2908,11 +2908,11 @@
       var requesting_count = Object.keys(controllers).length;
 
       if (requesting_count === 0) {
-        if (this.active_requests[filter_id]) {
-          this.active_requests[filter_id].abort();
-          delete this.active_requests[filter_id];
-          log.debug('Aborted request for ' + controller.id + ' and filter "' +
-              filter_id + '"');
+        if (this.active_requests[uri]) {
+          this.active_requests[uri].abort();
+          delete this.active_requests[uri];
+          log.debug('Aborted request for ' + controller.id + ' and uri "' +
+              uri + '"');
         }
       }
     }
@@ -2922,39 +2922,33 @@
    * Checks if a data source has active requests for a filter and manages the
    *  HTTP requests.
    */
-  DataSource.prototype.checkRequests = function(filter) {
-    var filter_id = filter ? filter.id : '';
-
-    var data = this.getData(filter_id);
+  DataSource.prototype._checkRequests = function(uri) {
+    var data = this.getData(uri);
     if (data) {
-      this.dataLoaded(data, filter_id);
+      this.dataLoaded(data, uri);
       return this;
     }
 
-    this.addNewXmlRequest(filter);
+    this.addNewXmlRequest(uri);
 
     return this;
   };
 
-  DataSource.prototype.addNewXmlRequest = function(filter) {
+  DataSource.prototype.addNewXmlRequest = function(uri) {
     var self = this;
-    var filter_id = filter ? filter.id : '';
 
-    if (this.active_requests[filter_id]) {
+    if (this.active_requests[uri]) {
       // we already have an request
       return this;
     }
 
-    var data_uri = create_uri(this.command, this.token, filter, this.params,
-      this.prefix, false);
-
-    var d3_request = d3.xml(data_uri, 'application/xml');
+    var d3_request = d3.xml(uri, 'application/xml');
     d3_request.on('beforesend', function(request) {
       request.withCredentials = true;
     });
-    this.active_requests[filter_id] = d3_request;
+    this.active_requests[uri] = d3_request;
     d3_request.get(function(error, xml) {
-      var ctrls = self.requesting_controllers[filter_id];
+      var ctrls = self.requesting_controllers[uri];
       var omp_status;
       var omp_status_text;
 
@@ -3035,10 +3029,10 @@
       }
 
       var data = gch.xml2json(xml_select.node());
-      self.addData(data, filter_id);
-      self.dataLoaded(data, filter_id);
+      self.addData(data, uri);
+      self.dataLoaded(data, uri);
 
-      delete self.active_requests[filter_id];
+      delete self.active_requests[uri];
     });
 
     return this;
@@ -3051,15 +3045,13 @@
   /**
    * Notifiy all controllers about available data
    *
-   * @param data       Data to notify the requesting controllers about
-   * @param filter_id  Filter ID (optional)
+   * @param data Data to notify the requesting controllers about
+   * @param uri  URI of the request
    *
    * @return This data source
    */
-  DataSource.prototype.dataLoaded = function(data, filter_id) {
-    filter_id = gsa.is_defined(filter_id) ? filter_id : '';
-
-    var ctrls = this.requesting_controllers[filter_id];
+  DataSource.prototype.dataLoaded = function(data, uri) {
+    var ctrls = this.requesting_controllers[uri];
 
     for (var controller_id in ctrls) {
       var ctrl = ctrls[controller_id];
@@ -3069,7 +3061,7 @@
         ctrl.controller.dataLoaded(data);
       }
     }
-    delete this.requesting_controllers[filter_id];
+    delete this.requesting_controllers[uri];
     return this;
   };
 
@@ -3079,27 +3071,25 @@
    * This data will delivered to each requesting chart using the filter id
    * afterwards.
    *
-   * @param data       Data to use for requesting charts
-   * @param filter_id  Filter ID (optional)
+   * @param data  Data to use for requesting charts
+   * @param uri   URI of the request
    *
    * @return This data source
    */
-  DataSource.prototype.addData = function(data, filter_id) {
-    filter_id = gsa.is_defined(filter_id) ? filter_id : '';
-    this.cache.set(filter_id, data);
+  DataSource.prototype.addData = function(data, uri) {
+    this.cache.set(uri, data);
     return this;
   };
 
   /**
    * Get request data from the local cache
    *
-   * @param filter_id  Filter ID (optional)
+   * @param uri URI to get data for
    *
    * @return The cached data or undefined of not available
    */
-  DataSource.prototype.getData = function(filter_id) {
-    filter_id = gsa.is_defined(filter_id) ? filter_id : '';
-    return this.cache.get(filter_id);
+  DataSource.prototype.getData = function(uri) {
+    return this.cache.get(uri);
   };
 
   /**
