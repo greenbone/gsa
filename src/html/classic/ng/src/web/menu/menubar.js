@@ -142,10 +142,8 @@ export const MenuBar = (props, context) => {
               to="dfncertadvs"/>
             <MenuEntry
               section
-              legacy
               title={_('All SecInfo')}
-              cmd="get_info"
-              info_type="allinfo"/>
+              to="secinfos"/>
           </Menu>
         }
         <Menu title={_('Configuration')}>

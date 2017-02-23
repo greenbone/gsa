@@ -1,5 +1,11 @@
 2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/menu/menubar.js: Use ng for all secinfo list page.
+
+2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/secinfo/filterdialog.js,
 	src/html/classic/ng/src/web/secinfo/row.js,

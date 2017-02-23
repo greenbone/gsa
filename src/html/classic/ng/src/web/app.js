@@ -57,6 +57,7 @@ import OvaldefsPage from './ovaldefs/ovaldefspage.js';
 import OverridesPage from './overrides/overridespage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
+import AllSecInfosPage from './secinfo/secinfospage.js';
 import TargetsPage from './targets/targetspage.js';
 import TasksPage from './tasks/taskspage.js';
 import VulnerabilitiesPage from './vulns/vulnspage.js';
@@ -192,6 +193,9 @@ ReactDOM.render(
         <Route
           path="dfncertadvs"
           component={DfnCertAdvsPage}/>
+        <Route
+          path="secinfos"
+          component={AllSecInfosPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>
