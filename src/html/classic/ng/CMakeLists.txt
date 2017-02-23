@@ -134,6 +134,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/credentials/dialog2.js
      ${NG_SRC_DIR}/src/web/certbund/charts.js
+     ${NG_SRC_DIR}/src/web/certbund/certbundadvspage.js
+     ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
+     ${NG_SRC_DIR}/src/web/certbund/row.js
+     ${NG_SRC_DIR}/src/web/certbund/table.js
      ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/cves/cvespage.js
