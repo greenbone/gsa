@@ -1,3 +1,8 @@
+2017-02-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/parser.js (parse_report_result_entities):
+	New function for parsing the results from a report.
+
 2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,

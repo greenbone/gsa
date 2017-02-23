@@ -107,6 +107,10 @@ export function parse_entities(response, name, modelclass = Model) {
     element => new modelclass(element));
 }
 
+export function parse_report_result_entities(response, name, modelclass) {
+  return parse_entities(response.results, name, modelclass);
+};
+
 export function parse_collection_counts(response, name, plural_name) {
   return new CollectionCounts(parse_counts(response, name, plural_name));
 }
