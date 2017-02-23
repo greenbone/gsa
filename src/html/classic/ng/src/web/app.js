@@ -48,6 +48,7 @@ import {get_severity_levels} from './render.js';
 import CertBundAdvsPage from './certbund/certbundadvspage.js';
 import CpesPage from './cpes/cpespage.js';
 import CvesPage from './cves/cvespage.js';
+import DfnCertAdvsPage from './dfncert/dfncertadvspage.js';
 import HostsPage from './hosts/hostspage.js';
 import NotesPage from './notes/notespage.js';
 import NvtsPage from './nvts/nvtspage.js';
@@ -188,6 +189,9 @@ ReactDOM.render(
         <Route
           path="certbundadvs"
           component={CertBundAdvsPage}/>
+        <Route
+          path="dfncertadvs"
+          component={DfnCertAdvsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

@@ -22364,7 +22364,7 @@ should not have received it.
       title="{concat(gsa:i18n('Help'),': DFN_CERT_ADV (',gsa:i18n('DFN-CERT Advisory Details'),')')}">
       <img src="/img/help.svg"/>
     </a>
-    <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
+    <a href="/ng/dfncertadvs?filter={str:encode-uri (gsa:envelope-filter (), true ())}"
       class="icon icon-sm"
       title="{gsa:i18n ('DFN-CERT Advisories')}">
       <img src="/img/list.svg" alt="{gsa:i18n ('DFN-CERT Advisories')}"/>
@@ -22391,7 +22391,7 @@ should not have received it.
       </table>
     </div>
     <h1>
-      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"
+      <a href="/ng/dfncertadvs"
          title="{gsa:i18n ('DFN-CERT Advisories')}">
         <img class="icon icon-lg" src="/img/dfn_cert_adv.svg" alt="DFN-CERT Advisories"/>
       </a>
