@@ -37,6 +37,7 @@ import DashboardControls from '../dashboard/controls.js';
 
 const exclude_props = [
   'children',
+  'cache',
   'title',
   'sectionIcon',
   'toolBarIcons',
@@ -115,7 +116,7 @@ export class EntitiesPage extends React.Component {
   }
 
   renderSection() {
-    let {sectionIcon, filter} = this.props;
+    let {sectionIcon, filter, cache} = this.props;
     let DashboardComponent = this.props.dashboard;
 
     return (
@@ -125,7 +126,7 @@ export class EntitiesPage extends React.Component {
         img={sectionIcon}
         extra={DashboardComponent ? <DashboardControls/> : null}>
         {DashboardComponent &&
-          <DashboardComponent filter={filter}/>
+          <DashboardComponent cache={cache} filter={filter}/>
         }
         {this.renderTable()}
       </Section>
@@ -231,6 +232,7 @@ export class EntitiesPage extends React.Component {
 }
 
 EntitiesPage.propTypes = {
+  cache: React.PropTypes.object,
   title: React.PropTypes.string,
   entities: React.PropTypes.object,
   filter: React.PropTypes.object,

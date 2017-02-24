@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ import CpeCharts from './cpes/charts.js';
 import DfnCertCharts from './dfncert/charts.js';
 import SecinfoCharts from './secinfo/charts.js';
 
-export const Home = () => {
+export const Home = (props, {cache}) => {
   return (
     <Section title={_('Dashboard')} img="dashboard.svg"
       extra={<DashboardControls/>}>
@@ -56,24 +56,28 @@ export const Home = () => {
           'cve-by-created|host-by-topology|nvt-by-severity-class'}
         defaultControllerString="task-by-severity-class"
         maxComponents="8">
-        <TaskCharts/>
-        <ReportCharts/>
-        <ResultCharts/>
-        <NoteCharts/>
-        <OverrideCharts/>
-        <VulnCharts/>
-        <HostCharts/>
-        <OsCharts/>
-        <NvtCharts/>
-        <OvaldefCharts/>
-        <CertBundCharts/>
-        <CveCharts/>
-        <CpeCharts/>
-        <DfnCertCharts/>
-        <SecinfoCharts/>
+        <TaskCharts cache={cache}/>
+        <ReportCharts cache={cache}/>
+        <ResultCharts cache={cache}/>
+        <NoteCharts cache={cache}/>
+        <OverrideCharts cache={cache}/>
+        <VulnCharts cache={cache}/>
+        <HostCharts cache={cache}/>
+        <OsCharts cache={cache}/>
+        <NvtCharts cache={cache}/>
+        <OvaldefCharts cache={cache}/>
+        <CertBundCharts cache={cache}/>
+        <CveCharts cache={cache}/>
+        <CpeCharts cache={cache}/>
+        <DfnCertCharts cache={cache}/>
+        <SecinfoCharts cache={cache}/>
       </Dashboard>
     </Section>
   );
+};
+
+Home.contextTypes = {
+  cache: React.PropTypes.object,
 };
 
 export default Home;

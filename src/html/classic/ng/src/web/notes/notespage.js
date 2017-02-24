@@ -151,6 +151,7 @@ export class NotesPage extends EntitiesListPage {
   }
 
   renderDashboard() {
+    let {cache} = this.context;
     let {filter} = this.state;
     return (
       <Dashboard
@@ -160,7 +161,7 @@ export class NotesPage extends EntitiesListPage {
         defaultControllersString={'note-by-active-days|note-by-created|' +
         'note-by-text-words'}
         defaultControllerString="note-by-active-days">
-        <NotesCharts filter={filter}/>
+        <NotesCharts filter={filter} cache={cache}/>
       </Dashboard>
     );
   }
@@ -181,6 +182,7 @@ export class NotesPage extends EntitiesListPage {
 }
 
 NotesPage.contextTypes = {
+  cache: React.PropTypes.object.isRequired,
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };

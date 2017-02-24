@@ -274,6 +274,7 @@ export class TasksPage extends EntitiesListPage {
   }
 
   renderDashboard() {
+    let {cache} = this.context;
     let {filter} = this.state;
     return (
       <Dashboard
@@ -283,13 +284,14 @@ export class TasksPage extends EntitiesListPage {
         defaultControllersString={'task-by-severity-class|' +
           'task-by-most-high-results|task-by-status'}
         defaultControllerString="task-by-cvss">
-        <TaskCharts filter={filter}/>
+        <TaskCharts filter={filter} cache={cache}/>
       </Dashboard>
     );
   }
 }
 
 TasksPage.contextTypes = {
+  cache: React.PropTypes.object,
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };

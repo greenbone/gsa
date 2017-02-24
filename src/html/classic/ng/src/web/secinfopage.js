@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ import NvtCharts from './nvts/charts.js';
 import OvaldefCharts from './ovaldefs/charts.js';
 import AllSecinfoCharts from './secinfo/charts.js';
 
-export const SecinfoPage = () => {
+export const SecinfoPage = (props, {cache}) => {
   return (
     <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
       extra={<DashboardControls/>}>
@@ -49,16 +49,22 @@ export const SecinfoPage = () => {
           'cert_bund_adv-by-cvss'}
         defaultControllerString="nvt-by-cvss"
         maxComponents="8">
-        <NvtCharts/>
-        <OvaldefCharts/>
-        <CertBundCharts/>
-        <CveCharts/>
-        <CpeCharts/>
-        <DfnCertCharts/>
-        <AllSecinfoCharts/>
+        <NvtCharts cache={cache}/>
+        <OvaldefCharts cache={cache}/>
+        <CertBundCharts cache={cache}/>
+        <CveCharts cache={cache}/>
+        <CpeCharts cache={cache}/>
+        <DfnCertCharts cache={cache}/>
+        <AllSecinfoCharts cache={cache}/>
       </Dashboard>
     </Section>
   );
 };
 
+SecinfoPage.contextTypes = {
+  cache: React.PropTypes.object,
+};
+
 export default SecinfoPage;
+
+// vim: set ts=2 sw=2 tw=80:

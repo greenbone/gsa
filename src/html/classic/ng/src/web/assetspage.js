@@ -33,7 +33,7 @@ import DashboardControls from './dashboard/controls.js';
 import HostCharts from './hosts/charts.js';
 import OsCharts from './os/charts.js';
 
-export const AssetsPage = () => {
+export const AssetsPage = (props, {cache}) => {
   return (
     <Section title={_('Assets Dashboard')} img="asset.svg"
       extra={<DashboardControls/>}>
@@ -44,11 +44,15 @@ export const AssetsPage = () => {
           'host-by-modification-time'}
         defaultControllerString="host-by-severity-class"
         maxComponents="8">
-        <HostCharts/>
-        <OsCharts/>
+        <HostCharts cache={cache}/>
+        <OsCharts cache={cache}/>
       </Dashboard>
     </Section>
   );
+};
+
+AssetsPage.contextTypes = {
+  cache: React.PropTypes.object,
 };
 
 export default AssetsPage;

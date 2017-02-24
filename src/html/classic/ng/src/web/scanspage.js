@@ -37,7 +37,7 @@ import NoteCharts from './notes/charts.js';
 import OverrideCharts from './overrides/charts.js';
 import VulnCharts from './vulns/charts.js';
 
-export const ScansPage = () => {
+export const ScansPage = (props, {cache}) => {
   return (
     <Section title={_('Scans Dashboard')} img="scan.svg"
       extra={<DashboardControls/>}>
@@ -48,15 +48,19 @@ export const ScansPage = () => {
           'task-by-severity-class'}
         defaultControllerString="task-by-severity-class"
         maxComponents="8">
-        <TaskCharts/>
-        <ReportCharts/>
-        <ResultCharts/>
-        <NoteCharts/>
-        <OverrideCharts/>
-        <VulnCharts/>
+        <TaskCharts cache={cache}/>
+        <ReportCharts cache={cache}/>
+        <ResultCharts cache={cache}/>
+        <NoteCharts cache={cache}/>
+        <OverrideCharts cache={cache}/>
+        <VulnCharts cache={cache}/>
       </Dashboard>
     </Section>
   );
+};
+
+ScansPage.contextTypes = {
+  cache: React.PropTypes.object,
 };
 
 export default ScansPage;

@@ -178,6 +178,7 @@ export class OverridesPage extends EntitiesListPage {
   }
 
   renderDashboard() {
+    let {cache} = this.context;
     let {filter} = this.state;
     return (
       <Dashboard
@@ -187,13 +188,14 @@ export class OverridesPage extends EntitiesListPage {
         defaultControllersString={'override-by-active-days|' +
           'override-by-created|override-by-text-words'}
         defaultControllerString="override-by-active-days">
-        <OverridesCharts filter={filter}/>
+        <OverridesCharts filter={filter} cache={cache}/>
       </Dashboard>
     );
   }
 }
 
 OverridesPage.contextTypes = {
+  cache: React.PropTypes.object,
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };

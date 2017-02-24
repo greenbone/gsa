@@ -287,6 +287,7 @@ class EntitiesContainer extends React.Component {
   }
 
   render() {
+    let {cache} = this.context;
     let {filter, filters, entities, selection_type, selected} = this.state;
     let {entity_command, entities_command} = this;
     let Component = this.props.component;
@@ -294,6 +295,7 @@ class EntitiesContainer extends React.Component {
     return (
       <Layout>
         <Component {...other}
+          cache={cache}
           entitiesCommand={entities_command}
           entityCommand={entity_command}
           entities={entities}
@@ -333,6 +335,7 @@ EntitiesContainer.propTypes = {
 };
 
 EntitiesContainer.contextTypes = {
+  cache: React.PropTypes.object,
   gmp: React.PropTypes.object.isRequired,
 };
 

@@ -1,5 +1,19 @@
 2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/assetspage.js
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/homepage.js,
+	src/html/classic/ng/src/web/notes/notespage.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js,
+	src/html/classic/ng/src/web/scanspage.js,
+	src/html/classic/ng/src/web/secinfopage.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Pass global cache to all
+	charts. Currently there is no reloading of the chart data implemented.
+	Therefore the charts won't show any new data after initial rendering.
+
+2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/certbund/charts.js,
 	src/html/classic/ng/src/web/cpes/charts.js,
 	src/html/classic/ng/src/web/cves/charts.js,
