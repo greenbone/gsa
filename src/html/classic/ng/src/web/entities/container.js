@@ -32,6 +32,7 @@ import SelectionType from '../selectiontype.js';
 
 import Download from '../form/download.js';
 
+import PromiseFactory from '../../gmp/promise.js';
 import Filter from '../../gmp/models/filter.js';
 
 const log = logger.getLogger('web.entities.container');
@@ -50,6 +51,7 @@ class EntitiesContainer extends React.Component {
     super(...args);
 
     this.state = {
+      loading: false,
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
     };
 
@@ -89,8 +91,6 @@ class EntitiesContainer extends React.Component {
     this.entity_command = gmp[entity_command_name];
     this.entities_command = gmp[entities_command_name];
 
-    this.refresh = gmp.globals.refresh;
-
     if (filter_string) {
       filter = Filter.fromString(filter_string);
     }
@@ -107,14 +107,19 @@ class EntitiesContainer extends React.Component {
     let {cache = true, force = false, refresh} = options;
     let {entities_command} = this;
 
+    this.setState({loading: true});
+
     this.clearTimer(); // remove possible running timer
 
     entities_command.get({filter}, {cache, force}).then(entities => {
       filter = entities.getFilter();
 
-      this.setState({entities, filter});
+      this.setState({entities, filter, loading: false});
 
       this.startTimer(refresh);
+    }, error => {
+      this.setState({loading: false, entities: null});
+      return PromiseFactory.reject(error);
     });
   }
 
@@ -144,7 +149,8 @@ class EntitiesContainer extends React.Component {
   }
 
   startTimer(refresh) {
-    refresh = is_defined(refresh) ? refresh : this.refresh;
+    let {gmp} = this.context;
+    refresh = is_defined(refresh) ? refresh : gmp.globals.autorefresh;
     if (refresh) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
       log.debug('Started reload timer with id', this.timer, 'and interval',
@@ -160,6 +166,8 @@ class EntitiesContainer extends React.Component {
   }
 
   handleTimer() {
+    log.debug('Timer', this.timer, 'finished. Reloading data.');
+
     this.timer = undefined;
     this.reload();
   }
@@ -288,13 +296,15 @@ class EntitiesContainer extends React.Component {
 
   render() {
     let {cache} = this.context;
-    let {filter, filters, entities, selection_type, selected} = this.state;
+    let {filter, filters, entities, selection_type, selected, loading,
+      } = this.state;
     let {entity_command, entities_command} = this;
     let Component = this.props.component;
     let other = exclude(this.props, key => includes(exclude_props, key));
     return (
       <Layout>
         <Component {...other}
+          loading={loading}
           cache={cache}
           entitiesCommand={entities_command}
           entityCommand={entity_command}
