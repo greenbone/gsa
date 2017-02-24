@@ -169,7 +169,9 @@ export class EntitiesPage extends React.Component {
       this.handleFilterEditClick : undefined;
 
     return (
-      <Layout flex align="end" grow="1">
+      <Layout flex
+        align="end"
+        grow="1">
         <PowerFilterComponent
           filter={filter}
           filters={filters}
