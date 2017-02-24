@@ -26,17 +26,19 @@ import React from 'react';
 import CommonCharts from '../dashboard/commoncharts.js';
 
 export const DfnCertCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
       <CommonCharts type="dfn_cert_adv" titleType="DFN-CERT Advisiories"
+        cache={cache}
         filter={filter}/>
     </div>
   );
 };
 
 DfnCertCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 

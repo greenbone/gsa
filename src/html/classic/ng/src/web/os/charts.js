@@ -29,7 +29,7 @@ import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
 export const OsCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
@@ -37,6 +37,7 @@ export const OsCharts = props => {
         name="os-average-severity-count-source"
         group-column="average_severity"
         aggregate-type="os"
+        cache={cache}
         filter={filter}>
         <Chart
           name="os-by-cvss"
@@ -60,6 +61,7 @@ export const OsCharts = props => {
         sort-fields={['average_severity_score', 'modified']}
         sort-orders={['descending', 'descending']}
         sort-stats={['max', 'value']}
+        cache={cache}
         filter={filter}>
         <Chart
           name="os-by-most-vulnerable"
@@ -82,6 +84,7 @@ export const OsCharts = props => {
 };
 
 OsCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 

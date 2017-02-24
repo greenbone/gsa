@@ -34,6 +34,7 @@ export class DataSource extends React.Component {
       undefined;
 
     let ds = new window.gsa.charts.DataSource(this.props.name, {
+      cache: this.props.cache,
       type: this.props.type,
       group_column: this.props['group-column'],
       aggregate_type: this.props['aggregate-type'],
@@ -92,6 +93,7 @@ DataSource.childContextTypes = {
 };
 
 DataSource.propTypes = {
+  cache: React.PropTypes.object,
   name: React.PropTypes.string.isRequired,
   type: React.PropTypes.string,
   column: React.PropTypes.string,

@@ -29,12 +29,13 @@ import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
 export const TaskCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
       <DataSource name="task-severity-count-source"
         filter={filter}
+        cache={cache}
         group-column="severity"
         aggregate-type="task">
         <Chart name="task-by-cvss"
@@ -50,6 +51,7 @@ export const TaskCharts = props => {
       </DataSource>
       <DataSource name="task-status-count-source"
         filter={filter}
+        cache={cache}
         group-column="status"
         aggregate-type="task">
         <Chart name="task-by-status"
@@ -59,6 +61,7 @@ export const TaskCharts = props => {
       </DataSource>
       <DataSource name="task-high-results-source"
         filter={filter}
+        cache={cache}
         aggregate-type="task"
         group-column="uuid"
         columns={['severity', 'high_per_host']}
@@ -83,6 +86,7 @@ export const TaskCharts = props => {
       </DataSource>
       <DataSource name="task-schedules-source"
         filter={filter}
+        cache={cache}
         type="task">
         <Chart name="task-by-schedules"
           type="gantt"
@@ -94,6 +98,7 @@ export const TaskCharts = props => {
 };
 
 TaskCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 

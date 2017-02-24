@@ -30,16 +30,18 @@ import Chart from '../dashboard/chart.js';
 import CommonCharts from '../dashboard/commoncharts.js';
 
 export const OvaldefCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
       <CommonCharts type="ovaldef" titleType="OVAL Definitions"
+        cache={cache}
         filter={filter}/>
       <DataSource
         name="ovaldef-class-source"
         aggregate-type="ovaldef"
         group-column="class"
+        cache={cache}
         filter={filter}>
         <Chart
           name="ovaldef-by-class"
@@ -52,6 +54,7 @@ export const OvaldefCharts = props => {
 };
 
 OvaldefCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 

@@ -26,17 +26,19 @@ import React from 'react';
 import CommonCharts from '../dashboard/commoncharts.js';
 
 export const CveCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
       <CommonCharts type="cve" titleType="CVEs"
+        cache={cache}
         filter={filter}/>
     </div>
   );
 };
 
 CveCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 

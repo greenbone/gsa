@@ -29,12 +29,13 @@ import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
 export const VulnCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
       <DataSource
         filter={filter}
+        cache={cache}
         name="vuln-severity-count-source"
         group-column="severity"
         aggregate-type="vuln">
@@ -53,6 +54,7 @@ export const VulnCharts = props => {
       </DataSource>
       <DataSource
         filter={filter}
+        cache={cache}
         name="vuln-host-count-source"
         group-column="hosts"
         aggregate-type="vuln">
@@ -81,6 +83,7 @@ export const VulnCharts = props => {
 };
 
 VulnCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 

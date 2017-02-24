@@ -1,5 +1,27 @@
 2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/certbund/charts.js,
+	src/html/classic/ng/src/web/cpes/charts.js,
+	src/html/classic/ng/src/web/cves/charts.js,
+	src/html/classic/ng/src/web/dashboard/commoncharts.js,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/dashboard/datasource.js,
+	src/html/classic/ng/src/web/dfncert/charts.js,
+	src/html/classic/ng/src/web/hosts/charts.js,
+	src/html/classic/ng/src/web/notes/charts.js,
+	src/html/classic/ng/src/web/nvts/charts.js,
+	src/html/classic/ng/src/web/os/charts.js,
+	src/html/classic/ng/src/web/ovaldefs/charts.js,
+	src/html/classic/ng/src/web/overrides/charts.js,
+	src/html/classic/ng/src/web/reports/charts.js,
+	src/html/classic/ng/src/web/results/charts.js,
+	src/html/classic/ng/src/web/secinfo/charts.js,
+	src/html/classic/ng/src/web/tasks/charts.js,
+	src/html/classic/ng/src/web/vulns/charts.js: Allow to pass a cache object to
+	all charts.
+
+2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/app.js: Add cache to the context of all
 	components in ng. This introduces a global cache object usable for alle
 	react components.

@@ -29,12 +29,13 @@ import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
 export const NoteCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
       <DataSource
         name="note-created-count-source"
+        cache={cache}
         aggregate-type="note"
         aggregate-mode="count"
         group-column="created"
@@ -51,6 +52,7 @@ export const NoteCharts = props => {
         aggregate-type="note"
         group-column="text"
         aggregate-mode="word_counts"
+        cache={cache}
         filter={filter}>
         <Chart
           name="note-by-text-words"
@@ -64,6 +66,7 @@ export const NoteCharts = props => {
         sort-stat="count"
         sort-order="descending"
         max-groups="250"
+        cache={cache}
         filter={filter}>
         <Chart
           name="note-by-active-days"
@@ -77,6 +80,7 @@ export const NoteCharts = props => {
 };
 
 NoteCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 

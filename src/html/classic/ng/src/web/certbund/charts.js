@@ -26,17 +26,19 @@ import React from 'react';
 import CommonCharts from '../dashboard/commoncharts.js';
 
 export const CertBundCharts = props => {
-  let {filter} = props;
+  let {filter, cache} = props;
 
   return (
     <div>
       <CommonCharts type="cert_bund_adv" titleType="CERT-Bund Advisiories"
+        cache={cache}
         filter={filter}/>
     </div>
   );
 };
 
 CertBundCharts.propTypes = {
+  cache: React.PropTypes.object,
   filter: React.PropTypes.object,
 };
 
