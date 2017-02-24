@@ -71,6 +71,8 @@ const {cache = new Cache(), ...other} = config;
 
 const gmp = new Gmp({cache, ...other});
 
+window.gmp = gmp;
+
 function is_logged_in(next_state, replace) {
   if (!gmp.token && !sessionStorage.token) {
     replace({
