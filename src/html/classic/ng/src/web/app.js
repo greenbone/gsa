@@ -115,7 +115,7 @@ class App extends React.Component {
   }
 
   getChildContext() {
-    return {gmp: gmp};
+    return {gmp, cache};
   }
 
   toLoginPage() {
@@ -137,6 +137,7 @@ class App extends React.Component {
 
 App.childContextTypes = {
   gmp: React.PropTypes.object,
+  cache: React.PropTypes.object,
 };
 
 App.contextTypes = {
