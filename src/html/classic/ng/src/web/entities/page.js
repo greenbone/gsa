@@ -128,16 +128,25 @@ export class EntitiesPage extends React.Component {
         {DashboardComponent &&
           <DashboardComponent cache={cache} filter={filter}/>
         }
+        {this.renderLoading()}
         {this.renderTable()}
       </Section>
     );
+  }
+
+  renderLoading() {
+    let {entities} = this.props;
+    if (!is_defined(entities)) {
+      return <div>{_('Loading')}</div>;
+    }
+    return null;
   }
 
   renderTable() {
     let {filter, entities, ...other} = this.props;
     let TableComponent = this.props.table;
 
-    if (!TableComponent) {
+    if (!entities || !TableComponent) {
       return null;
     }
 

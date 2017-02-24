@@ -1,5 +1,12 @@
 2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/entities/table.js: Move displaying loading of
+	entries into EntitiesPage component. Also don't display table at all if no
+	entities are available.
+
+2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/app.js: Add gmp as global object. This allows to
 	inspect (and also set) gmp settings via the dev console.
 

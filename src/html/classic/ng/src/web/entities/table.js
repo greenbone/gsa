@@ -49,6 +49,10 @@ export class EntitiesTable extends React.Component {
     let {props} = this;
     let {filter, entities, emptyTitle} = props;
 
+    if (!is_defined(entities)) {
+      return null;
+    }
+
     let RowComponent = props.row;
     let HeaderComponent = props.header;
     let FooterComponent = props.footer;
@@ -58,10 +62,6 @@ export class EntitiesTable extends React.Component {
     const other = exclude(props, key => includes(exclude_props, key));
 
     let filterstring = filter ? filter.toFilterString() : '';
-
-    if (!is_defined(entities)) {
-      return <div className="entities-table">{_('Loading')}</div>;
-    }
 
     if (entities.length === 0) {
       return <div className="entities-table">{emptyTitle}</div>;
