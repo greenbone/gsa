@@ -40,6 +40,14 @@ export class Result extends Model {
     if (ret.nvt) {
       ret.nvt = new Nvt(ret.nvt);
     }
+
+    if (ret.name === undefined) {
+      ret.vulnerability = ret.nvt.oid;
+    }
+    else {
+      ret.vulnerability = ret.name;
+    }
+
     return ret;
   }
 }

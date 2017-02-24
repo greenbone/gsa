@@ -50,7 +50,7 @@ export class CollectionList {
   }
 
   sort(func) {
-    return this._entities.sort(func);
+    return this._entries.sort(func);
   }
 
   push(filter) {
