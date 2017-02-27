@@ -95,7 +95,7 @@ class EntitiesContainer extends React.Component {
       filter = Filter.fromString(filter_string);
     }
 
-    this.load(filter, {refresh: 1}); // use data from cache and reload after 1 sec
+    this.load(filter, {refresh: -1}); // use data from cache and reload afterwards
     this.loadFilters();
   }
 
@@ -113,8 +113,14 @@ class EntitiesContainer extends React.Component {
 
     entities_command.get({filter}, {cache, force}).then(entities => {
       filter = entities.getFilter();
+      let meta = entities.getMeta();
 
       this.setState({entities, filter, loading: false});
+
+      if (meta.fromcache && refresh === -1) {
+        // FIXME
+        refresh = 1;
+      }
 
       this.startTimer(refresh);
     }, error => {
@@ -151,7 +157,7 @@ class EntitiesContainer extends React.Component {
   startTimer(refresh) {
     let {gmp} = this.context;
     refresh = is_defined(refresh) ? refresh : gmp.globals.autorefresh;
-    if (refresh) {
+    if (refresh && refresh >= 0) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
       log.debug('Started reload timer with id', this.timer, 'and interval',
         refresh);
@@ -200,9 +206,10 @@ class EntitiesContainer extends React.Component {
       promise = entities_command.exportByFilter(filter.all());
     }
 
-    promise.then(xhr => {
+    promise.then(response => {
+      let {data} = response;
       this.download.setFilename(filename);
-      this.download.setData(xhr.responseText);
+      this.download.setData(data);
       this.download.download();
     }, err => log.error(err));
   }

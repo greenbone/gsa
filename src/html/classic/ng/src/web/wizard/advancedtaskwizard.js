@@ -73,9 +73,9 @@ export class AdvancedTaskWizard extends Dialog {
 
   show() {
     let {gmp} = this.context;
-    gmp.wizard.quickTask().then(settings => {
-      let config_id = settings.settings
-        .get('Default OpenVAS Scan Config').value;
+    gmp.wizard.advancedTask().then(response => {
+      let settings = response.data;
+      let config_id = settings.get('Default OpenVAS Scan Config').value;
 
       if (!is_defined(config_id) || config_id.length === 0) {
         config_id = OPENVAS_CONFIG_FULL_AND_FAST_ID;
@@ -84,11 +84,11 @@ export class AdvancedTaskWizard extends Dialog {
       let credentials = settings.credentials;
 
       let ssh_credential = select_save_id(credentials,
-        settings.settings.get('Default SSH Credential').value, '');
+        settings.get('Default SSH Credential').value, '');
       let smb_credential = select_save_id(credentials,
-        settings.settings.get('Default SMB Credential').value, '');
+        settings.get('Default SMB Credential').value, '');
       let esxi_credential = select_save_id(credentials,
-        settings.settings.get('Default ESXi Credential').value, '');
+        settings.get('Default ESXi Credential').value, '');
 
       let now = moment().tz(settings.timezone);
 
@@ -99,14 +99,14 @@ export class AdvancedTaskWizard extends Dialog {
         date: now,
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
-        port_list_id: settings.settings.get('Default Port List').value,
-        alert_id: settings.settings.get('Default Alert').value,
+        port_list_id: settings.get('Default Port List').value,
+        alert_id: settings.get('Default Alert').value,
         config_id,
         ssh_credential,
         smb_credential,
         esxi_credential,
-        scanner_id: settings.settings.get('Default OpenVAS Scanner').value,
-        slave_id: settings.settings.get('Default Slave').value,
+        scanner_id: settings.get('Default OpenVAS Scanner').value,
+        slave_id: settings.get('Default Slave').value,
         start_minute: now.minutes(),
         start_hour: now.hours(),
         start_timezone: settings.timezone,
@@ -176,7 +176,10 @@ export class AdvancedTaskWizard extends Dialog {
             </p>
           </div>
         </Layout>
-        <Layout grow="1" basis="0" flex="column">
+        <Layout
+          grow="1"
+          basis="0"
+          flex="column">
           <FormGroup>
             <h3>{_('Quick start: Create a new task')}</h3>
           </FormGroup>
@@ -185,7 +188,9 @@ export class AdvancedTaskWizard extends Dialog {
             <TextField name="task_name"
               grow="1"
               onChange={this.onValueChange}
-              value={task_name} size="30" maxLength="80"/>
+              value={task_name}
+              size="30"
+              maxLength="80"/>
           </FormGroup>
 
           <FormGroup title={_('Scan Config')} titleSize="3">
@@ -204,7 +209,9 @@ export class AdvancedTaskWizard extends Dialog {
               value={target_hosts} maxLength="2000"/>
           </FormGroup>
 
-          <FormGroup title={_('Start Time')} titleSize="3" flex="column">
+          <FormGroup title={_('Start Time')}
+            titleSize="3"
+            flex="column">
             <Radio
               title={_('Start immediately')}
               value="2"
@@ -228,12 +235,20 @@ export class AdvancedTaskWizard extends Dialog {
             </FormGroup>
             <FormGroup offset="1">
               <Text>{_('at')}</Text>
-              <Spinner type="int" min="0" max="23" size="2"
+              <Spinner
+                type="int"
+                min="0"
+                max="23"
+                size="2"
                 name="start_hour"
                 value={start_hour}
                 onChange={this.onValueChange}/>
               <Text>{_('h')}</Text>
-              <Spinner type="int" min="0" max="59" size="2"
+              <Spinner
+                type="int"
+                min="0"
+                max="59"
+                size="2"
                 name="start_minute"
                 value={start_minute}
                 onChange={this.onValueChange}/>
@@ -264,7 +279,10 @@ export class AdvancedTaskWizard extends Dialog {
             <Text>
               {_(' on port ')}
             </Text>
-            <Spinner min="0" max="65535" size="5"
+            <Spinner
+              min="0"
+              max="65535"
+              size="5"
               value={ssh_port}
               onChange={this.onValueChange}/>
           </FormGroup>

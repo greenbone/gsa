@@ -26,7 +26,8 @@ import logger from '../log.js';
 
 import {ALL_FILTER} from './models/filter.js';
 
-import {parse_collection_list} from './parser.js';
+import {parse_collection_list, parse_info_entities,
+  parse_info_counts} from './parser.js';
 
 const log = logger.getLogger('gmp.command');
 
@@ -102,9 +103,9 @@ export class EntitiesCommand extends HttpCommand {
     return rparams;
   }
 
-  getCollectionListFromRoot(root) {
+  getCollectionListFromRoot(root, meta) {
     let response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz);
+    return parse_collection_list(response, this.name, this.clazz, {meta});
   }
 
   getEntitiesResponse(root) {
@@ -113,8 +114,8 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   get(params, options) {
-    return this.httpGet(params, options).then(root => {
-        return this.getCollectionListFromRoot(root);
+    return this.httpGet(params, options).then(response => {
+      return this.getCollectionListFromRoot(response.data, response.meta);
     });
   }
 
@@ -138,7 +139,8 @@ export class EntitiesCommand extends HttpCommand {
     for (let id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    return this.httpPost(params, {plain: true});
+    return this.httpPost(params, {plain: true})
+      .then(response => response.setData(response.data.responseText));
   }
 
   exportByFilter(filter) {
@@ -149,12 +151,13 @@ export class EntitiesCommand extends HttpCommand {
       'bulk_export.x': 1,
       filter,
     };
-    return this.httpPost(params, {plain: true});
+    return this.httpPost(params, {plain: true})
+      .then(response => response.setData(response.data.responseText));
   }
 
   delete(entities) {
     return this.deleteByIds(map(entities, entity => entity.id))
-      .then(() => entities);
+      .then(response => response.setData(entities));
   }
 
   deleteByIds(ids) {
@@ -165,16 +168,17 @@ export class EntitiesCommand extends HttpCommand {
     for (let id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    return this.httpPost(params).then(() => ids);
+    return this.httpPost(params).then(response => response.setData(ids));
   }
 
   deleteByFilter(filter) {
     // FIXME change gmp to allow deletion by filter
     let deleted;
-    return this.get(filter).then(entities => {
+    return this.get(filter).then(response => {
+      let entities = response.data;
       deleted = entities;
       return this.delete(entities);
-    }).then(() => deleted);
+    }).then(response => response.setData(deleted));
   }
 }
 
@@ -186,6 +190,8 @@ export class EntityCommand extends HttpCommand {
     this.clazz = clazz;
     this.name = name;
     this.id_name = name + '_id';
+
+    this.transformResponse = this.transformResponse.bind(this);
   }
 
   getParams(params, extra_params = {}) {
@@ -197,13 +203,16 @@ export class EntityCommand extends HttpCommand {
     return rparams;
   }
 
-  getModelFromResponse(root) {
-    return new this.clazz(this.getElementFromResponse(root));
+  getModelFromResponse(response) {
+    return new this.clazz(this.getElementFromRoot(response.data));
   }
 
   get({id}, options) {
-    return this.httpGet({id}, options).then(
-      xhr => this.getModelFromResponse(xhr));
+    return this.httpGet({id}, options).then(this.transformResponse);
+  }
+
+  transformResponse(response) {
+    return response.setData(this.getModelFromResponse(response));
   }
 
   clone({id}) {
@@ -216,9 +225,9 @@ export class EntityCommand extends HttpCommand {
       next: 'get_'  + this.name,
     }, {
       extra_params,
-    }).then(xhr => {
+    }).then(response => {
       log.debug('Cloned', this.name);
-      return this.getModelFromResponse(xhr);
+      return this.transformResponse(response);
     })
     .catch(err => {
       log.error('An error occured while cloning', this.name, id, err);
@@ -233,9 +242,39 @@ export class EntityCommand extends HttpCommand {
     return this.httpPost(params);
   }
 
-  getElementFromResponse(root) {
-    throw new Error('getElementFromResponse not implemented in ' +
+  getElementFromRoot(root) {
+    throw new Error('getElementFromRoot not implemented in ' +
       this.constructor.name);
+  }
+}
+
+export class InfoEntitiesCommand extends EntitiesCommand {
+
+  constructor(http, name, clazz, entities_filter_func) {
+    super(http, 'info', clazz);
+    this.setParam('cmd', 'get_info');
+    this.setParam('info_type', name);
+    this.entities_filter_func = entities_filter_func;
+
+    this.parseInfoEntities = this.parseInfoEntities.bind(this);
+  }
+
+  getEntitiesResponse(root) {
+    return root.get_info.get_info_response;
+  }
+
+  parseInfoEntities(response, name, modelclass) {
+    return parse_info_entities(response, name, modelclass,
+      this.entities_filter_func);
+  }
+
+  getCollectionListFromRoot(root, meta) {
+    let response = this.getEntitiesResponse(root);
+    return parse_collection_list(response, this.name, this.clazz, {
+      meta,
+      entities_parse_func: this.parseInfoEntities,
+      collection_count_parse_func: parse_info_counts
+    });
   }
 }
 

@@ -63,7 +63,7 @@ export class TargetCommand extends EntityCommand {
       snmp_credential_id,
       file,
       hosts_filter,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    }).then(this.transformResponse);
   }
 
   save(args) {
@@ -93,11 +93,11 @@ export class TargetCommand extends EntityCommand {
       snmp_credential_id,
       ssh_credential_id,
       target_source,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    }).then(this.transformResponse);
   }
 
-  getElementFromResponse(xhr) {
-    return xhr.get_target.get_targets_response.target;
+  getElementFromRoot(root) {
+    return root.get_target.get_targets_response.target;
   }
 }
 

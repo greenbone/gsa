@@ -73,16 +73,16 @@ export class AlertCommand extends EntityCommand {
       convert_data("condition_data", condition_data, condition_data_fields),
       convert_data("event_data", event_data, event_data_fields));
     log.debug('Creating new alert', args, data);
-    return this.httpPost(data).then(xhr => this.getModelFromResponse(xhr));
+    return this.httpPost(data).then(this.transformResponse);
   }
 
-  getElementFromResponse(xhr) {
-    return xhr.get_alert.get_alerts_response.alert;
+  getElementFromRoot(root) {
+    return root.get_alert.get_alerts_response.alert;
   }
 
   newAlertSettings() { // should be removed after all corresponsing omp commands are implemented
-    return this.httpGet({cmd: 'new_alert'}).then(xhr => {
-      let {new_alert} = xhr;
+    return this.httpGet({cmd: 'new_alert'}).then(response => {
+      let {new_alert} = response.data;
       new_alert.report_formats = map(
         new_alert.get_report_formats_response.report_format,
         format => new Model(format));
@@ -93,7 +93,7 @@ export class AlertCommand extends EntityCommand {
         new_alert.get_tasks_response.task, task => new Model(task)); // don't use Task here to avoid cyclic dependencies
       new_alert.filters = map(
         new_alert.get_filters_response.filter, filter => new Model(filter));
-      return new_alert;
+      return response.setData(new_alert);
     });
   }
 }
@@ -102,10 +102,6 @@ export class AlertsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'alert', Alert);
-  }
-
-  getElementsFromResponse(response) {
-    return response.alert;
   }
 
   getEntitiesResponse(root) {

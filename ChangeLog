@@ -1,5 +1,51 @@
 2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/collectionlist.js,
+	src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/alerts.js,
+	src/html/classic/ng/src/gmp/commands/certbund.js,
+	src/html/classic/ng/src/gmp/commands/cpes.js,
+	src/html/classic/ng/src/gmp/commands/credentials.js,
+	src/html/classic/ng/src/gmp/commands/cves.js,
+	src/html/classic/ng/src/gmp/commands/dfncert.js,
+	src/html/classic/ng/src/gmp/commands/filters.js,
+	src/html/classic/ng/src/gmp/commands/login.js,
+	src/html/classic/ng/src/gmp/commands/notes.js,
+	src/html/classic/ng/src/gmp/commands/nvt.js,
+	src/html/classic/ng/src/gmp/commands/ovaldefs.js,
+	src/html/classic/ng/src/gmp/commands/overrides.js,
+	src/html/classic/ng/src/gmp/commands/portlists.js,
+	src/html/classic/ng/src/gmp/commands/schedules.js,
+	src/html/classic/ng/src/gmp/commands/secinfo.js,
+	src/html/classic/ng/src/gmp/commands/targets.js,
+	src/html/classic/ng/src/gmp/commands/tasks.js,
+	src/html/classic/ng/src/gmp/commands/users.js,
+	src/html/classic/ng/src/gmp/commands/wizard.js,
+	src/html/classic/ng/src/gmp/http.js,
+	src/html/classic/ng/src/gmp/parser.js,
+	src/html/classic/ng/src/web/alerts/dialog.js,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/page.js,
+	src/html/classic/ng/src/web/reports/reportspage.js,
+	src/html/classic/ng/src/web/targets/dialogcontainer.js,
+	src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/wizard/advancedtaskwizard.js,
+	src/html/classic/ng/src/web/wizard/taskwizard.js: Heavy refactoring of the
+	http response handling. We now always return a Response object for a http
+	request. The Response object has two members: data and meta. The data can be
+	an arbitrary js object (mostly a model instance). This depends on the command
+	and its methods. Meta contains meta info about the response. It is always
+	defined and an object. Currently it can be used e.g. to identify if a
+	response is comming from the cache.
+
+	If a command method returns a list a CollectionList is still returned instead
+	of a Response object. But the CollectionList now also contains the meta
+	object.
+
+2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Rename TIMEOUT constant to
 	DEFAULT_TIMEOUT.
 

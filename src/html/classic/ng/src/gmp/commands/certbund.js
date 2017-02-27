@@ -23,18 +23,12 @@
 
 import {is_defined} from '../../utils.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-
-import {parse_collection_list, parse_info_entities,
-  parse_info_counts} from '../parser.js';
+import {InfoEntitiesCommand, EntityCommand,
+  register_command} from '../command.js';
 
 import CertBundAdv from '../models/certbund.js';
 
 const info_filter = info => is_defined(info.cert_bund_adv);
-
-const parse_cert_bund_adv_entities = (response, name, modelclass) => {
-  return parse_info_entities(response, name, modelclass, info_filter);
-};
 
 export class CertBundCommand extends EntityCommand {
 
@@ -44,22 +38,10 @@ export class CertBundCommand extends EntityCommand {
   }
 }
 
-export class CertBundsCommand extends EntitiesCommand {
+export class CertBundsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
-    super(http, 'info', CertBundAdv);
-    this.setParam('cmd', 'get_info');
-    this.setParam('info_type', 'cert_bund_adv');
-  }
-
-  getEntitiesResponse(root) {
-    return root.get_info.get_info_response;
-  }
-
-  getCollectionListFromRoot(root) {
-    let response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, 'info',
-      parse_cert_bund_adv_entities, parse_info_counts);
+    super(http, 'cert_bund_adv', CertBundAdv, info_filter);
   }
 }
 

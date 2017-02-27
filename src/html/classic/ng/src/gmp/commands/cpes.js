@@ -23,18 +23,12 @@
 
 import {is_defined} from '../../utils.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-
-import {parse_collection_list, parse_info_entities,
-  parse_info_counts} from '../parser.js';
+import {InfoEntitiesCommand, EntityCommand,
+  register_command} from '../command.js';
 
 import Cpe from '../models/cpe.js';
 
 const info_filter = info => is_defined(info.cpe);
-
-const parse_cpe_entities = (response, name, modelclass) => {
-  return parse_info_entities(response, name, modelclass, info_filter);
-};
 
 export class CpeCommand extends EntityCommand {
 
@@ -44,22 +38,10 @@ export class CpeCommand extends EntityCommand {
   }
 }
 
-export class CpesCommand extends EntitiesCommand {
+export class CpesCommand extends InfoEntitiesCommand {
 
   constructor(http) {
-    super(http, 'info', Cpe);
-    this.setParam('cmd', 'get_info');
-    this.setParam('info_type', 'cpe');
-  }
-
-  getEntitiesResponse(root) {
-    return root.get_info.get_info_response;
-  }
-
-  getCollectionListFromRoot(root) {
-    let response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, 'info',
-      parse_cpe_entities, parse_info_counts);
+    super(http, 'cpe', Cpe, info_filter);
   }
 }
 

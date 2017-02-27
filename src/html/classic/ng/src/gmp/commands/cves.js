@@ -23,18 +23,12 @@
 
 import {is_defined} from '../../utils.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-
-import {parse_collection_list, parse_info_entities,
-  parse_info_counts} from '../parser.js';
+import {InfoEntitiesCommand, EntityCommand,
+  register_command} from '../command.js';
 
 import Cve from '../models/cve.js';
 
 const info_filter = info => is_defined(info.cve);
-
-const parse_cve_entities = (response, name, modelclass) => {
-  return parse_info_entities(response, name, modelclass, info_filter);
-};
 
 export class CveCommand extends EntityCommand {
 
@@ -44,22 +38,10 @@ export class CveCommand extends EntityCommand {
   }
 }
 
-export class CvesCommand extends EntitiesCommand {
+export class CvesCommand extends InfoEntitiesCommand {
 
   constructor(http) {
-    super(http, 'info', Cve);
-    this.setParam('cmd', 'get_info');
-    this.setParam('info_type', 'cve');
-  }
-
-  getEntitiesResponse(root) {
-    return root.get_info.get_info_response;
-  }
-
-  getCollectionListFromRoot(root) {
-    let response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, 'info',
-      parse_cve_entities, parse_info_counts);
+    super(http, 'cve', Cve, info_filter);
   }
 }
 

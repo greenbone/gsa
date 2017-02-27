@@ -91,9 +91,10 @@ export class TaskCommand extends EntityCommand {
   }
 
   newTaskSettings() {
-    return this.httpGet({cmd: 'new_task'}).then(xhr => {
+    return this.httpGet({cmd: 'new_task'}).then(response => {
+      let {data} = response;
       let settings = {};
-      let {new_task} = xhr;
+      let {new_task} = data;
       settings.targets = map(new_task.get_targets_response.target,
         target => new Target(target));
       settings.scan_configs = map(new_task.get_configs_response.config,
@@ -120,7 +121,7 @@ export class TaskCommand extends EntityCommand {
         undefined : new_task.schedule_id;
       settings.target_id = is_empty(new_task.target_id) ?
         undefined : new_task.target_id;
-      return settings;
+      return response.setData(settings);
     });
   }
 
@@ -128,21 +129,23 @@ export class TaskCommand extends EntityCommand {
     return this.httpGet({
       cmd: 'edit_task',
       id,
-    }).then(xhr => {
-        let inst = {};
-        let resp = xhr.edit_task.commands_response;
-        inst.targets = map(resp.get_targets_response.target,
-          target => new Target(target));
-        inst.scan_configs = map(resp.get_configs_response.config,
-          config => new Model(config));
-        inst.alerts = map(resp.get_alerts_response.alert,
-          alert => new Model(alert));
-        inst.schedules = map(resp.get_schedules_response.schedule,
-          schedule => new Schedule(schedule));
-        inst.scanners = map(resp.get_scanners_response.scanner,
-          scanner => new Scanner(scanner));
-        return inst;
-      });
+    }).then(response => {
+      let {data} = response;
+
+      let inst = {};
+      let resp = data.edit_task.commands_response;
+      inst.targets = map(resp.get_targets_response.target,
+        target => new Target(target));
+      inst.scan_configs = map(resp.get_configs_response.config,
+        config => new Model(config));
+      inst.alerts = map(resp.get_alerts_response.alert,
+        alert => new Model(alert));
+      inst.schedules = map(resp.get_schedules_response.schedule,
+        schedule => new Schedule(schedule));
+      inst.scanners = map(resp.get_scanners_response.scanner,
+        scanner => new Scanner(scanner));
+      return response.setData(inst);
+    });
   }
 
   create(args) {
@@ -154,6 +157,7 @@ export class TaskCommand extends EntityCommand {
     log.debug('Creating task', args);
     return this.httpPost({
       cmd: 'create_task',
+      next: 'get_task',
       alterable,
       apply_overrides,
       auto_delete,
@@ -175,7 +179,7 @@ export class TaskCommand extends EntityCommand {
       tag_name,
       tag_value,
       target_id,
-    });
+    }).then(this.transformResponse);
   }
 
   createContainer(args) {
@@ -186,7 +190,7 @@ export class TaskCommand extends EntityCommand {
       next: 'get_task',
       name,
       comment,
-    }).then(root => this.getModelFromResponse(root));
+    }).then(this.transformResponse);
   }
 
   save(args) {
@@ -197,6 +201,7 @@ export class TaskCommand extends EntityCommand {
     log.debug('Saving task', args);
     return this.httpPost({
       cmd: 'save_task',
+      next: 'get_task',
       alterable,
       apply_overrides,
       auto_delete,
@@ -216,7 +221,7 @@ export class TaskCommand extends EntityCommand {
       source_iface,
       target_id,
       task_id: id,
-    });
+    }).then(this.transformResponse);
   }
 
   saveContainer(args) {
@@ -225,16 +230,17 @@ export class TaskCommand extends EntityCommand {
     log.debug('Saving container task', args);
     return this.httpPost({
       cmd: 'save_container_task',
+      next: 'get_task',
       name,
       comment,
       in_assets,
       auto_delete,
       auto_delete_data,
       task_id: id,
-    });
+    }).then(this.transformResponse);
   }
 
-  getElementFromResponse(root) {
+  getElementFromRoot(root) {
     return root.get_task.commands_response.get_tasks_response.task;
   }
 }

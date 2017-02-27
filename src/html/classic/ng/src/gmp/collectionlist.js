@@ -23,10 +23,11 @@
 
 export class CollectionList {
 
-  constructor({entries = [], filter, counts}) {
+  constructor({entries = [], filter, counts, meta = {}}) {
     this._entries = entries;
     this._filter = filter;
     this._counts = counts;
+    this._meta = meta;
   }
 
   [Symbol.iterator]() {
@@ -72,6 +73,10 @@ export class CollectionList {
 
   getFilter() {
     return this._filter;
+  }
+
+  getMeta() {
+    return this._meta;
   }
 
 }

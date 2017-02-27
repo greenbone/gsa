@@ -113,7 +113,8 @@ export class TaskDialog extends Dialog {
 
     if (task) {
       log.debug(task);
-      gmp.task.editTaskSettings(task).then(settings => {
+      gmp.task.editTaskSettings(task).then(response => {
+        let settings = response.data;
         let {targets, scan_configs, alerts, scanners, schedules} = settings;
 
         log.debug('Loaded edit task dialog settings', settings);
@@ -163,7 +164,8 @@ export class TaskDialog extends Dialog {
       });
     }
     else {
-      gmp.task.newTaskSettings().then(settings => {
+      gmp.task.newTaskSettings().then(response => {
+        let settings = response.data;
         let {schedule_id, alert_id, osp_config_id, target_id,
           targets, scanner_id = OPENVAS_DEFAULT_SCANNER_ID, scan_configs,
           config_id = OPENVAS_CONFIG_FULL_AND_FAST_ID, alerts, scanners,

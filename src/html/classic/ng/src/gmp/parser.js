@@ -102,6 +102,24 @@ export function parse_elements(response, name) {
   return response[name];
 }
 
+export function parse_envelope_meta(envelope) {
+  let meta = {};
+
+  let props = [
+    'version',
+    'backend_operation',
+    'vendor_version',
+    'i18n',
+    'time',
+    'timezone',
+  ];
+
+  for (let name of props) {
+    meta[name] = envelope[name];
+  }
+  return meta;
+}
+
 export function parse_entities(response, name, modelclass = Model) {
   return map(parse_elements(response, name),
     element => new modelclass(element));
@@ -121,31 +139,51 @@ export function parse_collection_counts(response, name, plural_name) {
  * @param {Object} response       A response object e.g envelope.get_tasks_response
  * @param {String} name           The name of the property containing the entities
  * @param {Model}  modelclass     A Model class to use for creating the entities
- * @param {String} [plural_name]  (optional) plural name. Defaults to name + 's'
+ *
+ * @param {Object} options        An object that contains several optional
+ *                                values.
+ *
+ * @param {String} options.plural_name
+ *
+ *                                (optional) plural name. Defaults to name + 's'
  *                                if undefined. Used to extract the collection
  *                                counts from the response object.
  *
- * @param {Function} [entities_parse_func] Function to parse Model instances
- *                                         from the response. Defaults to
- *                                         parse_entities if undefined.
+ * @param {Function} options.entities_parse_func
  *
- * @param {Function} [collection_count_parse_func] Function to parse a
- *                                                 CollectionCounts instance
- *                                                 from the response. Defaults
- *                                                 to parse_collection_counts if
- *                                                 undefined.
+ *                                (optional) Function to parse Model instances
+ *                                from the response. Defaults to parse_entities
+ *                                if undefined.
  *
- * @param {Function} [filter_parse_func] Function to parse a Filter instance
- *                                       from the response. Defaults to
- *                                       parse_filter if undefined.
+ * @param {Function} options.collection_count_parse_func
+ *
+ *                                (optional) Function to parse a
+ *                                CollectionCounts instance from the response.
+ *                                Defaults to parse_collection_counts if
+ *                                undefined.
+ *
+ * @param {Function} options.filter_parse_func
+ *
+ *                                Function to parse a Filter instance from the
+ *                                response. Defaults to parse_filter if
+ *                                undefined.
+ *
+ * @param {Object} options.meta   Meta object. May contain all kind of meta
+ *                                information for the entities.
  *
  * @return {CollectionList}  A new CollectionList instance.
  */
-export function parse_collection_list(response, name, modelclass, plural_name,
+export function parse_collection_list(response, name, modelclass,
+    options = {}) {
+  const {
+    plural_name,
     entities_parse_func = parse_entities,
     collection_count_parse_func = parse_collection_counts,
-    filter_parse_func = parse_filter) {
+    filter_parse_func = parse_filter,
+    meta = {},
+  } = options;
   return new CollectionList({
+    meta,
     entries: entities_parse_func(response, name, modelclass),
     filter: filter_parse_func(response),
     counts: collection_count_parse_func(response, name, plural_name),

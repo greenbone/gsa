@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../../utils.js';
 import logger from '../../log.js';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
@@ -47,11 +46,11 @@ export class FilterCommand extends EntityCommand {
       comment,
     };
     log.debug('Creating new filter', args, data);
-    return this.httpPost(data).then(xhr => this.getModelFromResponse(xhr));
+    return this.httpPost(data).then(this.transformResponse);
   }
 
-  getElementFromResponse(xhr) {
-    return xhr.get_filter.get_filters_response.filter;
+  getElementFromRoot(root) {
+    return root.get_filter.get_filters_response.filter;
   }
 }
 
@@ -63,22 +62,6 @@ export class FiltersCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_filters.get_filters_response;
-  }
-
-  getFilterFromResponse(response) {
-    return undefined;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.filters.find(elem => is_defined(elem._max));
-    let ec = response.filter_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
   }
 }
 

@@ -107,7 +107,8 @@ class Page extends React.Component {
 
   handleCreateContainerTask(data) {
     let {gmp} = this.context;
-    return gmp.task.createContainer(data).then(task => {
+    return gmp.task.createContainer(data).then(response => {
+      let task = response.data;
       this.openImportDialog(task.id);
     });
   }

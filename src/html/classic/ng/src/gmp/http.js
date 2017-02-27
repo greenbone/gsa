@@ -29,6 +29,8 @@ import {is_defined, has_value, extend, xml2json} from '../utils.js';
 
 import Cache from './cache.js';
 import PromiseFactory from './promise.js';
+import Response from './response.js';
+import {parse_envelope_meta} from './parser.js';
 
 const log = logger.getLogger('gmp.http');
 
@@ -90,7 +92,14 @@ export class Http {
     log.debug('Using http options', options);
   }
 
-  request(method, {args, data, uri = this.url, cache = false, force = false,
+  _cacheData(data, options) {
+    if (options.cache && options.url && options.method === 'GET') {
+      this.cache.set(options.url, data);
+    }
+    return this;
+  }
+
+  request(method, {args, data, url = this.url, cache = false, force = false,
     ...other}) {
     let self = this;
     let formdata;
@@ -98,12 +107,13 @@ export class Http {
     method = method.toUpperCase();
 
     if (args) {
-      uri += '?' + build_url_params(extend({}, this.params, args));
+      url += '?' + build_url_params(extend({}, this.params, args));
     }
 
-    if (method === 'GET' && cache && !force && this.cache.has(uri)) {
-      log.debug('Using http response for uri', uri, 'from cache');
-      return this.promise_factory.promise.resolve(this.cache.get(uri));
+    if (method === 'GET' && cache && !force && this.cache.has(url)) {
+      log.debug('Using http response for url', url, 'from cache');
+      let responsedata = this.cache.get(url).setMeta({fromcache: true});
+      return this.promise_factory.promise.resolve(responsedata);
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
@@ -120,12 +130,12 @@ export class Http {
     }
 
     let xhr;
-    let options = {uri, formdata, cache, force, ...other};
+    let options = {method, url, formdata, cache, force, ...other};
 
     let promise = this.promise_factory.create(function(resolve, reject) {
       xhr = new XMLHttpRequest();
 
-      xhr.open(method, uri, true);
+      xhr.open(method, url, true);
 
       xhr.timeout = self.timeout;
       xhr.withCredentials = true; // allow to set Cookies
@@ -158,11 +168,11 @@ export class Http {
 
   handleSuccess(resolve, reject, xhr, options) {
     try {
-      let data = this.transformSuccess(xhr, options);
-      if (options.cache && options.uri) {
-        this.cache.set(options.uri, data);
-      }
-      resolve(data);
+      let response = this.transformSuccess(xhr, options);
+
+      this._cacheData(response, options);
+
+      resolve(response);
     }
     catch (error) {
       log.error('Error while transforming success response', error);
@@ -192,8 +202,8 @@ export class Http {
 
   handleTimeout(resolve, reject, xhr, options) {
     let rej = new Rejection(xhr, 'timeout',
-      _('A timeout for the request to uri {{uri}} occurred.',
-        {uri: options.uri}));
+      _('A timeout for the request to url {{url}} occurred.',
+        {url: options.url}));
     try {
       reject(this.transformRejection(rej, options));
     }
@@ -217,7 +227,7 @@ export class Http {
   }
 
   transformSuccess(xhr, options) {
-    return xhr;
+    return new Response(xhr, {fromcache: false});
   }
 
   transformRejection(rej, options) {
@@ -277,16 +287,20 @@ export class GmpHttp extends Http {
 
   transformSuccess(xhr, {plain = false, ...options}) {
     if (plain) {
-      return xhr;
+      return super.transformSuccess(xhr, options);
     }
     try {
-      return xml2json(xhr.responseXML).envelope;
+      let {envelope} = xml2json(xhr.responseXML);
+      let meta = parse_envelope_meta(envelope);
+      let response = super.transformSuccess(xhr, options);
+      response = response.set(envelope, meta);
+      return response;
     }
     catch (error) {
       log.error('An error occurred while converting gmp response to js for ' +
         'url', this.url, xhr);
       throw new Rejection(xhr, 'error',  _('An error occurred while ' +
-        'converting gmp response to js for uri {{uri}}', {uri: xhr.uri}));
+        'converting gmp response to js for url {{url}}', {url: options.url}));
     }
   }
 

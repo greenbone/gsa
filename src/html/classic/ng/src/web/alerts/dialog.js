@@ -120,7 +120,8 @@ export class AlertDialog extends Dialog {
   loadData() {
     let {gmp} = this.context;
 
-    gmp.alert.newAlertSettings().then(settings => {
+    gmp.alert.newAlertSettings().then(response => {
+      let settings = response.data;
       let {method_data = {}, condition_data = {}} = this.state;
 
       method_data.credentials = settings.credentials;

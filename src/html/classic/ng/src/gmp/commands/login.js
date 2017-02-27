@@ -40,7 +40,7 @@ export class LoginCommand extends HttpCommand {
     return this.httpPost({
       login: username,
       password
-    }).then(xhr => new Login(xhr), rej => {
+    }).then(responsedata => new Login(responsedata.data), rej => {
       if (rej.isError && rej.isError() && rej.xhr) {
         if (rej.xhr.status === 401) {
           rej.setMessage(_('Bad login information'));

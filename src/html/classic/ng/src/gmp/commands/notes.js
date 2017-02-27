@@ -35,7 +35,7 @@ export class NoteCommand extends EntityCommand {
     super(http, 'note', Note);
   }
 
-  getElementFromResponse(root) {
+  getElementFromRoot(root) {
     return root.get_note.get_notes_response.note;
   }
 
@@ -70,7 +70,7 @@ export class NoteCommand extends EntityCommand {
       port_manual,
       severity,
       text,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    }).then(this.transformResponse);
   }
 }
 

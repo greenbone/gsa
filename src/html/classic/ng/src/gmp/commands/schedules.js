@@ -57,11 +57,11 @@ export class ScheduleCommand extends EntityCommand {
       period_unit,
       duration,
       duration_unit,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    }).then(this.transformResponse);
   }
 
-  getElementFromResponse(xhr) {
-    return xhr.get_schedule.get_schedules_response.schedule;
+  getElementFromRoot(root) {
+    return root.get_schedule.get_schedules_response.schedule;
   }
 }
 

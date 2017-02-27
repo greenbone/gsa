@@ -46,11 +46,11 @@ export class PortListCommand extends EntityCommand {
       from_file,
       port_range,
       file,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    }).then(this.transformResponse);
   }
 
-  getElementFromResponse(xhr) {
-    return xhr.get_port_list.get_port_lists_response.port_list;
+  getElementFromRoot(root) {
+    return root.get_port_list.get_port_lists_response.port_list;
   }
 }
 

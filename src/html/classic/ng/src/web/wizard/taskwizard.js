@@ -47,18 +47,18 @@ export class TaskWizard extends Dialog {
 
   show() {
     let {gmp} = this.context;
-    gmp.wizard.quickFirstScan().then(settings => {
+    gmp.wizard.task().then(response => {
+      let settings = response.data;
       this.setState({
         visible: true,
         hosts: settings.client_address,
-        port_list_id: settings.settings.get('Default Port List').value,
-        alert_id: settings.settings.get('Default Alert').value,
-        config_id: settings.settings.get('Default OpenVAS Scan Config').value,
-        ssh_credential: settings.settings.get('Default SSH Credential').value,
-        smb_credential: settings.settings.get('Default SMB Credential').value,
-        esxi_credential:
-        settings.settings.get('Default ESXi Credential').value,
-        scanner_id: settings.settings.get('Default OpenVAS Scanner').value,
+        port_list_id: settings.get('Default Port List').value,
+        alert_id: settings.get('Default Alert').value,
+        config_id: settings.get('Default OpenVAS Scan Config').value,
+        ssh_credential: settings.get('Default SSH Credential').value,
+        smb_credential: settings.get('Default SMB Credential').value,
+        esxi_credential: settings.get('Default ESXi Credential').value,
+        scanner_id: settings.get('Default OpenVAS Scanner').value,
       });
     });
   }

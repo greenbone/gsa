@@ -85,7 +85,8 @@ export class TargetDialogContainer extends React.Component {
     else {
       promise = gmp.target.create(data);
     }
-    return promise.then(target => {
+    return promise.then(response => {
+      let target = response.data;
       if (onSave) {
         return onSave(target);
       }
@@ -95,7 +96,8 @@ export class TargetDialogContainer extends React.Component {
 
   handleCreateCredential(data) {
     let {gmp} = this.context;
-    return gmp.credential.create(data).then(credential => {
+    return gmp.credential.create(data).then(response => {
+      let credential = response.data;
       let {credentials = []} = this;
       credentials.push(credential);
 
@@ -106,7 +108,8 @@ export class TargetDialogContainer extends React.Component {
 
   handleCreatePortList(data) {
     let {gmp} = this.context;
-    return gmp.portlist.create(data).then(portlist => {
+    return gmp.portlist.create(data).then(response => {
+      let portlist = response.data;
       let {port_lists = []} = this;
       port_lists.push(portlist);
       this.target_dialog.setValue('port_lists', port_lists);

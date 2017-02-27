@@ -58,11 +58,11 @@ export class CredentialCommand extends EntityCommand {
       privacy_algorithm,
       private_key,
       certificate,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    }).then(this.transformResponse);
   }
 
-  getElementFromResponse(xhr) {
-    return xhr.get_credential.get_credentials_response.credential;
+  getElementFromRoot(root) {
+    return root.get_credential.get_credentials_response.credential;
   }
 }
 

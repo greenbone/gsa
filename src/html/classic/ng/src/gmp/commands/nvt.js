@@ -23,17 +23,12 @@
 
 import {is_defined} from '../../utils.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {InfoEntitiesCommand, EntityCommand,
+  register_command} from '../command.js';
 
 import Nvt from '../models/nvt.js';
-import {parse_collection_list, parse_info_entities,
-  parse_info_counts} from '../parser.js';
 
 const info_filter = info => is_defined(info.nvt);
-
-const parse_nvt_entities = (response, name, modelclass) => {
-  return parse_info_entities(response, name, modelclass, info_filter);
-};
 
 export class NvtCommand extends EntityCommand {
 
@@ -43,22 +38,10 @@ export class NvtCommand extends EntityCommand {
   }
 }
 
-export class NvtsCommand extends EntitiesCommand {
+export class NvtsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
-    super(http, 'info', Nvt);
-    this.setParam('cmd', 'get_info');
-    this.setParam('info_type', 'nvt');
-  }
-
-  getEntitiesResponse(root) {
-    return root.get_info.get_info_response;
-  }
-
-  getCollectionListFromRoot(root) {
-    let response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, 'info',
-      parse_nvt_entities, parse_info_counts);
+    super(http, 'nvt', Nvt, info_filter);
   }
 }
 

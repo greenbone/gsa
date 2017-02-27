@@ -80,10 +80,12 @@ export class Dashboard extends React.Component {
     ];
 
     if (!this.props.hideFilterSelect) {
-      promises.push(gmp.filters.get());
+      promises.push(gmp.filters.getAll());
     }
 
-    PromiseFactory.all(promises).then(([prefs, filters]) => {
+    PromiseFactory.all(promises).then(([prefresp, filtersresp]) => {
+      let filters = is_defined(filtersresp) ? filtersresp.data : undefined;
+      let prefs = prefresp.data;
       let pref = prefs.get(pref_id);
 
       for_each(filters, filter => {

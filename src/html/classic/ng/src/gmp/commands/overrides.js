@@ -35,7 +35,7 @@ export class OverrideCommand extends EntityCommand {
     super(http, 'override', Override);
   }
 
-  getElementFromResponse(root) {
+  getElementFromRoot(root) {
     return root.get_override.get_overrides_response.override;
   }
 
@@ -75,7 +75,7 @@ export class OverrideCommand extends EntityCommand {
       port_manual,
       severity,
       text,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    }).then(this.transformResponse);
   }
 }
 

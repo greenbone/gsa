@@ -45,7 +45,7 @@ export class Page extends React.Component {
     let {gmp} = this.context;
 
     gmp.user.currentCapabilities().then(
-      capabilities => this.setState({capabilities}));
+      response => this.setState({capabilities: response.data}));
   }
 
   getChildContext() {

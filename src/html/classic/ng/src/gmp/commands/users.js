@@ -46,9 +46,10 @@ export class UserCommand extends EntityCommand {
     }, {
       cache,
       ...other,
-    }).then(xhr => {
+    }).then(response => {
       let settings = new Settings();
-      for_each(xhr.get_my_settings.get_settings_response.setting, setting => {
+      let {data} = response;
+      for_each(data.get_my_settings.get_settings_response.setting, setting => {
         settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
@@ -56,7 +57,7 @@ export class UserCommand extends EntityCommand {
             value: setting.value,
         });
       });
-      return settings;
+      return response.setData(settings);
     });
   }
 
@@ -67,10 +68,10 @@ export class UserCommand extends EntityCommand {
     }, {
       cache,
       ...other,
-    }).then(xhr => {
-      let caps = xhr.capabilities.help_response.schema.command;
+    }).then(response => {
+      let caps = response.data.capabilities.help_response.schema.command;
       log.debug('Capabilities loaded', caps);
-      return new Capabilities(caps);
+      return response.setData(new Capabilities(caps));
     });
   }
 
@@ -81,10 +82,10 @@ export class UserCommand extends EntityCommand {
     }, {
       cache,
       ...other,
-    }).then(xhr => {
-      let prefs = xhr.chart_preferences.chart_preference;
+    }).then(response => {
+      let prefs = response.data.chart_preferences.chart_preference;
       log.debug('ChartPreferences loaded', prefs);
-      return new ChartPreferences(prefs);
+      return response.setData(new ChartPreferences(prefs));
     });
   }
 }

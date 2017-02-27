@@ -53,16 +53,18 @@ export class WizardCommand extends HttpCommand {
     super(http, {cmd: 'wizard'});
   }
 
-  quickFirstScan() {
+  task() {
     return this.httpGet({
       name: 'quick_first_scan',
-    }).then(xhr => {
+    }).then(response => {
+      let {data} = response;
+      let settings = new Settings();
 
-      xhr.settings = new Settings();
+      settings.client_address = data.client_address;
 
-      for_each(xhr.wizard.run_wizard_response.response
-        .get_settings_response.setting, setting => {
-          xhr.settings.set(setting.name, {
+      for_each(data.wizard.run_wizard_response.response.get_settings_response
+        .setting, setting => {
+          settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
             name: setting.name,
@@ -70,21 +72,22 @@ export class WizardCommand extends HttpCommand {
           });
       });
 
-      return xhr;
+      return response.setData(settings);
     });
   }
 
-  quickTask() {
+  advancedTask() {
     return this.httpGet({
       name: 'quick_task',
-    }).then(xhr => {
+    }).then(response => {
+      let {data} = response;
 
-      let resp = xhr.wizard.run_wizard_response.response.commands_response;
+      let resp = data.wizard.run_wizard_response.response.commands_response;
 
-      xhr.settings = new Settings();
+      let settings = new Settings();
 
       for_each(resp.get_settings_response.setting, setting => {
-          xhr.settings.set(setting.name, {
+          settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
             name: setting.name,
@@ -92,28 +95,34 @@ export class WizardCommand extends HttpCommand {
           });
       });
 
-      xhr.scan_configs = map(resp.get_configs_response.config, config => {
+      settings.scan_configs = map(resp.get_configs_response.config, config => {
         return new Model(config);
       });
 
-      xhr.credentials = map(resp.get_credentials_response.credential, cred => {
-        return new Credential(cred);
-      });
+      settings.credentials = map(resp.get_credentials_response.credential,
+        cred => {
+          return new Credential(cred);
+        });
 
-      return xhr;
+      settings.client_address = data.client_address;
+      settings.timezone = data.timezone;
+
+      return response.setData(settings);
     });
   }
 
   modifyTask() {
     return this.httpGet({
       name: 'modify_task',
-    }).then(xhr => {
-      let resp = xhr.wizard.run_wizard_response.response.commands_response;
+    }).then(response => {
+      let {data} = response;
 
-      xhr.settings = new Settings();
+      let resp = data.wizard.run_wizard_response.response.commands_response;
+
+      let settings = new Settings();
 
       for_each(resp.get_settings_response.setting, setting => {
-          xhr.settings.set(setting.name, {
+          settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
             name: setting.name,
@@ -121,8 +130,9 @@ export class WizardCommand extends HttpCommand {
           });
       });
 
-      xhr.tasks = map(resp.get_tasks_response.task, task => new Task(task));
-      return xhr;
+      settings.tasks = map(resp.get_tasks_response.task,
+        task => new Task(task));
+      return response.setData(settings);
     });
   }
 
