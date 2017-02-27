@@ -1,5 +1,10 @@
 2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: Only start fast reload if
+	the first loaded data was from cache.
+
+2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/response.js: Add missing response class.
 
 2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>

@@ -95,7 +95,7 @@ class EntitiesContainer extends React.Component {
       filter = Filter.fromString(filter_string);
     }
 
-    this.load(filter, {refresh: -1}); // use data from cache and reload afterwards
+    this.load(filter, {reload: true}); // use data from cache and reload afterwards
     this.loadFilters();
   }
 
@@ -104,7 +104,7 @@ class EntitiesContainer extends React.Component {
   }
 
   load(filter, options = {}) {
-    let {cache = true, force = false, refresh} = options;
+    let {cache = true, force = false, refresh, reload = false} = options;
     let {entities_command} = this;
 
     this.setState({loading: true});
@@ -117,8 +117,7 @@ class EntitiesContainer extends React.Component {
 
       this.setState({entities, filter, loading: false});
 
-      if (meta.fromcache && refresh === -1) {
-        // FIXME
+      if (meta.fromcache && reload) {
         refresh = 1;
       }
 
