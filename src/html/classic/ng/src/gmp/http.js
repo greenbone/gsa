@@ -56,7 +56,7 @@ class Rejection {
   }
 }
 
-export const TIMEOUT = 60000; // 60 sec
+export const DEFAULT_TIMEOUT = 60000; // 60 sec
 
 export function build_url_params(params) {
   let argcount = 0;
@@ -77,7 +77,7 @@ export function build_url_params(params) {
 export class Http {
 
   constructor(url, options = {}) {
-    let {timeout = TIMEOUT, promise_factory = PromiseFactory,
+    let {timeout = DEFAULT_TIMEOUT, promise_factory = PromiseFactory,
       cache = new Cache()} = options;
     this.url = url;
     this.params = {};
