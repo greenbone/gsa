@@ -1,3 +1,9 @@
+2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/models/result.js: Always use functions from
+	utils module for checking variables. Also use ternary operator for simple
+	checks.
+
 2017-02-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/collectionlist.js:  Call sort function

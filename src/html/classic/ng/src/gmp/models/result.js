@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import {is_defined} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -41,12 +43,8 @@ export class Result extends Model {
       ret.nvt = new Nvt(ret.nvt);
     }
 
-    if (ret.name === undefined) {
-      ret.vulnerability = ret.nvt.oid;
-    }
-    else {
-      ret.vulnerability = ret.name;
-    }
+    // FIXME is nvt always defined?
+    ret.vulnerability = is_defined(ret.name) ? ret.name : ret.nvt.oid;
 
     return ret;
   }
