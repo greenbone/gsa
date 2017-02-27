@@ -1,5 +1,9 @@
 2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/response.js: Add missing response class.
+
+2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/certbund/row.js,
 	src/html/classic/ng/src/web/cpes/row.js,
 	src/html/classic/ng/src/web/cves/table.js,
