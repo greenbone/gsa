@@ -32,6 +32,7 @@ import Pagination from '../pagination.js';
 import PropTypes from '../proptypes.js';
 import {withComponentDefaults} from '../render.js';
 
+import TableBody from '../table/body.js';
 import StrippedTable from '../table/stripped.js';
 
 const exclude_props = [
@@ -58,6 +59,7 @@ export class EntitiesTable extends React.Component {
     let FooterComponent = props.footer;
     let PaginationComponent = is_defined(props.pagination) ?
       props.pagination : Pagination;
+    let BodyComponent = is_defined(props.body) ? props.body : TableBody;
 
     const other = exclude(props, key => includes(exclude_props, key));
 
@@ -100,11 +102,23 @@ export class EntitiesTable extends React.Component {
       );
     }
 
+    let body;
+    if (BodyComponent) {
+      body = (
+        <BodyComponent>
+          {rows}
+        </BodyComponent>
+      );
+    }
+    else {
+      body = rows;
+    }
+
     return (
       <div className="entities-table">
         {pagination}
         <StrippedTable header={header} footer={footer}>
-          {rows}
+          {body}
         </StrippedTable>
         <Layout flex align="space-between">
           <FootNote>
@@ -118,6 +132,7 @@ export class EntitiesTable extends React.Component {
 }
 
 EntitiesTable.propTypes = {
+  body: PropTypes.componentOrFalse,
   emptyTitle: React.PropTypes.string,
   header: PropTypes.component,
   footer: PropTypes.component,

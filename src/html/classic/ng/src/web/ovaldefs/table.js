@@ -104,6 +104,7 @@ const OvaldefsFooter = createEntitiesFooter({
 });
 
 export const OvaldefsTable = createEntitiesTable({
+  body: false,
   emptyTitle: _('No OVAL Definitions available'),
   row: OvaldefRow,
   header: OvaldefsHeader,

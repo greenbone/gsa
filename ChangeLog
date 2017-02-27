@@ -1,5 +1,18 @@
 2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/certbund/row.js,
+	src/html/classic/ng/src/web/cpes/row.js,
+	src/html/classic/ng/src/web/cves/table.js,
+	src/html/classic/ng/src/web/dfncert/row.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/ovaldefs/table.js,
+	src/html/classic/ng/src/web/secinfo/table.js,
+	src/html/classic/ng/src/web/table/css/table.css: Fix using tbody in tables.
+	React was complaining about missing tbody elements. Now it is optional to use
+	own table bodies for entity rows.
+
+2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/collectionlist.js,
 	src/html/classic/ng/src/gmp/command.js,

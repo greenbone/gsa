@@ -33,42 +33,39 @@ import {na, render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
-import TableBody from '../table/body.js';
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
 
 const Row = ({entity, links = true, actions, ...other}) => {
   return (
-    <TableBody>
-      <TableRow>
-        <TableData>
-          {links ?
-            <LegacyLink
-              cmd="get_info"
-              details="1"
-              info_type="dfn_cert_adv"
-              info_id={entity.id}>
-              {entity.name}
-            </LegacyLink> :
-              entity.name
-          }
-          <Comment text={entity.comment}/>
-        </TableData>
-        <TableData>
-          {na(entity.title)}
-        </TableData>
-        <TableData>
-          {datetime(entity.creation_time)}
-        </TableData>
-        <TableData flex align="end">
-          {entity.cve_refs}
-        </TableData>
-        <TableData flex align="center">
-          <SeverityBar severity={entity.severity}/>
-        </TableData>
-        {render_component(actions, {...other, entity})}
-      </TableRow>
-    </TableBody>
+    <TableRow>
+      <TableData>
+        {links ?
+          <LegacyLink
+            cmd="get_info"
+            details="1"
+            info_type="dfn_cert_adv"
+            info_id={entity.id}>
+            {entity.name}
+          </LegacyLink> :
+            entity.name
+        }
+        <Comment text={entity.comment}/>
+      </TableData>
+      <TableData>
+        {na(entity.title)}
+      </TableData>
+      <TableData>
+        {datetime(entity.creation_time)}
+      </TableData>
+      <TableData flex align="end">
+        {entity.cve_refs}
+      </TableData>
+      <TableData flex align="center">
+        <SeverityBar severity={entity.severity}/>
+      </TableData>
+      {render_component(actions, {...other, entity})}
+    </TableRow>
   );
 };
 

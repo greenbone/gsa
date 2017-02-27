@@ -36,13 +36,13 @@ table {
   background: #DDDDDD;
 }
 
-.table-stripped > .table-body:nth-child(odd),
-.table-stripped > tr:nth-child(odd) {
+.table-stripped > .table-body:nth-of-type(even),
+.table-stripped > .table-body:only-of-type > tr:nth-of-type(even) {
   background-color: #EEEEEE;
 }
 
-.table-stripped > .table-body:hover,
-.table-stripped > tr:hover {
+.table-stripped > .table-body:not(:only-of-type):hover,
+.table-stripped > .table-body:only-of-type > tr:hover {
   background: #DDDDDD;
 }
 

@@ -108,6 +108,7 @@ const CvesFooter = createEntitiesFooter({
 });
 
 export const CvesTable = createEntitiesTable({
+  body: false,
   emptyTitle: _('No CVEs available'),
   row: CveRow,
   header: CvesHeader,
