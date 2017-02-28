@@ -33,33 +33,50 @@ import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
 
+import EditIcon from '../entities/icons/entityediticon.js';
+import DeleteIcon from '../entities/icons/entitydeleteicon.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
 import ExportIcon from '../icons/exporticon.js';
 import NewIcon from '../icons/newicon.js';
 import OsIcon from '../icons/osicon.js';
-import DeleteIcon from '../icons/deleteicon.js';
-import EditIcon from '../icons/editicon.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
 
-const IconActions = ({entity, onEntityDelete, onEntityDownload,
-    onCreateTarget, onEditHost}) => {
+const Actions = ({
+    entity,
+    onEntityDelete,
+    onEntityDownload,
+    onCreateTarget,
+    onEditHost,
+  }, {capabilities}) => {
+
+  let new_title;
+  let can_create_target = capabilities.mayCreate('target');
+  if (can_create_target) {
+    new_title = _('Create Target from Host');
+  }
+  else {
+    new_title = _('Permission to create Target denied');
+  }
   return (
     <Layout flex align={['center', 'center']}>
       <DeleteIcon
-        value={entity}
-        title={_('Delete')}
+        entity={entity}
+        name="asset"
+        uname={_('Host')}
         onClick={onEntityDelete}/>
       <EditIcon
-        value={entity}
-        title={_('Edit host')}
+        entity={entity}
+        name="asset"
+        uname={_('Host')}
         onClick={onEditHost}/>
       <NewIcon
         value={entity}
-        title={_('Create Target from Host')}
+        active={can_create_target}
+        title={new_title}
         onClick={onCreateTarget}/>
       <ExportIcon
         value={entity}
@@ -70,7 +87,7 @@ const IconActions = ({entity, onEntityDelete, onEntityDownload,
   );
 };
 
-IconActions.propTypes = {
+Actions.propTypes = {
   entity: React.PropTypes.object,
   onEntityDelete: React.PropTypes.func,
   onEntityDownload: React.PropTypes.func,
@@ -78,7 +95,9 @@ IconActions.propTypes = {
   onEditHost: React.PropTypes.func,
 };
 
-const Actions = withEntityActions(IconActions);
+Actions.contextTypes = {
+  capabilities: React.PropTypes.object.isRequired,
+};
 
 const Row = ({entity, links = true, actions, ...props}) => {
   return (
@@ -123,6 +142,6 @@ Row.propTypes = {
   links: React.PropTypes.bool,
 };
 
-export default withEntityRow(Row, Actions);
+export default withEntityRow(Row, withEntityActions(Actions));
 
 // vim: set ts=2 sw=2 tw=80:

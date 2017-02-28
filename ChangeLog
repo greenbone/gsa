@@ -1,5 +1,10 @@
 2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/hosts/row.js: Add capabilities checks for host
+	actions.
+
+2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
 	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
