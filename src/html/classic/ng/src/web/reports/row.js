@@ -40,24 +40,35 @@ import DeleteIcon from '../icons/deleteicon.js';
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
 
-const IconActions = props => {
-  let {entity, onEntityDelete} = props;
+const IconActions = ({entity, onEntityDelete}) => {
+  let {report} = entity;
+  let active = report.scan_run_status !== 'Running' &&
+    report.scan_run_status !== 'Requested' &&
+    report.scan_run_status !== 'Stop Requested' &&
+    report.scan_run_status !== 'Resume Requested';
+
+  let title;
+  if (active) {
+    title = _('Delete Report');
+  }
+  else {
+    title = _('Scan is active');
+  }
   return (
     <Layout flex align={['center', 'center']}>
       <DeleteIcon
+        active={active}
         value={entity}
-        title={_('Delete')}
+        title={title}
         onClick={onEntityDelete}/>
     </Layout>
   );
 };
 
 IconActions.propTypes = {
-  entity: React.PropTypes.object,
+  entity: React.PropTypes.object.isRequired,
   onEntityDelete: React.PropTypes.func,
 };
-
-const Actions = withEntityActions(IconActions);
 
 const Row = props => {
   let {entity, links = true, actions, ...other} = props;
@@ -128,7 +139,7 @@ Row.propTypes = {
   links: React.PropTypes.bool,
 };
 
-export default withEntityRow(Row, Actions);
+export default withEntityRow(Row, withEntityActions(IconActions));
 
 // vim: set ts=2 sw=2 tw=80:
 
