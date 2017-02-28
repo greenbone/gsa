@@ -1,3 +1,9 @@
+2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entities/container.js: Allow to set extra
+	parames for loading entities. This will be required for notes and overrides to
+	add defails http param.
+
 2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Only start fast reload if

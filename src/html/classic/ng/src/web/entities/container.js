@@ -106,26 +106,28 @@ class EntitiesContainer extends React.Component {
   load(filter, options = {}) {
     let {cache = true, force = false, refresh, reload = false} = options;
     let {entities_command} = this;
+    let {extraLoadParams = {}} = this.props;
 
     this.setState({loading: true});
 
     this.clearTimer(); // remove possible running timer
 
-    entities_command.get({filter}, {cache, force}).then(entities => {
-      filter = entities.getFilter();
-      let meta = entities.getMeta();
+    entities_command.get({filter, ...extraLoadParams}, {cache, force})
+      .then(entities => {
+        filter = entities.getFilter();
+        let meta = entities.getMeta();
 
-      this.setState({entities, filter, loading: false});
+        this.setState({entities, filter, loading: false});
 
-      if (meta.fromcache && reload) {
-        refresh = 1;
-      }
+        if (meta.fromcache && reload) {
+          refresh = 1;
+        }
 
-      this.startTimer(refresh);
-    }, error => {
-      this.setState({loading: false, entities: null});
-      return PromiseFactory.reject(error);
-    });
+        this.startTimer(refresh);
+      }, error => {
+        this.setState({loading: false, entities: null});
+        return PromiseFactory.reject(error);
+      });
   }
 
   loadFilters() {
@@ -341,6 +343,7 @@ class EntitiesContainer extends React.Component {
 
 EntitiesContainer.propTypes = {
   component: PropTypes.component.isRequired,
+  extraLoadParams: React.PropTypes.object,
   entities: PropTypes.collection,
   filter: PropTypes.filter,
   filtersFilter: PropTypes.filter,
