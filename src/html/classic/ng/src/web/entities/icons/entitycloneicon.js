@@ -31,25 +31,25 @@ import PropTypes from '../../proptypes.js';
 import CloneIcon from '../../icons/cloneicon.js';
 
 export const EntityCloneIcon = ({
+    displayName,
     entity,
     name,
     title,
-    uname,
     onClick,
     ...props,
   }, {capabilities}) => {
 
-  if (!is_defined(uname)) {
-    uname = _(capitalize_first_letter(name));
+  if (!is_defined(displayName)) {
+    displayName = _(capitalize_first_letter(name));
   }
 
   let active = capabilities.mayClone(name);
   if (!is_defined(title)) {
     if (active) {
-      title = _('Clone {{entity}}', {entity: uname});
+      title = _('Clone {{entity}}', {entity: displayName});
     }
     else {
-      title = _('Permission to clone {{entity}} denied', {entity: uname});
+      title = _('Permission to clone {{entity}} denied', {entity: displayName});
     }
   }
   return (
@@ -63,10 +63,10 @@ export const EntityCloneIcon = ({
 };
 
 EntityCloneIcon.propTypes = {
+  displayName: React.PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string,
-  uname: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
 

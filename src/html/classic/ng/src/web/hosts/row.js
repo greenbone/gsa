@@ -66,12 +66,12 @@ const Actions = ({
       <DeleteIcon
         entity={entity}
         name="asset"
-        uname={_('Host')}
+        displayName={_('Host')}
         onClick={onEntityDelete}/>
       <EditIcon
         entity={entity}
         name="asset"
-        uname={_('Host')}
+        displayName={_('Host')}
         onClick={onEditHost}/>
       <NewIcon
         value={entity}

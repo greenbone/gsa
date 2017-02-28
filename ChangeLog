@@ -1,5 +1,15 @@
 2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
+	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
+	src/html/classic/ng/src/web/entities/icons/entityediticon.js,
+	src/html/classic/ng/src/web/entities/icons/entitytrashicon.js,
+	src/html/classic/ng/src/web/hosts/row.js: Rename uname property to displayName
+	to make it more obvious about expecting a translated string which will be
+	displayed.
+
+2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/hosts/row.js: Add capabilities checks for host
 	actions.
 

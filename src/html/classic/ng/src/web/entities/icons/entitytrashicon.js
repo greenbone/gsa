@@ -31,36 +31,36 @@ import PropTypes from '../../proptypes.js';
 import TrashIcon from '../../icons/trashicon.js';
 
 export const EntityTrashIcon = ({
+    displayName,
     entity,
     name,
-    uname,
     title,
     onClick,
     ...props,
   }, {capabilities}) => {
 
-  if (!is_defined(uname)) {
-    uname = _(capitalize_first_letter(name));
+  if (!is_defined(displayName)) {
+    displayName = _(capitalize_first_letter(name));
   }
 
   let active = capabilities.mayDelete(name) && entity.isWriteable() &&
       !entity.isInUse();
   if (!is_defined(title)) {
     if (active) {
-      title = _('Move {{entity}} to trashcan', {entity: uname});
+      title = _('Move {{entity}} to trashcan', {entity: displayName});
     }
     else if (entity.isInUse()) {
-      title = _('{{entity}} is still in use', {entity: uname});
+      title = _('{{entity}} is still in use', {entity: displayName});
     }
     else if (!entity.isWriteable()) {
-      title = _('{{entity}} is not writable', {entity: uname});
+      title = _('{{entity}} is not writable', {entity: displayName});
     }
     else if (!capabilities.mayDelete(name)) { // eslint-disable-line no-negated-condition
       title = _('Permission to move {{entity}} to tashcan denied',
-        {entity: uname});
+        {entity: displayName});
     }
     else {
-      title = _('Cannot move {{entity}} to tashcan', {entity: uname});
+      title = _('Cannot move {{entity}} to tashcan', {entity: displayName});
     }
   }
   return (
@@ -74,10 +74,10 @@ export const EntityTrashIcon = ({
 };
 
 EntityTrashIcon.propTypes = {
+  displayName: React.PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string,
-  uname: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
 

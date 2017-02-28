@@ -31,29 +31,29 @@ import PropTypes from '../../proptypes.js';
 import EditIcon from '../../icons/editicon.js';
 
 export const EntityEditIcon = ({
+    displayName,
     entity,
     name,
-    uname,
     title,
     onClick,
     ...props,
   }, {capabilities}) => {
 
-  if (!is_defined(uname)) {
-    uname = _(capitalize_first_letter(name));
+  if (!is_defined(displayName)) {
+    displayName = _(capitalize_first_letter(name));
   }
 
   let active = capabilities.mayDelete(name) && entity.isWriteable() &&
       !entity.isInUse();
   if (!is_defined(title)) {
     if (active) {
-      title = _('Edit {{entity}}', {entity: uname});
+      title = _('Edit {{entity}}', {entity: displayName});
     }
     else if (!entity.isWriteable()) {
-      title = _('{{entity}} is not writable', {entity: uname});
+      title = _('{{entity}} is not writable', {entity: displayName});
     }
     else if (!capabilities.mayEdit(name)) { // eslint-disable-line no-negated-condition
-      title = _('Permission to edit {{entity}} denied', {entity: uname});
+      title = _('Permission to edit {{entity}} denied', {entity: displayName});
     }
     else {
       title = _('Cannot modify {{entity}}');
@@ -70,10 +70,10 @@ export const EntityEditIcon = ({
 };
 
 EntityEditIcon.propTypes = {
+  displayName: React.PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string,
-  uname: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
 

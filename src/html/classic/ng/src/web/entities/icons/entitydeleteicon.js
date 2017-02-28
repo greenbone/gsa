@@ -31,36 +31,36 @@ import PropTypes from '../../proptypes.js';
 import DeleteIcon from '../../icons/deleteicon.js';
 
 export const EntityDeleteIcon = ({
+    displayName,
     entity,
     name,
-    uname,
     title,
     onClick,
     ...props,
   }, {capabilities}) => {
 
-  if (!is_defined(uname)) {
-    uname = _(capitalize_first_letter(name));
+  if (!is_defined(displayName)) {
+    displayName = _(capitalize_first_letter(name));
   }
 
   let active = capabilities.mayDelete(name) && entity.isWriteable() &&
       !entity.isInUse();
   if (!is_defined(title)) {
     if (active) {
-      title = _('Delete {{entity}}', {entity: uname});
+      title = _('Delete {{entity}}', {entity: displayName});
     }
     else if (entity.isInUse()) {
-      title = _('{{entity}} is still in use', {entity: uname});
+      title = _('{{entity}} is still in use', {entity: displayName});
     }
     else if (!entity.isWriteable()) {
-      title = _('{{entity}} is not writable', {entity: uname});
+      title = _('{{entity}} is not writable', {entity: displayName});
     }
     else if (!capabilities.mayDelete(name)) { // eslint-disable-line no-negated-condition
       title = _('Permission to delete {{entity}} denied',
-        {entity: uname});
+        {entity: displayName});
     }
     else {
-      title = _('Cannot delete {{entity}}', {entity: uname});
+      title = _('Cannot delete {{entity}}', {entity: displayName});
     }
   }
   return (
@@ -74,10 +74,10 @@ export const EntityDeleteIcon = ({
 };
 
 EntityDeleteIcon.propTypes = {
+  displayName: React.PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string,
-  uname: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
 
