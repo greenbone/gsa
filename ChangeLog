@@ -1,5 +1,10 @@
 2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (main): Increase session timeout limit from 1 day two 4 weeks.
+	Also display default timeout in console help.
+
+2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.c: Fix cookie handling for newer browsers if server time is
 	behind the client. RFC 6265 defines a max-age parameter for Set-Cookie header
 	that defines a cookie lifetime in seconds from now (see

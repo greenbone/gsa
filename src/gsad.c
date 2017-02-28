@@ -150,6 +150,11 @@
 #define SESSION_TIMEOUT 15
 
 /**
+ * @brief Upper limit of minutes for a session timeout. Currently 4 weeks.
+ */
+#define MAX_SESSION_TIMEOUT 40320
+
+/**
  * @brief Default face name.
  */
 #define DEFAULT_GSAD_FACE "classic"
@@ -2968,7 +2973,8 @@ main (int argc, char **argv)
      "Use a secure cookie (implied when using HTTPS).", NULL},
     {"timeout", '\0',
      0, G_OPTION_ARG_INT, &timeout,
-     "Minutes of user idle time before session expires.", "<number>"},
+     "Minutes of user idle time before session expires. Defaults to "
+     G_STRINGIFY (SESSION_TIMEOUT) " minutes", "<number>"},
     {"debug-tls", 0,
      0, G_OPTION_ARG_INT, &debug_tls,
      "Enable TLS debugging at <level>", "<level>"},
@@ -3153,10 +3159,10 @@ main (int argc, char **argv)
 
   set_use_secure_cookie (secure_cookie);
 
-  if ((timeout < 1) || (timeout > 1440))
+  if ((timeout < 1) || (timeout > MAX_SESSION_TIMEOUT))
     {
-      g_critical ("%s: Timeout must be a number from 1 to 1440\n",
-                  __FUNCTION__);
+      g_critical ("%s: Timeout must be a number from 1 to %d\n",
+                  __FUNCTION__, MAX_SESSION_TIMEOUT);
       exit (EXIT_FAILURE);
     }
 
