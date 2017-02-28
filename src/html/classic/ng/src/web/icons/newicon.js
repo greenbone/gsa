@@ -25,8 +25,16 @@ import React from 'react';
 
 import Icon from './icon.js';
 
-export const NewIcon = props => {
-  return <Icon {...props} img="new.svg"/>;
+export const NewIcon = ({active = true, ...props}) => {
+  return (
+    <Icon
+      {...props}
+      img={active ? 'new.svg' : 'new_inactive.svg'}/>
+  );
+};
+
+NewIcon.propTypes = {
+  active: React.PropTypes.bool,
 };
 
 export default NewIcon;

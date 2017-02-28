@@ -1,5 +1,10 @@
 2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/icons/newicon.js: Allow to render inactive new
+	icon.
+
+2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/targets/row.js,
 	src/html/classic/ng/src/web/targets/table.js: Update coding style.
 
