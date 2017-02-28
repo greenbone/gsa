@@ -24,13 +24,14 @@
 import React from 'react';
 
 import _, {datetime} from '../../locale.js';
-import {extend, is_defined, is_empty} from '../../utils.js';
+import {is_defined, is_empty} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import {render_options, result_cvss_risk_factor, render_nvt_name,
 } from '../render.js';
 
-import Dialog from '../dialog/dialog.js';
+import {withDialog} from '../dialog/dialog.js';
 
 import FormGroup from '../form/formgroup.js';
 import Text from '../form/text.js';
@@ -40,288 +41,287 @@ import Radio from '../form/radio.js';
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
 
-export class NoteDialog extends Dialog {
+const NoteDialog = ({
+    active,
+    days,
+    hosts,
+    hosts_manual,
+    note,
+    oid,
+    port,
+    port_manual,
+    result_id,
+    result_uuid,
+    severity,
+    task_id,
+    tasks,
+    task_uuid,
+    text,
+    onValueChange,
+  }) => {
 
-  defaultState() {
-    return extend(super.defaultState(), {
-      active: '-1',
-      days: 30,
-      oid: '1.3.6.1.4.1.25623.1.0.',
-      hosts: '',
-      hosts_manual: '',
-      note: this.props.note,
-      result_id: '',
-      result_uuid: '',
-      task_id: '',
-      task_uuid: '',
-      port: '',
-      port_manual: '',
-      severity: '',
-      text: '',
-      width: 800,
-      tasks: [],
-    });
-  }
+  let is_edit = is_defined(note);
 
-  loadData() {
-    let {gmp} = this.context;
+  let note_severity = is_edit && is_defined(note.severity) ? note.severity : 0;
+  console.log(active);
 
-    if (this.state.note) {
-      // request all note details which haven't been included in get_notes
-      // response
-      gmp.note.get(this.props.note).then(note => {
-        let active = '0';
-        if (note.isActive()) {
-          if (is_empty(note.end_time)) {
-            active = '-1';
-          }
-          else {
-            active = '-2';
-          }
-        }
-        this.setState({
-          active,
-          hosts: is_empty(note.hosts) ? '' : '--',
-          hosts_manual: note.hosts,
-          port: note.port,
-          oid: note.nvt ? note.nvt.oid : undefined,
-          note,
-          note_id: note.id,
-          task_id: is_empty(note.task.id) ? '' : '0',
-          task_uuid: note.task.id,
-          result_id: is_empty(note.result.id) ? '' : '0',
-          result_uuid: note.result.id,
-          severity: note.severity,
-          text: note.text,
-          visible: true,
-        });
-      });
-    }
-    gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
-  }
-
-  save() {
-    let {note} = this.state;
-    let {gmp} = this.context;
-    let promise;
-
-    if (note) {
-      promise = gmp.note.save(this.state);
-    }
-    else {
-      promise = gmp.note.create(this.state);
-    }
-
-    return promise.then(() => {
-      this.close();
-    }, rej => {
-      this.showErrorMessageFromRejection(rej);
-      throw rej;
-    });
-  }
-
-  renderContent() {
-    let {active, days, oid, hosts, hosts_manual, text, port, port_manual,
-      severity, result_id, result_uuid, task_id, task_uuid,
-      tasks, note,
-    } = this.state;
-
-    let is_edit = is_defined(note);
-
-    let note_severity = is_edit && note.severity ? note.severity : 0;
-
-    return (
-      <Layout flex="column">
-        {is_edit ?
-          <FormGroup title={_('NVT')} flex="column">
-            <Radio name="oid"
-              value={note.nvt.oid}
-              title={render_nvt_name(note.nvt)}
-              checked={oid === note.nvt.oid}
-              onChange={this.onValueChange}/>
-            <Layout flex box>
-              <Radio name="oid"
-                value="1.3.6.1.4.1.25623.1.0."
-                checked={oid !== note.nvt.oid}
-                onChange={this.onValueChange}/>
-              <TextField name="oid"
-                value={oid}
-                disabled={oid === note.nvt.oid}
-                onChange={this.onValueChange}/>
-            </Layout>
-          </FormGroup> :
-            <FormGroup title={_('NVT OID')}>
-              <TextField name="oid"
-                value={oid}
-                onChange={this.onValueChange}/>
-            </FormGroup>
-        }
-        <FormGroup title={_('Active')} flex="column">
-          <Radio name="active"
-            value="-1"
-            checked={active === '-1'}
-            title={_('yes, always')}
-            onChange={this.onValueChange}/>
-          {is_edit && note.isActive() && !is_empty(note.end_time) &&
-            <Layout flex box>
-              <Radio name="active"
-                value="-2"
-                checked={active === '-2'}
-                title={_('yes, until')}
-                onChange={this.onValueChange}/>
-              <Text>{datetime(note.end_time)}</Text>
-            </Layout>
-          }
+  return (
+    <Layout flex="column">
+      {is_edit ?
+        <FormGroup title={_('NVT')} flex="column">
+          <Radio
+            name="oid"
+            value={note.nvt.oid}
+            title={render_nvt_name(note.nvt)}
+            checked={oid === note.nvt.oid}
+            onChange={onValueChange}/>
           <Layout flex box>
-            <Radio name="active"
-              value="1"
-              checked={active === '1'}
-              title={_('yes, for the next')}
-              onChange={this.onValueChange}>
-            </Radio>
-            <Spinner name="days" value={days} size="4"
-              onChange={this.onValueChange}
-              disabled={active !== '1'} type="int" min="1"/>
-            <Text>{_('days')}</Text>
+            <Radio
+              name="oid"
+              value="1.3.6.1.4.1.25623.1.0."
+              checked={oid !== note.nvt.oid}
+              onChange={onValueChange}/>
+            <TextField
+              name="oid"
+              value={oid}
+              disabled={oid === note.nvt.oid}
+              onChange={onValueChange}/>
           </Layout>
-          <Radio name="active"
+        </FormGroup> :
+          <FormGroup title={_('NVT OID')}>
+            <TextField
+              name="oid"
+              value={oid}
+              onChange={onValueChange}/>
+          </FormGroup>
+      }
+      <FormGroup title={_('Active')} flex="column">
+        <Radio
+          name="active"
+          value="-1"
+          checked={active === '-1'}
+          title={_('yes, always')}
+          onChange={onValueChange}/>
+        {is_edit && note.isActive() && !is_empty(note.end_time) &&
+          <Layout flex box>
+            <Radio
+              name="active"
+              value="-2"
+              checked={active === '-2'}
+              title={_('yes, until')}
+              onChange={onValueChange}/>
+            <Text>{datetime(note.end_time)}</Text>
+          </Layout>
+        }
+        <Layout flex box>
+          <Radio
+            name="active"
+            value="1"
+            checked={active === '1'}
+            title={_('yes, for the next')}
+            onChange={onValueChange}>
+          </Radio>
+          <Spinner
+            name="days"
+            value={days}
+            size="4"
+            type="int"
+            min="1"
+            onChange={onValueChange}
+            disabled={active !== '1'}/>
+          <Text>{_('days')}</Text>
+        </Layout>
+        <Radio
+          name="active"
+          value="0"
+          checked={active === '0'}
+          title={_('no')}
+          onChange={onValueChange}/>
+      </FormGroup>
+      <FormGroup title={_('Hosts')}>
+        <Radio
+          name="hosts"
+          value=""
+          title={_('Any')}
+          checked={hosts === ''}
+          onChange={onValueChange}>
+        </Radio>
+        <Layout flex box>
+          <Radio
+            name="hosts"
+            value="--"
+            checked={hosts === '--'}
+            onChange={onValueChange}>
+          </Radio>
+          <TextField
+            name="hosts_manual"
+            disabled={hosts !== '--'}
+            value={hosts_manual}
+            onChange={onValueChange}/>
+        </Layout>
+      </FormGroup>
+      <FormGroup title={_('Location')}>
+        <Radio
+          name="port"
+          value=""
+          title={_('Any')}
+          checked={port === ''}
+          onChange={onValueChange}>
+        </Radio>
+        <Layout flex box>
+          <Radio
+            name="port"
+            value="--"
+            checked={port === '--'}
+            onChange={onValueChange}>
+          </Radio>
+          <TextField
+            name="port_manual"
+            value={port_manual}
+            disabled={port !== '--'}
+            onChange={onValueChange}/>
+        </Layout>
+      </FormGroup>
+      <FormGroup title={_('Severity')}>
+        <Radio
+          name="severity"
+          value=""
+          title={_('Any')}
+          checked={is_empty(severity)}
+          onChange={onValueChange}>
+        </Radio>
+        {is_edit &&
+          <Layout flex box>
+            <Radio
+              name="severity"
+              value={0.1}
+              title={_('> 0.0')}
+              checked={!is_empty(severity) && severity > 0.0}
+              onChange={onValueChange}>
+            </Radio>
+            <Radio
+              name="severity"
+              value={note_severity}
+              title={result_cvss_risk_factor(note_severity)}
+              checked={!is_empty(severity) && severity <= 0.0}
+              onChange={onValueChange}>
+            </Radio>
+          </Layout>
+        }
+        {!is_edit &&
+          <Layout flex box>
+            <Radio
+              name="severity"
+              value="0.1"
+              title={_('> 0.0')}
+              checked={severity === '0.1'}
+              onChange={onValueChange}>
+            </Radio>
+            <Radio
+              name="severity"
+              value="0.0"
+              title={_('Log')}
+              checked={severity === '0.0'}
+              onChange={onValueChange}>
+            </Radio>
+          </Layout>
+        }
+      </FormGroup>
+      <FormGroup title={_('Task')}>
+        <Radio
+          name="task_id"
+          value=""
+          title={_('Any')}
+          checked={task_id === ''}
+          onChange={onValueChange}/>
+        <Layout flex box>
+          <Radio
+            name="task_id"
             value="0"
-            checked={active === '0'}
-            title={_('no')}
-            onChange={this.onValueChange}/>
-        </FormGroup>
-        <FormGroup title={_('Hosts')}>
-          <Radio name="hosts"
-            value=""
-            title={_('Any')}
-            checked={hosts === ''}
-            onChange={this.onValueChange}>
-          </Radio>
-          <Layout flex box>
-            <Radio name="hosts"
-              value="--"
-              checked={hosts === '--'}
-              onChange={this.onValueChange}>
-            </Radio>
-            <TextField name="hosts_manual"
-              disabled={hosts !== '--'}
-              value={hosts_manual}
-              onChange={this.onValueChange}/>
-          </Layout>
-        </FormGroup>
-        <FormGroup title={_('Location')}>
-          <Radio name="port"
-            value=""
-            title={_('Any')}
-            checked={port === ''}
-            onChange={this.onValueChange}>
-          </Radio>
-          <Layout flex box>
-            <Radio name="port"
-              value="--"
-              checked={port === '--'}
-              onChange={this.onValueChange}>
-            </Radio>
-            <TextField name="port_manual"
-              value={port_manual}
-              disabled={port !== '--'}
-              onChange={this.onValueChange}/>
-          </Layout>
-        </FormGroup>
-        <FormGroup title={_('Severity')}>
-          <Radio name="severity"
-            value=""
-            title={_('Any')}
-            checked={is_empty(severity)}
-            onChange={this.onValueChange}>
-          </Radio>
-          {is_edit &&
-            <Layout flex box>
-              <Radio name="severity"
-                value={0.1}
-                title={_('> 0.0')}
-                checked={!is_empty(severity) && severity > 0.0}
-                onChange={this.onValueChange}>
-              </Radio>
-              <Radio name="severity"
-                value={note_severity}
-                title={result_cvss_risk_factor(note_severity)}
-                checked={!is_empty(severity) && severity <= 0.0}
-                onChange={this.onValueChange}>
-              </Radio>
-            </Layout>
-          }
-          {!is_edit &&
-            <Layout flex box>
-              <Radio name="severity"
-                value="0.1"
-                title={_('> 0.0')}
-                checked={severity === '0.1'}
-                onChange={this.onValueChange}>
-              </Radio>
-              <Radio name="severity"
-                value="0.0"
-                title={_('Log')}
-                checked={severity === '0.0'}
-                onChange={this.onValueChange}>
-              </Radio>
-            </Layout>
-          }
-        </FormGroup>
-        <FormGroup title={_('Task')}>
-          <Radio name="task_id"
-            value=""
-            title={_('Any')}
-            checked={task_id === ''}
-            onChange={this.onValueChange}/>
-          <Layout flex box>
-            <Radio name="task_id"
-              value="0"
-              checked={task_id === '0'}
-              onChange={this.onValueChange}/>
-            <Select2 name="task_uuid"
-              value={task_uuid}
-              disabled={task_id !== '0'}
-              onChange={this.onValueChange}>
-              {render_options(tasks)}
-            </Select2>
-          </Layout>
-        </FormGroup>
-        <FormGroup title={_('Result')}>
-          <Radio name="result_id"
-            value=""
-            title={_('Any')}
-            checked={result_id === ''}
-            onChange={this.onValueChange}/>
-          <Layout flex box>
-            <Radio name="result_id"
-              value="0"
-              title={_('UUID')}
-              checked={result_id === '0'}
-              onChange={this.onValueChange}/>
-            <TextField name="result_uuid"
-              value={result_uuid}
-              size="34"
-              disabled={result_id !== '0'}
-              onChange={this.onValueChange}/>
-          </Layout>
-        </FormGroup>
-        <FormGroup title={_('Text')}>
-          <TextArea name="text"
-            grow="1"
-            rows="10" cols="60"
-            value={text}
-            onChange={this.onValueChange}/>
-        </FormGroup>
-      </Layout>
-    );
-  }
-}
-
-NoteDialog.propTypes = {
-  note: React.PropTypes.object,
+            checked={task_id === '0'}
+            onChange={onValueChange}/>
+          <Select2
+            name="task_uuid"
+            value={task_uuid}
+            disabled={task_id !== '0'}
+            onChange={onValueChange}>
+            {render_options(tasks)}
+          </Select2>
+        </Layout>
+      </FormGroup>
+      <FormGroup title={_('Result')}>
+        <Radio
+          name="result_id"
+          value=""
+          title={_('Any')}
+          checked={result_id === ''}
+          onChange={onValueChange}/>
+        <Layout flex box>
+          <Radio
+            name="result_id"
+            value="0"
+            title={_('UUID')}
+            checked={result_id === '0'}
+            onChange={onValueChange}/>
+          <TextField
+            name="result_uuid"
+            value={result_uuid}
+            size="34"
+            disabled={result_id !== '0'}
+            onChange={onValueChange}/>
+        </Layout>
+      </FormGroup>
+      <FormGroup title={_('Text')}>
+        <TextArea
+          name="text"
+          grow="1"
+          rows="10" cols="60"
+          value={text}
+          onChange={onValueChange}/>
+      </FormGroup>
+    </Layout>
+  );
 };
 
-export default NoteDialog;
+NoteDialog.propTypes = {
+  active: React.PropTypes.oneOf(['0', '1', '-1', '-2']),
+  days: PropTypes.number,
+  note: PropTypes.model,
+  hosts: React.PropTypes.string,
+  hosts_manual: React.PropTypes.string,
+  port: React.PropTypes.string,
+  port_manual: React.PropTypes.string,
+  oid: React.PropTypes.string,
+  note_id: PropTypes.id,
+  task_id: PropTypes.id,
+  task_uuid: PropTypes.id,
+  result_id: PropTypes.id,
+  result_uuid: PropTypes.id,
+  severity: PropTypes.number,
+  text: React.PropTypes.string,
+  tasks: PropTypes.arrayLike,
+  onValueChange: React.PropTypes.func,
+};
+
+export default withDialog(NoteDialog, {
+  title: _('New Note'),
+  footer: _('Save'),
+  defaultState: {
+    active: '-1',
+    days: 30,
+    oid: '1.3.6.1.4.1.25623.1.0.',
+    hosts: '',
+    hosts_manual: '',
+    result_id: '',
+    result_uuid: '',
+    task_id: '',
+    task_uuid: '',
+    port: '',
+    port_manual: '',
+    severity: '',
+    text: '',
+    tasks: [],
+  },
+});
 
 // vim: set ts=2 sw=2 tw=80:

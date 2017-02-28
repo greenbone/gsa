@@ -232,7 +232,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/notes/charts.js
      ${NG_SRC_DIR}/src/web/notes/dialog.js
      ${NG_SRC_DIR}/src/web/notes/notespage.js
-     ${NG_SRC_DIR}/src/web/notes/noteslistrow.js
+     ${NG_SRC_DIR}/src/web/notes/filterdialog.js
+     ${NG_SRC_DIR}/src/web/notes/row.js
+     ${NG_SRC_DIR}/src/web/notes/table.js
      ${NG_SRC_DIR}/src/web/nvts/charts.js
      ${NG_SRC_DIR}/src/web/nvts/filterdialog.js
      ${NG_SRC_DIR}/src/web/nvts/nvtspage.js

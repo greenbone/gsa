@@ -24,169 +24,149 @@
 import React from 'react';
 
 import  _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import {is_defined, is_empty, shorten} from '../../utils.js';
 
 import Layout from '../layout.js';
-import Sort from '../sortby.js';
+import PropTypes from '../proptypes.js';
 
-import Dashboard from '../dashboard/dashboard.js';
+import {withDashboard} from '../dashboard/dashboard.js';
 
-import EntitiesListPage from '../entities/listpage.js';
-import EntitiesFooter from '../entities/footer.js';
+import EntitiesPage from '../entities/page.js';
+import {withEntitiesContainer} from '../entities/container.js';
 
+import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
 
-import TableRow from '../table/row.js';
-import TableHead from '../table/head.js';
-import TableHeader from '../table/header.js';
-
 import NotesCharts from './charts.js';
-import NotesListRow from './noteslistrow.js';
 import NoteDialog from './dialog.js';
+import FilterDialog from './filterdialog.js';
+import NotesTable from './table.js';
 
 import {NOTES_FILTER_FILTER} from '../../gmp/models/filter.js';
 
-const SORT_FIELDS = [
-  ['text', _('Text')],
-  ['nvt', _('Nvt')],
-  ['hosts', _('Hosts')],
-  ['port', _('Location')],
-  ['active', _('Active')],
-];
+const Dashboard = withDashboard(NotesCharts, {
+  hideFilterSelect: true,
+  configPrefId: 'ce7b121-c609-47b0-ab57-fd020a0336f4',
+  defaultControllersString: 'note-by-active-days|note-by-created|' +
+    'note-by-text-words',
+  defaultControllerString: 'note-by-active-days',
+});
 
-export class NotesPage extends EntitiesListPage {
+const ToolBarIcons = ({onNewNoteClick}, {capabilities}) => {
+  return (
+    <Layout flex box>
+      <HelpIcon
+        page="notes"
+        title={_('Help: Notes')}/>
+      {capabilities.mayCreate('note') &&
+        <NewIcon title={_('New Note')}
+          onClick={onNewNoteClick}/>
+      }
+    </Layout>
+  );
+};
 
-  constructor(props) {
-    super(props, {
-      name: 'notes',
-      icon_name: 'note.svg',
-      download_name: 'notes.xml',
-      title: _('Notes'),
-      empty_title: _('No notes available'),
-      filter_filter: NOTES_FILTER_FILTER,
-      sort_fields: SORT_FIELDS,
-    });
+ToolBarIcons.contextTypes = {
+  capabilities: React.PropTypes.object.isRequired,
+};
+
+ToolBarIcons.propTypes = {
+  onNewNoteClick: React.PropTypes.func,
+};
+
+
+class Page extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.handleSaveNote = this.handleSaveNote.bind(this);
+    this.openNoteDialog = this.openNoteDialog.bind(this);
   }
 
-  getGmpPromise(filter, options) {
-    let gmp = this.getGmp();
-    return gmp.get({filter, details: 1}, options);
-  }
+  openNoteDialog(note) {
+    let {gmp} = this.context;
 
-  renderHeader() {
-    let entities = this.getEntities();
-
-    if (!is_defined(entities)) {
-      return null;
-    }
-
-    return (
-      <TableHeader>
-        <TableRow>
-          <TableHead>
-            <Sort by="text" onClick={this.onSortChange}>
-              {_('Text')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="nvt" onClick={this.onSortChange}>
-              {_('NVT')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="hosts" onClick={this.onSortChange}>
-              {_('Hosts')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="port" onClick={this.onSortChange}>
-              {_('Location')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="active" onClick={this.onSortChange}>
-              {_('Active')}
-            </Sort>
-          </TableHead>
-          <TableHead width="10em">
-            {_('Actions')}
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-    );
-  }
-
-  renderFooter() {
-    let {selection_type} = this.state;
-    return (
-      <EntitiesFooter span="8" download trash
-        selectionType={selection_type}
-        onTrashClick={this.onDeleteBulk}
-        onDownloadClick={this.onDownloadBulk}
-        onSelectionTypeChange={this.onSelectionTypeChange}>
-      </EntitiesFooter>
-    );
-  }
-
-  renderRow(note) {
-    let {selection_type} = this.state;
-    return (
-      <NotesListRow
-        key={note.id}
-        note={note}
-        selection={selection_type}
-        onSelected={this.onSelect}
-        onDeselected={this.onDeselect}
-        onDelete={this.reload}
-        onCloned={this.reload}/>
-    );
-  }
-
-  renderCreateDialog() {
-    return (
-      <NoteDialog ref={ref => this.create_dialog = ref}
-        title={_('Create new Note')} onClose={this.reload}
-        onSave={this.reload}/>
-    );
-  }
-
-  renderDashboard() {
-    let {cache} = this.context;
-    let {filter} = this.state;
-    return (
-      <Dashboard
-        filter={filter}
-        hideFilterSelect
-        configPrefId="ce7b121-c609-47b0-ab57-fd020a0336f4"
-        defaultControllersString={'note-by-active-days|note-by-created|' +
-        'note-by-text-words'}
-        defaultControllerString="note-by-active-days">
-        <NotesCharts filter={filter} cache={cache}/>
-      </Dashboard>
-    );
-  }
-
-  renderToolbarIconButtons() {
-    let caps = this.context.capabilities;
-    return (
-      <Layout flex>
-        {this.renderHelpIcon()}
-
-        {caps.mayCreate('note') &&
-          <NewIcon title={_('New Note')}
-            onClick={() => { this.create_dialog.show(); }}/>
+    if (is_defined(note) && note.id) {
+      let active = '0';
+      if (note.isActive()) {
+        if (is_empty(note.end_time)) {
+          active = '-1';
         }
+        else {
+          active = '-2';
+        }
+      }
+      this.note_dialog.show({
+        active,
+        hosts: is_defined(note.hosts) ? '--' : '',
+        hosts_manual: note.hosts,
+        port: note.port,
+        oid: is_defined(note.nvt) ? note.nvt.oid : undefined,
+        note,
+        note_id: note.id,
+        task_id: is_defined(note.task) && is_defined(note.task.id) ? '0' : '',
+        task_uuid: is_defined(note.task) ? note.task.id : '',
+        result_id: is_defined(note.result) && is_defined(note.result.id) ?
+          '0' : '',
+        result_uuid: is_defined(note.result) ? note.result.id : '',
+        severity: note.severity,
+        text: note.text,
+      }, {
+        title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
+      });
+    }
+    else {
+      this.note_dialog.show({});
+    }
+    gmp.tasks.getAll().then(tasks => this.note_dialog.setValue('tasks', tasks));
+  }
+
+  handleSaveNote(data) {
+    let {entityCommand, onChanged} = this.props;
+    let promise;
+    if (data.note && data.note.id) {
+      promise = entityCommand.save(data);
+    }
+    else {
+      promise = entityCommand.create(data);
+    }
+    return promise.then(() => onChanged());
+  }
+
+  render() {
+    return (
+      <Layout>
+        <EntitiesPage
+          {...this.props}
+          onEditNoteClick={this.openNoteDialog}
+          onNewNoteClick={this.openNoteDialog}/>
+        <NoteDialog
+          ref={ref => this.note_dialog = ref}
+          onSave={this.handleSaveNote}/>
       </Layout>
     );
   }
 }
 
-NotesPage.contextTypes = {
-  cache: React.PropTypes.object.isRequired,
-  gmp: React.PropTypes.object.isRequired,
-  capabilities: React.PropTypes.object.isRequired,
+Page.propTypes = {
+  entityCommand: PropTypes.entitycommand,
+  onChanged: React.PropTypes.func.isRequired,
 };
 
-export default NotesPage;
+Page.contextTypes = {
+  gmp: React.PropTypes.object.isRequired,
+};
+
+export default withEntitiesContainer(Page, 'note', {
+  dashboard: Dashboard,
+  extraLoadParams: {details: 1},
+  filterEditDialog: FilterDialog,
+  filtersFilter: NOTES_FILTER_FILTER,
+  sectionIcon: 'note.svg',
+  table: NotesTable,
+  title: _('Notes'),
+  toolBarIcons: ToolBarIcons,
+});
 
 // vim: set ts=2 sw=2 tw=80:
