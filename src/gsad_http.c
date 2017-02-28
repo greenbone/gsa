@@ -672,7 +672,7 @@ remove_sid (http_response_t *response)
   expire_time = time (NULL);
   if (localtime_r (&expire_time, &expire_time_broken) == NULL)
     abort ();
-  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
+  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d %b %Y %T GMT",
                   &expire_time_broken);
   if (ret == 0)
     abort ();
@@ -731,7 +731,7 @@ attach_sid (http_response_t *response, const char *sid)
   expire_time = now + (get_session_timeout() * 60) + 30;
   if (localtime_r (&expire_time, &expire_time_broken) == NULL)
     abort ();
-  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
+  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d %b %Y %T GMT",
                   &expire_time_broken);
   if (ret == 0)
     abort ();
