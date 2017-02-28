@@ -113,7 +113,9 @@ const Row = ({entity, links = true, actions, ...props}) => {
     <TableRow>
       <TableData flex="column">
         {links ?
-          <LegacyLink cmd="get_target" target_id={entity.id}>
+          <LegacyLink
+            cmd="get_target"
+            target_id={entity.id}>
             {entity.name}
           </LegacyLink> :
           entity.name
@@ -130,17 +132,27 @@ const Row = ({entity, links = true, actions, ...props}) => {
       </TableData>
       <TableData>
         {links ?
-          <LegacyLink cmd="get_port_list" port_list_id={entity.port_list.id}>
+          <LegacyLink
+            cmd="get_port_list"
+            port_list_id={entity.port_list.id}>
             {entity.port_list.name}
           </LegacyLink> :
           entity.port_list.name
         }
       </TableData>
       <TableData flex="column" align="center">
-        <Cred cred={entity.ssh_credential} title={'SSH'} links={links}/>
-        <Cred cred={entity.smb_credential} title={'SMB'} links={links}/>
-        <Cred cred={entity.esxi_credential} title={'ESXi'} links={links}/>
-        <Cred cred={entity.snmp_credential} title={'SNMP'} links={links}/>
+        <Cred cred={entity.ssh_credential}
+          title={'SSH'}
+          links={links}/>
+        <Cred cred={entity.smb_credential}
+          title={'SMB'}
+          links={links}/>
+        <Cred cred={entity.esxi_credential}
+          title={'ESXi'}
+          links={links}/>
+        <Cred cred={entity.snmp_credential}
+          title={'SNMP'}
+          links={links}/>
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>

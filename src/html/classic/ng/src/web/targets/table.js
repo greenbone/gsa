@@ -83,13 +83,11 @@ const Footer = createEntitiesFooter({
   download: 'targets.xml',
 });
 
-export const TargetsTable = createEntitiesTable({
+export default createEntitiesTable({
   emptyTitle: _('No targets available'),
   row: TargetRow,
   header: TargetsHeader,
   footer: Footer,
 });
-
-export default TargetsTable;
 
 // vim: set ts=2 sw=2 tw=80:
