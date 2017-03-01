@@ -3399,7 +3399,7 @@ exec_omp_get (struct MHD_Connection *connection,
 static int
 attach_sid (struct MHD_Response *response, const char *sid)
 {
-  int ret;
+  int ret, timeout;
   gchar *value;
   gchar *locale;
   char expires[EXPIRES_LENGTH + 1];
@@ -3422,11 +3422,13 @@ attach_sid (struct MHD_Response *response, const char *sid)
   locale = g_strdup (setlocale (LC_ALL, NULL));
   setlocale (LC_ALL, "C");
 
+  timeout = session_timeout * 60 + 30
+
   now = time (NULL);
-  expire_time = now + (session_timeout * 60) + 30;
+  expire_time = now + timeout;
   if (localtime_r (&expire_time, &expire_time_broken) == NULL)
     abort ();
-  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
+  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d %b %Y %T GMT",
                   &expire_time_broken);
   if (ret == 0)
     abort ();
@@ -3454,9 +3456,10 @@ attach_sid (struct MHD_Response *response, const char *sid)
    * we get the domain in here?  Maybe a --domain option. */
 
   value = g_strdup_printf (SID_COOKIE_NAME
-                           "=%s; expires=%s; path=/; %sHTTPonly",
+                           "=%s; expires=%s; max-age=%d; path=/; %sHTTPonly",
                            sid,
                            expires,
+                           timeout,
                            (use_secure_cookie ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
   g_free (value);
@@ -3487,7 +3490,7 @@ remove_sid (struct MHD_Response *response)
   expire_time = time (NULL);
   if (localtime_r (&expire_time, &expire_time_broken) == NULL)
     abort ();
-  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
+  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d %b %Y %T GMT",
                   &expire_time_broken);
   if (ret == 0)
     abort ();

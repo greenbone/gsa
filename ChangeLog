@@ -1,3 +1,16 @@
+2016-03-01 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	Backport r27844 and r27845. Session ID handling of lagging server time.
+
+	* src/gsad.c (remove_sid, attach_sid): Use RFC 2616 compliant date format in
+	Set-Cookie http response header.
+
+	* src/gsad.c (attach_sid): Fix cookie handling for newer browsers if server
+	time is lagging. RFC 6265 defines a max-age parameter for Set-Cookie header
+	that defines a cookie lifetime duration in seconds from now. The max-age
+	parameter takes precedence over expire. Old browsers which are not aware of
+	max-age will still use the expire parameter.
+
 2016-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Backport r27771 and r27772. Allow setting multiple addresses with
