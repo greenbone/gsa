@@ -1,5 +1,16 @@
 2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/overrides/dialog.js,
+	src/html/classic/ng/src/web/overrides/filterdialog.js,
+	src/html/classic/ng/src/web/overrides/overrideslistrow.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js,
+	src/html/classic/ng/src/web/overrides/row.js,
+	src/html/classic/ng/src/web/overrides/table.js: Update overrides list page to
+	use composition instead of inheritance.
+
+2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/notes/dialog.js: Remove debug output.
 
 	* src/html/classic/ng/src/web/notes/row.js: Fix link to note details and title

@@ -250,8 +250,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/ovaldefs/table.js
      ${NG_SRC_DIR}/src/web/overrides/charts.js
      ${NG_SRC_DIR}/src/web/overrides/dialog.js
+     ${NG_SRC_DIR}/src/web/overrides/filterdialog.js
      ${NG_SRC_DIR}/src/web/overrides/overridespage.js
-     ${NG_SRC_DIR}/src/web/overrides/overrideslistrow.js
+     ${NG_SRC_DIR}/src/web/overrides/row.js
+     ${NG_SRC_DIR}/src/web/overrides/table.js
      ${NG_SRC_DIR}/src/web/os/charts.js
      ${NG_SRC_DIR}/src/web/ovaldefs/charts.js
      ${NG_SRC_DIR}/src/web/page.js

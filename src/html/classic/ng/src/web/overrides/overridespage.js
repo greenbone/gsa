@@ -24,182 +24,167 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import {is_defined, is_empty, includes, shorten} from '../../utils.js';
 
 import Layout from '../layout.js';
-import Sort from '../sortby.js';
+import PropTypes from '../proptypes.js';
 
-import Dashboard from '../dashboard/dashboard.js';
+import {withDashboard} from '../dashboard/dashboard.js';
 
-import EntitiesListPage from '../entities/listpage.js';
-import EntitiesFooter from '../entities/footer.js';
+import EntitiesPage from '../entities/page.js';
+import {withEntitiesContainer} from '../entities/container.js';
 
+import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
-
-import TableRow from '../table/row.js';
-import TableHead from '../table/head.js';
-import TableHeader from '../table/header.js';
 
 import OverridesCharts from './charts.js';
 import OverrideDialog from './dialog.js';
-import OverridesListRow from './overrideslistrow.js';
+import FilterDialog from './filterdialog.js';
+import Table from './table.js';
 
 import {OVERRIDES_FILTER_FILTER} from '../../gmp/models/filter.js';
 
-const SORT_FIELDS = [
-  ['text', _('Text')],
-  ['nvt', _('Nvt')],
-  ['hosts', _('Hosts')],
-  ['port', _('Location')],
-  ['severity', _('From')],
-  ['new_severity', _('To')],
-  ['active', _('Active')],
-];
 
-export class OverridesPage extends EntitiesListPage {
+const Dashboard = withDashboard(OverridesCharts, {
+  hideFilterSelect: true,
+  configPrefId: '054862fe-0781-4527-b1aa-2113bcd16ce7',
+  defaultControllersString: 'override-by-active-days|' +
+    'override-by-created|override-by-text-words',
+  defaultControllerString: 'override-by-active-days',
+});
 
-  constructor(props) {
-    super(props, {
-      name: 'overrides',
-      icon_name: 'override.svg',
-      download_name: 'overrides.xml',
-      title: _('Overrides'),
-      empty_title: _('No overrides available'),
-      filter_filter: OVERRIDES_FILTER_FILTER,
-      sort_fields: SORT_FIELDS,
-    });
+const ToolBarIcons = ({
+    onNewOverrideClick,
+  }, {capabilities}) => {
+  return (
+    <Layout flex box>
+      <HelpIcon
+        page="overrides"
+        title={_('Help: Overrides')}/>
+
+      {capabilities.mayCreate('override') &&
+        <NewIcon title={_('New Override')}
+          onClick={onNewOverrideClick}/>
+      }
+    </Layout>
+  );
+};
+
+ToolBarIcons.contextTypes = {
+  capabilities: React.PropTypes.object.isRequired,
+};
+
+ToolBarIcons.propTypes = {
+  onNewOverrideClick: React.PropTypes.func,
+};
+
+class Page extends React.Component {
+  constructor(...args) {
+    super(...args);
+
+    this.openOverrideDialog = this.openOverrideDialog.bind(this);
+    this.handleSaveOverride = this.handleSaveOverride.bind(this);
   }
 
-  getGmpPromise(filter, options) {
-    let gmp = this.getGmp();
-    return gmp.get({filter, details: 1}, options);
-  }
+  openOverrideDialog(override) {
+    let {gmp} = this.context;
 
-  renderHeader() {
-    let entities = this.getEntities();
+    if (is_defined(override)) {
+      let active = '0';
+      if (override.isActive()) {
+        if (is_empty(override.end_time)) {
+          active = '-1';
+        }
+        else {
+          active = '-2';
+        }
+      }
 
-    if (!is_defined(entities)) {
-      return null;
+      let custom_severity = '0';
+      let new_severity_from_list = '';
+      let new_severity = '';
+
+      if (includes([10, 5, 2, 0, -1], override.new_severity)) {
+        new_severity_from_list = override.new_severity;
+      }
+      else {
+        custom_severity = '1';
+        new_severity = override.new_severity;
+      }
+      this.override_dialog.show({
+        active,
+        hosts: override.hosts,
+        port: override.port,
+        oid: override.nvt ? override.nvt.oid : undefined,
+        override,
+        override_id: override.id,
+        task_id: is_empty(override.task.id) ? '' : '0',
+        task_uuid: override.task.id,
+        result_id: is_empty(override.result.id) ? '' : '0',
+        result_uuid: override.result.id,
+        severity: override.severity,
+        custom_severity,
+        new_severity,
+        new_severity_from_list,
+        text: override.text,
+        visible: true,
+      }, {
+        title: _('Edit Override {{name}}',
+          {name: shorten(override.text, 20)}),
+      });
+    }
+    else {
+      this.override_dialog.show({});
     }
 
-    return (
-      <TableHeader>
-        <TableRow>
-          <TableHead>
-            <Sort by="text" onClick={this.onSortChange}>
-              {_('Text')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="nvt" onClick={this.onSortChange}>
-              {_('NVT')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="hosts" onClick={this.onSortChange}>
-              {_('Hosts')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="port" onClick={this.onSortChange}>
-              {_('Location')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="severity" onClick={this.onSortChange}>
-              {_('From')}
-            </Sort>
-          </TableHead>
-          <TableHead width="10em">
-            <Sort by="new_severity" onClick={this.onSortChange}>
-              {_('To')}
-            </Sort>
-          </TableHead>
-          <TableHead>
-            <Sort by="active" onClick={this.onSortChange}>
-              {_('Active')}
-            </Sort>
-          </TableHead>
-          <TableHead width="10em">
-            {_('Actions')}
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-    );
+    gmp.tasks.getAll().then(tasks => this.note_dialog.setValue('tasks', tasks));
   }
 
-  renderFooter() {
-    let {selection_type} = this.state;
-    return (
-      <EntitiesFooter span="8" download trash
-        selectionType={selection_type}
-        onTrashClick={this.onDeleteBulk}
-        onDownloadClick={this.onDownloadBulk}
-        onSelectionTypeChange={this.onSelectionTypeChange}>
-      </EntitiesFooter>
-    );
+  handleSaveOverride(data) {
+    let {entityCommand, onChanged} = this.props;
+    let promise;
+    if (is_defined(data.override) && data.override.id) {
+      promise = entityCommand.save(data);
+    }
+    else {
+      promise = entityCommand.create(data);
+    }
+    return promise.then(() => onChanged());
   }
 
-  renderToolbarIconButtons() {
-    let caps = this.context.capabilities;
+  render() {
     return (
-      <Layout flex>
-        {this.renderHelpIcon()}
-
-        {caps.mayCreate('override') &&
-          <NewIcon title={_('New Override')}
-            onClick={() => { this.create_dialog.show(); }}/>
-        }
+      <Layout>
+        <EntitiesPage
+          {...this.props}
+          onEditOverrideClick={this.openOverrideDialog}
+          onNewOverrideClick={this.openOverrideDialog}/>
+        <OverrideDialog
+          ref={ref => this.override_dialog = ref}
+          onSave={this.handleSaveOverride}/>
       </Layout>
-    );
-  }
-
-  renderCreateDialog() {
-    return (
-      <OverrideDialog ref={ref => this.create_dialog = ref}
-        title={_('Create new Override')} onClose={this.reload}
-        onSave={this.reload}/>
-    );
-  }
-
-  renderRow(override) {
-    let {selection_type} = this.state;
-
-    return (
-      <OverridesListRow
-        key={override.id}
-        override={override}
-        selection={selection_type}
-        onSelected={this.onSelect}
-        onDeselected={this.onDeselect}
-        onDelete={this.reload}
-        onCloned={this.reload}/>
-    );
-  }
-
-  renderDashboard() {
-    let {cache} = this.context;
-    let {filter} = this.state;
-    return (
-      <Dashboard
-        filter={filter}
-        hideFilterSelect
-        configPrefId="054862fe-0781-4527-b1aa-2113bcd16ce7"
-        defaultControllersString={'override-by-active-days|' +
-          'override-by-created|override-by-text-words'}
-        defaultControllerString="override-by-active-days">
-        <OverridesCharts filter={filter} cache={cache}/>
-      </Dashboard>
     );
   }
 }
 
-OverridesPage.contextTypes = {
-  cache: React.PropTypes.object,
-  gmp: React.PropTypes.object.isRequired,
-  capabilities: React.PropTypes.object.isRequired,
+Page.propTypes = {
+  entityCommand: PropTypes.entitycommand,
+  onChanged: React.PropTypes.func.isRequired,
 };
 
-export default OverridesPage;
+Page.contextTypes = {
+  gmp: React.PropTypes.object.isRequired,
+};
+
+export default withEntitiesContainer(Page, 'override', {
+  dashboard: Dashboard,
+  extraLoadParams: {details: 1},
+  filterEditDialog: FilterDialog,
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+  sectionIcon: 'override.svg',
+  table: Table,
+  title: _('Overrides'),
+  toolBarIcons: ToolBarIcons,
+});
 
 // vim: set ts=2 sw=2 tw=80:
