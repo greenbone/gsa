@@ -3422,7 +3422,7 @@ attach_sid (struct MHD_Response *response, const char *sid)
   locale = g_strdup (setlocale (LC_ALL, NULL));
   setlocale (LC_ALL, "C");
 
-  timeout = session_timeout * 60 + 30
+  timeout = session_timeout * 60 + 30;
 
   now = time (NULL);
   expire_time = now + timeout;
