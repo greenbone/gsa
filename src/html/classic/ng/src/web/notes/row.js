@@ -67,7 +67,7 @@ const Actions = ({
         onClick={onEntityClone}/>
       <ExportIcon
         value={entity}
-        title={_('Export Host')}
+        title={_('Export Note')}
         onClick={onEntityDownload}
       />
     </Layout>
@@ -95,7 +95,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
     <TableRow>
       <TableData>
         {links ?
-          <LegacyLink cmd="get_entity" entity_id={entity.id}>
+          <LegacyLink cmd="get_note" note_id={entity.id}>
             {text}
           </LegacyLink> :
           text

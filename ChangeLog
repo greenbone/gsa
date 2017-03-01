@@ -1,3 +1,10 @@
+2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/notes/dialog.js: Remove debug output.
+
+	* src/html/classic/ng/src/web/notes/row.js: Fix link to note details and title
+	of export button.
+
 2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad.c (main): Increase session timeout limit from 1 day two 4 weeks.

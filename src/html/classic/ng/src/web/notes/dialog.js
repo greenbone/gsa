@@ -63,7 +63,6 @@ const NoteDialog = ({
   let is_edit = is_defined(note);
 
   let note_severity = is_edit && is_defined(note.severity) ? note.severity : 0;
-  console.log(active);
 
   return (
     <Layout flex="column">
