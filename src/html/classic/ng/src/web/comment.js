@@ -25,7 +25,11 @@ import {is_defined} from '../utils.js';
 
 import React from 'react';
 
-export const Comment = ({text}) => {
+export const Comment = ({text, children}) => {
+  if (!is_defined(text)) {
+    text = children;
+  }
+
   if (!is_defined(text)) {
     return null;
   }
