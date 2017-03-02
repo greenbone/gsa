@@ -1,5 +1,10 @@
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/parser.js: Be more cautious with info counts.
+	They are very fragile from js view.
+
+2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
 	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
 	src/html/classic/ng/src/web/entities/icons/entityediticon.js,

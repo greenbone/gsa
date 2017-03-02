@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import logger from '../log.js';
 import {is_defined, is_empty, is_array, parse_float, map} from '../utils.js';
 
 import CollectionList from './collectionlist.js';
@@ -29,6 +30,8 @@ import CollectionCounts from './collectioncounts.js';
 import Model from './model.js';
 
 import Filter from './models/filter.js';
+
+const log = logger.getLogger('gmp.parser');
 
 export function parse_severity(value) {
   return is_empty(value) ? undefined : parse_float(value);
@@ -68,6 +71,28 @@ export function parse_info_counts(response) {
   // element for start and max counts.
   let es = is_array(infos) ? infos[infos.length - 1] : infos;
   let ec = response.info_count;
+
+  if (!is_defined(es)) {
+    // houston we have a problem ...
+    log.error('No info found in response. Can not get correct counts.',
+      response);
+    es = {
+      _start: 0,
+      _max: 0,
+    };
+  }
+
+  if (!is_defined(ec)) {
+    // houston we have another problem ...
+    log.error('No info_count found in response. Can not get correct counts.',
+      response);
+    ec = {
+      page: 0,
+      __text: 0,
+      filtered: 0,
+    };
+  }
+
   let counts =  {
     first: es._start,
     rows: es._max,
