@@ -41,7 +41,7 @@ export class TargetDialogContainer extends React.Component {
     this.openPortListDialog = this.openPortListDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
-    this.handleCreateTarget = this.handleCreateTarget.bind(this);
+    this.handleSaveTarget = this.handleSaveTarget.bind(this);
   }
 
   openCredentialsDialog(data) {
@@ -74,7 +74,7 @@ export class TargetDialogContainer extends React.Component {
     this.port_list_dialog.show({});
   }
 
-  handleCreateTarget(data) {
+  handleSaveTarget(data) {
     let {gmp} = this.context;
     let {onSave} = this.props;
 
@@ -124,7 +124,7 @@ export class TargetDialogContainer extends React.Component {
           ref={ref => this.target_dialog = ref}
           onNewCredentialsClick={this.openCredentialsDialog}
           onNewPortListClick={this.openPortListDialog}
-          onSave={this.handleCreateTarget}
+          onSave={this.handleSaveTarget}
         />
         <CredentialsDialog
           ref={ref => this.credentials_dialog = ref}
