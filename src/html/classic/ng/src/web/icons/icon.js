@@ -26,6 +26,7 @@ import React from 'react';
 import {classes} from '../../utils.js';
 
 import './css/icon.css';
+import {get_img_url} from '../urls.js';
 
 export const withIconCss = Component => {
   function IconCss(props) {
@@ -79,7 +80,7 @@ class IconComponent extends React.Component {
 
   render() {
     const {img, href, alt = '', value, onClick, ...other} = this.props; // eslint-disable-line no-unused-vars
-    let img_path = process.env.PUBLIC_URL + '/img/' + img; // eslint-disable-line no-process-env,no-undef
+    let img_path = get_img_url(img);
 
     if (href) {
       return (

@@ -1,3 +1,17 @@
+2017-03-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Allow to override default image URLs, for example to allow report
+	formats to use images embedded in the HTML/JavaScript.
+
+	* src/html/classic/ng/src/web/icons/icon.js: Use new get_img_url
+	function to get src URL of img element.
+
+	* src/html/classic/ng/src/web/img.js: Use new get_img_url function
+	to get src URL of img element.
+
+	* src/html/classic/ng/src/web/urls.js: New file.  Manages URL
+	overrides.
+
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/targets/dialogcontainer.js: Rename

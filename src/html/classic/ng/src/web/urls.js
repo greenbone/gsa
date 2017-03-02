@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Timo Pollmeier <timo.pollmeier@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 Greenbone Networks GmbH
@@ -21,22 +21,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-import {get_img_url} from './urls.js';
+var img_url_overrides = {};
 
-export const Img = props => {
-  const {src, alt = '', ...other} = props;
-  let img_path = get_img_url(src);
-  return (
-    <img {...other} alt={alt} src={img_path}/>
-  );
+function get_img_url (name) {
+  let overridden = img_url_overrides[name];
+  if (overridden) {
+    return overridden;
+  }
+
+  return process.env.PUBLIC_URL + '/img/' + name; // eslint-disable-line no-process-env,no-undef
 };
 
-Img.propTypes = {
-  alt: React.PropTypes.string,
-  src: React.PropTypes.string.isRequired,
+function set_img_url_override (name, new_url) {
+  img_url_overrides[name] = new_url;
 };
 
-export default Img;
-
-// vim: set ts=2 sw=2 tw=80:
+export {get_img_url, set_img_url_override};
