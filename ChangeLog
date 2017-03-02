@@ -1,5 +1,9 @@
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/proptypes.js: Add proptype for Capabilities.
+
+2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/parser.js: Be more cautious with info counts.
 	They are very fragile from js view.
 
