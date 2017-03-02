@@ -58,7 +58,7 @@ export const EntityCloneIcon = ({
       title={title}
       value={entity}
       active={active}
-      onClick={active && onClick}/>
+      onClick={active ? onClick : undefined}/>
   );
 };
 
