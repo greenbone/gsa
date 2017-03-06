@@ -103,8 +103,10 @@ class ResultsFilterDialogComponent extends React.Component {
         <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange}/>
 
         <FormGroup title={_('Auto-FP')} flex="column">
-          <Checkbox name="autofp"
-            checkedValue="1" uncheckedValue="0"
+          <Checkbox
+            name="autofp"
+            checkedValue="1"
+            unCheckedValue="0"
             checked={autofp >= 1}
             title={_('Trust vendor security updates')}
             onChange={this.onFilterIntValueChange}/>
