@@ -23,77 +23,64 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../locale.js';
 
 import Layout from '../layout.js';
-import {render_options} from '../render.js';
+import PropTypes from '../proptypes.js';
+import {render_options, withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
 import Radio from '../form/radio.js';
-import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = "Filter count changed";
 
-export class FilterCountChangedConditionPart extends RadioSelectFormPart {
-
-  constructor(...args) {
-    super(...args);
-
-    this.data_name = 'condition_data';
-  }
-
-  defaultState() {
-    let {data = {}} = this.props;
-
-    return {
-      count: is_defined(data.count) ? data.count : 1,
-      filter_id: data.filter_id,
-      filters: data.filters,
-    };
-  }
-
-  componentWillReceiveProps(props) {
-    let {data = {}} = props;
-    this.setState({filters: data.filters});
-  }
-
-  render() {
-    let {filter_id, count, filters = []} = this.state;
-    let {value} = this.props;
-
-    let filter_opts = render_options(filters);
-    return (
+const FilterCountChangedConditionPart = ({
+    condition,
+    count,
+    filterId,
+    filters,
+    prefix,
+    onChange,
+  }) => {
+  return (
+    <Layout flex box>
+      <Radio title={_('Filter')}
+        value={VALUE}
+        checked={condition === VALUE}
+        name="condition"
+        onChange={onChange}/>
+      <Select2
+        value={filterId}
+        name={prefix + 'filter_id'}
+        onChange={onChange}>
+        {render_options(filters)}
+      </Select2>
       <Layout flex box>
-        <Radio title={_('Filter')}
-          value={VALUE}
-          checked={value === VALUE}
-          name="condition"
-          onChange={this.onCheckedChange}/>
-        <Select2
-          value={filter_id}
-          name="filter_id"
-          onChange={this.onValueChange}>
-          {filter_opts}
-        </Select2>
-        <Layout flex box>
-          {_('matches at least')}
-        </Layout>
-        <Spinner
-          value={count}
-          name="count"
-          type="int"
-          min="0" size="5"
-          onChange={this.onValueChange}/>
-        <Layout flex box>
-          {_('result(s) more then previous scan')}
-        </Layout>
+        {_('matches at least')}
       </Layout>
-    );
-  }
-}
+      <Spinner
+        value={count}
+        name={prefix + 'count'}
+        type="int"
+        min="0" size="5"
+        onChange={onChange}/>
+      <Layout flex box>
+        {_('result(s) more then previous scan')}
+      </Layout>
+    </Layout>
+  );
+};
 
-export default FilterCountChangedConditionPart;
+FilterCountChangedConditionPart.propTypes = {
+  condition: React.PropTypes.string.isRequired,
+  count: PropTypes.number.isRequired,
+  filterId: PropTypes.id,
+  filters: PropTypes.arrayLike.isRequired,
+  prefix: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+};
+
+export default withPrefix(FilterCountChangedConditionPart);
 
 // vim: set ts=2 sw=2 tw=80:

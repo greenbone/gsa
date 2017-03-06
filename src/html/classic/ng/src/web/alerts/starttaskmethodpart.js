@@ -24,47 +24,39 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {select_save_id} from '../../utils.js';
 
-import {render_options} from '../render.js';
+import PropTypes from '../proptypes.js';
+import {render_options, withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
-import FormPart from '../form/formpart.js';
 
-export class StartTaskMethodPart extends FormPart {
+const StartTaskMethodPart = ({
+    prefix,
+    tasks,
+    startTaskTask,
+    onChange,
+  }) => {
+  return (
+    <FormGroup title={_('Start Task')}>
+      <Select2
+        name={prefix + 'start_task_task'}
+        value={startTaskTask}
+        onChange={onChange}>
+        {render_options(tasks)}
+      </Select2>
+    </FormGroup>
+  );
+};
 
-  constructor(props) {
-    super(props, 'method_data');
-  }
+StartTaskMethodPart.propTypes = {
+  prefix: React.PropTypes.string,
+  tasks: PropTypes.arrayLike,
+  startTaskTask: PropTypes.id,
+  onChange: React.PropTypes.func,
+};
 
-  defaultState() {
-    let {tasks = [], data = {}} = this.props;
-    return {
-      start_task_task: select_save_id(tasks, data.start_task_task),
-    };
-  }
 
-  componentWillMount() {
-    this.notify();
-  }
-
-  render() {
-    let {tasks = [], start_task_task} = this.props;
-    let task_opts = render_options(tasks);
-    return (
-      <FormGroup title={_('Start Task')}>
-        <Select2
-          name="start_task_task"
-          value={start_task_task}
-          onChange={this.onValueChange}>
-          {task_opts}
-        </Select2>
-      </FormGroup>
-    );
-  }
-}
-
-export default StartTaskMethodPart;
+export default withPrefix(StartTaskMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

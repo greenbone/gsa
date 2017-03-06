@@ -23,56 +23,49 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import {withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import Radio from '../form/radio.js';
-import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Severity changed';
 
-export class SeverityChangedConditionPart extends RadioSelectFormPart {
+const SeverityChangedConditionPart = ({
+    condition,
+    direction,
+    prefix,
+    onChange,
+  }) => {
+  return (
+    <Layout flex box>
+      <Radio title={_('Severity Level')}
+        value={VALUE}
+        name="condition"
+        checked={condition === VALUE}
+        onChange={onChange}>
+      </Radio>
+      <Select2
+        value={direction}
+        name={prefix + 'direction'}
+        onChange={onChange}>
+        <option value="changed">{_('changed')}</option>
+        <option value="increased">{_('increased')}</option>
+        <option value="decreased">{_('decreased')}</option>
+      </Select2>
+    </Layout>
+  );
+};
 
-  constructor(...args) {
-    super(...args);
+SeverityChangedConditionPart.propTypes = {
+  condition: React.PropTypes.string.isRequired,
+  direction: React.PropTypes.string.isRequired,
+  prefix: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+};
 
-    this.data_name = 'condition_data';
-  }
-
-  defaultState() {
-    let {data = {}} = this.props;
-    return {
-      direction: is_defined(data.direction) ? data.direction : 'changed',
-    };
-  }
-
-  render() {
-    let {direction} = this.state;
-    let {value} = this.props;
-    return (
-      <Layout flex box>
-        <Radio title={_('Severity Level')}
-          value={VALUE}
-          name="condition"
-          checked={value === VALUE}
-          onChange={this.onCheckedChange}>
-        </Radio>
-        <Select2
-          value={direction}
-          name="direction"
-          onChange={this.onValueChange}>
-          <option value="changed">{_('changed')}</option>
-          <option value="increased">{_('increased')}</option>
-          <option value="decreased">{_('decreased')}</option>
-        </Select2>
-      </Layout>
-    );
-  }
-}
-
-export default SeverityChangedConditionPart;
+export default withPrefix(SeverityChangedConditionPart);
 
 // vim: set ts=2 sw=2 tw=80:

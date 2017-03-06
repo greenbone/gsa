@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {map, extend, convert_data} from '../../utils.js';
+import {map, extend} from '../../utils.js';
 import logger from '../../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
@@ -50,6 +50,17 @@ const condition_data_fields = [
   'filter_id', 'count',
 ];
 
+function convert_data(prefix, data, fields) {
+  let converted = {};
+  for (let field of fields) {
+    let name = prefix + '_' + field;
+    if (data.hasOwnProperty(name)) {
+      converted[prefix + ':' + field] = data[name];
+    }
+  }
+  return converted;
+}
+
 export class AlertCommand extends EntityCommand {
 
   constructor(http) {
@@ -57,9 +68,8 @@ export class AlertCommand extends EntityCommand {
   }
 
   create(args) {
-    let {name, comment = '', event, event_data = {}, condition,
-      condition_data = {}, filter_id, method, method_data = {},
-    } = args;
+    let {name, comment = '', event, condition, filter_id, method,
+      ...other} = args;
     let data = extend({
       cmd: 'create_alert',
       next: 'get_alert',
@@ -69,9 +79,9 @@ export class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-    }, convert_data("method_data", method_data, method_data_fields),
-      convert_data("condition_data", condition_data, condition_data_fields),
-      convert_data("event_data", event_data, event_data_fields));
+    }, convert_data("method_data", other, method_data_fields),
+      convert_data("condition_data", other, condition_data_fields),
+      convert_data("event_data", other, event_data_fields));
     log.debug('Creating new alert', args, data);
     return this.httpPost(data).then(this.transformResponse);
   }

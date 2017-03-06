@@ -24,74 +24,67 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {select_save_id} from '../../utils.js';
 
 import Layout from '../layout.js';
-import {render_options} from '../render.js';
+import PropTypes from '../proptypes.js';
+import {render_options, withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
-import FormPart from '../form/formpart.js';
 
-export class SendMethodPart extends FormPart {
+const SendMethodPart = ({
+    prefix,
+    reportFormats,
+    sendHost,
+    sendPort,
+    sendReportFormat,
+    onChange,
+  }) => {
+  return (
+    <Layout
+      flex="column"
+      box
+      grow="1">
+      <FormGroup title={_('Send to host')}>
+        <TextField
+          name={prefix  + 'send_host'}
+          value={sendHost}
+          size="30"
+          maxLength="256"
+          onChange={onChange}/>
+        <Layout flex box>
+          {_('on port')}
+        </Layout>
+        <TextField
+          name={prefix + 'send_port'}
+          value={sendPort}
+          maxLength="6"
+          size="6"
+          onChange={onChange}/>
+      </FormGroup>
 
-  constructor(props) {
-    super(props, 'method_part');
-  }
+      <FormGroup title={_('Report')}>
+        <Select2
+          name={prefix + 'send_report_format'}
+          value={sendReportFormat}
+          onChange={onChange}>
+          {render_options(reportFormats)}
+        </Select2>
+      </FormGroup>
+    </Layout>
+  );
+};
 
-  defaultState() {
-    let {report_formats = [], data = {}} = this.props;
-    return {
-      send_report_format: select_save_id(report_formats,
-        data.send_report_format),
-      send_port: data.send_port,
-      send_host: data.send_host,
-    };
-  }
+SendMethodPart.propTypes = {
+  prefix: React.PropTypes.string,
+  reportFormats: PropTypes.arrayLike,
+  sendHost: React.PropTypes.string.isRequired,
+  sendPort: React.PropTypes.string.isRequired,
+  sendReportFormat: PropTypes.id,
+  onChange: React.PropTypes.func,
+};
 
-  componentWillMount() {
-    this.notify();
-  }
-
-  render() {
-    let {send_report_format, send_port, send_host} = this.state;
-    let {report_formats} = this.props;
-
-    let send_report_format_opts = render_options(report_formats);
-    return (
-      <Layout flex="column" box grow="1">
-        <FormGroup title={_('Send to host')}>
-          <TextField
-            name="send_host"
-            value={send_host}
-            size="30"
-            maxLength="256"
-            onChange={this.onValueChange}/>
-          <Layout flex box>
-            {_('on port')}
-          </Layout>
-          <TextField
-            name="send_port"
-            value={send_port}
-            maxLength="6"
-            size="6"
-            onChange={this.onValueChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('Report')}>
-          <Select2
-            name="send_report_format"
-            value={send_report_format}
-            onChange={this.onValueChange}>
-            {send_report_format_opts}
-          </Select2>
-        </FormGroup>
-      </Layout>
-    );
-  }
-}
-
-export default SendMethodPart;
+export default withPrefix(SendMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

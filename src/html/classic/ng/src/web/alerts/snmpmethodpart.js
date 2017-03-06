@@ -24,68 +24,64 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
+import {withPrefix} from '../render.js';
 
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
-import FormPart from '../form/formpart.js';
 
-export class SnmpMethodPart extends FormPart {
+const SnmpMethodPart = ({
+    prefix,
+    snmpAgent,
+    snmpCommunity,
+    snmpMessage,
+    onChange,
+  }) => {
+  return (
+    <Layout
+      flex="column"
+      grow="1"
+      box>
+      <FormGroup title={_('Community')}>
+        <TextField
+          size="30"
+          maxLength="301"
+          name={prefix + 'snmp_community'}
+          value={snmpCommunity}
+          onChange={onChange}/>
+      </FormGroup>
 
-  constructor(props) {
-    super(props, 'method_data');
-  }
+      <FormGroup title={_('Agent')}>
+        <TextField
+          size="30"
+          maxLength="301"
+          name={prefix + 'snmp_agent'}
+          value={snmpAgent}
+          onChange={onChange}/>
+      </FormGroup>
 
-  defaultState() {
-    let {data = {}} = this.props;
+      <FormGroup title={_('Message')}>
+        <TextField
+          size="30"
+          maxLength="301"
+          name={prefix + 'snmp_message'}
+          value={snmpMessage}
+          onChange={onChange}/>
+      </FormGroup>
+    </Layout>
+  );
+};
 
-    return {
-      snmp_community: is_defined(data.snmp_community) ?
-        data.snmp_community : 'public',
-      snmp_agent: is_defined(data.snmp_agent) ? data.snmp_agent : 'localhost',
-      snmp_message: is_defined(data.snmp_message) ? data.snmp_message : '$e',
-    };
-  }
+SnmpMethodPart.propTypes = {
+  prefix: React.PropTypes.string,
+  snmpAgent: React.PropTypes.string,
+  snmpCommunity: React.PropTypes.string,
+  snmpMessage: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+};
 
-  componentWillMount() {
-    this.notify();
-  }
 
-  render() {
-    let {snmp_community, snmp_agent, snmp_message} = this.state;
-
-    return (
-      <Layout flex="column" grow="1" box>
-        <FormGroup title={_('Community')}>
-          <TextField
-            size="30" maxLength="301"
-            name="snmp_community"
-            value={snmp_community}
-            onChange={this.onValueChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('Agent')}>
-          <TextField
-            size="30" maxLength="301"
-            name="snmp_agent"
-            value={snmp_agent}
-            onChange={this.onValueChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('Message')}>
-          <TextField
-            size="30" maxLength="301"
-            name="snmp_message"
-            value={snmp_message}
-            onChange={this.onValueChange}/>
-        </FormGroup>
-      </Layout>
-    );
-  }
-}
-
-export default SnmpMethodPart;
+export default withPrefix(SnmpMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -24,71 +24,62 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
+import {withPrefix} from '../render.js';
 
 import Spinner from '../form/spinner.js';
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 import FileField from '../form/filefield.js';
-import FormPart from '../form/formpart.js';
 
-export class SourcefireMethodPart extends FormPart {
+const SourcefireMethodPart = ({
+    prefix,
+    defenseCenterIp,
+    defenseCenterPort,
+    onChange,
+  }) => {
+  return (
+    <Layout
+      flex="column"
+      box
+      grow="1">
+      <FormGroup title={_('Defense Center IP')}>
+        <TextField
+          size="30"
+          maxLength="40"
+          name={prefix + 'defense_center_ip'}
+          value={defenseCenterIp}
+          onChange={onChange}/>
+      </FormGroup>
 
-  constructor(props) {
-    super(props, 'method_part');
-  }
+      <FormGroup title={_('Defense Center Port')}>
+        <Spinner
+          name={prefix + 'defense_center_port'}
+          value={defenseCenterPort}
+          onChange={onChange}
+          type="int"
+          max="65535"
+          min="0"/>
+      </FormGroup>
 
-  defaultState() {
-    let {data = {}} = this.props;
+      <FormGroup title={_('PKCS12 file')}>
+        <FileField
+          name={prefix + 'pkcs12'}
+          onChange={onChange}/>
+      </FormGroup>
+    </Layout>
+  );
+};
 
-    return {
-      defense_center_port: is_defined(data.defense_center_port) ?
-        data.defense_center_port : '8307',
-      defense_center_ip: data.defense_center_ip,
-      pkcs12: data.pkcs12,
-    };
-  }
+SourcefireMethodPart.propTypes = {
+  prefix: React.PropTypes.string,
+  defenseCenterIp: React.PropTypes.string.isRequired,
+  defenseCenterPort: PropTypes.number.isRequired,
+  onChange: React.PropTypes.func,
+};
 
-  componentWillMount() {
-    this.notify();
-  }
-
-  render() {
-    let {defense_center_ip, defense_center_port, pkcs12} = this.state;
-
-    return (
-      <Layout flex="column" box grow="1">
-        <FormGroup title={_('Defense Center IP')}>
-          <TextField
-            size="30" maxLength="40"
-            name="defense_center_ip"
-            value={defense_center_ip}
-            onChange={this.onValueChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('Defense Center Port')}>
-          <Spinner
-            name="defense_center_port"
-            value={defense_center_port}
-            onChange={this.onValueChange}
-            type="int"
-            max="65535"
-            min="0"/>
-        </FormGroup>
-
-        <FormGroup title={_('PKCS12 file')}>
-          <FileField
-            name="pkcs12"
-            value={pkcs12}
-            onChange={this.onValueChange}/>
-        </FormGroup>
-      </Layout>
-    );
-  }
-}
-
-export default SourcefireMethodPart;
+export default withPrefix(SourcefireMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

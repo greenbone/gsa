@@ -23,76 +23,66 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../locale.js';
 
 import Layout from '../layout.js';
-import {render_options} from '../render.js';
+import PropTypes from '../proptypes.js';
+import {render_options, withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
 import Radio from '../form/radio.js';
-import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Filter count at least';
 
-export class FilterCountLeastConditionPart extends RadioSelectFormPart {
-
-  constructor(...args) {
-    super(...args);
-
-    this.data_name = 'condition_data';
-  }
-
-  defaultState() {
-    let {data = {}} = this.props;
-
-    return {
-      at_least_count: is_defined(data.at_least_count) ? data.at_least_count : 1,
-      at_least_filter_id: data.at_least_filter_id,
-      filters: data.filters,
-    };
-  }
-
-  componentWillReceiveProps(props) {
-    let {data = {}} = props;
-    this.setState({filters: data.filters});
-  }
-
-  render() {
-    let {at_least_filter_id, at_least_count, filters = []} = this.state;
-    let {value} = this.props;
-
-    let filter_opts = render_options(filters);
-    return (
+const FilterCountLeastConditionPart = ({
+    condition,
+    atLeastFilterId,
+    atLeastCount,
+    filters,
+    prefix,
+    onChange,
+  }) => {
+  return (
+    <Layout flex box>
+      <Radio title={_('Filter')}
+        value={VALUE}
+        name="condition"
+        checked={condition === VALUE}
+        onChange={onChange}>
+      </Radio>
+      <Select2
+        value={atLeastFilterId}
+        name={prefix + 'at_least_filter_id'}
+        onChange={onChange}>
+        {render_options(filters)}
+      </Select2>
       <Layout flex box>
-        <Radio title={_('Filter')}
-          value={VALUE}
-          name="condition"
-          checked={value === VALUE}
-          onChange={this.onCheckedChange}>
-        </Radio>
-        <Select2
-          value={at_least_filter_id}
-          name="at_least_filter_id"
-          onChange={this.onValueChange}>
-          {filter_opts}
-        </Select2>
-        <Layout flex box>
-          {_('matches at least')}
-        </Layout>
-        <Spinner value={at_least_count}
-          name="at_least_count"
-          type="int" min="0" size="5"
-          onChange={this.onValueChange}/>
-        <Layout flex box>
-          {_('result(s) NVT(s)')}
-        </Layout>
+        {_('matches at least')}
       </Layout>
-    );
-  }
-}
+      <Spinner
+        value={atLeastCount}
+        name={prefix + 'at_least_count'}
+        type="int"
+        min="0"
+        size="5"
+        onChange={onChange}/>
+      <Layout flex box>
+        {_('result(s) NVT(s)')}
+      </Layout>
+    </Layout>
+  );
+};
 
-export default FilterCountLeastConditionPart;
+FilterCountLeastConditionPart.propTypes = {
+  atLeastFilterId: PropTypes.id,
+  atLeastCount: PropTypes.number.isRequired,
+  condition: React.PropTypes.string.isRequired,
+  filters: PropTypes.arrayLike.isRequired,
+  prefix: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+};
+
+export default withPrefix(FilterCountLeastConditionPart);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -23,54 +23,49 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
+import {withPrefix} from '../render.js';
 
 import Spinner from '../form/spinner.js';
 import Radio from '../form/radio.js';
-import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Severity at least';
 
-export class SeverityLeastConditionPart extends RadioSelectFormPart {
+const SeverityLeastConditionPart = ({
+    condition,
+    severity,
+    prefix,
+    onChange,
+  }) => {
+  return (
+    <Layout flex box>
+      <Radio title={_('Severity at least')}
+        value={VALUE}
+        checked={condition === VALUE}
+        name="condition"
+        onChange={onChange}>
+      </Radio>
+      <Spinner
+        value={severity}
+        name={prefix + 'severity'}
+        type="float"
+        min="0"
+        size="5"
+        onChange={onChange}/>
+    </Layout>
+  );
+};
 
-  constructor(props) {
-    super(props, 'condition_data');
-  }
+SeverityLeastConditionPart.propTypes = {
+  condition: React.PropTypes.string.isRequired,
+  prefix: React.PropTypes.string,
+  severity: PropTypes.number.isRequired,
+  onChange: React.PropTypes.func,
+};
 
-  defaultState(...args) {
-    let {data = {}} = this.props;
-
-    return {
-      severity: is_defined(data.severity) ? data.severity : 0.1,
-    };
-  }
-
-  render() {
-    let {severity} = this.state;
-    let {value} = this.props;
-    return (
-      <Layout flex box>
-        <Radio title={_('Severity at least')}
-          value={VALUE}
-          checked={value === VALUE}
-          name="condition"
-          onChange={this.onCheckedChange}>
-        </Radio>
-        <Spinner
-          value={severity}
-          name="severity"
-          type="float"
-          min="0"
-          size="5"
-          onChange={this.onValueChange}/>
-      </Layout>
-    );
-  }
-}
-
-export default SeverityLeastConditionPart;
+export default withPrefix(SeverityLeastConditionPart);
 
 // vim: set ts=2 sw=2 tw=80:

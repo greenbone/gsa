@@ -1,5 +1,30 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/alerts.js: Adjust alert create to use
+	new data structures. Now all data is contained in one object and not splitted
+	into several sub objects like before the method_data.
+
+	* src/html/classic/ng/src/web/alerts/dialog.js,
+	src/html/classic/ng/src/web/alerts/emailmethodpart.js,
+	src/html/classic/ng/src/web/alerts/filtercountchangedconditionpart.js,
+	src/html/classic/ng/src/web/alerts/filtercountleastconditionpart.js,
+	src/html/classic/ng/src/web/alerts/httpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/scpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/secinfoeventpart.js,
+	src/html/classic/ng/src/web/alerts/sendmethodpart.js,
+	src/html/classic/ng/src/web/alerts/severitychangedconditionpart.js,
+	src/html/classic/ng/src/web/alerts/severityleastconditionpart.js,
+	src/html/classic/ng/src/web/alerts/snmpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/sourcefiremethodpart.js,
+	src/html/classic/ng/src/web/alerts/starttaskmethodpart.js,
+	src/html/classic/ng/src/web/alerts/taskeventpart.js,
+	src/html/classic/ng/src/web/alerts/verinicemethodpart.js: Refactor Alert
+	dialog to use withDialog HOC instead of inherit from Dialog. All form parts
+	are now independent and don't inherit from FormPart classes anymore. They are
+	now completely stateless and could be used independent of AlertDialog.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/schedules/dialog.js: Refactor ScheduleDialog to
 	use withDialog HOC instead of inherit from Dialog.
 

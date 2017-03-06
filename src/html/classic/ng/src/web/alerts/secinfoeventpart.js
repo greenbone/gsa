@@ -23,70 +23,67 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import {withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import Radio from '../form/radio.js';
-import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'New SecInfo arrived';
 
-export class SecinfoEventPart extends RadioSelectFormPart {
+const SecinfoEventPart = ({
+    event,
+    feedEvent,
+    prefix,
+    secinfoType,
+    onChange,
+    onEventChange,
+  }) => {
+  return (
+    <Layout flex box>
+      <Radio
+        name="event"
+        value={VALUE}
+        checked={event === VALUE}
+        onChange={onEventChange}>
+      </Radio>
+      <Select2
+        value={feedEvent}
+        name={prefix + 'feed_event'}
+        onChange={onChange}>
+        <option value="new">{_('New')}</option>
+        <option value="updated">{_('Updated')}</option>
+      </Select2>
+      <Select2
+        value={secinfoType}
+        name={prefix + 'secinfo_type'}
+        onChange={onChange}>
+        <option value="nvt">{_('NVTs')}</option>
+        <option value="cve">{_('CVEs')}</option>
+        <option value="cpe">{_('CPEs')}</option>
+        <option value="cert_bund_adv">
+          {_('CERT-Bund Advisories')}
+        </option>
+        <option value="dfn_cert_adv">
+          {_('DFN-CERT Advisories')}
+        </option>
+        <option value="ovaldef">{_('OVAL Definition')}</option>
+      </Select2>
+    </Layout>
+  );
+};
 
-  constructor(props) {
-    super(props, 'event_data');
-  }
+SecinfoEventPart.propTypes = {
+  event: React.PropTypes.string.isRequired,
+  feedEvent: React.PropTypes.string.isRequired,
+  prefix: React.PropTypes.string,
+  secinfoType: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func,
+  onEventChange: React.PropTypes.func,
+};
 
-  defaultState() {
-    let {data = {}} = this.props;
-
-    return {
-      feed_event: is_defined(data.feed_event) ? data.feed_event : 'new',
-      secinfo_type: is_defined(data.secinfo_type) ? data.secinfo_type : 'nvt',
-    };
-  }
-
-  render() {
-    let {feed_event, secinfo_type} = this.state;
-    let {value} = this.props;
-    return (
-      <Layout flex box>
-        <Radio
-          name="event"
-          value={VALUE}
-          checked={value === VALUE}
-          onChange={this.onCheckedChange}>
-        </Radio>
-        <Select2
-          value={feed_event}
-          name="feed_event"
-          onChange={this.onValueChange}>
-          <option value="new">{_('New')}</option>
-          <option value="updated">{_('Updated')}</option>
-        </Select2>
-        <Select2
-          value={secinfo_type}
-          name="secinfo_type"
-          onChange={this.onValueChange}>
-          <option value="nvt">{_('NVTs')}</option>
-          <option value="cve">{_('CVEs')}</option>
-          <option value="cpe">{_('CPEs')}</option>
-          <option value="cert_bund_adv">
-            {_('CERT-Bund Advisories')}
-          </option>
-          <option value="dfn_cert_adv">
-            {_('DFN-CERT Advisories')}
-          </option>
-          <option value="ovaldef">{_('OVAL Definition')}</option>
-        </Select2>
-      </Layout>
-    );
-  }
-}
-
-export default SecinfoEventPart;
+export default withPrefix(SecinfoEventPart);
 
 // vim: set ts=2 sw=2 tw=80:

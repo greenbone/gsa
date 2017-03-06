@@ -23,57 +23,54 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import {withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import Radio from '../form/radio.js';
-import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Task run status changed';
 
-export class TaskEventPart extends RadioSelectFormPart {
+const TaskEventPart = ({
+    prefix,
+    event,
+    status,
+    onChange,
+    onEventChange,
+  }) => {
+  return (
+    <Layout flex box>
+      <Radio title={_('Task run status changed to')}
+        name="event"
+        value={VALUE}
+        checked={event === VALUE}
+        onChange={onEventChange}>
+      </Radio>
+      <Select2
+        onChange={onChange}
+        name={prefix + 'status'}
+        value={status}>
+        <option value="Done">{('Done')}</option>
+        <option value="New">{_('New')}</option>
+        <option value="Requested">{_('Requested')}</option>
+        <option value="Running">{_('Running')}</option>
+        <option value="Stop Requested">{_('Stop Requested')}</option>
+        <option value="Stopped">{_('Stopped')}</option>
+      </Select2>
+    </Layout>
+  );
+};
 
-  constructor(props) {
-    super(props, 'event_data');
-  }
+TaskEventPart.propTypes = {
+  prefix: React.PropTypes.string,
+  event: React.PropTypes.string.isRequired,
+  status: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func,
+  onEventChange: React.PropTypes.func,
+};
 
-  defaultState() {
-    let {data = {}} = this.props;
-
-    return {
-      status: is_defined(data.status) ? data.status : 'Done',
-    };
-  }
-
-  render() {
-    let {status} = this.state;
-    let {value} = this.props;
-    return (
-      <Layout flex box>
-        <Radio title={_('Task run status changed to')}
-          name="event"
-          value={VALUE}
-          checked={value === VALUE}
-          onChange={this.onCheckedChange}>
-        </Radio>
-        <Select2 onChange={this.onValueChange}
-          name="status"
-          value={status}>
-          <option value="Done">{('Done')}</option>
-          <option value="New">{_('New')}</option>
-          <option value="Requested">{_('Requested')}</option>
-          <option value="Running">{_('Running')}</option>
-          <option value="Stop Requested">{_('Stop Requested')}</option>
-          <option value="Stopped">{_('Stopped')}</option>
-        </Select2>
-      </Layout>
-    );
-  }
-}
-
-export default TaskEventPart;
+export default withPrefix(TaskEventPart);
 
 // vim: set ts=2 sw=2 tw=80:

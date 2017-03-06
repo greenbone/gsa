@@ -23,41 +23,36 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
+
+import {withPrefix} from '../render.js';
 
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
-import FormPart from '../form/formpart.js';
 
-export class HttpMethodPart extends FormPart {
+const HttpMethodPart = ({
+    prefix,
+    URL,
+    onChange,
+  }) => {
+  return (
+    <FormGroup title={_('HTTP Get URL')}>
+      <TextField
+        grow="1"
+        name={prefix + 'URL'}
+        maxLength="301"
+        value={URL}
+        onChange={onChange}/>
+    </FormGroup>
+  );
+};
 
-  constructor(props) {
-    super(props, 'method_data');
-  }
+HttpMethodPart.propTypes = {
+  prefix: React.PropTypes.string,
+  URL: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func,
+};
 
-  defaultState() {
-    let {data = {}} = this.props;
-
-    return {
-      URL: data.URL,
-    };
-  }
-
-  render() {
-    let {URL} = this.state;
-    return (
-      <FormGroup title={_('HTTP Get URL')}>
-        <TextField
-          grow="1"
-          name="URL"
-          maxLength="301"
-          value={URL}
-          onChange={this.onValueChange}/>
-      </FormGroup>
-    );
-  }
-}
-
-export default HttpMethodPart;
+export default withPrefix(HttpMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:
