@@ -1,5 +1,10 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dialog/dialog.js: Only render child component of
+	DialogWrapper if the dialog is visible.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/capabilities.js: Add mayAccess method to
 	capabilities.
 

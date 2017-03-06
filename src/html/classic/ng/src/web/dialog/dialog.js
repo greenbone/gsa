@@ -229,7 +229,9 @@ export class Dialog extends React.Component {
         <div className="dialog dialog-modal"
           onClick={this.onOuterClick} onKeyDown={this.onKeyDown}
           tabIndex="0" role="dialog">
-          <div className="dialog-container" style={style} tabIndex="1"
+          <div className="dialog-container"
+            style={style}
+            tabIndex="1"
             ref={ref => this.dialog = ref}>
             {showTitle && this.renderTitle()}
             <DialogError error={error} onCloseClick={this.onErrorClose}/>
@@ -273,6 +275,7 @@ export const withDialog = (Component, options = {}) => {
 
       this.state = {
         data: {},
+        visible: false,
       };
 
       this.handleSave = this.handleSave.bind(this);
@@ -287,23 +290,27 @@ export const withDialog = (Component, options = {}) => {
       this.onValueChange(value, name);
     }
 
+    setValues(new_data) {
+      let {data} = this.state;
+      data = extend({}, data, new_data);
+      this.setState({data});
+    }
+
     show(data, opts) {
       let {defaultState = {}} = options;
 
-      if (is_defined(data)) {
-        data = extend({}, defaultState, data);
-      }
-      else {
-        data = defaultState;
-      }
+      data = extend({}, defaultState, data);
 
-      this.setState({data});
+      this.setState({data, visible: true});
       this.dialog.show(opts);
     }
 
     onValueChange(value, name) {
       let {data} = this.state;
       data[name] = value;
+
+      log.debug('value changed', name, value);
+
       this.setState({data});
     }
 
@@ -327,9 +334,10 @@ export const withDialog = (Component, options = {}) => {
     }
 
     render() {
-      let {data} = this.state;
+      let {data, visible = false} = this.state;
       let {onClose, title = options.title, footer = options.footer,
         ...other} = this.props;
+
       return (
         <Dialog
           ref={ref => this.dialog = ref}
@@ -338,10 +346,12 @@ export const withDialog = (Component, options = {}) => {
           width={800}
           onCloseClick={onClose}
           onSaveClick={this.handleSave}>
-          <Component
-            {...other}
-            {...data}
-            onValueChange={this.onValueChange}/>
+          {visible &&
+            <Component
+              {...other}
+              {...data}
+              onValueChange={this.onValueChange}/>
+          }
         </Dialog>
       );
     }
