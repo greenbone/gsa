@@ -23,14 +23,11 @@
 
 import React from 'react';
 
-import moment from 'moment-timezone';
-
-import {autobind} from '../../utils.js';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
 
-import Dialog from '../dialog/dialog.js';
+import {withDialog} from '../dialog/dialog.js';
 
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
@@ -50,147 +47,137 @@ const TimeUnitSelect = props => {
   );
 };
 
-export class ScheduleDialog extends Dialog {
+const ScheduleDialog = ({
+    comment,
+    date,
+    duration,
+    duration_unit,
+    hour,
+    minute,
+    name,
+    period,
+    period_unit,
+    timezone,
+    onValueChange,
+  }) => {
+  return (
+    <Layout flex="column">
 
-  constructor(...args) {
-    super(...args);
+      <FormGroup title={_('Name')}>
+        <TextField
+          name="name"
+          grow="1"
+          value={name}
+          size="30"
+          onChange={onValueChange}
+          maxLength="80"/>
+      </FormGroup>
 
-    autobind(this, 'on');
-  }
+      <FormGroup title={_('Comment')}>
+        <TextField
+          name="comment"
+          value={comment}
+          grow="1"
+          size="30" maxLength="400"
+          onChange={onValueChange}/>
+      </FormGroup>
 
-  show() {
-    this.loadData();
-  }
+      <FormGroup title={_('First Time')}>
+        <DatePicker
+          name="date"
+          value={date}
+          onChange={onValueChange}/>
+        <Spinner
+          name="hour"
+          type="int"
+          min="0"
+          max="23"
+          size="2"
+          value={hour}
+          onChange={onValueChange}/> h
+        <Spinner
+          name="minute"
+          type="int"
+          min="0"
+          max="59"
+          size="2"
+          value={minute}
+          onChange={onValueChange}/> m
+      </FormGroup>
 
-  loadData() {
-    let {gmp} = this.context;
-    let timezone = gmp.globals.timezone;
-    let now = moment().tz(timezone);
-    this.setState({
-      error: undefined,
-      name: _('unnamed'),
-      comment: '',
-      minute: now.minutes(),
-      hour: now.hours(),
-      date: now,
-      width: 800,
-      visible: true,
-      timezone,
-      period: 0,
-      duration: 0,
-      period_unit: 'hour',
-      duration_unit: 'hour',
-    });
-  }
+      <FormGroup title={_('Timezone')}>
+        <TimeZoneSelect
+          name="timezone"
+          value={timezone}
+          onChange={onValueChange}/>
+      </FormGroup>
 
-  save() {
-    let {gmp} = this.context;
-    return gmp.schedule.create(this.state).then(schedule => {
-      this.close();
-      return schedule;
-    }, xhr => {
-      this.showErrorMessage(xhr.action_result.message);
-      throw new Error('Schedule creation failed. Reason: ' +
-        xhr.action_result.message);
-    });
-  }
+      <FormGroup title={_('Period')}>
+        <Spinner
+          name="period"
+          type="int"
+          min="0"
+          size="3"
+          value={period}
+          onChange={onValueChange}/>
+        <TimeUnitSelect
+          name="period_unit"
+          value={period_unit}
+          onChange={onValueChange}/>
+      </FormGroup>
 
-  onCommentChange(comment) {
-    this.setState({comment});
-  }
-
-  onNameChange(name) {
-    this.setState({name});
-  }
-
-  onHourChange(hour) {
-    this.setState({hour});
-  }
-
-  onMinuteChange(minute) {
-    this.setState({minute});
-  }
-
-  onTimezoneChange(timezone) {
-    this.setState({timezone});
-  }
-
-  onDateChange(date) {
-    this.setState({date});
-  }
-
-  onPeriodChange(period) {
-    this.setState({period});
-  }
-
-  onPeriodUnitChange(period_unit) {
-    this.setState({period_unit});
-  }
-
-  onDurationChange(duration) {
-    this.setState({duration});
-  }
-
-  onDurationUnitChange(duration_unit) {
-    this.setState({duration_unit});
-  }
-
-  renderContent() {
-    let {comment, name, hour, minute, date, duration, period, duration_unit,
-      period_unit, timezone} = this.state;
-    return (
-      <Layout flex="column">
-
-        <FormGroup title={_('Name')}>
-          <TextField name="name"
-            grow="1"
-            value={name} size="30"
-            onChange={this.onNameChange}
-            maxLength="80"/>
-        </FormGroup>
-
-        <FormGroup title={_('Comment')}>
-          <TextField name="comment" value={comment}
-            grow="1"
-            size="30" maxLength="400"
-            onChange={this.onCommentChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('First Time')}>
-          <DatePicker value={date} onChange={this.onDateChange}/>
-          <Spinner type="int" min="0" max="23" size="2"
-            value={hour} onChange={this.onHourChange}/> h
-          <Spinner type="int" min="0" max="59" size="2"
-            value={minute} onChange={this.onMinuteChange}/> m
-        </FormGroup>
-
-        <FormGroup title={_('Timezone')}>
-          <TimeZoneSelect value={timezone} onChange={this.onTimezoneChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('Period')}>
-          <Spinner type="int" min="0" size="3"
-            value={period} onChange={this.onPeriodChange}/>
-          <TimeUnitSelect value={period_unit}
-            onChange={this.onPeriodUnitChange}/>
-        </FormGroup>
-
-        <FormGroup title={_('Duration')}>
-          <Spinner type="int" min="0" size="3"
-            value={duration} onChange={this.onDurationChange}/>
-          <TimeUnitSelect value={duration_unit}
-            onChange={this.onDurationUnitChange}/>
-        </FormGroup>
-      </Layout>
-    );
-  }
-}
+      <FormGroup title={_('Duration')}>
+        <Spinner
+          name="duration"
+          type="int"
+          min="0"
+          size="3"
+          value={duration}
+          onChange={onValueChange}/>
+        <TimeUnitSelect
+          name="duration_unit"
+          value={duration_unit}
+          onChange={onValueChange}/>
+      </FormGroup>
+    </Layout>
+  );
+};
 
 ScheduleDialog.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
 
-export default ScheduleDialog;
+const timeunit =  React.PropTypes.oneOf([
+  'hour', 'day', 'week', 'month',
+]);
+
+
+ScheduleDialog.propTypes = {
+  comment: React.PropTypes.string,
+  date: React.PropTypes.object,
+  duration: React.PropTypes.number,
+  duration_unit: timeunit,
+  hour: React.PropTypes.number,
+  minute: React.PropTypes.number,
+  name: React.PropTypes.string,
+  period: React.PropTypes.number,
+  period_unit: timeunit,
+  timezone: React.PropTypes.string,
+  onValueChange: React.PropTypes.func,
+};
+
+
+export default withDialog(ScheduleDialog, {
+  title: _('New Schedule'),
+  footer: _('Save'),
+  defaultState: {
+    name: _('unnamed'),
+    comment: '',
+    period: 0,
+    duration: 0,
+    period_unit: 'hour',
+    duration_unit: 'hour',
+  },
+});
 
 // vim: set ts=2 sw=2 tw=80:
-
