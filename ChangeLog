@@ -1,5 +1,11 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/tasks/dialogcontainer.js: Add new
+	TaskDialogContainer component.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/scanners.js,
 	src/html/classic/ng/src/gmp/models/scanner.js: Move constant scanner varibales
 	from command to model module.

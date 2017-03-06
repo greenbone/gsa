@@ -313,6 +313,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/charts.js
      ${NG_SRC_DIR}/src/web/tasks/containerdialog.js
      ${NG_SRC_DIR}/src/web/tasks/dialog.js
+     ${NG_SRC_DIR}/src/web/tasks/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
      ${NG_SRC_DIR}/src/web/tasks/task.js
      ${NG_SRC_DIR}/src/web/tasks/taskspage.js
