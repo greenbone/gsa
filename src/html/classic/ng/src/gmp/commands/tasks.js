@@ -151,13 +151,14 @@ export class TaskCommand extends EntityCommand {
   create(args) {
     let {name, comment = '', target_id, schedule_id = 0, in_assets,
       apply_overrides, min_qod, alterable, auto_delete, auto_delete_data,
-      scanner_type, scanner_id, config_id, slave_id = 0,
+      scanner_type, scanner_id, config_id, slave_id = 0, alert_ids = [],
       source_iface = '', hosts_ordering, max_checks, max_hosts, cve_scanner_id,
       tag_name = '', tag_value = ''} = args;
-    log.debug('Creating task', args);
-    return this.httpPost({
+
+    let data = {
       cmd: 'create_task',
       next: 'get_task',
+      'alert_ids:': alert_ids,
       alterable,
       apply_overrides,
       auto_delete,
@@ -179,7 +180,9 @@ export class TaskCommand extends EntityCommand {
       tag_name,
       tag_value,
       target_id,
-    }).then(this.transformResponse);
+    };
+    log.debug('Creating task', args, data);
+    return this.httpPost(data).then(this.transformResponse);
   }
 
   createContainer(args) {
@@ -196,13 +199,13 @@ export class TaskCommand extends EntityCommand {
   save(args) {
     let {id, name, comment = '', target_id, schedule_id = 0, in_assets,
       apply_overrides, min_qod, alterable, auto_delete, auto_delete_data,
-      scanner_type, scanner_id, config_id, slave_id = 0,
+      scanner_type, scanner_id, config_id, slave_id = 0, alert_ids = [],
       source_iface = '', hosts_ordering, max_checks, max_hosts} = args;
-    log.debug('Saving task', args);
-    return this.httpPost({
+    let data = {
       cmd: 'save_task',
       next: 'get_task',
       alterable,
+      'alert_ids:': alert_ids,
       apply_overrides,
       auto_delete,
       auto_delete_data,
@@ -221,7 +224,9 @@ export class TaskCommand extends EntityCommand {
       source_iface,
       target_id,
       task_id: id,
-    }).then(this.transformResponse);
+    };
+    log.debug('Saving task', args, data);
+    return this.httpPost(data).then(this.transformResponse);
   }
 
   saveContainer(args) {
