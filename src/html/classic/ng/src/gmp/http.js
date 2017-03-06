@@ -25,7 +25,7 @@ import logger from '../log.js';
 
 import _ from '../locale.js';
 
-import {is_defined, has_value, extend, xml2json} from '../utils.js';
+import {is_defined, has_value, is_array, extend, xml2json} from '../utils.js';
 
 import Cache from './cache.js';
 import PromiseFactory from './promise.js';
@@ -99,6 +99,26 @@ export class Http {
     return this;
   }
 
+  _createFormData(data) {
+    let formdata = new FormData();
+
+    for (let key in data) {
+      let value = data[key];
+      if (data.hasOwnProperty(key) && has_value(value)) { // don't add undefined and null values to form
+        if (is_array(value)) {
+          for (let val of value) {
+            formdata.append(key, val);
+          }
+        }
+        else {
+          formdata.append(key, value);
+        }
+      }
+    }
+
+    return formdata;
+  }
+
   request(method, {args, data, url = this.url, cache = false, force = false,
     ...other}) {
     let self = this;
@@ -117,16 +137,7 @@ export class Http {
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
-      formdata = new FormData();
-      let pdata = extend({}, this.params, data);
-      for (let key in pdata) {
-        if (pdata.hasOwnProperty(key)) {
-          let value = pdata[key];
-          if (has_value(value)) { // don't add undefined and null values to form
-            formdata.append(key, value);
-          }
-        }
-      }
+      formdata = this._createFormData(extend({}, this.params, data));
     }
 
     let xhr;

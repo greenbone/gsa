@@ -1,5 +1,10 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/http.js: Add support for submitting array values
+	via http post (and put).
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/checkbox.js,
 	src/html/classic/ng/src/web/results/filterdialog.js: Use camel case for all
 	properties of Checkbox component.
