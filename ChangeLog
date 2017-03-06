@@ -1,6 +1,13 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/form/formpart.js,
+	src/html/classic/ng/src/web/form/radioselectformpart.js: Remove now unused
+	FormPart components.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/alerts/dialogcontainer.js: Add new
 	AlertDialogContainer component to encapsulate all AlertDialog related
 	functionality in one component.

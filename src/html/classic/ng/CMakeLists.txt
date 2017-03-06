@@ -191,10 +191,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/form/filefield.js
      ${NG_SRC_DIR}/src/web/form/form.js
      ${NG_SRC_DIR}/src/web/form/formgroup.js
-     ${NG_SRC_DIR}/src/web/form/formpart.js
      ${NG_SRC_DIR}/src/web/form/passwordfield.js
      ${NG_SRC_DIR}/src/web/form/radio.js
-     ${NG_SRC_DIR}/src/web/form/radioselectformpart.js
      ${NG_SRC_DIR}/src/web/form/select2.js
      ${NG_SRC_DIR}/src/web/form/spinner.js
      ${NG_SRC_DIR}/src/web/form/submitbutton.js
