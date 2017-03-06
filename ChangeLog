@@ -1,5 +1,10 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/utils.js: Remove now obsolete convert_data function
+	from utils module.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Avoid eslint warning for for in loops
 	(http://eslint.org/docs/rules/guard-for-in)
 

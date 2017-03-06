@@ -240,16 +240,6 @@ export function select_save_id(list, id, empty_default) {
   return id;
 }
 
-export function convert_data(prefix, data, fields) {
-  let converted = {};
-  for (let name of fields) {
-    if (data.hasOwnProperty(name)) {
-      converted[prefix + ':' + name] = data[name];
-    }
-  }
-  return converted;
-}
-
 export function capitalize_first_letter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
