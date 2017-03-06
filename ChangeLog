@@ -1,6 +1,18 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/tasks/actions.js,
+	src/html/classic/ng/src/web/tasks/filterdialog.js,
+	src/html/classic/ng/src/web/tasks/row.js,
+	src/html/classic/ng/src/web/tasks/table.js,
+	src/html/classic/ng/src/web/tasks/taskslistrow.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Finally refactor task list
+	page to use new component composition pattern. This fixes several glitches at
+	the tasks page.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/tasks/dialogcontainer.js: Add new
 	TaskDialogContainer component.
 

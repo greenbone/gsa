@@ -342,7 +342,8 @@ export class TasksListRow extends EntityListRow {
             </span>
           }
         </td>
-        <td>{task.last_report &&
+        <td>
+          {task.last_report &&
           <LegacyLink cmd="get_report" report_id={task.last_report.id}>
             {this.reportDate(task.last_report)}
           </LegacyLink>

@@ -308,16 +308,19 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/targets/row.js
      ${NG_SRC_DIR}/src/web/targets/table.js
      ${NG_SRC_DIR}/src/web/targets/targetspage.js
+     ${NG_SRC_DIR}/src/web/tasks/actions.js
      ${NG_SRC_DIR}/src/web/tasks/addresultstoassetsgroup.js
      ${NG_SRC_DIR}/src/web/tasks/autodeletereportsgroup.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js
      ${NG_SRC_DIR}/src/web/tasks/containerdialog.js
-     ${NG_SRC_DIR}/src/web/tasks/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/dialogcontainer.js
+     ${NG_SRC_DIR}/src/web/tasks/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
+     ${NG_SRC_DIR}/src/web/tasks/row.js
+     ${NG_SRC_DIR}/src/web/tasks/table.js
      ${NG_SRC_DIR}/src/web/tasks/task.js
-     ${NG_SRC_DIR}/src/web/tasks/taskspage.js
      ${NG_SRC_DIR}/src/web/tasks/taskslistrow.js
+     ${NG_SRC_DIR}/src/web/tasks/taskspage.js
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js
      ${NG_SRC_DIR}/src/web/toolbar.js
