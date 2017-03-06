@@ -76,6 +76,12 @@ export function build_url_params(params) {
   return uri;
 }
 
+function formdata_append(formdata, key, value) {
+  if (has_value(value)) {
+    formdata.append(key, value);
+  }
+}
+
 export class Http {
 
   constructor(url, options = {}) {
@@ -103,15 +109,15 @@ export class Http {
     let formdata = new FormData();
 
     for (let key in data) {
-      let value = data[key];
-      if (data.hasOwnProperty(key) && has_value(value)) { // don't add undefined and null values to form
+      if (data.hasOwnProperty(key)) { // don't add undefined and null values to form
+        let value = data[key];
         if (is_array(value)) {
           for (let val of value) {
-            formdata.append(key, val);
+            formdata_append(formdata, key, val);
           }
         }
         else {
-          formdata.append(key, value);
+          formdata_append(formdata, key, value);
         }
       }
     }
