@@ -1,5 +1,14 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/scanners.js,
+	src/html/classic/ng/src/gmp/models/scanner.js: Move constant scanner varibales
+	from command to model module.
+
+	* src/html/classic/ng/src/web/tasks/dialog.js: Refactor TaskDialog to use
+	composition via withDialog HOC instead of inheritence.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/utils.js: Remove now obsolete convert_data function
 	from utils module.
 
