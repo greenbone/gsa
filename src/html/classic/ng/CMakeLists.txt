@@ -118,6 +118,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/gmp/response.js
      ${NG_SRC_DIR}/src/web/alerts/dialog.js
+     ${NG_SRC_DIR}/src/web/alerts/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/alerts/emailmethodpart.js
      ${NG_SRC_DIR}/src/web/alerts/filtercountchangedconditionpart.js
      ${NG_SRC_DIR}/src/web/alerts/filtercountleastconditionpart.js

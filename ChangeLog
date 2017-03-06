@@ -1,5 +1,12 @@
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/alerts/dialogcontainer.js: Add new
+	AlertDialogContainer component to encapsulate all AlertDialog related
+	functionality in one component.
+
+2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/alerts.js: Adjust alert create to use
 	new data structures. Now all data is contained in one object and not splitted
 	into several sub objects like before the method_data.
