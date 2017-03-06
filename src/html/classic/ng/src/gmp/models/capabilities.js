@@ -41,6 +41,10 @@ export class Capabilities extends Model {
     return is_defined(capability) ? capability : {};
   }
 
+  mayAccess(type) {
+    return this.mayOp('get_' + type);
+  }
+
   mayOp(value) {
     return value.toUpperCase() in this._capabilities;
   }
