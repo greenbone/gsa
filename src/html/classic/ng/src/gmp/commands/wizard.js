@@ -28,7 +28,17 @@ import Credential from '../models/credential.js';
 import Task from '../models/task.js';
 import Settings from '../models/settings.js';
 
-import {convert_data, extend, for_each, map} from '../../utils.js';
+import {extend, for_each, map} from '../../utils.js';
+
+function convert_data(prefix, data, fields) {
+  let converted = {};
+  for (let name of fields) {
+    if (data.hasOwnProperty(name)) {
+      converted[prefix + ':' + name] = data[name];
+    }
+  }
+  return converted;
+}
 
 const event_data_quick_first_scan_fields = [
   'config_id', 'alert_id', 'scanner_id', 'smb_credential', 'ssh_credential',
