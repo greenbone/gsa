@@ -188,4 +188,22 @@ export const na = value => {
   return is_empty(value) ? N_A : value;
 };
 
+export const withPrefix = Component => {
+  const CompentWrapper = ({prefix, ...props}) => {
+    if (is_defined(prefix)) {
+      prefix += '_';
+    }
+    else {
+      prefix = '';
+    }
+    return <Component {...props} prefix={prefix}/>;
+  };
+
+  CompentWrapper.propTypes = {
+    prefix: React.PropTypes.string,
+  };
+
+  return CompentWrapper;
+};
+
 // vim: set ts=2 sw=2 tw=80:
