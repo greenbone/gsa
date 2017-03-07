@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, is_empty, shorten} from '../../utils.js';
 
+import Comment from '../comment.js';
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
@@ -34,12 +35,14 @@ import {render_component} from '../render.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
+import CloneIcon from '../entities/icons/entitycloneicon.js';
+import EditIcon from '../entities/icons/entityediticon.js';
+import ObserverIcon from '../entities/icons/entityobservericon.js';
+import TrashIcon from '../entities/icons/entitytrashicon.js';
+
 import Text from '../form/text.js';
 
-import CloneIcon from '../icons/cloneicon.js';
-import EditIcon from '../icons/editicon.js';
 import ExportIcon from '../icons/exporticon.js';
-import TrashIcon from '../icons/trashicon.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
@@ -48,20 +51,20 @@ const IconActions = ({entity, onEntityDelete, onEntityDownload,
     onEntityClone, onEditTarget}) => {
   return (
     <Layout flex align={['center', 'center']}>
-      {entity.isInUse() ?
-        <TrashIcon
-          active={false}
-          title={_('Target is in use')}/> :
-            <TrashIcon
-              value={entity}
-              title={_('Move to Trashcan')}
-              onClick={onEntityDelete}/>
-      }
+      <TrashIcon
+        displayName={_('Target')}
+        name="target"
+        entity={entity}
+        onClick={onEntityDelete}/>
       <EditIcon
-        value={entity}
-        title={_('Edit Target')}
+        displayName={_('Target')}
+        name="target"
+        entity={entity}
         onClick={onEditTarget}/>
       <CloneIcon
+        displayName={_('Target')}
+        name="target"
+        entity={entity}
         title={_('Clone Target')}
         value={entity}
         onClick={onEntityClone}/>
@@ -108,20 +111,33 @@ Cred.propTypes = {
 };
 
 
-const Row = ({entity, links = true, actions, ...props}) => {
+const Row = ({
+  actions,
+  entity,
+  links = true,
+  username,
+  ...props
+}, {capabilities}) => {
   return (
     <TableRow>
       <TableData flex="column">
-        {links ?
-          <LegacyLink
-            cmd="get_target"
-            target_id={entity.id}>
-            {entity.name}
-          </LegacyLink> :
-          entity.name
-        }
-        {!is_empty(entity.comment) &&
-          <div className="comment">({entity.comment})</div>
+        <Layout flex align="space-between">
+          {links ?
+            <LegacyLink
+              cmd="get_target"
+              target_id={entity.id}>
+              {entity.name}
+            </LegacyLink> :
+            entity.name
+          }
+          <ObserverIcon
+            displayName={_('Target')}
+            entity={entity}
+            userName={username}
+          />
+        </Layout>
+        {entity.comment &&
+          <Comment>({entity.comment})</Comment>
         }
       </TableData>
       <TableData>
@@ -131,7 +147,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
         {entity.max_hosts}
       </TableData>
       <TableData>
-        {links ?
+        {links && capabilities.mayAccess('port_lists') ?
           <LegacyLink
             cmd="get_port_list"
             port_list_id={entity.port_list.id}>
@@ -163,6 +179,11 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: React.PropTypes.object,
   links: React.PropTypes.bool,
+  username: React.PropTypes.string,
+};
+
+Row.contextTypes = {
+  capabilities: React.PropTypes.object.isRequired,
 };
 
 const Actions = withEntityActions(IconActions);

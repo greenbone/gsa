@@ -1,5 +1,11 @@
 2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/targets/row.js: Improve target row by using the
+	common entity icons for edit, clone and delete. Also display observers via
+	observer icon and use comment component.
+
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/row.js: User ObserverIcon in task list
 	table.
 
