@@ -24,6 +24,7 @@
 import React from 'react';
 
 import  _ from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -35,8 +36,15 @@ import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
 import TextField from '../form/textfield.js';
 
-const PortListsDialog = ({name, comment, from_file, port_range,
-    onValueChange}) => {
+const PortListsDialog = ({
+    name,
+    comment,
+    from_file,
+    port_range,
+    port_list,
+    onValueChange,
+  }) => {
+  let is_edit = is_defined(port_list);
   return (
     <Layout flex="column">
 
@@ -60,34 +68,36 @@ const PortListsDialog = ({name, comment, from_file, port_range,
           onChange={onValueChange}/>
       </FormGroup>
 
-      <FormGroup title={_('Port Ranges')} flex="column">
-        <Layout flex box>
-          <Radio
-            title={_('Manual')}
-            name="from_file"
-            value="0"
-            onChange={onValueChange}
-            checked={from_file !== '1'}/>
-          <TextField
-            grow="1"
-            name="port_range"
-            value={port_range}
-            disabled={from_file === '1'}
-            onChange={onValueChange}
-            size="30" maxLength="400"/>
-        </Layout>
+      {!is_edit &&
+        <FormGroup title={_('Port Ranges')} flex="column">
+          <Layout flex box>
+            <Radio
+              title={_('Manual')}
+              name="from_file"
+              value="0"
+              onChange={onValueChange}
+              checked={from_file !== '1'}/>
+            <TextField
+              grow="1"
+              name="port_range"
+              value={port_range}
+              disabled={from_file === '1'}
+              onChange={onValueChange}
+              size="30" maxLength="400"/>
+          </Layout>
 
-        <Layout flex box>
-          <Radio title={_('From file')}
-            name="from_file"
-            value="1"
-            onChange={onValueChange}
-            checked={from_file === '1'}/>
-          <FileField
-            name="file"
-            onChange={onValueChange}/>
-        </Layout>
-      </FormGroup>
+          <Layout flex box>
+            <Radio title={_('From file')}
+              name="from_file"
+              value="1"
+              onChange={onValueChange}
+              checked={from_file === '1'}/>
+            <FileField
+              name="file"
+              onChange={onValueChange}/>
+          </Layout>
+        </FormGroup>
+      }
     </Layout>
   );
 };
@@ -96,6 +106,7 @@ PortListsDialog.propTypes = {
   name: React.PropTypes.string,
   comment: React.PropTypes.string,
   from_file: PropTypes.yesno,
+  port_list: PropTypes.model,
   port_range: React.PropTypes.string,
   onValueChange: React.PropTypes.func,
 };
