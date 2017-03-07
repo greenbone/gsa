@@ -1,5 +1,10 @@
 2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/taskspage.js: Finish porting of tasks list
+	page by re-adding the wizards.
+
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dialog/dialog.js: All dialogs should now be
 	converted to "new style" dialogs. Therefore the Dialog class can be simplified
 	by removing obsolete code.

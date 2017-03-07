@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import moment from 'moment-timezone';
+
 import  _ from '../../locale.js';
 import logger from '../../log.js';
 import {is_defined, is_empty, map, select_save_id, first, for_each, parse_int,
@@ -42,6 +44,10 @@ import IconMenu from '../menu/iconmenu.js';
 import MenuEntry from '../menu/menuentry.js';
 
 import ImportReportDialog from '../reports/importdialog.js';
+
+import AdvancedTaskWizard from '../wizard/advancedtaskwizard.js';
+import ModifyTaskWizard from '../wizard/modifytaskwizard.js';
+import TaskWizard from '../wizard/taskwizard.js';
 
 import TaskDialog from './dialogcontainer.js';
 import ContainerTaskDialog from './containerdialog.js';
@@ -137,13 +143,22 @@ class Page extends React.Component {
 
     this.handleImportReport = this.handleImportReport.bind(this);
     this.handleResumeTask = this.handleResumeTask.bind(this);
+    this.handleSaveAdvancedTaskWizard =
+      this.handleSaveAdvancedTaskWizard.bind(this);
     this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
+    this.handleSaveModifyTaskWizard =
+      this.handleSaveModifyTaskWizard.bind(this);
+    this.handleSaveTaskWizard = this.handleSaveTaskWizard.bind(this);
     this.handleStartTask = this.handleStartTask.bind(this);
     this.handleStopTask = this.handleStopTask.bind(this);
+    this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
+    this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
     this.openImportReportDialog = this.openImportReportDialog.bind(this);
+    this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
+    this.openTaskWizard = this.openTaskWizard.bind(this);
   }
 
   handleSaveContainerTask(data) {
@@ -179,6 +194,29 @@ class Page extends React.Component {
   handleResumeTask(task) {
     let {entityCommand, onChanged} = this.props;
     entityCommand.resume(task).then(() => onChanged());
+  }
+
+  handleSaveTaskWizard(data) {
+    let {gmp} = this.context;
+    let {onChanged} = this.props;
+    return gmp.wizard.runQuickFirstScan(data).then(() => onChanged());
+  }
+
+  handleSaveAdvancedTaskWizard(data) {
+    let {gmp} = this.context;
+    let {onChanged} = this.props;
+    return gmp.wizard.runQuickTask(data).then(() => onChanged());
+  }
+
+  handleSaveModifyTaskWizard(data) {
+    let {gmp} = this.context;
+    let {onChanged} = this.props;
+    return gmp.wizard.runModifyTask(data).then(() => onChanged());
+  }
+
+  handleTaskWizardNewClick() {
+    this.openTaskDialog();
+    this.task_wizard.close();
   }
 
   openContainerTaskDialog(task) {
@@ -303,6 +341,87 @@ class Page extends React.Component {
     });
   }
 
+  openTaskWizard() {
+    let {gmp} = this.context;
+
+    this.task_wizard.show({});
+
+    gmp.wizard.task().then(response => {
+      let settings = response.data;
+      this.task_wizard.setValues({
+        hosts: settings.client_address,
+        port_list_id: settings.get('Default Port List').value,
+        alert_id: settings.get('Default Alert').value,
+        config_id: settings.get('Default OpenVAS Scan Config').value,
+        ssh_credential: settings.get('Default SSH Credential').value,
+        smb_credential: settings.get('Default SMB Credential').value,
+        esxi_credential: settings.get('Default ESXi Credential').value,
+        scanner_id: settings.get('Default OpenVAS Scanner').value,
+      });
+    });
+  }
+
+  openAdvancedTaskWizard() {
+    let {gmp} = this.context;
+    gmp.wizard.advancedTask().then(response => {
+      let settings = response.data;
+      let config_id = settings.get('Default OpenVAS Scan Config').value;
+
+      if (!is_defined(config_id) || config_id.length === 0) {
+        config_id = OPENVAS_CONFIG_FULL_AND_FAST_ID;
+      }
+
+      let credentials = settings.credentials;
+
+      let ssh_credential = select_save_id(credentials,
+        settings.get('Default SSH Credential').value, '');
+      let smb_credential = select_save_id(credentials,
+        settings.get('Default SMB Credential').value, '');
+      let esxi_credential = select_save_id(credentials,
+        settings.get('Default ESXi Credential').value, '');
+
+      let now = moment().tz(settings.timezone);
+
+      this.advanced_task_wizard.show({
+        credentials,
+        scan_configs: settings.scan_configs,
+        date: now,
+        task_name: _('New Quick Task'),
+        target_hosts: settings.client_address,
+        port_list_id: settings.get('Default Port List').value,
+        alert_id: settings.get('Default Alert').value,
+        config_id,
+        ssh_credential,
+        smb_credential,
+        esxi_credential,
+        scanner_id: settings.get('Default OpenVAS Scanner').value,
+        slave_id: settings.get('Default Slave').value,
+        start_minute: now.minutes(),
+        start_hour: now.hours(),
+        start_timezone: settings.timezone,
+      });
+    });
+  }
+
+  openModifyTaskWizard() {
+    let {gmp} = this.context;
+
+    gmp.wizard.modifyTask().then(response => {
+      let settings = response.data;
+      let now = moment().tz(settings.timezone);
+
+      this.modify_task_wizard.show({
+        date: now,
+        tasks: settings.tasks,
+        reschedule: '0',
+        task_id: select_save_id(settings.tasks),
+        start_minute: now.minutes(),
+        start_hour: now.hours(),
+        start_timezone: settings.timezone,
+      });
+    });
+  }
+
   render() {
     let {gmp, capabilities} = this.context;
     let {onChanged} = this.props;
@@ -312,21 +431,40 @@ class Page extends React.Component {
         <EntitiesPage
           {...this.props}
           username={gmp.username}
+          onAdvancedTaskWizardClick={this.openAdvancedTaskWizard}
           onEditTaskClick={this.openTaskDialog}
           onImportReportClick={this.openImportReportDialog}
+          onModifyTaskWizardClick={this.openModifyTaskWizard}
           onNewTaskClick={this.openTaskDialog}
           onResumeTaskClick={this.handleResumeTask}
           onStartTaskClick={this.handleStartTask}
           onStopTaskClick={this.handleStopTask}
+          onTaskWizardClick={this.openTaskWizard}
         />
 
         {capabilities.mayCreate('task') &&
           <span>
-            <TaskDialog ref={ref => this.task_dialog = ref}
+            <TaskDialog
+              ref={ref => this.task_dialog = ref}
               onSave={onChanged}/>
             <ContainerTaskDialog
               ref={ref => this.container_dialog = ref}
               onSave={this.handleSaveContainerTask}/>
+          </span>
+        }
+
+        {capabilities.mayOp('run_wizard') &&
+          <span>
+            <TaskWizard
+              ref={ref => this.task_wizard = ref}
+              onSave={this.handleSaveTaskWizard}
+              onNewClick={this.handleTaskWizardNewClick}/>
+            <AdvancedTaskWizard
+              ref={ref => this.advanced_task_wizard = ref}
+              onSave={this.handleSaveAdvancedTaskWizard}/>
+            <ModifyTaskWizard
+              ref={ref => this.modify_task_wizard = ref}
+              onSave={this.handleSaveModifyTaskWizard}/>
           </span>
         }
 
@@ -350,8 +488,6 @@ Page.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };
-
-// export default TasksPage;
 
 export default withEntitiesContainer(Page, 'task', {
   dashboard: Dashboard,
