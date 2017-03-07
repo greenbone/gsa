@@ -305,6 +305,11 @@ export const withDialog = (Component, options = {}) => {
       this.dialog.show(opts);
     }
 
+    close() {
+      this.setState({visible: false});
+      this.dialog.close();
+    }
+
     onValueChange(value, name) {
       let {data} = this.state;
       data[name] = value;
@@ -328,7 +333,7 @@ export const withDialog = (Component, options = {}) => {
         }
         else {
           onSave(data);
-          this.dialog.close();
+          this.close();
         }
       }
     }
