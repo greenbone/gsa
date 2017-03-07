@@ -1,5 +1,10 @@
 2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: Pass username via context
+	to child components of EntitiesContainer.
+
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/icons/entityediticon.js: Fix displaying
 	active status of entity edit button.
 
