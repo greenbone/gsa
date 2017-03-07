@@ -49,6 +49,16 @@ export class PortListCommand extends EntityCommand {
     }).then(this.transformResponse);
   }
 
+  import(args) {
+    let {xml_file} = args;
+    log.debug('Importing port list', args);
+    return this.httpPost({
+      cmd: 'import_port_list',
+      next: 'get_port_list',
+      xml_file,
+    }).then(this.transformResponse);
+  }
+
   getElementFromRoot(root) {
     return root.get_port_list.get_port_lists_response.port_list;
   }
