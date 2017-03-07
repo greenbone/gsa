@@ -43,8 +43,8 @@ export const EntityEditIcon = ({
     displayName = _(capitalize_first_letter(name));
   }
 
-  let active = capabilities.mayDelete(name) && entity.isWriteable() &&
-      !entity.isInUse();
+  let active = capabilities.mayEdit(name) && entity.isWriteable();
+
   if (!is_defined(title)) {
     if (active) {
       title = _('Edit {{entity}}', {entity: displayName});
@@ -56,7 +56,7 @@ export const EntityEditIcon = ({
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
     }
     else {
-      title = _('Cannot modify {{entity}}');
+      title = _('Cannot modify {{entity}}', {entity: displayName});
     }
   }
   return (
