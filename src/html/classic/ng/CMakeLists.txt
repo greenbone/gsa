@@ -257,6 +257,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pagenotfound.js
      ${NG_SRC_DIR}/src/web/pagination.js
      ${NG_SRC_DIR}/src/web/portlists/dialog.js
+     ${NG_SRC_DIR}/src/web/portlists/filterdialog.js
+     ${NG_SRC_DIR}/src/web/portlists/importdialog.js
+     ${NG_SRC_DIR}/src/web/portlists/portlistspage.js
+     ${NG_SRC_DIR}/src/web/portlists/row.js
+     ${NG_SRC_DIR}/src/web/portlists/table.js
      ${NG_SRC_DIR}/src/web/powerfilter/applyoverridesgroup.js
      ${NG_SRC_DIR}/src/web/powerfilter/dialog.js
      ${NG_SRC_DIR}/src/web/powerfilter/filterstringgroup.js
