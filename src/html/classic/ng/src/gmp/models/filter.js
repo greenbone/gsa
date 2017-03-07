@@ -788,15 +788,16 @@ export class Filter extends Model {
 
 }
 
-export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
-export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
+export const ALL_FILTER = new Filter().all();
+export const ASSETS_FILTER_FILTER = Filter.fromString('type=asset');
 export const NOTES_FILTER_FILTER = Filter.fromString('type=note');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
+export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
-export const ASSETS_FILTER_FILTER = Filter.fromString('type=asset');
+export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
+export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
-export const ALL_FILTER = new Filter().all();
 
 export default Filter;
 
