@@ -283,9 +283,9 @@ class EntitiesContainer extends React.Component {
 
     let filename = name + '-' + entity.id + '.xml';
 
-    entities_command.export([entity]).then(xhr => {
+    entities_command.export([entity]).then(response => {
       this.download.setFilename(filename);
-      this.download.setData(xhr.responseText);
+      this.download.setData(response.data);
       this.download.download();
     }, err => log.error(err));
   }
