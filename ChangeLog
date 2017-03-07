@@ -1,3 +1,9 @@
+2017-03-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Preparing the gsa 7.0.2 release.
+
+	* CHANGES: Updated.
+
 2016-03-01 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	Backport r27844 and r27845. Session ID handling of lagging server time.
