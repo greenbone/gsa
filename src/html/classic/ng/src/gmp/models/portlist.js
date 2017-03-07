@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,19 @@
 
 import Model from '../model.js';
 
+import {is_defined, map} from '../../utils.js';
+
+export class PortRange extends Model {
+}
+
 export class PortList extends Model {
+
+  parseProperties(elem) {
+    let ret = super.parseProperties(elem);
+    let ranges = is_defined(ret.port_ranges) ? ret.port_ranges.port_range : [];
+    ret.port_ranges = map(ranges, range => new PortRange(range));
+    return ret;
+  }
 }
 
 export default PortList;

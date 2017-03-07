@@ -1,5 +1,10 @@
 2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/portlist.js: Allow to parse port ranges
+	of port lists.
+
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/container.js: Fix export of entities
 	from list pages.
 
