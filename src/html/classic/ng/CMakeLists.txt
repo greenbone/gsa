@@ -175,9 +175,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/icons/entitydeleteicon.js
      ${NG_SRC_DIR}/src/web/entities/icons/entityediticon.js
      ${NG_SRC_DIR}/src/web/entities/icons/entitytrashicon.js
-     ${NG_SRC_DIR}/src/web/entities/listpage.js
-     ${NG_SRC_DIR}/src/web/entities/listrow.js
-     ${NG_SRC_DIR}/src/web/entities/listtable.js
      ${NG_SRC_DIR}/src/web/entities/page.js
      ${NG_SRC_DIR}/src/web/entities/row.js
      ${NG_SRC_DIR}/src/web/entities/selection.js
@@ -319,7 +316,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/row.js
      ${NG_SRC_DIR}/src/web/tasks/table.js
      ${NG_SRC_DIR}/src/web/tasks/task.js
-     ${NG_SRC_DIR}/src/web/tasks/taskslistrow.js
      ${NG_SRC_DIR}/src/web/tasks/taskspage.js
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js

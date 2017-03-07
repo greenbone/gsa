@@ -1,3 +1,12 @@
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/listpage.js,
+	src/html/classic/ng/src/web/entities/listrow.js,
+	src/html/classic/ng/src/web/entities/listtable.js,
+	src/html/classic/ng/src/web/tasks/taskslistrow.js: Remove now obsole files for
+	old entities list page.
+
 2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
