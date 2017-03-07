@@ -1,5 +1,13 @@
 2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/row.js: User ObserverIcon in task list
+	table.
+
+	* src/html/classic/ng/src/web/tasks/taskspage.js: Remove username passing as
+	probs. It is now passed already via context.
+
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/icons/entityobservericon.js: Add new
 	entities observer icon.

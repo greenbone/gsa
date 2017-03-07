@@ -429,14 +429,13 @@ class Page extends React.Component {
   }
 
   render() {
-    let {gmp, capabilities} = this.context;
+    let {capabilities} = this.context;
     let {onChanged} = this.props;
 
     return (
       <Layout>
         <EntitiesPage
           {...this.props}
-          username={gmp.username}
           onAdvancedTaskWizardClick={this.openAdvancedTaskWizard}
           onEditTaskClick={this.openTaskDialog}
           onImportReportClick={this.openImportReportDialog}

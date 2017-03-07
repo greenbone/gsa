@@ -37,6 +37,8 @@ import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
+import ObserverIcon from '../entities/icons/entityobservericon.js';
+
 import Icon from '../icons/icon.js';
 
 import TableRow from '../table/row.js';
@@ -130,7 +132,12 @@ const render_report_total = (entity, links) => {
   );
 };
 
-const Row = ({entity, links = true, username, actions, ...props}) => {
+const Row = ({
+    entity,
+    links = true,
+    actions,
+    ...props,
+  }, {username}) => {
   return (
     <TableRow>
       <TableData>
@@ -157,13 +164,11 @@ const Row = ({entity, links = true, username, actions, ...props}) => {
               title={_('Task is configured to run on slave scanner {{name}}',
                 {name: entity.scanner.name})}/>
           }
-          {entity.owner.name !== username &&
-            <Icon
-              size="small"
-              img="view_other.svg"
-              title={_('Observing entity owned by {{user}}',
-                {user: entity.owner.name})}/>
-          }
+          <ObserverIcon
+            displayName={_('Task')}
+            entity={entity}
+            userName={username}
+          />
           {!is_empty(entity.observers) &&
             <Icon
               size="small"
@@ -199,10 +204,13 @@ const Row = ({entity, links = true, username, actions, ...props}) => {
 };
 
 Row.propTypes = {
-  username: React.PropTypes.string,
   actions: PropTypes.componentOrFalse,
   entity: React.PropTypes.object,
   links: React.PropTypes.bool,
+};
+
+Row.contextTypes = {
+  username: React.PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, Actions);
