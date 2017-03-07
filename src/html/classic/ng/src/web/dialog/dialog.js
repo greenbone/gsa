@@ -28,40 +28,36 @@ import _ from '../../locale.js';
 import logger from '../../log.js';
 
 import PropTypes from '../proptypes.js';
-import {render_options} from '../render.js';
 
 import DialogError from './error.js';
 import DialogFooter from './footer.js';
 import DialogTitle from './title.js';
 
-import PromiseFactory from '../../gmp/promise.js';
-
 import './css/dialog.css';
 
 const log = logger.getLogger('web.dialog');
+
+const DEFAULT_DIALOG_WIDTH = 800;
 
 export class Dialog extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.show = this.show.bind(this);
-    this.close = this.close.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.onOuterClick = this.onOuterClick.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onErrorClose = this.onErrorClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onErrorClose = this.onErrorClose.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.onOuterClick = this.onOuterClick.bind(this);
 
     this.state = this.defaultState();
   }
 
   defaultState() {
-    let {title, footer, width = 800} = this.props;
+    let {title, footer, width = DEFAULT_DIALOG_WIDTH} = this.props;
     return {
       visible: false,
       error: undefined,
@@ -73,23 +69,13 @@ export class Dialog extends React.Component {
     };
   }
 
-  loadData() {
-    // overwrite to load data via gmp
-    this.setState({visible: true, error: undefined});
-  }
-
   show(options = {}) {
     let {title = this.props.title, footer = this.props.footer} = options;
-    this.setState({title, footer});
-    this.loadData();
+    this.setState({title, footer, visible: true, error: undefined});
   }
 
   close() {
     this.setState(this.defaultState());
-  }
-
-  save() {
-    return PromiseFactory.resolve();
   }
 
   setErrorMessage(message) {
@@ -159,55 +145,36 @@ export class Dialog extends React.Component {
     if (this.props.onSaveClick) {
       this.props.onSaveClick();
     }
-    else {
-      this.save().then(data => {
-        if (this.props.onSave) {
-          this.props.onSave(data);
-        }
-      }).catch(error => {
-        log.error('Error while saving data.',
-          error.message, error.stack, error);
-      });
-    }
-  }
-
-  onValueChange(value, name) {
-    log.debug('value changed', name, value);
-    this.setState({[name]: value});
-  }
-
-  renderOptions(list, default_opt_value, default_opt = '--') {
-    return render_options(list, default_opt_value, default_opt);
   }
 
   renderTitle() {
     let {title} = this.state;
 
-    return (
-      <DialogTitle onCloseClick={this.handleClose} title={title}
-        onMouseDown={this.onMouseDown}/>
-    );
+    if (title) {
+      return (
+        <DialogTitle
+          onCloseClick={this.handleClose}
+          title={title}
+          onMouseDown={this.onMouseDown}/>
+      );
+    }
+    return null;
   }
 
   renderFooter() {
     let {footer} = this.state;
 
-    return (
-      <DialogFooter onSaveClick={this.handleSave} title={footer}/>
-    );
-  }
-
-  renderSubDialogs() {
-    return null;
-  }
-
-  renderContent() {
+    if (footer) {
+      return (
+        <DialogFooter onSaveClick={this.handleSave} title={footer}/>
+      );
+    }
     return null;
   }
 
   render() {
     let {visible = false, error, width, posX, posY} = this.state;
-    let {children, showTitle = true, showFooter = true} = this.props;
+    let {children} = this.props;
     let style = {};
 
     if (!visible) {
@@ -227,22 +194,24 @@ export class Dialog extends React.Component {
     return (
       <div className="dialogs">
         <div className="dialog dialog-modal"
-          onClick={this.onOuterClick} onKeyDown={this.onKeyDown}
-          tabIndex="0" role="dialog">
+          onClick={this.onOuterClick}
+          onKeyDown={this.onKeyDown}
+          tabIndex="0"
+          role="dialog">
           <div className="dialog-container"
             style={style}
             tabIndex="1"
             ref={ref => this.dialog = ref}>
-            {showTitle && this.renderTitle()}
-            <DialogError error={error} onCloseClick={this.onErrorClose}/>
+            {this.renderTitle()}
+            <DialogError
+              error={error}
+              onCloseClick={this.onErrorClose}/>
             <div className="dialog-content">
-              {this.renderContent()}
               {children}
             </div>
-            {showFooter && this.renderFooter()}
+            {this.renderFooter()}
           </div>
         </div>
-        {this.renderSubDialogs()}
       </div>
     );
   }
@@ -250,20 +219,13 @@ export class Dialog extends React.Component {
 
 Dialog.propTypes = {
   visible: React.PropTypes.bool,
-  title: React.PropTypes.string,
-  footer: React.PropTypes.string,
-  showTitle: React.PropTypes.bool,
-  showFooter: React.PropTypes.bool,
-  onSave: React.PropTypes.func,
+  title: PropTypes.stringOrFalse,
+  footer: PropTypes.stringOrFalse,
   onSaveClick: React.PropTypes.func,
   onClose: React.PropTypes.func,
   onCloseClick: React.PropTypes.func,
   width: PropTypes.number,
-  error: React.PropTypes.string,
-};
-
-Dialog.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  error: PropTypes.stringOrFalse,
 };
 
 export const withDialog = (Component, options = {}) => {
@@ -341,14 +303,14 @@ export const withDialog = (Component, options = {}) => {
     render() {
       let {data, visible = false} = this.state;
       let {onClose, title = options.title, footer = options.footer,
-        ...other} = this.props;
+        width = options.width, ...other} = this.props;
 
       return (
         <Dialog
           ref={ref => this.dialog = ref}
           title={title}
           footer={footer}
-          width={800}
+          width={width}
           onCloseClick={onClose}
           onSaveClick={this.handleSave}>
           {visible &&
@@ -365,6 +327,7 @@ export const withDialog = (Component, options = {}) => {
   DialogWrapper.propTypes = {
     title: React.PropTypes.string,
     footer: React.PropTypes.string,
+    width: PropTypes.number,
     onSave: React.PropTypes.func,
     onClose: React.PropTypes.func,
   };
