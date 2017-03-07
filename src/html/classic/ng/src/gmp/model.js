@@ -66,7 +66,7 @@ export class Model {
   }
 
   isWriteable() {
-    return this.writeable !== '0';
+    return this.writable !== '0';
   }
 
 }
