@@ -141,7 +141,10 @@ export class WizardCommand extends HttpCommand {
       });
 
       settings.tasks = map(resp.get_tasks_response.task,
-        task => new Task(task));
+        task => new Task(task))
+        .filter(task => !task.isContainer());
+
+      settings.timezone = data.timezone;
       return response.setData(settings);
     });
   }
