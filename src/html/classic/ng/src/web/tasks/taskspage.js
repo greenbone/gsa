@@ -102,12 +102,18 @@ const ToolBarIcons = ({
       {capabilities.mayOp('run_wizard') &&
         <IconMenu img="wizard.svg" size="small"
           onClick={onTaskWizardClick}>
-          <MenuEntry title={_('Task Wizard')}
-            onClick={onTaskWizardClick}/>
-          <MenuEntry title={_('Advanced Task Wizard')}
-            onClick={onAdvancedTaskWizardClick}/>
-          <MenuEntry title={_('Modify Task Wizard')}
-            onClick={onModifyTaskWizardClick}/>
+          {capabilities.mayCreate('task') &&
+            <MenuEntry title={_('Task Wizard')}
+              onClick={onTaskWizardClick}/>
+          }
+          {capabilities.mayCreate('task') &&
+            <MenuEntry title={_('Advanced Task Wizard')}
+              onClick={onAdvancedTaskWizardClick}/>
+          }
+          {capabilities.mayEdit('task') &&
+            <MenuEntry title={_('Modify Task Wizard')}
+              onClick={onModifyTaskWizardClick}/>
+          }
         </IconMenu>
       }
 
@@ -454,6 +460,7 @@ class Page extends React.Component {
         }
 
         {capabilities.mayOp('run_wizard') &&
+          capabilities.mayCreate('task') &&
           <span>
             <TaskWizard
               ref={ref => this.task_wizard = ref}
@@ -462,10 +469,13 @@ class Page extends React.Component {
             <AdvancedTaskWizard
               ref={ref => this.advanced_task_wizard = ref}
               onSave={this.handleSaveAdvancedTaskWizard}/>
+          </span>
+        }
+        {capabilities.mayOp('run_wizard') &&
+          capabilities.mayEdit('task') &&
             <ModifyTaskWizard
               ref={ref => this.modify_task_wizard = ref}
               onSave={this.handleSaveModifyTaskWizard}/>
-          </span>
         }
 
         {capabilities.mayCreate('report') &&
