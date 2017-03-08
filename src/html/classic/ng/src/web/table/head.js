@@ -25,6 +25,7 @@ import React from 'react';
 
 import {is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import Sort from '../sortby.js';
 
@@ -36,11 +37,16 @@ export const TableHead = props => {
     style.width = width;
   }
   return (
-    <th style={style} {...other}>
+    <th style={style}>
       {sortby ?
         <Sort by={sortby} onClick={onSortChange}>
-          {children}
-        </Sort> : children
+          <Layout {...other}>
+            {children}
+          </Layout>
+        </Sort> :
+          <Layout {...other}>
+            {children}
+          </Layout>
       }
     </th>
   );
