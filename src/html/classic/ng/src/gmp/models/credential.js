@@ -45,8 +45,12 @@ export const SNMP_CREDENTIAL_TYPES = [
   SNMP_CREDENTIAL_TYPE,
 ];
 
-export class Credential extends Model {
-}
+export const ALL_CREDENTIAL_TYPES = [
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+  SNMP_CREDENTIAL_TYPE,
+];
 
 export const ssh_credential_filter = credential =>
   credential.type === SSH_CREDENTIAL_TYPES ||
@@ -60,6 +64,13 @@ export const esxi_credential_filter = credential =>
 
 export const snmp_credential_filter = credential =>
   credential.type === SNMP_CREDENTIAL_TYPE;
+
+export class Credential extends Model {
+
+  isAllowInsecure() {
+    return this.allow_insecure !== '0';
+  }
+}
 
 export default Credential;
 
