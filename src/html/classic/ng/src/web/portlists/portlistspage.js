@@ -41,6 +41,7 @@ import {PORTLISTS_FILTER_FILTER} from '../../gmp/models/filter.js';
 import FilterDialog from './filterdialog.js';
 import ImportPortListDialog from './importdialog.js';
 import PortListDialog from './dialog.js';
+import PortRangeDialog from './portrangedialog.js';
 import Table from './table.js';
 
 const ToolBarIcons = ({
@@ -80,9 +81,12 @@ class Page extends React.Component {
     super(...args);
 
     this.openImportDialog = this.openImportDialog.bind(this);
+    this.openNewPortRangeDialog = this.openNewPortRangeDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
+    this.handleDeletePortRange = this.handleDeletePortRange.bind(this);
     this.handleImportPortList = this.handleImportPortList.bind(this);
     this.handleSavePortList = this.handleSavePortList.bind(this);
+    this.handleSavePortRange = this.handleSavePortRange.bind(this);
   }
 
   openPortListDialog(entity) {
@@ -91,7 +95,8 @@ class Page extends React.Component {
       entityCommand.get(entity).then(response => {
         let port_list = response.data;
         this.port_list_dialog.show({
-          port_list: response.data,
+          id: port_list.id,
+          port_list,
           name: port_list.name,
           comment: port_list.comment,
         }, {
@@ -111,6 +116,21 @@ class Page extends React.Component {
     });
   }
 
+  openNewPortRangeDialog(port_list) {
+    this.port_range_dialog.show({
+      id: port_list.id,
+    });
+  }
+
+  handleDeletePortRange(range) {
+    let {entityCommand, onChanged} = this.props;
+
+    entityCommand.deletePortRange(range).then(response => {
+      this.port_list_dialog.setValue('port_list', response.data);
+      onChanged();
+    });
+  }
+
   handleSavePortList(data) {
     let {onChanged, entityCommand} = this.props;
 
@@ -122,6 +142,15 @@ class Page extends React.Component {
       promise = entityCommand.create(data);
     }
     return promise.then(() => onChanged());
+  }
+
+  handleSavePortRange(data) {
+    let {onChanged, entityCommand} = this.props;
+
+    return entityCommand.createPortRange(data).then(response => {
+      this.port_list_dialog.setValue('port_list', response.data);
+      onChanged();
+    });
   }
 
   handleImportPortList(data) {
@@ -140,11 +169,17 @@ class Page extends React.Component {
         />
         <PortListDialog
           ref={ref => this.port_list_dialog = ref}
+          onDeletePortRangeClick={this.handleDeletePortRange}
+          onNewPortRangeClick={this.openNewPortRangeDialog}
           onSave={this.handleSavePortList}
         />
         <ImportPortListDialog
           ref={ref => this.import_dialog = ref}
           onSave={this.handleImportPortList}
+        />
+        <PortRangeDialog
+          ref={ref => this.port_range_dialog = ref}
+          onSave={this.handleSavePortRange}
         />
       </Layout>
     );
