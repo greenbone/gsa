@@ -137,7 +137,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/assetspage.js
      ${NG_SRC_DIR}/src/web/button.js
      ${NG_SRC_DIR}/src/web/comment.js
+     ${NG_SRC_DIR}/src/web/credentials/credentialspage.js
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
+     ${NG_SRC_DIR}/src/web/credentials/downloadicon.js
+     ${NG_SRC_DIR}/src/web/credentials/filterdialog.js
+     ${NG_SRC_DIR}/src/web/credentials/row.js
+     ${NG_SRC_DIR}/src/web/credentials/table.js
      ${NG_SRC_DIR}/src/web/certbund/charts.js
      ${NG_SRC_DIR}/src/web/certbund/certbundadvspage.js
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
