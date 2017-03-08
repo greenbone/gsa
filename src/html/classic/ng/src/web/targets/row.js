@@ -176,13 +176,13 @@ const Row = ({
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
+  entity: PropTypes.model.isRequired,
   links: React.PropTypes.bool,
 };
 
 Row.contextTypes = {
   capabilities: React.PropTypes.object.isRequired,
-  username: React.PropTypes.string,
+  username: React.PropTypes.string.isRequired,
 };
 
 const Actions = withEntityActions(IconActions);
