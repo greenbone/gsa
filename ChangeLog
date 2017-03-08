@@ -1,5 +1,10 @@
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/section.js: Don't required section icon for a
+	section.
+
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/page.js: Allow to customize section in
 	entities pages.
 

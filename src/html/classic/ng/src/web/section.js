@@ -48,14 +48,17 @@ Section.propTypes = {
   img: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.element,
-  ]).isRequired,
+  ]),
   title: React.PropTypes.string.isRequired,
   extra: React.PropTypes.element,
 };
 
 export const SectionHeader = props => {
   return (
-    <Layout flex align={['space-between', 'end']} className="section-header">
+    <Layout
+      flex
+      align={['space-between', 'end']}
+      className="section-header">
       <h2>
         {is_string(props.img) ?
           <Icon size="large" img={props.img}/> : props.img
@@ -71,7 +74,7 @@ SectionHeader.propTypes = {
   img: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.element,
-  ]).isRequired,
+  ]),
   title: React.PropTypes.string.isRequired,
 };
 
