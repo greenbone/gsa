@@ -1,5 +1,12 @@
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entities/page.js: Use context instead of props to
+	pass cache to dashboards.
+
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/section.js: Don't required section icon for a
 	section.
 

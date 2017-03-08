@@ -36,7 +36,6 @@ import PowerFilter from '../powerfilter/powerfilter.js';
 import DashboardControls from '../dashboard/controls.js';
 
 const exclude_props = [
-  'cache',
   'children',
   'dashboard',
   'filterEditDialog',
@@ -116,7 +115,7 @@ export class EntitiesPage extends React.Component {
   }
 
   renderSection() {
-    let {sectionIcon, filter, cache} = this.props;
+    let {sectionIcon, filter} = this.props;
     let DashboardComponent = this.props.dashboard;
     let SectionComponent = this.props.section;
 
@@ -135,7 +134,7 @@ export class EntitiesPage extends React.Component {
         img={sectionIcon}
         extra={DashboardComponent ? <DashboardControls/> : null}>
         {DashboardComponent &&
-          <DashboardComponent cache={cache} filter={filter}/>
+          <DashboardComponent filter={filter}/>
         }
         {this.renderLoading()}
         {this.renderTable()}
@@ -252,7 +251,6 @@ export class EntitiesPage extends React.Component {
 }
 
 EntitiesPage.propTypes = {
-  cache: React.PropTypes.object,
   dashboard: PropTypes.componentOrFalse,
   entities: React.PropTypes.object,
   filterEditDialog: PropTypes.component,

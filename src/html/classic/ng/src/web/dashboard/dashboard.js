@@ -149,8 +149,9 @@ Dashboard.contextTypes = {
 
 export const withDashboard = (Charts, options = {}) => {
 
-  const DashboardWrapper = props => {
-    let {filter, cache, ...other} = props;
+  const DashboardWrapper = (props, context) => {
+    let {filter, ...other} = props;
+    let {cache} = context;
     return (
       <Dashboard {...options} {...other}>
         <Charts filter={filter} cache={cache}/>
@@ -159,8 +160,11 @@ export const withDashboard = (Charts, options = {}) => {
   };
 
   DashboardWrapper.propTypes = {
-    cache: React.PropTypes.object,
     filter: React.PropTypes.object,
+  };
+
+  DashboardWrapper.contextTypes = {
+    cache: React.PropTypes.object,
   };
 
   return DashboardWrapper;
