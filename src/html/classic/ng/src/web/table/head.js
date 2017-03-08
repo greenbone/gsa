@@ -29,15 +29,25 @@ import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import Sort from '../sortby.js';
 
-export const TableHead = props => {
-  let {width, sortby, onSortChange, children, ...other} = props;
+export const TableHead = ({
+    children,
+    colSpan,
+    rowSpan,
+    sortby,
+    width,
+    onSortChange,
+    ...other
+  }) => {
   let style = {};
 
   if (is_defined(width)) {
     style.width = width;
   }
   return (
-    <th style={style}>
+    <th
+      style={style}
+      rowSpan={rowSpan}
+      colSpan={colSpan}>
       {sortby ?
         <Sort by={sortby} onClick={onSortChange}>
           <Layout {...other}>
@@ -53,8 +63,10 @@ export const TableHead = props => {
 };
 
 TableHead.propTypes = {
-  width: React.PropTypes.string,
+  colSpan: PropTypes.number,
+  rowSpan: PropTypes.number,
   sortby: PropTypes.stringOrFalse,
+  width: React.PropTypes.string,
   onSortChange: React.PropTypes.func,
 };
 
