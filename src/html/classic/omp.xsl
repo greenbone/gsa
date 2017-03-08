@@ -26919,7 +26919,7 @@ should not have received it.
         title="{concat(gsa:i18n('Help'),': ',gsa:i18n('New Port List'))}">
         <img src="/img/help.svg"/>
       </a>
-      <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/ng/portlists?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
         class="icon icon-sm"
         title="{gsa:i18n ('Port Lists')}">
         <img src="/img/list.svg" alt="{gsa:i18n ('Port Lists')}"/>
@@ -27162,7 +27162,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}"
+      <a href="/ng/portlists"
          title="{gsa:i18n ('Port Lists')}">
         <img class="icon icon-lg" src="/img/port_list.svg" alt="Port Lists"/>
       </a>
@@ -27509,7 +27509,7 @@ should not have received it.
         title="{concat(gsa:i18n('Help'),': ',gsa:i18n('New Port List'))}">
         <img src="/img/help.svg"/>
       </a>
-      <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/ng/portlists?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
         class="icon icon-sm"
         title="Port Lists">
         <img src="/img/list.svg" alt="{gsa:i18n ('Port Lists')}"/>

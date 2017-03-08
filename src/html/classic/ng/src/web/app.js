@@ -56,6 +56,7 @@ import NvtsPage from './nvts/nvtspage.js';
 import OperatingSystemsPage from './os/operatingsystemspage.js';
 import OvaldefsPage from './ovaldefs/ovaldefspage.js';
 import OverridesPage from './overrides/overridespage.js';
+import PortListsPage from './portlists/portlistspage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
 import AllSecInfosPage from './secinfo/secinfospage.js';
@@ -204,6 +205,9 @@ ReactDOM.render(
         <Route
           path="secinfos"
           component={AllSecInfosPage}/>
+        <Route
+          path="portlists"
+          component={PortListsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

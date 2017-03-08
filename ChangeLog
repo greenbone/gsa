@@ -1,5 +1,12 @@
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/omp.xsl: Use ng for port lists page.
+
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/portlists/dialog.js,
 	src/html/classic/ng/src/web/portlists/portlistspage.js: Implment editing of
 	port lists.

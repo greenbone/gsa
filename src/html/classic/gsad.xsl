@@ -550,7 +550,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_PORT_LISTS')">
           <item>
-            <page>get_port_lists</page>
+            <url>/ng/portlists</url>
             <name><xsl:value-of select="gsa:i18n ('Port Lists')"/></name>
           </item>
         </xsl:if>
