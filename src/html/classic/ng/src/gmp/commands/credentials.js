@@ -61,6 +61,52 @@ export class CredentialCommand extends EntityCommand {
     }).then(this.transformResponse);
   }
 
+  save(args) {
+    let {
+      allow_insecure = 0,
+      auth_algorithm,
+      base,
+      certificate,
+      change_community = 0,
+      change_passphrase = 0,
+      change_password = 0,
+      change_privacy_password = 0,
+      comment,
+      community,
+      credential_login,
+      id,
+      name,
+      passphrase,
+      password,
+      privacy_algorithm,
+      privacy_password,
+      private_key
+    } = args;
+    log.debug('Saving credential', args);
+    return this.httpPost({
+      cmd: 'save_credential',
+      next: 'get_credential',
+      allow_insecure,
+      auth_algorithm,
+      base,
+      certificate,
+      change_community,
+      change_passphrase,
+      change_password,
+      change_privacy_password,
+      comment,
+      community,
+      credential_login,
+      id,
+      password,
+      name,
+      passphrase,
+      privacy_algorithm,
+      privacy_password,
+      private_key,
+    }).then(this.transformResponse);
+  }
+
   getElementFromRoot(root) {
     return root.get_credential.get_credentials_response.credential;
   }

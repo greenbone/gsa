@@ -1,5 +1,10 @@
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/credentials.js: Implement gmp api for
+	saving a credential.
+
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/credential.js: Add ALL_CREDENTIAL_TYPES
 	array constant and isAllowInsecure method to Credential model class.
 
