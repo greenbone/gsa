@@ -8675,7 +8675,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_credentials&amp;token={/envelope/token}"
+      <a href="/ng/credentials"
          title="{gsa:i18n ('Credentials')}">
         <img class="icon icon-lg" src="/img/credential.svg" alt="Credentials"/>
       </a>

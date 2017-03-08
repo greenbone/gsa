@@ -556,7 +556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_CREDENTIALS')">
           <item>
-            <page>get_credentials</page>
+            <url>/ng/credentials</url>
             <name><xsl:value-of select="gsa:i18n ('Credentials')"/></name>
           </item>
         </xsl:if>

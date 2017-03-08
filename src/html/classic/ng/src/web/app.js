@@ -48,6 +48,7 @@ import {get_severity_levels} from './render.js';
 
 import CertBundAdvsPage from './certbund/certbundadvspage.js';
 import CpesPage from './cpes/cpespage.js';
+import CredentialsPage from './credentials/credentialspage.js';
 import CvesPage from './cves/cvespage.js';
 import DfnCertAdvsPage from './dfncert/dfncertadvspage.js';
 import HostsPage from './hosts/hostspage.js';
@@ -208,6 +209,9 @@ ReactDOM.render(
         <Route
           path="portlists"
           component={PortListsPage}/>
+        <Route
+          path="credentials"
+          component={CredentialsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>
