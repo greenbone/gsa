@@ -544,7 +544,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_TARGETS')">
           <item>
-            <page>get_targets</page>
+            <url>/ng/targets</url>
             <name><xsl:value-of select="gsa:i18n ('Targets')"/></name>
           </item>
         </xsl:if>

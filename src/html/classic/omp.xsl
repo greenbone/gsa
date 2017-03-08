@@ -8753,7 +8753,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+      <a href="/ng/targets"
          title="{gsa:i18n ('Targets')}">
         <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
       </a>
@@ -8802,7 +8802,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+      <a href="/ng/targets"
          title="{gsa:i18n ('Targets')}">
         <img class="icon icon-sm" src="/img/scanner.svg" alt="Scanners"/>
       </a>
@@ -14020,7 +14020,7 @@ should not have received it.
         title="{concat(gsa:i18n('Help'),': ',gsa:i18n('New Target'))}">
         <img src="/img/help.svg"/>
       </a>
-      <a href="/omp?cmd=get_targets&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/ng/targets?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
         class="icon icon-sm"
         title="{gsa:i18n ('Targets')}">
         <img src="/img/list.svg" alt="{gsa:i18n ('Targets')}"/>
@@ -15547,7 +15547,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+      <a href="/ng/targets"
          title="{gsa:i18n ('Targets')}">
         <img class="icon icon-lg" src="/img/target.svg" alt="Targets"/>
       </a>
@@ -27240,7 +27240,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+      <a href="/ng/targets"
          title="{gsa:i18n ('Targets')}">
         <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
       </a>
