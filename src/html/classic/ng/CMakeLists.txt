@@ -137,7 +137,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/assetspage.js
      ${NG_SRC_DIR}/src/web/button.js
      ${NG_SRC_DIR}/src/web/comment.js
-     ${NG_SRC_DIR}/src/web/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/credentials/dialog2.js
      ${NG_SRC_DIR}/src/web/certbund/charts.js
      ${NG_SRC_DIR}/src/web/certbund/certbundadvspage.js
