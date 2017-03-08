@@ -1,5 +1,10 @@
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/targets/table.js: Allow sorting by credential
+	types at targets list page.
+
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/table/head.js: Allow to use flexbox layout in
 	table head easily.
 

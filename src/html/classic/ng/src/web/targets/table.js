@@ -25,9 +25,15 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+import Sort from '../sortby.js';
+
 import {createEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
+
+import Select2 from '../form/select2.js';
+import Text from '../form/text.js';
 
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';
@@ -35,7 +41,22 @@ import TableRow from '../table/row.js';
 
 import TargetRow from './row.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions}) => {
+const Header = ({
+    actions,
+    filter,
+    links = true,
+    sort = true,
+    onSortChange,
+  }) => {
+
+  let select_sort = 'ssh_credential';
+  let sort_by = filter ? filter.getSortBy() : undefined;
+
+  if (sort_by === 'smb_credential' ||
+    sort_by === 'esxi_credential' ||
+    sort_by === 'snmp_credential') {
+    select_sort = sort_by;
+  }
   return (
     <TableHeader>
       <TableRow>
@@ -59,8 +80,22 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
           onSortChange={onSortChange}>
           {_('Port List')}
         </TableHead>
-        <TableHead>
-          {_('Credentials')}
+        <TableHead flex>
+          <Text>
+            <Sort by={sort ? select_sort : false} onClick={onSortChange}>
+              {_('Credentials')}
+            </Sort>
+          </Text>
+          {sort !== false &&
+            <Select2
+              value={select_sort}
+              onChange={onSortChange}>
+              <option value="ssh_credential">{_('SSH')}</option>
+              <option value="smb_credential">{_('SMB')}</option>
+              <option value="esxi_credential">{_('ESXi')}</option>
+              <option value="snmp_credential">{_('SNMP')}</option>
+            </Select2>
+          }
         </TableHead>
         {actions}
       </TableRow>
@@ -70,6 +105,7 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
 
 Header.propTypes = {
   actions: React.PropTypes.element,
+  filter: PropTypes.filter,
   links: React.PropTypes.bool,
   sort: React.PropTypes.bool,
   onSortChange: React.PropTypes.func,
