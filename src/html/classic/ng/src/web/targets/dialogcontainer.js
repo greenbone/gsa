@@ -26,7 +26,7 @@ import React from 'react';
 import Layout from '../layout.js';
 import {first} from '../../utils.js';
 
-import CredentialsDialog from '../credentials/dialog2.js';
+import CredentialsDialog from '../credentials/dialog.js';
 
 import PortListDialog from '../portlists/dialog.js';
 

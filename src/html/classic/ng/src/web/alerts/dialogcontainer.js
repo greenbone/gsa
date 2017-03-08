@@ -28,7 +28,7 @@ import {is_defined, select_save_id, first} from '../../utils.js';
 
 import Layout from '../layout.js';
 
-import CredentialsDialog from '../credentials/dialog2.js';
+import CredentialsDialog from '../credentials/dialog.js';
 
 import AlertDialog, {DEFAULT_NOTICE_REPORT_FORMAT, DEFAULT_NOTICE_ATTACH_FROMAT,
 } from './dialog.js';

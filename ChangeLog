@@ -1,6 +1,15 @@
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/alerts/dialogcontainer.js,
+	src/html/classic/ng/src/web/credentials/dialog2.js,
+	src/html/classic/ng/src/web/credentials/dialog.js,
+	src/html/classic/ng/src/web/targets/dialogcontainer.js: Rename credentials
+	dialog2 module to dialog after the old dialog has been removed.
+
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/credentials/dialog.js: Remove obsolete, old and
 	replaced first version of the CredentialsDialog.
 
