@@ -1,3 +1,8 @@
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entities/page.js: Allow to customize section in
+	entities pages.
+
 2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,,

@@ -36,17 +36,17 @@ import PowerFilter from '../powerfilter/powerfilter.js';
 import DashboardControls from '../dashboard/controls.js';
 
 const exclude_props = [
-  'children',
   'cache',
-  'title',
-  'sectionIcon',
-  'toolBarIcons',
-  'dashboard',
-  'powerfilter',
-  'filterEditDialog',
-  'table',
-  'filters',
   'children',
+  'dashboard',
+  'filterEditDialog',
+  'filters',
+  'powerfilter',
+  'section',
+  'sectionIcon',
+  'table',
+  'title',
+  'toolBarIcons',
 ];
 
 export class EntitiesPage extends React.Component {
@@ -118,9 +118,18 @@ export class EntitiesPage extends React.Component {
   renderSection() {
     let {sectionIcon, filter, cache} = this.props;
     let DashboardComponent = this.props.dashboard;
+    let SectionComponent = this.props.section;
+
+    if (SectionComponent === false) {
+      return null;
+    }
+
+    if (!is_defined(SectionComponent)) {
+      SectionComponent = Section;
+    }
 
     return (
-      <Section
+      <SectionComponent
         title={this.getSectionTitle()}
         className="entities-section"
         img={sectionIcon}
@@ -130,7 +139,7 @@ export class EntitiesPage extends React.Component {
         }
         {this.renderLoading()}
         {this.renderTable()}
-      </Section>
+      </SectionComponent>
     );
   }
 
@@ -244,15 +253,16 @@ export class EntitiesPage extends React.Component {
 
 EntitiesPage.propTypes = {
   cache: React.PropTypes.object,
-  title: React.PropTypes.string,
+  dashboard: PropTypes.componentOrFalse,
   entities: React.PropTypes.object,
+  filterEditDialog: PropTypes.component,
   filter: React.PropTypes.object,
   filters: React.PropTypes.object,
-  dashboard: PropTypes.componentOrFalse,
   powerfilter: PropTypes.componentOrFalse,
-  table: PropTypes.componentOrFalse,
-  filterEditDialog: PropTypes.component,
   sectionIcon: PropTypes.icon,
+  section: PropTypes.componentOrFalse,
+  table: PropTypes.componentOrFalse,
+  title: React.PropTypes.string,
   toolBarIcons: PropTypes.componentOrElement,
   onFilterChanged: React.PropTypes.func,
   onFilterCreateClick: React.PropTypes.func,
