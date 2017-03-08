@@ -1,5 +1,14 @@
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/credentials.js: Accept password as
+	argument for creating a credential. Map password to lsc_password in http post
+	request.
+
+	* src/html/classic/ng/src/web/credentials/dialog.js: Fix some typos and extend
+	CredentialDialog for also support editing.
+
+2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/credentials.js: Implement gmp api for
 	saving a credential.
 

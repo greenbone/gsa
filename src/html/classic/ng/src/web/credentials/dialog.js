@@ -24,13 +24,14 @@
 import React from 'react';
 
 import  _ from '../../locale.js';
-import {map} from '../../utils.js';
+import {is_defined, map} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
+import Checkbox from '../form/checkbox.js';
 import FileField from '../form/filefield.js';
 import FormGroup from '../form/formgroup.js';
 import PasswordField from '../form/passwordfield.js';
@@ -68,16 +69,35 @@ class CredentialsDialog extends React.Component {
   }
 
   render() {
-    let {name, comment, types, base, allow_insecure, autogenerate,
-      community, credential_login, lsc_password, privacy_password,
-      auth_algorithm, privacy_algorithm, passphrase,
-      onValueChange} = this.props;
+    let {
+      allow_insecure,
+      auth_algorithm,
+      autogenerate,
+      base,
+      change_community,
+      change_passphrase,
+      change_password,
+      change_privacy_password,
+      comment,
+      community,
+      credential,
+      credential_login,
+      name,
+      passphrase,
+      password,
+      privacy_algorithm,
+      privacy_password,
+      types,
+      onValueChange,
+    } = this.props;
 
     let type_opts = map(types, type => {
       return (
         <option value={type} key={type}>{type_names[type]}</option>
       );
     });
+
+    let is_edit = is_defined(credential);
 
     return (
       <Layout flex="column">
@@ -105,12 +125,13 @@ class CredentialsDialog extends React.Component {
         <FormGroup title={_('Type')}>
           <Select2
             onChange={this.handleTypeChange}
+            disabled={is_edit}
             value={base}>
             {type_opts}
           </Select2>
         </FormGroup>
 
-        <FormGroup title={_('Allow insecure user')}>
+        <FormGroup title={_('Allow insecure use')}>
           <YesNoRadio
             name="allow_insecure"
             value={allow_insecure}
@@ -118,7 +139,7 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Auto-generate')}
-          condition={base === 'up' || base === 'usk'}>
+          condition={(base === 'up' || base === 'usk') && !is_edit}>
           <YesNoRadio
             name="autogenerate"
             value={autogenerate}
@@ -127,6 +148,15 @@ class CredentialsDialog extends React.Component {
 
         <FormGroup title={_('SNMP Community')}
           condition={base === 'snmp'}>
+          {is_edit &&
+            <Checkbox
+              name="change_community"
+              checked={change_community === '1'}
+              checkedValue="1"
+              unCheckedValue="0"
+              title={_('Replace existing SNMP community with')}
+              onChange={onValueChange}/>
+          }
           <PasswordField
             name="community"
             value={community}
@@ -134,6 +164,7 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Username')}
+          flex
           condition={base === 'up' || base === 'usk' || base === 'snmp'}>
           <TextField
             name="credential_login"
@@ -143,15 +174,33 @@ class CredentialsDialog extends React.Component {
 
         <FormGroup title={_('Password')}
           condition={base === 'up' || base === 'snmp'}>
+          {is_edit &&
+            <Checkbox
+              name="change_password"
+              checked={change_password === '1'}
+              checkedValue="1"
+              unCheckedValue="0"
+              title={_('Replace existing password with')}
+              onChange={onValueChange}/>
+          }
           <PasswordField
-            name="lsc_password"
-            value={lsc_password}
+            name="password"
+            value={password}
             disabled={autogenerate === 1}
             onChange={onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Passphrase')}
           condition={base === 'usk'}>
+          {is_edit &&
+            <Checkbox
+              name="change_passphrase"
+              checked={change_passphrase === '1'}
+              checkedValue="1"
+              unCheckedValue="0"
+              title={_('Replace existing passphrase with')}
+              onChange={onValueChange}/>
+          }
           <PasswordField
             name="passphrase"
             value={passphrase}
@@ -161,6 +210,15 @@ class CredentialsDialog extends React.Component {
 
         <FormGroup title={_('Privacy Password')}
           condition={base === 'snmp'}>
+          {is_edit &&
+            <Checkbox
+              name="change_privacy_password"
+              checked={change_privacy_password === '1'}
+              checkedValue="1"
+              unCheckedValue="0"
+              title={_('Replace existing privacy password with')}
+              onChange={onValueChange}/>
+          }
           <PasswordField
             name="privacy_password"
             value={privacy_password}
@@ -201,7 +259,7 @@ class CredentialsDialog extends React.Component {
           condition={base === 'snmp'}>
           <Radio
             value="aes"
-            title="AED"
+            title="AES"
             checked={privacy_algorithm === 'aes'}
             name="privacy_algorithm"
             onChange={onValueChange}/>
@@ -233,12 +291,17 @@ CredentialsDialog.propTypes = {
   types: React.PropTypes.arrayOf(
     pwtypes
   ),
+  change_community: PropTypes.yesno,
+  change_passphrase: PropTypes.yesno,
+  change_password: PropTypes.yesno,
+  change_privacy_password: PropTypes.yesno,
   base: pwtypes,
   allow_insecure: PropTypes.yesno,
   autogenerate: PropTypes.yesno,
   community: React.PropTypes.string,
+  credential: PropTypes.model,
   credential_login: React.PropTypes.string,
-  lsc_password: React.PropTypes.string,
+  password: React.PropTypes.string,
   privacy_password: React.PropTypes.string,
   auth_algorithm: React.PropTypes.oneOf([
     'md5', 'sha1',
@@ -258,18 +321,22 @@ export default withDialog(CredentialsDialog, {
   title: _('New Credential'),
   footer: _('Save'),
   defaultState: {
-    name: _('Unnamed'),
-    comment: '',
-    base: 'up',
     allow_insecure: 0,
+    auth_algorithm: 'sha1',
     autogenerate: 0,
+    base: 'up',
+    change_community: '0',
+    change_passphrase: '0',
+    change_password: '0',
+    change_privacy_password: '0',
+    comment: '',
     community: '',
     credential_login: '',
-    lsc_password: '',
+    name: _('Unnamed'),
     passphrase: '',
-    privacy_password: '',
-    auth_algorithm: 'sha1',
+    password: '',
     privacy_algorithm: 'aes',
+    privacy_password: '',
   },
 });
 

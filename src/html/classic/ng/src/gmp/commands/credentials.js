@@ -37,7 +37,7 @@ export class CredentialCommand extends EntityCommand {
 
   create(args) {
     let {name, comment = '', allow_insecure = 0, autogenerate = 0,
-      community = '', credential_login = '', lsc_password = '', passphrase = '',
+      community = '', credential_login = '', password = '', passphrase = '',
       privacy_password = '', auth_algorithm = 'sha1', certificate, base,
       privacy_algorithm = 'aes', private_key} = args;
     log.debug('Creating new credential', args);
@@ -51,7 +51,7 @@ export class CredentialCommand extends EntityCommand {
       autogenerate,
       community,
       credential_login,
-      lsc_password,
+      lsc_password: password,
       passphrase,
       privacy_password,
       auth_algorithm,
