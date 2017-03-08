@@ -260,6 +260,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/portlists/filterdialog.js
      ${NG_SRC_DIR}/src/web/portlists/importdialog.js
      ${NG_SRC_DIR}/src/web/portlists/portlistspage.js
+     ${NG_SRC_DIR}/src/web/portlists/portrangedialog.js
      ${NG_SRC_DIR}/src/web/portlists/row.js
      ${NG_SRC_DIR}/src/web/portlists/table.js
      ${NG_SRC_DIR}/src/web/powerfilter/applyoverridesgroup.js
