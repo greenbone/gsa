@@ -115,9 +115,8 @@ const Row = ({
   actions,
   entity,
   links = true,
-  username,
   ...props
-}, {capabilities}) => {
+}, {capabilities, username}) => {
   return (
     <TableRow>
       <TableData flex="column">
@@ -179,11 +178,11 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: React.PropTypes.object,
   links: React.PropTypes.bool,
-  username: React.PropTypes.string,
 };
 
 Row.contextTypes = {
   capabilities: React.PropTypes.object.isRequired,
+  username: React.PropTypes.string,
 };
 
 const Actions = withEntityActions(IconActions);
