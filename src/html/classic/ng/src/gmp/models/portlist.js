@@ -33,7 +33,10 @@ export class PortList extends Model {
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
     let ranges = is_defined(ret.port_ranges) ? ret.port_ranges.port_range : [];
-    ret.port_ranges = map(ranges, range => new PortRange(range));
+    ret.port_ranges = map(ranges, range => {
+      range.port_list_id = ret.id;
+      return new PortRange(range);
+    });
     return ret;
   }
 }
