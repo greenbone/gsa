@@ -49,6 +49,39 @@ export class PortListCommand extends EntityCommand {
     }).then(this.transformResponse);
   }
 
+  save(args) {
+    let {id, name, comment = ''} = args;
+
+    log.debug('Saving port list', args);
+    return this.httpPost({
+      cmd: 'save_port_list',
+      next: 'get_port_list',
+      comment,
+      id,
+      name,
+    }).then(this.transformResponse);
+  }
+
+  createPortRange(args) {
+    let {id, port_range_start, port_range_end, port_type} = args;
+    return this.httpPost({
+      cmd: 'create_port_range',
+      next: 'get_port_list',
+      id,
+      port_range_start,
+      port_range_end,
+      port_type,
+    }).then(this.transformResponse);
+  }
+
+  deletePortRange({id, port_list_id}) {
+    return this.httpPost({
+      cmd: 'delete_port_range',
+      port_range_id: id,
+      no_redirect: 1,
+    }).then(() => this.get({id: port_list_id}));
+  }
+
   import(args) {
     let {xml_file} = args;
     log.debug('Importing port list', args);
