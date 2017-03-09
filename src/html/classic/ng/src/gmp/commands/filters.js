@@ -51,6 +51,21 @@ export class FilterCommand extends EntityCommand {
     return this.httpPost(data).then(this.transformResponse);
   }
 
+  save(args) {
+    let {id, term, name, type, comment = ''} = args;
+    let data = {
+      cmd: 'save_filter',
+      next: 'get_filter',
+      comment,
+      id,
+      name,
+      optional_resource_type: type,
+      term,
+    };
+    log.debug('Saving filter', args, data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
   getElementFromRoot(root) {
     return root.get_filter.get_filters_response.filter;
   }
