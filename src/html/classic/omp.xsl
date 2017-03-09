@@ -23960,37 +23960,6 @@ should not have received it.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template name="html-notes-table">
-  <xsl:call-template name="list-window">
-    <xsl:with-param name="type" select="'note'"/>
-    <xsl:with-param name="cap-type" select="'Note'"/>
-    <xsl:with-param name="resources-summary" select="notes"/>
-    <xsl:with-param name="resources" select="note"/>
-    <xsl:with-param name="count" select="count (note)"/>
-    <xsl:with-param name="filtered-count" select="note_count/filtered"/>
-    <xsl:with-param name="full-count" select="note_count/text ()"/>
-    <xsl:with-param name="columns" xmlns="">
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Text')"/></name>
-        <field>text</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('NVT')"/></name>
-        <field>nvt</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Active', 'Note')"/></name>
-        <field>active</field>
-      </column>
-    </xsl:with-param>
-    <xsl:with-param name="icon-count" select="4"/>
-    <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-notes-top-visualization"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
 <xsl:template name="html-notes-trash-table">
   <div>
     <table class="gbntable">
@@ -24029,18 +23998,6 @@ should not have received it.
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
-<xsl:template match="get_notes">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_note_response"/>
-  <xsl:apply-templates select="create_filter_response"/>
-  <xsl:apply-templates select="create_note_response"/>
-  <!-- The for-each makes the get_notes_response the current node. -->
-  <xsl:for-each select="get_notes_response | commands_response/get_notes_response">
-    <xsl:call-template name="html-notes-table"/>
-  </xsl:for-each>
-</xsl:template>
-
 
 <!-- BEGIN OVERRIDES MANAGEMENT -->
 
@@ -25289,45 +25246,6 @@ should not have received it.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template name="html-overrides-table">
-  <xsl:call-template name="list-window">
-    <xsl:with-param name="type" select="'override'"/>
-    <xsl:with-param name="cap-type" select="'Override'"/>
-    <xsl:with-param name="resources-summary" select="overrides"/>
-    <xsl:with-param name="resources" select="override"/>
-    <xsl:with-param name="count" select="count (override)"/>
-    <xsl:with-param name="filtered-count" select="override_count/filtered"/>
-    <xsl:with-param name="full-count" select="override_count/text ()"/>
-    <xsl:with-param name="columns" xmlns="">
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Text')"/></name>
-        <field>text</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('NVT')"/></name>
-        <field>nvt</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('From', 'Override|Severity')"/></name>
-        <field>severity</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('To', 'Override|Severity')"/></name>
-        <field>new_severity</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Active', 'Override')"/></name>
-        <field>active</field>
-      </column>
-    </xsl:with-param>
-    <xsl:with-param name="icon-count" select="4"/>
-    <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-overrides-top-visualization"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
 <xsl:template name="html-overrides-trash-table">
   <div>
     <table class="gbntable">
@@ -25366,18 +25284,6 @@ should not have received it.
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
-<xsl:template match="get_overrides">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_override_response"/>
-  <xsl:apply-templates select="create_filter_response"/>
-  <xsl:apply-templates select="create_override_response"/>
-  <!-- The for-each makes the get_overrides_response the current node. -->
-  <xsl:for-each select="get_overrides_response | commands_response/get_overrides_response">
-    <xsl:call-template name="html-overrides-table"/>
-  </xsl:for-each>
-</xsl:template>
-
 
 <!-- BEGIN GROUPS MANAGEMENT -->
 

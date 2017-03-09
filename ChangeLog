@@ -1,3 +1,10 @@
+2017-03-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (template name="html-notes-table",
+	template match="get_notes", template name="html-overrides-table",
+	template match="get_overrides"): Removed. These are fully covered
+	by NG.
+
 2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
