@@ -1,5 +1,11 @@
 2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/powerfilter/dialog.js: Add createFilterDialog
+	HOC for easier filter dialog creation. Most filter dialogs are using
+	the DefaultFilterDialog. So add a HOC that uses it automatically.
+
+2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/filters.js: Fix parsing collection
 	counts for filters. Due to the bad count naming scheme we have to sub elements
 	named filters in the get_filters_response.

@@ -179,7 +179,11 @@ export const withFilterDialog = (FilterDialogComponent, options = {}) => {
   return FilterDialogWrapper;
 };
 
-export const FilterDialog = withFilterDialog(DefaultFilterDialog);
+export const createFilterDialog = options => {
+  return withFilterDialog(DefaultFilterDialog, options);
+};
+
+export const FilterDialog = createFilterDialog();
 
 export default FilterDialog;
 
