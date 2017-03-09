@@ -184,6 +184,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/row.js
      ${NG_SRC_DIR}/src/web/entities/selection.js
      ${NG_SRC_DIR}/src/web/entities/table.js
+     ${NG_SRC_DIR}/src/web/filters/dialog.js
+     ${NG_SRC_DIR}/src/web/filters/filterspage.js
+     ${NG_SRC_DIR}/src/web/filters/row.js
+     ${NG_SRC_DIR}/src/web/filters/table.js
      ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/footnote.js
      ${NG_SRC_DIR}/src/web/form/checkbox.js
