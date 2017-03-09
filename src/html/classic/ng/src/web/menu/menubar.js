@@ -192,9 +192,8 @@ export const MenuBar = (props, context) => {
             cmd="get_scanners"
             caps="get_scanners"/>
           <MenuEntry
-            legacy
             title={_('Filters')}
-            cmd="get_filters"
+            to="filters"
             caps="get_filters"/>
           <MenuEntry
             legacy

@@ -12745,7 +12745,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+      <a href="/ng/filters"
          title="{gsa:i18n ('Filters')}">
         <img class="icon icon-lg" src="/img/filter.svg" style="margin-right:5px" alt="Filters"/>
       </a>
@@ -12891,7 +12891,7 @@ should not have received it.
         title="{concat(gsa:i18n('Help'),': ',gsa:i18n('New Filter'))}">
         <img src="/img/help.svg"/>
       </a>
-      <a href="/omp?cmd=get_filters&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/ng/filters?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
         title="{gsa:i18n ('Filters')}"
         class="icon icon-sm">
         <img src="/img/list.svg" alt="{gsa:i18n ('Filters')}"/>
