@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import Comment from '../comment.js';
 import FootNote from '../footnote.js';
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
