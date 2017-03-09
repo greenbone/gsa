@@ -23,7 +23,7 @@
 
 import  _ from '../../locale.js';
 
-import {withFilterDialog, DefaultFilterDialog} from '../powerfilter/dialog.js';
+import {createFilterDialog} from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],
@@ -36,10 +36,8 @@ const SORT_FIELDS = [
   ['snmp_credential', _('SNMP Credential')],
 ];
 
-export const TargetsFilterDialog = withFilterDialog(DefaultFilterDialog, {
+export default createFilterDialog({
   sortFields: SORT_FIELDS,
 });
-
-export default TargetsFilterDialog;
 
 // vim: set ts=2 sw=2 tw=80:

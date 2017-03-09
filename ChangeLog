@@ -1,5 +1,22 @@
 2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/certbund/filterdialog.js,
+	src/html/classic/ng/src/web/cpes/filterdialog.js,
+	src/html/classic/ng/src/web/credentials/filterdialog.js,
+	src/html/classic/ng/src/web/cves/filterdialog.js,
+	src/html/classic/ng/src/web/hosts/filterdialog.js,
+	src/html/classic/ng/src/web/notes/filterdialog.js,
+	src/html/classic/ng/src/web/nvts/filterdialog.js,
+	src/html/classic/ng/src/web/os/filterdialog.js,
+	src/html/classic/ng/src/web/ovaldefs/filterdialog.js,
+	src/html/classic/ng/src/web/overrides/filterdialog.js,
+	src/html/classic/ng/src/web/portlists/filterdialog.js,
+	src/html/classic/ng/src/web/secinfo/filterdialog.js,
+	src/html/classic/ng/src/web/targets/filterdialog.js,
+	src/html/classic/ng/src/web/vulns/filterdialog.js: Use createFilterDialog HOC.
+
+2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/powerfilter/dialog.js: Add createFilterDialog
 	HOC for easier filter dialog creation. Most filter dialogs are using
 	the DefaultFilterDialog. So add a HOC that uses it automatically.

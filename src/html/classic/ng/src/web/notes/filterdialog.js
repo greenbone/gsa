@@ -23,7 +23,7 @@
 
 import  _ from '../../locale.js';
 
-import {withFilterDialog, DefaultFilterDialog} from '../powerfilter/dialog.js';
+import {createFilterDialog} from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['text', _('Text')],
@@ -33,7 +33,7 @@ const SORT_FIELDS = [
   ['active', _('Active')],
 ];
 
-export default withFilterDialog(DefaultFilterDialog, {
+export default createFilterDialog({
   sortFields: SORT_FIELDS,
 });
 
