@@ -1,3 +1,9 @@
+2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/commands/filters.js: Fix parsing collection
+	counts for filters. Due to the bad count naming scheme we have to sub elements
+	named filters in the get_filters_response.
+
 2017-03-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (template name="html-notes-table",

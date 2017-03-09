@@ -23,7 +23,9 @@
 
 import logger from '../../log.js';
 
+import CollectionCounts from '../collectioncounts.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {parse_collection_list} from '../parser.js';
 
 import Filter from '../models/filter.js';
 
@@ -54,6 +56,28 @@ export class FilterCommand extends EntityCommand {
   }
 }
 
+// FIXME parsing counts is horrible
+
+const parse_filter = element => {
+  return new Filter(element.filters[0]);
+};
+
+const parse_counts = element => {
+  let es = element.filters[1];
+  let ec = element.filter_count;
+  return {
+    first: es._start,
+    rows: es._max,
+    length: ec.page,
+    all: ec.__text,
+    filtered: ec.filtered,
+  };
+};
+
+const parse_collection_counts = response => {
+  return new CollectionCounts(parse_counts(response));
+};
+
 export class FiltersCommand extends EntitiesCommand {
 
   constructor(http) {
@@ -62,6 +86,15 @@ export class FiltersCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_filters.get_filters_response;
+  }
+
+  getCollectionListFromRoot(root, meta) {
+    let response = this.getEntitiesResponse(root);
+    return parse_collection_list(response, this.name, this.clazz, {
+      meta,
+      filter_parse_func: parse_filter,
+      collection_count_parse_func: parse_collection_counts,
+    });
   }
 }
 
