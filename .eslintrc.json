@@ -47,11 +47,6 @@
         "consistent-return": "error",
         "consistent-this": "off",
         "curly": "error",
-        "default-case": "error",
-        "dot-location": [
-            "error",
-            "property"
-        ],
         "dot-notation": [
             "error",
             {
@@ -59,7 +54,6 @@
             }
         ],
         "eol-last": "error",
-        "eqeqeq": "error",
         "func-call-spacing": "error",
         "func-names": [
             "error",
@@ -125,13 +119,10 @@
             }
         ],
         "multiline-ternary": "off",
-        "new-parens": "error",
         "newline-after-var": "off",
         "newline-before-return": "off",
         "no-alert": "error",
-        "no-array-constructor": "error",
         "no-bitwise": "error",
-        "no-caller": "error",
         "no-catch-shadow": "error",
         "no-confusing-arrow": "error",
         "no-continue": "error",
@@ -142,9 +133,6 @@
         "no-empty-function": "off",
         "no-eq-null": "error",
         "no-eval": "error",
-        "no-extend-native": "error",
-        "no-extra-bind": "error",
-        "no-extra-label": "error",
         "no-extra-parens": "off",
         "no-floating-decimal": "error",
         "no-global-assign": "error",
@@ -157,17 +145,12 @@
         "no-implicit-globals": "error",
         "no-implied-eval": "error",
         "no-inline-comments": "off",
-        "no-iterator": "error",
         "no-label-var": "error",
         "no-labels": "error",
-        "no-lone-blocks": "error",
         "no-lonely-if": "error",
-        "no-loop-func": "error",
         "no-magic-numbers": "off",
-        "no-mixed-operators": "error",
         "no-mixed-requires": "error",
         "no-multi-spaces": "off",
-        "no-multi-str": "error",
         "no-multiple-empty-lines": "error",
         "no-negated-condition": "warn",
         "no-nested-ternary": "off",
@@ -185,13 +168,8 @@
         "no-restricted-globals": "error",
         "no-restricted-imports": "error",
         "no-restricted-modules": "error",
-        "no-restricted-syntax": "error",
         "no-return-assign": "off",
-        "no-script-url": "error",
-        "no-self-compare": "error",
-        "no-sequences": "error",
         "no-shadow": "warn",
-        "no-shadow-restricted-names": "error",
         "no-spaced-func": "error",
         "no-sync": "error",
         "no-tabs": "error",
@@ -204,17 +182,8 @@
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-unsafe-negation": "error",
-        "no-unused-expressions": "error",
-        "no-use-before-define": "error",
         "no-useless-call": "error",
-        "no-useless-computed-key": "error",
-        "no-useless-concat": "error",
-        "no-useless-constructor": "error",
-        "no-useless-escape": "error",
-        "no-useless-rename": "error",
         "no-void": "error",
-        "no-whitespace-before-property": "error",
-        "no-with": "error",
         "object-curly-newline": "off",
         "object-curly-spacing": [
             "error",
@@ -229,10 +198,6 @@
         "object-shorthand": "off",
         "one-var": "off",
         "one-var-declaration-per-line": "error",
-        "operator-assignment": [
-            "error",
-            "always"
-        ],
         "operator-linebreak": [
             "error",
             "after"
@@ -246,12 +211,7 @@
         "prefer-template": "off",
         "quote-props": "off",
         "quotes": "off",
-        "radix": "error",
         "require-jsdoc": "off",
-        "rest-spread-spacing": [
-            "error",
-            "never"
-        ],
         "semi": "error",
         "semi-spacing": "error",
         "sort-imports": "off",
@@ -270,10 +230,6 @@
         ],
         "symbol-description": "error",
         "template-curly-spacing": "error",
-        "unicode-bom": [
-            "error",
-            "never"
-        ],
         "valid-jsdoc": [
             "warn",
             {
@@ -296,11 +252,7 @@
             }
         ],
         "react/prefer-es6-class": "warn",
-        "react/jsx-uses-react": "error",
-        "react/jsx-uses-vars": "error",
-        "react/jsx-no-undef": "error",
-        "react/jsx-wrap-multilines": "error",
-        "react/jsx-pascal-case": "error",
+        "react/jsx-wrap-multilines": "warn",
         "react/jsx-indent": ["warn", 2],
         "react/jsx-key": "warn",
         "react/jsx-no-bind": [
@@ -315,7 +267,6 @@
                 "maximum": 2,
                 "when": "multiline"
             }
-        ],
-        "react/require-render-return": "error"
+        ]
     }
 }
