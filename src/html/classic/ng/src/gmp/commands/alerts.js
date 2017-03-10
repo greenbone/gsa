@@ -86,10 +86,6 @@ export class AlertCommand extends EntityCommand {
     return this.httpPost(data).then(this.transformResponse);
   }
 
-  getElementFromRoot(root) {
-    return root.get_alert.get_alerts_response.alert;
-  }
-
   newAlertSettings() { // should be removed after all corresponsing omp commands are implemented
     return this.httpGet({cmd: 'new_alert'}).then(response => {
       let {new_alert} = response.data;
@@ -106,6 +102,18 @@ export class AlertCommand extends EntityCommand {
       return response.setData(new_alert);
     });
   }
+
+  test({id}) {
+    return this.httpPost({
+      cmd: 'test_alert',
+      id,
+    });
+  }
+
+  getElementFromRoot(root) {
+    return root.get_alert.get_alerts_response.alert;
+  }
+
 }
 
 export class AlertsCommand extends EntitiesCommand {

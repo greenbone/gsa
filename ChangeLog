@@ -1,5 +1,10 @@
 2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/alerts.js: Add gmp api for testing an
+	alert.
+
+2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/alert.js: Implement parsing of Alert
 	model properties.
 
