@@ -21,9 +21,56 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import {is_defined, is_object, for_each} from '../../utils.js';
+
 import Model from '../model.js';
 
+
+const create_values = data => {
+  let values = {value: data.__text};
+  let {__text, name, ...other} = data;
+
+  for (let key of Object.keys(other)) {
+    values[key] = data[key];
+  }
+
+  return values;
+};
+
 export class Alert extends Model {
+
+  parseProperties(elem) {
+    let ret = super.parseProperties(elem);
+
+    let types = ['condition', 'method', 'event'];
+
+    for (let type of types) {
+      if (is_object(ret[type])) {
+        let data = {};
+
+        for_each(ret[type].data, value => {
+          data[value.name] = create_values(value);
+        });
+
+        ret[type] = {
+          type: ret[type].__text,
+          data,
+        };
+      }
+      else {
+        ret[type] = {
+          type: ret[type],
+          data: {},
+        };
+      }
+    }
+
+    if (is_defined(ret.filter)) {
+      ret.filter = new Model(ret.filter);
+    }
+
+    return ret;
+  }
 }
 
 export default Alert;
