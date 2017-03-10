@@ -59,19 +59,30 @@ export class Dialog extends React.Component {
   defaultState() {
     let {title, footer, width = DEFAULT_DIALOG_WIDTH} = this.props;
     return {
-      visible: false,
       error: undefined,
-      width,
-      title,
       footer,
       posX: undefined,
       posY: undefined,
+      title,
+      visible: false,
+      width,
     };
   }
 
   show(options = {}) {
-    let {title = this.props.title, footer = this.props.footer} = options;
-    this.setState({title, footer, visible: true, error: undefined});
+    let {
+      content,
+      footer = this.props.footer,
+      title = this.props.title,
+    } = options;
+
+    this.setState({
+      content,
+      error: undefined,
+      footer,
+      title,
+      visible: true,
+    });
   }
 
   close() {
@@ -173,8 +184,14 @@ export class Dialog extends React.Component {
   }
 
   render() {
-    let {visible = false, error, width, posX, posY} = this.state;
-    let {children} = this.props;
+    let {
+      error,
+      content = this.props.children,
+      posX,
+      posY,
+      visible = false,
+      width,
+    } = this.state;
     let style = {};
 
     if (!visible) {
@@ -207,7 +224,7 @@ export class Dialog extends React.Component {
               error={error}
               onCloseClick={this.onErrorClose}/>
             <div className="dialog-content">
-              {children}
+              {content}
             </div>
             {this.renderFooter()}
           </div>
