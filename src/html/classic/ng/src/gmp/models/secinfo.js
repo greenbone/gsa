@@ -21,9 +21,32 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend} from '../../utils.js';
+import _ from '../../locale.js';
+import {extend, is_defined} from '../../utils.js';
 
 import Model from '../model.js';
+
+export const secinfo_type = (type, unknown = _('N/A')) => {
+  if (!is_defined(type)) {
+    return unknown;
+  }
+  switch (type) {
+    case 'cve':
+      return _('CVE');
+    case 'cpe':
+      return _('CPE');
+    case 'nvt':
+      return _('NVT');
+    case 'ovaldef':
+      return _('OVAL Definition');
+    case 'cert_bund_adv':
+      return _('CERT-Bund Advisory');
+    case 'dfn_cert_adv':
+      return _('DFN-CERT Advisory');
+    default:
+      return type;
+  }
+};
 
 export class SecInfo extends Model {
 

@@ -25,7 +25,7 @@ import React from 'react';
 
 import _, {datetime} from '../../locale.js';
 
-import {shorten, is_defined} from '../../utils.js';
+import {shorten} from '../../utils.js';
 
 import Comment from '../comment.js';
 import LegacyLink from '../legacylink.js';
@@ -39,27 +39,7 @@ import TableBody from '../table/body.js';
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
 
-const secinfo_type = type => {
-  if (!is_defined(type)) {
-    return _('N/A');
-  }
-  switch (type) {
-    case 'cve':
-      return _('CVE');
-    case 'cpe':
-      return _('CPE');
-    case 'nvt':
-      return _('NVT');
-    case 'ovaldef':
-      return _('OVAL Definition');
-    case 'cert_bund_adv':
-      return _('CERT-Bund Advisory');
-    case 'dfn_cert_adv':
-      return _('DFN-CERT Advisory');
-    default:
-      return type;
-  }
-};
+import {secinfo_type} from '../../gmp/models/secinfo.js';
 
 const Row = ({entity, links = true, actions, ...other}) => {
   return (
