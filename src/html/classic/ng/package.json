@@ -17,14 +17,14 @@
   "license": "GPL-2.0+",
   "main": "src/index.js",
   "devDependencies": {
-    "babel-eslint": "^7.0.0",
-    "eslint": "^3.8.1",
-    "eslint-config-react-app": "^0.5.1",
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.16.1",
+    "eslint-config-react-app": "^0.9.5",
     "eslint-plugin-flowtype": "^2.21.0",
     "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.4.1",
-    "react-scripts": "^0.9.0"
+    "react-scripts": "^0.9.5"
   },
   "eslintConfig": {
     "extends": "react-app"
