@@ -86,8 +86,30 @@ export class AlertCommand extends EntityCommand {
     return this.httpPost(data).then(this.transformResponse);
   }
 
+  save(args) {
+    let {id, name, comment = '', event, condition, filter_id, method,
+      ...other} = args;
+    let data = extend({
+      cmd: 'save_alert',
+      next: 'get_alert',
+      id,
+      name,
+      comment,
+      event,
+      condition,
+      method,
+      filter_id,
+    }, convert_data("method_data", other, method_data_fields),
+      convert_data("condition_data", other, condition_data_fields),
+      convert_data("event_data", other, event_data_fields));
+    log.debug('Saving alert', args, data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
   newAlertSettings() { // should be removed after all corresponsing omp commands are implemented
-    return this.httpGet({cmd: 'new_alert'}).then(response => {
+    return this.httpGet({
+      cmd: 'new_alert',
+    }).then(response => {
       let {new_alert} = response.data;
       new_alert.report_formats = map(
         new_alert.get_report_formats_response.report_format,
@@ -100,6 +122,40 @@ export class AlertCommand extends EntityCommand {
       new_alert.filters = map(
         new_alert.get_filters_response.filter, filter => new Model(filter));
       return response.setData(new_alert);
+    });
+  }
+
+  editAlertSettings({id}) {
+    return this.httpGet({
+      cmd: 'edit_alert',
+      id,
+    }).then(response => {
+      let {edit_alert} = response.data;
+
+      edit_alert.alert = new Alert(edit_alert.get_alerts_response.alert);
+      delete edit_alert.get_alerts_response;
+
+      edit_alert.report_formats = map(
+        edit_alert.get_report_formats_response.report_format,
+        format => new Model(format));
+      delete edit_alert.get_report_formats_response;
+
+      edit_alert.credentials = map(
+        edit_alert.get_credentials_response.credential,
+        credential => new Credential(credential));
+      delete edit_alert.get_credentials_response;
+
+      edit_alert.tasks = map(
+        edit_alert.get_tasks_response.task, task => new Model(task)); // don't use Task here to avoid cyclic dependencies
+      delete edit_alert.get_tasks_response;
+
+      edit_alert.filters = map(
+        edit_alert.get_filters_response.filter, filter => new Model(filter));
+      delete edit_alert.get_filters_response;
+
+      delete edit_alert.next;
+
+      return response.setData(edit_alert);
     });
   }
 
