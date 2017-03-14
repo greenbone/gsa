@@ -31,7 +31,12 @@ const create_values = data => {
   let {__text, name, ...other} = data;
 
   for (let key of Object.keys(other)) {
-    values[key] = data[key];
+    let obj = data[key];
+    if (is_defined(obj._id)) {
+      obj.id = obj._id;
+      delete obj._id;
+    }
+    values[key] = obj;
   }
 
   return values;
