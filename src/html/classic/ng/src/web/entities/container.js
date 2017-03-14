@@ -23,12 +23,15 @@
 
 import React from 'react';
 
+import _ from '../../locale.js';
 import logger from '../../log.js';
 import {is_defined, is_array, exclude, includes} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import SelectionType from '../selectiontype.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import Download from '../form/download.js';
 
@@ -67,6 +70,8 @@ class EntitiesContainer extends React.Component {
     this.handleCloneEntity = this.handleCloneEntity.bind(this);
     this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
+    this.handleShowError = this.handleShowError.bind(this);
+    this.handleShowSuccess = this.handleShowSuccess.bind(this);
   }
 
   componentDidMount() {
@@ -307,6 +312,28 @@ class EntitiesContainer extends React.Component {
     this.load(filter);
   }
 
+  handleShowError(error) {
+    this.notice_dialog.show({
+      content: (
+        <Layout flex align="center">
+          {error}
+        </Layout>
+      ),
+      title: _('Error'),
+    });
+  }
+
+  handleShowSuccess(message) {
+    this.notice_dialog.show({
+      content: (
+        <Layout flex align="center">
+          {message}
+        </Layout>
+      ),
+      title: _('Success'),
+    });
+  }
+
   render() {
     let {filter, filters, entities, selection_type, selected, loading,
       } = this.state;
@@ -335,9 +362,15 @@ class EntitiesContainer extends React.Component {
           onEntityDelete={this.handleDeleteEntity}
           onEntityDownload={this.handleDownloadEntity}
           onEntityClone={this.handleCloneEntity}
+          showError={this.handleShowError}
+          showSuccess={this.handleShowSuccess}
         />
         <Download ref={ref => this.download = ref}
           filename={this.download_name}/>
+        <Dialog
+          width="400"
+          ref={ref => this.notice_dialog = ref}
+        />
       </Layout>
     );
   }
