@@ -104,12 +104,14 @@ const EmailMethodPart = ({
                 value="0"
                 onChange={onChange}>
               </Radio>
-              <Select2
-                name={prefix + 'notice_report_format'}
-                value={noticeReportFormat}
-                onChange={onChange}>
-                {report_format_opts}
-              </Select2>
+              {isTaskEvent &&
+                <Select2
+                  name={prefix + 'notice_report_format'}
+                  value={noticeReportFormat}
+                  onChange={onChange}>
+                  {report_format_opts}
+                </Select2>
+              }
             </Layout>
             <TextArea
               name={prefix + 'message'}
@@ -131,12 +133,14 @@ const EmailMethodPart = ({
                 value="2"
                 onChange={onChange}>
               </Radio>
-              <Select2
-                name={prefix + 'notice_attach_format'}
-                value={noticeAttachFormat}
-                onChange={onChange}>
-                {render_options(reportFormats)}
-              </Select2>
+              {isTaskEvent &&
+                <Select2
+                  name={prefix + 'notice_attach_format'}
+                  value={noticeAttachFormat}
+                  onChange={onChange}>
+                  {render_options(reportFormats)}
+                </Select2>
+              }
             </Layout>
             <TextArea
               name={prefix + 'message_attach'}
