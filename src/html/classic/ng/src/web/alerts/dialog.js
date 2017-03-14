@@ -55,15 +55,31 @@ import FilterCountLeastConditionPart from './filtercountleastconditionpart.js';
 import FilterCountChangedConditionPart from
   './filtercountchangedconditionpart.js';
 
+export const DEFAULT_DEFENSE_CENTER_PORT = '8307';
+export const DEFAULT_DIRECTION = 'changed';
+export const DEFAULT_EVENT_STATUS = 'Done';
+export const DEFAULT_METHOD = 'Email';
+export const DEFAULT_SCP_PATH = 'report.xml';
+export const DEFAULT_SECINFO_TYPE = 'nvt';
+export const DEFAULT_SEVERITY = 0.1;
+
+export const DEFAULT_DETAILS_URL = 'https://secinfo.greenbone.net/omp?' +
+  'cmd=get_info&info_type=$t&info_id=$o&details=1&token=guest';
+
+export const DEFAULT_NOTICE = '1';
+export const NOTICE_SIMPLE = '1';
+export const NOTICE_INCLUDE = '0';
+export const NOTICE_ATTACH = '2';
+
 export const DEFAULT_NOTICE_REPORT_FORMAT =
   '19f6f1b3-7128-4433-888c-ccc764fe6ed5';
-export const DEFAULT_NOTICE_ATTACH_FROMAT =
+export const DEFAULT_NOTICE_ATTACH_FORMAT =
   '1a60a67e-97d0-4cbf-bc77-f71b08e7043d';
 
-const TASK_SUBJECT = '[OpenVAS-Manager] Task \'$n\': $e';
-const SECINFO_SUBJECT = '[OpenVAS-Manager] $T $q $S since $d';
+export const TASK_SUBJECT = '[OpenVAS-Manager] Task \'$n\': $e';
+export const SECINFO_SUBJECT = '[OpenVAS-Manager] $T $q $S since $d';
 
-const INCLUDE_MESSAGE_DEFAULT =
+export const INCLUDE_MESSAGE_DEFAULT =
 `Task '$n': $e'
 
 After the event $e,
@@ -80,7 +96,7 @@ This email was sent to you as a configured security scan escalation.
 Please contact your local system administrator if you think you
 should not have received it.`;
 
-const INCLUDE_MESSAGE_SECINFO =
+export const INCLUDE_MESSAGE_SECINFO =
 `After the event $e,
 the following condition was met: $c
 
@@ -92,7 +108,7 @@ This email was sent to you as a configured security information escalation.
 Please contact your local system administrator if you think you
 should not have received it.`;
 
-const ATTACH_MESSAGE_DEFAULT =
+export const ATTACH_MESSAGE_DEFAULT =
 `Task '$n': $e
 
 After the event $e,
@@ -108,7 +124,7 @@ This email was sent to you as a configured security scan escalation.
 Please contact your local system administrator if you think you
 should not have received it.`;
 
-const ATTACH_MESSAGE_SECINFO =
+export const ATTACH_MESSAGE_SECINFO =
 `After the event $e,
 the following condition was met: $c
 
@@ -160,8 +176,11 @@ class AlertDialog extends React.Component {
         onValueChange(result_filters, 'condition_data_filters');
 
         filter_id = select_save_id(result_filters);
+
       }
       else {
+        onValueChange(DEFAULT_METHOD, 'method'); // reset method to avoid having an invalid method for secinfo
+
         if (method_data_subject === TASK_SUBJECT) {
           onValueChange(SECINFO_SUBJECT, 'method_data_subject');
         }
@@ -174,6 +193,8 @@ class AlertDialog extends React.Component {
         onValueChange(secinfo_filters, 'condition_data_filters');
 
         filter_id = select_save_id(secinfo_filters);
+
+        onValueChange('0', 'filter_id'); // reset filter_id
       }
 
       onValueChange(filter_id, 'condition_data_at_least_filter_id');
@@ -234,6 +255,7 @@ class AlertDialog extends React.Component {
       onValueChange,
     } = this.props;
     let {capabilities} = this.context;
+    let is_task_event = event === 'Task run status changed';
     return (
       <Layout flex="column">
 
@@ -283,7 +305,7 @@ class AlertDialog extends React.Component {
             checked={condition === 'Always'}
             onChange={onValueChange}/>
 
-          {event === 'Task run status changed' &&
+          {is_task_event &&
             <SeverityLeastConditionPart
               prefix="condition_data"
               condition={condition}
@@ -291,7 +313,7 @@ class AlertDialog extends React.Component {
               onChange={onValueChange}/>
           }
 
-          {event === 'Task run status changed' &&
+          {is_task_event &&
             <SeverityChangedConditionPart
               prefix="condition_data"
               condition={condition}
@@ -307,7 +329,7 @@ class AlertDialog extends React.Component {
             filters={condition_data_filters}
             onChange={onValueChange}/>
 
-          {event === 'Task run status changed' &&
+          {is_task_event &&
             <FilterCountChangedConditionPart
               prefix="condition_data"
               condition={condition}
@@ -318,7 +340,7 @@ class AlertDialog extends React.Component {
           }
         </FormGroup>
 
-        {event === 'New SecInfo arrived' &&
+        {!is_task_event &&
           <FormGroup title={_('Details URL')}>
             <TextField
               grow="1"
@@ -329,7 +351,7 @@ class AlertDialog extends React.Component {
         }
 
         {capabilities.mayOp('get_filters') &&
-          event === 'Task run status changed' &&
+          is_task_event &&
           <FormGroup title={_('Report Result Filter')}>
             <Select2
               value={filter_id}
@@ -346,14 +368,18 @@ class AlertDialog extends React.Component {
             value={method}
             onChange={onValueChange}>
             <option value="Email">{_('Email')}</option>
-            <option value="HTTP Get">{_('HTTP Get')}</option>
+            <option value="HTTP Get" disabled={!is_task_event}>
+              {_('HTTP Get')}
+            </option>
             <option value="SCP">{_('SCP')}</option>
             <option value="Send">{_('Send to host')}</option>
             <option value="SNMP">{_('SNMP')}</option>
-            <option value="Sourcefire Connector">
+            <option value="Sourcefire Connector" disabled={!is_task_event}>
               {_('Sourcefire Connector')}
             </option>
-            <option value="Start Task">{_('Start Task')}</option>
+            <option value="Start Task" disabled={!is_task_event}>
+              {_('Start Task')}
+            </option>
             <option value="Syslog">{_('System Logger')}</option>
             <option value="verinice Connector">
               {_('verinice.PRO Connector')}
@@ -373,7 +399,7 @@ class AlertDialog extends React.Component {
             subject={method_data_subject}
             toAddress={method_data_to_address}
             reportFormats={report_formats}
-            isTaskEvent={event === 'Task run status changed'}
+            isTaskEvent={is_task_event}
             onChange={onValueChange}/>
         }
 
@@ -440,7 +466,7 @@ class AlertDialog extends React.Component {
             credentials={credentials}
             reportFormats={report_formats}
             veriniceServerUrl={method_data_verinice_server_url}
-            veriniceServerCredentials={method_data_verinice_server_credential}
+            veriniceServerCredential={method_data_verinice_server_credential}
             veriniceServerReportFormat={
               method_data_verinice_server_report_format}
             onNewCredentialClick={onNewVeriniceCredentialClick}
@@ -518,27 +544,26 @@ export default withDialog(AlertDialog, {
     condition: 'Always',
     condition_data_at_least_count: 1,
     condition_data_count: 1,
-    condition_data_direction: 'changed',
+    condition_data_direction: DEFAULT_DIRECTION,
     condition_data_filters: [],
-    condition_data_severity: 0.1,
+    condition_data_severity: DEFAULT_SEVERITY,
     event_data_feed_event: 'new',
-    event_data_secinfo_type: 'nvt',
-    event_data_status: 'Done',
+    event_data_secinfo_type: DEFAULT_SECINFO_TYPE,
+    event_data_status: DEFAULT_EVENT_STATUS,
     event: 'Task run status changed',
     filter_id: 0,
     filters: [],
-    method: 'Email',
-    method_data_details_url: 'https://secinfo.greenbone.net/omp?' +
-      'cmd=get_info&info_type=$t&info_id=$o&details=1&token=guest',
+    method: DEFAULT_METHOD,
+    method_data_details_url: DEFAULT_DETAILS_URL,
     method_data_defense_center_ip: '',
-    method_data_defense_center_port: '8307',
+    method_data_defense_center_port: DEFAULT_DEFENSE_CENTER_PORT,
     method_data_from_address: '',
     method_data_message_attach: ATTACH_MESSAGE_DEFAULT,
     method_data_message: INCLUDE_MESSAGE_DEFAULT,
-    method_data_notice: '1',
-    method_data_notice_attach_format: DEFAULT_NOTICE_ATTACH_FROMAT,
+    method_data_notice: DEFAULT_NOTICE,
+    method_data_notice_attach_format: DEFAULT_NOTICE_ATTACH_FORMAT,
     method_data_notice_report_format: DEFAULT_NOTICE_REPORT_FORMAT,
-    method_data_scp_path: 'report.xml',
+    method_data_scp_path: DEFAULT_SCP_PATH,
     method_data_scp_host: '',
     method_data_scp_known_hosts: '',
     method_data_send_host: '',
@@ -550,6 +575,7 @@ export default withDialog(AlertDialog, {
     method_data_subject: TASK_SUBJECT,
     method_data_submethod: 'syslog',
     method_data_to_address: '',
+    method_data_URL: '',
     name: _('Unnamed'),
     report_formats: [],
     result_filters: [],
