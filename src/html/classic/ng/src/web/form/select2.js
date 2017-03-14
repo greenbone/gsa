@@ -32,7 +32,7 @@ import 'select2';
 
 import './css/select2.css';
 
-function equal_array_keys(arr1, arr2) {
+function equal_array(arr1, arr2) {
   if (Object.is(arr1, arr2)) {
     return true;
   }
@@ -46,7 +46,8 @@ function equal_array_keys(arr1, arr2) {
   }
 
   for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i].key !== arr2[i].key) {
+    if (arr1[i].key !== arr2[i].key ||
+      arr1[i].props.disabled !== arr2[i].props.disabled) {
       return false;
     }
   }
@@ -78,14 +79,14 @@ class Select2Component extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // only update componentn if value or options have changed
+    // only update component if value or options have changed
     return this.props.value !== nextProps.value ||
-      !equal_array_keys(this.props.children, nextProps.children) ||
+      !equal_array(this.props.children, nextProps.children) ||
       this.props.disabled !== nextProps.disabled;
   }
 
   componentDidUpdate(prevProps) {
-    if (!equal_array_keys(this.props.children, prevProps.children)) {
+    if (!equal_array(this.props.children, prevProps.children)) {
       // options have changed -> rebuild
       this.destroy();
       this.init();
