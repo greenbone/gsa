@@ -64,36 +64,36 @@ const ToolBarIcons = ({
 };
 
 const FILTER_OPTIONS = [
-  ['agent', 'Agent'],
-  ['alert', 'Alert'],
-  ['asset', 'Asset'],
-  ['credential', 'Credential'],
-  ['filter', 'Filter'],
-  ['group', 'Group'],
-  ['note', 'Note'],
-  ['override', 'Override'],
-  ['permission', 'Permission'],
-  ['port_list', 'Port List'],
-  ['report', 'Report'],
-  ['report_format', 'Report Format'],
-  ['result', 'Result'],
-  ['role', 'Role'],
-  ['schedule', 'Schedule'],
-  ['secinfo', 'SecInfo'],
-  ['config', 'Scan Config'],
-  ['tag', 'Tag'],
-  ['target', 'Target'],
-  ['task', 'Task'],
-  ['user', 'User'],
+  ['agents', 'Agent', _('Agent')],
+  ['alerts', 'Alert', _('Alert')],
+  ['assets', 'Asset', _('Asset')],
+  ['credentials', 'Credential', _('Credential')],
+  ['filters', 'Filter', _('Filter')],
+  ['groups', 'Group', _('Group')],
+  ['notes', 'Note', _('Note')],
+  ['overrides', 'Override', _('Override')],
+  ['permissions', 'Permission', _('Permission')],
+  ['port_lists', 'Port List', _('Port List')],
+  ['reports', 'Report', _('Report')],
+  ['report_formats', 'Report Format', _('Report Format')],
+  ['results', 'Result', _('Result')],
+  ['roles', 'Role', _('Role')],
+  ['schedules', 'Schedule', _('Schedule')],
+  ['info', 'SecInfo', _('SecInfo')],
+  ['configs', 'Scan Config', _('Scan Config')],
+  ['tags', 'Tag', _('Tag')],
+  ['targets', 'Target', _('Target')],
+  ['tasks', 'Task', _('Task')],
+  ['users', 'User', _('User')],
 ];
 
 const filter_types = (caps, name) => {
-  return caps.mayAccess(name === 'secinfo' ? 'info' : name + 's');
+  return caps.mayAccess(name);
 };
 
 const includes_type = (types, type) => {
   for (let option of types) {
-    if (option[0] === type) {
+    if (option[1] === type) {
       return true;
     }
   }
@@ -126,7 +126,7 @@ class Page extends React.Component {
     if (is_defined(filter)) {
       let {type} = filter;
       if (!includes_type(types, type)) {
-        type = first(types, [])[0];
+        type = first(types, [])[1];
       }
       this.filter_dialog.show({
         comment: filter.comment,
@@ -139,7 +139,7 @@ class Page extends React.Component {
       });
     }
     else {
-      let type = first(types, [])[0];
+      let type = first(types, [])[1];
 
       this.filter_dialog.show({
         type,

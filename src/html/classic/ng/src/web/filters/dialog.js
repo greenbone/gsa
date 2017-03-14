@@ -79,7 +79,7 @@ const FilterDialog = ({
           value={type}>
           {
             types.map(option => (
-              <option key={option[0]} value={option[0]}>{option[1]}</option>
+              <option key={option[1]} value={option[1]}>{option[2]}</option>
             ))
           }
         </Select2>
