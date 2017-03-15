@@ -47,6 +47,7 @@ import SecinfoPage from './secinfopage.js';
 import {get_severity_levels} from './render.js';
 
 import AlertsPage from './alerts/alertspage.js';
+import AllSecInfosPage from './secinfo/secinfospage.js';
 import CertBundAdvsPage from './certbund/certbundadvspage.js';
 import CpesPage from './cpes/cpespage.js';
 import CredentialsPage from './credentials/credentialspage.js';
@@ -62,7 +63,7 @@ import OverridesPage from './overrides/overridespage.js';
 import PortListsPage from './portlists/portlistspage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
-import AllSecInfosPage from './secinfo/secinfospage.js';
+import SchedulesPage from './schedules/schedulespage.js';
 import TargetsPage from './targets/targetspage.js';
 import TasksPage from './tasks/taskspage.js';
 import VulnerabilitiesPage from './vulns/vulnspage.js';
@@ -220,6 +221,9 @@ ReactDOM.render(
         <Route
           path="alerts"
           component={AlertsPage}/>
+        <Route
+          path="schedules"
+          component={SchedulesPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

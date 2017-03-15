@@ -575,7 +575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_SCHEDULES')">
           <item>
-            <page>get_schedules</page>
+            <url>/ng/schedules</url>
             <name><xsl:value-of select="gsa:i18n ('Schedules')"/></name>
           </item>
         </xsl:if>

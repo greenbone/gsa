@@ -18801,7 +18801,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_schedules&amp;token={/envelope/token}"
+      <a href="/ng/schedules"
          title="{gsa:i18n ('Schedules')}">
         <img class="icon icon-lg" src="/img/schedule.svg" alt="Schedules"/>
       </a>
