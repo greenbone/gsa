@@ -1,5 +1,10 @@
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/select2.js: Fix properties comparision if
+	no properties are set when checking if a select component should be updated.
+
+2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: Add new proptypes for date
 	validation.
 

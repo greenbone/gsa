@@ -46,8 +46,10 @@ function equal_array(arr1, arr2) {
   }
 
   for (let i = 0; i < arr1.length; i++) {
+    let props1 = arr1[i].props || {};
+    let props2 = arr2[i].props || {};
     if (arr1[i].key !== arr2[i].key ||
-      arr1[i].props.disabled !== arr2[i].props.disabled) {
+      props1.disabled !== props2.disabled) {
       return false;
     }
   }
