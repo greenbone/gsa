@@ -296,6 +296,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/results/table.js
      ${NG_SRC_DIR}/src/web/scanspage.js
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
+     ${NG_SRC_DIR}/src/web/schedules/row.js
+     ${NG_SRC_DIR}/src/web/schedules/schedulespage.js
+     ${NG_SRC_DIR}/src/web/schedules/table.js
      ${NG_SRC_DIR}/src/web/secinfopage.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/secinfo/filterdialog.js

@@ -1,5 +1,13 @@
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/schedules/row.js,
+	src/html/classic/ng/src/web/schedules/schedulespage.js,
+	src/html/classic/ng/src/web/schedules/table.js: Add react components for
+	schedules list page.
+
+2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/schedules/dialog.js: Update proptypes of
 	Schedule dialog.
 
