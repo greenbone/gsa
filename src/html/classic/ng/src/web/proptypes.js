@@ -22,6 +22,7 @@
  */
 
 import React from 'react';
+import moment from 'moment';
 
 import CollectionList from '../gmp/collectionlist.js';
 
@@ -91,6 +92,18 @@ export const entitescommand = React.PropTypes.instanceOf(EntitiesCommand);
 
 export const capabilities = React.PropTypes.instanceOf(Capabilities);
 
+export const momentDate = (props, prop_name, component_name) => {
+  if (!moment.isMoment(props[prop_name])) {
+    return new Error('Invalid prop `' + prop_name + '` supplied to' +
+      ' `' + component_name + '`. Note a valid moment date.');
+  }
+  return undefined;
+};
+
+export const timeunit =  React.PropTypes.oneOf([
+  'hour', 'day', 'week', 'month',
+]);
+
 export default {
   arrayLike,
   capabilities,
@@ -102,12 +115,14 @@ export default {
   entitescommand,
   filter,
   model,
+  momentDate,
   number,
   icon,
   id,
   idOrZero,
   set,
   stringOrFalse,
+  timeunit,
   yesno,
 };
 
