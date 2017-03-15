@@ -100,8 +100,57 @@ export function short_date(date) {
   return date_format(date, 'L');
 }
 
+export function long_date(date) {
+  return date_format(date, 'llll z');
+}
+
 export function datetime(date) {
   return date_format(date, 'llll');
+}
+
+const MINUTE = 60;
+const HOUR = MINUTE * 60;
+const DAY = HOUR * 24;
+const WEEK = DAY * 7;
+
+export function interval(seconds = 0) {
+  if (seconds % WEEK === 0) {
+    if (seconds === WEEK) {
+      return translate('One week');
+    }
+    let weeks = parse_int(seconds / WEEK);
+    return translate('{{number}} weeks', {number: weeks});
+  }
+
+  if (seconds % DAY === 0) {
+    if (seconds === DAY) {
+      return translate('One day');
+    }
+    let days = parse_int(seconds / DAY);
+    return translate('{{number}} days', {number: days});
+  }
+
+  if (seconds % HOUR === 0) {
+    if (seconds === HOUR) {
+      return translate('One hour');
+    }
+    let hours = parse_int(seconds / HOUR);
+    return translate('{{number}} hours', {number: hours});
+  }
+
+  if (seconds % MINUTE === 0) {
+    if (seconds === MINUTE) {
+      return translate('One minute');
+    }
+    let minutes = parse_int(seconds / MINUTE);
+    return translate('{{number}} minutes', {number: minutes});
+  }
+
+  if (seconds === 1) {
+    return translate('One second');
+  }
+
+  return translate('{{number} seconds', {number: seconds});
 }
 
 export default translate;
