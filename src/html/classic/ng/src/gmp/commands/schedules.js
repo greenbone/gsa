@@ -60,6 +60,35 @@ export class ScheduleCommand extends EntityCommand {
     }).then(this.transformResponse);
   }
 
+  save(args) {
+    let {id, name, comment = '', hour, minute, timezone, date,
+      period, period_unit, duration, duration_unit} = args;
+
+    let day_of_month = date.day();
+    let month = date.month();
+    let year = date.year();
+
+    let data = {
+      cmd: 'save_schedule',
+      next: 'get_schedule',
+      comment,
+      day_of_month,
+      duration,
+      duration_unit,
+      hour,
+      id,
+      minute,
+      month,
+      name,
+      period,
+      period_unit,
+      timezone,
+      year,
+    };
+    log.debug('Saving schedule', args, data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
   getElementFromRoot(root) {
     return root.get_schedule.get_schedules_response.schedule;
   }
