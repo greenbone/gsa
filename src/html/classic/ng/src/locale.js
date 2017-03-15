@@ -23,6 +23,7 @@
 
 import $ from 'jquery';
 import i18next from 'i18next';
+import moment from 'moment';
 import XHRBackend from 'i18next-xhr-backend';
 import BrowserDetector from 'i18next-browser-languagedetector';
 
@@ -41,6 +42,7 @@ export class LanguageDetector extends BrowserDetector {
     }
 
     log.debug('Detected language', lang);
+    moment.locale(lang);
     return lang;
   }
 }
