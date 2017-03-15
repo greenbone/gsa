@@ -27,7 +27,7 @@
 #include <assert.h> /* for assert */
 
 #include "gsad_http_handler.h"
-#include "gsad_omp.h" /* for get_system_report_omp */
+#include "gsad_gmp.h" /* for get_system_report_omp */
 #include "validator.h" /* for openvas_validate */
 #include "xslt_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h" /* for get_guest_usernmae */

@@ -44,14 +44,14 @@ target_link_libraries (gsad_base ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${LIBXSLT_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS}
                        ${GNUTLS_LDFLAGS})
 
-add_library (gsad_omp STATIC gsad_omp.c)
-target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
+add_library (gsad_gmp STATIC gsad_gmp.c)
+target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
                        ${LIBXSLT_LDFLAGS} ${LIBGVM_GMP_LDFLAGS}
                        ${GNUTLS_LDFLAGS})
 
 add_library (gsad_xslt_ext STATIC xslt_i18n.c)
-target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
+target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
                        ${LIBXSLT_LDFLAGS} ${LIBGVM_GMP_LDFLAGS}
                        ${GNUTLS_LDFLAGS})
@@ -67,7 +67,7 @@ add_executable (gsad
                 gsad_http_handler.c
                 validator.c)
 
-target_link_libraries (gsad gsad_omp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
+target_link_libraries (gsad gsad_gmp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
