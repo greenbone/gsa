@@ -63,6 +63,10 @@ export function is_empty(value) {
   return false;
 }
 
+export function is_date(value) {
+  return toString.call(value) === '[object Date]';
+}
+
 export function shallow_copy(source) {
   return Object.assign({}, source);
 }
