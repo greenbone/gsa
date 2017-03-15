@@ -24,6 +24,8 @@
 import React from 'react';
 import moment from 'moment';
 
+import {is_defined} from '../utils.js';
+
 import CollectionList from '../gmp/collectionlist.js';
 
 import Model from '../gmp/model.js';
@@ -92,13 +94,31 @@ export const entitescommand = React.PropTypes.instanceOf(EntitiesCommand);
 
 export const capabilities = React.PropTypes.instanceOf(Capabilities);
 
-export const momentDate = (props, prop_name, component_name) => {
+const mayRequire = validator => {
+  const wrapper = (...props) => {
+    return validator(...props);
+  };
+
+  wrapper.isRequired = (props, prop_name, component_name) => {
+    if (is_defined(props[prop_name])) {
+      return validator(props, prop_name, component_name);
+    }
+    return new Error('Prop `' + prop_name + '` supplied to' +
+      ' `' + component_name + '` is required.');
+  };
+
+  return wrapper;
+};
+
+const momentDateValidator = (props, prop_name, component_name) => {
   if (!moment.isMoment(props[prop_name])) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '`. Note a valid moment date.');
   }
   return undefined;
 };
+
+export const momentDate = mayRequire(momentDateValidator);
 
 export const timeunit =  React.PropTypes.oneOf([
   'hour', 'day', 'week', 'month',
