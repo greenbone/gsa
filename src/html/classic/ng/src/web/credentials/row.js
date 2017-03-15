@@ -32,6 +32,7 @@ import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
+import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
 import CloneIcon from '../entities/icons/entitycloneicon.js';
@@ -140,9 +141,7 @@ const Row = ({
       <TableData>
         {entity.login}
       </TableData>
-      <TableData>
-        {render_component(actions, {...props, entity})}
-      </TableData>
+      {render_component(actions, {...props, entity})}
     </TableRow>
   );
 };
@@ -158,6 +157,6 @@ Row.contextTypes = {
   username: React.PropTypes.string.isRequired,
 };
 
-export default withEntityRow(Row, Actions);
+export default withEntityRow(Row, withEntityActions(Actions));
 
 // vim: set ts=2 sw=2 tw=80:
