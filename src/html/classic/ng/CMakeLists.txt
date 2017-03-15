@@ -117,8 +117,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/parser.js
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/gmp/response.js
-     ${NG_SRC_DIR}/src/web/alerts/dialog.js
+     ${NG_SRC_DIR}/src/web/alerts/alertspage.js
      ${NG_SRC_DIR}/src/web/alerts/dialogcontainer.js
+     ${NG_SRC_DIR}/src/web/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/alerts/emailmethodpart.js
      ${NG_SRC_DIR}/src/web/alerts/filtercountchangedconditionpart.js
      ${NG_SRC_DIR}/src/web/alerts/filtercountleastconditionpart.js
@@ -131,6 +132,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/alerts/snmpmethodpart.js
      ${NG_SRC_DIR}/src/web/alerts/sourcefiremethodpart.js
      ${NG_SRC_DIR}/src/web/alerts/starttaskmethodpart.js
+     ${NG_SRC_DIR}/src/web/alerts/table.js
      ${NG_SRC_DIR}/src/web/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
