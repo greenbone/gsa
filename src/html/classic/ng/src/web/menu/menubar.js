@@ -165,10 +165,9 @@ export const MenuBar = (props, context) => {
             cmd="get_configs"
             caps="get_configs"/>
           <MenuEntry
-            legacy
             section
             title={_('Alerts')}
-            cmd="get_alerts"
+            to="alerts"
             caps="get_alerts"/>
           <MenuEntry
             legacy

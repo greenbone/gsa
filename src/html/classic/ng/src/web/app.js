@@ -46,6 +46,7 @@ import ScansPage from './scanspage.js';
 import SecinfoPage from './secinfopage.js';
 import {get_severity_levels} from './render.js';
 
+import AlertsPage from './alerts/alertspage.js';
 import CertBundAdvsPage from './certbund/certbundadvspage.js';
 import CpesPage from './cpes/cpespage.js';
 import CredentialsPage from './credentials/credentialspage.js';
@@ -216,6 +217,9 @@ ReactDOM.render(
         <Route
           path="filters"
           component={FiltersPage}/>
+        <Route
+          path="alerts"
+          component={AlertsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>
