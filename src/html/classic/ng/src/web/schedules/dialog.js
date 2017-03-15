@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
@@ -147,21 +148,16 @@ ScheduleDialog.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
 
-const timeunit =  React.PropTypes.oneOf([
-  'hour', 'day', 'week', 'month',
-]);
-
-
 ScheduleDialog.propTypes = {
   comment: React.PropTypes.string,
-  date: React.PropTypes.object,
+  date: PropTypes.momentDate,
   duration: React.PropTypes.number,
-  duration_unit: timeunit,
+  duration_unit: PropTypes.timeunit,
   hour: React.PropTypes.number,
   minute: React.PropTypes.number,
   name: React.PropTypes.string,
   period: React.PropTypes.number,
-  period_unit: timeunit,
+  period_unit: PropTypes.timeunit,
   timezone: React.PropTypes.string,
   onValueChange: React.PropTypes.func,
 };
@@ -171,12 +167,13 @@ export default withDialog(ScheduleDialog, {
   title: _('New Schedule'),
   footer: _('Save'),
   defaultState: {
-    name: _('unnamed'),
     comment: '',
-    period: 0,
     duration: 0,
-    period_unit: 'hour',
     duration_unit: 'hour',
+    name: _('Unnamed'),
+    period: 0,
+    period_unit: 'hour',
+    timezone: 'UTC',
   },
 });
 
