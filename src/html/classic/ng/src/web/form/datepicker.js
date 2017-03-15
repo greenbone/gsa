@@ -31,6 +31,7 @@ import 'jquery-ui/ui/widgets/datepicker.js';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import './css/datepicker.css';
 import '../css/jquery-ui.theme.css';
@@ -107,7 +108,7 @@ class DatePicker extends React.Component {
 
 DatePicker.propTypes = {
   name: React.PropTypes.string,
-  value: React.PropTypes.object.isRequired, // moment date object
+  value: PropTypes.momentDate.isRequired,
   onChange: React.PropTypes.func,
 };
 

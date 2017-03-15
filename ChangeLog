@@ -1,5 +1,10 @@
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/proptypes.js: Use momentDate proptype to
+	validate date property of Datepicker.
+
+2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: Allow to require momentDate
 	proptypes.
 
