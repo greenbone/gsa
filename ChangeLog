@@ -1,5 +1,9 @@
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/locale.js: Use moment.js to format dates.
+
+2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/utils.js: Add utility function to checking if a
 	value is a js Date object.
 

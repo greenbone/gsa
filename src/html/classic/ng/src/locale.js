@@ -27,7 +27,7 @@ import moment from 'moment';
 import XHRBackend from 'i18next-xhr-backend';
 import BrowserDetector from 'i18next-browser-languagedetector';
 
-import {is_defined, is_string} from './utils.js';
+import {is_defined, is_string, is_date, parse_int} from './utils.js';
 import logger from './log.js';
 
 const log = logger.getLogger('locale');
@@ -79,40 +79,29 @@ export function translate(key, options) {
   return i18next.t(key, options);
 }
 
-export function short_date(date) {
+function date_format(date, format) {
   if (!is_defined(date)) {
     return undefined;
   }
 
-  if (is_string(date)) {
-    date = new Date(date);
+  if (!moment.isMoment(date)) {
+    if (is_string(date) || is_date(date)) {
+      date = moment(date);
+    }
+    else {
+      log.error('Invalid date', date);
+      return undefined;
+    }
   }
-  let options = {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  };
-  return date.toLocaleDateString(i18next.language, options);
+  return date.format(format);
+}
+
+export function short_date(date) {
+  return date_format(date, 'L');
 }
 
 export function datetime(date) {
-  if (!is_defined(date)) {
-    return undefined;
-  }
-
-  if (is_string(date)) {
-    date = new Date(date);
-  }
-  let options = {
-    weekday: 'short',
-    month: 'short',
-    year: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: false,
-  };
-  return date.toLocaleString(i18next.language, options);
+  return date_format(date, 'llll');
 }
 
 export default translate;
