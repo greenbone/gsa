@@ -23,7 +23,7 @@
 
 import logger from '../../log.js';
 
-import {EntityCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Schedule from '../models/schedule.js';
 
@@ -65,6 +65,18 @@ export class ScheduleCommand extends EntityCommand {
   }
 }
 
+export class SchedulesCommand extends EntitiesCommand {
+
+  constructor(http) {
+    super(http, 'schedule', Schedule);
+  }
+
+  getEntitiesResponse(root) {
+    return root.get_schedules.get_schedules_response;
+  }
+}
+
 register_command('schedule', ScheduleCommand);
+register_command('schedules', SchedulesCommand);
 
 // vim: set ts=2 sw=2 tw=80:
