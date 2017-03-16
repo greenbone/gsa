@@ -26,7 +26,7 @@
  */
 
 /**
- * @file gsad_omp.c
+ * @file gsad_gmp.c
  * @brief OMP communication module of Greenbone Security Assistant daemon.
  *
  * This file implements an API for OMP.  The functions call the OpenVAS Manager

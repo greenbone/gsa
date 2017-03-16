@@ -26,7 +26,7 @@
  */
 
 /**
- * @file gsad_omp.h
+ * @file gsad_gmp.h
  * @brief Headers for GSA's OMP communication module.
  */
 
