@@ -73,7 +73,7 @@ const Actions = ({
       <ExportIcon
         value={entity}
         title={_('Export Schedule')}
-        onClick={onEntityEdit}
+        onClick={onEntityDownload}
       />
     </Layout>
   );

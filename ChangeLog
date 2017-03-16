@@ -1,3 +1,9 @@
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/alerts/row.js,
+	src/html/classic/ng/src/web/schedules/row.js: Use correct event handler for
+	downloading single alert and schedule.
+
 2017-03-16  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad_gmp.c, src/gsad_gmp.h: Update file names in documentation

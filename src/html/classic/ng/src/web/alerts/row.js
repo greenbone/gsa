@@ -78,7 +78,7 @@ const Actions = ({
       <ExportIcon
         value={entity}
         title={_('Export Alert')}
-        onClick={onEntityEdit}
+        onClick={onEntityDownload}
       />
       <Icon img="start.svg"
         value={entity}
