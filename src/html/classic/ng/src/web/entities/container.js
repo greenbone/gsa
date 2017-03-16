@@ -69,6 +69,7 @@ class EntitiesContainer extends React.Component {
     this.handleDeleteEntity = this.handleDeleteEntity.bind(this);
     this.handleCloneEntity = this.handleCloneEntity.bind(this);
     this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
+    this.handleError = this.handleError.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleShowError = this.handleShowError.bind(this);
     this.handleShowSuccess = this.handleShowSuccess.bind(this);
@@ -136,6 +137,7 @@ class EntitiesContainer extends React.Component {
         this.startTimer(refresh);
       }, error => {
         this.setState({loading: false, entities: null});
+        this.handleError(error);
         return PromiseFactory.reject(error);
       });
   }
@@ -157,7 +159,7 @@ class EntitiesContainer extends React.Component {
           {cache: true, force: true});
       }).then(filters => {
         this.setState({filters});
-      });
+      }, this.handleError);
   }
 
   reload() {
@@ -222,7 +224,7 @@ class EntitiesContainer extends React.Component {
       this.download.setFilename(filename);
       this.download.setData(data);
       this.download.download();
-    }, err => log.error(err));
+    }, this.handleError);
   }
 
   handleDeleteBulk() {
@@ -243,7 +245,7 @@ class EntitiesContainer extends React.Component {
     promise.then(deleted => {
       this.reload();
       log.debug('successfully deleted entities', deleted);
-    }, err => log.error(err));
+    }, this.handleError);
   }
 
   handleSelected(entity) {
@@ -268,7 +270,7 @@ class EntitiesContainer extends React.Component {
     entity_command.delete(entity).then(() => {
       this.reload();
       log.debug('successfully deleted entity', entity);
-    }, err => log.error(err));
+    }, this.handleError);
   }
 
   handleCloneEntity(entity) {
@@ -277,7 +279,7 @@ class EntitiesContainer extends React.Component {
     entity_command.clone(entity).then(() => {
       this.reload();
       log.debug('successfully cloned entity', entity);
-    }, err => log.error(err));
+    }, this.handleError);
   }
 
   handleDownloadEntity(entity) {
@@ -292,7 +294,7 @@ class EntitiesContainer extends React.Component {
       this.download.setFilename(filename);
       this.download.setData(response.data);
       this.download.download();
-    }, err => log.error(err));
+    }, this.handleError);
   }
 
   handleSortChange(field) {
@@ -310,6 +312,11 @@ class EntitiesContainer extends React.Component {
     filter.set(sort, field);
 
     this.load(filter);
+  }
+
+  handleError(error) {
+    log.error(error);
+    this.handleShowError(error.message);
   }
 
   handleShowError(error) {

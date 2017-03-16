@@ -1,3 +1,9 @@
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entities/container.js: Start to display errors
+	when they occur at list pages. This is just a start and there is still much
+	room for improvement.
+
 2017-03-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad_omp.c, src/gsad_gmp.c: Rename gsad_omp.c to gsad_gmp.c.
