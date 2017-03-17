@@ -285,6 +285,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/powerfilter/sortbygroup.js
      ${NG_SRC_DIR}/src/web/proptypes.js
      ${NG_SRC_DIR}/src/web/render.js
+     ${NG_SRC_DIR}/src/web/reportformats/dialog.js
+     ${NG_SRC_DIR}/src/web/reportformats/reportformatspage.js
+     ${NG_SRC_DIR}/src/web/reportformats/row.js
+     ${NG_SRC_DIR}/src/web/reportformats/table.js
      ${NG_SRC_DIR}/src/web/reports/charts.js
      ${NG_SRC_DIR}/src/web/reports/filterdialog.js
      ${NG_SRC_DIR}/src/web/reports/importdialog.js
