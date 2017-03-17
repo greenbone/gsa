@@ -27535,7 +27535,7 @@ should not have received it.
         title="{concat(gsa:i18n('Help'),': ',gsa:i18n('New Report Format'))}">
         <img src="/img/help.svg"/>
       </a>
-      <a href="/omp?cmd=get_report_formats&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/ng/reportformats?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
         class="icon icon-sm"
         title="{gsa:i18n ('Report Formats')}">
         <img src="/img/list.svg" alt="{gsa:i18n ('Report Formats')}"/>
@@ -28058,7 +28058,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}"
+      <a href="/ng/reportformats"
          title="{gsa:i18n ('Report Formats')}">
         <img class="icon" src="/img/report_format.svg" alt="Report Formats"/>
       </a>

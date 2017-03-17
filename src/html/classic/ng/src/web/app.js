@@ -61,6 +61,7 @@ import OperatingSystemsPage from './os/operatingsystemspage.js';
 import OvaldefsPage from './ovaldefs/ovaldefspage.js';
 import OverridesPage from './overrides/overridespage.js';
 import PortListsPage from './portlists/portlistspage.js';
+import ReportFormatsPage from './reportformats/reportformatspage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
 import SchedulesPage from './schedules/schedulespage.js';
@@ -224,6 +225,9 @@ ReactDOM.render(
         <Route
           path="schedules"
           component={SchedulesPage}/>
+        <Route
+          path="reportformats"
+          component={ReportFormatsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

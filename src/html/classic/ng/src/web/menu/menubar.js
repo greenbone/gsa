@@ -174,9 +174,8 @@ export const MenuBar = (props, context) => {
             to="schedules"
             caps="get_schedules"/>
           <MenuEntry
-            legacy
             title={_('Report Formats')}
-            cmd="get_report_formats"
+            to="reportformats"
             caps="get_report_formats"/>
           <MenuEntry
             legacy
