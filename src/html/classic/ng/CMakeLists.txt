@@ -62,8 +62,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/command.js
      ${NG_SRC_DIR}/src/gmp/commands/alerts.js
      ${NG_SRC_DIR}/src/gmp/commands/certbund.js
-     ${NG_SRC_DIR}/src/gmp/commands/credentials.js
      ${NG_SRC_DIR}/src/gmp/commands/cpes.js
+     ${NG_SRC_DIR}/src/gmp/commands/credentials.js
      ${NG_SRC_DIR}/src/gmp/commands/cves.js
      ${NG_SRC_DIR}/src/gmp/commands/dfncert.js
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
@@ -75,6 +75,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/ovaldefs.js
      ${NG_SRC_DIR}/src/gmp/commands/overrides.js
      ${NG_SRC_DIR}/src/gmp/commands/portlists.js
+     ${NG_SRC_DIR}/src/gmp/commands/reportformats.js
      ${NG_SRC_DIR}/src/gmp/commands/reports.js
      ${NG_SRC_DIR}/src/gmp/commands/results.js
      ${NG_SRC_DIR}/src/gmp/commands/scanners.js
@@ -104,6 +105,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/override.js
      ${NG_SRC_DIR}/src/gmp/models/nvt.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
+     ${NG_SRC_DIR}/src/gmp/models/reportformat.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
      ${NG_SRC_DIR}/src/gmp/models/result.js
      ${NG_SRC_DIR}/src/gmp/models/scanner.js

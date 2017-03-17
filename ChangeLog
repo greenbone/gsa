@@ -1,5 +1,13 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/commands/reportformats.js,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/models/reportformat.js: Add gmp api for report
+	formats.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Add root (envelope) object to rejection
 	if an error has occured and the response has xml content. This allows easier
 	extraction of the error messages.

@@ -39,6 +39,7 @@ import './commands/os.js';
 import './commands/ovaldefs.js';
 import './commands/overrides.js';
 import './commands/portlists.js';
+import './commands/reportformats.js';
 import './commands/reports.js';
 import './commands/results.js';
 import './commands/scanners.js';
