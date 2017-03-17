@@ -76,8 +76,9 @@ export class ReportFormatCommand extends EntityCommand {
     log.debug('Verifying report format', id);
     return this.httpPost({
       cmd: 'verify_report_format',
+      next: 'get_report_format',
       id,
-    }).catch(rej => {
+    }).then(this.transformRequest, rej => {
       let {root} = rej;
 
       if (is_defined(root) && is_defined(root.get_report_formats) &&

@@ -1,5 +1,10 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/reportformats.js: verify_report_command
+	requires a next parameter. Otherwise gsad will return an error.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/reportformats/dialog.js,
 	src/html/classic/ng/src/web/reportformats/reportformatspage.js,
