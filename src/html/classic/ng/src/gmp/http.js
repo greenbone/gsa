@@ -327,6 +327,8 @@ export class GmpHttp extends Http {
       let root = xml2json(rej.xhr.responseXML).envelope;
 
       if (is_defined(root))  {
+        rej.root = root;
+
         if (is_defined(root.gsad_response)) {
           return rej.setMessage(root.gsad_response.message);
         }

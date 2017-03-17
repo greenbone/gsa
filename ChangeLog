@@ -1,3 +1,9 @@
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/http.js: Add root (envelope) object to rejection
+	if an error has occured and the response has xml content. This allows easier
+	extraction of the error messages.
+
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/alerts/row.js,
