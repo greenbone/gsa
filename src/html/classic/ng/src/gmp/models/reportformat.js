@@ -23,20 +23,41 @@
 
 import moment from 'moment';
 
-import {is_defined, is_empty, map} from '../../utils.js';
+import {is_defined, is_empty, is_object, map} from '../../utils.js';
 
 import Model from '../model.js';
+
+const get_value = val => {
+  return is_object(val) ? val.__text : val;
+};
 
 class Param {
 
   constructor({name, type, value, options, ...other}) {
-    this.default = other.default;
+    this.default = get_value(other.default);
     this.name = name;
-    this.value = value;
     this.max = type.max;
     this.min = type.min;
-    this.type = type.__text;
-    this.options = map(options, opt => opt); //FIXME
+    this.type = get_value(type);
+
+    if (is_object(options)) {
+      this.options = map(options.option, opt => {
+        return {
+          value: opt,
+          name: opt,
+        };
+      });
+    }
+    else {
+      this.options = [];
+    }
+
+    if (type === 'report_format_list') {
+      this.value = map(value.report_format, format => format._id);
+    }
+    else {
+      this.value = get_value(value);
+    }
   }
 }
 
