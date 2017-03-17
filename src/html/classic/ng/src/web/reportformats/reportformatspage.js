@@ -39,6 +39,8 @@ import NewIcon from '../icons/newicon.js';
 
 import {createFilterDialog} from '../powerfilter/dialog.js';
 
+import PromiseFactory from '../../gmp/promise.js';
+
 import ReportFormatDialog from './dialog.js';
 import Table from './table.js';
 
@@ -122,28 +124,45 @@ class Page extends React.Component {
 
   openReportFormatDialog(reportformat) {
     if (is_defined(reportformat)) {
-      const {entityCommand, showError} = this.props;
+      const {entityCommand, entitiesCommand, showError} = this.props;
+
       // (re-)load report format to get params
       entityCommand.get(reportformat).then(response => {
-        reportformat = response.data;
-
+        let format = response.data;
         let preferences = {};
+        let load_formats = false;
+        let id_lists = {};
 
-        reportformat.params.forEach(param => {
-          preferences[param.name] = param.value;
+        format.params.forEach(param => {
+          if (param.type === 'report_format_list') {
+            load_formats = true;
+            id_lists[param.name] = param.value;
+          }
+          else {
+            preferences[param.name] = param.value;
+          }
         });
 
-        this.reportformat_dialog.show({
-          active: reportformat.active,
-          id: reportformat.id,
-          name: reportformat.name,
-          preferences,
-          reportformat,
-          summary: reportformat.summary,
-        }, {
-          title: _('Edit Report Format {{name}}', {name: reportformat.name}),
-        });
-      }, error => showError(error.message));
+        // only load formats if they are required for the report format list
+        // type param
+        let p2 = load_formats ? entitiesCommand.getAll() :
+          PromiseFactory.resolve(undefined);
+
+        p2.then(formats => {
+          this.reportformat_dialog.show({
+            active: format.active,
+            formats,
+            id: format.id,
+            id_lists,
+            name: format.name,
+            preferences,
+            reportformat: format,
+            summary: format.summary,
+          }, {
+            title: _('Edit Report Format {{name}}', {name: format.name}),
+          });
+        }, error => showError(error.message));
+      });
     }
     else {
       this.reportformat_dialog.show({
@@ -171,6 +190,7 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
+  entitiesCommand: PropTypes.entitiescommand,
   onChanged: React.PropTypes.func,
   showError: React.PropTypes.func.isRequired,
   showSuccess: React.PropTypes.func.isRequired,

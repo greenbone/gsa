@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import {is_defined, is_array, has_value, map} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -45,10 +45,50 @@ import TableHeader from '../table/header.js';
 import TableHead from '../table/head.js';
 import TableRow from '../table/row.js';
 
+const ReportFormatListParam = ({
+    formats,
+    idList,
+    name,
+    onValueChange,
+  }) => {
+  return (
+    <TableRow>
+      <TableData>
+        {name}
+      </TableData>
+      <TableData>
+        <Select2
+          multiple
+          name={name}
+          value={idList}
+          onChange={onValueChange}
+        >
+          {map(formats, format => {
+            return (
+              <option
+                key={format.id}
+                value={format.id}>
+                {format.name}
+              </option>
+            );
+          })}
+        </Select2>
+      </TableData>
+    </TableRow>
+  );
+};
+
+ReportFormatListParam.propTypes = {
+  formats: PropTypes.arrayLike.isRequired,
+  idList: React.PropTypes.array.isRequired,
+  name: React.PropTypes.string.isRequired,
+  onValueChange: React.PropTypes.func.isRequired,
+};
+
 const Param = ({
-    value,
     data,
-    onChange
+    value,
+    onPrefChange,
   }) => {
   let {name, type, min, max} = value;
   let field_value = data[name];
@@ -59,7 +99,7 @@ const Param = ({
       <YesNoRadio
         name={name}
         value={field_value}
-        onChange={onChange}
+        onChange={onPrefChange}
       />
     );
   }
@@ -71,7 +111,7 @@ const Param = ({
         min={min}
         max={max}
         value={field_value}
-        onChange={onChange}
+        onChange={onPrefChange}
       />
     );
   }
@@ -81,24 +121,26 @@ const Param = ({
         name={name}
         maxLength={max}
         value={field_value}
-        onChange={onChange}
+        onChange={onPrefChange}
       />
     );
   }
   else if (type === 'selection') {
-    // FIXME test options
     field = (
       <Select2
         name={name}
-        value={field_value}
-        onChange={onChange}
+        value={is_array(field_value) ? field_value : [field_value]}
+        onChange={onPrefChange}
       >
-        {value.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+        {value.options.map(opt =>
+          <option
+            key={opt.value}
+            value={opt.value}>
+            {opt.name}
+          </option>)
+        }
       </Select2>
     );
-  }
-  else if (type === 'report_format_list') {
-    // TODO implement
   }
   else {
     field = (
@@ -107,7 +149,7 @@ const Param = ({
         rows="5"
         name={name}
         value={field_value}
-        onChange={onChange}
+        onChange={onPrefChange}
       />
     );
   }
@@ -126,7 +168,7 @@ const Param = ({
 Param.propTypes = {
   data: React.PropTypes.object.isRequired,
   value: React.PropTypes.object.isRequired,
-  onChange: React.PropTypes.func.isRequired,
+  onPrefChange: React.PropTypes.func.isRequired,
 };
 
 class Dialog extends React.Component {
@@ -135,6 +177,7 @@ class Dialog extends React.Component {
     super(...args);
 
     this.handlePrefChange = this.handlePrefChange.bind(this);
+    this.handleIdListChange = this.handleIdListsChange.bind(this);
   }
 
   handlePrefChange(value, name) {
@@ -147,9 +190,25 @@ class Dialog extends React.Component {
     }
   }
 
+  handleIdListsChange(value, name) {
+    let {id_lists, onValueChange} = this.props;
+
+    if (!has_value(value)) {
+      value = [];
+    }
+
+    id_lists[name] = value;
+
+    if (onValueChange) {
+      onValueChange(id_lists, 'is_lists');
+    }
+  }
+
   render() {
     const {
       active,
+      formats,
+      id_lists,
       name,
       preferences,
       reportformat,
@@ -200,12 +259,27 @@ class Dialog extends React.Component {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {reportformat.params.map(param =>
-                  <Param key={param.name}
-                    value={param}
-                    data={preferences}
-                    onChange={this.handlePrefChange}
-                  />)}
+                {reportformat.params.map(param => {
+                  if (param.type === 'report_format_list') {
+                    return (
+                      <ReportFormatListParam
+                        key={param.name}
+                        formats={formats}
+                        idList={id_lists[param.name]}
+                        name={param.name}
+                        onValueChange={this.handleIdListChange}
+                      />
+                    );
+                  }
+                  return (
+                    <Param
+                      key={param.name}
+                      value={param}
+                      data={preferences}
+                      onPrefChange={this.handlePrefChange}
+                    />
+                  );
+                })}
               </TableBody>
             </Table>
           }
@@ -227,6 +301,8 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   active: PropTypes.yesno,
+  formats: PropTypes.arrayLike,
+  id_lists: React.PropTypes.object,
   name: React.PropTypes.string,
   preferences: React.PropTypes.object,
   reportformat: PropTypes.model,
