@@ -90,7 +90,7 @@ export const filter = React.PropTypes.instanceOf(Filter);
 export const model = React.PropTypes.instanceOf(Model);
 
 export const entitycommand = React.PropTypes.instanceOf(EntityCommand);
-export const entitescommand = React.PropTypes.instanceOf(EntitiesCommand);
+export const entitiescommand = React.PropTypes.instanceOf(EntitiesCommand);
 
 export const capabilities = React.PropTypes.instanceOf(Capabilities);
 
@@ -132,7 +132,7 @@ export default {
   componentOrFalse,
   componentOrElement,
   entitycommand,
-  entitescommand,
+  entitiescommand,
   filter,
   model,
   momentDate,
