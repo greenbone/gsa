@@ -52,8 +52,9 @@ export class ReportFormatCommand extends EntityCommand {
     const {
       active,
       id,
+      id_lists = {},
       name,
-      preferences,
+      preferences = {},
       summary,
     } = args;
 
@@ -68,6 +69,16 @@ export class ReportFormatCommand extends EntityCommand {
       let prefix = 'preference:nvt[string]:'; // only the format of the prefix is important
       data[prefix + prefname] = preferences[prefname];
     }
+
+    let id_list = [];
+    for (let lname in id_lists) {
+      data['include_id_list:' + lname] = 1;
+      for (let val of id_lists[lname]) {
+        id_list.push(lname + ':' + val);
+      }
+    }
+    data['id_list:'] = id_list;
+
     log.debug('Saving report format', args, data);
     return this.httpPost(data);
   }

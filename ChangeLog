@@ -1,5 +1,10 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/reportformats.js: Add special handling
+	for report format lists when saving a report format.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/reportformat.js: Fix parsing type,
 	default and value of report format params. Add special handling for the
 	report_format_list type param.
