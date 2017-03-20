@@ -1,3 +1,16 @@
+2017-03-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (name="html-credentials-table",
+	match="get_credentials_response", name="html-filters-table",
+	name="html-targets-table", name="html-cpe-table",
+	name="html-cve-table", name="html-nvt-table",
+	name="html-ovaldef-table", name="html-cert_bund_adv-table",
+	name="html-dfn_cert_adv-table", name="html-port-lists-table",
+	match="get_port_lists", name="html-reports-table",
+	name="html-hosts-table", name="html-oss-table",
+	match="get_assets_response"): Removed.  These are fully
+	covered by NG.
+
 2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-footer): Update copyright text.
