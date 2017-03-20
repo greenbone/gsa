@@ -1,5 +1,17 @@
 2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r28052.
+
+	* src/html/classic/gsad.xsl (html-footer): Update copyright text.
+
+	* src/html/classic/help.xsl (about.html): Update copyright text.
+
+	* src/html/classic/help_ru.xsl (about.html): Update copyright text.
+	
+	* src/html/classic/help_zh_CN.xsl (about.html): Update copyright text.
+
+2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r28050.
 
 	* src/html/classic/omp.xsl (html-feed-row): Show feed as current only

@@ -275,7 +275,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      版权 2009-2014 归属于 <a href="http://www.greenbone.net" target="_blank">Greenbone Networks GmbH</a>
+      版权 2009-2017 归属于 <a href="http://www.greenbone.net" target="_blank">Greenbone Networks GmbH</a>
       </p>
 
       <p>
