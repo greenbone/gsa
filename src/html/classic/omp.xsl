@@ -36700,11 +36700,11 @@ should not have received it.
                   <xsl:text> - </xsl:text>
                   <xsl:value-of select="gsa:i18n ('Please check the automatic synchronization of your system')"/>
                 </xsl:when>
-                <xsl:when test="number($days_diff) &gt; 0">
-                  <xsl:value-of select="gsa-i18n:strformat(gsa:n-i18n ('Current (%1 day old)', 'Current (%1 days old)', number($days_diff)), number($days_diff))"/>
+                <xsl:when test="number($days_diff) &gt;= 2">
+                  <xsl:value-of select="gsa-i18n:strformat(gsa:n-i18n ('%1 day old', '%1 days old', number($days_diff)), number($days_diff))"/>
                 </xsl:when>
-                <xsl:when test="$days_diff = ''">
-                  <xsl:value-of select="gsa:i18n ('Current (less than 1 day old)')"/>
+                <xsl:when test="$days_diff = '' or number($days_diff) &lt; 2">
+                  <xsl:value-of select="gsa:i18n ('Current')"/>
                 </xsl:when>
               </xsl:choose>
             </xsl:when>

@@ -1,5 +1,13 @@
 2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r28050.
+
+	* src/html/classic/omp.xsl (html-feed-row): Show feed as current only
+	when it is less than 2 days old and don't show number of days in that
+	case.
+
+2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r28048.
 
 	* src/html/classic/omp.xsl (html-feed-row): Mention explicitly that
