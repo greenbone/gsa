@@ -1,5 +1,11 @@
 2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-feed-row): Show feed as current only
+	when it is less than 2 days old and don't show number of days in that
+	case.
+
+2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-feed-row): Mention explicitly that
 	feed is current in status text when it is newer than 10 days.
 
