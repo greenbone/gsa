@@ -1,3 +1,10 @@
+2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r28048.
+
+	* src/html/classic/omp.xsl (html-feed-row): Mention explicitly that
+	feed is current in status text when it is newer than 10 days.
+
 2017-03-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
