@@ -1,5 +1,11 @@
 2017-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_gmp.c (save_config_omp): Send modify_config command with
+	trends and family selections only if parameters for at least one of the
+	two are given.
+
+2017-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [assets]): Add missing blank cells
 	in the footer row of the table.
 

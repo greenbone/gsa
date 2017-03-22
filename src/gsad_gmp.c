@@ -11928,111 +11928,113 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
     {
       return ret;
     }
-  g_free (ret);
 
   /* Update the config. */
 
   trends = params_values (params, "trend:");
-
-  if (gvm_connection_sendf (connection,
-                            "<modify_config config_id=\"%s\">"
-                            "<family_selection>"
-                            "<growing>%i</growing>",
-                            params_value (params, "config_id"),
-                            trends
-                            && params_value (params, "trend")
-                            && strcmp (params_value (params, "trend"), "0"))
-      == -1)
-    {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a config. "
-                           "It is unclear whether the entire config has been saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
-    }
-
   selects = params_values (params, "select:");
 
-  if (selects)
+  if (trends || selects || params_value (params, "trend"))
     {
-      gchar *family;
-      params_iterator_t iter;
-      param_t *param;
-
-      params_iterator_init (&iter, selects);
-      while (params_iterator_next (&iter, &family, &param))
-        if (gvm_connection_sendf (connection,
-                                  "<family>"
-                                  "<name>%s</name>"
-                                  "<all>1</all>"
-                                  "<growing>%i</growing>"
-                                  "</family>",
-                                  family,
-                                  trends && member1 (trends, family))
-            == -1)
-          {
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred while saving a config. "
-                                 "It is unclear whether the entire config has been saved. "
-                                 "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_configs", response_data);
-          }
-    }
-
-  if (trends)
-    {
-      gchar *family;
-      params_iterator_t iter;
-      param_t *param;
-
-      params_iterator_init (&iter, trends);
-      while (params_iterator_next (&iter, &family, &param))
+      if (gvm_connection_sendf (connection,
+                                "<modify_config config_id=\"%s\">"
+                                "<family_selection>"
+                                "<growing>%i</growing>",
+                                params_value (params, "config_id"),
+                                trends
+                                && params_value (params, "trend")
+                                && strcmp (params_value (params, "trend"), "0"))
+          == -1)
         {
-          if (param->value_size == 0) continue;
-          if (param->value[0] == '0') continue;
-          if (selects && member (selects, family)) continue;
-          if (gvm_connection_sendf (connection,
-                                    "<family>"
-                                    "<name>%s</name>"
-                                    "<all>0</all>"
-                                    "<growing>1</growing>"
-                                    "</family>",
-                                    family)
-              == -1)
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while saving a config. "
+                              "It is unclear whether the entire config has been saved. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_configs", response_data);
+        }
+
+      if (selects)
+        {
+          gchar *family;
+          params_iterator_t iter;
+          param_t *param;
+
+          params_iterator_init (&iter, selects);
+          while (params_iterator_next (&iter, &family, &param))
+            if (gvm_connection_sendf (connection,
+                                      "<family>"
+                                      "<name>%s</name>"
+                                      "<all>1</all>"
+                                      "<growing>%i</growing>"
+                                      "</family>",
+                                      family,
+                                      trends && member1 (trends, family))
+                == -1)
+              {
+                response_data->http_status_code 
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                return gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while saving a config. "
+                                    "It is unclear whether the entire config has been saved. "
+                                    "Diagnostics: Failure to send command to manager daemon.",
+                                    "/omp?cmd=get_configs", response_data);
+              }
+        }
+
+      if (trends)
+        {
+          gchar *family;
+          params_iterator_t iter;
+          param_t *param;
+
+          params_iterator_init (&iter, trends);
+          while (params_iterator_next (&iter, &family, &param))
             {
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while saving a config. "
-                                   "It is unclear whether the entire config has been saved. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_configs", response_data);
+              if (param->value_size == 0) continue;
+              if (param->value[0] == '0') continue;
+              if (selects && member (selects, family)) continue;
+              if (gvm_connection_sendf (connection,
+                                        "<family>"
+                                        "<name>%s</name>"
+                                        "<all>0</all>"
+                                        "<growing>1</growing>"
+                                        "</family>",
+                                        family)
+                  == -1)
+                {
+                  response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                  return gsad_message (credentials,
+                                       "Internal error", __FUNCTION__, __LINE__,
+                                       "An internal error occurred while saving a config. "
+                                       "It is unclear whether the entire config has been saved. "
+                                       "Diagnostics: Failure to send command to manager daemon.",
+                                       "/omp?cmd=get_configs", response_data);
+                }
             }
         }
+
+      if (gvm_connection_sendf (connection,
+                                "</family_selection>"
+                                "</modify_config>")
+          == -1)
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a config. "
+                               "It is unclear whether the entire config has been saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_configs", response_data);
+        }
+
+      g_free (ret);
+      ret = check_modify_config (connection, credentials, params,
+                                 "get_config", "edit_config",
+                                 NULL, response_data);
     }
-
-  if (gvm_connection_sendf (connection,
-                            "</family_selection>"
-                            "</modify_config>")
-      == -1)
-    {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a config. "
-                           "It is unclear whether the entire config has been saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
-    }
-
-  ret = check_modify_config (connection, credentials, params,
-                             "get_config", "edit_config",
-                             NULL, response_data);
-
   return ret;
 }
 
