@@ -1768,7 +1768,7 @@ select[multiple] {
   display: inline;
 }
 
-.performance-presets ul li  li {
+.performance-presets ul li + li {
   padding-right: 5px;
   padding-left: 5px;
   border-left: 1px solid black;
