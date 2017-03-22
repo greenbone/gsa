@@ -1,3 +1,8 @@
+2017-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report [assets]): Add missing blank cells
+	in the footer row of the table.
+
 2017-03-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (name="html-credentials-table",
