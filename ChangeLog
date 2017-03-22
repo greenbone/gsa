@@ -1,5 +1,12 @@
 2017-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r28062.
+
+	* src/html/classic/omp.xsl (report [assets]): Add missing blank cells
+	in the footer row of the table.
+
+2017-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css (.performance-presets ul li + li):
 	Add missing "+" in selector.
 
