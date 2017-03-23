@@ -1,5 +1,10 @@
 2017-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_http_handler.c (handle_system_report): Close manager
+	connection after the get_system_report_omp call.
+
+2017-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_gmp.c (save_config_omp): Free and replace response for first
 	command only if preferences are sent.
 

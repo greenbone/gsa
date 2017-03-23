@@ -865,6 +865,7 @@ handle_system_report (http_connection_t *connection,
                                      &url[0] + strlen ("/system_report/"),
                                      params,
                                      response_data);
+        gvm_connection_close (&con);
         break;
       case -1:
         return handler_send_reauthentication
