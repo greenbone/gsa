@@ -11811,7 +11811,7 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   int omp_ret;
-  char *ret;
+  char *ret, *osp_ret;
   params_t *preferences, *selects, *trends;
   const char *config_id, *name, *comment, *scanner_id;
   int success;
@@ -11866,7 +11866,6 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
     {
       return ret;
     }
-  g_free (ret);
 
   /* Save preferences. */
 
@@ -11909,6 +11908,7 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
                                    "/omp?cmd=get_configs", response_data);
             }
           g_free (value);
+          g_free (ret);
 
           ret = check_modify_config (connection, credentials, params,
                                      "get_config", "edit_config",
@@ -11921,11 +11921,27 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   /* OSP config file preference. */
-  ret = save_osp_prefs (connection, credentials, params,
-                        "get_config", "edit_config",
-                        &success, response_data);
+  osp_ret = save_osp_prefs (connection, credentials, params,
+                            "get_config", "edit_config",
+                            &success, response_data);
+  if (osp_ret)
+    {
+      g_free (ret);
+      ret = osp_ret;
+    }
+
   if (success == 0)
     {
+      if (osp_ret == NULL)
+        {
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a config. "
+                               "It is unclear whether the entire config has been saved. "
+                               "Diagnostics: save_osp_prefs returned NULL unexpectedly.",
+                               "/omp?cmd=get_configs", response_data);
+        }
       return ret;
     }
 
