@@ -1,5 +1,11 @@
 2017-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (get_system_reports_omp): Show the page with a
+	report duration of one day by default and have the duration apply
+	to the start time.
+
+2017-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_http_handler.c (handle_system_report): Close manager
 	connection after the get_system_report_omp call.
 
