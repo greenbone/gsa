@@ -1,5 +1,13 @@
 2017-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r28079.
+
+	* src/gsad_omp.c (get_system_reports_omp): Show the page with a
+	report duration of one day by default and have the duration apply
+	to the start time.
+
+2017-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r28076.
 
 	* src/gsad_gmp.c (save_config_omp): Free and replace response for first
