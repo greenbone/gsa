@@ -192,9 +192,8 @@ export const MenuBar = (props, context) => {
             to="filters"
             caps="get_filters"/>
           <MenuEntry
-            legacy
             title={_('Tags')}
-            cmd="get_tags"
+            to="tags"
             caps="get_tags"/>
           <MenuEntry
             legacy

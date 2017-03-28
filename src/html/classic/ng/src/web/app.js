@@ -66,6 +66,7 @@ import ReportFormatsPage from './reportformats/reportformatspage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
 import SchedulesPage from './schedules/schedulespage.js';
+import TagsPage from './tags/tagspage.js';
 import TargetsPage from './targets/targetspage.js';
 import TasksPage from './tasks/taskspage.js';
 import VulnerabilitiesPage from './vulns/vulnspage.js';
@@ -232,6 +233,9 @@ ReactDOM.render(
         <Route
           path="agents"
           component={AgentsPage}/>
+        <Route
+          path="tags"
+          component={TagsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>
