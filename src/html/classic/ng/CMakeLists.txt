@@ -60,6 +60,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/collectioncounts.js
      ${NG_SRC_DIR}/src/gmp/collectionlist.js
      ${NG_SRC_DIR}/src/gmp/command.js
+     ${NG_SRC_DIR}/src/gmp/commands/agents.js
      ${NG_SRC_DIR}/src/gmp/commands/alerts.js
      ${NG_SRC_DIR}/src/gmp/commands/certbund.js
      ${NG_SRC_DIR}/src/gmp/commands/cpes.js
@@ -88,6 +89,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/gmp.js
      ${NG_SRC_DIR}/src/gmp/http.js
      ${NG_SRC_DIR}/src/gmp/model.js
+     ${NG_SRC_DIR}/src/gmp/models/agent.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js
      ${NG_SRC_DIR}/src/gmp/models/capabilities.js
      ${NG_SRC_DIR}/src/gmp/models/certbund.js
