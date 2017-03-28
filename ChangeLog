@@ -1,5 +1,10 @@
 2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/resourcelink.js: Add a react component to render
+	a legacy link to a resource/entity details page.
+
+2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/legacylink.js: Update coding style.
 
 2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
