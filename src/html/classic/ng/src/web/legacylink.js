@@ -45,7 +45,9 @@ export class LegacyLink extends React.Component {
 
     let url = gmp.buildUrl(path, extend({}, params, iparams));
     return (
-      <a href={url} className={className} title={title}>
+      <a href={url}
+        className={className}
+        title={title}>
         {children}
       </a>
     );
