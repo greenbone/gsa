@@ -26211,8 +26211,26 @@ dashboard (credentials_t * credentials, params_t *params,
     {
       if (credentials->guest)
         name = "secinfo";
-      else
+      else if (command_enabled (credentials, "GET_TASKS"))
         name = "main";
+      else if (command_enabled (credentials, "GET_INFO"))
+        name = "secinfo";
+      else if (command_enabled (credentials, "GET_SYSTEM_REPORTS"))
+        {
+          gchar *redirect_url;
+          redirect_url = g_strdup_printf ("/omp?cmd=get_system_reports&token=%s",
+                                          credentials->token);
+          response_data->redirect = redirect_url;
+          return g_strdup_printf ("redirecting to %s", redirect_url);
+        }
+      else
+        {
+          gchar *redirect_url;
+          redirect_url = g_strdup_printf ("/help/about.html?token=%s",
+                                          credentials->token);
+          response_data->redirect = redirect_url;
+          return g_strdup_printf ("redirecting to %s", redirect_url);
+        }
     }
 
   xml = g_string_new ("<dashboard>");

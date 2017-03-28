@@ -1,3 +1,12 @@
+2017-03-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (handle_request): Handle redirects in OMP get requests.
+
+	* src/gsad_omp.c (dashboard): Use secinfo dashboard if user has no
+	get_tasks permission, redirect to get_system_reports page if user also
+	has no get_info permission and redirect to about page if user also
+	has no get_system_reports permission.
+
 2017-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r28079.

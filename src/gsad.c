@@ -4741,7 +4741,18 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                        content_type_string);
               g_free (content_type_string);
             }
-          http_response_code = response_data.http_status_code;
+
+          if (response_data.redirect)
+            {
+              MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION,
+                                       response_data.redirect);
+              http_response_code = MHD_HTTP_SEE_OTHER;
+            }
+          else
+            {
+              http_response_code = response_data.http_status_code;
+            }
+
           cmd_response_data_reset (&response_data);
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
