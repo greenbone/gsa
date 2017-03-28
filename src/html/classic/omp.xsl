@@ -8874,7 +8874,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         class="icon icon-sm">
         <img src="/img/help.svg"/>
       </a>
-      <a href="/omp?cmd=get_agents&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/ng/agents?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
         class="icon icon-sm"
         title="{gsa:i18n ('Agents')}">
         <img src="/img/list.svg" alt="{gsa:i18n ('Agents')}"/>
