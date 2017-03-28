@@ -1,6 +1,15 @@
 2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/agents/agentspage.js,
+	src/html/classic/ng/src/web/agents/dialog.js,
+	src/html/classic/ng/src/web/agents/row.js,
+	src/html/classic/ng/src/web/agents/table.js: Add react components for agents
+	list page.
+
+2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/agents.js,
 	src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/models/agent.js: Add gmp api for agents.
