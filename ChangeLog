@@ -1,5 +1,10 @@
 2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/render.js: Add function to display the type name
+	of an entity type.
+
+2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/resourcelink.js: Add a react component to render
 	a legacy link to a resource/entity details page.
 

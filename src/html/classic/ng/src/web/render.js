@@ -41,7 +41,7 @@ const DEBUG = _('Debug');
 
 /* eslint-enable no-unused-vars */
 
-const N_A = _('N/A');
+export const N_A = _('N/A');
 
 export function render_options(list, default_opt_value, default_opt = '--') {
   let options = map(list, entry => {
@@ -204,6 +204,69 @@ export const withPrefix = Component => {
   };
 
   return CompentWrapper;
+};
+
+export function type_name(type) {
+  switch (type) {
+    case 'agent':
+      return _('Agent');
+    case 'alert':
+      return _('Alert');
+    case 'allinfo':
+      return _('All SecInfo');
+    case 'cpe':
+      return _('CPE');
+    case 'cve':
+      return _('CVE');
+    case 'credential':
+      return _('Credential');
+    case 'cert_bund_adv':
+      return _('CERT-Bund Advisory');
+    case 'dfn_cert_adv':
+      return _('DFN-CERT Advisory');
+    case 'filter':
+      return _('Filter');
+    case 'group':
+      return _('Group');
+    case 'host':
+      return _('Host');
+    case 'os':
+      return _('Operating System');
+    case 'ovaldef':
+      return _('OVAL Definition');
+    case 'note':
+      return _('Note');
+    case 'nvt':
+      return _('NVT');
+    case 'override':
+      return _('Override');
+    case 'permission':
+      return _('Permission');
+    case 'port_list':
+      return _('Port List');
+    case 'report':
+      return _('Report');
+    case 'report_format':
+      return _('Report Format');
+    case 'result':
+      return _('Result');
+    case 'role':
+      return _('Role');
+    case 'scan_config':
+      return _('Scan Config');
+    case 'schedule':
+      return _('Schedule');
+    case 'target':
+      return _('Target');
+    case 'task':
+      return _('Task');
+    case 'user':
+      return _('User');
+    case 'vuln':
+      return _('Vulnerability');
+    default:
+      return _('Unkonwn');
+  }
 };
 
 // vim: set ts=2 sw=2 tw=80:
