@@ -1,5 +1,12 @@
 2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt
+	src/html/classic/ng/src/gmp/commands/tags.js,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/models/tag.js: Add gmp api for tags.
+
+2017-03-28 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/render.js: Add function to display the type name
 	of an entity type.
 
