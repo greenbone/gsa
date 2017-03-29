@@ -84,22 +84,7 @@ class Page extends React.Component {
 
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
-    this.handleSaveTag = this.handleSaveTag.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
-  }
-
-  handleSaveTag(data) {
-    const {onChanged, entityCommand} = this.props;
-    let promise;
-
-    if (is_defined(data.tag)) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.create(data);
-    }
-
-    return promise.then(() => onChanged());
   }
 
   handleEnableTag(tag) {
@@ -135,6 +120,7 @@ class Page extends React.Component {
   }
 
   render() {
+    const {onEntitySave} = this.props;
     return (
       <Layout>
         <EntitiesPage
@@ -146,7 +132,7 @@ class Page extends React.Component {
         />
         <TagDialog
           ref={ref => this.tag_dialog = ref}
-          onSave={this.handleSaveTag}
+          onSave={onEntitySave}
         />
       </Layout>
     );
@@ -156,6 +142,7 @@ class Page extends React.Component {
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
   onChanged: React.PropTypes.func,
+  onEntitySave: React.PropTypes.func,
   showError: React.PropTypes.func.isRequired,
   showSuccess: React.PropTypes.func.isRequired,
 };

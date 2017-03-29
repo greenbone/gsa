@@ -77,7 +77,9 @@ const TagDialog = ({
 
       <FormGroup title={_('Resource Type')}>
         <Select2
-          value={resource_type}>
+          name="resource_type"
+          value={resource_type}
+          onChange={onValueChange}>
           {capabilities.mayAccess('agents') &&
             <option value="agent">{_('Agent')}</option>
           }
