@@ -1,5 +1,11 @@
 2017-03-29 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: Add a generic entity save
+	method to entity container hoc. In most cases creating and saving entities
+	uses the same pattern.
+
+2017-03-29 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/tags/table.js,
 	src/html/classic/ng/src/web/tags/tagspage.js: Use new createEntitiesHeader HOC

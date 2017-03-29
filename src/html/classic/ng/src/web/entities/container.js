@@ -70,6 +70,7 @@ class EntitiesContainer extends React.Component {
     this.handleCloneEntity = this.handleCloneEntity.bind(this);
     this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
     this.handleError = this.handleError.bind(this);
+    this.handleSaveEntity = this.handleSaveEntity.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleShowError = this.handleShowError.bind(this);
     this.handleShowSuccess = this.handleShowSuccess.bind(this);
@@ -297,6 +298,20 @@ class EntitiesContainer extends React.Component {
     }, this.handleError);
   }
 
+  handleSaveEntity(data) {
+    let {entity_command} = this;
+    let promise;
+
+    if (is_defined(data.id)) {
+      promise = entity_command.save(data);
+    }
+    else {
+      promise = entity_command.create(data);
+    }
+
+    return promise.then(() => this.reload());
+  }
+
   handleSortChange(field) {
     let {filter} = this.state;
 
@@ -369,6 +384,7 @@ class EntitiesContainer extends React.Component {
           onEntityDelete={this.handleDeleteEntity}
           onEntityDownload={this.handleDownloadEntity}
           onEntityClone={this.handleCloneEntity}
+          onEntitySave={this.handleSaveEntity}
           showError={this.handleShowError}
           showSuccess={this.handleShowSuccess}
         />
