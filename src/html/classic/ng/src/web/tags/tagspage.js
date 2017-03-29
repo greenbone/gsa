@@ -31,6 +31,9 @@ import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
+import {createEntitiesFooter} from '../entities/footer.js';
+import {createEntitiesHeader} from '../entities/header.js';
+import {createEntitiesTable} from '../entities/table.js';
 
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
@@ -38,7 +41,7 @@ import NewIcon from '../icons/newicon.js';
 import {createFilterDialog} from '../powerfilter/dialog.js';
 
 import TagDialog from './dialog.js';
-import Table from './table.js';
+import Row from './row.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],
@@ -156,6 +159,17 @@ Page.propTypes = {
   showError: React.PropTypes.func.isRequired,
   showSuccess: React.PropTypes.func.isRequired,
 };
+
+const Table = createEntitiesTable({
+  emptyTitle: _('No tags available'),
+  header: createEntitiesHeader(SORT_FIELDS),
+  row: Row,
+  footer: createEntitiesFooter({
+    download: 'tags.xml',
+    span: 7,
+    trash: true,
+  }),
+});
 
 export default withEntitiesContainer(Page, 'tag', {
   filterEditDialog: createFilterDialog({

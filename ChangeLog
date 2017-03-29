@@ -1,5 +1,12 @@
 2017-03-29 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/tags/table.js,
+	src/html/classic/ng/src/web/tags/tagspage.js: Use new createEntitiesHeader HOC
+	for tags list page.
+
+2017-03-29 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/header.js: Allow to create a table
 	header component from a column description via new createEntitesHeader HOC.
 	This simplifies creating entity list tables with one row headers.

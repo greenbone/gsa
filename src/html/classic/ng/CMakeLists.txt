@@ -335,7 +335,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/table/table.js
      ${NG_SRC_DIR}/src/web/tags/dialog.js
      ${NG_SRC_DIR}/src/web/tags/row.js
-     ${NG_SRC_DIR}/src/web/tags/table.js
      ${NG_SRC_DIR}/src/web/tags/tagspage.js
      ${NG_SRC_DIR}/src/web/targets/dialog.js
      ${NG_SRC_DIR}/src/web/targets/dialogcontainer.js
