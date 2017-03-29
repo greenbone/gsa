@@ -27,7 +27,7 @@
 #include <assert.h> /* for assert */
 
 #include "gsad_http_handler.h"
-#include "gsad_gmp.h" /* for get_system_report_omp */
+#include "gsad_gmp.h" /* for get_system_report_gmp */
 #include "validator.h" /* for openvas_validate */
 #include "xslt_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h" /* for get_guest_usernmae */
@@ -592,7 +592,7 @@ handle_logout (http_connection_t *connection,
 }
 
 int
-handle_omp_get (http_connection_t *connection,
+handle_gmp_get (http_connection_t *connection,
                 const char *method, const char *url,
                 gsad_connection_info_t *con_info,
                 http_handler_t *handler, void *data)
@@ -601,14 +601,14 @@ handle_omp_get (http_connection_t *connection,
   int ret;
   credentials_t *credentials = (credentials_t*)data;
 
-  ret = exec_omp_get (connection, con_info, credentials);
+  ret = exec_gmp_get (connection, con_info, credentials);
 
   credentials_free (credentials);
   return ret;
 }
 
 int
-handle_omp_post (http_connection_t *connection,
+handle_gmp_post (http_connection_t *connection,
                  const char *method, const char *url,
                  gsad_connection_info_t *con_info,
                  http_handler_t *handler, void *data)
@@ -654,7 +654,7 @@ handle_omp_post (http_connection_t *connection,
       return MHD_YES;
     }
 
-  return exec_omp_post (connection, con_info, client_address);
+  return exec_gmp_post (connection, con_info, client_address);
 }
 
 int
@@ -860,7 +860,7 @@ handle_system_report (http_connection_t *connection,
   switch (manager_connect (credentials, &con, response_data))
     {
       case 0:
-        res = get_system_report_omp (&con,
+        res = get_system_report_gmp (&con,
                                      credentials,
                                      &url[0] + strlen ("/system_report/"),
                                      params,
@@ -984,7 +984,7 @@ init_http_handlers()
   http_handler_t *not_found_handler;
   http_handler_t *user_handler;
   http_handler_t *credential_handler;
-  http_handler_t *omp_post_handler;
+  http_handler_t *gmp_post_handler;
   http_handler_t *anon_url_handlers;
   http_handler_t *user_url_handlers;
 
@@ -998,7 +998,7 @@ init_http_handlers()
   not_found_handler = http_handler_new (handle_not_found);
   user_handler = http_handler_new (handle_setup_user);
   credential_handler = http_handler_new (handle_setup_credentials);
-  omp_post_handler = http_handler_new (handle_omp_post);
+  gmp_post_handler = http_handler_new (handle_gmp_post);
 
   http_handler_add (handlers, method_router);
 
@@ -1020,7 +1020,7 @@ init_http_handlers()
 
   user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
   http_handler_add (user_url_handlers, credential_handler);
-  url_handler_add (user_url_handlers, "^/omp$", handle_omp_get);
+  url_handler_add (user_url_handlers, "^/omp$", handle_gmp_get);
   url_handler_add (user_url_handlers,
       "^/help/[a-zA-Z][[:alpha:][:alnum:]_-]*\\.html$", handle_help_pages);
   url_handler_add (user_url_handlers, "^/system_report/.+$",
@@ -1031,7 +1031,7 @@ init_http_handlers()
   http_handler_add (user_handler, user_url_handlers);
 
   method_router_set_get_handler (method_router, anon_url_handlers);
-  method_router_set_post_handler (method_router, omp_post_handler);
+  method_router_set_post_handler (method_router, gmp_post_handler);
 
   http_handler_add (handlers, http_handler_new (handle_invalid_method));
 

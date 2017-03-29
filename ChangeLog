@@ -1,3 +1,9 @@
+2017-03-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c, src/gsad_gmp.c, src/gsad_gmp.h, src/gsad_http.h,
+	src/gsad_http_handler.c, src/gsad_omp_auth.h, src/gsad_user.c:
+	Replace "omp" by "gmp" from any function calls.
+
 2017-03-29 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,

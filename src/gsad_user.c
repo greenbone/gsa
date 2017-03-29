@@ -175,7 +175,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
 
       /* Log in as guest. */
 
-      ret = authenticate_omp (guest_username,
+      ret = authenticate_gmp (guest_username,
                               guest_password,
                               &role,
                               &timezone,

@@ -1,6 +1,6 @@
 /* Greenbone Security Assistant
  * $Id$
- * Description: Authentication OMP
+ * Description: Authentication GMP
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
@@ -23,13 +23,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _GSAD_OMP_AUTH_H
-#define _GSAD_OMP_AUTH_H
+#ifndef _GSAD_GMP_AUTH_H
+#define _GSAD_GMP_AUTH_H
 
 #include <glib.h> /* for gchar */
 
-int authenticate_omp (const gchar *, const gchar *, gchar **, gchar **,
+int authenticate_gmp (const gchar *, const gchar *, gchar **, gchar **,
                       gchar **, gchar **, gchar **, gchar **, GTree **,
                       gchar **);
 
-#endif /* _GSAD_OMP_AUTH_H */
+#endif /* _GSAD_GMP_AUTH_H */

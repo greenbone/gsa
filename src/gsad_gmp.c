@@ -1,6 +1,6 @@
 /* Greenbone Security Assistant
  * $Id$
- * Description: OMP communication module.
+ * Description: GMP communication module.
  *
  * Authors:
  * Matthew Mundell <matthew.mundell@greenbone.net>
@@ -27,10 +27,10 @@
 
 /**
  * @file gsad_gmp.c
- * @brief OMP communication module of Greenbone Security Assistant daemon.
+ * @brief GMP communication module of Greenbone Security Assistant daemon.
  *
- * This file implements an API for OMP.  The functions call the OpenVAS Manager
- * via OMP properly, and apply XSL-Transforms to deliver HTML results.
+ * This file implements an API for GMP.  The functions call the OpenVAS Manager
+ * via GMP properly, and apply XSL-Transforms to deliver HTML results.
  */
 
 #include <stdio.h>
@@ -80,7 +80,7 @@
 /**
  * @brief GLib log domain.
  */
-#define G_LOG_DOMAIN "gsad  omp"
+#define G_LOG_DOMAIN "gsad  gmp"
 
 /**
  * @brief Manager (openvasmd) address.
@@ -129,11 +129,11 @@ int manager_port = 9390;
 /* Headers. */
 
 static int
-omp (gvm_connection_t *, credentials_t *, gchar **, entity_t *,
+gmp (gvm_connection_t *, credentials_t *, gchar **, entity_t *,
      cmd_response_data_t*, const char *);
 
 static int
-ompf (gvm_connection_t *, credentials_t *, gchar **, entity_t *,
+gmpf (gvm_connection_t *, credentials_t *, gchar **, entity_t *,
       cmd_response_data_t*,
       const char *, ...);
 
@@ -308,7 +308,7 @@ static char *wizard_get (gvm_connection_t *, credentials_t *, params_t *,
 
 int token_user_remove (const char *);
 
-static int omp_success (entity_t entity);
+static int gmp_success (entity_t entity);
 
 static gchar *next_page_url (credentials_t *, params_t *, const char *,
                              const char *, const char *, const char *,
@@ -327,7 +327,7 @@ static gchar* response_from_entity (gvm_connection_t *, credentials_t*,
 /* Helpers. */
 
 /**
- * @brief Init the GSA OMP library.
+ * @brief Init the GSA GMP library.
  *
  * @param[in]  credentials   Credentials.
  * @param[in]  name          Command name.
@@ -340,14 +340,14 @@ command_enabled (credentials_t *credentials, const gchar *name)
 }
 
 /**
- * @brief Init the GSA OMP library.
+ * @brief Init the GSA GMP library.
  *
  * @param[in]  manager_address_unix  Manager address when using UNIX socket.
  * @param[in]  manager_address_tls   Manager address when using TLS-TCP.
  * @param[in]  port_manager          Manager port.
  */
 void
-omp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
+gmp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
           int port_manager)
 {
   if (manager_address_unix)
@@ -466,7 +466,7 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
       return -3;
     }
 
-  return omp_success (entity);
+  return gmp_success (entity);
 }
 
 /**
@@ -481,7 +481,7 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
  * @return Result of XSL transformation.
  */
 static char *
-xsl_transform_omp (gvm_connection_t *connection,
+xsl_transform_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params, gchar * xml,
                    cmd_response_data_t *response_data)
 {
@@ -579,7 +579,7 @@ xsl_transform_omp (gvm_connection_t *connection,
                      ? g_base64_encode ((guchar*) refresh_interval,
                                         strlen (refresh_interval))
                      : g_strdup (""));
-      ret = ompf (connection, credentials, &response, &entity, response_data,
+      ret = gmpf (connection, credentials, &response, &entity, response_data,
                   "<modify_setting"
                   " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\">"
                   "<value>%s</value>"
@@ -849,7 +849,7 @@ check_modify_config (gvm_connection_t *connection,
       free_entity (entity);
       return response;
     }
-  else if (success && omp_success (entity))
+  else if (success && gmp_success (entity))
     {
       *success = 1;
     }
@@ -866,14 +866,14 @@ check_modify_config (gvm_connection_t *connection,
 }
 
 /**
- * @brief Check whether an OMP command failed.
+ * @brief Check whether an GMP command failed.
  *
  * @param[in] entity  Response entity.
  *
  * @return 1 success, 0 fail, -1 error.
  */
 static int
-omp_success (entity_t entity)
+gmp_success (entity_t entity)
 {
   const char *status;
 
@@ -889,9 +889,9 @@ omp_success (entity_t entity)
 }
 
 /**
- * @brief Set the HTTP status according to OMP response entity.
+ * @brief Set the HTTP status according to GMP response entity.
  *
- * @param[in]  entity         The OMP response entity.
+ * @param[in]  entity         The GMP response entity.
  * @param[in]  response_data  Response data.
  */
 void
@@ -911,7 +911,7 @@ set_http_status_from_entity (entity_t entity,
 }
 
 /**
- * @brief Run a single OMP command.
+ * @brief Run a single GMP command.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
@@ -924,7 +924,7 @@ set_http_status_from_entity (entity_t entity,
  *         error.
  */
 static int
-omp (gvm_connection_t *connection, credentials_t *credentials,
+gmp (gvm_connection_t *connection, credentials_t *credentials,
      gchar **response, entity_t *entity_return,
      cmd_response_data_t *response_data, const char *command)
 {
@@ -953,7 +953,7 @@ omp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Run a single OMP command, preparing a response even on error.
+ * @brief Run a single GMP command, preparing a response even on error.
  *
  * @param[in]  connection         Connection to manager
  * @param[out] message_operation  Operation for error message
@@ -967,7 +967,7 @@ omp (gvm_connection_t *connection, credentials_t *credentials,
  *         3 command failed, 4 connect error.
  */
 static int
-simple_ompf (gvm_connection_t *connection, const gchar *message_operation,
+simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
              credentials_t *credentials, gchar **response,
              cmd_response_data_t *response_data,
              const char *format, ...)
@@ -981,7 +981,7 @@ simple_ompf (gvm_connection_t *connection, const gchar *message_operation,
   command = g_markup_vprintf_escaped (format, args);
   va_end (args);
 
-  ret = omp (connection, credentials, response, &entity, response_data,
+  ret = gmp (connection, credentials, response, &entity, response_data,
              command);
   g_free (command);
   switch (ret)
@@ -989,7 +989,7 @@ simple_ompf (gvm_connection_t *connection, const gchar *message_operation,
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return 4;
       case 1:
         if (response_data)
@@ -1055,7 +1055,7 @@ simple_ompf (gvm_connection_t *connection, const gchar *message_operation,
         return -1;
     }
 
-  switch (omp_success (entity))
+  switch (gmp_success (entity))
     {
       case 0:
         set_http_status_from_entity (entity, response_data);
@@ -1073,7 +1073,7 @@ simple_ompf (gvm_connection_t *connection, const gchar *message_operation,
 }
 
 /**
- * @brief Run a single formatted OMP command.
+ * @brief Run a single formatted GMP command.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
@@ -1087,7 +1087,7 @@ simple_ompf (gvm_connection_t *connection, const gchar *message_operation,
  *         2 read error.
  */
 static int
-ompf (gvm_connection_t *connection, credentials_t *credentials,
+gmpf (gvm_connection_t *connection, credentials_t *credentials,
       gchar **response, entity_t *entity_return,
       cmd_response_data_t *response_data, const char *format, ...)
 {
@@ -1099,14 +1099,14 @@ ompf (gvm_connection_t *connection, credentials_t *credentials,
   command = g_markup_vprintf_escaped (format, args);
   va_end (args);
 
-  ret = omp (connection, credentials, response, entity_return, response_data,
+  ret = gmp (connection, credentials, response, entity_return, response_data,
              command);
   g_free (command);
   return ret;
 }
 
 /**
- * @brief Get a setting by UUID for the current user of an OMP connection.
+ * @brief Get a setting by UUID for the current user of an GMP connection.
  *
  * @param[in]  connection  Connection.
  * @param[in]  setting_id  UUID of the setting to get.
@@ -1460,7 +1460,7 @@ action_result_page (gvm_connection_t *connection,
                                  status ? status : "",
                                  message ? message : "",
                                  next_url ? next_url : "");
-  return xsl_transform_omp (connection, credentials, params, xml,
+  return xsl_transform_gmp (connection, credentials, params, xml,
                             response_data);
 }
 
@@ -1514,7 +1514,7 @@ response_from_entity (gvm_connection_t *connection,
 {
   gchar *res, *next_url;
   int success;
-  success = omp_success (entity);
+  success = gmp_success (entity);
 
   if (success)
     {
@@ -1695,7 +1695,7 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
       result = get_report (connection, credentials, params, NULL,
                            response, &error, response_data);
 
-      return error ? result : xsl_transform_omp (connection, credentials,
+      return error ? result : xsl_transform_gmp (connection, credentials,
                                                  params, result,
                                                  response_data);
     }
@@ -1801,7 +1801,7 @@ next_page (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[in]  extra_attribs  Extra attributes for OMP GET command.
+ * @param[in]  extra_attribs  Extra attributes for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
@@ -1845,7 +1845,7 @@ get_one (gvm_connection_t *connection, const char *type,
 
       response = NULL;
       entity = NULL;
-      switch (ompf (connection, credentials, &response, &entity, response_data,
+      switch (gmpf (connection, credentials, &response, &entity, response_data,
                     "<get_permissions"
                     " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
                     params_value (params, "role_id")))
@@ -1878,7 +1878,7 @@ get_one (gvm_connection_t *connection, const char *type,
 
       g_string_append (xml, response);
 
-      if (!omp_success (entity))
+      if (!gmp_success (entity))
         set_http_status_from_entity (entity, response_data);
 
       free_entity (entity);
@@ -2024,7 +2024,7 @@ get_one (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE), response_data);
 }
 
@@ -2036,7 +2036,7 @@ get_one (gvm_connection_t *connection, const char *type,
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[in]  extra_attribs  Extra attributes for OMP GET command.
+ * @param[in]  extra_attribs  Extra attributes for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
@@ -2477,7 +2477,7 @@ get_many (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   g_string_free (type_many, TRUE);
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE), response_data);
 }
 
@@ -2562,7 +2562,7 @@ edit_resource (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</edit_%s>", type);
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE), response_data);
 }
 
@@ -2687,7 +2687,7 @@ export_resource (gvm_connection_t *connection, const char *type,
   if (resource_id == NULL)
     {
       g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
-      return xsl_transform_omp (connection, credentials, params,
+      return xsl_transform_gmp (connection, credentials, params,
                                 g_string_free (xml, FALSE), response_data);
     }
 
@@ -2732,7 +2732,7 @@ export_resource (gvm_connection_t *connection, const char *type,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (!omp_success (entity))
+  if (!gmp_success (entity))
     set_http_status_from_entity (entity, response_data);
 
   resource_entity = entity_child (entity, type);
@@ -2923,7 +2923,7 @@ export_many (gvm_connection_t *connection, const char *type,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (!omp_success (entity))
+  if (!gmp_success (entity))
     set_http_status_from_entity (entity, response_data);
 
   ret = setting_get_value (connection,
@@ -3095,7 +3095,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (!omp_success (entity))
+  if (!gmp_success (entity))
     set_http_status_from_entity (entity, response_data);
 
   cap_type = capitalize (type);
@@ -3168,7 +3168,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials, &response, &entity, response_data,
+  ret = gmpf (connection, credentials, &response, &entity, response_data,
               "<%s_%s %s_id=\"%s\"/>",
               action,
               type,
@@ -3205,7 +3205,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (!omp_success (entity))
+  if (!gmp_success (entity))
     set_http_status_from_entity (entity, response_data);
 
   cap_action = capitalize (action);
@@ -3234,8 +3234,8 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
 /**
  * @todo Consider doing the input sanatizing in the page handlers.
  *
- * Currently the input sanatizing is done in serve_post, exec_omp_post and
- * exec_omp_get in gsad.c.  This means that the information about what
+ * Currently the input sanatizing is done in serve_post, exec_gmp_post and
+ * exec_gmp_get in gsad.c.  This means that the information about what
  * input is suitable for a page is separate from the page handler.
  *
  * Doing the input sanatizing in the page handler will probably also help
@@ -3255,15 +3255,15 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
  * @todo Unify the style of page handlers.
  *
  * There are variations in the style of the page handlers that run
- * multiple OMP commands.
+ * multiple GMP commands.
  *
- * Some, like delete_credential_omp, simply run the OMP commands inside
- * one OMP COMMANDS and leave it to the XSL to figure out the context.
+ * Some, like delete_credential_gmp, simply run the GMP commands inside
+ * one GMP COMMANDS and leave it to the XSL to figure out the context.
  *
- * Others, like create_target_omp, run each command separately and wrap the
+ * Others, like create_target_gmp, run each command separately and wrap the
  * responses in a unique page tag which gives the XSL the context.
  *
- * One handler, delete_target_omp, runs all the commands in a single COMMANDS
+ * One handler, delete_target_gmp, runs all the commands in a single COMMANDS
  * and also wraps the response in a unique page tag to convey the context to
  * the XSL.  This is probably the way to go.
  */
@@ -3702,7 +3702,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                           apply_overrides,
                           alerts ? alerts : "1");
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE), response_data);
 }
 
@@ -3717,7 +3717,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+new_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return new_task (connection, credentials, NULL, params, NULL, response_data);
@@ -3753,7 +3753,7 @@ new_container_task (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</new_container_task>");
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -3769,7 +3769,7 @@ new_container_task (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-new_container_task_omp (gvm_connection_t *connection,
+new_container_task_gmp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -3803,7 +3803,7 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
     {
       gchar *response;
 
-      if (simple_ompf (connection, "getting Tasks", credentials, &response,
+      if (simple_gmpf (connection, "getting Tasks", credentials, &response,
                        response_data,
                        "<get_tasks"
                        /* All container tasks. */
@@ -3818,7 +3818,7 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</upload_report>");
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -3834,7 +3834,7 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-upload_report_omp (gvm_connection_t *connection, credentials_t *credentials,
+upload_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t* response_data)
 {
   return upload_report (connection, credentials, params, NULL, response_data);
@@ -3851,7 +3851,7 @@ upload_report_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_report_omp (gvm_connection_t *connection,
+create_report_gmp (gvm_connection_t *connection,
                    credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -3932,7 +3932,7 @@ create_report_omp (gvm_connection_t *connection,
       g_free (xml_file_escaped);
     }
 
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -3944,7 +3944,7 @@ create_report_omp (gvm_connection_t *connection,
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -3996,11 +3996,11 @@ create_report_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-import_report_omp (gvm_connection_t *connection,
+import_report_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return create_report_omp (connection, credentials, params, response_data);
+  return create_report_gmp (connection, credentials, params, response_data);
 }
 
 #define CHECK(name)                                                        \
@@ -4017,7 +4017,7 @@ CHECK_PARAM_INVALID (name, "Create Task", "new_task")
  * @return Result of XSL transformation.
  */
 char *
-create_container_task_omp (gvm_connection_t *connection,
+create_container_task_gmp (gvm_connection_t *connection,
                            credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
@@ -4039,7 +4039,7 @@ create_container_task_omp (gvm_connection_t *connection,
                              "</create_task>",
                              name,
                              comment);
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -4051,7 +4051,7 @@ create_container_task_omp (gvm_connection_t *connection,
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -4102,7 +4102,7 @@ create_container_task_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-create_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -4291,7 +4291,7 @@ create_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                              auto_delete_data,
                              alterable ? strcmp (alterable, "0") : 0);
 
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -4306,7 +4306,7 @@ create_task_omp (gvm_connection_t *connection, credentials_t * credentials,
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -4334,7 +4334,7 @@ create_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
+  if (gmp_success (entity))
     {
       if (add_tag && strcmp (add_tag, "0"))
         {
@@ -4365,7 +4365,7 @@ create_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                                          tag_name,
                                          new_task_id);
 
-          ret = omp (connection, credentials,
+          ret = gmp (connection, credentials,
                      &tag_response,
                      &tag_entity,
                      response_data,
@@ -4459,7 +4459,7 @@ create_task_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "task", credentials, params, 0, NULL,
@@ -4589,7 +4589,7 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_task>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -4605,7 +4605,7 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+edit_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return edit_task (connection, credentials, params, NULL, response_data);
@@ -4622,7 +4622,7 @@ edit_task_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *format;
@@ -4790,7 +4790,7 @@ save_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                             alterable ? "</alterable>" : "");
   response = NULL;
   entity = NULL;
-  ret = ompf (connection,
+  ret = gmpf (connection,
               credentials,
               &response,
               &entity,
@@ -4869,7 +4869,7 @@ save_task_omp (gvm_connection_t *connection, credentials_t * credentials,
  *
  * @return Result of XSL transformation.
  */
-char * save_container_task_omp (gvm_connection_t *connection,
+char * save_container_task_gmp (gvm_connection_t *connection,
                                 credentials_t *credentials, params_t *params,
                                 cmd_response_data_t *response_data)
 {
@@ -4914,7 +4914,7 @@ char * save_container_task_omp (gvm_connection_t *connection,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials, &response, &entity, response_data,
+  ret = gmpf (connection, credentials, &response, &entity, response_data,
               format, task_id, name, comment,
               strcmp (in_assets, "0") ? "yes" : "no",
               auto_delete,
@@ -4972,7 +4972,7 @@ char * save_container_task_omp (gvm_connection_t *connection,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_task_omp (gvm_connection_t *connection, credentials_t *credentials,
+export_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   return export_resource (connection, "task", credentials, params,
@@ -4990,7 +4990,7 @@ export_task_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Tasks XML on success.  HTML result of XSL transformation
  *         on error.
  */
-char * export_tasks_omp (gvm_connection_t *connection,
+char * export_tasks_gmp (gvm_connection_t *connection,
                          credentials_t *credentials, params_t *params,
                          cmd_response_data_t *response_data)
 {
@@ -5009,7 +5009,7 @@ char * export_tasks_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-stop_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+stop_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return resource_action (connection, credentials, params, "task", "stop",
@@ -5027,7 +5027,7 @@ stop_task_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-resume_task_omp (gvm_connection_t *connection, credentials_t *credentials,
+resume_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   return resource_action (connection, credentials, params, "task", "resume",
@@ -5045,7 +5045,7 @@ resume_task_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-start_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+start_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return resource_action (connection, credentials, params, "task", "start",
@@ -5053,7 +5053,7 @@ start_task_omp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Reassign a task to a new OMP slave.
+ * @brief Reassign a task to a new GMP slave.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -5063,7 +5063,7 @@ start_task_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-move_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *command, *response, *html;
@@ -5081,7 +5081,7 @@ move_task_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   response = NULL;
   entity = NULL;
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = gmp (connection, credentials, &response, &entity, response_data,
              command);
   g_free (command);
   switch (ret)
@@ -5089,7 +5089,7 @@ move_task_omp (gvm_connection_t *connection, credentials_t * credentials,
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -5238,7 +5238,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</get_nvts>");
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE), response_data);
 }
 
@@ -5313,7 +5313,7 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
     {
       gchar *response;
 
-      if (simple_ompf (connection, "getting SecInfo", credentials, &response,
+      if (simple_gmpf (connection, "getting SecInfo", credentials, &response,
                        response_data,
                        "<get_notes"
                        " nvt_oid=\"%s\""
@@ -5333,7 +5333,7 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
     {
       gchar *response;
 
-      if (simple_ompf (connection, "getting SecInfo", credentials, &response,
+      if (simple_gmpf (connection, "getting SecInfo", credentials, &response,
                        response_data,
                        "<get_overrides"
                        " nvt_oid=\"%s\""
@@ -5382,7 +5382,7 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_info_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_info_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_info (connection, credentials, params, NULL, response_data);
@@ -5399,7 +5399,7 @@ get_info_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return XSL transformed NVT details response or error message.
  */
 char*
-get_nvts_omp (gvm_connection_t *connection, credentials_t *credentials,
+get_nvts_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_nvts (connection, credentials, params, NULL, NULL, response_data);
@@ -5511,7 +5511,7 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_tasks (connection, credentials, params, NULL, response_data);
@@ -5532,7 +5532,7 @@ static char *
 get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return xsl_transform_omp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
+  return xsl_transform_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
                             response_data);
 }
 
@@ -5547,7 +5547,7 @@ get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_chart_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_tasks_chart (connection, credentials, params, NULL, response_data);
@@ -5884,7 +5884,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</get_task>");
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -5900,7 +5900,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_task_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_task (connection, credentials, params, NULL, response_data);
@@ -5927,7 +5927,7 @@ new_credential (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_credential>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -5943,7 +5943,7 @@ new_credential (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_credential_omp (gvm_connection_t *connection,
+create_credential_gmp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -5989,7 +5989,7 @@ create_credential_omp (gvm_connection_t *connection,
       if (type && (strcmp (type, "cc") == 0))
         {
           // Auto-generate types without username
-          ret = ompf (connection,
+          ret = gmpf (connection,
                       credentials,
                       &response,
                       &entity,
@@ -6010,7 +6010,7 @@ create_credential_omp (gvm_connection_t *connection,
           // Auto-generate types with username
           CHECK_PARAM_INVALID (login, "Create Credential", "new_credential");
 
-          ret = ompf (connection, credentials,
+          ret = gmpf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6037,7 +6037,7 @@ create_credential_omp (gvm_connection_t *connection,
           CHECK_PARAM_INVALID (password,
                                 "Create Credential", "new_credential");
 
-          ret = ompf (connection, credentials,
+          ret = gmpf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6065,7 +6065,7 @@ create_credential_omp (gvm_connection_t *connection,
           CHECK_PARAM_INVALID (private_key,
                                 "Create Credential", "new_credential");
 
-          ret = ompf (connection, credentials,
+          ret = gmpf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6095,7 +6095,7 @@ create_credential_omp (gvm_connection_t *connection,
           CHECK_PARAM_INVALID (private_key,
                                 "Create Credential", "new_credential");
 
-          ret = ompf (connection, credentials,
+          ret = gmpf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6133,7 +6133,7 @@ create_credential_omp (gvm_connection_t *connection,
                                 "Create Credential", "new_credential");
 
           if (privacy_password && strcmp (privacy_password, ""))
-            ret = ompf (connection, credentials,
+            ret = gmpf (connection, credentials,
                         &response,
                         &entity,
                         response_data,
@@ -6162,7 +6162,7 @@ create_credential_omp (gvm_connection_t *connection,
                         auth_algorithm ? auth_algorithm : "",
                         allow_insecure);
           else
-            ret = ompf (connection, credentials,
+            ret = gmpf (connection, credentials,
                         &response,
                         &entity,
                         response_data,
@@ -6272,7 +6272,7 @@ get_credential (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_credential_omp (gvm_connection_t *connection,
+get_credential_gmp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -6293,7 +6293,7 @@ get_credential_omp (gvm_connection_t *connection,
  * @return 0 success, 1 failure.
  */
 int
-download_credential_omp (gvm_connection_t *connection,
+download_credential_gmp (gvm_connection_t *connection,
                          credentials_t * credentials,
                          params_t *params,
                          char ** html,
@@ -6478,7 +6478,7 @@ download_credential_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_credential_omp (gvm_connection_t *connection,
+export_credential_gmp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -6498,7 +6498,7 @@ export_credential_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_credentials_omp (gvm_connection_t *connection,
+export_credentials_gmp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -6537,7 +6537,7 @@ get_credentials (gvm_connection_t *connection, credentials_t * credentials, para
  * @return 0 success, 1 failure.
  */
 char *
-get_credentials_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_credentials_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_credentials (connection, credentials, params, NULL, response_data);
@@ -6554,7 +6554,7 @@ get_credentials_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-delete_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "credential", credentials, params, 0,
@@ -6572,7 +6572,7 @@ delete_credential_omp (gvm_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 char *
-new_credential_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_credential_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return new_credential (connection, credentials, params, NULL, response_data);
@@ -6608,7 +6608,7 @@ edit_credential (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-edit_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return edit_credential (connection, credentials, params, NULL, response_data);
@@ -6625,7 +6625,7 @@ edit_credential_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-save_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   int ret, change_password, change_passphrase;
@@ -6770,7 +6770,7 @@ save_credential_omp (gvm_connection_t *connection, credentials_t * credentials, 
   /* Modify the credential. */
   response = NULL;
   entity = NULL;
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -6782,7 +6782,7 @@ save_credential_omp (gvm_connection_t *connection, credentials_t * credentials, 
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -6840,7 +6840,7 @@ new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_agent>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -6855,7 +6855,7 @@ new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @return Result of XSL transformation.
  */
 char *
-new_agent_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_agent_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return new_agent (connection, credentials, params, NULL, response_data);
@@ -6872,7 +6872,7 @@ new_agent_omp (gvm_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-create_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -6943,7 +6943,7 @@ create_agent_omp (gvm_connection_t *connection, credentials_t * credentials, par
                              howto_install_64,
                              howto_use_64);
 
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -6959,7 +6959,7 @@ create_agent_omp (gvm_connection_t *connection, credentials_t * credentials, par
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7010,7 +7010,7 @@ create_agent_omp (gvm_connection_t *connection, credentials_t * credentials, par
  * @return Result of XSL transformation.
  */
 char *
-delete_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "agent", credentials, params, 0, "get_agents",
@@ -7031,7 +7031,7 @@ delete_agent_omp (gvm_connection_t *connection, credentials_t * credentials, par
  * @return 0 success, 1 failure.
  */
 int
-download_agent_omp (gvm_connection_t *connection,
+download_agent_gmp (gvm_connection_t *connection,
                     credentials_t * credentials,
                     params_t *params,
                     char ** html,
@@ -7213,7 +7213,7 @@ edit_agent (gvm_connection_t *connection, credentials_t * credentials, params_t 
  * @return Result of XSL transformation.
  */
 char *
-edit_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return edit_agent (connection, credentials, params, NULL, response_data);
@@ -7230,7 +7230,7 @@ edit_agent_omp (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-save_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   int ret;
@@ -7251,7 +7251,7 @@ save_agent_omp (gvm_connection_t *connection, credentials_t * credentials, param
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -7333,7 +7333,7 @@ get_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *
  * @return Result of XSL transformation.
  */
 char *
-get_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_agent (connection, credentials, params, NULL, response_data);
@@ -7369,7 +7369,7 @@ get_agents (gvm_connection_t *connection, credentials_t * credentials, params_t 
  * @return Result of XSL transformation.
  */
 char *
-get_agents_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_agents_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_agents (connection, credentials, params, NULL, response_data);
@@ -7386,7 +7386,7 @@ get_agents_omp (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-verify_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -7406,7 +7406,7 @@ verify_agent_omp (gvm_connection_t *connection, credentials_t * credentials, par
     }
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -7444,7 +7444,7 @@ verify_agent_omp (gvm_connection_t *connection, credentials_t * credentials, par
                              "/omp?cmd=get_agents", response_data);
     }
 
-  if (omp_success (entity))
+  if (gmp_success (entity))
     {
       html = next_page (connection, credentials, params, response,
                         response_data);
@@ -7482,7 +7482,7 @@ verify_agent_omp (gvm_connection_t *connection, credentials_t * credentials, par
  * @return Agent XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_agent_omp (gvm_connection_t *connection,
+export_agent_gmp (gvm_connection_t *connection,
                   credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
@@ -7502,7 +7502,7 @@ export_agent_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_agents_omp (gvm_connection_t *connection,
+export_agents_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -7521,7 +7521,7 @@ export_agents_omp (gvm_connection_t *connection,
  * @return The aggregate.
  */
 char *
-get_aggregate_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   params_t *data_columns, *text_columns;
@@ -7569,7 +7569,7 @@ get_aggregate_omp (gvm_connection_t *connection, credentials_t * credentials, pa
 
   if (xml_param == NULL || atoi (xml_param) == 0)
     {
-      return xsl_transform_omp (connection, credentials,params,
+      return xsl_transform_gmp (connection, credentials,params,
                                 g_strdup ("<get_aggregate/>"), response_data);
     }
   xml = g_string_new ("<get_aggregate>");
@@ -7660,14 +7660,14 @@ get_aggregate_omp (gvm_connection_t *connection, credentials_t * credentials, pa
   g_string_append (xml, command_escaped);
   g_free (command_escaped);
 
-  ret = omp (connection, credentials, &response, NULL, response_data, command->str);
+  ret = gmp (connection, credentials, &response, NULL, response_data, command->str);
   g_string_free (command, TRUE);
   switch (ret)
     {
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7696,7 +7696,7 @@ get_aggregate_omp (gvm_connection_t *connection, credentials_t * credentials, pa
   g_free (response);
   g_string_append (xml, "</get_aggregate>");
 
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -7728,7 +7728,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 
   response = NULL;
   entity = NULL;
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = gmp (connection, credentials, &response, &entity, response_data,
              "<get_report_formats filter=\"rows=-1\"/>");
   switch (ret)
     {
@@ -7767,7 +7767,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 
   /* Get Report Filters. */
 
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = gmp (connection, credentials, &response, &entity, response_data,
              "<get_filters filter=\"rows=-1\"/>");
 
   switch (ret)
@@ -7807,7 +7807,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 
   /* Get Tasks. */
 
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = gmp (connection, credentials, &response, &entity, response_data,
              "<get_tasks"
              " schedules_only=\"1\""
              " filter=\"owner=any permission=start_task rows=-1\"/>");
@@ -7852,7 +7852,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 
   /* Get Credentials. */
 
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = gmp (connection, credentials, &response, &entity, response_data,
              "<get_credentials"
              " filter=\"type=up owner=any permission=any rows=-1\"/>");
 
@@ -7896,7 +7896,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   free_entity (entity);
 
   g_string_append (xml, "</new_alert>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -7911,7 +7911,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @return Result of XSL transformation.
  */
 char *
-new_alert_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_alert_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return new_alert (connection, credentials, params, NULL, response_data);
@@ -8135,7 +8135,7 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
  * @return Result of XSL transformation.
  */
 char *
-create_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   int ret;
@@ -8217,7 +8217,7 @@ create_alert_omp (gvm_connection_t *connection, credentials_t * credentials, par
                      "</condition>"
                      "</create_alert>");
 
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -8277,7 +8277,7 @@ create_alert_omp (gvm_connection_t *connection, credentials_t * credentials, par
  * @return Result of XSL transformation.
  */
 char *
-delete_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "alert", credentials, params, 0, "get_alerts",
@@ -8312,7 +8312,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_report_formats"
                    " filter=\"rows=-1\"/>"))
         {
@@ -8359,7 +8359,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_tasks"
                    " schedules_only=\"1\""
                    " filter=\"owner=any permission=start_task rows=-1\"/>"))
@@ -8408,7 +8408,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_filters"
                    " filter=\"type=result rows=-1\"/>"))
         {
@@ -8464,7 +8464,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
  * @return Result of XSL transformation.
  */
 char *
-get_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_alert (connection, credentials, params, NULL, response_data);
@@ -8496,7 +8496,7 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_tasks"
                    " schedules_only=\"1\""
                    " filter=\"owner=any permission=start_task rows=-1\"/>"))
@@ -8546,7 +8546,7 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_filters"
                    " filter=\"type=result rows=-1\"/>"))
         {
@@ -8604,7 +8604,7 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
  * @return Result of XSL transformation.
  */
 char *
-get_alerts_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_alerts_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_alerts (connection, credentials, params, NULL, response_data);
@@ -8829,7 +8829,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_alert>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -8845,7 +8845,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
+edit_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return edit_alert (connection, credentials, params, NULL, response_data);
@@ -8862,7 +8862,7 @@ edit_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -8948,7 +8948,7 @@ save_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
                      "</condition>"
                      "</modify_alert>");
 
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -9006,7 +9006,7 @@ save_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-test_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
+test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -9076,7 +9076,7 @@ test_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Alert XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_alert_omp (gvm_connection_t *connection,
+export_alert_gmp (gvm_connection_t *connection,
                   credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
@@ -9096,7 +9096,7 @@ export_alert_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_alerts_omp (gvm_connection_t *connection,
+export_alerts_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -9260,7 +9260,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -9276,7 +9276,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_target_omp (gvm_connection_t *connection, credentials_t *credentials,
+new_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return new_target (connection, credentials, params, NULL, response_data);
@@ -9293,7 +9293,7 @@ new_target_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_target_omp (gvm_connection_t *connection, credentials_t *
+create_target_gmp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -9435,7 +9435,7 @@ create_target_omp (gvm_connection_t *connection, credentials_t *
   g_free (smb_credentials_element);
   g_free (esxi_credentials_element);
 
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -9446,7 +9446,7 @@ create_target_omp (gvm_connection_t *connection, credentials_t *
       case 0:
         break;
       case -1:
-        /* 'omp' set response. */
+        /* 'gmp' set response. */
         return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -9515,7 +9515,7 @@ create_target_omp (gvm_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-clone_omp (gvm_connection_t *connection, credentials_t *credentials,
+clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -9586,7 +9586,7 @@ clone_omp (gvm_connection_t *connection, credentials_t *credentials,
 
   /* Cleanup, and return next page. */
 
-  if (omp_success (entity) == 0 || params_given (params, "next") == 0)
+  if (gmp_success (entity) == 0 || params_given (params, "next") == 0)
     {
       gchar *next;
       next = g_strdup_printf ("get_%ss", type);
@@ -9594,7 +9594,7 @@ clone_omp (gvm_connection_t *connection, credentials_t *credentials,
       g_free (next);
     }
 
-  if (omp_success (entity))
+  if (gmp_success (entity))
     {
       next_id = entity_attribute (entity, "id");
       if (next_id == NULL)
@@ -9649,7 +9649,7 @@ clone_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_target_omp (gvm_connection_t *connection, credentials_t *
+delete_target_gmp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -9668,7 +9668,7 @@ delete_target_omp (gvm_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "agent", credentials, params, 1, "get_trash",
@@ -9686,7 +9686,7 @@ delete_trash_agent_omp (gvm_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "config", credentials, params, 1, "get_trash",
@@ -9704,7 +9704,7 @@ delete_trash_config_omp (gvm_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "alert", credentials, params, 1, "get_trash",
@@ -9722,7 +9722,7 @@ delete_trash_alert_omp (gvm_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "credential", credentials, params, 1, "get_trash",
@@ -9740,7 +9740,7 @@ delete_trash_credential_omp (gvm_connection_t *connection, credentials_t * crede
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                                 cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "report_format", credentials, params, 1, "get_trash",
@@ -9758,7 +9758,7 @@ delete_trash_report_format_omp (gvm_connection_t *connection, credentials_t * cr
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "schedule", credentials, params, 1, "get_trash",
@@ -9776,7 +9776,7 @@ delete_trash_schedule_omp (gvm_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_target_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_target_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "target", credentials, params, 1, "get_trash",
@@ -9794,7 +9794,7 @@ delete_trash_target_omp (gvm_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_task_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "task", credentials, params, 1, "get_trash",
@@ -9813,7 +9813,7 @@ delete_trash_task_omp (gvm_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 char *
-restore_omp (gvm_connection_t *connection, credentials_t * credentials,
+restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -9890,7 +9890,7 @@ restore_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-empty_trashcan_omp (gvm_connection_t *connection, credentials_t *
+empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
                     credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -9990,7 +9990,7 @@ new_tag (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -10006,7 +10006,7 @@ new_tag (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_tag_omp (gvm_connection_t *connection, credentials_t *credentials,
+new_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, cmd_response_data_t* response_data)
 {
   return new_tag (connection, credentials, params, NULL, response_data);
@@ -10023,7 +10023,7 @@ new_tag_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_tag_omp (gvm_connection_t *connection, credentials_t *credentials,
+create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
@@ -10049,7 +10049,7 @@ create_tag_omp (gvm_connection_t *connection, credentials_t *credentials,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -10122,7 +10122,7 @@ create_tag_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_tag_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "tag", credentials, params, 0, NULL, response_data);
@@ -10139,7 +10139,7 @@ delete_tag_omp (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_tag_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "tag", credentials, params, 1, "get_trash",
@@ -10219,7 +10219,7 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_tag>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -10235,7 +10235,7 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
+edit_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return edit_tag (connection, credentials, params, NULL, response_data);
@@ -10252,7 +10252,7 @@ edit_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -10280,7 +10280,7 @@ save_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -10358,7 +10358,7 @@ save_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "tag", credentials, params,
@@ -10377,7 +10377,7 @@ export_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_tags_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "tag", credentials, params,
@@ -10415,7 +10415,7 @@ get_tag (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, cmd_response_data_t* response_data)
 {
   return get_tag (connection, credentials, params, NULL, response_data);
@@ -10452,7 +10452,7 @@ get_tags (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_tags_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_tags (connection, credentials, params, NULL, response_data);
@@ -10469,7 +10469,7 @@ get_tags_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-toggle_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
+toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -10535,7 +10535,7 @@ toggle_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (! omp_success (entity))
+  if (! gmp_success (entity))
     set_http_status_from_entity (entity, response_data);
   html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
@@ -10703,7 +10703,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_target>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -10719,7 +10719,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_target_omp (gvm_connection_t *connection, credentials_t * credentials,
+edit_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return edit_target (connection, credentials, params, NULL, response_data);
@@ -10756,7 +10756,7 @@ get_target (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_target_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return get_target (connection, credentials, params, NULL, response_data);
@@ -10793,7 +10793,7 @@ get_targets (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_targets_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_targets_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return get_targets (connection, credentials, params, NULL, response_data);
@@ -10810,7 +10810,7 @@ get_targets_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_target_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -10855,7 +10855,7 @@ save_target_omp (gvm_connection_t *connection, credentials_t * credentials,
 
       response = NULL;
       entity = NULL;
-      ret = omp (connection, credentials, &response, &entity, response_data,
+      ret = gmp (connection, credentials, &response, &entity, response_data,
                  command->str);
       g_string_free (command, TRUE);
       switch (ret)
@@ -11072,7 +11072,7 @@ save_target_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_target_omp (gvm_connection_t *connection, credentials_t *
+export_target_gmp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -11092,7 +11092,7 @@ export_target_omp (gvm_connection_t *connection, credentials_t *
  *         on error.
  */
 char *
-export_targets_omp (gvm_connection_t *connection, credentials_t *
+export_targets_gmp (gvm_connection_t *connection, credentials_t *
                     credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -11126,7 +11126,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
     g_string_append (xml, extra_xml);
 
   /* Get Scanners. */
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = gmp (connection, credentials, &response, &entity, response_data,
              "<get_scanners/>");
   switch (ret)
     {
@@ -11164,7 +11164,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
   free_entity (entity);
 
   g_string_append (xml, "</new_config>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -11180,7 +11180,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_config_omp (gvm_connection_t *connection, credentials_t *credentials,
+new_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return new_config (connection, credentials, params, NULL, response_data);
@@ -11208,7 +11208,7 @@ upload_config (gvm_connection_t *connection, credentials_t *credentials, params_
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_config>");
 
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -11223,7 +11223,7 @@ upload_config (gvm_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-upload_config_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+upload_config_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return upload_config (connection, credentials, params, NULL, response_data);
@@ -11240,7 +11240,7 @@ upload_config_omp (gvm_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-create_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -11262,7 +11262,7 @@ create_config_omp (gvm_connection_t *connection, credentials_t * credentials, pa
     }
 
   /* Create the config. */
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -11328,7 +11328,7 @@ create_config_omp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-import_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -11346,7 +11346,7 @@ import_config_omp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "%s"
                              "</create_config>",
                              params_value (params, "xml_file"));
-  ret = omp (connection, credentials, &response, &entity, response_data, command);
+  ret = gmp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -11421,7 +11421,7 @@ get_configs (gvm_connection_t *connection, credentials_t *credentials, params_t 
  * @return Result of XSL transformation.
  */
 char *
-get_configs_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_configs_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return get_configs (connection, credentials, params, NULL, response_data);
@@ -11609,7 +11609,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -11624,7 +11624,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_config (connection, credentials, params, NULL, 0, response_data);
@@ -11658,7 +11658,7 @@ edit_config (gvm_connection_t *connection, credentials_t * credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-edit_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return edit_config (connection, credentials, params, NULL, response_data);
@@ -11675,7 +11675,7 @@ edit_config_omp (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-sync_config_omp (gvm_connection_t *connection, credentials_t * credentials,
+sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -11807,10 +11807,10 @@ save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
  * @return Following page.
  */
 char *
-save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
-  int omp_ret;
+  int gmp_ret;
   char *ret, *osp_ret;
   params_t *preferences, *selects, *trends;
   const char *config_id, *name, *comment, *scanner_id;
@@ -11828,7 +11828,7 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
   /* Save name and comment. */
 
   if (scanner_id)
-    omp_ret = gvm_connection_sendf_xml (connection,
+    gmp_ret = gvm_connection_sendf_xml (connection,
                                         "<modify_config config_id=\"%s\">"
                                         "<name>%s</name>"
                                         "<comment>%s</comment>"
@@ -11839,7 +11839,7 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
                                         comment,
                                         scanner_id);
   else
-    omp_ret = gvm_connection_sendf_xml (connection,
+    gmp_ret = gvm_connection_sendf_xml (connection,
                                         "<modify_config config_id=\"%s\">"
                                         "<name>%s</name>"
                                         "<comment>%s</comment>"
@@ -11848,7 +11848,7 @@ save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
                                         name,
                                         comment);
 
-  if (omp_ret == -1)
+  if (gmp_ret == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
@@ -12183,7 +12183,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *
     }
 
   g_string_append (xml, "</get_config_family_response>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -12198,7 +12198,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_config_family_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return get_config_family (connection, credentials, params, 0, response_data);
@@ -12215,7 +12215,7 @@ get_config_family_omp (gvm_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 char *
-edit_config_family_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return get_config_family (connection, credentials, params, 1, response_data);
@@ -12232,7 +12232,7 @@ edit_config_family_omp (gvm_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-save_config_family_omp (gvm_connection_t *connection, credentials_t *
+save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                         credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -12458,7 +12458,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -12473,7 +12473,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_config_nvt_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return get_config_nvt (connection, credentials, params, 0, response_data);
@@ -12490,7 +12490,7 @@ get_config_nvt_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-edit_config_nvt_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_config_nvt (connection, credentials, params, 1, response_data);
@@ -12507,7 +12507,7 @@ edit_config_nvt_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-save_config_nvt_omp (gvm_connection_t *connection, credentials_t *
+save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
                      credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -12730,7 +12730,7 @@ save_config_nvt_omp (gvm_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-delete_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "config", credentials, params, 0, "get_configs",
@@ -12748,7 +12748,7 @@ delete_config_omp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_config_omp (gvm_connection_t *connection,
+export_config_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -12768,7 +12768,7 @@ export_config_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_configs_omp (gvm_connection_t *connection,
+export_configs_gmp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -12786,7 +12786,7 @@ export_configs_omp (gvm_connection_t *connection,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_note_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "note", credentials, params,
@@ -12805,7 +12805,7 @@ export_note_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_notes_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_notes_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "note", credentials, params,
@@ -12823,7 +12823,7 @@ export_notes_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Override XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_override_omp (gvm_connection_t *connection,
+export_override_gmp (gvm_connection_t *connection,
                      credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -12843,7 +12843,7 @@ export_override_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_overrides_omp (gvm_connection_t *connection,
+export_overrides_gmp (gvm_connection_t *connection,
                       credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -12863,7 +12863,7 @@ export_overrides_omp (gvm_connection_t *connection,
  *         error.
  */
 char *
-export_port_list_omp (gvm_connection_t *connection,
+export_port_list_gmp (gvm_connection_t *connection,
                       credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -12883,7 +12883,7 @@ export_port_list_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_port_lists_omp (gvm_connection_t *connection,
+export_port_lists_gmp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -12902,7 +12902,7 @@ export_port_lists_omp (gvm_connection_t *connection,
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_preference_file_omp (gvm_connection_t *connection,
+export_preference_file_gmp (gvm_connection_t *connection,
                             credentials_t * credentials, params_t *params,
                             cmd_response_data_t* response_data)
 {
@@ -12984,7 +12984,7 @@ export_preference_file_omp (gvm_connection_t *connection,
     }
 
   g_string_append (xml, "</get_preferences_response>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -13001,7 +13001,7 @@ export_preference_file_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_report_format_omp (gvm_connection_t *connection,
+export_report_format_gmp (gvm_connection_t *connection,
                           credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
@@ -13021,7 +13021,7 @@ export_report_format_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_report_formats_omp (gvm_connection_t *connection,
+export_report_formats_gmp (gvm_connection_t *connection,
                            credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
@@ -13040,7 +13040,7 @@ export_report_formats_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-delete_report_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_report_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "report", credentials, params, 0, NULL,
@@ -14367,7 +14367,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
  * @return Report.
  */
 char *
-get_report_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   char *result;
@@ -14376,7 +14376,7 @@ get_report_omp (gvm_connection_t *connection, credentials_t * credentials,
   result = get_report (connection, credentials, params, NULL, NULL, &error,
                        response_data);
 
-  return error ? result : xsl_transform_omp (connection, credentials, params,
+  return error ? result : xsl_transform_gmp (connection, credentials, params,
                                              result, response_data);
 }
 
@@ -14418,7 +14418,7 @@ get_reports (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_reports_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_reports_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return get_reports (connection, credentials, params, NULL, response_data);
@@ -14468,7 +14468,7 @@ get_report_section (gvm_connection_t *connection,
       result = get_report (connection, credentials, params, NULL,
                            extra_xml, &error, response_data);
 
-      return error ? result : xsl_transform_omp (connection, credentials,
+      return error ? result : xsl_transform_gmp (connection, credentials,
                                                  params, result, response_data);
     }
 
@@ -14487,7 +14487,7 @@ get_report_section (gvm_connection_t *connection,
       int ret;
       char *response;
 
-      ret = omp (connection, credentials,
+      ret = gmp (connection, credentials,
                  &response,
                  NULL,
                  response_data,
@@ -14534,7 +14534,7 @@ get_report_section (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -14549,7 +14549,7 @@ get_report_section (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-get_report_section_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_section_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return get_report_section (connection, credentials, params, NULL, response_data);
@@ -14676,7 +14676,7 @@ download_key_pub (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_result_omp (gvm_connection_t *connection,
+export_result_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -14696,7 +14696,7 @@ export_result_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_results_omp (gvm_connection_t *connection, credentials_t *
+export_results_gmp (gvm_connection_t *connection, credentials_t *
                     credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -14742,7 +14742,7 @@ get_results (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_results_omp (gvm_connection_t *connection, credentials_t *credentials,
+get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return get_results (connection,
@@ -14878,7 +14878,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_result>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -14893,7 +14893,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_result_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+get_result_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_result (connection, credentials, params,
@@ -14965,7 +14965,7 @@ get_notes (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @return Result of XSL transformation.
  */
 char *
-get_notes_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_notes (connection, credentials, params, NULL, response_data);
@@ -15000,7 +15000,7 @@ get_note (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
  * @return Result of XSL transformation.
  */
 char *
-get_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+get_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return get_note (connection, credentials, params, NULL, response_data);
@@ -15094,7 +15094,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
         }
 
       g_string_append (xml, "</new_note>");
-      return xsl_transform_omp (connection, credentials, params,
+      return xsl_transform_gmp (connection, credentials, params,
                                 g_string_free (xml, FALSE), response_data);
     }
 
@@ -15182,7 +15182,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_note>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -15197,7 +15197,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return new_note (connection, credentials, params, NULL, response_data);
@@ -15340,7 +15340,7 @@ get_result_id_from_params(params_t *params)
  * @return Result of XSL transformation.
  */
 char *
-create_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   char *ret;
@@ -15372,7 +15372,7 @@ create_note_omp (gvm_connection_t *connection, credentials_t *credentials, param
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -15449,7 +15449,7 @@ create_note_omp (gvm_connection_t *connection, credentials_t *credentials, param
  * @return Result of XSL transformation.
  */
 char *
-delete_note_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "note", credentials, params, 0, NULL, response_data);
@@ -15466,7 +15466,7 @@ delete_note_omp (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_note_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "note", credentials, params, 1, "get_trash",
@@ -15533,7 +15533,7 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_note>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -15548,7 +15548,7 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+edit_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return edit_note (connection, credentials, params, NULL, response_data);
@@ -15565,7 +15565,7 @@ edit_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-save_note_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -15600,7 +15600,7 @@ save_note_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -15696,7 +15696,7 @@ get_overrides (gvm_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-get_overrides_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return get_overrides (connection, credentials, params, NULL, response_data);
@@ -15732,7 +15732,7 @@ get_override (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-get_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+get_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return get_override (connection, credentials, params, NULL, response_data);
@@ -15826,7 +15826,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
         }
 
       g_string_append (xml, "</new_override>");
-      return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+      return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                                 response_data);
     }
 
@@ -15916,7 +15916,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_override>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -15931,7 +15931,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return new_override (connection, credentials, params, NULL, response_data);
@@ -15948,7 +15948,7 @@ new_override_omp (gvm_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-create_override_omp (gvm_connection_t *connection, credentials_t *credentials,
+create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      params_t *params, cmd_response_data_t *response_data)
 {
   char *ret;
@@ -16007,7 +16007,7 @@ create_override_omp (gvm_connection_t *connection, credentials_t *credentials,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -16086,7 +16086,7 @@ create_override_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_override_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "override", credentials, params, 0, NULL,
@@ -16104,7 +16104,7 @@ delete_override_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_override_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "override", credentials, params, 1, "get_trash",
@@ -16171,7 +16171,7 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_override>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -16186,7 +16186,7 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+edit_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return edit_override (connection, credentials, params, NULL, response_data);
@@ -16203,7 +16203,7 @@ edit_override_omp (gvm_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-save_override_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
                    params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -16244,7 +16244,7 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -16345,7 +16345,7 @@ get_scanners (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-get_scanners_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_scanners_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return get_scanners (connection, credentials, params, NULL, response_data);
@@ -16381,7 +16381,7 @@ get_scanner (gvm_connection_t *connection, credentials_t * credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-get_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return get_scanner (connection, credentials, params, NULL, response_data);
@@ -16398,7 +16398,7 @@ get_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Scanner XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_scanner_omp (gvm_connection_t *connection,
+export_scanner_gmp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -16417,7 +16417,7 @@ export_scanner_omp (gvm_connection_t *connection,
  * @return Scanners XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_scanners_omp (gvm_connection_t *connection,
+export_scanners_gmp (gvm_connection_t *connection,
                      credentials_t *credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -16472,7 +16472,7 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   g_string_append (xml, "</new_scanner>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -16488,7 +16488,7 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_scanner_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return new_scanner (connection, credentials, params, NULL, response_data);
@@ -16505,7 +16505,7 @@ new_scanner_omp (gvm_connection_t *connection, credentials_t *credentials, param
  * @return Result of XSL transformation.
  */
 char *
-verify_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -16517,7 +16517,7 @@ verify_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, p
   CHECK_PARAM (scanner_id, "Verify Scanner", get_scanners);
 
 
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -16555,7 +16555,7 @@ verify_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, p
                              "/omp?cmd=get_scanners", response_data);
     }
 
-  if (omp_success (entity))
+  if (gmp_success (entity))
     {
       html = next_page (connection, credentials, params, response, response_data);
       if (html == NULL)
@@ -16597,7 +16597,7 @@ verify_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-create_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   int ret;
@@ -16625,7 +16625,7 @@ create_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, p
   CHECK_PARAM_INVALID (credential_id, "Create Scanner", "new_scanner");
 
   if (ca_pub)
-    ret = ompf (connection, credentials, &response, &entity, response_data,
+    ret = gmpf (connection, credentials, &response, &entity, response_data,
                 "<create_scanner>"
                 "<name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
@@ -16634,7 +16634,7 @@ create_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, p
                 "</create_scanner>",
                 name, comment, host, port, type, ca_pub, credential_id);
   else
-    ret = ompf (connection, credentials, &response, &entity, response_data,
+    ret = gmpf (connection, credentials, &response, &entity, response_data,
                 "<create_scanner>"
                 "<name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
@@ -16695,7 +16695,7 @@ create_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-delete_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "scanner", credentials, params, 0, "get_scanners",
@@ -16713,7 +16713,7 @@ delete_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "scanner", credentials, params, 1, "get_trash",
@@ -16799,7 +16799,7 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_scanner>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -16814,7 +16814,7 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return edit_scanner (connection, credentials, params, NULL, response_data);
@@ -16831,7 +16831,7 @@ edit_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, par
  * @return Result of XSL transformation.
  */
 char *
-save_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *response = NULL;
@@ -16872,7 +16872,7 @@ save_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, par
       if (ca_pub == NULL)
         ca_pub = "";
       if (in_use)
-        ret = ompf (connection, credentials, &response, &entity, response_data,
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -16883,7 +16883,7 @@ save_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, par
                     strcmp (which_cert, "new") == 0 ? ca_pub : "",
                     credential_id);
       else
-        ret = ompf (connection, credentials, &response, &entity, response_data,
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -16901,7 +16901,7 @@ save_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, par
     {
       /* Using existing CA cert. */
       if (in_use)
-        ret = ompf (connection, credentials, &response, &entity, response_data,
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -16909,7 +16909,7 @@ save_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, par
                     "</modify_scanner>",
                     scanner_id, name, comment ?: "", credential_id);
       else
-        ret = ompf (connection, credentials, &response, &entity, response_data,
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -16997,7 +16997,7 @@ get_schedule (gvm_connection_t *connection, credentials_t * credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-get_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return get_schedule (connection, credentials, params, NULL, response_data);
@@ -17033,7 +17033,7 @@ get_schedules (gvm_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-get_schedules_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_schedules_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return get_schedules (connection, credentials, params, NULL, response_data);
@@ -17081,7 +17081,7 @@ new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -17096,7 +17096,7 @@ new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-new_schedule_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return new_schedule (connection, credentials, params, NULL, response_data);
@@ -17113,7 +17113,7 @@ new_schedule_omp (gvm_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-create_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   char *ret;
@@ -17152,7 +17152,7 @@ create_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, 
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -17245,7 +17245,7 @@ create_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-delete_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "schedule", credentials, params, 0, "get_schedules",
@@ -17263,7 +17263,7 @@ delete_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-get_system_reports_omp (gvm_connection_t *connection,
+get_system_reports_gmp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -17418,7 +17418,7 @@ get_system_reports_omp (gvm_connection_t *connection,
 
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
-      /* Get the OMP scanners. */
+      /* Get the GMP scanners. */
 
       if (gvm_connection_sendf (connection,
                                 "<get_scanners"
@@ -17451,7 +17451,7 @@ get_system_reports_omp (gvm_connection_t *connection,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_system_reports>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -17467,7 +17467,7 @@ get_system_reports_omp (gvm_connection_t *connection,
  * @return Image, or NULL.
  */
 char *
-get_system_report_omp (gvm_connection_t *connection,
+get_system_report_gmp (gvm_connection_t *connection,
                        credentials_t *credentials, const char *url,
                        params_t *params,
                        cmd_response_data_t* response_data)
@@ -17475,7 +17475,7 @@ get_system_report_omp (gvm_connection_t *connection,
   entity_t entity;
   entity_t report_entity;
   char name[501];
-  gchar *omp_command;
+  gchar *gmp_command;
   time_t now;
   struct tm *now_broken;
   const char *slave_id, *duration;
@@ -17497,7 +17497,7 @@ get_system_report_omp (gvm_connection_t *connection,
 
     if (duration && strcmp (duration, ""))
       {
-        omp_command
+        gmp_command
         = g_markup_printf_escaped ("<get_system_reports"
                                     " name=\"%s\""
                                     " duration=\"%s\""
@@ -17558,7 +17558,7 @@ get_system_report_omp (gvm_connection_t *connection,
                             end_time.tm_hour,
                             end_time.tm_min);
 
-        omp_command
+        gmp_command
         = g_markup_printf_escaped ("<get_system_reports"
                                     " name=\"%s\""
                                     " start_time=\"%s\""
@@ -17574,13 +17574,13 @@ get_system_report_omp (gvm_connection_t *connection,
 
       if (gvm_connection_sendf (connection,
                                 "%s",
-                                omp_command)
+                                gmp_command)
           == -1)
         {
-          g_free (omp_command);
+          g_free (gmp_command);
           return NULL;
         }
-      g_free (omp_command);
+      g_free (gmp_command);
 
       entity = NULL;
       if (read_entity_c (connection, &entity))
@@ -17663,7 +17663,7 @@ get_report_format (gvm_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return get_report_format (connection, credentials, params, NULL, response_data);
@@ -17699,7 +17699,7 @@ get_report_formats (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_report_formats_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_formats_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return get_report_formats (connection, credentials, params, NULL, response_data);
@@ -17725,7 +17725,7 @@ new_report_format (gvm_connection_t *connection, credentials_t *credentials, par
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_report_format>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -17740,7 +17740,7 @@ new_report_format (gvm_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-new_report_format_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_report_format_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return new_report_format (connection, credentials, params, NULL, response_data);
@@ -17757,7 +17757,7 @@ new_report_format_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_report_format_omp (gvm_connection_t *connection,
+delete_report_format_gmp (gvm_connection_t *connection,
                           credentials_t *credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
@@ -17784,7 +17784,7 @@ edit_report_format (gvm_connection_t *connection,
 {
   gchar *all_rfs_response, *response, *ext_extra_xml;
 
-  if (simple_ompf (connection, "getting Report Formats",
+  if (simple_gmpf (connection, "getting Report Formats",
                    credentials, &all_rfs_response, response_data,
                    "<get_report_formats"
                    " filter=\"rows=-1\"/>"))
@@ -17815,7 +17815,7 @@ edit_report_format (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-edit_report_format_omp (gvm_connection_t *connection,
+edit_report_format_gmp (gvm_connection_t *connection,
                         credentials_t *credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -17834,7 +17834,7 @@ edit_report_format_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-import_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+import_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   const char* no_redirect;
@@ -17852,7 +17852,7 @@ import_report_format_omp (gvm_connection_t *connection, credentials_t * credenti
                              "%s"
                              "</create_report_format>",
                              params_value (params, "xml_file"));
-  ret = omp (connection, credentials, &response, &entity, response_data, command);
+  ret = gmp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -17911,7 +17911,7 @@ import_report_format_omp (gvm_connection_t *connection, credentials_t * credenti
  * @return Result of XSL transformation.
  */
 char *
-save_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   int ret;
@@ -17991,7 +17991,7 @@ save_report_format_omp (gvm_connection_t *connection, credentials_t * credential
 
           response = NULL;
           entity = NULL;
-          ret = ompf (connection, credentials,
+          ret = gmpf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -18057,7 +18057,7 @@ save_report_format_omp (gvm_connection_t *connection, credentials_t * credential
       params_iterator_t iter;
 
       /* The naming is a bit subtle here, because the HTTP request
-       * parameters are called "param"s and so are the OMP report format
+       * parameters are called "param"s and so are the GMP report format
        * parameters. */
 
       params_iterator_init (&iter, preferences);
@@ -18080,7 +18080,7 @@ save_report_format_omp (gvm_connection_t *connection, credentials_t * credential
 
               response = NULL;
               entity = NULL;
-              ret = ompf (connection, credentials,
+              ret = gmpf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -18139,7 +18139,7 @@ save_report_format_omp (gvm_connection_t *connection, credentials_t * credential
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -18207,7 +18207,7 @@ save_report_format_omp (gvm_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-verify_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   int ret;
@@ -18230,7 +18230,7 @@ verify_report_format_omp (gvm_connection_t *connection, credentials_t * credenti
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -18268,7 +18268,7 @@ verify_report_format_omp (gvm_connection_t *connection, credentials_t * credenti
                              "/omp?cmd=get_report_formats", response_data);
     }
 
-  if (omp_success (entity))
+  if (gmp_success (entity))
     {
       html = next_page (connection, credentials, params, response, response_data);
       if (html == NULL)
@@ -18305,7 +18305,7 @@ verify_report_format_omp (gvm_connection_t *connection, credentials_t * credenti
  * @return Result of XSL transformation.
  */
 char *
-run_wizard_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   const char *no_redirect, *name;
@@ -18318,7 +18318,7 @@ run_wizard_omp (gvm_connection_t *connection, credentials_t *credentials, params
   entity_t entity;
 
   /* The naming is a bit subtle here, because the HTTP request
-   * parameters are called "param"s and so are the OMP wizard
+   * parameters are called "param"s and so are the GMP wizard
    * parameters. */
 
   no_redirect = params_value (params, "no_redirect");
@@ -18357,7 +18357,7 @@ run_wizard_omp (gvm_connection_t *connection, credentials_t *credentials, params
 
   response = NULL;
   entity = NULL;
-  ret = omp (connection, credentials, &response, &entity, response_data, run->str);
+  ret = gmp (connection, credentials, &response, &entity, response_data, run->str);
   g_string_free (run, TRUE);
   switch (ret)
     {
@@ -18497,7 +18497,7 @@ get_trash (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -18514,7 +18514,7 @@ get_trash (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_trash_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_trash_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_trash (connection, credentials, params, NULL, response_data);
@@ -18576,7 +18576,7 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</get_my_settings>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -18592,7 +18592,7 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_my_settings_omp (gvm_connection_t *connection, credentials_t *
+get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                      credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -18622,7 +18622,7 @@ get_my_settings_omp (gvm_connection_t *connection, credentials_t *
   g_string_append (commands, "</commands>");
 
   /* Get Filters and other resource lists. */
-  ret = omp (connection, credentials, &response, NULL, response_data,
+  ret = gmp (connection, credentials, &response, NULL, response_data,
              commands->str);
   g_string_free (commands, TRUE);
   switch (ret)
@@ -18708,7 +18708,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
 
   filters_xml = NULL;
   entity = NULL;
-  ret = omp (connection, credentials, &filters_xml, &entity, response_data,
+  ret = gmp (connection, credentials, &filters_xml, &entity, response_data,
              commands->str);
   g_string_free (commands, TRUE);
   switch (ret)
@@ -18784,7 +18784,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -18800,7 +18800,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_my_settings_omp (gvm_connection_t *connection, credentials_t *
+edit_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -18867,7 +18867,7 @@ send_settings_filters (gvm_connection_t *connection, params_t *data,
                   return -1;
                 }
               xml_string_append (xml, "</save_setting>");
-              if (! omp_success (entity))
+              if (! gmp_success (entity))
                 {
                   set_http_status_from_entity (entity, response_data);
                   if (modify_failed_flag)
@@ -18896,7 +18896,7 @@ send_settings_filters (gvm_connection_t *connection, params_t *data,
  * @return Result of XSL transformation.
  */
 char *
-save_my_settings_omp (gvm_connection_t *connection, credentials_t *
+save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       const char *accept_language, char **timezone,
                       char **password, char **severity, char **language,
@@ -19147,7 +19147,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                                "/omp?cmd=get_my_settings", response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (! omp_success (entity))
+      if (! gmp_success (entity))
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -19197,7 +19197,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                                "/omp?cmd=get_my_settings", response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (omp_success (entity) != 1)
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -19247,7 +19247,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                                "/omp?cmd=get_my_settings", response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (omp_success (entity) != 1)
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -19297,7 +19297,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                                "/omp?cmd=get_my_settings", response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (omp_success (entity) != 1)
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -19347,7 +19347,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                                "/omp?cmd=get_my_settings", response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (omp_success (entity))
+      if (gmp_success (entity))
         {
           gchar *language_code;
           set_language_code (&language_code, lang);
@@ -19513,7 +19513,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                                "/omp?cmd=get_my_settings", response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (! omp_success (entity))
+      if (! gmp_success (entity))
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -19566,7 +19566,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                                "/omp?cmd=get_my_settings", response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (! omp_success (entity))
+      if (! gmp_success (entity))
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -19584,7 +19584,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get OMP doc.
+ * @brief Get GMP doc.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -19594,7 +19594,7 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_protocol_doc_omp (gvm_connection_t *connection, credentials_t *
+get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -19613,7 +19613,7 @@ get_protocol_doc_omp (gvm_connection_t *connection, credentials_t *
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the OMP doc. "
+                           "An internal error occurred while getting the GMP doc. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks", response_data);
     }
@@ -19625,7 +19625,7 @@ get_protocol_doc_omp (gvm_connection_t *connection, credentials_t *
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the OMP doc. "
+                           "An internal error occurred while getting the GMP doc. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks", response_data);
     }
@@ -19635,13 +19635,13 @@ get_protocol_doc_omp (gvm_connection_t *connection, credentials_t *
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_protocol_doc>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
- * @brief Download the OMP doc.
+ * @brief Download the GMP doc.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
@@ -19651,7 +19651,7 @@ get_protocol_doc_omp (gvm_connection_t *connection, credentials_t *
  * @return XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_omp_doc_omp (gvm_connection_t *connection,
+export_gmp_doc_gmp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -19685,7 +19685,7 @@ export_omp_doc_omp (gvm_connection_t *connection,
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting OMP doc. "
+                           "An internal error occurred while getting GMP doc. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_protocol_doc", response_data);
     }
@@ -19703,7 +19703,7 @@ export_omp_doc_omp (gvm_connection_t *connection,
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting OMP doc. "
+                               "An internal error occurred while getting GMP doc. "
                                "Diagnostics: Schema element missing.",
                                "/omp?cmd=get_protocol_doc", response_data);
         }
@@ -19715,7 +19715,7 @@ export_omp_doc_omp (gvm_connection_t *connection,
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting OMP doc. "
+                               "An internal error occurred while getting GMP doc. "
                                "Diagnostics: Schema empty.",
                                "/omp?cmd=get_protocol_doc", response_data);
         }
@@ -19728,7 +19728,7 @@ export_omp_doc_omp (gvm_connection_t *connection,
   tm = localtime (&now);
   cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
   cmd_response_data_set_content_disposition
-    (response_data, g_strdup_printf ("attachment; filename=\"omp-%d-%d-%d.%s\"",
+    (response_data, g_strdup_printf ("attachment; filename=\"gmp-%d-%d-%d.%s\"",
                                      tm->tm_mday,
                                      tm->tm_mon + 1,
                                      tm->tm_year +1900,
@@ -19771,7 +19771,7 @@ get_group (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_group_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_group (connection, credentials, params, NULL, response_data);
@@ -19808,7 +19808,7 @@ get_groups (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_groups_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_groups_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_groups (connection, credentials, params, NULL, response_data);
@@ -19834,7 +19834,7 @@ new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_group>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -19849,7 +19849,7 @@ new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @return Result of XSL transformation.
  */
 char *
-new_group_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return new_group (connection, credentials, params, NULL, response_data);
@@ -19866,7 +19866,7 @@ new_group_omp (gvm_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "group", credentials, params, 1, "get_trash",
@@ -19884,7 +19884,7 @@ delete_trash_group_omp (gvm_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-delete_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "group", credentials, params, 0,
@@ -19902,7 +19902,7 @@ delete_group_omp (gvm_connection_t *connection, credentials_t * credentials, par
  * @return Result of XSL transformation.
  */
 char *
-create_group_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response, *command, *specials_element;
@@ -19950,7 +19950,7 @@ create_group_omp (gvm_connection_t *connection, credentials_t *credentials, para
   g_string_free (xml, TRUE);
   g_free (specials_element);
 
-  ret = omp (connection, credentials, &response, &entity, response_data, command);
+  ret = gmp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -20025,7 +20025,7 @@ edit_group (gvm_connection_t *connection, credentials_t * credentials, params_t 
  * @return Result of XSL transformation.
  */
 char *
-edit_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return edit_group (connection, credentials, params, NULL, response_data);
@@ -20042,7 +20042,7 @@ edit_group_omp (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Group XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_group_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "group", credentials, params,
@@ -20061,7 +20061,7 @@ export_group_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_groups_omp (gvm_connection_t *connection,
+export_groups_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -20079,7 +20079,7 @@ export_groups_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-save_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   int ret;
@@ -20102,7 +20102,7 @@ save_group_omp (gvm_connection_t *connection, credentials_t * credentials, param
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -20190,7 +20190,7 @@ get_permission (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return get_permission (connection, credentials, params, NULL, response_data);
@@ -20226,7 +20226,7 @@ get_permissions (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-get_permissions_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_permissions (connection, credentials, params, NULL, response_data);
@@ -20243,7 +20243,7 @@ get_permissions_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "permission", credentials, params, 1, "get_trash",
@@ -20261,7 +20261,7 @@ delete_trash_permission_omp (gvm_connection_t *connection, credentials_t * crede
  * @return Result of XSL transformation.
  */
 char *
-delete_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "permission", credentials, params, 0, NULL,
@@ -20294,7 +20294,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1 permission=get_users\"/>"))
         {
           case 0:
@@ -20339,7 +20339,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1 permission=get_groups\"/>"))
         {
           case 0:
@@ -20384,7 +20384,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1 permission=get_roles\"/>"))
         {
           case 0:
@@ -20427,7 +20427,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
 
   g_string_append (xml, "</new_permission>");
 
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -20442,7 +20442,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-new_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+new_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return new_permission (connection, credentials, params, NULL, response_data);
@@ -20459,7 +20459,7 @@ new_permission_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-create_permission_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   int ret;
@@ -20493,7 +20493,7 @@ create_permission_omp (gvm_connection_t *connection, credentials_t *credentials,
       CHECK_PARAM_INVALID (subject_name,
                             "Create Permission", "new_permission");
       subject_id = NULL;
-      ret = ompf (connection, credentials,
+      ret = gmpf (connection, credentials,
                   &subject_response,
                   &get_subject_entity,
                   response_data,
@@ -20572,7 +20572,7 @@ create_permission_omp (gvm_connection_t *connection, credentials_t *credentials,
     {
       response = NULL;
       entity = NULL;
-      ret = ompf (connection, credentials,
+      ret = gmpf (connection, credentials,
                   &response,
                   &entity,
                   response_data,
@@ -20675,7 +20675,7 @@ create_permission_omp (gvm_connection_t *connection, credentials_t *credentials,
     {
       response = NULL;
       entity = NULL;
-      ret = ompf (connection, credentials,
+      ret = gmpf (connection, credentials,
                   &response,
                   &entity,
                   response_data,
@@ -20741,7 +20741,7 @@ create_permission_omp (gvm_connection_t *connection, credentials_t *credentials,
   return html;
 }
 
-#define CHECK_OMPF_RET \
+#define CHECK_GMPF_RET \
   switch (ret)                                                                \
     {                                                                         \
       case 0:                                                                 \
@@ -20772,7 +20772,7 @@ create_permission_omp (gvm_connection_t *connection, credentials_t *credentials,
                             "Diagnostics: Internal Error.",                                  \
                             "/omp?cmd=get_permissions", response_data);                      \
     }                                                                         \
-  if (omp_success (entity))                                                   \
+  if (gmp_success (entity))                                                   \
     {                                                                         \
       successes ++;                                                           \
       free_entity (entity);                                                   \
@@ -20822,7 +20822,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1 permission=get_users\"/>"))
         {
           case 0:
@@ -20867,7 +20867,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1 permission=get_groups\"/>"))
         {
           case 0:
@@ -20912,7 +20912,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1 permission=get_roles\"/>"))
         {
           case 0:
@@ -20961,7 +20961,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
       get_command = g_strdup_printf ("get_%ss", restrict_type);
       response = NULL;
       entity = NULL;
-      switch (ompf (connection, credentials, &response, &entity, response_data,
+      switch (gmpf (connection, credentials, &response, &entity, response_data,
                     "<%s %s_id=\"%s\" details=\"0\"/>",
                     get_command, restrict_type, resource_id))
         {
@@ -21025,7 +21025,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
       get_command = g_strdup_printf ("get_%ss", related_type);
       response = NULL;
       entity = NULL;
-      switch (ompf (connection, credentials, &response, &entity, response_data,
+      switch (gmpf (connection, credentials, &response, &entity, response_data,
                     "<%s %s_id=\"%s\" details=\"0\"/>",
                     get_command, related_type, related_id))
         {
@@ -21074,7 +21074,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 
   g_string_append (xml, "</new_permissions>");
 
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -21089,7 +21089,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-new_permissions_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+new_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return new_permissions (connection, credentials, params, NULL, response_data);
@@ -21106,7 +21106,7 @@ new_permissions_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   int ret;
@@ -21144,7 +21144,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
     {
       CHECK_PARAM (subject_name, "Create Permission", new_permission);
       subject_id = NULL;
-      ret = ompf (connection, credentials,
+      ret = gmpf (connection, credentials,
                   &subject_response,
                   &get_subject_entity,
                   response_data,
@@ -21229,7 +21229,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
         {
           response = NULL;
           entity = NULL;
-          ret = ompf (connection, credentials,
+          ret = gmpf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -21246,7 +21246,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                       subject_id,
                       subject_type);
 
-          CHECK_OMPF_RET
+          CHECK_GMPF_RET
         }
 
       if ((strcmp (permission, "proxy") == 0)
@@ -21255,7 +21255,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
         {
           response = NULL;
           entity = NULL;
-          ret = ompf (connection, credentials,
+          ret = gmpf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -21272,13 +21272,13 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                       subject_id,
                       subject_type);
 
-          CHECK_OMPF_RET
+          CHECK_GMPF_RET
 
           if (strcmp (resource_type, "task") == 0)
             {
               response = NULL;
               entity = NULL;
-              ret = ompf (connection, credentials,
+              ret = gmpf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -21295,11 +21295,11 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                           subject_id,
                           subject_type);
 
-              CHECK_OMPF_RET
+              CHECK_GMPF_RET
 
               response = NULL;
               entity = NULL;
-              ret = ompf (connection, credentials,
+              ret = gmpf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -21316,11 +21316,11 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                           subject_id,
                           subject_type);
 
-              CHECK_OMPF_RET
+              CHECK_GMPF_RET
 
               response = NULL;
               entity = NULL;
-              ret = ompf (connection, credentials,
+              ret = gmpf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -21337,14 +21337,14 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                           subject_id,
                           subject_type);
 
-              CHECK_OMPF_RET
+              CHECK_GMPF_RET
             }
 
           if (strcmp (resource_type, "alert") == 0)
             {
               response = NULL;
               entity = NULL;
-              ret = ompf (connection, credentials,
+              ret = gmpf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -21361,7 +21361,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                           subject_id,
                           subject_type);
 
-              CHECK_OMPF_RET
+              CHECK_GMPF_RET
             }
 
           if (strcmp (resource_type, "agent") == 0
@@ -21370,7 +21370,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
             {
               response = NULL;
               entity = NULL;
-              ret = ompf (connection, credentials,
+              ret = gmpf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -21387,7 +21387,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                           subject_id,
                           subject_type);
 
-              CHECK_OMPF_RET
+              CHECK_GMPF_RET
             }
         }
     }
@@ -21414,7 +21414,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                 {
                   response = NULL;
                   entity = NULL;
-                  ret = ompf (connection, credentials,
+                  ret = gmpf (connection, credentials,
                               &response,
                               &entity,
                               response_data,
@@ -21431,7 +21431,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                               subject_id,
                               subject_type);
 
-                  CHECK_OMPF_RET
+                  CHECK_GMPF_RET
                 }
 
               if ((strcmp (permission, "proxy") == 0)
@@ -21440,7 +21440,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                 {
                   response = NULL;
                   entity = NULL;
-                  ret = ompf (connection, credentials,
+                  ret = gmpf (connection, credentials,
                               &response,
                               &entity,
                               response_data,
@@ -21457,13 +21457,13 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                               subject_id,
                               subject_type);
 
-                  CHECK_OMPF_RET
+                  CHECK_GMPF_RET
 
                   if (strcmp (related_type, "task") == 0)
                     {
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (connection, credentials,
+                      ret = gmpf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -21480,11 +21480,11 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                                   subject_id,
                                   subject_type);
 
-                      CHECK_OMPF_RET
+                      CHECK_GMPF_RET
 
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (connection, credentials,
+                      ret = gmpf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -21501,11 +21501,11 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                                   subject_id,
                                   subject_type);
 
-                      CHECK_OMPF_RET
+                      CHECK_GMPF_RET
 
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (connection, credentials,
+                      ret = gmpf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -21522,14 +21522,14 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                                   subject_id,
                                   subject_type);
 
-                      CHECK_OMPF_RET
+                      CHECK_GMPF_RET
                     }
 
                   if (strcmp (related_type, "alert") == 0)
                     {
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (connection, credentials,
+                      ret = gmpf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -21546,7 +21546,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                                   subject_id,
                                   subject_type);
 
-                      CHECK_OMPF_RET
+                      CHECK_GMPF_RET
                     }
 
                   if (strcmp (related_type, "agent") == 0
@@ -21555,7 +21555,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                     {
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (connection, credentials,
+                      ret = gmpf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -21572,7 +21572,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
                                   subject_id,
                                   subject_type);
 
-                      CHECK_OMPF_RET
+                      CHECK_GMPF_RET
                     }
                 }
             }
@@ -21608,7 +21608,7 @@ create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials
   return html;
 }
 
-#undef CHECK_OMPF_RET
+#undef CHECK_GMPF_RET
 
 /**
  * @brief Setup edit_permission XML, XSL transform the result.
@@ -21637,7 +21637,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1\"/>"))
         {
           case 0:
@@ -21682,7 +21682,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1\"/>"))
         {
           case 0:
@@ -21727,7 +21727,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1\"/>"))
         {
           case 0:
@@ -21784,7 +21784,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-edit_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return edit_permission (connection, credentials, params, NULL, response_data);
@@ -21801,7 +21801,7 @@ edit_permission_omp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Permission XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_permission_omp (gvm_connection_t *connection,
+export_permission_gmp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -21821,7 +21821,7 @@ export_permission_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_permissions_omp (gvm_connection_t *connection,
+export_permissions_gmp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -21840,7 +21840,7 @@ export_permissions_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-save_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -21880,7 +21880,7 @@ save_permission_omp (gvm_connection_t *connection, credentials_t * credentials, 
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -21965,7 +21965,7 @@ new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_list>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -21991,7 +21991,7 @@ upload_port_list (gvm_connection_t *connection, credentials_t *credentials, para
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_port_list>");
 
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -22006,7 +22006,7 @@ upload_port_list (gvm_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-upload_port_list_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+upload_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   return upload_port_list (connection, credentials, params, NULL, response_data);
@@ -22023,7 +22023,7 @@ upload_port_list_omp (gvm_connection_t *connection, credentials_t *credentials, 
  * @return Result of XSL transformation.
  */
 char *
-create_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -22043,7 +22043,7 @@ create_port_list_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   /* Create the port_list. */
 
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -22119,7 +22119,7 @@ new_port_range (gvm_connection_t *connection, credentials_t *credentials, params
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_range>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -22134,7 +22134,7 @@ new_port_range (gvm_connection_t *connection, credentials_t *credentials, params
  * @return Result of XSL transformation.
  */
 char *
-new_port_range_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return new_port_range (connection, credentials, params, NULL, response_data);
@@ -22151,7 +22151,7 @@ new_port_range_omp (gvm_connection_t *connection, credentials_t *credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-create_port_range_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   int ret;
@@ -22174,7 +22174,7 @@ create_port_range_omp (gvm_connection_t *connection, credentials_t * credentials
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -22260,7 +22260,7 @@ get_port_list (gvm_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-get_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return get_port_list (connection, credentials, params, NULL, response_data);
@@ -22296,7 +22296,7 @@ get_port_lists (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_port_lists_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_port_lists_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return get_port_lists (connection, credentials, params, NULL, response_data);
@@ -22313,7 +22313,7 @@ get_port_lists_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-new_port_list_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return new_port_list (connection, credentials, params, NULL, response_data);
@@ -22349,7 +22349,7 @@ edit_port_list (gvm_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-edit_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return edit_port_list (connection, credentials, params, NULL, response_data);
@@ -22366,7 +22366,7 @@ edit_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-save_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   int ret;
@@ -22387,7 +22387,7 @@ save_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, p
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -22451,7 +22451,7 @@ save_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-delete_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "port_list", credentials, params, 0, "get_port_lists",
@@ -22469,7 +22469,7 @@ delete_port_list_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                             cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "port_list", credentials, params, 1, "get_trash",
@@ -22487,7 +22487,7 @@ delete_trash_port_list_omp (gvm_connection_t *connection, credentials_t * creden
  * @return Result of XSL transformation.
  */
 char *
-delete_port_range_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "port_range", credentials, params, 1,
@@ -22505,7 +22505,7 @@ delete_port_range_omp (gvm_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 char *
-import_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -22523,7 +22523,7 @@ import_port_list_omp (gvm_connection_t *connection, credentials_t * credentials,
                              "%s"
                              "</create_port_list>",
                              params_value (params, "xml_file"));
-  ret = omp (connection, credentials, &response, &entity, response_data, command);
+  ret = gmp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -22594,7 +22594,7 @@ new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_role>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -22609,7 +22609,7 @@ new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
  * @return Result of XSL transformation.
  */
 char *
-new_role_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return new_role (connection, credentials, params, NULL, response_data);
@@ -22626,7 +22626,7 @@ new_role_omp (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "role", credentials, params, 1, "get_trash",
@@ -22644,7 +22644,7 @@ delete_trash_role_omp (gvm_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 char *
-delete_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "role", credentials, params, 0, "get_roles",
@@ -22662,7 +22662,7 @@ delete_role_omp (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-create_role_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   char *ret;
@@ -22681,7 +22681,7 @@ create_role_omp (gvm_connection_t *connection, credentials_t *credentials, param
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -22762,7 +22762,7 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
 
       response = NULL;
       entity = NULL;
-      switch (ompf (connection, credentials, &response, &entity, response_data,
+      switch (gmpf (connection, credentials, &response, &entity, response_data,
                     "<get_permissions"
                     " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
                     params_value (params, "role_id")))
@@ -22806,7 +22806,7 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
 
       response = NULL;
       entity = NULL;
-      switch (ompf (connection, credentials, &response, &entity, response_data,
+      switch (gmpf (connection, credentials, &response, &entity, response_data,
                     "<get_groups"
                     " filter=\"rows=-1 owner=%s\"/>",
                     credentials->username))
@@ -22862,7 +22862,7 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
  * @return Result of XSL transformation.
  */
 char *
-edit_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return edit_role (connection, credentials, params, NULL, response_data);
@@ -22897,7 +22897,7 @@ get_role (gvm_connection_t *connection, credentials_t * credentials, params_t *p
  * @return Result of XSL transformation.
  */
 char *
-get_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return get_role (connection, credentials, params, NULL, response_data);
@@ -22932,7 +22932,7 @@ get_roles (gvm_connection_t *connection, credentials_t * credentials, params_t *
  * @return Result of XSL transformation.
  */
 char *
-get_roles_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_roles_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_roles (connection, credentials, params, NULL, response_data);
@@ -22949,7 +22949,7 @@ get_roles_omp (gvm_connection_t *connection, credentials_t * credentials, params
  * @return Role XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_role_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_role_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "role", credentials, params,
@@ -22968,7 +22968,7 @@ export_role_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_roles_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_roles_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "role", credentials, params, response_data);
@@ -22985,7 +22985,7 @@ export_roles_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   int ret;
@@ -23008,7 +23008,7 @@ save_role_omp (gvm_connection_t *connection, credentials_t * credentials, params
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -23077,7 +23077,7 @@ save_role_omp (gvm_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-get_feeds_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -23134,7 +23134,7 @@ get_feeds_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   g_free (text);
 
-  return xsl_transform_omp (connection, credentials, params,  response,
+  return xsl_transform_gmp (connection, credentials, params,  response,
                             response_data);
 }
 
@@ -23144,7 +23144,7 @@ get_feeds_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication
  * @param[in]  params         Request parameters.
- * @param[in]  sync_cmd       Name of the OMP command used to sync the feed.
+ * @param[in]  sync_cmd       Name of the GMP command used to sync the feed.
  * @param[in]  action         Action shown in gsad status messages.
  * @param[in]  feed_name      Name of the feed shown in error messages.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23219,7 +23219,7 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
  * @return Result of XSL transformation.
  */
 char *
-sync_feed_omp (gvm_connection_t *connection, credentials_t * credentials,
+sync_feed_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return sync_feed (connection, credentials, params,
@@ -23238,7 +23238,7 @@ sync_feed_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-sync_scap_omp (gvm_connection_t *connection, credentials_t * credentials,
+sync_scap_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return sync_feed (connection, credentials, params,
@@ -23257,7 +23257,7 @@ sync_scap_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-sync_cert_omp (gvm_connection_t *connection, credentials_t * credentials,
+sync_cert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return sync_feed (connection, credentials, params,
@@ -23298,7 +23298,7 @@ get_filter (gvm_connection_t *connection, credentials_t * credentials, params_t 
  * @return Result of XSL transformation.
  */
 char *
-get_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_filter (connection, credentials, params, NULL, response_data);
@@ -23334,7 +23334,7 @@ get_filters (gvm_connection_t *connection, credentials_t * credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-get_filters_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_filters_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return get_filters (connection, credentials, params, NULL, response_data);
@@ -23360,7 +23360,7 @@ new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_filter>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -23375,7 +23375,7 @@ new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *
  * @return Result of XSL transformation.
  */
 char *
-create_filter_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -23393,7 +23393,7 @@ create_filter_omp (gvm_connection_t *connection, credentials_t *credentials, par
   CHECK_PARAM_INVALID (term, "Create Filter", "new_filter");
   CHECK_PARAM_INVALID (type, "Create Filter", "new_filter");
 
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -23437,7 +23437,7 @@ create_filter_omp (gvm_connection_t *connection, credentials_t *credentials, par
                             "/omp?cmd=get_alerts", response_data);
     }
 
-  if (omp_success (entity))
+  if (gmp_success (entity))
     {
       const char *filter_id;
 
@@ -23474,7 +23474,7 @@ create_filter_omp (gvm_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "filter", credentials, params, 1, "get_trash",
@@ -23492,7 +23492,7 @@ delete_trash_filter_omp (gvm_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-delete_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   param_t *filt_id, *id;
@@ -23564,7 +23564,7 @@ edit_filter (gvm_connection_t *connection, credentials_t * credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-edit_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return edit_filter (connection, credentials, params, NULL, response_data);
@@ -23581,7 +23581,7 @@ edit_filter_omp (gvm_connection_t *connection, credentials_t * credentials, para
  * @return Filter XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_filter_omp (gvm_connection_t *connection,
+export_filter_gmp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -23601,7 +23601,7 @@ export_filter_omp (gvm_connection_t *connection,
  *         on error.
  */
 char *
-export_filters_omp (gvm_connection_t *connection,
+export_filters_gmp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -23620,7 +23620,7 @@ export_filters_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-new_filter_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+new_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return new_filter (connection, credentials, params, NULL, response_data);
@@ -23637,7 +23637,7 @@ new_filter_omp (gvm_connection_t *connection, credentials_t *credentials, params
  * @return Result of XSL transformation.
  */
 char *
-save_filter_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -23748,7 +23748,7 @@ edit_schedule (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_schedule_omp (gvm_connection_t *connection, credentials_t *
+edit_schedule_gmp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -23766,7 +23766,7 @@ edit_schedule_omp (gvm_connection_t *connection, credentials_t *
  * @return Schedule XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_schedule_omp (gvm_connection_t *connection,
+export_schedule_gmp (gvm_connection_t *connection,
                      credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -23785,7 +23785,7 @@ export_schedule_omp (gvm_connection_t *connection,
  * @return Schedules XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_schedules_omp (gvm_connection_t *connection,
+export_schedules_gmp (gvm_connection_t *connection,
                       credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -23804,7 +23804,7 @@ export_schedules_omp (gvm_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-save_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -23845,7 +23845,7 @@ save_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, pa
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -23957,7 +23957,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -24002,7 +24002,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_groups/>"))
         {
           case 0:
@@ -24047,7 +24047,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_roles/>"))
         {
           case 0:
@@ -24086,7 +24086,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
     }
 
   g_string_append (xml, "</new_user>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -24101,7 +24101,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
  * @return Result of XSL transformation.
  */
 char *
-new_user_omp (gvm_connection_t *connection, credentials_t *credentials,
+new_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return new_user (connection, credentials, params, NULL, response_data);
@@ -24118,7 +24118,7 @@ new_user_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_user_omp (gvm_connection_t *connection, credentials_t * credentials,
+delete_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "user", credentials, params, 0,
@@ -24147,7 +24147,7 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
 
   if (command_enabled (credentials, "GET_USERS"))
     {
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"first=1 rows=-1\"/>"))
         {
           case 0:
@@ -24190,7 +24190,7 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
     g_string_append (xml, extra_xml);
 
   g_string_append (xml, "</delete_user>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -24206,7 +24206,7 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
  * @return Result of XSL transformation.
  */
 char *
-delete_user_confirm_omp (gvm_connection_t *connection, credentials_t *
+delete_user_confirm_gmp (gvm_connection_t *connection, credentials_t *
                          credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
@@ -24243,7 +24243,7 @@ get_user (gvm_connection_t *connection, credentials_t * credentials,
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -24294,7 +24294,7 @@ get_user (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_user_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_user (connection, credentials, params, NULL, response_data);
@@ -24326,7 +24326,7 @@ get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -24379,7 +24379,7 @@ get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *
  * @return Result of XSL transformation.
  */
 char *
-get_users_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+get_users_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_users (connection, credentials, params, NULL, response_data);
@@ -24396,7 +24396,7 @@ get_users_omp (gvm_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-create_user_omp (gvm_connection_t *connection, credentials_t * credentials,
+create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -24501,7 +24501,7 @@ create_user_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   response = NULL;
   entity = NULL;
-  ret = omp (connection, credentials, &response, &entity, response_data, buf);
+  ret = gmp (connection, credentials, &response, &entity, response_data, buf);
   g_free (buf);
   switch (ret)
     {
@@ -24573,7 +24573,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -24615,7 +24615,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_groups/>"))
         {
           case 0:
@@ -24657,7 +24657,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
 
       response = NULL;
       entity = NULL;
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<get_roles/>"))
         {
           case 0:
@@ -24715,7 +24715,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_user_omp (gvm_connection_t *connection, credentials_t * credentials,
+edit_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return edit_user (connection, credentials, params, NULL, response_data);
@@ -24732,7 +24732,7 @@ edit_user_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_vulns_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_vulns_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_vulns (connection, credentials, params, NULL, response_data);
@@ -24759,7 +24759,7 @@ get_vulns (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 char *
-auth_settings_omp (gvm_connection_t *connection, credentials_t *
+auth_settings_gmp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -24781,7 +24781,7 @@ auth_settings_omp (gvm_connection_t *connection, credentials_t *
       gchar * response = NULL;
       entity_t entity = NULL;
 
-      switch (omp (connection, credentials, &response, &entity, response_data,
+      switch (gmp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -24818,7 +24818,7 @@ auth_settings_omp (gvm_connection_t *connection, credentials_t *
 
   g_string_append (xml, "</auth_settings>");
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -24837,7 +24837,7 @@ auth_settings_omp (gvm_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-save_user_omp (gvm_connection_t *connection, credentials_t *credentials,
+save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, char **password_return, char **modified_user,
                int *logout_user, cmd_response_data_t *response_data)
 {
@@ -24975,7 +24975,7 @@ save_user_omp (gvm_connection_t *connection, credentials_t *credentials,
 
   response = NULL;
   entity = NULL;
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -25033,7 +25033,7 @@ save_user_omp (gvm_connection_t *connection, credentials_t *credentials,
                              "/omp?cmd=get_users", response_data);
     }
 
-  if (omp_success (entity)
+  if (gmp_success (entity)
       && (!strcmp (modify_password, "2")
           || !strcmp (modify_password, "3"))
       && params_given (params, "current_user"))
@@ -25066,7 +25066,7 @@ save_user_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_user_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   return export_resource (connection, "user", credentials, params,
@@ -25085,7 +25085,7 @@ export_user_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_users_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_users_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "user", credentials, params,
@@ -25173,7 +25173,7 @@ cvss_calculator (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   g_string_append (xml, "</cvss_calculator>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -25218,7 +25218,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
       || strcasecmp (name, "Main") == 0
       || strcasecmp (name, "SecInfo") == 0)
     {
-      ret = ompf (connection,
+      ret = gmpf (connection,
                   credentials,
                   &response,
                   &entity,
@@ -25268,14 +25268,14 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   if (strcasecmp (name, "SecInfo") == 0)
-    ret = ompf (connection,
+    ret = gmpf (connection,
                 credentials,
                 &response,
                 &entity,
                 response_data,
                 "<get_filters filter=\"type=info or type= first=1 rows=-1\"/>");
   else
-    ret = ompf (connection,
+    ret = gmpf (connection,
                 credentials,
                 &response,
                 &entity,
@@ -25323,13 +25323,13 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
   free_entity (entity);
 
   g_string_append (xml, "</dashboard>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
- * @brief Generate AUTH_CONF_SETTING element for save_auth_omp.
+ * @brief Generate AUTH_CONF_SETTING element for save_auth_gmp.
  */
 #define AUTH_CONF_SETTING(key, value) \
   "<auth_conf_setting>"               \
@@ -25348,7 +25348,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
  * @return XSL transformated list of users and configuration.
  */
 char*
-save_auth_omp (gvm_connection_t *connection, credentials_t* credentials,
+save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
@@ -25378,7 +25378,7 @@ save_auth_omp (gvm_connection_t *connection, credentials_t* credentials,
         {
           CHECK_PARAM_INVALID (certificate, "Save Authentication", "get_users");
           /** @warning authdn shall contain a single %s, handle with care. */
-          ret = ompf (connection, credentials, &response, &entity,
+          ret = gmpf (connection, credentials, &response, &entity,
                       response_data,
                       "<modify_auth>"
                       "<group name=\"%s\">"
@@ -25392,7 +25392,7 @@ save_auth_omp (gvm_connection_t *connection, credentials_t* credentials,
         }
       else
         /** @warning authdn shall contain a single %s, handle with care. */
-        ret = ompf (connection, credentials, &response, &entity, response_data,
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
                     "<modify_auth>"
                     "<group name=\"%s\">"
                     AUTH_CONF_SETTING ("enable", "%s")
@@ -25410,7 +25410,7 @@ save_auth_omp (gvm_connection_t *connection, credentials_t* credentials,
       CHECK_PARAM_INVALID (radiushost, "Save Authentication", "get_users");
       CHECK_PARAM_INVALID (radiuskey, "Save Authentication", "get_users");
       /** @warning authdn shall contain a single %s, handle with care. */
-      ret = ompf (connection, credentials, &response, &entity, response_data,
+      ret = gmpf (connection, credentials, &response, &entity, response_data,
                   "<modify_auth>"
                   "<group name=\"%s\">"
                   AUTH_CONF_SETTING ("enable", "%s")
@@ -25477,10 +25477,10 @@ save_auth_omp (gvm_connection_t *connection, credentials_t* credentials,
  * @param[in]  pref_value     Preference value.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return SAVE_CHART_PREFERENCE OMP response.
+ * @return SAVE_CHART_PREFERENCE GMP response.
  */
 char*
-save_chart_preference_omp (gvm_connection_t *connection,
+save_chart_preference_gmp (gvm_connection_t *connection,
                            credentials_t* credentials, params_t *params,
                            gchar **pref_id, gchar **pref_value,
                            cmd_response_data_t* response_data)
@@ -25518,7 +25518,7 @@ save_chart_preference_omp (gvm_connection_t *connection,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials, &response, &entity, response_data,
+  ret = gmpf (connection, credentials, &response, &entity, response_data,
               "<modify_setting setting_id=\"%s\">"
               "<value>%s</value>"
               "</modify_setting>",
@@ -25560,7 +25560,7 @@ save_chart_preference_omp (gvm_connection_t *connection,
                              "/omp?cmd=get_my_settings", xml_flag, response_data);
     }
 
-  if (omp_success (entity))
+  if (gmp_success (entity))
     {
       free_entity (entity);
       g_free (response);
@@ -25680,7 +25680,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</wizard>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -25696,7 +25696,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-wizard_omp (gvm_connection_t *connection, credentials_t *credentials,
+wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, cmd_response_data_t* response_data)
 {
   return wizard (connection, credentials, params, NULL, response_data);
@@ -25729,7 +25729,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
   gchar *wizard_xml;
 
   /* The naming is a bit subtle here, because the HTTP request
-   * parameters are called "param"s and so are the OMP wizard
+   * parameters are called "param"s and so are the GMP wizard
    * parameters. */
 
   name = params_value (params, "get_name");
@@ -25768,7 +25768,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
 
   response = NULL;
   entity = NULL;
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = gmp (connection, credentials, &response, &entity, response_data,
              run->str);
   g_string_free (run, TRUE);
   switch (ret)
@@ -25807,7 +25807,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                                 extra_xml ? extra_xml : "",
                                 response);
 
-  return xsl_transform_omp (connection, credentials, params, wizard_xml,
+  return xsl_transform_gmp (connection, credentials, params, wizard_xml,
                             response_data);
 }
 
@@ -25822,7 +25822,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-wizard_get_omp (gvm_connection_t *connection, credentials_t *credentials,
+wizard_get_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return wizard_get (connection, credentials, params, NULL, response_data);
@@ -25839,7 +25839,7 @@ wizard_get_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-process_bulk_omp (gvm_connection_t *connection, credentials_t *credentials,
+process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   GString *bulk_string;
@@ -25981,7 +25981,7 @@ process_bulk_omp (gvm_connection_t *connection, credentials_t *credentials,
       entity_t entity;
       gchar *response;
 
-      ret = ompf (connection, credentials, &response, &entity, response_data,
+      ret = gmpf (connection, credentials, &response, &entity, response_data,
                   "<get_%ss filter=\"first=1 rows=-1 %s\"/>",
                   type,
                   params_value (params, "filter") ? : "");
@@ -26063,7 +26063,7 @@ process_bulk_omp (gvm_connection_t *connection, credentials_t *credentials,
       entity_t entity;
       gchar *response;
 
-      ret = ompf (connection, credentials, &response, &entity, response_data,
+      ret = gmpf (connection, credentials, &response, &entity, response_data,
                   "<get_users filter=\"first=1 rows=-1\"/>",
                   type,
                   params_value (params, "filter") ? : "");
@@ -26114,7 +26114,7 @@ process_bulk_omp (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (bulk_string, "</process_bulk>");
 
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (bulk_string, FALSE), response_data);
 }
 
@@ -26129,7 +26129,7 @@ process_bulk_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-bulk_delete_omp (gvm_connection_t *connection, credentials_t * credentials,
+bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   const char *no_redirect, *type;
@@ -26264,7 +26264,7 @@ new_host (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_host>");
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -26280,7 +26280,7 @@ new_host (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_host_omp (gvm_connection_t *connection, credentials_t *credentials,
+new_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return new_host (connection, credentials, params, NULL, response_data);
@@ -26297,7 +26297,7 @@ new_host_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_host_omp (gvm_connection_t *connection, credentials_t * credentials,
+create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
@@ -26329,7 +26329,7 @@ create_host_omp (gvm_connection_t *connection, credentials_t * credentials,
                      name,
                      comment);
 
-  ret = omp (connection, credentials,
+  ret = gmp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -26468,7 +26468,7 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_asset (connection, credentials, params, NULL, response_data);
@@ -26547,7 +26547,7 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_assets_omp (gvm_connection_t *connection, credentials_t * credentials,
+get_assets_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return get_assets (connection, credentials, params, NULL, response_data);
@@ -26564,7 +26564,7 @@ get_assets_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_asset_omp (gvm_connection_t *connection, credentials_t *credentials,
+create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
@@ -26581,7 +26581,7 @@ create_asset_omp (gvm_connection_t *connection, credentials_t *credentials,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -26643,7 +26643,7 @@ create_asset_omp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
+delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *resource_id;
@@ -26759,7 +26759,7 @@ delete_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Asset XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
+export_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "asset", credentials, params,
@@ -26778,7 +26778,7 @@ export_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_assets_omp (gvm_connection_t *connection, credentials_t *
+export_assets_gmp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -26828,7 +26828,7 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (connection, credentials,
+  switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -26871,7 +26871,7 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append_printf (xml, "</edit_asset>");
   free_entity (entity);
   g_free (response);
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_string_free (xml, FALSE),
                             response_data);
 }
@@ -26887,7 +26887,7 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
+edit_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return edit_asset (connection, credentials, params, NULL, response_data);
@@ -26904,7 +26904,7 @@ edit_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
+save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
@@ -26923,7 +26923,7 @@ save_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (connection, credentials,
+  ret = gmpf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -26990,7 +26990,7 @@ get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, const char *extra_xml,
                   cmd_response_data_t* response_data)
 {
-  return xsl_transform_omp (connection, credentials, params,
+  return xsl_transform_gmp (connection, credentials, params,
                             g_strdup ("<get_assets_chart/>"), response_data);
 }
 
@@ -27005,7 +27005,7 @@ get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_assets_chart_omp (gvm_connection_t *connection, credentials_t *
+get_assets_chart_gmp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -27104,7 +27104,7 @@ openvas_connection_open (gvm_connection_t *connection,
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
-authenticate_omp (const gchar * username, const gchar * password,
+authenticate_gmp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
                   gchar **capabilities, gchar **language, gchar **pw_warning,
                   GTree **chart_prefs, gchar **autorefresh)

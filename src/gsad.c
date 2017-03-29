@@ -32,7 +32,7 @@
  *
  * This file contains the core of the GSA server process that
  * handles HTTPS requests and communicates with OpenVAS-Manager via the
- * OMP protocol.
+ * GMP protocol.
  */
 
 /**
@@ -98,7 +98,7 @@
 #include "gsad_base.h"
 #include "gsad_params.h"
 #include "gsad_gmp.h"
-#include "gsad_omp_auth.h" /* for authenticate_omp */
+#include "gsad_omp_auth.h" /* for authenticate_gmp */
 #include "gsad_http.h"
 #include "gsad_http_handler.h" /* for init_http_handlers */
 #include "gsad_settings.h"
@@ -931,7 +931,7 @@ init_validator ()
  * @param[out]  content_type  Return location for the newly set content type,
  *                            defaults to GSAD_CONTENT_TYPE_OCTET_STREAM.
  * @param[in]   format        Lowercase format string as in the respective
- *                            OMP commands.
+ *                            GMP commands.
  */
 static void
 content_type_from_format_string (enum content_type* content_type,
@@ -1281,19 +1281,19 @@ params_mhd_validate (void *params)
 }
 
 /**
- * @brief Add else branch for an OMP operation.
+ * @brief Add else branch for an GMP operation.
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    res = name ## _omp (&connection, credentials, \
+    res = name ## _gmp (&connection, credentials, \
                         con_info->params, response_data);
 
 /**
  * @brief Handle a complete POST request.
  *
  * Ensures there is a command, then depending on the command validates
- * parameters and calls the appropriate OMP function (like
- * create_task_omp).
+ * parameters and calls the appropriate GMP function (like
+ * create_task_gmp).
  *
  * @param[in]   con             HTTP connection
  * @param[in]   con_info        Connection info.
@@ -1302,7 +1302,7 @@ params_mhd_validate (void *params)
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
-exec_omp_post (http_connection_t *con,
+exec_gmp_post (http_connection_t *con,
                gsad_connection_info_t *con_info,
                const char *client_address)
 {
@@ -1334,7 +1334,7 @@ exec_omp_post (http_connection_t *con,
           gchar *timezone, *role, *capabilities, *severity, *language;
           gchar *pw_warning, *autorefresh;
           GTree *chart_prefs;
-          ret = authenticate_omp (params_value (con_info->params, "login"),
+          ret = authenticate_gmp (params_value (con_info->params, "login"),
                                   password,
                                   &role,
                                   &timezone,
@@ -1641,7 +1641,7 @@ exec_omp_post (http_connection_t *con,
   ELSE (empty_trashcan)
   else if (!strcmp (cmd, "alert_report"))
     {
-      res = get_report_section_omp
+      res = get_report_section_gmp
                             (&connection, credentials, con_info->params,
                              response_data);
     }
@@ -1662,7 +1662,7 @@ exec_omp_post (http_connection_t *con,
     {
       gchar *pref_id, *pref_value;
 
-      res = save_chart_preference_omp (&connection,
+      res = save_chart_preference_gmp (&connection,
                                        credentials,
                                        con_info->params,
                                        &pref_id, &pref_value,
@@ -1679,26 +1679,26 @@ exec_omp_post (http_connection_t *con,
   else if (!strcmp (cmd, "save_my_settings"))
     {
       char *timezone, *password, *severity, *language;
-      res = save_my_settings_omp (&connection,
+      res = save_my_settings_gmp (&connection,
                                   credentials, con_info->params,
                                   con_info->language,
                                   &timezone, &password,
                                   &severity, &language,
                                   response_data);
       if (timezone)
-        /* credentials->timezone set in save_my_settings_omp before XSLT. */
+        /* credentials->timezone set in save_my_settings_gmp before XSLT. */
         user_set_timezone (credentials->token, timezone);
       if (password)
         {
-          /* credentials->password set in save_my_settings_omp before XSLT. */
+          /* credentials->password set in save_my_settings_gmp before XSLT. */
           user_set_password (credentials->token, password);
 
           user_logout_all_sessions (credentials->username, credentials);
         }
       if (severity)
-        /* credentials->severity set in save_my_settings_omp before XSLT. */
+        /* credentials->severity set in save_my_settings_gmp before XSLT. */
         user_set_severity (credentials->token, severity);
-      /* credentials->language is set in save_my_settings_omp before XSLT. */
+      /* credentials->language is set in save_my_settings_gmp before XSLT. */
       user_set_language (credentials->token, language);
 
       g_free (timezone);
@@ -1722,7 +1722,7 @@ exec_omp_post (http_connection_t *con,
     {
       char *password, *modified_user;
       int logout;
-      res = save_user_omp (&connection, credentials,
+      res = save_user_gmp (&connection, credentials,
                            con_info->params,
                            &password, &modified_user, &logout,
                            response_data);
@@ -1730,7 +1730,7 @@ exec_omp_post (http_connection_t *con,
         user_logout_all_sessions (modified_user, credentials);
 
       if (password)
-        /* credentials->password set in save_user_omp before XSLT. */
+        /* credentials->password set in save_user_gmp before XSLT. */
         user_set_password (credentials->token, password);
 
       g_free (password);
@@ -1889,17 +1889,17 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
 #undef ELSE
 
 /**
- * @brief Add else branch for an OMP operation.
+ * @brief Add else branch for an GMP operation.
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    res = name ## _omp (&connection, credentials, params, response_data);
+    res = name ## _gmp (&connection, credentials, params, response_data);
 
 /**
  * @brief Handle a complete GET request.
  *
  * After some input checking, depending on the cmd parameter of the connection,
- * issue an omp command (via *_omp functions).
+ * issue an gmp command (via *_gmp functions).
  *
  * @param[in]   con                  HTTP Connection
  * @param[in]   con_info             Connection info.
@@ -1908,7 +1908,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
-exec_omp_get (http_connection_t *con,
+exec_gmp_get (http_connection_t *con,
               gsad_connection_info_t *con_info,
               credentials_t *credentials)
 {
@@ -1943,7 +1943,7 @@ exec_omp_get (http_connection_t *con,
       res = gsad_message_new (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: No valid command for omp.",
+                              "Diagnostics: No valid command for gmp.",
                               "/omp?cmd=get_tasks",
                               params_value_bool (params, "xml"),
                               response_data);
@@ -2019,7 +2019,7 @@ exec_omp_get (http_connection_t *con,
 
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
-  /* Check cmd and precondition, start respective OMP command(s). */
+  /* Check cmd and precondition, start respective GMP command(s). */
 
   if (!strcmp (cmd, "cvss_calculator"))
     res = cvss_calculator (&connection, credentials, params, response_data);
@@ -2086,7 +2086,7 @@ exec_omp_get (http_connection_t *con,
       credential_login = NULL;
       credential_id = params_value (params, "credential_id");
 
-      if (download_credential_omp (&connection,
+      if (download_credential_gmp (&connection,
                                    credentials,
                                    params,
                                    &html,
@@ -2122,7 +2122,7 @@ exec_omp_get (http_connection_t *con,
   ELSE (export_groups)
   ELSE (export_note)
   ELSE (export_notes)
-  ELSE (export_omp_doc)
+  ELSE (export_gmp_doc)
   ELSE (export_override)
   ELSE (export_overrides)
   ELSE (export_permission)
@@ -2157,7 +2157,7 @@ exec_omp_get (http_connection_t *con,
     {
       char *html, *filename;
 
-      if (download_agent_omp (&connection, credentials,
+      if (download_agent_gmp (&connection, credentials,
                               params,
                               &html,
                               &filename,
@@ -3401,7 +3401,7 @@ main (int argc, char **argv)
     {
       /* Start the unix socket server. */
 
-      omp_init (gsad_manager_unix_socket_path,
+      gmp_init (gsad_manager_unix_socket_path,
                 gsad_manager_address_string,
                 gsad_manager_port);
 
@@ -3424,7 +3424,7 @@ main (int argc, char **argv)
     {
       /* Start the real server. */
 
-      omp_init (gsad_manager_unix_socket_path,
+      gmp_init (gsad_manager_unix_socket_path,
                 gsad_manager_address_string,
                 gsad_manager_port);
 
