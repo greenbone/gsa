@@ -30,6 +30,8 @@ import SelectionType from '../selectiontype.js';
 import PropTypes from '../proptypes.js';
 
 import TableHead from '../table/head.js';
+import TableHeader from '../table/header.js';
+import TableRow from '../table/row.js';
 
 /**
  * A higher order component to create table headers which support entity
@@ -76,7 +78,13 @@ export const withEntitiesHeader = (Component, actions, options = {}) => {
         column = null;
       }
     }
-    return <Component {...options} actions={column} {...props}/>;
+    return (
+      <Component
+        {...options}
+        actions={column}
+        {...props}
+      />
+    );
   };
 
   HeaderWrapper.propTypes = {
@@ -84,6 +92,55 @@ export const withEntitiesHeader = (Component, actions, options = {}) => {
   };
 
   return HeaderWrapper;
+};
+
+/**
+ * A higher order component to create table headers from a column description
+ * array
+ *
+ * @param {Array}   columns   An array in the form of
+ *                            [['<column_key>', '<column_display_name>'], ...]
+ * @param {Element} action_element   React element, undefined or boolean value.
+ * @param {Object}  options   Default properties for Component.
+ *
+ * @return A new EntitiesHeader component
+ */
+export const createEntitiesHeader = (columns, action_element, options = {}) => {
+
+  const Header = ({
+    actions,
+    links = true,
+    sort = true,
+    onSortChange,
+  }) => {
+    return (
+      <TableHeader>
+        <TableRow>
+          {
+            columns.map(column => {
+              return (
+                <TableHead
+                  key={column[0]}
+                  sortby={sort ? column[0] : false}
+                  onSortChange={onSortChange}>
+                  {column[1]}
+                </TableHead>
+              );
+            })
+          }
+          {actions}
+        </TableRow>
+      </TableHeader>
+    );
+  };
+
+  Header.propTypes = {
+    actions: React.PropTypes.element,
+    links: React.PropTypes.bool,
+    sort: React.PropTypes.bool,
+    onSortChange: React.PropTypes.func,
+  };
+  return withEntitiesHeader(Header, action_element, options);
 };
 
 // vim: set ts=2 sw=2 tw=80:
