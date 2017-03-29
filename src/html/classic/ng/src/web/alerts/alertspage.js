@@ -36,9 +36,12 @@ import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
 
 import {createFilterDialog} from '../powerfilter/dialog.js';
+import {createEntitiesFooter} from '../entities/footer.js';
+import {createEntitiesHeader} from '../entities/header.js';
+import {createEntitiesTable} from '../entities/table.js';
 
 import AlertDialog from './dialogcontainer.js';
-import Table from './table.js';
+import Row from './row.js';
 
 const log = logger.getLogger('web.alerts.alertspage');
 
@@ -130,6 +133,17 @@ Page.propTypes = {
   showError: React.PropTypes.func.isRequired,
   showSuccess: React.PropTypes.func.isRequired,
 };
+
+const Table = createEntitiesTable({
+  emptyTitle: _('No alerts available'),
+  header: createEntitiesHeader(SORT_FIELDS),
+  row: Row,
+  footer: createEntitiesFooter({
+    download: 'alerts.xml',
+    span: 6,
+    trash: true,
+  }),
+});
 
 export default withEntitiesContainer(Page, 'alert', {
   filterEditDialog: createFilterDialog({

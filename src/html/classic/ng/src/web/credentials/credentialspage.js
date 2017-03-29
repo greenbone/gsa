@@ -31,16 +31,27 @@ import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
+import {createEntitiesFooter} from '../entities/footer.js';
+import {createEntitiesHeader} from '../entities/header.js';
+import {createEntitiesTable} from '../entities/table.js';
 
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
+
+import {createFilterDialog} from '../powerfilter/dialog.js';
 
 import {ALL_CREDENTIAL_TYPES, USERNAME_PASSWORD_CREDENTIAL_TYPE,
   } from '../../gmp/models/credential.js';
 
 import CredentialsDialog from './dialog.js';
-import FilterDialog from './filterdialog.js';
-import Table from './table.js';
+import Row from './row.js';
+
+const SORT_FIELDS = [
+  ['name', _('Name')],
+  ['type', _('Type')],
+  ['allow_insecure', _('Allow insecure use')],
+  ['login', _('Login')],
+];
 
 const ToolBarIcons = ({
     onNewCredentialClick
@@ -136,8 +147,21 @@ Page.propTypes = {
   onChanged: React.PropTypes.func.isRequired,
 };
 
+const Table = createEntitiesTable({
+  emptyTitle: _('No credentials available'),
+  header: createEntitiesHeader(SORT_FIELDS),
+  row: Row,
+  footer: createEntitiesFooter({
+    download: 'credentials.xml',
+    span: 6,
+    trash: true,
+  }),
+});
+
 export default withEntitiesContainer(Page, 'credential', {
-  filterEditDialog: FilterDialog,
+  filterEditDialog: createFilterDialog({
+    sortFields: SORT_FIELDS,
+  }),
   sectionIcon: 'credential.svg',
   table: Table,
   title: _('Credentials'),

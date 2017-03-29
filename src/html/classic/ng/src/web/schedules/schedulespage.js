@@ -33,6 +33,9 @@ import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
+import {createEntitiesFooter} from '../entities/footer.js';
+import {createEntitiesHeader} from '../entities/header.js';
+import {createEntitiesTable} from '../entities/table.js';
 
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
@@ -40,7 +43,7 @@ import NewIcon from '../icons/newicon.js';
 import {createFilterDialog} from '../powerfilter/dialog.js';
 
 import ScheduleDialog from './dialog.js';
-import Table from './table.js';
+import Row from './row.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],
@@ -163,6 +166,17 @@ Page.propTypes = {
 Page.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
+
+const Table = createEntitiesTable({
+  emptyTitle: _('No schedules available'),
+  header: createEntitiesHeader(SORT_FIELDS),
+  row: Row,
+  footer: createEntitiesFooter({
+    download: 'schedules.xml',
+    span: 6,
+    trash: true,
+  }),
+});
 
 export default withEntitiesContainer(Page, 'schedule', {
   filterEditDialog: createFilterDialog({

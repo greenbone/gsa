@@ -126,7 +126,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/agents/agentspage.js
      ${NG_SRC_DIR}/src/web/agents/dialog.js
      ${NG_SRC_DIR}/src/web/agents/row.js
-     ${NG_SRC_DIR}/src/web/agents/table.js
      ${NG_SRC_DIR}/src/web/alerts/alertspage.js
      ${NG_SRC_DIR}/src/web/alerts/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/alerts/dialog.js
@@ -142,7 +141,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/alerts/snmpmethodpart.js
      ${NG_SRC_DIR}/src/web/alerts/sourcefiremethodpart.js
      ${NG_SRC_DIR}/src/web/alerts/starttaskmethodpart.js
-     ${NG_SRC_DIR}/src/web/alerts/table.js
      ${NG_SRC_DIR}/src/web/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
@@ -152,9 +150,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/credentials/credentialspage.js
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/credentials/downloadicon.js
-     ${NG_SRC_DIR}/src/web/credentials/filterdialog.js
      ${NG_SRC_DIR}/src/web/credentials/row.js
-     ${NG_SRC_DIR}/src/web/credentials/table.js
      ${NG_SRC_DIR}/src/web/certbund/charts.js
      ${NG_SRC_DIR}/src/web/certbund/certbundadvspage.js
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
@@ -199,7 +195,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/filters/dialog.js
      ${NG_SRC_DIR}/src/web/filters/filterspage.js
      ${NG_SRC_DIR}/src/web/filters/row.js
-     ${NG_SRC_DIR}/src/web/filters/table.js
      ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/footnote.js
      ${NG_SRC_DIR}/src/web/form/checkbox.js
@@ -296,7 +291,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/reportformats/dialog.js
      ${NG_SRC_DIR}/src/web/reportformats/reportformatspage.js
      ${NG_SRC_DIR}/src/web/reportformats/row.js
-     ${NG_SRC_DIR}/src/web/reportformats/table.js
      ${NG_SRC_DIR}/src/web/reports/charts.js
      ${NG_SRC_DIR}/src/web/reports/filterdialog.js
      ${NG_SRC_DIR}/src/web/reports/importdialog.js
@@ -312,7 +306,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/schedules/row.js
      ${NG_SRC_DIR}/src/web/schedules/schedulespage.js
-     ${NG_SRC_DIR}/src/web/schedules/table.js
      ${NG_SRC_DIR}/src/web/secinfopage.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/secinfo/filterdialog.js

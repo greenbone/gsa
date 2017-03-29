@@ -32,6 +32,9 @@ import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
+import {createEntitiesFooter} from '../entities/footer.js';
+import {createEntitiesHeader} from '../entities/header.js';
+import {createEntitiesTable} from '../entities/table.js';
 
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
@@ -39,7 +42,7 @@ import NewIcon from '../icons/newicon.js';
 import {createFilterDialog} from '../powerfilter/dialog.js';
 
 import AgentDialog from './dialog.js';
-import Table from './table.js';
+import Row from './row.js';
 
 const log = logger.getLogger('web.agents.agentspage');
 
@@ -149,6 +152,17 @@ Page.propTypes = {
   showError: React.PropTypes.func.isRequired,
   showSuccess: React.PropTypes.func.isRequired,
 };
+
+const Table = createEntitiesTable({
+  emptyTitle: _('No agents available'),
+  header: createEntitiesHeader(SORT_FIELDS),
+  row: Row,
+  footer: createEntitiesFooter({
+    download: 'agents.xml',
+    span: 6,
+    trash: true,
+  }),
+});
 
 export default withEntitiesContainer(Page, 'agent', {
   filterEditDialog: createFilterDialog({

@@ -1,5 +1,23 @@
 2017-03-29 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/agents/agentspage.js,
+	src/html/classic/ng/src/web/agents/table.js,
+	src/html/classic/ng/src/web/alerts/alertspage.js,
+	src/html/classic/ng/src/web/alerts/table.js,
+	src/html/classic/ng/src/web/credentials/credentialspage.js,
+	src/html/classic/ng/src/web/credentials/filterdialog.js,
+	src/html/classic/ng/src/web/credentials/table.js,
+	src/html/classic/ng/src/web/filters/filterspage.js,
+	src/html/classic/ng/src/web/filters/table.js,
+	src/html/classic/ng/src/web/reportformats/reportformatspage.js,
+	src/html/classic/ng/src/web/reportformats/table.js,
+	src/html/classic/ng/src/web/schedules/schedulespage.js,
+	src/html/classic/ng/src/web/schedules/table.js: Use new createEntitiesHeader
+	HOC and remove now obsolete table modules.
+
+2017-03-29 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tags/dialog.js: Fix changing the resource type
 	for a tag.
 
