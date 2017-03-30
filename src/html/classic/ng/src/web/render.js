@@ -25,7 +25,10 @@ import d3 from 'd3';
 import React from 'react';
 
 import _ from '../locale.js';
-import {is_defined, is_empty, map, shorten} from '../utils.js';
+import logger from '../log.js';
+import {is_defined, is_empty, map, shorten, split} from '../utils.js';
+
+const log = logger.getLogger('web.render');
 
 /* eslint-disable no-unused-vars */
 /* add variables for translation message extractions */
@@ -206,71 +209,238 @@ export const withPrefix = Component => {
   return CompentWrapper;
 };
 
-export function type_name(type) {
+export function type_name(type, plural = true) {
+  if (!plural && type.endsWith('s')) {
+    type = type.slice(0, -1);
+  }
   switch (type) {
     case 'agent':
       return _('Agent');
+    case 'agents':
+      return _('Agents');
+    case 'aggregates':
+      return _('Aggregates');
     case 'alert':
       return _('Alert');
+    case 'alerts':
+      return _('Alerts');
     case 'allinfo':
       return _('All SecInfo');
+    case 'asset':
+      return _('Asset');
+    case 'assets':
+      return _('Assets');
     case 'config':
       return _('Scan Config');
+    case 'configs':
+      return _('Scan Configs');
     case 'cpe':
       return _('CPE');
     case 'cve':
       return _('CVE');
     case 'credential':
       return _('Credential');
+    case 'credentials':
+      return _('Credentials');
     case 'cert_bund_adv':
       return _('CERT-Bund Advisory');
     case 'dfn_cert_adv':
       return _('DFN-CERT Advisory');
+    case 'feeds':
+      return _('Feeds');
     case 'filter':
       return _('Filter');
+    case 'filters':
+      return _('Filters');
     case 'group':
       return _('Group');
+    case 'groups':
+      return _('Groups');
     case 'host':
       return _('Host');
+    case 'info':
+      return _('SecInfo');
     case 'os':
       return _('Operating System');
     case 'ovaldef':
       return _('OVAL Definition');
     case 'note':
       return _('Note');
+    case 'notes':
+      return _('Notes');
     case 'nvt':
       return _('NVT');
+    case 'nvts':
+      return _('NVTs');
+    case 'nvt_families':
+      return _('NVT Families');
     case 'override':
       return _('Override');
+    case 'overrides':
+      return _('Overrides');
     case 'permission':
       return _('Permission');
+    case 'permissions':
+      return _('Permissions');
     case 'port_list':
       return _('Port List');
+    case 'port_lists':
+      return _('Port Lists');
+    case 'port_range':
+      return _('Port Range');
+    case 'preferences':
+      return _('Preferences');
     case 'report':
       return _('Report');
+    case 'reports':
+      return _('Reports');
     case 'report_format':
       return _('Report Format');
+    case 'report_formats':
+      return _('Report Formats');
     case 'result':
       return _('Result');
+    case 'results':
+      return _('Results');
     case 'role':
       return _('Role');
+    case 'roles':
+      return _('Roles');
     case 'scanner':
       return _('Scanner');
+    case 'scanners':
+      return _('Scanners');
     case 'schedule':
       return _('Schedule');
+    case 'schedules':
+      return _('Schedules');
+    case 'setting':
+      return _('Setting');
+    case 'settings':
+      return _('Settings');
+    case 'system_reports':
+      return _('System Reports');
+    case 'tag':
+      return _('Tag');
+    case 'tags':
+      return _('Tags');
     case 'target':
       return _('Target');
+    case 'targets':
+      return _('Targets');
     case 'task':
       return _('Task');
+    case 'tasks':
+      return _('Tasks');
     case 'user':
       return _('User');
+    case 'users':
+      return _('Users');
     case 'vuln':
       return _('Vulnerability');
     case '':
       return '';
     default:
-      return _('Unkonwn');
+      log.debug('Unknown type', type);
+      return type;
   }
 };
+
+export function permission_description(name, resource) {
+  const has_resource = is_defined(resource) && !is_empty(resource.type);
+
+  if (has_resource && name === 'super') {
+    return _('Has super access to {{type}} {{name}}', {
+      type: type_name(resource.type),
+      name: resource.name,
+    });
+  }
+
+  switch (name) {
+    case 'super':
+    case 'Super':
+      return _('Has super access to all users');
+    case 'authenticate':
+      return _('May login');
+    case 'commands':
+      return _('May run multiple OMP commands in one');
+    case 'everything':
+    case 'Everything':
+      return _('Has all permissions');
+    case 'empty_trashcan':
+      return _('May empty the trashcan');
+    case 'get_dependencies':
+      return _('May get the dependencies of NVTs');
+    case 'get_version':
+      return _('May get version information');
+    case 'help':
+      return _('May get the help text');
+    case 'modify_auth':
+      return _('Has write access to the authentication configuration');
+    case 'restore':
+      return _('May restore items from the trashcan');
+    case 'resume_task':
+      return _('May resume Task');
+    case 'start_task':
+      return _('May start Task');
+    case 'stop_task':
+      return _('May stop Task');
+    case 'run_wizard':
+      return _('May run Wizard');
+    case 'test_alert':
+      return _('May test Alert');
+    default:
+      break;
+  }
+
+  let [type, res] = split(name, '_', 1);
+  switch (type) {
+    case 'create':
+      return _('May create a new {{type}}', {type: type_name(res)});
+    case 'delete':
+      if (has_resource) {
+        return _('May delete {{type}} {{name}}', {
+          type: type_name(res, false),
+          name: resource.name,
+        });
+      }
+      return _('May delete an existing {{type}}', {type: type_name(res)});
+    case 'get':
+      if (has_resource) {
+        return _('Has read access to {{type}} {{name}}', {
+          type: type_name(res, false),
+          name: resource.name,
+        });
+      }
+      return _('Has read access to {{type}}', {type: type_name(res)});
+    case 'modify':
+      if (has_resource) {
+        return _('Has write access to {{type}} {{name}}', {
+          type: type_name(res, false),
+          name: resource.name,
+        });
+      }
+      return _('Has write access to {{type}}', {type: type_name(res)});
+    case 'sync':
+      if (res === 'cert') {
+        return _('May sync the CERT feed');
+      }
+      if (res === 'feed') {
+        return _('May sync the NVT feed');
+      }
+      if (res === 'scap') {
+        return _('May sync the SCAP feed');
+      }
+      return _('May sync {{type}}', {type: res});
+    case 'move':
+      return _('May move {{type}}', {type: type_name(res)});
+    case 'verify':
+      return _('May verify {{type}}', {type: type_name(res)});
+    default:
+      break;
+  }
+
+  return name;
+}
 
 // vim: set ts=2 sw=2 tw=80:
