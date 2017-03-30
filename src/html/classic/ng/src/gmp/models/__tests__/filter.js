@@ -330,4 +330,31 @@ describe('Filter equal', () => {
   });
 
 });
+
+describe('Filter get', () => {
+
+  test('should get value', () => {
+    let filter = Filter.fromString('abc=1');
+    expect(filter.get('abc')).toEqual('1');
+
+    filter = Filter.fromString('abc=1 def=2');
+    expect(filter.get('abc')).toEqual('1');
+    expect(filter.get('def')).toEqual('2');
+  });
+
+  test('should not get value', () => {
+    let filter = Filter.fromString('abc=1');
+    expect(filter.get('def')).toBeUndefined();
+  });
+
+  test('should not get value without keyword', () => {
+    let filter = Filter.fromString('abc');
+    expect(filter.get('abc')).toBeUndefined();
+
+    filter = Filter.fromString('~abc');
+    expect(filter.get('abc')).toBeUndefined();
+    expect(filter.get('~abc')).toBeUndefined();
+  });
+
+});
 // vim: set ts=2 sw=2 tw=80:

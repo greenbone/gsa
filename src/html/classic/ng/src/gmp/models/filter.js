@@ -376,10 +376,8 @@ export class Filter extends Model {
    *                  this Filter.
    */
   _getTerm(key) {
-    if (!this.has(key)) {
-      return undefined;
-    }
-    return this.terms.get(key).get();
+    let tlist = this.terms.find(list => key === list.keyword);
+    return is_defined(tlist) ? tlist.get() : undefined;
   }
 
   /**
