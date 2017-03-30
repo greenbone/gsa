@@ -214,6 +214,8 @@ export function type_name(type) {
       return _('Alert');
     case 'allinfo':
       return _('All SecInfo');
+    case 'config':
+      return _('Scan Config');
     case 'cpe':
       return _('CPE');
     case 'cve':
@@ -252,8 +254,8 @@ export function type_name(type) {
       return _('Result');
     case 'role':
       return _('Role');
-    case 'scan_config':
-      return _('Scan Config');
+    case 'scanner':
+      return _('Scanner');
     case 'schedule':
       return _('Schedule');
     case 'target':
@@ -264,6 +266,8 @@ export function type_name(type) {
       return _('User');
     case 'vuln':
       return _('Vulnerability');
+    case '':
+      return '';
     default:
       return _('Unkonwn');
   }
