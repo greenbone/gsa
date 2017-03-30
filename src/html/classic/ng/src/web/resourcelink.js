@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from '../locale.js';
+import {is_defined, is_empty} from '../utils.js';
 
 import LegacyLink from './legacylink.js';
 import PropTypes from './proptypes.js';
@@ -31,8 +32,9 @@ import PropTypes from './proptypes.js';
 export const ResourceLink = ({
     resource,
     ...props,
-  }) => {
-  const {type, id, trash, name} = resource;
+  }, {capabilities}) => {
+  const {id, trash, name, permissions, deleted} = resource;
+  let {type} = resource;
 
   if (trash === '1') {
     return (
@@ -46,6 +48,20 @@ export const ResourceLink = ({
     );
   }
 
+  if (is_defined(deleted) && deleted !== '0') {
+    return (
+      <b>{_('Orphan')}</b>
+    );
+  }
+
+  if (is_defined(permissions) && is_empty(permissions)) {
+    return (
+      <span>
+        {name}
+      </span>
+    );
+  }
+
   let cmd;
   let id_name;
   let other = {};
@@ -55,22 +71,35 @@ export const ResourceLink = ({
     id_name = 'info_id';
     cmd = 'get_info';
     other.info_type = type;
+    type = 'info';
   }
   else if (type === 'nvt') {
     id_name = 'info_id';
     cmd = 'get_info';
     other.info_type = type;
     other.details = '1';
+    type = 'info';
   }
   else if (type === 'host' || type === 'os') {
     id_name = 'asset_id';
     cmd = 'get_asset';
     other.asset_type = type;
+    type = 'assets';
   }
   else {
     id_name = type + '_id';
     cmd = 'get_' + type;
+    type += 's';
   }
+
+  if (!capabilities.mayAccess(type)) {
+    return (
+      <span>
+        {name}
+      </span>
+    );
+  }
+
   props[id_name] = id;
   return (
     <LegacyLink
@@ -86,6 +115,9 @@ ResourceLink.propTypes = {
   resource: PropTypes.model.isRequired,
 };
 
+ResourceLink.contextTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
+};
 
 export default ResourceLink;
 
