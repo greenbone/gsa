@@ -261,4 +261,16 @@ export function exclude(object, func) {
     .map(key => ({[key]: object[key]})));
 }
 
+export function split(string, seperator, limit) {
+  // split('abc_def_hij', 1) => ['abc', 'def_hij']
+  let splits = string.split(seperator, limit);
+
+  let left = string.replace(splits.join(seperator), '');
+  if (left.trim().length > 0) {
+    splits.push(left.slice(1));
+  }
+
+  return splits;
+}
+
 // vim: set ts=2 sw=2 tw=80:

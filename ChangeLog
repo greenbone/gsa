@@ -1,5 +1,10 @@
 2017-03-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/utils.js: Add new function split to allow python
+	like string split.
+
+2017-03-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/__tests__/filter.js: Add additional tests
 	for FilterTermList hasKeyword and FilterTermList copy. Also add new tests for
 	Filter copy and next.
