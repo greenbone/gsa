@@ -123,6 +123,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/parser.js
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/gmp/response.js
+     ${NG_SRC_DIR}/src/gmp/xml2json.js
      ${NG_SRC_DIR}/src/web/agents/agentspage.js
      ${NG_SRC_DIR}/src/web/agents/dialog.js
      ${NG_SRC_DIR}/src/web/agents/row.js

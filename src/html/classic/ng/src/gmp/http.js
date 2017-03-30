@@ -25,11 +25,12 @@ import logger from '../log.js';
 
 import _ from '../locale.js';
 
-import {is_defined, has_value, is_array, extend, xml2json} from '../utils.js';
+import {is_defined, has_value, is_array, extend} from '../utils.js';
 
 import Cache from './cache.js';
 import PromiseFactory from './promise.js';
 import Response from './response.js';
+import xml2json from './xml2json.js';
 import {parse_envelope_meta} from './parser.js';
 
 const log = logger.getLogger('gmp.http');

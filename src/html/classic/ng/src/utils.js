@@ -21,8 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-const x2js = new window.X2JS();
-
 export const is_array = Array.isArray;
 
 export function is_defined(value) {
@@ -80,10 +78,6 @@ export function includes(array, value) {
     return array.indexOf(value) !== -1;
   }
   return array.includes(value);
-}
-
-export function xml2json(...args) {
-  return x2js.xml2json(...args);
 }
 
 export function for_each(array, func) {
