@@ -1,5 +1,11 @@
 2017-03-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/filter.js: Fix several parsing issues
+	with the filter. E.g. the order of the filter terms wasn't kept therefore and,
+	or, ... didn't work.
+
+2017-03-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/resourcelink.js: Update ResourceLink component
 	to check permissions and capabilities for the user. Also check for orphaned
 	resources.
