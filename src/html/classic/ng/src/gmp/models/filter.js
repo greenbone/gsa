@@ -309,7 +309,7 @@ export class FilterTermList {
    * @return {FilterTermList} A copy of this list
    */
   copy() {
-    return new FilterTermList(this.terms.slice());
+    return new FilterTermList(this.terms.slice(), this.keyword);
   }
 }
 
@@ -321,7 +321,7 @@ export class FilterTermList {
 export class Filter extends Model {
 
   get length() {
-    return this.terms.lenght;
+    return this.terms.length;
   }
 
   /**

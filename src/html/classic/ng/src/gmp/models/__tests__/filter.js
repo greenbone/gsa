@@ -90,6 +90,79 @@ describe('FilterTermList constructor', () => {
   });
 });
 
+describe('FilterTermList hasKeyword', () => {
+
+  test('should have a keyword', () => {
+    let list = new FilterTermList([], 'abc');
+    expect(list.hasKeyword()).toBe(true);
+  });
+
+  test('should not have a keyword', () => {
+    let list = new FilterTermList([]);
+    expect(list.hasKeyword()).toBe(false);
+  });
+});
+
+describe('FilterTermList copy', () => {
+
+  test('should contain same terms', () => {
+    let term1 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '1',
+    });
+    let term2 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '2',
+    });
+    let list1 = new FilterTermList([term1, term2], 'abc');
+    let list2 = list1.copy();
+
+    expect(list1.length).toBe(list2.length);
+    expect(list1.terms[0].equals(list2.terms[0])).toBe(true);
+    expect(list1.terms[1].equals(list2.terms[1])).toBe(true);
+  });
+
+  test('should contain same keyword', () => {
+    let list1 = new FilterTermList([], 'abc');
+    let list2 = list1.copy();
+
+    expect(list1.keyword).toBe(list2.keyword);
+  });
+
+  test('changing copy should not change origin', () => {
+    let term1 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '1',
+    });
+    let list1 = new FilterTermList(term1, 'abc');
+    let list2 = list1.copy();
+
+    list2.add(new FilterTerm({
+      keyword: 'abc',
+      value: '2',
+      relation: '=',
+    }));
+
+    expect(list1.length).toBe(1);
+    expect(list2.length).toBe(2);
+
+    list2 = list1.copy();
+
+    list2.set(new FilterTerm({
+      keyword: 'abc',
+      value: '2',
+      relation: '=',
+    }));
+
+    expect(list1.get('abc').value).toBe('1');
+    expect(list2.get('abc').value).toBe('2');
+  });
+
+});
+
 describe('Filter parse from string tests', () => {
 
   test('should parse aprox relation without column', () => {
@@ -116,6 +189,7 @@ describe('Filter parse from string tests', () => {
 });
 
 describe('Filter parse from keywords', () => {
+
   test('should parse aprox relation without column', () => {
     let elem = {
       keywords: {
@@ -354,6 +428,33 @@ describe('Filter get', () => {
     filter = Filter.fromString('~abc');
     expect(filter.get('abc')).toBeUndefined();
     expect(filter.get('~abc')).toBeUndefined();
+  });
+
+});
+
+describe('Filter copy', () => {
+
+  test('should copy all values', () => {
+    let filter1 = Filter.fromString('abc=1 def=2');
+    let filter2 = filter1.copy();
+    expect(filter1).not.toBe(filter2);
+    expect(filter2.get('abc')).toBe('1');
+    expect(filter2.get('def')).toBe('2');
+  });
+
+});
+
+describe('Filter next', () => {
+
+  test('should change first and rows', () => {
+    let filter = Filter.fromString('first=1 rows=10');
+    expect(filter.get('first')).toBe(1);
+    expect(filter.get('rows')).toBe(10);
+
+    filter = filter.next();
+
+    expect(filter.get('first')).toBe(11);
+    expect(filter.get('rows')).toBe(10);
   });
 
 });
