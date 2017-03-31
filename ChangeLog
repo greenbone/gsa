@@ -1,3 +1,8 @@
+2017-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_gmp.c (get_task): Request details, for RESULT_COUNT.
+	(save_config_gmp, get_system_reports_gmp): Flush trailing whitespace.
+
 2017-03-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (exec_gmp_post): Add log message on successful login.
@@ -218,7 +223,7 @@
 	* src/html/classic/help.xsl (about.html): Update copyright text.
 
 	* src/html/classic/help_ru.xsl (about.html): Update copyright text.
-	
+
 	* src/html/classic/help_zh_CN.xsl (about.html): Update copyright text.
 
 2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
@@ -3326,7 +3331,7 @@
 	openvas/omp/xml.h.
 
 	* src/gsad_omp.c: Remove unneeded include.
-	
+
 2017-01-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Rename type and function calls with changing from module
@@ -3334,7 +3339,7 @@
 
 	* src/gsad.c: Use gvm_connection_t instead of openvas_connection_t,
 	gvm_connection_close instead of openvas_connection_close.
-	
+
 	* src/gsad_http_handler.c: Use gvm_connection_t instead of
 	openvas_connection_t.
 
@@ -3546,7 +3551,7 @@
 	to ensure correct capitalization of tagName.  Remove href attributes
 	only from "a" elements.  Add workarounds for missing "xlink" prefix
 	and quotes in url(...) styles.
-	(svg_from_elem): Use regex to check stylesheet URLs and include ng 
+	(svg_from_elem): Use regex to check stylesheet URLs and include ng
 	main.[...].css.
 
 	* src/html/classic/js/gsa_gantt_chart.js
@@ -4628,7 +4633,7 @@
 	* src/gsad.c (init_validator): Remove option "vulns" from param
 	report_section.
 
-	* src/html/classic/omp.xsl (gsa:report-section-title): Remove menu 
+	* src/html/classic/omp.xsl (gsa:report-section-title): Remove menu
 	entry "Vulnerabilities".
 	(get_report_vulns_response, key_vulns_hosts, key_report_vulns)
 	(report [vulns]): Remove.  Made obsolete by the Vulnerabilities page

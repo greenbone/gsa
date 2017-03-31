@@ -5593,7 +5593,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
         "<get_tasks"
         " task_id=\"%s\""
         " filter=\"apply_overrides=%i\""
-        " details=\"0\"/>"
+        " details=\"1\"/>"
         "%s%s%s"
         "%s%s%s"
         "</commands>",
@@ -11989,7 +11989,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                       trends && member1 (trends, family))
                 == -1)
               {
-                response_data->http_status_code 
+                response_data->http_status_code
                   = MHD_HTTP_INTERNAL_SERVER_ERROR;
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
@@ -17335,7 +17335,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
                                       : time_broken->tm_year;
       start_time.tm_mon = start_month ? atoi (start_month) - 1
                                       : time_broken->tm_mon;
-      start_time.tm_mday = start_day ? atoi (start_day) 
+      start_time.tm_mday = start_day ? atoi (start_day)
                                      : time_broken->tm_mday;
       start_time.tm_hour = start_hour ? atoi (start_hour)
                                       : time_broken->tm_hour;
