@@ -1379,6 +1379,10 @@ exec_gmp_post (http_connection_t *con,
               ret = send_redirect_to_urn (con, url, user);
               user_release (user);
 
+              g_message ("Authentication success for '%s' from %s",
+                         params_value (con_info->params, "login") ?: "",
+                         client_address);
+
               g_free (url);
               g_free (timezone);
               g_free (severity);
