@@ -1,5 +1,10 @@
 2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/icons/entitycloneicon.js: Allow to
+	deactive entity clone icon.
+
+2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/capabilities.js: Use lower case name for
 	identifying capabalilities. Also use map to store all capabilities which
 	allows implementing for each and iterator protocol easily.

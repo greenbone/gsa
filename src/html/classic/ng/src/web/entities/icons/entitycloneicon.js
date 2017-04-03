@@ -33,6 +33,7 @@ import CloneIcon from '../../icons/cloneicon.js';
 export const EntityCloneIcon = ({
     displayName,
     entity,
+    mayClone = true,
     name,
     title,
     onClick,
@@ -43,10 +44,13 @@ export const EntityCloneIcon = ({
     displayName = _(capitalize_first_letter(name));
   }
 
-  let active = capabilities.mayClone(name);
+  let active = mayClone && capabilities.mayClone(name);
   if (!is_defined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
+    }
+    else if (!mayClone) { // eslint-disable-line no-negated-condition
+      title = _('{{entity}} may not be cloned', {entity: displayName});
     }
     else {
       title = _('Permission to clone {{entity}} denied', {entity: displayName});
@@ -65,6 +69,7 @@ export const EntityCloneIcon = ({
 EntityCloneIcon.propTypes = {
   displayName: React.PropTypes.string,
   entity: PropTypes.model.isRequired,
+  mayClone: React.PropTypes.bool,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string,
   onClick: React.PropTypes.func,
