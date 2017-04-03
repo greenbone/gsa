@@ -1,3 +1,16 @@
+2017-04-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Move overflow-y CSS rule to remove scroll bar from login page.
+
+	* src/html/classic/css/gsa-base.css (html): Remove overflow-y rule.
+
+	* src/html/classic/css/gsa-style.css (html): New rule-set.
+
+	* src/html/classic/ng/src/web/css/gsa-base.css (html): Remove
+	overflow-y rule.
+
+	* src/html/classic/ng/src/web/css/gsa-style.css (html): New rule-set.
+
 2017-03-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_gmp.c (get_task): Request details, for RESULT_COUNT.
