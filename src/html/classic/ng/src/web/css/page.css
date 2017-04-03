@@ -1,3 +1,7 @@
+html {
+  overflow-y: scroll;
+}
+
 html, body, #app, #app > div, #page {
   height: 100%;
 }
