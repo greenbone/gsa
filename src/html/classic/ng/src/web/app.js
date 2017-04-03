@@ -61,6 +61,7 @@ import NvtsPage from './nvts/nvtspage.js';
 import OperatingSystemsPage from './os/operatingsystemspage.js';
 import OvaldefsPage from './ovaldefs/ovaldefspage.js';
 import OverridesPage from './overrides/overridespage.js';
+import PermissionsPage from './permissions/permissionspage.js';
 import PortListsPage from './portlists/portlistspage.js';
 import ReportFormatsPage from './reportformats/reportformatspage.js';
 import ReportsPage from './reports/reportspage.js';
@@ -236,6 +237,9 @@ ReactDOM.render(
         <Route
           path="tags"
           component={TagsPage}/>
+        <Route
+          path="permissions"
+          component={PermissionsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

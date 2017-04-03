@@ -2845,7 +2845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise/>
       </xsl:choose>
       <h2>
-        <a href="/omp?cmd=get_permissions&amp;filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}&amp;token={/envelope/token}"
+        <a href="/ng/permissions?filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}"
            title="{gsa:i18n ('Permissions')}">
           <img class="icon icon-sm" src="/img/permission.svg" alt="Permissions"/>
         </a>

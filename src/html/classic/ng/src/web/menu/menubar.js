@@ -196,9 +196,8 @@ export const MenuBar = (props, context) => {
             to="tags"
             caps="get_tags"/>
           <MenuEntry
-            legacy
             title={_('Permissions')}
-            cmd="get_permissions"
+            to="permissions"
             caps="get_permissions"/>
         </Menu>
         <Menu title={_('Extras')}>
