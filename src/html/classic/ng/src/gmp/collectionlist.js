@@ -67,6 +67,10 @@ export class CollectionList {
     return this._entries.length;
   }
 
+  getEntries() {
+    return this._entries;
+  }
+
   getCounts() {
     return this._counts;
   }
