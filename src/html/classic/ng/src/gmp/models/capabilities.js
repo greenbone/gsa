@@ -31,14 +31,22 @@ export class Capabilities extends Model {
     super(element);
 
     if (!is_defined(this._capabilities)) {
-      this._capabilities = {};
+      this._capabilities = new Map();
     }
   }
 
+  [Symbol.iterator]() {
+    return this._capabilities[Symbol.iterator]();
+  }
+
   get(name) {
-    name = name.toUpperCase();
-    let capability = this._capabilities[name];
+    name = name.toLowerCase();
+    let capability = this._capabilities.get(name);
     return is_defined(capability) ? capability : {};
+  }
+
+  forEach(callback) {
+    return this._capabilities.forEach(callback);
   }
 
   mayAccess(type) {
@@ -46,7 +54,7 @@ export class Capabilities extends Model {
   }
 
   mayOp(value) {
-    return value.toUpperCase() in this._capabilities;
+    return this._capabilities.has(value.toLowerCase());
   }
 
   mayClone(type) {
@@ -68,13 +76,14 @@ export class Capabilities extends Model {
   setProperties() {};
 
   parseProroperties(elem) {
-    let capabilities = {};
+    let capabilities = new Map();
 
     for_each(elem, command => {
-      capabilities[command.name.toUpperCase()] = {
-        name: command.name,
+      const name = command.name.toLowerCase();
+      capabilities.set(name, {
+        name: name,
         summary: command.summary,
-      };
+      });
     });
 
     return capabilities;
