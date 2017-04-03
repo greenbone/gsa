@@ -277,6 +277,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/ovaldefs/charts.js
      ${NG_SRC_DIR}/src/web/page.js
      ${NG_SRC_DIR}/src/web/pagenotfound.js
+     ${NG_SRC_DIR}/src/web/permissions/dialog.js
+     ${NG_SRC_DIR}/src/web/permissions/dialogcontainer.js
+     ${NG_SRC_DIR}/src/web/permissions/permissionspage.js
+     ${NG_SRC_DIR}/src/web/permissions/row.js
      ${NG_SRC_DIR}/src/web/pagination.js
      ${NG_SRC_DIR}/src/web/portlists/dialog.js
      ${NG_SRC_DIR}/src/web/portlists/filterdialog.js

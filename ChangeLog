@@ -1,6 +1,15 @@
 2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/permissions/dialog.js,
+	src/html/classic/ng/src/web/permissions/dialogcontainer.js,
+	src/html/classic/ng/src/web/permissions/permissionspage.js,
+	src/html/classic/ng/src/web/permissions/row.js: Add react components for
+	permission list page.
+
+2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/groups.js,
 	src/html/classic/ng/src/gmp/commands/permissions.js,
 	src/html/classic/ng/src/gmp/commands/roles.js,
