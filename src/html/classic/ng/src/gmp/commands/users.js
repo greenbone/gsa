@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntityCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import {for_each} from '../../utils.js';
 import logger from '../../log.js';
@@ -90,6 +90,18 @@ export class UserCommand extends EntityCommand {
   }
 }
 
+export class UsersCommand extends EntitiesCommand {
+
+  constructor(http) {
+    super(http, 'user', User);
+  }
+
+  getEntitiesResponse(root) {
+    return root.get_users.get_users_response;
+  }
+}
+
 register_command('user', UserCommand);
+register_command('users', UsersCommand);
 
 // vim: set ts=2 sw=2 tw=80:
