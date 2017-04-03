@@ -1,5 +1,11 @@
 2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/utils.js: Support iterator protocol in first
+	function. Also support all kind of objects with length property in is_empty
+	function.
+
+2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/users.js: Implement gmp api for getting
 	the list of users.
 

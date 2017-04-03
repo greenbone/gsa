@@ -55,7 +55,7 @@ export function is_empty(value) {
     return value.trim().length === 0;
   }
 
-  if (is_array(value)) {
+  if (is_defined(value.length)) {
     return value.length === 0;
   }
   return false;
@@ -216,7 +216,17 @@ export function first(array, non = {}) {
   if (is_empty(array)) {
     return non;
   }
-  return array[0];
+
+  if (is_array(array)) {
+    return array[0];
+  }
+
+  // support array like objects which have an iterator
+  if (!is_defined(array[Symbol.iterator])) { // not an array like object
+    return non;
+  }
+
+  return array[Symbol.iterator]().next().value; // returns array[0]
 }
 
 export function includes_id(list, id) {
