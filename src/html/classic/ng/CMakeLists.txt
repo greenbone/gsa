@@ -67,6 +67,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/credentials.js
      ${NG_SRC_DIR}/src/gmp/commands/cves.js
      ${NG_SRC_DIR}/src/gmp/commands/dfncert.js
+     ${NG_SRC_DIR}/src/gmp/commands/groups.js
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
      ${NG_SRC_DIR}/src/gmp/commands/hosts.js
      ${NG_SRC_DIR}/src/gmp/commands/login.js
@@ -75,10 +76,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/os.js
      ${NG_SRC_DIR}/src/gmp/commands/ovaldefs.js
      ${NG_SRC_DIR}/src/gmp/commands/overrides.js
+     ${NG_SRC_DIR}/src/gmp/commands/permissions.js
      ${NG_SRC_DIR}/src/gmp/commands/portlists.js
      ${NG_SRC_DIR}/src/gmp/commands/reportformats.js
      ${NG_SRC_DIR}/src/gmp/commands/reports.js
      ${NG_SRC_DIR}/src/gmp/commands/results.js
+     ${NG_SRC_DIR}/src/gmp/commands/roles.js
      ${NG_SRC_DIR}/src/gmp/commands/scanners.js
      ${NG_SRC_DIR}/src/gmp/commands/schedules.js
      ${NG_SRC_DIR}/src/gmp/commands/secinfo.js
@@ -99,6 +102,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/cpe.js
      ${NG_SRC_DIR}/src/gmp/models/cve.js
      ${NG_SRC_DIR}/src/gmp/models/dfncert.js
+     ${NG_SRC_DIR}/src/gmp/models/group.js
      ${NG_SRC_DIR}/src/gmp/models/filter.js
      ${NG_SRC_DIR}/src/gmp/models/host.js
      ${NG_SRC_DIR}/src/gmp/models/login.js
@@ -106,11 +110,13 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/os.js
      ${NG_SRC_DIR}/src/gmp/models/ovaldef.js
      ${NG_SRC_DIR}/src/gmp/models/override.js
+     ${NG_SRC_DIR}/src/gmp/models/permission.js
      ${NG_SRC_DIR}/src/gmp/models/nvt.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
      ${NG_SRC_DIR}/src/gmp/models/reportformat.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
      ${NG_SRC_DIR}/src/gmp/models/result.js
+     ${NG_SRC_DIR}/src/gmp/models/role.js
      ${NG_SRC_DIR}/src/gmp/models/scanner.js
      ${NG_SRC_DIR}/src/gmp/models/schedule.js
      ${NG_SRC_DIR}/src/gmp/models/secinfo.js

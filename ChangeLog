@@ -1,5 +1,17 @@
 2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/commands/groups.js,
+	src/html/classic/ng/src/gmp/commands/permissions.js,
+	src/html/classic/ng/src/gmp/commands/roles.js,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/models/group.js,
+	src/html/classic/ng/src/gmp/models/permission.js,
+	src/html/classic/ng/src/gmp/models/role.js: Add gmp apis for groups, roles and
+	permissions.
+
+2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/render.js: Improve permission_description to
 	support subject type parameter. In contrast to the xslt based version the js
 	version is completely translatable.
