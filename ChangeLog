@@ -1,3 +1,8 @@
+2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad.c (init_validator): Really make optional_resource_type optional by
+	allowing an empty string as value.
+
 2017-04-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/ng/src/web/css/page.css (html): New rule-set.
