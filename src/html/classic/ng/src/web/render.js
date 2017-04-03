@@ -338,6 +338,8 @@ export function type_name(type, plural = true) {
       return _('Users');
     case 'vuln':
       return _('Vulnerability');
+    case 'vulns':
+      return _('Vulnerabilities');
     case '':
       return '';
     default:
@@ -346,27 +348,95 @@ export function type_name(type, plural = true) {
   }
 };
 
-export function permission_description(name, resource) {
-  const has_resource = is_defined(resource) && !is_empty(resource.type);
+export function permission_description(name, resource, subject) {
+  if (is_defined(subject) && !is_empty(subject.type)) {
+    return permission_description_resource_with_subject(name, resource,
+      subject);
+  }
+  return permission_description_resource(name, resource);
+}
 
-  if (has_resource && name === 'super') {
-    return _('Has super access to {{type}} {{name}}', {
-      type: type_name(resource.type),
+export function permission_description_resource(name, resource) {
+  if (is_defined(resource) && !is_empty(resource.type)) {
+    name = name.toLowerCase();
+    const resource_type = {
+      type: type_name(resource.type, false),
       name: resource.name,
-    });
+    };
+
+    if (name === 'super') {
+      return _('Has super access to all resources of {{type}} {{name}}',
+        resource_type);
+    }
+
+    let [type] = split(name, '_', 1);
+    switch (type) {
+      case 'create':
+        return _('May create a new {{type}}', resource_type);
+      case 'delete':
+        return _('May delete {{type}} {{name}}', resource_type);
+      case 'get':
+        return _('Has read access to {{type}} {{name}}', resource_type);
+      case 'modify':
+        return _('Has write access to {{type}} {{name}}', resource_type);
+      default:
+        break;
+    }
   }
 
+  return simple_permission_description(name);
+}
+
+export function permission_description_resource_with_subject(name, resource,
+  subject) {
+  if (is_defined(resource) && !is_empty(resource.type)) {
+    name = name.toLowerCase();
+    let type = {
+      subject_type: type_name(subject.type, false),
+      subject_name: subject.name,
+      resource_type: type_name(resource.type, false),
+      resource_name: resource.name,
+    };
+
+    if (name === 'super') {
+      return _('{{subject_type}} {{subject_name}} has super access to ' +
+        'all resources of {{resource_type}} {{resource_name}}', type);
+    }
+
+    let [command_type, command_name] = split(name, '_', 1);
+    type.resource_type = type_name(command_name, false);
+    switch (command_type) {
+      case 'create':
+        return _('{{subject_type}} {{subject_name}} may create a new ' +
+          '{{resource_type}}', type);
+      case 'delete':
+        return _('{{subject_type}} {{subject_name}} may delete ' +
+          '{{resource_type}} {{resource_name}}', type);
+      case 'get':
+        return _('{{subject_type}} {{subject_name}} has read access to ' +
+          '{{resource_type}} {{resource_name}}', type);
+      case 'modify':
+        return _('{{subject_type}} {{subject_name}} has write access to ' +
+          '{{resource_type}} {{resource_name}}', type);
+      default:
+        break;
+    }
+  }
+
+  return simple_permission_description_with_subject(name, subject);
+}
+
+export function simple_permission_description(name) {
+  name = name.toLowerCase();
   switch (name) {
     case 'super':
-    case 'Super':
-      return _('Has super access to all users');
+      return _('Has super access');
     case 'authenticate':
       return _('May login');
     case 'commands':
       return _('May run multiple OMP commands in one');
     case 'everything':
-    case 'Everything':
-      return _('Has all permissions');
+      return _('Has permission to run all commands');
     case 'empty_trashcan':
       return _('May empty the trashcan');
     case 'get_dependencies':
@@ -398,28 +468,10 @@ export function permission_description(name, resource) {
     case 'create':
       return _('May create a new {{type}}', {type: type_name(res)});
     case 'delete':
-      if (has_resource) {
-        return _('May delete {{type}} {{name}}', {
-          type: type_name(res, false),
-          name: resource.name,
-        });
-      }
       return _('May delete an existing {{type}}', {type: type_name(res)});
     case 'get':
-      if (has_resource) {
-        return _('Has read access to {{type}} {{name}}', {
-          type: type_name(res, false),
-          name: resource.name,
-        });
-      }
       return _('Has read access to {{type}}', {type: type_name(res)});
     case 'modify':
-      if (has_resource) {
-        return _('Has write access to {{type}} {{name}}', {
-          type: type_name(res, false),
-          name: resource.name,
-        });
-      }
       return _('Has write access to {{type}}', {type: type_name(res)});
     case 'sync':
       if (res === 'cert') {
@@ -437,10 +489,101 @@ export function permission_description(name, resource) {
     case 'verify':
       return _('May verify {{type}}', {type: type_name(res)});
     default:
+      return name;
+  }
+}
+
+export function simple_permission_description_with_subject(name, subject) {
+  name = name.toLowerCase();
+  let type = {
+    subject_type: type_name(subject.type, false),
+    subject_name: subject.name,
+  };
+
+  switch (name) {
+    case 'super':
+      return _('{{subject_type}} {{subject_name}} has super access', type);
+    case 'authenticate':
+      return _('{{subject_type}} {{subject_name}} may login', type);
+    case 'commands':
+      return _('{{subject_type}} {{subject_name}} may run multiple OMP ' +
+        'commands in one', type);
+    case 'everything':
+      return _('{{subject_type}} {{subject_name}} has all permissions', type);
+    case 'empty_trashcan':
+      return _('{{subject_type}} {{subject_name}} may empty the ' +
+        'trashcan', type);
+    case 'get_dependencies':
+      return _('{{subject_type}} {{subject_name}} may get the dependencies ' +
+        'of NVTs', type);
+    case 'get_version':
+      return _('{{subject_type}} {{subject_name}} may get version ' +
+        'information', type);
+    case 'help':
+      return _('{{subject_type}} {{subject_name}} may get the help text', type);
+    case 'modify_auth':
+      return _('{{subject_type}} {{subject_name}} has write access to the ' +
+        'authentication configuration', type);
+    case 'restore':
+      return _('{{subject_type}} {{subject_name}} may restore items from ' +
+        'the trashcan', type);
+    case 'resume_task':
+      return _('{{subject_type}} {{subject_name}} may resume Task', type);
+    case 'start_task':
+      return _('{{subject_type}} {{subject_name}} may start Task', type);
+    case 'stop_task':
+      return _('{{subject_type}} {{subject_name}} may stop Task', type);
+    case 'run_wizard':
+      return _('{{subject_type}} {{subject_name}} may run Wizard', type);
+    case 'test_alert':
+      return _('{{subject_type}} {{subject_name}} may test Alert', type);
+    default:
       break;
   }
 
-  return name;
+  let [command_type, res] = split(name, '_', 1);
+  type = {
+    subject_type: type_name(subject.type, false),
+    subject_name: subject.name,
+    resource_type: type_name(res),
+  };
+  switch (command_type) {
+    case 'create':
+      return _('{{subject_type}} {{subject_name}} may create a new ' +
+        '{{resource_type}}', type);
+    case 'delete':
+      return _('{{subject_type}} {{subject_name}} may delete an existing ' +
+        '{{resource_type}}', type);
+    case 'get':
+      return _('{{subject_type}} {{subject_name}} has read access to ' +
+        '{{resource_type}}', type);
+    case 'modify':
+      return _('{{subject_type}} {{subject_name}} has write access to ' +
+        '{{resource_type}}', type);
+    case 'sync':
+      if (res === 'cert') {
+        return _('{{subject_type}} {{subject_name}} may sync the CERT ' +
+          'feed', type);
+      }
+      if (res === 'feed') {
+        return _('{{subject_type}} {{subject_name}} may sync the NVT ' +
+          'feed', type);
+      }
+      if (res === 'scap') {
+        return _('{{subject_type}} {{subject_name}} may sync the SCAP ' +
+          'feed', type);
+      }
+      return _('{{subject_type}} {{subject_name}} may sync ' +
+        '{{resource_type}}', type);
+    case 'move':
+      return _('{{subject_type}} {{subject_name}} may move ' +
+        '{{resource_type}}', type);
+    case 'verify':
+      return _('{{subject_type}} {{subject_name}} may verify ' +
+        '{{resource_type}}', type);
+    default:
+      return name;
+  }
 }
 
 // vim: set ts=2 sw=2 tw=80:

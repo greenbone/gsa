@@ -1,5 +1,11 @@
 2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/render.js: Improve permission_description to
+	support subject type parameter. In contrast to the xslt based version the js
+	version is completely translatable.
+
+2017-04-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/utils.js: Support iterator protocol in first
 	function. Also support all kind of objects with length property in is_empty
 	function.
