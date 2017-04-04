@@ -175,6 +175,31 @@ describe('Filter parse from string tests', () => {
     expect(filter.toFilterString()).toEqual('abc');
   });
 
+  test('should parse equal relation without column', () => {
+    let filter = Filter.fromString('=abc');
+    expect(filter.toFilterString()).toEqual('=abc');
+  });
+
+  test('should parse equal relation without column and with quotes', () => {
+    let filter = Filter.fromString('="abc def"');
+    expect(filter.toFilterString()).toEqual('="abc def"');
+  });
+
+  test('should parse above relation without column', () => {
+    let filter = Filter.fromString('>1.0');
+    expect(filter.toFilterString()).toEqual('>1.0');
+  });
+
+  test('should parse below relation without column', () => {
+    let filter = Filter.fromString('<1.0');
+    expect(filter.toFilterString()).toEqual('<1.0');
+  });
+
+  test('should parse below relation without column', () => {
+    let filter = Filter.fromString(':abc');
+    expect(filter.toFilterString()).toEqual(':abc');
+  });
+
   test('should parse and keep sequence order', () => {
     let fstrings = [
       'abc and not def',
