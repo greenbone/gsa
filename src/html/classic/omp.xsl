@@ -36,7 +36,7 @@
 <!--
 Greenbone Security Assistant
 $Id$
-Description: OpenVAS Manager Protocol (OMP) stylesheet
+Description: Greenbone Management Protocol (GMP) stylesheet
 
 Authors:
 Matthew Mundell <matthew.mundell@greenbone.net>
@@ -749,7 +749,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="gsa:i18n ('may login')"/>
       </xsl:when>
       <xsl:when test="$lower = 'commands'">
-        <xsl:value-of select="gsa:i18n ('may run multiple OMP commands in one')"/>
+        <xsl:value-of select="gsa:i18n ('may run multiple GMP commands in one')"/>
       </xsl:when>
       <xsl:when test="$lower = 'everything'">
         <xsl:value-of select="gsa:i18n ('has all permissions')"/>
@@ -2393,7 +2393,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$type = '1'">OSP Scanner</xsl:when>
     <xsl:when test="$type = '2'">OpenVAS Scanner</xsl:when>
     <xsl:when test="$type = '3'">CVE Scanner</xsl:when>
-    <xsl:when test="$type = '4'">OMP Slave</xsl:when>
+    <xsl:when test="$type = '4'">GMP Slave</xsl:when>
     <xsl:otherwise>Unknown type (<xsl:value-of select="type"/>)</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2402,7 +2402,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="default"/>
   <xsl:call-template name="opt">
     <xsl:with-param name="value" select="4"/>
-    <xsl:with-param name="content" select="'OMP Slave'"/>
+    <xsl:with-param name="content" select="'GMP Slave'"/>
     <xsl:with-param name="select-value" select="$default"/>
   </xsl:call-template>
   <xsl:call-template name="opt">
@@ -2991,7 +2991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="error_window">
         <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
         <xsl:with-param name="message">
-          SCAP database missing on OMP server.  Prognostic reporting disabled.
+          SCAP database missing on GMP server.  Prognostic reporting disabled.
           <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
             title="Help: SCAP database missing"
             class="icon icon-sm">
@@ -7566,7 +7566,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </div>
                 </xsl:if>
 
-                <!-- OMP Scanner. -->
+                <!-- GMP Scanner. -->
                 <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 4])">
                   <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--4">
                     <input type="hidden" name="scanner_type" value="4" class="form-selection-input-scanner form-selection-input-scanner--4"/>
@@ -27595,7 +27595,7 @@ should not have received it.
       <xsl:call-template name="error_window">
         <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
         <xsl:with-param name="message">
-          SCAP database missing on OMP server.  Prognostic reporting disabled.
+          SCAP database missing on GMP server.  Prognostic reporting disabled.
           <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
             class="icon icon-sm"
             title="Help: SCAP database missing">
@@ -35329,7 +35329,7 @@ should not have received it.
         </xsl:when>
         <xsl:otherwise>
           <b>
-            <xsl:value-of select="gsa:i18n ('OMP Error')"/>
+            <xsl:value-of select="gsa:i18n ('GMP Error')"/>
             <xsl:text> </xsl:text>
             <xsl:value-of select="@status"/>:
           </b>
@@ -37766,7 +37766,7 @@ should not have received it.
           <option value="xml">XML</option>
         </select>
         <input type="image"
-          name="Download OMP documentation"
+          name="Download GMP documentation"
           src="/img/download.svg"
           class="icon icon-sm"
           alt="Download"/>
@@ -37777,10 +37777,10 @@ should not have received it.
   <div class="section-header">
     <h1>
       <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Help: OMP')}">
-        <img class="icon icon-lg" src="/img/help.svg" alt="Help: OMP"/>
+         title="{gsa:i18n ('Help: GMP')}">
+        <img class="icon icon-lg" src="/img/help.svg" alt="Help: GMP"/>
       </a>
-      <xsl:value-of select="gsa:i18n ('Help: OMP')"/>
+      <xsl:value-of select="gsa:i18n ('Help: GMP')"/>
     </h1>
   </div>
 
@@ -37789,7 +37789,7 @@ should not have received it.
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>i
     </div>
     <div style="text-align:left">
-      <h1>OMP</h1>
+      <h1>GMP</h1>
 
       <xsl:if test="version">
         <p>Version: <xsl:value-of select="normalize-space(version)"/></p>

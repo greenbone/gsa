@@ -1475,10 +1475,10 @@ exec_gmp_post (http_connection_t *con,
                                            BAD_MISSING_COOKIE, xml_flag);
     }
 
-  if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_OMP_DOWN ||
+  if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_GMP_DOWN ||
           ret == USER_GUEST_LOGIN_ERROR)
     {
-      auth_reason = ret == USER_OMP_DOWN
+      auth_reason = ret == USER_GMP_DOWN
                     ? GMP_SERVICE_DOWN
                     : (ret == USER_GUEST_LOGIN_ERROR
                       ? LOGIN_ERROR

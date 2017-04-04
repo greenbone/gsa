@@ -78,7 +78,7 @@
   gsa.stop_auto_refresh = stop_auto_refresh;
   gsa.set_token = set_token;
 
-  gsa.OMPRequest = OMPRequest;
+  gsa.GMPRequest = GMPRequest;
 
   gsa.log.error =  function() {
     console.error.apply(console, arguments);
@@ -200,7 +200,7 @@
     // currently only local urls are supported
     return url.pathname + '?' + $.param(url.params);
   }
-  function OMPRequest(options) {
+  function GMPRequest(options) {
     this.params = gsa.is_defined(options.params) ? options.params : {};
     this.method = gsa.is_string(options.method) ?
       options.method.toUpperCase() : 'POST';
@@ -210,7 +210,7 @@
     this.fail_callback = options.fail_callback;
   }
 
-  OMPRequest.prototype.do = function(success_callback, fail_callback) {
+  GMPRequest.prototype.do = function(success_callback, fail_callback) {
     var self = this;
 
     if (success_callback) {
@@ -271,13 +271,13 @@
     return this;
   };
 
-  OMPRequest.prototype.success = function(data, status, jqXHR) {
+  GMPRequest.prototype.success = function(data, status, jqXHR) {
     if (this.success_callback) {
       this.success_callback(data, status, jqXHR);
     }
   };
 
-  OMPRequest.prototype.fail = function(jqXHR) {
+  GMPRequest.prototype.fail = function(jqXHR) {
     if (this.fail_callback) {
       this.fail_callback(jqXHR);
     }

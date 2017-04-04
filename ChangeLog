@@ -1,3 +1,16 @@
+2017-04-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c, src/gsad_http_handler.c, src/gsad_user.c,
+	src/gsad_user.h, src/html/classic/dynamic_strings.xsl,
+	src/html/classic/gsad.xsl, src/html/classic/js/greenbone-dialog.js,
+	src/html/classic/js/greenbone-init.js,
+	src/html/classic/js/greenbone.js,
+	src/html/classic/js/gsa_chart_helpers.js,
+	src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/omp-doc.xsl, src/html/classic/omp.xsl,
+	src/html/classic/rnc.xsl, src/html/its/gsad.xsl,
+	src/html/its/omp.xsl: Replace various occurances of "OMP" by "GMP".
+
 2017-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	 * src/html/classic/ng/src/gmp/models/__tests__/filter.js: Add filter parse

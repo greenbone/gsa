@@ -1558,8 +1558,8 @@
   /**
    * Gets the full form of an aggregate field name.
    *
-   * @param field   The name of the field as used in OMP requests.
-   * @param type    The resource type as used in OMP requests.
+   * @param field   The name of the field as used in GMP requests.
+   * @param type    The resource type as used in GMP requests.
    *
    * @return  The full field name.
    */

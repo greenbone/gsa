@@ -124,7 +124,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
  *
  * @return 0 ok (user in user_return), 1 bad token, 2 expired token,
  *         3 bad/missing cookie, 4 bad/missing token, 5 guest login failed,
- *         6 OMP down for guest login, 7 IP address mismatch, -1 error during
+ *         6 GMP down for guest login, 7 IP address mismatch, -1 error during
  *         guest login.
  */
 int
@@ -188,7 +188,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
       if (ret == 1)
         return USER_GUEST_LOGIN_FAILED;
       else if (ret == 2)
-        return USER_OMP_DOWN;
+        return USER_GMP_DOWN;
       else if (ret == -1)
         return USER_GUEST_LOGIN_ERROR;
       else

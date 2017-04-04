@@ -44,7 +44,7 @@
   gsa.init_omp_dialog = init_omp_dialog;
   gsa.Dialog = Dialog;
   gsa.InfoDialog = InfoDialog;
-  gsa.OMPDialog = OMPDialog;
+  gsa.GMPDialog = GMPDialog;
   gsa.FilterDialog = FilterDialog;
   gsa.ToggleIcon = ToggleIcon;
 
@@ -335,7 +335,7 @@
    * params are extra parameters to send to the initial GET request.
    * show_method specifies the method to send the initial request instead of GET.
   **/
-  function OMPDialog(options) {
+  function GMPDialog(options) {
     Dialog.call(this, options); // call super
     this.success_reload = options.success_reload || {};
     this.close_reload = options.close_reload || {};
@@ -356,9 +356,9 @@
     }
   }
 
-  gsa.derive(OMPDialog, Dialog);
+  gsa.derive(GMPDialog, Dialog);
 
-  OMPDialog.prototype.finished = function() {
+  GMPDialog.prototype.finished = function() {
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
 
     buttons.each(function() {
@@ -380,7 +380,7 @@
     });
   };
 
-  OMPDialog.prototype.close = function() {
+  GMPDialog.prototype.close = function() {
     if (this.dialog.$omp) {
       // dereference self to avoid memory leak
       this.dialog.$omp = undefined;
@@ -402,10 +402,10 @@
     return this;
   };
 
-  OMPDialog.prototype.postForm = function() {
+  GMPDialog.prototype.postForm = function() {
     var self = this;
 
-    var request = new gsa.OMPRequest({
+    var request = new gsa.GMPRequest({
       form: this.dialog.find('form')[0],
       xml: true,
     });
@@ -504,7 +504,7 @@
     });
   };
 
-  OMPDialog.prototype.setContent = function(html) {
+  GMPDialog.prototype.setContent = function(html) {
     var self = this;
     var dialog_title, dialog_html;
     var response = $('<div/>', {html: html});
@@ -558,7 +558,7 @@
     gsa.on_ready(self.dialog);
   };
 
-  OMPDialog.prototype.show = function(button, callback) {
+  GMPDialog.prototype.show = function(button, callback) {
     var self = this;
     var done_func, fail_func;
 
@@ -580,7 +580,7 @@
       'class': 'dialog-form',
     });
 
-    // connect this OMPDialog with the DOM
+    // connect this GMPDialog with the DOM
     self.dialog[0].$omp = self;
 
     done_func = function(html) {
@@ -634,7 +634,7 @@
       $('html').css('cursor', '');
     };
 
-    self.request = new gsa.OMPRequest({
+    self.request = new gsa.GMPRequest({
       params: self.params,
       method: self.show_method,
       xml: false,
@@ -645,7 +645,7 @@
     return this;
   };
 
-  OMPDialog.prototype.reload = function() {
+  GMPDialog.prototype.reload = function() {
     var self = this;
     self.waiting();
     self.request.do(function(data) {
@@ -656,7 +656,7 @@
     );
   };
 
-  OMPDialog.prototype.getActionResultEntity = function(xml) {
+  GMPDialog.prototype.getActionResultEntity = function(xml) {
     var entity;
     var self = this;
     var action_result_next = xml.find('action_result > next');
@@ -682,12 +682,12 @@
     return entity;
   };
 
-  OMPDialog.prototype.submit = function() {
+  GMPDialog.prototype.submit = function() {
     this.waiting();
     this.postForm();
   };
 
-  global.OMPDialog = OMPDialog;
+  global.GMPDialog = GMPDialog;
 
   function FilterDialog(id, title) {
     this.id = id;
@@ -954,7 +954,7 @@
     }
 
     function show_dialog(callback) {
-      new OMPDialog({
+      new GMPDialog({
         cmd: cmd,
         done: done,
         params: params,

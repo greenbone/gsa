@@ -113,7 +113,7 @@
       elem.on('click', function(event) {
         event.preventDefault();
         var dialog = elem.parents('.dialog-form')[0].$omp;
-        new gsa.OMPRequest({
+        new gsa.GMPRequest({
           params: parse_params(elem.data('extra')),
           form: elem.parents('form')[0],
         }).do(function() {
@@ -147,7 +147,7 @@
         if (done === undefined) {
           reload = 'window';
         }
-        new gsa.OMPDialog({
+        new gsa.GMPDialog({
           cmd: 'process_bulk',
           done: done,
           params: params,
@@ -164,7 +164,7 @@
       var params = {name: name};
       var dialog_id = elem.data('dialog-id');
 
-      var dialog = new gsa.OMPDialog({
+      var dialog = new gsa.GMPDialog({
         cmd: 'wizard',
         success_reload: {type: 'window'},
         params: params,
@@ -229,7 +229,7 @@
       button.on('click', function(event) {
         event.preventDefault();
 
-        var request = new gsa.OMPRequest({
+        var request = new gsa.GMPRequest({
           form: form[0],
           params: {next_xml: 0},
         });

@@ -901,7 +901,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
-<!-- OMP -->
+<!-- GMP -->
 
 <xsl:include href="omp.xsl"/>
 

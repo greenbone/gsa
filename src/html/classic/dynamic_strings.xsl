@@ -45,9 +45,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="login-msgs">
   <xsl:value-of select="gsa:i18n ('Successfully logged out.')"/>
   <xsl:value-of select="gsa:i18n ('Already logged out.')"/>
-  <xsl:value-of select="gsa:i18n ('Logged out. OMP service is down.')"/>
+  <xsl:value-of select="gsa:i18n ('Logged out. GMP service is down.')"/>
   <xsl:value-of select="gsa:i18n ('Login failed.')"/>
-  <xsl:value-of select="gsa:i18n ('Login failed.  OMP service is down.')"/>
+  <xsl:value-of select="gsa:i18n ('Login failed.  GMP service is down.')"/>
   <xsl:value-of select="gsa:i18n ('Login failed.  Error during authentication.')"/>
   <xsl:value-of select="gsa:i18n ('Session has expired.  Please login again.')"/>
   <xsl:value-of select="gsa:i18n ('Cookie missing or bad.  Please login again.')"/>
@@ -632,7 +632,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- authenticate -->
   <xsl:value-of select="gsa:i18n ('may login')"/>
   <!-- commands -->
-  <xsl:value-of select="gsa:i18n ('may run multiple OMP commands as one')"/>
+  <xsl:value-of select="gsa:i18n ('may run multiple GMP commands as one')"/>
 
   <!-- create_... -->
   <xsl:value-of select="gsa:i18n ('may create a new agent')"/>

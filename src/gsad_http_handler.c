@@ -478,9 +478,9 @@ handle_setup_user (http_connection_t *connection,
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED
-      || ret == USER_OMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
+      || ret == USER_GMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
     {
-      auth_reason = ret == USER_OMP_DOWN
+      auth_reason = ret == USER_GMP_DOWN
                     ? GMP_SERVICE_DOWN
                     : (ret == USER_GUEST_LOGIN_ERROR
                       ? LOGIN_ERROR
@@ -597,7 +597,7 @@ handle_gmp_get (http_connection_t *connection,
                 gsad_connection_info_t *con_info,
                 http_handler_t *handler, void *data)
 {
-  /* URL requests to run OMP command. */
+  /* URL requests to run GMP command. */
   int ret;
   credentials_t *credentials = (credentials_t*)data;
 

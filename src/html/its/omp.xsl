@@ -35,7 +35,7 @@
 Greenbone Security Assistant
 $Id$
 Description:
-OpenVAS Manager Protocol (OMP) stylesheet for IT-Schwachstellenampel.
+Grenbone Management Protocol (GMP) stylesheet for IT-Schwachstellenampel.
 
 Authors:
 Timo Pollmeier <timo.pollmeier@greenbone.net>

@@ -3022,7 +3022,7 @@
         self.outputError(ctrls,
             gsa._('Error {{omp_status}}: {{omp_status_text}}',
               {omp_status: omp_status, omp_status_text: omp_status_text}),
-            gsa._('OMP Error {{omp_status}}: {{omp_status_text}}',
+            gsa._('GMP Error {{omp_status}}: {{omp_status_text}}',
               {omp_status: omp_status, omp_status_text: omp_status_text}));
         return;
       }
