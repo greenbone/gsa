@@ -54,8 +54,8 @@ export class CollectionList {
     return this._entries.sort(func);
   }
 
-  push(filter) {
-    this._entries.push(filter);
+  push(entry) {
+    this._entries.push(entry);
     return this;
   }
 
