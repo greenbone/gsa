@@ -57,6 +57,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/timezones.js
      ${NG_SRC_DIR}/src/utils.js
      ${NG_SRC_DIR}/src/gmp/cache.js
+     ${NG_SRC_DIR}/src/gmp/capabilities.js
      ${NG_SRC_DIR}/src/gmp/collectioncounts.js
      ${NG_SRC_DIR}/src/gmp/collectionlist.js
      ${NG_SRC_DIR}/src/gmp/command.js
@@ -95,7 +96,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/model.js
      ${NG_SRC_DIR}/src/gmp/models/agent.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js
-     ${NG_SRC_DIR}/src/gmp/models/capabilities.js
      ${NG_SRC_DIR}/src/gmp/models/certbund.js
      ${NG_SRC_DIR}/src/gmp/models/chartpreferences.js
      ${NG_SRC_DIR}/src/gmp/models/credential.js

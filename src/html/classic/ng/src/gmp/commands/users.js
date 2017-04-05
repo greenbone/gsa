@@ -26,9 +26,10 @@ import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 import {for_each} from '../../utils.js';
 import logger from '../../log.js';
 
+import Capabilities from '../capabilities.js';
+
 import User from '../models/user.js';
 import Settings from '../models/settings.js';
-import Capabilities from '../models/capabilities.js';
 import ChartPreferences from '../models/chartpreferences.js';
 
 const log = logger.getLogger('gmp.commands.users');
@@ -70,7 +71,6 @@ export class UserCommand extends EntityCommand {
       ...other,
     }).then(response => {
       let caps = response.data.capabilities.help_response.schema.command;
-      log.debug('Capabilities loaded', caps);
       return response.setData(new Capabilities(caps));
     });
   }

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, for_each} from '../../utils.js';
+import {is_defined, for_each} from '../utils.js';
 
-import Model from '../model.js';
-
-export class Capabilities extends Model {
+export class Capabilities {
 
   constructor(element) {
-    super(element);
+    this._capabilities = new Set();
 
-    if (!is_defined(this._capabilities)) {
-      this._capabilities = new Map();
-    }
+    for_each(element, command => {
+      this._capabilities.add(command.name.toLowerCase());
+    });
   }
 
   [Symbol.iterator]() {
@@ -45,6 +43,10 @@ export class Capabilities extends Model {
     return is_defined(capability) ? capability : {};
   }
 
+  has(name) {
+    return this._capabilities.has(name);
+  }
+
   forEach(callback) {
     return this._capabilities.forEach(callback);
   }
@@ -54,7 +56,7 @@ export class Capabilities extends Model {
   }
 
   mayOp(value) {
-    return this._capabilities.has(value.toLowerCase());
+    return this.has(value.toLowerCase()) || this.has('everything');
   }
 
   mayClone(type) {
@@ -73,8 +75,6 @@ export class Capabilities extends Model {
     return this.mayOp('create_' + type);
   }
 
-  setProperties() {};
-
   parseProroperties(elem) {
     let capabilities = new Map();
 
@@ -87,10 +87,6 @@ export class Capabilities extends Model {
     });
 
     return capabilities;
-  }
-
-  updateFromElement(elem) {
-    this._capabilities = this.parseProroperties(elem);
   }
 }
 

@@ -29,8 +29,8 @@ import {is_defined} from '../utils.js';
 import CollectionList from '../gmp/collectionlist.js';
 
 import Model from '../gmp/model.js';
+import Capabilities from '../gmp/capabilities.js';
 
-import Capabilities from '../gmp/models/capabilities.js';
 import Filter from '../gmp/models/filter.js';
 
 import {EntityCommand, EntitiesCommand} from '../gmp/command.js';
