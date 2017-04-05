@@ -1,5 +1,10 @@
 2017-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/credential.js: Parse activation and
+	expiration time of credential certificates.
+
+2017-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/icons/entityediticon.js: Only allow to
 	edit an entity via the edit button if the user has the edit permission on the
 	entity.

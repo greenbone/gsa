@@ -21,7 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import moment from 'moment';
+
 import Model from '../model.js';
+
+import {is_defined} from '../../utils.js';
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';
@@ -66,6 +70,20 @@ export const snmp_credential_filter = credential =>
   credential.type === SNMP_CREDENTIAL_TYPE;
 
 export class Credential extends Model {
+
+  parseProperties(elem) {
+    let ret = super.parseProperties(elem);
+
+    if (is_defined(ret.certificate_info)) {
+      ret.certificate_info.activation_time = moment(
+        ret.certificate_info.activation_time
+      );
+      ret.certificate_info.expiration_time = moment(
+        ret.certificate_info.expiration_time
+      );
+    }
+    return ret;
+  }
 
   isAllowInsecure() {
     return this.allow_insecure !== '0';
