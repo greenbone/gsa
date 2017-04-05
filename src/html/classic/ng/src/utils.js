@@ -126,7 +126,7 @@ export function filter(array, func, empty = []) {
   if (!has_value(array) || !is_defined(func)) {
     return empty;
   }
-  if (!is_array(array)) {
+  if (!is_defined(array.filter)) {
     array = [array];
   }
   return array.filter(func);
