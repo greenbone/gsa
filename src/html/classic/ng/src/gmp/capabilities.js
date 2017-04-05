@@ -74,20 +74,6 @@ export class Capabilities {
   mayCreate(type) {
     return this.mayOp('create_' + type);
   }
-
-  parseProroperties(elem) {
-    let capabilities = new Map();
-
-    for_each(elem, command => {
-      const name = command.name.toLowerCase();
-      capabilities.set(name, {
-        name: name,
-        summary: command.summary,
-      });
-    });
-
-    return capabilities;
-  }
 }
 
 export default Capabilities;
