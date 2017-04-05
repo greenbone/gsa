@@ -21,9 +21,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntitiesCommand, register_command} from '../command.js';
+import logger from '../../log.js';
+
+import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Scanner from '../models/scanner.js';
+
+const log = logger.getLogger('gmp.commands.scanners');
 
 export class ScannersCommand extends EntitiesCommand {
 
@@ -34,8 +38,81 @@ export class ScannersCommand extends EntitiesCommand {
   getEntitiesResponse(root) {
     return root.get_scanners.get_scanners_response;
   }
+
 }
 
+export class ScannerCommand extends EntityCommand {
+
+  constructor(http) {
+    super(http, 'scanner', Scanner);
+  }
+
+  getElementFromRoot(root) {
+    return root.get_scanner.get_scanners_response.scanner;
+  }
+
+  create({
+      name,
+      ca_pub,
+      comment = '',
+      credential_id,
+      host,
+      port,
+      type,
+    }) {
+    const data = {
+      cmd: 'create_scanner',
+      next: 'get_scanner',
+      name,
+      comment,
+      credential_id,
+      scanner_host: host,
+      scanner_type: type,
+      port,
+      ca_pub,
+    };
+    log.debug('Creating new scanner', data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
+  save({
+      id,
+      name,
+      ca_pub = '',
+      comment = '',
+      credential_id,
+      host,
+      port,
+      type,
+      which_cert,
+    }) {
+    const data = {
+      cmd: 'save_scanner',
+      next: 'get_scanner',
+      ca_pub,
+      comment,
+      credential_id,
+      id,
+      name,
+      port,
+      scanner_host: host,
+      scanner_type: type,
+      which_cert,
+    };
+    log.debug('Saving scanner', data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
+  verify({id}) {
+    return this.httpPost({
+      cmd: 'verify_scanner',
+      next: 'get_scanner',
+      id,
+    });
+  }
+}
+
+register_command('scanner', ScannerCommand);
 register_command('scanners', ScannersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

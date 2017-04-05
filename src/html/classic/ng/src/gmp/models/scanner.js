@@ -21,10 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import moment from 'moment';
+
 import _ from '../../locale.js';
-import {parse_int} from '../../utils.js';
+import {is_defined, is_empty, is_string, parse_int} from '../../utils.js';
 
 import Model from '../model.js';
+
+import Credential from './credential.js';
 
 export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
@@ -62,7 +66,36 @@ export class Scanner extends Model {
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
     ret.type = parse_int(ret.type);
+    ret.credential = is_defined(ret.credential) &&
+      !is_empty(ret.credential._id) ? new Credential(ret.credential) :
+      undefined;
+
+    if (is_empty(ret.ca_pub)) {
+      delete ret.ca_pub;
+    }
+    else {
+      ret.ca_pub = {
+        certificate: ret.ca_pub,
+      };
+
+      if (is_defined(ret.ca_pub_info)) {
+        ret.ca_pub.info = ret.ca_pub_info;
+        ret.ca_pub.info.activation_time = moment(
+          ret.ca_pub.info.activation_time
+        );
+        ret.ca_pub.info.expiration_time = moment(
+          ret.ca_pub.info.expiration_time
+        );
+        delete ret.ca_pub_info;
+      }
+    }
+
+    // TODO parse tasks and configs
     return ret;
+  }
+
+  hasUnixSocket() {
+    return is_string(this.host) && this.host[0] === '/';
   }
 }
 
