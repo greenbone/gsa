@@ -1,5 +1,10 @@
 2017-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/page.js: Log user capabilities to console after
+	successful login.
+
+2017-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/utils.js (filter): Allow to filter all kind of js
 	objects with a filter method not only arrays.
 

@@ -25,6 +25,7 @@ import React from 'react';
 
 import {StickyContainer} from 'react-sticky';
 
+import logger from '../log.js';
 import {is_defined} from '../utils.js';
 
 import Header from './header.js';
@@ -32,6 +33,8 @@ import Footer from './footer.js';
 import Main from './main.js';
 
 import './css/page.css';
+
+const log = logger.getLogger('web.page');
 
 export class Page extends React.Component {
 
@@ -44,8 +47,11 @@ export class Page extends React.Component {
   componentDidMount() {
     let {gmp} = this.context;
 
-    gmp.user.currentCapabilities().then(
-      response => this.setState({capabilities: response.data}));
+    gmp.user.currentCapabilities().then(response => {
+      let capabilities = response.data;
+      log.debug('User capabilities', capabilities);
+      this.setState({capabilities});
+    });
   }
 
   getChildContext() {
