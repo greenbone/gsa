@@ -23,18 +23,22 @@
 
 import React from 'react';
 
-import _ from '../locale.js';
-import {is_defined, is_empty} from '../utils.js';
+import _ from '../../locale.js';
+import {is_defined, is_empty} from '../../utils.js';
 
-import LegacyLink from './legacylink.js';
-import PropTypes from './proptypes.js';
+import LegacyLink from '../legacylink.js';
+import PropTypes from '../proptypes.js';
 
-export const ResourceLink = ({
-    resource,
+export const EntityLink = ({
+    entity,
+    type,
     ...props,
   }, {capabilities}) => {
-  const {id, trash, name, permissions, deleted} = resource;
-  let {type} = resource;
+  const {id, trash, name, permissions, deleted} = entity;
+
+  if (!is_defined(type)) {
+    type = entity.type;
+  }
 
   if (trash === '1') {
     return (
@@ -111,14 +115,15 @@ export const ResourceLink = ({
   );
 };
 
-ResourceLink.propTypes = {
-  resource: PropTypes.model.isRequired,
+EntityLink.propTypes = {
+  entity: PropTypes.model.isRequired,
+  type: React.PropTypes.string,
 };
 
-ResourceLink.contextTypes = {
+EntityLink.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default ResourceLink;
+export default EntityLink;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -13,6 +13,15 @@
 
 2017-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/resourcelink.js,
+	src/html/classic/ng/src/web/entities/link.js
+	src/html/classic/ng/src/web/permissions/row.js,
+	src/html/classic/ng/src/web/tags/row.js: Change ResourceLink into an
+	EntityLink to allow linking to all kind of details pages.
+
+2017-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	 * src/html/classic/ng/src/gmp/models/__tests__/filter.js: Add filter parse
 	 tests for all relations.
 

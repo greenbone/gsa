@@ -30,9 +30,9 @@ import Comment from '../comment.js';
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
-import ResourceLink from '../resourcelink.js';
 import {render_component, type_name, N_A} from '../render.js';
 
+import EntityLink from '../entities/link.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
@@ -180,7 +180,7 @@ const Row = ({
               <i> ({entity.resource.id})</i>
             }
           </span> :
-            <ResourceLink resource={entity.resource}/>
+            <EntityLink entity={entity.resource}/>
         }
       </TableData>
       <TableData>

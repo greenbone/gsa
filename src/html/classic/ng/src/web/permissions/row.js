@@ -29,13 +29,13 @@ import Comment from '../comment.js';
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
-import ResourceLink from '../resourcelink.js';
 import {
   render_component,
   type_name,
   permission_description,
 } from '../render.js';
 
+import EntityLink from '../entities/link.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
@@ -136,13 +136,13 @@ const Row = ({
         {type_name(entity.resource.type)}
       </TableData>
       <TableData>
-        <ResourceLink resource={entity.resource}/>
+        <EntityLink entity={entity.resource}/>
       </TableData>
       <TableData>
         {type_name(entity.subject.type)}
       </TableData>
       <TableData>
-        <ResourceLink resource={entity.subject}/>
+        <EntityLink entity={entity.subject}/>
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
