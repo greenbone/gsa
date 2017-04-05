@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import moment from 'moment';
+
 import {is_defined, extend} from '../utils.js';
+
+import Capabilities from './capabilities.js';
 
 export class Model {
 
@@ -58,6 +62,17 @@ export class Model {
   parseProperties(elem) {
     let copy = extend({}, elem);
     copy.id = elem._id;
+
+    if (is_defined(elem.creation_time)) {
+      copy.creation_time = moment(elem.creation_time);
+    }
+    if (is_defined(elem.modification_time)) {
+      copy.modification_time = moment(elem.modification_time);
+    }
+
+    if (is_defined(elem.permissions)) {
+      copy.permissions = new Capabilities(elem.permissions.permission);
+    }
     return copy;
   }
 
