@@ -1,5 +1,12 @@
 2017-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/omp.xsl: Use ng for scanners list page.
+
+2017-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/scanners/dialog.js,
 	src/html/classic/ng/src/web/scanners/row.js,
 	src/html/classic/ng/src/web/scanners/scannerspage.js: Add react components for

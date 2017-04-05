@@ -66,6 +66,7 @@ import PortListsPage from './portlists/portlistspage.js';
 import ReportFormatsPage from './reportformats/reportformatspage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
+import ScannersPage from './scanners/scannerspage.js';
 import SchedulesPage from './schedules/schedulespage.js';
 import TagsPage from './tags/tagspage.js';
 import TargetsPage from './targets/targetspage.js';
@@ -240,6 +241,9 @@ ReactDOM.render(
         <Route
           path="permissions"
           component={PermissionsPage}/>
+        <Route
+          path="scanners"
+          component={ScannersPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

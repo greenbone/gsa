@@ -182,10 +182,9 @@ export const MenuBar = (props, context) => {
             to="agents"
             caps="get_agents"/>
           <MenuEntry
-            legacy
             section
             title={_('Scanners')}
-            cmd="get_scanners"
+            to="scanners"
             caps="get_scanners"/>
           <MenuEntry
             title={_('Filters')}
