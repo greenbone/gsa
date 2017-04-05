@@ -138,8 +138,6 @@ class Page extends React.Component {
       <Layout>
         <EntitiesPage
           {...this.props}
-          onPermissionEnable={this.handleEnablePermission}
-          onPermissionDisable={this.handleDisablePermission}
           onEntityEdit={this.openPermissionDialog}
           onNewPermissionClick={this.openPermissionDialog}
         />
