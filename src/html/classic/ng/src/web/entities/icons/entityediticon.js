@@ -43,7 +43,10 @@ export const EntityEditIcon = ({
     displayName = _(capitalize_first_letter(name));
   }
 
-  let active = capabilities.mayEdit(name) && entity.isWriteable();
+  const {permissions} = entity;
+  const may_edit = capabilities.mayEdit(name) && is_defined(permissions) &&
+    permissions.mayEdit(name);
+  let active = may_edit && entity.isWriteable();
 
   if (!is_defined(title)) {
     if (active) {
@@ -52,7 +55,7 @@ export const EntityEditIcon = ({
     else if (!entity.isWriteable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
     }
-    else if (!capabilities.mayEdit(name)) { // eslint-disable-line no-negated-condition
+    else if (!may_edit) {  // eslint-disable-line no-negated-condition
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
     }
     else {
@@ -82,3 +85,5 @@ EntityEditIcon.contextTypes = {
 };
 
 export default EntityEditIcon;
+
+// vim: set ts=2 sw=2 tw=80:
