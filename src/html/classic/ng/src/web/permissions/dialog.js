@@ -179,9 +179,9 @@ const PermissionDialog = ({
   capabilities.forEach(cap => {
     perm_opts.push(
       <option
-        key={cap.name}
-        value={cap.name}>
-        {cap.name} ({permission_description(cap.name)})
+        key={cap}
+        value={cap}>
+        {cap} ({permission_description(cap)})
       </option>
     );
   });

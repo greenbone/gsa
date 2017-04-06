@@ -1,3 +1,8 @@
+2017-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/permissions/dialog.js: Fix getting all
+	permission names after Capabilities class has changed.
+
 2017-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/capabilities.js: Remove obsolete parseProperties
