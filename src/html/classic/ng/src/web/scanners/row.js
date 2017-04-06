@@ -26,19 +26,18 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Comment from '../comment.js';
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
+import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 import EntityLink from '../entities/link.js';
 
 import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
-import ObserverIcon from '../entities/icons/entityobservericon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../icons/exporticon.js';
@@ -136,26 +135,12 @@ const Row = ({
   }) => {
   return (
     <TableRow>
-      <TableData flex="column">
-        <Layout flex align="space-between">
-          {links ?
-            <LegacyLink
-              cmd="get_scanner"
-              scanner_id={entity.id}>
-              {entity.name}
-            </LegacyLink> :
-            entity.name
-          }
-          <ObserverIcon
-            displayName={_('Scanner')}
-            entity={entity}
-            userName={username}
-          />
-        </Layout>
-        {entity.comment &&
-          <Comment>({entity.comment})</Comment>
-        }
-      </TableData>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="scanner"
+        displayName={_('Scanner')}
+        userName={username}/>
       <TableData>
         {entity.type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
           entity.host}

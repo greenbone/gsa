@@ -26,19 +26,17 @@ import React from 'react';
 import _, {short_date} from '../../locale.js';
 import {is_empty} from '../../utils.js';
 
-import Comment from '../comment.js';
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component, type_name, N_A} from '../render.js';
 
+import EntityNameTableData from '../entities/entitynametabledata.js';
 import EntityLink from '../entities/link.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
 import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
-import ObserverIcon from '../entities/icons/entityobservericon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../icons/exporticon.js';
@@ -134,36 +132,14 @@ const Row = ({
     capabilities,
     username,
   }) => {
-  let text = (
-    <Layout flex="column">
-      {entity.isOrphan() &&
-        <b>{_('Orphan')}</b>
-      }
-      {entity.name}
-    </Layout>
-  );
   return (
     <TableRow>
-      <TableData flex="column">
-        <Layout flex align="space-between">
-          {links ?
-            <LegacyLink
-              cmd="get_tag"
-              tag_id={entity.id}>
-              {text}
-            </LegacyLink> :
-            {text}
-          }
-          <ObserverIcon
-            displayName={_('Tag')}
-            entity={entity}
-            userName={username}
-          />
-        </Layout>
-        {entity.comment &&
-          <Comment>({entity.comment})</Comment>
-        }
-      </TableData>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="tag"
+        displayName={_('Tag')}
+        userName={username}/>
       <TableData>
         {entity.value}
       </TableData>

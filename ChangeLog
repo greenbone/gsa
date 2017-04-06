@@ -1,5 +1,22 @@
 2017-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/agents/row.js,
+	src/html/classic/ng/src/web/alerts/row.js,
+	src/html/classic/ng/src/web/credentials/row.js,
+	src/html/classic/ng/src/web/entities/entitynametabledata.js,
+	src/html/classic/ng/src/web/filters/row.js,
+	src/html/classic/ng/src/web/permissions/row.js,
+	src/html/classic/ng/src/web/portlists/row.js,
+	src/html/classic/ng/src/web/reportformats/row.js,
+	src/html/classic/ng/src/web/scanners/row.js,
+	src/html/classic/ng/src/web/schedules/row.js,
+	src/html/classic/ng/src/web/tags/row.js,
+	src/html/classic/ng/src/web/targets/row.js: Extract rendering of the name
+	column into a common component.
+
+2017-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js,
 	src/html/classic/ng/src/gmp/models/note.js,
 	src/html/classic/ng/src/gmp/models/override.js,

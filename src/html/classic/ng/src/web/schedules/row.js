@@ -25,18 +25,16 @@ import React from 'react';
 
 import _, {long_date, interval} from '../../locale.js';
 
-import Comment from '../comment.js';
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
+import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
 import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
-import ObserverIcon from '../entities/icons/entityobservericon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../icons/exporticon.js';
@@ -121,26 +119,12 @@ const Row = ({
     long_date(entity.next_time);
   return (
     <TableRow>
-      <TableData flex="column">
-        <Layout flex align="space-between">
-          {links ?
-            <LegacyLink
-              cmd="get_schedule"
-              schedule_id={entity.id}>
-              {entity.name}
-            </LegacyLink> :
-            entity.name
-          }
-          <ObserverIcon
-            displayName={_('Schedule')}
-            entity={entity}
-            userName={username}
-          />
-        </Layout>
-        {entity.comment &&
-          <Comment>({entity.comment})</Comment>
-        }
-      </TableData>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="schedule"
+        displayName={_('Schedule')}
+        userName={username}/>
       <TableData>
         {long_date(entity.first_time)}
       </TableData>

@@ -25,19 +25,17 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Comment from '../comment.js';
 import FootNote from '../footnote.js';
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
+import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
 import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
-import ObserverIcon from '../entities/icons/entityobservericon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import Text from '../form/text.js';
@@ -105,26 +103,12 @@ const Row = ({
   }) => {
   return (
     <TableRow>
-      <TableData flex="column">
-        <Layout flex align="space-between">
-          {links ?
-            <LegacyLink
-              cmd="get_credential"
-              credential_id={entity.id}>
-              {entity.name}
-            </LegacyLink> :
-            entity.name
-          }
-          <ObserverIcon
-            displayName={_('Credential')}
-            entity={entity}
-            userName={username}
-          />
-        </Layout>
-        {entity.comment &&
-          <Comment>({entity.comment})</Comment>
-        }
-      </TableData>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="credential"
+        displayName={_('Credential')}
+        userName={username}/>
       <TableData flex>
         <Text>
           {entity.type}

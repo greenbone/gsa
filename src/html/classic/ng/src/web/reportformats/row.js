@@ -27,16 +27,15 @@ import _, {short_date} from '../../locale.js';
 
 import Comment from '../comment.js';
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
+import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
 import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
-import ObserverIcon from '../entities/icons/entityobservericon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../icons/exporticon.js';
@@ -117,29 +116,16 @@ const Row = ({
   }) => {
   return (
     <TableRow>
-      <TableData flex="column">
-        <Layout flex align="space-between">
-          {links ?
-            <LegacyLink
-              cmd="get_report_format"
-              report_format_id={entity.id}>
-              {entity.name}
-            </LegacyLink> :
-            entity.name
-          }
-          <ObserverIcon
-            displayName={_('Report Format')}
-            entity={entity}
-            userName={username}
-          />
-        </Layout>
-        {entity.comment &&
-          <Comment>({entity.comment})</Comment>
-        }
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="report_format"
+        displayName={_('Report Format')}
+        userName={username}>
         {entity.summary &&
           <Comment>({entity.summary})</Comment>
         }
-      </TableData>
+      </EntityNameTableData>
       <TableData>
         {entity.extension}
       </TableData>

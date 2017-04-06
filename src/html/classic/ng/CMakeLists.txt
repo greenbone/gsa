@@ -188,6 +188,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dialog/title.js
      ${NG_SRC_DIR}/src/web/entities/actions.js
      ${NG_SRC_DIR}/src/web/entities/container.js
+     ${NG_SRC_DIR}/src/web/entities/entitynametabledata.js
      ${NG_SRC_DIR}/src/web/entities/footer.js
      ${NG_SRC_DIR}/src/web/entities/header.js
      ${NG_SRC_DIR}/src/web/entities/icons/entitycloneicon.js
