@@ -84,6 +84,13 @@ export class Model {
     return this.writable !== '0';
   }
 
+  isOrphan() {
+    return this.orphan === '1';
+  }
+
+  isActive() {
+    return this.active !== '0';
+  }
 }
 
 export default Model;

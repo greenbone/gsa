@@ -33,14 +33,6 @@ export class Tag extends Model {
     ret.resource = new Model(elem.resource);
     return ret;
   }
-
-  isActive() {
-    return this.active !== '0';
-  }
-
-  isOrphan() {
-    return this.orphan === '1';
-  }
 }
 
 export default Tag;

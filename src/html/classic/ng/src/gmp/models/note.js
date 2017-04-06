@@ -54,10 +54,6 @@ export class Note extends Model {
     return this.active === '1';
   }
 
-  isOrphan() {
-    return this.orphan === '1';
-  }
-
   isExcerpt() {
     return this.text_excerpt === '1';
   }
