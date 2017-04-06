@@ -228,7 +228,9 @@ const PermissionDialog = ({
               onChange={onValueChange}>
               {map(users, user => {
                 return (
-                  <option value={user.id}>
+                  <option
+                    key={user.id}
+                    value={user.id}>
                     {user.name}
                   </option>
                 );
@@ -252,7 +254,9 @@ const PermissionDialog = ({
               onChange={onValueChange}>
               {map(roles, role => {
                 return (
-                  <option value={role.id}>
+                  <option
+                    key={role.id}
+                    value={role.id}>
                     {role.name}
                   </option>
                 );
@@ -276,7 +280,9 @@ const PermissionDialog = ({
               onChange={onValueChange}>
               {map(groups, group => {
                 return (
-                  <option value={group.id}>
+                  <option
+                    key={group.id}
+                    value={group.id}>
                     {group.name}
                   </option>
                 );

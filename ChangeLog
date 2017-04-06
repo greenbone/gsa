@@ -1,5 +1,10 @@
 2017-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/capabilities.js: Set key property for group,
+	user and role selection options.
+
+2017-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/permissions/dialog.js: Fix getting all
 	permission names after Capabilities class has changed.
 
