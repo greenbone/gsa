@@ -1,3 +1,21 @@
+2017-04-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/ng/src/web/css/folding.css: New file.  Animation
+	keyframes for folding.
+
+	* src/html/classic/ng/src/web/entities/page.js
+	(EntitiesPage.renderSection): Allow making the section foldable by
+	setting the prop "foldable".
+
+	* src/html/classic/ng/src/web/folding.js: New file.  Helpers for
+	creating foldable components.
+
+	* src/html/classic/ng/src/web/icons/foldicon.js: New file.  Icon for
+	controlling the folding and unfolding of components.
+
+	* src/html/classic/ng/src/web/section.js (Section): Make Section
+	foldable.
+
 2017-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,

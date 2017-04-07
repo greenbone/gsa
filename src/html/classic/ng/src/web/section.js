@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Timo Pollmeier <timo.pollmeier@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -28,19 +29,48 @@ import {is_string} from '../utils.js';
 import Layout from './layout.js';
 
 import Icon from './icons/icon.js';
+import FoldIcon from './icons/foldicon.js';
 
 import './css/section.css';
 
-export const Section = props => {
-  let {className} = props;
-  return (
-    <section className={className}>
-      <SectionHeader img={props.img} title={props.title}>
-        {props.extra}
-      </SectionHeader>
-      {props.children}
-    </section>
-  );
+import {FoldState, withFolding} from './folding.js';
+
+const FoldableLayout = withFolding(Layout);
+
+class Section extends React.Component {
+
+  constructor (props, ...args) {
+    super (props, ...args);
+    this.state = {foldState: FoldState.UNFOLDED};
+    this.handleFoldToggle = props.onFoldToggle;
+    this.handleFoldStepEnd = props.onFoldStepEnd;
+  }
+
+  render() {
+    let {foldable, foldState,
+         className, title, img, extra, children} = this.props;
+
+    console.debug('foldState:' + foldState)
+    let Content = foldable ? FoldableLayout : Layout;
+
+    return (
+      <section className={className}>
+        <SectionHeader img={img} title={title}>
+          <Layout
+            align={['space-between', 'end']}>
+            {extra}
+            {foldable ? <FoldIcon foldState={foldState}
+                            onFoldToggle={this.handleFoldToggle}/>
+                      : null}
+          </Layout>
+        </SectionHeader>
+        <Content grow="1" foldState={foldState}
+            onFoldStepEnd={this.handleFoldStepEnd}>
+          {children}
+        </Content>
+      </section>
+    );
+  }
 };
 
 Section.propTypes = {

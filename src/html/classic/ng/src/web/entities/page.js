@@ -34,6 +34,7 @@ import Toolbar from '../toolbar.js';
 import PowerFilter from '../powerfilter/powerfilter.js';
 
 import DashboardControls from '../dashboard/controls.js';
+import {withFoldToggle} from '../folding.js'
 
 const exclude_props = [
   'children',
@@ -115,7 +116,7 @@ export class EntitiesPage extends React.Component {
   }
 
   renderSection() {
-    let {sectionIcon, filter} = this.props;
+    let {sectionIcon, filter, foldable} = this.props;
     let DashboardComponent = this.props.dashboard;
     let SectionComponent = this.props.section;
 
@@ -127,11 +128,16 @@ export class EntitiesPage extends React.Component {
       SectionComponent = Section;
     }
 
+    if (foldable) {
+      SectionComponent = withFoldToggle(SectionComponent)
+    }
+
     return (
       <SectionComponent
         title={this.getSectionTitle()}
         className="entities-section"
         img={sectionIcon}
+        foldable={foldable}
         extra={DashboardComponent ? <DashboardControls/> : null}>
         {DashboardComponent &&
           <DashboardComponent filter={filter}/>
