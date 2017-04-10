@@ -1,5 +1,11 @@
 2017-04-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r28135.
+
+	* src/gsad.c (exec_omp_post): Add log message on successful login.
+
+2017-04-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (dashboard): Check if user has the get_aggregates
 	permission for dashboards and add case for when the user may
 	get Tasks but not SecInfo.

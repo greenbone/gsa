@@ -2270,6 +2270,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                password, timezone, severity, role, capabilities,
                                language, pw_warning, chart_prefs, autorefresh,
                                client_address);
+
+              g_message ("Authentication success for '%s' from %s",
+                         params_value (con_info->params, "login") ?: "",
+                         client_address);
+
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
