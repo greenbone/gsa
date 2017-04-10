@@ -27,60 +27,68 @@ import React from 'react';
 import {is_string} from '../utils.js';
 
 import Layout from './layout.js';
+import {withFolding, withFoldToggle} from './folding.js';
 
 import Icon from './icons/icon.js';
 import FoldIcon from './icons/foldicon.js';
 
 import './css/section.css';
 
-import {FoldState, withFolding} from './folding.js';
-
 const FoldableLayout = withFolding(Layout);
 
-class Section extends React.Component {
+const Section = ({
+    children,
+    className,
+    extra,
+    foldable,
+    foldState,
+    img,
+    title,
+    onFoldToggle,
+    onFoldStepEnd,
+  }) => {
 
-  constructor (props, ...args) {
-    super (props, ...args);
-    this.state = {foldState: FoldState.UNFOLDED};
-    this.handleFoldToggle = props.onFoldToggle;
-    this.handleFoldStepEnd = props.onFoldStepEnd;
-  }
-
-  render() {
-    let {foldable, foldState,
-         className, title, img, extra, children} = this.props;
-
-    console.debug('foldState:' + foldState)
-    let Content = foldable ? FoldableLayout : Layout;
-
-    return (
-      <section className={className}>
-        <SectionHeader img={img} title={title}>
-          <Layout
-            align={['space-between', 'end']}>
+  return (
+    <section className={className}>
+      <SectionHeader
+        img={img}
+        title={title}>
+        <Layout
+          flex
+          align={['space-between', 'end']}>
+          <Layout flex align="center">
             {extra}
-            {foldable ? <FoldIcon foldState={foldState}
-                            onFoldToggle={this.handleFoldToggle}/>
-                      : null}
+            {foldable &&
+              <FoldIcon
+                className="section-fold-icon"
+                foldState={foldState}
+                onClick={onFoldToggle}/>
+            }
           </Layout>
-        </SectionHeader>
-        <Content grow="1" foldState={foldState}
-            onFoldStepEnd={this.handleFoldStepEnd}>
-          {children}
-        </Content>
-      </section>
-    );
-  }
+        </Layout>
+      </SectionHeader>
+      <FoldableLayout
+        grow="1"
+        foldState={foldState}
+        onFoldStepEnd={onFoldStepEnd}>
+        {children}
+      </FoldableLayout>
+    </section>
+  );
 };
 
 Section.propTypes = {
   className: React.PropTypes.string,
+  foldable: React.PropTypes.bool,
+  foldState: React.PropTypes.string,
   img: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.element,
   ]),
   title: React.PropTypes.string.isRequired,
   extra: React.PropTypes.element,
+  onFoldToggle: React.PropTypes.func,
+  onFoldStepEnd: React.PropTypes.func,
 };
 
 export const SectionHeader = props => {
@@ -108,6 +116,6 @@ SectionHeader.propTypes = {
   title: React.PropTypes.string.isRequired,
 };
 
-export default Section;
+export default withFoldToggle(Section);
 
 // vim: set ts=2 sw=2 tw=80:
