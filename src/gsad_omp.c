@@ -26205,15 +26205,22 @@ dashboard (credentials_t * credentials, params_t *params,
   gchar* response;
   entity_t entity;
   int ret;
+  int may_get_aggregates, may_get_info, may_get_tasks;
 
+  may_get_aggregates = command_enabled (credentials, "GET_AGGREGATES");
+  may_get_info = command_enabled (credentials, "GET_INFO");
+  may_get_tasks = command_enabled (credentials, "GET_TASKS");
   name = params_value (params, "dashboard_name");
   if (name == NULL)
     {
-      if (credentials->guest)
+      if (credentials->guest
+          && may_get_aggregates && may_get_info)
         name = "secinfo";
-      else if (command_enabled (credentials, "GET_TASKS"))
+      else if (may_get_aggregates && may_get_info && may_get_tasks)
         name = "main";
-      else if (command_enabled (credentials, "GET_INFO"))
+      else if (may_get_aggregates && may_get_tasks)
+        name = "scans";
+      else if (may_get_aggregates && may_get_info)
         name = "secinfo";
       else if (command_enabled (credentials, "GET_SYSTEM_REPORTS"))
         {

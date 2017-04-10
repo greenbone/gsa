@@ -1,3 +1,20 @@
+2017-04-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (dashboard): Check if user has the get_aggregates
+	permission for dashboards and add case for when the user may
+	get Tasks but not SecInfo.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Show "Dashboard"
+	menu items only if user has the get_aggregates permission.
+
+	* src/html/classic/omp.xsl (html-tasks-table, html-cpe-table)
+	(html-cve-table, html-nvt-table, html-ovaldef-table)
+	(html-cert_bund_adv-table, html-dfn_cert_adv-table)
+	(html-allinfo-table, html-notes-table, html-overrides-table)
+	(html-reports-table, html-results-table, html-hosts-table)
+	(html-oss-table): Show top dashboard only if user has the
+	get_aggregates permission.
+
 2017-04-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r28139.

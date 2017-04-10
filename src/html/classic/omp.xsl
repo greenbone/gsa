@@ -8179,12 +8179,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="6"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-scan-management-top-visualization">
-        <xsl:with-param name="type" select="'task'"/>
-        <xsl:with-param name="auto_load_left_default" select="'left-by-class'"/>
-        <xsl:with-param name="auto_load_right_default" select="'right-by-task-status'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-scan-management-top-visualization">
+          <xsl:with-param name="type" select="'task'"/>
+          <xsl:with-param name="auto_load_left_default" select="'left-by-class'"/>
+          <xsl:with-param name="auto_load_right_default" select="'right-by-task-status'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -21086,10 +21088,12 @@ should not have received it.
     <xsl:with-param name="filtered-count" select="info_count/filtered"/>
     <xsl:with-param name="full-count" select="info_count/text ()"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
-        <xsl:with-param name="type" select="'cpe'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-secinfo-top-visualization">
+          <xsl:with-param name="type" select="'cpe'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
     <xsl:with-param name="columns" xmlns="">
       <column>
@@ -21146,10 +21150,12 @@ should not have received it.
     <xsl:with-param name="full-count" select="info_count/text ()"/>
 
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
-        <xsl:with-param name="type" select="'cve'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-secinfo-top-visualization">
+          <xsl:with-param name="type" select="'cve'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
     <xsl:with-param name="columns" xmlns="">
       <column>
@@ -21221,10 +21227,12 @@ should not have received it.
     <xsl:with-param name="filtered-count" select="info_count/filtered"/>
     <xsl:with-param name="full-count" select="info_count/text ()"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
-        <xsl:with-param name="type" select="'nvt'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-secinfo-top-visualization">
+          <xsl:with-param name="type" select="'nvt'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
     <xsl:with-param name="columns" xmlns="">
       <column>
@@ -21299,10 +21307,12 @@ should not have received it.
     <xsl:with-param name="filtered-count" select="info_count/filtered"/>
     <xsl:with-param name="full-count" select="info_count/text ()"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
-        <xsl:with-param name="type" select="'ovaldef'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-secinfo-top-visualization">
+          <xsl:with-param name="type" select="'ovaldef'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
     <xsl:with-param name="columns" xmlns="">
       <column>
@@ -21373,10 +21383,12 @@ should not have received it.
     <xsl:with-param name="full-count" select="info_count/text ()"/>
 
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
-        <xsl:with-param name="type" select="'cert_bund_adv'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-secinfo-top-visualization">
+          <xsl:with-param name="type" select="'cert_bund_adv'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
 
     <xsl:with-param name="columns" xmlns="">
@@ -21435,10 +21447,12 @@ should not have received it.
     <xsl:with-param name="full-count" select="info_count/text ()"/>
 
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
-        <xsl:with-param name="type" select="'dfn_cert_adv'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-secinfo-top-visualization">
+          <xsl:with-param name="type" select="'dfn_cert_adv'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
 
     <xsl:with-param name="columns" xmlns="">
@@ -21497,10 +21511,12 @@ should not have received it.
     <xsl:with-param name="full-count" select="info_count/text ()"/>
     <xsl:with-param name="no_bulk" select="1"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-secinfo-top-visualization">
-        <xsl:with-param name="type" select="'allinfo'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-secinfo-top-visualization">
+          <xsl:with-param name="type" select="'allinfo'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
     <xsl:with-param name="columns" xmlns="">
       <column>
@@ -24202,8 +24218,10 @@ should not have received it.
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-notes-top-visualization"/>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-notes-top-visualization"/>
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -25539,8 +25557,10 @@ should not have received it.
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-overrides-top-visualization"/>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-overrides-top-visualization"/>
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -29086,10 +29106,12 @@ should not have received it.
     <xsl:with-param name="filtered-count" select="report_count/filtered"/>
     <xsl:with-param name="full-count" select="report_count/text ()"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-scan-management-top-visualization">
-        <xsl:with-param name="type" select="'report'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-scan-management-top-visualization">
+          <xsl:with-param name="type" select="'report'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
     <xsl:with-param name="upload-icon" select="true ()"/>
     <xsl:with-param name="columns" xmlns="">
@@ -31223,10 +31245,12 @@ should not have received it.
     <xsl:with-param name="filtered-count" select="result_count/filtered"/>
     <xsl:with-param name="full-count" select="result_count/text()"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-scan-management-top-visualization">
-        <xsl:with-param name="type" select="'result'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-scan-management-top-visualization">
+          <xsl:with-param name="type" select="'result'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
     <xsl:with-param name="columns" xmlns="">
       <column>
@@ -38804,10 +38828,12 @@ should not have received it.
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-assets-top-visualization">
-        <xsl:with-param name="type" select="'host'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-assets-top-visualization">
+          <xsl:with-param name="type" select="'host'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -38864,10 +38890,12 @@ should not have received it.
     <xsl:with-param name="icon-count" select="1"/>
     <xsl:with-param name="new-icon" select="false ()"/>
     <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-assets-top-visualization">
-        <xsl:with-param name="type" select="'os'"/>
-      </xsl:call-template>
+      <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+        <xsl:call-template name="init-d3charts"/>
+        <xsl:call-template name="js-assets-top-visualization">
+          <xsl:with-param name="type" select="'os'"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>

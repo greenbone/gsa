@@ -397,7 +397,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    <ul>
     <li>
       <xsl:choose>
-        <xsl:when test="number (/envelope/guest)">
+        <xsl:when test="number (/envelope/guest) or not(gsa:may-op ('GET_AGGREGATES')) or not(gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_INFO'))">
           <div class="empty_top_button"/>
         </xsl:when>
         <xsl:otherwise>
@@ -411,7 +411,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </li>
     <li>
       <xsl:variable name="items" xmlns="">
-        <xsl:if test="gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_REPORTS') or gsa:may-op ('GET_RESULTS') or gsa:may-op ('GET_NOTES') or gsa:may-op ('GET_OVERRIDES')">
+        <xsl:if test="gsa:may-op ('GET_AGGREGATES') and (gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_REPORTS') or gsa:may-op ('GET_RESULTS') or gsa:may-op ('GET_NOTES') or gsa:may-op ('GET_OVERRIDES'))">
           <item>
             <page>dashboard&amp;dashboard_name=scans</page>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
@@ -460,11 +460,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <li>
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_ASSETS')">
-          <item>
-            <page>dashboard&amp;dashboard_name=assets</page>
-            <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
-          </item>
-          <divider/>
+          <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+            <item>
+              <page>dashboard&amp;dashboard_name=assets</page>
+              <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
+            </item>
+            <divider/>
+          </xsl:if>
           <item>
             <page>get_assets&amp;asset_type=host</page>
             <name><xsl:value-of select="gsa:i18n ('Hosts')"/></name>
@@ -489,11 +491,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <li>
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_INFO')">
-          <item>
-            <page>dashboard&amp;dashboard_name=secinfo</page>
-            <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
-          </item>
-          <divider/>
+          <xsl:if test="gsa:may-op ('GET_AGGREGATES')">
+            <item>
+              <page>dashboard&amp;dashboard_name=secinfo</page>
+              <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
+            </item>
+            <divider/>
+          </xsl:if>
           <item>
             <page>get_info&amp;info_type=nvt</page>
             <name><xsl:value-of select="gsa:i18n ('NVTs')"/></name>
