@@ -34,7 +34,6 @@ import Toolbar from '../toolbar.js';
 import PowerFilter from '../powerfilter/powerfilter.js';
 
 import DashboardControls from '../dashboard/controls.js';
-import {withFoldToggle} from '../folding.js'
 
 const exclude_props = [
   'children',
@@ -126,10 +125,6 @@ export class EntitiesPage extends React.Component {
 
     if (!is_defined(SectionComponent)) {
       SectionComponent = Section;
-    }
-
-    if (foldable) {
-      SectionComponent = withFoldToggle(SectionComponent)
     }
 
     return (
@@ -259,6 +254,7 @@ export class EntitiesPage extends React.Component {
 EntitiesPage.propTypes = {
   dashboard: PropTypes.componentOrFalse,
   entities: React.PropTypes.object,
+  foldable: React.PropTypes.bool,
   filterEditDialog: PropTypes.component,
   filter: React.PropTypes.object,
   filters: React.PropTypes.object,
