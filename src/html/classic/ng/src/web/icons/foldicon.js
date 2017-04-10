@@ -24,29 +24,37 @@
 import React from 'react';
 
 import _ from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import Icon from './icon.js';
 
 import {FoldState} from '../folding.js';
 
-export const FoldIcon = (props, context) => {
-  let {foldState, onFoldToggle, ...other} = props;
-  let folded = (foldState === FoldState.FOLDED ||
+export const FoldIcon = ({
+    foldState,
+    title,
+    ...other,
+  }) => {
+  let folded = foldState === FoldState.FOLDED ||
       foldState === FoldState.FOLDING ||
-      foldState === FoldState.FOLDING_START);
-  let url = '';
+      foldState === FoldState.FOLDING_START;
   let img = folded ? 'unfold.svg' : 'fold.svg';
-  let title = folded ? _('Unfold') : _('Fold');
+
+  if (!is_defined(title)) {
+    title = folded ? _('Unfold') : _('Fold');
+  }
 
   return (
-    <Icon img={img} href={url} title={title} onClick={onFoldToggle} {...other}/>
+    <Icon
+      {...other}
+      img={img}
+      title={title}/>
   );
 };
 
 FoldIcon.propTypes = {
+  foldState: React.PropTypes.string,
   title: React.PropTypes.string,
-  onFoldToggle: React.PropTypes.func,
-  page: React.PropTypes.string,
 };
 
 FoldIcon.contextTypes = {
