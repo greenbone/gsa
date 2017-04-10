@@ -23,48 +23,46 @@
 
 import React from 'react';
 
-import {is_defined} from '../utils.js';
+import {is_defined, extend} from '../utils.js';
 
 import './css/folding.css';
 
 /**
- * State used in foldable components 
+ * State used in foldable components
  */
-export const FoldState = 
-    {
-      UNFOLDED: 'UNFOLDED',
-      FOLDED: 'FOLDED',
-      FOLDING_START: 'FOLDING_START',
-      UNFOLDING_START:'UNFOLDING_START',
-      FOLDING: 'FOLDING',
-      UNFOLDING: 'UNFOLDING'
-    };
+export const FoldState = {
+  UNFOLDED: 'UNFOLDED',
+  FOLDED: 'FOLDED',
+  FOLDING_START: 'FOLDING_START',
+  UNFOLDING_START: 'UNFOLDING_START',
+  FOLDING: 'FOLDING',
+  UNFOLDING: 'UNFOLDING',
+};
 
 /**
  * HOC for making a container content component foldable
  */
 export const withFolding = (Component, defaults = {}) => {
-  const FoldingWrapper = props => {
-    let {foldState, style, ...other} = props;
-
+  const FoldingWrapper = ({
+    foldState,
+    style = {},
+    onFoldStepEnd,
+    onFoldToggle,
+    ...props,
+  }) => {
     let height;
     let animation;
+    let display;
     let window_height = Math.ceil(window.innerHeight * 1.2) + 'px';
-    let display = (foldState === FoldState.FOLDED ? 'none' : null);
-    let new_style = {};
+    let new_style = extend({}, style);
 
-    for (let rule in style) {
-      new_style[rule] = style[rule];
-    }
-
-    switch (props.foldState) {
+    switch (foldState) {
       case FoldState.FOLDED:
         height = '0';
-        animation = null;
+        display = 'none';
         break;
       case FoldState.UNFOLDED:
         height = '';
-        animation = null;
         break;
       case FoldState.UNFOLDING_START:
         height = '1px';
@@ -76,40 +74,52 @@ export const withFolding = (Component, defaults = {}) => {
         break;
       case FoldState.UNFOLDING:
         height = window_height;
-        animation = null;
         break;
       case FoldState.FOLDING:
         height = '0';
-        animation = null;
         break;
       default:
-        height = null;
-        animation = null;
+        break;
     }
 
-    if (height !== null) {
+    if (is_defined(height)) {
       new_style.maxHeight = height;
     }
-    if (animation !== null) {
+    if (is_defined(animation)) {
       new_style.animation = animation;
     }
-    if (!is_defined (new_style.overflow)) {
+    if (!is_defined(new_style.overflow)) {
       new_style.overflow = 'hidden';
     }
-    if (!is_defined (new_style.transition)) {
+    if (!is_defined(new_style.transition)) {
       new_style.transition = '0.4s';
     }
-    if (display !== null) {
+    if (is_defined(display)) {
       new_style.display = display;
     }
 
-    return <Component style={new_style} {...other}
-              onTransitionEnd={props.onFoldStepEnd}
-              onAnimationEnd={props.onFoldStepEnd}/>
-  }
+    return (
+      <Component
+        style={new_style}
+        {...props}
+        onTransitionEnd={onFoldStepEnd}
+        onAnimationEnd={onFoldStepEnd}
+      />
+    );
+  };
+
+  FoldingWrapper.propTypes = {
+    foldState: React.PropTypes.oneOf([
+      FoldState.UNFOLDED, FoldState.FOLDED, FoldState.FOLDING_START,
+      FoldState.UNFOLDING_START, FoldState.FOLDING, FoldState.UNFOLDING,
+    ]),
+    style: React.PropTypes.object,
+    onFoldStepEnd: React.PropTypes.func,
+    onFoldToggle: React.PropTypes.func,
+  };
 
   return FoldingWrapper;
-}
+};
 
 /**
  * HOC to add fold parent functionality to a component.
@@ -119,9 +129,9 @@ export const withFoldToggle = (Component, defaults = {}) => {
 
     constructor(...args) {
       super(...args);
-      this.state = {foldState: FoldState.UNFOLDED}
-      this.onFoldStepEnd = this.handleFoldStepEnd.bind(this);
-      this.onFoldToggle = this.handleFoldToggle.bind(this);
+      this.state = {foldState: FoldState.UNFOLDED};
+      this.handleFoldStepEnd = this.handleFoldStepEnd.bind(this);
+      this.handleFoldToggle = this.handleFoldToggle.bind(this);
     }
 
     handleFoldToggle() {
@@ -138,7 +148,7 @@ export const withFoldToggle = (Component, defaults = {}) => {
           newFoldState = FoldState.FOLDED;
           break;
         case FoldState.FOLDING_START:
-          newFoldState = FoldState.UNFOLDED;false
+          newFoldState = FoldState.UNFOLDED;
           break;
         case FoldState.UNFOLDING:
           newFoldState = FoldState.FOLDING;
@@ -165,7 +175,7 @@ export const withFoldToggle = (Component, defaults = {}) => {
           break;
         case FoldState.UNFOLDING_START:
           newFoldState = FoldState.UNFOLDING;
-          break;      
+          break;
         case FoldState.FOLDING_START:
           newFoldState = FoldState.FOLDING;
           break;
@@ -186,13 +196,19 @@ export const withFoldToggle = (Component, defaults = {}) => {
       let {...other} = this.props;
       let {foldState} = this.state;
 
-      return <Component foldState={foldState}
-                onFoldToggle={this.onFoldToggle}
-                onFoldStepEnd={this.onFoldStepEnd}
-                {...other} />;
-    }
+      return (
+        <Component
+          foldState={foldState}
+          onFoldToggle={this.handleFoldToggle}
+          onFoldStepEnd={this.handleFoldStepEnd}
+          {...other}
+        />
+      );
+    };
 
-  }
+  };
 
   return FoldToggleWrapper;
-}
+};
+
+// vim: set ts=2 sw=2 tw=80:
