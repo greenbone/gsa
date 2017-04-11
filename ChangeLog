@@ -1,5 +1,34 @@
 2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/filters/dialog.js,
+	src/html/classic/ng/src/web/filters/filterspage.js,
+	src/html/classic/ng/src/web/filters/row.js,
+	src/html/classic/ng/src/web/folding.js,
+	src/html/classic/ng/src/web/footnote.js,
+	src/html/classic/ng/src/web/header.js,
+	src/html/classic/ng/src/web/homepage.js,
+	src/html/classic/ng/src/web/img.js,
+	src/html/classic/ng/src/web/layout.js,
+	src/html/classic/ng/src/web/legacylink.js,
+	src/html/classic/ng/src/web/link.js,
+	src/html/classic/ng/src/web/loginpage.js,
+	src/html/classic/ng/src/web/main.js,
+	src/html/classic/ng/src/web/page.js,
+	src/html/classic/ng/src/web/pagenotfound.js,
+	src/html/classic/ng/src/web/pagination.js,
+	src/html/classic/ng/src/web/render.js,
+	src/html/classic/ng/src/web/scanspage.js,
+	src/html/classic/ng/src/web/secinfopage.js,
+	src/html/classic/ng/src/web/section.js,
+	src/html/classic/ng/src/web/solutiontype.js,
+	src/html/classic/ng/src/web/sortby.js,
+	src/html/classic/ng/src/web/statusbar.js,
+	src/html/classic/ng/src/web/titlebar.js,
+	src/html/classic/ng/src/web/toolbar.js: Port additional components to
+	use own PropTypes.
+
+2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/assetspage.js,
 	src/html/classic/ng/src/web/button.js,
 	src/html/classic/ng/src/web/certbund/charts.js,

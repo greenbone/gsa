@@ -23,66 +23,67 @@
 
 import React from 'react';
 
+import _ from '../locale.js';
+
 import Layout from './layout.js';
 import Link from './link.js';
 import LegacyLink from './legacylink.js';
+import PropTypes from './proptypes.js';
 
 import Icon from './icons/icon.js';
 
 import './css/titlebar.css';
 
-export class Titlebar extends React.Component {
-  render() {
-    let {gmp} = this.context;
-    let {onLogoutClick} = this.props;
-
-    const gb = (
-      <Icon img="greenbone.svg" size="default"
-        alt="Greenbone Security Assistant"
-        className="greenbone-icon"/>
-    );
-    const gsa = (
-      <Icon img="gsa.svg" size="default"
-        alt="Greenbone Security Assistant"
-        className="greenbone-text"/>
-    );
-    return (
-      <Layout className="titlebar" flex>
-        {gmp.isLoggedIn() &&
-          <Link to="/" title="Dashboard" className="auto">
-            {gb}
-            {gsa}
-          </Link>
-        }
-        {gmp.isLoggedIn() &&
-          <div className="user-panel">
-            <span>Logged in as </span>
-            <LegacyLink cmd="get_my_settings">
-              <b>{gmp.username}</b>
-            </LegacyLink>
-            <span> | </span>
-            <a onClick={onLogoutClick} className="none">Logout</a>
-          </div>
-        }
-        {!gmp.isLoggedIn() &&
-          <span className="none">
-            {gb}
-            {gsa}
-          </span>
-        }
-      </Layout>
-    );
-  }
-}
+const Titlebar = ({onLogoutClick}, {gmp}) => {
+  const gb = (
+    <Icon img="greenbone.svg" size="default"
+      alt="Greenbone Security Assistant"
+      className="greenbone-icon"/>
+  );
+  const gsa = (
+    <Icon img="gsa.svg" size="default"
+      alt="Greenbone Security Assistant"
+      className="greenbone-text"/>
+  );
+  return (
+    <Layout className="titlebar" flex>
+      {gmp.isLoggedIn() &&
+        <Link
+          to="/"
+          title={_('Dashboard')}
+          className="auto">
+          {gb}
+          {gsa}
+        </Link>
+      }
+      {gmp.isLoggedIn() &&
+        <div className="user-panel">
+          <span>Logged in as </span>
+          <LegacyLink cmd="get_my_settings">
+            <b>{gmp.username}</b>
+          </LegacyLink>
+          <span> | </span>
+          <a onClick={onLogoutClick} className="none">Logout</a>
+        </div>
+      }
+      {!gmp.isLoggedIn() &&
+        <span className="none">
+          {gb}
+          {gsa}
+        </span>
+      }
+    </Layout>
+  );
+};
 
 Titlebar.propTypes = {
-  onLogoutClick: React.PropTypes.func,
+  onLogoutClick: PropTypes.func,
 };
 
 Titlebar.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
-export {Titlebar as default};
+export default Titlebar;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,45 +25,49 @@ import React from 'react';
 
 import {extend, is_defined} from '../utils.js';
 
-export class LegacyLink extends React.Component {
+import PropTypes from './proptypes.js';
 
-  render() {
-    let {children, path, className, cmd, title, ...params} = this.props;
+const LegacyLink = ({
+    children,
+    className,
+    cmd,
+    path,
+    title,
+    ...params,
+  }, {gmp}) => {
 
-    let {gmp} = this.context;
-    let iparams = {
-      token: gmp.token,
-    };
+  let iparams = {
+    token: gmp.token,
+  };
 
-    if (is_defined(cmd)) {
-      iparams.cmd = cmd;
+  if (is_defined(cmd)) {
+    iparams.cmd = cmd;
 
-      if (!is_defined(path)) {
-        path = 'omp';
-      }
+    if (!is_defined(path)) {
+      path = 'omp';
     }
-
-    let url = gmp.buildUrl(path, extend({}, params, iparams));
-    return (
-      <a href={url}
-        className={className}
-        title={title}>
-        {children}
-      </a>
-    );
   }
-}
+
+  let url = gmp.buildUrl(path, extend({}, params, iparams));
+  return (
+    <a href={url}
+      className={className}
+      title={title}>
+      {children}
+    </a>
+  );
+};
 
 LegacyLink.propTypes = {
-  className: React.PropTypes.string,
-  cmd: React.PropTypes.string,
-  path: React.PropTypes.string,
-  params: React.PropTypes.object,
-  title: React.PropTypes.string,
+  className: PropTypes.string,
+  cmd: PropTypes.string,
+  path: PropTypes.string,
+  params: PropTypes.object,
+  title: PropTypes.string,
 };
 
 LegacyLink.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default LegacyLink;

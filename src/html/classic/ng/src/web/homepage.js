@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from '../locale.js';
 
+import PropTypes from './proptypes.js';
 import Section from './section.js';
 
 import Dashboard from './dashboard/dashboard.js';
@@ -77,7 +78,7 @@ export const Home = (props, {cache}) => {
 };
 
 Home.contextTypes = {
-  cache: React.PropTypes.object,
+  cache: PropTypes.object,
 };
 
 export default Home;

@@ -23,6 +23,7 @@
 
 import React from 'react';
 
+import PropTypes from './proptypes.js';
 import Titlebar from './titlebar.js';
 
 import MenuBar from './menu/menubar.js';
@@ -59,8 +60,8 @@ export class Header extends React.Component {
 }
 
 Header.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
-  router: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
 export default Header;

@@ -26,6 +26,7 @@ import React from 'react';
 import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
@@ -89,12 +90,12 @@ const FilterDialog = ({
 };
 
 FilterDialog.propTypes = {
-  comment: React.PropTypes.string,
-  name: React.PropTypes.string,
-  term: React.PropTypes.string,
-  type: React.PropTypes.string,
-  types: React.PropTypes.array.isRequired,
-  onValueChange: React.PropTypes.func,
+  comment: PropTypes.string,
+  name: PropTypes.string,
+  term: PropTypes.string,
+  type: PropTypes.string,
+  types: PropTypes.array.isRequired,
+  onValueChange: PropTypes.func,
 };
 
 export default withDialog(FilterDialog, {

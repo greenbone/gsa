@@ -26,12 +26,11 @@ import React from 'react';
 import {classes} from '../utils.js';
 
 import Layout from './layout.js';
+import PropTypes from './proptypes.js';
 
 import './css/footnote.css';
 
-export const FootNote = props => {
-  let {className, ...other} = props;
-
+export const FootNote = ({className, ...other}) => {
   className = classes('footnote', className);
 
   return (
@@ -40,7 +39,7 @@ export const FootNote = props => {
 };
 
 FootNote.propTypes = {
-  className: React.PropTypes.string,
+  className: PropTypes.string,
 };
 
 

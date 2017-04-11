@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from '../locale.js';
 
+import PropTypes from './proptypes.js';
+
 import Icon from './icons/icon.js';
 
 export const SolutionType = props => {
@@ -62,12 +64,15 @@ export const SolutionType = props => {
       return null;
   }
   return (
-    <Icon img={img} title={title} alt={title}/>
+    <Icon
+      img={img}
+      title={title}
+      alt={title}/>
   );
 };
 
 SolutionType.propTypes = {
-  type: React.PropTypes.string,
+  type: PropTypes.string,
 };
 
 

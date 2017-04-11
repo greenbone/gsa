@@ -28,6 +28,8 @@ import _ from '../locale.js';
 import logger from '../log.js';
 import {is_defined, is_empty, map, shorten, split} from '../utils.js';
 
+import PropTypes from './proptypes.js';
+
 const log = logger.getLogger('web.render');
 
 /* eslint-disable no-unused-vars */
@@ -203,7 +205,7 @@ export const withPrefix = Component => {
   };
 
   CompentWrapper.propTypes = {
-    prefix: React.PropTypes.string,
+    prefix: PropTypes.string,
   };
 
   return CompentWrapper;

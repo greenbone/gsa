@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,19 +22,24 @@
  */
 
 import React from 'react';
+
+import PropTypes from './proptypes.js';
 import {get_img_url} from './urls.js';
 
-export const Img = props => {
-  const {src, alt = '', ...other} = props;
+export const Img = ({src, alt = '', ...other}) => {
   let img_path = get_img_url(src);
   return (
-    <img {...other} alt={alt} src={img_path}/>
+    <img
+      {...other}
+      alt={alt}
+      src={img_path}
+    />
   );
 };
 
 Img.propTypes = {
-  alt: React.PropTypes.string,
-  src: React.PropTypes.string.isRequired,
+  alt: PropTypes.string,
+  src: PropTypes.string.isRequired,
 };
 
 export default Img;

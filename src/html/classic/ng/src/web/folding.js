@@ -25,6 +25,8 @@ import React from 'react';
 
 import {is_defined, extend} from '../utils.js';
 
+import PropTypes from './proptypes.js';
+
 import './css/folding.css';
 
 /**
@@ -109,13 +111,13 @@ export const withFolding = (Component, defaults = {}) => {
   };
 
   FoldingWrapper.propTypes = {
-    foldState: React.PropTypes.oneOf([
+    foldState: PropTypes.oneOf([
       FoldState.UNFOLDED, FoldState.FOLDED, FoldState.FOLDING_START,
       FoldState.UNFOLDING_START, FoldState.FOLDING, FoldState.UNFOLDING,
     ]),
-    style: React.PropTypes.object,
-    onFoldStepEnd: React.PropTypes.func,
-    onFoldToggle: React.PropTypes.func,
+    style: PropTypes.object,
+    onFoldStepEnd: PropTypes.func,
+    onFoldToggle: PropTypes.func,
   };
 
   return FoldingWrapper;

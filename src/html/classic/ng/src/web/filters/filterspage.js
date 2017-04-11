@@ -104,7 +104,7 @@ const includes_type = (types, type) => {
 };
 
 ToolBarIcons.propTypes = {
-  onNewFilterClick: React.PropTypes.func,
+  onNewFilterClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
@@ -182,8 +182,8 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func,
+  entityCommand: PropTypes.entitycommand.isRequired,
+  onChanged: PropTypes.func.isRequired,
 };
 
 

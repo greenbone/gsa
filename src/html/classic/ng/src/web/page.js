@@ -28,9 +28,10 @@ import {StickyContainer} from 'react-sticky';
 import logger from '../log.js';
 import {is_defined} from '../utils.js';
 
-import Header from './header.js';
 import Footer from './footer.js';
+import Header from './header.js';
 import Main from './main.js';
+import PropTypes from './proptypes.js';
 
 import './css/page.css';
 
@@ -83,11 +84,11 @@ export class Page extends React.Component {
 }
 
 Page.childContextTypes = {
-  capabilities: React.PropTypes.object,
+  capabilities: PropTypes.capabilities,
 };
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default Page;

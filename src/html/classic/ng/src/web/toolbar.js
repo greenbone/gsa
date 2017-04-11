@@ -25,12 +25,13 @@ import React from 'react';
 
 import Layout from './layout.js';
 
-export const Toolbar = props => {
+const Toolbar = props => {
   return (
-    <Layout flex align={['space-between', 'start']} {...props}
-      className="toolbar">
-      {props.children}
-    </Layout>
+    <Layout
+      flex
+      align={['space-between', 'start']}
+      {...props}
+      className="toolbar"/>
   );
 };
 

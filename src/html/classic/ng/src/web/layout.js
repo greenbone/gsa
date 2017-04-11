@@ -25,6 +25,8 @@ import React from 'react';
 
 import {classes, is_defined, is_empty, is_array} from '../utils.js';
 
+import PropTypes from './proptypes.js';
+
 import './css/layout.css';
 
 const LAYOUT_PROPNAMES = [
@@ -87,33 +89,39 @@ export const withLayout = (Component, defaults = {}) => {
       style.flexBasis = basis;
     }
 
-    return <Component {...other} className={css} style={style}/>;
+    return (
+      <Component
+        {...other}
+        className={css}
+        style={style}
+      />
+    );
   };
 
   LayoutWrapper.propTypes = {
-    className: React.PropTypes.string,
-    flex: React.PropTypes.oneOf(['row', 'column', true]),
-    float: React.PropTypes.bool,
-    wrap: React.PropTypes.bool,
-    box: React.PropTypes.bool,
-    align: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.array,
+    className: PropTypes.string,
+    flex: PropTypes.oneOf(['row', 'column', true]),
+    float: PropTypes.bool,
+    wrap: PropTypes.bool,
+    box: PropTypes.bool,
+    align: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
     ]),
-    grow: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
+    grow: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
     ]),
-    shrink: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
+    shrink: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
     ]),
-    basis: React.PropTypes.string,
-    offset: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
+    basis: PropTypes.string,
+    offset: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
     ]),
-    style: React.PropTypes.object,
+    style: PropTypes.object,
   };
 
   return LayoutWrapper;

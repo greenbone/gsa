@@ -27,6 +27,7 @@ import React from 'react';
 import {is_string} from '../utils.js';
 
 import Layout from './layout.js';
+import PropTypes from './proptypes.js';
 import {withFolding, withFoldToggle} from './folding.js';
 
 import Icon from './icons/icon.js';
@@ -78,17 +79,17 @@ const Section = ({
 };
 
 Section.propTypes = {
-  className: React.PropTypes.string,
-  foldable: React.PropTypes.bool,
-  foldState: React.PropTypes.string,
-  img: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element,
+  className: PropTypes.string,
+  foldable: PropTypes.bool,
+  foldState: PropTypes.string,
+  img: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
   ]),
-  title: React.PropTypes.string.isRequired,
-  extra: React.PropTypes.element,
-  onFoldToggle: React.PropTypes.func,
-  onFoldStepEnd: React.PropTypes.func,
+  title: PropTypes.string.isRequired,
+  extra: PropTypes.element,
+  onFoldToggle: PropTypes.func,
+  onFoldStepEnd: PropTypes.func,
 };
 
 export const SectionHeader = props => {
@@ -109,11 +110,11 @@ export const SectionHeader = props => {
 };
 
 SectionHeader.propTypes = {
-  img: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element,
+  img: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
   ]),
-  title: React.PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default withFoldToggle(Section);

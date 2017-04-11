@@ -25,6 +25,8 @@ import React from 'react';
 
 import {classes} from '../utils.js';
 
+import PropTypes from './proptypes.js';
+
 import './css/sortby.css';
 
 export class SortBy extends React.Component {
@@ -54,9 +56,9 @@ export class SortBy extends React.Component {
 };
 
 SortBy.propTypes = {
-  by: React.PropTypes.string,
-  className: React.PropTypes.string,
-  onClick: React.PropTypes.func,
+  by: PropTypes.string,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default SortBy;

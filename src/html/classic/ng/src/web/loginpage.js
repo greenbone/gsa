@@ -24,18 +24,19 @@
 import React from 'react';
 
 import _ from '../locale.js';
-import {autobind, KeyCode, is_empty} from '../utils.js';
 import logger from '../log.js';
+import {autobind, KeyCode, is_empty} from '../utils.js';
 
-import Header from './header.js';
 import Footer from './footer.js';
+import Header from './header.js';
 import Layout from './layout.js';
 import Main from './main.js';
+import PropTypes from './proptypes.js';
 
 import FormGroup from './form/formgroup.js';
-import TextField from './form/textfield.js';
 import PasswordField from './form/passwordfield.js';
 import SubmitButton from './form/submitbutton.js';
+import TextField from './form/textfield.js';
 
 import Icon from './icons/icon.js';
 
@@ -125,7 +126,10 @@ export class LoginPage extends React.Component {
     return (
       <Layout flex="column" className="login">
         <Header/>
-        <Main flex align={['space-around', 'center']} wrap>
+        <Main
+          flex
+          align={['space-around', 'center']}
+          wrap>
           <LoginForm onSubmit={this.onSubmit} error={message}/>
           <LogoBox/>
         </Main>
@@ -136,14 +140,17 @@ export class LoginPage extends React.Component {
 }
 
 LoginPage.contextTypes = {
-  router: React.PropTypes.object.isRequired,
-  gmp: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 
 const LogoBox = () => {
   return (
-    <Icon className="greenbone-icon" size="default" img="greenbone.svg"/>
+    <Icon
+      className="greenbone-icon"
+      size="default"
+      img="greenbone.svg"/>
   );
 };
 
@@ -192,13 +199,21 @@ class LoginForm extends React.Component {
         {protocol_insecure &&
           <div className="login-panel">
             <p className="error">{_('Warning: Connection unencrypted')}</p>
-            <p>{_('The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.')}</p>
-            <p>{_('Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.')}</p>
+            <p>{_('The connection to this GSA is not encrypted, allowing ' +
+              'anyone listening to the traffic to steal your credentials.')}</p>
+            <p>{_('Please configure a TLS certificate for the HTTPS service ' +
+              'or ask your administrator to do so as soon as possible.')}</p>
           </div>
         }
-        <Layout flex align="space-around" className="login-panel">
+        <Layout
+          flex
+          align="space-around"
+          className="login-panel">
           <Icon img="login-label.png" size="default"/>
-          <Layout flex="column" align="space-around" grow="1">
+          <Layout
+            flex="column"
+            align="space-around"
+            grow="1">
             <Layout flex="column">
               <FormGroup title={_('Username')} titleSize="4">
                 <TextField name="username"
@@ -229,8 +244,8 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
-  onSubmit: React.PropTypes.func,
-  error: React.PropTypes.string,
+  error: PropTypes.string,
+  onSubmit: PropTypes.func,
 };
 
 export default LoginPage;

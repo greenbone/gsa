@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,11 @@
 
 import React from 'react';
 
+import PropTypes from './proptypes.js';
+
 import './css/statusbar.css';
 
-const StatusBar = props => {
-  let {status = 'Unknown', progress = '0'} = props;
+const StatusBar = ({status = 'Unknown', progress = '0'}) => {
   let text = status;
   let st = status.toLowerCase();
   let css_class = st;
@@ -66,9 +67,9 @@ const StatusBar = props => {
 };
 
 StatusBar.propTypes = {
-  status: React.PropTypes.string,
-  progress: React.PropTypes.string,
-  suffix: React.PropTypes.string,
+  status: PropTypes.string,
+  progress: PropTypes.string,
+  suffix: PropTypes.string,
 };
 
 export default StatusBar;
