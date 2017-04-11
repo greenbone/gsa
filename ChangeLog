@@ -1,5 +1,11 @@
 2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/powerfilter/dialog.js: Don't export a
+	FilterDialog anymore. This isn't used since all entities pages are converted
+	to use HOCs.
+
+2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dialog/dialog.js,
 	src/html/classic/ng/src/web/powerfilter/dialog.js: Dialog width property isn't
 	a integer anymore. It's a string that also must contain a unit.

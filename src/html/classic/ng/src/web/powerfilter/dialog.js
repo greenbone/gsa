@@ -184,8 +184,4 @@ export const createFilterDialog = options => {
   return withFilterDialog(DefaultFilterDialog, options);
 };
 
-export const FilterDialog = createFilterDialog();
-
-export default FilterDialog;
-
 // vim: set ts=2 sw=2 tw=80:
