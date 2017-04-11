@@ -50,7 +50,7 @@ export const componentOrElement = React.PropTypes.oneOfType([
   React.PropTypes.element,
 ]);
 
-export const number = React.PropTypes.oneOfType([
+export const numberString = React.PropTypes.oneOfType([
   React.PropTypes.number,
   React.PropTypes.string,
 ]);
@@ -125,6 +125,23 @@ export const timeunit =  React.PropTypes.oneOf([
 ]);
 
 export default {
+  bool: React.PropTypes.bool,
+  any: React.PropTypes.any,
+  array: React.PropTypes.array,
+  arrayOf: React.PropTypes.arrayOf,
+  element: React.PropTypes.element,
+  func: React.PropTypes.func,
+  instanceOf: React.PropTypes.instanceOf,
+  node: React.PropTypes.node,
+  number: React.PropTypes.number,
+  object: React.PropTypes.object,
+  objectOf: React.PropTypes.objectOf,
+  oneOf: React.PropTypes.oneOf,
+  oneOfType: React.PropTypes.oneOfType,
+  shape: React.PropTypes.shape,
+  symbol: React.PropTypes.symbol,
+  string: React.PropTypes.string,
+
   arrayLike,
   capabilities,
   collection,
@@ -136,7 +153,7 @@ export default {
   filter,
   model,
   momentDate,
-  number,
+  numberString,
   icon,
   id,
   idOrZero,
