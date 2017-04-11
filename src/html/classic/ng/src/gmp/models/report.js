@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parse_float} from '../../utils.js';
+import {is_defined, parse_float} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -54,6 +54,10 @@ export class Report extends Model {
     ret.report = new ReportReport(ret.report);
     ret.report_format = new Model(ret.report_format);
     ret.task = new Model(ret.task);
+
+    if (is_defined(ret.severity)) {
+      ret.severity = parse_float(ret.severity);
+    }
 
     ret.type = ret._type;
     ret.content_type = ret._content_type;
