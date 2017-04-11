@@ -57,9 +57,15 @@ import Table from './table.js';
 
 import {TASKS_FILTER_FILTER} from '../../gmp/models/filter.js';
 
-import {OSP_SCAN_CONFIG_TYPE, OPENVAS_SCAN_CONFIG_TYPE,
-  OPENVAS_DEFAULT_SCANNER_ID, OPENVAS_CONFIG_FULL_AND_FAST_ID,
-  } from '../../gmp/models/scanner.js';
+import {
+  OPENVAS_DEFAULT_SCANNER_ID,
+} from '../../gmp/models/scanner.js';
+
+import {
+  FULL_AND_FAST_SCAN_CONFIG_ID,
+  OPENVAS_SCAN_CONFIG_TYPE,
+  OSP_SCAN_CONFIG_TYPE,
+} from '../../gmp/models/scanconfig.js';
 
 const log = logger.getLogger('web.tasks.taskspage');
 
@@ -303,7 +309,7 @@ class Page extends React.Component {
         let settings = response.data;
         let {schedule_id, alert_id, target_id,
           targets, scanner_id = OPENVAS_DEFAULT_SCANNER_ID, scan_configs,
-          config_id = OPENVAS_CONFIG_FULL_AND_FAST_ID, alerts, scanners,
+          config_id = FULL_AND_FAST_SCAN_CONFIG_ID, alerts, scanners,
           schedules, tags} = settings;
 
         log.debug('Loaded new task dialog settings', settings);
@@ -374,7 +380,7 @@ class Page extends React.Component {
       let config_id = settings.get('Default OpenVAS Scan Config').value;
 
       if (!is_defined(config_id) || config_id.length === 0) {
-        config_id = OPENVAS_CONFIG_FULL_AND_FAST_ID;
+        config_id = FULL_AND_FAST_SCAN_CONFIG_ID;
       }
 
       let credentials = settings.credentials;

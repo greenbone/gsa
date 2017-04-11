@@ -35,14 +35,8 @@ export const OPENVAS_SCANNER_TYPE = 2;
 export const CVE_SCANNER_TYPE = 3;
 export const SLAVE_SCANNER_TYPE = 4;
 
-export const OSP_SCAN_CONFIG_TYPE = 1;
-export const OPENVAS_SCAN_CONFIG_TYPE = 0;
-
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
-export const OPENVAS_CONFIG_FULL_AND_FAST_ID =
-  'daba56c8-73ec-11df-a475-002264764cea';
-export const OPENVAS_CONFIG_EMPTY_ID = '085569ce-73ed-11df-83c3-002264764cea';
 
 export function scanner_type_name(scanner_type) {
   scanner_type = parse_int(scanner_type);

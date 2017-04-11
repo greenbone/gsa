@@ -27,10 +27,18 @@ import _ from '../../locale.js';
 import logger from '../../log.js';
 import {is_defined, classes, select_save_id} from '../../utils.js';
 
-import {OSP_SCANNER_TYPE, OPENVAS_SCANNER_TYPE, OSP_SCAN_CONFIG_TYPE,
-  OPENVAS_SCAN_CONFIG_TYPE, OPENVAS_CONFIG_EMPTY_ID,
-  OPENVAS_CONFIG_FULL_AND_FAST_ID,
-  SLAVE_SCANNER_TYPE} from '../../gmp/models/scanner.js';
+import {
+  OPENVAS_SCANNER_TYPE,
+  OSP_SCANNER_TYPE,
+  SLAVE_SCANNER_TYPE,
+} from '../../gmp/models/scanner.js';
+
+import {
+  EMPTY_SCAN_CONFIG_ID,
+  FULL_AND_FAST_SCAN_CONFIG_ID,
+  OPENVAS_SCAN_CONFIG_TYPE,
+  OSP_SCAN_CONFIG_TYPE,
+} from '../../gmp/models/scanconfig.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -81,7 +89,7 @@ class ScannerSelect extends React.Component {
     if (scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner_type === SLAVE_SCANNER_TYPE) {
       config_id = select_save_id(scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
-        OPENVAS_CONFIG_FULL_AND_FAST_ID);
+        FULL_AND_FAST_SCAN_CONFIG_ID);
     }
     else if (scanner_type === OSP_SCANNER_TYPE) {
       config_id = select_save_id(scanConfigs[OSP_SCAN_CONFIG_TYPE], 0);
@@ -190,7 +198,7 @@ const TaskDialog = ({
     render_options(
       scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
         // Skip the "empty" config
-        return config.id !== OPENVAS_CONFIG_EMPTY_ID;
+        return config.id !== EMPTY_SCAN_CONFIG_ID;
       }));
 
   let alert_opts = render_options(alerts);
