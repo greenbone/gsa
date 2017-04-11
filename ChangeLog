@@ -1,5 +1,9 @@
 2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/proptypes.js: Add proptype for gmp validation.
+
+2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: In react 15.5 using
 	React.PropTypes creates a warning. With react 16.0 PropTypes will be removed
 	from the React namespace. Therefore prepare to use our own object for all
