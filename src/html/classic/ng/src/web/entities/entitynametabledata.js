@@ -82,10 +82,10 @@ const EntityNameTableData = ({
 
 EntityNameTableData.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: React.PropTypes.bool,
-  type: React.PropTypes.string.isRequired,
-  displayName: React.PropTypes.string.isRequired,
-  userName: React.PropTypes.string.isRequired,
+  links: PropTypes.bool,
+  type: PropTypes.string.isRequired,
+  displayName: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
 };
 
 export default EntityNameTableData;

@@ -73,15 +73,15 @@ export const EntityEditIcon = ({
 };
 
 EntityEditIcon.propTypes = {
-  displayName: React.PropTypes.string,
+  displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
-  name: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string,
-  onClick: React.PropTypes.func,
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 EntityEditIcon.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default EntityEditIcon;

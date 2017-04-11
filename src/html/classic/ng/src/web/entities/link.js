@@ -117,7 +117,7 @@ export const EntityLink = ({
 
 EntityLink.propTypes = {
   entity: PropTypes.model.isRequired,
-  type: React.PropTypes.string,
+  type: PropTypes.string,
 };
 
 EntityLink.contextTypes = {

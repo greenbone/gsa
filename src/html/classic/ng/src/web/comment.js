@@ -25,6 +25,8 @@ import {is_defined} from '../utils.js';
 
 import React from 'react';
 
+import PropTypes from './proptypes.js';
+
 export const Comment = ({text, children}) => {
   if (!is_defined(text)) {
     text = children;
@@ -37,8 +39,10 @@ export const Comment = ({text, children}) => {
 };
 
 Comment.propTypes = {
-  text: React.PropTypes.string,
+  text: PropTypes.string,
 };
 
 
 export default Comment;
+
+// vim: set ts=2 sw=2 tw=80:

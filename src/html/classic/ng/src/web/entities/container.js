@@ -402,22 +402,22 @@ class EntitiesContainer extends React.Component {
 
 EntitiesContainer.propTypes = {
   component: PropTypes.component.isRequired,
-  extraLoadParams: React.PropTypes.object,
+  extraLoadParams: PropTypes.object,
   entities: PropTypes.collection,
   filter: PropTypes.filter,
   filtersFilter: PropTypes.filter,
-  gmpname: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.arrayOf(React.PropTypes.string),
+  gmpname: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
 };
 
 EntitiesContainer.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 EntitiesContainer.childContextTypes = {
-  username: React.PropTypes.string,
+  username: PropTypes.string,
 };
 
 export const withEntitiesContainer = (component, gmpname, options = {}) => {

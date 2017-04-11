@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const CveCharts = props => {
-  let {filter, cache} = props;
-
+export const CveCharts = ({filter, cache}) => {
   return (
     <div>
       <CommonCharts type="cve" titleType="CVEs"
@@ -38,8 +38,8 @@ export const CveCharts = props => {
 };
 
 CveCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
+  cache: PropTypes.object,
+  filter: PropTypes.filter,
 };
 
 export default CveCharts;

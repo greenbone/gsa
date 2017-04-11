@@ -25,22 +25,25 @@ import React from 'react';
 
 import {classes} from '../utils.js';
 
+import PropTypes from './proptypes.js';
+
 import './css/button.css';
 
-export const Button = props => {
-  let {title, className, children = title, ...other} = props;
-
+export const Button = ({title, className, children = title, ...other}) => {
   className = classes('button', className);
   return (
-    <button {...other} className={className} title={title}>
+    <button
+      {...other}
+      className={className}
+      title={title}>
       {children}
     </button>
   );
 };
 
 Button.propTypes = {
-  title: React.PropTypes.string,
-  className: React.PropTypes.string,
+  title: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default Button;

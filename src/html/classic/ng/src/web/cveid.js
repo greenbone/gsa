@@ -24,6 +24,7 @@
 import React from 'react';
 
 import LegacyLink from './legacylink.js';
+import PropTypes from './proptypes.js';
 
 import './css/cveid.css';
 
@@ -46,8 +47,8 @@ export const CveId = ({id, link = true}) => {
 };
 
 CveId.propTypes = {
-  id: React.PropTypes.string,
-  link: React.PropTypes.bool,
+  id: PropTypes.string,
+  link: PropTypes.bool,
 };
 
 

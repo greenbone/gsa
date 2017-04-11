@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 import Checkbox from '../form/checkbox.js';
 
 export class EntitySelection extends React.Component {
@@ -54,10 +56,12 @@ export class EntitySelection extends React.Component {
 }
 
 EntitySelection.propTypes = {
-  entity: React.PropTypes.object,
-  onSelected: React.PropTypes.func,
-  onDeselected: React.PropTypes.func,
+  entity: PropTypes.model,
+  onSelected: PropTypes.func,
+  onDeselected: PropTypes.func,
 };
 
 
 export default EntitySelection;
+
+// vim: set ts=2 sw=2 tw=80:

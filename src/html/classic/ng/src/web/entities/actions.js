@@ -58,10 +58,10 @@ export const EntityActions = props => {
 
 EntityActions.propTypes = {
   actionsComponent: PropTypes.component,
-  entity: React.PropTypes.object,
-  selectionType: React.PropTypes.string,
-  onEntitySelected: React.PropTypes.func,
-  onEntityDeselected: React.PropTypes.func,
+  entity: PropTypes.model,
+  selectionType: PropTypes.string,
+  onEntitySelected: PropTypes.func,
+  onEntityDeselected: PropTypes.func,
 };
 
 export const withEntityActions = component => {
@@ -71,7 +71,7 @@ export const withEntityActions = component => {
   };
 
   EnityActionsWrapper.propTypes = {
-    actions: React.PropTypes.any, // don't care
+    actions: PropTypes.any, // don't care
   };
 
   return EnityActionsWrapper;

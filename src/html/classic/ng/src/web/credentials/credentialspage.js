@@ -71,7 +71,7 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
-  onNewCredentialClick: React.PropTypes.func,
+  onNewCredentialClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
@@ -144,7 +144,7 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func.isRequired,
+  onChanged: PropTypes.func.isRequired,
 };
 
 const Table = createEntitiesTable({

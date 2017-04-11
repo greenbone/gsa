@@ -61,8 +61,8 @@ const ObserverIcon = ({
 
 ObserverIcon.propTypes = {
   entity: PropTypes.model.isRequired,
-  displayName: React.PropTypes.string,
-  userName: React.PropTypes.string.isRequired,
+  displayName: PropTypes.string,
+  userName: PropTypes.string.isRequired,
 };
 
 export default ObserverIcon;

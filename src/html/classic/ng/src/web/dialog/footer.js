@@ -26,21 +26,21 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Button from '../button.js';
+import PropTypes from '../proptypes.js';
 
-export const DialogFooter = props => {
-  let title = props.title ? props.title : _('Save');
+export const DialogFooter = ({title = _('Save'), onSaveClick}) => {
   return (
     <div className="dialog-footer">
       <Button className="dialog-save-button"
-        onClick={props.onSaveClick}
+        onClick={onSaveClick}
         title={title}>{title}</Button>
     </div>
   );
 };
 
 DialogFooter.propTypes = {
-  title: React.PropTypes.string,
-  onSaveClick: React.PropTypes.func,
+  title: PropTypes.string,
+  onSaveClick: PropTypes.func,
 };
 
 export default DialogFooter;

@@ -94,8 +94,8 @@ const Row = ({entity, links = true, actions, ...other}) => {
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
-  links: React.PropTypes.bool,
+  entity: PropTypes.model,
+  links: PropTypes.bool,
 };
 
 export default withEntityRow(Row);

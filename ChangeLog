@@ -1,5 +1,44 @@
 2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/assetspage.js,
+	src/html/classic/ng/src/web/button.js,
+	src/html/classic/ng/src/web/certbund/charts.js,
+	src/html/classic/ng/src/web/certbund/row.js,
+	src/html/classic/ng/src/web/certbund/table.js,
+	src/html/classic/ng/src/web/comment.js,
+	src/html/classic/ng/src/web/cpes/charts.js,
+	src/html/classic/ng/src/web/cpes/row.js,
+	src/html/classic/ng/src/web/cpes/table.js,
+	src/html/classic/ng/src/web/credentials/credentialspage.js,
+	src/html/classic/ng/src/web/credentials/dialog.js,
+	src/html/classic/ng/src/web/credentials/row.js,
+	src/html/classic/ng/src/web/cveid.js,
+	src/html/classic/ng/src/web/cves/charts.js,
+	src/html/classic/ng/src/web/cves/row.js,
+	src/html/classic/ng/src/web/cves/table.js,
+	src/html/classic/ng/src/web/dfncert/charts.js,
+	src/html/classic/ng/src/web/dfncert/row.js,
+	src/html/classic/ng/src/web/dfncert/table.js,
+	src/html/classic/ng/src/web/dialog/error.js,
+	src/html/classic/ng/src/web/dialog/footer.js,
+	src/html/classic/ng/src/web/dialog/title.js,
+	src/html/classic/ng/src/web/entities/actions.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entities/entitynametabledata.js,
+	src/html/classic/ng/src/web/entities/footer.js,
+	src/html/classic/ng/src/web/entities/header.js,
+	src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
+	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
+	src/html/classic/ng/src/web/entities/icons/entityediticon.js,
+	src/html/classic/ng/src/web/entities/icons/entityobservericon.js,
+	src/html/classic/ng/src/web/entities/icons/entitytrashicon.js,
+	src/html/classic/ng/src/web/entities/link.js,
+	src/html/classic/ng/src/web/entities/selection.js,
+	src/html/classic/ng/src/web/entities/table.js: Port additional components to
+	use own PropTypes.
+
+2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/powerfilter/dialog.js: Don't export a
 	FilterDialog anymore. This isn't used since all entities pages are converted
 	to use HOCs.

@@ -23,14 +23,16 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const DfnCertCharts = props => {
-  let {filter, cache} = props;
-
+export const DfnCertCharts = ({filter, cache}) => {
   return (
     <div>
-      <CommonCharts type="dfn_cert_adv" titleType="DFN-CERT Advisiories"
+      <CommonCharts
+        type="dfn_cert_adv"
+        titleType="DFN-CERT Advisiories"
         cache={cache}
         filter={filter}/>
     </div>
@@ -38,8 +40,8 @@ export const DfnCertCharts = props => {
 };
 
 DfnCertCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
+  cache: PropTypes.object,
+  filter: PropTypes.filter,
 };
 
 export default DfnCertCharts;

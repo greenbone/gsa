@@ -139,10 +139,10 @@ export const createEntitiesHeader = (columns, action_element, options = {}) => {
   };
 
   Header.propTypes = {
-    actions: React.PropTypes.element,
-    links: React.PropTypes.bool,
-    sort: React.PropTypes.bool,
-    onSortChange: React.PropTypes.func,
+    actions: PropTypes.element,
+    links: PropTypes.bool,
+    sort: PropTypes.bool,
+    onSortChange: PropTypes.func,
   };
   return withEntitiesHeader(Header, action_element, options);
 };

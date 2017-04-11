@@ -24,26 +24,28 @@
 import React from 'react';
 
 import _ from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import Button from '../button.js';
+import PropTypes from '../proptypes.js';
 
-export const DialogError = props => {
-  if (!props.error) {
+export const DialogError = ({error, onCloseClick}) => {
+  if (!is_defined(error)) {
     return null;
   }
   return (
     <div className="dialog-error">
-      <span className="dialog-error-text">{props.error}</span>
+      <span className="dialog-error-text">{error}</span>
       <Button className="dialog-close-button"
-        onClick={props.onCloseClick}
+        onClick={onCloseClick}
         title={_('Close')}>x</Button>
     </div>
   );
 };
 
 DialogError.propTypes = {
-  error: React.PropTypes.string,
-  onCloseClick: React.PropTypes.func,
+  error: PropTypes.string,
+  onCloseClick: PropTypes.func,
 };
 
 export default DialogError;

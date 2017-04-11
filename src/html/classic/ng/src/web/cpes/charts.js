@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,16 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const CpeCharts = props => {
-  let {filter, cache} = props;
-
+export const CpeCharts = ({filter, cache}) => {
   return (
     <div>
-      <CommonCharts type="cpe" titleType="CPEs"
+      <CommonCharts
+        type="cpe"
+        titleType="CPEs"
         cache={cache}
         filter={filter}/>
     </div>
@@ -38,8 +40,8 @@ export const CpeCharts = props => {
 };
 
 CpeCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
+  cache: PropTypes.object,
+  filter: PropTypes.filter,
 };
 
 export default CpeCharts;

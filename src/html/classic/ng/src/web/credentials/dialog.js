@@ -281,14 +281,14 @@ class CredentialsDialog extends React.Component {
   }
 }
 
-const pwtypes =  React.PropTypes.oneOf([
+const pwtypes =  PropTypes.oneOf([
   'up', 'usk', 'cc', 'snmp',
 ]);
 
 CredentialsDialog.propTypes = {
-  name: React.PropTypes.string,
-  comment: React.PropTypes.string,
-  types: React.PropTypes.arrayOf(
+  name: PropTypes.string,
+  comment: PropTypes.string,
+  types: PropTypes.arrayOf(
     pwtypes
   ),
   change_community: PropTypes.yesno,
@@ -298,23 +298,23 @@ CredentialsDialog.propTypes = {
   base: pwtypes,
   allow_insecure: PropTypes.yesno,
   autogenerate: PropTypes.yesno,
-  community: React.PropTypes.string,
+  community: PropTypes.string,
   credential: PropTypes.model,
-  credential_login: React.PropTypes.string,
-  password: React.PropTypes.string,
-  privacy_password: React.PropTypes.string,
-  auth_algorithm: React.PropTypes.oneOf([
+  credential_login: PropTypes.string,
+  password: PropTypes.string,
+  privacy_password: PropTypes.string,
+  auth_algorithm: PropTypes.oneOf([
     'md5', 'sha1',
   ]),
-  privacy_algorithm: React.PropTypes.oneOf([
+  privacy_algorithm: PropTypes.oneOf([
     'aes', 'des', '',
   ]),
-  passphrase: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  passphrase: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 CredentialsDialog.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withDialog(CredentialsDialog, {

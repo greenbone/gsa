@@ -39,12 +39,21 @@ import TableRow from '../table/row.js';
 
 import './css/footer.css';
 
-export const EntitiesFooter = props => {
-
-  let {span, selectionType, download, trash, children, onTrashClick,
-    onDeleteClick, onSelectionTypeChange, onDownloadClick,
-    selection = true, actions = true} = props;
-  let deleteEntities = props.delete;
+export const EntitiesFooter = ({
+    actions = true,
+    children,
+    download,
+    selection = true,
+    selectionType,
+    span,
+    trash,
+    onDeleteClick,
+    onDownloadClick,
+    onSelectionTypeChange,
+    onTrashClick,
+    ...props,
+  }) => {
+  const deleteEntities = props.delete;
   return (
     <TableRow>
       <td colSpan={span}>
@@ -89,17 +98,17 @@ export const EntitiesFooter = props => {
 };
 
 EntitiesFooter.propTypes = {
-  span: PropTypes.number.isRequired,
-  selection: React.PropTypes.bool,
-  selectionType: React.PropTypes.string,
+  actions: PropTypes.bool,
+  delete: PropTypes.bool,
   download: PropTypes.stringOrFalse,
-  delete: React.PropTypes.bool,
-  trash: React.PropTypes.bool,
-  actions: React.PropTypes.bool,
-  onSelectionTypeChange: React.PropTypes.func,
-  onDownloadClick: React.PropTypes.func,
-  onTrashClick: React.PropTypes.func,
-  onDeleteClick: React.PropTypes.func,
+  selection: PropTypes.bool,
+  selectionType: PropTypes.string,
+  span: PropTypes.number.isRequired,
+  trash: PropTypes.bool,
+  onDeleteClick: PropTypes.func,
+  onDownloadClick: PropTypes.func,
+  onSelectionTypeChange: PropTypes.func,
+  onTrashClick: PropTypes.func,
 };
 
 export const withEntitiesFooter = (Component, options = {}) => {
@@ -114,8 +123,8 @@ export const withEntitiesFooter = (Component, options = {}) => {
   };
 
   EntitiesFooterWrapper.propTypes = {
-    onDownloadBulk: React.PropTypes.func,
-    onDeleteBulk: React.PropTypes.func,
+    onDownloadBulk: PropTypes.func,
+    onDeleteBulk: PropTypes.func,
   };
 
   return EntitiesFooterWrapper;

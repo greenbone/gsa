@@ -26,14 +26,15 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Button from '../button.js';
+import PropTypes from '../proptypes.js';
 
-export const DialogTitle = props => {
+export const DialogTitle = ({showClose, title, onCloseClick, onMouseDown}) => {
   return (
-    <div className="dialog-titlebar" onMouseDown={props.onMouseDown}>
-      <span className="dialog-title-text">{props.title}</span>
-      {props.showClose &&
+    <div className="dialog-titlebar" onMouseDown={onMouseDown}>
+      <span className="dialog-title-text">{title}</span>
+      {showClose &&
         <Button className="dialog-close-button"
-          onClick={props.onCloseClick}
+          onClick={onCloseClick}
           title={_('Close')}>x</Button>
       }
     </div>
@@ -41,10 +42,10 @@ export const DialogTitle = props => {
 };
 
 DialogTitle.propTypes = {
-  showClose: React.PropTypes.bool,
-  onCloseClick: React.PropTypes.func,
-  onMouseDown: React.PropTypes.func,
-  title: React.PropTypes.string,
+  showClose: PropTypes.bool,
+  onCloseClick: PropTypes.func,
+  onMouseDown: PropTypes.func,
+  title: PropTypes.string,
 };
 
 DialogTitle.defaultProps = {
