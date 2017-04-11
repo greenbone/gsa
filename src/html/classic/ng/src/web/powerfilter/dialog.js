@@ -155,7 +155,7 @@ export const withFilterDialog = (FilterDialogComponent, options = {}) => {
           ref={ref => this.dialog = ref}
           title={_('Update Filter')}
           footer={_('Update')}
-          width={800}
+          width="800px"
           onSaveClick={this.handleSave}>
           {filter &&
             <FilterDialogComponent {...options} {...this.props}

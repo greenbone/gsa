@@ -37,7 +37,7 @@ import './css/dialog.css';
 
 const log = logger.getLogger('web.dialog');
 
-const DEFAULT_DIALOG_WIDTH = 800;
+const DEFAULT_DIALOG_WIDTH = '800px';
 
 export class Dialog extends React.Component {
 
