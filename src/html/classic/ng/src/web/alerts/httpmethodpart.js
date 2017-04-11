@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
 import {withPrefix} from '../render.js';
 
 import FormGroup from '../form/formgroup.js';
@@ -48,9 +49,9 @@ const HttpMethodPart = ({
 };
 
 HttpMethodPart.propTypes = {
-  prefix: React.PropTypes.string,
-  URL: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func,
+  prefix: PropTypes.string,
+  URL: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(HttpMethodPart);

@@ -63,8 +63,8 @@ export const TableHead = ({
 };
 
 TableHead.propTypes = {
-  colSpan: PropTypes.number,
-  rowSpan: PropTypes.number,
+  colSpan: PropTypes.numberString,
+  rowSpan: PropTypes.numberString,
   sortby: PropTypes.stringOrFalse,
   width: React.PropTypes.string,
   onSortChange: React.PropTypes.func,

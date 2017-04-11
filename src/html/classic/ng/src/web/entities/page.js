@@ -253,19 +253,19 @@ export class EntitiesPage extends React.Component {
 
 EntitiesPage.propTypes = {
   dashboard: PropTypes.componentOrFalse,
-  entities: React.PropTypes.object,
-  foldable: React.PropTypes.bool,
+  entities: PropTypes.collection,
+  foldable: PropTypes.bool,
   filterEditDialog: PropTypes.component,
-  filter: React.PropTypes.object,
-  filters: React.PropTypes.object,
+  filter: PropTypes.filter,
+  filters: PropTypes.arrayLike,
   powerfilter: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
   section: PropTypes.componentOrFalse,
   table: PropTypes.componentOrFalse,
-  title: React.PropTypes.string,
+  title: PropTypes.string,
   toolBarIcons: PropTypes.componentOrElement,
-  onFilterChanged: React.PropTypes.func,
-  onFilterCreateClick: React.PropTypes.func,
+  onFilterChanged: PropTypes.func,
+  onFilterCreateClick: PropTypes.func,
 };
 
 export const createEntitiesPage = (options = {}) => {

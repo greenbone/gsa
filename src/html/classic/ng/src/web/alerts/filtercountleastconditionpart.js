@@ -77,10 +77,10 @@ const FilterCountLeastConditionPart = ({
 FilterCountLeastConditionPart.propTypes = {
   atLeastFilterId: PropTypes.id,
   atLeastCount: PropTypes.number.isRequired,
-  condition: React.PropTypes.string.isRequired,
+  condition: PropTypes.string.isRequired,
   filters: PropTypes.arrayLike.isRequired,
-  prefix: React.PropTypes.string,
-  onChange: React.PropTypes.func,
+  prefix: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(FilterCountLeastConditionPart);

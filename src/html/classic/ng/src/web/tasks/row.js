@@ -205,12 +205,12 @@ const Row = ({
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
-  links: React.PropTypes.bool,
+  entity: PropTypes.model,
+  links: PropTypes.bool,
 };
 
 Row.contextTypes = {
-  username: React.PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, Actions);

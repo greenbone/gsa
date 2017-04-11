@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,8 @@
 import React from 'react';
 
 import {is_defined} from '../../utils.js';
+
+import PropTypes from '../proptypes.js';
 
 export class DataSource extends React.Component {
 
@@ -85,30 +87,30 @@ export class DataSource extends React.Component {
 }
 
 DataSource.contextTypes = {
-  dashboard: React.PropTypes.object.isRequired,
+  dashboard: PropTypes.object.isRequired,
 };
 
 DataSource.childContextTypes = {
-  datasource: React.PropTypes.object,
+  datasource: PropTypes.object,
 };
 
 DataSource.propTypes = {
-  cache: React.PropTypes.object,
-  name: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string,
-  column: React.PropTypes.string,
-  columns: React.PropTypes.array,
-  filter: React.PropTypes.object,
-  'group-column': React.PropTypes.string,
-  'aggregate-type': React.PropTypes.string,
-  'subgroup-column': React.PropTypes.string,
-  'text-columns': React.PropTypes.array,
-  'sort-fields': React.PropTypes.array,
-  'sort-orders': React.PropTypes.array,
-  'sort-stats': React.PropTypes.array,
-  'aggregate-mode': React.PropTypes.string,
-  'max-groups': React.PropTypes.string,
-  'first-group': React.PropTypes.string,
+  cache: PropTypes.object,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  column: PropTypes.string,
+  columns: PropTypes.array,
+  filter: PropTypes.filter,
+  'group-column': PropTypes.string,
+  'aggregate-type': PropTypes.string,
+  'subgroup-column': PropTypes.string,
+  'text-columns': PropTypes.array,
+  'sort-fields': PropTypes.array,
+  'sort-orders': PropTypes.array,
+  'sort-stats': PropTypes.array,
+  'aggregate-mode': PropTypes.string,
+  'max-groups': PropTypes.string,
+  'first-group': PropTypes.string,
 };
 
 export default DataSource;

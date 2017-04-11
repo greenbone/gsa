@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,8 @@
 import React from 'react';
 
 import {extend} from '../../utils.js';
+
+import PropTypes from '../proptypes.js';
 
 export class Chart extends React.Component {
 
@@ -61,21 +63,21 @@ export class Chart extends React.Component {
 }
 
 Chart.contextTypes = {
-  dashboard: React.PropTypes.object.isRequired,
-  datasource: React.PropTypes.object.isRequired,
+  dashboard: PropTypes.object.isRequired,
+  datasource: PropTypes.object.isRequired,
 };
 
 Chart.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired,
-  template: React.PropTypes.string,
-  'title-count': React.PropTypes.string,
-  'x-field': React.PropTypes.string,
-  'y-fields': React.PropTypes.array,
-  'z-fields': React.PropTypes.array,
-  'gen-params': React.PropTypes.object,
-  'init-params': React.PropTypes.object,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  template: PropTypes.string,
+  'title-count': PropTypes.string,
+  'x-field': PropTypes.string,
+  'y-fields': PropTypes.array,
+  'z-fields': PropTypes.array,
+  'gen-params': PropTypes.object,
+  'init-params': PropTypes.object,
 };
 
 export default Chart;

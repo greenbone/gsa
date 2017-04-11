@@ -120,11 +120,11 @@ class ScannerSelect extends React.Component {
 }
 
 ScannerSelect.propTypes = {
-  changeTask: React.PropTypes.bool.isRequired,
-  scanConfigs: React.PropTypes.object.isRequired,
+  changeTask: PropTypes.bool.isRequired,
+  scanConfigs: PropTypes.object.isRequired,
   scannerId: PropTypes.id.isRequired,
-  scanners: React.PropTypes.array.isRequired,
-  onChange: React.PropTypes.func,
+  scanners: PropTypes.array.isRequired,
+  onChange: PropTypes.func,
 };
 
 const TaskDialog = ({
@@ -456,45 +456,45 @@ const TaskDialog = ({
 
 TaskDialog.propTypes = {
   add_tag: PropTypes.yesno,
-  alert_ids: React.PropTypes.array,
-  alerts: React.PropTypes.array,
+  alert_ids: PropTypes.array,
+  alerts: PropTypes.array,
   alterable: PropTypes.yesno,
   apply_overrides: PropTypes.yesno,
-  auto_delete: React.PropTypes.oneOf([
+  auto_delete: PropTypes.oneOf([
     'keep', 'no',
   ]),
   auto_delete_data: PropTypes.number,
-  comment: React.PropTypes.string,
+  comment: PropTypes.string,
   config_id: PropTypes.idOrZero,
-  hosts_ordering: React.PropTypes.oneOf([
+  hosts_ordering: PropTypes.oneOf([
     'sequential', 'random', 'reverse',
   ]),
   in_assets: PropTypes.yesno,
   max_checks: PropTypes.number,
   max_hosts: PropTypes.number,
   min_qod: PropTypes.number,
-  name: React.PropTypes.string,
-  scan_configs: React.PropTypes.object,
+  name: PropTypes.string,
+  scan_configs: PropTypes.object,
   scanner_id: PropTypes.idOrZero,
-  scanners: React.PropTypes.array,
+  scanners: PropTypes.array,
   schedule_id: PropTypes.idOrZero,
   schedule_periods: PropTypes.yesno,
-  schedules: React.PropTypes.array,
-  source_iface: React.PropTypes.string,
-  tag_name: React.PropTypes.string,
-  tags: React.PropTypes.array,
-  tag_value: React.PropTypes.string,
+  schedules: PropTypes.array,
+  source_iface: PropTypes.string,
+  tag_name: PropTypes.string,
+  tags: PropTypes.array,
+  tag_value: PropTypes.string,
   target_id: PropTypes.idOrZero,
-  targets: React.PropTypes.array,
+  targets: PropTypes.array,
   task: PropTypes.model,
-  onNewAlertClick: React.PropTypes.func,
-  onNewScheduleClick: React.PropTypes.func,
-  onNewTargetClick: React.PropTypes.func,
-  onValueChange: React.PropTypes.func,
+  onNewAlertClick: PropTypes.func,
+  onNewScheduleClick: PropTypes.func,
+  onNewTargetClick: PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 TaskDialog.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withDialog(TaskDialog, {

@@ -73,12 +73,12 @@ const FilterCountChangedConditionPart = ({
 };
 
 FilterCountChangedConditionPart.propTypes = {
-  condition: React.PropTypes.string.isRequired,
+  condition: PropTypes.string.isRequired,
   count: PropTypes.number.isRequired,
   filterId: PropTypes.id,
   filters: PropTypes.arrayLike.isRequired,
-  prefix: React.PropTypes.string,
-  onChange: React.PropTypes.func,
+  prefix: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(FilterCountChangedConditionPart);

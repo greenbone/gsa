@@ -50,10 +50,10 @@ const StartTaskMethodPart = ({
 };
 
 StartTaskMethodPart.propTypes = {
-  prefix: React.PropTypes.string,
+  prefix: PropTypes.string,
   tasks: PropTypes.arrayLike,
   startTaskTask: PropTypes.id,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 

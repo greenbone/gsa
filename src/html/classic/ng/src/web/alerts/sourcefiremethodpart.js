@@ -74,10 +74,10 @@ const SourcefireMethodPart = ({
 };
 
 SourcefireMethodPart.propTypes = {
-  prefix: React.PropTypes.string,
-  defenseCenterIp: React.PropTypes.string.isRequired,
+  prefix: PropTypes.string,
+  defenseCenterIp: PropTypes.string.isRequired,
   defenseCenterPort: PropTypes.number.isRequired,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(SourcefireMethodPart);

@@ -109,15 +109,15 @@ const ScpMethodPart = ({
 
 ScpMethodPart.propTypes = {
   credentials: PropTypes.arrayLike,
-  prefix: React.PropTypes.string,
+  prefix: PropTypes.string,
   reportFormats: PropTypes.arrayLike,
   scpCredential: PropTypes.id,
-  scpHost: React.PropTypes.string.isRequired,
-  scpKnownHosts: React.PropTypes.string.isRequired,
-  scpPath: React.PropTypes.string.isRequired,
+  scpHost: PropTypes.string.isRequired,
+  scpKnownHosts: PropTypes.string.isRequired,
+  scpPath: PropTypes.string.isRequired,
   scpReportFormat: PropTypes.id,
-  onChange: React.PropTypes.func,
-  onNewCredentialClick: React.PropTypes.func,
+  onChange: PropTypes.func,
+  onNewCredentialClick: PropTypes.func,
 };
 
 export default withPrefix(ScpMethodPart);

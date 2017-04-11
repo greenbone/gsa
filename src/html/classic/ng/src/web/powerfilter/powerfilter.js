@@ -29,6 +29,7 @@ import logger from '../../log.js';
 
 import FootNote from '../footnote.js';
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
 import DeleteIcon from '../icons/deleteicon.js';
@@ -40,8 +41,6 @@ import NewIcon from '../icons/newicon.js';
 import FormGroup from '../form/formgroup.js';
 import Select2 from '../form/select2.js';
 import TextField from '../form/textfield.js';
-
-import CollectionList from '../../gmp/collectionlist.js';
 
 import Filter from '../../gmp/models/filter.js';
 
@@ -266,21 +265,18 @@ export class PowerFilter extends React.Component {
 }
 
 PowerFilter.propTypes = {
-  filter: React.PropTypes.object,
-  filters: React.PropTypes.oneOfType([
-    React.PropTypes.instanceOf(CollectionList),
-    React.PropTypes.array,
-  ]),
-  onResetClick: React.PropTypes.func,
-  onEditClick: React.PropTypes.func,
-  onCreateClick: React.PropTypes.func,
-  onUpdate: React.PropTypes.func,
-  onFilterCreated: React.PropTypes.func,
+  filter: PropTypes.filter,
+  filters: PropTypes.arrayLike,
+  onResetClick: PropTypes.func,
+  onEditClick: PropTypes.func,
+  onCreateClick: PropTypes.func,
+  onUpdate: PropTypes.func,
+  onFilterCreated: PropTypes.func,
 };
 
 PowerFilter.contextTypes = {
-  gmp: React.PropTypes.object,
-  capabilities: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default PowerFilter;

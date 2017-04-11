@@ -27,6 +27,7 @@ import  _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import Dialog from '../dialog/dialog.js';
 
@@ -61,13 +62,13 @@ export const DefaultFilterDialog = props => {
 };
 
 export const DefaultFilterDialogPropTypes = {
-  filter: React.PropTypes.object,
-  filterstring: React.PropTypes.string,
-  sortFields: React.PropTypes.array,
-  onSortByChange: React.PropTypes.func,
-  onSortOrderChange: React.PropTypes.func,
-  onFilterValueChange: React.PropTypes.func,
-  onFilterStringChange: React.PropTypes.func,
+  filter: PropTypes.filter,
+  filterstring: PropTypes.string,
+  sortFields: PropTypes.array,
+  onSortByChange: PropTypes.func,
+  onSortOrderChange: PropTypes.func,
+  onFilterValueChange: PropTypes.func,
+  onFilterStringChange: PropTypes.func,
 };
 
 DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
@@ -172,8 +173,8 @@ export const withFilterDialog = (FilterDialogComponent, options = {}) => {
   };
 
   FilterDialogWrapper.propTypes = {
-    filter: React.PropTypes.object,
-    onFilterChanged: React.PropTypes.func,
+    filter: PropTypes.filter,
+    onFilterChanged: PropTypes.func,
   };
 
   return FilterDialogWrapper;

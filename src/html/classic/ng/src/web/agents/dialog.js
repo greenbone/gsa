@@ -89,9 +89,9 @@ const AgentDialog = ({
 
 AgentDialog.propTypes = {
   agent: PropTypes.model,
-  name: React.PropTypes.string,
-  comment: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  name: PropTypes.string,
+  comment: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 

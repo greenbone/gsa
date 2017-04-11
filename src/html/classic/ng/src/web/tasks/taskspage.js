@@ -131,15 +131,15 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 ToolBarIcons.propTypes = {
-  onAdvancedTaskWizardClick: React.PropTypes.func,
-  onModifyTaskWizardClick: React.PropTypes.func,
-  onNewContainerTaskClick: React.PropTypes.func,
-  onNewTaskClick: React.PropTypes.func,
-  onTaskWizardClick: React.PropTypes.func,
+  onAdvancedTaskWizardClick: PropTypes.func,
+  onModifyTaskWizardClick: PropTypes.func,
+  onNewContainerTaskClick: PropTypes.func,
+  onNewTaskClick: PropTypes.func,
+  onTaskWizardClick: PropTypes.func,
 };
 
 class Page extends React.Component {
@@ -490,12 +490,12 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func.isRequired,
+  onChanged: PropTypes.func.isRequired,
 };
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
-  capabilities: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withEntitiesContainer(Page, 'task', {

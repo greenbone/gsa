@@ -157,22 +157,22 @@ const EmailMethodPart = ({
 };
 
 EmailMethodPart.propTypes = {
-  fromAddress: React.PropTypes.string.isRequired,
-  isTaskEvent: React.PropTypes.bool.isRequired,
-  messageAttach: React.PropTypes.string.isRequired,
-  message: React.PropTypes.string.isRequired,
+  fromAddress: PropTypes.string.isRequired,
+  isTaskEvent: PropTypes.bool.isRequired,
+  messageAttach: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
   noticeAttachFormat: PropTypes.id,
-  notice: React.PropTypes.string.isRequired,
+  notice: PropTypes.string.isRequired,
   noticeReportFormat: PropTypes.id,
-  prefix: React.PropTypes.string.isRequired,
+  prefix: PropTypes.string.isRequired,
   reportFormats: PropTypes.arrayLike,
-  subject: React.PropTypes.string.isRequired,
-  toAddress: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func,
+  subject: PropTypes.string.isRequired,
+  toAddress: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
 };
 
 EmailMethodPart.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withPrefix(EmailMethodPart);

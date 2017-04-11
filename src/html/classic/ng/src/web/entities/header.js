@@ -88,7 +88,11 @@ export const withEntitiesHeader = (Component, actions, options = {}) => {
   };
 
   HeaderWrapper.propTypes = {
-    selectionType: PropTypes.number,
+    selectionType: PropTypes.oneOf([
+      SelectionType.SELECTION_PAGE_CONTENTS,
+      SelectionType.SELECTION_USER,
+      SelectionType.SELECTION_FILTER,
+    ]),
   };
 
   return HeaderWrapper;

@@ -1,5 +1,44 @@
 2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/agents/agentspage.js,
+	src/html/classic/ng/src/web/agents/dialog.js,
+	src/html/classic/ng/src/web/agents/row.js,
+	src/html/classic/ng/src/web/alerts/alertspage.js,
+	src/html/classic/ng/src/web/alerts/dialog.js,
+	src/html/classic/ng/src/web/alerts/dialogcontainer.js,
+	src/html/classic/ng/src/web/alerts/emailmethodpart.js,
+	src/html/classic/ng/src/web/alerts/filtercountchangedconditionpart.js,
+	src/html/classic/ng/src/web/alerts/filtercountleastconditionpart.js,
+	src/html/classic/ng/src/web/alerts/httpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/row.js,
+	src/html/classic/ng/src/web/alerts/scpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/sendmethodpart.js,
+	src/html/classic/ng/src/web/alerts/severitychangedconditionpart.js,
+	src/html/classic/ng/src/web/alerts/severityleastconditionpart.js,
+	src/html/classic/ng/src/web/alerts/snmpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/sourcefiremethodpart.js,
+	src/html/classic/ng/src/web/alerts/starttaskmethodpart.js,
+	src/html/classic/ng/src/web/alerts/taskeventpart.js,
+	src/html/classic/ng/src/web/alerts/verinicemethodpart.js,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/dashboard/chart.js,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/dashboard/datasource.js,
+	src/html/classic/ng/src/web/dialog/dialog.js,
+	src/html/classic/ng/src/web/entities/header.js,
+	src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/powerfilter/dialog.js,
+	src/html/classic/ng/src/web/powerfilter/powerfilter.js,
+	src/html/classic/ng/src/web/table/head.js,
+	src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/tasks/row.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Start to use only our own
+	PropTypes. Also update proptype definitions for capabilities and gmp
+	properties.
+
+2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: Add proptype for gmp validation.
 
 2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>

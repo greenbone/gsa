@@ -93,13 +93,13 @@ const VeriniceMethodPart = ({
 
 VeriniceMethodPart.propTypes = {
   credentials: PropTypes.arrayLike,
-  prefix: React.PropTypes.string,
+  prefix: PropTypes.string,
   reportFormats: PropTypes.arrayLike,
   veriniceServerCredential: PropTypes.id,
   veriniceServerReportFormat: PropTypes.id,
-  veriniceServerUrl: React.PropTypes.string,
-  onNewCredentialClick: React.PropTypes.func,
-  onChange: React.PropTypes.func,
+  veriniceServerUrl: PropTypes.string,
+  onNewCredentialClick: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(VeriniceMethodPart);

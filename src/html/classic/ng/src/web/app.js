@@ -42,6 +42,7 @@ import HomePage from './homepage.js';
 import LoginPage from './loginpage.js';
 import Page from './page.js';
 import PageNotFound from './pagenotfound.js';
+import PropTypes from './proptypes.js';
 import ScansPage from './scanspage.js';
 import SecinfoPage from './secinfopage.js';
 import {get_severity_levels} from './render.js';
@@ -148,12 +149,12 @@ class App extends React.Component {
 }
 
 App.childContextTypes = {
-  gmp: React.PropTypes.object,
-  cache: React.PropTypes.object,
+  gmp: PropTypes.object,
+  cache: PropTypes.object,
 };
 
 App.contextTypes = {
-  router: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
 ReactDOM.render(

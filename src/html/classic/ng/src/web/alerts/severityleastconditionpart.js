@@ -60,10 +60,10 @@ const SeverityLeastConditionPart = ({
 };
 
 SeverityLeastConditionPart.propTypes = {
-  condition: React.PropTypes.string.isRequired,
-  prefix: React.PropTypes.string,
+  condition: PropTypes.string.isRequired,
+  prefix: PropTypes.string,
   severity: PropTypes.number.isRequired,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(SeverityLeastConditionPart);

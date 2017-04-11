@@ -77,12 +77,12 @@ const SendMethodPart = ({
 };
 
 SendMethodPart.propTypes = {
-  prefix: React.PropTypes.string,
+  prefix: PropTypes.string,
   reportFormats: PropTypes.arrayLike,
-  sendHost: React.PropTypes.string.isRequired,
-  sendPort: React.PropTypes.string.isRequired,
+  sendHost: PropTypes.string.isRequired,
+  sendPort: PropTypes.string.isRequired,
   sendReportFormat: PropTypes.id,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(SendMethodPart);

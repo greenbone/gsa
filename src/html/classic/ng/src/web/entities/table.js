@@ -133,18 +133,18 @@ export class EntitiesTable extends React.Component {
 
 EntitiesTable.propTypes = {
   body: PropTypes.componentOrFalse,
-  emptyTitle: React.PropTypes.string,
+  emptyTitle: PropTypes.string,
   header: PropTypes.component,
   footer: PropTypes.component,
   row: PropTypes.component.isRequired,
   pagination: PropTypes.componentOrFalse,
   filter: PropTypes.filter,
   entities: PropTypes.collection,
-  onFirstClick: React.PropTypes.func,
-  onLastClick: React.PropTypes.func,
-  onPreviousClick: React.PropTypes.func,
-  onNextClick: React.PropTypes.func,
-  onSortChange: React.PropTypes.func,
+  onFirstClick: PropTypes.func,
+  onLastClick: PropTypes.func,
+  onPreviousClick: PropTypes.func,
+  onNextClick: PropTypes.func,
+  onSortChange: PropTypes.func,
 };
 
 export const withEntitiesTable = withComponentDefaults;

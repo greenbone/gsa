@@ -126,16 +126,16 @@ export class Dashboard extends React.Component {
 }
 
 Dashboard.childContextTypes = {
-  dashboard: React.PropTypes.object,
+  dashboard: PropTypes.object,
 };
 
 Dashboard.propTypes = {
-  id: React.PropTypes.string,
-  filter: React.PropTypes.object,
-  configPrefId: React.PropTypes.string,
-  hideFilterSelect: React.PropTypes.bool,
-  defaultControllerString: React.PropTypes.string,
-  defaultControllersString: React.PropTypes.string,
+  id: PropTypes.id,
+  filter: PropTypes.filter,
+  configPrefId: PropTypes.id,
+  hideFilterSelect: PropTypes.bool,
+  defaultControllerString: PropTypes.string,
+  defaultControllersString: PropTypes.string,
   maxComponents: PropTypes.number,
 };
 
@@ -144,7 +144,7 @@ Dashboard.defaultProps = {
 };
 
 Dashboard.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export const withDashboard = (Charts, options = {}) => {
@@ -160,11 +160,11 @@ export const withDashboard = (Charts, options = {}) => {
   };
 
   DashboardWrapper.propTypes = {
-    filter: React.PropTypes.object,
+    filter: PropTypes.filter,
   };
 
   DashboardWrapper.contextTypes = {
-    cache: React.PropTypes.object,
+    cache: PropTypes.object,
   };
 
   return DashboardWrapper;

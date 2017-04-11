@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import {withPrefix} from '../render.js';
 
 import FormGroup from '../form/formgroup.js';
@@ -74,11 +75,11 @@ const SnmpMethodPart = ({
 };
 
 SnmpMethodPart.propTypes = {
-  prefix: React.PropTypes.string,
-  snmpAgent: React.PropTypes.string,
-  snmpCommunity: React.PropTypes.string,
-  snmpMessage: React.PropTypes.string,
-  onChange: React.PropTypes.func,
+  prefix: PropTypes.string,
+  snmpAgent: PropTypes.string,
+  snmpCommunity: PropTypes.string,
+  snmpMessage: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 

@@ -27,6 +27,7 @@ import _ from '../../locale.js';
 import {is_defined, select_save_id, first, shorten} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
 
@@ -382,11 +383,11 @@ export class AlertDialogContainer extends React.Component {
 };
 
 AlertDialogContainer.propTypes = {
-  onSave: React.PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 AlertDialogContainer.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default AlertDialogContainer;

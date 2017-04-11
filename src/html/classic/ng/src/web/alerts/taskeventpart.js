@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import {withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
@@ -64,11 +65,11 @@ const TaskEventPart = ({
 };
 
 TaskEventPart.propTypes = {
-  prefix: React.PropTypes.string,
-  event: React.PropTypes.string.isRequired,
-  status: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func,
-  onEventChange: React.PropTypes.func,
+  prefix: PropTypes.string,
+  event: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  onEventChange: PropTypes.func,
 };
 
 export default withPrefix(TaskEventPart);

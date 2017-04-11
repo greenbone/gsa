@@ -235,13 +235,13 @@ export class Dialog extends React.Component {
 }
 
 Dialog.propTypes = {
-  visible: React.PropTypes.bool,
+  visible: PropTypes.bool,
   title: PropTypes.stringOrFalse,
   footer: PropTypes.stringOrFalse,
-  onSaveClick: React.PropTypes.func,
-  onClose: React.PropTypes.func,
-  onCloseClick: React.PropTypes.func,
-  width: PropTypes.number,
+  onSaveClick: PropTypes.func,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func,
+  width: PropTypes.string,
   error: PropTypes.stringOrFalse,
 };
 
@@ -342,11 +342,11 @@ export const withDialog = (Component, options = {}) => {
   };
 
   DialogWrapper.propTypes = {
-    title: React.PropTypes.string,
-    footer: React.PropTypes.string,
-    width: PropTypes.number,
-    onSave: React.PropTypes.func,
-    onClose: React.PropTypes.func,
+    title: PropTypes.string,
+    footer: PropTypes.string,
+    width: PropTypes.string,
+    onSave: PropTypes.func,
+    onClose: PropTypes.func,
   };
 
   return DialogWrapper;

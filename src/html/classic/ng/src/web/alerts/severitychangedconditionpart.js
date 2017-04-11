@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import {withPrefix} from '../render.js';
 
 import Select2 from '../form/select2.js';
@@ -60,10 +61,10 @@ const SeverityChangedConditionPart = ({
 };
 
 SeverityChangedConditionPart.propTypes = {
-  condition: React.PropTypes.string.isRequired,
-  direction: React.PropTypes.string.isRequired,
-  prefix: React.PropTypes.string,
-  onChange: React.PropTypes.func,
+  condition: PropTypes.string.isRequired,
+  direction: PropTypes.string.isRequired,
+  prefix: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default withPrefix(SeverityChangedConditionPart);
