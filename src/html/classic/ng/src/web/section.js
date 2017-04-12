@@ -56,16 +56,16 @@ const Section = ({
         title={title}>
         <Layout
           flex
-          align={['space-between', 'end']}>
-          <Layout flex align="center">
-            {extra}
-            {foldable &&
+          align={['space-between', 'center']}>
+          {extra}
+          {foldable &&
+            <Layout>
               <FoldIcon
                 className="section-fold-icon"
                 foldState={foldState}
                 onClick={onFoldToggle}/>
-            }
-          </Layout>
+            </Layout>
+          }
         </Layout>
       </SectionHeader>
       <FoldableLayout
