@@ -21,49 +21,50 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Model from '../model.js';
-
 import {is_defined, for_each} from '../../utils.js';
 
+import Model from '../model.js';
+import {parse_severity} from '../parser.js';
 
 export class Host extends Model {
 
   parseProperties(elem) {
-    elem = super.parseProperties(elem);
+    let ret = super.parseProperties(elem);
 
-    elem.severity = is_defined(elem.host.severity) ? elem.host.severity.value :
-      undefined;
+    if (is_defined(ret.host) && is_defined(ret.host.severity)) {
+      ret.severity = parse_severity(ret.host.severity.value);
+    }
 
     let identifiers = {};
-    if (is_defined(elem.identifiers)) {
-      for_each(elem.identifiers.identifier, identifier => {
+    if (is_defined(ret.identifiers)) {
+      for_each(ret.identifiers.identifier, identifier => {
         identifiers[identifier.name] = new Model(identifier);
       });
     }
 
-    elem.identifiers = identifiers;
+    ret.identifiers = identifiers;
 
-    let hostname = elem.identifiers.hostname ||
-      elem.identifiers['DNS-via-TargetDefinition'];
-    let ip = elem.identifiers.ip;
+    let hostname = ret.identifiers.hostname ||
+      ret.identifiers['DNS-via-TargetDefinition'];
+    let ip = ret.identifiers.ip;
 
-    elem.hostname = is_defined(hostname) ? hostname.value : undefined;
-    elem.ip = is_defined(ip) ? ip.value : undefined;
+    ret.hostname = is_defined(hostname) ? hostname.value : undefined;
+    ret.ip = is_defined(ip) ? ip.value : undefined;
 
-    elem.details = {};
+    ret.details = {};
 
-    if (is_defined(elem.host)) {
-      for_each(elem.host.detail, details => {
-        elem.details[details.name] = {
+    if (is_defined(ret.host)) {
+      for_each(ret.host.detail, details => {
+        ret.details[details.name] = {
           value: details.value,
           source: new Model(details.source),
         };
       });
     }
 
-    delete elem.host;
+    delete ret.host;
 
-    return elem;
+    return ret;
   }
 }
 

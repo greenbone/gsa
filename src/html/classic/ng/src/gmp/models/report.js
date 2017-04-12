@@ -24,6 +24,7 @@
 import {is_defined, parse_float} from '../../utils.js';
 
 import Model from '../model.js';
+import {parse_severity} from '../parser.js';
 
 class ReportReport extends Model {
 
@@ -56,7 +57,7 @@ export class Report extends Model {
     ret.task = new Model(ret.task);
 
     if (is_defined(ret.severity)) {
-      ret.severity = parse_float(ret.severity);
+      ret.severity = parse_severity(ret.severity);
     }
 
     ret.type = ret._type;

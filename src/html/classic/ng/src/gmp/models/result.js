@@ -24,6 +24,7 @@
 import {is_defined} from '../../utils.js';
 
 import Model from '../model.js';
+import {parse_severity} from '../parser.js';
 
 import Nvt from './nvt.js';
 
@@ -39,11 +40,12 @@ export class Result extends Model {
       id: host.asset._asset_id,
     };
 
-    if (ret.nvt) {
-      ret.nvt = new Nvt(ret.nvt);
+    ret.nvt = new Nvt(ret.nvt);
+
+    if (is_defined(ret.severity)) {
+      ret.severity = parse_severity(ret.severity);
     }
 
-    // FIXME is nvt always defined?
     ret.vulnerability = is_defined(ret.name) ? ret.name : ret.nvt.oid;
 
     return ret;
