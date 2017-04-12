@@ -1,5 +1,10 @@
 2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: width of notice dialog
+	must have a unit.
+
+2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/spinner.js: Update Spinner to use only own
 	PropTypes. Fix parsing value of spinner to always use and return a number.
 

@@ -391,7 +391,7 @@ class EntitiesContainer extends React.Component {
         <Download ref={ref => this.download = ref}
           filename={this.download_name}/>
         <Dialog
-          width="400"
+          width="400px"
           ref={ref => this.notice_dialog = ref}
         />
       </Layout>
