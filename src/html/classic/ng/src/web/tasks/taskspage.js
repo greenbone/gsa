@@ -285,18 +285,18 @@ class Page extends React.Component {
           auto_delete: task.auto_delete,
           auto_delete_data: task.auto_delete_data,
           comment: task.comment,
-          config_id: task.isAlterable() ? task.config.id : 0,
+          config_id: task.isAlterable() ? task.config.id : '0',
           id: task.id,
           in_assets: task.in_assets,
           min_qod: task.min_qod,
           name: task.name,
           scan_configs: sorted_scan_configs,
-          scanner_id: task.isAlterable() ? task.scanner.id : 0,
+          scanner_id: task.isAlterable() ? task.scanner.id : '0',
           scanner_type: task.scanner.type,
           scanners,
           schedule_id,
           schedules,
-          target_id: task.isAlterable() ?  task.target.id : 0,
+          target_id: task.isAlterable() ?  task.target.id : '0',
           targets,
           task: task,
         }, {
@@ -320,7 +320,7 @@ class Page extends React.Component {
 
         target_id = select_save_id(targets, target_id);
 
-        schedule_id = select_save_id(schedules, schedule_id, 0);
+        schedule_id = select_save_id(schedules, schedule_id, '0');
 
         alert_id = includes_id(alerts, alert_id) ? alert_id : undefined;
 

@@ -1,5 +1,9 @@
 2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/taskspage.js: Use strings for zero ids.
+
+2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/alerts/secinfoeventpart.js,
 	src/html/classic/ng/src/web/dashboard/commoncharts.js,
 	src/html/classic/ng/src/web/filters/filterspage.js,
