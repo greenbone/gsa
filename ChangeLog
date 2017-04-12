@@ -1,5 +1,10 @@
 2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/section.js: Update coding style of SectionHeader
+	component.
+
+2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/section.js: Fix position of toggle fold icon in
 	section header.
 

@@ -92,19 +92,19 @@ Section.propTypes = {
   onFoldStepEnd: PropTypes.func,
 };
 
-export const SectionHeader = props => {
+export const SectionHeader = ({children, title, img}) => {
   return (
     <Layout
       flex
       align={['space-between', 'end']}
       className="section-header">
       <h2>
-        {is_string(props.img) ?
-          <Icon size="large" img={props.img}/> : props.img
+        {is_string(img) ?
+          <Icon size="large" img={img}/> : img
         }
-        {props.title}
+        {title}
       </h2>
-      {props.children}
+      {children}
     </Layout>
   );
 };
