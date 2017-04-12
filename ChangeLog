@@ -1,3 +1,9 @@
+2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/public/img,
+	src/html/classic/ng/public/js: Add required symlinks for running ng via the
+	development server.
+
 2017-04-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/scanner.js,
