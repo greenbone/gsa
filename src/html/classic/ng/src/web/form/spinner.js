@@ -23,9 +23,16 @@
 
 import React from 'react';
 
-import {is_defined, autobind, parse_float, includes, KeyCode,
-  classes} from '../../utils.js';
+import {
+  autobind,
+  classes,
+  includes,
+  is_defined,
+  KeyCode,
+  parse_float,
+} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
 import './css/spinner.css';
@@ -68,7 +75,7 @@ class SpinnerComponent extends React.Component {
   }
 
   componentWillReceiveProps(new_props) {
-    this.setState({value: new_props.value});
+    this.setState({value: parse_float(new_props.value)});
   }
 
   handleBlur(event) {
@@ -123,7 +130,8 @@ class SpinnerComponent extends React.Component {
     if (this.props.disabled) {
       return;
     }
-    this.setState({value: event.target.value});
+    let value = parse_float(event.target.value);
+    this.setState({value});
   }
 
   handleMouseWheel(event) {
@@ -178,6 +186,8 @@ class SpinnerComponent extends React.Component {
     }
 
     value = parse_float(value);
+    min = parse_float(min);
+    max = parse_float(max);
 
     if (isNaN(value)) {
       value = this.value; // reset to last valid value;
@@ -259,27 +269,20 @@ SpinnerComponent.defaultProps = {
   type: 'int',
 };
 
-const propTypeInt = React.PropTypes.oneOfType([
-  React.PropTypes.number,
-  React.PropTypes.string,
-]);
-
 SpinnerComponent.propTypes = {
-  size: propTypeInt,
-  maxLength: propTypeInt,
-  min: propTypeInt,
-  max: propTypeInt,
-  step: propTypeInt,
-  type: React.PropTypes.oneOf(['int', 'float']),
-  name: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  value: propTypeInt,
-  className: React.PropTypes.string,
-  onChange: React.PropTypes.func,
+  size: PropTypes.numberOrNumberString,
+  maxLength: PropTypes.numberOrNumberString,
+  min: PropTypes.numberOrNumberString,
+  max: PropTypes.numberOrNumberString,
+  step: PropTypes.numberOrNumberString,
+  type: PropTypes.oneOf(['int', 'float']),
+  name: PropTypes.string,
+  disabled: PropTypes.bool,
+  value: PropTypes.numberOrNumberString,
+  className: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
-export const Spinner = withLayout(SpinnerComponent, {box: true});
-
-export default Spinner;
+export default withLayout(SpinnerComponent, {box: true});
 
 // vim: set ts=2 sw=2 tw=80:
