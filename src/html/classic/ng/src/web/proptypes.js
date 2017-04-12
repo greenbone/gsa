@@ -51,9 +51,11 @@ export const componentOrElement = React.PropTypes.oneOfType([
   React.PropTypes.element,
 ]);
 
-export const numberString = React.PropTypes.oneOfType([
+export const numberString = React.PropTypes.string; // TODO restrict string to contain numbers
+
+export const numberOrNumberString = React.PropTypes.oneOfType([
   React.PropTypes.number,
-  React.PropTypes.string,
+  numberString,
 ]);
 
 export const icon =  React.PropTypes.oneOfType([
@@ -158,6 +160,7 @@ export default {
   model,
   momentDate,
   numberString,
+  numberOrNumberString,
   icon,
   id,
   idOrZero,
