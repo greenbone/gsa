@@ -28,6 +28,7 @@ import OperatingSystems from '../../os.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import Icon from './icon.js';
 
@@ -73,7 +74,11 @@ export const OsIcon = ({host, osName = false, osCpe = true, ...props}) => {
 
   return (
     <Layout flex>
-      <Icon {...props} title={title} img={os_icon}/>
+      <Icon
+        {...props}
+        title={title}
+        img={os_icon}
+      />
       {osName && best_os_txt &&
         best_os_txt.value
       }
@@ -82,10 +87,12 @@ export const OsIcon = ({host, osName = false, osCpe = true, ...props}) => {
 };
 
 OsIcon.propTypes = {
-  host: React.PropTypes.object,
-  osName: React.PropTypes.bool,
-  osCpe: React.PropTypes.bool,
+  host: PropTypes.model.isRequired,
+  osName: PropTypes.bool,
+  osCpe: PropTypes.bool,
 };
 
 
 export default OsIcon;
+
+// vim: set ts=2 sw=2 tw=80:

@@ -31,9 +31,7 @@ import PropTypes from '../proptypes.js';
 import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';
 
-export const ResultsPerPageGroup = props => {
-  let {rows, filter, onChange, name = 'rows'} = props;
-
+const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
   if (is_defined(filter)) {
     rows = filter.get('rows');
   }
@@ -51,10 +49,10 @@ export const ResultsPerPageGroup = props => {
 };
 
 ResultsPerPageGroup.propTypes = {
-  name: React.PropTypes.string,
+  filter: PropTypes.filter,
+  name: PropTypes.string,
   rows: PropTypes.number,
-  filter: React.PropTypes.object,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default ResultsPerPageGroup;

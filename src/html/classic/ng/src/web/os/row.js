@@ -42,8 +42,7 @@ import ExportIcon from '../icons/exporticon.js';
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
 
-const IconActions = props => {
-  let {entity, onEntityDelete, onEntityDownload} = props;
+const IconActions = ({entity, onEntityDelete, onEntityDownload}) => {
   return (
     <Layout flex align={['center', 'center']}>
       {entity.isInUse() ?
@@ -64,9 +63,9 @@ const IconActions = props => {
 };
 
 IconActions.propTypes = {
-  entity: React.PropTypes.object,
-  onEntityDelete: React.PropTypes.func,
-  onEntityDownload: React.PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onEntityDelete: PropTypes.func,
+  onEntityDownload: PropTypes.func,
 };
 
 const Actions = withEntityActions(IconActions);
@@ -112,8 +111,8 @@ const Row = ({entity, links = true, actions, ...props}) => {
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
-  links: React.PropTypes.bool,
+  entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 export default withEntityRow(Row, Actions);

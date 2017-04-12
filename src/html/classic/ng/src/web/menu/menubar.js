@@ -29,6 +29,7 @@ import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import Link from '../link.js';
+import PropTypes from '../proptypes.js';
 
 import Menu from './menu.js';
 import MenuEntry from './menuentry.js';
@@ -37,18 +38,15 @@ import Icon from '../icons/icon.js';
 
 import './css/menubar.css';
 
-export const MenuBar = (props, context) => {
-  let {gmp} = context;
-  let caps = context.capabilities;
-
-  if (!gmp.isLoggedIn() || !is_defined(caps)) {
+export const MenuBar = (props, {gmp, capabilities}) => {
+  if (!gmp.isLoggedIn() || !is_defined(capabilities)) {
     return null;
   }
 
-  const may_op_tasks = caps.mayOp('get_tasks');
-  const may_op_reports = caps.mayOp('get_reports');
-  const may_op_results = caps.mayOp('get_results');
-  const may_op_overrides = caps.mayOp('get_overrides');
+  const may_op_tasks = capabilities.mayOp('get_tasks');
+  const may_op_reports = capabilities.mayOp('get_reports');
+  const may_op_results = capabilities.mayOp('get_results');
+  const may_op_overrides = capabilities.mayOp('get_overrides');
 
   const may_op_scans = may_op_tasks || may_op_reports || may_op_results ||
     may_op_overrides;
@@ -98,7 +96,7 @@ export const MenuBar = (props, context) => {
               to="overrides"/>
           </Menu>
         }
-        {caps.mayOp('get_assets') &&
+        {capabilities.mayOp('get_assets') &&
           <Menu title={_('Assets')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
             <MenuEntry
@@ -118,7 +116,7 @@ export const MenuBar = (props, context) => {
               caps="get_reports"/>
           </Menu>
         }
-        {caps.mayOp('get_info') &&
+        {capabilities.mayOp('get_info') &&
           <Menu title={_('SecInfo')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/secinfo"/>
             <MenuEntry
@@ -273,8 +271,8 @@ export const MenuBar = (props, context) => {
 };
 
 MenuBar.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
-  capabilities: React.PropTypes.object,
+  gmp: PropTypes.gmp.isRequired,
+  capabilities: PropTypes.capabilities,
 };
 
 export default MenuBar;

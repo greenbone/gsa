@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from './icon.js';
 
 export const EditIcon = ({active = true, ...props}) => {
@@ -34,7 +36,7 @@ export const EditIcon = ({active = true, ...props}) => {
 };
 
 EditIcon.propTypes = {
-  active: React.PropTypes.bool,
+  active: PropTypes.bool,
 };
 
 export default EditIcon;

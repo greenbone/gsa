@@ -28,7 +28,10 @@ import {is_defined, is_empty} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
-import {render_options, result_cvss_risk_factor, render_nvt_name,
+import {
+  render_nvt_name,
+  render_options,
+  result_cvss_risk_factor,
 } from '../render.js';
 
 import {withDialog} from '../dialog/dialog.js';
@@ -283,23 +286,23 @@ const NoteDialog = ({
 };
 
 NoteDialog.propTypes = {
-  active: React.PropTypes.oneOf(['0', '1', '-1', '-2']),
+  active: PropTypes.oneOf(['0', '1', '-1', '-2']),
   days: PropTypes.number,
   note: PropTypes.model,
-  hosts: React.PropTypes.string,
-  hosts_manual: React.PropTypes.string,
-  port: React.PropTypes.string,
-  port_manual: React.PropTypes.string,
-  oid: React.PropTypes.string,
+  hosts: PropTypes.string,
+  hosts_manual: PropTypes.string,
+  port: PropTypes.string,
+  port_manual: PropTypes.string,
+  oid: PropTypes.string,
   note_id: PropTypes.id,
   task_id: PropTypes.id,
   task_uuid: PropTypes.id,
   result_id: PropTypes.id,
   result_uuid: PropTypes.id,
   severity: PropTypes.number,
-  text: React.PropTypes.string,
+  text: PropTypes.string,
   tasks: PropTypes.arrayLike,
-  onValueChange: React.PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 export default withDialog(NoteDialog, {

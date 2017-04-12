@@ -53,7 +53,7 @@ const ToolBarIcons = ({onNewTargetClick}) => {
 };
 
 ToolBarIcons.propTypes = {
-  onNewTargetClick: React.PropTypes.func,
+  onNewTargetClick: PropTypes.func,
 };
 
 const id_or__ = value => {
@@ -114,8 +114,7 @@ class TargetsPage extends React.Component {
 }
 
 TargetsPage.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func,
+  onChanged: PropTypes.func,
 };
 
 export default withEntitiesContainer(TargetsPage, 'target', {

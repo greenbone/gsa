@@ -39,9 +39,14 @@ import YesNoRadio from '../form/yesnoradio.js';
 
 import NewIcon from '../icons/newicon.js';
 
-const ImportDialog = props => {
-  let {onValueChange, tasks, in_assets = 1, task_id, newContainerTask = true,
-    onNewContainerTaskClick} = props;
+const ImportDialog = ({
+    in_assets = 1,
+    newContainerTask = true,
+    task_id,
+    tasks,
+    onNewContainerTaskClick,
+    onValueChange,
+  }) => {
 
   return (
     <Layout flex="column">
@@ -81,11 +86,11 @@ const ImportDialog = props => {
 
 ImportDialog.propTypes = {
   in_assets: PropTypes.yesno,
+  newContainerTask: PropTypes.bool,
   task_id: PropTypes.id,
-  tasks: React.PropTypes.array,
-  newContainerTask: React.PropTypes.bool,
-  onValueChange: React.PropTypes.func,
-  onNewContainerTaskClick: React.PropTypes.func,
+  tasks: PropTypes.array,
+  onValueChange: PropTypes.func,
+  onNewContainerTaskClick: PropTypes.func,
 };
 
 

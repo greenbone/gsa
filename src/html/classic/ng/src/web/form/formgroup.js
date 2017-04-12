@@ -26,13 +26,23 @@ import React from 'react';
 import {is_defined, classes} from '../../utils.js';
 
 import Layout from '../layout';
+import PropTypes from '../proptypes.js';
 
 import './css/form.css';
 import './css/formgroup.css';
 
-export const FormGroup = props => {
-  let {title, size, className, titleSize, titleOffset, offset, condition,
-    flex = "row", ...other} = props;
+const FormGroup = ({
+    children,
+    className,
+    condition,
+    flex = "row",
+    offset,
+    size,
+    title,
+    titleOffset = 0,
+    titleSize = 2,
+    ...other,
+  }) => {
 
   if (is_defined(condition) && !condition) {
     return null;
@@ -42,7 +52,7 @@ export const FormGroup = props => {
 
   if (title) {
     let title_css = classes('col-' + titleSize, 'control-label');
-    if (props.titleOffset) {
+    if (titleOffset) {
       title_css = classes('offset-' + titleOffset, title_css);
     }
 
@@ -60,42 +70,28 @@ export const FormGroup = props => {
   return (
     <div className={className}>
       {title}
-      <Layout {...other} flex={flex} className={css}>
-        {props.children}
+      <Layout
+        {...other}
+        flex={flex}
+        className={css}>
+        {children}
       </Layout>
     </div>
   );
 };
 
 FormGroup.propTypes = {
-  title: React.PropTypes.string,
-  className: React.PropTypes.string,
-  condition: React.PropTypes.bool,
-  size: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
+  title: PropTypes.string,
+  className: PropTypes.string,
+  condition: PropTypes.bool,
+  size: PropTypes.numberOrNumberString,
+  offset: PropTypes.numberOrNumberString,
+  titleSize: PropTypes.numberOrNumberString,
+  titleOffset: PropTypes.numberOrNumberString,
+  flex: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
   ]),
-  offset: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
-  titleSize: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
-  titleOffset: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
-  flex: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.bool,
-  ]),
-};
-
-FormGroup.defaultProps = {
-  titleSize: 2,
-  titleOffset: 0,
 };
 
 export default FormGroup;

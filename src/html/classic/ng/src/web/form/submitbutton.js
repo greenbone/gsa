@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,19 +23,24 @@
 
 import React from 'react';
 
-import Button from '../button.js';
-
 import {classes} from '../../utils.js';
 
-export const SubmitButton = ({className, ...other}) => {
+import Button from '../button.js';
+import PropTypes from '../proptypes.js';
+
+const SubmitButton = ({className, ...other}) => {
   className = classes('button-block', className);
   return (
-    <Button {...other} type="submit" className={className}/>
+    <Button
+      {...other}
+      type="submit"
+      className={className}
+    />
   );
 };
 
 SubmitButton.propTypes = {
-  className: React.PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default SubmitButton;

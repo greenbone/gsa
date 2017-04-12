@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from './icon.js';
 
 import SelectionType from '../selectiontype.js';
@@ -47,9 +49,9 @@ export const ExportIcon = ({selectionType, title, ...other}) => {
 };
 
 ExportIcon.propTypes = {
-  title: React.PropTypes.string,
-  selectionType: React.PropTypes.string,
-  onClick: React.PropTypes.func,
+  title: PropTypes.string,
+  selectionType: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default ExportIcon;

@@ -33,7 +33,9 @@ import FirstResultGroup from '../powerfilter/firstresultgroup.js';
 import MinQodGroup from '../powerfilter/minqodgroup.js';
 import ResultsPerPageGroup from '../powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../powerfilter/sortbygroup.js';
-import {withFilterDialog, DefaultFilterDialogPropTypes
+import {
+  DefaultFilterDialogPropTypes,
+  withFilterDialog,
 } from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
@@ -48,10 +50,14 @@ const SORT_FIELDS = [
   ['false_positive', _('Scan Results: False Positive')],
 ];
 
-const ReportFilterDialogComponent = props => {
-
-  let {filter, filterstring, onFilterStringChange, onFilterValueChange,
-    onSortOrderChange, onSortByChange} = props;
+const ReportFilterDialogComponent = ({
+    filter,
+    filterstring,
+    onFilterStringChange,
+    onFilterValueChange,
+    onSortByChange,
+    onSortOrderChange,
+  }) => {
 
   if (!filter) {
     return null;

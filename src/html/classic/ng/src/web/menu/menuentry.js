@@ -23,10 +23,11 @@
 
 import React from 'react';
 
+import {is_defined, is_array} from '../../utils.js';
+
 import Link from '../link.js';
 import LegacyLink from '../legacylink.js';
-
-import {is_defined, is_array} from '../../utils.js';
+import PropTypes from '../proptypes.js';
 
 import './css/menuentry.css';
 
@@ -40,20 +41,26 @@ const handler_wrapper = handler => {
   return undefined;
 };
 
-export const MenuEntry = (props, context) => {
-  let {to, title, legacy, section, onClick, caps, ...other} = props;
+export const MenuEntry = ({
+    caps,
+    legacy,
+    section,
+    title,
+    to,
+    onClick,
+    ...other,
+  }, {capabilities}) => {
   let entry;
   let css = section ? "menu-entry menu-section" : "menu-entry";
 
-  if (is_defined(caps) && is_defined(context) &&
-    is_defined(context.capabilities)) {
+  if (is_defined(caps) && is_defined(capabilities)) {
 
     if (!is_array(caps)) {
       caps = [caps];
     }
 
     let may_op = caps.reduce((a, b) => {
-      return context.capabilities.mayOp(b) && a;
+      return capabilities.mayOp(b) && a;
     }, true);
 
     if (!may_op) {
@@ -76,19 +83,19 @@ export const MenuEntry = (props, context) => {
 };
 
 MenuEntry.propTypes = {
-  caps: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.array,
+  caps: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
   ]),
-  section: React.PropTypes.bool,
-  legacy: React.PropTypes.bool,
-  to: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func,
+  section: PropTypes.bool,
+  legacy: PropTypes.bool,
+  to: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
 };
 
 MenuEntry.contextTypes = {
-  capabilities: React.PropTypes.object,
+  capabilities: PropTypes.capabilities,
 };
 
 export default MenuEntry;

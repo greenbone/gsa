@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from './icon.js';
 
 export const CloneIcon = ({active = true, ...props}) => {
@@ -30,7 +32,7 @@ export const CloneIcon = ({active = true, ...props}) => {
 };
 
 CloneIcon.propTypes = {
-  active: React.PropTypes.bool,
+  active: PropTypes.bool,
 };
 
 export default CloneIcon;

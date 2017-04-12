@@ -79,11 +79,11 @@ const Actions = ({
 
 Actions.propTypes = {
   entity: PropTypes.model,
-  onEntityEdit: React.PropTypes.func,
-  onEntityClone: React.PropTypes.func,
-  onEntityDelete: React.PropTypes.func,
-  onEntityDownload: React.PropTypes.func,
-  onTestSchedule: React.PropTypes.func,
+  onEntityEdit: PropTypes.func,
+  onEntityClone: PropTypes.func,
+  onEntityDelete: PropTypes.func,
+  onEntityDownload: PropTypes.func,
+  onTestSchedule: PropTypes.func,
 };
 
 const render_period = entity => {
@@ -145,12 +145,12 @@ const Row = ({
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
-  links: React.PropTypes.bool,
+  links: PropTypes.bool,
 };
 
 Row.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
-  username: React.PropTypes.string.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

@@ -27,14 +27,19 @@ import  _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
-const HostsDialog = ({host, name = '127.0.0.1', comment = '',
-    onValueChange}) => {
+const HostsDialog = ({
+    host,
+    name,
+    comment,
+    onValueChange
+  }) => {
   return (
     <Layout flex="column">
       <FormGroup title={_('Name')}>
@@ -61,14 +66,18 @@ const HostsDialog = ({host, name = '127.0.0.1', comment = '',
 };
 
 HostsDialog.propTypes = {
-  host: React.PropTypes.object,
-  name: React.PropTypes.string,
-  comment: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  host: PropTypes.model,
+  name: PropTypes.string,
+  comment: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 
 export default withDialog(HostsDialog, {
   title: _('New Host'),
   footer: _('Save'),
+  defaultState: {
+    name: '127.0.0.1',
+    comment: '',
+  },
 });

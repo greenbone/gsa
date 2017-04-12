@@ -28,6 +28,7 @@ import {withDialog} from '../dialog/dialog.js';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import FileField from '../form/filefield.js';
 import FormGroup from '../form/formgroup.js';
@@ -49,7 +50,7 @@ const ImportDialog = ({
 };
 
 ImportDialog.propTypes = {
-  onValueChange: React.PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 

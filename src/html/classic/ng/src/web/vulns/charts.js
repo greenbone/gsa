@@ -25,12 +25,12 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-export const VulnCharts = props => {
-  let {filter, cache} = props;
-
+const VulnCharts = ({filter, cache}) => {
   return (
     <div>
       <DataSource
@@ -83,8 +83,8 @@ export const VulnCharts = props => {
 };
 
 VulnCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
+  cache: PropTypes.object,
+  filter: PropTypes.filter,
 };
 
 export default VulnCharts;

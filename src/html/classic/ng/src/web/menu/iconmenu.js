@@ -25,14 +25,13 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import Icon, {withIconCss} from '../icons/icon.js';
 
 import './css/iconmenu.css';
 
-const IconMenuContainer = props => {
-
-  let {children, onClick, className, ...other} = props;
-
+const IconMenuContainer = ({children, onClick, className, ...other}) => {
   className = classes('icon-menu', className);
 
   return (
@@ -46,13 +45,11 @@ const IconMenuContainer = props => {
 };
 
 IconMenuContainer.propTypes = {
-  img: React.PropTypes.string.isRequired,
-  className: React.PropTypes.string,
-  onClick: React.PropTypes.func,
+  img: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
-export const IconMenu = withIconCss(IconMenuContainer);
-
-export default IconMenu;
+export default withIconCss(IconMenuContainer);
 
 // vim: set ts=2 sw=2 tw=80:

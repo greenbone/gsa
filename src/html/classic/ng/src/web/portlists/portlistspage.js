@@ -67,8 +67,8 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
-  onNewPortListClick: React.PropTypes.func,
-  onImportPortListClick: React.PropTypes.func,
+  onNewPortListClick: PropTypes.func,
+  onImportPortListClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
@@ -188,12 +188,12 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func.isRequired,
+  onChanged: PropTypes.func.isRequired,
 };
 
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   capabilities: PropTypes.capabilities.isRequired,
 };
 

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,9 @@
 
 import React from 'react';
 
-export class Task extends React.Component {
+import PropTypes from '../proptypes.js';
+
+class Task extends React.Component {
 
   constructor(props) {
     super(props);
@@ -46,7 +48,7 @@ export class Task extends React.Component {
 }
 
 Task.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default Task;

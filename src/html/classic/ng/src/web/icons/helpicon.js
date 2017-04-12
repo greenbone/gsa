@@ -26,12 +26,12 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, capitalize_first_letter} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from './icon.js';
 
-export const HelpIcon = (props, context) => {
-  let {page, title, ...other} = props;
+export const HelpIcon = ({page, title, ...other}, {gmp}) => {
   let path = 'help/' + page + '.html';
-  let {gmp} = context;
   let params = {
     token: gmp.token,
   };
@@ -42,17 +42,21 @@ export const HelpIcon = (props, context) => {
 
   let url = gmp.buildUrl(path, params);
   return (
-    <Icon img="help.svg" href={url} title={title} {...other}/>
+    <Icon
+      img="help.svg"
+      href={url}
+      title={title}
+      {...other}/>
   );
 };
 
 HelpIcon.propTypes = {
-  title: React.PropTypes.string,
-  page: React.PropTypes.string,
+  title: PropTypes.string,
+  page: PropTypes.string.isRequired,
 };
 
 HelpIcon.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default HelpIcon;

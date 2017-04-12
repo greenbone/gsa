@@ -26,7 +26,12 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import {LabelHigh, LabelMedium, LabelLow, LabelLog, LabelFalsePositive
+import {
+  LabelFalsePositive,
+  LabelHigh,
+  LabelLog,
+  LabelLow,
+  LabelMedium,
 } from '../severityclasslabels.js';
 
 import {createEntitiesFooter} from '../entities/footer.js';
@@ -100,9 +105,9 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
 
 Header.propTypes = {
   actions: PropTypes.componentOrFalse,
-  links: React.PropTypes.bool,
-  sort: React.PropTypes.bool,
-  onSortChange: React.PropTypes.func,
+  links: PropTypes.bool,
+  sort: PropTypes.bool,
+  onSortChange: PropTypes.func,
 };
 
 const Footer = createEntitiesFooter({
@@ -110,13 +115,11 @@ const Footer = createEntitiesFooter({
   delete: true,
 });
 
-export const ReportsTable = createEntitiesTable({
+export default createEntitiesTable({
   emptyTitle: _('No reports available'),
   header: Header,
   footer: Footer,
   row: ReportRow,
 });
-
-export default ReportsTable;
 
 // vim: set ts=2 sw=2 tw=80:

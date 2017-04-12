@@ -23,7 +23,6 @@
 
 import React from 'react';
 
-
 import _ from '../../locale.js';
 
 import Img from '../img.js';
@@ -42,7 +41,10 @@ import Datepicker from '../form/datepicker.js';
 import Text from '../form/text.js';
 import TimeZoneSelect from '../form/timezoneselect.js';
 
-import {ssh_credential_filter, smb_credential_filter, esxi_credential_filter
+import {
+  esxi_credential_filter,
+  smb_credential_filter,
+  ssh_credential_filter,
 } from '../../gmp/models/credential.js';
 
 const AdvancedTaskWizard = ({
@@ -268,26 +270,26 @@ const AdvancedTaskWizard = ({
 AdvancedTaskWizard.propTypes = {
   scan_configs: PropTypes.arrayLike,
   credentials: PropTypes.arrayLike,
-  date: React.PropTypes.object,
-  task_name: React.PropTypes.string,
+  date: PropTypes.momentDate,
+  task_name: PropTypes.string,
   config_id: PropTypes.idOrZero,
-  auto_start: React.PropTypes.oneOf([
+  auto_start: PropTypes.oneOf([
     '0', '1', '2',
   ]),
-  target_hosts: React.PropTypes.string,
+  target_hosts: PropTypes.string,
   start_hour: PropTypes.number,
   start_minute: PropTypes.number,
-  start_timezone: React.PropTypes.string,
+  start_timezone: PropTypes.string,
   ssh_credential: PropTypes.idOrZero,
   ssh_port: PropTypes.number,
   smb_credential: PropTypes.idOrZero,
   esxi_credential: PropTypes.idOrZero,
-  alert_email: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  alert_email: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 AdvancedTaskWizard.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withDialog(AdvancedTaskWizard, {

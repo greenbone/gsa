@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import {is_defined} from '../../utils.js';
 
 import Link from '../link.js';
 import LegacyLink from '../legacylink.js';
+import PropTypes from '../proptypes.js';
 
 import './css/menu.css';
 
@@ -41,9 +42,7 @@ function create_link(title, options = {}) {
   return undefined;
 }
 
-export const Menu = props => {
-  let {children, title} = props;
-
+const Menu = ({children, title, ...props}) => {
   let link = create_link(title, props);
 
   if (!is_defined(link) && is_defined(children) && children.length > 0) {
@@ -65,9 +64,9 @@ export const Menu = props => {
 };
 
 Menu.propTypes = {
-  legacy: React.PropTypes.bool,
-  to: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
+  legacy: PropTypes.bool,
+  to: PropTypes.string,
+  title: PropTypes.string.isRequired,
 };
 
 export default Menu;

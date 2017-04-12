@@ -86,11 +86,11 @@ const Actions = ({
 };
 
 Actions.propTypes = {
-  entity: React.PropTypes.object,
-  onEditOverrideClick: React.PropTypes.func,
-  onEntityClone: React.PropTypes.func,
-  onEntityDelete: React.PropTypes.func,
-  onEntityDownload: React.PropTypes.func,
+  entity: PropTypes.model,
+  onEditOverrideClick: PropTypes.func,
+  onEntityClone: PropTypes.func,
+  onEntityDelete: PropTypes.func,
+  onEntityDownload: PropTypes.func,
 };
 
 const Row = ({entity, links = true, actions, ...props}) => {
@@ -131,8 +131,8 @@ const Row = ({entity, links = true, actions, ...props}) => {
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
-  links: React.PropTypes.bool,
+  entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

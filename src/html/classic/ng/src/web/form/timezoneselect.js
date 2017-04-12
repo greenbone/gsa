@@ -27,12 +27,13 @@ import  _ from '../../locale.js';
 import {map} from '../../utils.js';
 import timezones from '../../timezones.js';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
 import Select2 from './select2.js';
 
 
-const TimeZoneSelectComponent = ({value, ...props}) => {
+const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
 
   let timezone_opts = map(timezones, zone => {
     return <option key={zone.name} value={zone.name}>{zone.name}</option>;
@@ -49,15 +50,9 @@ const TimeZoneSelectComponent = ({value, ...props}) => {
 };
 
 TimeZoneSelectComponent.propTypes = {
-  value: React.PropTypes.string,
+  value: PropTypes.string,
 };
 
-TimeZoneSelectComponent.defaultProps = {
-  value: 'UTC',
-};
-
-export const TimeZoneSelect = withLayout(TimeZoneSelectComponent, {box: true});
-
-export default TimeZoneSelect;
+export default withLayout(TimeZoneSelectComponent, {box: true});
 
 // vim: set ts=2 sw=2 tw=80:

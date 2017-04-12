@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import Sort from '../sortby.js';
 
 import {createEntitiesFooter} from '../entities/footer.js';
@@ -108,10 +109,10 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
 };
 
 Header.propTypes = {
-  actions: React.PropTypes.element,
-  links: React.PropTypes.bool,
-  sort: React.PropTypes.bool,
-  onSortChange: React.PropTypes.func,
+  actions: PropTypes.element,
+  links: PropTypes.bool,
+  sort: PropTypes.bool,
+  onSortChange: PropTypes.func,
 };
 
 const NvtsHeader = withEntitiesHeader(Header, true);

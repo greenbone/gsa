@@ -26,11 +26,13 @@ import React from 'react';
 import _ from '../../locale.js';
 import {map, is_defined} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
 import Select2 from '../form/select2.js';
 
-export class SortByGroup extends React.Component {
+class SortByGroup extends React.Component {
 
   renderSortFieldOptions() {
     let {fields} = this.props;
@@ -74,12 +76,12 @@ export class SortByGroup extends React.Component {
 }
 
 SortByGroup.propTypes = {
-  by: React.PropTypes.string,
-  order: React.PropTypes.oneOf(['sort', 'sort-reverse']),
-  filter: React.PropTypes.object,
-  fields: React.PropTypes.array,
-  onSortByChange: React.PropTypes.func,
-  onSortOrderChange: React.PropTypes.func,
+  by: PropTypes.string,
+  order: PropTypes.oneOf(['sort', 'sort-reverse']),
+  filter: PropTypes.filter,
+  fields: PropTypes.array,
+  onSortByChange: PropTypes.func,
+  onSortOrderChange: PropTypes.func,
 };
 
 

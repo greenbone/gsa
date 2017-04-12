@@ -71,11 +71,11 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 ToolBarIcons.propTypes = {
-  onNewOverrideClick: React.PropTypes.func,
+  onNewOverrideClick: PropTypes.func,
 };
 
 class Page extends React.Component {
@@ -169,11 +169,11 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func.isRequired,
+  onChanged: PropTypes.func.isRequired,
 };
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default withEntitiesContainer(Page, 'override', {

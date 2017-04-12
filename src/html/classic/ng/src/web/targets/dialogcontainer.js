@@ -24,6 +24,7 @@
 import React from 'react';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import {first} from '../../utils.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
@@ -140,11 +141,11 @@ export class TargetDialogContainer extends React.Component {
 };
 
 TargetDialogContainer.propTypes = {
-  onSave: React.PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 TargetDialogContainer.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default TargetDialogContainer;

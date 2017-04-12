@@ -67,7 +67,7 @@ const ToolBarIcons = props => {
 };
 
 ToolBarIcons.propTypes = {
-  onUploadReportClick: React.PropTypes.func,
+  onUploadReportClick: PropTypes.func,
 };
 
 class Page extends React.Component {
@@ -134,11 +134,11 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func,
+  onChanged: PropTypes.func,
 };
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default withEntitiesContainer(Page, 'report', {

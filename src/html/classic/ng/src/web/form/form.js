@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 const noop_convert = value => value;
 const target_value = event => event.target.value;
 
@@ -41,9 +43,9 @@ export const withChangeHandler = (Component, convert_func = noop_convert,
   };
 
   ChangeHandler.propTypes = {
-    convert: React.PropTypes.func,
-    name: React.PropTypes.string,
-    onChange: React.PropTypes.func,
+    convert: PropTypes.func,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
   };
 
   return ChangeHandler;

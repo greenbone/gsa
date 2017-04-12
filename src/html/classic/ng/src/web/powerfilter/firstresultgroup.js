@@ -31,9 +31,7 @@ import PropTypes from '../proptypes.js';
 import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';
 
-export const FirstResultGroup = props => {
-  let {first, filter, onChange, name = 'first'} = props;
-
+const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
   if (is_defined(filter)) {
     first = filter.get('first');
   }
@@ -50,10 +48,10 @@ export const FirstResultGroup = props => {
 };
 
 FirstResultGroup.propTypes = {
-  name: React.PropTypes.string,
+  name: PropTypes.string,
   first: PropTypes.number,
-  filter: React.PropTypes.object,
-  onChange: React.PropTypes.func,
+  filter: PropTypes.filter,
+  onChange: PropTypes.func,
 };
 
 export default FirstResultGroup;

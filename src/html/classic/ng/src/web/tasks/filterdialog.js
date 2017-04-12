@@ -26,6 +26,7 @@ import React from 'react';
 import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import ApplyOverridesGroup from '../powerfilter/applyoverridesgroup.js';
 import FilterStringGroup from '../powerfilter/filterstringgroup.js';
@@ -90,12 +91,12 @@ const TaskFilterDialogComponent = ({
 };
 
 TaskFilterDialogComponent.propTypes = {
-  filter: React.PropTypes.object,
-  filterstring: React.PropTypes.string,
-  onSortByChange: React.PropTypes.func,
-  onSortOrderChange: React.PropTypes.func,
-  onFilterValueChange: React.PropTypes.func,
-  onFilterStringChange: React.PropTypes.func,
+  filter: PropTypes.filter,
+  filterstring: PropTypes.string,
+  onSortByChange: PropTypes.func,
+  onSortOrderChange: PropTypes.func,
+  onFilterValueChange: PropTypes.func,
+  onFilterStringChange: PropTypes.func,
 };
 
 export const TaskFilterDialog = withFilterDialog(TaskFilterDialogComponent);

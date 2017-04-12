@@ -77,10 +77,10 @@ const IconActions = ({
 
 IconActions.propTypes = {
   entity: PropTypes.model,
-  onEntityDelete: React.PropTypes.func,
-  onEntityDownload: React.PropTypes.func,
-  onEditPortList: React.PropTypes.func,
-  onEntityClone: React.PropTypes.func,
+  onEntityDelete: PropTypes.func,
+  onEntityDownload: PropTypes.func,
+  onEditPortList: PropTypes.func,
+  onEntityClone: PropTypes.func,
 };
 
 const Row = ({
@@ -116,12 +116,12 @@ const Row = ({
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
-  links: React.PropTypes.bool,
+  entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 Row.contextTypes = {
-  username: React.PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(IconActions));

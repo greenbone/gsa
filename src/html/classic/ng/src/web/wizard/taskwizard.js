@@ -27,6 +27,7 @@ import _ from '../../locale.js';
 
 import Layout from '../layout.js';
 import Img from '../img.js';
+import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
@@ -98,9 +99,9 @@ const TaskWizard = ({
 };
 
 TaskWizard.propTypes = {
-  hosts: React.PropTypes.string,
-  onNewClick: React.PropTypes.func,
-  onValueChange: React.PropTypes.func,
+  hosts: PropTypes.string,
+  onNewClick: PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 export default withDialog(TaskWizard, {

@@ -26,6 +26,8 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from './icon.js';
 
 import SelectionType from '../selectiontype.js';
@@ -50,10 +52,10 @@ export const TrashIcon = ({selectionType, title, active = true, ...other}) => {
 };
 
 TrashIcon.propTypes = {
-  active: React.PropTypes.bool,
-  title: React.PropTypes.string,
-  selectionType: React.PropTypes.string,
-  onClick: React.PropTypes.func,
+  active: PropTypes.bool,
+  title: PropTypes.string,
+  selectionType: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 

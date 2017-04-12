@@ -25,11 +25,11 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import './css/table.css';
 
-export const Table = props => {
-  let {header, footer, children, className} = props;
-
+const Table = ({header, footer, children, className}) => {
   className = classes(className, 'table');
 
   return (
@@ -44,15 +44,15 @@ export const Table = props => {
 };
 
 Table.propTypes = {
-  header: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.object,
+  header: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
   ]),
-  footer: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.object,
+  footer: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
   ]),
-  className: React.PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default Table;

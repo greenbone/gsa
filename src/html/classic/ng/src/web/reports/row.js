@@ -66,12 +66,11 @@ const IconActions = ({entity, onEntityDelete}) => {
 };
 
 IconActions.propTypes = {
-  entity: React.PropTypes.object.isRequired,
-  onEntityDelete: React.PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onEntityDelete: PropTypes.func,
 };
 
-const Row = props => {
-  let {entity, links = true, actions, ...other} = props;
+const Row = ({entity, links = true, actions, ...other}) => {
   let {report} = entity;
   let status;
 
@@ -135,8 +134,8 @@ const Row = props => {
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
-  links: React.PropTypes.bool,
+  entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 export default withEntityRow(Row, withEntityActions(IconActions));

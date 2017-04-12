@@ -104,11 +104,11 @@ const Header = ({
 };
 
 Header.propTypes = {
-  actions: React.PropTypes.element,
+  actions: PropTypes.element,
   filter: PropTypes.filter,
-  links: React.PropTypes.bool,
-  sort: React.PropTypes.bool,
-  onSortChange: React.PropTypes.func,
+  links: PropTypes.bool,
+  sort: PropTypes.bool,
+  onSortChange: PropTypes.func,
 };
 
 const TargetsHeader = withEntitiesHeader(Header);

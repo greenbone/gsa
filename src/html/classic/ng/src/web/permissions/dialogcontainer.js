@@ -136,11 +136,11 @@ class PermissionDialogContainer extends React.Component {
 }
 
 PermissionDialogContainer.propTypes = {
-  onSave: React.PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 PermissionDialogContainer.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   capabilities: PropTypes.capabilities.isRequired,
 };
 

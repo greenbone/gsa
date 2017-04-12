@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,12 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-export const CommonCharts = props => {
-  let {filter, type, titleType, cache} = props;
-
+const CommonCharts = ({filter, type, titleType, cache}) => {
   return (
     <div>
       <DataSource
@@ -70,10 +70,10 @@ export const CommonCharts = props => {
 };
 
 CommonCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
-  type: React.PropTypes.string.isRequired,
-  titleType: React.PropTypes.string.isRequired,
+  cache: PropTypes.object,
+  filter: PropTypes.filter,
+  type: PropTypes.string.isRequired,
+  titleType: PropTypes.string.isRequired,
 };
 
 export default CommonCharts;

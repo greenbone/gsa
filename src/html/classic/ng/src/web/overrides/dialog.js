@@ -28,7 +28,10 @@ import {is_defined, is_empty} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
-import {render_nvt_name, result_cvss_risk_factor, render_options,
+import {
+  render_nvt_name,
+  render_options,
+  result_cvss_risk_factor,
 } from '../render.js';
 
 import {withDialog} from '../dialog/dialog.js';
@@ -299,25 +302,25 @@ const OverrideDialog = ({
 };
 
 OverrideDialog.propTypes = {
-  active: React.PropTypes.oneOf(['0', '1', '-1', '-2']),
+  active: PropTypes.oneOf(['0', '1', '-1', '-2']),
   custom_severity: PropTypes.number,
   days: PropTypes.number,
-  hosts_manual: React.PropTypes.string,
-  hosts: React.PropTypes.string,
+  hosts_manual: PropTypes.string,
+  hosts: PropTypes.string,
   new_severity: PropTypes.number,
   new_severity_from_list: PropTypes.number,
-  oid: React.PropTypes.string,
+  oid: PropTypes.string,
   override: PropTypes.model,
-  port_manual: React.PropTypes.string,
-  port: React.PropTypes.string,
+  port_manual: PropTypes.string,
+  port: PropTypes.string,
   result_id: PropTypes.id,
   result_uuid: PropTypes.id,
   severity: PropTypes.number,
   task_id: PropTypes.id,
   tasks: PropTypes.arrayLike,
   task_uuid: PropTypes.id,
-  text: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  text: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 

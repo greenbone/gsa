@@ -31,9 +31,12 @@ import PropTypes from '../proptypes.js';
 import FormGroup from '../form/formgroup.js';
 import YesNoRadio from '../form/yesnoradio.js';
 
-export const ApplyOverridesGroup = props => {
-  let {filter, overrides, onChange, name = 'apply_overrides'} = props;
-
+const ApplyOverridesGroup = ({
+    filter,
+    name = 'apply_overrides',
+    overrides,
+    onChange,
+  }) => {
   if (is_defined(filter)) {
     overrides = filter.get('apply_overrides');
   }
@@ -48,10 +51,10 @@ export const ApplyOverridesGroup = props => {
 };
 
 ApplyOverridesGroup.propTypes = {
-  filter: React.PropTypes.object,
-  name: React.PropTypes.string,
+  filter: PropTypes.filter,
+  name: PropTypes.string,
   overrides: PropTypes.number,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default ApplyOverridesGroup;

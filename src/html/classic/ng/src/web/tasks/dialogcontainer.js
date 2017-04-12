@@ -30,6 +30,7 @@ import logger from '../../log.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import ScheduleDialog from '../schedules/dialog.js';
 import TargetDialogContainer from '../targets/dialogcontainer.js';
@@ -39,7 +40,7 @@ import TaskDialog from './dialog.js';
 
 const log = logger.getLogger('web.tasks.dialogcontainer');
 
-export class TaskDialogContainer extends React.Component {
+class TaskDialogContainer extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -171,11 +172,11 @@ export class TaskDialogContainer extends React.Component {
 }
 
 TaskDialogContainer.propTypes = {
-  onSave: React.PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 TaskDialogContainer.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default TaskDialogContainer;

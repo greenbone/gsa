@@ -25,13 +25,13 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
-import './css/icon.css';
+import PropTypes from '../proptypes.js';
 import {get_img_url} from '../urls.js';
 
-export const withIconCss = Component => {
-  function IconCss(props) {
-    let {size = 'small', className, onClick, ...other} = props;
+import './css/icon.css';
 
+export const withIconCss = Component => {
+  function IconCss({size = 'small', className, onClick, ...other}) {
     if (size === 'small') {
       className = classes('icon', 'icon-sm', className);
     }
@@ -48,15 +48,21 @@ export const withIconCss = Component => {
     if (onClick) {
       className = classes(className, 'icon-button');
     }
-    return <Component {...other} onClick={onClick} className={className}/>;
+    return (
+      <Component
+        {...other}
+        className={className}
+        onClick={onClick}
+      />
+    );
   };
 
   IconCss.propTypes = {
-    className: React.PropTypes.string,
-    size: React.PropTypes.oneOf([
+    className: PropTypes.string,
+    size: PropTypes.oneOf([
       'small', 'medium', 'large', 'default',
     ]),
-    onClick: React.PropTypes.func,
+    onClick: PropTypes.func,
   };
 
   return IconCss;
@@ -84,29 +90,36 @@ class IconComponent extends React.Component {
 
     if (href) {
       return (
-        <a {...other} onClick={this.handleClick} href={href}>
+        <a
+          {...other}
+          href={href}
+          onClick={this.handleClick}
+        >
           <img src={img_path} alt={alt}/>
         </a>
       );
     }
     return (
-      <img {...other} onClick={this.handleClick} alt={alt} src={img_path}/>
+      <img
+        {...other}
+        alt={alt}
+        src={img_path}
+        onClick={this.handleClick}
+      />
     );
   }
 }
 
 IconComponent.propTypes = {
-  alt: React.PropTypes.string,
-  img: React.PropTypes.string.isRequired,
-  size: React.PropTypes.string,
-  href: React.PropTypes.string,
-  value: React.PropTypes.any,
-  className: React.PropTypes.string,
-  onClick: React.PropTypes.func,
+  alt: PropTypes.string,
+  className: PropTypes.string,
+  href: PropTypes.string,
+  img: PropTypes.string.isRequired,
+  size: PropTypes.string,
+  value: PropTypes.any,
+  onClick: PropTypes.func,
 };
 
-export const Icon = withIconCss(IconComponent);
-
-export default Icon;
+export default withIconCss(IconComponent);
 
 // vim: set ts=2 sw=2 tw=80:

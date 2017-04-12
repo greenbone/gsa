@@ -73,7 +73,7 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
-  onNewReportFormatClick: React.PropTypes.func,
+  onNewReportFormatClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
@@ -194,13 +194,13 @@ class Page extends React.Component {
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
   entitiesCommand: PropTypes.entitiescommand,
-  onChanged: React.PropTypes.func,
-  showError: React.PropTypes.func.isRequired,
-  showSuccess: React.PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
+  showError: PropTypes.func.isRequired,
+  showSuccess: PropTypes.func.isRequired,
 };
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 const Table = createEntitiesTable({

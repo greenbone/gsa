@@ -27,6 +27,8 @@ import _ from '../../locale.js';
 import Cpe from '../../cpe.js';
 import {is_defined} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from './icon.js';
 
 export const CpeIcon = ({name, ...props}) => {
@@ -43,7 +45,7 @@ export const CpeIcon = ({name, ...props}) => {
 };
 
 CpeIcon.propTypes = {
-  name: React.PropTypes.string,
+  name: PropTypes.string,
 };
 
 

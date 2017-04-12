@@ -26,11 +26,12 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_string} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
-export const FilterStringGroup = props => {
-  let {filter, onChange, name = 'filter'} = props;
+const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
   let filterstring = is_string(filter) ?
     filter : filter.toFilterCriteriaString();
   return (
@@ -46,12 +47,12 @@ export const FilterStringGroup = props => {
 };
 
 FilterStringGroup.propTypes = {
-  name: React.PropTypes.string,
-  filter: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.object,
-  ]),
-  onChange: React.PropTypes.func,
+  name: PropTypes.string,
+  filter: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.filter,
+  ]).isRequired,
+  onChange: PropTypes.func,
 };
 
 export default FilterStringGroup;

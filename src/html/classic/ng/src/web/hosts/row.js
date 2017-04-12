@@ -47,10 +47,10 @@ import TableRow from '../table/row.js';
 
 const Actions = ({
     entity,
-    onEntityDelete,
-    onEntityDownload,
     onCreateTarget,
     onEditHost,
+    onEntityDelete,
+    onEntityDownload,
   }, {capabilities}) => {
 
   let new_title;
@@ -88,15 +88,15 @@ const Actions = ({
 };
 
 Actions.propTypes = {
-  entity: React.PropTypes.object,
-  onEntityDelete: React.PropTypes.func,
-  onEntityDownload: React.PropTypes.func,
-  onCreateTarget: React.PropTypes.func,
-  onEditHost: React.PropTypes.func,
+  entity: PropTypes.model,
+  onEntityDelete: PropTypes.func,
+  onEntityDownload: PropTypes.func,
+  onCreateTarget: PropTypes.func,
+  onEditHost: PropTypes.func,
 };
 
 Actions.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 const Row = ({entity, links = true, actions, ...props}) => {
@@ -138,8 +138,8 @@ const Row = ({entity, links = true, actions, ...props}) => {
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: React.PropTypes.object,
-  links: React.PropTypes.bool,
+  entity: PropTypes.model,
+  links: PropTypes.bool,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

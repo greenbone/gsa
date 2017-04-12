@@ -70,7 +70,7 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
-  onNewPermissionClick: React.PropTypes.func,
+  onNewPermissionClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
@@ -152,10 +152,10 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func,
-  onEntitySave: React.PropTypes.func,
-  showError: React.PropTypes.func.isRequired,
-  showSuccess: React.PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
+  onEntitySave: PropTypes.func,
+  showError: PropTypes.func.isRequired,
+  showSuccess: PropTypes.func.isRequired,
 };
 
 const Table = createEntitiesTable({

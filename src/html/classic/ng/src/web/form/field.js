@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
 import {withChangeHandler} from './form.js';
@@ -32,20 +33,22 @@ import {withChangeHandler} from './form.js';
 const FieldComponent = ({className, value = '', ...props}) => {
   className = classes('form-control', className);
   return (
-    <input {...props} className={className} value={value}/>
+    <input
+      {...props}
+      className={className}
+      value={value}
+    />
   );
 };
 
 FieldComponent.propTypes = {
-  className: React.PropTypes.string,
-  value: React.PropTypes.any,
+  className: PropTypes.string,
+  value: PropTypes.any,
 };
 
-export const Field = withLayout(
+export default withLayout(
   withChangeHandler(FieldComponent),
   {box: true}
 );
-
-export default Field;
 
 // vim: set ts=2 sw=2 tw=80:

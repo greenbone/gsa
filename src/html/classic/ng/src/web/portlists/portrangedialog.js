@@ -83,10 +83,10 @@ const PortRangeDialog = ({
 PortRangeDialog.propTypes = {
   port_range_end: PropTypes.number,
   port_range_start: PropTypes.number,
-  port_type: React.PropTypes.oneOf([
+  port_type: PropTypes.oneOf([
     'tcp', 'udp',
   ]),
-  onValueChange: React.PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 

@@ -242,16 +242,16 @@ const Actions = ({
 };
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  links: React.PropTypes.bool,
-  onEditTaskClick: React.PropTypes.func,
-  onEntityClone: React.PropTypes.func,
-  onEntityDelete: React.PropTypes.func,
-  onEntityDownload: React.PropTypes.func,
-  onImportReportClick: React.PropTypes.func,
-  onResumeTaskClick: React.PropTypes.func,
-  onStartTaskClick: React.PropTypes.func,
-  onStopTaskClick: React.PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
+  onEditTaskClick: PropTypes.func,
+  onEntityClone: PropTypes.func,
+  onEntityDelete: PropTypes.func,
+  onEntityDownload: PropTypes.func,
+  onImportReportClick: PropTypes.func,
+  onResumeTaskClick: PropTypes.func,
+  onStartTaskClick: PropTypes.func,
+  onStopTaskClick: PropTypes.func,
 };
 
 Actions.contextTypes = {

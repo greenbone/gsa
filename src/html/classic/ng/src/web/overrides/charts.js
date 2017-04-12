@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,12 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-export const OverrideCharts = props => {
-  let {filter, cache} = props;
-
+export const OverrideCharts = ({filter, cache}) => {
   return (
     <div>
       <DataSource
@@ -80,8 +80,8 @@ export const OverrideCharts = props => {
 };
 
 OverrideCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
+  cache: PropTypes.object,
+  filter: PropTypes.model,
 };
 
 export default OverrideCharts;

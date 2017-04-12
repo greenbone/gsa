@@ -25,6 +25,7 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
 import {withChangeHandler} from './form.js';
@@ -39,15 +40,13 @@ const TextAreaComponent = ({className, value = '', ...props}) => {
 };
 
 TextAreaComponent.propTypes = {
-  className: React.PropTypes.string,
-  value: React.PropTypes.any,
+  className: PropTypes.string,
+  value: PropTypes.any,
 };
 
-export const TextArea = withLayout(
+export default withLayout(
   withChangeHandler(TextAreaComponent),
   {box: true}
 );
-
-export default TextArea;
 
 // vim: set ts=2 sw=2 tw=80:

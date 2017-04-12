@@ -26,11 +26,16 @@ import React from 'react';
 import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
-import {LabelHigh, LabelMedium, LabelLow, LabelLog, LabelFalsePositive
+import {
+  LabelFalsePositive,
+  LabelHigh,
+  LabelLog,
+  LabelLow,
+  LabelMedium,
 } from '../severityclasslabels.js';
 
-import FormGroup from '../form/formgroup.js';
 import Checkbox from '../form/checkbox.js';
+import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
 
 import ApplyOverridesGroup from '../powerfilter/applyoverridesgroup.js';
@@ -39,7 +44,9 @@ import FirstResultGroup from '../powerfilter/firstresultgroup.js';
 import MinQodGroup from '../powerfilter/minqodgroup.js';
 import ResultsPerPageGroup from '../powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../powerfilter/sortbygroup.js';
-import {withFilterDialog, DefaulFilterDialogPropTypes
+import {
+  DefaulFilterDialogPropTypes,
+  withFilterDialog,
 } from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
@@ -185,9 +192,6 @@ class ResultsFilterDialogComponent extends React.Component {
 
 ResultsFilterDialogComponent.propTypes = DefaulFilterDialogPropTypes;
 
-export const ResultsFilterDialog = withFilterDialog(
-  ResultsFilterDialogComponent);
-
-export default ResultsFilterDialog;
+export default withFilterDialog(ResultsFilterDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:

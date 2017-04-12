@@ -29,7 +29,7 @@ import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import Sort from '../sortby.js';
 
-export const TableHead = ({
+const TableHead = ({
     children,
     colSpan,
     rowSpan,
@@ -66,8 +66,8 @@ TableHead.propTypes = {
   colSpan: PropTypes.numberString,
   rowSpan: PropTypes.numberString,
   sortby: PropTypes.stringOrFalse,
-  width: React.PropTypes.string,
-  onSortChange: React.PropTypes.func,
+  width: PropTypes.string,
+  onSortChange: PropTypes.func,
 };
 
 export default TableHead;

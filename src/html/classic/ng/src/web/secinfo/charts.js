@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,13 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const SecinfoCharts = props => {
-  let {filter, cache} = props;
-
+const SecinfoCharts = ({filter, cache}) => {
   return (
     <div>
       <CommonCharts type="allinfo" titleType="SecInfo Items"
@@ -56,8 +56,8 @@ export const SecinfoCharts = props => {
 };
 
 SecinfoCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
+  cache: PropTypes.object,
+  filter: PropTypes.filter,
 };
 
 export default SecinfoCharts;

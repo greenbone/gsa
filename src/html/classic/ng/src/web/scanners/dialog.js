@@ -109,7 +109,7 @@ const CertStatus = ({
 };
 
 CertStatus.propTypes = {
-  info: React.PropTypes.object.isRequired,
+  info: PropTypes.object.isRequired,
 };
 
 
@@ -280,19 +280,19 @@ class ScannerDialog extends React.Component {
 }
 
 ScannerDialog.propTypes = {
-  comment: React.PropTypes.string,
+  comment: PropTypes.string,
   credentials: PropTypes.arrayLike,
   credential_id: PropTypes.id,
-  name: React.PropTypes.string,
-  host: React.PropTypes.string,
-  port: React.PropTypes.string,
+  name: PropTypes.string,
+  host: PropTypes.string,
+  port: PropTypes.string,
   scanner: PropTypes.model,
-  type: React.PropTypes.oneOf(scanner_types),
-  which_cert: React.PropTypes.oneOf([
+  type: PropTypes.oneOf(scanner_types),
+  which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),
-  onValueChange: React.PropTypes.func,
-  onNewCredentialClick: React.PropTypes.func,
+  onValueChange: PropTypes.func,
+  onNewCredentialClick: PropTypes.func,
 };
 
 export default withDialog(ScannerDialog, {

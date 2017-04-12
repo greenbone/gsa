@@ -205,7 +205,7 @@ const Row = ({
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: PropTypes.model,
+  entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
 

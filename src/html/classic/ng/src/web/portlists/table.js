@@ -77,9 +77,9 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
 
 Header.propTypes = {
   actions: PropTypes.componentOrFalse,
-  links: React.PropTypes.bool,
-  sort: React.PropTypes.bool,
-  onSortChange: React.PropTypes.func,
+  links: PropTypes.bool,
+  sort: PropTypes.bool,
+  onSortChange: PropTypes.func,
 };
 
 export default createEntitiesTable({

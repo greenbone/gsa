@@ -36,8 +36,15 @@ import TextField from '../form/textfield.js';
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
-const ContainerTaskDialog = ({onValueChange, name, comment, task, in_assets,
-    auto_delete, auto_delete_data = 5}) => {
+const ContainerTaskDialog = ({
+    auto_delete,
+    auto_delete_data = 5,
+    comment,
+    in_assets,
+    name,
+    task,
+    onValueChange,
+  }) => {
   return (
     <Layout flex="column">
       <FormGroup title={_('Name')}>
@@ -74,15 +81,15 @@ const ContainerTaskDialog = ({onValueChange, name, comment, task, in_assets,
 };
 
 ContainerTaskDialog.propTypes = {
-  task: React.PropTypes.object,
-  name: React.PropTypes.string,
-  comment: React.PropTypes.string,
+  task: PropTypes.model,
+  name: PropTypes.string,
+  comment: PropTypes.string,
   in_assets: PropTypes.yesno,
-  auto_delete: React.PropTypes.oneOf([
+  auto_delete: PropTypes.oneOf([
     'keep', 'no',
   ]),
   auto_delete_data: PropTypes.number,
-  onValueChange: React.PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 

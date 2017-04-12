@@ -25,6 +25,8 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 export const TableBody = ({className, ...props}) => {
   className = classes(className, 'table-body');
 
@@ -32,7 +34,7 @@ export const TableBody = ({className, ...props}) => {
 };
 
 TableBody.propTypes = {
-  className: React.PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default TableBody;

@@ -32,9 +32,7 @@ import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';
 import Text from '../form/text.js';
 
-export const MinQodGroup = props => {
-  let {qod, onChange, filter, name = 'min_qod'} = props;
-
+const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
   if (!is_defined(qod) && is_defined(filter)) {
     qod = filter.get('min_qod');
   }
@@ -54,10 +52,10 @@ export const MinQodGroup = props => {
 };
 
 MinQodGroup.propTypes = {
-  name: React.PropTypes.string,
+  name: PropTypes.string,
   qod: PropTypes.number,
-  filter: React.PropTypes.object,
-  onChange: React.PropTypes.func,
+  filter: PropTypes.filter,
+  onChange: PropTypes.func,
 };
 
 export default MinQodGroup;

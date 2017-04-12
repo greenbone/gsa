@@ -25,12 +25,12 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
+
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-export const OsCharts = props => {
-  let {filter, cache} = props;
-
+export const OsCharts = ({filter, cache}) => {
   return (
     <div>
       <DataSource
@@ -84,8 +84,8 @@ export const OsCharts = props => {
 };
 
 OsCharts.propTypes = {
-  cache: React.PropTypes.object,
-  filter: React.PropTypes.object,
+  cache: PropTypes.object,
+  filter: PropTypes.filter,
 };
 
 export default OsCharts;

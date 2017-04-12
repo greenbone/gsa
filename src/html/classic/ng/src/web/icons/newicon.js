@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from './icon.js';
 
 export const NewIcon = ({active = true, ...props}) => {
@@ -34,7 +36,9 @@ export const NewIcon = ({active = true, ...props}) => {
 };
 
 NewIcon.propTypes = {
-  active: React.PropTypes.bool,
+  active: PropTypes.bool,
 };
 
 export default NewIcon;
+
+// vim: set ts=2 sw=2 tw=80:

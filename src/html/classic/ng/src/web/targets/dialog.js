@@ -80,13 +80,29 @@ const NEW_SNMP = {
   types: SNMP_CREDENTIAL_TYPES,
 };
 
-const TargetDialog = ({name, comment = '', target_source,
-    hosts, exclude_hosts, reverse_lookup_only, reverse_lookup_unify,
-    port_list_id, port_lists, alive_tests, ssh_credential_id, credentials,
-    port, smb_credential_id, esxi_credential_id, snmp_credential_id,
-    hosts_count, onValueChange, onNewCredentialsClick, onNewPortListClick,
-    in_use = false, ...props},
-    {capabilities}) => {
+const TargetDialog = ({
+    alive_tests,
+    comment = '',
+    credentials,
+    esxi_credential_id,
+    exclude_hosts,
+    hosts,
+    hosts_count,
+    in_use = false,
+    name,
+    port,
+    port_list_id,
+    port_lists,
+    reverse_lookup_only,
+    reverse_lookup_unify,
+    smb_credential_id,
+    snmp_credential_id,
+    ssh_credential_id,
+    target_source,
+    onValueChange,
+    onNewCredentialsClick,
+    onNewPortListClick,
+  }, {capabilities}) => {
 
   let ssh_credentials = credentials.filter(ssh_credential_filter);
   let up_credentials = credentials.filter(value =>
@@ -322,18 +338,18 @@ const TargetDialog = ({name, comment = '', target_source,
 };
 
 TargetDialog.propTypes = {
-  name: React.PropTypes.string,
-  comment: React.PropTypes.string,
-  target_source: React.PropTypes.oneOf([
+  name: PropTypes.string,
+  comment: PropTypes.string,
+  target_source: PropTypes.oneOf([
     'manual', 'file', 'asset_hosts',
   ]),
-  alive_tests: React.PropTypes.oneOf(ALIVE_TESTS),
+  alive_tests: PropTypes.oneOf(ALIVE_TESTS),
   credentials: PropTypes.arrayLike,
   esxi_credential_id: PropTypes.idOrZero,
-  exclude_hosts: React.PropTypes.string,
-  hosts_count: React.PropTypes.number,
-  hosts: React.PropTypes.string,
-  in_use: React.PropTypes.bool,
+  exclude_hosts: PropTypes.string,
+  hosts_count: PropTypes.number,
+  hosts: PropTypes.string,
+  in_use: PropTypes.bool,
   port_list_id: PropTypes.idOrZero,
   port_lists: PropTypes.arrayLike,
   port: PropTypes.number,
@@ -342,13 +358,13 @@ TargetDialog.propTypes = {
   smb_credential_id: PropTypes.idOrZero,
   snmp_credential_id: PropTypes.idOrZero,
   ssh_credential_id: PropTypes.idOrZero,
-  onValueChange: React.PropTypes.func,
-  onNewCredentialsClick: React.PropTypes.func,
-  onNewPortListClick: React.PropTypes.func,
+  onValueChange: PropTypes.func,
+  onNewCredentialsClick: PropTypes.func,
+  onNewPortListClick: PropTypes.func,
 };
 
 TargetDialog.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withDialog(TargetDialog, {

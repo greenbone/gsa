@@ -102,7 +102,7 @@ const PortRangeTable = ({
 
 PortRangeTable.propTypes = {
   port_ranges: PropTypes.arrayLike,
-  onDeleteClick: React.PropTypes.func,
+  onDeleteClick: PropTypes.func,
 };
 
 const PortListsDialog = ({
@@ -192,14 +192,14 @@ const PortListsDialog = ({
 };
 
 PortListsDialog.propTypes = {
-  name: React.PropTypes.string,
-  comment: React.PropTypes.string,
+  name: PropTypes.string,
+  comment: PropTypes.string,
   from_file: PropTypes.yesno,
   port_list: PropTypes.model,
-  port_range: React.PropTypes.string,
-  onDeletePortRangeClick: React.PropTypes.func,
-  onNewPortRangeClick: React.PropTypes.func,
-  onValueChange: React.PropTypes.func,
+  port_range: PropTypes.string,
+  onDeletePortRangeClick: PropTypes.func,
+  onNewPortRangeClick: PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 

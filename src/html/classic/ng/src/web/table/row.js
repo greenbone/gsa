@@ -23,21 +23,22 @@
 
 import React from 'react';
 
-export const TableRow = props => {
-  let {items = [], ...other} = props;
+import PropTypes from '../proptypes.js';
+
+const TableRow = ({items = [], children, ...other}) => {
   let data = items.map((item, i) => {
     return <th key={i}>{item}</th>;
   });
   return (
     <tr {...other}>
       {data}
-      {props.children}
+      {children}
     </tr>
   );
 };
 
 TableRow.propTypes = {
-  items: React.PropTypes.array,
+  items: PropTypes.array,
 };
 
 export default TableRow;

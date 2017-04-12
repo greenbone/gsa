@@ -168,21 +168,21 @@ const ModifyTaskWizard = ({
 };
 
 ModifyTaskWizard.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 ModifyTaskWizard.propTypes = {
-  alert_email: React.PropTypes.string,
-  date: React.PropTypes.object,
-  reschedule: React.PropTypes.oneOf([
+  alert_email: PropTypes.string,
+  date: PropTypes.momentDate,
+  reschedule: PropTypes.oneOf([
     '0', '1',
   ]),
   start_hour: PropTypes.number,
   start_minute: PropTypes.number,
-  start_timezone: React.PropTypes.string,
+  start_timezone: PropTypes.string,
   task_id: PropTypes.id,
   tasks: PropTypes.arrayLike,
-  onValueChange: React.PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 

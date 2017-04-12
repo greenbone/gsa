@@ -183,17 +183,17 @@ const TagDialog = ({
 
 TagDialog.propTypes = {
   active: PropTypes.yesno,
-  comment: React.PropTypes.string,
-  name: React.PropTypes.string,
+  comment: PropTypes.string,
+  name: PropTypes.string,
   resource_id: PropTypes.id,
-  resource_type: React.PropTypes.string,
+  resource_type: PropTypes.string,
   tag: PropTypes.model,
-  value: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  value: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 TagDialog.contextTypes = {
-  capabilities: PropTypes.capabilities,
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withDialog(TagDialog, {

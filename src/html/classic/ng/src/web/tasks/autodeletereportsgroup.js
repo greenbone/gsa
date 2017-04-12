@@ -33,8 +33,11 @@ import Radio from '../form/radio.js';
 import Spinner from '../form/spinner.js';
 import Text from '../form/text.js';
 
-export const AutoDeleteReportsGroup = ({autoDelete, autoDeleteData,
-   onChange}) => {
+const AutoDeleteReportsGroup = ({
+    autoDelete,
+    autoDeleteData,
+    onChange,
+  }) => {
   return (
     <FormGroup title={_('Auto Delete Reports')} flex="column">
       <Radio
@@ -68,11 +71,11 @@ export const AutoDeleteReportsGroup = ({autoDelete, autoDeleteData,
 };
 
 AutoDeleteReportsGroup.propTypes = {
-  autoDelete: React.PropTypes.oneOf([
+  autoDelete: PropTypes.oneOf([
     'keep', 'no',
   ]),
   autoDeleteData: PropTypes.number,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default AutoDeleteReportsGroup;

@@ -59,7 +59,7 @@ const ToolBarIcons = ({onNewHostClick}) => {
 };
 
 ToolBarIcons.propTypes = {
-  onNewHostClick: React.PropTypes.func,
+  onNewHostClick: PropTypes.func,
 };
 
 const Dashboard = withDashboard(HostsCharts, {
@@ -166,15 +166,15 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  selectionType: PropTypes.number,
+  selectionType: PropTypes.string,
   entities: PropTypes.collection,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
-  onChanged: React.PropTypes.func,
+  onChanged: PropTypes.func,
 };
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default withEntitiesContainer(Page, 'host', {

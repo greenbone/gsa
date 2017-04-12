@@ -31,7 +31,7 @@ import PropTypes from '../proptypes.js';
 
 import Radio from './radio.js';
 
-export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
+const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
   value = parse_int(value);
   return (
     <Layout {...other} flex>
@@ -56,10 +56,10 @@ export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
 };
 
 YesNoRadio.propTypes = {
-  disabled: React.PropTypes.bool,
-  name: React.PropTypes.string,
-  value: PropTypes.number,
-  onChange: React.PropTypes.func,
+  disabled: PropTypes.bool,
+  name: PropTypes.string,
+  value: PropTypes.yesno,
+  onChange: PropTypes.func,
 };
 
 export default YesNoRadio;

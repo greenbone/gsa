@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-export const TableHeader = props => {
+const TableHeader = props => {
   return <thead {...props}/>;
 };
 

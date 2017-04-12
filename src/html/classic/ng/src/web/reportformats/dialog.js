@@ -80,9 +80,9 @@ const ReportFormatListParam = ({
 
 ReportFormatListParam.propTypes = {
   formats: PropTypes.arrayLike.isRequired,
-  idList: React.PropTypes.array.isRequired,
-  name: React.PropTypes.string.isRequired,
-  onValueChange: React.PropTypes.func.isRequired,
+  idList: PropTypes.array.isRequired,
+  name: PropTypes.string.isRequired,
+  onValueChange: PropTypes.func.isRequired,
 };
 
 const Param = ({
@@ -166,9 +166,9 @@ const Param = ({
 };
 
 Param.propTypes = {
-  data: React.PropTypes.object.isRequired,
-  value: React.PropTypes.object.isRequired,
-  onPrefChange: React.PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
+  value: PropTypes.object.isRequired,
+  onPrefChange: PropTypes.func.isRequired,
 };
 
 class Dialog extends React.Component {
@@ -302,12 +302,12 @@ class Dialog extends React.Component {
 Dialog.propTypes = {
   active: PropTypes.yesno,
   formats: PropTypes.arrayLike,
-  id_lists: React.PropTypes.object,
-  name: React.PropTypes.string,
-  preferences: React.PropTypes.object,
+  id_lists: PropTypes.object,
+  name: PropTypes.string,
+  preferences: PropTypes.object,
   reportformat: PropTypes.model,
-  summary: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  summary: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 export default withDialog(Dialog, {

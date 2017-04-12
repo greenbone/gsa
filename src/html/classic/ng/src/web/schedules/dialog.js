@@ -145,21 +145,21 @@ const ScheduleDialog = ({
 };
 
 ScheduleDialog.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 ScheduleDialog.propTypes = {
-  comment: React.PropTypes.string,
+  comment: PropTypes.string,
   date: PropTypes.momentDate,
-  duration: React.PropTypes.number,
+  duration: PropTypes.number,
   duration_unit: PropTypes.timeunit,
-  hour: React.PropTypes.number,
-  minute: React.PropTypes.number,
-  name: React.PropTypes.string,
-  period: React.PropTypes.number,
+  hour: PropTypes.number,
+  minute: PropTypes.number,
+  name: PropTypes.string,
+  period: PropTypes.number,
   period_unit: PropTypes.timeunit,
-  timezone: React.PropTypes.string,
-  onValueChange: React.PropTypes.func,
+  timezone: PropTypes.string,
+  onValueChange: PropTypes.func,
 };
 
 

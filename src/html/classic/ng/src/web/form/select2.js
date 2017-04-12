@@ -26,6 +26,7 @@ import $ from 'jquery';
 
 import {is_defined, is_array} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
 import 'select2';
@@ -137,15 +138,13 @@ class Select2Component extends React.Component {
 }
 
 Select2Component.propTypes = {
-  disabled: React.PropTypes.bool,
-  name: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  value: React.PropTypes.any,
-  className: React.PropTypes.string
+  disabled: PropTypes.bool,
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+  value: PropTypes.any,
+  className: PropTypes.string
 };
 
-export const Select2 = withLayout(Select2Component, {box: true});
-
-export default Select2;
+export default withLayout(Select2Component, {box: true});
 
 // vim: set ts=2 sw=2 tw=80:

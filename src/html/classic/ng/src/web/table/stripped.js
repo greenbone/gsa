@@ -25,11 +25,11 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import Table from './table.js';
 
-export const StrippedTable = props => {
-  let {className, ...other} = props;
-
+const StrippedTable = ({className, ...other}) => {
   className = classes(className, 'table-stripped');
   return (
     <Table className={className} {...other}/>
@@ -37,7 +37,7 @@ export const StrippedTable = props => {
 };
 
 StrippedTable.propTypes = {
-  className: React.PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default StrippedTable;

@@ -46,8 +46,13 @@ import ExportIcon from '../icons/exporticon.js';
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
 
-const IconActions = ({entity, onEntityDelete, onEntityDownload,
-    onEntityClone, onEditTarget}) => {
+const IconActions = ({
+    entity,
+    onEditTarget,
+    onEntityClone,
+    onEntityDelete,
+    onEntityDownload,
+  }) => {
   return (
     <Layout flex align={['center', 'center']}>
       <TrashIcon
@@ -78,10 +83,10 @@ const IconActions = ({entity, onEntityDelete, onEntityDownload,
 
 IconActions.propTypes = {
   entity: PropTypes.model,
-  onEntityDelete: React.PropTypes.func,
-  onEntityDownload: React.PropTypes.func,
-  onEditTarget: React.PropTypes.func,
-  onEntityClone: React.PropTypes.func,
+  onEntityDelete: PropTypes.func,
+  onEntityDownload: PropTypes.func,
+  onEditTarget: PropTypes.func,
+  onEntityClone: PropTypes.func,
 };
 
 const Cred = ({cred, title, links}) => {
@@ -105,8 +110,8 @@ const Cred = ({cred, title, links}) => {
 
 Cred.propTypes = {
   cred: PropTypes.model,
-  links: React.PropTypes.bool,
-  title: React.PropTypes.string,
+  links: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 
@@ -162,14 +167,14 @@ const Row = ({
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
-  links: React.PropTypes.bool,
+  links: PropTypes.bool,
 };
 
 Row.contextTypes = {
-  capabilities: React.PropTypes.object.isRequired,
-  username: React.PropTypes.string.isRequired,
+  capabilities: PropTypes.capabilities.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
-const Actions = withEntityActions(IconActions);
+export default withEntityRow(Row, withEntityActions(IconActions));
 
-export default withEntityRow(Row, Actions);
+// vim: set ts=2 sw=2 tw=80:

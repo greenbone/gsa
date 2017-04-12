@@ -25,6 +25,7 @@ import React from 'react';
 
 import {classes, is_defined} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
 import {withChangeHandler} from './form.js';
@@ -44,7 +45,7 @@ const convert_checked = (value, props) => {
   return value;
 };
 
-export const CheckboxComponent = ({
+const CheckboxComponent = ({
     title,
     className,
     children,
@@ -72,21 +73,19 @@ export const CheckboxComponent = ({
 };
 
 CheckboxComponent.propTypes = {
-  name: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  title: React.PropTypes.string,
-  className: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  checkedValue: React.PropTypes.any,
-  unCheckedValue: React.PropTypes.any,
+  name: PropTypes.string,
+  disabled: PropTypes.bool,
+  title: PropTypes.string,
+  className: PropTypes.string,
+  onChange: PropTypes.func,
+  checkedValue: PropTypes.any,
+  unCheckedValue: PropTypes.any,
 };
 
-export const Checkbox = withLayout(
+export default withLayout(
   withChangeHandler(CheckboxComponent, convert_checked,
     event => event.target.checked),
   {box: true}
 );
-
-export default Checkbox;
 
 // vim: set ts=2 sw=2 tw=80:

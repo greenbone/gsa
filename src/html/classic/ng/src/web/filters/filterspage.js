@@ -182,7 +182,7 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  entityCommand: PropTypes.entitycommand.isRequired,
+  entityCommand: PropTypes.entitycommand,
   onChanged: PropTypes.func.isRequired,
 };
 

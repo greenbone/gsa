@@ -23,10 +23,11 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
+
 import Icon from '../icons/icon.js';
 
-const Trend = props => {
-  let {name} = props;
+const Trend = ({name}) => {
   let title;
   let img;
 
@@ -55,12 +56,17 @@ const Trend = props => {
   }
 
   return (
-    <Icon img={img} size="small" alt={title} title={title}/>
+    <Icon
+      img={img}
+      size="small"
+      alt={title}
+      title={title}
+    />
   );
 };
 
 Trend.propTypes = {
-  name: React.PropTypes.string,
+  name: PropTypes.string,
 };
 
 export default Trend;

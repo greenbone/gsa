@@ -71,7 +71,7 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
-  onNewScheduleClick: React.PropTypes.func,
+  onNewScheduleClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
@@ -158,13 +158,13 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: React.PropTypes.func,
-  showError: React.PropTypes.func.isRequired,
-  showSuccess: React.PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
+  showError: PropTypes.func.isRequired,
+  showSuccess: PropTypes.func.isRequired,
 };
 
 Page.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: PropTypes.gmp.isRequired,
 };
 
 const Table = createEntitiesTable({

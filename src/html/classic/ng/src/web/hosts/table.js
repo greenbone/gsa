@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import PropTypes from '../proptypes.js';
 import SelectionType from '../selectiontype.js';
 
 import EntitiesFooter, {withEntitiesFooter} from '../entities/footer.js';
@@ -83,10 +84,10 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
 };
 
 Header.propTypes = {
-  actions: React.PropTypes.element,
-  links: React.PropTypes.bool,
-  sort: React.PropTypes.bool,
-  onSortChange: React.PropTypes.func,
+  actions: PropTypes.element,
+  links: PropTypes.bool,
+  sort: PropTypes.bool,
+  onSortChange: PropTypes.func,
 };
 
 const HostsHeader = withEntitiesHeader(Header);
@@ -112,8 +113,8 @@ const Footer = ({onCreateTargetSelection, selectionType, ...props}) => {
 };
 
 Footer.propTypes = {
-  selectionType: React.PropTypes.string,
-  onCreateTargetSelection: React.PropTypes.func,
+  selectionType: PropTypes.string,
+  onCreateTargetSelection: PropTypes.func,
 };
 
 

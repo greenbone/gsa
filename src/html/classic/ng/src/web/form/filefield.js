@@ -33,12 +33,10 @@ const FileFieldComponent = props => {
   );
 };
 
-export const FileField = withLayout(
+export default withLayout(
   withChangeHandler(FileFieldComponent, value => value,
     event => event.target.files[0]),
   {box: true}
 );
-
-export default FileField;
 
 // vim: set ts=2 sw=2 tw=80:

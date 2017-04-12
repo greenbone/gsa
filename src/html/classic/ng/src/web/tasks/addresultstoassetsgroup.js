@@ -43,7 +43,7 @@ export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
 
 AddResultsToAssetsGroup.propTypes = {
   inAssets: PropTypes.yesno,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default AddResultsToAssetsGroup;

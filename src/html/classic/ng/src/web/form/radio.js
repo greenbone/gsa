@@ -25,6 +25,7 @@ import React from 'react';
 
 import {classes, is_defined} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
 import {withChangeHandler} from './form.js';
@@ -32,16 +33,18 @@ import {withChangeHandler} from './form.js';
 import './css/form.css';
 import './css/checkboxradio.css';
 
-const RadioComponent = props => {
-
-  let {title, children, className, disabled, ...other} = props;
+const RadioComponent = ({title, children, className, disabled, ...other}) => {
 
   className = classes(className, 'radio', disabled ? 'disabled' : '');
 
   return (
     <div className={className}>
       <label>
-        <input {...other} disabled={disabled} type="radio"/>
+        <input
+          {...other}
+          disabled={disabled}
+          type="radio"
+        />
         {is_defined(title) &&
           <span>
             {title}
@@ -54,16 +57,14 @@ const RadioComponent = props => {
 };
 
 RadioComponent.propTypes = {
-  name: React.PropTypes.string,
-  className: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  title: React.PropTypes.string,
-  onChange: React.PropTypes.func,
+  name: PropTypes.string,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  title: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
-export const Radio = withLayout(withChangeHandler(RadioComponent),
+export default withLayout(withChangeHandler(RadioComponent),
   {align: ['start', 'center'], box: true, flex: true});
-
-export default Radio;
 
 // vim: set ts=2 sw=2 tw=80:

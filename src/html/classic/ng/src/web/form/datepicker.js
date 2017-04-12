@@ -107,9 +107,9 @@ class DatePicker extends React.Component {
 }
 
 DatePicker.propTypes = {
-  name: React.PropTypes.string,
+  name: PropTypes.string,
   value: PropTypes.momentDate.isRequired,
-  onChange: React.PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default DatePicker;

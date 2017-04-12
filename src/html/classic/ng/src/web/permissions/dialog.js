@@ -324,21 +324,21 @@ const PermissionDialog = ({
 };
 
 PermissionDialog.propTypes = {
-  comment: React.PropTypes.string,
+  comment: PropTypes.string,
   groups: PropTypes.arrayLike,
-  name: React.PropTypes.string,
+  name: PropTypes.string,
   permission: PropTypes.model,
   group_id: PropTypes.id,
   role_id: PropTypes.id,
   user_id: PropTypes.id,
-  resource_id: React.PropTypes.string,
-  resource_type: React.PropTypes.string,
+  resource_id: PropTypes.string,
+  resource_type: PropTypes.string,
   roles: PropTypes.arrayLike,
-  subject_type: React.PropTypes.oneOf([
+  subject_type: PropTypes.oneOf([
     'user', 'role', 'group',
   ]),
   users: PropTypes.arrayLike,
-  onValueChange: React.PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 PermissionDialog.contextTypes = {
