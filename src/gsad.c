@@ -3548,7 +3548,6 @@ main (int argc, char **argv)
 
   /* Wait forever for input or interrupts. */
 
-
   if (sigfillset (&sigmask_all))
     {
       g_critical ("%s: Error filling signal set\n", __FUNCTION__);

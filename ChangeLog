@@ -1,5 +1,9 @@
 2017-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c: Remove extra space.
+
+2017-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add ability to enable or disable alerts.
 
 	* src/gsad_gmp.c (create_alert_gmp, save_alert_gmp): Handle new alert
