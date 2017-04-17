@@ -8141,7 +8141,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   int ret;
   gchar *html, *response;
   const char *no_redirect;
-  const char *name, *comment, *condition, *event, *method, *filter_id;
+  const char *name, *comment, *active, *condition, *event, *method, *filter_id;
   params_t *method_data, *event_data, *condition_data;
   entity_t entity;
   GString *xml;
@@ -8149,12 +8149,14 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
+  active = params_value (params, "active");
   condition = params_value (params, "condition");
   event = params_value (params, "event");
   method = params_value (params, "method");
   filter_id = params_value (params, "filter_id");
 
   CHECK_PARAM_INVALID (name, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (active, "Create Alert", "new_alert");
   CHECK_PARAM_INVALID (comment, "Create Alert", "new_alert");
   CHECK_PARAM_INVALID (condition, "Create Alert", "new_alert");
   CHECK_PARAM_INVALID (event, "Create Alert", "new_alert");
@@ -8190,10 +8192,12 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                      "<create_alert>"
                      "<name>%s</name>"
                      "<filter id=\"%s\"/>"
+                     "<active>%s</active>"
                      "<comment>%s</comment>"
                      "<event>%s",
                      name,
                      filter_id,
+                     active,
                      comment ? comment : "",
                      event);
 
@@ -8870,7 +8874,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   gchar *html, *response;
   const char *no_redirect, *name, *comment, *alert_id;
   const char *event, *condition, *method;
-  const char *filter_id;
+  const char *filter_id, *active;
   params_t *event_data, *condition_data, *method_data;
   entity_t entity;
 
@@ -8882,6 +8886,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   method = params_value (params, "method");
   alert_id = params_value (params, "alert_id");
   filter_id = params_value (params, "filter_id");
+  active = params_value (params, "active");
 
   CHECK_PARAM_INVALID (name, "Save Alert", "edit_alert");
   CHECK_PARAM_INVALID (comment, "Save Alert", "edit_alert");
@@ -8890,6 +8895,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK_PARAM_INVALID (event, "Save Alert", "edit_alert");
   CHECK_PARAM_INVALID (method, "Save Alert", "edit_alert");
   CHECK_PARAM_INVALID (filter_id, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (active, "Save Alert", "edit_alert");
 
   xml = g_string_new ("");
 
@@ -8920,11 +8926,13 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      "<modify_alert alert_id=\"%s\">"
                      "<name>%s</name>"
                      "<filter id=\"%s\"/>"
+                     "<active>%s</active>"
                      "<comment>%s</comment>"
                      "<event>%s",
                      alert_id,
                      name,
                      filter_id,
+                     active,
                      comment ? comment : "",
                      event);
 

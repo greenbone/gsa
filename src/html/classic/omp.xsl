@@ -10283,6 +10283,20 @@ should not have received it.
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Active')"/></label>
+          <div class="col-10">
+            <label>
+              <input type="radio" name="active" value="1" checked="1"/>
+              <xsl:value-of select="gsa:i18n ('Yes')"/>
+            </label>
+            <label>
+              <input type="radio" name="active" value="0"/>
+              <xsl:value-of select="gsa:i18n ('No')"/>
+            </label>
+          </div>
+        </div>
+
       </form>
     </div>
   </div>
@@ -11364,6 +11378,34 @@ should not have received it.
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Active')"/></label>
+          <div class="col-10">
+            <label>
+              <xsl:choose>
+                <xsl:when test="get_alerts_response/alert/active != 0">
+                  <input type="radio" name="active" value="1" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="active" value="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="gsa:i18n ('Yes')"/>
+            </label>
+            <label>
+              <xsl:choose>
+                <xsl:when test="get_alerts_response/alert/active = 0">
+                  <input type="radio" name="active" value="0" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="active" value="0"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="gsa:i18n ('No')"/>
+            </label>
+          </div>
+        </div>
+
       </form>
     </div>
   </div>
@@ -12327,6 +12369,15 @@ should not have received it.
           </td>
         </tr>
       </xsl:if>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Active', 'Alert')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="active = 0"><xsl:value-of select="gsa:i18n ('No')"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="gsa:i18n ('Yes')"/></xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
     </table>
   </div>
 

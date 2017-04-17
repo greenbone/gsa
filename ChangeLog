@@ -1,3 +1,13 @@
+2017-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add ability to enable or disable alerts.
+
+	* src/gsad_gmp.c (create_alert_gmp, save_alert_gmp): Handle new alert
+	state "active".
+
+	* src/html/classic/omp.xsl (html-create-alert-form, html-edit-alert-form)
+	(alert [details]): Add alert active field.
+
 2017-04-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/section.js: Update coding style of SectionHeader
