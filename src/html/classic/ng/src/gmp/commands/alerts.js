@@ -68,11 +68,12 @@ export class AlertCommand extends EntityCommand {
   }
 
   create(args) {
-    let {name, comment = '', event, condition, filter_id, method,
+    let {active, name, comment = '', event, condition, filter_id, method,
       ...other} = args;
     let data = extend({
       cmd: 'create_alert',
       next: 'get_alert',
+      active,
       name,
       comment,
       event,
@@ -87,12 +88,13 @@ export class AlertCommand extends EntityCommand {
   }
 
   save(args) {
-    let {id, name, comment = '', event, condition, filter_id, method,
+    let {active, id, name, comment = '', event, condition, filter_id, method,
       ...other} = args;
     let data = extend({
       cmd: 'save_alert',
       next: 'get_alert',
       id,
+      active,
       name,
       comment,
       event,

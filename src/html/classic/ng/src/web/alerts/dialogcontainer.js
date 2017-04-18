@@ -236,6 +236,7 @@ export class AlertDialogContainer extends React.Component {
         this.alert_dialog.show({
           id: alert.id,
           alert,
+          active: alert.active,
           name: alert.name,
           comment: alert.comment,
           filters,

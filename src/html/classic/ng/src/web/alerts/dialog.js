@@ -36,6 +36,7 @@ import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 import Radio from '../form/radio.js';
+import YesNoRadio from '../form/yesnoradio.js';
 
 import HttpMethodPart from './httpmethodpart.js';
 import ScpMethodPart from './scpmethodpart.js';
@@ -203,6 +204,7 @@ class AlertDialog extends React.Component {
 
   render() {
     let {
+      active,
       name,
       comment,
       condition,
@@ -473,12 +475,21 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         }
 
+        <FormGroup title={_('Active')}>
+          <YesNoRadio
+            name="active"
+            value={active}
+            onChange={onValueChange}
+          />
+        </FormGroup>
+
       </Layout>
     );
   }
 }
 
 AlertDialog.propTypes = {
+  active: PropTypes.yesno,
   name: PropTypes.string,
   comment: PropTypes.string,
   condition: PropTypes.string,
@@ -540,6 +551,7 @@ export default withDialog(AlertDialog, {
   title: _('New Alert'),
   footer: _('Save'),
   defaultState: {
+    active: 1,
     comment: '',
     condition: 'Always',
     condition_data_at_least_count: 1,

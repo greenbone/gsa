@@ -1,3 +1,10 @@
+2017-04-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/commands/alerts.js,
+	src/html/classic/ng/src/web/alerts/dialog.js
+	src/html/classic/ng/src/web/alerts/dialogcontainer.js: Allow to edit new
+	active status of Alerts in ng.
+
 2017-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c: Remove extra space.
