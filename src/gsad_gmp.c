@@ -25362,7 +25362,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   int ret;
   entity_t entity = NULL;
   char *html, *response = NULL, *truefalse;
-  const char *no_redirect, *method;
+  const char *no_redirect, *method, *name;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -25376,6 +25376,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   if (!strcmp (method, "method:ldap_connect"))
     {
       const char *ldaphost, *authdn, *certificate;
+      name = "ldap";
       ldaphost = params_value (params, "ldaphost");
       authdn = params_value (params, "authdn");
       certificate = params_value (params, "certificate");
@@ -25412,6 +25413,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   else if (!strcmp (method, "method:radius_connect"))
     {
       const char *radiushost, *radiuskey;
+      name = "radius";
       radiushost = params_value (params, "radiushost");
       radiuskey = params_value (params, "radiuskey");
 
@@ -25464,13 +25466,15 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                              "/omp?cmd=get_users", response_data);
     }
 
+  gchar* next_url = g_strdup_printf ("auth_settings&name=%s", name);
   html = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, NULL,
+                              NULL, next_url,
                               NULL, "modify_auth",
                               "Save Authentication Configuration",
                               response_data);
   free_entity (entity);
+  g_free (next_url);
   g_free (response);
   return html;
 }
