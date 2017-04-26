@@ -19506,7 +19506,7 @@ should not have received it.
        data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type={$type}">
       <img src="/img/new.svg"/>
     </a>
-    <xsl:if test="string-length ($credential_id) &gt; 0">
+    <xsl:if test="(string-length ($credential_id) &gt; 0) and ($type = 'cc')">
       <p class="footnote" style="margin-top:3px;">
         <a href="/omp?cmd=download_credential&amp;credential_id={$credential_id}&amp;package_format=pem&amp;token={/envelope/token}"
           title="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"
@@ -19664,22 +19664,24 @@ should not have received it.
           <tr>
             <xsl:call-template name="html-edit-scanner-form-ca-cert"/>
           </tr>
-          <tr class="form-selection-item-scanner form-selection-item-scanner--1">
-            <xsl:call-template name="html-edit-scanner-form-credentials">
-              <xsl:with-param name="type" select="'cc'"/>
-              <xsl:with-param
-                name="input-classes"
-                select="'form-selection-input-scanner form-selection-input-scanner--1'"/>
-            </xsl:call-template>
-          </tr>
-          <tr class="form-selection-item-scanner form-selection-item-scanner--2">
-            <xsl:call-template name="html-edit-scanner-form-credentials">
-              <xsl:with-param name="type" select="'cc'"/>
-              <xsl:with-param
-                name="input-classes"
-                select="'form-selection-input-scanner form-selection-input-scanner--2'"/>
-            </xsl:call-template>
-          </tr>
+          <xsl:if test="not (gsa:is_absolute_path (commands_response/get_scanners_response/scanner/host))">
+            <tr class="form-selection-item-scanner form-selection-item-scanner--1">
+              <xsl:call-template name="html-edit-scanner-form-credentials">
+                <xsl:with-param name="type" select="'cc'"/>
+                <xsl:with-param
+                  name="input-classes"
+                  select="'form-selection-input-scanner form-selection-input-scanner--1'"/>
+              </xsl:call-template>
+            </tr>
+            <tr class="form-selection-item-scanner form-selection-item-scanner--2">
+              <xsl:call-template name="html-edit-scanner-form-credentials">
+                <xsl:with-param name="type" select="'cc'"/>
+                <xsl:with-param
+                  name="input-classes"
+                  select="'form-selection-input-scanner form-selection-input-scanner--2'"/>
+              </xsl:call-template>
+            </tr>
+          </xsl:if>
           <tr class="form-selection-item-scanner form-selection-item-scanner--4">
             <xsl:call-template name="html-edit-scanner-form-credentials">
               <xsl:with-param name="type" select="'up'"/>
