@@ -2646,8 +2646,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       if (severity)
         /* credentials->severity set in save_my_settings_omp before XSLT. */
         user_set_severity (credentials->token, severity);
-      /* credentials->language is set in save_my_settings_omp before XSLT. */
-      user_set_language (credentials->token, language);
+      if (language)
+        /* credentials->language is set in save_my_settings_omp before XSLT. */
+        user_set_language (credentials->token, language);
 
       g_free (timezone);
       g_free (password);
