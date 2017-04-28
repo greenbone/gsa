@@ -1702,8 +1702,9 @@ exec_gmp_post (http_connection_t *con,
       if (severity)
         /* credentials->severity set in save_my_settings_gmp before XSLT. */
         user_set_severity (credentials->token, severity);
-      /* credentials->language is set in save_my_settings_gmp before XSLT. */
-      user_set_language (credentials->token, language);
+      if (language)
+        /* credentials->language is set in save_my_settings_omp before XSLT. */
+        user_set_language (credentials->token, language);
 
       g_free (timezone);
       g_free (password);
