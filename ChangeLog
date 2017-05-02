@@ -1,3 +1,11 @@
+2017-05-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css: Add new ruleset for svg element to
+	set overflow to hidden.
+
+	* src/html/classic/ng/src/web/css/gsa-base.css: Add new ruleset for svg
+	element to set overflow to hidden.
+
 2017-04-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (exec_gmp_post): Do not overwrite user's language if none

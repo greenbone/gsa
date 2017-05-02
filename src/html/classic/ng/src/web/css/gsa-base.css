@@ -72,6 +72,10 @@ img {
   border: 0px;
 }
 
+svg {
+  overflow: hidden;
+}
+
 h1 {
   font-size: 20px;
 }
