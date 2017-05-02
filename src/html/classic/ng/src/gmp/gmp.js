@@ -46,6 +46,7 @@ import './commands/reportformats.js';
 import './commands/reports.js';
 import './commands/results.js';
 import './commands/roles.js';
+import './commands/scanconfigs.js';
 import './commands/scanners.js';
 import './commands/schedules.js';
 import './commands/secinfo.js';

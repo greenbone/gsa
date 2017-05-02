@@ -1,5 +1,10 @@
 2017-05-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/scanconfigs.js,
+	src/html/classic/ng/src/gmp/gmp.js: Add gmp api draft for scan configs.
+
+2017-05-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/scanconfig.js: Use strings for scan
 	config type constants. Update ScanConfig model for additional counts.
 
