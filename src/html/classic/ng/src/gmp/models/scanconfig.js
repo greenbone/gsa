@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, parse_int} from '../../utils.js';
+import {is_defined, is_empty, parse_int, map} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -29,8 +29,8 @@ export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =
   'daba56c8-73ec-11df-a475-002264764cea';
 
-export const OSP_SCAN_CONFIG_TYPE = 1;
-export const OPENVAS_SCAN_CONFIG_TYPE = 0;
+export const OSP_SCAN_CONFIG_TYPE = '1';
+export const OPENVAS_SCAN_CONFIG_TYPE = '0';
 
 const parse_count = count => {
   return !is_empty(count) && count !== '-1' ? parse_int(count) : undefined;
@@ -40,15 +40,30 @@ export class ScanConfig extends Model {
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
-    if (is_defined(ret.family_count)) {
-      ret.families = {
-        count: parse_count(ret.family_count.__text),
-        trend: ret.family_count.growing,
-      };
-      delete ret.family_count;
+
+    if (is_defined(ret.families)) {
+     ret.families = map(ret.families.family, family => {
+        return {
+          name: family.name,
+          trend: family.growing,
+          nvts: {
+            count: parse_count(family.nvt_count),
+            max: parse_count(family.max_nvt_count),
+          }
+        };
+      });
     }
     else {
-      ret.families = {};
+      ret.families = {
+        length: 0,
+      };
+    }
+
+    if (is_defined(ret.family_count)) {
+      ret.families.count = parse_count(ret.family_count.__text);
+      ret.families.trend = ret.family_count.growing;
+
+      delete ret.family_count;
     }
 
     if (is_defined(ret.nvt_count)) {
@@ -56,7 +71,18 @@ export class ScanConfig extends Model {
         count: parse_count(ret.nvt_count.__text),
         trend: ret.nvt_count.growing,
       };
+
       delete ret.nvt_count;
+
+      if (is_defined(ret.known_nvt_count)) {
+        ret.nvts.known = parse_count(ret.known_nvt_count);
+        delete ret.known_nvt_count;
+      }
+
+      if (is_defined(ret.max_nvt_count)) {
+        ret.nvts.max = parse_count(ret.max_nvt_count);
+        delete ret.max_nvt_count;
+      }
     }
     else {
       ret.nvts = {};
