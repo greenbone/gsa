@@ -317,13 +317,23 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/results/resultspage.js
      ${NG_SRC_DIR}/src/web/results/row.js
      ${NG_SRC_DIR}/src/web/results/table.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/dialog.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/editdialog.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/header.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/importdialog.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/row.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/scanconfigspage.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/trend.js
+     ${NG_SRC_DIR}/src/web/scanners/dialog.js
+     ${NG_SRC_DIR}/src/web/scanners/row.js
+     ${NG_SRC_DIR}/src/web/scanners/scannerspage.js
      ${NG_SRC_DIR}/src/web/scanspage.js
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/schedules/row.js
      ${NG_SRC_DIR}/src/web/schedules/schedulespage.js
-     ${NG_SRC_DIR}/src/web/secinfopage.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/secinfo/filterdialog.js
+     ${NG_SRC_DIR}/src/web/secinfopage.js
      ${NG_SRC_DIR}/src/web/secinfo/row.js
      ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
      ${NG_SRC_DIR}/src/web/secinfo/table.js
