@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, parse_int, map} from '../../utils.js';
+import {is_defined, is_empty, parse_int, for_each} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -32,7 +32,7 @@ export const FULL_AND_FAST_SCAN_CONFIG_ID =
 export const OSP_SCAN_CONFIG_TYPE = '1';
 export const OPENVAS_SCAN_CONFIG_TYPE = '0';
 
-const parse_count = count => {
+export const parse_count = count => {
   return !is_empty(count) && count !== '-1' ? parse_int(count) : undefined;
 };
 
@@ -41,30 +41,33 @@ export class ScanConfig extends Model {
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
-    if (is_defined(ret.families)) {
-     ret.families = map(ret.families.family, family => {
-        return {
-          name: family.name,
+    let families = {};
+
+    if (is_defined(elem.families)) {
+      for_each(elem.families.family, family => {
+        let {name} = family;
+        families[name] = {
+          name,
           trend: family.growing,
           nvts: {
             count: parse_count(family.nvt_count),
             max: parse_count(family.max_nvt_count),
-          }
+          },
         };
       });
     }
-    else {
-      ret.families = {
-        length: 0,
-      };
-    }
 
     if (is_defined(ret.family_count)) {
-      ret.families.count = parse_count(ret.family_count.__text);
-      ret.families.trend = ret.family_count.growing;
+      families.count = parse_count(ret.family_count.__text);
+      families.trend = ret.family_count.growing;
 
       delete ret.family_count;
     }
+    else {
+      families.count = 0;
+    }
+
+    ret.families = families;
 
     if (is_defined(ret.nvt_count)) {
       ret.nvts = {
@@ -87,6 +90,31 @@ export class ScanConfig extends Model {
     else {
       ret.nvts = {};
     }
+
+    let nvt_preferences = [];
+    let scanner_preferences = [];
+
+    if (is_defined(elem.preferences)) {
+      for_each(elem.preferences.preference, preference => {
+        if (is_empty(preference.nvt.name)) {
+          delete preference.nvt;
+
+          scanner_preferences.push(preference);
+        }
+        else {
+          preference.nvt.oid = preference.nvt._oid;
+          delete preference.nvt._oid;
+
+          nvt_preferences.push(preference);
+        }
+      });
+    }
+
+    ret.preferences = {
+      scanner: scanner_preferences,
+      nvt: nvt_preferences,
+    };
+
     return ret;
   }
 }

@@ -22,12 +22,31 @@
  */
 
 import logger from '../../log.js';
+import {extend, map} from '../../utils.js';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
-import ScanConfig from '../models/scanconfig.js';
+import ScanConfig, {parse_count} from '../models/scanconfig.js';
 
 const log = logger.getLogger('gmp.commands.scanconfigs');
+
+const convert = (values, prefix) => {
+  let ret = {};
+  for (let [key, value] of Object.entries(values)) {
+    ret[prefix + key] = value;
+  }
+  return ret;
+};
+
+const convert_select = values => {
+  let ret = {};
+  for (let [key, value] of Object.entries(values)) {
+    if (value === '1') {
+      ret['select:' + key] = value;
+    }
+  }
+  return ret;
+};
 
 export class ScanConfigCommand extends EntityCommand {
 
@@ -59,7 +78,56 @@ export class ScanConfigCommand extends EntityCommand {
       name,
       scanner_id,
     };
+    log.debug('Creating scanconfig', data);
     return this.httpPost(data).then(this.transformResponse);
+  }
+
+  save({
+    id,
+    name,
+    comment = '',
+    trend,
+    select,
+    scanner_preference_values,
+  }) {
+    const data = extend({
+      cmd: 'save_config',
+      next: 'get_config',
+      id,
+      comment,
+      name,
+    },
+      convert(trend, 'trend:'),
+      convert(scanner_preference_values, 'preference:scanner[scanner]:'),
+      convert_select(select),
+    );
+    log.debug('Saving scanconfig', data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
+  editScanConfigSettings({id}) { // should be removed in future an splitted into several api calls
+    return this.httpGet({
+      cmd: 'edit_config',
+      id,
+    }).then(response => {
+      let {data} = response;
+      let config_resp = data.get_config_response;
+      let settings = {};
+
+      settings.scanconfig = new ScanConfig(
+        config_resp.get_configs_response.config);
+
+      settings.families = map(
+        config_resp.get_nvt_families_response.families.family,
+        family => {
+          return {
+            name: family.name,
+            max: parse_count(family.max_nvt_count),
+          };
+        });
+
+      return response.setData(settings);
+    });
   }
 
   getElementFromRoot(root) {
