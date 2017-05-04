@@ -39,7 +39,7 @@ export class ScheduleCommand extends EntityCommand {
     let {name, comment = '', hour, minute, timezone, date,
       period, period_unit, duration, duration_unit} = args;
     let day_of_month = date.day();
-    let month = date.month();
+    let month = date.month() + 1;
     let year = date.year();
     log.debug('Creating new schedule', args);
     return this.httpPost({
@@ -65,7 +65,7 @@ export class ScheduleCommand extends EntityCommand {
       period, period_unit, duration, duration_unit} = args;
 
     let day_of_month = date.day();
-    let month = date.month();
+    let month = date.month() + 1;
     let year = date.year();
 
     let data = {

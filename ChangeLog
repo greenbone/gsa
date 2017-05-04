@@ -1,3 +1,13 @@
+2017-05-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/commands/schedules.js
+	(ScheduleCommand.create, ScheduleCommand.save): Add 1 to month returned
+	by date object because counting starts at 0 for JS dates.
+
+	* src/html/classic/ng/src/gmp/commands/wizard.js
+	(WizardCommand.runQuickTask, WizardCommand.runModifyTask): Add 1 to
+	month returned by date object because counting starts at 0.
+
 2017-05-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/app.js,

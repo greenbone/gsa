@@ -165,7 +165,7 @@ export class WizardCommand extends HttpCommand {
       event_data_quick_task_fields);
 
     event_data['event_data:start_day'] = date.day();
-    event_data['event_data:start_month'] = date.month();
+    event_data['event_data:start_month'] = date.month() + 1;
     event_data['event_data:start_year'] = date.year();
 
     return this.httpPost(extend(
@@ -184,7 +184,7 @@ export class WizardCommand extends HttpCommand {
       event_data_modify_task_fields);
 
     event_data['event_data:start_day'] = date.day();
-    event_data['event_data:start_month'] = date.month();
+    event_data['event_data:start_month'] = date.month() + 1;
     event_data['event_data:start_year'] = date.year();
 
     return this.httpPost(extend(
