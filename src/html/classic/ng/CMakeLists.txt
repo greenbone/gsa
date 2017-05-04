@@ -83,6 +83,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/reports.js
      ${NG_SRC_DIR}/src/gmp/commands/results.js
      ${NG_SRC_DIR}/src/gmp/commands/roles.js
+     ${NG_SRC_DIR}/src/gmp/commands/scanconfigs.js
      ${NG_SRC_DIR}/src/gmp/commands/scanners.js
      ${NG_SRC_DIR}/src/gmp/commands/schedules.js
      ${NG_SRC_DIR}/src/gmp/commands/secinfo.js
@@ -117,6 +118,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/report.js
      ${NG_SRC_DIR}/src/gmp/models/result.js
      ${NG_SRC_DIR}/src/gmp/models/role.js
+     ${NG_SRC_DIR}/src/gmp/models/scanconfig.js
      ${NG_SRC_DIR}/src/gmp/models/scanner.js
      ${NG_SRC_DIR}/src/gmp/models/schedule.js
      ${NG_SRC_DIR}/src/gmp/models/secinfo.js

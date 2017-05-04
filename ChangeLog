@@ -1,5 +1,10 @@
 2017-05-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt: Add new scanconfig js files as
+	dependencies for rebuilding ng.
+
+2017-05-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/scanconfigs.js,
 	src/html/classic/ng/src/gmp/models/scanconfig.js: Update gmp api of
 	scanconfigs for editing.
