@@ -92,7 +92,7 @@ class ScannerSelect extends React.Component {
         FULL_AND_FAST_SCAN_CONFIG_ID);
     }
     else if (scanner_type === OSP_SCANNER_TYPE) {
-      config_id = select_save_id(scanConfigs[OSP_SCAN_CONFIG_TYPE], 0);
+      config_id = select_save_id(scanConfigs[OSP_SCAN_CONFIG_TYPE], '0');
     }
     else {
       config_id = 0;

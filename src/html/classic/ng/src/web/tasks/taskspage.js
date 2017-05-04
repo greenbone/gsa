@@ -27,8 +27,16 @@ import moment from 'moment-timezone';
 
 import  _ from '../../locale.js';
 import logger from '../../log.js';
-import {is_defined, is_empty, map, select_save_id, first, for_each, parse_int,
-  is_array, includes_id} from '../../utils.js';
+import {
+  first,
+  for_each,
+  includes_id,
+  is_array,
+  is_defined,
+  is_empty,
+  map,
+  select_save_id,
+} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -76,7 +84,7 @@ const sort_scan_configs = scan_configs => {
   };
 
   for_each(scan_configs, config => {
-    let type = parse_int(config.type);
+    let {type} = config;
     if (!is_array(sorted_scan_configs[type])) {
       sorted_scan_configs[type] = [];
     }
