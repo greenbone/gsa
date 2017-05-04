@@ -29,11 +29,26 @@ import PropTypes from '../proptypes.js';
 
 import './css/table.css';
 
-const Table = ({header, footer, children, className}) => {
+const Table = ({
+    children,
+    className,
+    fixed = false,
+    footer,
+    header,
+  }) => {
+
   className = classes(className, 'table');
 
+  let style = {};
+
+  if (fixed) {
+    style.tableLayout = 'fixed';
+  }
+
   return (
-    <table className={className}>
+    <table
+      className={className}
+      style={style}>
       {header}
       {children}
       <tfoot>
@@ -48,6 +63,7 @@ Table.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]),
+  fixed: PropTypes.bool,
   footer: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
