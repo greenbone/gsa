@@ -67,6 +67,7 @@ import PortListsPage from './portlists/portlistspage.js';
 import ReportFormatsPage from './reportformats/reportformatspage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
+import ScanConfigsPage from './scanconfigs/scanconfigspage.js';
 import ScannersPage from './scanners/scannerspage.js';
 import SchedulesPage from './schedules/schedulespage.js';
 import TagsPage from './tags/tagspage.js';
@@ -245,6 +246,9 @@ ReactDOM.render(
         <Route
           path="scanners"
           component={ScannersPage}/>
+        <Route
+          path="scanconfigs"
+          component={ScanConfigsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

@@ -1,5 +1,18 @@
 2017-05-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/scanconfigs/dialog.js,
+	src/html/classic/ng/src/web/scanconfigs/editdialog.js,
+	src/html/classic/ng/src/web/scanconfigs/header.js,
+	src/html/classic/ng/src/web/scanconfigs/importdialog.js,
+	src/html/classic/ng/src/web/scanconfigs/row.js,
+	src/html/classic/ng/src/web/scanconfigs/scanconfigspage.js,
+	src/html/classic/ng/src/web/scanconfigs/trend.js: Add components for scan
+	config. Currently the scan configs page isn't linked in the menu because of
+	still missing features in the edit dialog.
+
+2017-05-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/yarn.lock: Update yarn lock file.
 
 2017-05-04  Björn Ricks <bjoern.ricks@greenbone.net>
