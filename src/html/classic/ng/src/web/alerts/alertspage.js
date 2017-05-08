@@ -141,7 +141,7 @@ const Table = createEntitiesTable({
   row: Row,
   footer: createEntitiesFooter({
     download: 'alerts.xml',
-    span: 6,
+    span: 7,
     trash: true,
   }),
 });

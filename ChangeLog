@@ -1,5 +1,10 @@
 2017-05-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/alerts/alertspage.js: Update table footer width
+	after new active column has been added.
+
+2017-05-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/alert.js,
 	src/html/classic/ng/src/web/alerts/alertspage.js,
 	src/html/classic/ng/src/web/alerts/row.js: Add column active to alerts list
