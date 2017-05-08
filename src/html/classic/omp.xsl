@@ -22773,7 +22773,7 @@ should not have received it.
   </table>
 
   <p>
-    <a href="/omp?cmd=get_results&amp;filter={@oid}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
+    <a href="/omp?cmd=get_results&amp;filter=nvt={@oid}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
       <xsl:value-of select="gsa:i18n ('Show scan results for this NVT')"/>
     </a>
   </p>

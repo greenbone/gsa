@@ -1,3 +1,9 @@
+2017-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport part of r26733, by Timo Pollmeier.
+
+	* src/html/classic/omp.xsl (nvt [details]): Specify column in link filter.
+
 2017-05-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r28302.
@@ -107,7 +113,7 @@
 	* src/html/classic/help.xsl (about.html): Update copyright text.
 
 	* src/html/classic/help_ru.xsl (about.html): Update copyright text.
-	
+
 	* src/html/classic/help_zh_CN.xsl (about.html): Update copyright text.
 
 2017-03-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
