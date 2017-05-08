@@ -51,6 +51,7 @@ const SORT_FIELDS = [
   ['condition', _('Condition')],
   ['method', _('Method')],
   ['filter', _('Filter')],
+  ['active', _('Active')],
 ];
 
 const ToolBarIcons = ({

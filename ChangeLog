@@ -1,3 +1,10 @@
+2017-05-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/models/alert.js,
+	src/html/classic/ng/src/web/alerts/alertspage.js,
+	src/html/classic/ng/src/web/alerts/row.js: Add column active to alerts list
+	page.
+
 2017-05-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt: Add missing build dependencies to

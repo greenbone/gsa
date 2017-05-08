@@ -76,6 +76,10 @@ export class Alert extends Model {
 
     return ret;
   }
+
+  isActive() {
+    return this.active === '1';
+  }
 }
 
 export default Alert;

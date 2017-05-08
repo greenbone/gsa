@@ -266,6 +266,9 @@ const Row = ({
       <TableData>
         {render_filter(entity.filter, capabilities)}
       </TableData>
+      <TableData>
+        {entity.isActive() ? _('yes') : _('no')}
+      </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
   );
