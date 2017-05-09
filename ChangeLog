@@ -1,5 +1,10 @@
 2017-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_gmp.c (save_target_gmp): Return an invalid message instead of
+	the new targets page on error, because that's what the NG expects.
+
+2017-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Remove limitation on hosts length.
 
 	* src/html/classic/omp.xsl (html-create-target-form)

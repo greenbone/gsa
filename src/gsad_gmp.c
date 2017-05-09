@@ -10933,20 +10933,17 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     {
-      return new_target (connection, credentials, params,
-                         GSAD_MESSAGE_INVALID_PARAM ("Modify Target"),
-                         response_data);
+      return message_invalid (connection, credentials, params, response_data,
+                              "Given hosts was invalid",
+                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                              "Save Target", "edit_target");
     }
   if (strcmp (target_source, "import") == 0 && name == NULL)
     {
-      gchar *msg;
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
-                            "Given target_source was invalid",
-                            "Modify Target");
-      html = new_target (connection, credentials, params, msg, response_data);
-      g_free (msg);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return html;
+      return message_invalid (connection, credentials, params, response_data,
+                              "Given target_source was invalid",
+                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                              "Save Target", "edit_target");
     }
 
   {
