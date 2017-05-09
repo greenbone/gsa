@@ -12067,8 +12067,7 @@ should not have received it.
                     </label>
                   </td>
                   <td>
-                    <input type="text" name="hosts" value="localhost" size="30"
-                            maxlength="2000"/>
+                    <input type="text" name="hosts" value="localhost" size="30"/>
                   </td>
                 </tr>
                 <tr>
@@ -12088,8 +12087,7 @@ should not have received it.
           <tr>
             <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/></td>
             <td>
-              <input type="text" name="exclude_hosts" value="" size="30"
-                      maxlength="2000"/>
+              <input type="text" name="exclude_hosts" value="" size="30"/>
             </td>
           </tr>
           <tr>
@@ -12276,8 +12274,7 @@ should not have received it.
                       <td>
                         <input type="text" name="hosts"
                                value="{get_targets_response/target/hosts}"
-                               size="30"
-                               maxlength="2000"/>
+                               size="30"/>
                       </td>
                     </tr>
                     <tr>
@@ -12299,7 +12296,7 @@ should not have received it.
                 <td>
                   <input type="text" name="exclude_hosts"
                          value="{get_targets_response/target/exclude_hosts}"
-                         size="30" maxlength="2000"/>
+                         size="30"/>
                 </td>
               </tr>
               <tr>
@@ -12554,7 +12551,6 @@ should not have received it.
                         <input type="text" name="hosts"
                                value="{get_targets_response/target/hosts}"
                                size="30"
-                               maxlength="2000"
                                disabled="1"/>
                       </td>
                     </tr>
@@ -12579,7 +12575,7 @@ should not have received it.
                 <td>
                   <input type="text" name="exclude_hosts"
                          value="{get_targets_response/target/exclude_hosts}"
-                         size="30" maxlength="2000"
+                         size="30"
                          disabled="1"/>
                 </td>
               </tr>
