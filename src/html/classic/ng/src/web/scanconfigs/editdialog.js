@@ -291,6 +291,7 @@ class NvtFamily extends React.Component {
       family,
       select,
       trend,
+      onEditConfigFamilyClick,
       onSelectChange,
       onTrendChange,
     } = this.props;
@@ -347,6 +348,9 @@ class NvtFamily extends React.Component {
         </TableData>
         <TableData flex align="center">
           <EditIcon
+            title={_('Select and edit NVT details')}
+            value={{name, config}}
+            onClick={onEditConfigFamilyClick}
           />
         </TableData>
       </TableRow>
@@ -363,6 +367,7 @@ NvtFamily.propTypes = {
   trend: PropTypes.oneOf([
     '1', '0',
   ]).isRequired,
+  onEditConfigFamilyClick: PropTypes.func,
   onSelectChange: PropTypes.func,
   onTrendChange: PropTypes.func,
 };
@@ -398,6 +403,7 @@ class NvtFamilies extends React.Component {
       families,
       trend,
       select,
+      onEditConfigFamilyClick,
     } = this.props;
 
     return (
@@ -436,6 +442,7 @@ class NvtFamilies extends React.Component {
                     family={family}
                     trend={trend[name]}
                     select={select[name]}
+                    onEditConfigFamilyClick={onEditConfigFamilyClick}
                     onSelectChange={this.onSelectChange}
                     onTrendChange={this.onTrendChange}
                   />
@@ -462,10 +469,12 @@ NvtFamilies.propTypes = {
   families: PropTypes.arrayLike.isRequired,
   select: PropTypes.object.isRequired,
   trend: PropTypes.object.isRequired,
+  onEditConfigFamilyClick: PropTypes.func,
   onValueChange: PropTypes.func,
 };
 
 class EditDialog extends React.Component {
+
   render() {
     let {
       comment,
@@ -477,6 +486,7 @@ class EditDialog extends React.Component {
       scanners,
       select,
       trend,
+      onEditConfigFamilyClick,
       onValueChange,
     } = this.props;
     return (
@@ -520,6 +530,7 @@ class EditDialog extends React.Component {
             families={families}
             trend={trend}
             select={select}
+            onEditConfigFamilyClick={onEditConfigFamilyClick}
             onValueChange={onValueChange}
           />
         }
@@ -554,6 +565,7 @@ EditDialog.propTypes = {
   scanner_preference_values: PropTypes.object,
   select: PropTypes.object,
   trend: PropTypes.object,
+  onEditConfigFamilyClick: PropTypes.func,
   onValueChange: PropTypes.func,
 };
 

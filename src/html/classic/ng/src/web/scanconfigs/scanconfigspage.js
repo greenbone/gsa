@@ -45,6 +45,7 @@ import NewIcon from '../icons/newicon.js';
 
 import {createFilterDialog} from '../powerfilter/dialog.js';
 
+import EditConfigFamilyDialog from './editconfigfamilydialog.js';
 import EditScanConfigDialog from './editdialog.js';
 import Header from './header.js';
 import ImportDialog from './importdialog.js';
@@ -102,15 +103,96 @@ class Page extends React.Component {
 
     this.handleImportConfig = this.handleImportConfig.bind(this);
     this.handleSaveConfig = this.handleSaveConfig.bind(this);
+    this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
+    this.openEditConfigFamilyDialog =
+      this.openEditConfigFamilyDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
   }
 
   openEditConfigDialog(config) {
+    this.loadEditScanConfigSettings(config).then(state => {
+      this.edit_dialog.show(state, {
+        title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
+      });
+
+      this.loadScanners(this.edit_dialog);
+    });
+  }
+
+  openCreateConfigDialog() {
+    this.scanconfig_dialog.show({});
+    this.loadScanners(this.scanconfig_dialog);
+  }
+
+  openImportDialog() {
+    this.import_dialog.show({});
+  }
+
+  openEditConfigFamilyDialog({config, name}) {
     const {entityCommand} = this.props;
 
-    entityCommand.editScanConfigSettings(config).then(response => {
+    entityCommand.editScanConfigFamilySettings({
+      id: config.id,
+      family_name: name,
+      config_name: config.name,
+    }).then(response => {
+      let {data} = response;
+      let {nvts} = data;
+      let selected = {};
+
+      for_each(nvts, nvt => {
+        selected[nvt.oid] = nvt.selected;
+      });
+
+      this.edit_config_family_dialog.show({
+        config: data.config,
+        config_name: config.name,
+        family_name: name,
+        id: config.id,
+        nvts: data.nvts,
+        selected,
+      }, {
+        title: _('Edit Scan Config Family {{name}}',
+          {name: shorten(name)}),
+      });
+    });
+  }
+
+  handleImportConfig(data) {
+    const {entityCommand, onChanged} = this.props;
+    return entityCommand.import(data).then(() => onChanged());
+  }
+
+  handleSaveConfig(data) {
+    const {entityCommand, onChanged} = this.props;
+    return entityCommand.save(data).then(() => onChanged());
+  }
+
+  handleSaveConfigFamily(data) {
+    const {entityCommand} = this.props;
+    return entityCommand.saveScanConfigFamily(data).then(() => {
+      return this.loadEditScanConfigSettings(data.config);
+    }).then(state => this.edit_dialog.setValues(state));
+  }
+
+  loadScanners(dialog) {
+    const {gmp} = this.context;
+
+    gmp.scanners.getAll({cache: false}).then(scanners => {
+      scanners = scanners.filter(scanner => scanner.type === OSP_SCANNER_TYPE);
+      dialog.setValues({
+        scanners,
+        scanner_id: select_save_id(scanners),
+      });
+    });
+  }
+
+  loadEditScanConfigSettings(config) {
+    const {entityCommand} = this.props;
+
+    return entityCommand.editScanConfigSettings(config).then(response => {
       let {data} = response;
       let {families, scanconfig} = data;
       let trend = {};
@@ -137,7 +219,7 @@ class Page extends React.Component {
       });
 
       const state = {
-        comment: config.comment,
+        comment: scanconfig.comment,
         id: config.id,
         name: config.name,
         config: scanconfig,
@@ -146,43 +228,7 @@ class Page extends React.Component {
         select,
         scanner_preference_values,
       };
-
-      this.edit_dialog.show(state, {
-        title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
-      });
-
-      this.loadScanners(this.edit_dialog);
-    });
-  }
-
-  openCreateConfigDialog() {
-    this.scanconfig_dialog.show({});
-    this.loadScanners(this.scanconfig_dialog);
-  }
-
-  openImportDialog() {
-    this.import_dialog.show({});
-  }
-
-  handleImportConfig(data) {
-    const {entityCommand, onChanged} = this.props;
-    return entityCommand.import(data).then(() => onChanged());
-  }
-
-  handleSaveConfig(data) {
-    const {entityCommand, onChanged} = this.props;
-    return entityCommand.save(data).then(() => onChanged());
-  }
-
-  loadScanners(dialog) {
-    const {gmp} = this.context;
-
-    gmp.scanners.getAll({cache: false}).then(scanners => {
-      scanners = scanners.filter(scanner => scanner.type === OSP_SCANNER_TYPE);
-      dialog.setValues({
-        scanners,
-        scanner_id: select_save_id(scanners),
-      });
+      return state;
     });
   }
 
@@ -207,6 +253,11 @@ class Page extends React.Component {
         <EditScanConfigDialog
           ref={ref => this.edit_dialog = ref}
           onSave={this.handleSaveConfig}
+          onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
+        />
+        <EditConfigFamilyDialog
+          ref={ref => this.edit_config_family_dialog = ref}
+          onSave={this.handleSaveConfigFamily}
         />
       </Layout>
     );
