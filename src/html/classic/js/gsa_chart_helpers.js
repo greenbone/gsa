@@ -2819,12 +2819,20 @@
    */
   gch.title_static = function(loading_text, loaded_text) {
     return function(data) {
+      var title;
+
       if (!gsa.is_defined(data)) {
-        return loading_text;
+        title = loading_text;
       }
       else {
-        return loaded_text;
+        title = loaded_text;
       }
+
+      if (data && data.filter_info && data.filter_info.name !== '') {
+        title = title + ' : ' + data.filter_info.name;
+      }
+
+      return title;
     };
   };
 
