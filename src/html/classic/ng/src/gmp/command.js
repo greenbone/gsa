@@ -164,6 +164,7 @@ export class EntitiesCommand extends HttpCommand {
     let params = {
       cmd: 'bulk_delete',
       resource_type: this.name,
+      no_redirect: '1',
     };
     for (let id of ids) {
       params['bulk_selected:' + id] = 1;
@@ -238,7 +239,11 @@ export class EntityCommand extends HttpCommand {
   delete({id}) {
     log.debug('Deleting', this.name, id);
 
-    let params = {cmd: 'delete_' + this.name, id};
+    let params = {
+      cmd: 'delete_' + this.name,
+      id,
+      no_redirect: '1',
+    };
     return this.httpPost(params);
   }
 
