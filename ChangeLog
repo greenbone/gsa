@@ -1,3 +1,12 @@
+2017-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r28354.
+
+	* src/gsad.c (init_validator): Remove limitation on hosts length.
+
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form): Remove hosts input length constraint.
+
 2017-05-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r28348.

@@ -14363,12 +14363,10 @@ should not have received it.
                   <td>
                     <xsl:choose>
                       <xsl:when test="string-length (/envelope/params/hosts)">
-                        <input type="text" name="hosts" value="{/envelope/params/hosts}" size="30"
-                                maxlength="2000"/>
+                        <input type="text" name="hosts" value="{/envelope/params/hosts}" size="30"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <input type="text" name="hosts" value="{/envelope/client_address}" size="30"
-                                maxlength="2000"/>
+                        <input type="text" name="hosts" value="{/envelope/client_address}" size="30"/>
                       </xsl:otherwise>
                     </xsl:choose>
                   </td>
@@ -14450,8 +14448,7 @@ should not have received it.
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Exclude Hosts')"/></td>
             <td>
-              <input type="text" name="exclude_hosts" value="" size="30"
-                      maxlength="2000"/>
+              <input type="text" name="exclude_hosts" value="" size="30"/>
             </td>
           </tr>
           <tr>
@@ -14669,8 +14666,7 @@ should not have received it.
                       <td>
                         <input type="text" name="hosts"
                                value="{get_targets_response/target/hosts}"
-                               size="30"
-                               maxlength="2000"/>
+                               size="30"/>
                       </td>
                     </tr>
                     <tr>
@@ -14692,7 +14688,7 @@ should not have received it.
                 <td>
                   <input type="text" name="exclude_hosts"
                          value="{get_targets_response/target/exclude_hosts}"
-                         size="30" maxlength="2000"/>
+                         size="30"/>
                 </td>
               </tr>
               <tr>
@@ -14994,7 +14990,6 @@ should not have received it.
                         <input type="text" name="hosts"
                                value="{get_targets_response/target/hosts}"
                                size="30"
-                               maxlength="2000"
                                disabled="1"/>
                       </td>
                     </tr>
@@ -15019,7 +15014,7 @@ should not have received it.
                 <td>
                   <input type="text" name="exclude_hosts"
                          value="{get_targets_response/target/exclude_hosts}"
-                         size="30" maxlength="2000"
+                         size="30"
                          disabled="1"/>
                 </td>
               </tr>
