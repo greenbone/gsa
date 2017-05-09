@@ -22,8 +22,9 @@
  */
 
 import logger from '../../log.js';
-import {extend, map} from '../../utils.js';
+import {extend, for_each, map} from '../../utils.js';
 
+import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import ScanConfig, {parse_count} from '../models/scanconfig.js';
@@ -38,11 +39,11 @@ const convert = (values, prefix) => {
   return ret;
 };
 
-const convert_select = values => {
+const convert_select = (values, prefix) => {
   let ret = {};
   for (let [key, value] of Object.entries(values)) {
     if (value === '1') {
-      ret['select:' + key] = value;
+      ret[prefix + key] = value;
     }
   }
   return ret;
@@ -99,7 +100,7 @@ export class ScanConfigCommand extends EntityCommand {
     },
       convert(trend, 'trend:'),
       convert(scanner_preference_values, 'preference:scanner[scanner]:'),
-      convert_select(select),
+      convert_select(select, 'select:'),
     );
     log.debug('Saving scanconfig', data);
     return this.httpPost(data).then(this.transformResponse);
@@ -125,6 +126,63 @@ export class ScanConfigCommand extends EntityCommand {
             max: parse_count(family.max_nvt_count),
           };
         });
+
+      return response.setData(settings);
+    });
+  }
+
+  saveScanConfigFamily({
+    config_name,
+    family_name,
+    id,
+    selected,
+  }) {
+    const data = extend({
+      cmd: 'save_config_family',
+      no_redirect: '1',
+      id,
+      family: family_name,
+      name: config_name,
+    },
+      convert_select(selected, 'nvt:'),
+    );
+    log.debug('Saving scanconfigfamily', data);
+    return this.httpPost(data);
+  }
+
+  editScanConfigFamilySettings({
+    id,
+    family_name,
+    config_name,
+  }) {
+    return this.httpGet({
+      cmd: 'edit_config_family',
+      id,
+      name: config_name,
+      family: family_name,
+    }).then(response => {
+      let {data} = response;
+      let config_resp = data.get_config_family_response;
+      let settings = {};
+
+      settings.config = new Model(config_resp.config);
+
+      let nvts = {};
+      for_each(config_resp.get_nvts_response.nvt, nvt => {
+        let oid = nvt._oid;
+        nvts[oid] = true;
+      });
+
+      settings.nvts = map(config_resp.all.get_nvts_response.nvt, nvt => {
+        nvt.oid = nvt._oid;
+        delete nvt._oid;
+
+        nvt.severity = nvt.cvss_base;
+        delete nvt.cvss_base;
+
+        nvt.selected = nvt.oid in nvts ? '1' : '0';
+        return nvt;
+      });
 
       return response.setData(settings);
     });

@@ -1,5 +1,10 @@
 2017-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/scanconfigs.js: Add gmp api for editing
+	and saving a scan config nvt family.
+
+2017-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/severitybar.js: Update proptypes of SeverityBar.
 	The severity property is required and may be a string or a number.
 
