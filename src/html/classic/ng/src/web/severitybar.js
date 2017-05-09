@@ -72,7 +72,7 @@ export const SeverityBar = ({severity, scale = 10}) => {
 };
 
 SeverityBar.propTypes = {
-  severity: PropTypes.number,
+  severity: PropTypes.numberOrNumberString.isRequired,
   scale: PropTypes.number,
 };
 
