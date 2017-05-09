@@ -1,3 +1,10 @@
+2017-05-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r28348.
+
+	* src/html/classic/js/gsa_chart_helpers.js (title_static): If there is
+	a filter name, add it to the returned title.
+
 2017-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport part of r26733, by Timo Pollmeier.
