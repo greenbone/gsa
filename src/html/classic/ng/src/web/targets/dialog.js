@@ -99,6 +99,7 @@ const TargetDialog = ({
     snmp_credential_id,
     ssh_credential_id,
     target_source,
+    target_exclude_source,
     onValueChange,
     onNewCredentialsClick,
     onNewPortListClick,
@@ -180,13 +181,38 @@ const TargetDialog = ({
 
       </FormGroup>
 
-      <FormGroup title={_('Exclude Hosts')}>
-        <TextField
-          name="exclude_hosts"
-          value={exclude_hosts}
-          grow="1"
-          disabled={in_use}
-          onChange={onValueChange}/>
+      <FormGroup
+        title={_('Exclude Hosts')}
+        flex="column">
+        <Layout flex box>
+          <Radio
+            value="manual"
+            title={_('Manual')}
+            name="target_exclude_source"
+            disabled={in_use}
+            onChange={onValueChange}
+            checked={target_exclude_source === 'manual'}/>
+          <TextField
+            grow="1"
+            disabled={in_use || target_exclude_source !== 'manual'}
+            value={exclude_hosts}
+            name="exclude_hosts"
+            onChange={onValueChange}/>
+        </Layout>
+
+        <Layout flex box>
+          <Radio
+            title={_('From file')}
+            name="target_exclude_source"
+            value="file"
+            disabled={in_use}
+            onChange={onValueChange}
+            checked={target_exclude_source === 'file'}/>
+          <FileField
+            name="exclude_file"
+            disabled={in_use}
+            onChange={onValueChange}/>
+        </Layout>
       </FormGroup>
 
       <FormGroup title={_('Reverse Lookup Only')}>
@@ -343,6 +369,9 @@ TargetDialog.propTypes = {
   target_source: PropTypes.oneOf([
     'manual', 'file', 'asset_hosts',
   ]),
+  target_exclude_source: PropTypes.oneOf([
+    'manual', 'file',
+  ]),
   alive_tests: PropTypes.oneOf(ALIVE_TESTS),
   credentials: PropTypes.arrayLike,
   esxi_credential_id: PropTypes.idOrZero,
@@ -385,6 +414,7 @@ export default withDialog(TargetDialog, {
     snmp_credential_id: 0,
     ssh_credential_id: 0,
     target_source: 'manual',
+    target_exclude_source: 'manual',
   },
 });
 

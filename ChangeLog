@@ -1,3 +1,26 @@
+2017-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Extend the Exclude Hosts field of New Target and Edit Target to allow
+	file uploads.
+
+	* src/gsad.c (init_validator, params_append_mhd): Add exclude fields.
+
+	* src/gsad_gmp.c (create_target_gmp, save_target_gmp): Add file option for
+	target excludes.
+
+	* src/html/classic/omp.xsl (html-create-target-form)
+	(html-edit-target-form): Add file option to Exclude Hosts.
+
+	* src/html/classic/ng/src/gmp/commands/targets.js (create, save): Add
+	exclude fields.
+
+	* src/html/classic/ng/src/web/targets/dialog.js (TargetDialog): Add file
+	option to Exclude Hosts.
+	(proptypes): Add target_exclude_source.
+
+	* src/html/classic/ng/src/web/targets/targetspage.js
+	(openTargetDialog): Add target_exclude_source.
+
 2017-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_gmp.c (save_target_gmp): Return an invalid message instead of

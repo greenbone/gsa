@@ -88,6 +88,7 @@ class TargetsPage extends React.Component {
         snmp_credential_id: id_or__(entity.snmp_credential),
         ssh_credential_id: id_or__(entity.ssh_credential),
         target_source: 'manual',
+        target_exclude_source: 'manual',
       }, {
         title: _('Edit Target {{name}}', entity),
       });

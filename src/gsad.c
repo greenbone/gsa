@@ -587,6 +587,9 @@ init_validator ()
   openvas_validator_add (validator, "event_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :.]{1,200}$");
+  openvas_validator_add (validator, "exclude_file",         "(?s)^.*$");
+  openvas_validator_add (validator, "exclude_file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+  openvas_validator_add (validator, "exclude_file:value",   "^yes$");
   openvas_validator_add (validator, "file",         "(?s)^.*$");
   openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
   openvas_validator_add (validator, "file:value",   "^yes$");
@@ -729,6 +732,7 @@ init_validator ()
   openvas_validator_add (validator, "sort_stats:name", "^[0123456789]{1,5}$");
   openvas_validator_add (validator, "sort_stats:value", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");
+  openvas_validator_add (validator, "target_exclude_source", "^(file|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
@@ -1031,6 +1035,7 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)
       || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)
+      || (strncmp (name, "exclude_file:", strlen ("exclude_file:")) == 0)
       || (strncmp (name, "file:", strlen ("file:")) == 0)
       || (strncmp (name, "include_id_list:", strlen ("include_id_list:")) == 0)
       || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)
@@ -1797,6 +1802,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)
       || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)
+      || (strncmp (name, "exclude_file:", strlen ("exclude_file:")) == 0)
       || (strncmp (name, "file:", strlen ("file:")) == 0)
       || (strncmp (name, "include_id_list:", strlen ("include_id_list:")) == 0)
       || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)

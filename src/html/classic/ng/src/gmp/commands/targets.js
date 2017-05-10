@@ -38,10 +38,11 @@ export class TargetCommand extends EntityCommand {
   }
 
   create(args) {
-    let {name, comment = '', target_source, hosts, exclude_hosts,
+    let {name, comment = '', target_source, target_exclude_source, hosts,
+      exclude_hosts,
       reverse_lookup_only, reverse_lookup_unify, port_list_id, alive_tests,
       ssh_credential_id = 0, port, smb_credential_id = 0,
-      esxi_credential_id = 0, snmp_credential_id = 0, file,
+      esxi_credential_id = 0, snmp_credential_id = 0, file, exclude_file,
       hosts_filter} = args;
     log.debug('Creating new target', args);
     return this.httpPost({
@@ -50,6 +51,7 @@ export class TargetCommand extends EntityCommand {
       name,
       comment,
       target_source,
+      target_exclude_source,
       hosts,
       exclude_hosts,
       reverse_lookup_only,
@@ -62,15 +64,17 @@ export class TargetCommand extends EntityCommand {
       esxi_credential_id,
       snmp_credential_id,
       file,
+      exclude_file,
       hosts_filter,
     }).then(this.transformResponse);
   }
 
   save(args) {
-    let {id, name, comment = '', target_source, hosts, exclude_hosts,
+    let {id, name, comment = '', target_source, target_exclude_source, hosts,
+      exclude_hosts,
       reverse_lookup_only, reverse_lookup_unify, port_list_id, alive_tests,
       ssh_credential_id = 0, port, smb_credential_id = 0,
-      esxi_credential_id = 0, snmp_credential_id = 0, file,
+      esxi_credential_id = 0, snmp_credential_id = 0, file, exclude_file,
       in_use} = args;
     log.debug('Saving target', args);
     return this.httpPost({
@@ -82,6 +86,7 @@ export class TargetCommand extends EntityCommand {
       esxi_credential_id,
       exclude_hosts,
       file,
+      exclude_file,
       hosts,
       in_use: is_string(in_use) ? in_use : in_use ? '1' : '0',
       name,
@@ -93,6 +98,7 @@ export class TargetCommand extends EntityCommand {
       snmp_credential_id,
       ssh_credential_id,
       target_source,
+      target_exclude_source,
     }).then(this.transformResponse);
   }
 

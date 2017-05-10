@@ -14148,7 +14148,33 @@ should not have received it.
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Exclude Hosts')"/></td>
             <td>
-              <input type="text" name="exclude_hosts" value="" size="30"/>
+              <table class="table-form">
+                <tr>
+                  <td>
+                    <label>
+                      <input type="radio" name="target_exclude_source" value="manual"
+                             checked="1"/>
+                      <xsl:value-of select="gsa:i18n ('Manual', 'Target Source')"/>
+                    </label>
+                  </td>
+                  <td>
+                    <input type="text" name="exclude_hosts"
+                           value="{/envelope/params/exclude_hosts}"
+                           size="30"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label>
+                      <input type="radio" name="target_exclude_source" value="file"/>
+                      <xsl:value-of select="gsa:i18n ('From file', 'Target Source')"/>
+                    </label>
+                  </td>
+                  <td>
+                    <input type="file" name="exclude_file" size="30"/>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
           <tr>
@@ -14386,9 +14412,33 @@ should not have received it.
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Exclude Hosts')"/></td>
                 <td>
-                  <input type="text" name="exclude_hosts"
-                         value="{get_targets_response/target/exclude_hosts}"
-                         size="30"/>
+                  <table>
+                    <tr>
+                      <td>
+                        <label>
+                          <input type="radio" name="target_exclude_source" value="manual"
+                                 checked="1"/>
+                          <xsl:value-of select="gsa:i18n ('Manual', 'Target Source')"/>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="text" name="exclude_hosts"
+                               value="{get_targets_response/target/exclude_hosts}"
+                               size="30"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label>
+                          <input type="radio" name="target_exclude_source" value="file"/>
+                          <xsl:value-of select="gsa:i18n ('From file', 'Target Source')"/>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="file" name="exclude_file" size="30"/>
+                      </td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
               <tr>

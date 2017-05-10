@@ -9310,8 +9310,9 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential, *target_source;
+  const char *target_exclude_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
-  const char *alive_tests, *hosts_filter, *file;
+  const char *alive_tests, *hosts_filter, *file, *exclude_file;
   gchar *ssh_credentials_element, *smb_credentials_element;
   gchar *esxi_credentials_element, *snmp_credentials_element;
   gchar *asset_hosts_element;
@@ -9326,6 +9327,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   reverse_lookup_only = params_value (params, "reverse_lookup_only");
   reverse_lookup_unify = params_value (params, "reverse_lookup_unify");
   target_source = params_value (params, "target_source");
+  target_exclude_source = params_value (params, "target_exclude_source");
   comment = params_value (params, "comment");
   port_list_id = params_value (params, "port_list_id");
   target_ssh_credential = params_value (params, "ssh_credential_id");
@@ -9336,6 +9338,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   alive_tests = params_value (params, "alive_tests");
   hosts_filter = params_value (params, "hosts_filter");
   file = params_value (params, "file");
+  exclude_file = params_value (params, "exclude_file");
 
   CHECK_PARAM_INVALID (name, "Create Target", "new_target");
   CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
@@ -9349,10 +9352,19 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                             "Missing hosts file",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Target", "new_target");
-
   /* require hosts_filter if target_source is "asset_hosts" */
   if (strcmp (target_source, "asset_hosts") == 0)
     CHECK_PARAM_INVALID (hosts_filter, "Create Target", "new_target");
+
+  if (params_given (params, "target_exclude_source"))
+    {
+      CHECK_PARAM_INVALID (target_exclude_source, "Create Target", "new_target")
+      if (strcmp (target_exclude_source, "file") == 0 && exclude_file == NULL)
+        return message_invalid (connection, credentials, params, response_data,
+                                "Missing exclude hosts file",
+                                G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                                "Create Target", "new_target");
+    }
 
   CHECK_PARAM_INVALID (comment, "Create Target", "new_target");
   CHECK_PARAM_INVALID (port_list_id, "Create Target", "new_target");
@@ -9420,7 +9432,11 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                      "<alive_tests>%s</alive_tests>",
                      name,
                      strcmp (target_source, "file") == 0 ? file : hosts,
-                     exclude_hosts ? exclude_hosts : "",
+                     target_exclude_source
+                      ? (strcmp (target_exclude_source, "file") == 0
+                          ? exclude_file
+                          : exclude_hosts)
+                      : "",
                      reverse_lookup_only ? reverse_lookup_only : "0",
                      reverse_lookup_unify ? reverse_lookup_unify : "0",
                      port_list_id,
@@ -10824,7 +10840,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   gchar *html, *response;
   const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
-  const char *target_esxi_credential, *target_snmp_credential, *target_source;
+  const char *target_esxi_credential, *target_snmp_credential;
+  const char *target_source, *target_exclude_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
   GString *command;
@@ -10913,6 +10930,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   reverse_lookup_only = params_value (params, "reverse_lookup_only");
   reverse_lookup_unify = params_value (params, "reverse_lookup_unify");
   target_source = params_value (params, "target_source");
+  target_exclude_source = params_value (params, "target_exclude_source");
   port_list_id = params_value (params, "port_list_id");
   target_ssh_credential = params_value (params, "ssh_credential_id");
   port = params_value (params, "port");
@@ -10921,6 +10939,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   target_snmp_credential = params_value (params, "snmp_credential_id");
 
   CHECK_PARAM_INVALID (target_source, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_exclude_source, "Save Target", "edit_target");
   CHECK_PARAM_INVALID (port_list_id, "Save Target", "edit_target");
   CHECK_PARAM_INVALID (target_ssh_credential, "Save Target", "edit_target");
   CHECK_PARAM_INVALID (target_smb_credential, "Save Target", "edit_target");
@@ -11004,7 +11023,9 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                        strcmp (target_source, "file") == 0
                          ? params_value (params, "file")
                          : hosts,
-                       exclude_hosts ? exclude_hosts : "",
+                       strcmp (target_exclude_source, "file") == 0
+                         ? params_value (params, "exclude_file")
+                         : exclude_hosts,
                        reverse_lookup_only ? reverse_lookup_only : "0",
                        reverse_lookup_unify ? reverse_lookup_unify : "0",
                        port_list_id,
