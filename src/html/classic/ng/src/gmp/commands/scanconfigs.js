@@ -22,11 +22,13 @@
  */
 
 import logger from '../../log.js';
-import {extend, for_each, map} from '../../utils.js';
+import {extend, for_each, map, is_defined} from '../../utils.js';
 
 import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {parse_counts} from '../parser.js';
 
+import Nvt from '../models/nvt.js';
 import ScanConfig, {parse_count} from '../models/scanconfig.js';
 
 const log = logger.getLogger('gmp.commands.scanconfigs');
@@ -44,6 +46,25 @@ const convert_select = (values, prefix) => {
   for (let [key, value] of Object.entries(values)) {
     if (value === '1') {
       ret[prefix + key] = value;
+    }
+  }
+  return ret;
+};
+
+const convert_preferences = (values, nvt_name) => {
+  let ret = {};
+  for (const prop in values) {
+    const data  = values[prop];
+    const {type, value} = data;
+    if (is_defined(value)) {
+      let typestring = nvt_name + '[' + type + ']:' + prop;
+      if (type === 'password') {
+        ret['password:' + typestring] = 'yes';
+      }
+      else if (type === 'file') {
+        ret['file:' + typestring] = 'yes';
+      }
+      ret['preference:' + typestring] = value;
     }
   }
   return ret;
@@ -183,6 +204,60 @@ export class ScanConfigCommand extends EntityCommand {
         nvt.selected = nvt.oid in nvts ? '1' : '0';
         return nvt;
       });
+
+      return response.setData(settings);
+    });
+  }
+
+  saveScanConfigNvt({
+    config_name,
+    family_name,
+    id,
+    manual_timeout,
+    nvt_name,
+    oid,
+    preference_values,
+    timeout,
+  }) {
+    let data = extend({
+      cmd: 'save_config_nvt',
+      no_redirect: '1',
+      id,
+      oid,
+      name: config_name,
+      family: family_name,
+      timeout,
+    }, convert_preferences(preference_values, nvt_name));
+
+    data['preference:scanner[scanner]:timeout.' + oid] = manual_timeout;
+
+    log.debug('Saving scanconfignvt', data);
+    return this.httpPost(data);
+  }
+
+  editScanConfigNvtSettings({
+    config_name,
+    family_name,
+    id,
+    oid,
+  }) {
+    return this.httpGet({
+      cmd: 'edit_config_nvt',
+      id,
+      oid,
+      name: config_name,
+      family: family_name,
+    }).then(response => {
+      let {data} = response;
+      let settings = {};
+      let config_resp = data.get_config_nvt_response;
+
+      settings.config = new Model(config_resp.config);
+      settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
+
+      settings.nvt.notes_counts = parse_counts(data.get_notes_response, 'note');
+      settings.nvt.overrides_counts = parse_counts(data.get_overrides_response,
+        'override');
 
       return response.setData(settings);
     });
