@@ -1,5 +1,10 @@
 2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/nvt.js,
+	src/html/classic/ng/src/web/nvts/row.js: Parse cvss_base as severity for nvts.
+
+2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/nvt.js: Parse preferences of nvts.
 
 2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>

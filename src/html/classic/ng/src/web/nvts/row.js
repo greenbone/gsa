@@ -86,7 +86,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
         }
       </TableData>
       <TableData flex align="center">
-        <SeverityBar severity={entity.cvss_base}/>
+        <SeverityBar severity={entity.severity}/>
       </TableData>
       <TableData flex align="center">
         {entity.qod && entity.qod.value} %
