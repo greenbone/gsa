@@ -21,7 +21,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, parse_int, for_each} from '../../utils.js';
+import {
+  for_each,
+  is_defined,
+  is_empty,
+  parse_int,
+  shallow_copy,
+} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -96,16 +102,19 @@ export class ScanConfig extends Model {
 
     if (is_defined(elem.preferences)) {
       for_each(elem.preferences.preference, preference => {
-        if (is_empty(preference.nvt.name)) {
-          delete preference.nvt;
+        let pref = shallow_copy(preference);
+        if (is_empty(pref.nvt.name)) {
+          delete pref.nvt;
 
-          scanner_preferences.push(preference);
+          scanner_preferences.push(pref);
         }
         else {
-          preference.nvt.oid = preference.nvt._oid;
-          delete preference.nvt._oid;
+          let nvt = shallow_copy(pref.nvt);
+          pref.nvt = nvt;
+          pref.nvt.oid = preference.nvt._oid;
+          delete pref.nvt._oid;
 
-          nvt_preferences.push(preference);
+          nvt_preferences.push(pref);
         }
       });
     }
