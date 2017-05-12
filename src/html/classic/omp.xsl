@@ -15877,7 +15877,7 @@ should not have received it.
         title="{concat(gsa:i18n('Help'),': ',gsa:i18n('Import Scan Config'))}">
         <img src="/img/help.svg"/>
       </a>
-      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/ng/scanconfigs?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
         class="icon icon-sm"
         title="{gsa:i18n ('Scan Configs')}">
         <img src="/img/list.svg" alt="{gsa:i18n ('Scan Configs')}"/>
@@ -16053,7 +16053,7 @@ should not have received it.
       </table>
     </div>
     <h1>
-      <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
+      <a href="/ng/scanconfigs"
          title="{gsa:i18n ('Scan Configs')}">
         <img class="icon icon-lg" src="/img/config.svg" alt="Scan Configs"/>
       </a>
@@ -16823,7 +16823,7 @@ should not have received it.
       </table>
     </div>
     <h1>
-      <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
+      <a href="/ng/scanconfigs"
          title="{gsa:i18n ('Scan Configs')}">
         <img class="icon icon-lg" src="/img/config.svg" alt="Scan Configs"/>
       </a>
@@ -17233,7 +17233,7 @@ should not have received it.
              class="icon icon-sm"/>
       </xsl:otherwise>
     </xsl:choose>
-    <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/ng/scanconfigs?filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
        class="icon icon-sm"
        title="{gsa:i18n ('Scan Configs')}">
       <img src="/img/list.svg" alt="{gsa:i18n ('Scan Configs')}"/>
@@ -17309,7 +17309,7 @@ should not have received it.
     </div>
 
     <h1>
-      <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
+      <a href="/ng/scanconfigs"
          title="{gsa:i18n ('Scan Configs')}">
         <img class="icon icon-lg" src="/img/config.svg" alt="Scan Configs"/>
       </a>
@@ -19560,7 +19560,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
+      <a href="/ng/scanconfigs"
          title="{gsa:i18n ('Configs')}">
         <img class="icon icon-sm" src="/img/config.svg" alt="Configs"/>
       </a>

@@ -158,9 +158,8 @@ export const MenuBar = (props, {gmp, capabilities}) => {
             to="credentials"
             caps="get_credentials"/>
           <MenuEntry
-            legacy
             title={_('Scan Configs')}
-            cmd="get_configs"
+            to="scanconfigs"
             caps="get_configs"/>
           <MenuEntry
             section
