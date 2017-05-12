@@ -33,6 +33,7 @@ const LegacyLink = ({
     cmd,
     path,
     title,
+    target,
     ...params,
   }, {gmp}) => {
 
@@ -51,6 +52,7 @@ const LegacyLink = ({
   let url = gmp.buildUrl(path, extend({}, params, iparams));
   return (
     <a href={url}
+      target={target}
       className={className}
       title={title}>
       {children}
@@ -63,6 +65,7 @@ LegacyLink.propTypes = {
   cmd: PropTypes.string,
   path: PropTypes.string,
   params: PropTypes.object,
+  target: PropTypes.string,
   title: PropTypes.string,
 };
 
