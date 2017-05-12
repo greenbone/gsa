@@ -23,7 +23,6 @@
 
 import React from 'react';
 
-import {parse_int} from '../../utils.js';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
@@ -31,24 +30,29 @@ import PropTypes from '../proptypes.js';
 
 import Radio from './radio.js';
 
-const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
-  value = parse_int(value);
+const YesNoRadio = ({
+    disabled,
+    value,
+    name,
+    yesValue = "1",
+    noValue = "0",
+    onChange,
+    ...other,
+  }) => {
   return (
     <Layout {...other} flex>
       <Radio
         title={_('Yes')}
-        value="1"
+        value={yesValue}
         name={name}
-        checked={value === 1}
-        convert={parse_int}
+        checked={value === yesValue}
         onChange={onChange}
         disabled={disabled}/>
       <Radio
         title={_('No')}
-        value="0"
+        value={noValue}
         name={name}
-        convert={parse_int}
-        checked={value === 0}
+        checked={value === noValue}
         onChange={onChange}
         disabled={disabled}/>
     </Layout>
@@ -58,7 +62,9 @@ const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
 YesNoRadio.propTypes = {
   disabled: PropTypes.bool,
   name: PropTypes.string,
-  value: PropTypes.yesno,
+  value: PropTypes.any,
+  yesValue: PropTypes.any,
+  noValue: PropTypes.any,
   onChange: PropTypes.func,
 };
 

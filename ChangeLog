@@ -1,5 +1,10 @@
 2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/yesnoradio.js: Allow to set arbitrary
+	values for yes no radio selection. Use "1" for yes and "0" for no as defaults.
+
+2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/legacylink.js: Allow to set the target property
 	of LegacyLink to allow opening links in an external window.
 
