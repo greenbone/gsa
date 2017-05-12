@@ -1,5 +1,9 @@
 2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/nvt.js: Parse preferences of nvts.
+
+2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: Use only "1" and "0" for yesno
 	proptypes. If yesno number values are used they won't work with YesNoRadio out
 	of the box anymore.
