@@ -347,9 +347,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/statusbar.js
      ${NG_SRC_DIR}/src/web/table/body.js
      ${NG_SRC_DIR}/src/web/table/data.js
-     ${NG_SRC_DIR}/src/web/table/head.js
      ${NG_SRC_DIR}/src/web/table/header.js
+     ${NG_SRC_DIR}/src/web/table/head.js
      ${NG_SRC_DIR}/src/web/table/row.js
+     ${NG_SRC_DIR}/src/web/table/simple.js
      ${NG_SRC_DIR}/src/web/table/stripped.js
      ${NG_SRC_DIR}/src/web/table/table.js
      ${NG_SRC_DIR}/src/web/tags/dialog.js

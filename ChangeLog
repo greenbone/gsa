@@ -1,3 +1,11 @@
+2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/table/css/table.css,
+	src/html/classic/ng/src/web/table/simple.js: Add a simplified table component.
+	This table uses auto width (doesn't use the full with of 100% as Table) and
+	has nearly not styling.
+
 2017-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Extend the Exclude Hosts field of New Target and Edit Target to allow

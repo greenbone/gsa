@@ -11,6 +11,10 @@ table {
   border-spacing: 2px;
 }
 
+.table.table-simple {
+  width: auto;
+}
+
 .table th,
 .table td {
   padding: 4px;
