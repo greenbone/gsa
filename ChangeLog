@@ -1,5 +1,15 @@
 2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/scanconfigs/editconfigfamilydialog.js,
+	src/html/classic/ng/src/web/scanconfigs/editdialog.js,
+	src/html/classic/ng/src/web/scanconfigs/editnvtdetailsdialog.js,
+	src/html/classic/ng/src/web/scanconfigs/nvtpreference.js,
+	src/html/classic/ng/src/web/scanconfigs/scanconfigspage.js: Add edit scan
+	config nvt dialog to scan config page.
+
+2017-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/scanconfigs.js: Add gmp api for editing
 	scan config nvt preferences.
 

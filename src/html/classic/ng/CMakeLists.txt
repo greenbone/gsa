@@ -320,8 +320,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/scanconfigs/dialog.js
      ${NG_SRC_DIR}/src/web/scanconfigs/editconfigfamilydialog.js
      ${NG_SRC_DIR}/src/web/scanconfigs/editdialog.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/editnvtdetailsdialog.js
      ${NG_SRC_DIR}/src/web/scanconfigs/header.js
      ${NG_SRC_DIR}/src/web/scanconfigs/importdialog.js
+     ${NG_SRC_DIR}/src/web/scanconfigs/nvtpreference.js
      ${NG_SRC_DIR}/src/web/scanconfigs/row.js
      ${NG_SRC_DIR}/src/web/scanconfigs/scanconfigspage.js
      ${NG_SRC_DIR}/src/web/scanconfigs/trend.js

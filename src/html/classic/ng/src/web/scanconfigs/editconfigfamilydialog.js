@@ -35,6 +35,9 @@ import {withDialog} from '../dialog/dialog.js';
 
 import Checkbox from '../form/checkbox.js';
 
+import EditIcon from '../icons/editicon.js';
+
+import SimpleTable from '../table/simple.js';
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';
 import TableData from '../table/data.js';
@@ -45,14 +48,17 @@ import TableRow from '../table/row.js';
 class Nvt extends React.Component {
 
   shouldComponentUpdate(nextProps) {
-    return this.props.selected !== nextProps.selected;
+    return this.props.selected !== nextProps.selected ||
+      this.props.nvt !== nextProps.nvt;
   }
 
   render() {
     const {
+      config,
       nvt,
       selected,
       onSelectedChange,
+      onEditNvtDetailsClick,
     } = this.props;
 
     let pref_count = nvt.preference_count;
@@ -97,7 +103,12 @@ class Nvt extends React.Component {
             onChange={onSelectedChange}
           />
         </TableData>
-        <TableData>
+        <TableData flex align="center">
+          <EditIcon
+            title={_('Select and edit NVT details')}
+            value={{config, nvt}}
+            onClick={onEditNvtDetailsClick}
+          />
         </TableData>
       </TableRow>
     );
@@ -105,8 +116,10 @@ class Nvt extends React.Component {
 }
 
 Nvt.propTypes = {
+  config: PropTypes.model.isRequired,
   nvt: PropTypes.object.isRequired,
   selected: PropTypes.yesno.isRequired,
+  onEditNvtDetailsClick: PropTypes.func,
   onSelectedChange: PropTypes.func,
 };
 
@@ -131,10 +144,11 @@ class EditDialogComponent extends React.Component {
       config,
       nvts,
       selected,
+      onEditNvtDetailsClick,
     } = this.props;
     return (
       <Layout flex="column">
-        <Table>
+        <SimpleTable>
           <TableBody>
             <TableRow>
               <TableData>
@@ -153,7 +167,7 @@ class EditDialogComponent extends React.Component {
               </TableData>
             </TableRow>
           </TableBody>
-        </Table>
+        </SimpleTable>
 
         <Section title={_('Edit Network Vulnerability Tests')}>
           <Table>
@@ -190,8 +204,10 @@ class EditDialogComponent extends React.Component {
                     <Nvt
                       key={oid}
                       nvt={nvt}
+                      config={config}
                       selected={selected[oid]}
                       onSelectedChange={this.handleSelectedChange}
+                      onEditNvtDetailsClick={onEditNvtDetailsClick}
                     />
                   );
                 })
@@ -208,6 +224,7 @@ EditDialogComponent.propTypes = {
   config: PropTypes.model.isRequired,
   nvts: PropTypes.arrayLike.isRequired,
   selected: PropTypes.object.isRequired,
+  onEditNvtDetailsClick: PropTypes.func,
   onValueChange: PropTypes.func,
 };
 

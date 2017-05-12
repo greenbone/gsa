@@ -38,6 +38,7 @@ import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
 import TextField from '../form/textfield.js';
 import Select2 from '../form/select2.js';
+import YesNoRadio from '../form/yesnoradio.js';
 
 import EditIcon from '../icons/editicon.js';
 
@@ -55,7 +56,7 @@ import {
   OSP_SCAN_CONFIG_TYPE,
 } from '../../gmp/models/scanconfig.js';
 
-class NvtPreference extends React.Component {
+class NvtPreferenceDisplay extends React.Component {
 
   shouldComponentUpdate(nextProps) {
     return nextProps.preference !== this.props.preference;
@@ -63,7 +64,9 @@ class NvtPreference extends React.Component {
 
   render() {
     let {
+      config,
       preference,
+      onEditNvtDetailsClick,
     } = this.props;
     return (
       <TableRow>
@@ -77,21 +80,30 @@ class NvtPreference extends React.Component {
           {preference.value}
         </TableData>
         <TableData>
+          <EditIcon
+            title={_('Edit Scan Config NVT Details')}
+            value={{config, nvt: preference.nvt}}
+            onClick={onEditNvtDetailsClick}
+          />
         </TableData>
       </TableRow>
     );
   }
 }
 
-NvtPreference.propTypes = {
+NvtPreferenceDisplay.propTypes = {
+  config: PropTypes.model.isRequired,
   preference: PropTypes.object.isRequired,
+  onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
 class NvtPreferences extends React.Component {
 
   render() {
     let {
+      config,
       preferences,
+      onEditNvtDetailsClick,
     } = this.props;
     return (
       <Section
@@ -119,9 +131,11 @@ class NvtPreferences extends React.Component {
             {
               map(preferences, pref => {
                 return (
-                  <NvtPreference
+                  <NvtPreferenceDisplay
                     key={pref.nvt.name + pref.name}
+                    config={config}
                     preference={pref}
+                    onEditNvtDetailsClick={onEditNvtDetailsClick}
                   />
                 );
               })
@@ -134,7 +148,9 @@ class NvtPreferences extends React.Component {
 }
 
 NvtPreferences.propTypes = {
+  config: PropTypes.model.isRequired,
   preferences: PropTypes.arrayLike.isRequired,
+  onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
 class ScannerPreference extends React.Component {
@@ -173,18 +189,11 @@ class ScannerPreference extends React.Component {
         <TableData>
           {is_radio ?
             <Layout flex>
-              <Radio
-                title={_('Yes')}
-                value="yes"
+              <YesNoRadio
+                yesValue="yes"
+                noValue="no"
                 name={name}
-                checked={value === 'yes'}
-                onChange={onPreferenceChange}
-              />
-              <Radio
-                title={_('No')}
-                value="no"
-                name={name}
-                checked={value === 'no'}
+                value={value}
                 onChange={onPreferenceChange}
               />
             </Layout> :
@@ -348,7 +357,7 @@ class NvtFamily extends React.Component {
         </TableData>
         <TableData flex align="center">
           <EditIcon
-            title={_('Select and edit NVT details')}
+            title={_('Edit Scan Config Family')}
             value={{name, config}}
             onClick={onEditConfigFamilyClick}
           />
@@ -487,6 +496,7 @@ class EditDialog extends React.Component {
       select,
       trend,
       onEditConfigFamilyClick,
+      onEditNvtDetailsClick,
       onValueChange,
     } = this.props;
     return (
@@ -545,8 +555,10 @@ class EditDialog extends React.Component {
 
         {!config.isInUse() && config.type === OPENVAS_SCAN_CONFIG_TYPE &&
           <NvtPreferences
+            config={config}
             preferences={config.preferences.nvt}
             onValueChange={onValueChange}
+            onEditNvtDetailsClick={onEditNvtDetailsClick}
           />
         }
 
@@ -566,6 +578,7 @@ EditDialog.propTypes = {
   select: PropTypes.object,
   trend: PropTypes.object,
   onEditConfigFamilyClick: PropTypes.func,
+  onEditNvtDetailsClick: PropTypes.func,
   onValueChange: PropTypes.func,
 };
 

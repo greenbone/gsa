@@ -27,6 +27,7 @@ import _ from '../../locale.js';
 import {
   for_each,
   is_defined,
+  is_empty,
   select_save_id,
   shorten,
 } from '../../utils.js';
@@ -47,6 +48,7 @@ import {createFilterDialog} from '../powerfilter/dialog.js';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog.js';
 import EditScanConfigDialog from './editdialog.js';
+import EditNvtDetailsDialog from './editnvtdetailsdialog.js';
 import Header from './header.js';
 import ImportDialog from './importdialog.js';
 import Row from './row.js';
@@ -102,12 +104,14 @@ class Page extends React.Component {
     super(...args);
 
     this.handleImportConfig = this.handleImportConfig.bind(this);
-    this.handleSaveConfig = this.handleSaveConfig.bind(this);
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
+    this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
+    this.handleSaveConfig = this.handleSaveConfig.bind(this);
     this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
     this.openEditConfigFamilyDialog =
       this.openEditConfigFamilyDialog.bind(this);
+    this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
   }
 
@@ -131,31 +135,18 @@ class Page extends React.Component {
   }
 
   openEditConfigFamilyDialog({config, name}) {
-    const {entityCommand} = this.props;
-
-    entityCommand.editScanConfigFamilySettings({
-      id: config.id,
-      family_name: name,
-      config_name: config.name,
-    }).then(response => {
-      let {data} = response;
-      let {nvts} = data;
-      let selected = {};
-
-      for_each(nvts, nvt => {
-        selected[nvt.oid] = nvt.selected;
-      });
-
-      this.edit_config_family_dialog.show({
-        config: data.config,
-        config_name: config.name,
-        family_name: name,
-        id: config.id,
-        nvts: data.nvts,
-        selected,
-      }, {
+    this.loadEditScanConfigFamilySettings(config, name).then(state => {
+      this.edit_config_family_dialog.show(state, {
         title: _('Edit Scan Config Family {{name}}',
           {name: shorten(name)}),
+      });
+    });
+  }
+
+  openEditNvtDetailsDialog({config, nvt}) {
+    this.loadEditScanConfigNvtSettings(config, nvt).then(state => {
+      this.edit_nvt_details_dialog.show(state, {
+        title: _('Edit Scan Config NVT {{name}}', {name: shorten(nvt.name)}),
       });
     });
   }
@@ -175,6 +166,23 @@ class Page extends React.Component {
     return entityCommand.saveScanConfigFamily(data).then(() => {
       return this.loadEditScanConfigSettings(data.config);
     }).then(state => this.edit_dialog.setValues(state));
+  }
+
+  handleSaveConfigNvt(data) {
+    const {entityCommand} = this.props;
+    return entityCommand.saveScanConfigNvt(data).then(response => {
+
+      // update nvt timeouts in nvt family dialog
+      this.loadEditScanConfigFamilySettings(
+        data.config, data.family_name).then(state => {
+          this.edit_config_family_dialog.setValues(state);
+        });
+
+      // update nvt preference values in edit dialog
+      this.loadEditScanConfigSettings(data.config).then(state => {
+        this.edit_dialog.setValues(state);
+      });
+    });
   }
 
   loadScanners(dialog) {
@@ -232,6 +240,77 @@ class Page extends React.Component {
     });
   }
 
+  loadEditScanConfigFamilySettings(config, name) {
+    const {entityCommand} = this.props;
+
+    return entityCommand.editScanConfigFamilySettings({
+      id: config.id,
+      family_name: name,
+      config_name: config.name,
+    }).then(response => {
+      let {data} = response;
+      let {nvts} = data;
+      let selected = {};
+
+      for_each(nvts, nvt => {
+        selected[nvt.oid] = nvt.selected;
+      });
+
+      const state = {
+        config: data.config,
+        config_name: config.name,
+        family_name: name,
+        id: config.id,
+        nvts: data.nvts,
+        selected,
+      };
+
+      return state;
+    });
+  }
+
+  loadEditScanConfigNvtSettings(config, nvt) {
+    const {entityCommand} = this.props;
+
+    return entityCommand.editScanConfigNvtSettings({
+      id: config.id,
+      oid: nvt.oid,
+      config_name: config.name,
+      name: nvt.name,
+    }).then(response => {
+      let {data} = response;
+      let preference_values = {};
+
+      for_each(data.nvt.preferences, pref => {
+        let {value, type} = pref;
+
+        if (type === 'password' || type === 'file') {
+          value = undefined;
+        }
+
+        preference_values[pref.name] = {
+          value,
+          type,
+        };
+      });
+
+      const state = {
+        config: data.config,
+        config_name: data.config.name,
+        family_name: data.nvt.family,
+        id: data.config.id,
+        oid: data.nvt.oid,
+        manual_timeout: data.nvt.timeout,
+        nvt: data.nvt,
+        nvt_name: data.nvt.name,
+        preference_values,
+        timeout: is_empty(data.nvt.timeout) ? "0" : "1",
+      };
+
+      return state;
+    });
+  }
+
   render() {
     const {onEntitySave} = this.props;
     return (
@@ -254,10 +333,16 @@ class Page extends React.Component {
           ref={ref => this.edit_dialog = ref}
           onSave={this.handleSaveConfig}
           onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
+          onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
         />
         <EditConfigFamilyDialog
           ref={ref => this.edit_config_family_dialog = ref}
           onSave={this.handleSaveConfigFamily}
+          onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
+        />
+        <EditNvtDetailsDialog
+          ref={ref => this.edit_nvt_details_dialog = ref}
+          onSave={this.handleSaveConfigNvt}
         />
       </Layout>
     );
