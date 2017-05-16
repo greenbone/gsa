@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend, is_string, map, shallow_copy} from '../../utils.js';
+import {extend, is_defined, is_string, map, shallow_copy} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -62,11 +62,16 @@ export class Nvt extends Model {
     ret.severity = ret.cvss_base;
     delete ret.cvss_base;
 
-    ret.preferences = map(elem.preferences.preference, preference => {
-      let pref = shallow_copy(preference);
-      delete pref.nvt;
-      return pref;
-    });
+    if (is_defined(elem.preferences)) {
+      ret.preferences = map(elem.preferences.preference, preference => {
+        let pref = shallow_copy(preference);
+        delete pref.nvt;
+        return pref;
+      });
+    }
+    else {
+      ret.preferences = [];
+    }
 
     return ret;
   }
