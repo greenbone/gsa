@@ -90,7 +90,7 @@ Compiling Greenbone Security Assistant Next Generation GUI
 
 Prerequisites for using the Next Generation GUI:
 * node.js >= 4.0
-* Either yarn or npm. yarn is faster, but younger.
+* Either yarn or npm. yarn is faster and more reliable, but younger.
 
 On Debian Jessie node.js is too old. Follow these steps for a
 sufficiently new version. Be aware that this will remove your
@@ -159,20 +159,20 @@ Logging is configured entirely by the file
 
 The configuration is divided into domains like this one
 
-	[gsad main]
-	prepend=%t %p
-	prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
-	file=/var/log/openvas/gsad.log
-	level=128
+    [gsad main]
+    prepend=%t %p
+    prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
+    file=/var/log/openvas/gsad.log
+    level=128
 
 The "level" field controls the amount of logging that is written.
 The value of "level" can be
 
       4  Errors.
-	  8  Critical situation.
+      8  Critical situation.
      16  Warnings.
-	 32  Messages.
-	 64  Information.
+     32  Messages.
+     64  Information.
     128  Debug.  (Lots of output.)
 
 Enabling any level includes all the levels above it.  So enabling Information
