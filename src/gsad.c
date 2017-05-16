@@ -825,7 +825,7 @@ init_validator ()
   openvas_validator_alias (validator, "host_count",         "number");
   openvas_validator_alias (validator, "hosts_manual",       "hosts");
   openvas_validator_alias (validator, "hosts_filter",       "filter");
-  openvas_validator_alias (validator, "exclude_hosts",      "hosts");
+  openvas_validator_alias (validator, "exclude_hosts",      "hosts_opt");
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "in_use",             "boolean");
   openvas_validator_alias (validator, "include_related",   "number");

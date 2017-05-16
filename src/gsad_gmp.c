@@ -9342,11 +9342,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
 
   CHECK_PARAM_INVALID (name, "Create Target", "new_target");
   CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
-  if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    return message_invalid (connection, credentials, params, response_data,
-                            "Missing manual list of hosts",
-                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            "Create Target", "new_target");
+  if (strcmp (target_source, "manual") == 0)
+    CHECK_PARAM_INVALID (hosts, "Create Target", "new_target");
   if (strcmp (target_source, "file") == 0 && file == NULL)
     return message_invalid (connection, credentials, params, response_data,
                             "Missing hosts file",
@@ -9359,6 +9356,10 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   if (params_given (params, "target_exclude_source"))
     {
       CHECK_PARAM_INVALID (target_exclude_source, "Create Target", "new_target")
+      if (strcmp (target_exclude_source, "manual") == 0
+          /* In case browser doesn't send empty field. */
+          && params_given (params, "exclude_hosts"))
+        CHECK_PARAM_INVALID (exclude_hosts, "Create Target", "new_target");
       if (strcmp (target_exclude_source, "file") == 0 && exclude_file == NULL)
         return message_invalid (connection, credentials, params, response_data,
                                 "Missing exclude hosts file",
@@ -9435,7 +9436,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                      target_exclude_source
                       ? (strcmp (target_exclude_source, "file") == 0
                           ? exclude_file
-                          : exclude_hosts)
+                          : (exclude_hosts ? exclude_hosts : ""))
                       : "",
                      reverse_lookup_only ? reverse_lookup_only : "0",
                      reverse_lookup_unify ? reverse_lookup_unify : "0",

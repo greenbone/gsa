@@ -1,3 +1,12 @@
+2017-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Make exclude_hosts optional.
+
+	* src/gsad_gmp.c (create_target_gmp): Check hosts with standard check,
+	because it's can be NULL for other reasons too, like forbidden characters.
+	Check exclude_hosts, but also NULL check it before use because the browser
+	may not send it at all if the field is empty.
+
 2017-05-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/nvt.js: Fix parsing nvt preferences if
