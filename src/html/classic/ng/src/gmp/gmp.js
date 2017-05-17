@@ -66,7 +66,13 @@ const log = logger.getLogger('gmp');
 export class Gmp {
 
   constructor(options = {}) {
-    let {server, protocol, storage = localStorage, ...httpoptions} = options;
+    let {
+      autorefresh,
+      protocol,
+      server,
+      storage = localStorage,
+      ...httpoptions,
+    } = options;
 
     this._commands = {};
 
@@ -78,6 +84,8 @@ export class Gmp {
     this._login = new LoginCommand(this.http);
 
     this.storage = storage;
+
+    this._autorefresh = autorefresh;
 
     if (this.storage.token) {
       this.token = this.storage.token;
@@ -175,6 +183,12 @@ export class Gmp {
 
   set globals(values) {
     this.storage.globals = JSON.stringify(values);
+  }
+
+  get autorefresh() {
+    return is_defined(this._autorefresh) ?
+      this._autorefresh :
+      this.globals.autorefresh;
   }
 
   addHttpInterceptor(interceptor) {

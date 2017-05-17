@@ -1,5 +1,17 @@
 2017-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/web/entities/container.js: Allow to change refresh
+	interval via public/config.js. E.g. to set a reload interval of 60 seconds set
+
+		config = {
+			autorefresh: 60,
+		}
+
+	in public/config.js.
+
+2017-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/footer.js: Render delete icon before
 	export icon in list table footers.
 
