@@ -79,14 +79,14 @@ export const EntitiesFooter = ({
                 <TrashIcon onClick={onTrashClick}
                   selectionType={selectionType}/>
               }
+              {deleteEntities &&
+                <DeleteIcon onClick={onDeleteClick}
+                  selectionType={selectionType}/>
+              }
               {download &&
                 <ExportIcon onClick={onDownloadClick}
                   selectionType={selectionType}
                   value={download}/>
-              }
-              {deleteEntities &&
-                <DeleteIcon onClick={onDeleteClick}
-                  selectionType={selectionType}/>
               }
               {children}
             </Layout>
