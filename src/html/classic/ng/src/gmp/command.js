@@ -21,10 +21,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, extend, map} from '../utils.js';
+import {is_defined, is_string, extend, map} from '../utils.js';
 import logger from '../log.js';
 
-import {ALL_FILTER} from './models/filter.js';
+import Filter, {ALL_FILTER} from './models/filter.js';
 
 import {parse_collection_list, parse_info_entities,
   parse_info_counts} from './parser.js';
@@ -120,8 +120,16 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   getAll(params = {}, options) {
-    params.filter = is_defined(params.filter) ?
-      params.filter.all() : ALL_FILTER;
+    const {filter} = params;
+    if (!is_defined(filter)) {
+      params.filter = ALL_FILTER;
+    }
+    else if (is_string(filter)) {
+      params.filter = Filter.fromString(filter).all();
+    }
+    else {
+      params.filter = filter.all();
+    }
     return this.get(params, options);
   }
 
