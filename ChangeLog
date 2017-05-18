@@ -1,5 +1,10 @@
 2017-05-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-dialog.js: Allow to resize "old" dialogs
+	vertically.
+
+2017-05-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/icons/icon.js: Allow to set the size of an icon
 	in units not only pre-defined strings.
 
