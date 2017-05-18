@@ -48,6 +48,9 @@
 
   var DIALOGS = {};
 
+  var DIALOG_DEFAULT_HEIGHT = 'auto';
+  var DIALOG_DEFAULT_WIDTH = 800;
+
   /*
   * GSA base object
   */
@@ -348,6 +351,16 @@
     return undefined;
   }
 
+  function parse_size(value, full, def) {
+    if (gsa.is_defined(value)) {
+      if (gsa.is_string(value) && value.endsWith('%')) {
+        return full * (gsa.parse_int(value.slice(0, -1)) / 100);
+      }
+      return value;
+    }
+    return def;
+  }
+
   function Dialog(options) {
     this.command = options.cmd;
     this.dialog_id = options.dialog_id;
@@ -497,7 +510,11 @@
     Dialog.call(this, options); // call super
     this.success_reload = options.success_reload || {};
     this.close_reload = options.close_reload || {};
-    this.height = is_defined(options.height) ? options.height : 500;
+
+    this.height = parse_size(options.height, $(window).height(),
+      DIALOG_DEFAULT_HEIGHT);
+    this.width = parse_size(options.width, $(window).width(),
+      DIALOG_DEFAULT_WIDTH);
 
     if (options.params === undefined) {
       this.params = {};
@@ -747,7 +764,7 @@
       // show the dialog !
       self.dialog.dialog({
         modal: true,
-        width: 800,
+        width: self.width,
         height: self.height,
         buttons: [
           {
@@ -1080,6 +1097,7 @@
     var parent_dialog = options.element.parents('.dialog-form')[0];
     var reload_type = options.element.data('reload');
     var height = options.element.data('height');
+    var width = options.element.data('width');
     var close_reload_type = options.element.data('close-reload');
     var dialog_id = options.element.data('dialog-id');
 
@@ -1125,6 +1143,7 @@
         close_reload: {type: close_reload_type},
         parent_dialog: parent_dialog,
         height: height,
+        width: width,
         dialog_id: dialog_id,
       }).show(options.button, callback);
     }

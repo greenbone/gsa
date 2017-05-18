@@ -1,5 +1,13 @@
 2017-05-18  Björn Ricks <bjoern.ricks@greenbone.neto
 
+	Backport r28425 and r28427
+
+	* src/html/classic/js/greenbone.js: Allow to set dialog height as
+	percent values of the current browser window height. Also allow to set width
+	dynamically.
+
+2017-05-18  Björn Ricks <bjoern.ricks@greenbone.neto
+
 	Backport r28418
 
 	* src/html/classic/js/greenbone.js: Allow to resize dialogs vertically.
