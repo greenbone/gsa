@@ -1,5 +1,18 @@
 2017-05-18  Björn Ricks <bjoern.ricks@greenbone.neto
 
+	Backport r28426 and r28428
+
+	* src/html/classic/omp.xsl (html-config-table):  Set height of edit scan
+	config dialog to 90% of of the browser window height and width to 50%.
+
+	* src/html/classic/omp.xsl (list-window-line-icons): Allow to set width and
+	height of edit dialogs opened from the list page table actions.
+
+	* src/html/classic/omp.xsl (config): Set width and height of scan config edit
+	dialogs in scan config list table actions.
+
+2017-05-18  Björn Ricks <bjoern.ricks@greenbone.neto
+
 	Backport r28425 and r28427
 
 	* src/html/classic/js/greenbone.js: Allow to set dialog height as

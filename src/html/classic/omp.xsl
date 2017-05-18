@@ -1931,6 +1931,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="next" select="concat ('get_', $type, 's')"/>
   <xsl:param name="next_type" select="''"/>
   <xsl:param name="next_id" select="''"/>
+  <xsl:param name="edit-dialog-width" select="'800'"/>
+  <xsl:param name="edit-dialog-height" select="'auto'"/>
 
   <xsl:variable name="next_params_string">
     <xsl:choose>
@@ -1991,8 +1993,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="gsa:may (concat ('modify_', $type)) and $resource/writable!='0'">
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={$resource/@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n (concat ('Edit ', $cap-type))}" data-reload="window"
-             class="edit-action-icon icon icon-sm" data-type="{$type}" data-id="{$resource/@id}">
+             title="{gsa:i18n (concat ('Edit ', $cap-type))}"
+             class="edit-action-icon icon icon-sm"
+             data-type="{$type}" data-id="{$resource/@id}"
+             data-width="{$edit-dialog-width}" data-height="{$edit-dialog-height}"
+             data-reload="window">
             <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </xsl:when>
@@ -17624,8 +17629,10 @@ should not have received it.
       </xsl:when>
       <xsl:otherwise>
         <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            class="edit-action-icon icon icon-sm" data-type="config" data-id="{$config/@id}"
-            title="{gsa:i18n ('Edit Scan Config')}">
+          class="edit-action-icon icon icon-sm"
+          data-type="config" data-id="{$config/@id}"
+          data-height="90%" data-width="50%"
+          title="{gsa:i18n ('Edit Scan Config')}">
           <img src="/img/edit.svg"/>
         </a>
       </xsl:otherwise>
@@ -18147,6 +18154,8 @@ should not have received it.
             <xsl:with-param name="cap-type" select="'Scan Config'"/>
             <xsl:with-param name="type" select="'config'"/>
             <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="edit-dialog-height" select="'90%'"/>
+            <xsl:with-param name="edit-dialog-width" select="'50%'"/>
           </xsl:call-template>
         </td>
       </xsl:otherwise>
