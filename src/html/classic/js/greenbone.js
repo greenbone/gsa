@@ -748,7 +748,7 @@
       self.dialog.dialog({
         modal: true,
         width: 800,
-        maxHeight: self.height,
+        height: self.height,
         buttons: [
           {
             text: button,
