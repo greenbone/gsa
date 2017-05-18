@@ -17271,8 +17271,10 @@ should not have received it.
       </xsl:when>
       <xsl:otherwise>
         <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            class="edit-action-icon icon icon-sm" data-type="config" data-id="{$config/@id}"
-            title="{gsa:i18n ('Edit Scan Config')}">
+          class="edit-action-icon icon icon-sm"
+          data-type="config" data-id="{$config/@id}"
+          data-height="90%" data-width="50%"
+          title="{gsa:i18n ('Edit Scan Config')}">
           <img src="/img/edit.svg"/>
         </a>
       </xsl:otherwise>
