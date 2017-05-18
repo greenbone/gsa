@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
+import {classes, is_array} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 import {get_img_url} from '../urls.js';
@@ -31,7 +31,7 @@ import {get_img_url} from '../urls.js';
 import './css/icon.css';
 
 export const withIconCss = Component => {
-  function IconCss({size = 'small', className, onClick, ...other}) {
+  function IconCss({size = 'small', className, style = {}, onClick, ...other}) {
     if (size === 'small') {
       className = classes('icon', 'icon-sm', className);
     }
@@ -40,6 +40,10 @@ export const withIconCss = Component => {
     }
     else if (size === 'large') {
       className = classes('icon', 'icon-lg', className);
+    }
+    else if (is_array(size)) {
+      style.width = size[0];
+      style.height = size[1];
     }
     else {
       className = classes('icon', className);
@@ -51,6 +55,7 @@ export const withIconCss = Component => {
     return (
       <Component
         {...other}
+        style={style}
         className={className}
         onClick={onClick}
       />
@@ -59,9 +64,13 @@ export const withIconCss = Component => {
 
   IconCss.propTypes = {
     className: PropTypes.string,
-    size: PropTypes.oneOf([
-      'small', 'medium', 'large', 'default',
+    size: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.oneOf([
+        'small', 'medium', 'large', 'default',
+      ]),
     ]),
+    style: PropTypes.object,
     onClick: PropTypes.func,
   };
 
