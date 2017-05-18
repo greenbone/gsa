@@ -31,7 +31,7 @@
 
   var DIALOGS = {};
 
-  var DIALOG_DEFAULT_HEIGHT = 500;
+  var DIALOG_DEFAULT_HEIGHT = 'auto';
   var DIALOG_DEFAULT_WIDTH = 800;
 
   /*

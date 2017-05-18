@@ -1,5 +1,10 @@
 2017-05-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-dialog.js: Set default height to auto for
+	"old" dialogs. With the setting the height is defined by it's content.
+
+2017-05-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Set height of edit scan config dialog to 90% of
 	the browser window height and width to 50%.
 
