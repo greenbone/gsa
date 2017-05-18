@@ -1,5 +1,13 @@
 2017-05-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window-line-icons): Allow to set width and
+	height of edit dialogs opened from the list page table actions.
+
+	* src/html/classic/omp.xsl (config): Set width and height of scan config edit
+	dialogs in scan config list table actions.
+
+2017-05-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone-dialog.js: Set default height to auto for
 	"old" dialogs. With the setting the height is defined by it's content.
 
