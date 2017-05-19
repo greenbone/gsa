@@ -36,6 +36,12 @@ export class NvtCommand extends EntityCommand {
     super(http, 'info', Nvt);
     this.setParam('info_type', 'nvt');
   }
+
+  getElementFromRoot(root) {
+    // info[0] because we have always two info objects here
+    // one for the real nvt object and second for the counts (no infos)
+    return root.get_info.get_info_response.info[0].nvt;
+  }
 }
 
 export class NvtsCommand extends InfoEntitiesCommand {
