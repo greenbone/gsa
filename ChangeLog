@@ -1,5 +1,12 @@
 2017-05-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dialog/dialog.js: Fix calling onSave handler if
+	the handler doesn't return a promise. When clicking on the save button of a
+	dialog the callback handler has been called twice if the callback didn't
+	return a promise.
+
+2017-05-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/nvt.js: Implement getElementFromRoot
 	for NvtCommand to support gmp.nvt.get(...)
 

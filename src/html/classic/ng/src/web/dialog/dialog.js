@@ -311,7 +311,6 @@ export const withDialog = (Component, options = {}) => {
           );
         }
         else {
-          onSave(data);
           this.close();
         }
       }
