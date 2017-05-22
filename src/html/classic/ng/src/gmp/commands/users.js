@@ -27,6 +27,7 @@ import {for_each} from '../../utils.js';
 import logger from '../../log.js';
 
 import Capabilities from '../capabilities.js';
+import Promise from '../promise.js';
 
 import User from '../models/user.js';
 import Settings from '../models/settings.js';
@@ -87,6 +88,68 @@ export class UserCommand extends EntityCommand {
       log.debug('ChartPreferences loaded', prefs);
       return response.setData(new ChartPreferences(prefs));
     });
+  }
+
+  create({
+    access_hosts,
+    access_ifaces,
+    auth_method,
+    group_ids,
+    hosts_allow,
+    ifaces_allow,
+    name,
+    password,
+    role_ids,
+  }) {
+    const data = {
+      cmd: 'create_user',
+      next: 'get_user',
+      access_hosts,
+      access_ifaces,
+      auth_method,
+      'group_ids:': group_ids,
+      hosts_allow,
+      ifaces_allow,
+      login: name,
+      password,
+      'role_ids:': role_ids,
+    };
+    log.debug('Creating new user', data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
+  save({
+    id,
+    access_hosts,
+    access_ifaces,
+    auth_method,
+    group_ids,
+    hosts_allow,
+    ifaces_allow,
+    name,
+    password,
+    role_ids,
+  }) {
+    const data = {
+      cmd: 'save_user',
+      next: 'get_user',
+      access_hosts,
+      access_ifaces,
+      'group_ids:': group_ids,
+      hosts_allow,
+      id,
+      ifaces_allow,
+      login: name,
+      'modify_password': auth_method,
+      password,
+      'role_ids:': role_ids,
+    };
+    log.debug('Saving user', data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
+  getElementFromRoot(root) {
+    return root.get_user.get_users_response.user;
   }
 }
 
