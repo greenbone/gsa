@@ -1,5 +1,11 @@
 2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/containerdialog.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Fix opening and saving the
+	container task dialog.
+
+2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/user.js: Implement gmp api for creating
 	and modifying users.
 

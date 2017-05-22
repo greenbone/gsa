@@ -149,11 +149,11 @@ ToolBarIcons.contextTypes = {
 };
 
 ToolBarIcons.propTypes = {
-  onAdvancedTaskWizardClick: PropTypes.func,
-  onModifyTaskWizardClick: PropTypes.func,
-  onNewContainerTaskClick: PropTypes.func,
-  onNewTaskClick: PropTypes.func,
-  onTaskWizardClick: PropTypes.func,
+  onAdvancedTaskWizardClick: PropTypes.func.isRequired,
+  onModifyTaskWizardClick: PropTypes.func.isRequired,
+  onNewContainerTaskClick: PropTypes.func.isRequired,
+  onNewTaskClick: PropTypes.func.isRequired,
+  onTaskWizardClick: PropTypes.func.isRequired,
 };
 
 class Page extends React.Component {
@@ -454,6 +454,7 @@ class Page extends React.Component {
           onEditTaskClick={this.openTaskDialog}
           onImportReportClick={this.openImportReportDialog}
           onModifyTaskWizardClick={this.openModifyTaskWizard}
+          onNewContainerTaskClick={this.openContainerTaskDialog}
           onNewTaskClick={this.openTaskDialog}
           onResumeTaskClick={this.handleResumeTask}
           onStartTaskClick={this.handleStartTask}
