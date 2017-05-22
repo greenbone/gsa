@@ -45,7 +45,7 @@ export class Dashboard extends React.Component {
       id = "dashboard";
     }
 
-    let dashboard = new window.gsa.charts.Dashboard(id, undefined, {
+    this.dashboard = new window.gsa.charts.Dashboard(id, undefined, {
       config_pref_id: this.props.configPrefId,
       default_heights_string: '280',
       default_controllers_string: this.props.defaultControllersString,
@@ -56,7 +56,6 @@ export class Dashboard extends React.Component {
     });
 
     this.state = {
-      dashboard,
       initialized: false,
       id,
     };
@@ -66,13 +65,13 @@ export class Dashboard extends React.Component {
 
   getChildContext() {
     return {
-      dashboard: this.state.dashboard,
+      dashboard: this.dashboard,
     };
   }
 
   componentDidMount() {
     let {gmp} = this.context;
-    let {dashboard} = this.state;
+    let {dashboard} = this;
     let pref_id = this.props.configPrefId;
 
     let promises = [
@@ -114,6 +113,10 @@ export class Dashboard extends React.Component {
     gmp.user.currentChartPreferences({force: true});
   }
 
+  reload() {
+    this.dashboard.reload();
+  }
+
   render() {
     let {id} = this.state;
     return (
@@ -136,7 +139,7 @@ Dashboard.propTypes = {
   hideFilterSelect: PropTypes.bool,
   defaultControllerString: PropTypes.string,
   defaultControllersString: PropTypes.string,
-  maxComponents: PropTypes.number,
+  maxComponents: PropTypes.numberOrNumberString,
 };
 
 Dashboard.defaultProps = {
@@ -149,14 +152,22 @@ Dashboard.contextTypes = {
 
 export const withDashboard = (Charts, options = {}) => {
 
-  const DashboardWrapper = (props, context) => {
-    let {filter, ...other} = props;
-    let {cache} = context;
-    return (
-      <Dashboard {...options} {...other}>
-        <Charts filter={filter} cache={cache}/>
-      </Dashboard>
-    );
+  class DashboardWrapper extends React.Component {
+
+    reload() {
+      this.dashboard.reload();
+    }
+
+    render() {
+      let {filter, ...other} = this.props;
+      let {cache} = this.context;
+      return (
+        <Dashboard {...options} {...other}
+          ref={ref => this.dashboard = ref}>
+          <Charts filter={filter} cache={cache}/>
+        </Dashboard>
+      );
+    }
   };
 
   DashboardWrapper.propTypes = {

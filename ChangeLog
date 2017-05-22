@@ -1,5 +1,11 @@
 2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dashboard/dashboard.js: Allow to reload a
+	dashboard via the react wrappers. Also fix the proptype of the maxComponents
+	property.
+
+2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Allow to reload dashboards and their
 	displayed charts.
 
