@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ export class LoginCommand extends HttpCommand {
     super(http, {
       cmd: 'login',
       text: '/omp?xml=1',
+      no_redirect: '1', // TODO fix in gsad
     });
   }
 
