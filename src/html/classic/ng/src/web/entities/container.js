@@ -126,10 +126,24 @@ class EntitiesContainer extends React.Component {
 
     entities_command.get({filter, ...extraLoadParams}, {cache, force})
       .then(entities => {
-        filter = entities.getFilter();
-        let meta = entities.getMeta();
+        const loaded_filter = entities.getFilter();
+        const meta = entities.getMeta();
 
-        this.setState({entities, filter, loading: false});
+        this.setState({filter: loaded_filter});
+
+        if (!loaded_filter.equals(filter) && meta.from_cache) {
+          // reload data for default filter if page was visited without filter
+          // data may be already different if loaded filter differs from passed
+          // filter (especially if filter was undefined initially)
+          return entities_command.get({filter, ...extraLoadParams},
+            {cache, force});
+        }
+        return entities;
+      })
+      .then(entities => {
+        const meta = entities.getMeta();
+
+        this.setState({entities, loading: false});
 
         if (meta.fromcache && reload) {
           refresh = 1;

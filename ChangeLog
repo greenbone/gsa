@@ -1,5 +1,13 @@
 2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: Fix displaying entities
+	if they have changed and no filter is used in the initial request. Only the
+	first request for the entities has no filter set. Therefore the initial
+	request is cached without the filter param in the url. Following requests
+	including the requests from the reload time use a filter param.
+
+2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/containerdialog.js,
 	src/html/classic/ng/src/web/tasks/taskspage.js: Fix opening and saving the
 	container task dialog.
