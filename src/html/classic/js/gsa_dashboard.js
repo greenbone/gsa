@@ -981,6 +981,14 @@
     return;
   };
 
+  Dashboard.prototype.reload = function() {
+    log.debug('reload dashboard');
+
+    this.forEachRowOrdered(function(row) {
+      row.reload();
+    });
+  };
+
   /**
    * Checks wether a row has displays and removes it if not
    *
@@ -1483,6 +1491,14 @@
     return this;
   };
 
+  DashboardRow.prototype.reload = function() {
+    log.debug('reload row', this.id);
+
+    this.forEachDisplayOrdered(function(display) {
+      display.reload();
+    });
+  };
+
   /**
    * Returns the width for one in the row
    *
@@ -1911,6 +1927,13 @@
   DashboardDisplay.prototype.redraw = function() {
     log.debug('redraw display ' + this.id);
     this._requestNewChart();
+    return this;
+  };
+
+  DashboardDisplay.prototype.reload = function() {
+    log.debug('reload display ', this.id);
+
+    this._requestNewChart(true);
     return this;
   };
 
@@ -2458,7 +2481,7 @@
    *
    * @return This display
    */
-  DashboardDisplay.prototype._requestNewChart = function() {
+  DashboardDisplay.prototype._requestNewChart = function(force_reload) {
     if (!gsa.is_defined(this.current_controller)) {
       this.showError(gsa._('Could not load chart {{chart}}',
             {chart: this.config.name}));
@@ -2471,7 +2494,7 @@
       this.last_request = undefined;
     }
 
-    this.current_controller.addRequest(this.current_filter);
+    this.current_controller.addRequest(this.current_filter, force_reload);
 
     this.last_request = {
       controller: this.current_controller,
@@ -2600,13 +2623,13 @@
   gsa.derive(ChartController, EventNode);
 
   /* Delegates a data request to the data source */
-  ChartController.prototype.addRequest = function(filter) {
+  ChartController.prototype.addRequest = function(filter, force_reload) {
     this.filter = filter;
 
     if (this.hasChanged()) {
       this.showLoading();
     }
-    this.data_src.addRequest(this, this.filter, this.gen_params);
+    this.data_src.addRequest(this, this.filter, this.gen_params, force_reload);
   };
 
   ChartController.prototype.removeRequest = function(filter) {
@@ -2874,7 +2897,8 @@
    * @param filter      The requested filter.
    * @param gen_params  Generator params for the request.
    */
-  DataSource.prototype.addRequest = function(controller, filter, gen_params) {
+  DataSource.prototype.addRequest = function(controller, filter, gen_params,
+      force_reload) {
     var uri = create_uri(this.command, this.token, filter, this.params,
       this.prefix, false);
 
@@ -2889,7 +2913,17 @@
       gen_params: gen_params
     };
 
-    this._checkRequests(uri);
+    if (force_reload !== true) { // use cache by default
+      var data = this.getData(uri);
+      if (data) {
+        this.dataLoaded(data, uri);
+        return this;
+      }
+    }
+
+    this.addNewXmlRequest(uri);
+
+    return this;
   };
 
   /**
@@ -2915,22 +2949,6 @@
         }
       }
     }
-  };
-
-  /**
-   * Checks if a data source has active requests for a filter and manages the
-   *  HTTP requests.
-   */
-  DataSource.prototype._checkRequests = function(uri) {
-    var data = this.getData(uri);
-    if (data) {
-      this.dataLoaded(data, uri);
-      return this;
-    }
-
-    this.addNewXmlRequest(uri);
-
-    return this;
   };
 
   DataSource.prototype.addNewXmlRequest = function(uri) {

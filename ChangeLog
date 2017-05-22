@@ -1,3 +1,8 @@
+2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js: Allow to reload dashboards and their
+	displayed charts.
+
 2017-05-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dialog/dialog.js: Fix calling onSave handler if
