@@ -1,5 +1,9 @@
 2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/button.js: Allow to layout button components.
+
+2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/container.js: Fix displaying entities
 	if they have changed and no filter is used in the initial request. Only the
 	first request for the entities has no filter set. Therefore the initial

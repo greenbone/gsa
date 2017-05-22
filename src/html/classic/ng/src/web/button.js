@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,16 @@ import {classes} from '../utils.js';
 
 import PropTypes from './proptypes.js';
 
+import {withLayout} from './layout.js';
+
 import './css/button.css';
 
-export const Button = ({title, className, children = title, ...other}) => {
+export const Button = ({
+    className,
+    title,
+    children = title,
+    ...other
+  }) => {
   className = classes('button', className);
   return (
     <button
@@ -46,6 +53,6 @@ Button.propTypes = {
   className: PropTypes.string,
 };
 
-export default Button;
+export default withLayout(Button);
 
 // vim: set ts=2 sw=2 tw=80:
