@@ -871,6 +871,7 @@ export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
+export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 
 export default Filter;
 
