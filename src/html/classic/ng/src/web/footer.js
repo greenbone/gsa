@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,8 @@ export const Footer = () => {
   return (
     <footer className="gsa-footer">
       Greenbone Security Assistant (GSA) Copyright 2009-2017 by
-      Greenbone Networks GmbH,
-      <a href="http://www.greenbone.net" target="_blank">www.greenbone.net</a>
+      Greenbone Networks GmbH, <a href="http://www.greenbone.net"
+        target="_blank">www.greenbone.net</a>
     </footer>
   );
 };
