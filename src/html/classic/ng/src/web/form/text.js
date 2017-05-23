@@ -23,14 +23,25 @@
 
 import React from 'react';
 
+import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
-const TextComponent = props => {
+import {withClickHandler} from './form.js';
+
+const TextComponent = ({
+    value,
+    ...props,
+  }) => {
   return <span {...props} />;
 };
 
-export const Text = withLayout(TextComponent, {box: true});
+TextComponent.propTypes = {
+  value: PropTypes.any,
+};
 
-export default Text;
+export default withLayout(
+  withClickHandler(TextComponent),
+  {box: true},
+);
 
 // vim: set ts=2 sw=2 tw=80:
