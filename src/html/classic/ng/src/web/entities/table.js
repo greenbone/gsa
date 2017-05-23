@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {is_defined, map, exclude, includes} from '../../utils.js';
+import {is_defined, for_each, exclude, includes} from '../../utils.js';
 
 import FootNote from '../footnote.js';
 import Layout from '../layout.js';
@@ -46,8 +46,27 @@ const exclude_props = [
 
 export class EntitiesTable extends React.Component {
 
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      details: {},
+    };
+
+    this.handleToggleShowDetails = this.handleToggleShowDetails.bind(this);
+  }
+
+  handleToggleShowDetails(value, name) {
+    const {details} = this.state;
+
+    details[name] = !details[name];
+
+    this.setState({details});
+  }
+
   render() {
     let {props} = this;
+    let {details} = this.state;
     let {filter, entities, emptyTitle} = props;
 
     if (!is_defined(entities)) {
@@ -55,6 +74,7 @@ export class EntitiesTable extends React.Component {
     }
 
     let RowComponent = props.row;
+    let RowDetailsComponent = props.rowDetails;
     let HeaderComponent = props.header;
     let FooterComponent = props.footer;
     let PaginationComponent = is_defined(props.pagination) ?
@@ -69,13 +89,24 @@ export class EntitiesTable extends React.Component {
       return <div className="entities-table">{emptyTitle}</div>;
     }
 
-    let rows;
+    let rows = [];
     if (RowComponent) {
-      rows = map(entities, entity => {
-        return (
-          <RowComponent {...other} key={entity.id}
+      for_each(entities, entity => {
+        rows.push(
+          <RowComponent
+            {...other}
+            onToggleDetailsClick={this.handleToggleShowDetails}
+            key={entity.id}
             entity={entity}/>
         );
+        if (RowDetailsComponent && details[entity.id]) {
+          rows.push(
+            <RowDetailsComponent
+              key={'details-' + entity.id}
+              entity={entity}
+            />
+          );
+        }
       });
     }
 
