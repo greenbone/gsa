@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntitiesCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Result from '../models/result.js';
 
@@ -36,6 +36,18 @@ export class ResultsCommand extends EntitiesCommand {
   }
 };
 
+export class ResultCommand extends EntityCommand {
+
+  constructor(http) {
+    super(http, 'result', Result);
+  }
+
+  getElementFromRoot(root) {
+    return root.get_result.commands_response.get_results_response.result;
+  }
+}
+
+register_command('result', ResultCommand);
 register_command('results', ResultsCommand);
 
 // vim: set ts=2 sw=2 tw=80:
