@@ -25,13 +25,15 @@ import React from 'react';
 
 import _ from '../locale.js';
 
+import Layout from './layout.js';
 import PropTypes from './proptypes.js';
 
 import Icon from './icons/icon.js';
 
-export const SolutionType = props => {
-  let {type} = props;
-
+const SolutionType = ({
+    type,
+    displayTitleText = false,
+  }) => {
   let img;
   let title;
 
@@ -63,6 +65,21 @@ export const SolutionType = props => {
     default:
       return null;
   }
+
+  if (displayTitleText) {
+    return (
+      <Layout flex align={["start", "center"]}>
+        <Icon
+          img={img}
+          title={title}
+          alt={title}/>
+        <span>
+          {title}
+        </span>
+      </Layout>
+    );
+  }
+
   return (
     <Icon
       img={img}
@@ -73,6 +90,7 @@ export const SolutionType = props => {
 
 SolutionType.propTypes = {
   type: PropTypes.string,
+  displayTitleText: PropTypes.bool,
 };
 
 
