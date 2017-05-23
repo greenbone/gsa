@@ -313,6 +313,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/reports/row.js
      ${NG_SRC_DIR}/src/web/reports/table.js
      ${NG_SRC_DIR}/src/web/results/charts.js
+     ${NG_SRC_DIR}/src/web/results/details.js
      ${NG_SRC_DIR}/src/web/results/filterdialog.js
      ${NG_SRC_DIR}/src/web/results/resultspage.js
      ${NG_SRC_DIR}/src/web/results/row.js
@@ -428,6 +429,7 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/menu/css/menu.css
      ${NG_SRC_DIR}/src/web/menu/css/menuentry.css
      ${NG_SRC_DIR}/src/web/powerfilter/css/powerfilter.css
+     ${NG_SRC_DIR}/src/web/results/css/details.css
      ${NG_SRC_DIR}/src/web/table/css/table.css
      ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
      )

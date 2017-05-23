@@ -1,5 +1,12 @@
 2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/results/css/details.css,
+	src/html/classic/ng/src/web/results/details.js: Introduce new ResultDetails
+	component.
+
+2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	src/html/classic/ng/src/web/entities/table.js: Allow to render a details row
 	for an entity at the entities tables.
 
