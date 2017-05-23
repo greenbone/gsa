@@ -1,0 +1,12 @@
+.row-details-toggle {
+  cursor: pointer;
+  text-decoration: none;
+  color: blue;
+}
+
+.row-details-toggle:hover {
+  text-decoration: underline;
+  color: blue;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

@@ -1,5 +1,11 @@
 2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/css/row.css,
+	src/html/classic/ng/src/web/entities/row.js: Introduce new RowDetailsToggle
+	component.
+
+2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/text.js: Extend Text component to be able
 	to act on click events. This will be required for toggling of result details.
 

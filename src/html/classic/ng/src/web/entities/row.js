@@ -23,9 +23,15 @@
 
 import React from 'react';
 
-import {is_defined} from '../../utils.js';
+import {classes, is_defined} from '../../utils.js';
+
+import PropTypes from '../proptypes.js';
+
+import Text from '../form/text.js';
 
 import EntityActions from './actions.js';
+
+import './css/row.css';
 
 export const withEntityRow = (Component, actions, options = {}) => {
 
@@ -35,10 +41,29 @@ export const withEntityRow = (Component, actions, options = {}) => {
 
   const EntityRowWrapper = props => {
     return (
-      <Component {...options} actions={actions} {...props}/>
+      <Component
+        {...options}
+        actions={actions}
+        {...props}
+      />
     );
   };
   return EntityRowWrapper;
 };
+
+export const RowDetailsToggle = ({
+    className,
+    ...props,
+  }) => {
+  className = classes(className, 'row-details-toggle');
+  return (
+    <Text {...props} className={className} />
+  );
+};
+
+RowDetailsToggle.propTypes = {
+  className: PropTypes.string,
+};
+
 
 // vim: set ts=2 sw=2 tw=80:
