@@ -25,8 +25,10 @@ import React from 'react';
 
 import PropTypes from '../proptypes.js';
 
-const noop_convert = value => value;
-const target_value = event => event.target.value;
+export const noop_convert = value => value;
+
+export const target_value = event => event.target.value;
+export const props_value = (event, props) => props.value;
 
 export const withChangeHandler = (
     Component,
@@ -55,6 +57,35 @@ export const withChangeHandler = (
   };
 
   return ChangeHandler;
+};
+
+export const withClickHandler = (
+    Component,
+    options = {},
+  ) => {
+  const {
+    convert_func = noop_convert,
+    value_func = props_value,
+  } = options;
+
+  const ClickHandler = ({onClick, convert = convert_func, ...props}) => {
+
+    const handleClick = event => {
+      if (onClick) {
+        onClick(convert(value_func(event, props), props), props.name);
+      }
+    };
+
+    return <Component {...props} onClick={handleClick}/>;
+  };
+
+  ClickHandler.propTypes = {
+    convert: PropTypes.func,
+    name: PropTypes.string,
+    onClick: PropTypes.func,
+  };
+
+  return ClickHandler;
 };
 
 // vim: set ts=2 sw=2 tw=80:
