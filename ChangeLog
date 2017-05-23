@@ -1,5 +1,13 @@
 2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/checkbox.js,
+	src/html/classic/ng/src/web/form/filefield.js,
+	src/html/classic/ng/src/web/form/form.js: Change function signature of
+	withChangeHandler to use an object as second parameter for the optional
+	convert functions.
+
+2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/results/filterdialog.js: Fix setting autofp
 	value in result powerfilter dialog.
 

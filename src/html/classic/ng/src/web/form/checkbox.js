@@ -83,8 +83,10 @@ CheckboxComponent.propTypes = {
 };
 
 export default withLayout(
-  withChangeHandler(CheckboxComponent, convert_checked,
-    event => event.target.checked),
+  withChangeHandler(CheckboxComponent, {
+    convert_func: convert_checked,
+    value_func: event => event.target.checked,
+  }),
   {box: true}
 );
 

@@ -28,8 +28,14 @@ import PropTypes from '../proptypes.js';
 const noop_convert = value => value;
 const target_value = event => event.target.value;
 
-export const withChangeHandler = (Component, convert_func = noop_convert,
-  value_func = target_value) => {
+export const withChangeHandler = (
+    Component,
+    options = {},
+  ) => {
+  const {
+    convert_func = noop_convert,
+    value_func = target_value,
+  } = options;
 
   const ChangeHandler = ({onChange, convert = convert_func, ...props}) => {
 

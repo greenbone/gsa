@@ -34,8 +34,10 @@ const FileFieldComponent = props => {
 };
 
 export default withLayout(
-  withChangeHandler(FileFieldComponent, value => value,
-    event => event.target.files[0]),
+  withChangeHandler(FileFieldComponent, {
+    convert_func: value => value,
+    value_func: event => event.target.files[0],
+  }),
   {box: true}
 );
 
