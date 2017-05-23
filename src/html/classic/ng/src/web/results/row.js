@@ -31,24 +31,27 @@ import SeverityBar from '../severitybar.js';
 import SolutionType from '../solutiontype.js';
 import {render_component} from '../render.js';
 
-import {withEntityRow} from '../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../entities/row.js';
 
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
 
-const Row = ({entity, links = true, actions, ...other}) => {
+const Row = ({
+    actions,
+    entity,
+    links = true,
+    onToggleDetailsClick,
+    ...other,
+  }) => {
   let shown_name = entity.name ? entity.name : entity.nvt.oid;
   return (
     <TableRow>
       <TableData>
-        {links ?
-          <LegacyLink
-            cmd="get_result"
-            result_id={entity.id}>
-            {shown_name}
-          </LegacyLink> :
-          shown_name
-        }
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
+          {shown_name}
+        </RowDetailsToggle>
       </TableData>
       <TableData flex align="center">
         {entity && entity.nvt && entity.nvt.tags &&
@@ -87,6 +90,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func,
 };
 
 export default withEntityRow(Row);
