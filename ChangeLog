@@ -1,3 +1,7 @@
+2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/models/nvt.js: Parse severity of nvt.
+
 2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/button.js: Allow to layout button components.

@@ -24,6 +24,7 @@
 import {extend, is_defined, is_string, map, shallow_copy} from '../../utils.js';
 
 import Model from '../model.js';
+import {parse_severity} from '../parser.js';
 
 const parse_tags = tags => {
   let newtags = {};
@@ -59,7 +60,7 @@ export class Nvt extends Model {
     ret.oid = ret._oid;
     ret.tags = parse_tags(ret.tags);
     ret.cve_ids = parse_cve_ids(ret.cve_id);
-    ret.severity = ret.cvss_base;
+    ret.severity = parse_severity(ret.cvss_base);
     delete ret.cvss_base;
 
     if (is_defined(elem.preferences)) {
