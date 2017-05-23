@@ -14420,33 +14420,33 @@ create_slave_omp (credentials_t *credentials, params_t *params)
   CHECK_PARAM (password, "Create Slave", new_slave);
 
   if (comment)
-    command = g_strdup_printf ("<create_slave>"
-                               "<name>%s</name>"
-                               "<comment>%s</comment>"
-                               "<host>%s</host>"
-                               "<port>%s</port>"
-                               "<login>%s</login>"
-                               "<password>%s</password>"
-                               "</create_slave>",
-                               name,
-                               comment,
-                               host,
-                               port,
-                               login,
-                               password);
+    command = g_markup_printf_escaped ("<create_slave>"
+                                       "<name>%s</name>"
+                                       "<comment>%s</comment>"
+                                       "<host>%s</host>"
+                                       "<port>%s</port>"
+                                       "<login>%s</login>"
+                                       "<password>%s</password>"
+                                       "</create_slave>",
+                                       name,
+                                       comment,
+                                       host,
+                                       port,
+                                       login,
+                                       password);
   else
-    command = g_strdup_printf ("<create_slave>"
-                               "<name>%s</name>"
-                               "<host>%s</host>"
-                               "<port>%s</port>"
-                               "<login>%s</login>"
-                               "<password>%s</password>"
-                               "</create_slave>",
-                               name,
-                               host,
-                               port,
-                               login,
-                               password);
+    command = g_markup_printf_escaped ("<create_slave>"
+                                       "<name>%s</name>"
+                                       "<host>%s</host>"
+                                       "<port>%s</port>"
+                                       "<login>%s</login>"
+                                       "<password>%s</password>"
+                                       "</create_slave>",
+                                       name,
+                                       host,
+                                       port,
+                                       login,
+                                       password);
 
   ret = omp (credentials, &response, &entity, command);
   g_free (command);

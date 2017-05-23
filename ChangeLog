@@ -1,3 +1,8 @@
+2017-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (create_slave_omp): Use g_markup_printf_escaped to
+	build the OMP command to ensure password is escaped.
+
 2017-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r28354.
