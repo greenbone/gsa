@@ -83,7 +83,7 @@
 #define G_LOG_DOMAIN "gsad  gmp"
 
 /**
- * @brief Manager (openvasmd) address.
+ * @brief Manager (gvmd) address.
  */
 #define OPENVASMD_ADDRESS "127.0.0.1"
 
@@ -363,7 +363,7 @@ gmp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
   else
     {
       manager_address = g_build_filename (OPENVAS_RUN_DIR,
-                                          "openvasmd.sock",
+                                          "gvmd.sock",
                                           NULL);
       manager_use_tls = 0;
     }

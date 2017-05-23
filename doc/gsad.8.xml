@@ -37,7 +37,7 @@
   <description>
     <p>
       Together, OpenVAS Scanner (openvassd(8)) and OpenVAS Manager
-      (openvasmd(8)) provide the core functionality of the Open
+      (gvmd(8)) provide the core functionality of the Open
       Vulnerability Assessment System (OpenVAS), with OpenVAS Scanner
       handling the actual scan process and OpenVAS Manager adding
       various management functionalities to handle and organise scan
@@ -143,7 +143,7 @@
       <manref name="openvassd" section="8"/>
       <manref name="openvasad" section="8"/>
       <manref name="omp" section="8"/>
-      <manref name="openvasmd" section="8"/>
+      <manref name="gvmd" section="8"/>
       <manref name="gsd" section="8"/>
     </p>
   </section>
