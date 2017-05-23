@@ -41,7 +41,7 @@ export const withChangeHandler = (
 
     const handleChange = event => {
       if (onChange) {
-        onChange(convert(value_func(event), props), props.name);
+        onChange(convert(value_func(event, props), props), props.name);
       }
     };
 
