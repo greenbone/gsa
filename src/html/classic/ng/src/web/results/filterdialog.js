@@ -24,6 +24,7 @@
 import React from 'react';
 
 import  _ from '../../locale.js';
+import {parse_int} from '../../utils.js';
 
 import Layout from '../layout.js';
 import {
@@ -64,7 +65,16 @@ class ResultsFilterDialogComponent extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleIntValueChange = this.handleIntValueChange.bind(this);
     this.handleLevelChange = this.handleLevelChange.bind(this);
+  }
+
+  handleIntValueChange(value, name) {
+    let {onFilterValueChange} = this.props;
+
+    value = parse_int(value);
+
+    onFilterValueChange(value, name);
   }
 
   handleLevelChange(value, level) {
@@ -116,7 +126,7 @@ class ResultsFilterDialogComponent extends React.Component {
             unCheckedValue="0"
             checked={autofp >= 1}
             title={_('Trust vendor security updates')}
-            onChange={this.onFilterIntValueChange}/>
+            onChange={this.handleIntValueChange}/>
           <Layout flex box>
             <Radio
               name="autofp"
