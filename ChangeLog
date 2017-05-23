@@ -1,5 +1,12 @@
 2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/results/css/table.css,
+	src/html/classic/ng/src/web/results/table.js: Add a ResultRowDetails
+	component to render the result details within the results list table.
+
+2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/results/row.js: Allow to toggle details of a
 	results row.
 

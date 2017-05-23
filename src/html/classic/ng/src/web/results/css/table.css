@@ -1,0 +1,16 @@
+.table-stripped > .table-body > .table-row-details,
+.table-stripped > .table-body > .table-row-details:hover {
+  background-color: white !important;
+}
+
+.table-row-details .indent {
+  width: 3em;
+  display: flex;
+}
+
+.table-row-details .result-details {
+  border-left: 2px solid black;
+  padding-left: 1em;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

@@ -35,11 +35,15 @@ import {createEntitiesTable} from '../entities/table.js';
 
 import Icon from '../icons/icon.js';
 
+import TableData from '../table/data.js';
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';
 import TableRow from '../table/row.js';
 
 import ResultsRow from './row.js';
+import ResultDetails from './details.js';
+
+import './css/table.css';
 
 const Header = ({onSortChange, links = true, sort = true, actions}) => {
   return (
@@ -98,20 +102,38 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Footer = createEntitiesFooter({
-  span: 8,
-  download: 'results.xml',
-});
+const ResultsRowDetails = ({
+    entity,
+  }) => {
+  return (
+    <TableRow className="table-row-details">
+      <TableData
+        colSpan="7"
+        flex
+        align={['start', 'stretch']}>
+        <div className="indent"/>
+        <ResultDetails
+          className="result-details"
+          result={entity}
+        />
+      </TableData>
+    </TableRow>
+  );
+};
 
-const ResultsHeader = withEntitiesHeader(Header, true);
+ResultsRowDetails.propTypes = {
+  entity: PropTypes.model,
+};
 
-export const ResultsTable = createEntitiesTable({
+export default createEntitiesTable({
   emptyTitle: _('No results available'),
-  header: ResultsHeader,
-  footer: Footer,
+  footer: createEntitiesFooter({
+    span: 8,
+    download: 'results.xml',
+  }),
+  header: withEntitiesHeader(Header, true),
   row: ResultsRow,
+  rowDetails: ResultsRowDetails,
 });
-
-export default ResultsTable;
 
 // vim: set ts=2 sw=2 tw=80:
