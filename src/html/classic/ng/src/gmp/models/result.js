@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../../utils.js';
+import {for_each, is_defined} from '../../utils.js';
 
 import Model from '../model.js';
 import {parse_severity} from '../parser.js';
@@ -47,6 +47,30 @@ export class Result extends Model {
     }
 
     ret.vulnerability = is_defined(ret.name) ? ret.name : ret.nvt.oid;
+
+    if (is_defined(elem.report)) {
+      ret.report = new Model(elem.report);
+    }
+
+    if (is_defined(elem.task)) {
+      ret.task = new Model(elem.task);
+    }
+
+    if (is_defined(elem.detection) && is_defined(elem.detection.result)) {
+      let d_result = {
+        id: ret.detection.result._id,
+      };
+      let details = {};
+
+      if (is_defined(ret.detection.result.details)) {
+        for_each(ret.detection.result.details.detail, detail => {
+          details[detail.name] = detail;
+        });
+      }
+
+      d_result.details = details;
+      ret.detection.result = d_result;
+    }
 
     return ret;
   }

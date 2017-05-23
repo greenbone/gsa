@@ -1,5 +1,10 @@
 2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/result.js: Parse report, task and
+	detection of results.
+
+2017-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/nvt.js: Parse severity of nvt.
 
 2017-05-22  Björn Ricks <bjoern.ricks@greenbone.net>
