@@ -283,4 +283,23 @@ export function split(string, seperator, limit) {
   return splits;
 }
 
+export function debounce(func, wait, immediate = false) {
+  let timeout;
+  return function(...args) {
+    const context = this;
+    const later = () => {
+      timeout = undefined;
+      func.apply(context, args);
+    };
+    let callNow = immediate && !timeout;
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+
+    if (callNow) {
+      func.apply(context, args);
+    }
+  };
+}
+
 // vim: set ts=2 sw=2 tw=80:
