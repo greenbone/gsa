@@ -1,3 +1,7 @@
+2017-05-24  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Remove obsolete todo.
+
 2017-05-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/scanner.js (scanner_type_name):

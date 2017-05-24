@@ -73,8 +73,6 @@ if (MANDATORY_TOOL_MISSING)
                       "your system. Please check the logs above.")
 endif (MANDATORY_TOOL_MISSING)
 
-# TODO: Check for (optional) rats, flawfinder, splint, doxygen.
-
 ## Check for existance of required libraries
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
