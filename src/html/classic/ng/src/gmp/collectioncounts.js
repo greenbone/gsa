@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parse_int} from '../utils.js';
+import {is_defined, parse_int} from '../utils.js';
 
 export class CollectionCounts {
 
@@ -50,6 +50,15 @@ export class CollectionCounts {
     return this.last < this.filtered;
   }
 
+  clone({first, all, filtered, length, rows}) {
+    return new CollectionCounts({
+      first: is_defined(first) ? first : this.first,
+      all: is_defined(all) ? all : this.all,
+      filtered: is_defined(filtered) ? filtered : this.filtered,
+      length: is_defined(length) ? length : this.length,
+      rows: is_defined(rows) ? rows : this.rows,
+    });
+  }
 }
 
 export default CollectionCounts;

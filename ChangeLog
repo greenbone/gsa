@@ -1,5 +1,10 @@
 2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/collectioncounts.js: Allow to clone
+	CollectionCounts.
+
+2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/utils.js: Add debounce function to utils module. The
 	debounce function can be used to lower the rate of event notifications.
 
