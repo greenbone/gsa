@@ -104,6 +104,7 @@ Header.propTypes = {
 
 const ResultsRowDetails = ({
     entity,
+    links,
   }) => {
   return (
     <TableRow className="table-row-details">
@@ -113,6 +114,7 @@ const ResultsRowDetails = ({
         align={['start', 'stretch']}>
         <div className="indent"/>
         <ResultDetails
+          links={links}
           className="result-details"
           result={entity}
         />
@@ -123,6 +125,7 @@ const ResultsRowDetails = ({
 
 ResultsRowDetails.propTypes = {
   entity: PropTypes.model,
+  links: PropTypes.bool,
 };
 
 export default createEntitiesTable({

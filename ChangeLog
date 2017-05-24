@@ -1,5 +1,11 @@
 2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/results/table.js: Pass links property to the
+	result details.
+
+2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/results/details.js: Allow to deactive links in
 	the result details. This is required for the html report.
 

@@ -102,6 +102,7 @@ export class EntitiesTable extends React.Component {
         if (RowDetailsComponent && details[entity.id]) {
           rows.push(
             <RowDetailsComponent
+              links={props.links}
               key={'details-' + entity.id}
               entity={entity}
             />
