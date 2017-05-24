@@ -1,3 +1,8 @@
+2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/icons/foldicon.js: Remove required gmp context
+	type from FoldIcon. It's not used in FoldIcon component.
+
 2017-05-24  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Remove obsolete todo.

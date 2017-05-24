@@ -59,10 +59,6 @@ FoldIcon.propTypes = {
   title: PropTypes.string,
 };
 
-FoldIcon.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
 export default FoldIcon;
 
 // vim: set ts=2 sw=2 tw=80:
