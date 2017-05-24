@@ -1,5 +1,12 @@
 2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/collectionlist.js: Update filter method of
+	CollectionList class. Now the filter method returns a new CollectionList
+	instance with filtered entries. Before it returend an array with the filtered
+	entries.
+
+2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/collectioncounts.js: Allow to clone
 	CollectionCounts.
 

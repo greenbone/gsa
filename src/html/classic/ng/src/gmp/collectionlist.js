@@ -43,7 +43,14 @@ export class CollectionList {
   }
 
   filter(func) {
-    return this._entries.filter(func);
+    const f_entries = this._entries.filter(func);
+    const counts = this.getCounts().clone({filtered: f_entries.length});
+    return new CollectionList({
+      entries: f_entries,
+      filter: this.getFilter(),
+      counts,
+      meta: this.getMeta(),
+    });
   }
 
   find(func) {
