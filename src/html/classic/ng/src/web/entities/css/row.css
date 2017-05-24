@@ -9,4 +9,10 @@
   color: blue;
 }
 
+@media print, screen {
+  .row-details-toggle {
+    color: black;
+  }
+}
+
 /* vim: set ts=2 sw=2 tw=80:*/

@@ -40,14 +40,39 @@ table {
   background: #DDDDDD;
 }
 
-.table-stripped > .table-body:nth-of-type(even),
-.table-stripped > .table-body:only-of-type > tr:nth-of-type(even) {
-  background-color: #EEEEEE;
+@media screen {
+  .table-stripped > .table-body:nth-of-type(even),
+  .table-stripped > .table-body:only-of-type > tr:nth-of-type(even) {
+    background-color: #EEEEEE;
+  }
+
+  .table-stripped > .table-body:not(:only-of-type):hover,
+  .table-stripped > .table-body:only-of-type > tr:hover {
+    background: #DDDDDD;
+  }
 }
 
-.table-stripped > .table-body:not(:only-of-type):hover,
-.table-stripped > .table-body:only-of-type > tr:hover {
-  background: #DDDDDD;
+@media print {
+  .table {
+    border-collapse: collapse;
+  }
+
+  .table th {
+    color: black;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+
+  .table thead a,
+  .table thead a:hover {
+    text-decoration: none;
+    color: black;
+  }
+
+  .table thead {
+    border-bottom: 1px solid black;
+  }
 }
 
 /* vim: set ts=2 sw=2 tw=80:*/

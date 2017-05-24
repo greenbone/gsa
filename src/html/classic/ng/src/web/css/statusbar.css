@@ -46,4 +46,19 @@
   margin: 0;
 }
 
+@media print {
+  .statusbar {
+    background: none;
+  }
+
+  .statusbar.statusbar-box {
+    border: 0;
+    background: none;
+  }
+
+  .statusbar p {
+    color: black;
+  }
+}
+
 /* vim: set ts=2 sw=2 tw=80:*/

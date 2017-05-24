@@ -1,5 +1,12 @@
 2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/web/css/statusbar.css,
+	src/web/entities/css/row.css,
+	src/web/icons/css/icon.css,
+	src/web/table/css/table.css: Add better layout for print views.
+
+2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/folding.js: Update coding style.
 
 2017-05-24  Björn Ricks <bjoern.ricks@greenbone.net>
