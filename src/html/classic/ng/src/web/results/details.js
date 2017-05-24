@@ -66,6 +66,7 @@ ResultBlock.propTypes = {
 
 const ResultDetails = ({
     className,
+    links = true,
     result,
   }) => {
 
@@ -81,10 +82,10 @@ const ResultDetails = ({
     tags = {};
   }
 
+  const {oid} = result.nvt;
   const detection_title = result.severity > 0 || result.nvt.severity > 0 ?
     _('Vulnerability Detection Method') : _('Log Method');
-
-  const {oid} = result.nvt;
+  const is_oval = is_defined(oid) && oid.startsWith('oval:');
 
   return (
     <Layout flex="column" className={className}>
@@ -95,13 +96,14 @@ const ResultDetails = ({
 
       <ResultBlock
         title={_('Vulnerability Detection Result')}>
-        {!is_empty(result.description) && result.description.length > 1 ? (
-            _('Vulnerability was detected according to the Vulnerability ' +
-            'Detection Method.')
-          ) : (
+        {!is_empty(result.description) && result.description.length > 1 ?
+          (
             <pre>
               {result.description}
             </pre>
+          ) : (
+            _('Vulnerability was detected according to the Vulnerability ' +
+            'Detection Method.')
           )
         }
       </ResultBlock>
@@ -152,26 +154,38 @@ const ResultDetails = ({
           </Layout>
           <Layout flex box>
             {_('Details: ')}
-            {is_defined(oid) && oid.startsWith('oval:') &&
-              <LegacyLink
-                cmd="get_info"
-                info_type="oval_def"
-                info_id={oid}
-                details="1"
-                title={_('View Details of OVAL Definition {{oid}}', {oid})}
-              >
+            {is_oval && (
+              links === true ? (
+                <LegacyLink
+                  cmd="get_info"
+                  info_type="oval_def"
+                  info_id={oid}
+                  details="1"
+                  title={_('View Details of OVAL Definition {{oid}}', {oid})}
+                >
+                  {oid}
+                </LegacyLink>
+              ) : (
                 {oid}
-              </LegacyLink>
-            }
-            {is_defined(oid) && oid.startsWith('1.3.6.1.4.1.25623.1.0.') &&
-              <LegacyLink
-                cmd="get_info"
-                info_type="nvt"
-                info_id={oid}>
-                {render_nvt_name(result.nvt)}{' '}
-                {_('OID: {{oid}}', {oid})}
-              </LegacyLink>
-            }
+              )
+            )}
+            {is_defined(oid) && oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
+              links === true ?
+              (
+                <LegacyLink
+                  cmd="get_info"
+                  info_type="nvt"
+                  info_id={oid}>
+                  {render_nvt_name(result.nvt)}{' '}
+                  {_('OID: {{oid}}', {oid})}
+                </LegacyLink>
+              ) : (
+                <span>
+                  {render_nvt_name(result.nvt)}{' '}
+                  {_('OID: {{oid}}', {oid})}
+                </span>
+              )
+            )}
             {!is_defined(oid) &&
               _('No details available for this method.')
             }
@@ -207,6 +221,7 @@ const ResultDetails = ({
 
 ResultDetails.propTypes = {
   className: PropTypes.string,
+  links: PropTypes.bool,
   result: PropTypes.model,
 };
 
