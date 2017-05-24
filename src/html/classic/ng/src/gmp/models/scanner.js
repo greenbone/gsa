@@ -50,7 +50,7 @@ export function scanner_type_name(scanner_type) {
     return _('CVE Scanner');
   }
   else if (scanner_type === SLAVE_SCANNER_TYPE) {
-    return _('OMP Slave');
+    return _('GMP Scanner');
   }
   return _('Unknown type ({{type}})', scanner_type);
 }

@@ -494,7 +494,7 @@ msgid "CVE Scanner"
 msgstr ""
 
 #: src/html/classic/ng/src/gmp/commands/scanners.js:58
-msgid "OMP Slave"
+msgid "GMP Scanner"
 msgstr ""
 
 #: src/html/classic/ng/src/gmp/commands/scanners.js:60
