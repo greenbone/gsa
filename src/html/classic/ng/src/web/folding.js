@@ -44,6 +44,7 @@ export const FoldState = {
 /**
  * HOC for making a container content component foldable
  */
+
 export const withFolding = (Component, defaults = {}) => {
   const FoldingWrapper = ({
     foldState,
@@ -126,12 +127,17 @@ export const withFolding = (Component, defaults = {}) => {
 /**
  * HOC to add fold parent functionality to a component.
  */
-export const withFoldToggle = (Component, defaults = {}) => {
+
+export const withFoldToggle = Component => {
   class FoldToggleWrapper extends React.Component {
 
     constructor(...args) {
       super(...args);
-      this.state = {foldState: FoldState.UNFOLDED};
+
+      this.state = {
+        foldState: FoldState.UNFOLDED,
+      };
+
       this.handleFoldStepEnd = this.handleFoldStepEnd.bind(this);
       this.handleFoldToggle = this.handleFoldToggle.bind(this);
     }
@@ -165,7 +171,7 @@ export const withFoldToggle = (Component, defaults = {}) => {
       this.setState({foldState: newFoldState});
     }
 
-    handleFoldStepEnd () {
+    handleFoldStepEnd() {
       let newFoldState;
 
       switch (this.state.foldState) {
@@ -194,7 +200,7 @@ export const withFoldToggle = (Component, defaults = {}) => {
       this.setState({foldState: newFoldState});
     }
 
-    render () {
+    render() {
       let {...other} = this.props;
       let {foldState} = this.state;
 
