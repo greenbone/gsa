@@ -73,6 +73,7 @@ import SchedulesPage from './schedules/schedulespage.js';
 import TagsPage from './tags/tagspage.js';
 import TargetsPage from './targets/targetspage.js';
 import TasksPage from './tasks/taskspage.js';
+import UsersPage from './users/userspage.js';
 import VulnerabilitiesPage from './vulns/vulnspage.js';
 
 import './css/gsa-base.css';
@@ -249,6 +250,9 @@ ReactDOM.render(
         <Route
           path="scanconfigs"
           component={ScanConfigsPage}/>
+        <Route
+          path="users"
+          component={UsersPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

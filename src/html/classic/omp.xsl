@@ -34631,7 +34631,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_users&amp;token={/envelope/token}"
+      <a href="/ng/users"
          title="{gsa:i18n ('Users')}">
         <img class="icon icon-lg" src="/img/user.svg" alt="Users"/>
       </a>
