@@ -57,7 +57,7 @@ class TaskDialogContainer extends React.Component {
     this.openTargetDialog = this.openTargetDialog.bind(this);
   }
 
-  handleCreateTarget(data) {
+  handleCreateTarget(target) {
     let {targets} = this;
 
     targets.push(target);
@@ -65,7 +65,7 @@ class TaskDialogContainer extends React.Component {
     log.debug('adding target to task dialog', target, targets);
 
     this.task_dialog.setValue('targets', targets);
-    this.task_dialog.setValue('target_id': target.id);
+    this.task_dialog.setValue('target_id', target.id);
   }
 
   handleSaveTask(data) {
