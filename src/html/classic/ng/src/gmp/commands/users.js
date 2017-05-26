@@ -27,8 +27,6 @@ import {for_each} from '../../utils.js';
 import logger from '../../log.js';
 
 import Capabilities from '../capabilities.js';
-import Promise from '../promise.js';
-
 import User from '../models/user.js';
 import Settings from '../models/settings.js';
 import ChartPreferences from '../models/chartpreferences.js';
@@ -39,6 +37,35 @@ export class UserCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'user', User);
+  }
+
+  currentAuthSettings(options = {}) {
+    let {cache = true, ...other} = options;
+
+    const pauth = this.httpGet({
+      cmd: 'auth_settings',
+      name: '--', // only used in old xslt and can be any string
+    }, {
+      cache,
+      ...other,
+    });
+
+    return pauth.then(response => {
+      let settings = new Settings();
+      let {data} = response;
+
+      for_each(data.auth_settings.describe_auth_response.group, group => {
+        let values = {};
+
+        for_each(group.auth_conf_setting, setting => {
+          values[setting.key] = setting.value;
+        });
+
+        settings.set(group._name, values);
+      });
+
+      return response.setData(settings);
+    });
   }
 
   currentSettings(options = {}) {

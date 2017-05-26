@@ -1,5 +1,10 @@
 2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/users.js: Add currentAuthSettings
+	method to user command. This allows checking ldap and radius parameters.
+
+2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/css/row.css: Fix font color of details
 	toggle anchor. It should only be black in print layout.
 
