@@ -175,6 +175,17 @@ export class UserCommand extends EntityCommand {
     return this.httpPost(data).then(this.transformResponse);
   }
 
+  delete({id, inheritor_id}) {
+    const data = {
+      cmd: 'delete_user',
+      id,
+      inheritor_id,
+      no_redirect: '1',
+    };
+    log.debug('Deleting user', data);
+    return this.httpPost(data);
+  }
+
   getElementFromRoot(root) {
     return root.get_user.get_users_response.user;
   }
