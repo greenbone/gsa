@@ -1,5 +1,11 @@
 2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/targets/dialog.js,
+	src/html/classic/ng/src/web/tasks/dialog.js: Update target and task dialogs
+	for changed yes no values. These values are always strings now.
+
+2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/yesnoradio.js: Define constants for
 	default yes and no values of YesNoRadio.
 

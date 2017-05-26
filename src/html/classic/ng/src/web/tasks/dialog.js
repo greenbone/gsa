@@ -50,7 +50,7 @@ import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
 import FormGroup from '../form/formgroup.js';
 import Checkbox from '../form/checkbox.js';
-import YesNoRadio from '../form/yesnoradio.js';
+import YesNoRadio, {YES_VALUE, NO_VALUE} from '../form/yesnoradio.js';
 import Text from '../form/text.js';
 import TextField from '../form/textfield.js';
 
@@ -277,9 +277,9 @@ const TaskDialog = ({
         </Select2>
         <Checkbox
           name="schedule_periods"
-          checked={schedule_periods === 1}
-          checkedValue={1}
-          unCheckedValue={0}
+          checked={schedule_periods === YES_VALUE}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
           onChange={onValueChange}
           title={_('Once')}/>
         <Layout flex box>
@@ -298,12 +298,12 @@ const TaskDialog = ({
         flex="column"
         offset="2"
         className={classes('offset-container',
-          in_assets === 1 ? '' : 'disabled')}>
+          in_assets === YES_VALUE ? '' : 'disabled')}>
         <FormGroup title={_('Apply Overrides')}>
           <YesNoRadio
             name="apply_overrides"
             value={apply_overrides}
-            disabled={in_assets !== 1}
+            disabled={in_assets !== YES_VALUE}
             onChange={onValueChange}/>
         </FormGroup>
 
@@ -314,7 +314,7 @@ const TaskDialog = ({
             value={min_qod}
             size="4"
             onChange={onValueChange}
-            disabled={in_assets !== 1}
+            disabled={in_assets !== YES_VALUE}
             type="int"
             min="0" max="100"/>
           <Layout box float>%</Layout>
@@ -439,9 +439,9 @@ const TaskDialog = ({
         <Checkbox
           name="add_tag"
           onChange={onValueChange}
-          checkedValue={1}
-          unCheckedValue={0}
-          checked={add_tag === 1}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
+          checked={add_tag === YES_VALUE}
           title={_('Add Tag:')}/>
         <Select2
           name="tag_name"
@@ -509,15 +509,15 @@ export default withDialog(TaskDialog, {
   title: _('New Task'),
   footer: _('Save'),
   defaultState: {
-    add_tag: 0,
+    add_tag: NO_VALUE,
     alert_ids: [],
     alerts: [],
-    alterable: 0,
-    apply_overrides: 1,
+    alterable: NO_VALUE,
+    apply_overrides: YES_VALUE,
     auto_delete_data: 5,
     auto_delete: 'keep',
     hosts_ordering: 'sequential',
-    in_assets: 1,
+    in_assets: YES_VALUE,
     max_checks: 4,
     max_hosts: 20,
     min_qod: 70,
@@ -528,11 +528,11 @@ export default withDialog(TaskDialog, {
     },
     scanners: [],
     scanner_type: 2,
-    schedule_id: 0,
-    schedule_periods: 0,
+    schedule_id: '0',
+    schedule_periods: NO_VALUE,
     schedules: [],
     tags: [],
-    target_id: 0,
+    target_id: '0',
     targets: [],
   },
 });

@@ -36,7 +36,7 @@ import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
 import Select2 from '../form/select2.js';
 import TextField from '../form/textfield.js';
-import YesNoRadio from '../form/yesnoradio.js';
+import YesNoRadio, {NO_VALUE} from '../form/yesnoradio.js';
 
 import NewIcon from '../icons/newicon.js';
 
@@ -403,16 +403,16 @@ export default withDialog(TargetDialog, {
     alive_tests: ALIVE_TESTS_DEFAULT,
     comment: '',
     credentials: [],
-    esxi_credential_id: 0,
+    esxi_credential_id: '0',
     name: _('Unnamed'),
     port: 22,
     port_list_id: DEFAULT_PORT_LIST_ID,
     port_lists: [],
-    reverse_lookup_only: 0,
-    reverse_lookup_unify: 0,
-    smb_credential_id: 0,
-    snmp_credential_id: 0,
-    ssh_credential_id: 0,
+    reverse_lookup_only: NO_VALUE,
+    reverse_lookup_unify: NO_VALUE,
+    smb_credential_id: '0',
+    snmp_credential_id: '0',
+    ssh_credential_id: '0',
     target_source: 'manual',
     target_exclude_source: 'manual',
   },
