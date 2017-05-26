@@ -1,5 +1,10 @@
 2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/command.js: Allow to pass additional (http)
+	params to delete method of EntitiesCommand.
+
+2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/settings.js: Fix Settings set method.
 
 2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
