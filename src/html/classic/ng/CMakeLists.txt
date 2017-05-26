@@ -380,6 +380,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js
      ${NG_SRC_DIR}/src/web/toolbar.js
+     ${NG_SRC_DIR}/src/web/users/confirmdeletedialog.js
+     ${NG_SRC_DIR}/src/web/users/dialog.js
+     ${NG_SRC_DIR}/src/web/users/header.js
+     ${NG_SRC_DIR}/src/web/users/row.js
+     ${NG_SRC_DIR}/src/web/users/userspage.js
      ${NG_SRC_DIR}/src/web/vulns/charts.js
      ${NG_SRC_DIR}/src/web/vulns/filterdialog.js
      ${NG_SRC_DIR}/src/web/vulns/row.js
@@ -432,6 +437,7 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/results/css/details.css
      ${NG_SRC_DIR}/src/web/results/css/table.css
      ${NG_SRC_DIR}/src/web/table/css/table.css
+     ${NG_SRC_DIR}/src/web/users/css/row.css
      ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
      )
 

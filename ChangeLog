@@ -1,5 +1,15 @@
 2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/users/confirmdeletedialog.js,
+	src/html/classic/ng/src/web/users/css/row.css,
+	src/html/classic/ng/src/web/users/dialog.js,
+	src/html/classic/ng/src/web/users/header.js,
+	src/html/classic/ng/src/web/users/row.js,
+	src/html/classic/ng/src/web/users/userspage.js: Implement users list page.
+
+2017-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/users.js: Overwrite delete method in
 	UserCommand to allow passing extra parameter inheritor_id.
 
