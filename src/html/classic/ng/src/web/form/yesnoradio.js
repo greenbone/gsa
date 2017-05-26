@@ -30,12 +30,15 @@ import PropTypes from '../proptypes.js';
 
 import Radio from './radio.js';
 
+export const YES_VALUE = '1';
+export const NO_VALUE = '0';
+
 const YesNoRadio = ({
     disabled,
     value,
     name,
-    yesValue = "1",
-    noValue = "0",
+    yesValue = YES_VALUE,
+    noValue = NO_VALUE,
     onChange,
     ...other,
   }) => {
