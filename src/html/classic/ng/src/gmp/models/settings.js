@@ -29,7 +29,7 @@ export class Settings {
     this._settings = {};
   }
 
-  set(value) {
+  set(name, value) {
     this._settings[name] = value;
   }
 
