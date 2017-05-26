@@ -9,7 +9,7 @@
   color: blue;
 }
 
-@media print, screen {
+@media print {
   .row-details-toggle {
     color: black;
   }
