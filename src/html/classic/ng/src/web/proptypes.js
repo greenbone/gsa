@@ -32,6 +32,7 @@ import Model from '../gmp/model.js';
 import Capabilities from '../gmp/capabilities.js';
 
 import Filter from '../gmp/models/filter.js';
+import Settings from '../gmp/models/settings.js';
 
 import Gmp from '../gmp/gmp.js';
 import {EntityCommand, EntitiesCommand} from '../gmp/command.js';
@@ -99,6 +100,8 @@ export const capabilities = React.PropTypes.instanceOf(Capabilities);
 
 export const gmp = React.PropTypes.instanceOf(Gmp);
 
+export const settings = React.PropTypes.instanceOf(Settings);
+
 const mayRequire = validator => {
   const wrapper = (...props) => {
     return validator(...props);
@@ -165,6 +168,7 @@ export default {
   id,
   idOrZero,
   set,
+  settings,
   stringOrFalse,
   timeunit,
   yesno,
