@@ -1,5 +1,9 @@
 2017-05-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/img/upload.svg: Add viewBox attribute.
+
+2017-05-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_my_settings): Fix id and resources
 	selection for the two default Scan Config settings.
 
