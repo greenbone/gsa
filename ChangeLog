@@ -1,3 +1,10 @@
+2017-05-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r28550.
+
+	* src/html/classic/omp.xsl (get_my_settings): Fix id and resources
+	selection for the two default Scan Config settings.
+
 2017-05-18  Björn Ricks <bjoern.ricks@greenbone.neto
 
 	Backport r28426 and r28428

@@ -37039,8 +37039,8 @@ should not have received it.
             <td>
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
-                                select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value[type='1']"/>
-                <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
+                                select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_configs_response/config[type='0']"/>
                 <xsl:with-param name="type" select="'config'"/>
               </xsl:call-template>
             </td>
@@ -37051,8 +37051,8 @@ should not have received it.
             <td>
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
-                                select="get_settings_response/setting[name='Default OSP Scan Config']/value[type='2']"/>
-                <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
+                                select="get_settings_response/setting[name='Default OSP Scan Config']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_configs_response/config[type='1']"/>
                 <xsl:with-param name="type" select="'config'"/>
               </xsl:call-template>
             </td>
