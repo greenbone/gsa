@@ -1,3 +1,13 @@
+2017-05-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r28559.
+
+	* src/html/classic/js/gsa_chart_helpers.js (wrap_text): Check if the
+	document contains the text_selection node.
+
+	* src/html/classic/js/gsa_donut_chart.js (relax_labels): Check if the
+	document contains the text nodes.
+
 2017-05-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport 28553.

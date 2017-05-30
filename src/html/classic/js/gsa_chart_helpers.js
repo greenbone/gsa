@@ -2438,6 +2438,13 @@
    * @param width           The maximum width to wrap the text at.
    */
   gch.wrap_text = function(text_selection, width) {
+    /*
+     * Test if the node is not in the document yet because this would cause an
+     *  error in Internet Explorer when calling getComputedTextLength.
+     */
+    if (! document.body.contains(text_selection.node()))
+      return;
+
     text_selection.each(function() {
       var text = d3.select(this);
       var words = text.text()

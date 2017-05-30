@@ -452,7 +452,16 @@
       labels.each(function(d, i) {
         elem_a = this;
 
-        width_a = elem_a.getComputedTextLength();
+        /*
+         * Test if the node is not in the document yet because this would
+         * cause an error in Internet Explorer when calling
+         * getComputedTextLength.
+         */
+        if (document.body.contains(elem_a))
+          width_a = elem_a.getComputedTextLength();
+        else
+          width_a = 0;
+
         if (width_a === 0) {
           return;
         }
@@ -467,7 +476,12 @@
             return;
           }
 
-          width_b = elem_b.getComputedTextLength();
+          /* Test if the node is not in the document as above */
+          if (document.body.contains(elem_b))
+            width_b = elem_b.getComputedTextLength();
+          else
+            width_b = 0;
+
           if (width_b === 0) {
             return;
           }
