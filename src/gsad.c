@@ -3961,6 +3961,8 @@ file_content_response (credentials_t *credentials,
     *content_type = GSAD_CONTENT_TYPE_TEXT_CSS;
   else if (strstr (path, ".js"))
     *content_type = GSAD_CONTENT_TYPE_TEXT_JS;
+  else if (strstr (path, ".txt"))
+    *content_type = GSAD_CONTENT_TYPE_TEXT_PLAIN;
   /** @todo Set content disposition? */
 
   struct stat buf;
@@ -4361,7 +4363,8 @@ handle_request (void *cls, struct MHD_Connection *connection,
 #ifdef SERVE_STATIC_ASSETS
 
       if (!strcmp (url, "/favicon.ico")
-          || !strcmp (url, "/favicon.gif"))
+          || !strcmp (url, "/favicon.gif")
+          || !strcmp (url, "/robots.txt"))
         {
           response = file_content_response (NULL,
                                             connection, url,

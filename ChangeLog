@@ -1,3 +1,15 @@
+2017-05-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r28562.
+
+	* CMakeLists.txt: Install src/html/classic/robots.txt.
+
+	* src/gsad.c (file_content_response): Add case for .txt plain text in
+	content type detection.
+	(handle_request): Add case for serving robots.txt.
+
+	* src/html/classic/robots.txt: New file.
+
 2017-05-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r28559.
