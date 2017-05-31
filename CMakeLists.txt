@@ -278,6 +278,7 @@ install (FILES src/html/classic/gsad.xsl
                src/html/classic/omp.xsl
                src/html/classic/omp-doc.xsl
                src/html/classic/rnc.xsl
+               src/html/classic/robots.txt
                src/html/classic/os.xml
                src/html/classic/wizard.xsl
          DESTINATION ${GSA_DATA_DIR}/classic)

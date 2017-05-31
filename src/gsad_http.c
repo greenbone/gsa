@@ -76,6 +76,8 @@ guess_content_type (const gchar *path)
     return GSAD_CONTENT_TYPE_IMAGE_GIF;
   else if (g_str_has_suffix (path, ".json"))
     return GSAD_CONTENT_TYPE_APP_JSON;
+  else if (g_str_has_suffix (path, ".txt"))
+    return GSAD_CONTENT_TYPE_TEXT_PLAIN;
   else
     return GSAD_CONTENT_TYPE_OCTET_STREAM;
 }
