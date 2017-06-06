@@ -98,7 +98,7 @@
 #include "gsad_base.h"
 #include "gsad_params.h"
 #include "gsad_gmp.h"
-#include "gsad_omp_auth.h" /* for authenticate_gmp */
+#include "gsad_gmp_auth.h" /* for authenticate_gmp */
 #include "gsad_http.h"
 #include "gsad_http_handler.h" /* for init_http_handlers */
 #include "gsad_settings.h"

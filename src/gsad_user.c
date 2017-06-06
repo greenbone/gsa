@@ -26,7 +26,7 @@
 #include "gsad_user.h"
 #include "gsad_base.h" /* for set_language_code */
 #include "gsad_settings.h"
-#include "gsad_omp_auth.h"
+#include "gsad_gmp_auth.h"
 
 #include <assert.h> /* for asset */
 #include <string.h> /* for strcmp */
