@@ -30,7 +30,8 @@ export const Footer = () => {
     <footer className="gsa-footer">
       Greenbone Security Assistant (GSA) Copyright 2009-2017 by
       Greenbone Networks GmbH, <a href="http://www.greenbone.net"
-        target="_blank">www.greenbone.net</a>
+        target="_blank"
+        rel="noopener noreferrer">www.greenbone.net</a>
     </footer>
   );
 };

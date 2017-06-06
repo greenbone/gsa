@@ -1,5 +1,10 @@
 2017-06-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/footer.js: Fix possible security issue with
+	target="_blank". For details see https://mathiasbynens.github.io/rel-noopener/
+
+2017-06-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/yarn.lock: Finally update to create react app 1.0. It
 	updates several dependencies to new and current versions. Especially webpack 2
