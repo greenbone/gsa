@@ -21,8 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
 import moment from 'moment';
+import ReactPropTypes from 'prop-types';
 
 import {is_defined} from '../utils.js';
 
@@ -37,70 +37,70 @@ import Settings from '../gmp/models/settings.js';
 import Gmp from '../gmp/gmp.js';
 import {EntityCommand, EntitiesCommand} from '../gmp/command.js';
 
-export const component = React.PropTypes.oneOfType([
-  React.PropTypes.func,
-  React.PropTypes.object,
+export const component = ReactPropTypes.oneOfType([
+  ReactPropTypes.func,
+  ReactPropTypes.object,
 ]);
 
-export const componentOrFalse = React.PropTypes.oneOfType([
+export const componentOrFalse = ReactPropTypes.oneOfType([
   component,
-  React.PropTypes.oneOf([false]),
+  ReactPropTypes.oneOf([false]),
 ]);
 
-export const componentOrElement = React.PropTypes.oneOfType([
+export const componentOrElement = ReactPropTypes.oneOfType([
   component,
-  React.PropTypes.element,
+  ReactPropTypes.element,
 ]);
 
-export const numberString = React.PropTypes.string; // TODO restrict string to contain numbers
+export const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
 
-export const numberOrNumberString = React.PropTypes.oneOfType([
-  React.PropTypes.number,
+export const numberOrNumberString = ReactPropTypes.oneOfType([
+  ReactPropTypes.number,
   numberString,
 ]);
 
-export const icon =  React.PropTypes.oneOfType([
-  React.PropTypes.string,
-  React.PropTypes.element,
+export const icon =  ReactPropTypes.oneOfType([
+  ReactPropTypes.string,
+  ReactPropTypes.element,
 ]);
 
-export const yesno = React.PropTypes.oneOf([
+export const yesno = ReactPropTypes.oneOf([
   "1", "0",
 ]);
 
-export const id = React.PropTypes.string; // TODO improve checking for uuid
+export const id = ReactPropTypes.string; // TODO improve checking for uuid
 
-export const idOrZero = React.PropTypes.oneOfType([
+export const idOrZero = ReactPropTypes.oneOfType([
   id,
-  React.PropTypes.oneOf([0]),
+  ReactPropTypes.oneOf([0]),
 ]);
 
-export const stringOrFalse = React.PropTypes.oneOfType([
-  React.PropTypes.string,
-  React.PropTypes.oneOf([false]),
+export const stringOrFalse = ReactPropTypes.oneOfType([
+  ReactPropTypes.string,
+  ReactPropTypes.oneOf([false]),
 ]);
 
-export const collection = React.PropTypes.instanceOf(CollectionList);
+export const collection = ReactPropTypes.instanceOf(CollectionList);
 
-export const arrayLike = React.PropTypes.oneOfType([
-  React.PropTypes.array,
+export const arrayLike = ReactPropTypes.oneOfType([
+  ReactPropTypes.array,
   collection,
 ]);
 
-export const set = React.PropTypes.instanceOf(Set);
+export const set = ReactPropTypes.instanceOf(Set);
 
-export const filter = React.PropTypes.instanceOf(Filter);
+export const filter = ReactPropTypes.instanceOf(Filter);
 
-export const model = React.PropTypes.instanceOf(Model);
+export const model = ReactPropTypes.instanceOf(Model);
 
-export const entitycommand = React.PropTypes.instanceOf(EntityCommand);
-export const entitiescommand = React.PropTypes.instanceOf(EntitiesCommand);
+export const entitycommand = ReactPropTypes.instanceOf(EntityCommand);
+export const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
 
-export const capabilities = React.PropTypes.instanceOf(Capabilities);
+export const capabilities = ReactPropTypes.instanceOf(Capabilities);
 
-export const gmp = React.PropTypes.instanceOf(Gmp);
+export const gmp = ReactPropTypes.instanceOf(Gmp);
 
-export const settings = React.PropTypes.instanceOf(Settings);
+export const settings = ReactPropTypes.instanceOf(Settings);
 
 const mayRequire = validator => {
   const wrapper = (...props) => {
@@ -128,27 +128,27 @@ const momentDateValidator = (props, prop_name, component_name) => {
 
 export const momentDate = mayRequire(momentDateValidator);
 
-export const timeunit =  React.PropTypes.oneOf([
+export const timeunit =  ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
 ]);
 
 export default {
-  bool: React.PropTypes.bool,
-  any: React.PropTypes.any,
-  array: React.PropTypes.array,
-  arrayOf: React.PropTypes.arrayOf,
-  element: React.PropTypes.element,
-  func: React.PropTypes.func,
-  instanceOf: React.PropTypes.instanceOf,
-  node: React.PropTypes.node,
-  number: React.PropTypes.number,
-  object: React.PropTypes.object,
-  objectOf: React.PropTypes.objectOf,
-  oneOf: React.PropTypes.oneOf,
-  oneOfType: React.PropTypes.oneOfType,
-  shape: React.PropTypes.shape,
-  symbol: React.PropTypes.symbol,
-  string: React.PropTypes.string,
+  bool: ReactPropTypes.bool,
+  any: ReactPropTypes.any,
+  array: ReactPropTypes.array,
+  arrayOf: ReactPropTypes.arrayOf,
+  element: ReactPropTypes.element,
+  func: ReactPropTypes.func,
+  instanceOf: ReactPropTypes.instanceOf,
+  node: ReactPropTypes.node,
+  number: ReactPropTypes.number,
+  object: ReactPropTypes.object,
+  objectOf: ReactPropTypes.objectOf,
+  oneOf: ReactPropTypes.oneOf,
+  oneOfType: ReactPropTypes.oneOfType,
+  shape: ReactPropTypes.shape,
+  symbol: ReactPropTypes.symbol,
+  string: ReactPropTypes.string,
 
   arrayLike,
   capabilities,

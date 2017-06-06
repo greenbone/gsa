@@ -1,5 +1,11 @@
 2017-06-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/proptypes.js: Use new extracted prop types npm
+	module (for details see
+	https://facebook.github.io/react/blog/2017/04/07/react-v15.5.0.html).
+
+2017-06-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/yarn.lock: Update to latest react release (15.5.x).
 
