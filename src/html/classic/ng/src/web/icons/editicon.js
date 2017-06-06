@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-
 import PropTypes from '../proptypes.js';
 
 import Icon from './icon.js';

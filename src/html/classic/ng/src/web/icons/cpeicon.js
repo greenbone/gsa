@@ -23,7 +23,6 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
 import Cpe from '../../cpe.js';
 import {is_defined} from '../../utils.js';
 

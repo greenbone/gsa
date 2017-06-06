@@ -24,7 +24,6 @@
 import React from 'react';
 
 import {KeyCode, is_defined, extend} from '../../utils.js';
-import _ from '../../locale.js';
 import logger from '../../log.js';
 
 import PropTypes from '../proptypes.js';

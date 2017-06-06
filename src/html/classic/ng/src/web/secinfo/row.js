@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _, {datetime} from '../../locale.js';
+import {datetime} from '../../locale.js';
 
 import {shorten} from '../../utils.js';
 

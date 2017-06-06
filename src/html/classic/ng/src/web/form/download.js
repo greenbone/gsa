@@ -62,8 +62,14 @@ export class Download extends React.Component {
   render() {
     let {filename} = this.props;
     return (
-      <a download={filename}
-        ref={ref => this.anchor = ref} style={{display: 'none'}}/>
+      <a
+        download={filename}
+        aria-hidden
+        ref={ref => this.anchor = ref}
+        style={{display: 'none'}}
+      >
+        Download
+      </a>
     );
   }
 }
