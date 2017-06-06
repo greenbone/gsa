@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _, {datetime} from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
@@ -72,17 +73,19 @@ IconActions.propTypes = {
 
 const Row = ({entity, links = true, actions, ...other}) => {
   let {report} = entity;
-  let status;
 
-  if (report.task && report.task.target && report.task.target.id === '' &&
-      report.scan_run_status === 'Running') {
-    status = 'Uploading';
-  }
-  else if (report.task && report.task.target && report.task.target.id === '') {
-    status = 'Container';
-  }
-  else {
-    status = report.scan_run_status;
+  let status = report.scan_run_status;
+  let progress;
+
+  if (is_defined(report.task)) {
+    if (is_defined(report.task.target) && report.task.target.id === '' &&
+        report.scan_run_status === 'Running') {
+      status = 'Uploading';
+    }
+    else if (is_defined(report.task.target) && report.task.target.id === '') {
+      status = 'Container';
+    }
+    progress = report.task.progress;
   }
 
   return (
@@ -98,7 +101,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
       <TableData>
         <StatusBar
           status={status}
-          progress={report.task.progress}/>
+          progress={progress}/>
       </TableData>
       <TableData>
         {links ?
