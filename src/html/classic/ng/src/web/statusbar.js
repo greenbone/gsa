@@ -32,8 +32,8 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
   let st = status.toLowerCase();
   let css_class = st;
 
-  if (st === 'new' || st === 'done' || st === 'container' ||
-      st.indexOf('requested') !== -1) {
+  if (st === 'unknown' || st === 'new' || st === 'done' || st === 'container' ||
+      st.includes('requested')) {
     progress = '100';
   }
 
@@ -41,10 +41,10 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     width: progress + 'px',
   };
 
-  if (st === 'stopped' || st.indexOf('requested') !== -1) {
+  if (st === 'stopped' || st.includes('requested')) {
     css_class = 'request';
   }
-  else if (st.indexOf('error') !== -1) {
+  else if (st.includes('error')) {
     css_class = 'error';
   }
   else if (st === 'uploading' || st === 'container') {
