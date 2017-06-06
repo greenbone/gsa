@@ -46,7 +46,7 @@ import MinQodGroup from '../powerfilter/minqodgroup.js';
 import ResultsPerPageGroup from '../powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../powerfilter/sortbygroup.js';
 import {
-  DefaulFilterDialogPropTypes,
+  DefaultFilterDialogPropTypes,
   withFilterDialog,
 } from '../powerfilter/dialog.js';
 
@@ -200,7 +200,7 @@ class ResultsFilterDialogComponent extends React.Component {
   }
 }
 
-ResultsFilterDialogComponent.propTypes = DefaulFilterDialogPropTypes;
+ResultsFilterDialogComponent.propTypes = DefaultFilterDialogPropTypes;
 
 export default withFilterDialog(ResultsFilterDialogComponent);
 
