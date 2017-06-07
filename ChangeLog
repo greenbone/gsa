@@ -1,5 +1,12 @@
 2017-06-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/credentials/dialog.js: Turn off browsers
+	password complete for editing and creating credentials.
+	For details see
+	https://developer.mozilla.org/en-US/docs/Web/Security/Securing_your_site/Turning_off_form_autocompletion
+
+2017-06-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* INSTALL, src/html/classic/ng/CMakeLists.txt: create react app 1.0 and its
 	dependencies are requiring node 6 now. This isn't optimal because even in
 	debian testing and ubuntu only version 4 is packaged. Nevertheless node 6 is

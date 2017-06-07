@@ -186,6 +186,7 @@ class CredentialsDialog extends React.Component {
           <PasswordField
             name="password"
             value={password}
+            autoComplete="new-password"
             disabled={autogenerate === 1}
             onChange={onValueChange}/>
         </FormGroup>
@@ -204,6 +205,7 @@ class CredentialsDialog extends React.Component {
           <PasswordField
             name="passphrase"
             value={passphrase}
+            autoComplete="new-password"
             disabled={autogenerate === 1}
             onChange={onValueChange}/>
         </FormGroup>
@@ -221,6 +223,7 @@ class CredentialsDialog extends React.Component {
           }
           <PasswordField
             name="privacy_password"
+            autoComplete="new-password"
             value={privacy_password}
             onChange={onValueChange}/>
         </FormGroup>
