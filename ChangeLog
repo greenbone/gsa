@@ -1,5 +1,13 @@
 2017-06-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl: Don't use gb_window class for password warning.
+	This did show only the warning in the edit settings dialog and not the form.
+
+	* src/html/classic/js/greenbone-dialog.js: Don't set error if the dialog
+	hasn't displayed yet. This isn't possible with the jquery-ui dialog.
+
+2017-06-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/credentials/dialog.js: Turn off browsers
 	password complete for editing and creating credentials.
 	For details see
