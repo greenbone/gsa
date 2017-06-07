@@ -31,8 +31,8 @@
  * @brief Main module of Greenbone Security Assistant daemon
  *
  * This file contains the core of the GSA server process that
- * handles HTTPS requests and communicates with OpenVAS-Manager via the
- * GMP protocol.
+ * handles HTTPS requests and communicates with Greenbone Vulnerability Manager
+ * via the GMP protocol.
  */
 
 /**

@@ -9871,7 +9871,7 @@ should not have received it.
               <input id="email_subject_task_input" type="text" name="method_data:subject"
                 size="30" maxlength="80"
                 class="form-control form-selection-input-event form-selection-input-event--task"
-                value="[OpenVAS-Manager] Task '$n': $e"/>
+                value="[GVM] Task '$n': $e"/>
             </div>
           </div>
           <div  id="email_subject_secinfo"
@@ -9880,7 +9880,7 @@ should not have received it.
               <input id="email_subject_secinfo_input" type="text" name="method_data:subject"
                 size="30" maxlength="80"
                 class="form-control form-selection-input-event form-selection-input-event--secinfo"
-                value="[OpenVAS-Manager] $T $q $S since $d"/>
+                value="[GVM] $T $q $S since $d"/>
             </div>
           </div>
         </div>
@@ -10817,7 +10817,7 @@ should not have received it.
                   <input id="email_subject_task_input" type="text" name="method_data:subject"
                     size="30" maxlength="80"
                     class="form-control form-selection-input-event form-selection-input-event--task"
-                    value="[OpenVAS-Manager] Task '$n': $e"/>
+                    value="[GVM] Task '$n': $e"/>
                 </xsl:otherwise>
               </xsl:choose>
             </div>
@@ -10836,7 +10836,7 @@ should not have received it.
                   <input id="email_subject_secinfo_input" type="text" name="method_data:subject"
                     size="30" maxlength="80"
                     class="form-control form-selection-input-event form-selection-input-event--secinfo"
-                    value="[OpenVAS-Manager] $T $q $S since $d"/>
+                    value="[GVM] $T $q $S since $d"/>
                 </xsl:otherwise>
               </xsl:choose>
             </div>

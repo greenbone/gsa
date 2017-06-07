@@ -29,8 +29,9 @@
  * @file gsad_gmp.c
  * @brief GMP communication module of Greenbone Security Assistant daemon.
  *
- * This file implements an API for GMP.  The functions call the OpenVAS Manager
- * via GMP properly, and apply XSL-Transforms to deliver HTML results.
+ * This file implements an API for GMP.  The functions call the Greenbone
+ * Vulnerability Manager via GMP properly, and apply XSL-Transforms to
+ * deliver HTML results.
  */
 
 #include <stdio.h>
@@ -27048,7 +27049,7 @@ get_assets_chart_gmp (gvm_connection_t *connection, credentials_t *
 /* Manager communication. */
 
 /**
- * @brief Connect to OpenVAS Manager daemon.
+ * @brief Connect to Greenbone Vulnerability Manager daemon.
  *
  * @param[in]  path  Path to the Manager socket.
  *
@@ -27337,7 +27338,7 @@ authenticate_gmp (const gchar * username, const gchar * password,
 }
 
 /**
- * @brief Connect to OpenVAS Manager daemon.
+ * @brief Connect to Greenbone Vulnerability Manager daemon.
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[out]  connection   Connection to Manager on success.

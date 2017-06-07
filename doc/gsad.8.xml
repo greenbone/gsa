@@ -2,7 +2,7 @@
 <!DOCTYPE manpage SYSTEM "/usr/share/xmltoman/xmltoman.dtd">
 <?xml-stylesheet type="text/xsl" href="/usr/share/xmltoman/xmltoman.xsl" ?>
 
-<!-- OpenVAS
+<!-- GSA
  $Id$
  Description: gsad manpage
 
@@ -36,17 +36,17 @@
 
   <description>
     <p>
-      Together, OpenVAS Scanner (openvassd(8)) and OpenVAS Manager
+      Together, OpenVAS Scanner (openvassd(8)) and Greenbone Vulnerability Manager
       (gvmd(8)) provide the core functionality of the Open
       Vulnerability Assessment System (OpenVAS), with OpenVAS Scanner
-      handling the actual scan process and OpenVAS Manager adding
+      handling the actual scan process and Greenbone Vulnerability Manager adding
       various management functionalities to handle and organise scan
       results.
     </p>
 
     <p>
       The Greenbone Security Assistant Daemon (gsad) is a web
-      application that connects to the OpenVAS Manager to provide for a
+      application that connects to the Greenbone Vulnerability Manager to provide for a
       full-featured user interface for vulnerability management.
     </p>
 

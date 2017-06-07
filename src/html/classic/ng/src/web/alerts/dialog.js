@@ -77,8 +77,8 @@ export const DEFAULT_NOTICE_REPORT_FORMAT =
 export const DEFAULT_NOTICE_ATTACH_FORMAT =
   '1a60a67e-97d0-4cbf-bc77-f71b08e7043d';
 
-export const TASK_SUBJECT = '[OpenVAS-Manager] Task \'$n\': $e';
-export const SECINFO_SUBJECT = '[OpenVAS-Manager] $T $q $S since $d';
+export const TASK_SUBJECT = '[GVM] Task \'$n\': $e';
+export const SECINFO_SUBJECT = '[GVM] $T $q $S since $d';
 
 export const INCLUDE_MESSAGE_DEFAULT =
 `Task '$n': $e'
