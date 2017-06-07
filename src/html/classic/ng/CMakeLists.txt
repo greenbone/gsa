@@ -22,7 +22,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
-find_package (Node 4.0 REQUIRED)
+find_package (Node 6.0 REQUIRED)
 find_package (Yarn QUIET)
 
 set (NG_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)

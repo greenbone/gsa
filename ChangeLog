@@ -1,3 +1,11 @@
+2017-06-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* INSTALL, src/html/classic/ng/CMakeLists.txt: create react app 1.0 and its
+	dependencies are requiring node 6 now. This isn't optimal because even in
+	debian testing and ubuntu only version 4 is packaged. Nevertheless node 6 is
+	the proposed active lts version
+	(see https://github.com/nodejs/LTS#lts-schedule1).
+
 2017-06-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/certbund/row.js,
