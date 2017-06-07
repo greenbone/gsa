@@ -691,7 +691,9 @@
 
     if (gb_windows.length) {
       if (gb_windows.length > 1) {
-        self.error((gb_windows.length - 1) + ' forms not displayed !');
+        gsa.log.error('The html response contains several dialog forms. ' +
+          'Only the first form is displayed. ' + (gb_windows.length - 1) +
+          ' forms are not displayed!');
       }
 
       var gb_window = gb_windows.first();
