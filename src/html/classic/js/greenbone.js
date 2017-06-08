@@ -77,6 +77,8 @@
   gsa.start_auto_refresh = start_auto_refresh;
   gsa.stop_auto_refresh = stop_auto_refresh;
   gsa.set_token = set_token;
+  gsa.parse_params = parse_params;
+  gsa.parse_url = parse_url;
 
   gsa.GMPRequest = GMPRequest;
 
@@ -168,6 +170,33 @@
       val = undefined;
     }
     return val;
+  }
+
+  function parse_params(data) {
+    var params = {};
+
+    if (data) {
+      $.each(data.split('&'), function(i, v) {
+        var pair = v.split('=');
+        return (params[pair[0]] = pair[1]);
+      });
+    }
+    return params;
+  }
+
+  function parse_url(value) {
+    var parser = document.createElement('a');
+    parser.href = value;
+
+    return {
+      protocol: parser.protocol,
+      hostname: parser.hostname,
+      port: parser.port,
+      host: parser.host,
+      pathname: parser.pathname,
+      hash: parser.hash,
+      params: gsa.parse_params(parser.search.substr(1)),
+    };
   }
 
   function shallow_copy(object) {

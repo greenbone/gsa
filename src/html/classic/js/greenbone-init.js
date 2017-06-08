@@ -114,7 +114,7 @@
         event.preventDefault();
         var dialog = elem.parents('.dialog-form')[0].$omp;
         new gsa.GMPRequest({
-          params: parse_params(elem.data('extra')),
+          params: gsa.parse_params(elem.data('extra')),
           form: elem.parents('form')[0],
         }).do(function() {
           dialog.reload();

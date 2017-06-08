@@ -441,7 +441,7 @@
       }
       else if (self.success_reload.type === 'next' &&
           xml.find('action_result next')) {
-        var url = parse_url(xml.find('action_result next').text());
+        var url = gsa.parse_url(xml.find('action_result next').text());
         // we need the html page
         url.params.xml = 0;
         location.href = gsa.encode_url_object(url);
@@ -896,33 +896,6 @@
 
   global.InfoDialog = InfoDialog;
 
-  function parse_params(data) {
-    var params = {};
-
-    if (data) {
-      $.each(data.split('&'), function(i, v) {
-        var pair = v.split('=');
-        return (params[pair[0]] = pair[1]);
-      });
-    }
-    return params;
-  }
-
-  function parse_url(value) {
-    var parser = document.createElement('a');
-    parser.href = value;
-
-    return {
-      protocol: parser.protocol,
-      hostname: parser.hostname,
-      port: parser.port,
-      host: parser.host,
-      pathname: parser.pathname,
-      hash: parser.hash,
-      params: parse_params(parser.search.substr(1)),
-    };
-  }
-
   function init_omp_dialog(options) {
     var params;
     var reload_data;
@@ -963,7 +936,7 @@
       }
     }
 
-    params = parse_params(extra);
+    params = gsa.parse_params(extra);
 
     if (gsa.is_defined(type_id)) {
       params[type_name + '_id'] = type_id;

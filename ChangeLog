@@ -1,5 +1,13 @@
 2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-dialog.js,
+	src/html/classic/js/greenbone-init.js,
+	src/html/classic/js/greenbone.js: Fix calling parse_params function in
+	greenbone-init.js. Move parse_params and parse_url functions to greenbone.js
+	and add them to the gsa global object.
+
+2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
