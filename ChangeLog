@@ -1,5 +1,10 @@
 2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/users/userspage.js: Remove obselete method from
+	users page component.
+
+2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/groups.js: Add gmp api for handling a
 	group.
 

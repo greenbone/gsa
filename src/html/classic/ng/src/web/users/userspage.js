@@ -86,14 +86,10 @@ class Page extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.handleSaveUser = this.handleSaveUser.bind(this);
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
 
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
     this.openUserDialog = this.openUserDialog.bind(this);
-  }
-
-  handleSaveUser(data) {
   }
 
   handleDeleteUser({deleteUsers, id, inheritor_id}) {
