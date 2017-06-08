@@ -1,3 +1,8 @@
+2017-06-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-feed-row): Remove user from status,
+	because user does not make sense with automatic update.
+
 2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone-dialog.js,

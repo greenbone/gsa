@@ -35406,8 +35406,6 @@ should not have received it.
               <b>
                 <xsl:value-of select="$feed/currently_syncing/timestamp"/>
               </b>
-              <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
-              <b><xsl:value-of select="$feed/currently_syncing/user"/></b>
               <xsl:text>.</xsl:text>
             </xsl:when>
             <xsl:when test="$version and string-length($version) = 12 and number($version) = $version">
