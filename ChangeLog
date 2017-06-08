@@ -1,5 +1,13 @@
 2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/groups/dialog.js,
+	src/html/classic/ng/src/web/groups/groupsppage.js,
+	src/html/classic/ng/src/web/groups/header.js,
+	src/html/classic/ng/src/web/groups/row.js: Add components for group list page.
+
+2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/users/userspage.js: Remove obselete method from
 	users page component.
 

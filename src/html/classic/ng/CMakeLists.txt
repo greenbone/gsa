@@ -224,6 +224,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/form/textfield.js
      ${NG_SRC_DIR}/src/web/form/timezoneselect.js
      ${NG_SRC_DIR}/src/web/form/yesnoradio.js
+     ${NG_SRC_DIR}/src/web/groups/dialog.js
+     ${NG_SRC_DIR}/src/web/groups/groupsppage.js
+     ${NG_SRC_DIR}/src/web/groups/header.js
+     ${NG_SRC_DIR}/src/web/groups/row.js
      ${NG_SRC_DIR}/src/web/header.js
      ${NG_SRC_DIR}/src/web/homepage.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
