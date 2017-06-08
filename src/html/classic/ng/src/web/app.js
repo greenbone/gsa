@@ -56,6 +56,7 @@ import CredentialsPage from './credentials/credentialspage.js';
 import CvesPage from './cves/cvespage.js';
 import DfnCertAdvsPage from './dfncert/dfncertadvspage.js';
 import FiltersPage from './filters/filterspage.js';
+import GroupsPage from './groups/groupsppage.js';
 import HostsPage from './hosts/hostspage.js';
 import NotesPage from './notes/notespage.js';
 import NvtsPage from './nvts/nvtspage.js';
@@ -253,6 +254,9 @@ ReactDOM.render(
         <Route
           path="users"
           component={UsersPage}/>
+        <Route
+          path="groups"
+          component={GroupsPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

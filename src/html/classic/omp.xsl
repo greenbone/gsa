@@ -24883,7 +24883,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_groups&amp;token={/envelope/token}"
+      <a href="/ng/groups"
          title="{gsa:i18n ('Groups')}">
         <img class="icon icon-lg" src="/img/group.svg" alt="Groups"/>
       </a>
