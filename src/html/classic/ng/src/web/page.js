@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {StickyContainer} from 'react-sticky';
+import StickyContainer from './sticky/container.js';
 
 import logger from '../log.js';
 import {is_defined} from '../utils.js';
@@ -32,6 +32,8 @@ import Footer from './footer.js';
 import Header from './header.js';
 import Main from './main.js';
 import PropTypes from './proptypes.js';
+
+import MenuBar from './menu/menubar.js';
 
 import './css/page.css';
 
@@ -72,13 +74,16 @@ export class Page extends React.Component {
     }
 
     return (
-      <StickyContainer id="page">
+      <div id="page">
         <Header/>
-        <Main>
-          {children}
-        </Main>
-        <Footer/>
-      </StickyContainer>
+        <StickyContainer>
+          <MenuBar/>
+          <Main>
+            {children}
+          </Main>
+          <Footer/>
+        </StickyContainer>
+      </div>
     );
   }
 }

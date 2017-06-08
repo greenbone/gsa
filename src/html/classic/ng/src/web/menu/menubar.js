@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {Sticky} from 'react-sticky';
+import Sticky from '../sticky/sticky.js';
 
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
