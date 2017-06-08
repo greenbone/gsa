@@ -69,7 +69,7 @@ export function shallow_copy(source) {
   return Object.assign({}, source);
 }
 
-export function extend(dest, ...sources) {
+export function extend(dest = {}, ...sources) {
   return Object.assign(dest, ...sources);
 }
 
