@@ -168,7 +168,7 @@ export class EntitiesCommand extends HttpCommand {
       .then(response => response.setData(entities));
   }
 
-  deleteByIds(ids, extra_params) {
+  deleteByIds(ids, extra_params = {}) {
     let params = extend(extra_params, {
       cmd: 'bulk_delete',
       resource_type: this.name,
@@ -183,9 +183,8 @@ export class EntitiesCommand extends HttpCommand {
   deleteByFilter(filter, extra_params) {
     // FIXME change gmp to allow deletion by filter
     let deleted;
-    return this.get(filter).then(response => {
-      let entities = response.data;
-      deleted = entities;
+    return this.get({filter}).then(entities => {
+      deleted = entities.getEntries();
       return this.delete(entities, extra_params);
     }).then(response => response.setData(deleted));
   }
