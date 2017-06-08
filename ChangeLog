@@ -1,3 +1,12 @@
+2017-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/sticky/container.js,
+	src/html/classic/ng/src/web/sticky/sticky.js: Add an own Sticky component.
+	The components from react-sticky did introduce a bug for us in version 5.0.5
+	which didn't get fixed upstream. With version 6.0.0 react-sticky changed
+	significantly.
+
 2017-06-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl, src/gsad.c, README, doc/gsad.8.xml,

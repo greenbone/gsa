@@ -348,6 +348,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/solutiontype.js
      ${NG_SRC_DIR}/src/web/sortby.js
      ${NG_SRC_DIR}/src/web/statusbar.js
+     ${NG_SRC_DIR}/src/web/sticky/container.js
+     ${NG_SRC_DIR}/src/web/sticky/sticky.js
      ${NG_SRC_DIR}/src/web/table/body.js
      ${NG_SRC_DIR}/src/web/table/data.js
      ${NG_SRC_DIR}/src/web/table/header.js
