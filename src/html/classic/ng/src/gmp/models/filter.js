@@ -26,6 +26,7 @@ import {
   is_array,
   is_defined,
   is_empty,
+  is_string,
   parse_int,
   includes,
 } from '../../utils.js';
@@ -823,12 +824,14 @@ export class Filter extends Model {
    * @return {Filter} This filter.
    */
   parseString(filterstring) {
-    let fterms = filterstring.split(' ');
-    for (let fterm of fterms) {
-      // strip whitespace
-      fterm = fterm.trim();
-      if (fterm.length > 0) {
-        this._addTerm(FilterTerm.fromString(fterm));
+    if (is_string(filterstring)) {
+      let fterms = filterstring.split(' ');
+      for (let fterm of fterms) {
+        // strip whitespace
+        fterm = fterm.trim();
+        if (fterm.length > 0) {
+          this._addTerm(FilterTerm.fromString(fterm));
+        }
       }
     }
     return this;
