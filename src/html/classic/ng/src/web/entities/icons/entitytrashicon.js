@@ -56,11 +56,11 @@ export const EntityTrashIcon = ({
       title = _('{{entity}} is not writable', {entity: displayName});
     }
     else if (!capabilities.mayDelete(name)) { // eslint-disable-line no-negated-condition
-      title = _('Permission to move {{entity}} to tashcan denied',
+      title = _('Permission to move {{entity}} to trashcan denied',
         {entity: displayName});
     }
     else {
-      title = _('Cannot move {{entity}} to tashcan', {entity: displayName});
+      title = _('Cannot move {{entity}} to trashcan', {entity: displayName});
     }
   }
   return (
