@@ -322,6 +322,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/results/resultspage.js
      ${NG_SRC_DIR}/src/web/results/row.js
      ${NG_SRC_DIR}/src/web/results/table.js
+     ${NG_SRC_DIR}/src/web/roles/dialog.js
+     ${NG_SRC_DIR}/src/web/roles/rolespage.js
+     ${NG_SRC_DIR}/src/web/roles/row.js
      ${NG_SRC_DIR}/src/web/scanconfigs/dialog.js
      ${NG_SRC_DIR}/src/web/scanconfigs/editconfigfamilydialog.js
      ${NG_SRC_DIR}/src/web/scanconfigs/editdialog.js
