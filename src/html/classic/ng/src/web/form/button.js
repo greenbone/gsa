@@ -28,6 +28,7 @@ import {classes} from '../../utils.js';
 import PropTypes from '../proptypes.js';
 import {withLayout} from '../layout.js';
 
+import {withClickHandler} from './form.js';
 
 import './css/button.css';
 
@@ -53,6 +54,6 @@ Button.propTypes = {
   className: PropTypes.string,
 };
 
-export default withLayout(Button);
+export default withLayout(withClickHandler(Button));
 
 // vim: set ts=2 sw=2 tw=80:
