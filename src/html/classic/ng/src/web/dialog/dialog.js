@@ -149,9 +149,7 @@ export class Dialog extends React.Component {
     this.setErrorMessage();
   }
 
-  handleSave(event) {
-    event.preventDefault();
-
+  handleSave() {
     if (this.props.onSaveClick) {
       this.props.onSaveClick();
     }
