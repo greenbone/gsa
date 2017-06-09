@@ -231,9 +231,8 @@ export const MenuBar = (props, {gmp, capabilities}) => {
             to="groups"
             caps="get_groups"/>
           <MenuEntry
-            legacy
             title={_('Roles')}
-            cmd="get_roles"
+            to="roles"
             caps="get_roles"/>
           <MenuEntry
             legacy

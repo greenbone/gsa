@@ -674,7 +674,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_ROLES')">
           <item>
-            <page>get_roles</page>
+            <url>/ng/roles</url>
             <name><xsl:value-of select="gsa:i18n ('Roles')"/></name>
           </item>
         </xsl:if>

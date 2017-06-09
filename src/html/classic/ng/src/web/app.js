@@ -68,6 +68,7 @@ import PortListsPage from './portlists/portlistspage.js';
 import ReportFormatsPage from './reportformats/reportformatspage.js';
 import ReportsPage from './reports/reportspage.js';
 import ResultsPage from './results/resultspage.js';
+import RolesPage from './roles/rolespage.js';
 import ScanConfigsPage from './scanconfigs/scanconfigspage.js';
 import ScannersPage from './scanners/scannerspage.js';
 import SchedulesPage from './schedules/schedulespage.js';
@@ -257,6 +258,9 @@ ReactDOM.render(
         <Route
           path="groups"
           component={GroupsPage}/>
+        <Route
+          path="roles"
+          component={RolesPage}/>
         <Route
           path="dashboards/scans"
           component={ScansPage}/>

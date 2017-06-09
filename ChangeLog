@@ -1,5 +1,12 @@
 2017-06-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/omp.xsl: Use ng for roles list page.
+
+2017-06-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/roles/dialog.js,
 	src/html/classic/ng/src/web/roles/rolespage.js,
