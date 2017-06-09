@@ -116,7 +116,7 @@ Dialog.propTypes = {
   grant_full: PropTypes.oneOf(['0', '1']),
   id: PropTypes.id,
   name: PropTypes.string,
-  users: PropTypes.collection,
+  users: PropTypes.arrayLike,
   onValueChange: PropTypes.func.isRequired,
 };
 
