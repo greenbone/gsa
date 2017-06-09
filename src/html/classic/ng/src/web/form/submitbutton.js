@@ -25,8 +25,9 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
-import Button from '../button.js';
 import PropTypes from '../proptypes.js';
+
+import Button from './button.js';
 
 const SubmitButton = ({className, ...other}) => {
   className = classes('button-block', className);

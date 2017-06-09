@@ -23,11 +23,11 @@
 
 import React from 'react';
 
-import {classes} from '../utils.js';
+import {classes} from '../../utils.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../proptypes.js';
+import {withLayout} from '../layout.js';
 
-import {withLayout} from './layout.js';
 
 import './css/button.css';
 

@@ -154,7 +154,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
      ${NG_SRC_DIR}/src/web/assetspage.js
-     ${NG_SRC_DIR}/src/web/button.js
      ${NG_SRC_DIR}/src/web/comment.js
      ${NG_SRC_DIR}/src/web/credentials/credentialspage.js
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
@@ -208,6 +207,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/filters/row.js
      ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/footnote.js
+     ${NG_SRC_DIR}/src/web/form/button.js
      ${NG_SRC_DIR}/src/web/form/checkbox.js
      ${NG_SRC_DIR}/src/web/form/datepicker.js
      ${NG_SRC_DIR}/src/web/form/download.js
@@ -407,7 +407,6 @@ set (NG_JS_SRC_FILES
 
 
 set (NG_CSS_SRC_FILES
-     ${NG_SRC_DIR}/src/web/css/button.css
      ${NG_SRC_DIR}/src/web/css/cveid.css
      ${NG_SRC_DIR}/src/web/css/footer.css
      ${NG_SRC_DIR}/src/web/css/footnote.css
@@ -428,6 +427,7 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
+     ${NG_SRC_DIR}/src/web/form/css/button.css
      ${NG_SRC_DIR}/src/web/form/css/checkboxradio.css
      ${NG_SRC_DIR}/src/web/form/css/datepicker.css
      ${NG_SRC_DIR}/src/web/form/css/form.css

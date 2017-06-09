@@ -25,8 +25,9 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Button from '../button.js';
 import PropTypes from '../proptypes.js';
+
+import Button from '../form/button.js';
 
 export const DialogTitle = ({showClose, title, onCloseClick, onMouseDown}) => {
   return (

@@ -26,8 +26,9 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Button from '../button.js';
 import PropTypes from '../proptypes.js';
+
+import Button from '../form/button.js';
 
 export const DialogError = ({error, onCloseClick}) => {
   if (!is_defined(error)) {
