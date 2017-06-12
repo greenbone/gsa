@@ -40,15 +40,10 @@ export class UserCommand extends EntityCommand {
   }
 
   currentAuthSettings(options = {}) {
-    let {cache = true, ...other} = options;
-
     const pauth = this.httpGet({
       cmd: 'auth_settings',
       name: '--', // only used in old xslt and can be any string
-    }, {
-      cache,
-      ...other,
-    });
+    }, options);
 
     return pauth.then(response => {
       let settings = new Settings();
@@ -69,13 +64,10 @@ export class UserCommand extends EntityCommand {
   }
 
   currentSettings(options = {}) {
-    let {cache = true, ...other} = options;
     return this.httpGet({
       cmd: 'get_my_settings',
-    }, {
-      cache,
-      ...other,
-    }).then(response => {
+    }, options
+    ).then(response => {
       let settings = new Settings();
       let {data} = response;
       for_each(data.get_my_settings.get_settings_response.setting, setting => {
@@ -91,26 +83,20 @@ export class UserCommand extends EntityCommand {
   }
 
   currentCapabilities(options = {}) {
-    let {cache = true, ...other} = options;
     return this.httpGet({
       cmd: 'get_my_settings',
-    }, {
-      cache,
-      ...other,
-    }).then(response => {
+    }, options,
+    ).then(response => {
       let caps = response.data.capabilities.help_response.schema.command;
       return response.setData(new Capabilities(caps));
     });
   }
 
   currentChartPreferences(options = {}) {
-    let {cache = true, ...other} = options;
     return this.httpGet({
       cmd: 'get_my_settings',
-    }, {
-      cache,
-      ...other,
-    }).then(response => {
+    }, options,
+    ).then(response => {
       let prefs = response.data.chart_preferences.chart_preference;
       log.debug('ChartPreferences loaded', prefs);
       return response.setData(new ChartPreferences(prefs));

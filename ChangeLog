@@ -1,5 +1,10 @@
 2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/users.js: Don't cache user settings by
+	default.
+
+2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/sticky/sticky.js: Only set sticky css class if
 	the element is sticky. This fixes displaying the small greenbone icon when the
 	menu is sticked to the head of the page.
