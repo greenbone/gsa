@@ -30,12 +30,11 @@ import PropTypes from '../proptypes.js';
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-const CommonCharts = ({filter, type, titleType, cache}) => {
+const CommonCharts = ({filter, type, titleType}) => {
   return (
     <div>
       <DataSource
         name={type + '-severity-count-source'}
-        cache={cache}
         aggregate-type={type}
         group-column="severity"
         filter={filter}>
@@ -54,7 +53,6 @@ const CommonCharts = ({filter, type, titleType, cache}) => {
       </DataSource>
       <DataSource
         name={type + '-created-count-source'}
-        cache={cache}
         aggregate-type={type}
         group-column="created"
         filter={filter}>
@@ -70,7 +68,6 @@ const CommonCharts = ({filter, type, titleType, cache}) => {
 };
 
 CommonCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
   type: PropTypes.string.isRequired,
   titleType: PropTypes.string.isRequired,

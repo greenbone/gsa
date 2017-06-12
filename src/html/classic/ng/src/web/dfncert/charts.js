@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017  Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,20 +27,18 @@ import PropTypes from '../proptypes.js';
 
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const DfnCertCharts = ({filter, cache}) => {
+export const DfnCertCharts = ({filter}) => {
   return (
     <div>
       <CommonCharts
         type="dfn_cert_adv"
         titleType="DFN-CERT Advisiories"
-        cache={cache}
         filter={filter}/>
     </div>
   );
 };
 
 DfnCertCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

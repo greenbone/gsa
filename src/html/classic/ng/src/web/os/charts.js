@@ -30,14 +30,13 @@ import PropTypes from '../proptypes.js';
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-export const OsCharts = ({filter, cache}) => {
+export const OsCharts = ({filter}) => {
   return (
     <div>
       <DataSource
         name="os-average-severity-count-source"
         group-column="average_severity"
         aggregate-type="os"
-        cache={cache}
         filter={filter}>
         <Chart
           name="os-by-cvss"
@@ -61,7 +60,6 @@ export const OsCharts = ({filter, cache}) => {
         sort-fields={['average_severity_score', 'modified']}
         sort-orders={['descending', 'descending']}
         sort-stats={['max', 'value']}
-        cache={cache}
         filter={filter}>
         <Chart
           name="os-by-most-vulnerable"
@@ -84,7 +82,6 @@ export const OsCharts = ({filter, cache}) => {
 };
 
 OsCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

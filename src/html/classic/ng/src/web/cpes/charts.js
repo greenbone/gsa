@@ -27,20 +27,18 @@ import PropTypes from '../proptypes.js';
 
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const CpeCharts = ({filter, cache}) => {
+export const CpeCharts = ({filter}) => {
   return (
     <div>
       <CommonCharts
         type="cpe"
         titleType="CPEs"
-        cache={cache}
         filter={filter}/>
     </div>
   );
 };
 
 CpeCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

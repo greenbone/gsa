@@ -30,12 +30,11 @@ import PropTypes from '../proptypes.js';
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-const TaskCharts = ({filter, cache}) => {
+const TaskCharts = ({filter}) => {
   return (
     <div>
       <DataSource name="task-severity-count-source"
         filter={filter}
-        cache={cache}
         group-column="severity"
         aggregate-type="task">
         <Chart name="task-by-cvss"
@@ -51,7 +50,6 @@ const TaskCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource name="task-status-count-source"
         filter={filter}
-        cache={cache}
         group-column="status"
         aggregate-type="task">
         <Chart name="task-by-status"
@@ -61,7 +59,6 @@ const TaskCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource name="task-high-results-source"
         filter={filter}
-        cache={cache}
         aggregate-type="task"
         group-column="uuid"
         columns={['severity', 'high_per_host']}
@@ -86,7 +83,6 @@ const TaskCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource name="task-schedules-source"
         filter={filter}
-        cache={cache}
         type="task">
         <Chart name="task-by-schedules"
           type="gantt"
@@ -98,7 +94,6 @@ const TaskCharts = ({filter, cache}) => {
 };
 
 TaskCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

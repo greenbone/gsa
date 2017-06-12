@@ -31,18 +31,16 @@ import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const NvtCharts = ({filter, cache}) => {
+export const NvtCharts = ({filter}) => {
   return (
     <div>
       <CommonCharts type="nvt" titleType="NVTs"
-        cache={cache}
         filter={filter}/>
       <DataSource
         name="nvt-by-family-source"
         aggregate-type="nvt"
         group-column="family"
         column="severity"
-        cache={cache}
         filter={filter}>
         <Chart
           name="nvt-by-family"
@@ -54,7 +52,6 @@ export const NvtCharts = ({filter, cache}) => {
         name="nvt-by-qod-type-source"
         aggregate-type="nvt"
         group-column="qod_type"
-        cache={cache}
         filter={filter}>
         <Chart
           name="nvt-by-qod_type"
@@ -67,7 +64,6 @@ export const NvtCharts = ({filter, cache}) => {
         name="nvt-by-qod-source"
         aggregate-type="nvt"
         group-column="qod"
-        cache={cache}
         filter={filter}>
         <Chart
           name="nvt-by-qod"
@@ -81,7 +77,6 @@ export const NvtCharts = ({filter, cache}) => {
 };
 
 NvtCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

@@ -27,18 +27,16 @@ import PropTypes from '../proptypes.js';
 
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const CveCharts = ({filter, cache}) => {
+export const CveCharts = ({filter}) => {
   return (
     <div>
       <CommonCharts type="cve" titleType="CVEs"
-        cache={cache}
         filter={filter}/>
     </div>
   );
 };
 
 CveCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

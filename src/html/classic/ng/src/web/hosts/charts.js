@@ -30,12 +30,11 @@ import PropTypes from '../proptypes.js';
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-const HostCharts = ({filter, cache}) => {
+const HostCharts = ({filter}) => {
   return (
     <div>
       <DataSource
         name="host-severity-count-source"
-        cache={cache}
         group-column="severity"
         aggregate-type="host"
         filter={filter}>
@@ -54,7 +53,6 @@ const HostCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource
         name="host-most-vulnerable-source"
-        cache={cache}
         aggregate-type="host"
         group-column="uuid"
         columns={['severity']}
@@ -78,7 +76,6 @@ const HostCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource
         name="host-counts-timeline-source"
-        cache={cache}
         aggregate-type="host"
         group-column="modified"
         subgroup-column="severity_level"
@@ -94,7 +91,6 @@ const HostCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource
         name="host-topology-source"
-        cache={cache}
         aggregate-type="host"
         type="host"
         filter={filter}>
@@ -108,7 +104,6 @@ const HostCharts = ({filter, cache}) => {
 };
 
 HostCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

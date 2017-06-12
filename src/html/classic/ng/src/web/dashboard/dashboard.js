@@ -160,11 +160,10 @@ export const withDashboard = (Charts, options = {}) => {
 
     render() {
       let {filter, ...other} = this.props;
-      let {cache} = this.context;
       return (
         <Dashboard {...options} {...other}
           ref={ref => this.dashboard = ref}>
-          <Charts filter={filter} cache={cache}/>
+          <Charts filter={filter}/>
         </Dashboard>
       );
     }
@@ -172,10 +171,6 @@ export const withDashboard = (Charts, options = {}) => {
 
   DashboardWrapper.propTypes = {
     filter: PropTypes.filter,
-  };
-
-  DashboardWrapper.contextTypes = {
-    cache: PropTypes.object,
   };
 
   return DashboardWrapper;

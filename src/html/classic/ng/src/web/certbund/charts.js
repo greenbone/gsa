@@ -27,20 +27,16 @@ import PropTypes from '../proptypes.js';
 
 import CommonCharts from '../dashboard/commoncharts.js';
 
-export const CertBundCharts = props => {
-  let {filter, cache} = props;
-
+const CertBundCharts = ({filter}) => {
   return (
     <div>
       <CommonCharts type="cert_bund_adv" titleType="CERT-Bund Advisiories"
-        cache={cache}
         filter={filter}/>
     </div>
   );
 };
 
 CertBundCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

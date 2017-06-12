@@ -29,14 +29,14 @@ import PropTypes from '../proptypes.js';
 
 export class DataSource extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
 
     let filter = this.props.filter ? this.props.filter.toFilterString() :
       undefined;
 
     let ds = new window.gsa.charts.DataSource(this.props.name, {
-      cache: this.props.cache,
+      cache: this.context.cache,
       type: this.props.type,
       group_column: this.props['group-column'],
       aggregate_type: this.props['aggregate-type'],
@@ -88,6 +88,7 @@ export class DataSource extends React.Component {
 
 DataSource.contextTypes = {
   dashboard: PropTypes.object.isRequired,
+  cache: PropTypes.cache,
 };
 
 DataSource.childContextTypes = {
@@ -95,7 +96,6 @@ DataSource.childContextTypes = {
 };
 
 DataSource.propTypes = {
-  cache: PropTypes.object,
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   column: PropTypes.string,

@@ -30,7 +30,7 @@ import PropTypes from '../proptypes.js';
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-export const OverrideCharts = ({filter, cache}) => {
+export const OverrideCharts = ({filter}) => {
   return (
     <div>
       <DataSource
@@ -38,7 +38,6 @@ export const OverrideCharts = ({filter, cache}) => {
         aggregate-type="override"
         aggregate-mode="count"
         group-column="created"
-        cache={cache}
         filter={filter}>
         <Chart
           name="override-by-created"
@@ -52,7 +51,6 @@ export const OverrideCharts = ({filter, cache}) => {
         aggregate-type="override"
         group-column="text"
         aggregate-mode="word_counts"
-        cache={cache}
         filter={filter}>
         <Chart
           name="override-by-text-words"
@@ -66,7 +64,6 @@ export const OverrideCharts = ({filter, cache}) => {
         sort-stat="count"
         sort-order="descending"
         max-groups="250"
-        cache={cache}
         filter={filter}>
         <Chart
           name="override-by-active-days"
@@ -80,7 +77,6 @@ export const OverrideCharts = ({filter, cache}) => {
 };
 
 OverrideCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.model,
 };
 

@@ -31,18 +31,16 @@ import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 import CommonCharts from '../dashboard/commoncharts.js';
 
-const SecinfoCharts = ({filter, cache}) => {
+const SecinfoCharts = ({filter}) => {
   return (
     <div>
       <CommonCharts type="allinfo" titleType="SecInfo Items"
-        cache={cache}
         filter={filter}/>
 
       <DataSource
         name="allinfo-by-type-source"
         aggregate-type="allinfo"
         group-column="type"
-        cache={cache}
         filter={filter}>
         <Chart
           name="allinfo-by-type"
@@ -56,7 +54,6 @@ const SecinfoCharts = ({filter, cache}) => {
 };
 
 SecinfoCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 

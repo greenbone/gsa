@@ -30,12 +30,11 @@ import PropTypes from '../proptypes.js';
 import DataSource from '../dashboard/datasource.js';
 import Chart from '../dashboard/chart.js';
 
-const ResultCharts = ({filter, cache}) => {
+const ResultCharts = ({filter}) => {
   return (
     <div>
       <DataSource
         filter={filter}
-        cache={cache}
         name="results-severity-count-source"
         group-column="severity"
         aggregate-type="result">
@@ -54,7 +53,6 @@ const ResultCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource
         filter={filter}
-        cache={cache}
         name="result-vuln-words-source"
         aggregate-type="result"
         group-column="vulnerability"
@@ -69,7 +67,6 @@ const ResultCharts = ({filter, cache}) => {
       </DataSource>
       <DataSource
         filter={filter}
-        cache={cache}
         name="result-desc-words-source"
         aggregate-type="result"
         group-column="description"
@@ -87,7 +84,6 @@ const ResultCharts = ({filter, cache}) => {
 };
 
 ResultCharts.propTypes = {
-  cache: PropTypes.object,
   filter: PropTypes.filter,
 };
 
