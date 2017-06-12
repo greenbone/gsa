@@ -63,6 +63,29 @@ export class Cache {
   clear() {
     this._cache = {};
   }
+
+export class CacheFactory {
+
+  constructor() {
+    this._caches = {};
+  }
+
+  clearAll() {
+    for (const key in this._caches) {
+      const cache = this._caches[key];
+      cache.clear();
+    }
+  }
+
+  get(name) {
+    if (name in this._caches) {
+      return this._caches[name];
+    }
+
+    const cache = new Cache();
+    this._caches[name] = cache;
+    return cache;
+  }
 }
 
 export default Cache;
