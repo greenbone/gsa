@@ -21,11 +21,26 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import {is_defined} from '../utils.js';
+
 /**
  * Simple cache implementation
  *
  * Should be improved to a lru cache with a maximum of entries
  */
+
+class Entry {
+
+  constructor(value) {
+    this.dirty = false;
+    this.value = value;
+  }
+
+  invalidate() {
+    this.dirty = true;
+  }
+}
+
 export class Cache {
 
   constructor() {
