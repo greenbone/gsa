@@ -26,6 +26,8 @@ import ReactPropTypes from 'prop-types';
 
 import {is_defined} from '../utils.js';
 
+import {CacheFactory, Cache} from '../gmp/cache.js';
+
 import CollectionList from '../gmp/collectionlist.js';
 
 import Model from '../gmp/model.js';
@@ -102,6 +104,9 @@ export const gmp = ReactPropTypes.instanceOf(Gmp);
 
 export const settings = ReactPropTypes.instanceOf(Settings);
 
+export const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
+export const cache = ReactPropTypes.instanceOf(Cache);
+
 const mayRequire = validator => {
   const wrapper = (...props) => {
     return validator(...props);
@@ -151,6 +156,8 @@ export default {
   string: ReactPropTypes.string,
 
   arrayLike,
+  cache,
+  cachefactory,
   capabilities,
   collection,
   component,

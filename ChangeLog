@@ -1,5 +1,10 @@
 2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/proptypes.js: Add proptypes for cache and
+	cachefactory instances.
+
+2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/cache.js: Introduce a CacheFactory class. This
 	class is a key-value store for different cache objects.
 
