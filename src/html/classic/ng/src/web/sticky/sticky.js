@@ -120,7 +120,9 @@ class Sticky extends React.Component {
       },
     );
 
-    className = classes(className, 'sticky');
+    if (isSticky) {
+      className = classes(className, 'sticky');
+    }
 
     return (
       <div>
