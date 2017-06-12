@@ -22,14 +22,13 @@
  */
 
 import 'babel-polyfill';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {Router, Route, IndexRoute, Redirect, browserHistory
 } from 'react-router';
 
-import Cache from '../gmp/cache.js';
+import CacheFactory from '../gmp/cache.js';
 import Gmp from '../gmp/gmp.js';
 import {HttpInterceptor} from '../gmp/http.js';
 import PromiseFactory from '../gmp/promise.js';
@@ -82,9 +81,9 @@ import './css/gsa-base.css';
 
 const {config = {}} = window;
 
-const {cache = new Cache(), ...other} = config;
+const caches = new CacheFactory();
 
-const gmp = new Gmp({cache, ...other});
+const gmp = new Gmp({caches, ...config});
 
 window.gmp = gmp;
 
@@ -132,7 +131,7 @@ class App extends React.Component {
   }
 
   getChildContext() {
-    return {gmp, cache};
+    return {gmp, caches};
   }
 
   toLoginPage() {
@@ -153,8 +152,8 @@ class App extends React.Component {
 }
 
 App.childContextTypes = {
-  gmp: PropTypes.object,
-  cache: PropTypes.object,
+  gmp: PropTypes.gmp,
+  caches: PropTypes.cachefactory,
 };
 
 App.contextTypes = {

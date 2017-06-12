@@ -1,5 +1,32 @@
 2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/ng/src/gmp/cache.js: Update Cache classes to store cache
+	entry instances. Allow to invalidate cache entries.
+
+	* src/html/classic/ng/src/gmp/http.js: Update http client class to accept a
+	cache object on each request instead of storing the cache itself. This
+	introduces a more flexible caching approach where each request can be cached
+	independently.
+
+	* src/html/classic/ng/src/web/app.js: Instanciate a CacheFactory, pass it
+	to all components via context and also pass it to the global gmp instance.
+	With this change all caches can be inspected in the browser console via
+	gmp.caches.
+
+	* src/html/classic/ng/src/web/entities/container.js: Rework reloading of
+	entities. Differentiate between filter set by the user and the loaded filter
+	from the response. E.g. on the first request the user didn't set any filter.
+	Therefore filter is undefined and loaded filter will be the default filter for
+	the resource. For caching the http data will be stored with the url derived
+	from the users filter and not from the loaded filter anymore. This results in
+	less entries and more consistend data in the cache.
+	Also with this change every entity page will get its own cache. This allows
+	for marking all cache entries as dirty if e.g. data has been deleted. If the
+	returned data from the cache is dirty it will be reloaded automatically.
+
+2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/gmp.js: Allow to pass a cache factory instance
 	to the gmp instance.
 

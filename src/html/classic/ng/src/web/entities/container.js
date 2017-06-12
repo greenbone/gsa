@@ -58,6 +58,25 @@ class EntitiesContainer extends React.Component {
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
     };
 
+    const {gmpname} = this.props;
+    const {gmp, caches} = this.context;
+
+    let entity_command_name;
+    let entities_command_name;
+
+    if (is_array(gmpname)) {
+      entity_command_name = gmpname[0];
+      entities_command_name = gmpname[1];
+    }
+    else {
+      entity_command_name = gmpname;
+      entities_command_name  = gmpname + 's';
+    }
+
+    this.entity_command = gmp[entity_command_name];
+    this.entities_command = gmp[entities_command_name];
+    this.cache = caches.get(entities_command_name);
+
     this.load = this.load.bind(this);
     this.reload = this.reload.bind(this);
     this.handleSelected = this.handleSelected.bind(this);
@@ -77,26 +96,8 @@ class EntitiesContainer extends React.Component {
   }
 
   componentDidMount() {
-    let {gmp} = this.context;
     let filter_string = this.props.location.query.filter;
     let filter;
-
-    let {gmpname} = this.props;
-
-    let entity_command_name;
-    let entities_command_name;
-
-    if (is_array(gmpname)) {
-      entity_command_name = gmpname[0];
-      entities_command_name = gmpname[1];
-    }
-    else {
-      entity_command_name = gmpname;
-      entities_command_name  = gmpname + 's';
-    }
-
-    this.entity_command = gmp[entity_command_name];
-    this.entities_command = gmp[entities_command_name];
 
     if (filter_string) {
       filter = Filter.fromString(filter_string);
@@ -111,13 +112,17 @@ class EntitiesContainer extends React.Component {
   }
 
   getChildContext() {
-    let {gmp} = this.context;
-    return {username: gmp.username};
+    const {cache} = this;
+    const {gmp} = this.context;
+    return {
+      username: gmp.username,
+      cache,
+    };
   }
 
   load(filter, options = {}) {
-    let {cache = true, force = false, refresh, reload = false} = options;
-    let {entities_command} = this;
+    const {cache, entities_command} = this;
+    let {force = false, refresh, reload = false} = options;
     let {extraLoadParams = {}} = this.props;
 
     this.setState({loading: true});
@@ -126,26 +131,13 @@ class EntitiesContainer extends React.Component {
 
     entities_command.get({filter, ...extraLoadParams}, {cache, force})
       .then(entities => {
+        const meta = entities.getMeta();
         const loaded_filter = entities.getFilter();
-        const meta = entities.getMeta();
 
-        this.setState({filter: loaded_filter});
+        this.setState({entities, filter, loaded_filter, loading: false});
 
-        if (!loaded_filter.equals(filter) && meta.from_cache) {
-          // reload data for default filter if page was visited without filter
-          // data may be already different if loaded filter differs from passed
-          // filter (especially if filter was undefined initially)
-          return entities_command.get({filter, ...extraLoadParams},
-            {cache, force});
-        }
-        return entities;
-      })
-      .then(entities => {
-        const meta = entities.getMeta();
-
-        this.setState({entities, loading: false});
-
-        if (meta.fromcache && reload) {
+        if (meta.fromcache && (meta.dirty || reload)) {
+          log.debug('Forcing reload of entities', meta.dirty, reload);
           refresh = 1;
         }
 
@@ -158,28 +150,33 @@ class EntitiesContainer extends React.Component {
   }
 
   loadFilters() {
-    let {gmp} = this.context;
-    let {filtersFilter} = this.props;
+    const {cache} = this;
+    const {gmp} = this.context;
+    const {filtersFilter} = this.props;
 
     if (!filtersFilter) {
       return;
     }
 
-    gmp.filters.get({filter: filtersFilter}, {cache: true})
+    gmp.filters.get({filter: filtersFilter}, {cache})
       .then(filters => {
         // display cached filters
         this.setState({filters});
         // reload all filters from backend
         return gmp.filters.get({filter: filtersFilter},
-          {cache: true, force: true});
+          {cache, force: true});
       }).then(filters => {
         this.setState({filters});
       }, this.handleError);
   }
 
-  reload() {
+  reload({invalidate = false} = {}) {
+    if (invalidate) {
+      log.debug('Marking cache as dirty', this.cache);
+      this.cache.invalidate();
+    }
     // reload data from backend
-    this.load(this.state.filter, {cache: true, force: true});
+    this.load(this.state.filter, {force: true});
   }
 
   startTimer(refresh) {
@@ -221,17 +218,17 @@ class EntitiesContainer extends React.Component {
 
   handleDownloadBulk(filename = 'export.xml') {
     let {entities_command} = this;
-    let {selected, selection_type, filter} = this.state;
+    let {selected, selection_type, loaded_filter} = this.state;
     let promise;
 
     if (selection_type === SelectionType.SELECTION_USER) {
       promise = entities_command.export(selected);
     }
     else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entities_command.exportByFilter(filter);
+      promise = entities_command.exportByFilter(loaded_filter);
     }
     else {
-      promise = entities_command.exportByFilter(filter.all());
+      promise = entities_command.exportByFilter(loaded_filter.all());
     }
 
     promise.then(response => {
@@ -244,21 +241,21 @@ class EntitiesContainer extends React.Component {
 
   handleDeleteBulk() {
     let {entities_command} = this;
-    let {selected, selection_type, filter} = this.state;
+    let {selected, selection_type, loaded_filter} = this.state;
     let promise;
 
     if (selection_type === SelectionType.SELECTION_USER) {
       promise = entities_command.delete(selected);
     }
     else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise  = entities_command.deleteByFilter(filter);
+      promise  = entities_command.deleteByFilter(loaded_filter);
     }
     else {
-      promise  = entities_command.deleteByFilter(filter.all());
+      promise  = entities_command.deleteByFilter(loaded_filter.all());
     }
 
     promise.then(deleted => {
-      this.reload();
+      this.reload({invalidate: true});
       log.debug('successfully deleted entities', deleted);
     }, this.handleError);
   }
@@ -283,7 +280,7 @@ class EntitiesContainer extends React.Component {
     let {entity_command} = this;
 
     entity_command.delete(entity).then(() => {
-      this.reload();
+      this.reload({invalidate: true});
       log.debug('successfully deleted entity', entity);
     }, this.handleError);
   }
@@ -292,7 +289,7 @@ class EntitiesContainer extends React.Component {
     let {entity_command} = this;
 
     entity_command.clone(entity).then(() => {
-      this.reload();
+      this.reload({invalidate: true});
       log.debug('successfully cloned entity', entity);
     }, this.handleError);
   }
@@ -323,16 +320,16 @@ class EntitiesContainer extends React.Component {
       promise = entity_command.create(data);
     }
 
-    return promise.then(() => this.reload());
+    return promise.then(() => this.reload({invalidate: true}));
   }
 
   handleSortChange(field) {
-    let {filter} = this.state;
+    const {loaded_filter} = this.state;
 
     let sort = 'sort';
-    let sort_field = filter.getSortBy();
+    const sort_field = loaded_filter.getSortBy();
 
-    filter = filter.first();
+    let filter = loaded_filter.first();
 
     if (sort_field && sort_field === field) {
       sort = filter.getSortOrder() === 'sort' ? 'sort-reverse' : 'sort';
@@ -371,11 +368,17 @@ class EntitiesContainer extends React.Component {
   }
 
   render() {
-    let {filter, filters, entities, selection_type, selected, loading,
-      } = this.state;
-    let {entity_command, entities_command} = this;
-    let Component = this.props.component;
-    let other = exclude(this.props, key => includes(exclude_props, key));
+    const {
+      entities,
+      filters,
+      loaded_filter,
+      loading,
+      selected,
+      selection_type,
+    } = this.state;
+    const {entity_command, entities_command} = this;
+    const Component = this.props.component;
+    const other = exclude(this.props, key => includes(exclude_props, key));
     return (
       <Layout>
         <Component {...other}
@@ -384,7 +387,7 @@ class EntitiesContainer extends React.Component {
           entityCommand={entity_command}
           entities={entities}
           entitiesSelected={selected}
-          filter={filter}
+          filter={loaded_filter}
           filters={filters}
           selectionType={selection_type}
           onChanged={this.reload}
@@ -428,10 +431,12 @@ EntitiesContainer.propTypes = {
 
 EntitiesContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
+  caches: PropTypes.cachefactory.isRequired,
 };
 
 EntitiesContainer.childContextTypes = {
   username: PropTypes.string,
+  cache: PropTypes.cache,
 };
 
 export const withEntitiesContainer = (component, gmpname, options = {}) => {

@@ -46,6 +46,15 @@
 
   var log = gsa.log;
 
+  function CacheEntry(value) {
+    this.value = value;
+    this.dirty = false;
+  }
+
+  CacheEntry.prototype.invalidate = function() {
+    this.dirty = true;
+  }
+
   function Cache() {
     this._cache = {};
   }
@@ -55,9 +64,24 @@
   };
 
   Cache.prototype.set = function(key, value) {
-    this._cache[key] = value;
+    this._cache[key] = new CacheEntry(value);
     return this;
   };
+
+  Cache.prototype.getValue = function(key) {
+    var entry = this._cache[key];
+    if (gsa.is_defined(entry)) {
+      return entry.value;
+    }
+    return undefined;
+  }
+
+  Cache.prototype.invalidate = function() {
+    for (var key in this._cache) {
+      var entry = this._cache[key];
+      entry.invalidate();
+    }
+  }
 
   Cache.prototype.clear = function() {
     this._cache = {};
@@ -3106,7 +3130,7 @@
    * @return The cached data or undefined of not available
    */
   DataSource.prototype.getData = function(uri) {
-    return this.cache.get(uri);
+    return this.cache.getValue(uri);
   };
 
   /**

@@ -52,7 +52,7 @@ export class Cache {
   }
 
   set(key, value) {
-    this._cache[key] = value;
+    this._cache[key] = new Entry(value);
     return this;
   }
 
@@ -60,9 +60,25 @@ export class Cache {
     return key in this._cache;
   }
 
+  getValue(key) {
+    const entry = this._cache[key];
+    if (is_defined(entry)) {
+      return entry.value;
+    }
+    return undefined;
+  }
+
   clear() {
     this._cache = {};
   }
+
+  invalidate() {
+    for (const key in this._cache) {
+      const entry = this._cache[key];
+      entry.invalidate();
+    }
+  }
+}
 
 export class CacheFactory {
 
@@ -88,6 +104,6 @@ export class CacheFactory {
   }
 }
 
-export default Cache;
+export default CacheFactory;
 
 // vim: set ts=2 sw=2 tw=80:

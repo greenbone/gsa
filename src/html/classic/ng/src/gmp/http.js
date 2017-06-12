@@ -27,7 +27,6 @@ import _ from '../locale.js';
 
 import {is_defined, has_value, is_array, extend} from '../utils.js';
 
-import Cache from './cache.js';
 import PromiseFactory from './promise.js';
 import Response from './response.js';
 import xml2json from './xml2json.js';
@@ -86,22 +85,22 @@ function formdata_append(formdata, key, value) {
 export class Http {
 
   constructor(url, options = {}) {
-    let {timeout = DEFAULT_TIMEOUT, promise_factory = PromiseFactory,
-      cache = new Cache()} = options;
+    let {timeout = DEFAULT_TIMEOUT, promise_factory = PromiseFactory} = options;
     this.url = url;
     this.params = {};
     this.timeout = timeout;
     this.promise_factory = promise_factory;
 
     this.interceptors = [];
-    this.cache = cache;
 
     log.debug('Using http options', options);
   }
 
   _cacheData(data, options) {
-    if (options.cache && options.url && options.method === 'GET') {
-      this.cache.set(options.url, data);
+    const {cache, url, method} = options;
+    if (is_defined(cache) && is_defined(url) && method === 'GET') {
+      log.debug('Storing data for url', url, 'in cache', cache);
+      cache.set(url, data);
     }
     return this;
   }
@@ -126,8 +125,14 @@ export class Http {
     return formdata;
   }
 
-  request(method, {args, data, url = this.url, cache = false, force = false,
-    ...other}) {
+  request(method, {
+    args,
+    data,
+    url = this.url,
+    cache,
+    force = false,
+    ...other,
+  }) {
     let self = this;
     let formdata;
 
@@ -137,10 +142,19 @@ export class Http {
       url += '?' + build_url_params(extend({}, this.params, args));
     }
 
-    if (method === 'GET' && cache && !force && this.cache.has(url)) {
-      log.debug('Using http response for url', url, 'from cache');
-      let responsedata = this.cache.get(url).setMeta({fromcache: true});
-      return this.promise_factory.promise.resolve(responsedata);
+    if (method === 'GET' && is_defined(cache) && cache.has(url) && !force) {
+      log.debug('Using http response for url', url, 'from cache', cache);
+
+      const entry = cache.get(url);
+
+      let responsedata = entry.value;
+
+      responsedata = responsedata.setMeta({
+        fromcache: true,
+        dirty: entry.dirty,
+      });
+
+      return this.promise_factory.resolve(responsedata);
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
@@ -250,11 +264,6 @@ export class Http {
 
   transformRejection(rej, options) {
     return rej;
-  }
-
-  clearCache() {
-    this.cache.clear();
-    return this;
   }
 
   addInterceptor(interceptor) {
