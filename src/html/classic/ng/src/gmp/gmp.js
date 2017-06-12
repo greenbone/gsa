@@ -71,10 +71,14 @@ export class Gmp {
       protocol,
       server,
       storage = localStorage,
+      caches,
       ...httpoptions,
     } = options;
 
     this._commands = {};
+
+    this.caches = caches;
+    this.storage = storage;
 
     this.server = is_defined(server) ? server : window.location.host;
     this.protocol = is_defined(protocol) ? protocol : window.location.protocol;
@@ -82,8 +86,6 @@ export class Gmp {
     this.http = new GmpHttp(this.server, this.protocol, httpoptions);
 
     this._login = new LoginCommand(this.http);
-
-    this.storage = storage;
 
     this._autorefresh = autorefresh;
 
@@ -118,7 +120,9 @@ export class Gmp {
       this.username = username;
       this.globals = login;
 
-      this.http.clearCache();
+      if (is_defined(this.caches)) {
+        this.caches.clearAll();
+      }
 
       return this.token;
     });
