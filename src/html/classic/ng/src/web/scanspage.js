@@ -38,30 +38,49 @@ import NoteCharts from './notes/charts.js';
 import OverrideCharts from './overrides/charts.js';
 import VulnCharts from './vulns/charts.js';
 
-export const ScansPage = (props, {cache}) => {
-  return (
-    <Section title={_('Scans Dashboard')} img="scan.svg"
-      extra={<DashboardControls/>}>
-      <Dashboard
-        configPrefId="c7584d7c-649f-4f8b-9ded-9e1dc20f24c8"
-        defaultControllersString={'result-by-severity-class|' +
-          'report-by-severity-class#task-by-status|report-by-high-results|' +
-          'task-by-severity-class'}
-        defaultControllerString="task-by-severity-class"
-        maxComponents="8">
-        <TaskCharts cache={cache}/>
-        <ReportCharts cache={cache}/>
-        <ResultCharts cache={cache}/>
-        <NoteCharts cache={cache}/>
-        <OverrideCharts cache={cache}/>
-        <VulnCharts cache={cache}/>
-      </Dashboard>
-    </Section>
-  );
-};
+class ScansPage extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    const {caches} = this.context;
+
+    this.cache = caches.get('scansdashboard');
+  }
+
+  getChildContext() {
+    return {cache: this.cache};
+  }
+
+  render() {
+    return (
+      <Section title={_('Scans Dashboard')} img="scan.svg"
+        extra={<DashboardControls/>}>
+        <Dashboard
+          configPrefId="c7584d7c-649f-4f8b-9ded-9e1dc20f24c8"
+          defaultControllersString={'result-by-severity-class|' +
+            'report-by-severity-class#task-by-status|report-by-high-results|' +
+            'task-by-severity-class'}
+          defaultControllerString="task-by-severity-class"
+          maxComponents="8">
+          <TaskCharts/>
+          <ReportCharts/>
+          <ResultCharts/>
+          <NoteCharts/>
+          <OverrideCharts/>
+          <VulnCharts/>
+        </Dashboard>
+      </Section>
+    );
+  }
+}
 
 ScansPage.contextTypes = {
-  cache: PropTypes.object,
+  caches: PropTypes.cachefactory.isRequired,
+};
+
+ScansPage.childContextTypes = {
+  cache: PropTypes.cache,
 };
 
 export default ScansPage;

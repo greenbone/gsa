@@ -1,5 +1,13 @@
 2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/assetspage.js,
+	src/html/classic/ng/src/web/homepage.js,
+	src/html/classic/ng/src/web/scanspage.js,
+	src/html/classic/ng/src/web/secinfopage.js: Add caches for the section
+	dashboard pages.
+
+2017-06-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js,
 	src/html/classic/ng/src/gmp/cache.js: Update Cache classes to store cache
 	entry instances. Allow to invalidate cache entries.

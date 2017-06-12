@@ -39,31 +39,50 @@ import NvtCharts from './nvts/charts.js';
 import OvaldefCharts from './ovaldefs/charts.js';
 import AllSecinfoCharts from './secinfo/charts.js';
 
-export const SecinfoPage = (props, {cache}) => {
-  return (
-    <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
-      extra={<DashboardControls/>}>
-      <Dashboard
-        configPrefId="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
-        defaultControllersString={'nvt-by-severity-class|cve-by-created|' +
-          'cve-by-severity-class#cert_bund_adv-by-created|' +
-          'cert_bund_adv-by-cvss'}
-        defaultControllerString="nvt-by-cvss"
-        maxComponents="8">
-        <NvtCharts cache={cache}/>
-        <OvaldefCharts cache={cache}/>
-        <CertBundCharts cache={cache}/>
-        <CveCharts cache={cache}/>
-        <CpeCharts cache={cache}/>
-        <DfnCertCharts cache={cache}/>
-        <AllSecinfoCharts cache={cache}/>
-      </Dashboard>
-    </Section>
-  );
-};
+class SecinfoPage extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    const {caches} = this.context;
+
+    this.cache = caches.get('secinfodashboard');
+  }
+
+  getChildContext() {
+    return {cache: this.cache};
+  }
+
+  render() {
+    return (
+      <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
+        extra={<DashboardControls/>}>
+        <Dashboard
+          configPrefId="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
+          defaultControllersString={'nvt-by-severity-class|cve-by-created|' +
+            'cve-by-severity-class#cert_bund_adv-by-created|' +
+            'cert_bund_adv-by-cvss'}
+          defaultControllerString="nvt-by-cvss"
+          maxComponents="8">
+          <NvtCharts/>
+          <OvaldefCharts/>
+          <CertBundCharts/>
+          <CveCharts/>
+          <CpeCharts/>
+          <DfnCertCharts/>
+          <AllSecinfoCharts/>
+        </Dashboard>
+      </Section>
+    );
+  }
+}
 
 SecinfoPage.contextTypes = {
-  cache: PropTypes.object,
+  caches: PropTypes.cachefactory.isRequired,
+};
+
+SecinfoPage.childContextTypes = {
+  cache: PropTypes.cache,
 };
 
 export default SecinfoPage;

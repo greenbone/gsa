@@ -47,38 +47,57 @@ import CpeCharts from './cpes/charts.js';
 import DfnCertCharts from './dfncert/charts.js';
 import SecinfoCharts from './secinfo/charts.js';
 
-export const Home = (props, {cache}) => {
-  return (
-    <Section title={_('Dashboard')} img="dashboard.svg"
-      extra={<DashboardControls/>}>
-      <Dashboard
-        configPrefId="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
-        defaultControllersString={'task-by-severity-class|task-by-status#' +
-          'cve-by-created|host-by-topology|nvt-by-severity-class'}
-        defaultControllerString="task-by-severity-class"
-        maxComponents="8">
-        <TaskCharts cache={cache}/>
-        <ReportCharts cache={cache}/>
-        <ResultCharts cache={cache}/>
-        <NoteCharts cache={cache}/>
-        <OverrideCharts cache={cache}/>
-        <VulnCharts cache={cache}/>
-        <HostCharts cache={cache}/>
-        <OsCharts cache={cache}/>
-        <NvtCharts cache={cache}/>
-        <OvaldefCharts cache={cache}/>
-        <CertBundCharts cache={cache}/>
-        <CveCharts cache={cache}/>
-        <CpeCharts cache={cache}/>
-        <DfnCertCharts cache={cache}/>
-        <SecinfoCharts cache={cache}/>
-      </Dashboard>
-    </Section>
-  );
-};
+class Home extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    const {caches} = this.context;
+
+    this.cache = caches.get('homedashboard');
+  }
+
+  getChildContext() {
+    return {cache: this.cache};
+  }
+
+  render() {
+    return (
+      <Section title={_('Dashboard')} img="dashboard.svg"
+        extra={<DashboardControls/>}>
+        <Dashboard
+          configPrefId="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
+          defaultControllersString={'task-by-severity-class|task-by-status#' +
+            'cve-by-created|host-by-topology|nvt-by-severity-class'}
+          defaultControllerString="task-by-severity-class"
+          maxComponents="8">
+          <TaskCharts/>
+          <ReportCharts/>
+          <ResultCharts/>
+          <NoteCharts/>
+          <OverrideCharts/>
+          <VulnCharts/>
+          <HostCharts/>
+          <OsCharts/>
+          <NvtCharts/>
+          <OvaldefCharts/>
+          <CertBundCharts/>
+          <CveCharts/>
+          <CpeCharts/>
+          <DfnCertCharts/>
+          <SecinfoCharts/>
+        </Dashboard>
+      </Section>
+    );
+  }
+}
 
 Home.contextTypes = {
-  cache: PropTypes.object,
+  caches: PropTypes.cachefactory.isRequired,
+};
+
+Home.childContextTypes = {
+  cache: PropTypes.cache,
 };
 
 export default Home;
