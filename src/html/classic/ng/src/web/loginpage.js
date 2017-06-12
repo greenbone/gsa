@@ -164,9 +164,7 @@ class LoginForm extends React.Component {
     autobind(this, 'on');
   }
 
-  onSubmit(event) {
-    event.preventDefault();
-
+  onSubmit() {
     if (!this.props.onSubmit) {
       return;
     }
