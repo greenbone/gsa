@@ -27,6 +27,7 @@ import _ from '../../locale.js';
 import {is_defined, exclude, includes} from '../../utils.js';
 
 import Layout from '../layout.js';
+import Loading from '../loading.js';
 import PropTypes from '../proptypes.js';
 import Section from '../section.js';
 import Toolbar from '../toolbar.js';
@@ -144,11 +145,10 @@ export class EntitiesPage extends React.Component {
   }
 
   renderLoading() {
-    let {entities} = this.props;
-    if (!is_defined(entities)) {
-      return <div>{_('Loading')}</div>;
-    }
-    return null;
+    const {loading} = this.props;
+    return (
+      <Loading loading={loading}/>
+    );
   }
 
   renderTable() {
@@ -258,6 +258,7 @@ EntitiesPage.propTypes = {
   filterEditDialog: PropTypes.component,
   filter: PropTypes.filter,
   filters: PropTypes.arrayLike,
+  loading: PropTypes.bool,
   powerfilter: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
   section: PropTypes.componentOrFalse,

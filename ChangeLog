@@ -1,5 +1,13 @@
 2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/loading.js: Put displaying a loading element into
+	an own component. With this change displaying loading can be improved and
+	extended more easily.
+
+2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/yarn.lock: Update react to 15.6 release.
 
