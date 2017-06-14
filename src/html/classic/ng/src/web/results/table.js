@@ -35,6 +35,8 @@ import {createEntitiesTable} from '../entities/table.js';
 
 import Icon from '../icons/icon.js';
 
+import Link from '../link/link.js';
+
 import TableData from '../table/data.js';
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';

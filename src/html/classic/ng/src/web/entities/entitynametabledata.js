@@ -27,8 +27,9 @@ import _ from '../../locale.js';
 
 import Comment from '../comment.js';
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import TableData from '../table/data.js';
 

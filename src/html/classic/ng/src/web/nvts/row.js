@@ -26,13 +26,14 @@ import React from 'react';
 import {datetime} from '../../locale.js';
 
 import CveId from '../cveid.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import SolutionType from '../solutiontype.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';

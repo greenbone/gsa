@@ -26,8 +26,9 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, is_empty} from '../../utils.js';
 
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 export const EntityLink = ({
     entity,

@@ -27,10 +27,11 @@ import _ from '../../locale.js';
 import {classes, is_empty, is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import SolutionType from '../solutiontype.js';
 import {render_nvt_name} from '../render.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import SimpleTable from '../table/simple.js';
 import TableBody from '../table/body.js';

@@ -28,7 +28,6 @@ import {is_defined} from '../../utils.js';
 
 import Comment from '../comment.js';
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
@@ -41,6 +40,8 @@ import {withEntityRow} from '../entities/row.js';
 import ExportIcon from '../icons/exporticon.js';
 import NewIcon from '../icons/newicon.js';
 import OsIcon from '../icons/osicon.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';

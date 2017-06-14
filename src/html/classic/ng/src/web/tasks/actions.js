@@ -27,7 +27,6 @@ import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 
 import {withEntityActions} from '../entities/actions.js';
@@ -38,6 +37,8 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import Icon from '../icons/icon.js';
 import ExportIcon from '../icons/exporticon.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 const render_start_button = (task, capabilities, onStartTaskClick) => {
   if (task.isRunning() || task.isContainer()) {

@@ -28,13 +28,14 @@ import Sticky from '../sticky/sticky.js';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Link from '../link.js';
 import PropTypes from '../proptypes.js';
+
+import Icon from '../icons/icon.js';
+
+import Link from '../link/link.js';
 
 import Menu from './menu.js';
 import MenuEntry from './menuentry.js';
-
-import Icon from '../icons/icon.js';
 
 import './css/menubar.css';
 

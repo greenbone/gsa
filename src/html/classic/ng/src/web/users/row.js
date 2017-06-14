@@ -27,7 +27,6 @@ import _ from '../../locale.js';
 import {is_empty, map} from '../../utils.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
@@ -40,6 +39,8 @@ import DeleteIcon from '../entities/icons/entitydeleteicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
 
 import ExportIcon from '../icons/exporticon.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';

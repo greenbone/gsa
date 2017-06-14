@@ -26,8 +26,6 @@ import React from 'react';
 import _, {datetime} from '../../locale.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
-import Link from '../link.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
@@ -38,6 +36,9 @@ import {withEntityRow} from '../entities/row.js';
 import CpeIcon from '../icons/cpeicon.js';
 import DeleteIcon from '../icons/deleteicon.js';
 import ExportIcon from '../icons/exporticon.js';
+
+import LegacyLink from '../link/legacylink.js';
+import Link from '../link/link.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';

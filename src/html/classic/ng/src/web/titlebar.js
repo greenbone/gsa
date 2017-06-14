@@ -26,11 +26,12 @@ import React from 'react';
 import _ from '../locale.js';
 
 import Layout from './layout.js';
-import Link from './link.js';
-import LegacyLink from './legacylink.js';
 import PropTypes from './proptypes.js';
 
 import Icon from './icons/icon.js';
+
+import Link from './link/link.js';
+import LegacyLink from './link/legacylink.js';
 
 import './css/titlebar.css';
 

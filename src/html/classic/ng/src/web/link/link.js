@@ -25,7 +25,7 @@ import React from 'react';
 
 import {Link as RLink} from 'react-router';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../proptypes.js';
 
 export const Link = ({to, ...other}) => {
   let path = '/ng';

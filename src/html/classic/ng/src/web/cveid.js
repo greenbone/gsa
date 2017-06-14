@@ -23,8 +23,9 @@
 
 import React from 'react';
 
-import LegacyLink from './legacylink.js';
 import PropTypes from './proptypes.js';
+
+import LegacyLink from './link/legacylink.js';
 
 import './css/cveid.css';
 

@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import {extend, is_defined} from '../utils.js';
+import {extend, is_defined} from '../../utils.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../proptypes.js';
 
 const LegacyLink = ({
     children,

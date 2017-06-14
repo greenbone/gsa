@@ -27,7 +27,6 @@ import _ from '../../locale.js';
 import {shorten, is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {render_component, result_cvss_risk_factor} from '../render.js';
@@ -40,6 +39,8 @@ import EditIcon from '../entities/icons/entityediticon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../icons/exporticon.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';

@@ -26,7 +26,6 @@ import React from 'react';
 import _, {short_date} from '../../locale.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
@@ -40,6 +39,8 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../icons/exporticon.js';
 import Icon from '../icons/icon.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';

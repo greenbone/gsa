@@ -28,8 +28,6 @@ import {is_defined, is_empty} from '../../utils.js';
 
 import Comment from '../comment.js';
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
-import Link from '../link.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import StatusBar from '../statusbar.js';
@@ -40,6 +38,9 @@ import {withEntityRow} from '../entities/row.js';
 import ObserverIcon from '../entities/icons/entityobservericon.js';
 
 import Icon from '../icons/icon.js';
+
+import LegacyLink from '../link/legacylink.js';
+import Link from '../link/link.js';
 
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';

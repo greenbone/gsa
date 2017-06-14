@@ -27,7 +27,6 @@ import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 
@@ -36,6 +35,8 @@ import {withDialog} from '../dialog/dialog.js';
 import Radio from '../form/radio.js';
 import Text from '../form/text.js';
 import TextField from '../form/textfield.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import SimpleTable from '../table/simple.js';
 import Table from '../table/table.js';

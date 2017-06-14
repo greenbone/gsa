@@ -1,6 +1,47 @@
 2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/agents/row.js,
+	src/html/classic/ng/src/web/alerts/row.js,
+	src/html/classic/ng/src/web/certbund/row.js,
+	src/html/classic/ng/src/web/cpes/row.js,
+	src/html/classic/ng/src/web/credentials/downloadicon.js,
+	src/html/classic/ng/src/web/cveid.js,
+	src/html/classic/ng/src/web/cves/row.js,
+	src/html/classic/ng/src/web/dfncert/row.js,
+	src/html/classic/ng/src/web/entities/entitynametabledata.js,
+	src/html/classic/ng/src/web/entities/link.js,
+	src/html/classic/ng/src/web/hosts/row.js,
+	src/html/classic/ng/src/web/legacylink.js,
+	src/html/classic/ng/src/web/link/legacylink.js,
+	src/html/classic/ng/src/web/link.js,
+	src/html/classic/ng/src/web/link/link.js,
+	src/html/classic/ng/src/web/menu/menu.js,
+	src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/ng/src/web/menu/menuentry.js,
+	src/html/classic/ng/src/web/notes/row.js,
+	src/html/classic/ng/src/web/nvts/row.js,
+	src/html/classic/ng/src/web/os/row.js,
+	src/html/classic/ng/src/web/ovaldefs/row.js,
+	src/html/classic/ng/src/web/overrides/row.js,
+	src/html/classic/ng/src/web/reports/row.js,
+	src/html/classic/ng/src/web/results/details.js,
+	src/html/classic/ng/src/web/results/row.js,
+	src/html/classic/ng/src/web/results/table.js,
+	src/html/classic/ng/src/web/scanconfigs/editnvtdetailsdialog.js,
+	src/html/classic/ng/src/web/scanners/row.js,
+	src/html/classic/ng/src/web/secinfo/row.js,
+	src/html/classic/ng/src/web/targets/row.js,
+	src/html/classic/ng/src/web/tasks/actions.js,
+	src/html/classic/ng/src/web/tasks/row.js,
+	src/html/classic/ng/src/web/titlebar.js,
+	src/html/classic/ng/src/web/users/row.js,
+	src/html/classic/ng/src/web/vulns/row.js: Move link components into a
+	subdirectory. There will be at least one more link component in future.
+
+2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/page.js,
 	src/html/classic/ng/src/web/loading.js: Put displaying a loading element into
 	an own component. With this change displaying loading can be improved and

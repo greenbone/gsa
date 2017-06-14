@@ -27,7 +27,6 @@ import _, {datetime} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
-import LegacyLink from '../legacylink.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import StatusBar from '../statusbar.js';
@@ -37,6 +36,8 @@ import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
 import DeleteIcon from '../icons/deleteicon.js';
+
+import LegacyLink from '../link/legacylink.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
