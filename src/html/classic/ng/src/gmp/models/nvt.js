@@ -40,9 +40,9 @@ const parse_tags = tags => {
   return newtags;
 };
 
-const parse_cve_ids = cve_ids => {
-  if (is_string(cve_ids) && cve_ids !== 'NOCVE') {
-    return cve_ids.split(',').map(id => id.trim());
+const parse_ids = (ids, no) => {
+  if (is_string(ids) && ids !== no) {
+    return ids.split(',').map(id => id.trim());
   }
   return [];
 };
@@ -59,12 +59,25 @@ export class Nvt extends Model {
 
     ret.oid = ret._oid;
     ret.tags = parse_tags(ret.tags);
-    ret.cve_ids = parse_cve_ids(ret.cve_id);
+
+    // several properties use different names in different responses
+    // cve and cve_id, bid and bugtraq_id, cert and cert_ref
+
+    ret.cves = parse_ids(ret.cve, 'NOCVE')
+      .concat(parse_ids(ret.cve_id, 'NOCVE'));
+    delete ret.cve;
+    delete ret.cve_id;
+
+    ret.bids = parse_ids(ret.bid, 'NOBID')
+      .concat(parse_ids(ret.bugtraq_id, 'NOBID'));
+    delete ret.bid;
+    delete ret.bugtraq_id;
+
     ret.severity = parse_severity(ret.cvss_base);
     delete ret.cvss_base;
 
-    if (is_defined(elem.preferences)) {
-      ret.preferences = map(elem.preferences.preference, preference => {
+    if (is_defined(ret.preferences)) {
+      ret.preferences = map(ret.preferences.preference, preference => {
         let pref = shallow_copy(preference);
         delete pref.nvt;
         return pref;
@@ -73,6 +86,47 @@ export class Nvt extends Model {
     else {
       ret.preferences = [];
     }
+
+    if (is_defined(ret.cert)) {
+      ret.certs = map(ret.cert.cert_ref, ref => {
+        return {
+          id: ref._id,
+          type: ref._type,
+        };
+      });
+
+      delete ret.cert;
+    }
+    else {
+      ret.certs = [];
+    }
+
+    if (is_defined(ret.cert_refs)) {
+      ret.certs.concat(
+        map(ret.cert_refs.cert_ref, ref => {
+          return {
+            id: ref._id,
+            type: ref._type,
+          };
+        })
+      );
+
+      delete ret.cert_refs;
+    }
+
+    const xrefs = parse_ids(ret.xref, 'NOXREF');
+
+    ret.xrefs = xrefs.map(xref => {
+      let type = 'other';
+      let ref = xref;
+      if (xref.startsWith('URL:')) {
+        type = 'URL';
+        ref = xref.slice(4);
+      }
+      return {type, ref};
+    });
+
+    delete ret.xref;
 
     return ret;
   }
