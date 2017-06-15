@@ -29,12 +29,16 @@ import LegacyLink from './link/legacylink.js';
 
 import './css/cveid.css';
 
-export const CveId = ({id, link = true}) => {
-
+const CveId = ({
+    id,
+    link = true,
+    title,
+  }) => {
   return (
     <span className="cve-id">
       {link ?
         <LegacyLink
+          title={title}
           cmd="get_info"
           info_type="cve"
           details="1"
@@ -50,6 +54,7 @@ export const CveId = ({id, link = true}) => {
 CveId.propTypes = {
   id: PropTypes.string,
   link: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 

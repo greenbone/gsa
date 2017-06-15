@@ -1,5 +1,10 @@
 2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/cveid.js: Allow to set a title on a CveId
+	component.
+
+2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/results/filterdialog.js: Fix changing result
 	powerfilter autofp value and update coding style.
 
