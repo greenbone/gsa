@@ -36,8 +36,8 @@ const log = logger.getLogger('web.dashboard.dashboard');
 
 export class Dashboard extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
 
     let {id} = this.props;
 
@@ -55,6 +55,10 @@ export class Dashboard extends React.Component {
       dashboard_controls: '#dashboard-controls',
     });
 
+    const {caches} = this.context;
+
+    this.cache = caches.get('usersettings');
+
     this.state = {
       initialized: false,
       id,
@@ -70,12 +74,12 @@ export class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    let {gmp} = this.context;
-    let {dashboard} = this;
-    let pref_id = this.props.configPrefId;
+    const {gmp} = this.context;
+    const {cache, dashboard} = this;
+    const pref_id = this.props.configPrefId;
 
     let promises = [
-      gmp.user.currentChartPreferences(),
+      gmp.user.currentChartPreferences({cache}),
     ];
 
     if (!this.props.hideFilterSelect) {
@@ -106,11 +110,12 @@ export class Dashboard extends React.Component {
   }
 
   onConfigSaved() {
-    let {gmp} = this.context;
+    const {cache} = this;
+    const {gmp} = this.context;
     // override cache with current saved config
     // this is a bit "hackish" and should be obsolete when dashboards are
     // completely converted to react and gmp api
-    gmp.user.currentChartPreferences({force: true});
+    gmp.user.currentChartPreferences({cache, force: true});
   }
 
   reload() {
@@ -148,6 +153,7 @@ Dashboard.defaultProps = {
 
 Dashboard.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
+  caches: PropTypes.cachefactory.isRequired,
 };
 
 export const withDashboard = (Charts, options = {}) => {
