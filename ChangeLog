@@ -1,6 +1,13 @@
 2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/container.js,
+	src/html/classic/ng/src/web/entity/page.js: Add generic components for entity
+	detail pages.
+
+2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entity/info.js: Add new component to display the
 	info details of an entity.
 
