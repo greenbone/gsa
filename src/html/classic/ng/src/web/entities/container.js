@@ -158,12 +158,12 @@ class EntitiesContainer extends React.Component {
       return;
     }
 
-    gmp.filters.get({filter: filtersFilter}, {cache})
+    gmp.filters.getAll({filter: filtersFilter}, {cache})
       .then(filters => {
         // display cached filters
         this.setState({filters});
         // reload all filters from backend
-        return gmp.filters.get({filter: filtersFilter},
+        return gmp.filters.getAll({filter: filtersFilter},
           {cache, force: true});
       }).then(filters => {
         this.setState({filters});
