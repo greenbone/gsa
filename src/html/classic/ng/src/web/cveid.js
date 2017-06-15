@@ -25,35 +25,31 @@ import React from 'react';
 
 import PropTypes from './proptypes.js';
 
-import LegacyLink from './link/legacylink.js';
+import InfoLink from './link/infolink.js';
 
 import './css/cveid.css';
 
 const CveId = ({
     id,
-    link = true,
     title,
+    ...props,
   }) => {
   return (
     <span className="cve-id">
-      {link ?
-        <LegacyLink
-          title={title}
-          cmd="get_info"
-          info_type="cve"
-          details="1"
-          info_name={id}>
-          {id}
-        </LegacyLink> :
+      <InfoLink
+        title={title}
+        type="cve"
+        name={id}
+        {...props}
+      >
         {id}
-      }
+      </InfoLink>
     </span>
   );
 };
 
 CveId.propTypes = {
   id: PropTypes.string,
-  link: PropTypes.bool,
   title: PropTypes.string,
 };
 

@@ -33,7 +33,7 @@ import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
-import LegacyLink from '../link/legacylink.js';
+import InfoLink from '../link/infolink.js';
 
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
@@ -42,27 +42,23 @@ const Row = ({entity, links = true, actions, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        {links ?
-          <LegacyLink
-            cmd="get_info"
-            details="1"
-            info_type="nvt"
-            info_id={entity.id}>
-            {entity.name}
-          </LegacyLink> :
-            entity.name
-        }
+        <InfoLink
+          type="nvt"
+          id={entity.id}
+          textOnly={!links}
+        >
+          {entity.name}
+        </InfoLink>
       </TableData>
       <TableData>
-        {links ?
-          <LegacyLink
-            cmd="get_info"
-            info_type="nvt"
-            filter={'family="' + entity.family + '"'}>
-            {entity.family}
-          </LegacyLink> :
-          entity.family
-        }
+        <InfoLink
+          cmd="get_info"
+          info_type="nvt"
+          filter={'family="' + entity.family + '"'}
+          textOnly={!links}
+        >
+          {entity.family}
+        </InfoLink>
       </TableData>
       <TableData>
         {datetime(entity.creation_time)}
@@ -78,7 +74,8 @@ const Row = ({entity, links = true, actions, ...other}) => {
           <CveId
             key={id}
             id={id}
-            link={links}/>
+            textOnly={!links}
+          />
         ))}
       </TableData>
       <TableData flex align="center">
