@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import {is_defined, parse_int} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
@@ -45,6 +45,9 @@ const ApplyOverridesGroup = ({
       <YesNoRadio
         value={overrides}
         name={name}
+        yesValue={1}
+        noValue={0}
+        convert={parse_int}
         onChange={onChange}/>
     </FormGroup>
   );
