@@ -39,7 +39,7 @@ import ObserverIcon from '../entities/icons/entityobservericon.js';
 
 import Icon from '../icons/icon.js';
 
-import LegacyLink from '../link/legacylink.js';
+import DetailsLink from '../link/detailslink.js';
 import Link from '../link/link.js';
 
 import TableRow from '../table/row.js';
@@ -59,16 +59,16 @@ const render_report = (report, links) => {
     return null;
   }
   let date = datetime(report.timestamp);
-  if (links) {
-    return (
-      <LegacyLink
-        cmd="get_report"
-        report_id={report.id}>
-        {date}
-      </LegacyLink>
-    );
-  }
-  return date;
+  return (
+    <DetailsLink
+      legacy
+      type="report"
+      id={report.id}
+      textOnly={!links}
+    >
+      {date}
+    </DetailsLink>
+  );
 };
 
 const render_status = (entity, links) => {
@@ -80,6 +80,7 @@ const render_status = (entity, links) => {
     report_id = entity.last_report.id;
   }
   else {
+    report_id = '';
     links = false;
   }
 
@@ -89,47 +90,49 @@ const render_status = (entity, links) => {
       progress={entity.progress}/>
   );
 
-  if (links) {
-    return (
-      <LegacyLink
-        cmd="get_report"
-        report_id={report_id}
-        result_hosts_only="1"
-        notes="1">
-        {statusbar}
-      </LegacyLink>
-    );
-  }
-  return statusbar;
+  return (
+    <DetailsLink
+      legacy
+      type="report"
+      id={report_id}
+      result_hosts_only="1"
+      notes="1"
+      textOnly={!links}
+    >
+      {statusbar}
+    </DetailsLink>
+  );
 };
 
 const render_report_total = (entity, links) => {
   if (entity.report_count.total <= 0) {
     return null;
   }
-  if (links) {
-    return (
+  return (
+    <Layout flex align={['center', 'center']}>
+      <Link
+        to={'reports?replace_task_id=1&' +
+            'filter=task_id=' + entity.id + ' and status=Done ' +
+            'sort-reverse=date&filt_id=-2'}
+        title={_('View list of all finished reports for Task {{name}}',
+          {name: entity.name})}
+        textOnly={!links || entity.report_count.finished === 0}
+      >
+        {entity.report_count.finished}
+      </Link>
+      <span>&nbsp;</span>
       <span>
-        <Link to={'reports?replace_task_id=1&' +
-          'filter=task_id=' + entity.id + ' and status=Done ' +
-          'sort-reverse=date&filt_id=-2'}
-          title={_('View list of all finished reports for Task {{name}}',
-            {name: entity.name})}>
-          {entity.report_count.finished}
-        </Link>
-        (<Link to={'reports?replace_task_id=1&' +
-          'filter=task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
+        (<Link
+          to={'reports?replace_task_id=1&' +
+              'filter=task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
           title={_('View list of all reports for Task {{name}},' +
-            ' including unfinished ones', {name: entity.name})}>
+            ' including unfinished ones', {name: entity.name})}
+          textOnly={!links || entity.report_count.total === 0}
+        >
           {entity.report_count.total}
         </Link>)
       </span>
-    );
-  }
-  return (
-    <span>
-      {entity.report_count.finished} ({entity.report_count.total})
-    </span>
+    </Layout>
   );
 };
 
@@ -143,14 +146,14 @@ const Row = ({
     <TableRow>
       <TableData>
         <Layout flex align="space-between">
-          {links ?
-            <LegacyLink
-              cmd="get_task"
-              task_id={entity.id}>
-              {entity.name}
-            </LegacyLink> :
-            entity.name
-          }
+          <DetailsLink
+            legacy
+            type="task"
+            id={entity.id}
+            textOnly={!links}
+          >
+            {entity.name}
+          </DetailsLink>
 
           {entity.alterable === 1 &&
             <Icon
