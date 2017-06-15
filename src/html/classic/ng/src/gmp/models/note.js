@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, extend} from '../../utils.js';
+import {is_defined, extend, map} from '../../utils.js';
 
 import Model from '../model.js';
 import {parse_severity, parse_text} from '../parser.js';
@@ -58,6 +58,13 @@ export class Note extends Model {
     return this.text_excerpt === '1';
   }
 }
+
+export const parse_notes = notes => {
+  if (is_defined(notes)) {
+    return map(notes.note, note => new Note(note));
+  }
+  return [];
+};
 
 export default Note;
 
