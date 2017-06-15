@@ -34,6 +34,7 @@ export const YES_VALUE = '1';
 export const NO_VALUE = '0';
 
 const YesNoRadio = ({
+    convert,
     disabled,
     value,
     name,
@@ -49,6 +50,7 @@ const YesNoRadio = ({
         value={yesValue}
         name={name}
         checked={value === yesValue}
+        convert={convert}
         onChange={onChange}
         disabled={disabled}/>
       <Radio
@@ -56,6 +58,7 @@ const YesNoRadio = ({
         value={noValue}
         name={name}
         checked={value === noValue}
+        convert={convert}
         onChange={onChange}
         disabled={disabled}/>
     </Layout>
@@ -63,11 +66,12 @@ const YesNoRadio = ({
 };
 
 YesNoRadio.propTypes = {
+  convert: PropTypes.func,
   disabled: PropTypes.bool,
   name: PropTypes.string,
+  noValue: PropTypes.any,
   value: PropTypes.any,
   yesValue: PropTypes.any,
-  noValue: PropTypes.any,
   onChange: PropTypes.func,
 };
 
