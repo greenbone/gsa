@@ -1,5 +1,11 @@
 2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/info.js: Add new component to display the
+	info details of an entity.
+
+2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/result.js: Parse notes in results and
 	store value directly in detection result details object.
 
