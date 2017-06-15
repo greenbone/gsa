@@ -4,4 +4,5 @@ window.gsa = {
 
 window.config = {
   loglevel: 'warn',
+  autorefresh: 2,
 };

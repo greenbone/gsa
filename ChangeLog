@@ -1,3 +1,8 @@
+2017-06-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/ng/public/config.js: Default to a very short
+	refresh interval of 2 seconds.
+
 2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/nvts/row.js: Update property name for list of
