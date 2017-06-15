@@ -116,7 +116,13 @@ export class EntitiesPage extends React.Component {
   }
 
   renderSection() {
-    let {sectionIcon, filter, foldable} = this.props;
+    const {
+      entities,
+      filter,
+      foldable,
+      loading,
+      sectionIcon,
+    } = this.props;
     let DashboardComponent = this.props.dashboard;
     let SectionComponent = this.props.section;
 
@@ -138,8 +144,10 @@ export class EntitiesPage extends React.Component {
         {DashboardComponent &&
           <DashboardComponent filter={filter}/>
         }
-        {this.renderLoading()}
-        {this.renderTable()}
+        {loading && !is_defined(entities) ?
+          this.renderLoading() :
+          this.renderTable()
+        }
       </SectionComponent>
     );
   }
@@ -153,9 +161,9 @@ export class EntitiesPage extends React.Component {
 
   renderTable() {
     let {filter, entities, ...other} = this.props;
-    let TableComponent = this.props.table;
+    const TableComponent = this.props.table;
 
-    if (!entities || !TableComponent) {
+    if (!is_defined(entities) || !is_defined(TableComponent)) {
       return null;
     }
 
@@ -174,8 +182,14 @@ export class EntitiesPage extends React.Component {
   }
 
   renderPowerFilter() {
-    let {filters, filter, onFilterCreateClick, onFilterChanged,
-      filterEditDialog, powerfilter = PowerFilter} = this.props;
+    const {
+      filter,
+      filterEditDialog,
+      filters,
+      powerfilter = PowerFilter,
+      onFilterChanged,
+      onFilterCreateClick,
+    } = this.props;
 
     if (!powerfilter) {
       return null;
@@ -183,7 +197,7 @@ export class EntitiesPage extends React.Component {
 
     const PowerFilterComponent = powerfilter;
 
-    let handler = is_defined(filterEditDialog) ?
+    const handler = is_defined(filterEditDialog) ?
       this.handleFilterEditClick : undefined;
 
     return (
