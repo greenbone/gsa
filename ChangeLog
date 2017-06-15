@@ -1,5 +1,10 @@
 2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/nvts/row.js: Update property name for list of
+	cves in a nvt.
+
+2017-06-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/nvt.js: Update and fix parsing nvts.
 	Several nvt properties use different names in different responses.
 

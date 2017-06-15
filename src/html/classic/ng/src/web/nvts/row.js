@@ -74,12 +74,12 @@ const Row = ({entity, links = true, actions, ...other}) => {
         {entity.version}
       </TableData>
       <TableData>
-        {entity.cve_ids.map(id =>
+        {entity.cves.map(id => (
           <CveId
             key={id}
             id={id}
             link={links}/>
-        )}
+        ))}
       </TableData>
       <TableData flex align="center">
         {entity && entity.tags &&
