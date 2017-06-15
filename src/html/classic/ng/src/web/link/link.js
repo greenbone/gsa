@@ -28,11 +28,14 @@ import {Link as RLink} from 'react-router';
 import PropTypes from '../proptypes.js';
 
 export const withTextOnly = Component => {
-  const TextOnly = ({textOnly = false, ...props}) => {
-
+  const TextOnly = ({
+    textOnly = false,
+    ...props
+  }) => {
     if (textOnly) {
+      const {className, children, style, title} = props;
       return (
-        <span {...props}/>
+        <span {...{className, children, style, title}}/>
       );
     }
 
@@ -41,6 +44,9 @@ export const withTextOnly = Component => {
 
   TextOnly.propTypes = {
     textOnly: PropTypes.bool,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    title: PropTypes.string,
   };
 
   return TextOnly;
