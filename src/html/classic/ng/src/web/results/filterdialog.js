@@ -65,16 +65,7 @@ class ResultsFilterDialogComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleIntValueChange = this.handleIntValueChange.bind(this);
     this.handleLevelChange = this.handleLevelChange.bind(this);
-  }
-
-  handleIntValueChange(value, name) {
-    let {onFilterValueChange} = this.props;
-
-    value = parse_int(value);
-
-    onFilterValueChange(value, name);
   }
 
   handleLevelChange(value, level) {
@@ -96,8 +87,14 @@ class ResultsFilterDialogComponent extends React.Component {
   }
 
   render() {
-    let {filter, filterstring, onFilterStringChange, onFilterValueChange,
-      onSortOrderChange, onSortByChange} = this.props;
+    const {
+      filter,
+      filterstring,
+      onFilterStringChange,
+      onFilterValueChange,
+      onSortByChange,
+      onSortOrderChange,
+    } = this.props;
 
     if (!filter) {
       return null;
@@ -117,31 +114,35 @@ class ResultsFilterDialogComponent extends React.Component {
           filter={filterstring}
           onChange={onFilterStringChange}/>
 
-        <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange}/>
+        <ApplyOverridesGroup
+          filter={filter}
+          onChange={onFilterValueChange}/>
 
         <FormGroup title={_('Auto-FP')} flex="column">
           <Checkbox
             name="autofp"
-            checkedValue="1"
-            unCheckedValue="0"
+            checkedValue={1}
+            unCheckedValue={0}
             checked={autofp >= 1}
             title={_('Trust vendor security updates')}
-            onChange={this.handleIntValueChange}/>
+            onChange={onFilterValueChange}/>
           <Layout flex box>
             <Radio
               name="autofp"
-              value="1"
+              title={_('Full CVE match')}
+              value={1}
               disabled={autofp === 0}
               checked={autofp === 1}
-              title={_('Full CVE match')}
-              onChange={this.handleIntValueChange}/>
+              convert={parse_int}
+              onChange={onFilterValueChange}/>
             <Radio
               name="autofp"
+              title={_('Partial CVE match')}
               value="2"
               disabled={autofp === 0}
               checked={autofp === 2}
-              title={_('Partial CVE match')}
-              onChange={this.handleIntValueChange}/>
+              convert={parse_int}
+              onChange={onFilterValueChange}/>
           </Layout>
         </FormGroup>
 
