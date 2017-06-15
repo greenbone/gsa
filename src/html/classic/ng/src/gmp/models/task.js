@@ -77,7 +77,8 @@ export class Task extends Model {
 
   parseProperties(elem) {
     elem = super.parseProperties(elem);
-    elem.report_count.total = elem.report_count.__text;
+    elem.report_count.total = parse_int(elem.report_count.__text);
+    elem.report_count.finished = parse_int(elem.report_count.finished);
     elem.alterable = parse_int(elem.alterable);
 
     let reports = [

@@ -1,5 +1,9 @@
 2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/task.js: Parse report counts as integers.
+
+2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/footer.js: Use ExternalLink in footer.
 
 2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
