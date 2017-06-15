@@ -23,15 +23,16 @@
 
 import React from 'react';
 
+import ExternalLink from './link/external.js';
+
 import './css/footer.css';
 
 export const Footer = () => {
   return (
     <footer className="gsa-footer">
       Greenbone Security Assistant (GSA) Copyright 2009-2017 by
-      Greenbone Networks GmbH, <a href="http://www.greenbone.net"
-        target="_blank"
-        rel="noopener noreferrer">www.greenbone.net</a>
+      Greenbone Networks GmbH, <ExternalLink href="http://www.greenbone.net">
+        www.greenbone.net</ExternalLink>
     </footer>
   );
 };
