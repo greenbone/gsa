@@ -1,5 +1,10 @@
 2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/link/assetlink.js: Add new AssetLink component.
+
+2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/cveid.js: Update CveId component to use InfoLink
 	and withTextOnly.
 

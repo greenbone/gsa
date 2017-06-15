@@ -249,6 +249,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/img.js
      ${NG_SRC_DIR}/src/web/layout.js
      ${NG_SRC_DIR}/src/web/loading.js
+     ${NG_SRC_DIR}/src/web/link/assetlink.js
      ${NG_SRC_DIR}/src/web/link/detailslink.js
      ${NG_SRC_DIR}/src/web/link/external.js
      ${NG_SRC_DIR}/src/web/link/infolink.js
