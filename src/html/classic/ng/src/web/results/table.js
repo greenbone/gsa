@@ -118,7 +118,7 @@ const ResultsRowDetails = ({
         <ResultDetails
           links={links}
           className="result-details"
-          result={entity}
+          entity={entity}
         />
       </TableData>
     </TableRow>
