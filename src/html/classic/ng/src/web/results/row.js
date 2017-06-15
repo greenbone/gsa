@@ -32,7 +32,7 @@ import {render_component} from '../render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../entities/row.js';
 
-import LegacyLink from '../link/legacylink.js';
+import AssetLink from '../link/assetlink.js';
 
 import TableRow from '../table/row.js';
 import TableData from '../table/data.js';
@@ -66,15 +66,13 @@ const Row = ({
         {entity.qod.value} %
       </TableData>
       <TableData flex align="center">
-        {links ?
-          <LegacyLink
-            cmd="get_asset"
-            type="host"
-            asset_id={entity.host.id}>
-            {entity.host.name}
-          </LegacyLink> :
-          entity.host.name
-        }
+        <AssetLink
+          type="host"
+          id={entity.host.id}
+          textOnly={!links}
+        >
+          {entity.host.name}
+        </AssetLink>
       </TableData>
       <TableData>
         {entity.port}
