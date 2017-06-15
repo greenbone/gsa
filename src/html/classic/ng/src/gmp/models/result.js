@@ -27,6 +27,7 @@ import Model from '../model.js';
 import {parse_severity} from '../parser.js';
 
 import Nvt from './nvt.js';
+import {parse_notes} from './note.js';
 
 export class Result extends Model {
 
@@ -64,13 +65,15 @@ export class Result extends Model {
 
       if (is_defined(ret.detection.result.details)) {
         for_each(ret.detection.result.details.detail, detail => {
-          details[detail.name] = detail;
+          details[detail.name] = detail.value;
         });
       }
 
       d_result.details = details;
       ret.detection.result = d_result;
     }
+
+    ret.notes = parse_notes(elem.notes);
 
     return ret;
   }
