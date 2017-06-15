@@ -242,8 +242,8 @@ export class PowerFilter extends React.Component {
                 <NewIcon
                   title={_('Create new filter from current term')}
                   onClick={this.onCreateFilter}/> :
-                    <Icon img="new_inactive.svg"
-                      title={_('Please insert a filter name')}/>
+                <Icon img="new_inactive.svg"
+                  title={_('Please insert a filter name')}/>
                 }
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>

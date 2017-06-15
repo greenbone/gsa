@@ -38,10 +38,15 @@ import SortByGroup from './sortbygroup.js';
 
 import Filter from '../../gmp/models/filter.js';
 
-export const DefaultFilterDialog = props => {
-
-  let {filter, filterstring, sortFields, onFilterStringChange,
-    onFilterValueChange, onSortByChange, onSortOrderChange} = props;
+export const DefaultFilterDialog = ({
+    filter,
+    filterstring,
+    sortFields,
+    onFilterStringChange,
+    onFilterValueChange,
+    onSortByChange,
+    onSortOrderChange
+  }) => {
   return (
     <Layout flex="column">
       <FilterStringGroup
@@ -65,10 +70,10 @@ export const DefaultFilterDialogPropTypes = {
   filter: PropTypes.filter,
   filterstring: PropTypes.string,
   sortFields: PropTypes.array,
+  onFilterStringChange: PropTypes.func,
+  onFilterValueChange: PropTypes.func,
   onSortByChange: PropTypes.func,
   onSortOrderChange: PropTypes.func,
-  onFilterValueChange: PropTypes.func,
-  onFilterStringChange: PropTypes.func,
 };
 
 DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
