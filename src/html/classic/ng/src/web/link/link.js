@@ -27,7 +27,30 @@ import {Link as RLink} from 'react-router';
 
 import PropTypes from '../proptypes.js';
 
-export const Link = ({to, ...other}) => {
+export const withTextOnly = Component => {
+  const TextOnly = ({textOnly = false, ...props}) => {
+
+    if (textOnly) {
+      return (
+        <span {...props}/>
+      );
+    }
+
+    return <Component {...props}/>;
+  };
+
+  TextOnly.propTypes = {
+    textOnly: PropTypes.bool,
+  };
+
+  return TextOnly;
+};
+
+const Link = ({
+    to,
+    ...other
+  }) => {
+
   let path = '/ng';
 
   if (to.startsWith('/')) {
@@ -36,13 +59,13 @@ export const Link = ({to, ...other}) => {
   else {
     path += "/" + to;
   }
-  return <RLink to={path} {...other}/>;
+  return <RLink {...other} to={path}/>;
 };
 
 Link.propTypes = {
   to: PropTypes.string.isRequired,
 };
 
-export default Link;
+export default withTextOnly(Link);
 
 // vim: set ts=2 sw=2 tw=80:

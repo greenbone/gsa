@@ -27,13 +27,15 @@ import {extend, is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
+import {withTextOnly} from './link.js';
+
 const LegacyLink = ({
     children,
     className,
     cmd,
     path,
-    title,
     target,
+    title,
     ...params,
   }, {gmp}) => {
 
@@ -73,6 +75,6 @@ LegacyLink.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default LegacyLink;
+export default withTextOnly(LegacyLink);
 
 // vim: set ts=2 sw=2 tw=80:
