@@ -21,8 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend, is_defined} from '../../utils.js';
+import {extend, is_defined, map} from '../../utils.js';
 
+import List from '../list.js';
 import Model from '../model.js';
 import {parse_severity, parse_text} from '../parser.js';
 
@@ -60,6 +61,21 @@ export class Override extends Model {
     return this.text_excerpt === '1';
   }
 }
+
+export const parse_overrides = overrides => {
+  let active = false;
+  let entries = [];
+  if (is_defined(overrides)) {
+    entries = map(overrides.override, override => {
+      const o = new Override(override);
+      active = active || o.isActive();
+      return o;
+    });
+  }
+  let list = new List(entries);
+  list.active = active;
+  return list;
+};
 
 export default Override;
 

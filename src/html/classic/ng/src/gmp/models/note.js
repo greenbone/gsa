@@ -23,6 +23,7 @@
 
 import {is_defined, extend, map} from '../../utils.js';
 
+import List from '../list.js';
 import Model from '../model.js';
 import {parse_severity, parse_text} from '../parser.js';
 
@@ -60,10 +61,18 @@ export class Note extends Model {
 }
 
 export const parse_notes = notes => {
+  let active = false;
+  let entries = [];
   if (is_defined(notes)) {
-    return map(notes.note, note => new Note(note));
+    entries = map(notes.note, note => {
+      const n = new Note(note);
+      active = active || n.isActive();
+      return n;
+    });
   }
-  return [];
+  let list = new List(entries);
+  list.active = active;
+  return list;
 };
 
 export default Note;

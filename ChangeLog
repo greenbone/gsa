@@ -1,5 +1,11 @@
 2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/note.js,
+	src/html/classic/ng/src/gmp/models/override.js: Add parse_overrides and change
+	parse_notes to return a List with active property set.
+
+2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/collectionlist.js,
 	src/html/classic/ng/src/gmp/list.js: Extract a List class from CollectionList.
