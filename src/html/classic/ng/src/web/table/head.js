@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined} from '../../utils.js';
+import styled from 'styled-components';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -31,6 +31,7 @@ import Sort from '../sortby.js';
 
 const TableHead = ({
     children,
+    className,
     colSpan,
     rowSpan,
     sortby,
@@ -38,14 +39,9 @@ const TableHead = ({
     onSortChange,
     ...other
   }) => {
-  let style = {};
-
-  if (is_defined(width)) {
-    style.width = width;
-  }
   return (
     <th
-      style={style}
+      className={className}
       rowSpan={rowSpan}
       colSpan={colSpan}>
       {sortby ?
@@ -54,9 +50,9 @@ const TableHead = ({
             {children}
           </Layout>
         </Sort> :
-          <Layout {...other}>
-            {children}
-          </Layout>
+        <Layout {...other}>
+          {children}
+        </Layout>
       }
     </th>
   );
@@ -64,12 +60,25 @@ const TableHead = ({
 
 TableHead.propTypes = {
   colSpan: PropTypes.numberString,
+  className: PropTypes.string,
   rowSpan: PropTypes.numberString,
   sortby: PropTypes.stringOrFalse,
   width: PropTypes.string,
   onSortChange: PropTypes.func,
 };
 
-export default TableHead;
+export default styled(TableHead)`
+  background-color: #3A3A3A;
+  color: #FFFFFF;
+  font-weight: bold;
+  width: ${props => props.width};
+
+  @media print {
+    color: black;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+`;
 
 // vim: set ts=2 sw=2 tw=80:

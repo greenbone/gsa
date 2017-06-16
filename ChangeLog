@@ -1,3 +1,17 @@
+2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/results/css/table.css,
+	src/html/classic/ng/src/web/results/table.js,
+	src/html/classic/ng/src/web/table/css/table.css,
+	src/html/classic/ng/src/web/table/head.js,
+	src/html/classic/ng/src/web/table/header.js,
+	src/html/classic/ng/src/web/table/simple.js,
+	src/html/classic/ng/src/web/table/stripped.js,
+	src/html/classic/ng/src/web/table/table.js: Use styled components for setting
+	css on table components. This allows much easier overwriting of specific
+	styling then using direct css files.
+
 2017-06-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,

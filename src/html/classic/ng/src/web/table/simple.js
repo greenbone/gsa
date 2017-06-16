@@ -21,24 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
-import {classes} from '../../utils.js';
-
-import PropTypes from '../proptypes.js';
-
 import Table from './table.js';
 
-const SimpleTable = ({className, ...other}) => {
-  className = classes(className, 'table-simple');
-  return (
-    <Table className={className} {...other}/>
-  );
-};
-
-SimpleTable.propTypes = {
-  className: PropTypes.string,
-};
+const SimpleTable = Table.extend`
+  width: auto;
+`;
 
 export default SimpleTable;
 

@@ -21,11 +21,28 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import styled from 'styled-components';
 
-const TableHeader = props => {
-  return <thead {...props}/>;
-};
+const TableHeader = styled.thead`
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    color: white;
+  }
+
+  @media print {
+    border-bottom: 1px solid black;
+
+    a, a:hover {
+      text-decoration: none;
+      color: black;
+    }
+  }
+`;
 
 export default TableHeader;
 

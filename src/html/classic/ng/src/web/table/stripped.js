@@ -21,24 +21,21 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
-import {classes} from '../../utils.js';
-
-import PropTypes from '../proptypes.js';
-
 import Table from './table.js';
 
-const StrippedTable = ({className, ...other}) => {
-  className = classes(className, 'table-stripped');
-  return (
-    <Table className={className} {...other}/>
-  );
-};
+const StrippedTable = Table.extend`
+  @media screen {
+    & > tbody:nth-of-type(even),
+    & > tbody:only-of-type > tr:nth-of-type(even) {
+      background-color: #EEEEEE;
+    }
 
-StrippedTable.propTypes = {
-  className: PropTypes.string,
-};
+    & > tbody:not(:only-of-type):hover,
+    & > tbody:only-of-type > tr:hover {
+      background: #DDDDDD;
+    }
+  }
+`;
 
 export default StrippedTable;
 

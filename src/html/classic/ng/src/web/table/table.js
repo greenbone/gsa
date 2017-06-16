@@ -23,32 +23,24 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import {classes} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import './css/table.css';
-
 const Table = ({
     children,
     className,
-    fixed = false,
     footer,
     header,
   }) => {
 
   className = classes(className, 'table');
 
-  let style = {};
-
-  if (fixed) {
-    style.tableLayout = 'fixed';
-  }
-
   return (
     <table
-      className={className}
-      style={style}>
+      className={className}>
       {header}
       {children}
       <tfoot>
@@ -71,6 +63,25 @@ Table.propTypes = {
   className: PropTypes.string,
 };
 
-export default Table;
+export default styled(Table)`
+  border: 0;
+  border-spacing: 2px;
+  font-size: 12px;
+  table-layout: ${props => props.fixed ? 'fixed' : 'auto'};
+  text-align: left;
+  width: 100%;
+
+  th, td {
+    padding: 4px;
+  }
+
+  tfoot tr {
+    background: #DDDDDD;
+  }
+
+  @media print {
+    border-collapse: collapse;
+  }
+`;
 
 // vim: set ts=2 sw=2 tw=80:

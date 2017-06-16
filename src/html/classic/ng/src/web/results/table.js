@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
@@ -45,8 +47,6 @@ import TableRow from '../table/row.js';
 import ResultsRow from './row.js';
 import ResultDetails from './details.js';
 
-import './css/table.css';
-
 const Header = ({onSortChange, links = true, sort = true, actions}) => {
   return (
     <TableHeader>
@@ -62,7 +62,7 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
               <Sort by="solution_type" onClick={onSortChange}>
                 <Icon title={_('Solution type')} img="solution_type.svg"/>
               </Sort> :
-                <Icon title={_('Solution type')} img="solution_type.svg"/>
+              <Icon title={_('Solution type')} img="solution_type.svg"/>
             }
           </Layout>
         </TableHead>
@@ -104,17 +104,23 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const ResultsRowDetails = ({
+const Indent = styled.div`
+  display: flex;
+  width: 3em;
+`;
+
+const ResultsRowDetails = styled(({
+    className,
     entity,
     links,
   }) => {
   return (
-    <TableRow className="table-row-details">
+    <TableRow className={className}>
       <TableData
         colSpan="7"
         flex
         align={['start', 'stretch']}>
-        <div className="indent"/>
+        <Indent/>
         <ResultDetails
           links={links}
           className="result-details"
@@ -123,7 +129,16 @@ const ResultsRowDetails = ({
       </TableData>
     </TableRow>
   );
-};
+})`
+  &, &:hover {
+    background-color: white !important;
+  }
+
+  .result-details {
+    border-left: 2px solid black;
+    padding-left: 1em;
+  }
+`;
 
 ResultsRowDetails.propTypes = {
   entity: PropTypes.model,
