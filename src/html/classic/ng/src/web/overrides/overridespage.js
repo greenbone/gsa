@@ -137,7 +137,8 @@ class Page extends React.Component {
       this.override_dialog.show({});
     }
 
-    gmp.tasks.getAll().then(tasks => this.note_dialog.setValue('tasks', tasks));
+    gmp.tasks.getAll().then(tasks =>
+      this.override_dialog.setValue('tasks', tasks));
   }
 
   handleSaveOverride(data) {

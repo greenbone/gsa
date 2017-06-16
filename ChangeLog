@@ -1,5 +1,10 @@
 2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/overrides/overridespage.js: Fix editing and
+	creating an override.
+
+2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/result.js: Allow to set an id on a
 	DetailsBlock. This allows to reference a details block via an anchor.
 
