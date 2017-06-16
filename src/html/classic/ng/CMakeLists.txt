@@ -94,6 +94,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/vulns.js
      ${NG_SRC_DIR}/src/gmp/gmp.js
      ${NG_SRC_DIR}/src/gmp/http.js
+     ${NG_SRC_DIR}/src/gmp/list.js
      ${NG_SRC_DIR}/src/gmp/model.js
      ${NG_SRC_DIR}/src/gmp/models/agent.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js

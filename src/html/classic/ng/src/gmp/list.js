@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,43 +21,57 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import List from './list.js';
+export class List {
 
-export class CollectionList extends List {
+  constructor(entries = []) {
+    this._entries = entries;
+  }
 
-  constructor({entries = [], filter, counts, meta = {}}) {
-    super(entries);
+  [Symbol.iterator]() {
+    return this._entries.values();
+  }
 
-    this._filter = filter;
-    this._counts = counts;
-    this._meta = meta;
+  forEach(func) {
+    return this._entries.forEach(func);
+  }
+
+  map(func) {
+    return this._entries.map(func);
   }
 
   filter(func) {
     const f_entries = this._entries.filter(func);
-    const counts = this.getCounts().clone({filtered: f_entries.length});
-    return new CollectionList({
+    return new List({
       entries: f_entries,
-      filter: this.getFilter(),
-      counts,
-      meta: this.getMeta(),
     });
   }
 
-  getCounts() {
-    return this._counts;
+  find(func) {
+    return this._entries.find(func);
   }
 
-  getFilter() {
-    return this._filter;
+  sort(func) {
+    return this._entries.sort(func);
   }
 
-  getMeta() {
-    return this._meta;
+  push(entry) {
+    this._entries.push(entry);
+    return this;
   }
 
+  values() {
+    return this._entries.values();
+  }
+
+  get length() {
+    return this._entries.length;
+  }
+
+  getEntries() {
+    return this._entries;
+  }
 }
 
-export default CollectionList;
+export default List;
 
 // vim: set ts=2 sw=2 tw=80:
