@@ -1,5 +1,10 @@
 2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/layout.js: Allow to set defaults for all layout
+	properties. Also get rid of the obsolete float property.
+
+2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/note.js,
 	src/html/classic/ng/src/gmp/models/override.js: Add parse_overrides and change
 	parse_notes to return a List with active property set.

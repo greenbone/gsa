@@ -30,21 +30,26 @@ import PropTypes from './proptypes.js';
 import './css/layout.css';
 
 const LAYOUT_PROPNAMES = [
-  'flex', 'align', 'grow', 'shrink', 'basis', 'float', 'box', 'offset',
+  'flex', 'align', 'grow', 'shrink', 'basis', 'box', 'offset',
 ];
 
 export const withLayout = (Component, defaults = {}) => {
-  const LayoutWrapper = props => {
-    let {className, flex, align, grow, shrink, basis, float, box, offset,
-      style = {}, wrap, ...other} = props;
+  const LayoutWrapper = ({
+    align = defaults.align,
+    basis = defaults.basis,
+    box = defaults.box,
+    className,
+    flex = defaults.flex,
+    grow = defaults.grow,
+    offset = defaults.offset,
+    shrink = defaults.shrink,
+    style = {},
+    wrap = defaults.wrap,
+    ...other,
+  }) => {
     let css = className;
 
-    flex = is_defined(flex) ? flex : defaults.flex;
-    box = is_defined(box) ? box : defaults.box;
-
     if (is_defined(flex)) {
-
-      align = is_defined(align) ? align : defaults.align;
 
       if (is_empty(flex) || flex === true) {
         flex = 'row';
@@ -66,9 +71,6 @@ export const withLayout = (Component, defaults = {}) => {
       else {
         css = classes('justify-center', 'align-stretch', css);
       }
-    }
-    else if (is_defined(float)) {
-      css = classes('float', css);
     }
 
     if (box) {
@@ -101,7 +103,6 @@ export const withLayout = (Component, defaults = {}) => {
   LayoutWrapper.propTypes = {
     className: PropTypes.string,
     flex: PropTypes.oneOf(['row', 'column', true]),
-    float: PropTypes.bool,
     wrap: PropTypes.bool,
     box: PropTypes.bool,
     align: PropTypes.oneOfType([
