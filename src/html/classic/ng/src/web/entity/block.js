@@ -29,6 +29,7 @@ import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 
 const DetailsBlock = ({
+    id,
     children,
     className,
     title,
@@ -37,6 +38,7 @@ const DetailsBlock = ({
   return (
     <Layout
       flex="column"
+      id={id}
       className={className}>
       <h2>{title}</h2>
       <div className="details">
@@ -47,6 +49,7 @@ const DetailsBlock = ({
 };
 
 DetailsBlock.propTypes = {
+  id: PropTypes.string,
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
