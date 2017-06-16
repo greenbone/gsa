@@ -41,9 +41,7 @@ export class List {
 
   filter(func) {
     const f_entries = this._entries.filter(func);
-    return new List({
-      entries: f_entries,
-    });
+    return new List(f_entries);
   }
 
   find(func) {
