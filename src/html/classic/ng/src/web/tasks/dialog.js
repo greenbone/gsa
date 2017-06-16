@@ -317,7 +317,7 @@ const TaskDialog = ({
             disabled={in_assets !== YES_VALUE}
             type="int"
             min="0" max="100"/>
-          <Layout box float>%</Layout>
+          <Layout box>%</Layout>
         </FormGroup>
       </Layout>
 
