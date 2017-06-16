@@ -29,6 +29,8 @@ import {parse_severity} from '../parser.js';
 import Nvt from './nvt.js';
 import {parse_notes} from './note.js';
 
+import {parse_overrides} from './override.js';
+
 export class Result extends Model {
 
   parseProperties(elem) {
@@ -73,7 +75,12 @@ export class Result extends Model {
       ret.detection.result = d_result;
     }
 
+    if (is_defined(ret.original_severity)) {
+      ret.original_severity = parse_severity(ret.original_severity);
+    }
+
     ret.notes = parse_notes(elem.notes);
+    ret.overrides = parse_overrides(elem.overrides);
 
     return ret;
   }

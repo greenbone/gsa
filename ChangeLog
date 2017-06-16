@@ -1,5 +1,10 @@
 2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/result.js: Parse original_severity and
+	overrides of results.
+
+2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/list.js: Fix filter method of List class.
 
 2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
