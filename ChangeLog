@@ -1,5 +1,10 @@
 2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/info.js: Use InfoTable for EntityInfo
+	component.
+
+2017-06-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/dialog.js: Remove obsolete float property
 	from layout for qod setting.
 

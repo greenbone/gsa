@@ -23,17 +23,24 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _, {long_date} from '../../locale.js';
 import {classes} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import Table from '../table/simple.js';
+import InfoTable from '../table/info.js';
 import TableBody from '../table/body.js';
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
+
+
+const Table = InfoTable.extend`
+  border-spacing: 0;
+
+  td {
+    padding: 0;
+  }
+`;
 
 const EntityInfo = ({
     className,
@@ -85,16 +92,6 @@ EntityInfo.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-export default styled(EntityInfo)`
-  border-spacing: 0;
-
-  td {
-    padding: 0;
-  }
-
-  tr td:first-child {
-    padding-right: 1em;
-  }
-`;
+export default EntityInfo;
 
 // vim: set ts=2 sw=2 tw=80:
