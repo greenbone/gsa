@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import glamorous from 'glamorous';
 
 import _ from '../../locale.js';
 
@@ -104,12 +104,12 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Indent = styled.div`
-  display: flex;
-  width: 3em;
-`;
+const Indent = glamorous.div({
+  display: 'flex',
+  width: '3em',
+});
 
-const ResultsRowDetails = styled(({
+const ResultsRowDetails = glamorous(({
     className,
     entity,
     links,
@@ -126,19 +126,27 @@ const ResultsRowDetails = styled(({
           className="result-details"
           entity={entity}
         />
+        <Layout flex align={['start', 'start']}>
+          <Link to={'/result/' + entity.id}>
+            <Icon img="details.svg"
+              size="small"
+              title={_('Show details')}
+            />
+          </Link>
+        </Layout>
       </TableData>
     </TableRow>
   );
-})`
-  &, &:hover {
-    background-color: white !important;
-  }
+})({
+  '&, &:hover': {
+    backgroundColor: 'white !important',
+  },
 
-  .result-details {
-    border-left: 2px solid black;
-    padding-left: 1em;
-  }
-`;
+  '& .result-details': {
+    borderLeft: '2px solid black',
+    paddingLeft: '1em',
+  },
+});
 
 ResultsRowDetails.propTypes = {
   entity: PropTypes.model,

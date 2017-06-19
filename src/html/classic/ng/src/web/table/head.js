@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import glamorous from 'glamorous';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -67,18 +67,21 @@ TableHead.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-export default styled(TableHead)`
-  background-color: #3A3A3A;
-  color: #FFFFFF;
-  font-weight: bold;
-  width: ${props => props.width};
+export default glamorous(TableHead)({
+  backgroundColor: '#3A3A3A',
+  color: '#FFFFFF',
+  fontWeight: 'bold',
 
-  @media print {
-    color: black;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
-  }
-`;
+  '@media print': {
+    color: 'black',
+    fontSize: '1.2em',
+    backgroundColor: 'none',
+    fontWeight: 'bold',
+  },
+},
+  props => ({
+    width: props.width,
+  }),
+);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -32,6 +32,8 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "d3": "^3.5.17",
+    "glamor": "^2.20.25",
+    "glamorous": "^3.23.3",
     "i18next": "^8.4.0",
     "i18next-browser-languagedetector": "^1.0.0",
     "i18next-xhr-backend": "^1.4.2",
@@ -43,8 +45,7 @@
     "react": "^15.6.0",
     "react-dom": "^15.6.0",
     "react-router": "^3.0.5",
-    "select2": "^4.0.3",
-    "styled-components": "^2.0.1"
+    "select2": "^4.0.3"
   },
   "scripts": {
     "test": "./node_modules/.bin/react-scripts test",

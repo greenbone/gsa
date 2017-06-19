@@ -23,19 +23,20 @@
 
 import Table from './table.js';
 
-const StrippedTable = Table.extend`
-  @media screen {
-    & > tbody:nth-of-type(even),
-    & > tbody:only-of-type > tr:nth-of-type(even) {
-      background-color: #EEEEEE;
-    }
+import glamorous from 'glamorous';
 
-    & > tbody:not(:only-of-type):hover,
-    & > tbody:only-of-type > tr:hover {
-      background: #DDDDDD;
-    }
-  }
-`;
+const StrippedTable = glamorous(Table)({
+  '@media screen': {
+    ['& > tbody:nth-of-type(even), ' +
+    '& > tbody:only-of-type > tr:nth-of-type(even)']: {
+      backgroundColor: '#EEEEEE',
+    },
+    ['& > tbody:not(:only-of-type):hover, ' +
+    '& > tbody:only-of-type > tr:hover']: {
+      background: '#DDDDDD',
+    },
+  },
+});
 
 export default StrippedTable;
 

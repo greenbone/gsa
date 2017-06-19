@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _, {long_date} from '../../locale.js';
 import {classes} from '../../utils.js';
 
@@ -34,13 +36,13 @@ import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
 
 
-const Table = InfoTable.extend`
-  border-spacing: 0;
+const Table = glamorous(InfoTable)({
+  borderSpacing: 0,
 
-  td {
-    padding: 0;
-  }
-`;
+  '& td': {
+    padding: 0,
+  },
+});
 
 const EntityInfo = ({
     className,

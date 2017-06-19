@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import glamorous from 'glamorous';
 
 import _ from '../../locale.js';
 import {is_empty, is_defined} from '../../utils.js';
@@ -34,35 +34,29 @@ import PropTypes from '../proptypes.js';
 import SolutionType from '../solutiontype.js';
 import {render_nvt_name} from '../render.js';
 
+import Divider from '../divider/divider.js';
+
 import DetailsBlock from '../entity/block.js';
 
 import DetailsLink from '../link/detailslink.js';
 import ExternalLink from '../link/external.js';
 import InfoLink from '../link/infolink.js';
 
-import SimpleTable from '../table/simple.js';
+import InfoTable from '../table/info.js';
 import TableBody from '../table/body.js';
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
 
 const N_A = 'N/A';
 
-const Ref = styled.span.attrs({
-  className: 'ref',
-})`
-  + .ref {
-    margin-left: 5px;
-  }
-`;
+const B = glamorous.b({
+  marginRight: '0.5em',
+});
 
-const B = styled.b`
-  margin-right: 0.5em;
-`;
-
-const Pre = styled.pre`
-  white-space: pre-line;
-  word-wrap: normal;
-`;
+const Pre = glamorous.pre({
+  whiteSpace: 'pre-line',
+  wordWrap: 'normal',
+});
 
 const P = Pre.withComponent('div');
 
@@ -74,7 +68,7 @@ const CertLink = ({
 
   if (type !== 'CERT-Bund' && type !== 'DFN-CERT') {
     return (
-      <Ref><b>?</b>{id}</Ref>
+      <span><b>?</b>{id}</span>
     );
   }
 
@@ -90,15 +84,13 @@ const CertLink = ({
     info_type = 'dfn_cert_adv';
   }
   return (
-    <Ref>
-      <InfoLink
-        title={title}
-        name={id}
-        type={info_type}
-        textOnly={textOnly}>
-        {id}
-      </InfoLink>
-    </Ref>
+    <InfoLink
+      title={title}
+      name={id}
+      type={info_type}
+      textOnly={textOnly}>
+      {id}
+    </InfoLink>
   );
 };
 
@@ -169,16 +161,14 @@ const ResultDetails = ({
       {is_defined(tags.solution) && tags.solution !== N_A &&
         <DetailsBlock
           title={_('Solution')}>
-          <p>
-            <Layout
-              flex
-              className="solution-type">
-              <B>{_('Solution Type:')}</B>
-              <SolutionType
-                displayTitleText
-                type={tags.solution_type}/>
-            </Layout>
-          </p>
+          <Layout
+            flex
+            className="solution-type">
+            <B>{_('Solution Type:')}</B>
+            <SolutionType
+              displayTitleText
+              type={tags.solution_type}/>
+          </Layout>
           <P>
             {tags.solution}
           </P>

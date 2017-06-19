@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import glamorous from 'glamorous';
 
 import {classes} from '../../utils.js';
 
@@ -63,25 +63,26 @@ Table.propTypes = {
   className: PropTypes.string,
 };
 
-export default styled(Table)`
-  border: 0;
-  border-spacing: 2px;
-  font-size: 12px;
-  table-layout: ${props => props.fixed ? 'fixed' : 'auto'};
-  text-align: left;
-  width: 100%;
+export default glamorous(Table)({
+  border: 0,
+  borderSpacing: '2px',
+  fontSize: '12px',
+  textAlign: 'left',
+  width: '100%',
 
-  th, td {
-    padding: 4px;
-  }
+  '& th, & td': {
+    padding: '4px',
+  },
 
-  tfoot tr {
-    background: #DDDDDD;
-  }
+  '& tfoot tr': {
+    background: '#DDDDDD',
+  },
 
-  @media print {
-    border-collapse: collapse;
-  }
-`;
+  '@media print': {
+    borderCollapse: 'collapse',
+  },
+},
+  props => ({tableLayout: props.fixed ? 'fixed' : 'auto'}),
+);
 
 // vim: set ts=2 sw=2 tw=80:

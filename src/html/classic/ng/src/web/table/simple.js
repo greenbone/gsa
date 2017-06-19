@@ -23,9 +23,11 @@
 
 import Table from './table.js';
 
-const SimpleTable = Table.extend`
-  width: auto;
-`;
+import glamorous from 'glamorous';
+
+const SimpleTable = glamorous(Table)({
+  width: 'auto',
+});
 
 export default SimpleTable;
 
