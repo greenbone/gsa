@@ -56,10 +56,12 @@ const Menu = ({children, title, ...props}) => {
   return (
     <li className="menu">
       {link}
-      <ul>
-        <li className="menu-point"></li>
-        {children}
-      </ul>
+      {is_defined(children) && children.length > 0 &&
+        <ul>
+          <li className="menu-point"></li>
+          {children}
+        </ul>
+      }
     </li>
   );
 };
