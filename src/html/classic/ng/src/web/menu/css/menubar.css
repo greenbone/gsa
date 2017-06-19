@@ -16,6 +16,11 @@
   flex-direction: row;
 }
 
+.menubar .icon {
+  height: 35px;
+  width: 35px;
+}
+
 /* Set background of first menu entry */
 .menubar .menu > a:hover ~ ul > .menu-entry:nth-child(2) > a {
   background: #99CE48;

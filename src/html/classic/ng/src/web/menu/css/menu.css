@@ -2,11 +2,6 @@
   flex: auto;
 }
 
-.menu .icon {
-  height: 35px;
-  width: 35px;
-}
-
 .menu > a {
   display: block;
   height: 35px;
@@ -24,8 +19,11 @@
   text-decoration: none;
 }
 
-.menu:hover > a {
+.menu:hover  {
   background-color: #99ce48;
+}
+
+.menu:hover > a {
   color: #393637;
   text-decoration: none;
 }

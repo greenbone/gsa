@@ -1,5 +1,14 @@
 2017-06-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/css/titlebar.css,
+	src/html/classic/ng/src/web/menu/css/menu.css,
+	src/html/classic/ng/src/web/menu/css/menubar.css,
+	src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/ng/src/web/titlebar.js: Update menu to use greenboneicon
+	component, update layout and styles.
+
+2017-06-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/menu/menu.js: Don't render unsorted list (<ul>)
 	if there are no menu entry children.
 

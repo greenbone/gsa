@@ -23,11 +23,14 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from '../locale.js';
 
 import Layout from './layout.js';
 import PropTypes from './proptypes.js';
 
+import GreenboneIcon from './icons/greenbone.js';
 import Icon from './icons/icon.js';
 
 import Link from './link/link.js';
@@ -35,43 +38,54 @@ import LegacyLink from './link/legacylink.js';
 
 import './css/titlebar.css';
 
-const Titlebar = ({onLogoutClick}, {gmp}) => {
-  const gb = (
-    <Icon img="greenbone.svg" size="default"
-      alt="Greenbone Security Assistant"
-      className="greenbone-icon"/>
-  );
-  const gsa = (
-    <Icon img="gsa.svg" size="default"
-      alt="Greenbone Security Assistant"
-      className="greenbone-text"/>
-  );
+const LogoutLink = glamorous.a({
+  color: '#393637',
+  cursor: 'pointeri',
+  '&:link, &:hover': {
+    color: '#393637',
+  },
+});
+
+const UserLink = LogoutLink.withComponent(LegacyLink);
+
+const Greenbone = () => {
   return (
-    <Layout className="titlebar" flex>
+    <Layout flex>
+      <GreenboneIcon/>
+      <Icon
+        img="gsa.svg"
+        size="default"
+        alt={_('Greenbone Security Assistant')}
+        className="greenbone-text"/>
+    </Layout>
+  );
+
+};
+
+const Titlebar = ({onLogoutClick}, {gmp}) => {
+  return (
+    <Layout
+      className="titlebar"
+      flex
+      align={['space-between', 'center']}>
       {gmp.isLoggedIn() &&
         <Link
           to="/"
           title={_('Dashboard')}
-          className="auto">
-          {gb}
-          {gsa}
+        >
+          <Greenbone/>
         </Link>
       }
-      {gmp.isLoggedIn() &&
-        <div className="user-panel">
+      {gmp.isLoggedIn() ?
+        <Layout>
           <span>Logged in as </span>
-          <LegacyLink cmd="get_my_settings">
+          <UserLink cmd="get_my_settings">
             <b>{gmp.username}</b>
-          </LegacyLink>
+          </UserLink>
           <span> | </span>
-          <a onClick={onLogoutClick} className="none">Logout</a>
-        </div>
-      }
-      {!gmp.isLoggedIn() &&
-        <span className="none">
-          {gb}
-          {gsa}
-        </span>
+          <LogoutLink onClick={onLogoutClick}>Logout</LogoutLink>
+        </Layout> :
+        <Greenbone/>
       }
     </Layout>
   );

@@ -11,16 +11,6 @@
 
 .titlebar .greenbone-icon, .titlebar .greenbone-text {
   height: 40px;
-  display: inline-block;
   padding-top: 1px;
   padding-bottom: 1px;
-}
-
-.titlebar .user-panel {
-  margin: 3px;
-}
-
-.titlebar .user-panel a {
-  color: #393637;
-  cursor: pointer;
 }

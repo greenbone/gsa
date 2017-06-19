@@ -30,7 +30,7 @@ import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import Icon from '../icons/icon.js';
+import GreenboneIcon from '../icons/greenbone.js';
 
 import Link from '../link/link.js';
 
@@ -54,17 +54,17 @@ export const MenuBar = (props, {gmp, capabilities}) => {
   return (
     <Sticky className="menubar">
       <ul>
-        <li className="menu">
-          <Link to="/" title={_('Dashboard')}>
-            <div className="flex row">
-              <Icon img="greenbone.svg" alt={_('Greenbone Security Assistant')}
-                className="greenbone-icon none"/>
-              <p className="auto">
-                {_('Dashboard')}
-              </p>
-            </div>
+        <li>
+          <Link
+            to="/"
+            title={_('Dashboard')}>
+            <GreenboneIcon size={['35px', '35px']}/>
           </Link>
         </li>
+        <Menu
+          to="/"
+          title={_('Dashboard')}>
+        </Menu>
         {may_op_scans &&
           <Menu title={_('Scans')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/scans"/>
