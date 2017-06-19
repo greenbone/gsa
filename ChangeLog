@@ -1,5 +1,12 @@
 2017-06-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/results/detailspage.js: Add the first draft of a
+	result details page.
+
+2017-06-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/results/details.js: Use divider and infotable
 	components in result details.
 

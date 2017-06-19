@@ -332,6 +332,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/reports/table.js
      ${NG_SRC_DIR}/src/web/results/charts.js
      ${NG_SRC_DIR}/src/web/results/details.js
+     ${NG_SRC_DIR}/src/web/results/detailspage.js
      ${NG_SRC_DIR}/src/web/results/filterdialog.js
      ${NG_SRC_DIR}/src/web/results/resultspage.js
      ${NG_SRC_DIR}/src/web/results/row.js
