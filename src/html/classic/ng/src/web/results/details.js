@@ -199,7 +199,7 @@ const ResultDetails = ({
           <Layout flex box>
             {tags.vuldetect}
           </Layout>
-          <SimpleTable>
+          <InfoTable>
             <TableBody>
               <TableRow>
                 <TableData>
@@ -244,14 +244,14 @@ const ResultDetails = ({
                 </TableRow>
               }
             </TableBody>
-          </SimpleTable>
+          </InfoTable>
         </Layout>
       </DetailsBlock>
 
       {has_detection &&
         <DetailsBlock
           title={_('Product Detection Result')}>
-          <SimpleTable>
+          <InfoTable>
             <TableBody>
               <TableRow>
                 <TableData>
@@ -302,14 +302,14 @@ const ResultDetails = ({
                 </TableData>
               </TableRow>
             </TableBody>
-          </SimpleTable>
+          </InfoTable>
         </DetailsBlock>
       }
 
       {has_reference &&
         <DetailsBlock
           title={_('References')}>
-          <SimpleTable>
+          <InfoTable>
             <TableBody>
               {nvt.cves.length > 0 &&
                 <TableRow>
@@ -339,13 +339,15 @@ const ResultDetails = ({
                     {_('BID')}
                   </TableData>
                   <TableData>
-                    {
-                      nvt.bids.map(bid => {
-                        return (
-                          <Ref key={bid}>{bid}</Ref>
-                        );
-                      })
-                    }
+                    <Divider wrap>
+                      {
+                        nvt.bids.map(bid => {
+                          return (
+                            <span key={bid}>{bid}</span>
+                          );
+                        })
+                      }
+                    </Divider>
                   </TableData>
                 </TableRow>
               }
@@ -356,19 +358,21 @@ const ResultDetails = ({
                     {_('CERT')}
                   </TableData>
                   <TableData>
-                    {
-                      nvt.certs.map(cert => {
-                        return (
-                          <CertLink
-                            key={cert.id}
-                            type={cert.type}
-                            id={cert.id}
-                            links={links}
-                          />
-                        );
-                      })
+                    <Divider wrap>
+                      {
+                        nvt.certs.map(cert => {
+                          return (
+                            <CertLink
+                              key={cert.id}
+                              type={cert.type}
+                              id={cert.id}
+                              links={links}
+                            />
+                          );
+                        })
 
-                    }
+                      }
+                    </Divider>
                   </TableData>
                 </TableRow>
               }
@@ -379,25 +383,25 @@ const ResultDetails = ({
                     {_('Other')}
                   </TableData>
                   <TableData>
-                    {
-                      nvt.xrefs.map(xref => {
-                        return (
-                          <Ref key={xref.ref}>
+                    <Divider wrap>
+                      {
+                        nvt.xrefs.map(xref => {
+                          return (
                             <ExternalLink
+                              key={xref.ref}
                               textOnly={!links || xref.type !== 'URL'}
                               href={xref.ref}>
                               {xref.ref}
                             </ExternalLink>
-                          </Ref>
-                        );
-                      })
-
-                    }
+                          );
+                        })
+                      }
+                    </Divider>
                   </TableData>
                 </TableRow>
               }
             </TableBody>
-          </SimpleTable>
+          </InfoTable>
         </DetailsBlock>
       }
     </Layout>
