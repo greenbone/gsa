@@ -1,5 +1,9 @@
 2017-06-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js: Parse end_time for all models.
+
+2017-06-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/src/web/entity/info.js,
 	src/html/classic/ng/src/web/results/details.js,

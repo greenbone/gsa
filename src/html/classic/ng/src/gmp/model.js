@@ -69,6 +69,14 @@ export class Model {
     if (is_defined(elem.modification_time)) {
       copy.modification_time = moment(elem.modification_time);
     }
+    if (is_defined(elem.end_time)) {
+      if (elem.end_time.length === 0) {
+        delete copy.end_time;
+      }
+      else {
+        copy.end_time = moment(elem.end_time);
+      }
+    }
 
     if (is_defined(elem.permissions)) {
       copy.permissions = new Capabilities(elem.permissions.permission);
