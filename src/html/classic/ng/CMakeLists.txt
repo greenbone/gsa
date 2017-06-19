@@ -188,6 +188,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dialog/error.js
      ${NG_SRC_DIR}/src/web/dialog/footer.js
      ${NG_SRC_DIR}/src/web/dialog/title.js
+     ${NG_SRC_DIR}/src/web/divider/divider.js
+     ${NG_SRC_DIR}/src/web/divider/icondivider.js
      ${NG_SRC_DIR}/src/web/entities/actions.js
      ${NG_SRC_DIR}/src/web/entities/container.js
      ${NG_SRC_DIR}/src/web/entities/entitynametabledata.js
