@@ -124,9 +124,10 @@ const mayRequire = validator => {
 };
 
 const momentDateValidator = (props, prop_name, component_name) => {
-  if (!moment.isMoment(props[prop_name])) {
+  const value = props[prop_name];
+  if (is_defined(value) && !moment.isMoment(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '`. Note a valid moment date.');
+      ' `' + component_name + '`. Note a valid moment date. Value is ' + value);
   }
   return undefined;
 };
