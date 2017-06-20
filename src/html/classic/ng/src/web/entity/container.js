@@ -24,6 +24,7 @@
 import React from 'react';
 
 import logger from '../../log.js';
+import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -44,7 +45,10 @@ class EntityContainer extends React.Component {
       loading: true,
     };
 
+    this.reload = this.reload.bind(this);
+
     this.handleChanged = this.handleChanged.bind(this);
+    this.handleTimer = this.handleTimer.bind(this);
   }
 
   componentDidMount() {
@@ -62,8 +66,20 @@ class EntityContainer extends React.Component {
   load(id) {
     this.setState({loading: true});
 
+    this.clearTimer(); // remove possible running timer
+
     this.entity_command.get({id}).then(response => {
       this.setState({entity: response.data, loading: false});
+
+      const meta = response.getMeta();
+      let refresh;
+
+      if (meta.fromcache && meta.dirty) {
+        log.debug('Forcing reload of entities', meta.dirty);
+        refresh = 1;
+      }
+
+      this.startTimer(refresh);
     })
     .catch(err => {
       log.error(err);
@@ -71,9 +87,37 @@ class EntityContainer extends React.Component {
     });
   }
 
-  handleChanged() {
+  reload() {
     const {id} = this.props.params;
     this.load(id);
+  }
+
+  handleChanged() {
+    this.reload();
+  }
+
+  startTimer(refresh) {
+    let {gmp} = this.context;
+    refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
+    if (refresh && refresh >= 0) {
+      this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
+      log.debug('Started reload timer with id', this.timer, 'and interval',
+        refresh);
+    }
+  }
+
+  clearTimer() {
+    if (is_defined(this.timer)) {
+      log.debug('Clearing reload timer with id', this.timer);
+      window.clearTimeout(this.timer);
+    }
+  }
+
+  handleTimer() {
+    log.debug('Timer', this.timer, 'finished. Reloading data.');
+
+    this.timer = undefined;
+    this.reload();
   }
 
   render() {

@@ -1,5 +1,11 @@
 2017-06-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/container.js: Add reload timer to entity
+	container. With this change the details of an entity will be updated
+	automatically in the background.
+
+2017-06-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: undefined is a valid value for
 	moment date validator.
 
