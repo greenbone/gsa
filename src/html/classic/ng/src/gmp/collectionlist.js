@@ -56,6 +56,9 @@ export class CollectionList extends List {
     return this._meta;
   }
 
+  get meta() {
+    return this.getMeta();
+  }
 }
 
 export default CollectionList;

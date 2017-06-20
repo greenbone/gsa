@@ -38,16 +38,24 @@ export class Response {
     return new Response(this._data, extend({}, this._meta, meta));
   }
 
+  getMeta() {
+    return this._meta;
+  }
+
   setData(data) {
     return new Response(data, this._meta);
   }
 
+  getData() {
+    return this._data;
+  }
+
   get meta() {
-    return this._meta;
+    return this.getMeta();
   }
 
   get data() {
-    return this._data;
+    return this.getData();
   }
 }
 
