@@ -32,6 +32,7 @@ import Section from '../section.js';
 import Toolbar from '../toolbar.js';
 
 import EntityInfo from './info.js';
+import EntityTags from './tags.js';
 
 class EntityPage extends React.Component {
 
@@ -99,6 +100,25 @@ class EntityPage extends React.Component {
     );
   }
 
+  renderUserTags() {
+    const {entity} = this.props;
+    let TagsComponent = this.props.tags;
+
+    if (TagsComponent === false) {
+      return null;
+    }
+
+    if (!is_defined(TagsComponent)) {
+      TagsComponent = EntityTags;
+    }
+
+    return (
+      <TagsComponent
+        entity={entity}
+      />
+    );
+  }
+
   render() {
     const {entity, loading} = this.props;
     if (!is_defined(entity) && loading) {
@@ -113,6 +133,7 @@ class EntityPage extends React.Component {
         </Toolbar>
         {this.renderInfo()}
         {this.renderSection()}
+        {this.renderUserTags()}
       </Layout>
     );
   }
@@ -126,6 +147,7 @@ EntityPage.propTypes = {
   loading: PropTypes.bool,
   sectionIcon: PropTypes.icon,
   section: PropTypes.componentOrFalse,
+  tags: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
 };
