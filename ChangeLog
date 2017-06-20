@@ -1,5 +1,10 @@
 2017-06-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/results/detailspage.js: Add a toolbox (currently
+	contains only a details icon) to overrides and notes in a result.
+
+2017-06-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/results/detailspage.js: Fix passing the correct
 	event handler to add new override icon.
 

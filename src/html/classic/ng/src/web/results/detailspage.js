@@ -77,12 +77,14 @@ const InfoBox = ({
   end,
   text,
   title,
+  toolbox,
   ...props
 }) => {
   return (
     <InfoLayout {...props} flex="column" align="space-between">
       <Layout flex align={['space-between', 'start']}>
         <h3>{title}</h3>
+        {is_defined(toolbox) && toolbox}
       </Layout>
       <Pre>{text}</Pre>
       {children}
@@ -117,6 +119,7 @@ InfoBox.propTypes = {
   end: PropTypes.momentDate,
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
+  toolbox: PropTypes.element,
 };
 
 const Override = ({
@@ -139,12 +142,25 @@ const Override = ({
   }
   new_severity += result_cvss_risk_factor(override.new_severity);
 
+  const toolbox = (
+    <IconDivider>
+      <DetailsLink
+        legacy
+        id={override.id}
+        type="override"
+        title={_('Override Details')}
+      >
+        <Icon img="details.svg"/>
+      </DetailsLink>
+    </IconDivider>
+  );
   return (
     <InfoBox
       title={_('Override from {{- severity}} to {{- new_severity}}',
         {severity, new_severity})}
       text={override.text}
       end={override.end_time}
+      toolbox={toolbox}
       modified={override.modification_time}
     />
   );
@@ -158,11 +174,24 @@ Override.propTypes = {
 const Note = ({
   note,
 }) => {
+  const toolbox = (
+    <IconDivider>
+      <DetailsLink
+        legacy
+        id={note.id}
+        type="note"
+        title={_('Note Details')}
+      >
+        <Icon img="details.svg"/>
+      </DetailsLink>
+    </IconDivider>
+  );
   return (
     <InfoBox
       title={_('Note')}
       text={note.text}
       end={note.end_time}
+      toolbox={toolbox}
       modified={note.modification_time}>
     </InfoBox>
   );
