@@ -29,6 +29,10 @@ import {is_defined} from '../../utils.js';
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 
+import NoteDialog from '../notes/dialog.js';
+
+import OverrideDialog from '../overrides/dialog.js';
+
 const log = logger.getLogger('web.entity.container');
 
 class EntityContainer extends React.Component {
@@ -48,7 +52,12 @@ class EntityContainer extends React.Component {
     this.reload = this.reload.bind(this);
 
     this.handleChanged = this.handleChanged.bind(this);
+    this.handleSaveNote = this.handleSaveNote.bind(this);
+    this.handleSaveOverride = this.handleSaveOverride.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
+
+    this.openNoteDialog = this.openNoteDialog.bind(this);
+    this.openOverrideDialog = this.openOverrideDialog.bind(this);
   }
 
   componentDidMount() {
@@ -120,6 +129,58 @@ class EntityContainer extends React.Component {
     this.reload();
   }
 
+  handleSaveNote(data) {
+    const {gmp} = this.context;
+
+    gmp.note.create(data).then(() => this.reload());
+  }
+
+  handleSaveOverride(data) {
+    const {gmp} = this.context;
+
+    gmp.override.create(data).then(() => this.reload());
+  }
+
+  openNoteDialog(result) {
+    this.note_dialog.show({
+      fixed: true,
+      oid: result.nvt.oid,
+      nvt: result.nvt,
+      task_id: '0',
+      task_name: result.task.name,
+      result_id: '',
+      task_uuid: result.task.id,
+      result_uuid: result.id,
+      result_name: result.name,
+      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
+      note_severity: result.original_severity,
+      hosts: '--',
+      hosts_manual: result.host.name,
+      port: '--',
+      port_manual: result.port,
+    });
+  }
+
+  openOverrideDialog(result) {
+    this.override_dialog.show({
+      fixed: true,
+      oid: result.nvt.oid,
+      nvt: result.nvt,
+      task_id: '0',
+      task_name: result.task.name,
+      result_id: '',
+      task_uuid: result.task.id,
+      result_uuid: result.id,
+      result_name: result.name,
+      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
+      note_severity: result.original_severity,
+      hosts: '--',
+      hosts_manual: result.host.name,
+      port: '--',
+      port_manual: result.port,
+    });
+  }
+
   render() {
     const {loading, entity} = this.state;
     const Component = this.props.component;
@@ -130,8 +191,18 @@ class EntityContainer extends React.Component {
           entity={entity}
           entityCommand={this.entity_command}
           loading={loading}
+          onNewNoteClick={this.openNoteDialog}
+          onNewOverrideClick={this.openOverrideDialog}
           onChanged={this.handleChanged}
           {...other}
+        />
+        <NoteDialog
+          ref={ref => this.note_dialog = ref}
+          onSave={this.handleSaveNote}
+        />
+        <OverrideDialog
+          ref={ref => this.override_dialog = ref}
+          onSave={this.handleSaveOverride}
         />
       </Layout>
     );
