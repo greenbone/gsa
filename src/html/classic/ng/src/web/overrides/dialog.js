@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _, {datetime} from '../../locale.js';
-import {is_defined, is_empty} from '../../utils.js';
+import {is_defined, is_empty, parse_float} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
@@ -48,18 +48,23 @@ const OverrideDialog = ({
     active,
     custom_severity,
     days,
+    fixed,
     hosts,
     hosts_manual,
     new_severity,
     new_severity_from_list,
+    nvt,
     oid,
     override,
+    override_severity,
     port,
     port_manual,
     result_id,
+    result_name,
     result_uuid,
     severity,
     task_id,
+    task_name,
     tasks,
     task_uuid,
     text,
@@ -68,12 +73,14 @@ const OverrideDialog = ({
 
   let is_edit = is_defined(override);
 
-  let override_severity = is_edit && override.severity ?
-    override.severity : 0;
-
   return (
     <Layout flex="column">
-      {is_edit ?
+      {fixed &&
+        <FormGroup title={_('NVT')} flex="column">
+          <Text>{render_nvt_name(nvt)}</Text>
+        </FormGroup>
+      }
+      {is_edit && !fixed &&
         <FormGroup title={_('NVT')} flex="column">
           <Radio name="oid"
             value={override.nvt.oid}
@@ -90,12 +97,14 @@ const OverrideDialog = ({
               disabled={oid === override.nvt.oid}
               onChange={onValueChange}/>
           </Layout>
-        </FormGroup> :
-          <FormGroup title={_('NVT OID')}>
-            <TextField name="oid"
-              value={oid}
-              onChange={onValueChange}/>
-          </FormGroup>
+        </FormGroup>
+      }
+      {!is_edit && !fixed &&
+        <FormGroup title={_('NVT OID')}>
+          <TextField name="oid"
+            value={oid}
+            onChange={onValueChange}/>
+        </FormGroup>
       }
 
       <FormGroup title={_('Active')} flex="column">
@@ -148,13 +157,16 @@ const OverrideDialog = ({
         <Layout flex box>
           <Radio name="hosts"
             value="--"
+            title={fixed ? hosts_manual : ''}
             checked={hosts === '--'}
             onChange={onValueChange}>
           </Radio>
-          <TextField name="hosts_manual"
-            value={hosts_manual}
-            disabled={hosts !== '--'}
-            onChange={onValueChange}/>
+          {!fixed &&
+            <TextField name="hosts_manual"
+              value={hosts_manual}
+              disabled={hosts !== '--'}
+              onChange={onValueChange}/>
+          }
         </Layout>
       </FormGroup>
 
@@ -168,13 +180,16 @@ const OverrideDialog = ({
         <Layout flex box>
           <Radio name="port"
             value="--"
+            title={fixed ? port_manual : ''}
             checked={port === '--'}
             onChange={onValueChange}>
           </Radio>
-          <TextField name="port_manual"
-            value={port_manual}
-            disabled={port !== '--'}
-            onChange={onValueChange}/>
+          {!fixed &&
+            <TextField name="port_manual"
+              value={port_manual}
+              disabled={port !== '--'}
+              onChange={onValueChange}/>
+          }
         </Layout>
       </FormGroup>
 
@@ -185,34 +200,54 @@ const OverrideDialog = ({
           checked={is_empty(severity)}
           onChange={onValueChange}>
         </Radio>
-        {is_edit &&
+        {is_edit && !fixed &&
           <Layout flex box>
             <Radio name="severity"
               value={0.1}
               title={_('> 0.0')}
               checked={!is_empty(severity) && severity > 0.0}
+              convert={parse_float}
               onChange={onValueChange}>
             </Radio>
             <Radio name="severity"
               value={override_severity}
               title={result_cvss_risk_factor(override_severity)}
               checked={!is_empty(severity) && severity <= 0.0}
+              convert={parse_float}
               onChange={onValueChange}>
             </Radio>
           </Layout>
         }
-        {!is_edit &&
+        {!is_edit && !fixed &&
           <Layout flex box>
             <Radio name="severity"
               value="0.1"
               title={_('> 0.0')}
               checked={severity === '0.1'}
+              convert={parse_float}
               onChange={onValueChange}>
             </Radio>
             <Radio name="severity"
               value="0.0"
               title={_('Log')}
               checked={severity === '0.0'}
+              convert={parse_float}
+              onChange={onValueChange}>
+            </Radio>
+          </Layout>
+        }
+        {fixed &&
+          <Layout flex box>
+            <Radio
+              name="severity"
+              value={severity}
+              title={
+                severity > 0 ?
+                  _('> 0.0') :
+                  result_cvss_risk_factor(override_severity)
+              }
+              checked={!is_empty(severity) && severity > 0.0}
+              convert={parse_float}
               onChange={onValueChange}>
             </Radio>
           </Layout>
@@ -247,6 +282,7 @@ const OverrideDialog = ({
         <TextField name="new_severity"
           value={new_severity}
           disabled={custom_severity !== '1'}
+          convert={parse_float}
           onChange={onValueChange}/>
       </FormGroup>
 
@@ -259,14 +295,17 @@ const OverrideDialog = ({
         <Layout flex box>
           <Radio name="task_id"
             value="0"
+            title={fixed ? task_name : ''}
             checked={task_id === '0'}
             onChange={onValueChange}/>
-          <Select2 name="task_uuid"
-            value={task_uuid}
-            disabled={task_id !== '0'}
-            onChange={onValueChange}>
-            {render_options(tasks)}
-          </Select2>
+          {!fixed &&
+            <Select2 name="task_uuid"
+              value={task_uuid}
+              disabled={task_id !== '0'}
+              onChange={onValueChange}>
+              {render_options(tasks)}
+            </Select2>
+          }
         </Layout>
       </FormGroup>
 
@@ -279,14 +318,20 @@ const OverrideDialog = ({
         <Layout flex box>
           <Radio name="result_id"
             value="0"
-            title={_('UUID')}
+            title={
+              fixed ?
+                _('Only selected result ({{- name}})', {name: result_name}) :
+                _('UUID')
+            }
             checked={result_id === '0'}
             onChange={onValueChange}/>
-          <TextField name="result_uuid"
-            value={result_uuid}
-            size="34"
-            disabled={result_id !== '0'}
-            onChange={onValueChange}/>
+          {!fixed &&
+            <TextField name="result_uuid"
+              value={result_uuid}
+              size="34"
+              disabled={result_id !== '0'}
+              onChange={onValueChange}/>
+          }
         </Layout>
       </FormGroup>
 
@@ -303,24 +348,29 @@ const OverrideDialog = ({
 
 OverrideDialog.propTypes = {
   active: PropTypes.oneOf(['0', '1', '-1', '-2']),
-  custom_severity: PropTypes.number,
+  custom_severity: PropTypes.oneOf(['0', '1']),
   days: PropTypes.number,
+  fixed: PropTypes.bool,
   hosts_manual: PropTypes.string,
   hosts: PropTypes.string,
-  new_severity: PropTypes.number,
   new_severity_from_list: PropTypes.number,
+  new_severity: PropTypes.number,
+  nvt: PropTypes.model,
   oid: PropTypes.string,
   override: PropTypes.model,
+  override_severity: PropTypes.number,
   port_manual: PropTypes.string,
   port: PropTypes.string,
   result_id: PropTypes.id,
+  result_name: PropTypes.string,
   result_uuid: PropTypes.id,
   severity: PropTypes.number,
   task_id: PropTypes.id,
+  task_name: PropTypes.string,
   tasks: PropTypes.arrayLike,
   task_uuid: PropTypes.id,
   text: PropTypes.string,
-  onValueChange: PropTypes.func,
+  onValueChange: PropTypes.func.isRequired,
 };
 
 
@@ -330,14 +380,13 @@ export default withDialog(OverrideDialog, {
   defaultState: {
     active: '-1',
     days: 30,
+    fixed: false,
     oid: '1.3.6.1.4.1.25623.1.0.',
     hosts: '',
     hosts_manual: '',
     port: '',
     port_manual: '',
-    severity: '',
     custom_severity: '0',
-    new_severity: '',
     new_severity_from_list: -1,
     result_id: '',
     result_uuid: '',

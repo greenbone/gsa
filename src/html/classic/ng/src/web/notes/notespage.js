@@ -105,6 +105,8 @@ class Page extends React.Component {
         oid: is_defined(note.nvt) ? note.nvt.oid : undefined,
         note,
         note_id: note.id,
+        nvt: note.nvt,
+        note_severity: note.severity,
         task_id: is_defined(note.task) && is_defined(note.task.id) ? '0' : '',
         task_uuid: is_defined(note.task) ? note.task.id : '',
         result_id: is_defined(note.result) && is_defined(note.result.id) ?
