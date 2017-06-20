@@ -100,8 +100,8 @@ class EntityPage extends React.Component {
   }
 
   render() {
-    const {loading} = this.props;
-    if (loading) {
+    const {entity, loading} = this.props;
+    if (!is_defined(entity) && loading) {
       return (
         <Loading loading={loading}/>
       );
