@@ -61,7 +61,17 @@ const Pre = glamorous.pre({
   wordWrap: 'normal',
 });
 
-const InfoBox = glamorous(({
+const InfoLayout = glamorous(Layout)({
+  border: '1px solid #CCCCCC',
+  padding: '5px',
+  marginBottom: '10px',
+  width: '400px',
+  '& h3': {
+    marginTop: 0,
+  },
+});
+
+const InfoBox = ({
   children,
   modified,
   end,
@@ -70,8 +80,10 @@ const InfoBox = glamorous(({
   ...props
 }) => {
   return (
-    <Layout {...props} flex="column" align="space-between">
-      <h3>{title}</h3>
+    <InfoLayout {...props} flex="column" align="space-between">
+      <Layout flex align={['space-between', 'start']}>
+        <h3>{title}</h3>
+      </Layout>
       <Pre>{text}</Pre>
       {children}
       <InfoTable>
@@ -96,15 +108,16 @@ const InfoBox = glamorous(({
           </TableRow>
         </TableBody>
       </InfoTable>
-    </Layout>
+    </InfoLayout>
   );
-})({
-  border: '1px solid #CCCCCC',
-  padding: '5px',
-  '& h3': {
-    marginTop: 0,
-  },
-});
+};
+
+InfoBox.propTypes = {
+  modified: PropTypes.momentDate,
+  end: PropTypes.momentDate,
+  text: PropTypes.string,
+  title: PropTypes.string.isRequired,
+};
 
 const Override = ({
   override,
