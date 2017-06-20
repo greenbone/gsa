@@ -226,7 +226,7 @@ const ToolBarIcons = ({
           img="new_override.svg"
           title={_('Add new Override')}
           value={entity}
-          onClick={onNewNoteClick}
+          onClick={onNewOverrideClick}
         />
       </IconDivider>
     </Divider>
