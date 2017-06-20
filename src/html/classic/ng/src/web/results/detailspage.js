@@ -319,6 +319,7 @@ const Details = ({entity, ...props}) => {
         id="overrides"
         title={_('Overrides')}>
         <Divider
+          wrap
           align={['start', 'stretch']}
           width="15px">
           {
@@ -339,6 +340,7 @@ const Details = ({entity, ...props}) => {
         id="notes"
         title={_('Notes')}>
         <Divider
+          wrap
           align={['start', 'stretch']}
           width="15px">
           {

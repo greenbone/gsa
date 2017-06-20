@@ -1,5 +1,10 @@
 2017-06-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/results/detailspage.js: Wrap notes and overrides
+	at result details page if they don't fit in one row.
+
+2017-06-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/page.js: Render tags at entity detail
 	pages.
 
