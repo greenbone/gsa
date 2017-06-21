@@ -1,3 +1,9 @@
+2017-06-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/package.json,
+	src/html/classic/ng/yarn.lock: Update react, react-dom and react-script to
+	newest versions.
+
 2017-06-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/results/detailspage.js: Add a toolbox (currently
