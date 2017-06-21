@@ -28,7 +28,13 @@ import _ from '../../locale.js';
 import Section from '../section.js';
 import PropTypes from '../proptypes.js';
 
+import IconDivider from '../divider/icondivider.js';
+
+import EditIcon from '../icons/editicon.js';
+import HelpIcon from '../icons/helpicon.js';
 import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
+import TrashIcon from '../icons/trashicon.js';
 
 import DetailsLink from '../link/detailslink.js';
 
@@ -48,10 +54,28 @@ const TagIcon = props => {
 const EntityTags = ({
   entity,
   foldable = true,
+  onDeleteTag,
+  onDisableTag,
+  onEditTagClick,
+  onNewTagClick,
 }) => {
+  const extra = (
+    <IconDivider>
+      <NewIcon
+        title={_('New Tag')}
+        value={{type: 'result', entity}}
+        onClick={onNewTagClick}
+      />
+      <HelpIcon
+        page="user-tags"
+        title={_('Help: User Tags list')}
+      />
+    </IconDivider>
+  );
   return (
     <Section
       foldable={foldable}
+      extra={extra}
       img={<TagIcon/>}
       title={_('User Tags ({{count}})', {count: entity.user_tags.length})}
     >
@@ -94,6 +118,24 @@ const EntityTags = ({
                       {tag.comment}
                     </TableData>
                     <TableData>
+                      <IconDivider>
+                        <Icon
+                          img="disable.svg"
+                          value={tag}
+                          title={_('Disable Tag')}
+                          onClick={onDisableTag}
+                        />
+                        <TrashIcon
+                          value={tag}
+                          title={_('Move Tag to Trashcan')}
+                          onClick={onDeleteTag}
+                        />
+                        <EditIcon
+                          value={tag}
+                          title={_('Edit Tag')}
+                          onClick={onEditTagClick}
+                        />
+                      </IconDivider>
                     </TableData>
                   </TableRow>
                 );
@@ -109,6 +151,10 @@ const EntityTags = ({
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
   foldable: PropTypes.bool,
+  onDeleteTag: PropTypes.func.isRequired,
+  onDisableTag: PropTypes.func.isRequired,
+  onEditTagClick: PropTypes.func.isRequired,
+  onNewTagClick: PropTypes.func.isRequired,
 };
 
 export default EntityTags;

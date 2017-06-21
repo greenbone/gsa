@@ -1,5 +1,11 @@
 2017-06-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/web/entity/container.js, src/web/entity/page.js,
+	src/web/entity/tags.js: Add creating, editing, enabling, disabling and
+	deleting of tags.
+
+2017-06-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/tags.js: Fix getting a single tag from
 	gmp api.
 

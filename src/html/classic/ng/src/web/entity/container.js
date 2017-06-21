@@ -23,15 +23,20 @@
 
 import React from 'react';
 
+import _ from '../../locale.js';
 import logger from '../../log.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 
+import Dialog from '../dialog/dialog.js';
+
 import NoteDialog from '../notes/dialog.js';
 
 import OverrideDialog from '../overrides/dialog.js';
+
+import TagDialog from '../tags/dialog.js';
 
 const log = logger.getLogger('web.entity.container');
 
@@ -52,12 +57,21 @@ class EntityContainer extends React.Component {
     this.reload = this.reload.bind(this);
 
     this.handleChanged = this.handleChanged.bind(this);
+    this.handleDeleteTag = this.handleDeleteTag.bind(this);
+    this.handleDisableTag = this.handleDisableTag.bind(this);
+    this.handleEnableTag = this.handleEnableTag.bind(this);
+    this.handleError = this.handleError.bind(this);
     this.handleSaveNote = this.handleSaveNote.bind(this);
     this.handleSaveOverride = this.handleSaveOverride.bind(this);
+    this.handleSaveTag = this.handleSaveTag.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
+    this.handleShowError = this.handleShowError.bind(this);
+    this.handleShowSuccess = this.handleShowSuccess.bind(this);
 
     this.openNoteDialog = this.openNoteDialog.bind(this);
     this.openOverrideDialog = this.openOverrideDialog.bind(this);
+    this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
+    this.openEditTagDialog = this.openEditTagDialog.bind(this);
   }
 
   componentDidMount() {
@@ -91,8 +105,8 @@ class EntityContainer extends React.Component {
       this.startTimer(refresh);
     })
     .catch(err => {
-      log.error(err);
       this.setState({entity: undefined, loading: false});
+      this.handleError(err);
     });
   }
 
@@ -132,13 +146,73 @@ class EntityContainer extends React.Component {
   handleSaveNote(data) {
     const {gmp} = this.context;
 
-    gmp.note.create(data).then(() => this.reload());
+    return gmp.note.create(data).then(this.reload);
   }
 
   handleSaveOverride(data) {
     const {gmp} = this.context;
 
-    gmp.override.create(data).then(() => this.reload());
+    return gmp.override.create(data).then(this.reload);
+  }
+
+  handleSaveTag(data) {
+    const {gmp} = this.context;
+
+    let promise;
+
+    if (is_defined(data.id)) {
+      promise = gmp.tag.save(data);
+    }
+    else {
+      promise = gmp.tag.create(data);
+    }
+
+    return promise.then(this.reload);
+  }
+
+  handleEnableTag(tag) {
+    const {gmp} = this.context;
+
+    gmp.tag.enable(tag).then(this.reload, this.handleError);
+  }
+
+  handleDisableTag(tag) {
+    const {gmp} = this.context;
+
+    gmp.tag.disable(tag).then(this.reload, this.handleError);
+  }
+
+  handleDeleteTag(tag) {
+    const {gmp} = this.context;
+
+    gmp.tag.delete(tag).then(this.reload, this.handleError);
+  }
+
+  handleError(error) {
+    log.error(error);
+    this.handleShowError(error.message);
+  }
+
+  handleShowError(error) {
+    this.notice_dialog.show({
+      content: (
+        <Layout flex align="center">
+          {error}
+        </Layout>
+      ),
+      title: _('Error'),
+    });
+  }
+
+  handleShowSuccess(message) {
+    this.notice_dialog.show({
+      content: (
+        <Layout flex align="center">
+          {message}
+        </Layout>
+      ),
+      title: _('Success'),
+    });
   }
 
   openNoteDialog(result) {
@@ -181,6 +255,33 @@ class EntityContainer extends React.Component {
     });
   }
 
+  openEditTagDialog(tag) {
+    const {gmp} = this.context;
+
+    gmp.tag.get(tag).then(response => {
+      const t = response.data;
+      this.tag_dialog.show({
+        fixed: true,
+        id: t.id,
+        active: t.active,
+        name: t.name,
+        value: t.value,
+        comment: t.comment,
+        resource_id: t.resource.id,
+        resource_type: t.resource.type,
+      });
+    });
+  }
+
+  openCreateTagDialog({type, entity}) {
+    this.tag_dialog.show({
+      fixed: true,
+      resource_id: entity.id,
+      resource_type: type,
+      name: _('{{type}}:unnamed', {type}),
+    });
+  }
+
   render() {
     const {loading, entity} = this.state;
     const Component = this.props.component;
@@ -193,6 +294,11 @@ class EntityContainer extends React.Component {
           loading={loading}
           onNewNoteClick={this.openNoteDialog}
           onNewOverrideClick={this.openOverrideDialog}
+          onNewTagClick={this.openCreateTagDialog}
+          onEditTagClick={this.openEditTagDialog}
+          onEnableTag={this.handleEnableTag}
+          onDeleteTag={this.handleDeleteTag}
+          onDisableTag={this.handleDisableTag}
           onChanged={this.handleChanged}
           {...other}
         />
@@ -203,6 +309,14 @@ class EntityContainer extends React.Component {
         <OverrideDialog
           ref={ref => this.override_dialog = ref}
           onSave={this.handleSaveOverride}
+        />
+        <TagDialog
+          ref={ref => this.tag_dialog = ref}
+          onSave={this.handleSaveTag}
+        />
+        <Dialog
+          width="400px"
+          ref={ref => this.notice_dialog = ref}
         />
       </Layout>
     );
