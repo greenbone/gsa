@@ -55,51 +55,53 @@ const EntityTags = ({
       img={<TagIcon/>}
       title={_('User Tags ({{count}})', {count: entity.user_tags.length})}
     >
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              {_('Name')}
-            </TableHead>
-            <TableHead>
-              {_('Value')}
-            </TableHead>
-            <TableHead>
-              {_('Comment')}
-            </TableHead>
-            <TableHead>
-              {_('Actions')}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {
-            entity.user_tags.map(tag => {
-              return (
-                <TableRow
-                  key={tag.id}>
-                  <TableData>
-                    <DetailsLink
-                      legacy
-                      id={tag.id}
-                      type="tag">
-                      {tag.name}
-                    </DetailsLink>
-                  </TableData>
-                  <TableData>
-                    {tag.value}
-                  </TableData>
-                  <TableData>
-                    {tag.comment}
-                  </TableData>
-                  <TableData>
-                  </TableData>
-                </TableRow>
-              );
-            })
-          }
-        </TableBody>
-      </Table>
+      {entity.user_tags.length > 0 &&
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                {_('Name')}
+              </TableHead>
+              <TableHead>
+                {_('Value')}
+              </TableHead>
+              <TableHead>
+                {_('Comment')}
+              </TableHead>
+              <TableHead width="5em">
+                {_('Actions')}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {
+              entity.user_tags.map(tag => {
+                return (
+                  <TableRow
+                    key={tag.id}>
+                    <TableData>
+                      <DetailsLink
+                        legacy
+                        id={tag.id}
+                        type="tag">
+                        {tag.name}
+                      </DetailsLink>
+                    </TableData>
+                    <TableData>
+                      {tag.value}
+                    </TableData>
+                    <TableData>
+                      {tag.comment}
+                    </TableData>
+                    <TableData>
+                    </TableData>
+                  </TableRow>
+                );
+              })
+            }
+          </TableBody>
+        </Table>
+      }
     </Section>
   );
 };
