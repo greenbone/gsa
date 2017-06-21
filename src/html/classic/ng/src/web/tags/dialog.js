@@ -38,6 +38,7 @@ import YesNoRadio from '../form/yesnoradio.js';
 const TagDialog = ({
     active,
     comment,
+    fixed,
     name,
     resource_id,
     resource_type,
@@ -79,6 +80,7 @@ const TagDialog = ({
         <Select2
           name="resource_type"
           value={resource_type}
+          disabled={fixed}
           onChange={onValueChange}>
           {capabilities.mayAccess('agents') &&
             <option value="agent">{_('Agent')}</option>
@@ -166,6 +168,7 @@ const TagDialog = ({
           name="resource_id"
           value={resource_id}
           grow="1"
+          disabled={fixed}
           onChange={onValueChange}/>
       </FormGroup>
 
@@ -184,6 +187,7 @@ const TagDialog = ({
 TagDialog.propTypes = {
   active: PropTypes.yesno,
   comment: PropTypes.string,
+  fixed: PropTypes.bool,
   name: PropTypes.string,
   resource_id: PropTypes.id,
   resource_type: PropTypes.string,
@@ -202,6 +206,7 @@ export default withDialog(TagDialog, {
   defaultState: {
     active: '1',
     comment: '',
+    fixed: false,
     name: _('default:unnamed'),
     value: '',
     resource_type: 'agent',
