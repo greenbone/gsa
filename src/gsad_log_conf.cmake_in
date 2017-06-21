@@ -6,23 +6,23 @@
 [gsad main]
 prepend=%t %p
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
-file=${OPENVAS_LOG_DIR}/gsad.log
+file=${GVM_LOG_DIR}/gsad.log
 level=127
 
 [gsad  omp]
 prepend=%t %p
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
-file=${OPENVAS_LOG_DIR}/gsad.log
+file=${GVM_LOG_DIR}/gsad.log
 level=127
 
 [gsad xslt]
 prepend=%t %p
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
-file=${OPENVAS_LOG_DIR}/gsad.log
+file=${GVM_LOG_DIR}/gsad.log
 level=127
 
 [*]
 prepend=%t %p
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
-file=${OPENVAS_LOG_DIR}/gsad.log
+file=${GVM_LOG_DIR}/gsad.log
 level=0

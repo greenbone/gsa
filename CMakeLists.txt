@@ -225,7 +225,7 @@ if (NOT GSAD_PID_DIR)
 endif (NOT GSAD_PID_DIR)
 
 set (OPENVAS_STATE_DIR "${LOCALSTATEDIR}/lib/openvas")
-set (OPENVAS_LOG_DIR   "${LOCALSTATEDIR}/log/openvas")
+set (GVM_LOG_DIR   "${LOCALSTATEDIR}/log/gvm")
 set (GSA_DATA_DIR "${DATADIR}/openvas/gsa")
 set (GSA_LOCALE_SUBDIR "locale")
 set (GSA_LOCALE_DIR "${GSA_DATA_DIR}/${GSA_LOCALE_SUBDIR}")

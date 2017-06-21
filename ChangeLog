@@ -1,3 +1,15 @@
+2017-06-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Switch the log location from /var/log/openvas/ to /var/log/gvm/.
+
+	* CMakeLists.txt: Set location for GVM_LOG_DIR (replaces
+	OPENVAS_LOG_DIR) accordingly.
+
+	* INSTALL: Adjust the documentation accordingly.
+
+	* src/gsad_log_conf.cmake_in: Use GVM_LOG_DIR instead of
+	OPENVAS_LOG_DIR.
+
 2017-06-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/web/entity/container.js, src/web/entity/page.js,
