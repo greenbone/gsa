@@ -36,7 +36,8 @@ export class TagCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return root.get_tag.get_tags_response.tag;
+    // response does contain two get_tags_response elements
+    return root.get_tag.get_tags_response[0].tag;
   }
 
   create({name, comment = '', active, resource_id = '', resource_type,
