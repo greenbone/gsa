@@ -1,3 +1,7 @@
+2017-06-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_cmd.c (cmd_response_data_free): Remove unnecessary NULL assignment.
+
 2017-06-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Switch the log location from /var/log/openvas/ to /var/log/gvm/.

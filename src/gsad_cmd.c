@@ -95,8 +95,6 @@ cmd_response_data_free (cmd_response_data_t* data)
     }
 
   g_free (data);
-
-  data = NULL;
 }
 
 /**
