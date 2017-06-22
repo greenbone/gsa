@@ -236,9 +236,7 @@ set (OPENVAS_SERVER_CERTIFICATE "${OPENVAS_STATE_DIR}/CA/servercert.pem")
 set (OPENVAS_SERVER_KEY         "${OPENVAS_STATE_DIR}/private/CA/serverkey.pem")
 set (OPENVAS_CA_CERTIFICATE     "${OPENVAS_STATE_DIR}/CA/cacert.pem")
 
-# TODO: Eventually have all configurations collected here:
-set (GSA_CONFIG_DIR         "${SYSCONFDIR}/openvas/")
-set (GSA_CONFIG_FILE        "${SYSCONFDIR}/openvas/gsa.conf")
+set (GSA_CONFIG_DIR         "${SYSCONFDIR}/gvm/")
 
 if (NOT GVM_RUN_DIR)
   set (GVM_RUN_DIR      "${LOCALSTATEDIR}/run")

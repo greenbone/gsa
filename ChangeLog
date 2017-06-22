@@ -1,5 +1,17 @@
 2017-06-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* CMakeLists.txt: Changed location of config files from
+	$prefix/etc/openvas/ to $prefix/etc/gvm/.
+	Removed GSA_CONFIG_FILE which is not used anywhere.
+
+	* src/CMakeLists.txt: Removed setting of OPENVAS_USERS_DIR
+	and OPENVAS_CONFIG_FILE which are not used here.
+
+	* src/gsad.c: Renamed DEFAULT_OPENVAS_MANAGER_PORT to
+	DEFAULT_GVM_PORT.
+
+2017-06-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* CMakeLists.txt, src/CMakeLists.txt, src/gsad_gmp.c: Rename
 	OPENVAS_RUN_DIR to GVM_RUN_DIR.
 

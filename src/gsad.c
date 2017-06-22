@@ -142,7 +142,7 @@
 /**
  * @brief Fallback Manager port.
  */
-#define DEFAULT_OPENVAS_MANAGER_PORT 9390
+#define DEFAULT_GVM_PORT 9390
 
 /**
  * @brief Max number of minutes between activity in a session.
@@ -2875,7 +2875,7 @@ main (int argc, char **argv)
   char *locale;
   int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
-  int gsad_manager_port = DEFAULT_OPENVAS_MANAGER_PORT;
+  int gsad_manager_port = DEFAULT_GVM_PORT;
   sigset_t sigmask_all, sigmask_current;
 
   /* Initialise. */
