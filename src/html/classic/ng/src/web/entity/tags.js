@@ -23,12 +23,19 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from '../../locale.js';
+import {first} from '../../utils.js';
 
 import Section from '../section.js';
 import PropTypes from '../proptypes.js';
 
+import Divider from '../divider/divider.js';
 import IconDivider from '../divider/icondivider.js';
+
+import TextField from '../form/textfield.js';
+import Select2 from '../form/select2.js';
 
 import EditIcon from '../icons/editicon.js';
 import HelpIcon from '../icons/helpicon.js';
@@ -51,26 +58,131 @@ const TagIcon = props => {
   );
 };
 
+class AddTag extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    const {entity} = this.props;
+
+    this.state = {
+      name: first(entity.user_tags).name,
+      value: '',
+    };
+
+    this.handleAddTag = this.handleAddTag.bind(this);
+    this.onValueChange = this.onValueChange.bind(this);
+  }
+
+  onValueChange(value, name) {
+    this.setState({[name]: value});
+  }
+
+  handleAddTag() {
+    const {name, value} = this.state;
+    const {entity, onAddTag} = this.props;
+
+    onAddTag({
+      name,
+      value,
+      entity,
+    }).then(() => {
+      this.setState({
+        name: '',
+        value: '',
+      });
+    });
+  }
+
+  render() {
+    const {entity} = this.props;
+    const {name, value} = this.state;
+    return (
+      <Divider>
+        <b>{_('Add Tag')}</b>
+        <Select2
+          name="name"
+          value={name}
+          onChange={this.onValueChange}>
+          {entity.user_tags.map(tag => {
+            return (
+              <option key={tag.id} value={tag.name}>
+                {tag.name}
+              </option>
+            );
+          })}
+        </Select2>
+        <span>with Value</span>
+        <TextField
+          name="value"
+          value={value}
+          onChange={this.onValueChange}
+        />
+        <TagIcon
+          title={_('Add Tag')}
+          onClick={this.handleAddTag}
+        />
+      </Divider>
+    );
+  }
+}
+
+AddTag.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onAddTag: PropTypes.func.isRequired,
+};
+
+const SectionElementDivider = glamorous(Divider)({
+  marginBottom: '3px',
+});
+
+const SectionElements = ({
+  entity,
+  onAddTag,
+  onNewTagClick,
+}) => {
+  return (
+    <SectionElementDivider margin="10px">
+      <AddTag
+        entity={entity}
+        onAddTag={onAddTag}
+      />
+      <IconDivider>
+        <NewIcon
+          title={_('New Tag')}
+          value={{type: 'result', entity}}
+          onClick={onNewTagClick}
+        />
+        <HelpIcon
+          page="user-tags"
+          title={_('Help: User Tags list')}
+        />
+      </IconDivider>
+    </SectionElementDivider>
+  );
+};
+
+SectionElements.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onAddTag: PropTypes.func.isRequired,
+  onNewTagClick: PropTypes.func.isRequired,
+};
+
 const EntityTags = ({
   entity,
   foldable = true,
+  onAddTag,
   onDeleteTag,
   onDisableTag,
   onEditTagClick,
   onNewTagClick,
 }) => {
   const extra = (
-    <IconDivider>
-      <NewIcon
-        title={_('New Tag')}
-        value={{type: 'result', entity}}
-        onClick={onNewTagClick}
-      />
-      <HelpIcon
-        page="user-tags"
-        title={_('Help: User Tags list')}
-      />
-    </IconDivider>
+    <SectionElements
+      entity={entity}
+      onAddTag={onAddTag}
+      onNewTagClick={onNewTagClick}
+    />
   );
   return (
     <Section
@@ -151,6 +263,7 @@ const EntityTags = ({
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
   foldable: PropTypes.bool,
+  onAddTag: PropTypes.func.isRequired,
   onDeleteTag: PropTypes.func.isRequired,
   onDisableTag: PropTypes.func.isRequired,
   onEditTagClick: PropTypes.func.isRequired,

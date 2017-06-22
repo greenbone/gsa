@@ -38,6 +38,8 @@ import OverrideDialog from '../overrides/dialog.js';
 
 import TagDialog from '../tags/dialog.js';
 
+import Promise from '../../gmp/promise.js';
+
 const log = logger.getLogger('web.entity.container');
 
 class EntityContainer extends React.Component {
@@ -48,6 +50,8 @@ class EntityContainer extends React.Component {
     const {gmpname} = this.props;
     const {gmp} = this.context;
 
+    this.name = gmpname;
+
     this.entity_command = gmp[gmpname];
 
     this.state = {
@@ -56,6 +60,7 @@ class EntityContainer extends React.Component {
 
     this.reload = this.reload.bind(this);
 
+    this.handleAddTag = this.handleAddTag.bind(this);
     this.handleChanged = this.handleChanged.bind(this);
     this.handleDeleteTag = this.handleDeleteTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
@@ -170,27 +175,40 @@ class EntityContainer extends React.Component {
     return promise.then(this.reload);
   }
 
+  handleAddTag({name, value, entity}) {
+    const {gmp} = this.context;
+
+    return gmp.tag.create({
+      name,
+      value,
+      active: 1,
+      resource_id: entity.id,
+      resource_type: this.name,
+    }).then(this.reload, this.handleError);
+  }
+
   handleEnableTag(tag) {
     const {gmp} = this.context;
 
-    gmp.tag.enable(tag).then(this.reload, this.handleError);
+    return gmp.tag.enable(tag).then(this.reload, this.handleError);
   }
 
   handleDisableTag(tag) {
     const {gmp} = this.context;
 
-    gmp.tag.disable(tag).then(this.reload, this.handleError);
+    return gmp.tag.disable(tag).then(this.reload, this.handleError);
   }
 
   handleDeleteTag(tag) {
     const {gmp} = this.context;
 
-    gmp.tag.delete(tag).then(this.reload, this.handleError);
+    return gmp.tag.delete(tag).then(this.reload, this.handleError);
   }
 
   handleError(error) {
     log.error(error);
     this.handleShowError(error.message);
+    return Promise.reject();
   }
 
   handleShowError(error) {
@@ -292,6 +310,7 @@ class EntityContainer extends React.Component {
           entity={entity}
           entityCommand={this.entity_command}
           loading={loading}
+          onAddTag={this.handleAddTag}
           onNewNoteClick={this.openNoteDialog}
           onNewOverrideClick={this.openOverrideDialog}
           onNewTagClick={this.openCreateTagDialog}

@@ -103,6 +103,7 @@ class EntityPage extends React.Component {
   renderUserTags() {
     const {
       entity,
+      onAddTag,
       onDeleteTag,
       onDisableTag,
       onEditTagClick,
@@ -122,6 +123,7 @@ class EntityPage extends React.Component {
     return (
       <TagsComponent
         entity={entity}
+        onAddTag={onAddTag}
         onDeleteTag={onDeleteTag}
         onDisableTag={onDisableTag}
         onEditTagClick={onEditTagClick}
@@ -162,6 +164,7 @@ EntityPage.propTypes = {
   tags: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
+  onAddTag: PropTypes.func.isRequired,
   onEditTagClick: PropTypes.func.isRequired,
   onEnableTag: PropTypes.func.isRequired,
   onDeleteTag: PropTypes.func.isRequired,
