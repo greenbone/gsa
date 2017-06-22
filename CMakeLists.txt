@@ -240,9 +240,9 @@ set (OPENVAS_CA_CERTIFICATE     "${OPENVAS_STATE_DIR}/CA/cacert.pem")
 set (GSA_CONFIG_DIR         "${SYSCONFDIR}/openvas/")
 set (GSA_CONFIG_FILE        "${SYSCONFDIR}/openvas/gsa.conf")
 
-if (NOT OPENVAS_RUN_DIR)
-  set (OPENVAS_RUN_DIR      "${LOCALSTATEDIR}/run")
-endif (NOT OPENVAS_RUN_DIR)
+if (NOT GVM_RUN_DIR)
+  set (GVM_RUN_DIR      "${LOCALSTATEDIR}/run")
+endif (NOT GVM_RUN_DIR)
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 

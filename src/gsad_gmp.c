@@ -363,7 +363,7 @@ gmp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
     }
   else
     {
-      manager_address = g_build_filename (OPENVAS_RUN_DIR,
+      manager_address = g_build_filename (GVM_RUN_DIR,
                                           "gvmd.sock",
                                           NULL);
       manager_use_tls = 0;
