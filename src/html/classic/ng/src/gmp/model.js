@@ -23,7 +23,7 @@
 
 import moment from 'moment';
 
-import {is_defined, extend} from '../utils.js';
+import {is_defined, extend, map} from '../utils.js';
 
 import Capabilities from './capabilities.js';
 
@@ -81,6 +81,13 @@ export class Model {
     if (is_defined(elem.permissions)) {
       copy.permissions = new Capabilities(elem.permissions.permission);
     }
+
+    if (is_defined(elem.user_tags)) {
+      copy.user_tags = map(elem.user_tags.tag, tag => {
+        return new Model(tag);
+      });
+    }
+
     return copy;
   }
 

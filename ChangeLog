@@ -1,5 +1,11 @@
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js,
+	src/html/classic/ng/src/gmp/models/result.js: Always parse user tags for all
+	models if available.
+
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/icons/css/icon.css,
 	src/html/classic/ng/src/web/icons/icon.js: Use glamorous for icon styling.

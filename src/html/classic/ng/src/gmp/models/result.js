@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {for_each, is_defined, map} from '../../utils.js';
+import {for_each, is_defined} from '../../utils.js';
 
 import Model from '../model.js';
 import {parse_severity} from '../parser.js';
@@ -81,10 +81,6 @@ export class Result extends Model {
 
     ret.notes = parse_notes(elem.notes);
     ret.overrides = parse_overrides(elem.overrides);
-
-    ret.user_tags = map(elem.user_tags.tag, tag => {
-      return new Model(tag);
-    });
 
     return ret;
   }
