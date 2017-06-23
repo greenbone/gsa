@@ -1,5 +1,10 @@
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/tags.js: Don't crash if next entity prop
+	set on AddTag component is undefined.
+
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js,
 	src/html/classic/ng/src/gmp/models/result.js: Always parse user tags for all
 	models if available.

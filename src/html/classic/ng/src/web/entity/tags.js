@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from '../../locale.js';
-import {first} from '../../utils.js';
+import {first, is_defined} from '../../utils.js';
 
 import Section from '../section.js';
 import PropTypes from '../proptypes.js';
@@ -68,6 +68,7 @@ class AddTag extends React.Component {
     this.state = {
       name: first(entity.user_tags).name,
       value: '',
+      tags: [],
     };
 
     this.handleAddTag = this.handleAddTag.bind(this);
@@ -78,11 +79,19 @@ class AddTag extends React.Component {
     const {entity} = next;
     const {name} = this.state;
 
+    if (!is_defined(entity)) {
+      this.setState({
+        name: '',
+        tags: [],
+      });
+    }
+
     if (this.props.entity !== entity) {
       const tags = new Set(entity.user_tags.map(tag => tag.name));
       if (!tags.has(name)) {
         this.setState({
           name: first(entity.user_tags).name,
+          tags: [...tags],
         });
       }
     }
@@ -109,9 +118,7 @@ class AddTag extends React.Component {
   }
 
   render() {
-    const {entity} = this.props;
-    const {name, value} = this.state;
-    const tags = [...new Set(entity.user_tags.map(tag => tag.name))];
+    const {name, value, tags} = this.state;
 
     if (tags.length === 0) {
       return null;
@@ -204,14 +211,18 @@ const EntityTags = ({
       onNewTagClick={onNewTagClick}
     />
   );
+  const has_tags = is_defined(entity);
+  const tags = entity.user_tags;
   return (
     <Section
       foldable={foldable}
       extra={extra}
       img={<TagIcon/>}
-      title={_('User Tags ({{count}})', {count: entity.user_tags.length})}
+      title={_('User Tags ({{count}})', {
+        count: has_tags ? tags.length : 0,
+      })}
     >
-      {entity.user_tags.length > 0 &&
+      {tags.length > 0 &&
         <Table>
           <TableHeader>
             <TableRow>
@@ -231,7 +242,7 @@ const EntityTags = ({
           </TableHeader>
           <TableBody>
             {
-              entity.user_tags.map(tag => {
+              tags.map(tag => {
                 return (
                   <TableRow
                     key={tag.id}>
