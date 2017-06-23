@@ -23,54 +23,64 @@
 
 import React from 'react';
 
-import {classes, is_array} from '../../utils.js';
+import glamorous from 'glamorous';
+
+import {is_array, is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 import {get_img_url} from '../urls.js';
 
-import './css/icon.css';
+const convert_size = ({size = 'small'}) => {
+  let width;
+  let height;
+
+  if (size === 'small') {
+    height = width = '16px';
+  }
+  else if (size === 'medium') {
+    height = width = '24px';
+  }
+  else if (size === 'large') {
+    height = width = '50px';
+  }
+  else if (is_array(size)) {
+    width = size[0];
+    height = size[1];
+  }
+
+  return {
+    '&, & *': {
+      height,
+      width,
+    }
+  };
+};
+
+const icon_button_css = {
+  cursor: 'pointer',
+  '@media print': {
+    display: 'none',
+  },
+};
 
 export const withIconCss = Component => {
-  function IconCss({size = 'small', className, style = {}, onClick, ...other}) {
-    if (size === 'small') {
-      className = classes('icon', 'icon-sm', className);
-    }
-    else if (size === 'medium') {
-      className = classes('icon', 'icon-m', className);
-    }
-    else if (size === 'large') {
-      className = classes('icon', 'icon-lg', className);
-    }
-    else if (is_array(size)) {
-      style.width = size[0];
-      style.height = size[1];
-    }
-    else {
-      className = classes('icon', className);
-    }
 
-    if (onClick) {
-      className = classes(className, 'icon-button');
-    }
-    return (
-      <Component
-        {...other}
-        style={style}
-        className={className}
-        onClick={onClick}
-      />
-    );
-  };
+  const IconCss = glamorous(Component)(
+    {
+      display: 'inline-block',
+    },
+    ({onClick}) => is_defined(onClick) ? 'icon icon-button' : 'icon',
+    ({onClick}) => is_defined(onClick) ? icon_button_css : {},
+    convert_size,
+  );
 
   IconCss.propTypes = {
-    className: PropTypes.string,
     size: PropTypes.oneOfType([
       PropTypes.array,
       PropTypes.oneOf([
         'small', 'medium', 'large', 'default',
       ]),
     ]),
-    style: PropTypes.object,
     onClick: PropTypes.func,
   };
 

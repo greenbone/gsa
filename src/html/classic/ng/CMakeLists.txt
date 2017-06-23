@@ -454,7 +454,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/form/css/formgroup.css
      ${NG_SRC_DIR}/src/web/form/css/select2.css
      ${NG_SRC_DIR}/src/web/form/css/spinner.css
-     ${NG_SRC_DIR}/src/web/icons/css/icon.css
      ${NG_SRC_DIR}/src/web/menu/css/iconmenu.css
      ${NG_SRC_DIR}/src/web/menu/css/menubar.css
      ${NG_SRC_DIR}/src/web/menu/css/menu.css

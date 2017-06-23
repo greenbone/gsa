@@ -1,5 +1,11 @@
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/icons/css/icon.css,
+	src/html/classic/ng/src/web/icons/icon.js: Use glamorous for icon styling.
+
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/menu/css/iconmenu.css,
 	src/html/classic/ng/src/web/menu/css/menuentry.css: Fix styles for icon menu
 	(e.g the wizard icon at the task page).
