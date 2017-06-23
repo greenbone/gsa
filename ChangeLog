@@ -1,5 +1,14 @@
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* .eslintrc.json: Remove no-confusing-arrow rule
+	(http://eslint.org/docs/rules/no-confusing-arrow). This pattern is used often
+	in styling libraries like glamorous and styled-components.
+
+	* src/html/classic/ng/package.json: Allow to run linting with yarn/npm run
+	lint.
+
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/powerfilter/powerfilter.js,
 	src/html/classic/ng/src/web/tasks/taskspage.js: Use IconDivider at task page
 	and for at powerfilter.

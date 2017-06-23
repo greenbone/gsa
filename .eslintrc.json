@@ -123,7 +123,6 @@
         "no-alert": "error",
         "no-bitwise": "error",
         "no-catch-shadow": "error",
-        "no-confusing-arrow": "error",
         "no-continue": "error",
         "no-console": "warn",
         "no-div-regex": "error",
