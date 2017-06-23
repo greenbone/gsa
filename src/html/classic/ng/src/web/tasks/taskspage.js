@@ -43,6 +43,8 @@ import PropTypes from '../proptypes.js';
 
 import {withDashboard} from '../dashboard/dashboard.js';
 
+import IconDivider from '../divider/icondivider.js';
+
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
@@ -109,7 +111,7 @@ const ToolBarIcons = ({
     onTaskWizardClick,
   }, {capabilities}) => {
   return (
-    <Layout flex box>
+    <IconDivider>
       <HelpIcon
         page="tasks"
         title={_('Help: Tasks')}/>
@@ -140,7 +142,7 @@ const ToolBarIcons = ({
             onClick={onNewContainerTaskClick}/>
         </IconMenu>
       }
-    </Layout>
+    </IconDivider>
   );
 };
 

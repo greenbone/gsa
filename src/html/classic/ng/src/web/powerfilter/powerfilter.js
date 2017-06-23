@@ -32,6 +32,8 @@ import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
+import IconDivider from '../divider/icondivider.js';
+
 import DeleteIcon from '../icons/deleteicon.js';
 import EditIcon from '../icons/editicon.js';
 import Icon from '../icons/icon.js';
@@ -206,26 +208,29 @@ export class PowerFilter extends React.Component {
                 onKeyDown={this.onUserFilterKeyPress}
                 onChange={this.onValueChange}/>
             </FormGroup>
-            <FormGroup flex align={['start', 'center']}>
-              <Icon img="refresh.svg" title={_('Update Filter')}
-                onClick={this.onUpdateFilter}/>
+            <FormGroup flex>
+              <IconDivider flex align={['start', 'center']}>
+                <Icon img="refresh.svg" title={_('Update Filter')}
+                  onClick={this.onUpdateFilter}/>
 
-              {onResetClick &&
-                <DeleteIcon
-                  img="delete.svg"
-                  title={_('Reset Filter')}
-                  active={is_defined(filter)}
-                  onClick={is_defined(filter) ? this.onResetClick : undefined}/>
-              }
+                {onResetClick &&
+                  <DeleteIcon
+                    img="delete.svg"
+                    title={_('Reset Filter')}
+                    active={is_defined(filter)}
+                    onClick={is_defined(filter) ?
+                        this.onResetClick : undefined}/>
+                }
 
-              <HelpIcon page="powerfilter" />
+                <HelpIcon page="powerfilter" />
 
-              {onEditClick &&
-                <EditIcon
-                  title={_('Edit Filter')}
-                  active={is_defined(filter)}
-                  onClick={is_defined(filter) ? onEditClick : undefined}/>
-              }
+                {onEditClick &&
+                  <EditIcon
+                    title={_('Edit Filter')}
+                    active={is_defined(filter)}
+                    onClick={is_defined(filter) ? onEditClick : undefined}/>
+                }
+              </IconDivider>
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
               {capabilities.mayOp('create_filter') &&
