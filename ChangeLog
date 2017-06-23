@@ -1,5 +1,10 @@
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/page.js: Don't render entity details if
+	no entity is available.
+
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/tags.js: Don't crash if next entity prop
 	set on AddTag component is undefined.
 

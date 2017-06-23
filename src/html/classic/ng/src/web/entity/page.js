@@ -135,11 +135,16 @@ class EntityPage extends React.Component {
 
   render() {
     const {entity, loading} = this.props;
-    if (!is_defined(entity) && loading) {
-      return (
-        <Loading loading={loading}/>
-      );
+
+    if (!is_defined(entity)) {
+      if (loading) {
+        return (
+          <Loading loading={loading}/>
+        );
+      }
+      return null;
     }
+
     return (
       <Layout flex="column">
         <Toolbar>
