@@ -6626,8 +6626,8 @@ edit_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                     cmd_response_data_t* response_data)
+save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                     params_t *params, cmd_response_data_t* response_data)
 {
   int ret, change_password, change_passphrase;
   int change_community, change_privacy_password;
@@ -6670,20 +6670,21 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, 
     CHECK_PARAM_INVALID (privacy_algorithm,
                           "Save Credential", "edit_credential");
 
-  change_community = (params_value (params, "change_community") ? 1 : 0);
-  if (change_community)
-    CHECK_PARAM_INVALID (community, "Save Credential", "edit_credential");
-  change_passphrase = (params_value (params, "change_passphrase") ? 1 : 0);
-  if (change_passphrase)
-    CHECK_PARAM_INVALID (passphrase, "Save Credential", "edit_credential");
-  change_password = (params_value (params, "change_password") ? 1 : 0);
-  if (change_password)
-    CHECK_PARAM_INVALID (password, "Save Credential", "edit_credential");
-  change_privacy_password
-    = (params_value (params, "change_privacy_password") ? 1 : 0);
-  if (change_privacy_password)
-    CHECK_PARAM_INVALID (privacy_password,
-                          "Save Credential", "edit_credential");
+  if (params_given (params, "change_community"))
+    CHECK_PARAM_INVALID (community, "Save Credential", "change_community");
+  if (params_given (params, "change_passphrase"))
+    CHECK_PARAM_INVALID (passphrase, "Save Credential", "change_passphrase");
+  if (params_given (params, "change_password"))
+    CHECK_PARAM_INVALID (password, "Save Credential", "change_password");
+  if (params_given (params, "change_privacy_password"))
+    CHECK_PARAM_INVALID (privacy_password, "Save Credential",
+                         "change_privacy_password");
+
+  change_community = params_value_bool (params, "change_community");
+  change_passphrase = params_value_bool (params, "change_passphrase");
+  change_password = params_value_bool (params, "change_password");
+  change_privacy_password =
+    params_value_bool (params, "change_privacy_password");
 
   /* Prepare command */
   command = g_string_new ("");

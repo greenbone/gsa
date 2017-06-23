@@ -1,3 +1,8 @@
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_gmp.c (save_credential_gmp): Fix validating change_* parameters
+	when saving credentials. Valid values are 1 AND 0. This is required for ng.
+
 2017-06-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Changed location of config files from
