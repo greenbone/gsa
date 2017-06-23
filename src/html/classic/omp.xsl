@@ -33084,104 +33084,111 @@ should not have received it.
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
 
-  <div class="icon icon-sm ajax-post" data-reload="dialog" data-busy-text="{gsa:i18n ('Adding Report to Assets...')}">
-    <xsl:variable name="min_qod">
-      <xsl:choose>
-        <xsl:when test="string-length (report/filters/keywords/keyword[column='min_qod' and relation='=']/value) &gt; 0">
-          <xsl:value-of select="report/filters/keywords/keyword[column='min_qod' and relation='=']/value"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>70</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="overrides" select="report/filters/keywords/keyword[column='apply_overrides' and relation='=']/value = '1'"/>
-    <xsl:variable name="add_to_assets_title">
-      <xsl:choose>
-        <xsl:when test="$overrides">
-          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Add to Assets with QoD>=%1%% and Overrides enabled'), $min_qod)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Add to Assets with QoD>=%1%% and Overrides disabled'), $min_qod)"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="add_to_assets_success_message">
-      <xsl:choose>
-        <xsl:when test="$overrides">
-          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report content added to Assets with QoD>=%1%% and Overrides enabled.'), $min_qod)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report content added to Assets with QoD>=%1%% and Overrides disabled.'), $min_qod)"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
+  <xsl:if test="string-length (@id) &gt; 0">
+    <div class="icon icon-sm ajax-post" data-reload="dialog" data-busy-text="{gsa:i18n ('Adding Report to Assets...')}">
+      <xsl:variable name="min_qod">
+        <xsl:choose>
+          <xsl:when test="string-length (report/filters/keywords/keyword[column='min_qod' and relation='=']/value) &gt; 0">
+            <xsl:value-of select="report/filters/keywords/keyword[column='min_qod' and relation='=']/value"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>70</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="overrides" select="report/filters/keywords/keyword[column='apply_overrides' and relation='=']/value = '1'"/>
+      <xsl:variable name="add_to_assets_title">
+        <xsl:choose>
+          <xsl:when test="$overrides">
+            <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Add to Assets with QoD>=%1%% and Overrides enabled'), $min_qod)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Add to Assets with QoD>=%1%% and Overrides disabled'), $min_qod)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="add_to_assets_success_message">
+        <xsl:choose>
+          <xsl:when test="$overrides">
+            <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report content added to Assets with QoD>=%1%% and Overrides enabled.'), $min_qod)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report content added to Assets with QoD>=%1%% and Overrides disabled.'), $min_qod)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
 
-    <img src="/img/add_to_assets.svg" alt="{gsa:i18n ('Add to Assets')}"
-      name="Add to Assets"
-      title="{$add_to_assets_title}">
-      <div class="success-dialog" data-title="{gsa:i18n ('Success')}">
-        <div class="text-center">
-          <xsl:value-of select="$add_to_assets_success_message"/>
+      <img src="/img/add_to_assets.svg" alt="{gsa:i18n ('Add to Assets')}"
+        name="Add to Assets"
+        title="{$add_to_assets_title}">
+        <div class="success-dialog" data-title="{gsa:i18n ('Success')}">
+          <div class="text-center">
+            <xsl:value-of select="$add_to_assets_success_message"/>
+          </div>
         </div>
-      </div>
-      <div class="error-dialog">
-        <div class="text-center">
-          <xsl:value-of select="gsa:i18n ('Report content could not be added to Assets.')"/>
+        <div class="error-dialog">
+          <div class="text-center">
+            <xsl:value-of select="gsa:i18n ('Report content could not be added to Assets.')"/>
+          </div>
         </div>
-      </div>
-    </img>
+      </img>
 
-    <form action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-      <input type="hidden" name="cmd" value="create_asset"/>
-      <input type="hidden" name="report_id" value="{@id}"/>
-      <input type="hidden" name="next" value="get_report_section"/>
-      <input type="hidden" name="report_section" value="{$section}"/>
-      <input type="hidden" name="filter" value="{report/filters/term}"/>
-      <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
-    </form>
-  </div>
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+        <input type="hidden" name="cmd" value="create_asset"/>
+        <input type="hidden" name="report_id" value="{@id}"/>
+        <input type="hidden" name="next" value="get_report_section"/>
+        <input type="hidden" name="report_section" value="{$section}"/>
+        <input type="hidden" name="filter" value="{report/filters/term}"/>
+        <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+      </form>
+    </div>
 
-  <div class="icon icon-sm ajax-post" data-reload="dialog" data-busy-text="{gsa:i18n ('Removing Report from Assets...')}">
-    <img src="/img/remove_from_assets.svg" alt="{gsa:i18n ('Remove from Assets')}"
-      name="Remove from Assets"
-      title="{gsa:i18n ('Remove from Assets')}">
-      <div class="success-dialog" data-title="{gsa:i18n ('Success')}">
-        <div class="text-center">
-          <xsl:value-of select="gsa:i18n ('Report content removed from Assets.')"/>
+    <div class="icon icon-sm ajax-post" data-reload="dialog" data-busy-text="{gsa:i18n ('Removing Report from Assets...')}">
+      <img src="/img/remove_from_assets.svg" alt="{gsa:i18n ('Remove from Assets')}"
+        name="Remove from Assets"
+        title="{gsa:i18n ('Remove from Assets')}">
+        <div class="success-dialog" data-title="{gsa:i18n ('Success')}">
+          <div class="text-center">
+            <xsl:value-of select="gsa:i18n ('Report content removed from Assets.')"/>
+          </div>
         </div>
-      </div>
-      <div class="error-dialog">
-        <div class="text-center">
-          <xsl:value-of select="gsa:i18n ('Report content could not be removed from Assets.')"/>
+        <div class="error-dialog">
+          <div class="text-center">
+            <xsl:value-of select="gsa:i18n ('Report content could not be removed from Assets.')"/>
+          </div>
         </div>
-      </div>
-    </img>
+      </img>
 
-    <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-      <input type="hidden" name="cmd" value="delete_asset"/>
-      <input type="hidden" name="report_id" value="{@id}"/>
-      <input type="hidden" name="next" value="get_report_section"/>
-      <input type="hidden" name="report_section" value="{$section}"/>
-      <input type="hidden" name="filter" value="{report/filters/term}"/>
-      <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
-    </form>
-  </div>
+      <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+        <input type="hidden" name="cmd" value="delete_asset"/>
+        <input type="hidden" name="report_id" value="{@id}"/>
+        <input type="hidden" name="next" value="get_report_section"/>
+        <input type="hidden" name="report_section" value="{$section}"/>
+        <input type="hidden" name="filter" value="{report/filters/term}"/>
+        <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+      </form>
+    </div>
+  </xsl:if>
+
   <span class="divider"/>
-  <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
-    title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)'), task/name)}"
-    class="icon icon-sm">
-    <img src="/img/task.svg" alt="Task"/>
-  </a>
-  <a href="?cmd=get_results&amp;filter=report_id={@id}&amp;token={/envelope/token}"
-    title="{gsa:i18n ('Corresponding Results')}"
-    class="icon icon-sm">
-    <img src="/img/result.svg" alt="Results"/>
-  </a>
+  <xsl:if test="string-length (task/@id) &gt; 0">
+    <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
+      title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)'), task/name)}"
+      class="icon icon-sm">
+      <img src="/img/task.svg" alt="Task"/>
+    </a>
+  </xsl:if>
+  <xsl:if test="string-length (@id) &gt; 0">
+    <a href="?cmd=get_results&amp;filter=report_id={@id}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Corresponding Results')}"
+      class="icon icon-sm">
+      <img src="/img/result.svg" alt="Results"/>
+    </a>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="get_report_closed_cves_response">

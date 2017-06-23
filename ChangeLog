@@ -1,3 +1,10 @@
+2017-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r28799.
+
+	* src/html/classic/omp.xsl (report-icons): Skip the task and report
+	related icons if there's no report/task ID, for the prognostic report.
+
 2017-06-07  Björn Ricks <bjoern.ricks@greenbone.neto
 
 	Backport r28592
