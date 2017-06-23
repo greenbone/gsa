@@ -9,6 +9,7 @@
   font-weight: bold;
   width: 100%;
   cursor: pointer;
+  background-color: white;
 }
 
 .menu-entry > a {
@@ -33,3 +34,5 @@
 .menu-entry:hover {
   background: #99CE48;
 }
+
+/* vim: set ts=2 sw=2 tw=80:*/
