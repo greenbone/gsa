@@ -82,11 +82,21 @@
   width: 100%;
 }
 
-.dashboard-controls {
-}
-
 .dashboard-actions a {
   cursor: pointer;
+}
+
+.dashboard-controls .icon-sm,
+.dashboard-controls .icon-sm *,
+.dashboard .icon-sm,
+.dashboard .icon-sm * {
+  height: 16px;
+  width: 16px;
+}
+
+.dashboard-controls .icon + .icon,
+.dashboard .icon + .icon {
+  margin-left: 3px;
 }
 
 /* Chart menu. */
