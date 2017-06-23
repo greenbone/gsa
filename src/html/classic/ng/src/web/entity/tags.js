@@ -111,6 +111,12 @@ class AddTag extends React.Component {
   render() {
     const {entity} = this.props;
     const {name, value} = this.state;
+    const tags = [...new Set(entity.user_tags.map(tag => tag.name))];
+
+    if (tags.length === 0) {
+      return null;
+    }
+
     return (
       <Divider>
         <b>{_('Add Tag')}</b>
@@ -118,10 +124,10 @@ class AddTag extends React.Component {
           name="name"
           value={name}
           onChange={this.onValueChange}>
-          {entity.user_tags.map(tag => {
+          {tags.map(tag => {
             return (
-              <option key={tag.id} value={tag.name}>
-                {tag.name}
+              <option key={tag} value={tag}>
+                {tag}
               </option>
             );
           })}

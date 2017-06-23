@@ -1,5 +1,11 @@
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/tags.js: Don't show quick add tag
+	component if there aren't any user tags currently. Also don't show duplicate
+	tag names at the selection.
+
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/tags.js: Update tag name when entity prop
 	has changed and current name isn't available anymore.
 
