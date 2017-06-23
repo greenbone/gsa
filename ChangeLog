@@ -1,3 +1,8 @@
+2017-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (report-icons): Skip the task and report
+	related icons if there's no report/task ID, for the prognostic report.
+
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entity/page.js: Don't render entity details if
