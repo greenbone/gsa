@@ -1,5 +1,10 @@
 2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/tags.js: Update tag name when entity prop
+	has changed and current name isn't available anymore.
+
+2017-06-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_gmp.c (save_credential_gmp): Fix validating change_* parameters
 	when saving credentials. Valid values are 1 AND 0. This is required for ng.
 

@@ -74,6 +74,20 @@ class AddTag extends React.Component {
     this.onValueChange = this.onValueChange.bind(this);
   }
 
+  componentWillReceiveProps(next) {
+    const {entity} = next;
+    const {name} = this.state;
+
+    if (this.props.entity !== entity) {
+      const tags = new Set(entity.user_tags.map(tag => tag.name));
+      if (!tags.has(name)) {
+        this.setState({
+          name: first(entity.user_tags).name,
+        });
+      }
+    }
+  }
+
   onValueChange(value, name) {
     this.setState({[name]: value});
   }
