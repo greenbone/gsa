@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {Link as RLink} from 'react-router';
 
 import PropTypes from '../proptypes.js';
@@ -72,6 +74,6 @@ Link.propTypes = {
   to: PropTypes.string.isRequired,
 };
 
-export default withTextOnly(Link);
+export default glamorous(withTextOnly(Link))({display: 'flex'});
 
 // vim: set ts=2 sw=2 tw=80:
