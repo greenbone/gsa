@@ -40,7 +40,7 @@ export class Result extends Model {
 
     ret.host = {
       name: host.__text,
-      id: host.asset._asset_id,
+      id: is_defined(host.asset) ? host.asset._asset_id : undefined, // for openvas 8 where host.asset doesn't exist
     };
 
     ret.nvt = new Nvt(ret.nvt);
