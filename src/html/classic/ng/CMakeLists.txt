@@ -400,6 +400,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
      ${NG_SRC_DIR}/src/web/tasks/icons/importreporticon.js
+     ${NG_SRC_DIR}/src/web/tasks/icons/newiconmenu.js
      ${NG_SRC_DIR}/src/web/tasks/icons/resumeicon.js
      ${NG_SRC_DIR}/src/web/tasks/icons/scheduleicon.js
      ${NG_SRC_DIR}/src/web/tasks/icons/starticon.js

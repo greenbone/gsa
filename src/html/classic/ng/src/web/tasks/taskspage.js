@@ -65,6 +65,8 @@ import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 import Table from './table.js';
 
+import NewIconMenu from './icons/newiconmenu.js';
+
 import {TASKS_FILTER_FILTER} from '../../gmp/models/filter.js';
 
 import {
@@ -133,15 +135,10 @@ const ToolBarIcons = ({
         </IconMenu>
       }
 
-      {capabilities.mayCreate('task') &&
-        <IconMenu img="new.svg" size="small"
-          onClick={onNewTaskClick}>
-          <MenuEntry title={_('New Task')}
-            onClick={onNewTaskClick}/>
-          <MenuEntry title={_('New Container Task')}
-            onClick={onNewContainerTaskClick}/>
-        </IconMenu>
-      }
+      <NewIconMenu
+        onNewClick={onNewTaskClick}
+        onNewContainerClick={onNewContainerTaskClick}/>
+
     </IconDivider>
   );
 };

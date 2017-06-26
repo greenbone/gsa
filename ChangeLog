@@ -1,5 +1,12 @@
 2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/tasks/icons/newiconmenu.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Extract iconmenu for creating
+	a new task into a new component.
+
+2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/row.js: Fix layout of report total count
 	in task list row.
 
