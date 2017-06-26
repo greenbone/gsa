@@ -252,6 +252,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/icons/greenbone.js
      ${NG_SRC_DIR}/src/web/icons/helpicon.js
      ${NG_SRC_DIR}/src/web/icons/icon.js
+     ${NG_SRC_DIR}/src/web/icons/listicon.js
      ${NG_SRC_DIR}/src/web/icons/newicon.js
      ${NG_SRC_DIR}/src/web/icons/osicon.js
      ${NG_SRC_DIR}/src/web/icons/trashicon.js
