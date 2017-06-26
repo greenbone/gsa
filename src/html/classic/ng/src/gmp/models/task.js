@@ -90,34 +90,44 @@ export class Task extends Model {
 
     reports.forEach(name => {
       let report = elem[name];
-      if (report) {
+      if (is_defined(report)) {
         elem[name] = new Report(report.report);
       }
     });
 
     let models = [
       'config',
-      ['schedule', Schedule],
       'slave',
       'target',
-      ['scanner', Scanner],
     ];
     models.forEach(item => {
       let name = item;
       let model = Model;
 
-      if (is_array(item)) {
-        [name, model] = item;
-      }
       let data = elem[name];
-      if (data) {
+      if (is_defined(data)) {
         elem[name] = new model(data);
       }
     });
 
-    if (elem.alert) {
+    if (is_defined(elem.alert)) {
       elem.alerts = map(elem.alert, alert => new Model(alert));
       delete elem.alert;
+    }
+
+    if (is_defined(elem.scanner)) {
+      elem.scanner = new Scanner(elem.scanner);
+    }
+    else {
+      delete elem.scanner;
+    }
+
+    if (is_defined(elem.schedule) && is_defined(elem.schedule.id) &&
+      elem.schedule.id.length === 0) {
+      elem.schedule = new Schedule(elem.schedule);
+    }
+    else {
+      delete elem.schedule;
     }
 
     elem.schedule_periods = parse_int(elem.schedule_periods);

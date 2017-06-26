@@ -1,5 +1,11 @@
 2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/task.js: Simplify schedule usage in task
+	models. Only add a schedule object if there is really a schedule.
+	Additionally use is_defined instead of check for true.
+
+2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/result.js: Add check if result.host.asset
 	exists. This is required to get a working html report with openvas 8.
 
