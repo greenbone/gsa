@@ -65,10 +65,11 @@ class AddTag extends React.Component {
 
     const {entity} = this.props;
 
+    const tags = new Set(entity.user_tags.map(tag => tag.name));
     this.state = {
       name: first(entity.user_tags).name,
       value: '',
-      tags: [],
+      tags: [...tags],
     };
 
     this.handleAddTag = this.handleAddTag.bind(this);
