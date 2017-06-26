@@ -1,5 +1,17 @@
 2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/tasks/actions.js,
+	src/html/classic/ng/src/web/tasks/icons/importreporticon.js,
+	src/html/classic/ng/src/web/tasks/icons/resumeicon.js,
+	src/html/classic/ng/src/web/tasks/icons/scheduleicon.js,
+	src/html/classic/ng/src/web/tasks/icons/starticon.js,
+	src/html/classic/ng/src/web/tasks/icons/stopicon.js: Extract icon components
+	from task actions. They are now reusable at the details page. Also fix margin
+	between icons by using icon divider.
+
+2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js: Simplify schedule usage in task
 	models. Only add a schedule object if there is really a schedule.
 	Additionally use is_defined instead of check for true.
