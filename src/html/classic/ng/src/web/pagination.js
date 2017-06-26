@@ -23,15 +23,25 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from '../locale.js';
 import {is_defined} from '../utils.js';
 
 import Layout from './layout.js';
 import PropTypes from './proptypes.js';
 
+import IconDivider from './divider/icondivider.js';
+
 import Icon from './icons/icon.js';
 
-import './css/pagination.css';
+const PaginationText = glamorous.span({
+  margin: '0 3px;'
+});
+
+const PaginationLayout = glamorous(Layout)({
+  margin: '2px 3px',
+});
 
 const Pagination = ({
     counts,
@@ -46,38 +56,38 @@ const Pagination = ({
   }
 
   return (
-    <Layout
+    <PaginationLayout
       flex
       align={['end', 'center']}
       className="pagination">
       {counts.hasPrevious() ?
-        <span className="pagination-left">
+        <IconDivider>
           <Icon img="first.svg" title={_('First')}
             onClick={onFirstClick}/>
           <Icon img="previous.svg" title={_('Previous')}
             onClick={onPreviousClick}/>
-        </span> :
-          <span className="pagination-left">
-            <Icon img="first_inactive.svg" title={_('First')}/>
-            <Icon img="previous_inactive.svg" title={_('Previous')}/>
-          </span>
+        </IconDivider> :
+        <IconDivider>
+          <Icon img="first_inactive.svg" title={_('First')}/>
+          <Icon img="previous_inactive.svg" title={_('Previous')}/>
+        </IconDivider>
       }
-      <span className="pagination-text">
+      <PaginationText>
         {_('{{first}} - {{last}} of {{filtered}}', counts)}
-      </span>
+      </PaginationText>
       {counts.hasNext() ?
-        <span className="pagination-right">
+        <IconDivider>
           <Icon img="next.svg" title={_('Next')}
             onClick={onNextClick}/>
           <Icon img="last.svg" title={_('Last')}
             onClick={onLastClick}/>
-        </span> :
-          <span className="pagination-right">
-            <Icon img="next_inactive.svg" title={_('Next')}/>
-            <Icon img="last_inactive.svg" title={_('Last')}/>
-          </span>
+        </IconDivider> :
+        <IconDivider>
+          <Icon img="next_inactive.svg" title={_('Next')}/>
+          <Icon img="last_inactive.svg" title={_('Last')}/>
+        </IconDivider>
       }
-    </Layout>
+    </PaginationLayout>
   );
 };
 

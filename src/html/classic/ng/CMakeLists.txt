@@ -437,7 +437,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/login.css
      ${NG_SRC_DIR}/src/web/css/main.css
      ${NG_SRC_DIR}/src/web/css/page.css
-     ${NG_SRC_DIR}/src/web/css/pagination.css
      ${NG_SRC_DIR}/src/web/css/section.css
      ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
      ${NG_SRC_DIR}/src/web/css/sortby.css
