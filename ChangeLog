@@ -1,5 +1,10 @@
 2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/row.js: Fix layout of report total count
+	in task list row.
+
+2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/icons/icon.js: Display icon anchors as flex.
 
 2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>

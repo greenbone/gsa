@@ -121,17 +121,17 @@ const render_report_total = (entity, links) => {
         {entity.report_count.finished}
       </Link>
       <span>&nbsp;</span>
-      <span>
-        (<Link
-          to={'reports?replace_task_id=1&' +
-              'filter=task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
-          title={_('View list of all reports for Task {{name}},' +
-            ' including unfinished ones', {name: entity.name})}
-          textOnly={!links || entity.report_count.total === 0}
-        >
-          {entity.report_count.total}
-        </Link>)
-      </span>
+      (
+      <Link
+        to={'reports?replace_task_id=1&' +
+            'filter=task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
+        title={_('View list of all reports for Task {{name}},' +
+                 ' including unfinished ones', {name: entity.name})}
+        textOnly={!links || entity.report_count.total === 0}
+      >
+        {entity.report_count.total}
+      </Link>
+      )
     </Layout>
   );
 };
