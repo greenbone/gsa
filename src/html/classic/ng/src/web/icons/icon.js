@@ -87,6 +87,10 @@ export const withIconCss = Component => {
   return IconCss;
 };
 
+const Anchor = glamorous.a({
+  display: 'flex',
+});
+
 class IconComponent extends React.Component {
 
   constructor(...args) {
@@ -109,13 +113,13 @@ class IconComponent extends React.Component {
 
     if (href) {
       return (
-        <a
+        <Anchor
           {...other}
           href={href}
           onClick={this.handleClick}
         >
           <img src={img_path} alt={alt}/>
-        </a>
+        </Anchor>
       );
     }
     return (
