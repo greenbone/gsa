@@ -25,11 +25,12 @@ import React from 'react';
 
 import {is_defined} from '../../utils.js';
 
-import Loading from '../loading.js';
 import PropTypes from '../proptypes.js';
 import Toolbar from '../toolbar.js';
 
 import Layout from '../components/layout/layout.js';
+
+import Loading from '../components/loading/loading.js';
 
 import Section from '../components/section/section.js';
 

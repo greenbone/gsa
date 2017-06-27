@@ -202,6 +202,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
+     ${NG_SRC_DIR}/src/web/components/loading/loading.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
      ${NG_SRC_DIR}/src/web/components/sticky/sticky.js
@@ -269,7 +270,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/hosts/hostspage.js
      ${NG_SRC_DIR}/src/web/hosts/row.js
      ${NG_SRC_DIR}/src/web/hosts/table.js
-     ${NG_SRC_DIR}/src/web/loading.js
      ${NG_SRC_DIR}/src/web/link/assetlink.js
      ${NG_SRC_DIR}/src/web/link/detailslink.js
      ${NG_SRC_DIR}/src/web/link/external.js

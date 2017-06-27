@@ -26,12 +26,14 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, exclude, includes} from '../../utils.js';
 
+import PropTypes from '../proptypes.js';
+
 import Layout from '../components/layout/layout.js';
+
+import Loading from '../components/loading/loading.js';
 
 import Section from '../components/section/section.js';
 
-import Loading from '../loading.js';
-import PropTypes from '../proptypes.js';
 import Toolbar from '../toolbar.js';
 
 import PowerFilter from '../powerfilter/powerfilter.js';
