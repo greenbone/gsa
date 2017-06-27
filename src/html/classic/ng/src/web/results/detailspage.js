@@ -33,8 +33,8 @@ import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {result_cvss_risk_factor} from '../render.js';
 
-import Divider from '../divider/divider.js';
-import IconDivider from '../divider/icondivider.js';
+import Divider from '../components/layout/divider.js';
+import IconDivider from '../components/layout/icondivider.js';
 
 import DetailsBlock from '../entity/block.js';
 import EntityPage from '../entity/page.js';

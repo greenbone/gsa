@@ -32,7 +32,7 @@ import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import IconDivider from '../divider/icondivider.js';
+import IconDivider from '../components/layout/icondivider.js';
 
 import DeleteIcon from '../icons/deleteicon.js';
 import EditIcon from '../icons/editicon.js';

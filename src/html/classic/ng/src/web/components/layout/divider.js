@@ -25,8 +25,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import PropTypes from '../proptypes.js';
-import {withLayout} from '../layout.js';
+import PropTypes from '../../proptypes.js';
+import {withLayout} from '../../layout.js';
 
 const DEFAULT_MARGIN = '5px';
 

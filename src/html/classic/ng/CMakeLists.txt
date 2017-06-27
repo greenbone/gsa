@@ -165,6 +165,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/certbund/row.js
      ${NG_SRC_DIR}/src/web/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/layout/divider.js
+     ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/cves/cvespage.js
@@ -188,8 +190,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dialog/error.js
      ${NG_SRC_DIR}/src/web/dialog/footer.js
      ${NG_SRC_DIR}/src/web/dialog/title.js
-     ${NG_SRC_DIR}/src/web/divider/divider.js
-     ${NG_SRC_DIR}/src/web/divider/icondivider.js
      ${NG_SRC_DIR}/src/web/entities/actions.js
      ${NG_SRC_DIR}/src/web/entities/container.js
      ${NG_SRC_DIR}/src/web/entities/entitynametabledata.js

@@ -31,8 +31,8 @@ import {first, is_defined} from '../../utils.js';
 import Section from '../section.js';
 import PropTypes from '../proptypes.js';
 
-import Divider from '../divider/divider.js';
-import IconDivider from '../divider/icondivider.js';
+import Divider from '../components/layout/divider.js';
+import IconDivider from '../components/layout/icondivider.js';
 
 import TextField from '../form/textfield.js';
 import Select2 from '../form/select2.js';

@@ -28,7 +28,7 @@ import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import IconDivider from '../divider/icondivider.js';
+import IconDivider from '../components/layout/icondivider.js';
 
 import {withEntityActions} from '../entities/actions.js';
 

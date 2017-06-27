@@ -31,7 +31,7 @@ import {is_defined} from '../utils.js';
 import Layout from './layout.js';
 import PropTypes from './proptypes.js';
 
-import IconDivider from './divider/icondivider.js';
+import IconDivider from './components/layout/icondivider.js';
 
 import Icon from './icons/icon.js';
 

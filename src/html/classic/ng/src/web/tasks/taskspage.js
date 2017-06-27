@@ -43,7 +43,7 @@ import PropTypes from '../proptypes.js';
 
 import {withDashboard} from '../dashboard/dashboard.js';
 
-import IconDivider from '../divider/icondivider.js';
+import IconDivider from '../components/layout/icondivider.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';

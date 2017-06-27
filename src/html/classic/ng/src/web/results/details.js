@@ -34,7 +34,7 @@ import PropTypes from '../proptypes.js';
 import SolutionType from '../solutiontype.js';
 import {render_nvt_name} from '../render.js';
 
-import Divider from '../divider/divider.js';
+import Divider from '../components/layout/divider.js';
 
 import DetailsBlock from '../entity/block.js';
 

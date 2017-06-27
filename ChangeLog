@@ -1,3 +1,22 @@
+2017-06-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/divider/divider.js,
+	src/html/classic/ng/src/web/components/layout/divider.js,
+	src/html/classic/ng/src/web/divider/icondivider.js,
+	src/html/classic/ng/src/web/components/layout/icondivider.js,
+	src/html/classic/ng/src/web/entity/tags.js,
+	src/html/classic/ng/src/web/pagination.js,
+	src/html/classic/ng/src/web/powerfilter/powerfilter.js,
+	src/html/classic/ng/src/web/results/details.js,
+	src/html/classic/ng/src/web/results/detailspage.js,
+	src/html/classic/ng/src/web/tasks/actions.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Start new directory layout.
+	Its becoming more and more confusing to find a specific component. Therefore
+	start to use a more semantic directory layout. General purpose react components
+	will be moved into src/web/components/, page related components will be moved
+	to src/web/pages/ and utility stuff to src/web/utils/.
+
 2017-06-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
