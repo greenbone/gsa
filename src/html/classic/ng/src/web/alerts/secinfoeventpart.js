@@ -30,8 +30,8 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import {withPrefix} from '../render.js';
 
-import Select2 from '../form/select2.js';
-import Radio from '../form/radio.js';
+import Select2 from '../components/form/select2.js';
+import Radio from '../components/form/radio.js';
 
 const VALUE = 'New SecInfo arrived';
 

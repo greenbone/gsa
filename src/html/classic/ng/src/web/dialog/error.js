@@ -28,7 +28,7 @@ import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import Button from '../form/button.js';
+import Button from '../components/form/button.js';
 
 export const DialogError = ({error, onCloseClick}) => {
   if (!is_defined(error)) {

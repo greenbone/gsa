@@ -30,11 +30,11 @@ import {
   is_defined,
   KeyCode,
   parse_float,
-} from '../../utils.js';
+} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import {withLayout} from '../components/layout/layout.js';
+import {withLayout} from '../layout/layout.js';
 
 import './css/spinner.css';
 

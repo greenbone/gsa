@@ -34,8 +34,8 @@ import PropTypes from '../proptypes.js';
 import Divider from '../components/layout/divider.js';
 import IconDivider from '../components/layout/icondivider.js';
 
-import TextField from '../form/textfield.js';
-import Select2 from '../form/select2.js';
+import TextField from '../components/form/textfield.js';
+import Select2 from '../components/form/select2.js';
 
 import EditIcon from '../icons/editicon.js';
 import HelpIcon from '../icons/helpicon.js';

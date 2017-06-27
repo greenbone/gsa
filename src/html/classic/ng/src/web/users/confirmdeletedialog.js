@@ -32,8 +32,8 @@ import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import FormGroup from '../form/formgroup.js';
-import Select2 from '../form/select2.js';
+import FormGroup from '../components/form/formgroup.js';
+import Select2 from '../components/form/select2.js';
 
 const ConfirmDeleteDialog = ({
     deleteUsers,

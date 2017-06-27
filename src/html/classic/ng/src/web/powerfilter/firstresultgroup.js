@@ -28,8 +28,8 @@ import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
-import Spinner from '../form/spinner.js';
+import FormGroup from '../components/form/formgroup.js';
+import Spinner from '../components/form/spinner.js';
 
 const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
   if (is_defined(filter)) {

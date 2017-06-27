@@ -32,8 +32,8 @@ import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextField from '../components/form/textfield.js';
 
 const HostsDialog = ({
     host,

@@ -33,11 +33,11 @@ import {render_options} from '../render.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Select2 from '../form/select2.js';
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-import Radio from '../form/radio.js';
-import YesNoRadio from '../form/yesnoradio.js';
+import Select2 from '../components/form/select2.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextField from '../components/form/textfield.js';
+import Radio from '../components/form/radio.js';
+import YesNoRadio from '../components/form/yesnoradio.js';
 
 import HttpMethodPart from './httpmethodpart.js';
 import ScpMethodPart from './scpmethodpart.js';

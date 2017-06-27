@@ -33,10 +33,10 @@ import Section from '../section.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import FileField from '../form/filefield.js';
-import FormGroup from '../form/formgroup.js';
-import Radio from '../form/radio.js';
-import TextField from '../form/textfield.js';
+import FileField from '../components/form/filefield.js';
+import FormGroup from '../components/form/formgroup.js';
+import Radio from '../components/form/radio.js';
+import TextField from '../components/form/textfield.js';
 
 import DeleteIcon from '../icons/deleteicon.js';
 import NewIcon from '../icons/newicon.js';

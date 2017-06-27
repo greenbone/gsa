@@ -32,7 +32,7 @@ import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import TextField from '../form/textfield.js';
+import TextField from '../components/form/textfield.js';
 
 import NewIcon from '../icons/newicon.js';
 

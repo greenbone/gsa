@@ -31,13 +31,13 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import {withDialog} from '../dialog/dialog.js';
 
-import FileField from '../form/filefield.js';
-import FormGroup from '../form/formgroup.js';
-import Spinner from '../form/spinner.js';
-import TextArea from '../form/textarea.js';
-import TextField from '../form/textfield.js';
-import Select2 from '../form/select2.js';
-import YesNoRadio from '../form/yesnoradio.js';
+import FileField from '../components/form/filefield.js';
+import FormGroup from '../components/form/formgroup.js';
+import Spinner from '../components/form/spinner.js';
+import TextArea from '../components/form/textarea.js';
+import TextField from '../components/form/textfield.js';
+import Select2 from '../components/form/select2.js';
+import YesNoRadio from '../components/form/yesnoradio.js';
 
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';

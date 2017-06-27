@@ -34,7 +34,7 @@ import SeverityBar from '../severitybar.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Checkbox from '../form/checkbox.js';
+import Checkbox from '../components/form/checkbox.js';
 
 import EditIcon from '../icons/editicon.js';
 

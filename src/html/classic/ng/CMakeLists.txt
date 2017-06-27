@@ -165,6 +165,23 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/certbund/row.js
      ${NG_SRC_DIR}/src/web/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/form/button.js
+     ${NG_SRC_DIR}/src/web/components/form/checkbox.js
+     ${NG_SRC_DIR}/src/web/components/form/datepicker.js
+     ${NG_SRC_DIR}/src/web/components/form/download.js
+     ${NG_SRC_DIR}/src/web/components/form/field.js
+     ${NG_SRC_DIR}/src/web/components/form/filefield.js
+     ${NG_SRC_DIR}/src/web/components/form/formgroup.js
+     ${NG_SRC_DIR}/src/web/components/form/form.js
+     ${NG_SRC_DIR}/src/web/components/form/passwordfield.js
+     ${NG_SRC_DIR}/src/web/components/form/radio.js
+     ${NG_SRC_DIR}/src/web/components/form/select2.js
+     ${NG_SRC_DIR}/src/web/components/form/spinner.js
+     ${NG_SRC_DIR}/src/web/components/form/submitbutton.js
+     ${NG_SRC_DIR}/src/web/components/form/textarea.js
+     ${NG_SRC_DIR}/src/web/components/form/textfield.js
+     ${NG_SRC_DIR}/src/web/components/form/timezoneselect.js
+     ${NG_SRC_DIR}/src/web/components/form/yesnoradio.js
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
@@ -216,23 +233,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/filters/row.js
      ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/footnote.js
-     ${NG_SRC_DIR}/src/web/form/button.js
-     ${NG_SRC_DIR}/src/web/form/checkbox.js
-     ${NG_SRC_DIR}/src/web/form/datepicker.js
-     ${NG_SRC_DIR}/src/web/form/download.js
-     ${NG_SRC_DIR}/src/web/form/field.js
-     ${NG_SRC_DIR}/src/web/form/filefield.js
-     ${NG_SRC_DIR}/src/web/form/form.js
-     ${NG_SRC_DIR}/src/web/form/formgroup.js
-     ${NG_SRC_DIR}/src/web/form/passwordfield.js
-     ${NG_SRC_DIR}/src/web/form/radio.js
-     ${NG_SRC_DIR}/src/web/form/select2.js
-     ${NG_SRC_DIR}/src/web/form/spinner.js
-     ${NG_SRC_DIR}/src/web/form/submitbutton.js
-     ${NG_SRC_DIR}/src/web/form/textarea.js
-     ${NG_SRC_DIR}/src/web/form/textfield.js
-     ${NG_SRC_DIR}/src/web/form/timezoneselect.js
-     ${NG_SRC_DIR}/src/web/form/yesnoradio.js
      ${NG_SRC_DIR}/src/web/groups/dialog.js
      ${NG_SRC_DIR}/src/web/groups/groupsppage.js
      ${NG_SRC_DIR}/src/web/groups/header.js
@@ -434,6 +434,13 @@ set (NG_JS_SRC_FILES
 
 
 set (NG_CSS_SRC_FILES
+     ${NG_SRC_DIR}/src/web/components/form/css/button.css
+     ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css
+     ${NG_SRC_DIR}/src/web/components/form/css/datepicker.css
+     ${NG_SRC_DIR}/src/web/components/form/css/form.css
+     ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
+     ${NG_SRC_DIR}/src/web/components/form/css/select2.css
+     ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/components/layout/css/layout.css
      ${NG_SRC_DIR}/src/web/css/cveid.css
      ${NG_SRC_DIR}/src/web/css/footer.css
@@ -453,13 +460,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
-     ${NG_SRC_DIR}/src/web/form/css/button.css
-     ${NG_SRC_DIR}/src/web/form/css/checkboxradio.css
-     ${NG_SRC_DIR}/src/web/form/css/datepicker.css
-     ${NG_SRC_DIR}/src/web/form/css/form.css
-     ${NG_SRC_DIR}/src/web/form/css/formgroup.css
-     ${NG_SRC_DIR}/src/web/form/css/select2.css
-     ${NG_SRC_DIR}/src/web/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/menu/css/iconmenu.css
      ${NG_SRC_DIR}/src/web/menu/css/menubar.css
      ${NG_SRC_DIR}/src/web/menu/css/menu.css

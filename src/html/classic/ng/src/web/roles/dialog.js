@@ -33,10 +33,10 @@ import {permission_description} from '../render.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Button from '../form/button.js';
-import FormGroup from '../form/formgroup.js';
-import Select2 from '../form/select2.js';
-import TextField from '../form/textfield.js';
+import Button from '../components/form/button.js';
+import FormGroup from '../components/form/formgroup.js';
+import Select2 from '../components/form/select2.js';
+import TextField from '../components/form/textfield.js';
 
 import TrashIcon from '../icons/trashicon.js';
 

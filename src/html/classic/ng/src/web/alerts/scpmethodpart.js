@@ -30,10 +30,10 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import {render_options, withPrefix} from '../render.js';
 
-import Select2 from '../form/select2.js';
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-import TextArea from '../form/textarea.js';
+import Select2 from '../components/form/select2.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextField from '../components/form/textfield.js';
+import TextArea from '../components/form/textarea.js';
 
 import NewIcon from '../icons/newicon.js';
 

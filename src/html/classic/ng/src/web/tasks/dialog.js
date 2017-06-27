@@ -47,13 +47,16 @@ import {render_options} from '../render.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Select2 from '../form/select2.js';
-import Spinner from '../form/spinner.js';
-import FormGroup from '../form/formgroup.js';
-import Checkbox from '../form/checkbox.js';
-import YesNoRadio, {YES_VALUE, NO_VALUE} from '../form/yesnoradio.js';
-import Text from '../form/text.js';
-import TextField from '../form/textfield.js';
+import Select2 from '../components/form/select2.js';
+import Spinner from '../components/form/spinner.js';
+import FormGroup from '../components/form/formgroup.js';
+import Checkbox from '../components/form/checkbox.js';
+import YesNoRadio, {
+  YES_VALUE,
+  NO_VALUE,
+} from '../components/form/yesnoradio.js';
+import Text from '../components/form/text.js';
+import TextField from '../components/form/textfield.js';
 
 import NewIcon from '../icons/newicon.js';
 

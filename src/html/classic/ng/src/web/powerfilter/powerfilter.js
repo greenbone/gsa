@@ -41,9 +41,9 @@ import Icon from '../icons/icon.js';
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';
 
-import FormGroup from '../form/formgroup.js';
-import Select2 from '../form/select2.js';
-import TextField from '../form/textfield.js';
+import FormGroup from '../components/form/formgroup.js';
+import Select2 from '../components/form/select2.js';
+import TextField from '../components/form/textfield.js';
 
 import Filter from '../../gmp/models/filter.js';
 

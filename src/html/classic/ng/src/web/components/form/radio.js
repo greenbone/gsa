@@ -23,58 +23,49 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import {classes, is_defined} from '../../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Radio from './radio.js';
+import {withLayout} from '../layout/layout.js';
 
-export const YES_VALUE = '1';
-export const NO_VALUE = '0';
+import {withChangeHandler} from './form.js';
 
-const YesNoRadio = ({
-    convert,
-    disabled,
-    value,
-    name,
-    yesValue = YES_VALUE,
-    noValue = NO_VALUE,
-    onChange,
-    ...other,
-  }) => {
+import './css/form.css';
+import './css/checkboxradio.css';
+
+const RadioComponent = ({title, children, className, disabled, ...other}) => {
+
+  className = classes(className, 'radio', disabled ? 'disabled' : '');
+
   return (
-    <Layout {...other} flex>
-      <Radio
-        title={_('Yes')}
-        value={yesValue}
-        name={name}
-        checked={value === yesValue}
-        convert={convert}
-        onChange={onChange}
-        disabled={disabled}/>
-      <Radio
-        title={_('No')}
-        value={noValue}
-        name={name}
-        checked={value === noValue}
-        convert={convert}
-        onChange={onChange}
-        disabled={disabled}/>
-    </Layout>
+    <div className={className}>
+      <label>
+        <input
+          {...other}
+          disabled={disabled}
+          type="radio"
+        />
+        {is_defined(title) &&
+          <span>
+            {title}
+          </span>
+        }
+        {children}
+      </label>
+    </div>
   );
 };
 
-YesNoRadio.propTypes = {
-  convert: PropTypes.func,
-  disabled: PropTypes.bool,
+RadioComponent.propTypes = {
   name: PropTypes.string,
-  noValue: PropTypes.any,
-  value: PropTypes.any,
-  yesValue: PropTypes.any,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  title: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default YesNoRadio;
+export default withLayout(withChangeHandler(RadioComponent),
+  {align: ['start', 'center'], box: true, flex: true});
 
 // vim: set ts=2 sw=2 tw=80:

@@ -27,7 +27,7 @@ import {classes, is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import Text from '../form/text.js';
+import Text from '../components/form/text.js';
 
 import EntityActions from './actions.js';
 

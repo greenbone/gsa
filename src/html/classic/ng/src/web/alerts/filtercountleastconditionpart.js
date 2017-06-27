@@ -30,9 +30,9 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import {render_options, withPrefix} from '../render.js';
 
-import Select2 from '../form/select2.js';
-import Spinner from '../form/spinner.js';
-import Radio from '../form/radio.js';
+import Select2 from '../components/form/select2.js';
+import Spinner from '../components/form/spinner.js';
+import Radio from '../components/form/radio.js';
 
 const VALUE = 'Filter count at least';
 

@@ -31,12 +31,12 @@ import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Select2 from '../form/select2.js';
-import Spinner from '../form/spinner.js';
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-import DatePicker from '../form/datepicker.js';
-import TimeZoneSelect from '../form/timezoneselect.js';
+import Select2 from '../components/form/select2.js';
+import Spinner from '../components/form/spinner.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextField from '../components/form/textfield.js';
+import DatePicker from '../components/form/datepicker.js';
+import TimeZoneSelect from '../components/form/timezoneselect.js';
 
 const TimeUnitSelect = props => {
   return (

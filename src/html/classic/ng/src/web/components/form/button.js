@@ -23,22 +23,37 @@
 
 import React from 'react';
 
-import {withLayout} from '../components/layout/layout.js';
+import {classes} from '../../../utils.js';
 
-import {withChangeHandler} from './form.js';
+import PropTypes from '../../proptypes.js';
+import {withLayout} from '../layout/layout.js';
 
-const FileFieldComponent = props => {
+import {withClickHandler} from './form.js';
+
+import './css/button.css';
+
+export const Button = ({
+    className,
+    title,
+    children = title,
+    ...other
+  }) => {
+  className = classes('button', className);
   return (
-    <input {...props} type="file"/>
+    <button
+      {...other}
+      className={className}
+      title={title}>
+      {children}
+    </button>
   );
 };
 
-export default withLayout(
-  withChangeHandler(FileFieldComponent, {
-    convert_func: value => value,
-    value_func: event => event.target.files[0],
-  }),
-  {box: true}
-);
+Button.propTypes = {
+  title: PropTypes.string,
+  className: PropTypes.string,
+};
+
+export default withLayout(withClickHandler(Button));
 
 // vim: set ts=2 sw=2 tw=80:

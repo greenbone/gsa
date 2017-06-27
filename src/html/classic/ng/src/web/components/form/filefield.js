@@ -23,30 +23,21 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
-
-import PropTypes from '../proptypes.js';
-
-import {withLayout} from '../components/layout/layout.js';
+import {withLayout} from '../layout/layout.js';
 
 import {withChangeHandler} from './form.js';
 
-const TextAreaComponent = ({className, value = '', ...props}) => {
-  className = classes('form-control', className);
+const FileFieldComponent = props => {
   return (
-    <textarea {...props}
-      value={value}
-      className={className}/>
+    <input {...props} type="file"/>
   );
 };
 
-TextAreaComponent.propTypes = {
-  className: PropTypes.string,
-  value: PropTypes.any,
-};
-
 export default withLayout(
-  withChangeHandler(TextAreaComponent),
+  withChangeHandler(FileFieldComponent, {
+    convert_func: value => value,
+    value_func: event => event.target.files[0],
+  }),
   {box: true}
 );
 

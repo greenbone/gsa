@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,26 +23,37 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import  _ from '../../../locale.js';
+import {map} from '../../../utils.js';
+import timezones from '../../../timezones.js';
 
-import {withLayout} from '../components/layout/layout.js';
+import PropTypes from '../../proptypes.js';
 
-import {withClickHandler} from './form.js';
+import {withLayout} from '../layout/layout.js';
 
-const TextComponent = ({
-    value,
-    ...props,
-  }) => {
-  return <span {...props} />;
+import Select2 from './select2.js';
+
+
+const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
+
+  let timezone_opts = map(timezones, zone => {
+    return <option key={zone.name} value={zone.name}>{zone.name}</option>;
+  });
+
+  return (
+    <Select2 {...props} value={value}>
+      <option value="UTC">
+        {_('Coordinated Universal Time/UTC')}
+      </option>
+      {timezone_opts}
+    </Select2>
+  );
 };
 
-TextComponent.propTypes = {
-  value: PropTypes.any,
+TimeZoneSelectComponent.propTypes = {
+  value: PropTypes.string,
 };
 
-export default withLayout(
-  withClickHandler(TextComponent),
-  {box: true},
-);
+export default withLayout(TimeZoneSelectComponent, {box: true});
 
 // vim: set ts=2 sw=2 tw=80:

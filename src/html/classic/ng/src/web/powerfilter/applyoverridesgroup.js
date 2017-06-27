@@ -28,8 +28,8 @@ import {is_defined, parse_int} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
-import YesNoRadio from '../form/yesnoradio.js';
+import FormGroup from '../components/form/formgroup.js';
+import YesNoRadio from '../components/form/yesnoradio.js';
 
 const ApplyOverridesGroup = ({
     filter,

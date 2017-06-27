@@ -34,7 +34,7 @@ import SelectionType from '../selectiontype.js';
 
 import Dialog from '../dialog/dialog.js';
 
-import Download from '../form/download.js';
+import Download from '../components/form/download.js';
 
 import PromiseFactory from '../../gmp/promise.js';
 import Filter from '../../gmp/models/filter.js';

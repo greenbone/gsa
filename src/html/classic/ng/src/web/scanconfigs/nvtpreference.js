@@ -30,12 +30,12 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
-import Checkbox from '../form/checkbox.js';
-import FileField from '../form/filefield.js';
-import PasswordField from '../form/passwordfield.js';
-import Radio from '../form/radio.js';
-import TextField from '../form/textfield.js';
-import YesNoRadio from '../form/yesnoradio.js';
+import Checkbox from '../components/form/checkbox.js';
+import FileField from '../components/form/filefield.js';
+import PasswordField from '../components/form/passwordfield.js';
+import Radio from '../components/form/radio.js';
+import TextField from '../components/form/textfield.js';
+import YesNoRadio from '../components/form/yesnoradio.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';

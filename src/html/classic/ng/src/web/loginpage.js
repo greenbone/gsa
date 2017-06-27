@@ -34,10 +34,10 @@ import Header from './header.js';
 import Main from './main.js';
 import PropTypes from './proptypes.js';
 
-import FormGroup from './form/formgroup.js';
-import PasswordField from './form/passwordfield.js';
-import SubmitButton from './form/submitbutton.js';
-import TextField from './form/textfield.js';
+import FormGroup from './components/form/formgroup.js';
+import PasswordField from './components/form/passwordfield.js';
+import SubmitButton from './components/form/submitbutton.js';
+import TextField from './components/form/textfield.js';
 
 import Icon from './icons/icon.js';
 

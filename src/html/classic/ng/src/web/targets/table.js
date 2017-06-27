@@ -32,8 +32,8 @@ import {createEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
 
-import Select2 from '../form/select2.js';
-import Text from '../form/text.js';
+import Select2 from '../components/form/select2.js';
+import Text from '../components/form/text.js';
 
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';

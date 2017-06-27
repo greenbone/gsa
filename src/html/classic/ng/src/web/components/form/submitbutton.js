@@ -23,32 +23,27 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
+import {classes} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {withLayout} from '../components/layout/layout.js';
+import PropTypes from '../../proptypes.js';
 
-import {withChangeHandler} from './form.js';
+import Button from './button.js';
 
-const FieldComponent = ({className, value = '', ...props}) => {
-  className = classes('form-control', className);
+const SubmitButton = ({className, ...other}) => {
+  className = classes('button-block', className);
   return (
-    <input
-      {...props}
+    <Button
+      {...other}
+      type="submit"
       className={className}
-      value={value}
     />
   );
 };
 
-FieldComponent.propTypes = {
+SubmitButton.propTypes = {
   className: PropTypes.string,
-  value: PropTypes.any,
 };
 
-export default withLayout(
-  withChangeHandler(FieldComponent),
-  {box: true}
-);
+export default SubmitButton;
 
 // vim: set ts=2 sw=2 tw=80:

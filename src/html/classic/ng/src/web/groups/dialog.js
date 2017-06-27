@@ -32,10 +32,10 @@ import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Checkbox from '../form/checkbox.js';
-import FormGroup from '../form/formgroup.js';
-import Select2 from '../form/select2.js';
-import TextField from '../form/textfield.js';
+import Checkbox from '../components/form/checkbox.js';
+import FormGroup from '../components/form/formgroup.js';
+import Select2 from '../components/form/select2.js';
+import TextField from '../components/form/textfield.js';
 
 const Dialog = ({
     all_users,

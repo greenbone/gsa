@@ -28,8 +28,8 @@ import _ from '../../locale.js';
 import PropTypes from '../proptypes.js';
 import {render_options, withPrefix} from '../render.js';
 
-import Select2 from '../form/select2.js';
-import FormGroup from '../form/formgroup.js';
+import Select2 from '../components/form/select2.js';
+import FormGroup from '../components/form/formgroup.js';
 
 const StartTaskMethodPart = ({
     prefix,

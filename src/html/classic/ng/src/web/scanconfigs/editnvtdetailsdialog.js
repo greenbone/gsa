@@ -33,9 +33,9 @@ import SeverityBar from '../severitybar.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Radio from '../form/radio.js';
-import Text from '../form/text.js';
-import TextField from '../form/textfield.js';
+import Radio from '../components/form/radio.js';
+import Text from '../components/form/text.js';
+import TextField from '../components/form/textfield.js';
 
 import LegacyLink from '../link/legacylink.js';
 

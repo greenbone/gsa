@@ -34,7 +34,7 @@ import DeleteIcon from '../icons/deleteicon.js';
 import ExportIcon from '../icons/exporticon.js';
 import TrashIcon from '../icons/trashicon.js';
 
-import Select2 from '../form/select2.js';
+import Select2 from '../components/form/select2.js';
 
 import TableRow from '../table/row.js';
 

@@ -33,14 +33,14 @@ import {render_options} from '../render.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import Select2 from '../form/select2.js';
-import Spinner from '../form/spinner.js';
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-import Radio from '../form/radio.js';
-import Datepicker from '../form/datepicker.js';
-import Text from '../form/text.js';
-import TimeZoneSelect from '../form/timezoneselect.js';
+import Select2 from '../components/form/select2.js';
+import Spinner from '../components/form/spinner.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextField from '../components/form/textfield.js';
+import Radio from '../components/form/radio.js';
+import Datepicker from '../components/form/datepicker.js';
+import Text from '../components/form/text.js';
+import TimeZoneSelect from '../components/form/timezoneselect.js';
 
 import {
   esxi_credential_filter,

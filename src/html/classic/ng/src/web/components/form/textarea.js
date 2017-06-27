@@ -23,37 +23,31 @@
 
 import React from 'react';
 
-import  _ from '../../locale.js';
-import {map} from '../../utils.js';
-import timezones from '../../timezones.js';
+import {classes} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import {withLayout} from '../components/layout/layout.js';
+import {withLayout} from '../layout/layout.js';
 
-import Select2 from './select2.js';
+import {withChangeHandler} from './form.js';
 
-
-const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
-
-  let timezone_opts = map(timezones, zone => {
-    return <option key={zone.name} value={zone.name}>{zone.name}</option>;
-  });
-
+const TextAreaComponent = ({className, value = '', ...props}) => {
+  className = classes('form-control', className);
   return (
-    <Select2 {...props} value={value}>
-      <option value="UTC">
-        {_('Coordinated Universal Time/UTC')}
-      </option>
-      {timezone_opts}
-    </Select2>
+    <textarea {...props}
+      value={value}
+      className={className}/>
   );
 };
 
-TimeZoneSelectComponent.propTypes = {
-  value: PropTypes.string,
+TextAreaComponent.propTypes = {
+  className: PropTypes.string,
+  value: PropTypes.any,
 };
 
-export default withLayout(TimeZoneSelectComponent, {box: true});
+export default withLayout(
+  withChangeHandler(TextAreaComponent),
+  {box: true}
+);
 
 // vim: set ts=2 sw=2 tw=80:

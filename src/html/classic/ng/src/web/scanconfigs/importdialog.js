@@ -31,8 +31,8 @@ import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
-import FileField from '../form/filefield.js';
-import FormGroup from '../form/formgroup.js';
+import FileField from '../components/form/filefield.js';
+import FormGroup from '../components/form/formgroup.js';
 
 const ImportDialog = ({
     onValueChange,

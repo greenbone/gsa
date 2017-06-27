@@ -30,8 +30,8 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import {withPrefix} from '../render.js';
 
-import Spinner from '../form/spinner.js';
-import Radio from '../form/radio.js';
+import Spinner from '../components/form/spinner.js';
+import Radio from '../components/form/radio.js';
 
 const VALUE = 'Severity at least';
 

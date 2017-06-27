@@ -30,10 +30,10 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import {withPrefix} from '../render.js';
 
-import Spinner from '../form/spinner.js';
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-import FileField from '../form/filefield.js';
+import Spinner from '../components/form/spinner.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextField from '../components/form/textfield.js';
+import FileField from '../components/form/filefield.js';
 
 const SourcefireMethodPart = ({
     prefix,

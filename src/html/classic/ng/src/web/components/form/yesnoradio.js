@@ -23,49 +23,59 @@
 
 import React from 'react';
 
-import {classes, is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import {withLayout} from '../components/layout/layout.js';
+import Layout from '../layout/layout.js';
 
-import {withChangeHandler} from './form.js';
+import Radio from './radio.js';
 
-import './css/form.css';
-import './css/checkboxradio.css';
+export const YES_VALUE = '1';
+export const NO_VALUE = '0';
 
-const RadioComponent = ({title, children, className, disabled, ...other}) => {
-
-  className = classes(className, 'radio', disabled ? 'disabled' : '');
-
+const YesNoRadio = ({
+    convert,
+    disabled,
+    value,
+    name,
+    yesValue = YES_VALUE,
+    noValue = NO_VALUE,
+    onChange,
+    ...other,
+  }) => {
   return (
-    <div className={className}>
-      <label>
-        <input
-          {...other}
-          disabled={disabled}
-          type="radio"
-        />
-        {is_defined(title) &&
-          <span>
-            {title}
-          </span>
-        }
-        {children}
-      </label>
-    </div>
+    <Layout {...other} flex>
+      <Radio
+        title={_('Yes')}
+        value={yesValue}
+        name={name}
+        checked={value === yesValue}
+        convert={convert}
+        onChange={onChange}
+        disabled={disabled}/>
+      <Radio
+        title={_('No')}
+        value={noValue}
+        name={name}
+        checked={value === noValue}
+        convert={convert}
+        onChange={onChange}
+        disabled={disabled}/>
+    </Layout>
   );
 };
 
-RadioComponent.propTypes = {
-  name: PropTypes.string,
-  className: PropTypes.string,
+YesNoRadio.propTypes = {
+  convert: PropTypes.func,
   disabled: PropTypes.bool,
-  title: PropTypes.string,
+  name: PropTypes.string,
+  noValue: PropTypes.any,
+  value: PropTypes.any,
+  yesValue: PropTypes.any,
   onChange: PropTypes.func,
 };
 
-export default withLayout(withChangeHandler(RadioComponent),
-  {align: ['start', 'center'], box: true, flex: true});
+export default YesNoRadio;
 
 // vim: set ts=2 sw=2 tw=80:

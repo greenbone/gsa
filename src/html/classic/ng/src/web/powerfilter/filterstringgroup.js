@@ -28,8 +28,8 @@ import {is_string} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextField from '../components/form/textfield.js';
 
 const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
   let filterstring = is_string(filter) ?

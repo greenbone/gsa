@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,27 +23,26 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
+import PropTypes from '../../proptypes.js';
 
-import PropTypes from '../proptypes.js';
+import {withLayout} from '../layout/layout.js';
 
-import Button from './button.js';
+import {withClickHandler} from './form.js';
 
-const SubmitButton = ({className, ...other}) => {
-  className = classes('button-block', className);
-  return (
-    <Button
-      {...other}
-      type="submit"
-      className={className}
-    />
-  );
+const TextComponent = ({
+    value,
+    ...props,
+  }) => {
+  return <span {...props} />;
 };
 
-SubmitButton.propTypes = {
-  className: PropTypes.string,
+TextComponent.propTypes = {
+  value: PropTypes.any,
 };
 
-export default SubmitButton;
+export default withLayout(
+  withClickHandler(TextComponent),
+  {box: true},
+);
 
 // vim: set ts=2 sw=2 tw=80:

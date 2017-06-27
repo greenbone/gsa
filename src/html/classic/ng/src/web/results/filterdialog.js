@@ -36,9 +36,9 @@ import {
   LabelMedium,
 } from '../severityclasslabels.js';
 
-import Checkbox from '../form/checkbox.js';
-import FormGroup from '../form/formgroup.js';
-import Radio from '../form/radio.js';
+import Checkbox from '../components/form/checkbox.js';
+import FormGroup from '../components/form/formgroup.js';
+import Radio from '../components/form/radio.js';
 
 import ApplyOverridesGroup from '../powerfilter/applyoverridesgroup.js';
 import FilterStringGroup from '../powerfilter/filterstringgroup.js';

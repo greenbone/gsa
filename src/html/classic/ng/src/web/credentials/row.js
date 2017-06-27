@@ -39,7 +39,7 @@ import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
-import Text from '../form/text.js';
+import Text from '../components/form/text.js';
 
 import ExportIcon from '../icons/exporticon.js';
 

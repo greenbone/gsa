@@ -28,9 +28,9 @@ import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
-import Spinner from '../form/spinner.js';
-import Text from '../form/text.js';
+import FormGroup from '../components/form/formgroup.js';
+import Spinner from '../components/form/spinner.js';
+import Text from '../components/form/text.js';
 
 const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
   if (!is_defined(qod) && is_defined(filter)) {

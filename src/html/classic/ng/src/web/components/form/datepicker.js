@@ -28,14 +28,15 @@ import moment from 'moment';
 import 'jquery-ui';
 import 'jquery-ui/ui/widgets/datepicker.js';
 
-import _ from '../../locale.js';
+import _ from '../../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
+
+import Layout from '../layout/layout.js';
 
 import './css/datepicker.css';
-import '../css/jquery-ui.theme.css';
-import '../css/jquery-ui.structure.css';
+import '../../css/jquery-ui.theme.css';
+import '../../css/jquery-ui.structure.css';
 
 /* FIXME: the datepicker should be replaced with a native react datepicker in future */
 

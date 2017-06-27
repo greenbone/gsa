@@ -36,7 +36,7 @@ import {createEntitiesFooter} from '../entities/footer.js';
 import {createEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
 
-import Text from '../form/text.js';
+import Text from '../components/form/text.js';
 
 import HelpIcon from '../icons/helpicon.js';
 import NewIcon from '../icons/newicon.js';

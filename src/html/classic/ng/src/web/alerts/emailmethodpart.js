@@ -30,11 +30,11 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import {render_options, withPrefix} from '../render.js';
 
-import Select2 from '../form/select2.js';
-import FormGroup from '../form/formgroup.js';
-import TextArea from '../form/textarea.js';
-import TextField from '../form/textfield.js';
-import Radio from '../form/radio.js';
+import Select2 from '../components/form/select2.js';
+import FormGroup from '../components/form/formgroup.js';
+import TextArea from '../components/form/textarea.js';
+import TextField from '../components/form/textfield.js';
+import Radio from '../components/form/radio.js';
 
 const EmailMethodPart = ({
     fromAddress,
