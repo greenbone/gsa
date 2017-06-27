@@ -24,9 +24,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {classes} from '../../utils.js';
+import {classes} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 class Sticky extends React.Component {
 

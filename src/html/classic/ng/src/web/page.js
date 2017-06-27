@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import StickyContainer from './sticky/container.js';
-
 import logger from '../log.js';
 import {is_defined} from '../utils.js';
 
@@ -34,6 +32,8 @@ import Main from './main.js';
 import PropTypes from './proptypes.js';
 
 import MenuBar from './menu/menubar.js';
+
+import StickyContainer from './components/sticky/container.js';
 
 import './css/page.css';
 
