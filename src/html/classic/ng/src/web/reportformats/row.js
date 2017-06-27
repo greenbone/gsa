@@ -25,13 +25,14 @@ import React from 'react';
 
 import _, {short_date} from '../../locale.js';
 
-import Comment from '../comment.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
 import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
+
+import Comment from '../components/comment/comment.js';
 
 import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';

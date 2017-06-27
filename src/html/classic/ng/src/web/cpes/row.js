@@ -25,7 +25,6 @@ import React from 'react';
 
 import {datetime} from '../../locale.js';
 
-import Comment from '../comment.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {na, render_component} from '../render.js';
@@ -33,6 +32,8 @@ import {na, render_component} from '../render.js';
 import {withEntityRow} from '../entities/row.js';
 
 import LegacyLink from '../link/legacylink.js';
+
+import Comment from '../components/comment/comment.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';

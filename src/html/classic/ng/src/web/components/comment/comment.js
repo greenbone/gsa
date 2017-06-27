@@ -21,11 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils.js';
-
 import React from 'react';
 
-import PropTypes from './proptypes.js';
+import {is_defined} from '../../../utils.js';
+
+import PropTypes from '../../proptypes.js';
 
 export const Comment = ({text, children}) => {
   if (!is_defined(text)) {
@@ -41,7 +41,6 @@ export const Comment = ({text, children}) => {
 Comment.propTypes = {
   text: PropTypes.string,
 };
-
 
 export default Comment;
 

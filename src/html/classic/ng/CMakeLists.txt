@@ -153,7 +153,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
      ${NG_SRC_DIR}/src/web/assetspage.js
-     ${NG_SRC_DIR}/src/web/comment.js
      ${NG_SRC_DIR}/src/web/credentials/credentialspage.js
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/credentials/downloadicon.js
@@ -163,6 +162,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/certbund/row.js
      ${NG_SRC_DIR}/src/web/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/comment/comment.js
      ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
