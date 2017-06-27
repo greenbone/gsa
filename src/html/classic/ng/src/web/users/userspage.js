@@ -29,7 +29,8 @@ import {is_defined} from '../../utils.js';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
-import SelectionType from '../selectiontype.js';
+
+import SelectionType from '../utils/selectiontype.js';
 
 import EntitiesPage from '../entities/page.js';
 import {createEntitiesFooter} from '../entities/footer.js';

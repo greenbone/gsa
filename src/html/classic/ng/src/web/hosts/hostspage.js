@@ -29,7 +29,8 @@ import {is_defined, map} from '../../utils.js';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
-import SelectionType from '../selectiontype.js';
+
+import SelectionType from '../utils/selectiontype.js';
 
 import {withDashboard} from '../dashboard/dashboard.js';
 

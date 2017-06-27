@@ -1,6 +1,23 @@
 2017-06-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/icon/deleteicon.js,
+	src/html/classic/ng/src/web/components/icon/exporticon.js,
+	src/html/classic/ng/src/web/components/icon/trashicon.js,
+	src/html/classic/ng/src/web/entities/actions.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entities/footer.js,
+	src/html/classic/ng/src/web/entities/header.js,
+	src/html/classic/ng/src/web/hosts/hostspage.js,
+	src/html/classic/ng/src/web/hosts/table.js,
+	src/html/classic/ng/src/web/users/userspage.js,
+	src/html/classic/ng/src/web/selectiontype.js,
+	src/html/classic/ng/src/web/utils/selectiontype.js: Move selection type
+	constant to src/web/utils.
+
+2017-06-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/sticky/container.js,
 	src/html/classic/ng/src/web/components/sticky/container.js,
 	src/html/classic/ng/src/web/sticky/sticky.js,

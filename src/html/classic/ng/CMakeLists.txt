@@ -366,7 +366,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
      ${NG_SRC_DIR}/src/web/secinfo/table.js
      ${NG_SRC_DIR}/src/web/section.js
-     ${NG_SRC_DIR}/src/web/selectiontype.js
      ${NG_SRC_DIR}/src/web/severitybar.js
      ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
@@ -418,6 +417,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/users/userspage.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js
      ${NG_SRC_DIR}/src/web/utils/os.js
+     ${NG_SRC_DIR}/src/web/utils/selectiontype.js
      ${NG_SRC_DIR}/src/web/utils/urls.js
      ${NG_SRC_DIR}/src/web/vulns/charts.js
      ${NG_SRC_DIR}/src/web/vulns/filterdialog.js

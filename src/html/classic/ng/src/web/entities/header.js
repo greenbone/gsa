@@ -26,8 +26,9 @@ import React from 'react';
 import {is_defined} from '../../utils.js';
 import  _ from '../../locale.js';
 
-import SelectionType from '../selectiontype.js';
 import PropTypes from '../proptypes.js';
+
+import SelectionType from '../utils/selectiontype.js';
 
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';

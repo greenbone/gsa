@@ -26,7 +26,8 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import SelectionType from '../selectiontype.js';
+
+import SelectionType from '../utils/selectiontype.js';
 
 import EntitiesFooter, {withEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
