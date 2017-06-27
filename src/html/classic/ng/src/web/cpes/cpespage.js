@@ -30,7 +30,7 @@ import {withDashboard} from '../dashboard/dashboard.js';
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
-import HelpIcon from '../icons/helpicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
 
 import CpeCharts from './charts.js';
 import CpeFilterDialog from './filterdialog.js';

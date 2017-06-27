@@ -38,8 +38,8 @@ import FormGroup from '../components/form/formgroup.js';
 import Radio from '../components/form/radio.js';
 import TextField from '../components/form/textfield.js';
 
-import DeleteIcon from '../icons/deleteicon.js';
-import NewIcon from '../icons/newicon.js';
+import DeleteIcon from '../components/icon/deleteicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';

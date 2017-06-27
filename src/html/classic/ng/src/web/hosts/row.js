@@ -38,9 +38,9 @@ import DeleteIcon from '../entities/icons/entitydeleteicon.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
-import ExportIcon from '../icons/exporticon.js';
-import NewIcon from '../icons/newicon.js';
-import OsIcon from '../icons/osicon.js';
+import ExportIcon from '../components/icon/exporticon.js';
+import NewIcon from '../components/icon/newicon.js';
+import OsIcon from '../components/icon/osicon.js';
 
 import LegacyLink from '../link/legacylink.js';
 

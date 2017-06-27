@@ -27,23 +27,22 @@ import _ from '../../locale.js';
 import {KeyCode, autobind, is_defined} from '../../utils.js';
 import logger from '../../log.js';
 
-import Layout from '../components/layout/layout.js';
-
 import FootNote from '../footnote.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import IconDivider from '../components/layout/icondivider.js';
-
-import DeleteIcon from '../icons/deleteicon.js';
-import EditIcon from '../icons/editicon.js';
-import Icon from '../icons/icon.js';
-import HelpIcon from '../icons/helpicon.js';
-import NewIcon from '../icons/newicon.js';
+import DeleteIcon from '../components/icon/deleteicon.js';
+import EditIcon from '../components/icon/editicon.js';
+import Icon from '../components/icon/icon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import Select2 from '../components/form/select2.js';
 import TextField from '../components/form/textfield.js';
+
+import IconDivider from '../components/layout/icondivider.js';
+import Layout from '../components/layout/layout.js';
 
 import Filter from '../../gmp/models/filter.js';
 

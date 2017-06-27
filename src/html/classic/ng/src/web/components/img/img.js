@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,30 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Icon from './icon.js';
+import {get_img_url} from '../../utils/urls.js';
 
-export const CloneIcon = ({active = true, ...props}) => {
-  return <Icon {...props} img={active ? 'clone.svg' : 'clone_inactive.svg'}/>;
+const Img = ({
+  alt = '',
+  src,
+  ...other,
+}) => {
+  let img_path = get_img_url(src);
+  return (
+    <img
+      {...other}
+      alt={alt}
+      src={img_path}
+    />
+  );
 };
 
-CloneIcon.propTypes = {
-  active: PropTypes.bool,
+Img.propTypes = {
+  alt: PropTypes.string,
+  src: PropTypes.string.isRequired,
 };
 
-export default CloneIcon;
+export default Img;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -25,9 +25,6 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
-import Img from '../img.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
@@ -41,6 +38,10 @@ import Radio from '../components/form/radio.js';
 import Datepicker from '../components/form/datepicker.js';
 import Text from '../components/form/text.js';
 import TimeZoneSelect from '../components/form/timezoneselect.js';
+
+import Img from '../components/img/img.js';
+
+import Layout from '../components/layout/layout.js';
 
 import {
   esxi_credential_filter,

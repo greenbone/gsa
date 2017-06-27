@@ -49,11 +49,9 @@ set (NG_SRC_FILES
      ${NG_SRC_DIR}/public/config.js)
 
 set (NG_JS_SRC_FILES
-     ${NG_SRC_DIR}/src/cpe.js
      ${NG_SRC_DIR}/src/index.js
      ${NG_SRC_DIR}/src/locale.js
      ${NG_SRC_DIR}/src/log.js
-     ${NG_SRC_DIR}/src/os.js
      ${NG_SRC_DIR}/src/timezones.js
      ${NG_SRC_DIR}/src/utils.js
      ${NG_SRC_DIR}/src/gmp/cache.js
@@ -182,6 +180,19 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/textfield.js
      ${NG_SRC_DIR}/src/web/components/form/timezoneselect.js
      ${NG_SRC_DIR}/src/web/components/form/yesnoradio.js
+     ${NG_SRC_DIR}/src/web/components/icon/cloneicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/cpeicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/deleteicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/editicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/exporticon.js
+     ${NG_SRC_DIR}/src/web/components/icon/greenboneicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/helpicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/icon.js
+     ${NG_SRC_DIR}/src/web/components/icon/listicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/newicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/osicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/trashicon.js
+     ${NG_SRC_DIR}/src/web/components/img/img.js
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
@@ -245,19 +256,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/hosts/hostspage.js
      ${NG_SRC_DIR}/src/web/hosts/row.js
      ${NG_SRC_DIR}/src/web/hosts/table.js
-     ${NG_SRC_DIR}/src/web/icons/cloneicon.js
-     ${NG_SRC_DIR}/src/web/icons/cpeicon.js
-     ${NG_SRC_DIR}/src/web/icons/deleteicon.js
-     ${NG_SRC_DIR}/src/web/icons/editicon.js
-     ${NG_SRC_DIR}/src/web/icons/exporticon.js
-     ${NG_SRC_DIR}/src/web/icons/greenbone.js
-     ${NG_SRC_DIR}/src/web/icons/helpicon.js
-     ${NG_SRC_DIR}/src/web/icons/icon.js
-     ${NG_SRC_DIR}/src/web/icons/listicon.js
-     ${NG_SRC_DIR}/src/web/icons/newicon.js
-     ${NG_SRC_DIR}/src/web/icons/osicon.js
-     ${NG_SRC_DIR}/src/web/icons/trashicon.js
-     ${NG_SRC_DIR}/src/web/img.js
      ${NG_SRC_DIR}/src/web/loading.js
      ${NG_SRC_DIR}/src/web/link/assetlink.js
      ${NG_SRC_DIR}/src/web/link/detailslink.js
@@ -397,6 +395,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/autodeletereportsgroup.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js
      ${NG_SRC_DIR}/src/web/tasks/containerdialog.js
+     ${NG_SRC_DIR}/src/web/tasks/detailspage.js
      ${NG_SRC_DIR}/src/web/tasks/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/tasks/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
@@ -418,6 +417,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/users/header.js
      ${NG_SRC_DIR}/src/web/users/row.js
      ${NG_SRC_DIR}/src/web/users/userspage.js
+     ${NG_SRC_DIR}/src/web/utils/cpe.js
+     ${NG_SRC_DIR}/src/web/utils/os.js
+     ${NG_SRC_DIR}/src/web/utils/urls.js
      ${NG_SRC_DIR}/src/web/vulns/charts.js
      ${NG_SRC_DIR}/src/web/vulns/filterdialog.js
      ${NG_SRC_DIR}/src/web/vulns/row.js

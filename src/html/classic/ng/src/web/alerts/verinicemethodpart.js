@@ -34,7 +34,7 @@ import Select2 from '../components/form/select2.js';
 import FormGroup from '../components/form/formgroup.js';
 import TextField from '../components/form/textfield.js';
 
-import NewIcon from '../icons/newicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 const VeriniceMethodPart = ({
     prefix,

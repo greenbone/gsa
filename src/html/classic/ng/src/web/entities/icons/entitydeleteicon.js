@@ -28,7 +28,7 @@ import {is_defined, capitalize_first_letter} from '../../../utils.js';
 
 import PropTypes from '../../proptypes.js';
 
-import DeleteIcon from '../../icons/deleteicon.js';
+import DeleteIcon from '../../components/icon/deleteicon.js';
 
 export const EntityDeleteIcon = ({
     displayName,

@@ -23,17 +23,23 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import OperatingSystems from '../../os.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-import Layout from '../components/layout/layout.js';
+import OperatingSystems from '../../utils/os.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
+
+import Layout from '../layout/layout.js';
 
 import Icon from './icon.js';
 
-export const OsIcon = ({host, osName = false, osCpe = true, ...props}) => {
+const OsIcon = ({
+  host,
+  osCpe = true,
+  osName = false,
+  ...props,
+}) => {
   let {best_os_txt, best_os_cpe} = host.details;
   let title;
   let os_icon;

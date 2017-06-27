@@ -38,7 +38,7 @@ import Select2 from '../components/form/select2.js';
 import Text from '../components/form/text.js';
 import YesNoRadio from '../components/form/yesnoradio.js';
 
-import NewIcon from '../icons/newicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 const ImportDialog = ({
     in_assets = 1,

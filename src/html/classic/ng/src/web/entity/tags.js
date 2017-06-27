@@ -37,11 +37,11 @@ import IconDivider from '../components/layout/icondivider.js';
 import TextField from '../components/form/textfield.js';
 import Select2 from '../components/form/select2.js';
 
-import EditIcon from '../icons/editicon.js';
-import HelpIcon from '../icons/helpicon.js';
-import Icon from '../icons/icon.js';
-import NewIcon from '../icons/newicon.js';
-import TrashIcon from '../icons/trashicon.js';
+import EditIcon from '../components/icon/editicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import Icon from '../components/icon/icon.js';
+import NewIcon from '../components/icon/newicon.js';
+import TrashIcon from '../components/icon/trashicon.js';
 
 import DetailsLink from '../link/detailslink.js';
 

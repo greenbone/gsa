@@ -35,7 +35,7 @@ import FormGroup from '../components/form/formgroup.js';
 import TextField from '../components/form/textfield.js';
 import TextArea from '../components/form/textarea.js';
 
-import NewIcon from '../icons/newicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 const ScpMethodPart = ({
     prefix,

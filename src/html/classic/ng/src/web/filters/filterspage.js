@@ -26,8 +26,6 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, first} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
@@ -36,8 +34,10 @@ import {createEntitiesFooter} from '../entities/footer.js';
 import {createEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
 
-import HelpIcon from '../icons/helpicon.js';
-import NewIcon from '../icons/newicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import NewIcon from '../components/icon/newicon.js';
+
+import Layout from '../components/layout/layout.js';
 
 import {createFilterDialog} from '../powerfilter/dialog.js';
 

@@ -30,7 +30,7 @@ import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import GreenboneIcon from '../icons/greenbone.js';
+import GreenboneIcon from '../components/icon/greenboneicon.js';
 
 import Link from '../link/link.js';
 

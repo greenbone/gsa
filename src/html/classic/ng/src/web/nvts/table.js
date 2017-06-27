@@ -34,7 +34,7 @@ import {createEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
 
-import Icon from '../icons/icon.js';
+import Icon from '../components/icon/icon.js';
 
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';

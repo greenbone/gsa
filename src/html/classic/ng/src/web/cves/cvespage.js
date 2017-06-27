@@ -30,7 +30,7 @@ import {withDashboard} from '../dashboard/dashboard.js';
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
-import HelpIcon from '../icons/helpicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
 
 import CveCharts from './charts.js';
 import CveFilterDialog from './filterdialog.js';

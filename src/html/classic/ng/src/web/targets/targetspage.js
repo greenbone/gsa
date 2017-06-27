@@ -30,8 +30,8 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
-import HelpIcon from '../icons/helpicon.js';
-import NewIcon from '../icons/newicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';

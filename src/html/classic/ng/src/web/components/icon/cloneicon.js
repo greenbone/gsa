@@ -23,29 +23,18 @@
 
 import React from 'react';
 
-import Cpe from '../../cpe.js';
-import {is_defined} from '../../utils.js';
-
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import Icon from './icon.js';
 
-export const CpeIcon = ({name, ...props}) => {
-  let icon;
-  let cpe = Cpe.find(name);
-
-  if (is_defined(cpe)) {
-    icon = cpe.icon;
-  }
-  else {
-    icon = 'cpe/other.svg';
-  }
-  return <Icon {...props} img={icon}/>;
+const CloneIcon = ({active = true, ...props}) => {
+  return <Icon {...props} img={active ? 'clone.svg' : 'clone_inactive.svg'}/>;
 };
 
-CpeIcon.propTypes = {
-  name: PropTypes.string,
+CloneIcon.propTypes = {
+  active: PropTypes.bool,
 };
 
+export default CloneIcon;
 
-export default CpeIcon;
+// vim: set ts=2 sw=2 tw=80:

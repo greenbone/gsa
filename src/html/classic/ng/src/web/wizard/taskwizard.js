@@ -25,16 +25,17 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
-import Img from '../img.js';
 import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
 import TextField from '../components/form/textfield.js';
 
-import NewIcon from '../icons/newicon.js';
+import NewIcon from '../components/icon/newicon.js';
+
+import Img from '../components/img/img.js';
+
+import Layout from '../components/layout/layout.js';
 
 import './css/wizard.css';
 

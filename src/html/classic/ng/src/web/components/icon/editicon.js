@@ -23,22 +23,23 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import Icon from './icon.js';
 
-export const NewIcon = ({active = true, ...props}) => {
+const EditIcon = ({
+  active = true,
+  ...props,
+}) => {
   return (
-    <Icon
-      {...props}
-      img={active ? 'new.svg' : 'new_inactive.svg'}/>
+    <Icon {...props} img={active ? 'edit.svg' : 'edit_inactive.svg'}/>
   );
 };
 
-NewIcon.propTypes = {
+EditIcon.propTypes = {
   active: PropTypes.bool,
 };
 
-export default NewIcon;
+export default EditIcon;
 
 // vim: set ts=2 sw=2 tw=80:

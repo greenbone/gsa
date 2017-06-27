@@ -29,7 +29,7 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
-import Icon from '../icons/icon.js';
+import Icon from '../components/icon/icon.js';
 
 import LegacyLink from '../link/legacylink.js';
 

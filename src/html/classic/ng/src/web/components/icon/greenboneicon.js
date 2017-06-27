@@ -23,41 +23,29 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {classes} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import Icon from './icon.js';
 
-import SelectionType from '../selectiontype.js';
-
-export const DeleteIcon = ({selectionType, title, active = true, ...other}) => {
-  if (!is_defined(title)) {
-    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      title = _('Delete page contents');
-    }
-    else if (selectionType === SelectionType.SELECTION_USER) {
-      title = _('Delete selection');
-    }
-    else if (selectionType === SelectionType.SELECTION_FILTER) {
-      title = _('Delete all filtered');
-    }
-  }
+const GreenboneIcon = ({className, ...props}) => {
+  className = classes(className, 'greenbone-icon');
   return (
-    <Icon  {...other}
-      img={active ? 'delete.svg' : 'delete_inactive.svg'}
-      title={title}/>
+    <Icon
+      {...props}
+      alt={_('Greenbone Security Assistant')}
+      className={className}
+      img="greenbone.svg"
+    />
   );
 };
 
-DeleteIcon.propTypes = {
-  active: PropTypes.bool,
-  title: PropTypes.string,
-  selectionType: PropTypes.string,
-  onClick: PropTypes.func,
+GreenboneIcon.propTypes = {
+  className: PropTypes.string,
 };
 
-export default DeleteIcon;
+export default GreenboneIcon;
 
 // vim: set ts=2 sw=2 tw=80:

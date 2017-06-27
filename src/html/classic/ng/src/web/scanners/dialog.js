@@ -41,8 +41,8 @@ import Select2 from '../components/form/select2.js';
 import Text from '../components/form/text.js';
 import TextField from '../components/form/textfield.js';
 
-import Icon from '../icons/icon.js';
-import NewIcon from '../icons/newicon.js';
+import Icon from '../components/icon/icon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import {
   OPENVAS_SCANNER_TYPE,

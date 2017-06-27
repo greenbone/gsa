@@ -31,8 +31,8 @@ import Layout from './components/layout/layout.js';
 import PropTypes from './proptypes.js';
 import {withFolding, withFoldToggle} from './folding.js';
 
-import Icon from './icons/icon.js';
-import FoldIcon from './icons/foldicon.js';
+import Icon from './components/icon/icon.js';
+import FoldIcon from './components/icon/foldicon.js';
 
 import './css/section.css';
 

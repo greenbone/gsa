@@ -30,9 +30,9 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import SelectionType from '../selectiontype.js';
 
-import DeleteIcon from '../icons/deleteicon.js';
-import ExportIcon from '../icons/exporticon.js';
-import TrashIcon from '../icons/trashicon.js';
+import DeleteIcon from '../components/icon/deleteicon.js';
+import ExportIcon from '../components/icon/exporticon.js';
+import TrashIcon from '../components/icon/trashicon.js';
 
 import Select2 from '../components/form/select2.js';
 

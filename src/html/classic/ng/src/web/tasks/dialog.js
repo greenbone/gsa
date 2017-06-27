@@ -58,7 +58,7 @@ import YesNoRadio, {
 import Text from '../components/form/text.js';
 import TextField from '../components/form/textfield.js';
 
-import NewIcon from '../icons/newicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 import AutoDeleteReportsGroup from './autodeletereportsgroup.js';

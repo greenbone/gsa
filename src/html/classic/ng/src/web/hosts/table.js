@@ -32,7 +32,7 @@ import EntitiesFooter, {withEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
 
-import NewIcon from '../icons/newicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import TableHead from '../table/head.js';
 import TableHeader from '../table/header.js';

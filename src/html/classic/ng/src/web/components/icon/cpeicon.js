@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,43 +23,30 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined, capitalize_first_letter} from '../../utils.js';
+import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
+
+import Cpe from '../../utils/cpe.js';
 
 import Icon from './icon.js';
 
-export const HelpIcon = ({page, title, ...other}, {gmp}) => {
-  let path = 'help/' + page + '.html';
-  let params = {
-    token: gmp.token,
-  };
+const CpeIcon = ({name, ...props}) => {
+  let icon;
+  let cpe = Cpe.find(name);
 
-  if (!is_defined(title)) {
-    title = _('Help: {{pagename}}', {pagename: capitalize_first_letter(page)});
+  if (is_defined(cpe)) {
+    icon = cpe.icon;
   }
-
-  let url = gmp.buildUrl(path, params);
-  return (
-    <Icon
-      img="help.svg"
-      href={url}
-      title={title}
-      {...other}/>
-  );
+  else {
+    icon = 'cpe/other.svg';
+  }
+  return <Icon {...props} img={icon}/>;
 };
 
-HelpIcon.propTypes = {
-  title: PropTypes.string,
-  page: PropTypes.string.isRequired,
+CpeIcon.propTypes = {
+  name: PropTypes.string,
 };
 
-HelpIcon.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
 
-export default HelpIcon;
-
-// vim: set ts=2 sw=2 tw=80:
-
+export default CpeIcon;

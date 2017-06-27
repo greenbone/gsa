@@ -27,7 +27,7 @@ import _ from '../../../locale.js';
 
 import PropTypes from '../../proptypes.js';
 
-import Icon from '../../icons/icon.js';
+import Icon from '../../components/icon/icon.js';
 
 const StopIcon = ({
   task,

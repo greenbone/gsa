@@ -38,7 +38,7 @@ import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
-import ExportIcon from '../icons/exporticon.js';
+import ExportIcon from '../components/icon/exporticon.js';
 
 import LegacyLink from '../link/legacylink.js';
 

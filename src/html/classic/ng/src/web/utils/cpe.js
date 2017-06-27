@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const cpes = [
+const cpes = [
   {
     pattern: 'cpe:/a:apache:http_server',
     icon: 'cpe/a:apache:http_server.svg',

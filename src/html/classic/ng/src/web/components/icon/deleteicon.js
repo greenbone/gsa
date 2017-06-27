@@ -23,20 +23,46 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
+
+import PropTypes from '../../proptypes.js';
+
+import SelectionType from '../../selectiontype.js';
 
 import Icon from './icon.js';
 
-export const EditIcon = ({active = true, ...props}) => {
+const DeleteIcon = ({
+  active = true,
+  selectionType,
+  title,
+  ...other,
+}) => {
+  if (!is_defined(title)) {
+    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      title = _('Delete page contents');
+    }
+    else if (selectionType === SelectionType.SELECTION_USER) {
+      title = _('Delete selection');
+    }
+    else if (selectionType === SelectionType.SELECTION_FILTER) {
+      title = _('Delete all filtered');
+    }
+  }
   return (
-    <Icon {...props} img={active ? 'edit.svg' : 'edit_inactive.svg'}/>
+    <Icon  {...other}
+      img={active ? 'delete.svg' : 'delete_inactive.svg'}
+      title={title}/>
   );
 };
 
-EditIcon.propTypes = {
+DeleteIcon.propTypes = {
   active: PropTypes.bool,
+  title: PropTypes.string,
+  selectionType: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
-export default EditIcon;
+export default DeleteIcon;
 
 // vim: set ts=2 sw=2 tw=80:

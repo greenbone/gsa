@@ -25,10 +25,11 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_array, is_defined} from '../../utils.js';
+import {is_array, is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {get_img_url} from '../urls.js';
+import PropTypes from '../../proptypes.js';
+
+import {get_img_url} from '../../utils/urls.js';
 
 const convert_size = ({size = 'small'}) => {
   let width;

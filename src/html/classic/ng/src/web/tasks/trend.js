@@ -25,7 +25,7 @@ import React from 'react';
 
 import PropTypes from '../proptypes.js';
 
-import Icon from '../icons/icon.js';
+import Icon from '../components/icon/icon.js';
 
 const Trend = ({name}) => {
   let title;

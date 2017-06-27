@@ -28,7 +28,7 @@ import {is_defined} from '../../../utils.js';
 
 import PropTypes from '../../proptypes.js';
 
-import Icon from '../../icons/icon.js';
+import Icon from '../../components/icon/icon.js';
 
 import DetailsLink from '../../link/detailslink.js';
 

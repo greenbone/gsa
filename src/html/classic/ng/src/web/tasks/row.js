@@ -39,7 +39,7 @@ import {withEntityRow} from '../entities/row.js';
 
 import ObserverIcon from '../entities/icons/entityobservericon.js';
 
-import Icon from '../icons/icon.js';
+import Icon from '../components/icon/icon.js';
 
 import DetailsLink from '../link/detailslink.js';
 import Link from '../link/link.js';

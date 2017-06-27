@@ -28,7 +28,7 @@ import {is_defined, capitalize_first_letter} from '../../../utils.js';
 
 import PropTypes from '../../proptypes.js';
 
-import CloneIcon from '../../icons/cloneicon.js';
+import CloneIcon from '../../components/icon/cloneicon.js';
 
 export const EntityCloneIcon = ({
     displayName,

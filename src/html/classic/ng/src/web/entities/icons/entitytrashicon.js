@@ -28,7 +28,7 @@ import {is_defined, capitalize_first_letter} from '../../../utils.js';
 
 import PropTypes from '../../proptypes.js';
 
-import TrashIcon from '../../icons/trashicon.js';
+import TrashIcon from '../../components/icon/trashicon.js';
 
 export const EntityTrashIcon = ({
     displayName,

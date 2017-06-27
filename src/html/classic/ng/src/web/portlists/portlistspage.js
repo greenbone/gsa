@@ -33,9 +33,9 @@ import PropTypes from '../proptypes.js';
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
-import HelpIcon from '../icons/helpicon.js';
-import Icon from '../icons/icon.js';
-import NewIcon from '../icons/newicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import Icon from '../components/icon/icon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import {PORTLISTS_FILTER_FILTER} from '../../gmp/models/filter.js';
 

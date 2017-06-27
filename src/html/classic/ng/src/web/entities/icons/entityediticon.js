@@ -28,7 +28,7 @@ import {is_defined, capitalize_first_letter} from '../../../utils.js';
 
 import PropTypes from '../../proptypes.js';
 
-import EditIcon from '../../icons/editicon.js';
+import EditIcon from '../../components/icon/editicon.js';
 
 export const EntityEditIcon = ({
     displayName,

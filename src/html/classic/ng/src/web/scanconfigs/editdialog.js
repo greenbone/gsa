@@ -41,7 +41,7 @@ import TextField from '../components/form/textfield.js';
 import Select2 from '../components/form/select2.js';
 import YesNoRadio from '../components/form/yesnoradio.js';
 
-import EditIcon from '../icons/editicon.js';
+import EditIcon from '../components/icon/editicon.js';
 
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';

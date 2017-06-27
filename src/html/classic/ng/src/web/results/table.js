@@ -36,7 +36,7 @@ import {createEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
 
-import Icon from '../icons/icon.js';
+import Icon from '../components/icon/icon.js';
 
 import Link from '../link/link.js';
 

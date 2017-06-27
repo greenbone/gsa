@@ -31,8 +31,8 @@ import Layout from './components/layout/layout.js';
 
 import PropTypes from './proptypes.js';
 
-import GreenboneIcon from './icons/greenbone.js';
-import Icon from './icons/icon.js';
+import GreenboneIcon from './components/icon/greenboneicon.js';
+import Icon from './components/icon/icon.js';
 
 import Link from './link/link.js';
 import LegacyLink from './link/legacylink.js';

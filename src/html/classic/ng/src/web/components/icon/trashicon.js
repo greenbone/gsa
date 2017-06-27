@@ -23,25 +23,47 @@
 
 import React from 'react';
 
-import PropTypes from './proptypes.js';
-import {get_img_url} from './urls.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-export const Img = ({src, alt = '', ...other}) => {
-  let img_path = get_img_url(src);
+import PropTypes from '../../proptypes.js';
+
+import SelectionType from '../../selectiontype.js';
+
+import Icon from './icon.js';
+
+const TrashIcon = ({
+  active = true,
+  selectionType,
+  title,
+  ...other,
+}) => {
+  if (!is_defined(title)) {
+    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      title = _('Move page contents to trashcan');
+    }
+    else if (selectionType === SelectionType.SELECTION_USER) {
+      title = _('Move selection to trashcan');
+    }
+    else if (selectionType === SelectionType.SELECTION_FILTER) {
+      title = _('Move all filtered to trashcan');
+    }
+  }
   return (
-    <img
-      {...other}
-      alt={alt}
-      src={img_path}
-    />
+    <Icon  {...other}
+      img={active ? 'trashcan.svg' : 'trashcan_inactive.svg'}
+      title={title}/>
   );
 };
 
-Img.propTypes = {
-  alt: PropTypes.string,
-  src: PropTypes.string.isRequired,
+TrashIcon.propTypes = {
+  active: PropTypes.bool,
+  title: PropTypes.string,
+  selectionType: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
-export default Img;
+
+export default TrashIcon;
 
 // vim: set ts=2 sw=2 tw=80:

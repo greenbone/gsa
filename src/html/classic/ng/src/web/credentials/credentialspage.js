@@ -36,13 +36,15 @@ import {createEntitiesFooter} from '../entities/footer.js';
 import {createEntitiesHeader} from '../entities/header.js';
 import {createEntitiesTable} from '../entities/table.js';
 
-import HelpIcon from '../icons/helpicon.js';
-import NewIcon from '../icons/newicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import {createFilterDialog} from '../powerfilter/dialog.js';
 
-import {ALL_CREDENTIAL_TYPES, USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  } from '../../gmp/models/credential.js';
+import {
+  ALL_CREDENTIAL_TYPES,
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+} from '../../gmp/models/credential.js';
 
 import CredentialsDialog from './dialog.js';
 import Row from './row.js';

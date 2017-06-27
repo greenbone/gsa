@@ -41,9 +41,9 @@ import DetailsBlock from '../entity/block.js';
 import EntityPage from '../entity/page.js';
 import {withEntityContainer} from '../entity/container.js';
 
-import ExportIcon from '../icons/exporticon.js';
-import HelpIcon from '../icons/helpicon.js';
-import Icon from '../icons/icon.js';
+import ExportIcon from '../components/icon/exporticon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import Icon from '../components/icon/icon.js';
 
 import AssetLink from '../link/assetlink.js';
 import DetailsLink from '../link/detailslink.js';

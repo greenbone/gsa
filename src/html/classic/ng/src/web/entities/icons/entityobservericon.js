@@ -29,7 +29,7 @@ import {is_defined, is_empty} from '../../../utils.js';
 
 import PropTypes from '../../proptypes.js';
 
-import Icon from '../../icons/icon.js';
+import Icon from '../../components/icon/icon.js';
 
 const ObserverIcon = ({
     entity,

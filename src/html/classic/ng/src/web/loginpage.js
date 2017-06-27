@@ -39,7 +39,7 @@ import PasswordField from './components/form/passwordfield.js';
 import SubmitButton from './components/form/submitbutton.js';
 import TextField from './components/form/textfield.js';
 
-import Icon from './icons/icon.js';
+import Icon from './components/icon/icon.js';
 
 import './css/login.css';
 

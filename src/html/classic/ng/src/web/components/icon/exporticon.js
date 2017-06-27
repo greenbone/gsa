@@ -1,10 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Timo Pollmeier <timo.pollmeier@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,43 +23,37 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
+
+import SelectionType from '../../selectiontype.js';
 
 import Icon from './icon.js';
 
-import {FoldState} from '../folding.js';
-
-export const FoldIcon = ({
-    foldState,
-    title,
-    ...other,
-  }) => {
-  let folded = foldState === FoldState.FOLDED ||
-      foldState === FoldState.FOLDING ||
-      foldState === FoldState.FOLDING_START;
-  let img = folded ? 'unfold.svg' : 'fold.svg';
-
-  if (!is_defined(title)) {
-    title = folded ? _('Unfold') : _('Fold');
+export const ExportIcon = ({selectionType, title, ...other}) => {
+  let download_title = title;
+  if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    download_title = _('Export page contents');
   }
-
+  else if (selectionType === SelectionType.SELECTION_USER) {
+    download_title = _('Export selection');
+  }
+  else if (selectionType === SelectionType.SELECTION_FILTER) {
+    download_title = _('Export all filtered');
+  }
   return (
-    <Icon
-      {...other}
-      img={img}
-      title={title}/>
+    <Icon img="download.svg"
+      title={download_title} {...other}/>
   );
 };
 
-FoldIcon.propTypes = {
-  foldState: PropTypes.string,
+ExportIcon.propTypes = {
   title: PropTypes.string,
+  selectionType: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
-export default FoldIcon;
+export default ExportIcon;
 
 // vim: set ts=2 sw=2 tw=80:
-

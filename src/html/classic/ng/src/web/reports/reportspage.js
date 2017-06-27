@@ -35,8 +35,8 @@ import {withDashboard} from '../dashboard/dashboard.js';
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
-import HelpIcon from '../icons/helpicon.js';
-import Icon from '../icons/icon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import Icon from '../components/icon/icon.js';
 
 import ContainerTaskDialog from '../tasks/containerdialog.js';
 

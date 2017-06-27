@@ -23,42 +23,43 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {is_defined, capitalize_first_letter} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import Icon from './icon.js';
 
-import SelectionType from '../selectiontype.js';
+export const HelpIcon = ({page, title, ...other}, {gmp}) => {
+  let path = 'help/' + page + '.html';
+  let params = {
+    token: gmp.token,
+  };
 
-export const TrashIcon = ({selectionType, title, active = true, ...other}) => {
   if (!is_defined(title)) {
-    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      title = _('Move page contents to trashcan');
-    }
-    else if (selectionType === SelectionType.SELECTION_USER) {
-      title = _('Move selection to trashcan');
-    }
-    else if (selectionType === SelectionType.SELECTION_FILTER) {
-      title = _('Move all filtered to trashcan');
-    }
+    title = _('Help: {{pagename}}', {pagename: capitalize_first_letter(page)});
   }
+
+  let url = gmp.buildUrl(path, params);
   return (
-    <Icon  {...other}
-      img={active ? 'trashcan.svg' : 'trashcan_inactive.svg'}
-      title={title}/>
+    <Icon
+      img="help.svg"
+      href={url}
+      title={title}
+      {...other}/>
   );
 };
 
-TrashIcon.propTypes = {
-  active: PropTypes.bool,
+HelpIcon.propTypes = {
   title: PropTypes.string,
-  selectionType: PropTypes.string,
-  onClick: PropTypes.func,
+  page: PropTypes.string.isRequired,
 };
 
+HelpIcon.contextTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
 
-export default TrashIcon;
+export default HelpIcon;
 
 // vim: set ts=2 sw=2 tw=80:
+

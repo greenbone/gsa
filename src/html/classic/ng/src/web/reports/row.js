@@ -36,7 +36,7 @@ import {render_component} from '../render.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
-import DeleteIcon from '../icons/deleteicon.js';
+import DeleteIcon from '../components/icon/deleteicon.js';
 
 import LegacyLink from '../link/legacylink.js';
 

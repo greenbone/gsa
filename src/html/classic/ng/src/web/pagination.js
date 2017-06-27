@@ -33,7 +33,7 @@ import PropTypes from './proptypes.js';
 import Layout from './components/layout/layout.js';
 import IconDivider from './components/layout/icondivider.js';
 
-import Icon from './icons/icon.js';
+import Icon from './components/icon/icon.js';
 
 const PaginationText = glamorous.span({
   margin: '0 3px;'

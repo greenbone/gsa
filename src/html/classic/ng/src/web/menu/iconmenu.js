@@ -27,7 +27,7 @@ import {classes} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import Icon, {withIconCss} from '../icons/icon.js';
+import Icon, {withIconCss} from '../components/icon/icon.js';
 
 import './css/iconmenu.css';
 

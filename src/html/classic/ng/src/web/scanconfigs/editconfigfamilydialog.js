@@ -36,7 +36,7 @@ import {withDialog} from '../dialog/dialog.js';
 
 import Checkbox from '../components/form/checkbox.js';
 
-import EditIcon from '../icons/editicon.js';
+import EditIcon from '../components/icon/editicon.js';
 
 import SimpleTable from '../table/simple.js';
 import Table from '../table/table.js';

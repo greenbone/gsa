@@ -35,8 +35,8 @@ import {createEntitiesFooter} from '../entities/footer.js';
 import {createEntitiesTable} from '../entities/table.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
-import HelpIcon from '../icons/helpicon.js';
-import NewIcon from '../icons/newicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import {createFilterDialog} from '../powerfilter/dialog.js';
 

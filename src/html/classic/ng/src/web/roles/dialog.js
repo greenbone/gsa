@@ -38,7 +38,7 @@ import FormGroup from '../components/form/formgroup.js';
 import Select2 from '../components/form/select2.js';
 import TextField from '../components/form/textfield.js';
 
-import TrashIcon from '../icons/trashicon.js';
+import TrashIcon from '../components/icon/trashicon.js';
 
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';

@@ -35,8 +35,8 @@ import {withDashboard} from '../dashboard/dashboard.js';
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
-import HelpIcon from '../icons/helpicon.js';
-import NewIcon from '../icons/newicon.js';
+import HelpIcon from '../components/icon/helpicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import NotesCharts from './charts.js';
 import NoteDialog from './dialog.js';

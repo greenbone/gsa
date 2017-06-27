@@ -41,7 +41,7 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import Text from '../components/form/text.js';
 
-import ExportIcon from '../icons/exporticon.js';
+import ExportIcon from '../components/icon/exporticon.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';

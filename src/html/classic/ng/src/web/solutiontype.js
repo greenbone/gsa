@@ -25,10 +25,11 @@ import React from 'react';
 
 import _ from '../locale.js';
 
-import Layout from './components/layout/layout.js';
 import PropTypes from './proptypes.js';
 
-import Icon from './icons/icon.js';
+import Icon from './components/icon/icon.js';
+
+import Layout from './components/layout/layout.js';
 
 const SolutionType = ({
     type,

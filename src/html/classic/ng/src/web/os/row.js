@@ -34,9 +34,9 @@ import {render_component} from '../render.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
 
-import CpeIcon from '../icons/cpeicon.js';
-import DeleteIcon from '../icons/deleteicon.js';
-import ExportIcon from '../icons/exporticon.js';
+import CpeIcon from '../components/icon/cpeicon.js';
+import DeleteIcon from '../components/icon/deleteicon.js';
+import ExportIcon from '../components/icon/exporticon.js';
 
 import LegacyLink from '../link/legacylink.js';
 import Link from '../link/link.js';

@@ -48,8 +48,6 @@ import Layout from '../components/layout/layout.js';
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
-import HelpIcon from '../icons/helpicon.js';
-
 import IconMenu from '../menu/iconmenu.js';
 import MenuEntry from '../menu/menuentry.js';
 
@@ -64,6 +62,8 @@ import ContainerTaskDialog from './containerdialog.js';
 import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 import Table from './table.js';
+
+import HelpIcon from '../components/icon/helpicon.js';
 
 import NewIconMenu from './icons/newiconmenu.js';
 

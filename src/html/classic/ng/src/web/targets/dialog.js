@@ -39,7 +39,7 @@ import Select2 from '../components/form/select2.js';
 import TextField from '../components/form/textfield.js';
 import YesNoRadio, {NO_VALUE} from '../components/form/yesnoradio.js';
 
-import NewIcon from '../icons/newicon.js';
+import NewIcon from '../components/icon/newicon.js';
 
 import {SSH_CREDENTIAL_TYPES, SMB_CREDENTIAL_TYPES, ESXI_CREDENTIAL_TYPES,
   SNMP_CREDENTIAL_TYPES, USERNAME_PASSWORD_CREDENTIAL_TYPE,

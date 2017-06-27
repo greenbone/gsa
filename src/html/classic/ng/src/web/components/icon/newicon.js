@@ -23,29 +23,22 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {classes} from '../../utils.js';
-
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import Icon from './icon.js';
 
-const GreenboneIcon = ({className, ...props}) => {
-  className = classes(className, 'greenbone-icon');
+export const NewIcon = ({active = true, ...props}) => {
   return (
     <Icon
       {...props}
-      alt={_('Greenbone Security Assistant')}
-      className={className}
-      img="greenbone.svg"
-    />
+      img={active ? 'new.svg' : 'new_inactive.svg'}/>
   );
 };
 
-GreenboneIcon.propTypes = {
-  className: PropTypes.string,
+NewIcon.propTypes = {
+  active: PropTypes.bool,
 };
 
-export default GreenboneIcon;
+export default NewIcon;
 
 // vim: set ts=2 sw=2 tw=80:
