@@ -40,12 +40,10 @@ import {
   OSP_SCAN_CONFIG_TYPE,
 } from '../../gmp/models/scanconfig.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import Select2 from '../components/form/select2.js';
 import Spinner from '../components/form/spinner.js';
@@ -59,6 +57,8 @@ import Text from '../components/form/text.js';
 import TextField from '../components/form/textfield.js';
 
 import NewIcon from '../components/icon/newicon.js';
+
+import Layout from '../components/layout/layout.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 import AutoDeleteReportsGroup from './autodeletereportsgroup.js';

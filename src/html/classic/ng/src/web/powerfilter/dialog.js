@@ -30,7 +30,7 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
-import Dialog from '../dialog/dialog.js';
+import Dialog from '../components/dialog/dialog.js';
 
 import FilterStringGroup from './filterstringgroup.js';
 import FirstResultGroup from './firstresultgroup.js';

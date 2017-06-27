@@ -25,12 +25,10 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import FileField from '../components/form/filefield.js';
 import FormGroup from '../components/form/formgroup.js';
@@ -39,6 +37,8 @@ import Text from '../components/form/text.js';
 import YesNoRadio from '../components/form/yesnoradio.js';
 
 import NewIcon from '../components/icon/newicon.js';
+
+import Layout from '../components/layout/layout.js';
 
 const ImportDialog = ({
     in_assets = 1,

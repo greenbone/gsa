@@ -35,7 +35,7 @@ import {
   result_cvss_risk_factor,
 } from '../render.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import Text from '../components/form/text.js';

@@ -25,12 +25,10 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import FileField from '../components/form/filefield.js';
 import FormGroup from '../components/form/formgroup.js';
@@ -41,9 +39,16 @@ import YesNoRadio, {NO_VALUE} from '../components/form/yesnoradio.js';
 
 import NewIcon from '../components/icon/newicon.js';
 
-import {SSH_CREDENTIAL_TYPES, SMB_CREDENTIAL_TYPES, ESXI_CREDENTIAL_TYPES,
-  SNMP_CREDENTIAL_TYPES, USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  ssh_credential_filter, snmp_credential_filter,
+import Layout from '../components/layout/layout.js';
+
+import {
+  snmp_credential_filter,
+  ssh_credential_filter,
+  ESXI_CREDENTIAL_TYPES,
+  SMB_CREDENTIAL_TYPES,
+  SNMP_CREDENTIAL_TYPES,
+  SSH_CREDENTIAL_TYPES,
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from '../../gmp/models/credential.js';
 
 const DEFAULT_PORT_LIST_ID = 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5';

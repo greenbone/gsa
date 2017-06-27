@@ -26,14 +26,14 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import Select2 from '../components/form/select2.js';
+
+import Layout from '../components/layout/layout.js';
 
 const ConfirmDeleteDialog = ({
     deleteUsers,

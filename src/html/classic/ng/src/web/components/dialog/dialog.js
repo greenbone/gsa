@@ -23,10 +23,10 @@
 
 import React from 'react';
 
-import {KeyCode, is_defined, extend} from '../../utils.js';
-import logger from '../../log.js';
+import {KeyCode, is_defined, extend} from '../../../utils.js';
+import logger from '../../../log.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import DialogError from './error.js';
 import DialogFooter from './footer.js';

@@ -23,32 +23,28 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Button from '../components/form/button.js';
+import Button from '../form/button.js';
 
-export const DialogError = ({error, onCloseClick}) => {
-  if (!is_defined(error)) {
-    return null;
-  }
+const DialogFooter = ({title = _('Save'), onSaveClick}) => {
   return (
-    <div className="dialog-error">
-      <span className="dialog-error-text">{error}</span>
-      <Button className="dialog-close-button"
-        onClick={onCloseClick}
-        title={_('Close')}>x</Button>
+    <div className="dialog-footer">
+      <Button className="dialog-save-button"
+        onClick={onSaveClick}
+        title={title}>{title}</Button>
     </div>
   );
 };
 
-DialogError.propTypes = {
-  error: PropTypes.string,
-  onCloseClick: PropTypes.func,
+DialogFooter.propTypes = {
+  title: PropTypes.string,
+  onSaveClick: PropTypes.func,
 };
 
-export default DialogError;
+export default DialogFooter;
 
 // vim: set ts=2 sw=2 tw=80:
+

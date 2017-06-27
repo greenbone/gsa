@@ -26,17 +26,17 @@ import React from 'react';
 import _ from '../../locale.js';
 import {map, is_empty} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import Section from '../section.js';
 import SeverityBar from '../severitybar.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import Checkbox from '../components/form/checkbox.js';
 
 import EditIcon from '../components/icon/editicon.js';
+
+import Layout from '../components/layout/layout.js';
 
 import SimpleTable from '../table/simple.js';
 import Table from '../table/table.js';

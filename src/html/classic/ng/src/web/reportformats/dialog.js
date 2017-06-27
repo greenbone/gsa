@@ -26,10 +26,9 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, is_array, has_value, map} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
-import {withDialog} from '../dialog/dialog.js';
+
+import {withDialog} from '../components/dialog/dialog.js';
 
 import FileField from '../components/form/filefield.js';
 import FormGroup from '../components/form/formgroup.js';
@@ -38,6 +37,8 @@ import TextArea from '../components/form/textarea.js';
 import TextField from '../components/form/textfield.js';
 import Select2 from '../components/form/select2.js';
 import YesNoRadio from '../components/form/yesnoradio.js';
+
+import Layout from '../components/layout/layout.js';
 
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';

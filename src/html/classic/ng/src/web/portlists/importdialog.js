@@ -23,16 +23,16 @@
 
 import React from 'react';
 
-import {withDialog} from '../dialog/dialog.js';
-
 import _ from '../../locale.js';
-
-import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
+import {withDialog} from '../components/dialog/dialog.js';
+
 import FileField from '../components/form/filefield.js';
 import FormGroup from '../components/form/formgroup.js';
+
+import Layout from '../components/layout/layout.js';
 
 const ImportDialog = ({
     onValueChange,

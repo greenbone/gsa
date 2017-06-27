@@ -30,7 +30,7 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import Checkbox from '../components/form/checkbox.js';
 import FormGroup from '../components/form/formgroup.js';

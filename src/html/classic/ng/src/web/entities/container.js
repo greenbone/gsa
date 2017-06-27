@@ -32,7 +32,7 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../proptypes.js';
 import SelectionType from '../selectiontype.js';
 
-import Dialog from '../dialog/dialog.js';
+import Dialog from '../components/dialog/dialog.js';
 
 import Download from '../components/form/download.js';
 

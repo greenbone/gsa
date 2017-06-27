@@ -23,28 +23,41 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from '../../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Button from '../components/form/button.js';
+import Button from '../form/button.js';
 
-export const DialogFooter = ({title = _('Save'), onSaveClick}) => {
+const DialogTitle = ({
+  showClose,
+  title,
+  onCloseClick,
+  onMouseDown,
+}) => {
   return (
-    <div className="dialog-footer">
-      <Button className="dialog-save-button"
-        onClick={onSaveClick}
-        title={title}>{title}</Button>
+    <div className="dialog-titlebar" onMouseDown={onMouseDown}>
+      <span className="dialog-title-text">{title}</span>
+      {showClose &&
+        <Button className="dialog-close-button"
+          onClick={onCloseClick}
+          title={_('Close')}>x</Button>
+      }
     </div>
   );
 };
 
-DialogFooter.propTypes = {
+DialogTitle.propTypes = {
+  showClose: PropTypes.bool,
+  onCloseClick: PropTypes.func,
+  onMouseDown: PropTypes.func,
   title: PropTypes.string,
-  onSaveClick: PropTypes.func,
 };
 
-export default DialogFooter;
+DialogTitle.defaultProps = {
+  showClose: true,
+};
+
+export default DialogTitle;
 
 // vim: set ts=2 sw=2 tw=80:
-

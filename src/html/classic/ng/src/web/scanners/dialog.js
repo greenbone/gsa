@@ -26,13 +26,11 @@ import React from 'react';
 import _, {datetime} from '../../locale.js';
 import {is_defined, filter, parse_int, select_save_id} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import FootNote from '../footnote.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import FileField from '../components/form/filefield.js';
 import FormGroup from '../components/form/formgroup.js';
@@ -43,6 +41,8 @@ import TextField from '../components/form/textfield.js';
 
 import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
+
+import Layout from '../components/layout/layout.js';
 
 import {
   OPENVAS_SCANNER_TYPE,

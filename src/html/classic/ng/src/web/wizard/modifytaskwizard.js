@@ -27,7 +27,7 @@ import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import Select2 from '../components/form/select2.js';
 import Spinner from '../components/form/spinner.js';

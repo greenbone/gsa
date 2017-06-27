@@ -25,11 +25,9 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import Select2 from '../components/form/select2.js';
 import Spinner from '../components/form/spinner.js';
@@ -37,6 +35,8 @@ import FormGroup from '../components/form/formgroup.js';
 import TextField from '../components/form/textfield.js';
 import DatePicker from '../components/form/datepicker.js';
 import TimeZoneSelect from '../components/form/timezoneselect.js';
+
+import Layout from '../components/layout/layout.js';
 
 const TimeUnitSelect = props => {
   return (

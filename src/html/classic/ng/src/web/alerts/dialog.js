@@ -26,18 +26,18 @@ import React from 'react';
 import _ from '../../locale.js';
 import {select_save_id} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import Select2 from '../components/form/select2.js';
 import FormGroup from '../components/form/formgroup.js';
 import TextField from '../components/form/textfield.js';
 import Radio from '../components/form/radio.js';
 import YesNoRadio from '../components/form/yesnoradio.js';
+
+import Layout from '../components/layout/layout.js';
 
 import HttpMethodPart from './httpmethodpart.js';
 import ScpMethodPart from './scpmethodpart.js';

@@ -26,16 +26,16 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import Radio from '../components/form/radio.js';
 import Text from '../components/form/text.js';
 import TextField from '../components/form/textfield.js';
+
+import Layout from '../components/layout/layout.js';
 
 import LegacyLink from '../link/legacylink.js';
 

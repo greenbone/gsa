@@ -23,36 +23,32 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Button from '../components/form/button.js';
+import Button from '../form/button.js';
 
-export const DialogTitle = ({showClose, title, onCloseClick, onMouseDown}) => {
+const DialogError = ({error, onCloseClick}) => {
+  if (!is_defined(error)) {
+    return null;
+  }
   return (
-    <div className="dialog-titlebar" onMouseDown={onMouseDown}>
-      <span className="dialog-title-text">{title}</span>
-      {showClose &&
-        <Button className="dialog-close-button"
-          onClick={onCloseClick}
-          title={_('Close')}>x</Button>
-      }
+    <div className="dialog-error">
+      <span className="dialog-error-text">{error}</span>
+      <Button className="dialog-close-button"
+        onClick={onCloseClick}
+        title={_('Close')}>x</Button>
     </div>
   );
 };
 
-DialogTitle.propTypes = {
-  showClose: PropTypes.bool,
+DialogError.propTypes = {
+  error: PropTypes.string,
   onCloseClick: PropTypes.func,
-  onMouseDown: PropTypes.func,
-  title: PropTypes.string,
 };
 
-DialogTitle.defaultProps = {
-  showClose: true,
-};
-
-export default DialogTitle;
+export default DialogError;
 
 // vim: set ts=2 sw=2 tw=80:

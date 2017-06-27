@@ -163,6 +163,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/certbund/row.js
      ${NG_SRC_DIR}/src/web/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
+     ${NG_SRC_DIR}/src/web/components/dialog/error.js
+     ${NG_SRC_DIR}/src/web/components/dialog/footer.js
+     ${NG_SRC_DIR}/src/web/components/dialog/title.js
      ${NG_SRC_DIR}/src/web/components/form/button.js
      ${NG_SRC_DIR}/src/web/components/form/checkbox.js
      ${NG_SRC_DIR}/src/web/components/form/datepicker.js
@@ -215,10 +219,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dfncert/dfncertadvspage.js
      ${NG_SRC_DIR}/src/web/dfncert/row.js
      ${NG_SRC_DIR}/src/web/dfncert/table.js
-     ${NG_SRC_DIR}/src/web/dialog/dialog.js
-     ${NG_SRC_DIR}/src/web/dialog/error.js
-     ${NG_SRC_DIR}/src/web/dialog/footer.js
-     ${NG_SRC_DIR}/src/web/dialog/title.js
      ${NG_SRC_DIR}/src/web/entities/actions.js
      ${NG_SRC_DIR}/src/web/entities/container.js
      ${NG_SRC_DIR}/src/web/entities/entitynametabledata.js
@@ -395,7 +395,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/autodeletereportsgroup.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js
      ${NG_SRC_DIR}/src/web/tasks/containerdialog.js
-     ${NG_SRC_DIR}/src/web/tasks/detailspage.js
      ${NG_SRC_DIR}/src/web/tasks/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/tasks/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
@@ -436,6 +435,7 @@ set (NG_JS_SRC_FILES
 
 
 set (NG_CSS_SRC_FILES
+     ${NG_SRC_DIR}/src/web/components/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/components/form/css/button.css
      ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css
      ${NG_SRC_DIR}/src/web/components/form/css/datepicker.css
@@ -459,7 +459,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/statusbar.css
      ${NG_SRC_DIR}/src/web/css/titlebar.css
      ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
-     ${NG_SRC_DIR}/src/web/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
      ${NG_SRC_DIR}/src/web/menu/css/iconmenu.css

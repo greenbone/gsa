@@ -29,7 +29,7 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
-import {withDialog} from '../dialog/dialog.js';
+import {withDialog} from '../components/dialog/dialog.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import TextField from '../components/form/textfield.js';
