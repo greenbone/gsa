@@ -28,7 +28,7 @@ import {is_defined} from '../../../utils.js';
 
 import PropTypes from '../../proptypes.js';
 
-import {FoldState} from '../../folding.js';
+import {FoldState} from '../folding/folding.js';
 
 import Icon from './icon.js';
 

@@ -29,7 +29,6 @@ import {is_defined} from '../../utils.js';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
-import Section from '../section.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
 
@@ -40,6 +39,8 @@ import TextField from '../components/form/textfield.js';
 
 import DeleteIcon from '../components/icon/deleteicon.js';
 import NewIcon from '../components/icon/newicon.js';
+
+import Section from '../components/section/section.js';
 
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';

@@ -24,19 +24,24 @@
 
 import React from 'react';
 
-import {is_string} from '../utils.js';
+import glamorous from 'glamorous';
 
-import Layout from './components/layout/layout.js';
+import {is_string} from '../../../utils.js';
 
-import PropTypes from './proptypes.js';
-import {withFolding, withFoldToggle} from './folding.js';
+import PropTypes from '../../proptypes.js';
 
-import Icon from './components/icon/icon.js';
-import FoldIcon from './components/icon/foldicon.js';
+import {withFolding, withFoldToggle} from '../folding/folding.js';
 
-import './css/section.css';
+import Icon from '../icon/icon.js';
+import FoldIcon from '../icon/foldicon.js';
+
+import Layout, {withLayout} from '../layout/layout.js';
 
 const FoldableLayout = withFolding(Layout);
+
+const FoldLayout = glamorous(Layout)({
+  marginLeft: '3px',
+});
 
 const Section = ({
     children,
@@ -60,12 +65,12 @@ const Section = ({
           align={['space-between', 'center']}>
           {extra}
           {foldable &&
-            <Layout>
+            <FoldLayout>
               <FoldIcon
                 className="section-fold-icon"
                 foldState={foldState}
                 onClick={onFoldToggle}/>
-            </Layout>
+            </FoldLayout>
           }
         </Layout>
       </SectionHeader>
@@ -93,20 +98,39 @@ Section.propTypes = {
   onFoldStepEnd: PropTypes.func,
 };
 
+const HeaderLayout = glamorous(Layout)(
+  'section-header',
+  {
+    margin: '10px 0px',
+    borderBottom: '2px solid black',
+    position: 'relative',
+  },
+);
+
+const HeaderHeading = withLayout(glamorous.h2({
+  margin: 0,
+}));
+
+const HeaderIconLayout = glamorous(Layout)({
+  marginRight: '5px',
+});
+
 export const SectionHeader = ({children, title, img}) => {
   return (
-    <Layout
+    <HeaderLayout
       flex
       align={['space-between', 'end']}
       className="section-header">
-      <h2>
-        {is_string(img) ?
-          <Icon size="large" img={img}/> : img
-        }
+      <HeaderHeading flex align={['start', 'end']}>
+        <HeaderIconLayout flex>
+          {is_string(img) ?
+            <Icon size="large" img={img}/> : img
+          }
+        </HeaderIconLayout>
         {title}
-      </h2>
+      </HeaderHeading>
       {children}
-    </Layout>
+    </HeaderLayout>
   );
 };
 

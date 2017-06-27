@@ -28,7 +28,6 @@ import glamorous from 'glamorous';
 import _ from '../../locale.js';
 import {first, is_defined} from '../../utils.js';
 
-import Section from '../section.js';
 import PropTypes from '../proptypes.js';
 
 import Divider from '../components/layout/divider.js';
@@ -42,6 +41,8 @@ import HelpIcon from '../components/icon/helpicon.js';
 import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
 import TrashIcon from '../components/icon/trashicon.js';
+
+import Section from '../components/section/section.js';
 
 import DetailsLink from '../link/detailslink.js';
 

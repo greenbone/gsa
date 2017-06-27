@@ -27,7 +27,6 @@ import _ from '../../locale.js';
 import {is_defined, map} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import Section from '../section.js';
 import {render_options} from '../render.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
@@ -42,6 +41,8 @@ import YesNoRadio from '../components/form/yesnoradio.js';
 import EditIcon from '../components/icon/editicon.js';
 
 import Layout from '../components/layout/layout.js';
+
+import Section from '../components/section/section.js';
 
 import Table from '../table/table.js';
 import TableBody from '../table/body.js';

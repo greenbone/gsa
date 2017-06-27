@@ -167,6 +167,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
      ${NG_SRC_DIR}/src/web/components/dialog/title.js
+     ${NG_SRC_DIR}/src/web/components/folding/folding.js
      ${NG_SRC_DIR}/src/web/components/footnote/footnote.js
      ${NG_SRC_DIR}/src/web/components/form/button.js
      ${NG_SRC_DIR}/src/web/components/form/checkbox.js
@@ -201,6 +202,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
+     ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
      ${NG_SRC_DIR}/src/web/components/sticky/sticky.js
      ${NG_SRC_DIR}/src/web/cveid.js
@@ -365,7 +367,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/secinfo/row.js
      ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
      ${NG_SRC_DIR}/src/web/secinfo/table.js
-     ${NG_SRC_DIR}/src/web/section.js
      ${NG_SRC_DIR}/src/web/severitybar.js
      ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
@@ -436,6 +437,7 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/css/dialog.css
+     ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
      ${NG_SRC_DIR}/src/web/components/form/css/button.css
      ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css
      ${NG_SRC_DIR}/src/web/components/form/css/datepicker.css
@@ -452,7 +454,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/login.css
      ${NG_SRC_DIR}/src/web/css/main.css
      ${NG_SRC_DIR}/src/web/css/page.css
-     ${NG_SRC_DIR}/src/web/css/section.css
      ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
      ${NG_SRC_DIR}/src/web/css/sortby.css
      ${NG_SRC_DIR}/src/web/css/statusbar.css

@@ -26,10 +26,11 @@ import React from 'react';
 import _ from '../locale.js';
 
 import PropTypes from './proptypes.js';
-import Section from './section.js';
 
 import Dashboard from './dashboard/dashboard.js';
 import DashboardControls from './dashboard/controls.js';
+
+import Section from './components/section/section.js';
 
 import TaskCharts from './tasks/charts.js';
 import ReportCharts from './reports/charts.js';
