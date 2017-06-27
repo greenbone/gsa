@@ -26,8 +26,9 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, for_each, exclude, includes} from '../../utils.js';
 
+import Layout from '../components/layout/layout.js';
+
 import FootNote from '../footnote.js';
-import Layout from '../layout.js';
 import Pagination from '../pagination.js';
 import PropTypes from '../proptypes.js';
 import {withComponentDefaults} from '../render.js';

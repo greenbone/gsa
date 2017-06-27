@@ -25,7 +25,8 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 
 const DetailsBlock = ({

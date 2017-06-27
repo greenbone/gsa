@@ -26,7 +26,8 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, is_array, has_value, map} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 import {withDialog} from '../dialog/dialog.js';
 

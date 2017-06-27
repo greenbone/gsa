@@ -25,7 +25,8 @@ import React from 'react';
 
 import {is_defined} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 import SelectionType from '../selectiontype.js';
 import {render_component} from '../render.js';

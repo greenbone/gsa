@@ -25,7 +25,8 @@ import React from 'react';
 
 import {is_defined, select_save_id} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 
 import PermissionDialog from './dialog.js';

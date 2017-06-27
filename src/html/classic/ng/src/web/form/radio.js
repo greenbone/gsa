@@ -26,7 +26,8 @@ import React from 'react';
 import {classes, is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import {withLayout} from '../layout.js';
+
+import {withLayout} from '../components/layout/layout.js';
 
 import {withChangeHandler} from './form.js';
 

@@ -27,7 +27,8 @@ import glamorous from 'glamorous';
 
 import _ from '../locale.js';
 
-import Layout from './layout.js';
+import Layout from './components/layout/layout.js';
+
 import PropTypes from './proptypes.js';
 
 import GreenboneIcon from './icons/greenbone.js';

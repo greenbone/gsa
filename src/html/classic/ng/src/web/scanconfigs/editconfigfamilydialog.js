@@ -26,7 +26,8 @@ import React from 'react';
 import _ from '../../locale.js';
 import {map, is_empty} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 import Section from '../section.js';
 import SeverityBar from '../severitybar.js';

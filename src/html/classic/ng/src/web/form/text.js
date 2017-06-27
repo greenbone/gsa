@@ -24,7 +24,8 @@
 import React from 'react';
 
 import PropTypes from '../proptypes.js';
-import {withLayout} from '../layout.js';
+
+import {withLayout} from '../components/layout/layout.js';
 
 import {withClickHandler} from './form.js';
 

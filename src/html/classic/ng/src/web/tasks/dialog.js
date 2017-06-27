@@ -40,7 +40,8 @@ import {
   OSP_SCAN_CONFIG_TYPE,
 } from '../../gmp/models/scanconfig.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 

@@ -27,7 +27,8 @@ import _ from '../../locale.js';
 import OperatingSystems from '../../os.js';
 import {is_defined} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 
 import Icon from './icon.js';

@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {withLayout} from '../layout.js';
+import {withLayout} from '../components/layout/layout.js';
 
 import {withChangeHandler} from './form.js';
 

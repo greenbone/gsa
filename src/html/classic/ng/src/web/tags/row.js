@@ -26,7 +26,8 @@ import React from 'react';
 import _, {short_date} from '../../locale.js';
 import {is_empty} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 import {render_component, type_name, N_A} from '../render.js';
 

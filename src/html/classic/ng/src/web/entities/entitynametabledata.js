@@ -25,8 +25,9 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
+import Layout from '../components/layout/layout.js';
+
 import Comment from '../comment.js';
-import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 
 import LegacyLink from '../link/legacylink.js';

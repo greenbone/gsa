@@ -29,7 +29,8 @@ import _ from '../../locale.js';
 import logger from '../../log.js';
 import {is_defined} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 
 import ScheduleDialog from '../schedules/dialog.js';

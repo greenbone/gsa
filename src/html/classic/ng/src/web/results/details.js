@@ -28,8 +28,9 @@ import glamorous from 'glamorous';
 import _ from '../../locale.js';
 import {is_empty, is_defined} from '../../utils.js';
 
+import Layout from '../components/layout/layout.js';
+
 import CveId from '../cveid.js';
-import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import SolutionType from '../solutiontype.js';
 import {render_nvt_name} from '../render.js';

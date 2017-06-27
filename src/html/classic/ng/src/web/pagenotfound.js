@@ -25,9 +25,10 @@ import React from 'react';
 
 import _ from '../locale.js';
 
+import Layout from './components/layout/layout.js';
+
 import Footer from './footer.js';
 import Header from './header.js';
-import Layout from './layout.js';
 import Main from './main.js';
 
 export const PageNotFound = () => {

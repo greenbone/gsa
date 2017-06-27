@@ -167,6 +167,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/table.js
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
+     ${NG_SRC_DIR}/src/web/components/layout/layout.js
      ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/cves/cvespage.js
@@ -257,7 +258,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/icons/osicon.js
      ${NG_SRC_DIR}/src/web/icons/trashicon.js
      ${NG_SRC_DIR}/src/web/img.js
-     ${NG_SRC_DIR}/src/web/layout.js
      ${NG_SRC_DIR}/src/web/loading.js
      ${NG_SRC_DIR}/src/web/link/assetlink.js
      ${NG_SRC_DIR}/src/web/link/detailslink.js
@@ -434,13 +434,13 @@ set (NG_JS_SRC_FILES
 
 
 set (NG_CSS_SRC_FILES
+     ${NG_SRC_DIR}/src/web/components/layout/css/layout.css
      ${NG_SRC_DIR}/src/web/css/cveid.css
      ${NG_SRC_DIR}/src/web/css/footer.css
      ${NG_SRC_DIR}/src/web/css/footnote.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
-     ${NG_SRC_DIR}/src/web/css/layout.css
      ${NG_SRC_DIR}/src/web/css/login.css
      ${NG_SRC_DIR}/src/web/css/main.css
      ${NG_SRC_DIR}/src/web/css/page.css

@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import {withLayout} from './layout.js';
+import {withLayout} from './components/layout/layout.js';
+
 import {classes} from '../utils.js';
 
 import PropTypes from './proptypes.js';

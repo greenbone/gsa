@@ -27,7 +27,9 @@ import _, {datetime} from '../../locale.js';
 import {is_defined, is_empty} from '../../utils.js';
 
 import Comment from '../comment.js';
-import Layout from '../layout.js';
+
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import StatusBar from '../statusbar.js';

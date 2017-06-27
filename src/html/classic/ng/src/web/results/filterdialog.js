@@ -26,7 +26,8 @@ import React from 'react';
 import  _ from '../../locale.js';
 import {parse_int} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import {
   LabelFalsePositive,
   LabelHigh,

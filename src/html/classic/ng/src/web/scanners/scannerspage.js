@@ -26,7 +26,8 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, shorten, select_save_id} from '../../utils.js';
 
-import Layout from '../layout.js';
+import Layout from '../components/layout/layout.js';
+
 import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';

@@ -26,8 +26,9 @@ import React from 'react';
 import _, {datetime} from '../../locale.js';
 import {is_defined, filter, parse_int, select_save_id} from '../../utils.js';
 
+import Layout from '../components/layout/layout.js';
+
 import FootNote from '../footnote.js';
-import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 

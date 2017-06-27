@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import {classes, is_defined, is_empty, is_array} from '../utils.js';
+import {classes, is_defined, is_empty, is_array} from '../../../utils.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import './css/layout.css';
 

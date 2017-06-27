@@ -27,8 +27,9 @@ import _ from '../../locale.js';
 import {KeyCode, autobind, is_defined} from '../../utils.js';
 import logger from '../../log.js';
 
+import Layout from '../components/layout/layout.js';
+
 import FootNote from '../footnote.js';
-import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 

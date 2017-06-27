@@ -28,7 +28,8 @@ import {map} from '../../utils.js';
 import timezones from '../../timezones.js';
 
 import PropTypes from '../proptypes.js';
-import {withLayout} from '../layout.js';
+
+import {withLayout} from '../components/layout/layout.js';
 
 import Select2 from './select2.js';
 

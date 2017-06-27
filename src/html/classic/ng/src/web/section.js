@@ -26,7 +26,8 @@ import React from 'react';
 
 import {is_string} from '../utils.js';
 
-import Layout from './layout.js';
+import Layout from './components/layout/layout.js';
+
 import PropTypes from './proptypes.js';
 import {withFolding, withFoldToggle} from './folding.js';
 
