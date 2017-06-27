@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import Layout from './components/layout/layout.js';
+import Layout from '../layout/layout.js';
 
 const Toolbar = props => {
   return (

@@ -26,13 +26,14 @@ import React from 'react';
 import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import Toolbar from '../toolbar.js';
 
 import Layout from '../components/layout/layout.js';
 
 import Loading from '../components/loading/loading.js';
 
 import Section from '../components/section/section.js';
+
+import Toolbar from '../components/toolbar/toolbar.js';
 
 import EntityInfo from './info.js';
 import EntityTags from './tags.js';

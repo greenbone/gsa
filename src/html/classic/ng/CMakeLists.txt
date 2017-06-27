@@ -215,6 +215,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/table/simple.js
      ${NG_SRC_DIR}/src/web/components/table/stripped.js
      ${NG_SRC_DIR}/src/web/components/table/table.js
+     ${NG_SRC_DIR}/src/web/components/toolbar/toolbar.js
      ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/cves/cvespage.js
@@ -410,7 +411,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/taskspage.js
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js
-     ${NG_SRC_DIR}/src/web/toolbar.js
      ${NG_SRC_DIR}/src/web/users/confirmdeletedialog.js
      ${NG_SRC_DIR}/src/web/users/dialog.js
      ${NG_SRC_DIR}/src/web/users/header.js

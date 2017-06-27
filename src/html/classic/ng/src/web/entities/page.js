@@ -34,7 +34,7 @@ import Loading from '../components/loading/loading.js';
 
 import Section from '../components/section/section.js';
 
-import Toolbar from '../toolbar.js';
+import Toolbar from '../components/toolbar/toolbar.js';
 
 import PowerFilter from '../powerfilter/powerfilter.js';
 
