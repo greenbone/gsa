@@ -46,7 +46,7 @@ const method_data_fields = [
 ];
 const condition_data_fields = [
   'severity', 'direction', 'at_least_filter_id',
-  'at_least_count', 'filter_direction', //FIXME filter_direction is constant
+  'at_least_count', 'filter_direction', // FIXME filter_direction is constant
   'filter_id', 'count',
 ];
 

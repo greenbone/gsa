@@ -51,10 +51,10 @@ const IconActions = ({entity, onEntityDelete, onEntityDownload}) => {
         <DeleteIcon
           active={false}
           title={_('Operating System is in use')}/> :
-            <DeleteIcon
-              value={entity}
-              title={_('Delete')}
-              onClick={onEntityDelete}/>
+        <DeleteIcon
+          value={entity}
+          title={_('Delete')}
+          onClick={onEntityDelete}/>
       }
       <ExportIcon
         value={entity}

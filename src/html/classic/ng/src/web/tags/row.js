@@ -157,7 +157,7 @@ const Row = ({
               <i> ({entity.resource.id})</i>
             }
           </span> :
-            <EntityLink entity={entity.resource}/>
+          <EntityLink entity={entity.resource}/>
         }
       </TableData>
       <TableData>

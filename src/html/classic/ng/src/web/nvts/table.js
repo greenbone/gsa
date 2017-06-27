@@ -87,7 +87,7 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
               <Sort by="solution_type" onClick={onSortChange}>
                 <Icon title={_('Solution type')} img="solution_type.svg"/>
               </Sort> :
-                <Icon title={_('Solution type')} img="solution_type.svg"/>
+              <Icon title={_('Solution type')} img="solution_type.svg"/>
             }
           </Layout>
         </TableHead>

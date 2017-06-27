@@ -85,9 +85,9 @@ const Actions = ({
           title={_('Verify Report Format')}
           onClick={onVerifyReportFormat}
         /> :
-          <Icon img="verify_inactive.svg"
-            title={_('Permission to verify Report Format denied')}
-          />
+        <Icon img="verify_inactive.svg"
+          title={_('Permission to verify Report Format denied')}
+        />
       }
     </Layout>
   );

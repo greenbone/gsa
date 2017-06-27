@@ -133,12 +133,14 @@ const Param = ({
         value={is_array(field_value) ? field_value : [field_value]}
         onChange={onPrefChange}
       >
-        {value.options.map(opt =>
-          <option
-            key={opt.value}
-            value={opt.value}>
-            {opt.name}
-          </option>)
+        {
+          value.options.map(opt => (
+            <option
+              key={opt.value}
+              value={opt.value}>
+              {opt.name}
+            </option>
+          ))
         }
       </Select2>
     );

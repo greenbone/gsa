@@ -198,11 +198,11 @@ class ScannerPreference extends React.Component {
                 onChange={onPreferenceChange}
               />
             </Layout> :
-              <TextField
-                name={name}
-                value={value}
-                onChange={onPreferenceChange}
-              />
+            <TextField
+              name={name}
+              value={value}
+              onChange={onPreferenceChange}
+            />
           }
         </TableData>
         <TableData>
