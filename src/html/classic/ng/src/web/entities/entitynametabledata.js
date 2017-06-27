@@ -62,13 +62,11 @@ const EntityNameTableData = ({
   return (
     <TableData flex="column">
       <Layout flex align="space-between">
-        {links ?
-          <LegacyLink
-            {...linkprops}>
-            {linktext}
-          </LegacyLink> :
-          linktext
-        }
+        <LegacyLink
+          textOnly={!links}
+          {...linkprops}>
+          {linktext}
+        </LegacyLink>
         <ObserverIcon
           displayName={displayName}
           entity={entity}
