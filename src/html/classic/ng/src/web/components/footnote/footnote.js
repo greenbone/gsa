@@ -21,28 +21,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import glamorous from 'glamorous';
 
-import {classes} from '../utils.js';
+import Layout from '../layout/layout.js';
 
-import Layout from './components/layout/layout.js';
-
-import PropTypes from './proptypes.js';
-
-import './css/footnote.css';
-
-export const FootNote = ({className, ...other}) => {
-  className = classes('footnote', className);
-
-  return (
-    <Layout {...other} className={className}/>
-  );
-};
-
-FootNote.propTypes = {
-  className: PropTypes.string,
-};
-
+const FootNote = glamorous(Layout)(
+  'footnote',
+  {
+    fontSize: '10px',
+    color: '#787878',
+    textAlign: 'left',
+  },
+);
 
 export default FootNote;
 

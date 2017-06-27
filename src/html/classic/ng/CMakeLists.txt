@@ -167,6 +167,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
      ${NG_SRC_DIR}/src/web/components/dialog/title.js
+     ${NG_SRC_DIR}/src/web/components/footnote/footnote.js
      ${NG_SRC_DIR}/src/web/components/form/button.js
      ${NG_SRC_DIR}/src/web/components/form/checkbox.js
      ${NG_SRC_DIR}/src/web/components/form/datepicker.js
@@ -243,7 +244,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/filters/filterspage.js
      ${NG_SRC_DIR}/src/web/filters/row.js
      ${NG_SRC_DIR}/src/web/footer.js
-     ${NG_SRC_DIR}/src/web/footnote.js
      ${NG_SRC_DIR}/src/web/groups/dialog.js
      ${NG_SRC_DIR}/src/web/groups/groupsppage.js
      ${NG_SRC_DIR}/src/web/groups/header.js
@@ -446,7 +446,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/css/layout.css
      ${NG_SRC_DIR}/src/web/css/cveid.css
      ${NG_SRC_DIR}/src/web/css/footer.css
-     ${NG_SRC_DIR}/src/web/css/footnote.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css

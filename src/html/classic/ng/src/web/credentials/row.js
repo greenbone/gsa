@@ -25,9 +25,6 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
-import FootNote from '../footnote.js';
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
@@ -39,9 +36,13 @@ import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
 
+import FootNote from '../components/footnote/footnote.js';
+
 import Text from '../components/form/text.js';
 
 import ExportIcon from '../components/icon/exporticon.js';
+
+import Layout from '../components/layout/layout.js';
 
 import TableData from '../table/data.js';
 import TableRow from '../table/row.js';
