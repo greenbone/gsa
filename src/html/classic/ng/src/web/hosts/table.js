@@ -35,9 +35,9 @@ import {createEntitiesTable} from '../entities/table.js';
 
 import NewIcon from '../components/icon/newicon.js';
 
-import TableHead from '../table/head.js';
-import TableHeader from '../table/header.js';
-import TableRow from '../table/row.js';
+import TableHead from '../components/table/head.js';
+import TableHeader from '../components/table/header.js';
+import TableRow from '../components/table/row.js';
 
 import HostRow from './row.js';
 

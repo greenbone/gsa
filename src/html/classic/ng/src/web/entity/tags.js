@@ -30,9 +30,6 @@ import {first, is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import Divider from '../components/layout/divider.js';
-import IconDivider from '../components/layout/icondivider.js';
-
 import TextField from '../components/form/textfield.js';
 import Select2 from '../components/form/select2.js';
 
@@ -42,16 +39,19 @@ import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
 import TrashIcon from '../components/icon/trashicon.js';
 
+import Divider from '../components/layout/divider.js';
+import IconDivider from '../components/layout/icondivider.js';
+
 import Section from '../components/section/section.js';
 
 import DetailsLink from '../link/detailslink.js';
 
-import Table from '../table/stripped.js';
-import TableBody from '../table/body.js';
-import TableData from '../table/data.js';
-import TableHeader from '../table/header.js';
-import TableHead from '../table/head.js';
-import TableRow from '../table/row.js';
+import Table from '../components/table/stripped.js';
+import TableBody from '../components/table/body.js';
+import TableData from '../components/table/data.js';
+import TableHeader from '../components/table/header.js';
+import TableHead from '../components/table/head.js';
+import TableRow from '../components/table/row.js';
 
 const TagIcon = props => {
   return (

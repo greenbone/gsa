@@ -36,7 +36,7 @@ import TrashIcon from '../components/icon/trashicon.js';
 
 import Select2 from '../components/form/select2.js';
 
-import TableRow from '../table/row.js';
+import TableRow from '../components/table/row.js';
 
 import './css/footer.css';
 

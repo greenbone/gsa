@@ -40,7 +40,7 @@ import EditIcon from '../entities/icons/entityediticon.js';
 
 import ExportIcon from '../components/icon/exporticon.js';
 
-import TableRow from '../table/row.js';
+import TableRow from '../components/table/row.js';
 
 const IconActions = ({
     entity,

@@ -27,8 +27,6 @@ import glamorous from 'glamorous';
 
 import _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import Sort from '../sortby.js';
 
@@ -38,12 +36,14 @@ import {createEntitiesTable} from '../entities/table.js';
 
 import Icon from '../components/icon/icon.js';
 
+import Layout from '../components/layout/layout.js';
+
 import Link from '../link/link.js';
 
-import TableData from '../table/data.js';
-import TableHead from '../table/head.js';
-import TableHeader from '../table/header.js';
-import TableRow from '../table/row.js';
+import TableData from '../components/table/data.js';
+import TableHead from '../components/table/head.js';
+import TableHeader from '../components/table/header.js';
+import TableRow from '../components/table/row.js';
 
 import ResultsRow from './row.js';
 import ResultDetails from './details.js';

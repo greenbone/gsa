@@ -40,12 +40,12 @@ import TrashIcon from '../components/icon/trashicon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import Table from '../table/table.js';
-import TableBody from '../table/body.js';
-import TableData from '../table/data.js';
-import TableHeader from '../table/header.js';
-import TableHead from '../table/head.js';
-import TableRow from '../table/row.js';
+import Table from '../components/table/table.js';
+import TableBody from '../components/table/body.js';
+import TableData from '../components/table/data.js';
+import TableHeader from '../components/table/header.js';
+import TableHead from '../components/table/head.js';
+import TableRow from '../components/table/row.js';
 
 const Dialog = ({
     all_groups,

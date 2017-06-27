@@ -205,6 +205,15 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
      ${NG_SRC_DIR}/src/web/components/sticky/sticky.js
+     ${NG_SRC_DIR}/src/web/components/table/body.js
+     ${NG_SRC_DIR}/src/web/components/table/data.js
+     ${NG_SRC_DIR}/src/web/components/table/header.js
+     ${NG_SRC_DIR}/src/web/components/table/head.js
+     ${NG_SRC_DIR}/src/web/components/table/info.js
+     ${NG_SRC_DIR}/src/web/components/table/row.js
+     ${NG_SRC_DIR}/src/web/components/table/simple.js
+     ${NG_SRC_DIR}/src/web/components/table/stripped.js
+     ${NG_SRC_DIR}/src/web/components/table/table.js
      ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/cves/cvespage.js
@@ -372,15 +381,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/solutiontype.js
      ${NG_SRC_DIR}/src/web/sortby.js
      ${NG_SRC_DIR}/src/web/statusbar.js
-     ${NG_SRC_DIR}/src/web/table/body.js
-     ${NG_SRC_DIR}/src/web/table/data.js
-     ${NG_SRC_DIR}/src/web/table/header.js
-     ${NG_SRC_DIR}/src/web/table/head.js
-     ${NG_SRC_DIR}/src/web/table/info.js
-     ${NG_SRC_DIR}/src/web/table/row.js
-     ${NG_SRC_DIR}/src/web/table/simple.js
-     ${NG_SRC_DIR}/src/web/table/stripped.js
-     ${NG_SRC_DIR}/src/web/table/table.js
      ${NG_SRC_DIR}/src/web/tags/dialog.js
      ${NG_SRC_DIR}/src/web/tags/row.js
      ${NG_SRC_DIR}/src/web/tags/tagspage.js

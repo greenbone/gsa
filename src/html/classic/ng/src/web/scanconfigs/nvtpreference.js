@@ -26,8 +26,6 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_empty, map} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 
 import Checkbox from '../components/form/checkbox.js';
@@ -37,8 +35,10 @@ import Radio from '../components/form/radio.js';
 import TextField from '../components/form/textfield.js';
 import YesNoRadio from '../components/form/yesnoradio.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import Layout from '../components/layout/layout.js';
+
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 class NvtPreference extends React.Component {
 

@@ -30,9 +30,9 @@ import PropTypes from '../proptypes.js';
 
 import SelectionType from '../utils/selectiontype.js';
 
-import TableHead from '../table/head.js';
-import TableHeader from '../table/header.js';
-import TableRow from '../table/row.js';
+import TableHead from '../components/table/head.js';
+import TableHeader from '../components/table/header.js';
+import TableRow from '../components/table/row.js';
 
 /**
  * A higher order component to create table headers which support entity

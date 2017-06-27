@@ -21,21 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import glamorous from 'glamorous';
 
-import {classes} from '../../utils.js';
-
-import PropTypes from '../proptypes.js';
-
-export const TableBody = ({className, ...props}) => {
-  className = classes(className, 'table-body');
-
-  return <tbody {...props} className={className}/>;
-};
-
-TableBody.propTypes = {
-  className: PropTypes.string,
-};
+export const TableBody = glamorous.tbody(
+  'table-body',
+);
 
 export default TableBody;
 

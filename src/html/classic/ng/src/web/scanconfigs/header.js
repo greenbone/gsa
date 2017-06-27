@@ -27,9 +27,9 @@ import  _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
 
-import TableHead from '../table/head.js';
-import TableHeader from '../table/header.js';
-import TableRow from '../table/row.js';
+import TableHead from '../components/table/head.js';
+import TableHeader from '../components/table/header.js';
+import TableRow from '../components/table/row.js';
 
 const Header = ({
     actions = true,

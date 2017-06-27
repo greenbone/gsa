@@ -25,10 +25,12 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import Layout from '../components/layout/layout.js';
+import PropTypes from '../../proptypes.js';
 
-import PropTypes from '../proptypes.js';
-import Sort from '../sortby.js';
+import Sort from '../../sortby.js';
+
+import Layout from '../layout/layout.js';
+
 
 const TableHead = ({
     children,

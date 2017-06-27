@@ -39,13 +39,13 @@ import Layout from '../components/layout/layout.js';
 
 import Section from '../components/section/section.js';
 
-import SimpleTable from '../table/simple.js';
-import Table from '../table/table.js';
-import TableBody from '../table/body.js';
-import TableData from '../table/data.js';
-import TableHeader from '../table/header.js';
-import TableHead from '../table/head.js';
-import TableRow from '../table/row.js';
+import SimpleTable from '../components/table/simple.js';
+import Table from '../components/table/table.js';
+import TableBody from '../components/table/body.js';
+import TableData from '../components/table/data.js';
+import TableHeader from '../components/table/header.js';
+import TableHead from '../components/table/head.js';
+import TableRow from '../components/table/row.js';
 
 class Nvt extends React.Component {
 

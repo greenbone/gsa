@@ -40,8 +40,8 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../components/icon/exporticon.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 import Trend from './trend.js';
 

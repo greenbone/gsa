@@ -34,8 +34,8 @@ import {withEntityRow, RowDetailsToggle} from '../entities/row.js';
 
 import AssetLink from '../link/assetlink.js';
 
-import TableRow from '../table/row.js';
-import TableData from '../table/data.js';
+import TableRow from '../components/table/row.js';
+import TableData from '../components/table/data.js';
 
 const Row = ({
     actions,

@@ -25,8 +25,6 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import {render_component} from '../render.js';
 
@@ -40,7 +38,9 @@ import EditIcon from '../entities/icons/entityediticon.js';
 
 import ExportIcon from '../components/icon/exporticon.js';
 
-import TableRow from '../table/row.js';
+import Layout from '../components/layout/layout.js';
+
+import TableRow from '../components/table/row.js';
 
 const IconActions = ({
     entity,

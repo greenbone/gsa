@@ -44,8 +44,8 @@ import Icon from '../components/icon/icon.js';
 
 import LegacyLink from '../link/legacylink.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 import {secinfo_type} from '../../gmp/models/secinfo.js';
 

@@ -26,8 +26,6 @@ import React from 'react';
 import _, {datetime} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import StatusBar from '../statusbar.js';
@@ -38,10 +36,12 @@ import {withEntityRow} from '../entities/row.js';
 
 import DeleteIcon from '../components/icon/deleteicon.js';
 
+import Layout from '../components/layout/layout.js';
+
 import LegacyLink from '../link/legacylink.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 const IconActions = ({entity, onEntityDelete}) => {
   let {report} = entity;

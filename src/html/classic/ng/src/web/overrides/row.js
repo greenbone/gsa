@@ -26,8 +26,6 @@ import React from 'react';
 import _ from '../../locale.js';
 import {shorten, is_defined} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {render_component, result_cvss_risk_factor} from '../render.js';
@@ -41,10 +39,12 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../components/icon/exporticon.js';
 
+import Layout from '../components/layout/layout.js';
+
 import LegacyLink from '../link/legacylink.js';
 
-import TableRow from '../table/row.js';
-import TableData from '../table/data.js';
+import TableRow from '../components/table/row.js';
+import TableData from '../components/table/data.js';
 
 
 const render_severity = severity => {

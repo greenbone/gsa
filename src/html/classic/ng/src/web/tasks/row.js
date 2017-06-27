@@ -28,8 +28,6 @@ import {is_defined, is_empty} from '../../utils.js';
 
 import Comment from '../comment.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import StatusBar from '../statusbar.js';
@@ -41,11 +39,13 @@ import ObserverIcon from '../entities/icons/entityobservericon.js';
 
 import Icon from '../components/icon/icon.js';
 
+import Layout from '../components/layout/layout.js';
+
 import DetailsLink from '../link/detailslink.js';
 import Link from '../link/link.js';
 
-import TableRow from '../table/row.js';
-import TableData from '../table/data.js';
+import TableRow from '../components/table/row.js';
+import TableData from '../components/table/data.js';
 
 import Actions from './actions.js';
 import Trend from './trend.js';

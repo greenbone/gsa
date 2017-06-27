@@ -43,10 +43,10 @@ import DetailsLink from '../link/detailslink.js';
 import ExternalLink from '../link/external.js';
 import InfoLink from '../link/infolink.js';
 
-import InfoTable from '../table/info.js';
-import TableBody from '../table/body.js';
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import InfoTable from '../components/table/info.js';
+import TableBody from '../components/table/body.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 const N_A = 'N/A';
 

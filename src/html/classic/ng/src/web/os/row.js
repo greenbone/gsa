@@ -25,8 +25,6 @@ import React from 'react';
 
 import _, {datetime} from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
@@ -38,11 +36,13 @@ import CpeIcon from '../components/icon/cpeicon.js';
 import DeleteIcon from '../components/icon/deleteicon.js';
 import ExportIcon from '../components/icon/exporticon.js';
 
+import Layout from '../components/layout/layout.js';
+
 import LegacyLink from '../link/legacylink.js';
 import Link from '../link/link.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 const IconActions = ({entity, onEntityDelete, onEntityDownload}) => {
   return (

@@ -44,8 +44,8 @@ import ExportIcon from '../components/icon/exporticon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 import CredentialDownloadIcon from './downloadicon.js';
 

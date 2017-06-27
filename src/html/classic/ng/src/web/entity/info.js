@@ -30,10 +30,10 @@ import {classes} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import InfoTable from '../table/info.js';
-import TableBody from '../table/body.js';
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import InfoTable from '../components/table/info.js';
+import TableBody from '../components/table/body.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 
 const Table = glamorous(InfoTable)({

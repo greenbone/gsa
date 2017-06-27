@@ -25,14 +25,14 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import Layout from '../components/layout/layout.js';
-
 import Comment from '../comment.js';
 import PropTypes from '../proptypes.js';
 
 import LegacyLink from '../link/legacylink.js';
 
-import TableData from '../table/data.js';
+import Layout from '../components/layout/layout.js';
+
+import TableData from '../components/table/data.js';
 
 import ObserverIcon from './icons/entityobservericon.js';
 

@@ -26,8 +26,6 @@ import React from 'react';
 import _, {datetime} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import Comment from '../comment.js';
 import PropTypes from '../proptypes.js';
 import SeverityBar from '../severitybar.js';
@@ -42,10 +40,12 @@ import ExportIcon from '../components/icon/exporticon.js';
 import NewIcon from '../components/icon/newicon.js';
 import OsIcon from '../components/icon/osicon.js';
 
+import Layout from '../components/layout/layout.js';
+
 import LegacyLink from '../link/legacylink.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 const Actions = ({
     entity,

@@ -26,8 +26,6 @@ import React from 'react';
 import _, {short_date} from '../../locale.js';
 import {is_empty} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 import {render_component, type_name, N_A} from '../render.js';
 
@@ -43,9 +41,10 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 import ExportIcon from '../components/icon/exporticon.js';
 import Icon from '../components/icon/icon.js';
 
-import TableData from '../table/data.js';
-import TableRow from '../table/row.js';
+import Layout from '../components/layout/layout.js';
 
+import TableData from '../components/table/data.js';
+import TableRow from '../components/table/row.js';
 
 const Actions = ({
     entity,

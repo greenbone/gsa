@@ -34,8 +34,8 @@ import {withEntityRow} from '../entities/row.js';
 import LegacyLink from '../link/legacylink.js';
 import Link from '../link/link.js';
 
-import TableRow from '../table/row.js';
-import TableData from '../table/data.js';
+import TableRow from '../components/table/row.js';
+import TableData from '../components/table/data.js';
 
 const Row = ({entity, links = true, actions, ...other}) => {
   return (

@@ -23,66 +23,24 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import PropTypes from '../../proptypes.js';
 
-import {classes} from '../../utils.js';
-
-import PropTypes from '../proptypes.js';
-
-const Table = ({
-    children,
-    className,
-    footer,
-    header,
-  }) => {
-
-  className = classes(className, 'table');
-
+const TableRow = ({items = [], children, ...other}) => {
+  let data = items.map((item, i) => {
+    return <th key={i}>{item}</th>;
+  });
   return (
-    <table
-      className={className}>
-      {header}
+    <tr {...other}>
+      {data}
       {children}
-      <tfoot>
-        {footer}
-      </tfoot>
-    </table>
+    </tr>
   );
 };
 
-Table.propTypes = {
-  header: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
-  fixed: PropTypes.bool,
-  footer: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
-  className: PropTypes.string,
+TableRow.propTypes = {
+  items: PropTypes.array,
 };
 
-export default glamorous(Table)({
-  border: 0,
-  borderSpacing: '2px',
-  fontSize: '12px',
-  textAlign: 'left',
-  width: '100%',
-
-  '& th, & td': {
-    padding: '4px',
-  },
-
-  '& tfoot tr': {
-    background: '#DDDDDD',
-  },
-
-  '@media print': {
-    borderCollapse: 'collapse',
-  },
-},
-  props => ({tableLayout: props.fixed ? 'fixed' : 'auto'}),
-);
+export default TableRow;
 
 // vim: set ts=2 sw=2 tw=80:

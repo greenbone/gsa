@@ -23,24 +23,63 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import glamorous from 'glamorous';
 
-const TableRow = ({items = [], children, ...other}) => {
-  let data = items.map((item, i) => {
-    return <th key={i}>{item}</th>;
-  });
+import PropTypes from '../../proptypes.js';
+
+const Table = ({
+    children,
+    className,
+    footer,
+    header,
+  }) => {
   return (
-    <tr {...other}>
-      {data}
+    <table
+      className={className}>
+      {header}
       {children}
-    </tr>
+      <tfoot>
+        {footer}
+      </tfoot>
+    </table>
   );
 };
 
-TableRow.propTypes = {
-  items: PropTypes.array,
+Table.propTypes = {
+  header: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
+  fixed: PropTypes.bool,
+  footer: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
+  className: PropTypes.string,
 };
 
-export default TableRow;
+export default glamorous(Table)(
+  'table',
+  {
+    border: 0,
+    borderSpacing: '2px',
+    fontSize: '12px',
+    textAlign: 'left',
+    width: '100%',
+
+    '& th, & td': {
+      padding: '4px',
+    },
+
+    '& tfoot tr': {
+      background: '#DDDDDD',
+    },
+
+    '@media print': {
+      borderCollapse: 'collapse',
+    },
+  },
+  props => ({tableLayout: props.fixed ? 'fixed' : 'auto'}),
+);
 
 // vim: set ts=2 sw=2 tw=80:
