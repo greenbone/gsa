@@ -25,12 +25,14 @@ import React from 'react';
 
 import PropTypes from '../proptypes.js';
 
-import CommonCharts from '../dashboard/commoncharts.js';
+import CommonCharts from '../components/dashboard/commoncharts.js';
 
-export const CveCharts = ({filter}) => {
+const CveCharts = ({filter}) => {
   return (
     <div>
-      <CommonCharts type="cve" titleType="CVEs"
+      <CommonCharts
+        type="cve"
+        titleType="CVEs"
         filter={filter}/>
     </div>
   );

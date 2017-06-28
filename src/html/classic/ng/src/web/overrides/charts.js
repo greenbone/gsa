@@ -27,8 +27,8 @@ import  _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
 
-import DataSource from '../dashboard/datasource.js';
-import Chart from '../dashboard/chart.js';
+import DataSource from '../components/dashboard/datasource.js';
+import Chart from '../components/dashboard/chart.js';
 
 export const OverrideCharts = ({filter}) => {
   return (

@@ -28,10 +28,10 @@ import _ from '../../locale.js';
  // DFN-CERT uses same filter dialog as CERT-Bund
 import FilterDialog from '../certbund/filterdialog.js';
 
-import {withDashboard} from '../dashboard/dashboard.js';
-
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
+
+import {withDashboard} from '../components/dashboard/dashboard.js';
 
 import HelpIcon from '../components/icon/helpicon.js';
 

@@ -27,8 +27,8 @@ import _ from '../locale.js';
 
 import PropTypes from './proptypes.js';
 
-import Dashboard from './dashboard/dashboard.js';
-import DashboardControls from './dashboard/controls.js';
+import Dashboard from './components/dashboard/dashboard.js';
+import DashboardControls from './components/dashboard/controls.js';
 
 import Section from './components/section/section.js';
 

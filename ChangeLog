@@ -1,5 +1,57 @@
 2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/assetspage.js,
+	src/html/classic/ng/src/web/certbund/certbundadvspage.js,
+	src/html/classic/ng/src/web/certbund/charts.js,
+	src/html/classic/ng/src/web/dashboard/chart.js,
+	src/html/classic/ng/src/web/components/dashboard/chart.js,
+	src/html/classic/ng/src/web/dashboard/commoncharts.js,
+	src/html/classic/ng/src/web/components/dashboard/commoncharts.js,
+	src/html/classic/ng/src/web/dashboard/controls.js,
+	src/html/classic/ng/src/web/components/dashboard/controls.js,
+	src/html/classic/ng/src/web/dashboard/css/dashboard.css,
+	src/html/classic/ng/src/web/components/dashboard/css/dashboard.css,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/components/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/dashboard/datasource.js,
+	src/html/classic/ng/src/web/components/dashboard/datasource.js,
+	src/html/classic/ng/src/web/cpes/charts.js,
+	src/html/classic/ng/src/web/cpes/cpespage.js,
+	src/html/classic/ng/src/web/cves/charts.js,
+	src/html/classic/ng/src/web/cves/cvespage.js,
+	src/html/classic/ng/src/web/dfncert/charts.js,
+	src/html/classic/ng/src/web/dfncert/dfncertadvspage.js,
+	src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/homepage.js,
+	src/html/classic/ng/src/web/hosts/charts.js,
+	src/html/classic/ng/src/web/hosts/hostspage.js,
+	src/html/classic/ng/src/web/notes/charts.js,
+	src/html/classic/ng/src/web/notes/notespage.js,
+	src/html/classic/ng/src/web/nvts/charts.js,
+	src/html/classic/ng/src/web/nvts/nvtspage.js,
+	src/html/classic/ng/src/web/os/charts.js,
+	src/html/classic/ng/src/web/os/operatingsystemspage.js,
+	src/html/classic/ng/src/web/ovaldefs/charts.js,
+	src/html/classic/ng/src/web/ovaldefs/ovaldefspage.js,
+	src/html/classic/ng/src/web/overrides/charts.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js,
+	src/html/classic/ng/src/web/reports/charts.js,
+	src/html/classic/ng/src/web/reports/reportspage.js,
+	src/html/classic/ng/src/web/results/charts.js,
+	src/html/classic/ng/src/web/results/resultspage.js,
+	src/html/classic/ng/src/web/scanspage.js,
+	src/html/classic/ng/src/web/secinfo/charts.js,
+	src/html/classic/ng/src/web/secinfo/secinfospage.js,
+	src/html/classic/ng/src/web/secinfopage.js,
+	src/html/classic/ng/src/web/tasks/charts.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js,
+	src/html/classic/ng/src/web/vulns/charts.js,
+	src/html/classic/ng/src/web/vulns/vulnspage.js: Move dashboard components to
+	src/web/components/dashboard directory.
+
+2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt
 	src/html/classic/ng/src/web/menu/menubar.js
 	src/html/classic/ng/src/web/components/bar/menubar.js

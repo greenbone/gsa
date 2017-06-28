@@ -30,6 +30,8 @@ import PropTypes from '../proptypes.js';
 
 import Toolbar from '../components/bar/toolbar.js';
 
+import DashboardControls from '../components/dashboard/controls.js';
+
 import Layout from '../components/layout/layout.js';
 
 import Loading from '../components/loading/loading.js';
@@ -37,8 +39,6 @@ import Loading from '../components/loading/loading.js';
 import Section from '../components/section/section.js';
 
 import PowerFilter from '../powerfilter/powerfilter.js';
-
-import DashboardControls from '../dashboard/controls.js';
 
 const exclude_props = [
   'children',

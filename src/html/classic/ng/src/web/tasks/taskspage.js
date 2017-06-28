@@ -40,8 +40,6 @@ import {
 
 import PropTypes from '../proptypes.js';
 
-import {withDashboard} from '../dashboard/dashboard.js';
-
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
@@ -56,6 +54,8 @@ import ContainerTaskDialog from './containerdialog.js';
 import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 import Table from './table.js';
+
+import {withDashboard} from '../components/dashboard/dashboard.js';
 
 import HelpIcon from '../components/icon/helpicon.js';
 

@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import {is_defined} from '../../utils.js';
+import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 export class DataSource extends React.Component {
 

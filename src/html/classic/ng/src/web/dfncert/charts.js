@@ -25,9 +25,9 @@ import React from 'react';
 
 import PropTypes from '../proptypes.js';
 
-import CommonCharts from '../dashboard/commoncharts.js';
+import CommonCharts from '../components/dashboard/commoncharts.js';
 
-export const DfnCertCharts = ({filter}) => {
+const DfnCertCharts = ({filter}) => {
   return (
     <div>
       <CommonCharts

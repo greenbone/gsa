@@ -32,10 +32,10 @@ import PropTypes from '../proptypes.js';
 
 import SelectionType from '../utils/selectiontype.js';
 
-import {withDashboard} from '../dashboard/dashboard.js';
-
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
+
+import {withDashboard} from '../components/dashboard/dashboard.js';
 
 import HelpIcon from '../components/icon/helpicon.js';
 import NewIcon from '../components/icon/newicon.js';

@@ -27,14 +27,16 @@ import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
 
-import DataSource from '../dashboard/datasource.js';
-import Chart from '../dashboard/chart.js';
-import CommonCharts from '../dashboard/commoncharts.js';
+import DataSource from '../components/dashboard/datasource.js';
+import Chart from '../components/dashboard/chart.js';
+import CommonCharts from '../components/dashboard/commoncharts.js';
 
 const SecinfoCharts = ({filter}) => {
   return (
     <div>
-      <CommonCharts type="allinfo" titleType="SecInfo Items"
+      <CommonCharts
+        type="allinfo"
+        titleType="SecInfo Items"
         filter={filter}/>
 
       <DataSource

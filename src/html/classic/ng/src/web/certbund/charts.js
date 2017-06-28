@@ -25,12 +25,14 @@ import React from 'react';
 
 import PropTypes from '../proptypes.js';
 
-import CommonCharts from '../dashboard/commoncharts.js';
+import CommonCharts from '../components/dashboard/commoncharts.js';
 
 const CertBundCharts = ({filter}) => {
   return (
     <div>
-      <CommonCharts type="cert_bund_adv" titleType="CERT-Bund Advisiories"
+      <CommonCharts
+        type="cert_bund_adv"
+        titleType="CERT-Bund Advisiories"
         filter={filter}/>
     </div>
   );

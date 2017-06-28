@@ -27,9 +27,9 @@ import  _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
 
-import DataSource from '../dashboard/datasource.js';
-import Chart from '../dashboard/chart.js';
-import CommonCharts from '../dashboard/commoncharts.js';
+import DataSource from '../components/dashboard/datasource.js';
+import Chart from '../components/dashboard/chart.js';
+import CommonCharts from '../components/dashboard/commoncharts.js';
 
 export const NvtCharts = ({filter}) => {
   return (

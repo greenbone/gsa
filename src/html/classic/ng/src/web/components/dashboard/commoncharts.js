@@ -23,12 +23,12 @@
 
 import React from 'react';
 
-import  _ from '../../locale.js';
+import  _ from '../../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import DataSource from '../dashboard/datasource.js';
-import Chart from '../dashboard/chart.js';
+import DataSource from './datasource.js';
+import Chart from './chart.js';
 
 const CommonCharts = ({filter, type, titleType}) => {
   return (

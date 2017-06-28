@@ -25,10 +25,10 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import {withDashboard} from '../dashboard/dashboard.js';
-
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
+
+import {withDashboard} from '../components/dashboard/dashboard.js';
 
 import HelpIcon from '../components/icon/helpicon.js';
 

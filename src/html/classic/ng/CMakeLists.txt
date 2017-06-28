@@ -168,6 +168,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/bar/titlebar.js
      ${NG_SRC_DIR}/src/web/components/bar/toolbar.js
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/dashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
@@ -238,10 +242,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/cpes/filterdialog.js
      ${NG_SRC_DIR}/src/web/cpes/row.js
      ${NG_SRC_DIR}/src/web/cpes/table.js
-     ${NG_SRC_DIR}/src/web/dashboard/dashboard.js
-     ${NG_SRC_DIR}/src/web/dashboard/datasource.js
-     ${NG_SRC_DIR}/src/web/dashboard/chart.js
-     ${NG_SRC_DIR}/src/web/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/dfncert/charts.js
      ${NG_SRC_DIR}/src/web/dfncert/dfncertadvspage.js
      ${NG_SRC_DIR}/src/web/dfncert/row.js
@@ -437,6 +437,7 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/bar/css/statusbar.css
+     ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/components/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
      ${NG_SRC_DIR}/src/web/components/form/css/button.css
@@ -457,7 +458,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/login.css
      ${NG_SRC_DIR}/src/web/css/page.css
      ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
-     ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
      ${NG_SRC_DIR}/src/web/powerfilter/css/powerfilter.css

@@ -26,17 +26,17 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined, is_empty, includes, shorten} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
-
-import {withDashboard} from '../dashboard/dashboard.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
 
+import {withDashboard} from '../components/dashboard/dashboard.js';
+
 import HelpIcon from '../components/icon/helpicon.js';
 import NewIcon from '../components/icon/newicon.js';
+
+import Layout from '../components/layout/layout.js';
 
 import OverridesCharts from './charts.js';
 import OverrideDialog from './dialog.js';
