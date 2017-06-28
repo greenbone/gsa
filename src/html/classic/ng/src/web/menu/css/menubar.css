@@ -29,13 +29,3 @@
 .menubar .menu-section {
   border-top: 1px solid #b0b0b0;
 }
-
-/* Sticky menubar */
-
-.menubar  .greenbone-icon {
-  visibility: hidden;
-}
-
-.sticky.menubar .greenbone-icon {
-  visibility: visible;
-}

@@ -23,12 +23,14 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import GreenboneIcon from '../components/icon/greenboneicon.js';
+import GBIcon from '../components/icon/greenboneicon.js';
 
 import Sticky from '../components/sticky/sticky.js';
 
@@ -38,6 +40,15 @@ import Menu from './menu.js';
 import MenuEntry from './menuentry.js';
 
 import './css/menubar.css';
+
+const GreenboneIcon = glamorous(GBIcon)(
+  {
+    visibility: 'hidden',
+    '.sticky &': {
+      visibility: 'visible',
+    }
+  }
+);
 
 const MenuBar = (props, {gmp, capabilities}) => {
   if (!gmp.isLoggedIn() || !is_defined(capabilities)) {
