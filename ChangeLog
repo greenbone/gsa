@@ -1,5 +1,28 @@
 2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,,
+	src/html/classic/ng/src/web/components/bar/titlebar.js,,
+	src/html/classic/ng/src/web/components/icon/greenboneicon.js,
+	src/html/classic/ng/src/web/header.js,
+	src/html/classic/ng/src/web/components/structure/footer.js,
+	src/html/classic/ng/src/web/footer.js ->,
+	src/html/classic/ng/src/web/components/structure/header.js,
+	src/html/classic/ng/src/web/main.js ->,
+	src/html/classic/ng/src/web/components/structure/main.js,
+	src/html/classic/ng/src/web/css/footer.css,
+	src/html/classic/ng/src/web/css/main.css,
+	src/html/classic/ng/src/web/css/titlebar.css,
+	src/html/classic/ng/src/web/loginpage.js,
+	src/html/classic/ng/src/web/page.js,
+	src/html/classic/ng/src/web/pagenotfound.js,
+	src/html/classic/ng/src/web/titlebar.js: Move main, footer and header to
+	src/web/components/structure directory and titlebar to
+	src/web/components/bar. Get rid of css files by using glamorous for styling
+	these components. Don't set height and width by default for greenbone icon.
+	Move logout handler from Main to Titlebar where it actually is called.
+
+2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/menu/css/menubar.css,
 	src/html/classic/ng/src/web/menu/menubar.js: Use glamorous to get a sticky
 	greenbone icon at the menu bar.

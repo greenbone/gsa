@@ -23,44 +23,31 @@
 
 import React from 'react';
 
-import PropTypes from './proptypes.js';
-import Titlebar from './titlebar.js';
+import glamorous from 'glamorous';
 
-export class Header extends React.Component {
+import ExternalLink from '../../link/external.js';
 
-  constructor(props) {
-    super(props);
+const Link = glamorous(ExternalLink)({
+  color: '#787878',
+});
 
-    this.logout = this.logout.bind(this);
-  }
+const Footer = glamorous.footer({
+  fontSize: '10px',
+  textAlign: 'right',
+  color: '#787878',
+  margin: '10px 5px',
+});
 
-  logout(event) {
-    let {router, gmp} = this.context;
-
-    event.preventDefault();
-
-    gmp.logout().then(() => {
-      router.push('/login?type=logout');
-    })
-    .catch(() => {
-      router.push('/login?type=logout');
-    });
-  }
-
-  render() {
-    return (
-      <header>
-        <Titlebar onLogoutClick={this.logout}/>
-      </header>
-    );
-  }
-}
-
-Header.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  router: PropTypes.object.isRequired,
+const GreenboneFooter = () => {
+  return (
+    <Footer>
+      Greenbone Security Assistant (GSA) Copyright 2009-2017 by
+      Greenbone Networks GmbH, <Link href="http://www.greenbone.net">
+        www.greenbone.net</Link>
+    </Footer>
+  );
 };
 
-export default Header;
+export default GreenboneFooter;
 
 // vim: set ts=2 sw=2 tw=80:

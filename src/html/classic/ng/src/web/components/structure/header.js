@@ -23,20 +23,14 @@
 
 import React from 'react';
 
-import ExternalLink from './link/external.js';
+import Titlebar from '../bar/titlebar.js';
 
-import './css/footer.css';
+const Header = () =>  (
+  <header>
+    <Titlebar />
+  </header>
+);
 
-export const Footer = () => {
-  return (
-    <footer className="gsa-footer">
-      Greenbone Security Assistant (GSA) Copyright 2009-2017 by
-      Greenbone Networks GmbH, <ExternalLink href="http://www.greenbone.net">
-        www.greenbone.net</ExternalLink>
-    </footer>
-  );
-};
-
-export default Footer;
+export default Header;
 
 // vim: set ts=2 sw=2 tw=80:

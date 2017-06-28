@@ -27,9 +27,9 @@ import _ from '../locale.js';
 
 import Layout from './components/layout/layout.js';
 
-import Footer from './footer.js';
-import Header from './header.js';
-import Main from './main.js';
+import Footer from './components/structure/footer.js';
+import Header from './components/structure/header.js';
+import Main from './components/structure/main.js';
 
 export const PageNotFound = () => {
   return (

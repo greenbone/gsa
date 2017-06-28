@@ -30,11 +30,12 @@ import PropTypes from '../../proptypes.js';
 
 import Icon from './icon.js';
 
-const GreenboneIcon = ({className, ...props}) => {
+const GreenboneIcon = ({className, size = 'default', ...props}) => {
   className = classes(className, 'greenbone-icon');
   return (
     <Icon
       {...props}
+      size={size}
       alt={_('Greenbone Security Assistant')}
       className={className}
       img="greenbone.svg"
@@ -43,6 +44,7 @@ const GreenboneIcon = ({className, ...props}) => {
 };
 
 GreenboneIcon.propTypes = {
+  size: PropTypes.string,
   className: PropTypes.string,
 };
 

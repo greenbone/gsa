@@ -162,6 +162,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/certbund/row.js
      ${NG_SRC_DIR}/src/web/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/bar/titlebar.js
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
      ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
@@ -207,6 +208,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
      ${NG_SRC_DIR}/src/web/components/sticky/sticky.js
+     ${NG_SRC_DIR}/src/web/components/structure/footer.js
+     ${NG_SRC_DIR}/src/web/components/structure/header.js
+     ${NG_SRC_DIR}/src/web/components/structure/main.js
      ${NG_SRC_DIR}/src/web/components/table/body.js
      ${NG_SRC_DIR}/src/web/components/table/data.js
      ${NG_SRC_DIR}/src/web/components/table/header.js
@@ -259,12 +263,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/filters/dialog.js
      ${NG_SRC_DIR}/src/web/filters/filterspage.js
      ${NG_SRC_DIR}/src/web/filters/row.js
-     ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/groups/dialog.js
      ${NG_SRC_DIR}/src/web/groups/groupsppage.js
      ${NG_SRC_DIR}/src/web/groups/header.js
      ${NG_SRC_DIR}/src/web/groups/row.js
-     ${NG_SRC_DIR}/src/web/header.js
      ${NG_SRC_DIR}/src/web/homepage.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
      ${NG_SRC_DIR}/src/web/hosts/dialog.js
@@ -280,7 +282,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/link/legacylink.js
      ${NG_SRC_DIR}/src/web/link/link.js
      ${NG_SRC_DIR}/src/web/loginpage.js
-     ${NG_SRC_DIR}/src/web/main.js
      ${NG_SRC_DIR}/src/web/menu/iconmenu.js
      ${NG_SRC_DIR}/src/web/menu/menubar.js
      ${NG_SRC_DIR}/src/web/menu/menuentry.js
@@ -410,7 +411,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/task.js
      ${NG_SRC_DIR}/src/web/tasks/taskspage.js
      ${NG_SRC_DIR}/src/web/tasks/trend.js
-     ${NG_SRC_DIR}/src/web/titlebar.js
      ${NG_SRC_DIR}/src/web/users/confirmdeletedialog.js
      ${NG_SRC_DIR}/src/web/users/dialog.js
      ${NG_SRC_DIR}/src/web/users/header.js
@@ -447,16 +447,13 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/components/layout/css/layout.css
      ${NG_SRC_DIR}/src/web/css/cveid.css
-     ${NG_SRC_DIR}/src/web/css/footer.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
      ${NG_SRC_DIR}/src/web/css/login.css
-     ${NG_SRC_DIR}/src/web/css/main.css
      ${NG_SRC_DIR}/src/web/css/page.css
      ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
      ${NG_SRC_DIR}/src/web/css/statusbar.css
-     ${NG_SRC_DIR}/src/web/css/titlebar.css
      ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css

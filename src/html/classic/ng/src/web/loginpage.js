@@ -29,9 +29,6 @@ import {autobind, KeyCode, is_empty} from '../utils.js';
 
 import Layout from './components/layout/layout.js';
 
-import Footer from './footer.js';
-import Header from './header.js';
-import Main from './main.js';
 import PropTypes from './proptypes.js';
 
 import FormGroup from './components/form/formgroup.js';
@@ -40,6 +37,10 @@ import SubmitButton from './components/form/submitbutton.js';
 import TextField from './components/form/textfield.js';
 
 import Icon from './components/icon/icon.js';
+
+import Footer from './components/structure/footer.js';
+import Header from './components/structure/header.js';
+import Main from './components/structure/main.js';
 
 import './css/login.css';
 

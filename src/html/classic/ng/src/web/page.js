@@ -26,14 +26,15 @@ import React from 'react';
 import logger from '../log.js';
 import {is_defined} from '../utils.js';
 
-import Footer from './footer.js';
-import Header from './header.js';
-import Main from './main.js';
 import PropTypes from './proptypes.js';
 
 import MenuBar from './menu/menubar.js';
 
 import StickyContainer from './components/sticky/container.js';
+
+import Footer from './components/structure/footer.js';
+import Header from './components/structure/header.js';
+import Main from './components/structure/main.js';
 
 import './css/page.css';
 

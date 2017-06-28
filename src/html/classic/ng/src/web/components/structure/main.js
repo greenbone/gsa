@@ -23,23 +23,21 @@
 
 import React from 'react';
 
-import {withLayout} from './components/layout/layout.js';
+import glamorous from 'glamorous';
 
-import {classes} from '../utils.js';
+import {withLayout} from '../layout/layout.js';
 
-import PropTypes from './proptypes.js';
+const Main = glamorous.main(
+  'main',
+  {
+    padding: '5px 10px',
+  }
+);
 
-import './css/main.css';
-
-const MainComponent = ({className, ...other}) => {
-  className = classes('main', className);
+const MainComponent = props => {
   return (
-    <main {...other} className={className}/>
+    <Main {...props}/>
   );
-};
-
-MainComponent.propTypes = {
-  className: PropTypes.string,
 };
 
 export default withLayout(MainComponent);
