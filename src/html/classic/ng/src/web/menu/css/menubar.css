@@ -39,7 +39,3 @@
 .sticky.menubar .greenbone-icon {
   visibility: visible;
 }
-
-.sticky {
-  z-index: 20;
-}

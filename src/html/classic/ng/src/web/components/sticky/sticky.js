@@ -24,9 +24,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {classes} from '../../../utils.js';
+import glamorous from 'glamorous';
 
 import PropTypes from '../../proptypes.js';
+
+const Placeholder = glamorous.div(
+  ({isSticky, height}) => (
+    {
+      paddingBottom: isSticky ? height + 'px' : 0,
+    }
+  ),
+);
+
+const Wrapper = glamorous.div(
+  ({isSticky}) => isSticky ? 'sticky' : undefined,
+  ({isSticky, difference, left, width}) => isSticky ? {
+    position: 'fixed',
+    top: difference > 0 ? 0 : difference,
+    left: left,
+    width: width,
+    transform: 'translateZ(0)',
+    zIndex: 20,
+  } : {},
+);
 
 class Sticky extends React.Component {
 
@@ -35,7 +55,6 @@ class Sticky extends React.Component {
 
     this.state = {
       isSticky: false,
-      style: {},
     };
 
     this.handleContainerEvent = this.handleContainerEvent.bind(this);
@@ -77,41 +96,28 @@ class Sticky extends React.Component {
     isSticky = distanceFromTop <= -topOffset &&
       distanceFromBottom > -bottomOffset;
 
-    distanceFromBottom = distanceFromBottom - calculatedHeight;
-
-    const style = isSticky ? {
-      position: 'fixed',
-      top: bottomDifference > 0 ? 0 : bottomDifference,
-      left: placeholderClientRect.left,
-      width: placeholderClientRect.width,
-      transform: 'translateZ(0)',
-    } : {};
-
     this.setState({
       isSticky,
-      distanceFromTop,
-      distanceFromBottom,
-      calculatedHeight,
-      style
+      height: calculatedHeight,
+      difference: bottomDifference,
+      left: placeholderClientRect.left,
+      width: placeholderClientRect.width,
     });
   };
 
   render() {
     let {
       children,
-      className,
       ...props,
     } = this.props;
 
     const {
-      style,
       isSticky,
-      calculatedHeight,
+      height,
+      difference,
+      left,
+      width,
     } = this.state;
-
-    let placeholder_style = {
-      paddingBottom: isSticky ? calculatedHeight + 'px' : 0,
-    };
 
     const element = React.cloneElement(
       children,
@@ -120,22 +126,21 @@ class Sticky extends React.Component {
       },
     );
 
-    if (isSticky) {
-      className = classes(className, 'sticky');
-    }
-
     return (
       <div>
-        <div
-          style={placeholder_style}
-          ref={ref => this.placeholder = ref}>
-        </div>
-        <div
+        <Placeholder
+          isSticky={isSticky}
+          height={height}
+          innerRef={ref => this.placeholder = ref}>
+        </Placeholder>
+        <Wrapper
           {...props}
-          className={className}
-          style={style}>
+          isSticky={isSticky}
+          difference={difference}
+          left={left}
+          width={width}>
           {element}
-        </div>
+        </Wrapper>
       </div>
     );
   }
@@ -143,7 +148,6 @@ class Sticky extends React.Component {
 
 Sticky.propTypes = {
   bottomOffset: PropTypes.number,
-  className: PropTypes.string,
   topOffset: PropTypes.number,
 };
 
