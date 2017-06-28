@@ -24,14 +24,16 @@
 import React from 'react';
 
 import {datetime} from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import SolutionType from '../solutiontype.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../entities/row.js';
 
 import SeverityBar from '../components/bar/severitybar.js';
+
+import SolutionTypeIcon from '../components/icon/solutiontypeicon.js';
 
 import AssetLink from '../components/link/assetlink.js';
 
@@ -45,7 +47,8 @@ const Row = ({
     onToggleDetailsClick,
     ...other,
   }) => {
-  let shown_name = entity.name ? entity.name : entity.nvt.oid;
+  const shown_name = is_defined(entity.name) ? entity.name : entity.nvt.oid;
+  const has_tags = is_defined(entity.nvt) && is_defined(entity.nvt.tags);
   return (
     <TableRow>
       <TableData>
@@ -56,8 +59,8 @@ const Row = ({
         </RowDetailsToggle>
       </TableData>
       <TableData flex align="center">
-        {entity && entity.nvt && entity.nvt.tags &&
-          <SolutionType type={entity.nvt.tags.solution_type}/>
+        {has_tags &&
+          <SolutionTypeIcon type={entity.nvt.tags.solution_type}/>
         }
       </TableData>
       <TableData flex align="center">

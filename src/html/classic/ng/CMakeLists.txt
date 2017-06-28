@@ -206,6 +206,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/icon/listicon.js
      ${NG_SRC_DIR}/src/web/components/icon/newicon.js
      ${NG_SRC_DIR}/src/web/components/icon/osicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
      ${NG_SRC_DIR}/src/web/components/icon/trashicon.js
      ${NG_SRC_DIR}/src/web/components/img/img.js
      ${NG_SRC_DIR}/src/web/components/label/severityclass.js
@@ -382,7 +383,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/secinfo/row.js
      ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
      ${NG_SRC_DIR}/src/web/secinfo/table.js
-     ${NG_SRC_DIR}/src/web/solutiontype.js
      ${NG_SRC_DIR}/src/web/tags/dialog.js
      ${NG_SRC_DIR}/src/web/tags/row.js
      ${NG_SRC_DIR}/src/web/tags/tagspage.js

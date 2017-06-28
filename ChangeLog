@@ -1,6 +1,16 @@
 2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/solutiontype.js,
+	src/html/classic/ng/src/web/components/icon/solutiontypeicon.js,
+	src/html/classic/ng/src/web/nvts/row.js,
+	src/html/classic/ng/src/web/results/details.js,
+	src/html/classic/ng/src/web/results/row.js: Move solutiontype icon component
+	to src/web/components/icon directory.
+
+2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/label/severityclass.js,
 	src/html/classic/ng/src/web/css/severityclasslabels.css,
 	src/html/classic/ng/src/web/results/filterdialog.js,

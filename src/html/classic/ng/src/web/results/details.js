@@ -31,12 +31,13 @@ import {is_empty, is_defined} from '../../utils.js';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
-import SolutionType from '../solutiontype.js';
 import {render_nvt_name} from '../render.js';
 
-import Divider from '../components/layout/divider.js';
-
 import DetailsBlock from '../entity/block.js';
+
+import SolutionTypeIcon from '../components/icon/solutiontypeicon.js';
+
+import Divider from '../components/layout/divider.js';
 
 import CveLink from '../components/link/cvelink.js';
 import DetailsLink from '../components/link/detailslink.js';
@@ -166,7 +167,7 @@ const ResultDetails = ({
             flex
             className="solution-type">
             <B>{_('Solution Type:')}</B>
-            <SolutionType
+            <SolutionTypeIcon
               displayTitleText
               type={tags.solution_type}/>
           </Layout>

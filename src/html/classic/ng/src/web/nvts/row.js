@@ -26,17 +26,18 @@ import React from 'react';
 import {datetime} from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import SolutionType from '../solutiontype.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
+
+import SolutionTypeIcon from '../components/icon/solutiontypeicon.js';
 
 import Divider from '../components/layout/divider.js';
 
 import CveLink from '../components/link/cvelink.js';
 import InfoLink from '../components/link/infolink.js';
-
-import SeverityBar from '../components/bar/severitybar.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';
@@ -86,7 +87,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
       </TableData>
       <TableData flex align="center">
         {entity && entity.tags &&
-          <SolutionType type={entity.tags.solution_type}/>
+          <SolutionTypeIcon type={entity.tags.solution_type}/>
         }
       </TableData>
       <TableData flex align="center">

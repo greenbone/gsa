@@ -23,13 +23,13 @@
 
 import React from 'react';
 
-import _ from '../locale.js';
+import _ from '../../../locale.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Icon from './components/icon/icon.js';
+import Divider from '../layout/divider.js';
 
-import Layout from './components/layout/layout.js';
+import Icon from './icon.js';
 
 const SolutionType = ({
     type,
@@ -69,7 +69,7 @@ const SolutionType = ({
 
   if (displayTitleText) {
     return (
-      <Layout flex align={["start", "center"]}>
+      <Divider flex align={["start", "center"]}>
         <Icon
           img={img}
           title={title}
@@ -77,7 +77,7 @@ const SolutionType = ({
         <span>
           {title}
         </span>
-      </Layout>
+      </Divider>
     );
   }
 
