@@ -45,10 +45,10 @@ import Divider from '../components/layout/divider.js';
 import IconDivider from '../components/layout/icondivider.js';
 import Layout from '../components/layout/layout.js';
 
-import AssetLink from '../link/assetlink.js';
-import DetailsLink from '../link/detailslink.js';
-import InnerLink from '../link/innerlink.js';
-import LegacyLink from '../link/legacylink.js';
+import AssetLink from '../components/link/assetlink.js';
+import DetailsLink from '../components/link/detailslink.js';
+import InnerLink from '../components/link/innerlink.js';
+import LegacyLink from '../components/link/legacylink.js';
 
 import InfoTable from '../components/table/info.js';
 import TableBody from '../components/table/body.js';

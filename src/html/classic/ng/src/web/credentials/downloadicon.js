@@ -31,7 +31,7 @@ import PropTypes from '../proptypes.js';
 
 import Icon from '../components/icon/icon.js';
 
-import LegacyLink from '../link/legacylink.js';
+import LegacyLink from '../components/link/legacylink.js';
 
 const CredentialDownloadIcon = ({
     credential,

@@ -42,9 +42,9 @@ import TrashIcon from '../components/icon/trashicon.js';
 import Divider from '../components/layout/divider.js';
 import IconDivider from '../components/layout/icondivider.js';
 
-import Section from '../components/section/section.js';
+import DetailsLink from '../components/link/detailslink.js';
 
-import DetailsLink from '../link/detailslink.js';
+import Section from '../components/section/section.js';
 
 import Table from '../components/table/stripped.js';
 import TableBody from '../components/table/body.js';

@@ -32,12 +32,12 @@ import PropTypes from '../../proptypes.js';
 
 import GBIcon from '../icon/greenboneicon.js';
 
+import Link from '../link/link.js';
+
 import Menu from '../menu/menu.js';
 import MenuEntry from '../menu/menuentry.js';
 
 import Sticky from '../sticky/sticky.js';
-
-import Link from '../../link/link.js';
 
 const GreenboneIcon = glamorous(GBIcon)(
   {

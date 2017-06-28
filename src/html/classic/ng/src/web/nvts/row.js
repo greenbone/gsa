@@ -25,14 +25,16 @@ import React from 'react';
 
 import {datetime} from '../../locale.js';
 
-import CveId from '../cveid.js';
 import PropTypes from '../proptypes.js';
 import SolutionType from '../solutiontype.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
-import InfoLink from '../link/infolink.js';
+import Divider from '../components/layout/divider.js';
+
+import CveLink from '../components/link/cvelink.js';
+import InfoLink from '../components/link/infolink.js';
 
 import SeverityBar from '../components/bar/severitybar.js';
 
@@ -44,6 +46,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
     <TableRow>
       <TableData>
         <InfoLink
+          legacy
           type="nvt"
           id={entity.id}
           textOnly={!links}
@@ -53,8 +56,8 @@ const Row = ({entity, links = true, actions, ...other}) => {
       </TableData>
       <TableData>
         <InfoLink
-          cmd="get_info"
-          info_type="nvt"
+          legacy
+          type="nvt"
           filter={'family="' + entity.family + '"'}
           textOnly={!links}
         >
@@ -71,13 +74,15 @@ const Row = ({entity, links = true, actions, ...other}) => {
         {entity.version}
       </TableData>
       <TableData>
-        {entity.cves.map(id => (
-          <CveId
-            key={id}
-            id={id}
-            textOnly={!links}
-          />
-        ))}
+        <Divider>
+          {entity.cves.map(id => (
+            <CveLink
+              key={id}
+              id={id}
+              textOnly={!links}
+            />
+          ))}
+        </Divider>
       </TableData>
       <TableData flex align="center">
         {entity && entity.tags &&

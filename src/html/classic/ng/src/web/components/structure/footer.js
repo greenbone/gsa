@@ -25,7 +25,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import ExternalLink from '../../link/external.js';
+import ExternalLink from '../link/externallink.js';
 
 const Link = glamorous(ExternalLink)({
   color: '#787878',

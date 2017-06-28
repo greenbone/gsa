@@ -37,7 +37,7 @@ import Icon from '../components/icon/icon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import Link from '../link/link.js';
+import DetailsLink from '../components/link/detailslink.js';
 
 import Sort from '../components/sortby/sortby.js';
 
@@ -129,12 +129,14 @@ const ResultsRowDetails = glamorous(({
           entity={entity}
         />
         <Layout flex align={['start', 'start']}>
-          <Link to={'/result/' + entity.id}>
+          <DetailsLink
+            type="result"
+            id={entity.id}>
             <Icon img="details.svg"
               size="small"
               title={_('Show details')}
             />
-          </Link>
+          </DetailsLink>
         </Layout>
       </TableData>
     </TableRow>

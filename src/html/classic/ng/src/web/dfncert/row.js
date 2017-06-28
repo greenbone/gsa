@@ -30,7 +30,7 @@ import {na, render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
-import LegacyLink from '../link/legacylink.js';
+import InfoLink from '../components/link/infolink.js';
 
 import SeverityBar from '../components/bar/severitybar.js';
 
@@ -43,16 +43,14 @@ const Row = ({entity, links = true, actions, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        {links ?
-          <LegacyLink
-            cmd="get_info"
-            details="1"
-            info_type="dfn_cert_adv"
-            info_id={entity.id}>
-            {entity.name}
-          </LegacyLink> :
-            entity.name
-        }
+        <InfoLink
+          legacy
+          details
+          type="dfn_cert_adv"
+          id={entity.id}
+          textOnly={!links}>
+          {entity.name}
+        </InfoLink>
         <Comment text={entity.comment}/>
       </TableData>
       <TableData>

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,38 +23,58 @@
 
 import React from 'react';
 
-import PropTypes from './proptypes.js';
+import {extend, is_defined} from '../../../utils.js';
 
-import InfoLink from './link/infolink.js';
+import PropTypes from '../../proptypes.js';
 
-import './css/cveid.css';
+import {withTextOnly} from './link.js';
 
-const CveId = ({
-    id,
+const LegacyLink = ({
+    children,
+    className,
+    cmd,
+    path,
+    target,
     title,
-    ...props,
-  }) => {
+    ...params,
+  }, {gmp}) => {
+
+  let iparams = {
+    token: gmp.token,
+  };
+
+  if (is_defined(cmd)) {
+    iparams.cmd = cmd;
+
+    if (!is_defined(path)) {
+      path = 'omp';
+    }
+  }
+
+  let url = gmp.buildUrl(path, extend({}, params, iparams));
   return (
-    <span className="cve-id">
-      <InfoLink
-        title={title}
-        type="cve"
-        name={id}
-        {...props}
-      >
-        {id}
-      </InfoLink>
-    </span>
+    <a href={url}
+      target={target}
+      className={className}
+      title={title}>
+      {children}
+    </a>
   );
 };
 
-CveId.propTypes = {
-  id: PropTypes.string,
+LegacyLink.propTypes = {
+  className: PropTypes.string,
+  cmd: PropTypes.string,
+  path: PropTypes.string,
+  params: PropTypes.object,
+  target: PropTypes.string,
   title: PropTypes.string,
 };
 
+LegacyLink.contextTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
 
-export default CveId;
+export default withTextOnly(LegacyLink);
 
 // vim: set ts=2 sw=2 tw=80:
-

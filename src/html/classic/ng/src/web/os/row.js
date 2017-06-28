@@ -39,8 +39,8 @@ import ExportIcon from '../components/icon/exporticon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
-import Link from '../link/link.js';
+import AssetLink from '../components/link/assetlink.js';
+import Link from '../components/link/link.js';
 
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
@@ -78,14 +78,13 @@ const Row = ({entity, links = true, actions, ...props}) => {
     <TableRow>
       <TableData flex align={['start', 'center']}>
         <CpeIcon name={entity.name}/>
-        {links ?
-          <LegacyLink
-            cmd="get_asset"
-            asset_type="os"
-            asset_id={entity.id}>
-            {entity.name}
-          </LegacyLink> : entity.name
-        }
+        <AssetLink
+          legacy
+          type="os"
+          id={entity.id}
+          textOnly={!links}>
+          {entity.name}
+        </AssetLink>
       </TableData>
       <TableData>
         {entity.title}
@@ -100,7 +99,9 @@ const Row = ({entity, links = true, actions, ...props}) => {
         <SeverityBar severity={entity.average_severity}/>
       </TableData>
       <TableData flex align="center">
-        <Link to={'hosts?filter=os~"' + entity.name + '"'}>
+        <Link
+          to={'hosts?filter=os~"' + entity.name + '"'}
+          textOnly={!links}>
           {entity.hosts.length}
         </Link>
       </TableData>

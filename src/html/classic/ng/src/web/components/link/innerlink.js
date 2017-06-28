@@ -23,38 +23,24 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import LegacyLink from './legacylink.js';
-import Link from './link.js';
-
-const DetailsLink = ({
-    id,
-    legacy = false,
-    type,
-    ...props,
-  }) => {
-  if (legacy) {
-    props[type + '_id'] = id;
-    return (
-      <LegacyLink
-        {...props}
-        cmd={'get_' + type}
-      />
-    );
-  }
+const InnerLink = ({
+  children,
+  to,
+  ...props,
+}) => {
   return (
-    <Link {...props} to={'/' + type + '/' + id}/>
+    <a {...props} href={'#' + to}>
+      {children}
+    </a>
   );
 };
 
-
-DetailsLink.propTypes = {
-  id: PropTypes.id.isRequired,
-  legacy: PropTypes.bool,
-  type: PropTypes.string.isRequired,
+InnerLink.propTypes = {
+  to: PropTypes.string.isRequired,
 };
 
-export default DetailsLink;
+export default InnerLink;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -42,8 +42,8 @@ import Icon from '../components/icon/icon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import DetailsLink from '../link/detailslink.js';
-import Link from '../link/link.js';
+import DetailsLink from '../components/link/detailslink.js';
+import Link from '../components/link/link.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';

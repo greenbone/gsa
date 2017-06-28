@@ -44,7 +44,7 @@ import OsIcon from '../components/icon/osicon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
+import AssetLink from '../components/link/assetlink.js';
 
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
@@ -107,15 +107,12 @@ const Row = ({entity, links = true, actions, ...props}) => {
   return (
     <TableRow>
       <TableData flex="column">
-        {links ?
-          <LegacyLink
-            cmd="get_asset"
-            asset_type="host"
-            asset_id={entity.id}>
-            {entity.name}
-          </LegacyLink> :
-          entity.name
-        }
+        <AssetLink
+          legacy
+          type="host"
+          asset_id={entity.id}>
+          {entity.name}
+        </AssetLink>
         <Comment text={entity.comment}/>
       </TableData>
       <TableData>

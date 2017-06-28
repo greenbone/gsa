@@ -43,7 +43,7 @@ import ExportIcon from '../components/icon/exporticon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
+import DetailsLink from '../components/link/detailslink.js';
 
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
@@ -99,12 +99,13 @@ const Cred = ({cred, title, links}) => {
     <Layout flex box>
       <Text>{title}: </Text>
       <Layout box>
-        {links ?
-          <LegacyLink cmd="get_credential" credential_id={cred.id}>
-            {cred.name}
-          </LegacyLink> :
-          cred.name
-        }
+        <DetailsLink
+          legacy
+          type="credential"
+          id={cred.id}
+          textOnly={!links}>
+          {cred.name}
+        </DetailsLink>
       </Layout>
     </Layout>
   );
@@ -138,14 +139,13 @@ const Row = ({
         {entity.max_hosts}
       </TableData>
       <TableData>
-        {links && capabilities.mayAccess('port_lists') ?
-          <LegacyLink
-            cmd="get_port_list"
-            port_list_id={entity.port_list.id}>
-            {entity.port_list.name}
-          </LegacyLink> :
-          entity.port_list.name
-        }
+        <DetailsLink
+          legacy
+          type="port_list"
+          id={entity.port_list.id}
+          textOnly={!links || !capabilities.mayAccess('port_lists')}>
+          {entity.port_list.name}
+        </DetailsLink>
       </TableData>
       <TableData flex="column" align="center">
         <Cred cred={entity.ssh_credential}

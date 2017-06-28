@@ -28,7 +28,7 @@ import {is_defined, is_empty} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
 
-import LegacyLink from '../link/legacylink.js';
+import LegacyLink from '../components/link/legacylink.js';
 
 export const EntityLink = ({
     entity,

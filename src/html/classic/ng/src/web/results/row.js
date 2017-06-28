@@ -31,9 +31,9 @@ import {render_component} from '../render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../entities/row.js';
 
-import AssetLink from '../link/assetlink.js';
-
 import SeverityBar from '../components/bar/severitybar.js';
+
+import AssetLink from '../components/link/assetlink.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';
@@ -68,6 +68,7 @@ const Row = ({
       </TableData>
       <TableData flex align="center">
         <AssetLink
+          legacy
           type="host"
           id={entity.host.id}
           textOnly={!links}

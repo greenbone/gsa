@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,58 +23,34 @@
 
 import React from 'react';
 
-import {extend, is_defined} from '../../utils.js';
+import {classes} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import {withTextOnly} from './link.js';
 
-const LegacyLink = ({
-    children,
-    className,
-    cmd,
-    path,
-    target,
-    title,
-    ...params,
-  }, {gmp}) => {
+const ExternalLink = ({
+  className,
+  children,
+  ...props,
+}) => {
 
-  let iparams = {
-    token: gmp.token,
-  };
+  className = classes(className, 'external-link');
 
-  if (is_defined(cmd)) {
-    iparams.cmd = cmd;
-
-    if (!is_defined(path)) {
-      path = 'omp';
-    }
-  }
-
-  let url = gmp.buildUrl(path, extend({}, params, iparams));
   return (
-    <a href={url}
-      target={target}
+    <a {...props}
       className={className}
-      title={title}>
+      rel="noopener noreferrer"
+      target="_blank">
       {children}
     </a>
   );
 };
 
-LegacyLink.propTypes = {
+ExternalLink.propTypes = {
   className: PropTypes.string,
-  cmd: PropTypes.string,
-  path: PropTypes.string,
-  params: PropTypes.object,
-  target: PropTypes.string,
-  title: PropTypes.string,
 };
 
-LegacyLink.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withTextOnly(LegacyLink);
+export default withTextOnly(ExternalLink);
 
 // vim: set ts=2 sw=2 tw=80:

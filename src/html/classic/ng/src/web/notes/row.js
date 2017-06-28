@@ -40,7 +40,7 @@ import ExportIcon from '../components/icon/exporticon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
+import DetailsLink from '../components/link/detailslink.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';
@@ -96,12 +96,13 @@ const Row = ({entity, links = true, actions, ...props}) => {
   return (
     <TableRow>
       <TableData>
-        {links ?
-          <LegacyLink cmd="get_note" note_id={entity.id}>
-            {text}
-          </LegacyLink> :
-          text
-        }
+        <DetailsLink
+          legacy
+          type="note"
+          id={entity.id}
+          textOnly={!links}>
+          {text}
+        </DetailsLink>
       </TableData>
       <TableData>
         {entity.nvt ? entity.nvt.name : ""}

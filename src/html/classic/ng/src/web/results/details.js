@@ -30,7 +30,6 @@ import {is_empty, is_defined} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import CveId from '../cveid.js';
 import PropTypes from '../proptypes.js';
 import SolutionType from '../solutiontype.js';
 import {render_nvt_name} from '../render.js';
@@ -39,9 +38,10 @@ import Divider from '../components/layout/divider.js';
 
 import DetailsBlock from '../entity/block.js';
 
-import DetailsLink from '../link/detailslink.js';
-import ExternalLink from '../link/external.js';
-import InfoLink from '../link/infolink.js';
+import CveLink from '../components/link/cvelink.js';
+import DetailsLink from '../components/link/detailslink.js';
+import ExternalLink from '../components/link/externallink.js';
+import InfoLink from '../components/link/infolink.js';
 
 import InfoTable from '../components/table/info.js';
 import TableBody from '../components/table/body.js';
@@ -318,18 +318,18 @@ const ResultDetails = ({
                     {_('CVE')}
                   </TableData>
                   <TableData>
-                    {
-                      nvt.cves.map(cve_id => {
-                        return (
-                          <CveId
+                    <Divider>
+                      {
+                        nvt.cves.map(cve_id => (
+                          <CveLink
                             title={_('View Details of {{cve_id}}', {cve_id})}
                             key={cve_id}
                             id={cve_id}
                             textOnly={!links}
                           />
-                        );
-                      })
-                    }
+                        ))
+                      }
+                    </Divider>
                   </TableData>
                 </TableRow>
               }

@@ -27,30 +27,25 @@ import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
 
-import LegacyLink from '../link/legacylink.js';
-
 import Comment from '../components/comment/comment.js';
 
 import Layout from '../components/layout/layout.js';
+
+import DetailsLink from '../components/link/detailslink.js';
 
 import TableData from '../components/table/data.js';
 
 import ObserverIcon from './icons/entityobservericon.js';
 
 const EntityNameTableData = ({
-    entity,
-    links = true,
-    type,
-    displayName,
-    userName,
-    children,
-  }) => {
-
-  let linkprops = {
-    cmd: 'get_' + type,
-  };
-  linkprops[type + '_id'] = entity.id;
-
+  entity,
+  legacy = false,
+  links = true,
+  type,
+  displayName,
+  userName,
+  children,
+}) => {
   const linktext = (
     <Layout flex="column">
       {entity.isOrphan() &&
@@ -62,11 +57,13 @@ const EntityNameTableData = ({
   return (
     <TableData flex="column">
       <Layout flex align="space-between">
-        <LegacyLink
-          textOnly={!links}
-          {...linkprops}>
+        <DetailsLink
+          legacy={legacy}
+          type={type}
+          id={entity.id}
+          textOnly={!links}>
           {linktext}
-        </LegacyLink>
+        </DetailsLink>
         <ObserverIcon
           displayName={displayName}
           entity={entity}
@@ -83,6 +80,7 @@ const EntityNameTableData = ({
 
 EntityNameTableData.propTypes = {
   entity: PropTypes.model.isRequired,
+  legacy: PropTypes.bool,
   links: PropTypes.bool,
   type: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,

@@ -39,7 +39,7 @@ import DeleteIcon from '../components/icon/deleteicon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
+import DetailsLink from '../components/link/detailslink.js';
 
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
@@ -94,12 +94,13 @@ const Row = ({entity, links = true, actions, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        {links ?
-          <LegacyLink cmd="get_report" report_id={entity.id}>
-            {datetime(report.timestamp)}
-          </LegacyLink> :
-            datetime(report.timestamp)
-        }
+        <DetailsLink
+          legacy
+          type="report"
+          id={entity.id}
+          textOnly={!links}>
+          {datetime(report.timestamp)}
+        </DetailsLink>
       </TableData>
       <TableData>
         <StatusBar
@@ -107,12 +108,13 @@ const Row = ({entity, links = true, actions, ...other}) => {
           progress={progress}/>
       </TableData>
       <TableData>
-        {links ?
-          <LegacyLink cmd="get_task" task_id={entity.task.id}>
-            {entity.task.name}
-          </LegacyLink> :
-            entity.task.name
-        }
+        <DetailsLink
+          legacy
+          type="task"
+          id={entity.task.id}
+          textOnly={!links}>
+          {entity.task.name}
+        </DetailsLink>
       </TableData>
       <TableData flex align="center">
         <SeverityBar severity={entity.report.severity.filtered}/>

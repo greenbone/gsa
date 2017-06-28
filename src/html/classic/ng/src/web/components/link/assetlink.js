@@ -23,24 +23,32 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-const InnerLink = ({
-  children,
-  to,
+import LegacyLink from './legacylink.js';
+
+const AssetLink = ({
+  id,
+  legacy = false,
+  type,
   ...props,
 }) => {
   return (
-    <a {...props} href={'#' + to}>
-      {children}
-    </a>
+    <LegacyLink
+      {...props}
+      cmd="get_assets"
+      asset_type={type}
+      asset_id={id}
+    />
   );
 };
 
-InnerLink.propTypes = {
-  to: PropTypes.string.isRequired,
+AssetLink.propTypes = {
+  id: PropTypes.string.isRequired,
+  legacy: PropTypes.bool,
+  type: PropTypes.string,
 };
 
-export default InnerLink;
+export default AssetLink;
 
 // vim: set ts=2 sw=2 tw=80:

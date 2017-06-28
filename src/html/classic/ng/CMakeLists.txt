@@ -212,6 +212,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
      ${NG_SRC_DIR}/src/web/components/loading/loading.js
+     ${NG_SRC_DIR}/src/web/components/link/assetlink.js
+     ${NG_SRC_DIR}/src/web/components/link/cvelink.js
+     ${NG_SRC_DIR}/src/web/components/link/detailslink.js
+     ${NG_SRC_DIR}/src/web/components/link/externallink.js
+     ${NG_SRC_DIR}/src/web/components/link/infolink.js
+     ${NG_SRC_DIR}/src/web/components/link/innerlink.js
+     ${NG_SRC_DIR}/src/web/components/link/legacylink.js
+     ${NG_SRC_DIR}/src/web/components/link/link.js
      ${NG_SRC_DIR}/src/web/components/menu/iconmenu.js
      ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/components/menu/menu.js
@@ -231,7 +239,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/table/simple.js
      ${NG_SRC_DIR}/src/web/components/table/stripped.js
      ${NG_SRC_DIR}/src/web/components/table/table.js
-     ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/cves/cvespage.js
      ${NG_SRC_DIR}/src/web/cves/filterdialog.js
@@ -280,13 +287,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/hosts/hostspage.js
      ${NG_SRC_DIR}/src/web/hosts/row.js
      ${NG_SRC_DIR}/src/web/hosts/table.js
-     ${NG_SRC_DIR}/src/web/link/assetlink.js
-     ${NG_SRC_DIR}/src/web/link/detailslink.js
-     ${NG_SRC_DIR}/src/web/link/external.js
-     ${NG_SRC_DIR}/src/web/link/infolink.js
-     ${NG_SRC_DIR}/src/web/link/innerlink.js
-     ${NG_SRC_DIR}/src/web/link/legacylink.js
-     ${NG_SRC_DIR}/src/web/link/link.js
      ${NG_SRC_DIR}/src/web/loginpage.js
      ${NG_SRC_DIR}/src/web/notes/charts.js
      ${NG_SRC_DIR}/src/web/notes/dialog.js
@@ -451,7 +451,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/menu/css/iconmenu.css
      ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
      ${NG_SRC_DIR}/src/web/components/menu/css/menuentry.css
-     ${NG_SRC_DIR}/src/web/css/cveid.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css

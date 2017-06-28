@@ -23,27 +23,44 @@
 
 import React from 'react';
 
-import PropTypes from '../proptypes.js';
+import {is_defined} from '../../../utils.js';
+
+import PropTypes from '../../proptypes.js';
 
 import LegacyLink from './legacylink.js';
 
-const AssetLink = ({
-    id,
-    ...props,
-  }) => {
+const InfoLink = ({
+  details = true,
+  id,
+  legacy = false,
+  name,
+  type,
+  ...props,
+}) => {
+  if (is_defined(id)) {
+    props.info_id = id; // eslint-disable-line react/prop-types
+  }
+  else if (is_defined(name)) {
+    props.info_name = name; // eslint-disable-line react/prop-types
+  }
   return (
     <LegacyLink
       {...props}
-      cmd="get_assets"
-      asset_id={id}
+      cmd="get_info"
+      details={details ? '1' : '0'}
+      info_type={type}
     />
   );
 };
 
-AssetLink.propTypes = {
-  id: PropTypes.string.isRequired,
+InfoLink.propTypes = {
+  details: PropTypes.bool,
+  id: PropTypes.string,
+  legacy: PropTypes.bool,
+  name: PropTypes.string,
+  type: PropTypes.string.isRequired,
 };
 
-export default AssetLink;
+export default InfoLink;
 
 // vim: set ts=2 sw=2 tw=80:

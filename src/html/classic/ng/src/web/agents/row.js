@@ -41,7 +41,7 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 import ExportIcon from '../components/icon/exporticon.js';
 import Icon from '../components/icon/icon.js';
 
-import LegacyLink from '../link/legacylink.js';
+import LegacyLink from '../components/link/legacylink.js';
 
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';

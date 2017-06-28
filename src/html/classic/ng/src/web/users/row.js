@@ -41,7 +41,7 @@ import ExportIcon from '../components/icon/exporticon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
+import DetailsLink from '../components/link/detailslink.js';
 
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
@@ -104,17 +104,16 @@ const Row = ({
   let roles;
 
   if (capabilities.mayAccess('roles')) {
-    roles = map(entity.roles, role => {
-      return (
-        <LegacyLink
-          className="item"
-          key={role.id}
-          cmd="get_role"
-          role_id={role.id}>
-          {role.name}
-        </LegacyLink>
-      );
-    });
+    roles = map(entity.roles, role => (
+      <DetailsLink
+        className="item"
+        legacy
+        key={role.id}
+        type="role"
+        id={role.id}>
+        {role.name}
+      </DetailsLink>
+    ));
   }
   else {
     roles = map(entity.roles, role => {
@@ -132,13 +131,14 @@ const Row = ({
   if (capabilities.mayAccess('groups')) {
     groups = map(entity.groups, group => {
       return (
-        <LegacyLink
+        <DetailsLink
           className="item"
+          legacy
+          type="group"
           key={group.id}
-          cmd="get_group"
-          group_id={group.id}>
+          id={group.id}>
           {group.name}
-        </LegacyLink>
+        </DetailsLink>
       );
     });
   }

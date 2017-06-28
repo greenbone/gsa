@@ -42,7 +42,7 @@ import TrashIcon from '../entities/icons/entitytrashicon.js';
 import ExportIcon from '../components/icon/exporticon.js';
 import Icon from '../components/icon/icon.js';
 
-import LegacyLink from '../link/legacylink.js';
+import DetailsLink from '../components/link/detailslink.js';
 
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
@@ -226,17 +226,15 @@ const render_filter = (filter, caps, links = true) => {
     return null;
   }
 
-  if (caps.mayAccess('filters') && links) {
-    return (
-      <LegacyLink
-        cmd="get_filter"
-        filter_id={filter.id}>
-        {filter.name}
-      </LegacyLink>
-    );
-  }
-
-  return filter.name;
+  return (
+    <DetailsLink
+      legacy
+      textOnly={!caps.mayAccess('filters') || !links}
+      type="filter"
+      id={filter.id}>
+      {filter.name}
+    </DetailsLink>
+  );
 };
 
 const Row = ({

@@ -30,8 +30,8 @@ import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
-import LegacyLink from '../link/legacylink.js';
-import Link from '../link/link.js';
+import InfoLink from '../components/link/infolink.js';
+import Link from '../components/link/link.js';
 
 import SeverityBar from '../components/bar/severitybar.js';
 
@@ -42,15 +42,13 @@ const Row = ({entity, links = true, actions, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        {links ?
-          <LegacyLink
-            cmd="get_info"
-            info_type="nvt"
-            info_id={entity.id}>
-            {entity.name}
-          </LegacyLink> :
-            entity.name
-        }
+        <InfoLink
+          legacy
+          type="nvt"
+          id={entity.id}
+          textOnly={!links}>
+          {entity.name}
+        </InfoLink>
       </TableData>
       <TableData>
         {datetime(entity.results.oldest)}
@@ -65,12 +63,11 @@ const Row = ({entity, links = true, actions, ...other}) => {
         {entity.qod} %
       </TableData>
       <TableData flex align="center">
-        {links ?
-          <Link to={'results?filter=nvt=' + entity.id}>
-            {entity.results.count}
-          </Link> :
-          entity.results.count
-        }
+        <Link
+          to={'results?filter=nvt=' + entity.id}
+          textOnly={!links}>
+          {entity.results.count}
+        </Link>
       </TableData>
       <TableData flex align="center">
         {entity.hosts.count}

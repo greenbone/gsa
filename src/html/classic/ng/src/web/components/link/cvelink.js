@@ -23,42 +23,35 @@
 
 import React from 'react';
 
-import {is_defined} from '../../utils.js';
+import PropTypes from '../../proptypes.js';
 
-import PropTypes from '../proptypes.js';
+import InfoLink from './infolink.js';
 
-import LegacyLink from './legacylink.js';
-
-const InfoLink = ({
-    details = true,
+const CveLink = ({
     id,
-    name,
-    type,
+    title,
     ...props,
   }) => {
-  if (is_defined(id)) {
-    props.info_id = id; // eslint-disable-line react/prop-types
-  }
-  else if (is_defined(name)) {
-    props.info_name = name; // eslint-disable-line react/prop-types
-  }
   return (
-    <LegacyLink
-      {...props}
-      cmd="get_info"
-      details={details ? '1' : '0'}
-      info_type={type}
-    />
+    <span className="cve-id">
+      <InfoLink
+        title={title}
+        type="cve"
+        name={id}
+        {...props}
+      >
+        {id}
+      </InfoLink>
+    </span>
   );
 };
 
-InfoLink.propTypes = {
-  details: PropTypes.bool,
+CveLink.propTypes = {
   id: PropTypes.string,
-  name: PropTypes.string,
-  type: PropTypes.string.isRequired,
+  title: PropTypes.string,
 };
 
-export default InfoLink;
+export default CveLink;
 
 // vim: set ts=2 sw=2 tw=80:
+

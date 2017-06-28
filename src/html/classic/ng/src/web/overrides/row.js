@@ -42,7 +42,7 @@ import ExportIcon from '../components/icon/exporticon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
+import DetailsLink from '../components/link/detailslink.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';
@@ -100,14 +100,13 @@ const Row = ({entity, links = true, actions, ...props}) => {
   return (
     <TableRow>
       <TableData>
-        {links ?
-          <LegacyLink
-            cmd="get_override"
-            override_id={entity.id}>
-            {shorten(entity.text)}
-          </LegacyLink> :
-          shorten(entity.text)
-        }
+        <DetailsLink
+          legacy
+          type="override"
+          id={entity.id}
+          textOnly={!links}>
+          {shorten(entity.text)}
+        </DetailsLink>
       </TableData>
       <TableData>
         {entity.nvt ? entity.nvt.name : ""}

@@ -34,8 +34,8 @@ import Icon from '../icon/icon.js';
 
 import Layout from '../layout/layout.js';
 
-import Link from '../../link/link.js';
-import LegacyLink from '../../link/legacylink.js';
+import Link from '../link/link.js';
+import LegacyLink from '../link/legacylink.js';
 
 const LogoutLink = glamorous.a({
   color: '#393637',

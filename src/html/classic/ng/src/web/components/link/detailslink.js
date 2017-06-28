@@ -23,34 +23,38 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
+import PropTypes from '../../proptypes.js';
 
-import PropTypes from '../proptypes.js';
+import LegacyLink from './legacylink.js';
+import Link from './link.js';
 
-import {withTextOnly} from './link.js';
-
-const ExternalLink = ({
-  className,
-  children,
-  ...props,
-}) => {
-
-  className = classes(className, 'external-link');
-
+const DetailsLink = ({
+    id,
+    legacy = false,
+    type,
+    ...props,
+  }) => {
+  if (legacy) {
+    props[type + '_id'] = id;
+    return (
+      <LegacyLink
+        {...props}
+        cmd={'get_' + type}
+      />
+    );
+  }
   return (
-    <a {...props}
-      className={className}
-      rel="noopener noreferrer"
-      target="_blank">
-      {children}
-    </a>
+    <Link {...props} to={'/' + type + '/' + id}/>
   );
 };
 
-ExternalLink.propTypes = {
-  className: PropTypes.string,
+
+DetailsLink.propTypes = {
+  id: PropTypes.id.isRequired,
+  legacy: PropTypes.bool,
+  type: PropTypes.string.isRequired,
 };
 
-export default withTextOnly(ExternalLink);
+export default DetailsLink;
 
 // vim: set ts=2 sw=2 tw=80:

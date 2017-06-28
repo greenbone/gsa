@@ -38,7 +38,7 @@ import TextField from '../components/form/textfield.js';
 
 import Layout from '../components/layout/layout.js';
 
-import LegacyLink from '../link/legacylink.js';
+import LegacyLink from '../components/link/legacylink.js';
 
 import SimpleTable from '../components/table/simple.js';
 import Table from '../components/table/table.js';

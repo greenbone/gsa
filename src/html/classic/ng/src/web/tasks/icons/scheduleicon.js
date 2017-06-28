@@ -30,7 +30,7 @@ import PropTypes from '../../proptypes.js';
 
 import Icon from '../../components/icon/icon.js';
 
-import DetailsLink from '../../link/detailslink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 
 const ScheduleIcon = ({
   links = true,
@@ -79,18 +79,16 @@ const ScheduleIcon = ({
       alt={_('Schedule Details')}/>
   );
 
-  if (links) {
-    return (
-      <DetailsLink
-        legacy
-        type="schedule"
-        id={schedule.id}
-        title={title}>
-        {icon}
-      </DetailsLink>
-    );
-  }
-  return icon;
+  return (
+    <DetailsLink
+      legacy
+      type="schedule"
+      id={schedule.id}
+      title={title}
+      textOnly={!links}>
+      {icon}
+    </DetailsLink>
+  );
 };
 
 ScheduleIcon.propTypes = {

@@ -32,11 +32,11 @@ import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
-import LegacyLink from '../link/legacylink.js';
-
 import SeverityBar from '../components/bar/severitybar.js';
 
 import Comment from '../components/comment/comment.js';
+
+import InfoLink from '../components/link/infolink.js';
 
 import TableBody from '../components/table/body.js';
 import TableRow from '../components/table/row.js';
@@ -50,16 +50,14 @@ const Row = ({entity, links = true, actions, ...other}) => {
       <TableRow>
         <TableData
           rowSpan="2">
-          {links ?
-            <LegacyLink
-              cmd="get_info"
-              details="1"
-              info_type={entity.type}
-              info_id={entity.id}>
-              {entity.name}
-            </LegacyLink> :
-              entity.name
-          }
+          <InfoLink
+            legacy
+            details
+            type={entity.type}
+            id={entity.id}
+            textOnly={!links}>
+            {entity.name}
+          </InfoLink>
           <Comment text={entity.comment}/>
         </TableData>
         <TableData>
