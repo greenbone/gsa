@@ -23,12 +23,12 @@
 
 import React from 'react';
 
-import {is_defined, is_array} from '../../utils.js';
+import {is_defined, is_array} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Link from '../link/link.js';
-import LegacyLink from '../link/legacylink.js';
+import Link from '../../link/link.js';
+import LegacyLink from '../../link/legacylink.js';
 
 import './css/menuentry.css';
 
@@ -42,7 +42,7 @@ const handler_wrapper = handler => {
   return undefined;
 };
 
-export const MenuEntry = ({
+const MenuEntry = ({
     caps,
     legacy,
     section,

@@ -23,11 +23,11 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
+import {classes} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Icon, {withIconCss} from '../components/icon/icon.js';
+import Icon, {withIconCss} from '../icon/icon.js';
 
 import './css/iconmenu.css';
 

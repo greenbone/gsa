@@ -1,5 +1,29 @@
 2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt
+	src/html/classic/ng/src/web/menu/menubar.js
+	src/html/classic/ng/src/web/components/bar/menubar.js
+	src/html/classic/ng/src/web/menu/css/iconmenu.css
+	src/html/classic/ng/src/web/components/menu/css/iconmenu.css
+	src/html/classic/ng/src/web/menu/css/menu.css
+	src/html/classic/ng/src/web/components/menu/css/menu.css
+	src/html/classic/ng/src/web/menu/css/menuentry.css
+	src/html/classic/ng/src/web/components/menu/css/menuentry.css
+	src/html/classic/ng/src/web/menu/iconmenu.js
+	src/html/classic/ng/src/web/components/menu/iconmenu.js
+	src/html/classic/ng/src/web/menu/menu.js
+	src/html/classic/ng/src/web/components/menu/menu.js
+	src/html/classic/ng/src/web/menu/menuentry.js
+	src/html/classic/ng/src/web/components/menu/menuentry.js
+	src/html/classic/ng/src/web/menu/css/menubar.css
+	src/html/classic/ng/src/web/page.js
+	src/html/classic/ng/src/web/tasks/icons/newiconmenu.js
+	src/html/classic/ng/src/web/tasks/taskspage.js: Move Menubar component to
+	src/web/components/bar and other menu components to src/web/components/menu.
+	Style menubar completely with glamorous.
+
+2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/certbund/row.js,
 	src/html/classic/ng/src/web/css/statusbar.css,

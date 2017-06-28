@@ -28,7 +28,7 @@ import {is_defined} from '../utils.js';
 
 import PropTypes from './proptypes.js';
 
-import MenuBar from './menu/menubar.js';
+import MenuBar from './components/bar/menubar.js';
 
 import StickyContainer from './components/sticky/container.js';
 

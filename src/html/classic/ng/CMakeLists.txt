@@ -162,6 +162,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/certbund/row.js
      ${NG_SRC_DIR}/src/web/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/bar/menubar.js
      ${NG_SRC_DIR}/src/web/components/bar/severitybar.js
      ${NG_SRC_DIR}/src/web/components/bar/statusbar.js
      ${NG_SRC_DIR}/src/web/components/bar/titlebar.js
@@ -207,6 +208,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
      ${NG_SRC_DIR}/src/web/components/loading/loading.js
+     ${NG_SRC_DIR}/src/web/components/menu/iconmenu.js
+     ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
+     ${NG_SRC_DIR}/src/web/components/menu/menu.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
@@ -284,10 +288,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/link/legacylink.js
      ${NG_SRC_DIR}/src/web/link/link.js
      ${NG_SRC_DIR}/src/web/loginpage.js
-     ${NG_SRC_DIR}/src/web/menu/iconmenu.js
-     ${NG_SRC_DIR}/src/web/menu/menubar.js
-     ${NG_SRC_DIR}/src/web/menu/menuentry.js
-     ${NG_SRC_DIR}/src/web/menu/menu.js
      ${NG_SRC_DIR}/src/web/notes/charts.js
      ${NG_SRC_DIR}/src/web/notes/dialog.js
      ${NG_SRC_DIR}/src/web/notes/notespage.js
@@ -447,6 +447,9 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/css/select2.css
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/components/layout/css/layout.css
+     ${NG_SRC_DIR}/src/web/components/menu/css/iconmenu.css
+     ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
+     ${NG_SRC_DIR}/src/web/components/menu/css/menuentry.css
      ${NG_SRC_DIR}/src/web/css/cveid.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
@@ -457,10 +460,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
-     ${NG_SRC_DIR}/src/web/menu/css/iconmenu.css
-     ${NG_SRC_DIR}/src/web/menu/css/menubar.css
-     ${NG_SRC_DIR}/src/web/menu/css/menu.css
-     ${NG_SRC_DIR}/src/web/menu/css/menuentry.css
      ${NG_SRC_DIR}/src/web/powerfilter/css/powerfilter.css
      ${NG_SRC_DIR}/src/web/users/css/row.css
      ${NG_SRC_DIR}/src/web/wizard/css/wizard.css

@@ -42,14 +42,8 @@ import PropTypes from '../proptypes.js';
 
 import {withDashboard} from '../dashboard/dashboard.js';
 
-import IconDivider from '../components/layout/icondivider.js';
-import Layout from '../components/layout/layout.js';
-
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';
-
-import IconMenu from '../menu/iconmenu.js';
-import MenuEntry from '../menu/menuentry.js';
 
 import ImportReportDialog from '../reports/importdialog.js';
 
@@ -64,6 +58,12 @@ import TaskCharts from './charts.js';
 import Table from './table.js';
 
 import HelpIcon from '../components/icon/helpicon.js';
+
+import IconDivider from '../components/layout/icondivider.js';
+import Layout from '../components/layout/layout.js';
+
+import IconMenu from '../components/menu/iconmenu.js';
+import MenuEntry from '../components/menu/menuentry.js';
 
 import NewIconMenu from './icons/newiconmenu.js';
 

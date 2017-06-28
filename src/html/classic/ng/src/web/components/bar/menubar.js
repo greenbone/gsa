@@ -25,21 +25,19 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import GBIcon from '../components/icon/greenboneicon.js';
+import GBIcon from '../icon/greenboneicon.js';
 
-import Sticky from '../components/sticky/sticky.js';
+import Menu from '../menu/menu.js';
+import MenuEntry from '../menu/menuentry.js';
 
-import Link from '../link/link.js';
+import Sticky from '../sticky/sticky.js';
 
-import Menu from './menu.js';
-import MenuEntry from './menuentry.js';
-
-import './css/menubar.css';
+import Link from '../../link/link.js';
 
 const GreenboneIcon = glamorous(GBIcon)(
   {
@@ -48,6 +46,33 @@ const GreenboneIcon = glamorous(GBIcon)(
       visibility: 'visible',
     }
   }
+);
+
+const Ul = glamorous.ul({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'row',
+});
+
+const Wrapper = glamorous(Sticky)(
+  'menubar',
+  {
+    backgroundColor: '#393637',
+
+    '& ul': {
+      margin: 0,
+      padding: 0,
+      listStyle: 'none',
+    },
+
+    '& .menu > a:hover ~ ul > .menu-entry:nth-child(2) > a': {
+      background: '#99CE48',
+    },
+
+    '& .menu-section': {
+      borderTop: '1px solid #b0b0b0',
+    },
+  },
 );
 
 const MenuBar = (props, {gmp, capabilities}) => {
@@ -63,8 +88,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
   const may_op_scans = may_op_tasks || may_op_reports || may_op_results ||
     may_op_overrides;
   return (
-    <Sticky className="menubar">
-      <ul>
+    <Wrapper>
+      <Ul>
         <li>
           <Link
             to="/"
@@ -273,8 +298,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
             title={_('About')}
             path="help/about.html"/>
         </Menu>
-      </ul>
-    </Sticky>
+      </Ul>
+    </Wrapper>
   );
 };
 

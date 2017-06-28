@@ -27,8 +27,8 @@ import  _ from '../../../locale.js';
 
 import PropTypes from '../../proptypes.js';
 
-import IconMenu from '../../menu/iconmenu.js';
-import MenuEntry from '../../menu/menuentry.js';
+import IconMenu from '../../components/menu/iconmenu.js';
+import MenuEntry from '../../components/menu/menuentry.js';
 
 const NewIcon = ({
   onNewClick,
