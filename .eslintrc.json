@@ -256,7 +256,8 @@
         "react/jsx-no-bind": [
             "warn",
             {
-                "ignoreRefs": true
+                "ignoreRefs": true,
+                "allowArrowFunctions": true
             }
         ],
         "react/jsx-max-props-per-line": [
