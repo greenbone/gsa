@@ -208,6 +208,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/icon/osicon.js
      ${NG_SRC_DIR}/src/web/components/icon/trashicon.js
      ${NG_SRC_DIR}/src/web/components/img/img.js
+     ${NG_SRC_DIR}/src/web/components/label/severityclass.js
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
@@ -381,7 +382,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/secinfo/row.js
      ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
      ${NG_SRC_DIR}/src/web/secinfo/table.js
-     ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
      ${NG_SRC_DIR}/src/web/tags/dialog.js
      ${NG_SRC_DIR}/src/web/tags/row.js
@@ -456,7 +456,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
      ${NG_SRC_DIR}/src/web/css/login.css
      ${NG_SRC_DIR}/src/web/css/page.css
-     ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
      ${NG_SRC_DIR}/src/web/powerfilter/css/powerfilter.css

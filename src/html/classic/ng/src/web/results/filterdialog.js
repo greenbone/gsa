@@ -28,17 +28,11 @@ import {parse_int} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import {
-  LabelFalsePositive,
-  LabelHigh,
-  LabelLog,
-  LabelLow,
-  LabelMedium,
-} from '../severityclasslabels.js';
-
 import Checkbox from '../components/form/checkbox.js';
 import FormGroup from '../components/form/formgroup.js';
 import Radio from '../components/form/radio.js';
+
+import SeverityClassLabel from '../components/label/severityclass.js';
 
 import ApplyOverridesGroup from '../powerfilter/applyoverridesgroup.js';
 import FilterStringGroup from '../powerfilter/filterstringgroup.js';
@@ -156,31 +150,31 @@ class ResultsFilterDialogComponent extends React.Component {
             checked={levels.includes('h')}
             name="h"
             onChange={this.handleLevelChange}>
-            <LabelHigh/>
+            <SeverityClassLabel.High/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('m')}
             name="m"
             onChange={this.handleLevelChange}>
-            <LabelMedium/>
+            <SeverityClassLabel.Medium/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('l')}
             name="l"
             onChange={this.handleLevelChange}>
-            <LabelLow/>
+            <SeverityClassLabel.Low/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('g')}
             name="g"
             onChange={this.handleLevelChange}>
-            <LabelLog/>
+            <SeverityClassLabel.Log/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('f')}
             name="f"
             onChange={this.handleLevelChange}>
-            <LabelFalsePositive/>
+            <SeverityClassLabel.FalsePositive/>
           </Checkbox>
         </FormGroup>
 

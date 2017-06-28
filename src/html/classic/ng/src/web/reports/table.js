@@ -26,16 +26,11 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import {
-  LabelFalsePositive,
-  LabelHigh,
-  LabelLog,
-  LabelLow,
-  LabelMedium,
-} from '../severityclasslabels.js';
 
 import {createEntitiesFooter} from '../entities/footer.js';
 import {createEntitiesTable} from '../entities/table.js';
+
+import SeverityClassLabel from '../components/label/severityclass.js';
 
 import TableHead from '../components/table/head.js';
 import TableHeader from '../components/table/header.js';
@@ -76,27 +71,27 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
         <TableHead width="5em"
           sortby={sort ? 'high' : false}
           onSortChange={onSortChange}>
-          <LabelHigh/>
+          <SeverityClassLabel.High/>
         </TableHead>
         <TableHead width="5em"
           sortby={sort ? 'medium' : false}
           onSortChange={onSortChange}>
-          <LabelMedium/>
+          <SeverityClassLabel.Medium/>
         </TableHead>
         <TableHead width="5em"
           sortby={sort ? 'low' : false}
           onSortChange={onSortChange}>
-          <LabelLow/>
+          <SeverityClassLabel.Low/>
         </TableHead>
         <TableHead width="5em"
           sortby={sort ? 'log' : false}
           onSortChange={onSortChange}>
-          <LabelLog/>
+          <SeverityClassLabel.Log/>
         </TableHead>
         <TableHead width="5em"
           sortby={sort ? 'false_positive' : false}
           onSortChange={onSortChange}>
-          <LabelFalsePositive/>
+          <SeverityClassLabel.FalsePositive/>
         </TableHead>
       </TableRow>
     </TableHeader>
