@@ -23,7 +23,7 @@
 
 import  _ from '../../locale.js';
 
-import {createFilterDialog} from '../powerfilter/dialog.js';
+import {createFilterDialog} from '../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['text', _('Text')],

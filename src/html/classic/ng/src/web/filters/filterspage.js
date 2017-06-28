@@ -39,7 +39,7 @@ import NewIcon from '../components/icon/newicon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import {createFilterDialog} from '../powerfilter/dialog.js';
+import {createFilterDialog} from '../components/powerfilter/dialog.js';
 
 import FilterEditDialog from './dialog.js';
 import Row from './row.js';

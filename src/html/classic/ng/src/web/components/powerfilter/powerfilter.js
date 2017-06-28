@@ -23,29 +23,29 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {KeyCode, autobind, is_defined} from '../../utils.js';
-import logger from '../../log.js';
+import _ from '../../../locale.js';
+import {KeyCode, is_defined} from '../../../utils.js';
+import logger from '../../../log.js';
 
-import PropTypes from '../proptypes.js';
-import {render_options} from '../render.js';
+import PropTypes from '../../proptypes.js';
+import {render_options} from '../../render.js';
 
-import FootNote from '../components/footnote/footnote.js';
+import FootNote from '../footnote/footnote.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import Select2 from '../components/form/select2.js';
-import TextField from '../components/form/textfield.js';
+import FormGroup from '../form/formgroup.js';
+import Select2 from '../form/select2.js';
+import TextField from '../form/textfield.js';
 
-import DeleteIcon from '../components/icon/deleteicon.js';
-import EditIcon from '../components/icon/editicon.js';
-import Icon from '../components/icon/icon.js';
-import HelpIcon from '../components/icon/helpicon.js';
-import NewIcon from '../components/icon/newicon.js';
+import DeleteIcon from '../icon/deleteicon.js';
+import EditIcon from '../icon/editicon.js';
+import Icon from '../icon/icon.js';
+import HelpIcon from '../icon/helpicon.js';
+import NewIcon from '../icon/newicon.js';
 
-import IconDivider from '../components/layout/icondivider.js';
-import Layout from '../components/layout/layout.js';
+import IconDivider from '../layout/icondivider.js';
+import Layout from '../layout/layout.js';
 
-import Filter from '../../gmp/models/filter.js';
+import Filter from '../../../gmp/models/filter.js';
 
 import './css/powerfilter.css';
 
@@ -53,12 +53,12 @@ const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
 
-export class PowerFilter extends React.Component {
+class PowerFilter extends React.Component {
 
   constructor(...args) {
     super(...args);
 
-    let {filter} = this.props;
+    const {filter} = this.props;
 
     this.state = {
       filter: filter,
@@ -66,7 +66,12 @@ export class PowerFilter extends React.Component {
       filtername: '',
     };
 
-    autobind(this, 'on');
+    this.onCreateFilter = this.onCreateFilter.bind(this);
+    this.onNamedFilterChange = this.onNamedFilterChange.bind(this);
+    this.onResetClick = this.onResetClick.bind(this);
+    this.onUpdateFilter = this.onUpdateFilter.bind(this);
+    this.onUserFilterKeyPress = this.onUserFilterKeyPress.bind(this);
+    this.onValueChange = this.onValueChange.bind(this);
   }
 
   updateFilter(filter) {
@@ -189,7 +194,7 @@ export class PowerFilter extends React.Component {
 
     let filter_opts = render_options(filters, DEFAULT_FILTER_ID);
 
-    let can_create = capabilities.mayOp('create_filter') &&
+    let can_create = capabilities.mayCreate('filter') &&
       filtername.trim().length > 0;
 
     return (
@@ -234,7 +239,7 @@ export class PowerFilter extends React.Component {
               </IconDivider>
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
-              {capabilities.mayOp('create_filter') &&
+              {capabilities.mayCreate('filter') &&
                 <TextField
                   name="filtername"
                   size="10"
@@ -253,7 +258,7 @@ export class PowerFilter extends React.Component {
                 }
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
-              {capabilities.mayOp('get_filters') &&
+              {capabilities.mayAccess('filters') &&
                 <Select2 value={namedfilterid}
                   onChange={this.onNamedFilterChange}>
                   {filter_opts}

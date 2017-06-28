@@ -23,14 +23,14 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {map, is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {map, is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import Radio from '../components/form/radio.js';
-import Select2 from '../components/form/select2.js';
+import FormGroup from '../form/formgroup.js';
+import Radio from '../form/radio.js';
+import Select2 from '../form/select2.js';
 
 class SortByGroup extends React.Component {
 

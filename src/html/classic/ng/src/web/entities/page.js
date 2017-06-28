@@ -36,9 +36,9 @@ import Layout from '../components/layout/layout.js';
 
 import Loading from '../components/loading/loading.js';
 
-import Section from '../components/section/section.js';
+import PowerFilter from '../components/powerfilter/powerfilter.js';
 
-import PowerFilter from '../powerfilter/powerfilter.js';
+import Section from '../components/section/section.js';
 
 const exclude_props = [
   'children',

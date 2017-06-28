@@ -226,6 +226,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/components/menu/menu.js
      ${NG_SRC_DIR}/src/web/components/pagination/pagination.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/applyoverridesgroup.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/dialog.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/filterstringgroup.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/firstresultgroup.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/minqodgroup.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/powerfilter.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/resultsperpagegroup.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
@@ -331,14 +339,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/portlists/portrangedialog.js
      ${NG_SRC_DIR}/src/web/portlists/row.js
      ${NG_SRC_DIR}/src/web/portlists/table.js
-     ${NG_SRC_DIR}/src/web/powerfilter/applyoverridesgroup.js
-     ${NG_SRC_DIR}/src/web/powerfilter/dialog.js
-     ${NG_SRC_DIR}/src/web/powerfilter/filterstringgroup.js
-     ${NG_SRC_DIR}/src/web/powerfilter/firstresultgroup.js
-     ${NG_SRC_DIR}/src/web/powerfilter/minqodgroup.js
-     ${NG_SRC_DIR}/src/web/powerfilter/powerfilter.js
-     ${NG_SRC_DIR}/src/web/powerfilter/resultsperpagegroup.js
-     ${NG_SRC_DIR}/src/web/powerfilter/sortbygroup.js
      ${NG_SRC_DIR}/src/web/proptypes.js
      ${NG_SRC_DIR}/src/web/render.js
      ${NG_SRC_DIR}/src/web/reportformats/dialog.js
@@ -451,6 +451,7 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/menu/css/iconmenu.css
      ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
      ${NG_SRC_DIR}/src/web/components/menu/css/menuentry.css
+     ${NG_SRC_DIR}/src/web/components/powerfilter/css/powerfilter.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
@@ -458,7 +459,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/page.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
-     ${NG_SRC_DIR}/src/web/powerfilter/css/powerfilter.css
      ${NG_SRC_DIR}/src/web/users/css/row.css
      ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
      )

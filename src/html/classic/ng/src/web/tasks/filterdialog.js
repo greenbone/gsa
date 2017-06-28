@@ -29,13 +29,13 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../proptypes.js';
 
-import ApplyOverridesGroup from '../powerfilter/applyoverridesgroup.js';
-import FilterStringGroup from '../powerfilter/filterstringgroup.js';
-import FirstResultGroup from '../powerfilter/firstresultgroup.js';
-import MinQodGroup from '../powerfilter/minqodgroup.js';
-import ResultsPerPageGroup from '../powerfilter/resultsperpagegroup.js';
-import SortByGroup from '../powerfilter/sortbygroup.js';
-import {withFilterDialog} from '../powerfilter/dialog.js';
+import ApplyOverridesGroup from '../components/powerfilter/applyoverridesgroup.js'; // eslint-disable-line max-len
+import FilterStringGroup from '../components/powerfilter/filterstringgroup.js';
+import FirstResultGroup from '../components/powerfilter/firstresultgroup.js';
+import MinQodGroup from '../components/powerfilter/minqodgroup.js';
+import ResultsPerPageGroup from '../components/powerfilter/resultsperpagegroup.js'; // eslint-disable-line max-len
+import SortByGroup from '../components/powerfilter/sortbygroup.js';
+import {withFilterDialog} from '../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],

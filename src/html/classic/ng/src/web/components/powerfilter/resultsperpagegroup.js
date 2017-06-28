@@ -23,37 +23,38 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import Spinner from '../components/form/spinner.js';
+import FormGroup from '../form/formgroup.js';
+import Spinner from '../form/spinner.js';
 
-const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
+const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
   if (is_defined(filter)) {
-    first = filter.get('first');
+    rows = filter.get('rows');
   }
+
   return (
-    <FormGroup title={_('First result')}>
+    <FormGroup title={_('Results per page')}>
       <Spinner
         type="int"
         name={name}
-        value={first}
+        value={rows}
         size="5"
         onChange={onChange}/>
     </FormGroup>
   );
 };
 
-FirstResultGroup.propTypes = {
-  name: PropTypes.string,
-  first: PropTypes.number,
+ResultsPerPageGroup.propTypes = {
   filter: PropTypes.filter,
+  name: PropTypes.string,
+  rows: PropTypes.number,
   onChange: PropTypes.func,
 };
 
-export default FirstResultGroup;
+export default ResultsPerPageGroup;
 
 // vim: set ts=2 sw=2 tw=80:

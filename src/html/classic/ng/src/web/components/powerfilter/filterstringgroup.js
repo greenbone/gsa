@@ -23,41 +23,38 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {is_string} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import Spinner from '../components/form/spinner.js';
-import Text from '../components/form/text.js';
+import FormGroup from '../form/formgroup.js';
+import TextField from '../form/textfield.js';
 
-const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
-  if (!is_defined(qod) && is_defined(filter)) {
-    qod = filter.get('min_qod');
-  }
+const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
+  let filterstring = is_string(filter) ?
+    filter : filter.toFilterCriteriaString();
   return (
-    <FormGroup title={_('QoD')}>
-      <Text>{_('must be at least')}</Text>
-      <Spinner
-        type="int"
+    <FormGroup title={_('Filter')} flex>
+      <TextField
         name={name}
-        min="0" max="100"
-        step="1"
-        value={qod}
-        size="1"
-        onChange={onChange}/>
+        grow="1"
+        value={filterstring} size="30"
+        onChange={onChange}
+        maxLength="80"/>
     </FormGroup>
   );
 };
 
-MinQodGroup.propTypes = {
+FilterStringGroup.propTypes = {
   name: PropTypes.string,
-  qod: PropTypes.number,
-  filter: PropTypes.filter,
+  filter: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.filter,
+  ]).isRequired,
   onChange: PropTypes.func,
 };
 
-export default MinQodGroup;
+export default FilterStringGroup;
 
 // vim: set ts=2 sw=2 tw=80:

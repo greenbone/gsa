@@ -23,21 +23,21 @@
 
 import React from 'react';
 
-import  _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import  _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-import Layout from '../components/layout/layout.js';
+import PropTypes from '../../proptypes.js';
 
-import PropTypes from '../proptypes.js';
+import Dialog from '../dialog/dialog.js';
 
-import Dialog from '../components/dialog/dialog.js';
+import Layout from '../layout/layout.js';
 
 import FilterStringGroup from './filterstringgroup.js';
 import FirstResultGroup from './firstresultgroup.js';
 import ResultsPerPageGroup from './resultsperpagegroup.js';
 import SortByGroup from './sortbygroup.js';
 
-import Filter from '../../gmp/models/filter.js';
+import Filter from '../../../gmp/models/filter.js';
 
 export const DefaultFilterDialog = ({
     filter,

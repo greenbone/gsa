@@ -23,38 +23,43 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import _ from '../../../locale.js';
+import {is_defined, parse_int} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import Spinner from '../components/form/spinner.js';
+import FormGroup from '../form/formgroup.js';
+import YesNoRadio from '../form/yesnoradio.js';
 
-const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
+const ApplyOverridesGroup = ({
+    filter,
+    name = 'apply_overrides',
+    overrides,
+    onChange,
+  }) => {
   if (is_defined(filter)) {
-    rows = filter.get('rows');
+    overrides = filter.get('apply_overrides');
   }
-
   return (
-    <FormGroup title={_('Results per page')}>
-      <Spinner
-        type="int"
+    <FormGroup title={_('Apply Overrides')}>
+      <YesNoRadio
+        value={overrides}
         name={name}
-        value={rows}
-        size="5"
+        yesValue={1}
+        noValue={0}
+        convert={parse_int}
         onChange={onChange}/>
     </FormGroup>
   );
 };
 
-ResultsPerPageGroup.propTypes = {
+ApplyOverridesGroup.propTypes = {
   filter: PropTypes.filter,
   name: PropTypes.string,
-  rows: PropTypes.number,
+  overrides: PropTypes.number,
   onChange: PropTypes.func,
 };
 
-export default ResultsPerPageGroup;
+export default ApplyOverridesGroup;
 
 // vim: set ts=2 sw=2 tw=80:

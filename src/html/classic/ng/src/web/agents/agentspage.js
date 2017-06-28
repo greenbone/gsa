@@ -27,8 +27,6 @@ import _ from '../../locale.js';
 import logger from '../../log.js';
 import {is_defined, shorten} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
@@ -40,7 +38,9 @@ import {createEntitiesTable} from '../entities/table.js';
 import HelpIcon from '../components/icon/helpicon.js';
 import NewIcon from '../components/icon/newicon.js';
 
-import {createFilterDialog} from '../powerfilter/dialog.js';
+import Layout from '../components/layout/layout.js';
+
+import {createFilterDialog} from '../components/powerfilter/dialog.js';
 
 import AgentDialog from './dialog.js';
 import Row from './row.js';

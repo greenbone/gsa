@@ -32,8 +32,6 @@ import {
   shorten,
 } from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
@@ -45,7 +43,9 @@ import HelpIcon from '../components/icon/helpicon.js';
 import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
 
-import {createFilterDialog} from '../powerfilter/dialog.js';
+import Layout from '../components/layout/layout.js';
+
+import {createFilterDialog} from '../components/powerfilter/dialog.js';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog.js';
 import EditScanConfigDialog from './editdialog.js';

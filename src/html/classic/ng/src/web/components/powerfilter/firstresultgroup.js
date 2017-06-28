@@ -23,43 +23,37 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined, parse_int} from '../../utils.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import YesNoRadio from '../components/form/yesnoradio.js';
+import FormGroup from '../form/formgroup.js';
+import Spinner from '../form/spinner.js';
 
-const ApplyOverridesGroup = ({
-    filter,
-    name = 'apply_overrides',
-    overrides,
-    onChange,
-  }) => {
+const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
   if (is_defined(filter)) {
-    overrides = filter.get('apply_overrides');
+    first = filter.get('first');
   }
   return (
-    <FormGroup title={_('Apply Overrides')}>
-      <YesNoRadio
-        value={overrides}
+    <FormGroup title={_('First result')}>
+      <Spinner
+        type="int"
         name={name}
-        yesValue={1}
-        noValue={0}
-        convert={parse_int}
+        value={first}
+        size="5"
         onChange={onChange}/>
     </FormGroup>
   );
 };
 
-ApplyOverridesGroup.propTypes = {
-  filter: PropTypes.filter,
+FirstResultGroup.propTypes = {
   name: PropTypes.string,
-  overrides: PropTypes.number,
+  first: PropTypes.number,
+  filter: PropTypes.filter,
   onChange: PropTypes.func,
 };
 
-export default ApplyOverridesGroup;
+export default FirstResultGroup;
 
 // vim: set ts=2 sw=2 tw=80:
