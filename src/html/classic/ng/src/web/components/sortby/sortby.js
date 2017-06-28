@@ -23,13 +23,18 @@
 
 import React from 'react';
 
-import {classes} from '../utils.js';
+import glamorous from 'glamorous';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import './css/sortby.css';
+const Anchor = glamorous.a(
+  'sort-by',
+  {
+    cursor: 'pointer',
+  }
+);
 
-export class SortBy extends React.Component {
+class SortBy extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -47,10 +52,10 @@ export class SortBy extends React.Component {
 
   render() {
     let {children, className} = this.props;
-
-    className = classes(className, 'sort-by');
     return (
-      <a onClick={this.handleClick} className={className}>{children}</a>
+      <Anchor onClick={this.handleClick} className={className}>
+        {children}
+      </Anchor>
     );
   }
 };

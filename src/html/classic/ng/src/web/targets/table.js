@@ -26,7 +26,6 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import Sort from '../sortby.js';
 
 import {createEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
@@ -34,6 +33,8 @@ import {createEntitiesTable} from '../entities/table.js';
 
 import Select2 from '../components/form/select2.js';
 import Text from '../components/form/text.js';
+
+import Sort from '../components/sortby/sortby.js';
 
 import TableHead from '../components/table/head.js';
 import TableHeader from '../components/table/header.js';

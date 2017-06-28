@@ -27,10 +27,9 @@ import glamorous from 'glamorous';
 
 import PropTypes from '../../proptypes.js';
 
-import Sort from '../../sortby.js';
-
 import Layout from '../layout/layout.js';
 
+import Sort from '../sortby/sortby.js';
 
 const TableHead = ({
     children,

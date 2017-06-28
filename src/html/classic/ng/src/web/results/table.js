@@ -28,7 +28,6 @@ import glamorous from 'glamorous';
 import _ from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import Sort from '../sortby.js';
 
 import {createEntitiesFooter} from '../entities/footer.js';
 import {withEntitiesHeader} from '../entities/header.js';
@@ -39,6 +38,8 @@ import Icon from '../components/icon/icon.js';
 import Layout from '../components/layout/layout.js';
 
 import Link from '../link/link.js';
+
+import Sort from '../components/sortby/sortby.js';
 
 import TableData from '../components/table/data.js';
 import TableHead from '../components/table/head.js';

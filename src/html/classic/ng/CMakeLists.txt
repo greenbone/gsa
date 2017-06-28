@@ -204,6 +204,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
      ${NG_SRC_DIR}/src/web/components/loading/loading.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
+     ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
      ${NG_SRC_DIR}/src/web/components/sticky/sticky.js
      ${NG_SRC_DIR}/src/web/components/table/body.js
@@ -380,7 +381,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/severitybar.js
      ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
-     ${NG_SRC_DIR}/src/web/sortby.js
      ${NG_SRC_DIR}/src/web/statusbar.js
      ${NG_SRC_DIR}/src/web/tags/dialog.js
      ${NG_SRC_DIR}/src/web/tags/row.js
@@ -455,7 +455,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/main.css
      ${NG_SRC_DIR}/src/web/css/page.css
      ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
-     ${NG_SRC_DIR}/src/web/css/sortby.css
      ${NG_SRC_DIR}/src/web/css/statusbar.css
      ${NG_SRC_DIR}/src/web/css/titlebar.css
      ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
