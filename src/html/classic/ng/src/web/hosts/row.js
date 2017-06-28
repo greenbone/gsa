@@ -27,13 +27,14 @@ import _, {datetime} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
 
 import EditIcon from '../entities/icons/entityediticon.js';
 import DeleteIcon from '../entities/icons/entitydeleteicon.js';
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
 
 import Comment from '../components/comment/comment.js';
 

@@ -27,13 +27,14 @@ import {datetime} from '../../locale.js';
 
 import CveId from '../cveid.js';
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
 import SolutionType from '../solutiontype.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
 import InfoLink from '../link/infolink.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';

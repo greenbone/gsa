@@ -27,12 +27,13 @@ import _, {datetime} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
-import StatusBar from '../statusbar.js';
 import {render_component} from '../render.js';
 
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
+import StatusBar from '../components/bar/statusbar.js';
 
 import DeleteIcon from '../components/icon/deleteicon.js';
 

@@ -28,22 +28,22 @@ import glamorous from 'glamorous';
 import _, {datetime} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Layout from '../components/layout/layout.js';
-
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
 import {result_cvss_risk_factor} from '../render.js';
-
-import Divider from '../components/layout/divider.js';
-import IconDivider from '../components/layout/icondivider.js';
 
 import DetailsBlock from '../entity/block.js';
 import EntityPage from '../entity/page.js';
 import {withEntityContainer} from '../entity/container.js';
 
+import SeverityBar from '../components/bar/severitybar.js';
+
 import ExportIcon from '../components/icon/exporticon.js';
 import HelpIcon from '../components/icon/helpicon.js';
 import Icon from '../components/icon/icon.js';
+
+import Divider from '../components/layout/divider.js';
+import IconDivider from '../components/layout/icondivider.js';
+import Layout from '../components/layout/layout.js';
 
 import AssetLink from '../link/assetlink.js';
 import DetailsLink from '../link/detailslink.js';

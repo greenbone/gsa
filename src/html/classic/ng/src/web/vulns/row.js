@@ -26,13 +26,14 @@ import React from 'react';
 import {datetime} from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
 import LegacyLink from '../link/legacylink.js';
 import Link from '../link/link.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
 
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';

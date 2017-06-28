@@ -26,11 +26,12 @@ import React from 'react';
 import _, {datetime} from '../../locale.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
 
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
 
 import CpeIcon from '../components/icon/cpeicon.js';
 import DeleteIcon from '../components/icon/deleteicon.js';

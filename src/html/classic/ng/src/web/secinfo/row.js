@@ -28,12 +28,13 @@ import {datetime} from '../../locale.js';
 import {shorten} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
 import LegacyLink from '../link/legacylink.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
 
 import Comment from '../components/comment/comment.js';
 

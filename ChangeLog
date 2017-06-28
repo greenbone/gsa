@@ -1,5 +1,37 @@
 2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/certbund/row.js,
+	src/html/classic/ng/src/web/css/statusbar.css,
+	src/html/classic/ng/src/web/components/bar/css/statusbar.css,
+	src/html/classic/ng/src/web/severitybar.js,
+	src/html/classic/ng/src/web/components/bar/severitybar.js,
+	src/html/classic/ng/src/web/statusbar.js,
+	src/html/classic/ng/src/web/components/bar/statusbar.js,
+	src/html/classic/ng/src/web/components/toolbar/toolbar.js,
+	src/html/classic/ng/src/web/components/bar/toolbar.js,
+	src/html/classic/ng/src/web/cpes/row.js,
+	src/html/classic/ng/src/web/cves/row.js,
+	src/html/classic/ng/src/web/dfncert/row.js,
+	src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/entity/page.js,
+	src/html/classic/ng/src/web/hosts/row.js,
+	src/html/classic/ng/src/web/nvts/row.js,
+	src/html/classic/ng/src/web/os/row.js,
+	src/html/classic/ng/src/web/ovaldefs/row.js,
+	src/html/classic/ng/src/web/overrides/row.js,
+	src/html/classic/ng/src/web/reports/row.js,
+	src/html/classic/ng/src/web/results/detailspage.js,
+	src/html/classic/ng/src/web/results/row.js,
+	src/html/classic/ng/src/web/scanconfigs/editconfigfamilydialog.js,
+	src/html/classic/ng/src/web/scanconfigs/editnvtdetailsdialog.js,
+	src/html/classic/ng/src/web/secinfo/row.js,
+	src/html/classic/ng/src/web/tasks/row.js,
+	src/html/classic/ng/src/web/vulns/row.js: Move Titlebar, Statusbar and
+	Severitybar components to src/web/components/bar.
+
+2017-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,,
 	src/html/classic/ng/src/web/components/bar/titlebar.js,,
 	src/html/classic/ng/src/web/components/icon/greenboneicon.js,

@@ -27,7 +27,6 @@ import _ from '../../locale.js';
 import {shorten, is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
 import {render_component, result_cvss_risk_factor} from '../render.js';
 
 import {withEntityActions} from '../entities/actions.js';
@@ -36,6 +35,8 @@ import {withEntityRow} from '../entities/row.js';
 import CloneIcon from '../entities/icons/entitycloneicon.js';
 import EditIcon from '../entities/icons/entityediticon.js';
 import TrashIcon from '../entities/icons/entitytrashicon.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
 
 import ExportIcon from '../components/icon/exporticon.js';
 

@@ -27,7 +27,8 @@ import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
 

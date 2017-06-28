@@ -162,7 +162,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/certbund/row.js
      ${NG_SRC_DIR}/src/web/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/bar/severitybar.js
+     ${NG_SRC_DIR}/src/web/components/bar/statusbar.js
      ${NG_SRC_DIR}/src/web/components/bar/titlebar.js
+     ${NG_SRC_DIR}/src/web/components/bar/toolbar.js
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
      ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
@@ -220,7 +223,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/table/simple.js
      ${NG_SRC_DIR}/src/web/components/table/stripped.js
      ${NG_SRC_DIR}/src/web/components/table/table.js
-     ${NG_SRC_DIR}/src/web/components/toolbar/toolbar.js
      ${NG_SRC_DIR}/src/web/cveid.js
      ${NG_SRC_DIR}/src/web/cves/charts.js
      ${NG_SRC_DIR}/src/web/cves/cvespage.js
@@ -379,10 +381,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/secinfo/row.js
      ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
      ${NG_SRC_DIR}/src/web/secinfo/table.js
-     ${NG_SRC_DIR}/src/web/severitybar.js
      ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
-     ${NG_SRC_DIR}/src/web/statusbar.js
      ${NG_SRC_DIR}/src/web/tags/dialog.js
      ${NG_SRC_DIR}/src/web/tags/row.js
      ${NG_SRC_DIR}/src/web/tags/tagspage.js
@@ -436,6 +436,7 @@ set (NG_JS_SRC_FILES
 
 
 set (NG_CSS_SRC_FILES
+     ${NG_SRC_DIR}/src/web/components/bar/css/statusbar.css
      ${NG_SRC_DIR}/src/web/components/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
      ${NG_SRC_DIR}/src/web/components/form/css/button.css
@@ -453,7 +454,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/login.css
      ${NG_SRC_DIR}/src/web/css/page.css
      ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
-     ${NG_SRC_DIR}/src/web/css/statusbar.css
      ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css

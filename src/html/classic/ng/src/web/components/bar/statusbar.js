@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../../proptypes.js';
 
 import './css/statusbar.css';
 

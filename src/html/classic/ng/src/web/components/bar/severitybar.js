@@ -23,15 +23,15 @@
 
 import React from 'react';
 
-import _ from '../locale.js';
-import {parse_float, is_defined} from '../utils.js';
+import _ from '../../../locale.js';
+import {parse_float, is_defined} from '../../../utils.js';
 
-import PropTypes from './proptypes.js';
-import {result_cvss_risk_factor, cvss_number_format} from './render.js';
+import PropTypes from '../../proptypes.js';
+import {result_cvss_risk_factor, cvss_number_format} from '../../render.js';
 
 import './css/statusbar.css';
 
-export const SeverityBar = ({severity, scale = 10}) => {
+const SeverityBar = ({severity, scale = 10}) => {
   let cvss = parse_float(severity);
   let threat = result_cvss_risk_factor(cvss);
   let title = _(threat);

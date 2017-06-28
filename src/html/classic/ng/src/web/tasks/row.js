@@ -27,13 +27,14 @@ import _, {datetime} from '../../locale.js';
 import {is_defined, is_empty} from '../../utils.js';
 
 import PropTypes from '../proptypes.js';
-import SeverityBar from '../severitybar.js';
-import StatusBar from '../statusbar.js';
 import {render_component} from '../render.js';
 
 import {withEntityRow} from '../entities/row.js';
 
 import ObserverIcon from '../entities/icons/entityobservericon.js';
+
+import SeverityBar from '../components/bar/severitybar.js';
+import StatusBar from '../components/bar/statusbar.js';
 
 import Comment from '../components/comment/comment.js';
 
