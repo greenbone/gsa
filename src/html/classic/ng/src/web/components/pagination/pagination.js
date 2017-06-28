@@ -25,23 +25,26 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from '../locale.js';
-import {is_defined} from '../utils.js';
+import _ from '../../../locale.js';
+import {is_defined} from '../../../utils.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../../proptypes.js';
 
-import Layout from './components/layout/layout.js';
-import IconDivider from './components/layout/icondivider.js';
+import Icon from '../icon/icon.js';
 
-import Icon from './components/icon/icon.js';
+import Layout from '../layout/layout.js';
+import IconDivider from '../layout/icondivider.js';
 
 const PaginationText = glamorous.span({
   margin: '0 3px;'
 });
 
-const PaginationLayout = glamorous(Layout)({
-  margin: '2px 3px',
-});
+const PaginationLayout = glamorous(Layout)(
+  'pagination',
+  {
+    margin: '2px 3px',
+  }
+);
 
 const Pagination = ({
     counts,
@@ -58,8 +61,7 @@ const Pagination = ({
   return (
     <PaginationLayout
       flex
-      align={['end', 'center']}
-      className="pagination">
+      align={['end', 'center']}>
       {counts.hasPrevious() ?
         <IconDivider>
           <Icon img="first.svg" title={_('First')}

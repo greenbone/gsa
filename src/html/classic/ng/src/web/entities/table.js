@@ -30,10 +30,11 @@ import FootNote from '../components/footnote/footnote.js';
 
 import Layout from '../components/layout/layout.js';
 
+import Pagination from '../components/pagination/pagination.js';
+
 import TableBody from '../components/table/body.js';
 import StrippedTable from '../components/table/stripped.js';
 
-import Pagination from '../pagination.js';
 import PropTypes from '../proptypes.js';
 import {withComponentDefaults} from '../render.js';
 

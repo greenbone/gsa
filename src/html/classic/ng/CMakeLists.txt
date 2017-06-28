@@ -223,6 +223,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/menu/iconmenu.js
      ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/components/menu/menu.js
+     ${NG_SRC_DIR}/src/web/components/pagination/pagination.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
@@ -321,7 +322,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/permissions/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/permissions/permissionspage.js
      ${NG_SRC_DIR}/src/web/permissions/row.js
-     ${NG_SRC_DIR}/src/web/pagination.js
      ${NG_SRC_DIR}/src/web/portlists/dialog.js
      ${NG_SRC_DIR}/src/web/portlists/filterdialog.js
      ${NG_SRC_DIR}/src/web/portlists/importdialog.js
