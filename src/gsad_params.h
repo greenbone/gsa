@@ -38,14 +38,14 @@
  */
 struct param
 {
-  gchar *value;          /* Value. */
-  gchar *original_value; /* Original value, before validation. */
-  gchar *filename;       /* Filename. */
-  params_t *values;      /* Multiple binary values. */
-  int valid;             /* Validation flag. */
-  int valid_utf8;        /* UTF8 validation flag. */
-  int value_size;        /* Size of value, excluding trailing NULL. */
-  int array_len;         /* The number of items of "array" params */
+  gchar *value;          /**< Value. */
+  gchar *original_value; /**< Original value, before validation. */
+  gchar *filename;       /**< Filename. */
+  params_t *values;      /**< Multiple binary values. */
+  int valid;             /**< Validation flag. */
+  int valid_utf8;        /**< UTF8 validation flag. */
+  int value_size;        /**< Size of value, excluding trailing NULL. */
+  int array_len;         /**< The number of items of "array" params */
 };
 
 /**
