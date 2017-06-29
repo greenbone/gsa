@@ -34,7 +34,7 @@ import {
 } from 'react-router';
 
 import CacheFactory from 'gmp/cache.js';
-import Gmp from 'gmp/gmp.js';
+import Gmp from 'gmp';
 import {HttpInterceptor} from 'gmp/http.js';
 import PromiseFactory from 'gmp/promise.js';
 
