@@ -25,15 +25,15 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
-import {createEntitiesFooter} from '../entities/footer.js';
-import {withEntitiesHeader} from '../entities/header.js';
-import {createEntitiesTable} from '../entities/table.js';
+import {createEntitiesFooter} from '../../entities/footer.js';
+import {withEntitiesHeader} from '../../entities/header.js';
+import {createEntitiesTable} from '../../entities/table.js';
 
-import TableHead from '../components/table/head.js';
-import TableHeader from '../components/table/header.js';
-import TableRow from '../components/table/row.js';
+import TableHead from '../../components/table/head.js';
+import TableHeader from '../../components/table/header.js';
+import TableRow from '../../components/table/row.js';
 
 import Row from './row.js';
 

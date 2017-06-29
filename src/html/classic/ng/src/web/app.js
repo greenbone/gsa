@@ -81,7 +81,7 @@ import ScannersPage from './scanners/scannerspage.js';
 import SchedulesPage from './schedules/schedulespage.js';
 import TagsPage from './tags/tagspage.js';
 import TargetsPage from './targets/targetspage.js';
-import TasksPage from './tasks/taskspage.js';
+import TasksPage from './pages/tasks/listpage.js';
 import UsersPage from './users/userspage.js';
 import VulnerabilitiesPage from './vulns/vulnspage.js';
 

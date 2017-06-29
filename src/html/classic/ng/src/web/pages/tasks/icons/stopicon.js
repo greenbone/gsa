@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,40 +23,34 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from '../../../utils/proptypes.js';
 
-import IconMenu from '../../components/menu/iconmenu.js';
-import MenuEntry from '../../components/menu/menuentry.js';
+import Icon from '../../../components/icon/icon.js';
 
-const NewIcon = ({
-  onNewClick,
-  onNewContainerClick,
-}, {capabilities}) => {
-  if (capabilities.mayCreate('task')) {
+const StopIcon = ({
+  task,
+  onClick,
+}) => {
+  if (task.isRunning()) {
     return (
-      <IconMenu img="new.svg" size="small"
-        onClick={onNewClick}>
-        <MenuEntry title={_('New Task')}
-          onClick={onNewClick}/>
-        <MenuEntry title={_('New Container Task')}
-          onClick={onNewContainerClick}/>
-      </IconMenu>
+      <Icon
+        size="small"
+        img="stop.svg"
+        title={_('Stop')}
+        value={task}
+        onClick={onClick}/>
     );
   }
   return null;
 };
 
-NewIcon.propTypes = {
-  onNewClick: PropTypes.func,
-  onNewContainerClick: PropTypes.func,
+StopIcon.propTypes = {
+  task: PropTypes.model.isRequired,
+  onClick: PropTypes.func,
 };
 
-NewIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default NewIcon;
+export default StopIcon;
 
 // vim: set ts=2 sw=2 tw=80:

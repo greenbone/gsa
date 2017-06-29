@@ -38,16 +38,16 @@ import {
   select_save_id,
 } from 'gmp/utils.js';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
-import EntitiesPage from '../entities/page.js';
-import {withEntitiesContainer} from '../entities/container.js';
+import EntitiesPage from '../../entities/page.js';
+import {withEntitiesContainer} from '../../entities/container.js';
 
-import ImportReportDialog from '../reports/importdialog.js';
+import ImportReportDialog from '../../reports/importdialog.js';
 
-import AdvancedTaskWizard from '../wizard/advancedtaskwizard.js';
-import ModifyTaskWizard from '../wizard/modifytaskwizard.js';
-import TaskWizard from '../wizard/taskwizard.js';
+import AdvancedTaskWizard from '../../wizard/advancedtaskwizard.js';
+import ModifyTaskWizard from '../../wizard/modifytaskwizard.js';
+import TaskWizard from '../../wizard/taskwizard.js';
 
 import TaskDialog from './dialogcontainer.js';
 import ContainerTaskDialog from './containerdialog.js';
@@ -55,15 +55,15 @@ import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 import Table from './table.js';
 
-import {withDashboard} from '../components/dashboard/dashboard.js';
+import {withDashboard} from '../../components/dashboard/dashboard.js';
 
-import HelpIcon from '../components/icon/helpicon.js';
+import HelpIcon from '../../components/icon/helpicon.js';
 
-import IconDivider from '../components/layout/icondivider.js';
-import Layout from '../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
+import Layout from '../../components/layout/layout.js';
 
-import IconMenu from '../components/menu/iconmenu.js';
-import MenuEntry from '../components/menu/menuentry.js';
+import IconMenu from '../../components/menu/iconmenu.js';
+import MenuEntry from '../../components/menu/menuentry.js';
 
 import NewIconMenu from './icons/newiconmenu.js';
 

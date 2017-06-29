@@ -26,17 +26,17 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
-import IconDivider from '../components/layout/icondivider.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
-import {withEntityActions} from '../entities/actions.js';
+import {withEntityActions} from '../../entities/actions.js';
 
-import CloneIcon from '../entities/icons/entitycloneicon.js';
-import EditIcon from '../entities/icons/entityediticon.js';
-import TrashIcon from '../entities/icons/entitytrashicon.js';
+import CloneIcon from '../../entities/icons/entitycloneicon.js';
+import EditIcon from '../../entities/icons/entityediticon.js';
+import TrashIcon from '../../entities/icons/entitytrashicon.js';
 
-import ExportIcon from '../components/icon/exporticon.js';
+import ExportIcon from '../../components/icon/exporticon.js';
 
 import ImportReportIcon from './icons/importreporticon.js';
 import ResumeIcon from './icons/resumeicon.js';

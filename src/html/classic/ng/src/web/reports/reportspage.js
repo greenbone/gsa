@@ -38,7 +38,7 @@ import Icon from '../components/icon/icon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import ContainerTaskDialog from '../tasks/containerdialog.js';
+import ContainerTaskDialog from '../pages/tasks/containerdialog.js';
 
 import ReportCharts from './charts.js';
 import ReportFilterDialog from './filterdialog.js';

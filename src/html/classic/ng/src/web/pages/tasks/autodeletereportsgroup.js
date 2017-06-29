@@ -25,14 +25,14 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../components/layout/layout.js';
+import Layout from '../../components/layout/layout.js';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import Radio from '../components/form/radio.js';
-import Spinner from '../components/form/spinner.js';
-import Text from '../components/form/text.js';
+import FormGroup from '../../components/form/formgroup.js';
+import Radio from '../../components/form/radio.js';
+import Spinner from '../../components/form/spinner.js';
+import Text from '../../components/form/text.js';
 
 const AutoDeleteReportsGroup = ({
     autoDelete,

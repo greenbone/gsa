@@ -26,27 +26,27 @@ import React from 'react';
 import _, {datetime} from 'gmp/locale.js';
 import {is_defined, is_empty} from 'gmp/utils.js';
 
-import PropTypes from '../utils/proptypes.js';
-import {render_component} from '../utils/render.js';
+import PropTypes from '../../utils/proptypes.js';
+import {render_component} from '../../utils/render.js';
 
-import {withEntityRow} from '../entities/row.js';
+import {withEntityRow} from '../../entities/row.js';
 
-import ObserverIcon from '../entities/icons/entityobservericon.js';
+import ObserverIcon from '../../entities/icons/entityobservericon.js';
 
-import SeverityBar from '../components/bar/severitybar.js';
-import StatusBar from '../components/bar/statusbar.js';
+import SeverityBar from '../../components/bar/severitybar.js';
+import StatusBar from '../../components/bar/statusbar.js';
 
-import Comment from '../components/comment/comment.js';
+import Comment from '../../components/comment/comment.js';
 
-import Icon from '../components/icon/icon.js';
+import Icon from '../../components/icon/icon.js';
 
-import Layout from '../components/layout/layout.js';
+import Layout from '../../components/layout/layout.js';
 
-import DetailsLink from '../components/link/detailslink.js';
-import Link from '../components/link/link.js';
+import DetailsLink from '../../components/link/detailslink.js';
+import Link from '../../components/link/link.js';
 
-import TableRow from '../components/table/row.js';
-import TableData from '../components/table/data.js';
+import TableRow from '../../components/table/row.js';
+import TableData from '../../components/table/data.js';
 
 import Actions from './actions.js';
 import Trend from './trend.js';

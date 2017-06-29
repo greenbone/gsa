@@ -25,9 +25,9 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from '../../../utils/proptypes.js';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from '../../../components/icon/icon.js';
 
 const StartIcon = ({
   task,

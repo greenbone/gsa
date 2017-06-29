@@ -32,7 +32,7 @@ import DashboardControls from '../components/dashboard/controls.js';
 
 import Section from '../components/section/section.js';
 
-import TaskCharts from '../tasks/charts.js';
+import TaskCharts from './tasks/charts.js';
 import ReportCharts from '../reports/charts.js';
 import ResultCharts from '../results/charts.js';
 import NoteCharts from '../notes/charts.js';

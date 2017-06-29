@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,29 +23,34 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import PropTypes from '../../utils/proptypes.js';
 
-import PropTypes from '../utils/proptypes.js';
+class Task extends React.Component {
 
-import FormGroup from '../components/form/formgroup.js';
-import YesNoRadio from '../components/form/yesnoradio.js';
+  constructor(props) {
+    super(props);
+    this.state = {task: {}};
+  }
 
-export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
-  return (
-    <FormGroup title={_('Add results to Assets')}>
-      <YesNoRadio
-        name="in_assets"
-        value={inAssets}
-        onChange={onChange} />
-    </FormGroup>
-  );
+  componentDidMount() {
+    this.context.gmp.task.get(this.props.params).then(task => {
+      this.setState({task: task});
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>Task: {this.state.task.name}</h2>
+      </div>
+    );
+  }
+}
+
+Task.contextTypes = {
+  gmp: PropTypes.gmp.isRequired,
 };
 
-AddResultsToAssetsGroup.propTypes = {
-  inAssets: PropTypes.yesno,
-  onChange: PropTypes.func,
-};
-
-export default AddResultsToAssetsGroup;
+export default Task;
 
 // vim: set ts=2 sw=2 tw=80:

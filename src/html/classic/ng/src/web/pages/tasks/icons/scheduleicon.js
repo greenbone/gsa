@@ -26,11 +26,11 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from '../../../utils/proptypes.js';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from '../../../components/icon/icon.js';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from '../../../components/link/detailslink.js';
 
 const ScheduleIcon = ({
   links = true,

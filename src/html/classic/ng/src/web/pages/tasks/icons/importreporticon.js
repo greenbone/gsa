@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,52 +23,40 @@
 
 import React from 'react';
 
-import PropTypes from '../utils/proptypes.js';
+import _ from 'gmp/locale.js';
 
-import Icon from '../components/icon/icon.js';
+import PropTypes from '../../../utils/proptypes.js';
 
-const Trend = ({name}) => {
-  let title;
-  let img;
+import Icon from '../../../components/icon/icon.js';
 
-  if (name === 'up') {
-    title = 'Severity increased';
-    img = 'trend_' + name + '.svg';
-  }
-  else if (name === 'down') {
-    title = 'Severity decreased';
-    img = 'trend_' + name + '.svg';
-  }
-  else if (name === 'more') {
-    title = 'Vulnerability count increased';
-    img = 'trend_' + name + '.svg';
-  }
-  else if (name === 'less') {
-    title = 'Vulnerability count decreased';
-    img = 'trend_' + name + '.svg';
-  }
-  else if (name === 'same') {
-    title = 'Vulnerabilities did not change';
-    img = 'trend_nochange.svg';
-  }
-  else {
-    return <span/>;
+const  ImportIcon = ({
+  task,
+  onClick
+}, {capabilities}) => {
+
+  if (!task.isContainer() || !capabilities.mayCreate('report')) {
+    return null;
   }
 
   return (
     <Icon
-      img={img}
-      size="small"
-      alt={title}
-      title={title}
-    />
+      value={task}
+      img="upload.svg"
+      onClick={onClick}
+      alt={_('Import Report')}
+      title={_('Import Report')}/>
   );
 };
 
-Trend.propTypes = {
-  name: PropTypes.string,
+ImportIcon.propTypes = {
+  task: PropTypes.model.isRequired,
+  onClick: PropTypes.func,
 };
 
-export default Trend;
+ImportIcon.contextTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
+};
+
+export default ImportIcon;
 
 // vim: set ts=2 sw=2 tw=80:

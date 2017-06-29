@@ -23,34 +23,52 @@
 
 import React from 'react';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
-class Task extends React.Component {
+import Icon from '../../components/icon/icon.js';
 
-  constructor(props) {
-    super(props);
-    this.state = {task: {}};
+const Trend = ({name}) => {
+  let title;
+  let img;
+
+  if (name === 'up') {
+    title = 'Severity increased';
+    img = 'trend_' + name + '.svg';
+  }
+  else if (name === 'down') {
+    title = 'Severity decreased';
+    img = 'trend_' + name + '.svg';
+  }
+  else if (name === 'more') {
+    title = 'Vulnerability count increased';
+    img = 'trend_' + name + '.svg';
+  }
+  else if (name === 'less') {
+    title = 'Vulnerability count decreased';
+    img = 'trend_' + name + '.svg';
+  }
+  else if (name === 'same') {
+    title = 'Vulnerabilities did not change';
+    img = 'trend_nochange.svg';
+  }
+  else {
+    return <span/>;
   }
 
-  componentDidMount() {
-    this.context.gmp.task.get(this.props.params).then(task => {
-      this.setState({task: task});
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <h2>Task: {this.state.task.name}</h2>
-      </div>
-    );
-  }
-}
-
-Task.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
+  return (
+    <Icon
+      img={img}
+      size="small"
+      alt={title}
+      title={title}
+    />
+  );
 };
 
-export default Task;
+Trend.propTypes = {
+  name: PropTypes.string,
+};
+
+export default Trend;
 
 // vim: set ts=2 sw=2 tw=80:

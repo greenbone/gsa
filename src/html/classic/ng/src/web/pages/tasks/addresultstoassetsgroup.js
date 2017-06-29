@@ -27,30 +27,25 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Icon from '../../components/icon/icon.js';
+import FormGroup from '../../components/form/formgroup.js';
+import YesNoRadio from '../../components/form/yesnoradio.js';
 
-const StopIcon = ({
-  task,
-  onClick,
-}) => {
-  if (task.isRunning()) {
-    return (
-      <Icon
-        size="small"
-        img="stop.svg"
-        title={_('Stop')}
-        value={task}
-        onClick={onClick}/>
-    );
-  }
-  return null;
+export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
+  return (
+    <FormGroup title={_('Add results to Assets')}>
+      <YesNoRadio
+        name="in_assets"
+        value={inAssets}
+        onChange={onChange} />
+    </FormGroup>
+  );
 };
 
-StopIcon.propTypes = {
-  task: PropTypes.model.isRequired,
-  onClick: PropTypes.func,
+AddResultsToAssetsGroup.propTypes = {
+  inAssets: PropTypes.yesno,
+  onChange: PropTypes.func,
 };
 
-export default StopIcon;
+export default AddResultsToAssetsGroup;
 
 // vim: set ts=2 sw=2 tw=80:

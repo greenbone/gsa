@@ -25,14 +25,14 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../components/dialog/dialog.js';
+import {withDialog} from '../../components/dialog/dialog.js';
 
-import FormGroup from '../components/form/formgroup.js';
-import TextField from '../components/form/textfield.js';
+import FormGroup from '../../components/form/formgroup.js';
+import TextField from '../../components/form/textfield.js';
 
-import Layout from '../components/layout/layout.js';
+import Layout from '../../components/layout/layout.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
