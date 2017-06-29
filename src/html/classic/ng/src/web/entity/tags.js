@@ -25,8 +25,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from '../../locale.js';
-import {first, is_defined} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import {first, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 

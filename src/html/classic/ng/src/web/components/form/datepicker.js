@@ -28,7 +28,7 @@ import moment from 'moment';
 import 'jquery-ui';
 import 'jquery-ui/ui/widgets/datepicker.js';
 
-import _ from '../../../locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 

@@ -23,8 +23,8 @@
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import {for_each} from '../../utils.js';
-import logger from '../../log.js';
+import {for_each} from '../utils.js';
+import logger from '../log.js';
 
 import Capabilities from '../capabilities.js';
 import User from '../models/user.js';

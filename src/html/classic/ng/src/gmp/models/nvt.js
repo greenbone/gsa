@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend, is_defined, is_string, map, shallow_copy} from '../../utils.js';
+import {extend, is_defined, is_string, map, shallow_copy} from '../utils.js';
 
 import Model from '../model.js';
 import {parse_severity} from '../parser.js';

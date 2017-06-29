@@ -25,7 +25,7 @@ import moment from 'moment';
 
 import Model from '../model.js';
 
-import {is_defined} from '../../utils.js';
+import {is_defined} from '../utils.js';
 
 export class Agent extends Model {
 

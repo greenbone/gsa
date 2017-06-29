@@ -25,8 +25,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _, {long_date} from '../../locale.js';
-import {classes} from '../../utils.js';
+import _, {long_date} from 'gmp/locale.js';
+import {classes} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 

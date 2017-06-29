@@ -23,8 +23,8 @@
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import logger from '../../log.js';
-import {is_array} from '../../utils.js';
+import logger from '../log.js';
+import {is_array} from '../utils.js';
 
 import Group from '../models/group.js';
 

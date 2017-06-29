@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import  _ from '../../../locale.js';
-import {map} from '../../../utils.js';
-import timezones from '../../../timezones.js';
+import  _ from 'gmp/locale.js';
+import {map} from 'gmp/utils.js';
+import timezones from 'gmp/timezones.js';
 
 import PropTypes from '../../utils/proptypes.js';
 

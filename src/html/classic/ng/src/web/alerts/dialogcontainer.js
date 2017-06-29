@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined, select_save_id, first, shorten} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import {is_defined, select_save_id, first, shorten} from 'gmp/utils.js';
 
 import Layout from '../components/layout/layout.js';
 

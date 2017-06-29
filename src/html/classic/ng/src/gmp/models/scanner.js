@@ -23,8 +23,8 @@
 
 import moment from 'moment';
 
-import _ from '../../locale.js';
-import {is_defined, is_empty, is_string, parse_int} from '../../utils.js';
+import _ from '../locale.js';
+import {is_defined, is_empty, is_string, parse_int} from '../utils.js';
 
 import Model from '../model.js';
 

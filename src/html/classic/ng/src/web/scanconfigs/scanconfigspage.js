@@ -23,14 +23,14 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from 'gmp/locale.js';
 import {
   for_each,
   is_defined,
   is_empty,
   select_save_id,
   shorten,
-} from '../../utils.js';
+} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 

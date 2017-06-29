@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _, {datetime} from '../../locale.js';
-import {is_defined, filter, parse_int, select_save_id} from '../../utils.js';
+import _, {datetime} from 'gmp/locale.js';
+import {is_defined, filter, parse_int, select_save_id} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_options} from '../utils/render.js';

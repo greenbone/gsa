@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import {datetime} from '../../locale.js';
-import {is_defined} from '../../utils.js';
+import {datetime} from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_component} from '../utils/render.js';

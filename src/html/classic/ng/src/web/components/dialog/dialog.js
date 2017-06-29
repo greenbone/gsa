@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import {KeyCode, is_defined, extend} from '../../../utils.js';
-import logger from '../../../log.js';
+import {KeyCode, is_defined, extend} from 'gmp/utils.js';
+import logger from 'gmp/log.js';
 
 import PropTypes from '../../utils/proptypes.js';
 

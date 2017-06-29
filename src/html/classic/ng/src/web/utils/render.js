@@ -24,9 +24,9 @@
 import d3 from 'd3';
 import React from 'react';
 
-import _ from '../../locale.js';
-import logger from '../../log.js';
-import {is_defined, is_empty, map, shorten, split} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import logger from 'gmp/log.js';
+import {is_defined, is_empty, map, shorten, split} from 'gmp/utils.js';
 
 import PropTypes from './proptypes.js';
 

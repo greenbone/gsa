@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _, {datetime} from '../../locale.js';
-import {is_defined, is_empty, parse_float} from '../../utils.js';
+import _, {datetime} from 'gmp/locale.js';
+import {is_defined, is_empty, parse_float} from 'gmp/utils.js';
 
 import Layout from '../components/layout/layout.js';
 

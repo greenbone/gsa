@@ -23,7 +23,7 @@
 
 import Model from '../model.js';
 
-import {is_defined, map} from '../../utils.js';
+import {is_defined, map} from '../utils.js';
 
 export class PortRange extends Model {
 }

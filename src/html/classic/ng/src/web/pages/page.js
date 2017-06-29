@@ -25,8 +25,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import logger from '../../log.js';
-import {is_defined} from '../../utils.js';
+import logger from 'gmp/log.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 

@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {is_defined, for_each, exclude, includes} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import {is_defined, for_each, exclude, includes} from 'gmp/utils.js';
 
 import FootNote from '../components/footnote/footnote.js';
 

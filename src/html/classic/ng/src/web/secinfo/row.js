@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import {datetime} from '../../locale.js';
+import {datetime} from 'gmp/locale.js';
 
-import {shorten} from '../../utils.js';
+import {shorten} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_component} from '../utils/render.js';

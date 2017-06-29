@@ -50,10 +50,6 @@ set (NG_SRC_FILES
 
 set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/index.js
-     ${NG_SRC_DIR}/src/locale.js
-     ${NG_SRC_DIR}/src/log.js
-     ${NG_SRC_DIR}/src/timezones.js
-     ${NG_SRC_DIR}/src/utils.js
      ${NG_SRC_DIR}/src/gmp/cache.js
      ${NG_SRC_DIR}/src/gmp/capabilities.js
      ${NG_SRC_DIR}/src/gmp/collectioncounts.js
@@ -66,8 +62,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/credentials.js
      ${NG_SRC_DIR}/src/gmp/commands/cves.js
      ${NG_SRC_DIR}/src/gmp/commands/dfncert.js
-     ${NG_SRC_DIR}/src/gmp/commands/groups.js
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
+     ${NG_SRC_DIR}/src/gmp/commands/groups.js
      ${NG_SRC_DIR}/src/gmp/commands/hosts.js
      ${NG_SRC_DIR}/src/gmp/commands/login.js
      ${NG_SRC_DIR}/src/gmp/commands/notes.js
@@ -94,25 +90,27 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/http.js
      ${NG_SRC_DIR}/src/gmp/index.js
      ${NG_SRC_DIR}/src/gmp/list.js
+     ${NG_SRC_DIR}/src/gmp/locale.js
+     ${NG_SRC_DIR}/src/gmp/log.js
      ${NG_SRC_DIR}/src/gmp/model.js
      ${NG_SRC_DIR}/src/gmp/models/agent.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js
      ${NG_SRC_DIR}/src/gmp/models/certbund.js
      ${NG_SRC_DIR}/src/gmp/models/chartpreferences.js
-     ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/cpe.js
+     ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/cve.js
      ${NG_SRC_DIR}/src/gmp/models/dfncert.js
-     ${NG_SRC_DIR}/src/gmp/models/group.js
      ${NG_SRC_DIR}/src/gmp/models/filter.js
+     ${NG_SRC_DIR}/src/gmp/models/group.js
      ${NG_SRC_DIR}/src/gmp/models/host.js
      ${NG_SRC_DIR}/src/gmp/models/login.js
      ${NG_SRC_DIR}/src/gmp/models/note.js
+     ${NG_SRC_DIR}/src/gmp/models/nvt.js
      ${NG_SRC_DIR}/src/gmp/models/os.js
      ${NG_SRC_DIR}/src/gmp/models/ovaldef.js
      ${NG_SRC_DIR}/src/gmp/models/override.js
      ${NG_SRC_DIR}/src/gmp/models/permission.js
-     ${NG_SRC_DIR}/src/gmp/models/nvt.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
      ${NG_SRC_DIR}/src/gmp/models/reportformat.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
@@ -131,6 +129,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/parser.js
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/gmp/response.js
+     ${NG_SRC_DIR}/src/gmp/timezones.js
+     ${NG_SRC_DIR}/src/gmp/utils.js
      ${NG_SRC_DIR}/src/gmp/xml2json.js
      ${NG_SRC_DIR}/src/web/agents/agentspage.js
      ${NG_SRC_DIR}/src/web/agents/dialog.js
@@ -331,6 +331,25 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/page.js
      ${NG_SRC_DIR}/src/web/pages/scanspage.js
      ${NG_SRC_DIR}/src/web/pages/secinfopage.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/actions.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/addresultstoassetsgroup.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/autodeletereportsgroup.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/charts.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/containerdialog.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dialogcontainer.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dialog.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/filterdialog.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/icons/importreporticon.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/icons/newiconmenu.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/icons/resumeicon.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/icons/scheduleicon.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/icons/starticon.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/icons/stopicon.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/row.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/table.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/task.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/trend.js
      ${NG_SRC_DIR}/src/web/permissions/dialog.js
      ${NG_SRC_DIR}/src/web/permissions/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/permissions/permissionspage.js
@@ -391,25 +410,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/targets/row.js
      ${NG_SRC_DIR}/src/web/targets/table.js
      ${NG_SRC_DIR}/src/web/targets/targetspage.js
-     ${NG_SRC_DIR}/src/web/tasks/actions.js
-     ${NG_SRC_DIR}/src/web/tasks/addresultstoassetsgroup.js
-     ${NG_SRC_DIR}/src/web/tasks/autodeletereportsgroup.js
-     ${NG_SRC_DIR}/src/web/tasks/charts.js
-     ${NG_SRC_DIR}/src/web/tasks/containerdialog.js
-     ${NG_SRC_DIR}/src/web/tasks/dialogcontainer.js
-     ${NG_SRC_DIR}/src/web/tasks/dialog.js
-     ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
-     ${NG_SRC_DIR}/src/web/tasks/icons/importreporticon.js
-     ${NG_SRC_DIR}/src/web/tasks/icons/newiconmenu.js
-     ${NG_SRC_DIR}/src/web/tasks/icons/resumeicon.js
-     ${NG_SRC_DIR}/src/web/tasks/icons/scheduleicon.js
-     ${NG_SRC_DIR}/src/web/tasks/icons/starticon.js
-     ${NG_SRC_DIR}/src/web/tasks/icons/stopicon.js
-     ${NG_SRC_DIR}/src/web/tasks/row.js
-     ${NG_SRC_DIR}/src/web/tasks/table.js
-     ${NG_SRC_DIR}/src/web/tasks/task.js
-     ${NG_SRC_DIR}/src/web/tasks/taskspage.js
-     ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/users/confirmdeletedialog.js
      ${NG_SRC_DIR}/src/web/users/dialog.js
      ${NG_SRC_DIR}/src/web/users/header.js

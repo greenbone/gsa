@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import logger from '../../log.js';
-import {is_defined, is_array, exclude, includes} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import logger from 'gmp/log.js';
+import {is_defined, is_array, exclude, includes} from 'gmp/utils.js';
 
 import Layout from '../components/layout/layout.js';
 

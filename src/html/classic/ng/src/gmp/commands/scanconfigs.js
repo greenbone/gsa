@@ -21,8 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import logger from '../../log.js';
-import {extend, for_each, map, is_defined} from '../../utils.js';
+import logger from '../log.js';
+import {extend, for_each, map, is_defined} from '../utils.js';
 
 import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';

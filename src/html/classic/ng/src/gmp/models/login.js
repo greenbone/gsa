@@ -23,7 +23,7 @@
 
 import Model from '../model.js';
 
-import {parse_int} from '../../utils.js';
+import {parse_int} from '../utils.js';
 
 export class Login extends Model {
 

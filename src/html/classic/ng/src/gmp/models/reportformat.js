@@ -23,7 +23,7 @@
 
 import moment from 'moment';
 
-import {is_defined, is_empty, is_object, map} from '../../utils.js';
+import {is_defined, is_empty, is_object, map} from '../utils.js';
 
 import Model from '../model.js';
 

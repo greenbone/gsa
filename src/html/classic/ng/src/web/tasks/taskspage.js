@@ -25,8 +25,8 @@ import React from 'react';
 
 import moment from 'moment-timezone';
 
-import  _ from '../../locale.js';
-import logger from '../../log.js';
+import  _ from 'gmp/locale.js';
+import logger from 'gmp/log.js';
 import {
   first,
   for_each,
@@ -36,7 +36,7 @@ import {
   is_empty,
   map,
   select_save_id,
-} from '../../utils.js';
+} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 

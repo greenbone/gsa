@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _, {short_date} from '../../locale.js';
+import _, {short_date} from 'gmp/locale.js';
 
 import Layout from '../components/layout/layout.js';
 

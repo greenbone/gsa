@@ -29,7 +29,7 @@ import {
   is_string,
   parse_int,
   includes,
-} from '../../utils.js';
+} from '../utils.js';
 
 import Model from '../model.js';
 

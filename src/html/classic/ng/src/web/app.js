@@ -38,8 +38,8 @@ import Gmp from 'gmp';
 import {HttpInterceptor} from 'gmp/http.js';
 import PromiseFactory from 'gmp/promise.js';
 
-import {is_defined} from '../utils.js';
-import _ from '../locale.js';
+import {is_defined} from 'gmp/utils.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from './utils/proptypes.js';
 

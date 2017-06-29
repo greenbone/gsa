@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, select_save_id} from '../../utils.js';
+import {is_defined, select_save_id} from 'gmp/utils.js';
 
 import Layout from '../components/layout/layout.js';
 

@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {shorten} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import {shorten} from 'gmp/utils.js';
 
 import Layout from '../components/layout/layout.js';
 

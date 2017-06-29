@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from 'gmp/locale.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';

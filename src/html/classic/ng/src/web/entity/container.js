@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import logger from '../../log.js';
-import {is_defined} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import logger from 'gmp/log.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 

@@ -27,7 +27,7 @@ import {
   is_empty,
   parse_int,
   shallow_copy,
-} from '../../utils.js';
+} from '../utils.js';
 
 import Model from '../model.js';
 

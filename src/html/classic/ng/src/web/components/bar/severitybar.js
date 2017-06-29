@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _ from '../../../locale.js';
-import {parse_float, is_defined} from '../../../utils.js';
+import _ from 'gmp/locale.js';
+import {parse_float, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {result_cvss_risk_factor, cvss_number_format} from '../../utils/render.js';

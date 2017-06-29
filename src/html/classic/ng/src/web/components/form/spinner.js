@@ -30,7 +30,7 @@ import {
   is_defined,
   KeyCode,
   parse_float,
-} from '../../../utils.js';
+} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 

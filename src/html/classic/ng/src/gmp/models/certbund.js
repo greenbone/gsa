@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend} from '../../utils.js';
+import {extend} from '../utils.js';
 
 import Model from '../model.js';
 

@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_options, withPrefix} from '../utils/render.js';

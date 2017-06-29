@@ -28,7 +28,7 @@ import Credential from '../models/credential.js';
 import Task from '../models/task.js';
 import Settings from '../models/settings.js';
 
-import {extend, for_each, map} from '../../utils.js';
+import {extend, for_each, map} from '../utils.js';
 
 function convert_data(prefix, data, fields) {
   let converted = {};

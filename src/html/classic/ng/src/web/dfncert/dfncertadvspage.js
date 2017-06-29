@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from 'gmp/locale.js';
 
  // DFN-CERT uses same filter dialog as CERT-Bund
 import FilterDialog from '../certbund/filterdialog.js';

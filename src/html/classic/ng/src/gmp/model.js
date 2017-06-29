@@ -23,7 +23,7 @@
 
 import moment from 'moment';
 
-import {is_defined, extend, map} from '../utils.js';
+import {is_defined, extend, map} from './utils.js';
 
 import Capabilities from './capabilities.js';
 

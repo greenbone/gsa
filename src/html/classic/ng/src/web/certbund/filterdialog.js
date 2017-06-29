@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import  _ from '../../locale.js';
+import  _ from 'gmp/locale.js';
 
 import {createFilterDialog} from '../components/powerfilter/dialog.js';
 

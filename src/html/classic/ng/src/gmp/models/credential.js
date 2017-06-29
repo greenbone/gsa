@@ -25,7 +25,7 @@ import moment from 'moment';
 
 import Model from '../model.js';
 
-import {is_defined} from '../../utils.js';
+import {is_defined} from '../utils.js';
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';

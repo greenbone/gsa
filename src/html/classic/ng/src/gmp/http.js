@@ -21,11 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import logger from '../log.js';
+import logger from './log.js';
 
-import _ from '../locale.js';
+import _ from './locale.js';
 
-import {is_defined, has_value, is_array, extend} from '../utils.js';
+import {is_defined, has_value, is_array, extend} from './utils.js';
 
 import PromiseFactory from './promise.js';
 import Response from './response.js';

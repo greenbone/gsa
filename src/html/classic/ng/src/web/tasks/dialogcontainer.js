@@ -25,9 +25,9 @@ import React from 'react';
 
 import moment from 'moment-timezone';
 
-import _ from '../../locale.js';
-import logger from '../../log.js';
-import {is_defined} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import logger from 'gmp/log.js';
+import {is_defined} from 'gmp/utils.js';
 
 import Layout from '../components/layout/layout.js';
 

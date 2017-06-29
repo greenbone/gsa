@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import logger from '../../log.js';
+import _ from 'gmp/locale.js';
+import logger from 'gmp/log.js';
 
 import Layout from '../components/layout/layout.js';
 import PropTypes from '../utils/proptypes.js';

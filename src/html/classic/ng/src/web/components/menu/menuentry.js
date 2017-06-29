@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, is_array} from '../../../utils.js';
+import {is_defined, is_array} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 

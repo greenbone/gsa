@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {shorten, is_defined} from '../../utils.js';
+import _ from 'gmp/locale.js';
+import {shorten, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_component, result_cvss_risk_factor} from '../utils/render.js';
