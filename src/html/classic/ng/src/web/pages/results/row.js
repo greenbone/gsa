@@ -26,19 +26,19 @@ import React from 'react';
 import {datetime} from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
-import PropTypes from '../utils/proptypes.js';
-import {render_component} from '../utils/render.js';
+import PropTypes from '../../utils/proptypes.js';
+import {render_component} from '../../utils/render.js';
 
-import {withEntityRow, RowDetailsToggle} from '../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
-import SeverityBar from '../components/bar/severitybar.js';
+import SeverityBar from '../../components/bar/severitybar.js';
 
-import SolutionTypeIcon from '../components/icon/solutiontypeicon.js';
+import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
 
-import AssetLink from '../components/link/assetlink.js';
+import AssetLink from '../../components/link/assetlink.js';
 
-import TableRow from '../components/table/row.js';
-import TableData from '../components/table/data.js';
+import TableRow from '../../components/table/row.js';
+import TableData from '../../components/table/data.js';
 
 const Row = ({
     actions,

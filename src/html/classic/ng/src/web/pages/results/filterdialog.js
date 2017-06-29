@@ -26,24 +26,24 @@ import React from 'react';
 import  _ from 'gmp/locale.js';
 import {parse_int} from 'gmp/utils.js';
 
-import Layout from '../components/layout/layout.js';
+import Layout from '../../components/layout/layout.js';
 
-import Checkbox from '../components/form/checkbox.js';
-import FormGroup from '../components/form/formgroup.js';
-import Radio from '../components/form/radio.js';
+import Checkbox from '../../components/form/checkbox.js';
+import FormGroup from '../../components/form/formgroup.js';
+import Radio from '../../components/form/radio.js';
 
-import SeverityClassLabel from '../components/label/severityclass.js';
+import SeverityClassLabel from '../../components/label/severityclass.js';
 
-import ApplyOverridesGroup from '../components/powerfilter/applyoverridesgroup.js'; // eslint-disable-line max-len
-import FilterStringGroup from '../components/powerfilter/filterstringgroup.js';
-import FirstResultGroup from '../components/powerfilter/firstresultgroup.js';
-import MinQodGroup from '../components/powerfilter/minqodgroup.js';
-import ResultsPerPageGroup from '../components/powerfilter/resultsperpagegroup.js'; // eslint-disable-line max-len
-import SortByGroup from '../components/powerfilter/sortbygroup.js';
+import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js'; // eslint-disable-line max-len
+import FilterStringGroup from '../../components/powerfilter/filterstringgroup.js';
+import FirstResultGroup from '../../components/powerfilter/firstresultgroup.js';
+import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
+import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js'; // eslint-disable-line max-len
+import SortByGroup from '../../components/powerfilter/sortbygroup.js';
 import {
   DefaultFilterDialogPropTypes,
   withFilterDialog,
-} from '../components/powerfilter/dialog.js';
+} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['vulnerability', _('Vulnerability')],

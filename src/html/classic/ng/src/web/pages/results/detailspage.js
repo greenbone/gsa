@@ -28,32 +28,32 @@ import glamorous from 'glamorous';
 import _, {datetime} from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
-import PropTypes from '../utils/proptypes.js';
-import {result_cvss_risk_factor} from '../utils/render.js';
+import PropTypes from '../../utils/proptypes.js';
+import {result_cvss_risk_factor} from '../../utils/render.js';
 
-import DetailsBlock from '../entity/block.js';
-import EntityPage from '../entity/page.js';
-import {withEntityContainer} from '../entity/container.js';
+import DetailsBlock from '../../entity/block.js';
+import EntityPage from '../../entity/page.js';
+import {withEntityContainer} from '../../entity/container.js';
 
-import SeverityBar from '../components/bar/severitybar.js';
+import SeverityBar from '../../components/bar/severitybar.js';
 
-import ExportIcon from '../components/icon/exporticon.js';
-import HelpIcon from '../components/icon/helpicon.js';
-import Icon from '../components/icon/icon.js';
+import ExportIcon from '../../components/icon/exporticon.js';
+import HelpIcon from '../../components/icon/helpicon.js';
+import Icon from '../../components/icon/icon.js';
 
-import Divider from '../components/layout/divider.js';
-import IconDivider from '../components/layout/icondivider.js';
-import Layout from '../components/layout/layout.js';
+import Divider from '../../components/layout/divider.js';
+import IconDivider from '../../components/layout/icondivider.js';
+import Layout from '../../components/layout/layout.js';
 
-import AssetLink from '../components/link/assetlink.js';
-import DetailsLink from '../components/link/detailslink.js';
-import InnerLink from '../components/link/innerlink.js';
-import LegacyLink from '../components/link/legacylink.js';
+import AssetLink from '../../components/link/assetlink.js';
+import DetailsLink from '../../components/link/detailslink.js';
+import InnerLink from '../../components/link/innerlink.js';
+import LegacyLink from '../../components/link/legacylink.js';
 
-import InfoTable from '../components/table/info.js';
-import TableBody from '../components/table/body.js';
-import TableData from '../components/table/data.js';
-import TableRow from '../components/table/row.js';
+import InfoTable from '../../components/table/info.js';
+import TableBody from '../../components/table/body.js';
+import TableData from '../../components/table/data.js';
+import TableRow from '../../components/table/row.js';
 
 import ResultDetails from './details.js';
 

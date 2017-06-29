@@ -1,5 +1,27 @@
 2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/pages/homepage.js,
+	src/html/classic/ng/src/web/results/charts.js,
+	src/html/classic/ng/src/web/pages/results/charts.js,
+	src/html/classic/ng/src/web/results/details.js,
+	src/html/classic/ng/src/web/pages/results/details.js,
+	src/html/classic/ng/src/web/results/detailspage.js,
+	src/html/classic/ng/src/web/pages/results/detailspage.js,
+	src/html/classic/ng/src/web/results/filterdialog.js,
+	src/html/classic/ng/src/web/pages/results/filterdialog.js,
+	src/html/classic/ng/src/web/results/resultspage.js,
+	src/html/classic/ng/src/web/pages/results/listpage.js,
+	src/html/classic/ng/src/web/results/row.js,
+	src/html/classic/ng/src/web/pages/results/row.js,
+	src/html/classic/ng/src/web/results/table.js,
+	src/html/classic/ng/src/web/pages/results/table.js,
+	src/html/classic/ng/src/web/pages/scanspage.js: Move result page components to
+	src/web/pages/results.
+
+2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/pages/homepage.js,
 	src/html/classic/ng/src/web/pages/scanspage.js,

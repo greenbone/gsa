@@ -25,14 +25,14 @@ import React from 'react';
 
 import  _ from 'gmp/locale.js';
 
-import Layout from '../components/layout/layout.js';
+import Layout from '../../components/layout/layout.js';
 
-import EntitiesPage from '../entities/page.js';
-import {withEntitiesContainer} from '../entities/container.js';
+import EntitiesPage from '../../entities/page.js';
+import {withEntitiesContainer} from '../../entities/container.js';
 
-import {withDashboard} from '../components/dashboard/dashboard.js';
+import {withDashboard} from '../../components/dashboard/dashboard.js';
 
-import HelpIcon from '../components/icon/helpicon.js';
+import HelpIcon from '../../components/icon/helpicon.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';

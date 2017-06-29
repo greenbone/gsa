@@ -34,7 +34,7 @@ import Section from '../components/section/section.js';
 
 import TaskCharts from './tasks/charts.js';
 import ReportCharts from '../reports/charts.js';
-import ResultCharts from '../results/charts.js';
+import ResultCharts from './results/charts.js';
 import NoteCharts from '../notes/charts.js';
 import OverrideCharts from '../overrides/charts.js';
 import VulnCharts from '../vulns/charts.js';

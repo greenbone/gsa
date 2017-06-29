@@ -28,26 +28,26 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale.js';
 import {is_empty, is_defined} from 'gmp/utils.js';
 
-import Layout from '../components/layout/layout.js';
+import Layout from '../../components/layout/layout.js';
 
-import PropTypes from '../utils/proptypes.js';
-import {render_nvt_name} from '../utils/render.js';
+import PropTypes from '../../utils/proptypes.js';
+import {render_nvt_name} from '../../utils/render.js';
 
-import DetailsBlock from '../entity/block.js';
+import DetailsBlock from '../../entity/block.js';
 
-import SolutionTypeIcon from '../components/icon/solutiontypeicon.js';
+import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
 
-import Divider from '../components/layout/divider.js';
+import Divider from '../../components/layout/divider.js';
 
-import CveLink from '../components/link/cvelink.js';
-import DetailsLink from '../components/link/detailslink.js';
-import ExternalLink from '../components/link/externallink.js';
-import InfoLink from '../components/link/infolink.js';
+import CveLink from '../../components/link/cvelink.js';
+import DetailsLink from '../../components/link/detailslink.js';
+import ExternalLink from '../../components/link/externallink.js';
+import InfoLink from '../../components/link/infolink.js';
 
-import InfoTable from '../components/table/info.js';
-import TableBody from '../components/table/body.js';
-import TableData from '../components/table/data.js';
-import TableRow from '../components/table/row.js';
+import InfoTable from '../../components/table/info.js';
+import TableBody from '../../components/table/body.js';
+import TableData from '../../components/table/data.js';
+import TableRow from '../../components/table/row.js';
 
 const N_A = 'N/A';
 

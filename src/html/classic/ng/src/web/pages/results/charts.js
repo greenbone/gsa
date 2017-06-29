@@ -25,10 +25,10 @@ import React from 'react';
 
 import  _ from 'gmp/locale.js';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
-import DataSource from '../components/dashboard/datasource.js';
-import Chart from '../components/dashboard/chart.js';
+import DataSource from '../../components/dashboard/datasource.js';
+import Chart from '../../components/dashboard/chart.js';
 
 const ResultCharts = ({filter}) => {
   return (

@@ -329,6 +329,13 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/loginpage.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
      ${NG_SRC_DIR}/src/web/pages/page.js
+     ${NG_SRC_DIR}/src/web/pages/results/charts.js
+     ${NG_SRC_DIR}/src/web/pages/results/details.js
+     ${NG_SRC_DIR}/src/web/pages/results/detailspage.js
+     ${NG_SRC_DIR}/src/web/pages/results/filterdialog.js
+     ${NG_SRC_DIR}/src/web/pages/results/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/results/row.js
+     ${NG_SRC_DIR}/src/web/pages/results/table.js
      ${NG_SRC_DIR}/src/web/pages/scanspage.js
      ${NG_SRC_DIR}/src/web/pages/secinfopage.js
      ${NG_SRC_DIR}/src/web/pages/tasks/actions.js
@@ -370,13 +377,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/reports/reportspage.js
      ${NG_SRC_DIR}/src/web/reports/row.js
      ${NG_SRC_DIR}/src/web/reports/table.js
-     ${NG_SRC_DIR}/src/web/results/charts.js
-     ${NG_SRC_DIR}/src/web/results/details.js
-     ${NG_SRC_DIR}/src/web/results/detailspage.js
-     ${NG_SRC_DIR}/src/web/results/filterdialog.js
-     ${NG_SRC_DIR}/src/web/results/resultspage.js
-     ${NG_SRC_DIR}/src/web/results/row.js
-     ${NG_SRC_DIR}/src/web/results/table.js
      ${NG_SRC_DIR}/src/web/roles/dialog.js
      ${NG_SRC_DIR}/src/web/roles/rolespage.js
      ${NG_SRC_DIR}/src/web/roles/row.js
