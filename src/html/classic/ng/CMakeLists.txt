@@ -152,7 +152,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
-     ${NG_SRC_DIR}/src/web/assetspage.js
      ${NG_SRC_DIR}/src/web/credentials/credentialspage.js
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/credentials/downloadicon.js
@@ -291,14 +290,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/groups/groupsppage.js
      ${NG_SRC_DIR}/src/web/groups/header.js
      ${NG_SRC_DIR}/src/web/groups/row.js
-     ${NG_SRC_DIR}/src/web/homepage.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
      ${NG_SRC_DIR}/src/web/hosts/dialog.js
      ${NG_SRC_DIR}/src/web/hosts/filterdialog.js
      ${NG_SRC_DIR}/src/web/hosts/hostspage.js
      ${NG_SRC_DIR}/src/web/hosts/row.js
      ${NG_SRC_DIR}/src/web/hosts/table.js
-     ${NG_SRC_DIR}/src/web/loginpage.js
      ${NG_SRC_DIR}/src/web/notes/charts.js
      ${NG_SRC_DIR}/src/web/notes/dialog.js
      ${NG_SRC_DIR}/src/web/notes/notespage.js
@@ -326,8 +323,13 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/overrides/table.js
      ${NG_SRC_DIR}/src/web/os/charts.js
      ${NG_SRC_DIR}/src/web/ovaldefs/charts.js
-     ${NG_SRC_DIR}/src/web/page.js
-     ${NG_SRC_DIR}/src/web/pagenotfound.js
+     ${NG_SRC_DIR}/src/web/pages/assetspage.js
+     ${NG_SRC_DIR}/src/web/pages/homepage.js
+     ${NG_SRC_DIR}/src/web/pages/loginpage.js
+     ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
+     ${NG_SRC_DIR}/src/web/pages/page.js
+     ${NG_SRC_DIR}/src/web/pages/scanspage.js
+     ${NG_SRC_DIR}/src/web/pages/secinfopage.js
      ${NG_SRC_DIR}/src/web/permissions/dialog.js
      ${NG_SRC_DIR}/src/web/permissions/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/permissions/permissionspage.js
@@ -373,13 +375,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/scanners/dialog.js
      ${NG_SRC_DIR}/src/web/scanners/row.js
      ${NG_SRC_DIR}/src/web/scanners/scannerspage.js
-     ${NG_SRC_DIR}/src/web/scanspage.js
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/schedules/row.js
      ${NG_SRC_DIR}/src/web/schedules/schedulespage.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/secinfo/filterdialog.js
-     ${NG_SRC_DIR}/src/web/secinfopage.js
      ${NG_SRC_DIR}/src/web/secinfo/row.js
      ${NG_SRC_DIR}/src/web/secinfo/secinfospage.js
      ${NG_SRC_DIR}/src/web/secinfo/table.js
@@ -452,11 +452,10 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
      ${NG_SRC_DIR}/src/web/components/menu/css/menuentry.css
      ${NG_SRC_DIR}/src/web/components/powerfilter/css/powerfilter.css
+     ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
-     ${NG_SRC_DIR}/src/web/css/login.css
-     ${NG_SRC_DIR}/src/web/css/page.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
      ${NG_SRC_DIR}/src/web/users/css/row.css

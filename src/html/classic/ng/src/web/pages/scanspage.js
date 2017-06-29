@@ -23,21 +23,21 @@
 
 import React from 'react';
 
-import _ from '../locale.js';
+import _ from '../../locale.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../proptypes.js';
 
-import Dashboard from './components/dashboard/dashboard.js';
-import DashboardControls from './components/dashboard/controls.js';
+import Dashboard from '../components/dashboard/dashboard.js';
+import DashboardControls from '../components/dashboard/controls.js';
 
-import Section from './components/section/section.js';
+import Section from '../components/section/section.js';
 
-import TaskCharts from './tasks/charts.js';
-import ReportCharts from './reports/charts.js';
-import ResultCharts from './results/charts.js';
-import NoteCharts from './notes/charts.js';
-import OverrideCharts from './overrides/charts.js';
-import VulnCharts from './vulns/charts.js';
+import TaskCharts from '../tasks/charts.js';
+import ReportCharts from '../reports/charts.js';
+import ResultCharts from '../results/charts.js';
+import NoteCharts from '../notes/charts.js';
+import OverrideCharts from '../overrides/charts.js';
+import VulnCharts from '../vulns/charts.js';
 
 class ScansPage extends React.Component {
 

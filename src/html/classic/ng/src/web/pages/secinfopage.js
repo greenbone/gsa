@@ -23,26 +23,31 @@
 
 import React from 'react';
 
-import _ from '../locale.js';
+import _ from '../../locale.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from '../proptypes.js';
 
-import Dashboard from './components/dashboard/dashboard.js';
-import DashboardControls from './components/dashboard/controls.js';
+import Dashboard from '../components/dashboard/dashboard.js';
+import DashboardControls from '../components/dashboard/controls.js';
 
-import Section from './components/section/section.js';
+import Section from '../components/section/section.js';
 
-import HostCharts from './hosts/charts.js';
-import OsCharts from './os/charts.js';
+import CertBundCharts from '../certbund/charts.js';
+import CpeCharts from '../cpes/charts.js';
+import CveCharts from '../cves/charts.js';
+import DfnCertCharts from '../dfncert/charts.js';
+import NvtCharts from '../nvts/charts.js';
+import OvaldefCharts from '../ovaldefs/charts.js';
+import AllSecinfoCharts from '../secinfo/charts.js';
 
-class AssetsPage extends React.Component {
+class SecinfoPage extends React.Component {
 
   constructor(...args) {
     super(...args);
 
     const {caches} = this.context;
 
-    this.cache = caches.get('assetsdashboard');
+    this.cache = caches.get('secinfodashboard');
   }
 
   getChildContext() {
@@ -51,31 +56,36 @@ class AssetsPage extends React.Component {
 
   render() {
     return (
-      <Section title={_('Assets Dashboard')} img="asset.svg"
+      <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
         extra={<DashboardControls/>}>
         <Dashboard
-          configPrefId="0320e0db-bf30-4d4f-9379-b0a022d07cf7"
-          defaultControllersString={'host-by-most-vulnerable|' +
-            'host-by-topology|os-by-most-vulnerable#os-by-severity-class|' +
-            'host-by-modification-time'}
-          defaultControllerString="host-by-severity-class"
+          configPrefId="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
+          defaultControllersString={'nvt-by-severity-class|cve-by-created|' +
+            'cve-by-severity-class#cert_bund_adv-by-created|' +
+            'cert_bund_adv-by-cvss'}
+          defaultControllerString="nvt-by-cvss"
           maxComponents="8">
-          <HostCharts/>
-          <OsCharts/>
+          <NvtCharts/>
+          <OvaldefCharts/>
+          <CertBundCharts/>
+          <CveCharts/>
+          <CpeCharts/>
+          <DfnCertCharts/>
+          <AllSecinfoCharts/>
         </Dashboard>
       </Section>
     );
   }
 }
 
-AssetsPage.contextTypes = {
+SecinfoPage.contextTypes = {
   caches: PropTypes.cachefactory.isRequired,
 };
 
-AssetsPage.childContextTypes = {
+SecinfoPage.childContextTypes = {
   cache: PropTypes.cache,
 };
 
-export default AssetsPage;
+export default SecinfoPage;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -25,7 +25,12 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {Router, Route, IndexRoute, Redirect, browserHistory
+import {
+  browserHistory,
+  IndexRoute,
+  Redirect,
+  Route,
+  Router,
 } from 'react-router';
 
 import CacheFactory from '../gmp/cache.js';
@@ -36,15 +41,17 @@ import PromiseFactory from '../gmp/promise.js';
 import {is_defined} from '../utils.js';
 import _ from '../locale.js';
 
-import AssetsPage from './assetspage.js';
-import HomePage from './homepage.js';
-import LoginPage from './loginpage.js';
-import Page from './page.js';
-import PageNotFound from './pagenotfound.js';
 import PropTypes from './proptypes.js';
-import ScansPage from './scanspage.js';
-import SecinfoPage from './secinfopage.js';
+
 import {get_severity_levels} from './render.js';
+
+import AssetsPage from './pages/assetspage.js';
+import HomePage from './pages/homepage.js';
+import LoginPage from './pages/loginpage.js';
+import Page from './pages/page.js';
+import PageNotFound from './pages/notfoundpage.js';
+import ScansPage from './pages/scanspage.js';
+import SecinfoPage from './pages/secinfopage.js';
 
 import AgentsPage from './agents/agentspage.js';
 import AlertsPage from './alerts/alertspage.js';
@@ -79,6 +86,7 @@ import UsersPage from './users/userspage.js';
 import VulnerabilitiesPage from './vulns/vulnspage.js';
 
 import './css/gsa-base.css';
+import './css/app.css';
 
 const {config = {}} = window;
 

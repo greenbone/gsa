@@ -23,15 +23,15 @@
 
 import React from 'react';
 
-import _ from '../locale.js';
+import _ from '../../locale.js';
 
-import Layout from './components/layout/layout.js';
+import Layout from '../components/layout/layout.js';
 
-import Footer from './components/structure/footer.js';
-import Header from './components/structure/header.js';
-import Main from './components/structure/main.js';
+import Footer from '../components/structure/footer.js';
+import Header from '../components/structure/header.js';
+import Main from '../components/structure/main.js';
 
-export const PageNotFound = () => {
+const PageNotFound = () => {
   return (
     <Layout flex="column" style={{height: '100%'}}>
       <Header/>

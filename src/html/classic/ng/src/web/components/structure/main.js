@@ -21,8 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import glamorous from 'glamorous';
 
 import {withLayout} from '../layout/layout.js';
@@ -31,15 +29,10 @@ const Main = glamorous.main(
   'main',
   {
     padding: '5px 10px',
+    height: '100%',
   }
 );
 
-const MainComponent = props => {
-  return (
-    <Main {...props}/>
-  );
-};
-
-export default withLayout(MainComponent);
+export default withLayout(Main);
 
 // vim: set ts=2 sw=2 tw=80:

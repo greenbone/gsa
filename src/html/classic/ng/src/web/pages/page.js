@@ -23,24 +23,28 @@
 
 import React from 'react';
 
-import logger from '../log.js';
-import {is_defined} from '../utils.js';
+import glamorous from 'glamorous';
 
-import PropTypes from './proptypes.js';
+import logger from '../../log.js';
+import {is_defined} from '../../utils.js';
 
-import MenuBar from './components/bar/menubar.js';
+import PropTypes from '../proptypes.js';
 
-import StickyContainer from './components/sticky/container.js';
+import MenuBar from '../components/bar/menubar.js';
 
-import Footer from './components/structure/footer.js';
-import Header from './components/structure/header.js';
-import Main from './components/structure/main.js';
+import StickyContainer from '../components/sticky/container.js';
 
-import './css/page.css';
+import Footer from '../components/structure/footer.js';
+import Header from '../components/structure/header.js';
+import Main from '../components/structure/main.js';
 
 const log = logger.getLogger('web.page');
 
-export class Page extends React.Component {
+const Div = glamorous.div({
+  height: '100%',
+});
+
+class Page extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -75,7 +79,7 @@ export class Page extends React.Component {
     }
 
     return (
-      <div id="page">
+      <Div>
         <Header/>
         <StickyContainer>
           <MenuBar/>
@@ -84,7 +88,7 @@ export class Page extends React.Component {
           </Main>
           <Footer/>
         </StickyContainer>
-      </div>
+      </Div>
     );
   }
 }
