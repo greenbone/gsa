@@ -74,6 +74,10 @@ export class Capabilities {
   mayCreate(type) {
     return this.mayOp('create_' + type);
   }
+
+  get length() {
+    return this._capabilities.size;
+  }
 }
 
 export default Capabilities;

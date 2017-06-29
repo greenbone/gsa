@@ -1,5 +1,9 @@
 2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/capabilities.js: Support length property.
+
+2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/icon/listicon.js: Fix import of Link
 	component.
 
