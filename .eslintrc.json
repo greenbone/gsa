@@ -1,6 +1,7 @@
 {
     "extends": "react-app",
     "rules": {
+        "strict": "safe",
         "accessor-pairs": "error",
         "array-bracket-spacing": [
             "error",
@@ -97,7 +98,7 @@
         ],
         "max-depth": "error",
         "max-len": [
-            "error", 80,
+            "warn", 80,
             {
                 "ignoreComments": true
             }
