@@ -1,5 +1,44 @@
 2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/alerts/row.js,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/components/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/components/powerfilter/dialog.js,
+	src/html/classic/ng/src/web/components/powerfilter/powerfilter.js,
+	src/html/classic/ng/src/web/credentials/credentialspage.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entity/container.js,
+	src/html/classic/ng/src/web/groups/groupsppage.js,
+	src/html/classic/ng/src/web/hosts/hostspage.js,
+	src/html/classic/ng/src/web/notes/notespage.js,
+	src/html/classic/ng/src/web/os/operatingsystemspage.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js,
+	src/html/classic/ng/src/web/permissions/dialogcontainer.js,
+	src/html/classic/ng/src/web/portlists/portlistspage.js,
+	src/html/classic/ng/src/web/reportformats/reportformatspage.js,
+	src/html/classic/ng/src/web/reports/reportspage.js,
+	src/html/classic/ng/src/web/results/resultspage.js,
+	src/html/classic/ng/src/web/roles/rolespage.js,
+	src/html/classic/ng/src/web/scanconfigs/dialog.js,
+	src/html/classic/ng/src/web/scanconfigs/editdialog.js,
+	src/html/classic/ng/src/web/scanconfigs/scanconfigspage.js,
+	src/html/classic/ng/src/web/scanners/dialog.js,
+	src/html/classic/ng/src/web/scanners/row.js,
+	src/html/classic/ng/src/web/scanners/scannerspage.js,
+	src/html/classic/ng/src/web/secinfo/row.js,
+	src/html/classic/ng/src/web/targets/dialog.js,
+	src/html/classic/ng/src/web/targets/targetspage.js,
+	src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/tasks/row.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js,
+	src/html/classic/ng/src/web/users/userspage.js,
+	src/html/classic/ng/src/web/utils/proptypes.js,
+	src/html/classic/ng/src/web/vulns/vulnspage.js,
+	src/html/classic/ng/src/web/wizard/advancedtaskwizard.js: Import gmp modules
+	without relative paths.
+
+2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json: Set NODE_PATH to src directory. This
 	allows to import our packges without relative paths. E.g. now it is possible
 	to "import Model from 'gmp/model.js';" instead of having to use and adjust

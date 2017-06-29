@@ -43,7 +43,7 @@ import Layout from '../components/layout/layout.js';
 
 import {createFilterDialog} from '../components/powerfilter/dialog.js';
 
-import PromiseFactory from '../../gmp/promise.js';
+import PromiseFactory from 'gmp/promise.js';
 
 import ReportFormatDialog from './dialog.js';
 import Row from './row.js';

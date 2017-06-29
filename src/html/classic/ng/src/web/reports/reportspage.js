@@ -45,7 +45,7 @@ import ReportFilterDialog from './filterdialog.js';
 import ImportReportDialog from './importdialog.js';
 import ReportsTable from './table.js';
 
-import {REPORTS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const Dashboard = withDashboard(ReportCharts, {
   hideFilterSelect: true,

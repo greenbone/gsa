@@ -31,14 +31,14 @@ import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
-} from '../../gmp/models/scanner.js';
+} from 'gmp/models/scanner.js';
 
 import {
   EMPTY_SCAN_CONFIG_ID,
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
-} from '../../gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig.js';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_options} from '../utils/render.js';

@@ -39,7 +39,7 @@ import OverrideDialog from '../overrides/dialog.js';
 
 import TagDialog from '../tags/dialog.js';
 
-import Promise from '../../gmp/promise.js';
+import Promise from 'gmp/promise.js';
 
 const log = logger.getLogger('web.entity.container');
 

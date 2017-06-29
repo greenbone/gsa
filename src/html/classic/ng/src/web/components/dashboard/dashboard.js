@@ -28,7 +28,7 @@ import logger from '../../../log.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import PromiseFactory from '../../../gmp/promise.js';
+import PromiseFactory from 'gmp/promise.js';
 
 import './css/dashboard.css';
 

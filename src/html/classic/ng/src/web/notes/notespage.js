@@ -43,7 +43,7 @@ import NoteDialog from './dialog.js';
 import FilterDialog from './filterdialog.js';
 import NotesTable from './table.js';
 
-import {NOTES_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {NOTES_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const Dashboard = withDashboard(NotesCharts, {
   hideFilterSelect: true,

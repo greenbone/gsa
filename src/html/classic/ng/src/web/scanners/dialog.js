@@ -50,12 +50,12 @@ import {
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
   scanner_type_name,
-} from '../../gmp/models/scanner.js';
+} from 'gmp/models/scanner.js';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from '../../gmp/models/credential.js';
+} from 'gmp/models/credential.js';
 
 const scanner_types = [
   OPENVAS_SCANNER_TYPE,

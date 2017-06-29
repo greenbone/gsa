@@ -37,7 +37,7 @@ import HelpIcon from '../components/icon/helpicon.js';
 import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
 
-import {PORTLISTS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import FilterDialog from './filterdialog.js';
 import ImportPortListDialog from './importdialog.js';

@@ -37,7 +37,7 @@ import FirstResultGroup from './firstresultgroup.js';
 import ResultsPerPageGroup from './resultsperpagegroup.js';
 import SortByGroup from './sortbygroup.js';
 
-import Filter from '../../../gmp/models/filter.js';
+import Filter from 'gmp/models/filter.js';
 
 export const DefaultFilterDialog = ({
     filter,

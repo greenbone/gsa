@@ -51,7 +51,7 @@ import TableData from '../components/table/data.js';
 import Actions from './actions.js';
 import Trend from './trend.js';
 
-import {SLAVE_SCANNER_TYPE} from '../../gmp/models/scanner.js';
+import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
 const task_status = task => {
   return task.isContainer() ? 'Container' : task.status;

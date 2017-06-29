@@ -31,7 +31,7 @@ import PropTypes from '../utils/proptypes.js';
 
 import PermissionDialog from './dialog.js';
 
-import PromiseFactory from '../../gmp/promise.js';
+import PromiseFactory from 'gmp/promise.js';
 
 class PermissionDialogContainer extends React.Component {
 

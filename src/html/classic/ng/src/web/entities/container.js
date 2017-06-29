@@ -37,8 +37,8 @@ import Dialog from '../components/dialog/dialog.js';
 
 import Download from '../components/form/download.js';
 
-import PromiseFactory from '../../gmp/promise.js';
-import Filter from '../../gmp/models/filter.js';
+import PromiseFactory from 'gmp/promise.js';
+import Filter from 'gmp/models/filter.js';
 
 const log = logger.getLogger('web.entities.container');
 

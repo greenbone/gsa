@@ -47,7 +47,7 @@ import {
   esxi_credential_filter,
   smb_credential_filter,
   ssh_credential_filter,
-} from '../../gmp/models/credential.js';
+} from 'gmp/models/credential.js';
 
 const AdvancedTaskWizard = ({
     alert_email,

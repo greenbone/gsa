@@ -67,17 +67,17 @@ import MenuEntry from '../components/menu/menuentry.js';
 
 import NewIconMenu from './icons/newiconmenu.js';
 
-import {TASKS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
-} from '../../gmp/models/scanner.js';
+} from 'gmp/models/scanner.js';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
-} from '../../gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig.js';
 
 const log = logger.getLogger('web.tasks.taskspage');
 

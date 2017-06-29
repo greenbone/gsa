@@ -48,7 +48,7 @@ import LegacyLink from '../components/link/legacylink.js';
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
 
-import {scanner_type_name, CVE_SCANNER_TYPE} from '../../gmp/models/scanner.js';
+import {scanner_type_name, CVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
 
 const Actions = ({

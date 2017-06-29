@@ -49,7 +49,7 @@ import {
   SNMP_CREDENTIAL_TYPES,
   SSH_CREDENTIAL_TYPES,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from '../../gmp/models/credential.js';
+} from 'gmp/models/credential.js';
 
 const DEFAULT_PORT_LIST_ID = 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5';
 const ALIVE_TESTS_DEFAULT = 'Scan Config Default';

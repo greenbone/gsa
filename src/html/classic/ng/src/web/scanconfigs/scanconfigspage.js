@@ -55,7 +55,7 @@ import ImportDialog from './importdialog.js';
 import Row from './row.js';
 import ScanConfigDialog from './dialog.js';
 
-import {OSP_SCANNER_TYPE} from '../../gmp/models/scanner.js';
+import {OSP_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],

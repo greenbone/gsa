@@ -41,7 +41,7 @@ import Layout from '../components/layout/layout.js';
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   EMPTY_SCAN_CONFIG_ID,
-} from '../../gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig.js';
 
 const Dialog = ({
     base,

@@ -33,10 +33,10 @@ import {
   Router,
 } from 'react-router';
 
-import CacheFactory from '../gmp/cache.js';
-import Gmp from '../gmp/gmp.js';
-import {HttpInterceptor} from '../gmp/http.js';
-import PromiseFactory from '../gmp/promise.js';
+import CacheFactory from 'gmp/cache.js';
+import Gmp from 'gmp/gmp.js';
+import {HttpInterceptor} from 'gmp/http.js';
+import PromiseFactory from 'gmp/promise.js';
 
 import {is_defined} from '../utils.js';
 import _ from '../locale.js';

@@ -56,7 +56,7 @@ import Trend from './trend.js';
 import {
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
-} from '../../gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig.js';
 
 class NvtPreferenceDisplay extends React.Component {
 

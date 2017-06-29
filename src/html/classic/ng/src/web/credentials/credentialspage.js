@@ -44,7 +44,7 @@ import {createFilterDialog} from '../components/powerfilter/dialog.js';
 import {
   ALL_CREDENTIAL_TYPES,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from '../../gmp/models/credential.js';
+} from 'gmp/models/credential.js';
 
 import CredentialsDialog from './dialog.js';
 import Row from './row.js';

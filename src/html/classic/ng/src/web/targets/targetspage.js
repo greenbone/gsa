@@ -40,7 +40,7 @@ import TargetsFilterDialog from './filterdialog.js';
 import TargetsTable from './table.js';
 import TargetDialogContainer from './dialogcontainer.js';
 
-import {TARGETS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {TARGETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = ({onNewTargetClick}) => {
   return (

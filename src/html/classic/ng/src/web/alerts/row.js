@@ -47,7 +47,7 @@ import DetailsLink from '../components/link/detailslink.js';
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
 
-import {secinfo_type} from '../../gmp/models/secinfo.js';
+import {secinfo_type} from 'gmp/models/secinfo.js';
 
 const Actions = ({
     entity,

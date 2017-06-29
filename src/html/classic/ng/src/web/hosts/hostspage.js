@@ -47,7 +47,7 @@ import HostDialog from './dialog.js';
 import HostsFilterDialog from './filterdialog.js';
 import HostsTable from './table.js';
 
-import {ASSETS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = ({onNewHostClick}) => {
   return (

@@ -45,7 +45,7 @@ import NewIcon from '../icon/newicon.js';
 import IconDivider from '../layout/icondivider.js';
 import Layout from '../layout/layout.js';
 
-import Filter from '../../../gmp/models/filter.js';
+import Filter from 'gmp/models/filter.js';
 
 import './css/powerfilter.css';
 

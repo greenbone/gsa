@@ -40,7 +40,7 @@ import Layout from '../components/layout/layout.js';
 
 import {createFilterDialog} from '../components/powerfilter/dialog.js';
 
-import {GROUPS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {GROUPS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import GroupDialog from './dialog.js';
 import Header from './header.js';

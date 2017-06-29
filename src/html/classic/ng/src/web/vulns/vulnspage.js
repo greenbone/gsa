@@ -34,7 +34,7 @@ import {withDashboard} from '../components/dashboard/dashboard.js';
 
 import HelpIcon from '../components/icon/helpicon.js';
 
-import {VULNS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {VULNS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import VulnsCharts from './charts.js';
 import VulnsFilterDialog from './filterdialog.js';

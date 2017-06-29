@@ -42,7 +42,7 @@ import TableBody from '../components/table/body.js';
 import TableRow from '../components/table/row.js';
 import TableData from '../components/table/data.js';
 
-import {secinfo_type} from '../../gmp/models/secinfo.js';
+import {secinfo_type} from 'gmp/models/secinfo.js';
 
 const Row = ({entity, links = true, actions, ...other}) => {
   return (

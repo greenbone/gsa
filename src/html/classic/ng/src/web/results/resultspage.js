@@ -39,7 +39,7 @@ import ResultsFilterDialog from './filterdialog.js';
 
 import ResultsTable from './table.js';
 
-import {RESULTS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const Dashboard = withDashboard(ResultCharts, {
   hideFilterSelect: true,

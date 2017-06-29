@@ -43,7 +43,7 @@ import OverrideDialog from './dialog.js';
 import FilterDialog from './filterdialog.js';
 import Table from './table.js';
 
-import {OVERRIDES_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter.js';
 
 
 const Dashboard = withDashboard(OverridesCharts, {

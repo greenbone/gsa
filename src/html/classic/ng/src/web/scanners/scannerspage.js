@@ -50,12 +50,12 @@ import Row from './row.js';
 
 import {
   SLAVE_SCANNER_TYPE,
-} from '../../gmp/models/scanner.js';
+} from 'gmp/models/scanner.js';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from '../../gmp/models/credential.js';
+} from 'gmp/models/credential.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],

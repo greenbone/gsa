@@ -38,7 +38,7 @@ import OsCharts from './charts.js';
 import OsFilterDialog from './filterdialog.js';
 import OsTable from './table.js';
 
-import {ASSETS_FILTER_FILTER} from '../../gmp/models/filter.js';
+import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const Dashboard = withDashboard(OsCharts, {
   hideFilterSelect: true,
