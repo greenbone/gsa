@@ -1,5 +1,12 @@
 2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/package.json: Set NODE_PATH to src directory. This
+	allows to import our packges without relative paths. E.g. now it is possible
+	to "import Model from 'gmp/model.js';" instead of having to use and adjust
+	relative paths.
+
+2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/agents/agentspage.js,
 	src/html/classic/ng/src/web/agents/dialog.js,
