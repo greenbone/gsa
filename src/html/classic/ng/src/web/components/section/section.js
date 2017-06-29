@@ -108,7 +108,7 @@ const HeaderLayout = glamorous(Layout)(
 );
 
 const HeaderHeading = withLayout(glamorous.h2({
-  margin: 0,
+  margin: '0 0 1px 0',
 }));
 
 const HeaderIconLayout = glamorous(Layout)({
@@ -121,13 +121,15 @@ export const SectionHeader = ({children, title, img}) => {
       flex
       align={['space-between', 'end']}
       className="section-header">
-      <HeaderHeading flex align={['start', 'end']}>
+      <HeaderHeading flex align={['start', 'stretch']}>
         <HeaderIconLayout flex>
           {is_string(img) ?
             <Icon size="large" img={img}/> : img
           }
         </HeaderIconLayout>
-        {title}
+        <Layout flex align={['start', 'end']}>
+          {title}
+        </Layout>
       </HeaderHeading>
       {children}
     </HeaderLayout>
