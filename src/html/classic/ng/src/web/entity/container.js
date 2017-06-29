@@ -33,11 +33,11 @@ import Dialog from '../components/dialog/dialog.js';
 
 import Layout from '../components/layout/layout.js';
 
-import NoteDialog from '../notes/dialog.js';
+import NoteDialog from '../pages/notes/dialog.js';
 
-import OverrideDialog from '../overrides/dialog.js';
+import OverrideDialog from '../pages/overrides/dialog.js';
 
-import TagDialog from '../tags/dialog.js';
+import TagDialog from '../pages/tags/dialog.js';
 
 import Promise from 'gmp/promise.js';
 

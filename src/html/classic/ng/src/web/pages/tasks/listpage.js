@@ -43,7 +43,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import {withEntitiesContainer} from '../../entities/container.js';
 
-import ImportReportDialog from '../../reports/importdialog.js';
+import ImportReportDialog from '../reports/importdialog.js';
 
 import AdvancedTaskWizard from '../../wizard/advancedtaskwizard.js';
 import ModifyTaskWizard from '../../wizard/modifytaskwizard.js';
@@ -55,6 +55,8 @@ import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 import Table from './table.js';
 
+import NewIconMenu from './icons/newiconmenu.js';
+
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
@@ -64,8 +66,6 @@ import Layout from '../../components/layout/layout.js';
 
 import IconMenu from '../../components/menu/iconmenu.js';
 import MenuEntry from '../../components/menu/menuentry.js';
-
-import NewIconMenu from './icons/newiconmenu.js';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 

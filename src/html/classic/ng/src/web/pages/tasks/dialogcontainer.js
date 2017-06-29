@@ -33,9 +33,9 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import ScheduleDialog from '../../schedules/dialog.js';
-import TargetDialogContainer from '../../targets/dialogcontainer.js';
-import AlertDialogContainer from '../../alerts/dialogcontainer.js';
+import ScheduleDialog from '../schedules/dialog.js';
+import TargetDialogContainer from '../targets/dialogcontainer.js';
+import AlertDialogContainer from '../alerts/dialogcontainer.js';
 
 import TaskDialog from './dialog.js';
 

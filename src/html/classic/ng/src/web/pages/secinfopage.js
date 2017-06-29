@@ -32,13 +32,13 @@ import DashboardControls from '../components/dashboard/controls.js';
 
 import Section from '../components/section/section.js';
 
-import CertBundCharts from '../certbund/charts.js';
-import CpeCharts from '../cpes/charts.js';
-import CveCharts from '../cves/charts.js';
-import DfnCertCharts from '../dfncert/charts.js';
-import NvtCharts from '../nvts/charts.js';
-import OvaldefCharts from '../ovaldefs/charts.js';
-import AllSecinfoCharts from '../secinfo/charts.js';
+import CertBundCharts from './certbund/charts.js';
+import CpeCharts from './cpes/charts.js';
+import CveCharts from './cves/charts.js';
+import DfnCertCharts from './dfncert/charts.js';
+import NvtCharts from './nvts/charts.js';
+import OvaldefCharts from './ovaldefs/charts.js';
+import AllSecinfoCharts from './allsecinfo/charts.js';
 
 class SecinfoPage extends React.Component {
 

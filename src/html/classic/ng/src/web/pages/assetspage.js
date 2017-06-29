@@ -32,8 +32,8 @@ import DashboardControls from '../components/dashboard/controls.js';
 
 import Section from '../components/section/section.js';
 
-import HostCharts from '../hosts/charts.js';
-import OsCharts from '../os/charts.js';
+import HostCharts from './hosts/charts.js';
+import OsCharts from './os/charts.js';
 
 class AssetsPage extends React.Component {
 
