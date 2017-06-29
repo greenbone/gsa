@@ -1,5 +1,10 @@
 2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/icon/listicon.js: Fix import of Link
+	component.
+
+2017-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* .eslintrc.json: Only warn if a line is linger then 80 characters. It is save
 	to use strict in commonjs files.
 

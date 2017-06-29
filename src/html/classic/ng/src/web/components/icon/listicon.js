@@ -25,7 +25,7 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Link from '../../link/link.js';
+import Link from '../link/link.js';
 
 import Icon from './icon.js';
 
