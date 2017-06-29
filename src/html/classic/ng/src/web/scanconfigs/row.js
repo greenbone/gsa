@@ -27,8 +27,8 @@ import _ from '../../locale.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
-import {render_component, na} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_component, na} from '../utils/render.js';
 
 import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';

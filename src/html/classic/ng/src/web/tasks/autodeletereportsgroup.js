@@ -27,7 +27,7 @@ import _ from '../../locale.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import Radio from '../components/form/radio.js';

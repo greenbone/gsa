@@ -28,7 +28,7 @@ import moment from 'moment-timezone';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
 import {withEntitiesContainer} from '../entities/container.js';

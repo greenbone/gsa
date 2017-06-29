@@ -27,8 +27,8 @@ import _ from '../../locale.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
-import {withPrefix} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {withPrefix} from '../utils/render.js';
 
 import Spinner from '../components/form/spinner.js';
 import Radio from '../components/form/radio.js';

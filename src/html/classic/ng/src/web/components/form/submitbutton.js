@@ -25,7 +25,7 @@ import React from 'react';
 
 import {classes} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import Button from './button.js';
 

@@ -26,8 +26,8 @@ import React from 'react';
 import _ from '../../locale.js';
 import {select_save_id} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {render_options} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_options} from '../utils/render.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
 

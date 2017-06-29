@@ -25,8 +25,8 @@ import React from 'react';
 
 import {datetime} from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
-import {render_component} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_component} from '../utils/render.js';
 
 import {withEntityRow} from '../entities/row.js';
 

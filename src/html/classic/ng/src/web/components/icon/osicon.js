@@ -28,7 +28,7 @@ import {is_defined} from '../../../utils.js';
 
 import OperatingSystems from '../../utils/os.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
 

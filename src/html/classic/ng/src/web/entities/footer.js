@@ -27,7 +27,7 @@ import _ from '../../locale.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 import SelectionType from '../utils/selectiontype.js';
 
 import DeleteIcon from '../components/icon/deleteicon.js';

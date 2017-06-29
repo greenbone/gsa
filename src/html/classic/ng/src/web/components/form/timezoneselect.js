@@ -27,7 +27,7 @@ import  _ from '../../../locale.js';
 import {map} from '../../../utils.js';
 import timezones from '../../../timezones.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import {withLayout} from '../layout/layout.js';
 

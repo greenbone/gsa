@@ -26,7 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 import {first, is_defined, is_empty} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import EntitiesPage from '../entities/page.js';
 import {createEntitiesFooter} from '../entities/footer.js';

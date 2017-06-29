@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 
 import {is_string} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import {withFolding, withFoldToggle} from '../folding/folding.js';
 

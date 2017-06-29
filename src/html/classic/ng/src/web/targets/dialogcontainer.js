@@ -25,7 +25,7 @@ import React from 'react';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 import {first} from '../../utils.js';
 
 import CredentialsDialog from '../credentials/dialog.js';

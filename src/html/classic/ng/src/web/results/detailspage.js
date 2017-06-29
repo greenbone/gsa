@@ -28,8 +28,8 @@ import glamorous from 'glamorous';
 import _, {datetime} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {result_cvss_risk_factor} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {result_cvss_risk_factor} from '../utils/render.js';
 
 import DetailsBlock from '../entity/block.js';
 import EntityPage from '../entity/page.js';

@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 
 import {Link as RLink} from 'react-router';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 export const withTextOnly = Component => {
   const TextOnly = ({

@@ -27,7 +27,7 @@ import _ from '../../locale.js';
 import logger from '../../log.js';
 import {is_defined} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import Dialog from '../components/dialog/dialog.js';
 

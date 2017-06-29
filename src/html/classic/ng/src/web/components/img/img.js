@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import {get_img_url} from '../../utils/urls.js';
 

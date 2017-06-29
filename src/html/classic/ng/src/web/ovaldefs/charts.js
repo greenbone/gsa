@@ -25,7 +25,7 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import DataSource from '../components/dashboard/datasource.js';
 import Chart from '../components/dashboard/chart.js';

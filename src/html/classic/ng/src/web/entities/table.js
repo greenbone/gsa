@@ -35,8 +35,8 @@ import Pagination from '../components/pagination/pagination.js';
 import TableBody from '../components/table/body.js';
 import StrippedTable from '../components/table/stripped.js';
 
-import PropTypes from '../proptypes.js';
-import {withComponentDefaults} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {withComponentDefaults} from '../utils/render.js';
 
 const exclude_props = [
   'row',

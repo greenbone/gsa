@@ -40,8 +40,8 @@ import {
   OSP_SCAN_CONFIG_TYPE,
 } from '../../gmp/models/scanconfig.js';
 
-import PropTypes from '../proptypes.js';
-import {render_options} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_options} from '../utils/render.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
 

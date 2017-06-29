@@ -25,8 +25,8 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
-import {withPrefix} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {withPrefix} from '../utils/render.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import TextField from '../components/form/textfield.js';

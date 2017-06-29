@@ -26,7 +26,7 @@ import React from 'react';
 import {is_defined, for_each} from '../../../utils.js';
 import logger from '../../../log.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import PromiseFactory from '../../../gmp/promise.js';
 

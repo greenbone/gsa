@@ -27,7 +27,7 @@ import  _ from '../../locale.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import ApplyOverridesGroup from '../components/powerfilter/applyoverridesgroup.js'; // eslint-disable-line max-len
 import FilterStringGroup from '../components/powerfilter/filterstringgroup.js';

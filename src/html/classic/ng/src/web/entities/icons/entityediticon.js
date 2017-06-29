@@ -26,7 +26,7 @@ import React from 'react';
 import _ from '../../../locale.js';
 import {is_defined, capitalize_first_letter} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import EditIcon from '../../components/icon/editicon.js';
 

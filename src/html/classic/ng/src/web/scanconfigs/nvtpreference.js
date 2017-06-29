@@ -26,7 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_empty, map} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import Checkbox from '../components/form/checkbox.js';
 import FileField from '../components/form/filefield.js';

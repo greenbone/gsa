@@ -25,7 +25,7 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import TableHead from '../components/table/head.js';
 import TableHeader from '../components/table/header.js';

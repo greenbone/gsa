@@ -27,8 +27,8 @@ import {datetime} from '../../locale.js';
 
 import {shorten} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {na, render_component} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {na, render_component} from '../utils/render.js';
 
 import {withEntityRow} from '../entities/row.js';
 

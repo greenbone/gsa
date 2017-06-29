@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 import _ from '../../../locale.js';
 import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import GBIcon from '../icon/greenboneicon.js';
 

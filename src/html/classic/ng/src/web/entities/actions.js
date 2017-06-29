@@ -27,8 +27,8 @@ import {is_defined} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
-import {render_component} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_component} from '../utils/render.js';
 
 import SelectionType from '../utils/selectiontype.js';
 

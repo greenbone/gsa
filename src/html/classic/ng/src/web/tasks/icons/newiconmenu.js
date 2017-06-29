@@ -25,7 +25,7 @@ import React from 'react';
 
 import  _ from '../../../locale.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import IconMenu from '../../components/menu/iconmenu.js';
 import MenuEntry from '../../components/menu/menuentry.js';

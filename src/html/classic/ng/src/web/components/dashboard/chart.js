@@ -25,7 +25,7 @@ import React from 'react';
 
 import {extend} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 export class Chart extends React.Component {
 

@@ -26,7 +26,7 @@ import React from 'react';
 import _ from '../../../locale.js';
 import {is_defined} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';

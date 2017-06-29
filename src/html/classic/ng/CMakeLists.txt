@@ -341,8 +341,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/portlists/portrangedialog.js
      ${NG_SRC_DIR}/src/web/portlists/row.js
      ${NG_SRC_DIR}/src/web/portlists/table.js
-     ${NG_SRC_DIR}/src/web/proptypes.js
-     ${NG_SRC_DIR}/src/web/render.js
      ${NG_SRC_DIR}/src/web/reportformats/dialog.js
      ${NG_SRC_DIR}/src/web/reportformats/reportformatspage.js
      ${NG_SRC_DIR}/src/web/reportformats/row.js
@@ -418,6 +416,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/users/userspage.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js
      ${NG_SRC_DIR}/src/web/utils/os.js
+     ${NG_SRC_DIR}/src/web/utils/proptypes.js
+     ${NG_SRC_DIR}/src/web/utils/render.js
      ${NG_SRC_DIR}/src/web/utils/selectiontype.js
      ${NG_SRC_DIR}/src/web/utils/urls.js
      ${NG_SRC_DIR}/src/web/vulns/charts.js

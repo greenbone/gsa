@@ -26,8 +26,8 @@ import React from 'react';
 import _ from '../../../locale.js';
 import {parse_float, is_defined} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
-import {result_cvss_risk_factor, cvss_number_format} from '../../render.js';
+import PropTypes from '../../utils/proptypes.js';
+import {result_cvss_risk_factor, cvss_number_format} from '../../utils/render.js';
 
 import './css/statusbar.css';
 

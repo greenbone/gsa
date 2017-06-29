@@ -27,7 +27,7 @@ import {is_defined, select_save_id} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import PermissionDialog from './dialog.js';
 

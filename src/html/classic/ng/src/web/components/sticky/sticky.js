@@ -26,7 +26,7 @@ import ReactDOM from 'react-dom';
 
 import glamorous from 'glamorous';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 const Placeholder = glamorous.div(
   ({isSticky, height}) => (

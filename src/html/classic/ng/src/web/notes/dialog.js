@@ -28,12 +28,12 @@ import {is_defined, is_empty, parse_float} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 import {
   render_nvt_name,
   render_options,
   result_cvss_risk_factor,
-} from '../render.js';
+} from '../utils/render.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
 

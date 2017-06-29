@@ -26,8 +26,8 @@ import React from 'react';
 import  _ from '../../locale.js';
 import {is_defined, map} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {permission_description} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {permission_description} from '../utils/render.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
 

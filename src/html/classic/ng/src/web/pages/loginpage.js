@@ -31,7 +31,7 @@ import {KeyCode, is_empty} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import PasswordField from '../components/form/passwordfield.js';

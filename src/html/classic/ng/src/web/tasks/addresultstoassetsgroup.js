@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import FormGroup from '../components/form/formgroup.js';
 import YesNoRadio from '../components/form/yesnoradio.js';

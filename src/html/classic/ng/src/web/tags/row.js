@@ -26,8 +26,8 @@ import React from 'react';
 import _, {short_date} from '../../locale.js';
 import {is_empty} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {render_component, type_name, N_A} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_component, type_name, N_A} from '../utils/render.js';
 
 import EntityNameTableData from '../entities/entitynametabledata.js';
 import EntityLink from '../entities/link.js';

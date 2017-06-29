@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 import _ from '../../locale.js';
 import {first, is_defined} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import TextField from '../components/form/textfield.js';
 import Select2 from '../components/form/select2.js';

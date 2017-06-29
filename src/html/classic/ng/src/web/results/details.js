@@ -30,8 +30,8 @@ import {is_empty, is_defined} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
-import {render_nvt_name} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_nvt_name} from '../utils/render.js';
 
 import DetailsBlock from '../entity/block.js';
 

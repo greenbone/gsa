@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 
 import {is_array, is_defined} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import {get_img_url} from '../../utils/urls.js';
 

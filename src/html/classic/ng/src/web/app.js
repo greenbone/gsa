@@ -41,9 +41,9 @@ import PromiseFactory from '../gmp/promise.js';
 import {is_defined} from '../utils.js';
 import _ from '../locale.js';
 
-import PropTypes from './proptypes.js';
+import PropTypes from './utils/proptypes.js';
 
-import {get_severity_levels} from './render.js';
+import {get_severity_levels} from './utils/render.js';
 
 import AssetsPage from './pages/assetspage.js';
 import HomePage from './pages/homepage.js';

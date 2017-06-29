@@ -25,8 +25,8 @@ import React from 'react';
 
 import _, {long_date, interval} from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
-import {render_component} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_component} from '../utils/render.js';
 
 import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';

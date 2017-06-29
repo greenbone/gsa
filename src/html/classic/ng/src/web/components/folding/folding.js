@@ -25,7 +25,7 @@ import React from 'react';
 
 import {is_defined, extend} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import './css/folding.css';
 

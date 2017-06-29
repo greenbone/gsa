@@ -25,12 +25,12 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 import {
   render_component,
   type_name,
   permission_description,
-} from '../render.js';
+} from '../utils/render.js';
 
 import EntityNameTableData from '../entities/entitynametabledata.js';
 import EntityLink from '../entities/link.js';

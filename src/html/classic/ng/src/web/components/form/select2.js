@@ -26,7 +26,7 @@ import $ from 'jquery';
 
 import {is_defined, is_array} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import {withLayout} from '../layout/layout.js';
 

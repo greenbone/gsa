@@ -27,8 +27,8 @@ import _ from '../../../locale.js';
 import {KeyCode, is_defined} from '../../../utils.js';
 import logger from '../../../log.js';
 
-import PropTypes from '../../proptypes.js';
-import {render_options} from '../../render.js';
+import PropTypes from '../../utils/proptypes.js';
+import {render_options} from '../../utils/render.js';
 
 import FootNote from '../footnote/footnote.js';
 

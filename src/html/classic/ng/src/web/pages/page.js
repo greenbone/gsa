@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 import logger from '../../log.js';
 import {is_defined} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import MenuBar from '../components/bar/menubar.js';
 

@@ -30,7 +30,7 @@ import 'jquery-ui/ui/widgets/datepicker.js';
 
 import _ from '../../../locale.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
 

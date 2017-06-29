@@ -26,7 +26,7 @@ import React from 'react';
 import {is_defined} from '../../utils.js';
 import  _ from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import SelectionType from '../utils/selectiontype.js';
 

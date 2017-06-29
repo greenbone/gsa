@@ -28,7 +28,7 @@ import {is_defined, select_save_id, first, shorten} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
 

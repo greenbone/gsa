@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import LegacyLink from './legacylink.js';
 import Link from './link.js';

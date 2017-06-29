@@ -26,8 +26,8 @@ import React from 'react';
 import _ from '../../locale.js';
 import {shorten, is_defined} from '../../utils.js';
 
-import PropTypes from '../proptypes.js';
-import {render_component, result_cvss_risk_factor} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_component, result_cvss_risk_factor} from '../utils/render.js';
 
 import {withEntityActions} from '../entities/actions.js';
 import {withEntityRow} from '../entities/row.js';

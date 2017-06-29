@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from '../../locale.js';
 
-import PropTypes from '../proptypes.js';
+import PropTypes from '../utils/proptypes.js';
 
 import {withDialog} from '../components/dialog/dialog.js';
 
@@ -42,7 +42,7 @@ import Img from '../components/img/img.js';
 
 import Layout from '../components/layout/layout.js';
 
-import {render_options} from '../render.js';
+import {render_options} from '../utils/render.js';
 
 const ModifyTaskWizard = ({
     alert_email,

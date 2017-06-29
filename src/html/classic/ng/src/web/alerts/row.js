@@ -28,8 +28,8 @@ import {is_defined, parse_int} from '../../utils.js';
 
 import Layout from '../components/layout/layout.js';
 
-import PropTypes from '../proptypes.js';
-import {render_component} from '../render.js';
+import PropTypes from '../utils/proptypes.js';
+import {render_component} from '../utils/render.js';
 
 import EntityNameTableData from '../entities/entitynametabledata.js';
 import {withEntityActions} from '../entities/actions.js';

@@ -25,7 +25,7 @@ import React from 'react';
 
 import {extend, is_defined} from '../../../utils.js';
 
-import PropTypes from '../../proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import {withTextOnly} from './link.js';
 
