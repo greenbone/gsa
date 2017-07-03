@@ -1,5 +1,12 @@
 2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/utils/render.js: Add helper function to render
+	children. Until the next react release (react 16) it is not possible to return
+	several react elements from a render function/method. Thererefore if a
+	component encapsulates several sub components it must be wrapped in a div.
+
+2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/icon/icon.js,
 	src/html/classic/ng/src/web/components/icon/withIconSize.js,

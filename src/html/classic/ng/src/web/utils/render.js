@@ -182,6 +182,15 @@ export function render_component(Component, props = {}) {
   return null;
 }
 
+export function render_children(children) {
+  if (React.Children.count(children) > 1) {
+    return (
+      <div>{children}</div>
+    );
+  }
+  return children;
+}
+
 export const na = value => {
   return is_empty(value) ? N_A : value;
 };
