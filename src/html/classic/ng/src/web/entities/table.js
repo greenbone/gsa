@@ -71,7 +71,7 @@ export class EntitiesTable extends React.Component {
   render() {
     let {props} = this;
     let {details} = this.state;
-    let {filter, entities, emptyTitle} = props;
+    let {filter, entities, emptyTitle, footnote = true} = props;
 
     if (!is_defined(entities)) {
       return null;
@@ -157,9 +157,11 @@ export class EntitiesTable extends React.Component {
           {body}
         </StrippedTable>
         <Layout flex align="space-between">
-          <FootNote>
-            {_('(Applied filter: {{filter}})', {filter: filterstring})}
-          </FootNote>
+          {footnote &&
+            <FootNote>
+              {_('(Applied filter: {{filter}})', {filter: filterstring})}
+            </FootNote>
+          }
           {pagination}
         </Layout>
       </div>
@@ -173,6 +175,7 @@ EntitiesTable.propTypes = {
   entities: PropTypes.collection,
   filter: PropTypes.filter,
   footer: PropTypes.component,
+  footnote: PropTypes.bool,
   header: PropTypes.component,
   pagination: PropTypes.componentOrFalse,
   row: PropTypes.component.isRequired,
