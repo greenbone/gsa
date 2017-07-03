@@ -29,6 +29,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Icon from '../icon/icon.js';
 import withIconCss from '../icon/withIconCss.js';
+import withIconSize from '../icon/withIconSize.js';
 
 import './css/iconmenu.css';
 
@@ -51,6 +52,6 @@ IconMenuContainer.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withIconCss(IconMenuContainer);
+export default withIconSize(withIconCss(IconMenuContainer));
 
 // vim: set ts=2 sw=2 tw=80:
