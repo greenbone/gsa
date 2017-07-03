@@ -44,8 +44,8 @@ export const EntityEditIcon = ({
   }
 
   const {permissions} = entity;
-  const may_edit = capabilities.mayEdit(name) && is_defined(permissions) &&
-    permissions.mayEdit(name);
+  const may_edit = capabilities.mayEdit(name) && (!is_defined(permissions) ||
+    permissions.mayEdit(name));
   let active = may_edit && entity.isWriteable();
 
   if (!is_defined(title)) {
