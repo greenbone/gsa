@@ -27,7 +27,8 @@ import {classes} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Icon, {withIconCss} from '../icon/icon.js';
+import Icon from '../icon/icon.js';
+import withIconCss from '../icon/withIconCss.js';
 
 import './css/iconmenu.css';
 

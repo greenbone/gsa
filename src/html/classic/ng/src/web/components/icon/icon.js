@@ -25,68 +25,11 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_array, is_defined} from 'gmp/utils.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import {get_img_url} from '../../utils/urls.js';
 
-const convert_size = ({size = 'small'}) => {
-  let width;
-  let height;
-
-  if (size === 'small') {
-    height = width = '16px';
-  }
-  else if (size === 'medium') {
-    height = width = '24px';
-  }
-  else if (size === 'large') {
-    height = width = '50px';
-  }
-  else if (is_array(size)) {
-    width = size[0];
-    height = size[1];
-  }
-
-  return {
-    '&, & *': {
-      height,
-      width,
-    }
-  };
-};
-
-const icon_button_css = {
-  cursor: 'pointer',
-  '@media print': {
-    display: 'none',
-  },
-};
-
-export const withIconCss = Component => {
-
-  const IconCss = glamorous(Component)(
-    {
-      display: 'inline-block',
-    },
-    ({onClick}) => is_defined(onClick) ? 'icon icon-button' : 'icon',
-    ({onClick}) => is_defined(onClick) ? icon_button_css : {},
-    convert_size,
-  );
-
-  IconCss.propTypes = {
-    size: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.oneOf([
-        'small', 'medium', 'large', 'default',
-      ]),
-    ]),
-    onClick: PropTypes.func,
-  };
-
-  return IconCss;
-};
+import withIconCss from './withIconCss.js';
 
 const Anchor = glamorous.a({
   display: 'flex',
