@@ -1,5 +1,12 @@
 2017-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js: Rename model property permission to
+	user_capabilities because 1. permissions name is confusing, 2. it only
+	contains the permission names aka. capabilities, 3. it only contains the
+	capabilities of the current user.
+
+2017-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/tags/dialog.js,
 	src/html/classic/ng/src/web/pages/tags/listpage.js,
 	src/html/classic/ng/src/web/pages/tags/row.js: Add missing files. They have

@@ -79,7 +79,12 @@ export class Model {
     }
 
     if (is_defined(elem.permissions)) {
-      copy.permissions = new Capabilities(elem.permissions.permission);
+      // these are the permissions the current user has on the entity
+      copy.user_capabilities = new Capabilities(elem.permissions.permission);
+      delete copy.permissions;
+    }
+    else {
+      copy.capabilities = new Capabilities();
     }
 
     if (is_defined(elem.user_tags)) {
