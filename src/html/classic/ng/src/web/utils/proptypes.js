@@ -138,6 +138,13 @@ export const timeunit =  ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
 ]);
 
+export const iconSize = ReactPropTypes.oneOfType([
+  ReactPropTypes.array,
+  ReactPropTypes.oneOf([
+    'small', 'medium', 'large', 'default',
+  ]),
+]);
+
 export default {
   bool: ReactPropTypes.bool,
   any: ReactPropTypes.any,
@@ -168,6 +175,7 @@ export default {
   entitiescommand,
   filter,
   gmp,
+  iconSize,
   model,
   momentDate,
   numberString,

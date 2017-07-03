@@ -44,7 +44,7 @@ const GreenboneIcon = ({className, size = 'default', ...props}) => {
 };
 
 GreenboneIcon.propTypes = {
-  size: PropTypes.string,
+  size: PropTypes.iconSize,
   className: PropTypes.string,
 };
 

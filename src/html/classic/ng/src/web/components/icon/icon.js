@@ -139,7 +139,7 @@ IconComponent.propTypes = {
   className: PropTypes.string,
   href: PropTypes.string,
   img: PropTypes.string.isRequired,
-  size: PropTypes.string,
+  size: PropTypes.iconSize,
   value: PropTypes.any,
   onClick: PropTypes.func,
 };
