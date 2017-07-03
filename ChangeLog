@@ -1,5 +1,10 @@
 2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/permissions/row.js: Use icon divider for
+	permission row actions.
+
+2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/icons/entityediticon.js: Fix check
 	wether an entity may be edited.
 

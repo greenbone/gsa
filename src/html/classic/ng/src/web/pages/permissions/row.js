@@ -43,7 +43,7 @@ import TrashIcon from '../../entities/icons/entitytrashicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
@@ -58,7 +58,7 @@ const Actions = ({
     onVerifyPermission,
   }) => {
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider flex align={['center', 'center']}>
       <TrashIcon
         displayName={_('Permission')}
         name="permission"
@@ -82,7 +82,7 @@ const Actions = ({
         title={_('Export Permission')}
         onClick={onEntityDownload}
       />
-    </Layout>
+    </IconDivider>
   );
 };
 
