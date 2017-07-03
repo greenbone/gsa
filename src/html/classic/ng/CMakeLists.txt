@@ -209,6 +209,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
      ${NG_SRC_DIR}/src/web/components/icon/trashicon.js
      ${NG_SRC_DIR}/src/web/components/icon/withIconCss.js
+     ${NG_SRC_DIR}/src/web/components/icon/withIconSize.js
      ${NG_SRC_DIR}/src/web/components/img/img.js
      ${NG_SRC_DIR}/src/web/components/label/severityclass.js
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
@@ -235,6 +236,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/powerfilter/powerfilter.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/resultsperpagegroup.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
+     ${NG_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js

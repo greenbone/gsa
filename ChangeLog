@@ -2,6 +2,15 @@
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/icon/icon.js,
+	src/html/classic/ng/src/web/components/icon/withIconSize.js,
+	src/html/classic/ng/src/web/components/provider/iconsizeprovider.js: Introduce
+	IconSizeProvider component and withIconSize HOC. With these components it is
+	possible to change the default icon size via react context.
+
+2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/icon/icon.js,
 	src/html/classic/ng/src/web/components/icon/withIconCss.js,
 	src/html/classic/ng/src/web/components/menu/iconmenu.js: Extract withIconCss
 	HOC into an own js file.

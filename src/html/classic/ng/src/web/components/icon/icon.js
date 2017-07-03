@@ -30,6 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {get_img_url} from '../../utils/urls.js';
 
 import withIconCss from './withIconCss.js';
+import withIconSize from './withIconSize.js';
 
 const Anchor = glamorous.a({
   display: 'flex',
@@ -82,11 +83,10 @@ IconComponent.propTypes = {
   className: PropTypes.string,
   href: PropTypes.string,
   img: PropTypes.string.isRequired,
-  size: PropTypes.iconSize,
   value: PropTypes.any,
   onClick: PropTypes.func,
 };
 
-export default withIconCss(IconComponent);
+export default withIconSize(withIconCss(IconComponent));
 
 // vim: set ts=2 sw=2 tw=80:
