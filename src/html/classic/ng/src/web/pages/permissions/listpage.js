@@ -30,9 +30,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import {withEntitiesContainer} from '../../entities/container.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -42,16 +39,7 @@ import Layout from '../../components/layout/layout.js';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import PermissionDialog from './dialogcontainer.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['description', _('Description')],
-  ['type', _('Resource Type')],
-  ['_resource', _('Resource')],
-  ['subject_type', _('Subject Type')],
-  ['_subject', _('Subject')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
     onNewPermissionClick
@@ -158,18 +146,6 @@ Page.propTypes = {
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No permissions available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'permissions.xml',
-    span: 7,
-    trash: true,
-  }),
-});
-
 export default withEntitiesContainer(Page, 'permission', {
   filterEditDialog: createFilterDialog({
     sortFields: SORT_FIELDS,
