@@ -249,6 +249,7 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
+        legacy
         entity={entity}
         link={links}
         type="alert"
