@@ -213,16 +213,15 @@ const EntityTags = ({
       onNewTagClick={onNewTagClick}
     />
   );
-  const has_tags = is_defined(entity);
   const tags = entity.user_tags;
+  const has_tags = is_defined(tags);
+  const count = has_tags ? tags.length : 0;
   return (
     <Section
       foldable={foldable}
       extra={extra}
       img={<TagIcon/>}
-      title={_('User Tags ({{count}})', {
-        count: has_tags ? tags.length : 0,
-      })}
+      title={_('User Tags ({{count}})', {count})}
     >
       {tags.length > 0 &&
         <Table>
