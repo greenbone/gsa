@@ -27,6 +27,8 @@ import glamorous from 'glamorous';
 
 import {Link as RLink} from 'react-router';
 
+import {is_defined} from 'gmp/utils.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 export const withTextOnly = Component => {
@@ -55,23 +57,34 @@ export const withTextOnly = Component => {
 };
 
 const Link = ({
-    to,
-    ...other
-  }) => {
+  to,
+  filter,
+  ...other
+}) => {
 
-  let path = '/ng';
+  let pathname = '/ng';
 
   if (to.startsWith('/')) {
-    path += to;
+    pathname += to;
   }
   else {
-    path += "/" + to;
+    pathname += "/" + to;
   }
-  return <RLink {...other} to={path}/>;
+
+  let location = {
+    pathname,
+    query: {},
+  };
+
+  if (is_defined(filter)) {
+    location.query.filter = filter;
+  }
+  return <RLink {...other} to={location}/>;
 };
 
 Link.propTypes = {
   to: PropTypes.string.isRequired,
+  filter: PropTypes.string,
 };
 
 export default glamorous(withTextOnly(Link))({display: 'flex'});
