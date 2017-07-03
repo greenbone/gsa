@@ -25,56 +25,33 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import PropTypes from '../utils/proptypes.js';
-
 import Dashboard from '../components/dashboard/dashboard.js';
 import DashboardControls from '../components/dashboard/controls.js';
+
+import CacheProvider from '../components/provider/cacheprovider.js';
 
 import Section from '../components/section/section.js';
 
 import HostCharts from './hosts/charts.js';
 import OsCharts from './os/charts.js';
 
-class AssetsPage extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    const {caches} = this.context;
-
-    this.cache = caches.get('assetsdashboard');
-  }
-
-  getChildContext() {
-    return {cache: this.cache};
-  }
-
-  render() {
-    return (
-      <Section title={_('Assets Dashboard')} img="asset.svg"
-        extra={<DashboardControls/>}>
-        <Dashboard
-          configPrefId="0320e0db-bf30-4d4f-9379-b0a022d07cf7"
-          defaultControllersString={'host-by-most-vulnerable|' +
-            'host-by-topology|os-by-most-vulnerable#os-by-severity-class|' +
-            'host-by-modification-time'}
-          defaultControllerString="host-by-severity-class"
-          maxComponents="8">
-          <HostCharts/>
-          <OsCharts/>
-        </Dashboard>
-      </Section>
-    );
-  }
-}
-
-AssetsPage.contextTypes = {
-  caches: PropTypes.cachefactory.isRequired,
-};
-
-AssetsPage.childContextTypes = {
-  cache: PropTypes.cache,
-};
+const AssetsPage = () => (
+  <CacheProvider name="assetsdashboard">
+    <Section title={_('Assets Dashboard')} img="asset.svg"
+      extra={<DashboardControls/>}>
+      <Dashboard
+        configPrefId="0320e0db-bf30-4d4f-9379-b0a022d07cf7"
+        defaultControllersString={'host-by-most-vulnerable|' +
+          'host-by-topology|os-by-most-vulnerable#os-by-severity-class|' +
+          'host-by-modification-time'}
+        defaultControllerString="host-by-severity-class"
+        maxComponents="8">
+        <HostCharts/>
+        <OsCharts/>
+      </Dashboard>
+    </Section>
+  </CacheProvider>
+);
 
 export default AssetsPage;
 

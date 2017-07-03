@@ -25,10 +25,10 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import PropTypes from '../utils/proptypes.js';
-
 import Dashboard from '../components/dashboard/dashboard.js';
 import DashboardControls from '../components/dashboard/controls.js';
+
+import CacheProvider from '../components/provider/cacheprovider.js';
 
 import Section from '../components/section/section.js';
 
@@ -39,50 +39,27 @@ import NoteCharts from './notes/charts.js';
 import OverrideCharts from './overrides/charts.js';
 import VulnCharts from './vulns/charts.js';
 
-class ScansPage extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    const {caches} = this.context;
-
-    this.cache = caches.get('scansdashboard');
-  }
-
-  getChildContext() {
-    return {cache: this.cache};
-  }
-
-  render() {
-    return (
-      <Section title={_('Scans Dashboard')} img="scan.svg"
-        extra={<DashboardControls/>}>
-        <Dashboard
-          configPrefId="c7584d7c-649f-4f8b-9ded-9e1dc20f24c8"
-          defaultControllersString={'result-by-severity-class|' +
-            'report-by-severity-class#task-by-status|report-by-high-results|' +
-            'task-by-severity-class'}
-          defaultControllerString="task-by-severity-class"
-          maxComponents="8">
-          <TaskCharts/>
-          <ReportCharts/>
-          <ResultCharts/>
-          <NoteCharts/>
-          <OverrideCharts/>
-          <VulnCharts/>
-        </Dashboard>
-      </Section>
-    );
-  }
-}
-
-ScansPage.contextTypes = {
-  caches: PropTypes.cachefactory.isRequired,
-};
-
-ScansPage.childContextTypes = {
-  cache: PropTypes.cache,
-};
+const ScansPage = () => (
+  <CacheProvider name="scansdashboard">
+    <Section title={_('Scans Dashboard')} img="scan.svg"
+      extra={<DashboardControls/>}>
+      <Dashboard
+        configPrefId="c7584d7c-649f-4f8b-9ded-9e1dc20f24c8"
+        defaultControllersString={'result-by-severity-class|' +
+          'report-by-severity-class#task-by-status|report-by-high-results|' +
+          'task-by-severity-class'}
+        defaultControllerString="task-by-severity-class"
+        maxComponents="8">
+        <TaskCharts/>
+        <ReportCharts/>
+        <ResultCharts/>
+        <NoteCharts/>
+        <OverrideCharts/>
+        <VulnCharts/>
+      </Dashboard>
+    </Section>
+  </CacheProvider>
+);
 
 export default ScansPage;
 

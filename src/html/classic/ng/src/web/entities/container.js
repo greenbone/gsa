@@ -27,18 +27,22 @@ import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import {is_defined, is_array, exclude, includes} from 'gmp/utils.js';
 
-import Layout from '../components/layout/layout.js';
+import PromiseFactory from 'gmp/promise.js';
+import Filter from 'gmp/models/filter.js';
 
 import PropTypes from '../utils/proptypes.js';
 
 import SelectionType from '../utils/selectiontype.js';
 
+import withCache from '../utils/withCache.js';
+
 import Dialog from '../components/dialog/dialog.js';
 
 import Download from '../components/form/download.js';
 
-import PromiseFactory from 'gmp/promise.js';
-import Filter from 'gmp/models/filter.js';
+import Layout from '../components/layout/layout.js';
+
+import CacheProvider from '../components/provider/cacheprovider.js';
 
 const log = logger.getLogger('web.entities.container');
 
@@ -61,7 +65,7 @@ class EntitiesContainer extends React.Component {
     };
 
     const {gmpname} = this.props;
-    const {gmp, caches} = this.context;
+    const {gmp} = this.context;
 
     let entity_command_name;
     let entities_command_name;
@@ -77,7 +81,6 @@ class EntitiesContainer extends React.Component {
 
     this.entity_command = gmp[entity_command_name];
     this.entities_command = gmp[entities_command_name];
-    this.cache = caches.get(entities_command_name);
 
     this.load = this.load.bind(this);
     this.reload = this.reload.bind(this);
@@ -114,18 +117,16 @@ class EntitiesContainer extends React.Component {
   }
 
   getChildContext() {
-    const {cache} = this;
     const {gmp} = this.context;
     return {
       username: gmp.username,
-      cache,
     };
   }
 
   load(filter, options = {}) {
-    const {cache, entities_command} = this;
+    const {entities_command} = this;
     let {force = false, refresh, reload = false} = options;
-    let {extraLoadParams = {}} = this.props;
+    let {cache, extraLoadParams = {}} = this.props;
 
     this.setState({loading: true});
 
@@ -152,9 +153,8 @@ class EntitiesContainer extends React.Component {
   }
 
   loadFilters() {
-    const {cache} = this;
     const {gmp} = this.context;
-    const {filtersFilter} = this.props;
+    const {cache, filtersFilter} = this.props;
 
     if (!filtersFilter) {
       return;
@@ -174,8 +174,9 @@ class EntitiesContainer extends React.Component {
 
   reload({invalidate = false} = {}) {
     if (invalidate) {
-      log.debug('Marking cache as dirty', this.cache);
-      this.cache.invalidate();
+      const {cache} = this.props;
+      log.debug('Marking cache as dirty', cache);
+      cache.invalidate();
     }
     // reload data from backend
     this.load(this.state.filter, {force: true});
@@ -420,6 +421,7 @@ class EntitiesContainer extends React.Component {
 }
 
 EntitiesContainer.propTypes = {
+  cache: PropTypes.cache.isRequired,
   component: PropTypes.component.isRequired,
   extraLoadParams: PropTypes.object,
   entities: PropTypes.collection,
@@ -433,21 +435,21 @@ EntitiesContainer.propTypes = {
 
 EntitiesContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
-  caches: PropTypes.cachefactory.isRequired,
 };
 
 EntitiesContainer.childContextTypes = {
   username: PropTypes.string,
-  cache: PropTypes.cache,
 };
 
+EntitiesContainer = withCache(EntitiesContainer);
+
 export const withEntitiesContainer = (component, gmpname, options = {}) => {
-  const EntitiesContainerWrapper = props => {
-    return (
+  const EntitiesContainerWrapper = props => (
+    <CacheProvider name={gmpname}>
       <EntitiesContainer {...options} {...props}
         gmpname={gmpname} component={component}/>
-    );
-  };
+    </CacheProvider>
+  );
   return EntitiesContainerWrapper;
 };
 

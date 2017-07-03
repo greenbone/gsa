@@ -41,6 +41,8 @@ import PromiseFactory from 'gmp/promise.js';
 import {is_defined} from 'gmp/utils.js';
 import _ from 'gmp/locale.js';
 
+import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'; // eslint-disable-line max-len
+
 import PropTypes from './utils/proptypes.js';
 
 import {get_severity_levels} from './utils/render.js';
@@ -140,7 +142,7 @@ class App extends React.Component {
   }
 
   getChildContext() {
-    return {gmp, caches};
+    return {gmp};
   }
 
   toLoginPage() {
@@ -155,14 +157,15 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>{this.props.children}</div>
+      <CacheFactoryProvider caches={caches}>
+        {this.props.children}
+      </CacheFactoryProvider>
     );
   }
 }
 
 App.childContextTypes = {
   gmp: PropTypes.gmp,
-  caches: PropTypes.cachefactory,
 };
 
 App.contextTypes = {

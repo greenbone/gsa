@@ -236,6 +236,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/powerfilter/powerfilter.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/resultsperpagegroup.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
+     ${NG_SRC_DIR}/src/web/components/provider/cachefactoryprovider.js
+     ${NG_SRC_DIR}/src/web/components/provider/cacheprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
@@ -429,6 +431,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/render.js
      ${NG_SRC_DIR}/src/web/utils/selectiontype.js
      ${NG_SRC_DIR}/src/web/utils/urls.js
+     ${NG_SRC_DIR}/src/web/utils/withCache.js
      ${NG_SRC_DIR}/src/web/utils/withComponentDefaults.js
      ${NG_SRC_DIR}/src/web/utils/withPrefix.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js

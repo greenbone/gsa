@@ -1,5 +1,24 @@
 2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/components/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/components/provider/cachefactoryprovider.js,
+	src/html/classic/ng/src/web/components/provider/cacheprovider.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/pages/assetspage.js,
+	src/html/classic/ng/src/web/pages/homepage.js,
+	src/html/classic/ng/src/web/pages/scanspage.js,
+	src/html/classic/ng/src/web/pages/secinfopage.js,
+	src/html/classic/ng/src/web/utils/withCache.js: Introduce
+	CacheFactoryProvider, CacheProvider components and withCache HOC. They
+	abstract and simplify the cache usage. The react docs highly recommend to not
+	use the context api directly. With this change the context api usage is
+	abstracted and we are able to change the details of the cache easier in
+	future.
+
+2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/utils/render.js: Add helper function to render
 	children. Until the next react release (react 16) it is not possible to return
 	several react elements from a render function/method. Thererefore if a

@@ -25,10 +25,10 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import PropTypes from '../utils/proptypes.js';
-
 import Dashboard from '../components/dashboard/dashboard.js';
 import DashboardControls from '../components/dashboard/controls.js';
+
+import CacheProvider from '../components/provider/cacheprovider.js';
 
 import Section from '../components/section/section.js';
 
@@ -40,51 +40,30 @@ import NvtCharts from './nvts/charts.js';
 import OvaldefCharts from './ovaldefs/charts.js';
 import AllSecinfoCharts from './allsecinfo/charts.js';
 
-class SecinfoPage extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    const {caches} = this.context;
-
-    this.cache = caches.get('secinfodashboard');
-  }
-
-  getChildContext() {
-    return {cache: this.cache};
-  }
-
-  render() {
-    return (
-      <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
-        extra={<DashboardControls/>}>
-        <Dashboard
-          configPrefId="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
-          defaultControllersString={'nvt-by-severity-class|cve-by-created|' +
-            'cve-by-severity-class#cert_bund_adv-by-created|' +
-            'cert_bund_adv-by-cvss'}
-          defaultControllerString="nvt-by-cvss"
-          maxComponents="8">
-          <NvtCharts/>
-          <OvaldefCharts/>
-          <CertBundCharts/>
-          <CveCharts/>
-          <CpeCharts/>
-          <DfnCertCharts/>
-          <AllSecinfoCharts/>
-        </Dashboard>
-      </Section>
-    );
-  }
-}
-
-SecinfoPage.contextTypes = {
-  caches: PropTypes.cachefactory.isRequired,
-};
-
-SecinfoPage.childContextTypes = {
-  cache: PropTypes.cache,
-};
+const SecinfoPage = () => (
+  <CacheProvider name="secinfodashboard">
+    <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
+      extra={<DashboardControls/>}>
+      <Dashboard
+        configPrefId="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
+        defaultControllersString={
+          'nvt-by-severity-class|cve-by-created|' +
+          'cve-by-severity-class#cert_bund_adv-by-created|' +
+          'cert_bund_adv-by-cvss'
+        }
+        defaultControllerString="nvt-by-cvss"
+        maxComponents="8">
+        <NvtCharts/>
+        <OvaldefCharts/>
+        <CertBundCharts/>
+        <CveCharts/>
+        <CpeCharts/>
+        <DfnCertCharts/>
+        <AllSecinfoCharts/>
+      </Dashboard>
+    </Section>
+  </CacheProvider>
+);
 
 export default SecinfoPage;
 

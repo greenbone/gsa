@@ -25,10 +25,10 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import PropTypes from '../utils/proptypes.js';
-
 import Dashboard from '../components/dashboard/dashboard.js';
 import DashboardControls from '../components/dashboard/controls.js';
+
+import CacheProvider from '../components/provider/cacheprovider.js';
 
 import Section from '../components/section/section.js';
 
@@ -48,58 +48,38 @@ import CpeCharts from './cpes/charts.js';
 import DfnCertCharts from './dfncert/charts.js';
 import SecinfoCharts from './allsecinfo/charts.js';
 
-class Home extends React.Component {
+const Home = () => (
+  <CacheProvider name="homedashboard">
+    <Section title={_('Dashboard')} img="dashboard.svg"
+      extra={<DashboardControls/>}>
+      <Dashboard
+        configPrefId="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
+        defaultControllersString={
+          'task-by-severity-class|task-by-status#' +
+          'cve-by-created|host-by-topology|nvt-by-severity-class'
+        }
+        defaultControllerString="task-by-severity-class"
+        maxComponents="8">
+        <TaskCharts/>
+        <ReportCharts/>
+        <ResultCharts/>
+        <NoteCharts/>
+        <OverrideCharts/>
+        <VulnCharts/>
+        <HostCharts/>
+        <OsCharts/>
+        <NvtCharts/>
+        <OvaldefCharts/>
+        <CertBundCharts/>
+        <CveCharts/>
+        <CpeCharts/>
+        <DfnCertCharts/>
+        <SecinfoCharts/>
+      </Dashboard>
+    </Section>
+  </CacheProvider>
+);
 
-  constructor(...args) {
-    super(...args);
-
-    const {caches} = this.context;
-
-    this.cache = caches.get('homedashboard');
-  }
-
-  getChildContext() {
-    return {cache: this.cache};
-  }
-
-  render() {
-    return (
-      <Section title={_('Dashboard')} img="dashboard.svg"
-        extra={<DashboardControls/>}>
-        <Dashboard
-          configPrefId="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
-          defaultControllersString={'task-by-severity-class|task-by-status#' +
-            'cve-by-created|host-by-topology|nvt-by-severity-class'}
-          defaultControllerString="task-by-severity-class"
-          maxComponents="8">
-          <TaskCharts/>
-          <ReportCharts/>
-          <ResultCharts/>
-          <NoteCharts/>
-          <OverrideCharts/>
-          <VulnCharts/>
-          <HostCharts/>
-          <OsCharts/>
-          <NvtCharts/>
-          <OvaldefCharts/>
-          <CertBundCharts/>
-          <CveCharts/>
-          <CpeCharts/>
-          <DfnCertCharts/>
-          <SecinfoCharts/>
-        </Dashboard>
-      </Section>
-    );
-  }
-}
-
-Home.contextTypes = {
-  caches: PropTypes.cachefactory.isRequired,
-};
-
-Home.childContextTypes = {
-  cache: PropTypes.cache,
-};
 
 export default Home;
 

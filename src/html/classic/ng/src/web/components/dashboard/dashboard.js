@@ -25,16 +25,16 @@ import React from 'react';
 
 import {is_defined, for_each} from 'gmp/utils.js';
 import logger from 'gmp/log.js';
+import PromiseFactory from 'gmp/promise.js';
 
 import PropTypes from '../../utils/proptypes.js';
-
-import PromiseFactory from 'gmp/promise.js';
+import withCache from '../../utils/withCache.js';
 
 import './css/dashboard.css';
 
 const log = logger.getLogger('web.dashboard.dashboard');
 
-export class Dashboard extends React.Component {
+class Dashboard extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -55,10 +55,6 @@ export class Dashboard extends React.Component {
       dashboard_controls: '#dashboard-controls',
     });
 
-    const {caches} = this.context;
-
-    this.cache = caches.get('usersettings');
-
     this.state = {
       initialized: false,
       id,
@@ -75,7 +71,8 @@ export class Dashboard extends React.Component {
 
   componentDidMount() {
     const {gmp} = this.context;
-    const {cache, dashboard} = this;
+    const {dashboard} = this;
+    const cache = this.props.usersettingsCache;
     const pref_id = this.props.configPrefId;
 
     let promises = [
@@ -110,7 +107,7 @@ export class Dashboard extends React.Component {
   }
 
   onConfigSaved() {
-    const {cache} = this;
+    const cache = this.props.usersettingsCache;
     const {gmp} = this.context;
     // override cache with current saved config
     // this is a bit "hackish" and should be obsolete when dashboards are
@@ -138,6 +135,7 @@ Dashboard.childContextTypes = {
 };
 
 Dashboard.propTypes = {
+  usersettingsCache: PropTypes.cache.isRequired,
   id: PropTypes.id,
   filter: PropTypes.filter,
   configPrefId: PropTypes.id,
@@ -153,8 +151,9 @@ Dashboard.defaultProps = {
 
 Dashboard.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
-  caches: PropTypes.cachefactory.isRequired,
 };
+
+Dashboard = withCache(Dashboard, {usersettingsCache: 'usersettings'});
 
 export const withDashboard = (Charts, options = {}) => {
 
