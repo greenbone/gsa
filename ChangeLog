@@ -1,5 +1,10 @@
 2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/pagination/pagination.js: Fix setting
+	style.
+
+2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/link/link.js: Allow to pass filter
 	property to Link components.
 

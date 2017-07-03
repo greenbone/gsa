@@ -36,7 +36,7 @@ import Layout from '../layout/layout.js';
 import IconDivider from '../layout/icondivider.js';
 
 const PaginationText = glamorous.span({
-  margin: '0 3px;'
+  margin: '0 3px',
 });
 
 const PaginationLayout = glamorous(Layout)(
