@@ -36,7 +36,8 @@ import TableBody from '../components/table/body.js';
 import StrippedTable from '../components/table/stripped.js';
 
 import PropTypes from '../utils/proptypes.js';
-import {withComponentDefaults} from '../utils/render.js';
+
+import withComponentDefaults from '../utils/withComponentDefaults.js';
 
 const exclude_props = [
   'row',

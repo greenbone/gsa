@@ -26,7 +26,8 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options, withPrefix} from '../../utils/render.js';
+import {render_options} from '../../utils/render.js';
+import withPrefix from '../../utils/withPrefix.js';
 
 import Select2 from '../../components/form/select2.js';
 import FormGroup from '../../components/form/formgroup.js';

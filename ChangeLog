@@ -1,3 +1,27 @@
+2017-07-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/web/components/layout/icondivider.js,
+	src/web/entities/table.js,
+	src/web/pages/alerts/emailmethodpart.js,
+	src/web/pages/alerts/filtercountchangedconditionpart.js,
+	src/web/pages/alerts/filtercountleastconditionpart.js,
+	src/web/pages/alerts/httpmethodpart.js,
+	src/web/pages/alerts/scpmethodpart.js,
+	src/web/pages/alerts/secinfoeventpart.js,
+	src/web/pages/alerts/sendmethodpart.js,
+	src/web/pages/alerts/severitychangedconditionpart.js,
+	src/web/pages/alerts/severityleastconditionpart.js,
+	src/web/pages/alerts/snmpmethodpart.js,
+	src/web/pages/alerts/sourcefiremethodpart.js,
+	src/web/pages/alerts/starttaskmethodpart.js,
+	src/web/pages/alerts/taskeventpart.js,
+	src/web/pages/alerts/verinicemethodpart.js,
+	src/web/utils/render.js,
+	src/web/utils/withComponentDefaults.js,
+	src/web/utils/withPrefix.js: Move withComponentDefaults and withPrefix HOCs
+	into own js files.
+
 2017-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/model.js: Rename model property permission to

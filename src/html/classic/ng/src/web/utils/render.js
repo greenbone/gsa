@@ -28,8 +28,6 @@ import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import {is_defined, is_empty, map, shorten, split} from 'gmp/utils.js';
 
-import PropTypes from './proptypes.js';
-
 const log = logger.getLogger('web.render');
 
 /* eslint-disable no-unused-vars */
@@ -184,31 +182,8 @@ export function render_component(Component, props = {}) {
   return null;
 }
 
-export const withComponentDefaults = (Component, options = {}) => {
-  const CompentWrapper = props => <Component {...options} {...props}/>;
-  return CompentWrapper;
-};
-
 export const na = value => {
   return is_empty(value) ? N_A : value;
-};
-
-export const withPrefix = Component => {
-  const CompentWrapper = ({prefix, ...props}) => {
-    if (is_defined(prefix)) {
-      prefix += '_';
-    }
-    else {
-      prefix = '';
-    }
-    return <Component {...props} prefix={prefix}/>;
-  };
-
-  CompentWrapper.propTypes = {
-    prefix: PropTypes.string,
-  };
-
-  return CompentWrapper;
 };
 
 export function type_name(type, plural = true) {

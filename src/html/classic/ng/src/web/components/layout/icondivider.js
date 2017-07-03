@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {withComponentDefaults} from '../../utils/render.js';
+import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import Divider from './divider.js';
 

@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {withPrefix} from '../../utils/render.js';
+import withPrefix from '../../utils/withPrefix.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';

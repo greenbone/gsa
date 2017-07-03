@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,38 +23,28 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from './proptypes.js';
 
-import withPrefix from '../../utils/withPrefix.js';
+export const withPrefix = Component => {
+  const CompentWrapper = ({prefix, ...props}) => {
+    if (is_defined(prefix)) {
+      prefix += '_';
+    }
+    else {
+      prefix = '';
+    }
+    return <Component {...props} prefix={prefix}/>;
+  };
 
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
+  CompentWrapper.propTypes = {
+    prefix: PropTypes.string,
+  };
 
-const HttpMethodPart = ({
-    prefix,
-    URL,
-    onChange,
-  }) => {
-  return (
-    <FormGroup title={_('HTTP Get URL')}>
-      <TextField
-        grow="1"
-        name={prefix + 'URL'}
-        maxLength="301"
-        value={URL}
-        onChange={onChange}/>
-    </FormGroup>
-  );
+  return CompentWrapper;
 };
 
-HttpMethodPart.propTypes = {
-  prefix: PropTypes.string,
-  URL: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
-};
-
-export default withPrefix(HttpMethodPart);
+export default withPrefix;
 
 // vim: set ts=2 sw=2 tw=80:
