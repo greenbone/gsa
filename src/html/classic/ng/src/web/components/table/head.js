@@ -25,6 +25,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
+import {is_defined} from 'gmp/utils.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
@@ -46,7 +48,7 @@ const TableHead = ({
       className={className}
       rowSpan={rowSpan}
       colSpan={colSpan}>
-      {sortby ?
+      {sortby && is_defined(onSortChange) ?
         <Sort by={sortby} onClick={onSortChange}>
           <Layout {...other}>
             {children}
