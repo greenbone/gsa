@@ -1,5 +1,10 @@
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js: Add missing rename. If the permissions
+	are available they have been converted to user_capabilities property already.
+
+2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/tasks/icons/importreporticon.js,
 	src/html/classic/ng/src/web/pages/tasks/icons/newiconmenu.js,
 	src/html/classic/ng/src/web/pages/tasks/icons/resumeicon.js,

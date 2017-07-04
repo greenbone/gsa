@@ -84,7 +84,7 @@ export class Model {
       delete copy.permissions;
     }
     else {
-      copy.capabilities = new Capabilities();
+      copy.user_capabilities = new Capabilities();
     }
 
     if (is_defined(elem.user_tags)) {
