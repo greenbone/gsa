@@ -31,6 +31,7 @@ import PropTypes from '../../../utils/proptypes.js';
 import Icon from '../../../components/icon/icon.js';
 
 const ResumeIcon = ({
+  size,
   task,
   onClick
 }, {capabilities}) => {
@@ -38,6 +39,7 @@ const ResumeIcon = ({
   if (task.isContainer()) {
     return (
       <Icon
+        size={size}
         img="resume_inactive.svg"
         alt={_('Resume')}
         title={_('Task is a container')}/>
@@ -47,6 +49,7 @@ const ResumeIcon = ({
   if (is_defined(task.schedule)) {
     return (
       <Icon
+        size={size}
         img="resume_inactive.svg"
         alt={_('Resume')}
         title={_('Task is scheduled')}/>
@@ -57,8 +60,8 @@ const ResumeIcon = ({
     if (capabilities.mayOp('resume_task')) {
       return (
         <Icon
+          size={size}
           title={_('Resume')}
-          size="small"
           img="resume.svg"
           value={task}
           onClick={onClick}/>
@@ -66,6 +69,7 @@ const ResumeIcon = ({
     }
     return (
       <Icon
+        size={size}
         img="resume_inactive.svg"
         alt={_('Resume')}
         title={_('Permission to resume task denied')}/>
@@ -74,6 +78,7 @@ const ResumeIcon = ({
 
   return (
     <Icon
+      size={size}
       img="resume_inactive.svg"
       alt={_('Resume')}
       title={_('Task is not stopped')}/>
@@ -81,6 +86,7 @@ const ResumeIcon = ({
 };
 
 ResumeIcon.propTypes = {
+  size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };

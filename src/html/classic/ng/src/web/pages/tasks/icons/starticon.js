@@ -31,6 +31,7 @@ import Icon from '../../../components/icon/icon.js';
 
 const StartIcon = ({
   task,
+  size,
   onClick
 }, {capabilities}) => {
 
@@ -41,7 +42,7 @@ const StartIcon = ({
   if (!capabilities.mayOp('start_task')) {
     return (
       <Icon
-        size="small"
+        size={size}
         img="start_inactive.svg"
         title={_('Permission to start Task denied')}/>
     );
@@ -50,7 +51,7 @@ const StartIcon = ({
   if (!task.isActive()) {
     return (
       <Icon
-        size="small"
+        size={size}
         img="start.svg"
         title={_('Start')}
         value={task}
@@ -59,13 +60,14 @@ const StartIcon = ({
   }
   return (
     <Icon
-      size="small"
+      size={size}
       img="start_inactive.svg"
       title={_('Task is already active')}/>
   );
 };
 
 StartIcon.propTypes = {
+  size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };

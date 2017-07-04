@@ -30,13 +30,14 @@ import PropTypes from '../../../utils/proptypes.js';
 import Icon from '../../../components/icon/icon.js';
 
 const StopIcon = ({
+  size,
   task,
   onClick,
 }) => {
   if (task.isRunning()) {
     return (
       <Icon
-        size="small"
+        size={size}
         img="stop.svg"
         title={_('Stop')}
         value={task}
@@ -47,6 +48,7 @@ const StopIcon = ({
 };
 
 StopIcon.propTypes = {
+  size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };

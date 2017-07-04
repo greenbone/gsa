@@ -33,6 +33,7 @@ import Icon from '../../../components/icon/icon.js';
 import DetailsLink from '../../../components/link/detailslink.js';
 
 const ScheduleIcon = ({
+  size,
   links = true,
   task,
 }) => {
@@ -42,10 +43,11 @@ const ScheduleIcon = ({
     return null;
   }
 
-  if (is_defined(schedule.permissions) &&
-    schedule.permissions.permission === 0) { // FIXME check if it must be '0'
+  if (schedule.user_capabilities.length === 0) {
     return (
-      <Icon size="small" img="schedule_inactive.svg"
+      <Icon
+        size={size}
+        img="schedule_inactive.svg"
         title={_('Schedule Unavailable. Name: {{name}}, ID: {{id}}',
           {name: schedule.name, id: schedule.id})}/>
     );
@@ -72,13 +74,6 @@ const ScheduleIcon = ({
       {name: schedule.name, time: schedule.next_time});
   }
 
-  const icon = (
-    <Icon
-      size="small"
-      img="scheduled.svg"
-      alt={_('Schedule Details')}/>
-  );
-
   return (
     <DetailsLink
       legacy
@@ -86,12 +81,16 @@ const ScheduleIcon = ({
       id={schedule.id}
       title={title}
       textOnly={!links}>
-      {icon}
+      <Icon
+        size={size}
+        img="scheduled.svg"
+        alt={_('Schedule Details')}/>
     </DetailsLink>
   );
 };
 
 ScheduleIcon.propTypes = {
+  size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };

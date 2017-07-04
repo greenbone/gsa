@@ -36,8 +36,7 @@ const NewIcon = ({
 }, {capabilities}) => {
   if (capabilities.mayCreate('task')) {
     return (
-      <IconMenu img="new.svg" size="small"
-        onClick={onNewClick}>
+      <IconMenu img="new.svg" onClick={onNewClick}>
         <MenuEntry title={_('New Task')}
           onClick={onNewClick}/>
         <MenuEntry title={_('New Container Task')}

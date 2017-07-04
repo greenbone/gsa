@@ -1,5 +1,15 @@
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tasks/icons/importreporticon.js,
+	src/html/classic/ng/src/web/pages/tasks/icons/newiconmenu.js,
+	src/html/classic/ng/src/web/pages/tasks/icons/resumeicon.js,
+	src/html/classic/ng/src/web/pages/tasks/icons/scheduleicon.js,
+	src/html/classic/ng/src/web/pages/tasks/icons/starticon.js,
+	src/html/classic/ng/src/web/pages/tasks/icons/stopicon.js: Don't set a fixed
+	icon size. Allow to set size via prop or IconSizeProvider.
+
+2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/icon/withIconSize.js: Don't let
 	undefined size property override iconSize.
 

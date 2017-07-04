@@ -30,6 +30,7 @@ import PropTypes from '../../../utils/proptypes.js';
 import Icon from '../../../components/icon/icon.js';
 
 const  ImportIcon = ({
+  size,
   task,
   onClick
 }, {capabilities}) => {
@@ -41,6 +42,7 @@ const  ImportIcon = ({
   return (
     <Icon
       value={task}
+      size={size}
       img="upload.svg"
       onClick={onClick}
       alt={_('Import Report')}
@@ -49,6 +51,7 @@ const  ImportIcon = ({
 };
 
 ImportIcon.propTypes = {
+  size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
