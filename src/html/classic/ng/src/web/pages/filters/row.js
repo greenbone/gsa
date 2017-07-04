@@ -93,7 +93,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   return (
     <TableRow>
@@ -103,7 +102,7 @@ const Row = ({
         link={links}
         type="filter"
         displayName={_('Filter')}
-        userName={username}/>
+      />
       <TableData>
         {entity.term}
       </TableData>
@@ -123,7 +122,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

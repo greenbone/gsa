@@ -123,7 +123,7 @@ const Row = ({
   entity,
   links = true,
   ...props
-}, {capabilities, username}) => {
+}, {capabilities}) => {
   return (
     <TableRow>
       <EntityNameTableData
@@ -132,7 +132,7 @@ const Row = ({
         link={links}
         type="target"
         displayName={_('Target')}
-        userName={username}/>
+      />
       <TableData>
         {shorten(entity.hosts, 500)}
       </TableData>
@@ -175,7 +175,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(IconActions));

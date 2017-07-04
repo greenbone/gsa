@@ -92,7 +92,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   return (
     <TableRow>
@@ -102,7 +101,7 @@ const Row = ({
         link={links}
         type="role"
         displayName={_('Role')}
-        userName={username}/>
+      />
       {render_component(actions, {...props, entity})}
     </TableRow>
   );
@@ -116,7 +115,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(IconActions));

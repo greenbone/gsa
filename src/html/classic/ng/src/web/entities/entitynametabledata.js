@@ -26,6 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
+import withUserName from '../utils/withUserName.js';
 
 import Comment from '../components/comment/comment.js';
 
@@ -87,6 +88,6 @@ EntityNameTableData.propTypes = {
   userName: PropTypes.string.isRequired,
 };
 
-export default EntityNameTableData;
+export default withUserName(EntityNameTableData);
 
 // vim: set ts=2 sw=2 tw=80:

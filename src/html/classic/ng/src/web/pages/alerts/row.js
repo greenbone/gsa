@@ -244,7 +244,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   return (
     <TableRow>
@@ -254,7 +253,7 @@ const Row = ({
         link={links}
         type="alert"
         displayName={_('Alert')}
-        userName={username}/>
+      />
       <TableData>
         {render_event(entity.event)}
       </TableData>
@@ -283,7 +282,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

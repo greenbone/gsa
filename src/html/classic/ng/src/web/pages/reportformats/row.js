@@ -114,7 +114,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   return (
     <TableRow>
@@ -124,7 +123,7 @@ const Row = ({
         link={links}
         type="report_format"
         displayName={_('Report Format')}
-        userName={username}>
+      >
         {entity.summary &&
           <Comment>({entity.summary})</Comment>
         }
@@ -159,7 +158,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

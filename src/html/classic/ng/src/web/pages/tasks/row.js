@@ -28,6 +28,7 @@ import {is_defined, is_empty} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
+import withUserName from '../../utils/withUserName.js';
 
 import {withEntityRow} from '../../entities/row.js';
 
@@ -143,8 +144,9 @@ const Row = ({
     entity,
     links = true,
     actions,
+    userName,
     ...props,
-  }, {username}) => {
+  }) => {
   return (
     <TableRow>
       <TableData>
@@ -174,7 +176,7 @@ const Row = ({
           <ObserverIcon
             displayName={_('Task')}
             entity={entity}
-            userName={username}
+            userName={userName}
           />
           {!is_empty(entity.observers) &&
             <Icon
@@ -214,12 +216,9 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  userName: PropTypes.string.isRequired,
 };
 
-Row.contextTypes = {
-  username: PropTypes.string.isRequired,
-};
-
-export default withEntityRow(Row, Actions);
+export default withEntityRow(withUserName(Row), Actions);
 
 // vim: set ts=2 sw=2 tw=80:

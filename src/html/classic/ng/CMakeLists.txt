@@ -435,6 +435,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/withCache.js
      ${NG_SRC_DIR}/src/web/utils/withComponentDefaults.js
      ${NG_SRC_DIR}/src/web/utils/withPrefix.js
+     ${NG_SRC_DIR}/src/web/utils/withUserName.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/modifytaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/taskwizard.js

@@ -114,7 +114,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   return (
     <TableRow>
@@ -124,7 +123,7 @@ const Row = ({
         link={links}
         type="agent"
         displayName={_('Agent')}
-        userName={username}/>
+      />
       <TableData>
         {entity.trust.status} ({short_date(entity.trust.time)})
       </TableData>
@@ -141,7 +140,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

@@ -89,7 +89,7 @@ const Row = ({
     links = true,
     actions,
     ...props,
-  }, {username}) => {
+  }) => {
   return (
     <TableRow>
       <EntityNameTableData
@@ -98,7 +98,7 @@ const Row = ({
         link={links}
         type="port_list"
         displayName={_('Port List')}
-        userName={username}/>
+      />
       <TableData
         flex align="end">
         {entity.port_count.all}
@@ -120,10 +120,6 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(IconActions));

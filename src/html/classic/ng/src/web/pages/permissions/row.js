@@ -103,7 +103,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   return (
     <TableRow>
@@ -113,7 +112,7 @@ const Row = ({
         link={links}
         type="permission"
         displayName={_('Permission')}
-        userName={username}/>
+      />
       <TableData>
         {permission_description(entity.name, entity.resource)}
       </TableData>
@@ -138,11 +137,11 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  userName: PropTypes.string.isRequired,
 };
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

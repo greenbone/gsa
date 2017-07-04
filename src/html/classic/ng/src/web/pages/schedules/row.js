@@ -114,7 +114,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   let next_time = entity.next_time === 'over' ? '-' :
     long_date(entity.next_time);
@@ -126,7 +125,7 @@ const Row = ({
         link={links}
         type="schedule"
         displayName={_('Schedule')}
-        userName={username}/>
+      />
       <TableData>
         {long_date(entity.first_time)}
       </TableData>
@@ -148,11 +147,11 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  userName: PropTypes.string.isRequired,
 };
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

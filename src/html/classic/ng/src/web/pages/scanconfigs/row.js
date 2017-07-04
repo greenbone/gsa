@@ -93,8 +93,6 @@ const Row = ({
     entity,
     links = true,
     ...props
-  }, {
-    username,
   }) => {
   return (
     <TableRow>
@@ -104,7 +102,7 @@ const Row = ({
         link={links}
         type="config"
         displayName={_('Scan Config')}
-        userName={username}/>
+      />
       <TableData flex align="end">
         {na(entity.families.count)}
       </TableData>
@@ -139,10 +137,6 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

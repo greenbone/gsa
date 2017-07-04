@@ -98,60 +98,36 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
 
-  let roles;
+  const may_acces_roles = capabilities.mayAccess('roles');
 
-  if (capabilities.mayAccess('roles')) {
-    roles = map(entity.roles, role => (
-      <DetailsLink
-        className="item"
-        legacy
-        key={role.id}
-        type="role"
-        id={role.id}>
-        {role.name}
-      </DetailsLink>
-    ));
-  }
-  else {
-    roles = map(entity.roles, role => {
-      return (
-        <span
-          className="item">
-          {role.name}
-        </span>
-      );
-    });
-  }
+  const roles = map(entity.roles, role => (
+    <DetailsLink
+      className="item"
+      legacy
+      textOnly={!may_acces_roles}
+      key={role.id}
+      type="role"
+      id={role.id}>
+      {role.name}
+    </DetailsLink>
+  ));
 
-  let groups;
 
-  if (capabilities.mayAccess('groups')) {
-    groups = map(entity.groups, group => {
-      return (
-        <DetailsLink
-          className="item"
-          legacy
-          type="group"
-          key={group.id}
-          id={group.id}>
-          {group.name}
-        </DetailsLink>
-      );
-    });
-  }
-  else {
-    groups = map(entity.groups, group => {
-      return (
-        <span
-          className="item">
-          {group.name}
-        </span>
-      );
-    });
-  }
+  const may_acces_groups = capabilities.mayAccess('groups');
+
+  const groups = map(entity.groups, group => (
+    <DetailsLink
+      className="item"
+      legacy
+      textOnyl={!may_acces_groups}
+      type="group"
+      key={group.id}
+      id={group.id}>
+      {group.name}
+    </DetailsLink>
+  ));
 
   let auth_method;
   if (entity.auth_method === 'ldap_connect') {
@@ -190,7 +166,7 @@ const Row = ({
         link={links}
         type="user"
         displayName={_('User')}
-        userName={username}/>
+      />
       <TableData flex className="roles">
         {roles}
       </TableData>
@@ -216,7 +192,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(IconActions));

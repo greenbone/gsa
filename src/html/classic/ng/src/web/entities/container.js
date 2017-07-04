@@ -116,13 +116,6 @@ class EntitiesContainer extends React.Component {
     this.clearTimer();
   }
 
-  getChildContext() {
-    const {gmp} = this.context;
-    return {
-      username: gmp.username,
-    };
-  }
-
   load(filter, options = {}) {
     const {entities_command} = this;
     let {force = false, refresh, reload = false} = options;
@@ -435,10 +428,6 @@ EntitiesContainer.propTypes = {
 
 EntitiesContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
-};
-
-EntitiesContainer.childContextTypes = {
-  username: PropTypes.string,
 };
 
 EntitiesContainer = withCache(EntitiesContainer);

@@ -130,7 +130,6 @@ const Row = ({
     ...props
   }, {
     capabilities,
-    username,
   }) => {
   return (
     <TableRow>
@@ -140,7 +139,7 @@ const Row = ({
         link={links}
         type="tag"
         displayName={_('Tag')}
-        userName={username}/>
+      />
       <TableData>
         {entity.value}
       </TableData>
@@ -176,7 +175,6 @@ Row.propTypes = {
 
 Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));
