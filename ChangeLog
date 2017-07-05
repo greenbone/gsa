@@ -1,6 +1,13 @@
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/menu/css/iconmenu.css,
+	src/html/classic/ng/src/web/components/menu/iconmenu.js: Fix icon menu to be
+	usable with different icon sizes. Switch styling to glamorous.
+
+2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/container.js,
 	src/html/classic/ng/src/web/entities/entitynametabledata.js,
 	src/html/classic/ng/src/web/pages/agents/row.js,

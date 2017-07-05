@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {classes} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -31,17 +33,57 @@ import Icon from '../icon/icon.js';
 import withIconCss from '../icon/withIconCss.js';
 import withIconSize from '../icon/withIconSize.js';
 
-import './css/iconmenu.css';
+const Div = glamorous.div({
+  position: 'relative',
+  display: 'none',
+  '.icon-menu:hover &': {
+    display: 'block',
+  }
+});
 
-const IconMenuContainer = ({children, onClick, className, ...other}) => {
+const List = glamorous.ul({
+  position: 'absolute',
+  margin: 0,
+  padding: 0,
+  left: 0,
+  bottom: 0,
+  zIndex: 5,
+  listStyle: 'none',
+  fontSize: '10px',
+  width: '255px',
+  '& .menu-entry': {
+    width: '255px',
+    borderLeft: '1px solid #3A3A3A',
+    borderRight: '1px solid #3A3A3A',
+  },
+  '& .menu-entry:first-child': {
+    borderTopLeftRadius: '0px',
+    borderTopRightRadius: '8px',
+    borderTop: '1px solid #3A3A3A',
+  },
+  '& .menu-entry:last-child': {
+    borderBottomRightRadius: '8px',
+    borderBottomLeftRadius: '8px',
+    borderBottom: '1px solid #3A3A3A',
+  },
+});
+
+const IconMenuContainer = ({
+  children,
+  className,
+  onClick,
+  ...other
+}) => {
   className = classes('icon-menu', className);
 
   return (
     <span className={className}>
       <Icon onClick={onClick} {...other}/>
-      <ul>
-        {children}
-      </ul>
+      <Div>
+        <List>
+          {children}
+        </List>
+      </Div>
     </span>
   );
 };
