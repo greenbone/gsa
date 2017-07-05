@@ -1035,6 +1035,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="type" select="'credential'"/>
         </xsl:call-template>
         <tr class="even">
+          <td>Type</td>
+          <td>Shows the type of the credential.</td>
+        </tr>
+        <tr class="odd">
+          <td>Allow insecure use</td>
+          <td>Whether the credential can be used for unencrypted or otherwise insecure authentication methods.</td>
+        </tr>
+        <tr class="even">
           <td>Login</td>
           <td>Shows the login name that was provided for this credential.</td>
         </tr>
@@ -1127,7 +1135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template mode="help" match="new_credential.html">
   <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'New Credentials'"/>
+    <xsl:with-param name="title" select="'New Credential'"/>
     <xsl:with-param name="type" select="'credential'"/>
   </xsl:call-template>
 
@@ -1172,7 +1180,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Security Scan Account</td>
         </tr>
         <tr class="even">
-          <td>Login</td>
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>For the Windows systems</td>
+        </tr>
+        <tr class="odd">
+          <td>Type</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Selection</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Allow insecure use</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+
+        <tr class="gbntablehead2">
+          <td colspan="5">
+            Additional options for type &quot;Username + Password&quot;
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Auto-generate</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Username</td>
           <td>yes</td>
           <td>80</td>
           <td>Alphanumeric<br/>If not autogenerate also "\@_.-"</td>
@@ -1180,19 +1222,118 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               myDomain\jsmith<br/>
               jsmith@myDomain</td>
         </tr>
-        <tr class="odd">
-          <td>Comment</td>
-          <td>no</td>
-          <td>400</td>
-          <td>Alphanumeric</td>
-          <td>For the Windows systems</td>
+        <tr class="even">
+          <td>Password</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Free form text</td>
+          <td>hx7ZgI2n</td>
+        </tr>
+
+        <tr class="gbntablehead2">
+          <td colspan="5">
+            Additional options for type &quot;Username + SSH Key&quot;
+          </td>
         </tr>
         <tr class="even">
-          <td>[password option]</td>
+          <td>Auto-generate</td>
           <td>yes</td>
-          <td>"Autogenerate Credential" or a provided password (40)</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Username</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric<br/>If not autogenerate also "\@_.-"</td>
+          <td>jsmith<br/>
+              myDomain\jsmith<br/>
+              jsmith@myDomain</td>
+        </tr>
+        <tr class="even">
+          <td>Passphrase</td>
+          <td>yes</td>
+          <td>40</td>
           <td>Free form text</td>
-          <td>"Autogenerate Credential", hx7ZgI2n</td>
+          <td>hx7ZgI2n</td>
+        </tr>
+        <tr class="odd">
+          <td>Private key</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File containing an SSH private key</td>
+          <td></td>
+        </tr>
+
+        <tr class="gbntablehead2">
+          <td colspan="5">
+            Additional options for type &quot;Client Certificate&quot;
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Certificate</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File containing a client certificate in PEM format</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Private key</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File containing an a private key in PEM format</td>
+          <td></td>
+        </tr>
+
+        <tr class="gbntablehead2">
+          <td colspan="5">
+            Additional options for type &quot;SNMP&quot;
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Community</td>
+          <td>if no Username + Password given</td>
+          <td>40</td>
+          <td>Free form text</td>
+          <td>hx7ZgI2n</td>
+        </tr>
+        <tr class="odd">
+          <td>Username</td>
+          <td>if no Community given</td>
+          <td>80</td>
+          <td>Alphanumeric<br/>If not autogenerate also "\@_.-"</td>
+          <td>jsmith<br/>
+              myDomain\jsmith<br/>
+              jsmith@myDomain</td>
+        </tr>
+        <tr class="even">
+          <td>Password</td>
+          <td>if no Community given</td>
+          <td>40</td>
+          <td>Free form text</td>
+          <td>hx7ZgI2n</td>
+        </tr>
+        <tr class="odd">
+          <td>Privacy Password</td>
+          <td>no</td>
+          <td>40</td>
+          <td>Free form text</td>
+          <td>hx7ZgI2n</td>
+        </tr>
+        <tr class="even">
+          <td>Auth Algorithm</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Privacy Algorithm</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
         </tr>
       </table>
 
@@ -1217,6 +1358,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Note: According to documentation of Microsoft Domain Controller,
         if your Login uses German umlauts, you can use "ss" for "ß", "a" for "ä" etc.
         In other cases, Login names with German umlauts will not work.
+      </p>
+
+      <h4>Insecure use</h4>
+      <p>
+        With the option "Allow insecure use" enabled the credential can be used
+        for unencrypted or otherwise insecure authentication methods.
       </p>
 
       <h4>Credentials</h4>

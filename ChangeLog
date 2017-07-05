@@ -1,3 +1,13 @@
+2017-07-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r28938.
+
+	* src/html/classic/help.xsl (credentials.html): Add description of the
+	columns "Type" and "Allow insecure use".
+	(new_credential.html): Change title to "New Credential".  Add columns
+	"Type" and "Allow insecure use" as well as type specific columns.
+	Add paragraph about "Allow insecure use".
+
 2017-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r28799.
