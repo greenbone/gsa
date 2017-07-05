@@ -53,7 +53,7 @@ const Entry = glamorous.li({
   fontWeight: 'bold',
   width: '100%',
   backgroundColor: 'white',
-  '% > a': {
+  '& > a': {
     display: 'block',
     background: 'none',
     textDecoration: 'none',
@@ -65,6 +65,10 @@ const Entry = glamorous.li({
   },
   '&:hover': {
     background: '#99CE48',
+  },
+  '& > a:hover, & > a:focus, & > a:link': {
+    textDecoration: 'none',
+    color: '#3A3A3A',
   },
 },
   ({onClick}) => is_defined(onClick) ? {cursor: 'pointer'} : {},
