@@ -1,5 +1,11 @@
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/icon/withIconCss.js: Don't explicitly
+	set size of all icon children. Instead use inherit to allow changing the size
+	in some child component.
+
+2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/log.js: Log category in green color at console.
 
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>

@@ -46,10 +46,12 @@ const convert_size = ({size = 'small'}) => {
   }
 
   return {
-    '&, & *': {
-      height,
-      width,
-    }
+    height,
+    width,
+    '& *': {
+      height: 'inherit',
+      width: 'inherit',
+    },
   };
 };
 
