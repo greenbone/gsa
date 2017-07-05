@@ -234,7 +234,7 @@ export class EntityCommand extends HttpCommand {
     }, {
       extra_params,
     }).then(response => {
-      log.debug('Cloned', this.name);
+      log.debug('Cloned', this.name, id);
       return this.transformResponse(response);
     })
     .catch(err => {
