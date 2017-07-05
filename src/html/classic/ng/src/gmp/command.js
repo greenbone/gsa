@@ -254,6 +254,18 @@ export class EntityCommand extends HttpCommand {
     return this.httpPost(params);
   }
 
+  export({id}) {
+    let params = {
+      cmd: 'process_bulk',
+      resource_type: this.name,
+      bulk_select: 1,
+      'bulk_export.x': 1,
+      ['bulk_selected:' + id]: 1,
+    };
+    return this.httpPost(params, {plain: true})
+      .then(response => response.setData(response.data.responseText));
+  }
+
   getElementFromRoot(root) {
     throw new Error('getElementFromRoot not implemented in ' +
       this.constructor.name);
