@@ -23,6 +23,7 @@
 
 import {is_defined, is_string} from './utils.js';
 
+const GREENBONE_GREEN = '#99CE48';
 
 const LogLevels = {
   trace: 0,
@@ -58,7 +59,8 @@ export class Logger {
 
     for (let logname in LogLevels) { // eslint-disable-line guard-for-in
       this[logname] = (LogLevels[logname] < loglevel) ? noop : (...args) => {
-        return console[logname](this.name, ...args);
+        return console[logname]('%c' + this.name, 'color: ' + GREENBONE_GREEN,
+          ...args);
       };
     }
   }

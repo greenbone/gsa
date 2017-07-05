@@ -1,5 +1,9 @@
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/log.js: Log category in green color at console.
+
+2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/locale.js: Update log category after locale
 	module got moved to gmp directory.
 
