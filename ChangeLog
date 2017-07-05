@@ -1,5 +1,10 @@
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/table.js: Update proptypes of entities
+	list table. All components can be deactivated by passing false.
+
+2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/command.js: Add id to debug message when cloning
 	an entity.
 
