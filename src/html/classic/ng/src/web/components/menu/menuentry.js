@@ -23,14 +23,14 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {is_defined, is_array} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import Link from '../link/link.js';
 import LegacyLink from '../link/legacylink.js';
-
-import './css/menuentry.css';
 
 // don't pass event to handler
 const handler_wrapper = handler => {
@@ -41,6 +41,34 @@ const handler_wrapper = handler => {
   }
   return undefined;
 };
+
+const Entry = glamorous.li({
+  textDecoration: 'none',
+  textIndent: '12px',
+  textAlign: 'left',
+  color: '#3A3A3A',
+  height: '22px',
+  lineHeight: '22px',
+  fontSize: '10px',
+  fontWeight: 'bold',
+  width: '100%',
+  backgroundColor: 'white',
+  '% > a': {
+    display: 'block',
+    background: 'none',
+    textDecoration: 'none',
+    color: '#3A3A3A',
+  },
+  '&:last-child': {
+    borderBottomRightRadius: '8px',
+    borderBottomLeftRadius: '8px',
+  },
+  '&:hover': {
+    background: '#99CE48',
+  },
+},
+  ({onClick}) => is_defined(onClick) ? {cursor: 'pointer'} : {},
+);
 
 const MenuEntry = ({
     caps,
@@ -78,8 +106,11 @@ const MenuEntry = ({
   else {
     entry = title;
   }
+
+  onClick = is_defined(onClick) ? handler_wrapper(onClick) : undefined;
+
   return (
-    <li className={css} onClick={handler_wrapper(onClick)}>{entry}</li>
+    <Entry className={css} onClick={onClick}>{entry}</Entry>
   );
 };
 

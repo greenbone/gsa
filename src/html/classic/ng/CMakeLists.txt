@@ -460,7 +460,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/components/layout/css/layout.css
      ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
-     ${NG_SRC_DIR}/src/web/components/menu/css/menuentry.css
      ${NG_SRC_DIR}/src/web/components/powerfilter/css/powerfilter.css
      ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
