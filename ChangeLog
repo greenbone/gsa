@@ -1,3 +1,11 @@
+2017-07-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/help.xsl (credentials.html): Add description of the
+	columns "Type" and "Allow insecure use".
+	(new_credential.html): Change title to "New Credential".  Add columns
+	"Type" and "Allow insecure use" as well as type specific columns.
+	Add paragraph about "Allow insecure use".
+
 2017-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/components/menu/menuentry.js: Fix menu entry
