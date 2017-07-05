@@ -1,5 +1,10 @@
 2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/locale.js: Update log category after locale
+	module got moved to gmp directory.
+
+2017-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/menu/css/iconmenu.css,
 	src/html/classic/ng/src/web/components/menu/iconmenu.js: Fix icon menu to be

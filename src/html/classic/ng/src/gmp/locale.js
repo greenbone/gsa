@@ -30,7 +30,7 @@ import BrowserDetector from 'i18next-browser-languagedetector';
 import {is_defined, is_string, is_date, parse_int} from './utils.js';
 import logger from './log.js';
 
-const log = logger.getLogger('locale');
+const log = logger.getLogger('gmp.locale');
 
 export class LanguageDetector extends BrowserDetector {
 
