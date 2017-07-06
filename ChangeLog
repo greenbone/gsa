@@ -1,5 +1,10 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tasks/dialog.js: Remove obsolete
+	prop float from Layout component.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js: Parse result_count as int.
 
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>

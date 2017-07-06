@@ -350,7 +350,6 @@ const TaskDialog = ({
 
       {use_openvas_scan_config &&
         <Layout
-          float
           offset="2"
           className="offset-container">
           <Layout
