@@ -147,7 +147,6 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  userName: PropTypes.string.isRequired,
 };
 
 Row.contextTypes = {
