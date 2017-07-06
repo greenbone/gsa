@@ -27,6 +27,7 @@ import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import compose from '../../utils/compose.js';
 import {get_img_url} from '../../utils/urls.js';
 
 import withIconCss from './withIconCss.js';
@@ -87,6 +88,9 @@ IconComponent.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withIconSize(withIconCss(IconComponent));
+export default compose(
+  withIconSize,
+  withIconCss,
+)(IconComponent);
 
 // vim: set ts=2 sw=2 tw=80:
