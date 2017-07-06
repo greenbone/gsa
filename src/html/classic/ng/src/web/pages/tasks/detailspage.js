@@ -25,8 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
 import {withEntityContainer} from '../../entity/container.js';
@@ -34,6 +33,9 @@ import {withEntityContainer} from '../../entity/container.js';
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
 import TrashIcon from '../../entities/icons/entitytrashicon.js';
+
+import Divider from '../../components/layout/divider.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 import HelpIcon from '../../components/icon/helpicon.js';
@@ -46,19 +48,21 @@ import ScheduleIcon from './icons/scheduleicon.js';
 import StartIcon from './icons/starticon.js';
 import StopIcon from './icons/stopicon.js';
 
+import withTaskComponent from './withTaskComponent.js';
+
 const ToolBarIcons = ({
   entity,
   links,
-  onEntityDelete,
-  onEntityClone,
-  onEntityDownload,
-  onEntityEdit,
-  onImportReportClick,
-  onNewTaskClick,
-  onNewContainerTaskClick,
-  onStartTaskClick,
-  onStopTaskClick,
-  onResumeTaskClick,
+  onTaskDeleteClick,
+  onTaskCloneClick,
+  onTaskDownloadClick,
+  onTaskEditClick,
+  onReportImportClick,
+  onTaskCreateClick,
+  onContainerTaskCreateClick,
+  onTaskStartClick,
+  onTaskStopClick,
+  onTaskResumeClick,
 }, {capabilities}) => {
   return (
     <Divider margin="10px">
@@ -75,40 +79,56 @@ const ToolBarIcons = ({
 
       <IconDivider>
         <NewIconMenu
-          onNewClick={onNewTaskClick}
-          onNewContainerClick={onNewContainerTaskClick}
+          onNewClick={onTaskCreateClick}
+          onNewContainerClick={onContainerTaskCreateClick}
         />
         <CloneIcon
           entity={entity}
           name="task"
-          onClick={onEntityClone}/>
+          onClick={onTaskCloneClick}/>
         <EditIcon
           entity={entity}
           name="task"
-          onClick={onEntityEdit}/>
+          onClick={onTaskEditClick}/>
         <TrashIcon
           entity={entity}
           name="task"
-          onClick={onEntityDelete}/>
+          onClick={onTaskDeleteClick}/>
         <ExportIcon
           value={entity}
           title={_('Export Task as XML')}
-          onClick={onEntityDownload}
+          onClick={onTaskDownloadClick}
         />
       </IconDivider>
 
       <IconDivider>
         <ScheduleIcon task={entity} links={links} />
-        <StartIcon task={entity} onClick={onStartTaskClick}/>
+        <StartIcon task={entity} onClick={onTaskStartClick}/>
 
-        <ImportReportIcon task={entity} onClick={onImportReportClick}/>
+        <ImportReportIcon task={entity} onClick={onReportImportClick}/>
 
-        <StopIcon task={entity} onClick={onStopTaskClick}/>
+        <StopIcon task={entity} onClick={onTaskStopClick}/>
 
-        <ResumeIcon task={entity} onClick={onResumeTaskClick}/>
+        <ResumeIcon task={entity} onClick={onTaskResumeClick}/>
       </IconDivider>
+
     </Divider>
   );
+};
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
+  onTaskDeleteClick: PropTypes.func.isRequired,
+  onTaskCloneClick: PropTypes.func.isRequired,
+  onTaskDownloadClick: PropTypes.func.isRequired,
+  onTaskEditClick: PropTypes.func.isRequired,
+  onReportImportClick: PropTypes.func.isRequired,
+  onTaskCreateClick: PropTypes.func.isRequired,
+  onContainerTaskCreateClick: PropTypes.func.isRequired,
+  onTaskStartClick: PropTypes.func.isRequired,
+  onTaskStopClick: PropTypes.func.isRequired,
+  onTaskResumeClick: PropTypes.func.isRequired,
 };
 
 const Details = () => {
@@ -117,11 +137,20 @@ const Details = () => {
   );
 };
 
+const Page = withTaskComponent({
+  onCloned: 'onChanged', // FIXME goto new details page
+  onDeleted: 'onChanged', // FIXME goto task list
+  onSaved: 'onChanged',
+  onStarted: 'onChanged',
+  onStopped: 'onChanged',
+  onResumed: 'onChanged',
+})(EntityPage);
+
 export default withEntityContainer('task', {
   sectionIcon: 'task.svg',
   title: _('Task'),
   toolBarIcons: ToolBarIcons,
   details: Details,
-})(EntityPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
