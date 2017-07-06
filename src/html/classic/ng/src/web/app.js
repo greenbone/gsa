@@ -84,6 +84,7 @@ import SchedulesPage from './pages/schedules/listpage.js';
 import TagsPage from './pages/tags/listpage.js';
 import TargetsPage from './pages/targets/listpage.js';
 import TasksPage from './pages/tasks/listpage.js';
+import TaskDetailsPage from './pages/tasks/detailspage.js';
 import UsersPage from './pages/users/listpage.js';
 import VulnerabilitiesPage from './pages/vulns/listpage.js';
 
@@ -284,6 +285,10 @@ ReactDOM.render(
         <Route
           path="result/:id"
           component={ResultDetailsPage}
+        />
+        <Route
+          path="task/:id"
+          component={TaskDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
