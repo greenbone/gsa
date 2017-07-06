@@ -50,12 +50,12 @@ class EntityContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const {gmpname} = this.props;
+    const {name} = this.props;
     const {gmp} = this.context;
 
-    this.name = gmpname;
+    this.name = name;
 
-    this.entity_command = gmp[gmpname];
+    this.entity_command = gmp[name];
 
     this.state = {
       loading: true,
@@ -95,32 +95,72 @@ class EntityContainer extends React.Component {
   }
 
   load(id) {
+    log.debug('Loading data for entity', id);
+
+    const {gmp} = this.context;
+
     this.setState({loading: true});
 
     this.clearTimer(); // remove possible running timer
 
-    this.entity_command.get({id}).then(response => {
-      this.setState({entity: response.data, loading: false});
-
-      const meta = response.getMeta();
-      let refresh;
-
-      if (meta.fromcache && meta.dirty) {
-        log.debug('Forcing reload of entities', meta.dirty);
-        refresh = 1;
-      }
-
-      this.startTimer(refresh);
-    })
-    .catch(err => {
-      this.setState({entity: undefined, loading: false});
-      this.handleError(err);
-    });
+    Promise.all([this.loadEntity(id), this.loadPermissions(id)])
+      .then(values => values.reduce((sum, cur) => sum || cur, false))
+      .then(refresh => this.startTimer(refresh ? 1 : gmp.autorefresh))
+      .catch(err => {
+        log.error('Error while loading data', err);
+        this.setState({loading: false});
+      });
   }
 
   reload() {
     const {id} = this.props.params;
     this.load(id);
+  }
+
+  loadEntity(id) {
+    return this.entity_command.get({id}).then(response => {
+
+      this.setState({entity: response.data, loading: false});
+
+      const meta = response.getMeta();
+      if (meta.fromcache && meta.dirty) {
+        log.debug('Forcing reload of entity', meta.dirty);
+        return true;
+      }
+      return false;
+    })
+    .catch(err => {
+      this.setState({entity: undefined});
+      return this.handleError(err);
+    });
+  }
+
+  loadPermissions(id) {
+    if (this.props.permissionsComponent === false) {
+      return Promise.resolve(false);
+    }
+
+    const {gmp} = this.context;
+
+    return gmp.permissions.getAll({
+      filter: 'resource_uuid=' + id
+    }).then(permissions => {
+
+      this.setState({permissions});
+
+      const meta = permissions.getMeta();
+
+      if (meta.fromcache && meta.dirty) {
+        log.debug('Forcing reload of permissions', meta.dirty);
+        return true;
+      }
+
+      return false;
+    })
+    .catch(err => {
+      this.setState({permissions: undefined});
+      return this.handleError(err);
+    });
   }
 
   handleChanged() {
@@ -129,7 +169,9 @@ class EntityContainer extends React.Component {
 
   startTimer(refresh) {
     let {gmp} = this.context;
+
     refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
+
     if (refresh && refresh >= 0) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
       log.debug('Started reload timer with id', this.timer, 'and interval',
@@ -304,15 +346,17 @@ class EntityContainer extends React.Component {
   }
 
   render() {
-    const {loading, entity} = this.state;
+    const {loading, entity, permissions} = this.state;
     const Component = this.props.component;
-    const {children, component, gmpname, onDownload, ...other} = this.props;
+    const {children, component, name, onDownload, ...other} = this.props;
     return (
       <Layout>
         <Component
+          {...other}
           entity={entity}
           entityCommand={this.entity_command}
           loading={loading}
+          permissions={permissions}
           onAddTag={this.handleAddTag}
           onNewNoteClick={this.openNoteDialog}
           onNewOverrideClick={this.openOverrideDialog}
@@ -323,7 +367,7 @@ class EntityContainer extends React.Component {
           onDisableTag={this.handleDisableTag}
           onDownloaded={onDownload}
           onChanged={this.handleChanged}
-          {...other}
+          onError={this.handleError}
         />
         <NoteDialog
           ref={ref => this.note_dialog = ref}
@@ -348,7 +392,8 @@ class EntityContainer extends React.Component {
 
 EntityContainer.propTypes = {
   component: PropTypes.component.isRequired,
-  gmpname: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  permissionsComponent: PropTypes.componentOrFalse,
   onDownload: PropTypes.func.isRequired,
 };
 
@@ -358,13 +403,13 @@ EntityContainer.contextTypes = {
 
 EntityContainer = withDownload(EntityContainer);
 
-export const withEntityContainer = (component, gmpname, options = {}) => {
+export const withEntityContainer = (component, name, options = {}) => {
   const EntityContainerWrapper = props => {
     return (
       <EntityContainer
         {...options}
         {...props}
-        gmpname={gmpname}
+        name={name}
         component={component}
       />
     );
