@@ -92,6 +92,7 @@ class EntitiesContainer extends React.Component {
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleDeleteEntity = this.handleDeleteEntity.bind(this);
     this.handleCloneEntity = this.handleCloneEntity.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
     this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
     this.handleError = this.handleError.bind(this);
     this.handleSaveEntity = this.handleSaveEntity.bind(this);
@@ -229,10 +230,14 @@ class EntitiesContainer extends React.Component {
 
     promise.then(response => {
       let {data} = response;
-      this.download.setFilename(filename);
-      this.download.setData(data);
-      this.download.download();
+      this.handleDownload({filename, data});
     }, this.handleError);
+  }
+
+  handleDownload({filename, data}) {
+    this.download.setFilename(filename);
+    this.download.setData(data);
+    this.download.download();
   }
 
   handleDeleteBulk() {
@@ -299,9 +304,7 @@ class EntitiesContainer extends React.Component {
     let filename = name + '-' + entity.id + '.xml';
 
     entities_command.export([entity]).then(response => {
-      this.download.setFilename(filename);
-      this.download.setData(response.data);
-      this.download.download();
+      this.handleDownload({filename, data: response.data});
     }, this.handleError);
   }
 
