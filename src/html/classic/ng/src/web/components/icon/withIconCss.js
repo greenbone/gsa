@@ -64,7 +64,7 @@ const icon_button_css = {
 
 export const withIconCss = Component => {
 
-  const IconCss = glamorous(Component)(
+  const IconCss = glamorous(Component, {displayName: 'IconCss'})(
     {
       display: 'inline-block',
     },

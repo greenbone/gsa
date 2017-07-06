@@ -31,6 +31,8 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+RLink.displayName = 'RouterLink';
+
 export const withTextOnly = Component => {
   const TextOnly = ({
     textOnly = false,
@@ -56,7 +58,7 @@ export const withTextOnly = Component => {
   return TextOnly;
 };
 
-const Link = ({
+let Link = ({
   to,
   filter,
   ...other
@@ -87,6 +89,13 @@ Link.propTypes = {
   filter: PropTypes.string,
 };
 
-export default glamorous(withTextOnly(Link))({display: 'flex'});
+Link = glamorous(
+  withTextOnly(Link),
+  {displayName: 'Link'},
+)({
+  display: 'flex',
+});
+
+export default Link;
 
 // vim: set ts=2 sw=2 tw=80:

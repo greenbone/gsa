@@ -31,7 +31,7 @@ import {withLayout} from './layout.js';
 
 const DEFAULT_MARGIN = '5px';
 
-const Divider = withLayout(glamorous.div(
+let DividerComponent = glamorous.div(
   {
     '& > *': {
       display: 'inline-flex',
@@ -49,16 +49,20 @@ const Divider = withLayout(glamorous.div(
       }
     };
   }
-));
+);
 
-const DividerContainer = ({
+DividerComponent.displayName = 'DividerComponent';
+
+DividerComponent = withLayout(DividerComponent);
+
+const Divider = ({
   margin = DEFAULT_MARGIN,
   ...props,
 }) => {
   // put Divider into a container div to allow dividers in dividers
   return (
     <div>
-      <Divider
+      <DividerComponent
         margin={margin}
         flex="row"
         {...props}/>
@@ -66,10 +70,10 @@ const DividerContainer = ({
   );
 };
 
-DividerContainer.propTypes = {
+Divider.propTypes = {
   margin: PropTypes.string,
 };
 
-export default DividerContainer;
+export default Divider;
 
 // vim: set ts=2 sw=2 tw=80:

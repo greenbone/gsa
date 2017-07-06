@@ -25,6 +25,10 @@ import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import Divider from './divider.js';
 
-export default withComponentDefaults(Divider, {margin: '3px'});
+const IconDivider = withComponentDefaults(Divider, {margin: '3px'});
+
+IconDivider.displayName = 'IconDivider';
+
+export default IconDivider;
 
 // vim: set ts=2 sw=2 tw=80:
