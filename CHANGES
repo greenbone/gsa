@@ -1,3 +1,25 @@
+gsa 7.0.3 (2017-07-XX)
+
+This is the third maintenance release of the Greenbone Security
+Assistant (GSA) 7.0 module for the Open Vulnerability Assessment System
+release 9 (OpenVAS-9). It is the web client that makes the full feature
+set of OpenVAS Manager available in a web browser.
+
+Many thanks to everyone who has contributed to this release:
+Timo Pollmeier.
+
+Main changes compared to 7.0.2:
+* An issue which cause saving a scan config to fail under certain circumstances
+  has been addressed.
+* An issue which caused the users language setting to be reset under certain
+  circumstances has been addressed.
+* A log message is now written for every successful login.
+* A number of minor interface issues have been addressed.
+* The limit on the target host input field has been removed.
+* Support for responding to a request for 'robots.txt' has been added.
+* Documentation and help have been updated.
+
+
 gsa 7.0.2 (2017-03-07)
 
 This is the second maintenance release of the Greenbone Security

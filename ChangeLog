@@ -1,3 +1,7 @@
+2017-07-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CHANGES: Start preparing changes for 7.0.3 release.
+
 2017-07-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r28938.
