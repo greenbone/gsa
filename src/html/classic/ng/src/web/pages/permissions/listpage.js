@@ -24,7 +24,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, shorten} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -38,11 +37,12 @@ import Layout from '../../components/layout/layout.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import PermissionDialog from './dialogcontainer.js';
 import Table, {SORT_FIELDS} from './table.js';
 
+import withPermissionsComponent from './withPermissionsComponent.js';
+
 const ToolBarIcons = ({
-    onNewPermissionClick
+    onPermissionCreateClick
   }, {capabilities}) => {
   return (
     <Layout flex>
@@ -52,92 +52,25 @@ const ToolBarIcons = ({
       {capabilities.mayCreate('permission') &&
         <NewIcon
           title={_('New Permission')}
-          onClick={onNewPermissionClick}/>
+          onClick={onPermissionCreateClick}/>
       }
     </Layout>
   );
 };
 
 ToolBarIcons.propTypes = {
-  onNewPermissionClick: PropTypes.func,
+  onPermissionCreateClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-class Page extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.openPermissionDialog = this.openPermissionDialog.bind(this);
-    this.onSave = this.onSave.bind(this);
-  }
-
-  openPermissionDialog(permission) {
-    if (is_defined(permission)) {
-      let subject_type = is_defined(permission.subject) ?
-        permission.subject.type : undefined;
-
-      let state = {
-        id: permission.id,
-        permission,
-        name: permission.name,
-        comment: permission.comment,
-        subject_type,
-        resource_id: is_defined(permission.resource) ? permission.resource.id :
-          '',
-        resource_type: is_defined(permission.resource) ?
-          permission.resource.type : '',
-      };
-
-      switch (subject_type) {
-        case 'user':
-          state.user_id = permission.subject.id;
-          break;
-        case 'role':
-          state.role_id = permission.subject.id;
-          break;
-        case 'group':
-          state.group_id = permission.subject.id;
-          break;
-        default:
-          break;
-      }
-
-      this.permission_dialog.show(state, {
-        title: _('Edit permission {{name}}', {name: shorten(permission.name)}),
-      });
-    }
-    else {
-      this.permission_dialog.show({});
-    }
-  }
-
-  onSave() {
-    let {onChanged} = this.props;
-    if (onChanged) {
-      onChanged();
-    }
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEntityEdit={this.openPermissionDialog}
-          onNewPermissionClick={this.openPermissionDialog}
-        />
-        <PermissionDialog
-          ref={ref => this.permission_dialog = ref}
-          onSave={this.onSave}
-        />
-      </Layout>
-    );
-  }
-}
+const Page = withPermissionsComponent({
+  onCloned: 'onChanged',
+  onDeleted: 'onChanged',
+  onSaved: 'onChanged',
+})(EntitiesPage);
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,

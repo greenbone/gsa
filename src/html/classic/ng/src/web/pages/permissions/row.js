@@ -50,12 +50,10 @@ import TableRow from '../../components/table/row.js';
 
 const Actions = ({
     entity,
-    onDownloadPermissionInstaller,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-    onVerifyPermission,
+    onPermissionDeleteClick,
+    onPermissionDownloadClick,
+    onPermissionCloneClick,
+    onPermissionEditClick,
   }) => {
   return (
     <IconDivider flex align={['center', 'center']}>
@@ -63,12 +61,12 @@ const Actions = ({
         displayName={_('Permission')}
         name="permission"
         entity={entity}
-        onClick={onEntityDelete}/>
+        onClick={onPermissionDeleteClick}/>
       <EditIcon
         displayName={_('Permission')}
         name="permission"
         entity={entity}
-        onClick={onEntityEdit}/>
+        onClick={onPermissionEditClick}/>
       <CloneIcon
         displayName={_('Permission')}
         name="permission"
@@ -76,24 +74,22 @@ const Actions = ({
         title={_('Clone Permission')}
         value={entity}
         mayClone={entity.isWriteable()}
-        onClick={onEntityClone}/>
+        onClick={onPermissionCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Permission')}
-        onClick={onEntityDownload}
+        onClick={onPermissionDownloadClick}
       />
     </IconDivider>
   );
 };
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onDownloadPermissionInstaller: PropTypes.func,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onVerifyPermission: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onPermissionEditClick: PropTypes.func.isRequired,
+  onPermissionCloneClick: PropTypes.func.isRequired,
+  onPermissionDeleteClick: PropTypes.func.isRequired,
+  onPermissionDownloadClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
@@ -137,7 +133,6 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  userName: PropTypes.string.isRequired,
 };
 
 Row.contextTypes = {
