@@ -186,10 +186,8 @@ EntitiesTable.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-export const withEntitiesTable = withComponentDefaults;
-
 export const createEntitiesTable = options =>
-  withEntitiesTable(EntitiesTable, options);
+  withComponentDefaults(options)(EntitiesTable);
 
 
 export default EntitiesTable;

@@ -25,7 +25,7 @@ import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import Divider from './divider.js';
 
-const IconDivider = withComponentDefaults(Divider, {margin: '3px'});
+const IconDivider = withComponentDefaults({margin: '3px'})(Divider);
 
 IconDivider.displayName = 'IconDivider';
 

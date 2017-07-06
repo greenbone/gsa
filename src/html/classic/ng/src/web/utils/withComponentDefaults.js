@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-export const withComponentDefaults = (Component, options = {}) => {
+export const withComponentDefaults = (options = {}) => Component => {
   const ComponentDefaultsWrapper = props => (
     <Component {...options} {...props}/>
   );

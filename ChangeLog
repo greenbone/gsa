@@ -1,5 +1,12 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/layout/icondivider.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/utils/withComponentDefaults.js: Change
+	withComponentDefaults to a composable HOC.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/utils/withComponentDefaults.js,
 	src/html/classic/ng/src/web/utils/withPrefix.js: Fix typos and set better
 	component name for debugging.
