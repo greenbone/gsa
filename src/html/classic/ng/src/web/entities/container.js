@@ -30,6 +30,7 @@ import {is_defined, is_array, exclude, includes} from 'gmp/utils.js';
 import PromiseFactory from 'gmp/promise.js';
 import Filter from 'gmp/models/filter.js';
 
+import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
 
 import SelectionType from '../utils/selectiontype.js';
@@ -432,7 +433,10 @@ EntitiesContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-EntitiesContainer = withCache(withDownload(EntitiesContainer));
+EntitiesContainer = compose(
+  withCache,
+  withDownload,
+)(EntitiesContainer);
 
 export const withEntitiesContainer = (component, gmpname, options = {}) => {
   const EntitiesContainerWrapper = props => (

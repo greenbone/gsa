@@ -431,6 +431,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/row.js
      ${NG_SRC_DIR}/src/web/pages/vulns/table.js
+     ${NG_SRC_DIR}/src/web/utils/compose.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js
      ${NG_SRC_DIR}/src/web/utils/os.js
      ${NG_SRC_DIR}/src/web/utils/proptypes.js
