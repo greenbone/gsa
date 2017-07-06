@@ -47,11 +47,11 @@ import StopIcon from './icons/stopicon.js';
 const Actions = ({
     entity,
     links,
-    onDeleteTaskClick,
-    onDownloadTaskClick,
-    onCloneTaskClick,
-    onTaskEditClick,
     onReportImportClick,
+    onTaskCloneClick,
+    onTaskDeleteClick,
+    onTaskDownloadClick,
+    onTaskEditClick,
     onTaskResumeClick,
     onTaskStartClick,
     onTaskStopClick,
@@ -73,7 +73,7 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="task"
-        onClick={onDeleteTaskClick}/>
+        onClick={onTaskDeleteClick}/>
       <EditIcon
         entity={entity}
         name="task"
@@ -81,11 +81,11 @@ const Actions = ({
       <CloneIcon
         entity={entity}
         name="task"
-        onClick={onCloneTaskClick}/>
+        onClick={onTaskCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Task')}
-        onClick={onDownloadTaskClick}
+        onClick={onTaskDownloadClick}
       />
     </IconDivider>
   );
@@ -94,10 +94,10 @@ const Actions = ({
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onCloneTaskClick: PropTypes.func.isRequired,
-  onDeleteTaskClick: PropTypes.func.isRequired,
-  onDownloadTaskClick: PropTypes.func.isRequired,
   onReportImportClick: PropTypes.func.isRequired,
+  onTaskCloneClick: PropTypes.func.isRequired,
+  onTaskDeleteClick: PropTypes.func.isRequired,
+  onTaskDownloadClick: PropTypes.func.isRequired,
   onTaskEditClick: PropTypes.func.isRequired,
   onTaskResumeClick: PropTypes.func.isRequired,
   onTaskStartClick: PropTypes.func.isRequired,
