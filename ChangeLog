@@ -1,6 +1,13 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/permissions/withPermissionsComponent.js:
+	Create a HOC to provider permission specific handler functions. This allows to
+	extract this code and reuse it at several places.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entity/withEntityComponent.js: Introduce a new HOC
 	to generate the standard entity handler functions (clone, delete, save and
 	download).
