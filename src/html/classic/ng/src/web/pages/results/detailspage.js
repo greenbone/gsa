@@ -406,6 +406,7 @@ export default withEntityContainer(EntityPage, 'result', {
   title: _('Result'),
   toolBarIcons: ToolBarIcons,
   details: Details,
+  permissionsComponent: false,
 });
 
 // vim: set ts=2 sw=2 tw=80:
