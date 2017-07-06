@@ -28,7 +28,7 @@ import {is_defined} from 'gmp/utils.js';
 import PropTypes from './proptypes.js';
 
 export const withPrefix = Component => {
-  const CompentWrapper = ({prefix, ...props}) => {
+  const ComponentPrefixWrapper = ({prefix, ...props}) => {
     if (is_defined(prefix)) {
       prefix += '_';
     }
@@ -38,11 +38,11 @@ export const withPrefix = Component => {
     return <Component {...props} prefix={prefix}/>;
   };
 
-  CompentWrapper.propTypes = {
+  ComponentPrefixWrapper.propTypes = {
     prefix: PropTypes.string,
   };
 
-  return CompentWrapper;
+  return ComponentPrefixWrapper;
 };
 
 export default withPrefix;

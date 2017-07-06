@@ -24,8 +24,10 @@
 import React from 'react';
 
 export const withComponentDefaults = (Component, options = {}) => {
-  const CompentWrapper = props => <Component {...options} {...props}/>;
-  return CompentWrapper;
+  const ComponentDefaultsWrapper = props => (
+    <Component {...options} {...props}/>
+  );
+  return ComponentDefaultsWrapper;
 };
 
 export default withComponentDefaults;
