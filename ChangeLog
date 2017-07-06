@@ -1,6 +1,12 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Introduce new
+	withTaskComponent HOC.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/permissions/dialogcontainer.js,
 	src/html/classic/ng/src/web/pages/permissions/listpage.js,
 	src/html/classic/ng/src/web/pages/permissions/row.js: Use new

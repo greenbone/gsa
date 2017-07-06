@@ -417,6 +417,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/table.js
      ${NG_SRC_DIR}/src/web/pages/tasks/task.js
      ${NG_SRC_DIR}/src/web/pages/tasks/trend.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/withTaskComponent.js
      ${NG_SRC_DIR}/src/web/pages/users/confirmdeletedialog.js
      ${NG_SRC_DIR}/src/web/pages/users/dialog.js
      ${NG_SRC_DIR}/src/web/pages/users/header.js
