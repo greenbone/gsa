@@ -80,6 +80,7 @@ export class Task extends Model {
     elem.report_count.total = parse_int(elem.report_count.__text);
     elem.report_count.finished = parse_int(elem.report_count.finished);
     elem.alterable = parse_int(elem.alterable);
+    elem.result_count = parse_int(elem.result_count);
 
     let reports = [
       'first_report',
