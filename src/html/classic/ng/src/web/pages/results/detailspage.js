@@ -401,12 +401,12 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-export default withEntityContainer(EntityPage, 'result', {
+export default withEntityContainer('result', {
   sectionIcon: 'result.svg',
   title: _('Result'),
   toolBarIcons: ToolBarIcons,
   details: Details,
   permissionsComponent: false,
-});
+})(EntityPage);
 
 // vim: set ts=2 sw=2 tw=80:

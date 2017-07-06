@@ -117,11 +117,11 @@ const Details = () => {
   );
 };
 
-export default withEntityContainer(EntityPage, 'task', {
+export default withEntityContainer('task', {
   sectionIcon: 'task.svg',
   title: _('Task'),
   toolBarIcons: ToolBarIcons,
   details: Details,
-});
+})(EntityPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -403,7 +403,7 @@ EntityContainer.contextTypes = {
 
 EntityContainer = withDownload(EntityContainer);
 
-export const withEntityContainer = (component, name, options = {}) => {
+export const withEntityContainer = (name, options = {}) => component => {
   const EntityContainerWrapper = props => {
     return (
       <EntityContainer
