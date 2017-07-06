@@ -36,6 +36,7 @@ import Loading from '../components/loading/loading.js';
 import Section from '../components/section/section.js';
 
 import EntityInfo from './info.js';
+import EntityPermissions from './permissions.js';
 import EntityTags from './tags.js';
 
 class EntityPage extends React.Component {
@@ -137,6 +138,35 @@ class EntityPage extends React.Component {
     );
   }
 
+  renderPermissions() {
+    const {
+      entity,
+      permissions,
+      onChanged,
+      onDownloaded,
+      onError,
+    } = this.props;
+    let PermissionsComponent = this.props.permissionsComponent;
+
+    if (PermissionsComponent === false) {
+      return null;
+    }
+
+    if (!is_defined(PermissionsComponent)) {
+      PermissionsComponent = EntityPermissions;
+    }
+
+    return (
+      <PermissionsComponent
+        entity={entity}
+        permissions={permissions}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+      />
+    );
+  }
+
   render() {
     const {entity, loading} = this.props;
 
@@ -157,6 +187,7 @@ class EntityPage extends React.Component {
         {this.renderInfo()}
         {this.renderSection()}
         {this.renderUserTags()}
+        {this.renderPermissions()}
       </Layout>
     );
   }
@@ -168,14 +199,19 @@ EntityPage.propTypes = {
   foldable: PropTypes.bool,
   info: PropTypes.componentOrFalse,
   loading: PropTypes.bool,
+  permissions: PropTypes.arrayLike,
+  permissionsComponent: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
   section: PropTypes.componentOrFalse,
   tags: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
   onAddTag: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
+  onDownloaded: PropTypes.func,
   onEditTagClick: PropTypes.func.isRequired,
   onEnableTag: PropTypes.func.isRequired,
+  onError: PropTypes.func,
   onDeleteTag: PropTypes.func.isRequired,
   onDisableTag: PropTypes.func.isRequired,
   onNewTagClick: PropTypes.func.isRequired,
