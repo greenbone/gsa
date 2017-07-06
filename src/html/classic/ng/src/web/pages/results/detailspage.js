@@ -338,18 +338,16 @@ const Details = ({entity, ...props}) => {
         title={_('Tags')}
       >
         <Divider>
-          {entity.user_tags.map(tag => {
-            return (
-              <DetailsLink
-                legacy
-                key={tag.id}
-                id={tag.id}
-                type="tag"
-              >
-                {tag.name + '=' + tag.value}
-              </DetailsLink>
-            );
-          })}
+          {entity.user_tags.map(tag => (
+            <DetailsLink
+              legacy
+              key={tag.id}
+              id={tag.id}
+              type="tag"
+            >
+              {tag.name + '=' + tag.value}
+            </DetailsLink>
+          ))}
         </Divider>
       </DetailsBlock>
 
@@ -367,14 +365,12 @@ const Details = ({entity, ...props}) => {
           width="15px">
           {
             entity.overrides.filter(override => override.isActive())
-              .map(override => {
-                return (
-                  <Override
-                    key={override.id}
-                    override={override}
-                  />
-                );
-              })
+              .map(override => (
+                <Override
+                  key={override.id}
+                  override={override}
+                />
+              ))
           }
         </Divider>
       </DetailsBlock>
@@ -388,14 +384,12 @@ const Details = ({entity, ...props}) => {
           width="15px">
           {
             entity.notes.filter(note => note.isActive())
-              .map(note => {
-                return (
-                  <Note
-                    key={note.id}
-                    note={note}
-                  />
-                );
-              })
+              .map(note => (
+                <Note
+                  key={note.id}
+                  note={note}
+                />
+              ))
           }
         </Divider>
       </DetailsBlock>

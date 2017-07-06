@@ -1,5 +1,10 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/results/detailspage.js: Use shorter
+	notation for arrow functions in map to create list of components.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/actions.js: Code cleanup.
 
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
