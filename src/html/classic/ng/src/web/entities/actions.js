@@ -35,10 +35,14 @@ import SelectionType from '../utils/selectiontype.js';
 import EntitySelection from './selection.js';
 
 
-export const EntityActions = props => {
-  let {selectionType, entity, onEntitySelected, onEntityDeselected,
-    actionsComponent, ...other} = props;
-
+const EntityActions = ({
+  actionsComponent,
+  entity,
+  selectionType,
+  onEntityDeselected,
+  onEntitySelected,
+  ...other,
+}) => {
   if (!is_defined(actionsComponent) &&
     selectionType !== SelectionType.SELECTION_USER) {
     return null;
