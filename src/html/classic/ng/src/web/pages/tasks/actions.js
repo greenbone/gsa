@@ -47,45 +47,45 @@ import StopIcon from './icons/stopicon.js';
 const Actions = ({
     entity,
     links,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEditTaskClick,
-    onImportReportClick,
-    onResumeTaskClick,
-    onStartTaskClick,
-    onStopTaskClick,
+    onDeleteTaskClick,
+    onDownloadTaskClick,
+    onCloneTaskClick,
+    onTaskEditClick,
+    onReportImportClick,
+    onTaskResumeClick,
+    onTaskStartClick,
+    onTaskStopClick,
   }, {capabilities}) => {
   return (
     <IconDivider flex align={['center', 'center']}>
 
       {is_defined(entity.schedule) ?
         <ScheduleIcon task={entity} links={links} /> :
-        <StartIcon task={entity} onClick={onStartTaskClick}/>
+        <StartIcon task={entity} onClick={onTaskStartClick}/>
       }
 
-      <ImportReportIcon task={entity} onClick={onImportReportClick}/>
+      <ImportReportIcon task={entity} onClick={onReportImportClick}/>
 
-      <StopIcon task={entity} onClick={onStopTaskClick}/>
+      <StopIcon task={entity} onClick={onTaskStopClick}/>
 
-      <ResumeIcon task={entity} onClick={onResumeTaskClick}/>
+      <ResumeIcon task={entity} onClick={onTaskResumeClick}/>
 
       <TrashIcon
         entity={entity}
         name="task"
-        onClick={onEntityDelete}/>
+        onClick={onDeleteTaskClick}/>
       <EditIcon
         entity={entity}
         name="task"
-        onClick={onEditTaskClick}/>
+        onClick={onTaskEditClick}/>
       <CloneIcon
         entity={entity}
         name="task"
-        onClick={onEntityClone}/>
+        onClick={onCloneTaskClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Task')}
-        onClick={onEntityDownload}
+        onClick={onDownloadTaskClick}
       />
     </IconDivider>
   );
@@ -94,14 +94,14 @@ const Actions = ({
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onEditTaskClick: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onImportReportClick: PropTypes.func,
-  onResumeTaskClick: PropTypes.func,
-  onStartTaskClick: PropTypes.func,
-  onStopTaskClick: PropTypes.func,
+  onCloneTaskClick: PropTypes.func.isRequired,
+  onDeleteTaskClick: PropTypes.func.isRequired,
+  onDownloadTaskClick: PropTypes.func.isRequired,
+  onReportImportClick: PropTypes.func.isRequired,
+  onTaskEditClick: PropTypes.func.isRequired,
+  onTaskResumeClick: PropTypes.func.isRequired,
+  onTaskStartClick: PropTypes.func.isRequired,
+  onTaskStopClick: PropTypes.func.isRequired,
 };
 
 Actions.contextTypes = {
