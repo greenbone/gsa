@@ -390,6 +390,8 @@ class EntitiesContainer extends React.Component {
           filters={filters}
           selectionType={selection_type}
           onChanged={this.reload}
+          onDownloaded={this.handleDownload}
+          onError={this.handleError}
           onFilterChanged={this.load}
           onSortChange={this.handleSortChange}
           onSelectionTypeChange={this.handleSelectionTypeChange}

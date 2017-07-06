@@ -1,5 +1,10 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: Pass download and error
+	handlers down to the child components.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/container.js: Extract the actual
 	download into an own method to remove code duplication.
 
