@@ -38,7 +38,7 @@ import withCache from '../utils/withCache.js';
 
 import Dialog from '../components/dialog/dialog.js';
 
-import Download from '../components/form/download.js';
+import withDownload from '../components/form/withDownload.js';
 
 import Layout from '../components/layout/layout.js';
 
@@ -52,6 +52,7 @@ const exclude_props = [
   'component',
   'gmpname',
   'filtersFilter',
+  'onDownload',
 ];
 
 class EntitiesContainer extends React.Component {
@@ -92,7 +93,6 @@ class EntitiesContainer extends React.Component {
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleDeleteEntity = this.handleDeleteEntity.bind(this);
     this.handleCloneEntity = this.handleCloneEntity.bind(this);
-    this.handleDownload = this.handleDownload.bind(this);
     this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
     this.handleError = this.handleError.bind(this);
     this.handleSaveEntity = this.handleSaveEntity.bind(this);
@@ -229,15 +229,10 @@ class EntitiesContainer extends React.Component {
     }
 
     promise.then(response => {
-      let {data} = response;
-      this.handleDownload({filename, data});
+      const {data} = response;
+      const {onDownload} = this.props;
+      onDownload({filename, data});
     }, this.handleError);
-  }
-
-  handleDownload({filename, data}) {
-    this.download.setFilename(filename);
-    this.download.setData(data);
-    this.download.download();
   }
 
   handleDeleteBulk() {
@@ -297,14 +292,14 @@ class EntitiesContainer extends React.Component {
 
   handleDownloadEntity(entity) {
     let {entities_command} = this;
-    let {gmpname} = this.props;
+    let {gmpname, onDownload} = this.props;
 
     let name = is_array(gmpname) ? gmpname[0] : gmpname;
 
     let filename = name + '-' + entity.id + '.xml';
 
     entities_command.export([entity]).then(response => {
-      this.handleDownload({filename, data: response.data});
+      onDownload({filename, data: response.data});
     }, this.handleError);
   }
 
@@ -375,12 +370,14 @@ class EntitiesContainer extends React.Component {
       selected,
       selection_type,
     } = this.state;
+    const {onDownload} = this.props;
     const {entity_command, entities_command} = this;
     const Component = this.props.component;
     const other = exclude(this.props, key => includes(exclude_props, key));
     return (
       <Layout>
-        <Component {...other}
+        <Component
+          {...other}
           loading={loading}
           entitiesCommand={entities_command}
           entityCommand={entity_command}
@@ -390,7 +387,7 @@ class EntitiesContainer extends React.Component {
           filters={filters}
           selectionType={selection_type}
           onChanged={this.reload}
-          onDownloaded={this.handleDownload}
+          onDownloaded={onDownload}
           onError={this.handleError}
           onFilterChanged={this.load}
           onSortChange={this.handleSortChange}
@@ -406,8 +403,6 @@ class EntitiesContainer extends React.Component {
           showError={this.handleShowError}
           showSuccess={this.handleShowSuccess}
         />
-        <Download ref={ref => this.download = ref}
-          filename={this.download_name}/>
         <Dialog
           width="400px"
           ref={ref => this.notice_dialog = ref}
@@ -429,13 +424,14 @@ EntitiesContainer.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
+  onDownload: PropTypes.func.isRequired,
 };
 
 EntitiesContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-EntitiesContainer = withCache(EntitiesContainer);
+EntitiesContainer = withCache(withDownload(EntitiesContainer));
 
 export const withEntitiesContainer = (component, gmpname, options = {}) => {
   const EntitiesContainerWrapper = props => (

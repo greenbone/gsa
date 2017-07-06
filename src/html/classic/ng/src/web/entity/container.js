@@ -31,6 +31,8 @@ import PropTypes from '../utils/proptypes.js';
 
 import Dialog from '../components/dialog/dialog.js';
 
+import withDownload from '../components/form/withDownload.js';
+
 import Layout from '../components/layout/layout.js';
 
 import NoteDialog from '../pages/notes/dialog.js';
@@ -304,7 +306,7 @@ class EntityContainer extends React.Component {
   render() {
     const {loading, entity} = this.state;
     const Component = this.props.component;
-    const {children, component, gmpname, ...other} = this.props;
+    const {children, component, gmpname, onDownload, ...other} = this.props;
     return (
       <Layout>
         <Component
@@ -319,6 +321,7 @@ class EntityContainer extends React.Component {
           onEnableTag={this.handleEnableTag}
           onDeleteTag={this.handleDeleteTag}
           onDisableTag={this.handleDisableTag}
+          onDownloaded={onDownload}
           onChanged={this.handleChanged}
           {...other}
         />
@@ -346,11 +349,14 @@ class EntityContainer extends React.Component {
 EntityContainer.propTypes = {
   component: PropTypes.component.isRequired,
   gmpname: PropTypes.string.isRequired,
+  onDownload: PropTypes.func.isRequired,
 };
 
 EntityContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
+
+EntityContainer = withDownload(EntityContainer);
 
 export const withEntityContainer = (component, gmpname, options = {}) => {
   const EntityContainerWrapper = props => {

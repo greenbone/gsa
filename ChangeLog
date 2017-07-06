@@ -1,5 +1,13 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/form/withDownload.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entity/container.js: Extract handling of download
+	into an own HOC.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/tasks/actions.js: Update handlers to their
 	new names.
 
