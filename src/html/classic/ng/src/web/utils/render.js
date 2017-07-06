@@ -28,6 +28,8 @@ import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import {is_defined, is_empty, map, shorten, split} from 'gmp/utils.js';
 
+import Wrapper from '../components/layout/wrapper.js';
+
 const log = logger.getLogger('web.render');
 
 /* eslint-disable no-unused-vars */
@@ -185,7 +187,7 @@ export function render_component(Component, props = {}) {
 export function render_children(children) {
   if (React.Children.count(children) > 1) {
     return (
-      <div>{children}</div>
+      <Wrapper>{children}</Wrapper>
     );
   }
   return children;

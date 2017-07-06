@@ -20,46 +20,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
-import Wrapper from '../layout/wrapper.js';
+/**
+ * Component to wrap several child components
+ *
+ * This is required for returning from render methods and will be obsolete
+ * with React 16
+ *
+ * @param {object} props Properties to pass
+ *
+ * @returns {Element} A wrapper element
+ *
+ */
+const Wrapper = props => <div {...props}/>;
 
-import Download from './download.js';
-
-const withDownload = Component => {
-
-  class DownloadWrapper extends React.Component {
-
-    constructor(...args) {
-      super(...args);
-
-      this.handleDownload = this.handleDownload.bind(this);
-    }
-
-    handleDownload({filename, data}) {
-      this.download.setFilename(filename);
-      this.download.setData(data);
-      this.download.download();
-    }
-
-    render() {
-      return (
-        <Wrapper>
-          <Component
-            {...this.props}
-            onDownload={this.handleDownload}
-          />
-          <Download
-            ref={ref => this.download = ref}
-          />
-        </Wrapper>
-      );
-    }
-  }
-
-  return DownloadWrapper;
-};
-
-export default withDownload;
+export default Wrapper;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -41,6 +41,7 @@ import Dialog from '../components/dialog/dialog.js';
 import withDownload from '../components/form/withDownload.js';
 
 import Layout from '../components/layout/layout.js';
+import Wrapper from '../components/layout/wrapper.js';
 
 import CacheProvider from '../components/provider/cacheprovider.js';
 
@@ -375,7 +376,7 @@ class EntitiesContainer extends React.Component {
     const Component = this.props.component;
     const other = exclude(this.props, key => includes(exclude_props, key));
     return (
-      <Layout>
+      <Wrapper>
         <Component
           {...other}
           loading={loading}
@@ -407,7 +408,7 @@ class EntitiesContainer extends React.Component {
           width="400px"
           ref={ref => this.notice_dialog = ref}
         />
-      </Layout>
+      </Wrapper>
     );
   }
 

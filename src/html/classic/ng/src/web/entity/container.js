@@ -34,6 +34,7 @@ import Dialog from '../components/dialog/dialog.js';
 import withDownload from '../components/form/withDownload.js';
 
 import Layout from '../components/layout/layout.js';
+import Wrapper from '../components/layout/wrapper.js';
 
 import NoteDialog from '../pages/notes/dialog.js';
 
@@ -350,7 +351,7 @@ class EntityContainer extends React.Component {
     const Component = this.props.component;
     const {children, component, name, onDownload, ...other} = this.props;
     return (
-      <Layout>
+      <Wrapper>
         <Component
           {...other}
           entity={entity}
@@ -385,7 +386,7 @@ class EntityContainer extends React.Component {
           width="400px"
           ref={ref => this.notice_dialog = ref}
         />
-      </Layout>
+      </Wrapper>
     );
   }
 }

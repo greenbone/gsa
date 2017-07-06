@@ -1,5 +1,17 @@
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/form/withDownload.js,
+	src/html/classic/ng/src/web/components/layout/wrapper.js,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entity/container.js,
+	src/html/classic/ng/src/web/utils/render.js: Add Wrapper component. This
+	component is only for wrapping child components and will be obsolete with
+	React 16. With React 16 components will be allowed to return an array of
+	components.
+
+2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/container.js,
 	src/html/classic/ng/src/web/pages/results/detailspage.js,
 	src/html/classic/ng/src/web/pages/tasks/detailspage.js: Use new HOC function
