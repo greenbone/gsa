@@ -54,7 +54,11 @@ const Ul = glamorous.ul({
   flexDirection: 'row',
 });
 
-const Wrapper = glamorous(Sticky)(
+Ul.displayName = 'StyledUl';
+
+const Wrapper = glamorous(Sticky, {
+  displayName: 'StyledSticky',
+})(
   'menubar',
   {
     backgroundColor: '#393637',

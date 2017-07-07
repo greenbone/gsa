@@ -28,6 +28,8 @@ import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Wrapper from '../layout/wrapper.js';
+
 const Placeholder = glamorous.div(
   ({isSticky, height}) => (
     {
@@ -36,7 +38,9 @@ const Placeholder = glamorous.div(
   ),
 );
 
-const Wrapper = glamorous.div(
+Placeholder.displayName = 'StickyPlaceholder';
+
+const StickyWrapper = glamorous.div(
   ({isSticky}) => isSticky ? 'sticky' : undefined,
   ({isSticky, difference, left, width}) => isSticky ? {
     position: 'fixed',
@@ -47,6 +51,8 @@ const Wrapper = glamorous.div(
     zIndex: 20,
   } : {},
 );
+
+StickyWrapper.displayName = 'StickyWrapper';
 
 class Sticky extends React.Component {
 
@@ -127,21 +133,21 @@ class Sticky extends React.Component {
     );
 
     return (
-      <div>
+      <Wrapper>
         <Placeholder
           isSticky={isSticky}
           height={height}
           innerRef={ref => this.placeholder = ref}>
         </Placeholder>
-        <Wrapper
+        <StickyWrapper
           {...props}
           isSticky={isSticky}
           difference={difference}
           left={left}
           width={width}>
           {element}
-        </Wrapper>
-      </div>
+        </StickyWrapper>
+      </Wrapper>
     );
   }
 }

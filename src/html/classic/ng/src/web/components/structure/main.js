@@ -33,6 +33,8 @@ const Main = glamorous.main(
   }
 );
 
+Main.displayName = 'Main';
+
 export default withLayout(Main);
 
 // vim: set ts=2 sw=2 tw=80:
