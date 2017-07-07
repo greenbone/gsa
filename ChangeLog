@@ -1,5 +1,12 @@
 2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tasks/dialogcontainer.js: Don't handle
+	creating and saving a task in the dialogcontainer directly. Leave it to a
+	onSave handler from the props. The dialog containers have been a bad idea.
+	Instead the handling code should have been extracted to several reusable HOCs.
+
+2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/withEntityComponent.js: Allow to set
 	different handlers for error cases. Also allow to differentiate beteween
 	created and saved (edit and create cases).

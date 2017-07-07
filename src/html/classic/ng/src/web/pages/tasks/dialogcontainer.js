@@ -52,7 +52,6 @@ class TaskDialogContainer extends React.Component {
     this.handleCreateAlert = this.handleCreateAlert.bind(this);
     this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
     this.handleCreateTarget = this.handleCreateTarget.bind(this);
-    this.handleSaveTask = this.handleSaveTask.bind(this);
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
@@ -67,26 +66,6 @@ class TaskDialogContainer extends React.Component {
 
     this.task_dialog.setValue('targets', targets);
     this.task_dialog.setValue('target_id', target.id);
-  }
-
-  handleSaveTask(data) {
-    let {gmp} = this.context;
-    let {onSave} = this.props;
-
-    let promise;
-    if (data && data.id) {
-      promise = gmp.task.save(data);
-    }
-    else {
-      promise = gmp.task.create(data);
-    }
-    return promise.then(response => {
-      let task = response.data;
-      if (onSave) {
-        return onSave(task);
-      }
-      return undefined;
-    });
   }
 
   handleCreateSchedule(data) {
@@ -149,6 +128,7 @@ class TaskDialogContainer extends React.Component {
   }
 
   render() {
+    const {onSave} = this.props;
     return (
       <Layout>
         <TaskDialog
@@ -156,7 +136,7 @@ class TaskDialogContainer extends React.Component {
           onNewAlertClick={this.openAlertDialog}
           onNewTargetClick={this.openTargetDialog}
           onNewScheduleClick={this.openScheduleDialog}
-          onSave={this.handleSaveTask}/>
+          onSave={onSave}/>
         <ScheduleDialog
           title={_('Create new Schedule')}
           ref={ref => this.schedule_dialog = ref}
