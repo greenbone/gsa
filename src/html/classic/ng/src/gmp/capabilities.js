@@ -27,6 +27,7 @@ export class Capabilities {
 
   constructor(element) {
     this._capabilities = new Set();
+    this._has_caps = is_defined(element);
 
     for_each(element, command => {
       this._capabilities.add(command.name.toLowerCase());
@@ -41,6 +42,10 @@ export class Capabilities {
     name = name.toLowerCase();
     let capability = this._capabilities.get(name);
     return is_defined(capability) ? capability : {};
+  }
+
+  areDefined() {
+    return this._has_caps;
   }
 
   has(name) {
