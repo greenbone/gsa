@@ -43,11 +43,12 @@ const ScheduleIcon = ({
     return null;
   }
 
-  if (schedule.user_capabilities.length === 0) {
+  if (schedule.user_capabilities.areDefined() &&
+    schedule.user_capabilities.length === 0) {
     return (
       <Icon
         size={size}
-        img="schedule_inactive.svg"
+        img="scheduled_inactive.svg"
         title={_('Schedule Unavailable. Name: {{name}}, ID: {{id}}',
           {name: schedule.name, id: schedule.id})}/>
     );
