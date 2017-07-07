@@ -109,6 +109,8 @@ ToolBarIcons.propTypes = {
 
 const Page = withTaskComponent({
   onCloned: 'onChanged',
+  onCreated: 'onChanged',
+  onContainerCreated: 'onChanged',
   onDeleted: 'onChanged',
   onSaved: 'onChanged',
   onStarted: 'onChanged',
@@ -116,7 +118,7 @@ const Page = withTaskComponent({
   onResumed: 'onChanged',
   onAdvancedTaskWizardSaved: 'onChanged',
   onModifyTaskWizardSaved: 'onChanged',
-  onTaskWizard: 'onChanged',
+  onTaskWizardSaved: 'onChanged',
   onContainerSaved: 'onChanged',
   onReportImported: 'onChanged',
 })(EntitiesPage);
