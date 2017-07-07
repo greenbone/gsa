@@ -152,7 +152,6 @@ const Row = ({
       <TableData>
         <Layout flex align="space-between">
           <DetailsLink
-            legacy
             type="task"
             id={entity.id}
             textOnly={!links}
