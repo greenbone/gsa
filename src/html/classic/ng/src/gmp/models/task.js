@@ -21,7 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_array, is_string, is_defined, parse_int, map} from '../utils.js';
+import {
+  is_array,
+  is_defined,
+  is_empty,
+  is_string,
+  map,
+  parse_int,
+} from '../utils.js';
 
 import Model from '../model.js';
 
@@ -123,8 +130,7 @@ export class Task extends Model {
       delete elem.scanner;
     }
 
-    if (is_defined(elem.schedule) && is_defined(elem.schedule.id) &&
-      elem.schedule.id.length === 0) {
+    if (is_defined(elem.schedule) && !is_empty(elem.schedule._id)) {
       elem.schedule = new Schedule(elem.schedule);
     }
     else {

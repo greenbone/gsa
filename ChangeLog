@@ -1,5 +1,9 @@
 2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/task.js: Fix parsing Schedule of a Task.
+
+2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/capabilities.js: Allow to check wether the
 	capabilities have been defined. With this change it is possible to
 	differentiate between no capabilities are set and the user has no
