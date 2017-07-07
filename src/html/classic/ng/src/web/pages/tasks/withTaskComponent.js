@@ -33,7 +33,6 @@ import {
   includes_id,
   is_array,
   is_defined,
-  is_empty,
   map,
   select_save_id,
 } from 'gmp/utils.js';
@@ -275,8 +274,8 @@ const withTaskComponent = (mapping = {}) => Component => {
           let sorted_scan_configs = sort_scan_configs(scan_configs);
 
           let schedule_id;
-          if (capabilities.mayOp('get_schedules') &&
-            !is_empty(task.schedule.id)) {
+          if (capabilities.mayAccess('schedules') &&
+            is_defined(task.schedule)) {
             schedule_id = task.schedule.id;
           }
           else {
