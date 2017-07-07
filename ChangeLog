@@ -1,5 +1,10 @@
 2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/page.js: Display medium sized icons at
+	toolbar in details pages.
+
+2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Fix checking
 	if a user may access the task schedule when opening the task edit dialog.
 
