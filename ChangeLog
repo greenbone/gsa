@@ -1,5 +1,10 @@
 2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/scanners/listpage.js: Fix opening edit
+	scanner dialog. Cache must be a Cache instance now.
+
+2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/tasks/listpage.js: Update mapping to allow
 	task creation.
 

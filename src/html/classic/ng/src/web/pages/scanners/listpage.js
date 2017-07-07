@@ -106,9 +106,7 @@ class Page extends React.Component {
     let {entityCommand} = this.props;
 
     if (is_defined(scanner)) {
-      entityCommand.get(scanner, {
-        cache: false,
-      }).then(response => {
+      entityCommand.get(scanner).then(response => {
         scanner = response.data;
         const state = {
           comment: scanner.comment,
@@ -131,7 +129,7 @@ class Page extends React.Component {
       this.scanner_dialog.show({});
     }
 
-    gmp.credentials.getAll({cache: false}).then(credentials => {
+    gmp.credentials.getAll().then(credentials => {
       this.credentials = credentials;
       const credential_id = is_defined(scanner) &&
         is_defined(scanner.credential) ? scanner.credential.id : undefined;
