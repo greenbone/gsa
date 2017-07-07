@@ -1,5 +1,10 @@
 2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/withEntityComponent.js: Allow to override
+	handlers via props.
+
+2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/bar/menubar.js,
 	src/html/classic/ng/src/web/components/sticky/sticky.js,
 	src/html/classic/ng/src/web/components/structure/main.js: Set display names

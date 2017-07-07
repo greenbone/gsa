@@ -162,8 +162,8 @@ const withEntityComponent = (name, mapping) => Component => {
 
       return (
         <Component
-          {...this.props}
           {...handlers}
+          {...this.props}
         />
       );
     }
