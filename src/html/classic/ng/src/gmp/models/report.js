@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'moment';
 
 import {is_defined, parse_float} from '../utils.js';
 
@@ -62,6 +63,9 @@ export class Report extends Model {
 
     ret.type = ret._type;
     ret.content_type = ret._content_type;
+
+    ret.scan_start = moment(elem.scan_start);
+    ret.timestamp = moment(elem.timestamp);
 
     return ret;
   }
