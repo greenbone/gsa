@@ -42,13 +42,20 @@ export const set_handlers = (handlers, props) => {
 };
 
 export const DEFAULT_MAPPING = {
+  onCreate: 'onEntityCreateClick',
+  onCreateError: 'onCreateError',
+  onCreated: 'onCreated',
   onClone: 'onEntityCloneClick',
+  onCloneError: 'onCloneError',
   onCloned: 'onCloned',
   onDelete: 'onEntityDeleteClick',
+  onDeleteError: 'onDeleteError',
   onDeleted: 'onDeleted',
   onSave: 'onEntitySaveClick',
+  onSaveError: 'onSaveError',
   onSaved: 'onSaved',
   onDownload: 'onEntityDownloadClick',
+  onDownloadError: 'onDownloadError',
   onDownloaded: 'onDownloaded',
 };
 
@@ -75,16 +82,16 @@ const withEntityComponent = (name, mapping) => Component => {
     }
 
     handleEntityDelete(entity) {
-      const {onDeleted} = mapping;
-      const {onError} = this.props;
+      const {onDeleted, onDeleteError} = mapping;
+      const onError = this.props[onDeleteError];
       const onSuccess = this.props[onDeleted];
 
       return this.cmd.delete(entity).then(onSuccess, onError);
     }
 
     handleEntityClone(entity) {
-      const {onCloned} = mapping;
-      const {onError} = this.props;
+      const {onCloned, onCloneError} = mapping;
+      const onError = this.props[onCloneError];
       const onSuccess = this.props[onCloned];
 
       return this.cmd.clone(entity).then(onSuccess, onError);
@@ -92,14 +99,19 @@ const withEntityComponent = (name, mapping) => Component => {
 
     handleEntitySave(data) {
       let promise;
-      const {onSaved} = mapping;
-      const {onError} = this.props;
-      const onSuccess = this.props[onSaved];
+      let onSuccess;
+      let onError;
 
       if (is_defined(data.id)) {
+        const {onSaved, onSaveError} = mapping;
+        onError = this.props[onSaveError];
+        onSuccess = this.props[onSaved];
         promise = this.cmd.save(data);
       }
       else {
+        const {onCreated, onCreateError} = mapping;
+        onError = this.props[onCreateError];
+        onSuccess = this.props[onCreated];
         promise = this.cmd.create(data);
       }
 
@@ -107,8 +119,8 @@ const withEntityComponent = (name, mapping) => Component => {
     }
 
     handleEntityDownload(entity) {
-      const {onDownloaded} = mapping;
-      const {onError} = this.props;
+      const {onDownloaded, onDownloadError} = mapping;
+      const onError = this.props[onDownloadError];
       const onSuccess = this.props[onDownloaded];
 
       const filename = name + '-' + entity.id + '.xml';
@@ -124,6 +136,8 @@ const withEntityComponent = (name, mapping) => Component => {
       const {
         onClone,
         onCloned,
+        onCreate,
+        onCreated,
         onDelete,
         onDeleted,
         onSave,
@@ -135,6 +149,8 @@ const withEntityComponent = (name, mapping) => Component => {
       const handlers = {};
 
       set_handlers(handlers, this.props)(
+        onCreate, onCreated, this.handleEntitySave,
+      )(
         onClone, onCloned, this.handleEntityClone
       )(
         onDelete, onDeleted, this.handleEntityDelete

@@ -1,3 +1,9 @@
+2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entity/withEntityComponent.js: Allow to set
+	different handlers for error cases. Also allow to differentiate beteween
+	created and saved (edit and create cases).
+
 2017-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/tasks/dialog.js: Remove obsolete
