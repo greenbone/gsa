@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _, {short_date} from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -34,11 +35,17 @@ import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
 import TrashIcon from '../../entities/icons/entitytrashicon.js';
 
+import Badge from '../../components/badge/badge.js';
+
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 
+import DetailsLink from '../../components/link/detailslink.js';
+import Link from '../../components/link/link.js';
+
 import ExportIcon from '../../components/icon/exporticon.js';
 import HelpIcon from '../../components/icon/helpicon.js';
+import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import ImportReportIcon from './icons/importreporticon.js';
@@ -112,6 +119,93 @@ const ToolBarIcons = ({
         <ResumeIcon task={entity} onClick={onTaskResumeClick}/>
       </IconDivider>
 
+      <Divider margin="10px">
+        <IconDivider>
+          {is_defined(entity.current_report) &&
+            <DetailsLink
+              legacy
+              type="report"
+              id={entity.current_report.id}
+              title={_('Current Report on Task {{name}} from {{- date}}', {
+                name: entity.name,
+                date: short_date(entity.current_report.scan_start),
+              })}
+            >
+              <Icon
+                img="report.svg"
+              />
+            </DetailsLink>
+          }
+
+          <Badge
+            content={entity.report_count.total}>
+            <Link
+              to="reports"
+              filter={'task_id=' + entity.id}
+              title={_('Total Reports on Task {{name}}', entity)}
+            >
+              <Icon
+                img="report.svg"
+              />
+            </Link>
+          </Badge>
+
+          <Badge
+            content={entity.report_count.finished}>
+            <Link
+              to="reports"
+              filter={'task_id=' + entity.id + ' and status=Done'}
+              title={_('Finished Reports on Task {{name}}', entity)}
+            >
+              <Icon
+                img="report.svg"
+              />
+            </Link>
+          </Badge>
+        </IconDivider>
+
+        <Badge
+          content={entity.result_count}>
+          <Link
+            to="results"
+            filter={'task_id=' + entity.id}
+            title={_('Results on Task {{name}}', entity)}
+          >
+            <Icon
+              img="result.svg"
+            />
+          </Link>
+        </Badge>
+
+        <IconDivider>
+          <Badge
+            content="0">
+            <Link
+              to="notes"
+              filter={'task_id=' + entity.id}
+              title={_('Notes on Task {{name}}', entity)}
+            >
+              <Icon
+                img="note.svg"
+              />
+            </Link>
+          </Badge>
+
+          <Badge
+            content="0">
+            <Link
+              to="overrides"
+              filter={'task_id=' + entity.id}
+              title={_('Overrides on Task {{name}}', entity)}
+            >
+              <Icon
+                img="override.svg"
+              />
+            </Link>
+          </Badge>
+        </IconDivider>
+      </Divider>
+
     </Divider>
   );
 };
@@ -140,10 +234,17 @@ const Details = () => {
 const Page = withTaskComponent({
   onCloned: 'onChanged', // FIXME goto new details page
   onDeleted: 'onChanged', // FIXME goto task list
+  onCreated: 'onChanged', // FIXME goto new details page
   onSaved: 'onChanged',
   onStarted: 'onChanged',
   onStopped: 'onChanged',
   onResumed: 'onChanged',
+  onReportImported: 'onChanged',
+  onContainerCreated: 'onChanged', // FIXME goto new details page
+  onContainerSaved: 'onChanged',
+  onAdvancedTaskWizardSaved: 'onChanged', // FIXME
+  onTaskWizardSaved: 'onChanged', // FIXME
+  onModifyTaskWizardSaved: 'onChanged', // FIXME
 })(EntityPage);
 
 export default withEntityContainer('task', {
