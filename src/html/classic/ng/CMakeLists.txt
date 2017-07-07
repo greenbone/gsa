@@ -162,6 +162,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/certbund/row.js
      ${NG_SRC_DIR}/src/web/pages/certbund/table.js
+     ${NG_SRC_DIR}/src/web/components/badge/badge.js
      ${NG_SRC_DIR}/src/web/components/bar/menubar.js
      ${NG_SRC_DIR}/src/web/components/bar/severitybar.js
      ${NG_SRC_DIR}/src/web/components/bar/statusbar.js
