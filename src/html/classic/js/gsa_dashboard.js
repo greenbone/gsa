@@ -1627,8 +1627,6 @@
     this._createFilterSelector();
 
     this._applySelect2();
-
-    this.resize(); // will also request the data
   };
 
   /**
@@ -3144,6 +3142,8 @@
       });
 
       dashboard.initDisplays();
+      // resize will also request the data
+      dashboard.resize(elem[0].clientHeight, elem[0].clientWidth);
 
       if (elem.data('detached')) {
         $(window).on('resize', gch.detached_chart_resize_listener(dashboard));
