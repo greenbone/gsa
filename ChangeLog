@@ -1,5 +1,11 @@
 2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/schedule.js: Fix parsing schedule
+	next_time and and first_time when no timezone is available. This may result in
+	the wrong timezone beeing applied.
+
+2017-07-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/scanners/listpage.js: Fix opening edit
 	scanner dialog. Cache must be a Cache instance now.
 

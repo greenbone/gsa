@@ -60,9 +60,14 @@ export class Schedule extends Model {
       };
     }
 
-    ret.first_time = moment(ret.first_time).tz(ret.timezone);
+    const has_timezone = is_defined(ret.timezone);
+
+    // FIXME check what's happening during parsing without having a timezone
+    ret.first_time = has_timezone ? moment(ret.first_time).tz(ret.timezone) :
+      moment(ret.first_time);
     ret.next_time = ret.next_time === 'over' ? ret.next_time :
-      moment(ret.next_time).tz(ret.timezone);
+      has_timezone ? moment(ret.next_time).tz(ret.timezone) :
+      moment(ret.next_time);
 
     return ret;
   }
