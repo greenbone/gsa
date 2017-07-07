@@ -86,17 +86,21 @@ const sort_scan_configs = scan_configs => {
 const DEFAULT_MAPPING = {
   onClone: 'onTaskCloneClick',
   onCloned: 'onCloned',
+  onCreate: 'onTaskCreateClick',
+  onCreated: 'onCreated',
+  onCreateError: undefined, // let dialog handle error via returned promise
   onDelete: 'onTaskDeleteClick',
   onDeleted: 'onDeleted',
   onSave: 'onTaskSaveClick',
   onSaved: 'onSaved',
+  onSaveError: undefined, // same as onCreateError
   onDownload: 'onTaskDownloadClick',
   onDownloaded: 'onDownloaded',
-  onCreate: 'onTaskCreateClick',
   onEdit: 'onTaskEditClick',
   onReportImport: 'onReportImportClick',
   onReportImported: 'onReportImported',
   onContainerCreate: 'onContainerTaskCreateClick',
+  onContainerCreated: 'onContainerCreated',
   onContainerSaved: 'onContainerSaved',
   onResume: 'onTaskResumeClick',
   onResumed: 'onResumed',
@@ -150,16 +154,19 @@ const withTaskComponent = (mapping = {}) => Component => {
     }
 
     handleSaveContainerTask(data) {
-      const {onContainerSaved} = mapping;
       const {onError} = this.props;
-      const onSuccess = this.props[onContainerSaved];
 
       let promise;
+      let onSuccess;
 
-      if (is_defined(data.task)) {
+      if (is_defined(data.id)) {
+        const {onContainerSaved} = mapping;
+        onSuccess = this.props[onContainerSaved];
         promise = this.cmd.saveContainer(data);
       }
       else {
+        const {onContainerCreated} = mapping;
+        onSuccess = this.props[onContainerCreated];
         promise = this.cmd.createContainer(data);
       }
 
@@ -436,10 +443,11 @@ const withTaskComponent = (mapping = {}) => Component => {
     render() {
       const {
         onCreate,
+        onCreated,
         onEdit,
         onSave,
-        onContainerSaved,
         onContainerCreate,
+        onContainerCreated,
         onReportImport,
         onReportImported,
         onResume,
@@ -460,12 +468,18 @@ const withTaskComponent = (mapping = {}) => Component => {
       const has_save = is_defined(onSaveClick);
 
       const handlers = {
-        [onCreate]: has_save ? this.openTaskDialog : undefined,
         [onEdit]: has_save ? this.openTaskDialog : undefined,
       };
 
       set_handlers(handlers, this.props)(
-        onContainerCreate, onContainerSaved, this.openContainerTaskDialog,
+        // this is a bit too complicated:
+        // onCreate opens the dialog which calls onSave handler on the
+        // EntityComponentWrapper that differentiates between create and edit
+        // and calls onCreated afterwards. Therefore onCreated must be set to
+        // allow calling onCreate
+        onCreate, onCreated, this.openTaskDialog,
+      )(
+        onContainerCreate, onContainerCreated, this.openContainerTaskDialog,
       )(
         onReportImport, onReportImported, this.openReportImportDialog,
       )(
@@ -482,6 +496,7 @@ const withTaskComponent = (mapping = {}) => Component => {
       )(
         onTaskWizard, onTaskWizardSaved, this.openTaskWizard,
       );
+
       return (
         <Layout>
           <Component
@@ -519,7 +534,6 @@ const withTaskComponent = (mapping = {}) => Component => {
   }
 
   TaskComponentWrapper.propTypes = {
-    onChanged: PropTypes.func.isRequired,
     onError: PropTypes.func.isRequired,
   };
 
