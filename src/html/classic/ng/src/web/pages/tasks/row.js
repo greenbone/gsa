@@ -35,7 +35,6 @@ import {withEntityRow} from '../../entities/row.js';
 import ObserverIcon from '../../entities/icons/entityobservericon.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
-import StatusBar from '../../components/bar/statusbar.js';
 
 import Comment from '../../components/comment/comment.js';
 
@@ -50,13 +49,10 @@ import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
 import Actions from './actions.js';
+import TaskStatus from './status.js';
 import Trend from './trend.js';
 
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
-
-const task_status = task => {
-  return task.isContainer() ? 'Container' : task.status;
-};
 
 const render_report = (report, links) => {
   if (!is_defined(report)) {
@@ -71,39 +67,6 @@ const render_report = (report, links) => {
       textOnly={!links}
     >
       {date}
-    </DetailsLink>
-  );
-};
-
-const render_status = (entity, links) => {
-  let report_id;
-  if (is_defined(entity.current_report)) {
-    report_id = entity.current_report.id;
-  }
-  else if (is_defined(entity.last_report)) {
-    report_id = entity.last_report.id;
-  }
-  else {
-    report_id = '';
-    links = false;
-  }
-
-  let statusbar = (
-    <StatusBar
-      status={task_status(entity)}
-      progress={entity.progress}/>
-  );
-
-  return (
-    <DetailsLink
-      legacy
-      type="report"
-      id={report_id}
-      result_hosts_only="1"
-      notes="1"
-      textOnly={!links}
-    >
-      {statusbar}
     </DetailsLink>
   );
 };
@@ -190,7 +153,7 @@ const Row = ({
         }
       </TableData>
       <TableData flex align="center">
-        {render_status(entity, links)}
+        <TaskStatus task={entity} links={links}/>
       </TableData>
       <TableData>
         {render_report_total(entity, links)}

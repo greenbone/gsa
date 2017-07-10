@@ -418,6 +418,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/icons/stopicon.js
      ${NG_SRC_DIR}/src/web/pages/tasks/listpage.js
      ${NG_SRC_DIR}/src/web/pages/tasks/row.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/status.js
      ${NG_SRC_DIR}/src/web/pages/tasks/table.js
      ${NG_SRC_DIR}/src/web/pages/tasks/task.js
      ${NG_SRC_DIR}/src/web/pages/tasks/trend.js
