@@ -18589,6 +18589,9 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="string-length (byday) &gt; 0">
+          <xsl:value-of select="byday"/>
+        </xsl:when>
         <xsl:when test="period = 0 and period_months = 0">
           <xsl:value-of select="gsa:i18n ('Once')"/>
         </xsl:when>
@@ -18794,6 +18797,9 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/>:</td>
         <td>
           <xsl:choose>
+            <xsl:when test="string-length (byday) &gt; 0">
+              <xsl:value-of select="byday"/>
+            </xsl:when>
             <xsl:when test="period = 0 and period_months = 0">
               <xsl:value-of select="gsa:i18n ('Once')"/>
             </xsl:when>
