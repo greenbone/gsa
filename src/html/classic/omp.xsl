@@ -19714,7 +19714,7 @@ should not have received it.
     <xsl:call-template name="details-header-icons">
       <xsl:with-param name="cap-type" select="'Scanner'"/>
       <xsl:with-param name="type" select="'scanner'"/>
-      <xsl:with-param name="grey-clone" select="type = 3"/>
+      <xsl:with-param name="grey-clone" select="(type = 3) or (gsa:is_absolute_path (host))"/>
     </xsl:call-template>
     <xsl:call-template name="scanner-icons">
       <xsl:with-param name="scanner_id" select="@id"/>
@@ -20075,7 +20075,7 @@ should not have received it.
             <xsl:with-param name="cap-type" select="'Scanner'"/>
             <xsl:with-param name="type" select="'scanner'"/>
             <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="grey-clone" select="type = 3"/>
+            <xsl:with-param name="grey-clone" select="(type = 3) or (gsa:is_absolute_path (host))"/>
           </xsl:call-template>
           <xsl:call-template name="scanner-icons">
             <xsl:with-param name="scanner_id" select="@id"/>
