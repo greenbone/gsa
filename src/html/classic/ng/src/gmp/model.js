@@ -23,7 +23,14 @@
 
 import moment from 'moment';
 
-import {is_defined, extend, map} from './utils.js';
+import {
+  extend,
+  is_defined,
+  map,
+  parse_yesno,
+  NO_VALUE,
+  YES_VALUE,
+} from './utils.js';
 
 import Capabilities from './capabilities.js';
 
@@ -93,23 +100,28 @@ export class Model {
       });
     }
 
+    copy.in_use = parse_yesno(elem.in_use);
+    copy.writeable = parse_yesno(elem.writeable);
+    copy.orphan = parse_yesno(elem.orphan);
+    copy.active = parse_yesno(elem.active);
+
     return copy;
   }
 
   isInUse() {
-    return this.in_use === '1';
+    return this.in_use === YES_VALUE;
   }
 
   isWriteable() {
-    return this.writable !== '0';
+    return this.writable !== NO_VALUE;
   }
 
   isOrphan() {
-    return this.orphan === '1';
+    return this.orphan === YES_VALUE;
   }
 
   isActive() {
-    return this.active !== '0';
+    return this.active !== NO_VALUE;
   }
 }
 
