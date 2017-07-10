@@ -91,6 +91,13 @@ const ToolBarIcons = ({
           title={_('Task List')}
           page="tasks"
         />
+        {entity.isAlterable() && !entity.isNew() &&
+          <Icon
+            img="alterable.svg"
+            title={_('This is an Alterable Task. Reports may not relate to ' +
+              'current Scan Config or Target!')}
+          />
+        }
       </IconDivider>
 
       <IconDivider>
