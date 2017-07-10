@@ -52,7 +52,7 @@ export function scanner_type_name(scanner_type) {
   else if (scanner_type === SLAVE_SCANNER_TYPE) {
     return _('GMP Scanner');
   }
-  return _('Unknown type ({{type}})', scanner_type);
+  return _('Unknown type ({{type}})', {type: scanner_type});
 }
 
 export class Scanner extends Model {
