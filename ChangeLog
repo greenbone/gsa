@@ -1,5 +1,10 @@
 2017-07-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-scanner-form): Hide all fields
+	except name and comment if the host is a unix socket.
+
+2017-07-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r29003.
 
 	* src/gsad_omp.c (save_scanner_omp): Save only name and comment if

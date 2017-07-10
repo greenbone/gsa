@@ -19664,11 +19664,9 @@ should not have received it.
                 </xsl:choose>
               </td>
             </tr>
-          </xsl:if>
-          <tr>
-            <xsl:call-template name="html-edit-scanner-form-ca-cert"/>
-          </tr>
-          <xsl:if test="not (gsa:is_absolute_path (commands_response/get_scanners_response/scanner/host))">
+            <tr>
+              <xsl:call-template name="html-edit-scanner-form-ca-cert"/>
+            </tr>
             <tr class="form-selection-item-scanner form-selection-item-scanner--1">
               <xsl:call-template name="html-edit-scanner-form-credentials">
                 <xsl:with-param name="type" select="'cc'"/>
@@ -19685,15 +19683,15 @@ should not have received it.
                   select="'form-selection-input-scanner form-selection-input-scanner--2'"/>
               </xsl:call-template>
             </tr>
+            <tr class="form-selection-item-scanner form-selection-item-scanner--4">
+              <xsl:call-template name="html-edit-scanner-form-credentials">
+                <xsl:with-param name="type" select="'up'"/>
+                <xsl:with-param
+                  name="input-classes"
+                  select="'form-selection-input-scanner form-selection-input-scanner--4'"/>
+              </xsl:call-template>
+            </tr>
           </xsl:if>
-          <tr class="form-selection-item-scanner form-selection-item-scanner--4">
-            <xsl:call-template name="html-edit-scanner-form-credentials">
-              <xsl:with-param name="type" select="'up'"/>
-              <xsl:with-param
-                name="input-classes"
-                select="'form-selection-input-scanner form-selection-input-scanner--4'"/>
-            </xsl:call-template>
-          </tr>
           <tr>
             <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Scanner')}"/>
