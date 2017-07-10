@@ -1,3 +1,8 @@
+2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/pages/results/detailspage.js: Move action icons
+	before the result and report list icons.
+
 2017-07-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_gmp.c (save_scanner_gmp): Save only name and comment if

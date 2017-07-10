@@ -224,6 +224,20 @@ const ToolBarIcons = ({
         </LegacyLink>
       </IconDivider>
       <IconDivider>
+        <Icon
+          img="new_note.svg"
+          title={_('Add new Note')}
+          value={entity}
+          onClick={onNewNoteClick}
+        />
+        <Icon
+          img="new_override.svg"
+          title={_('Add new Override')}
+          value={entity}
+          onClick={onNewOverrideClick}
+        />
+      </IconDivider>
+      <IconDivider>
         <DetailsLink
           legacy
           type="task"
@@ -244,20 +258,6 @@ const ToolBarIcons = ({
             title={_('Corresponding Report')}
           />
         </DetailsLink>
-      </IconDivider>
-      <IconDivider>
-        <Icon
-          img="new_note.svg"
-          title={_('Add new Note')}
-          value={entity}
-          onClick={onNewNoteClick}
-        />
-        <Icon
-          img="new_override.svg"
-          title={_('Add new Override')}
-          value={entity}
-          onClick={onNewOverrideClick}
-        />
       </IconDivider>
     </Divider>
   );
