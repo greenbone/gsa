@@ -47,8 +47,8 @@ const TableData = ({
 
 TableData.propTypes = {
   className: PropTypes.string,
-  rowSpan: PropTypes.numberString,
-  colSpan: PropTypes.numberString,
+  rowSpan: PropTypes.numberOrNumberString,
+  colSpan: PropTypes.numberOrNumberString,
 };
 
 export default TableData;
