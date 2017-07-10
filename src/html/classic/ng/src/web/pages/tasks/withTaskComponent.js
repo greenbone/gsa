@@ -58,6 +58,7 @@ import ModifyTaskWizard from '../../wizard/modifytaskwizard.js';
 import TaskWizard from '../../wizard/taskwizard.js';
 
 import withEntityComponent, {
+  handle_promise,
   set_handlers,
 } from '../../entity/withEntityComponent.js';
 
@@ -153,83 +154,72 @@ const withTaskComponent = (mapping = {}) => Component => {
     }
 
     handleSaveContainerTask(data) {
-      const {onError} = this.props;
-
       let promise;
-      let onSuccess;
 
       if (is_defined(data.id)) {
         const {onContainerSaved} = mapping;
-        onSuccess = this.props[onContainerSaved];
         promise = this.cmd.saveContainer(data);
-      }
-      else {
-        const {onContainerCreated} = mapping;
-        onSuccess = this.props[onContainerCreated];
-        promise = this.cmd.createContainer(data);
+        return handle_promise(promise, this.props, onContainerSaved, 'onError');
       }
 
-      return promise.then(onSuccess, onError);
+      const {onContainerCreated} = mapping;
+      promise = this.cmd.createContainer(data);
+      return handle_promise(promise, this.props, onContainerCreated, 'onError');
     }
 
     handleReportImport(data) {
       const {gmp} = this.context;
       const {onReportImported} = mapping;
-      const {onError} = this.props;
-      const onSuccess = this.props[onReportImported];
 
-      return gmp.report.import(data).then(onSuccess, onError);
+      const promise = gmp.report.import(data);
+      return handle_promise(promise, this.props, onReportImported, 'onError');
     }
 
     handleTaskStart(task) {
       const {onStarted} = mapping;
-      const {onError} = this.props;
-      const onSuccess = this.props[onStarted];
 
-      return this.cmd.start(task).then(onSuccess, onError);
+      const promise = this.cmd.start(task);
+      return handle_promise(promise, this.props, onStarted, 'onError');
     }
 
     handleTaskStop(task) {
       const {onStopped} = mapping;
-      const {onError} = this.props;
-      const onSuccess = this.props[onStopped];
 
-      return this.cmd.stop(task).then(onSuccess, onError);
+      const promise =  this.cmd.stop(task);
+      return handle_promise(promise, this.props, onStopped, 'onError');
     }
 
     handleTaskResume(task) {
       const {onResumed} = mapping;
-      const {onError} = this.props;
-      const onSuccess = this.props[onResumed];
 
-      return this.cmd.resume(task).then(onSuccess, onError);
+      const promise = this.cmd.resume(task);
+      return handle_promise(promise, this.props, onResumed, 'onError');
     }
 
     handleSaveTaskWizard(data) {
       const {gmp} = this.context;
-      const {onError} = this.props;
       const {onTaskWizardSaved} = mapping;
-      const onSuccess = this.props[onTaskWizardSaved];
 
-      return gmp.wizard.runQuickFirstScan(data).then(onSuccess, onError);
+      const promise = gmp.wizard.runQuickFirstScan(data);
+      return handle_promise(promise, this.props, onTaskWizardSaved, 'onError');
     }
 
     handleSaveAdvancedTaskWizard(data) {
       const {gmp} = this.context;
-      const {onError} = this.props;
       const {onAdvancedTaskWizardSaved} = mapping;
-      const onSuccess = this.props[onAdvancedTaskWizardSaved];
 
-      return gmp.wizard.runQuickTask(data).then(onSuccess, onError);
+      const promise = gmp.wizard.runQuickTask(data);
+      return handle_promise(promise, this.props, onAdvancedTaskWizardSaved,
+        'onError');
     }
 
     handleSaveModifyTaskWizard(data) {
       const {gmp} = this.context;
-      const {onError} = this.props;
       const {onModifyTaskWizardSaved} = mapping;
-      const onSuccess = this.props[onModifyTaskWizardSaved];
 
-      return gmp.wizard.runModifyTask(data).then(onSuccess, onError);
+      const promise = gmp.wizard.runModifyTask(data);
+      return handle_promise(promise, this.props, onModifyTaskWizardSaved,
+        'onError');
     }
 
     handleTaskWizardNewClick() {

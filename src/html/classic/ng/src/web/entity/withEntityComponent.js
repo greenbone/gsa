@@ -24,7 +24,7 @@
 import React from 'react';
 
 import logger from 'gmp/log.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined, is_function} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -35,10 +35,32 @@ export const set_handlers = (handlers, props) => {
     if (process.env.NODE_ENV !== 'production' && !is_defined(name)) {
       log.error('No name for entity handler set');
     }
-    handlers[name] = is_defined(props[named]) ? handler : undefined;
+    handlers[name] = is_function(named) || is_defined(props[named]) ? handler :
+      undefined;
     return set_handler;
   };
   return set_handler;
+};
+
+
+export const handle_promise = (promise, props, success, error) => {
+  let onSuccess;
+  let onError;
+
+  if (is_function(success)) {
+    onSuccess = (...args) => success(props, ...args);
+  }
+  else {
+    onSuccess = props[success];
+  }
+
+  if (is_function(error)) {
+    onError = (...args) => error(props, ...args);
+  }
+  else {
+    onError = props[error];
+  }
+  return promise.then(onSuccess, onError);
 };
 
 export const DEFAULT_MAPPING = {
@@ -83,53 +105,42 @@ const withEntityComponent = (name, mapping) => Component => {
 
     handleEntityDelete(entity) {
       const {onDeleted, onDeleteError} = mapping;
-      const onError = this.props[onDeleteError];
-      const onSuccess = this.props[onDeleted];
+      const promise = this.cmd.delete(entity);
 
-      return this.cmd.delete(entity).then(onSuccess, onError);
+      return handle_promise(promise, this.props, onDeleted, onDeleteError);
     }
 
     handleEntityClone(entity) {
       const {onCloned, onCloneError} = mapping;
-      const onError = this.props[onCloneError];
-      const onSuccess = this.props[onCloned];
+      const promise = this.cmd.clone(entity);
 
-      return this.cmd.clone(entity).then(onSuccess, onError);
+      return handle_promise(promise, this.props, onCloned, onCloneError);
     }
 
     handleEntitySave(data) {
       let promise;
-      let onSuccess;
-      let onError;
 
       if (is_defined(data.id)) {
         const {onSaved, onSaveError} = mapping;
-        onError = this.props[onSaveError];
-        onSuccess = this.props[onSaved];
         promise = this.cmd.save(data);
-      }
-      else {
-        const {onCreated, onCreateError} = mapping;
-        onError = this.props[onCreateError];
-        onSuccess = this.props[onCreated];
-        promise = this.cmd.create(data);
+        return handle_promise(promise, this.props, onSaved, onSaveError);
       }
 
-      return promise.then(onSuccess, onError);
+      const {onCreated, onCreateError} = mapping;
+      promise = this.cmd.create(data);
+      return handle_promise(promise, this.props, onCreated, onCreateError);
+
     }
 
     handleEntityDownload(entity) {
       const {onDownloaded, onDownloadError} = mapping;
-      const onError = this.props[onDownloadError];
-      const onSuccess = this.props[onDownloaded];
 
-      const filename = name + '-' + entity.id + '.xml';
+      const promise = this.cmd.export(entity).then(response => {
+        const filename = name + '-' + entity.id + '.xml';
+        return {filename, data: response.data};
+      });
 
-      return this.cmd.export([entity]).then(response => {
-        if (is_defined(onSuccess)) {
-          onSuccess({filename, data: response.data});
-        }
-      }, onError);
+      return handle_promise(promise, this.props, onDownloaded, onDownloadError);
     }
 
     render() {

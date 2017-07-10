@@ -231,20 +231,21 @@ const Details = () => {
   );
 };
 
+const goto_task = ({router}, {data}) => router.push('ng/task/' + data.id);
+
 const Page = withTaskComponent({
-  onCloned: 'onChanged', // FIXME goto new details page
-  onDeleted: 'onChanged', // FIXME goto task list
-  onCreated: 'onChanged', // FIXME goto new details page
+  onCloned: goto_task,
+  onDeleted: ({router}) => {
+    router.push('/ng/tasks/');
+  },
+  onCreated: goto_task,
   onSaved: 'onChanged',
   onStarted: 'onChanged',
   onStopped: 'onChanged',
   onResumed: 'onChanged',
   onReportImported: 'onChanged',
-  onContainerCreated: 'onChanged', // FIXME goto new details page
+  onContainerCreated: goto_task,
   onContainerSaved: 'onChanged',
-  onAdvancedTaskWizardSaved: 'onChanged', // FIXME
-  onTaskWizardSaved: 'onChanged', // FIXME
-  onModifyTaskWizardSaved: 'onChanged', // FIXME
 })(EntityPage);
 
 export default withEntityContainer('task', {
