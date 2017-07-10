@@ -1,5 +1,14 @@
 2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/tasks/details.js,
+	src/html/classic/ng/src/web/pages/tasks/detailspage.js,
+	src/html/classic/ng/src/web/pages/tasks/row.js,
+	src/html/classic/ng/src/web/pages/tasks/table.js: Add task detail information
+	and render this new details also at the tasks list page.
+
+2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/utils/render.js: Add a new utility function to
 	render yes no text from values.
 

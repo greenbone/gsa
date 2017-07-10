@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 import withUserName from '../../utils/withUserName.js';
 
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import ObserverIcon from '../../entities/icons/entityobservericon.js';
 
@@ -104,36 +104,35 @@ const render_report_total = (entity, links) => {
 };
 
 const Row = ({
-    entity,
-    links = true,
-    actions,
-    userName,
-    ...props,
-  }) => {
+  entity,
+  links = true,
+  actions,
+  userName,
+  onToggleDetailsClick,
+  ...props,
+}) => {
+  const {scanner} = entity;
   return (
     <TableRow>
       <TableData>
         <Layout flex align="space-between">
-          <DetailsLink
-            type="task"
-            id={entity.id}
-            textOnly={!links}
-          >
+          <RowDetailsToggle
+            name={entity.id}
+            onClick={onToggleDetailsClick}>
             {entity.name}
-          </DetailsLink>
-
+          </RowDetailsToggle>
           {entity.alterable === 1 &&
             <Icon
               size="small"
               img="alterable.svg"
               title={_('Task is alterable')}/>
           }
-          {entity.scanner.type === SLAVE_SCANNER_TYPE &&
+          {is_defined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
             <Icon
               size="small"
               img="sensor.svg"
               title={_('Task is configured to run on slave scanner {{name}}',
-                {name: entity.scanner.name})}/>
+                {name: scanner.name})}/>
           }
           <ObserverIcon
             displayName={_('Task')}
@@ -179,6 +178,7 @@ Row.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   userName: PropTypes.string.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withUserName(Row), Actions);

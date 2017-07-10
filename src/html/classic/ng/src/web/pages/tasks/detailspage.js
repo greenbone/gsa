@@ -27,6 +27,7 @@ import _, {short_date} from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import {render_yesno} from '../../utils/render.js';
 
 import EntityPage from '../../entity/page.js';
 import {withEntityContainer} from '../../entity/container.js';
@@ -39,6 +40,7 @@ import Badge from '../../components/badge/badge.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
+import Layout from '../../components/layout/layout.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
@@ -48,6 +50,11 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
+import InfoTable from '../../components/table/info.js';
+import TableBody from '../../components/table/body.js';
+import TableData from '../../components/table/data.js';
+import TableRow from '../../components/table/row.js';
+
 import ImportReportIcon from './icons/importreporticon.js';
 import NewIconMenu from './icons/newiconmenu.js';
 import ResumeIcon from './icons/resumeicon.js';
@@ -55,6 +62,8 @@ import ScheduleIcon from './icons/scheduleicon.js';
 import StartIcon from './icons/starticon.js';
 import StopIcon from './icons/stopicon.js';
 
+import TaskDetails from './details.js';
+import TaskStatus from './status.js';
 import withTaskComponent from './withTaskComponent.js';
 
 const ToolBarIcons = ({
@@ -225,10 +234,64 @@ ToolBarIcons.propTypes = {
   onTaskResumeClick: PropTypes.func.isRequired,
 };
 
-const Details = () => {
+const Details = ({
+  entity,
+  ...props,
+}) => {
   return (
-    <div/>
+    <Layout flex="column">
+      <InfoTable>
+        <TableBody>
+          <TableRow>
+            <TableData>
+              {_('Name')}
+            </TableData>
+            <TableData>
+              {entity.name}
+            </TableData>
+          </TableRow>
+
+          <TableRow>
+            <TableData>
+              {_('Comment')}
+            </TableData>
+            <TableData>
+              {entity.comment}
+            </TableData>
+          </TableRow>
+
+          <TableRow>
+            <TableData>
+              {_('Alterable')}
+            </TableData>
+            <TableData>
+              {render_yesno(entity.isAlterable())}
+            </TableData>
+          </TableRow>
+
+          <TableRow>
+            <TableData>
+              {_('Status')}
+            </TableData>
+            <TableData>
+              <TaskStatus
+                task={entity}
+              />
+            </TableData>
+          </TableRow>
+        </TableBody>
+      </InfoTable>
+
+      <TaskDetails
+        entity={entity}
+        {...props}
+      />
+    </Layout>
   );
+};
+
+Details.propTypes = {
+  entity: PropTypes.model.isRequired,
 };
 
 const goto_task = ({router}, {data}) => router.push('ng/task/' + data.id);

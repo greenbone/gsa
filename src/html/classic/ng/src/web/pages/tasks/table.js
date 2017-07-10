@@ -30,12 +30,14 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 import Row from './row.js';
+import TaskDetails from './details.js';
 
 const Header = ({onSortChange, links = true, sort = true, actions}) => {
   return (
@@ -99,6 +101,7 @@ Header.propTypes = {
 export default createEntitiesTable({
   emptyTitle: _('No Tasks available'),
   row: Row,
+  rowDetails: withRowDetails('task', 10)(TaskDetails),
   header: withEntitiesHeader(Header),
   footer: createEntitiesFooter({
     span: 10,
