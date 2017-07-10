@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -32,16 +30,14 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import Icon from '../../components/icon/icon.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import DetailsLink from '../../components/link/detailslink.js';
-
 import Sort from '../../components/sortby/sortby.js';
 
-import TableData from '../../components/table/data.js';
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
@@ -106,57 +102,6 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Indent = glamorous.div({
-  display: 'flex',
-  width: '3em',
-});
-
-const ResultsRowDetails = glamorous(({
-    className,
-    entity,
-    links,
-  }) => {
-  return (
-    <TableRow className={className}>
-      <TableData
-        colSpan="7"
-        flex
-        align={['start', 'stretch']}>
-        <Indent/>
-        <ResultDetails
-          links={links}
-          className="result-details"
-          entity={entity}
-        />
-        <Layout flex align={['start', 'start']}>
-          <DetailsLink
-            type="result"
-            id={entity.id}>
-            <Icon img="details.svg"
-              size="small"
-              title={_('Show details')}
-            />
-          </DetailsLink>
-        </Layout>
-      </TableData>
-    </TableRow>
-  );
-})({
-  '&, &:hover': {
-    backgroundColor: 'white !important',
-  },
-
-  '& .result-details': {
-    borderLeft: '2px solid black',
-    paddingLeft: '1em',
-  },
-});
-
-ResultsRowDetails.propTypes = {
-  entity: PropTypes.model,
-  links: PropTypes.bool,
-};
-
 export default createEntitiesTable({
   emptyTitle: _('No results available'),
   footer: createEntitiesFooter({
@@ -165,7 +110,7 @@ export default createEntitiesTable({
   }),
   header: withEntitiesHeader(Header, true),
   row: ResultsRow,
-  rowDetails: ResultsRowDetails,
+  rowDetails: withRowDetails('result', 7)(ResultDetails),
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -1,5 +1,12 @@
 2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/withRowDetails.js,
+	src/html/classic/ng/src/web/pages/results/table.js: Extract the row details
+	formatting into an own HOC.
+
+2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js: Only add submodel elements if an
 	id is set. Parse all preferences in an objects. Parse average duration as
 	moment duration object.

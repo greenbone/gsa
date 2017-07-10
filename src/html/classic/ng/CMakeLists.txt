@@ -273,6 +273,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/row.js
      ${NG_SRC_DIR}/src/web/entities/selection.js
      ${NG_SRC_DIR}/src/web/entities/table.js
+     ${NG_SRC_DIR}/src/web/entities/withRowDetails.js
      ${NG_SRC_DIR}/src/web/entity/block.js
      ${NG_SRC_DIR}/src/web/entity/container.js
      ${NG_SRC_DIR}/src/web/entity/info.js
