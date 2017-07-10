@@ -36,7 +36,7 @@ import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
 import Select2 from '../../components/form/select2.js';
 import TextField from '../../components/form/textfield.js';
-import YesNoRadio, {NO_VALUE} from '../../components/form/yesnoradio.js';
+import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
