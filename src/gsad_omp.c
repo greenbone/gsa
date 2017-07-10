@@ -17690,13 +17690,14 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   const char *scanner_id, *name, *comment, *port, *host, *type, *ca_pub;
   const char *credential_id, *which_cert;
   char *html;
-  int ret, in_use;
+  int ret, is_unix_socket, in_use;
 
   no_redirect = params_value (params, "no_redirect");
   scanner_id = params_value (params, "scanner_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   host = params_value (params, "scanner_host");
+  is_unix_socket = (host && *host == '/') ? 1 : 0;
   port = params_value (params, "port");
   type = params_value (params, "scanner_type");
   which_cert = params_value (params, "which_cert");
@@ -17713,11 +17714,24 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
      CHECK_PARAM_INVALID (port, "Edit Scanner", "edit_scanner");
      CHECK_PARAM_INVALID (type, "Edit Scanner", "edit_scanner");
    }
-  CHECK_PARAM_INVALID (ca_pub, "Edit Scanner", "edit_scanner");
-  CHECK_PARAM_INVALID (credential_id, "Edit Scanner", "edit_scanner");
-  CHECK_PARAM_INVALID (which_cert, "Edit Scanner", "edit_scanner");
+  if (is_unix_socket == 0)
+    {
+      CHECK_PARAM_INVALID (ca_pub, "Edit Scanner", "edit_scanner");
+      CHECK_PARAM_INVALID (credential_id, "Edit Scanner", "edit_scanner");
+      CHECK_PARAM_INVALID (which_cert, "Edit Scanner", "edit_scanner");
+    }
 
-  if (strcmp (which_cert, "new") == 0 || strcmp (which_cert, "default") == 0)
+  if (is_unix_socket)
+    {
+      ret = ompf (credentials, &response, &entity, response_data,
+                  "<modify_scanner scanner_id=\"%s\">"
+                  "<name>%s</name>"
+                  "<comment>%s</comment>"
+                  "</modify_scanner>",
+                  scanner_id, name, comment ?: "");
+    }
+  else if (strcmp (which_cert, "new") == 0
+           || strcmp (which_cert, "default") == 0)
     {
       if (ca_pub == NULL)
         ca_pub = "";
