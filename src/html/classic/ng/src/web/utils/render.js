@@ -197,6 +197,21 @@ export const na = value => {
   return is_empty(value) ? N_A : value;
 };
 
+export const render_yesno = value => {
+  switch (value) {
+    case true:
+    case 1:
+    case '1':
+      return _('Yes');
+    case false:
+    case 0:
+    case '0':
+      return _('No');
+    default:
+      return _('Unkown');
+  }
+};
+
 export function type_name(type, plural = true) {
   if (!plural && type.endsWith('s')) {
     type = type.slice(0, -1);

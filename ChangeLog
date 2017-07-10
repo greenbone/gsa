@@ -1,5 +1,10 @@
 2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/utils/render.js: Add a new utility function to
+	render yes no text from values.
+
+2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/table/data.js: col and rowspan props
 	can be a number or a numberstring (colSpan={10} or colSpan="10").
 
