@@ -1,5 +1,14 @@
 2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/utils.js,
+	src/html/classic/ng/src/web/components/form/yesnoradio.js,
+	src/html/classic/ng/src/web/pages/targets/dialog.js,
+	src/html/classic/ng/src/web/pages/tasks/dialog.js,
+	src/html/classic/ng/src/web/utils/proptypes.js: Change yes no values to int 1
+	and 0.
+
+2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/withEntityComponent.js,
 	src/html/classic/ng/src/web/pages/tasks/detailspage.js,
 	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Allow to pass

@@ -67,7 +67,7 @@ export const icon =  ReactPropTypes.oneOfType([
 ]);
 
 export const yesno = ReactPropTypes.oneOf([
-  "1", "0",
+  1, 0,
 ]);
 
 export const id = ReactPropTypes.string; // TODO improve checking for uuid

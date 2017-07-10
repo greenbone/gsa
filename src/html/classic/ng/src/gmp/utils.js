@@ -178,6 +178,13 @@ export function parse_float(value) {
   return parseFloat(value);
 }
 
+export const YES_VALUE = 1;
+export const NO_VALUE = 0;
+
+export function parse_yesno(value) {
+  return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
+}
+
 const bind_exclude_methods = [
   'constructor',
   'getChildContext',

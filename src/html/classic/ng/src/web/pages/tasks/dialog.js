@@ -25,7 +25,13 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, classes, select_save_id} from 'gmp/utils.js';
+import {
+  classes,
+  is_defined,
+  select_save_id,
+  NO_VALUE,
+  YES_VALUE,
+} from 'gmp/utils.js';
 
 import {
   OPENVAS_SCANNER_TYPE,
@@ -49,10 +55,7 @@ import Select2 from '../../components/form/select2.js';
 import Spinner from '../../components/form/spinner.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Checkbox from '../../components/form/checkbox.js';
-import YesNoRadio, {
-  YES_VALUE,
-  NO_VALUE,
-} from '../../components/form/yesnoradio.js';
+import YesNoRadio from '../../components/form/yesnoradio.js';
 import Text from '../../components/form/text.js';
 import TextField from '../../components/form/textfield.js';
 

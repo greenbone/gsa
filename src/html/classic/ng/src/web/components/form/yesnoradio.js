@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -31,11 +32,8 @@ import Layout from '../layout/layout.js';
 
 import Radio from './radio.js';
 
-export const YES_VALUE = '1';
-export const NO_VALUE = '0';
-
 const YesNoRadio = ({
-    convert,
+    convert = parse_yesno,
     disabled,
     value,
     name,
