@@ -66,6 +66,9 @@ export class Report extends Model {
 
     ret.scan_start = moment(elem.scan_start);
     ret.timestamp = moment(elem.timestamp);
+    if (is_defined(elem.scan_end)) {
+      ret.scan_end = moment(elem.scan_end);
+    }
 
     return ret;
   }
