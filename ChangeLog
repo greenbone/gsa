@@ -1,5 +1,11 @@
 2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/task.js: Only add submodel elements if an
+	id is set. Parse all preferences in an objects. Parse average duration as
+	moment duration object.
+
+2017-07-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js: Use parse_yesno in main model base
 	class.
 

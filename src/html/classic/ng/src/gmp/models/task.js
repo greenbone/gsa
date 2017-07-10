@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import moment from 'moment';
+
 import {
   is_array,
   is_defined,
@@ -28,6 +30,9 @@ import {
   is_string,
   map,
   parse_int,
+  parse_yesno,
+  NO_VALUE,
+  YES_VALUE,
 } from '../utils.js';
 
 import Model from '../model.js';
@@ -49,8 +54,8 @@ function parse_progress(value) {
   return '0';
 }
 
-function parse_yesno(value) {
-  return value === 'yes' ? 1 : 0;
+function parse_yes(value) {
+  return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 
 export class Task extends Model {
@@ -75,18 +80,18 @@ export class Task extends Model {
   }
 
   isAlterable() {
-    return this.isNew() || this.alterable !== 0;
+    return this.isNew() || this.alterable !== NO_VALUE;
   }
 
   isContainer() {
-    return this.target && this.target.id === '';
+    return !is_defined(this.target);
   }
 
   parseProperties(elem) {
     elem = super.parseProperties(elem);
     elem.report_count.total = parse_int(elem.report_count.__text);
     elem.report_count.finished = parse_int(elem.report_count.finished);
-    elem.alterable = parse_int(elem.alterable);
+    elem.alterable = parse_yesno(elem.alterable);
     elem.result_count = parse_int(elem.result_count);
 
     let reports = [
@@ -113,8 +118,11 @@ export class Task extends Model {
       let model = Model;
 
       let data = elem[name];
-      if (is_defined(data)) {
+      if (is_defined(data) && !is_empty(data._id)) {
         elem[name] = new model(data);
+      }
+      else {
+        delete elem[name];
       }
     });
 
@@ -123,7 +131,7 @@ export class Task extends Model {
       delete elem.alert;
     }
 
-    if (is_defined(elem.scanner)) {
+    if (is_defined(elem.scanner) && !is_empty(elem.scanner._id)) {
       elem.scanner = new Scanner(elem.scanner);
     }
     else {
@@ -141,14 +149,16 @@ export class Task extends Model {
 
     elem.progress = parse_progress(elem.progress);
 
+    const prefs = {};
+
     if (elem.preferences && is_array(elem.preferences.preference)) {
       for (const pref of elem.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
-            elem.in_assets = parse_yesno(pref.value);
+            elem.in_assets = parse_yes(pref.value);
             break;
           case 'assets_apply_overrides':
-            elem.apply_overrides = parse_yesno(pref.value);
+            elem.apply_overrides = parse_yes(pref.value);
             break;
           case 'assets_min_qod':
             elem.min_qod = parse_int(pref.value);
@@ -161,9 +171,17 @@ export class Task extends Model {
               5 : parse_int(pref.value);
             break;
           default:
+            prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
             break;
         }
       }
+    }
+
+    elem.preferences = prefs;
+
+    if (is_defined(elem.average_duration)) {
+      elem.average_duration = moment.duration(parse_int(elem.average_duration),
+      'seconds');
     }
 
     return elem;
