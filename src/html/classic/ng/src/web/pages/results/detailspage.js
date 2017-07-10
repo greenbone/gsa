@@ -334,22 +334,24 @@ const Details = ({entity, ...props}) => {
         </InfoTable>
       </DetailsBlock>
 
-      <DetailsBlock
-        title={_('Tags')}
-      >
-        <Divider>
-          {entity.user_tags.map(tag => (
-            <DetailsLink
-              legacy
-              key={tag.id}
-              id={tag.id}
-              type="tag"
-            >
-              {tag.name + '=' + tag.value}
-            </DetailsLink>
-          ))}
-        </Divider>
-      </DetailsBlock>
+      {entity.user_tags.length > 0 &&
+        <DetailsBlock
+          title={_('Tags')}
+        >
+          <Divider>
+            {entity.user_tags.map(tag => (
+              <DetailsLink
+                legacy
+                key={tag.id}
+                id={tag.id}
+                type="tag"
+              >
+                {tag.name + '=' + tag.value}
+              </DetailsLink>
+            ))}
+          </Divider>
+        </DetailsBlock>
+      }
 
       <ResultDetails
         entity={entity}
