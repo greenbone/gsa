@@ -1,5 +1,12 @@
 2017-07-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/task.js,
+	src/html/classic/ng/src/web/pages/tasks/dialog.js,
+	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Change
+	Task.isAlterable method into isChangeable.
+
+2017-07-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/yarn.lock: Update react-script (from create-react-app) to
 	latest release (1.0.10) and put it into dependenciesi (details:

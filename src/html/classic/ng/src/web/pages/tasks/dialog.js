@@ -210,7 +210,7 @@ const TaskDialog = ({
 
   let alert_opts = render_options(alerts);
 
-  let change_task = task ? task.isAlterable() : true;
+  let change_task = task ? task.isChangeable() : true;
 
   let osp_config_id = select_save_id(scan_configs[OSP_SCAN_CONFIG_TYPE],
     config_id);

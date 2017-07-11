@@ -79,8 +79,12 @@ export class Task extends Model {
     return this.status === 'New';
   }
 
+  isChangeable() {
+    return this.isNew() || this.isAlterable();
+  }
+
   isAlterable() {
-    return this.isNew() || this.alterable !== NO_VALUE;
+    return this.alterable !== NO_VALUE;
   }
 
   isContainer() {
