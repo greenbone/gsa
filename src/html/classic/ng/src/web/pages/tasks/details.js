@@ -26,7 +26,7 @@ import React from 'react';
 import moment from 'moment';
 
 import _, {long_date} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined, YES_VALUE} from 'gmp/utils.js';
 
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig.js';
 import {scanner_type_name} from 'gmp/models/scanner.js';
@@ -51,10 +51,11 @@ const TaskDetails = ({
   links = true,
   entity,
 }) => {
-  console.log(entity);
   const {
     alerts,
     apply_overrides,
+    auto_delete,
+    auto_delete_data,
     average_duration,
     config,
     hosts_ordering,
@@ -218,7 +219,7 @@ const TaskDetails = ({
               </TableData>
             </TableRow>
 
-            {in_assets === 1 &&
+            {in_assets === YES_VALUE &&
               <TableRow>
                 <TableData>
                   {_('Apply to Overrides')}
@@ -229,7 +230,7 @@ const TaskDetails = ({
               </TableRow>
             }
 
-            {in_assets === 1 &&
+            {in_assets === YES_VALUE &&
               <TableRow>
                 <TableData>
                   {_('Min QoD')}
@@ -311,6 +312,18 @@ const TaskDetails = ({
                 </TableData>
               </TableRow>
             }
+            <TableRow>
+              <TableData>
+                {_('Auto delete Reports')}
+              </TableData>
+              <TableData>
+                {auto_delete === 'keep' ?
+                  _('Automatically delete oldest reports but always keep ' +
+                    'newest {{nr}} reports', {nr: auto_delete_data}) :
+                  _('Do not automatically delete reports')
+                }
+              </TableData>
+            </TableRow>
           </TableBody>
         </InfoTable>
       </DetailsBlock>
