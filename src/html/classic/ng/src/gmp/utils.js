@@ -259,8 +259,8 @@ export function capitalize_first_letter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export const pluralize_type = type => type === 'info' || type === 'version' ?
-  type : type + 's';
+export const pluralize_type = type => type[type.length - 1] === 's' ||
+  type === 'info' || type === 'version' ? type : type + 's';
 
 export function shorten(text, length = 60) {
   if (!is_defined(text)) {

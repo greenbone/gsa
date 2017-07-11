@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, for_each} from './utils.js';
+import {is_defined, for_each, pluralize_type} from './utils.js';
 
 export class Capabilities {
 
@@ -57,7 +57,7 @@ export class Capabilities {
   }
 
   mayAccess(type) {
-    return this.mayOp('get_' + type);
+    return this.mayOp('get_' + pluralize_type(type));
   }
 
   mayOp(value) {

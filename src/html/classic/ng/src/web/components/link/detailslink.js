@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import {pluralize_type} from 'gmp/utils.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import LegacyLink from './legacylink.js';
@@ -38,7 +36,7 @@ const DetailsLink = ({
   ...props,
 }, {capabilities}) => {
 
-  textOnly = textOnly || !capabilities.mayAccess(pluralize_type(type));
+  textOnly = textOnly || !capabilities.mayAccess(type);
 
   if (legacy) {
     props[type + '_id'] = id;

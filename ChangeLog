@@ -1,5 +1,13 @@
 2017-07-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/capabilities.js,
+	 src/html/classic/ng/src/gmp/utils.js,
+	 src/html/classic/ng/src/web/components/link/detailslink.js: Change
+	 Capabilities.mayAccess to support singular and plural term.
+	 caps.mayAccess('task') && caps.mayAccess('tasks') now return both true.
+
+2017-07-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/link/detailslink.js: Show only text
 	if the current user is not allowed to see the details page.
 
