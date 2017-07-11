@@ -81,8 +81,20 @@ class Badge extends React.Component {
   }
 
   componentDidMount() {
-    const {width} = this.icon.getBoundingClientRect();
-    this.setState({margin: width / 2});
+    this.calcMargin();
+  }
+
+  componentDidUpdate(prev) {
+    if (prev.content !== this.props.content) {
+      this.calcMargin();
+    }
+  }
+
+  calcMargin() {
+    if (is_defined(this.icon)) {
+      const {width} = this.icon.getBoundingClientRect();
+      this.setState({margin: width / 2});
+    }
   }
 
   render() {
