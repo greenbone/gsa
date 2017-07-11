@@ -1,5 +1,10 @@
 2017-07-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/link/detailslink.js: Show only text
+	if the current user is not allowed to see the details page.
+
+2017-07-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/utils.js: Add helper function to get the plural
 	name of an entity type e.g. tasks from task.
 

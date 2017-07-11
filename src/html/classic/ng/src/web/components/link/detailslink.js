@@ -23,35 +23,50 @@
 
 import React from 'react';
 
+import {pluralize_type} from 'gmp/utils.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import LegacyLink from './legacylink.js';
 import Link from './link.js';
 
 const DetailsLink = ({
-    id,
-    legacy = false,
-    type,
-    ...props,
-  }) => {
+  id,
+  legacy = false,
+  type,
+  textOnly = false,
+  ...props,
+}, {capabilities}) => {
+
+  textOnly = textOnly || !capabilities.mayAccess(pluralize_type(type));
+
   if (legacy) {
     props[type + '_id'] = id;
     return (
       <LegacyLink
         {...props}
+        textOnly={textOnly}
         cmd={'get_' + type}
       />
     );
   }
   return (
-    <Link {...props} to={'/' + type + '/' + id}/>
+    <Link
+      {...props}
+      textOnly={textOnly}
+      to={'/' + type + '/' + id}
+    />
   );
 };
 
+DetailsLink.contextTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
+};
 
 DetailsLink.propTypes = {
   id: PropTypes.id.isRequired,
   legacy: PropTypes.bool,
+  textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
 };
 
