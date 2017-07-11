@@ -99,12 +99,19 @@ class EntityContainer extends React.Component {
     log.debug('Loading data for entity', id);
 
     const {gmp} = this.context;
+    const loaders = [this.loadEntity, this.loadPermissions];
+
+    if (is_defined(this.props.loaders)) {
+      loaders.push(...this.props.loaders);
+    }
+
+    const promises = loaders.map(loader => loader.call(this, id));
 
     this.setState({loading: true});
 
     this.clearTimer(); // remove possible running timer
 
-    Promise.all([this.loadEntity(id), this.loadPermissions(id)])
+    Promise.all(promises)
       .then(values => values.reduce((sum, cur) => sum || cur, false))
       .then(refresh => this.startTimer(refresh ? 1 : gmp.autorefresh))
       .catch(err => {
@@ -347,17 +354,14 @@ class EntityContainer extends React.Component {
   }
 
   render() {
-    const {loading, entity, permissions} = this.state;
     const Component = this.props.component;
     const {children, component, name, onDownload, ...other} = this.props;
     return (
       <Wrapper>
         <Component
           {...other}
-          entity={entity}
+          {...this.state}
           entityCommand={this.entity_command}
-          loading={loading}
-          permissions={permissions}
           onAddTag={this.handleAddTag}
           onNewNoteClick={this.openNoteDialog}
           onNewOverrideClick={this.openOverrideDialog}
@@ -393,6 +397,7 @@ class EntityContainer extends React.Component {
 
 EntityContainer.propTypes = {
   component: PropTypes.component.isRequired,
+  loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
   permissionsComponent: PropTypes.componentOrFalse,
   onDownload: PropTypes.func.isRequired,
