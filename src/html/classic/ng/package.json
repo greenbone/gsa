@@ -16,16 +16,6 @@
   "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "GPL-2.0+",
   "main": "src/index.js",
-  "devDependencies": {
-    "babel-eslint": "7.2.3",
-    "eslint": "3.19.0",
-    "eslint-config-react-app": "^1.0.4",
-    "eslint-plugin-flowtype": "2.33.0",
-    "eslint-plugin-import": "2.2.0",
-    "eslint-plugin-jsx-a11y": "5.0.1",
-    "eslint-plugin-react": "7.0.1",
-    "react-scripts": "^1.0.7"
-  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -33,7 +23,7 @@
     "babel-polyfill": "^6.23.0",
     "d3": "^3.5.17",
     "glamor": "^2.20.25",
-    "glamorous": "^3.23.3",
+    "glamorous": "^3.23.5",
     "i18next": "^8.4.0",
     "i18next-browser-languagedetector": "^1.0.0",
     "i18next-xhr-backend": "^1.4.2",
@@ -45,10 +35,11 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router": "^3.0.5",
+    "react-scripts": "^1.0.10",
     "select2": "^4.0.3"
   },
   "scripts": {
-    "test": "NODE_PATH=src ./node_modules/.bin/react-scripts test",
+    "test": "NODE_PATH=src ./node_modules/.bin/react-scripts test --env=jsdom",
     "lint": "NODE_PATH=src ./node_modules/.bin/eslint src",
     "start": "NODE_PATH=src ./node_modules/.bin/react-scripts start",
     "build": "NODE_PATH=src ./node_modules/.bin/react-scripts build",
