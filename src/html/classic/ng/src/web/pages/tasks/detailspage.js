@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _, {short_date} from 'gmp/locale.js';
+import logger from 'gmp/log.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -66,9 +67,13 @@ import TaskDetails from './details.js';
 import TaskStatus from './status.js';
 import withTaskComponent from './withTaskComponent.js';
 
+const log = logger.getLogger('web.pages.task.detailspage');
+
 const ToolBarIcons = ({
   entity,
   links,
+  notes,
+  overrides,
   onTaskDeleteClick,
   onTaskCloneClick,
   onTaskDownloadClick,
@@ -80,6 +85,17 @@ const ToolBarIcons = ({
   onTaskStopClick,
   onTaskResumeClick,
 }, {capabilities}) => {
+
+  let notes_count;
+  if (is_defined(notes)) {
+    notes_count = notes.getCounts().length;
+  }
+
+  let override_count;
+  if (is_defined(overrides)) {
+    override_count = overrides.getCounts().length;
+  }
+
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -195,7 +211,7 @@ const ToolBarIcons = ({
 
         <IconDivider>
           <Badge
-            content="0">
+            content={notes_count}>
             <Link
               to="notes"
               filter={'task_id=' + entity.id}
@@ -208,7 +224,7 @@ const ToolBarIcons = ({
           </Badge>
 
           <Badge
-            content="0">
+            content={override_count}>
             <Link
               to="overrides"
               filter={'task_id=' + entity.id}
@@ -229,6 +245,8 @@ const ToolBarIcons = ({
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  notes: PropTypes.collection,
+  overrides: PropTypes.collection,
   onTaskDeleteClick: PropTypes.func.isRequired,
   onTaskCloneClick: PropTypes.func.isRequired,
   onTaskDownloadClick: PropTypes.func.isRequired,
@@ -318,11 +336,37 @@ const Page = withTaskComponent({
   onContainerSaved: 'onChanged',
 })(EntityPage);
 
+const loader = name => function(id) {
+  const {gmp} = this.context;
+
+  log.debug('Loading notes');
+
+  return gmp[name].getAll({
+    filter: 'task_id=' + id
+  }).then(entities => {
+
+    this.setState({[name]: entities});
+
+    const meta = entities.getMeta();
+
+    if (meta.fromcache && meta.dirty) {
+      log.debug('Forcing reload of', name, meta.dirty);
+      return true;
+    }
+
+    return false;
+  }).catch(err => {
+    this.setState({[name]: undefined});
+    return this.handleError(err);
+  });
+};
+
 export default withEntityContainer('task', {
   sectionIcon: 'task.svg',
   title: _('Task'),
   toolBarIcons: ToolBarIcons,
   details: Details,
+  loaders: [loader('notes'), loader('overrides')],
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
