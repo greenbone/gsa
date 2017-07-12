@@ -56,9 +56,13 @@ class Model {
 
   setProperties(properties) {
     if (is_defined(properties)) {
-      for (let key in properties) {
-        if (properties.hasOwnProperty(key) && !key.startsWith('_')) {
-          this[key] = properties[key];
+      for (const [key, value] of Object.entries(properties)) {
+        if (!key.startsWith('_')) {
+          Object.defineProperty(this, key, {
+            value,
+            writeable: false,
+            enumerable: true,
+          });
         }
       }
     }
