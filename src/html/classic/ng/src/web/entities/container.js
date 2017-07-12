@@ -142,7 +142,7 @@ class EntitiesContainer extends React.Component {
 
         this.startTimer(refresh);
       }, error => {
-        this.setState({loading: false, entities: null});
+        this.setState({loading: false, entities: undefined});
         this.handleError(error);
         return PromiseFactory.reject(error);
       });
