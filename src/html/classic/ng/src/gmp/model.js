@@ -112,7 +112,7 @@ class Model {
     }
 
     copy.in_use = parse_yesno(elem.in_use);
-    copy.writeable = parse_yesno(elem.writeable);
+    copy.writable = parse_yesno(elem.writable);
     copy.orphan = parse_yesno(elem.orphan);
     copy.active = parse_yesno(elem.active);
 
