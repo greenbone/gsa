@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _, {short_date} from 'gmp/locale.js';
-import {is_empty} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
@@ -152,17 +152,16 @@ const Row = ({
         {render_yesno(entity.isActive())}
       </TableData>
       <TableData>
-        {type_name(entity.resource.type)}
+        {is_defined(entity.resource) && type_name(entity.resource.entity_type)}
       </TableData>
       <TableData>
-        {entity.isOrphan() ?
-          <span>{N_A}
-            {!is_empty(entity.resource.id) &&
-              <i> ({entity.resource.id})</i>
-            }
-          </span> :
-          <EntityLink entity={entity.resource}/>
-        }
+        {is_defined(entity.resource) && (
+          entity.isOrphan() ?
+            <span>{N_A}{' '}
+              <i>({entity.resource.id})</i>
+            </span> :
+            <EntityLink entity={entity.resource}/>
+        )}
       </TableData>
       <TableData>
         {short_date(entity.modified)}

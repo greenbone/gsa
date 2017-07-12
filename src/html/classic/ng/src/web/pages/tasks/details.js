@@ -140,7 +140,7 @@ const TaskDetails = ({
                   {_('Type')}
                 </TableData>
                 <TableData>
-                  {scanner_type_name(scanner.type)}
+                  {scanner_type_name(scanner.scanner_type)}
                 </TableData>
               </TableRow>
               {is_defined(config) &&
@@ -159,7 +159,8 @@ const TaskDetails = ({
                   </TableData>
                 </TableRow>
               }
-              {is_defined(config) && config.type === OPENVAS_SCAN_CONFIG_TYPE &&
+              {is_defined(config) &&
+                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                 <TableRow>
                   <TableData>
                     {_('Order for target hosts')}
@@ -169,7 +170,8 @@ const TaskDetails = ({
                   </TableData>
                 </TableRow>
               }
-              {is_defined(config) && config.type === OPENVAS_SCAN_CONFIG_TYPE &&
+              {is_defined(config) &&
+                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                 <TableRow>
                   <TableData>
                     {_('Network Source Interface')}
@@ -179,7 +181,8 @@ const TaskDetails = ({
                   </TableData>
                 </TableRow>
               }
-              {is_defined(config) && config.type === OPENVAS_SCAN_CONFIG_TYPE &&
+              {is_defined(config) &&
+                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                 is_defined(max_checks.name) &&
                 <TableRow>
                   <TableData>
@@ -190,7 +193,8 @@ const TaskDetails = ({
                   </TableData>
                 </TableRow>
               }
-              {is_defined(config) && config.type === OPENVAS_SCAN_CONFIG_TYPE &&
+              {is_defined(config) &&
+                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                 is_defined(max_hosts.name) &&
                 <TableRow>
                   <TableData>

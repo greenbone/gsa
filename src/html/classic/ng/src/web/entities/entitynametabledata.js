@@ -42,7 +42,6 @@ const EntityNameTableData = ({
   entity,
   legacy = false,
   links = true,
-  type,
   displayName,
   userName,
   children,
@@ -60,7 +59,7 @@ const EntityNameTableData = ({
       <Layout flex align="space-between">
         <DetailsLink
           legacy={legacy}
-          type={type}
+          type={entity.entity_type}
           id={entity.id}
           textOnly={!links}>
           {linktext}
@@ -83,7 +82,6 @@ EntityNameTableData.propTypes = {
   entity: PropTypes.model.isRequired,
   legacy: PropTypes.bool,
   links: PropTypes.bool,
-  type: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
 };

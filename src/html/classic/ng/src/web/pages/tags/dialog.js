@@ -205,7 +205,7 @@ export default withDialog(TagDialog, {
   title: _('New Tag'),
   footer: _('Save'),
   defaultState: {
-    active: '1',
+    active: 1,
     comment: '',
     fixed: false,
     name: _('default:unnamed'),

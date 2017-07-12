@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
@@ -113,16 +114,20 @@ const Row = ({
         {permission_description(entity.name, entity.resource)}
       </TableData>
       <TableData>
-        {type_name(entity.resource.type)}
+        {is_defined(entity.resource) && type_name(entity.resource.entity_type)}
       </TableData>
       <TableData>
-        <EntityLink entity={entity.resource}/>
+        {is_defined(entity.resource) &&
+          <EntityLink entity={entity.resource}/>
+        }
       </TableData>
       <TableData>
-        {type_name(entity.subject.type)}
+        {is_defined(entity.subject) && type_name(entity.subject.entity_type)}
       </TableData>
       <TableData>
-        <EntityLink entity={entity.subject}/>
+        {is_defined(entity.subject) &&
+          <EntityLink entity={entity.subject}/>
+        }
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>

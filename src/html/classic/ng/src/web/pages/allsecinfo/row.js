@@ -53,7 +53,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
           <InfoLink
             legacy
             details
-            type={entity.type}
+            type={entity.info_type}
             id={entity.id}
             textOnly={!links}>
             {entity.name}
@@ -61,7 +61,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
           <Comment text={entity.comment}/>
         </TableData>
         <TableData>
-          {secinfo_type(entity.type)}
+          {secinfo_type(entity.info_type)}
         </TableData>
         <TableData>
           {datetime(entity.creation_time)}

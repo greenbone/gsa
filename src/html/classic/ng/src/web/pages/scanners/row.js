@@ -144,19 +144,19 @@ const Row = ({
         displayName={_('Scanner')}
       />
       <TableData>
-        {entity.type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+        {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
           entity.host}
       </TableData>
       <TableData>
-        {entity.type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+        {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
           entity.port}
       </TableData>
       <TableData>
-        {scanner_type_name(entity.type)}
+        {scanner_type_name(entity.scanner_type)}
       </TableData>
       <TableData>
         {is_defined(entity.credential) &&
-          <EntityLink entity={entity.credential} type="credential"/>
+          <EntityLink entity={entity.credential}/>
         }
       </TableData>
       {render_component(actions, {...props, entity})}

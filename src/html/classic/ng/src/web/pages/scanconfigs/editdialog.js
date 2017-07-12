@@ -524,7 +524,8 @@ class EditDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        {!config.isInUse() && config.type === OSP_SCAN_CONFIG_TYPE &&
+        {!config.isInUse() &&
+          config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
           <FormGroup title={_('Scanner')}>
             <Select2
               name="scanner_id"
@@ -536,7 +537,8 @@ class EditDialog extends React.Component {
           </FormGroup>
         }
 
-        {!config.isInUse() && config.type === OPENVAS_SCAN_CONFIG_TYPE &&
+        {!config.isInUse() &&
+          config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
           <NvtFamilies
             config={config}
             families={families}
@@ -555,7 +557,8 @@ class EditDialog extends React.Component {
           />
         }
 
-        {!config.isInUse() && config.type === OPENVAS_SCAN_CONFIG_TYPE &&
+        {!config.isInUse() &&
+          config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
           <NvtPreferences
             config={config}
             preferences={config.preferences.nvt}
