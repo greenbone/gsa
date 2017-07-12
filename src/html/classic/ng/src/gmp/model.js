@@ -122,11 +122,19 @@ class Model {
       delete copy.type;
     }
 
+    if (is_defined(elem.trash)) {
+      copy.trash = parse_yesno(elem.trash);
+    }
+
     return copy;
   }
 
   isInUse() {
     return this.in_use === YES_VALUE;
+  }
+
+  isInTrash() {
+    return this.trash === YES_VALUE;
   }
 
   isWriteable() {
