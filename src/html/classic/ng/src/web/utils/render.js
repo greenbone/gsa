@@ -32,9 +32,6 @@ import Wrapper from '../components/layout/wrapper.js';
 
 const log = logger.getLogger('web.render');
 
-/* eslint-disable no-unused-vars */
-/* add variables for translation message extractions */
-
 const LOG = _('Log');
 const LOW = _('Low');
 const MEDIUM = _('Medium');
@@ -43,8 +40,6 @@ const NONE = _('None');
 const FALSE_POSITIVE = _('False Positive');
 const ERROR = _('Error');
 const DEBUG = _('Debug');
-
-/* eslint-enable no-unused-vars */
 
 export const N_A = _('N/A');
 
@@ -69,42 +64,42 @@ export const cvss_number_format = d3.format('0.1f');
 export function cvss_risk_factor(score, type) {
   if (type === 'classic') {
     if (score === 0) {
-      return 'Log';
+      return LOG;
     }
     if (score > 0 && score <= 2) {
-      return 'Low';
+      return LOW;
     }
     if (score > 2 && score <= 5) {
-      return 'Medium';
+      return MEDIUM;
     }
     if (score > 5 && score <= 10) {
-      return 'High';
+      return HIGH;
     }
-    return 'None';
+    return NONE;
   }
   if (type === 'pci-dss') {
     if (score === 0 && score < 4) {
-      return 'Log';
+      return LOG;
     }
     else if (score >= 4) {
-      return 'High';
+      return HIGH;
     }
-    return 'None';
+    return NONE;
   }
 
   if (score === 0) {
-    return 'Log';
+    return LOG;
   }
   else if (score > 0 && score < 4) {
-    return 'Low';
+    return LOW;
   }
   else if (score >= 4 && score < 7) {
-    return 'Medium';
+    return MEDIUM;
   }
   else if (score >= 7 && score <= 10) {
-    return 'High';
+    return HIGH;
   }
-  return 'None';
+  return NONE;
 }
 
 export function result_cvss_risk_factor(score) {
@@ -112,18 +107,18 @@ export function result_cvss_risk_factor(score) {
     return cvss_risk_factor(score);
   }
   if (score === 0) {
-    return 'Log';
+    return LOG;
   }
   if (score === -1) {
-    return 'False Positive';
+    return FALSE_POSITIVE;
   }
   if (score === -2) {
-    return 'Debug';
+    return DEBUG;
   }
   if (score === -3) {
-    return 'Error';
+    return ERROR;
   }
-  return 'N/A';
+  return N_A;
 }
 
 export function get_severity_levels(type) {
