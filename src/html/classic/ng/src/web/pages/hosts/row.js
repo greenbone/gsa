@@ -110,7 +110,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
         <AssetLink
           legacy
           type="host"
-          asset_id={entity.id}>
+          id={entity.id}>
           {entity.name}
         </AssetLink>
         <Comment text={entity.comment}/>
