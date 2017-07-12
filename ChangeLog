@@ -1,5 +1,10 @@
 2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/parser.js: Provide all parser functions in
+	gmp/parser.js. The parser functions in gmp/utils.js will be removed in future.
+
+2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/bar/severitybar.js,
 	src/html/classic/ng/src/web/utils/render.js: Update threat comparisions after
 	risk factors are translated now.

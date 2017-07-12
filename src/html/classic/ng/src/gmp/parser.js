@@ -22,7 +22,17 @@
  */
 
 import logger from './log.js';
-import {is_defined, is_empty, is_array, parse_float, map} from './utils.js';
+import {
+  is_array,
+  is_defined,
+  is_empty,
+  map,
+  parse_float,
+  parse_int,
+  parse_yesno,
+  NO_VALUE,
+  YES_VALUE,
+} from './utils.js';
 
 import CollectionList from './collectionlist.js';
 import CollectionCounts from './collectioncounts.js';
@@ -32,6 +42,16 @@ import Model from './model.js';
 import Filter from './models/filter.js';
 
 const log = logger.getLogger('gmp.parser');
+
+// export imported parse stuff from utils
+// this code will be moved at this place in future
+export {
+  parse_int,
+  parse_float,
+  parse_yesno,
+  YES_VALUE,
+  NO_VALUE,
+};
 
 export function parse_severity(value) {
   return is_empty(value) ? undefined : parse_float(value);
