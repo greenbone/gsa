@@ -27,7 +27,12 @@ import _, {short_date} from 'gmp/locale.js';
 import {is_empty} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component, type_name, N_A} from '../../utils/render.js';
+import {
+  render_component,
+  render_yesno,
+  type_name,
+  N_A,
+} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import EntityLink from '../../entities/link.js';
@@ -144,7 +149,7 @@ const Row = ({
         {entity.value}
       </TableData>
       <TableData>
-        {entity.isActive() ? _('Yes') : _('No')}
+        {render_yesno(entity.isActive())}
       </TableData>
       <TableData>
         {type_name(entity.resource.type)}

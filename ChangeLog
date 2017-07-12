@@ -1,5 +1,11 @@
 2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/alerts/row.js,
+	src/html/classic/ng/src/web/pages/tags/row.js: Use render_yesno for alerts and
+	tags lists.
+
+2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/link.js: Update EntityLink to reflect
 	Model api changes (added entity_type).
 

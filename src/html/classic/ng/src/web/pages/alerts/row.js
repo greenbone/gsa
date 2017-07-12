@@ -29,7 +29,7 @@ import {is_defined, parse_int} from 'gmp/utils.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {render_component, render_yesno} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -267,7 +267,7 @@ const Row = ({
         {render_filter(entity.filter, capabilities)}
       </TableData>
       <TableData>
-        {entity.isActive() ? _('yes') : _('no')}
+        {render_yesno(entity.active)}
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
