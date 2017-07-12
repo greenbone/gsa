@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DeleteIcon from '../../components/icon/deleteicon.js';
 
-export const EntityDeleteIcon = ({
+const EntityDeleteIcon = ({
     displayName,
     entity,
     name,
@@ -86,3 +86,5 @@ EntityDeleteIcon.contextTypes = {
 };
 
 export default EntityDeleteIcon;
+
+// vim: set ts=2 sw=2 tw=80:

@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import CloneIcon from '../../components/icon/cloneicon.js';
 
-export const EntityCloneIcon = ({
+const EntityCloneIcon = ({
     displayName,
     entity,
     mayClone = true,
@@ -80,3 +80,5 @@ EntityCloneIcon.contextTypes = {
 };
 
 export default EntityCloneIcon;
+
+// vim: set ts=2 sw=2 tw=80:

@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EditIcon from '../../components/icon/editicon.js';
 
-export const EntityEditIcon = ({
+const EntityEditIcon = ({
     displayName,
     entity,
     name,

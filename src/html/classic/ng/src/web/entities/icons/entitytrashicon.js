@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import TrashIcon from '../../components/icon/trashicon.js';
 
-export const EntityTrashIcon = ({
+const EntityTrashIcon = ({
     displayName,
     entity,
     name,
@@ -86,3 +86,5 @@ EntityTrashIcon.contextTypes = {
 };
 
 export default EntityTrashIcon;
+
+// vim: set ts=2 sw=2 tw=80:
