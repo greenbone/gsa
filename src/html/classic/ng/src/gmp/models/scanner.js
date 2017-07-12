@@ -24,7 +24,8 @@
 import moment from 'moment';
 
 import _ from '../locale.js';
-import {is_defined, is_empty, is_string, parse_int} from '../utils.js';
+import {is_defined, is_empty, is_string} from '../utils.js';
+import {parse_int} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -55,11 +56,13 @@ export function scanner_type_name(scanner_type) {
   return _('Unknown type ({{type}})', {type: scanner_type});
 }
 
-export class Scanner extends Model {
+class Scanner extends Model {
+
+  static entity_type = 'scanner';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
-    ret.type = parse_int(ret.type);
+    ret.scanner_type = parse_int(elem.type);
     ret.credential = is_defined(ret.credential) &&
       !is_empty(ret.credential._id) ? new Credential(ret.credential) :
       undefined;

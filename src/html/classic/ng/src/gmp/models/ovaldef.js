@@ -23,9 +23,11 @@
 
 import {extend} from '../utils.js';
 
-import Model from '../model.js';
+import Info from './info.js';
 
-export class Ovaldef extends Model {
+class Ovaldef extends Info {
+
+  static info_type = 'ovaldef';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

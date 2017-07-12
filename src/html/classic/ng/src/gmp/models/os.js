@@ -21,10 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Model from '../model.js';
+import Asset from './asset.js';
 import {parse_severity} from '../parser.js';
 
-export class OperatingSystem extends Model {
+class OperatingSystem extends Asset {
+
+  static asset_type = 'os';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

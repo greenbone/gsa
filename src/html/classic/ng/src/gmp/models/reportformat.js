@@ -25,6 +25,8 @@ import moment from 'moment';
 
 import {is_defined, is_empty, is_object, map} from '../utils.js';
 
+import {parse_yesno, YES_VALUE} from '../parser.js';
+
 import Model from '../model.js';
 
 const get_value = val => {
@@ -61,7 +63,9 @@ class Param {
   }
 }
 
-export class ReportFormat extends Model {
+class ReportFormat extends Model {
+
+  static entity_type = 'report_format';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -83,11 +87,13 @@ export class ReportFormat extends Model {
 
     delete ret.param;
 
+    ret.active = parse_yesno(elem.active);
+
     return ret;
   }
 
   isActive() {
-    return this.active === '1';
+    return this.active === YES_VALUE;
   }
 }
 

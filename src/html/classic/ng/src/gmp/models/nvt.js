@@ -23,8 +23,9 @@
 
 import {extend, is_defined, is_string, map, shallow_copy} from '../utils.js';
 
-import Model from '../model.js';
 import {parse_severity} from '../parser.js';
+
+import Info from './info.js';
 
 const parse_tags = tags => {
   let newtags = {};
@@ -47,7 +48,9 @@ const parse_ids = (ids, no) => {
   return [];
 };
 
-export class Nvt extends Model {
+class Nvt extends Info {
+
+  static info_type = 'nvt';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -58,6 +61,7 @@ export class Nvt extends Model {
     }
 
     ret.oid = ret._oid;
+    ret.id = ret.oid;
     ret.tags = parse_tags(ret.tags);
 
     // several properties use different names in different responses

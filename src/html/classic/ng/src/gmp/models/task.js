@@ -29,11 +29,14 @@ import {
   is_empty,
   is_string,
   map,
+} from '../utils.js';
+
+import {
   parse_int,
   parse_yesno,
   NO_VALUE,
   YES_VALUE,
-} from '../utils.js';
+} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -58,7 +61,9 @@ function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 
-export class Task extends Model {
+class Task extends Model {
+
+  static entity_type = 'task';
 
   isActive() {
     return this.status === 'Running' || this.status === 'Stop Requested' ||
@@ -123,7 +128,7 @@ export class Task extends Model {
 
       let data = elem[name];
       if (is_defined(data) && !is_empty(data._id)) {
-        elem[name] = new model(data);
+        elem[name] = new model(data, name);
       }
       else {
         delete elem[name];
@@ -131,7 +136,7 @@ export class Task extends Model {
     });
 
     if (is_defined(elem.alert)) {
-      elem.alerts = map(elem.alert, alert => new Model(alert));
+      elem.alerts = map(elem.alert, alert => new Model(alert, 'alert'));
       delete elem.alert;
     }
 

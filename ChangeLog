@@ -1,5 +1,49 @@
 2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/model.js,
+	src/html/classic/ng/src/gmp/models/agent.js,
+	src/html/classic/ng/src/gmp/models/alert.js,
+	src/html/classic/ng/src/gmp/models/asset.js,
+	src/html/classic/ng/src/gmp/models/certbund.js,
+	src/html/classic/ng/src/gmp/models/chartpreferences.js,
+	src/html/classic/ng/src/gmp/models/cpe.js,
+	src/html/classic/ng/src/gmp/models/credential.js,
+	src/html/classic/ng/src/gmp/models/cve.js,
+	src/html/classic/ng/src/gmp/models/dfncert.js,
+	src/html/classic/ng/src/gmp/models/filter.js,
+	src/html/classic/ng/src/gmp/models/group.js,
+	src/html/classic/ng/src/gmp/models/host.js,
+	src/html/classic/ng/src/gmp/models/info.js,
+	src/html/classic/ng/src/gmp/models/login.js,
+	src/html/classic/ng/src/gmp/models/note.js,
+	src/html/classic/ng/src/gmp/models/nvt.js,
+	src/html/classic/ng/src/gmp/models/os.js,
+	src/html/classic/ng/src/gmp/models/ovaldef.js,
+	src/html/classic/ng/src/gmp/models/override.js,
+	src/html/classic/ng/src/gmp/models/permission.js,
+	src/html/classic/ng/src/gmp/models/portlist.js,
+	src/html/classic/ng/src/gmp/models/report.js,
+	src/html/classic/ng/src/gmp/models/reportformat.js,
+	src/html/classic/ng/src/gmp/models/result.js,
+	src/html/classic/ng/src/gmp/models/role.js,
+	src/html/classic/ng/src/gmp/models/scanconfig.js,
+	src/html/classic/ng/src/gmp/models/scanner.js,
+	src/html/classic/ng/src/gmp/models/schedule.js,
+	src/html/classic/ng/src/gmp/models/secinfo.js,
+	src/html/classic/ng/src/gmp/models/tag.js,
+	src/html/classic/ng/src/gmp/models/target.js,
+	src/html/classic/ng/src/gmp/models/task.js,
+	src/html/classic/ng/src/gmp/models/user.js,
+	src/html/classic/ng/src/gmp/models/vulnerability.js: Introduce new entity_type
+	property for model instances. With entity_type it will possible to generate
+	links from entities without having to know the details of the current entity.
+	Also update exports, parser imports, coding style and parsing of yes/no
+	values. No model should use a type property directly anymore. Instead it
+	should a property name like ${entity_type}_type e.g. scan_config_type.
+
+2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/note.js: Don't add task and/or result
 	objects if their id is not set.
 

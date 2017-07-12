@@ -25,11 +25,18 @@ import {is_defined, is_empty, extend, map} from '../utils.js';
 
 import List from '../list.js';
 import Model from '../model.js';
-import {parse_severity, parse_text} from '../parser.js';
+import {
+  parse_severity,
+  parse_text,
+  parse_yesno,
+  YES_VALUE,
+} from '../parser.js';
 
 import Nvt from './nvt.js';
 
-export class Note extends Model {
+class Note extends Model {
+
+  static entity_type = 'note';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -56,15 +63,18 @@ export class Note extends Model {
       delete ret.result;
     }
 
+    ret.active = parse_yesno(elem.active);
+    ret.text_excerpt = parse_yesno(elem.text_excerpt);
+
     return ret;
   }
 
   isActive() {
-    return this.active === '1';
+    return this.active === YES_VALUE;
   }
 
   isExcerpt() {
-    return this.text_excerpt === '1';
+    return this.text_excerpt === YES_VALUE;
   }
 }
 

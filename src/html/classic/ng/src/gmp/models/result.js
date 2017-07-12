@@ -27,11 +27,14 @@ import Model from '../model.js';
 import {parse_severity} from '../parser.js';
 
 import Nvt from './nvt.js';
+
 import {parse_notes} from './note.js';
 
 import {parse_overrides} from './override.js';
 
-export class Result extends Model {
+class Result extends Model {
+
+  static entity_type = 'result';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -52,11 +55,11 @@ export class Result extends Model {
     ret.vulnerability = is_defined(ret.name) ? ret.name : ret.nvt.oid;
 
     if (is_defined(elem.report)) {
-      ret.report = new Model(elem.report);
+      ret.report = new Model(elem.report, 'report');
     }
 
     if (is_defined(elem.task)) {
-      ret.task = new Model(elem.task);
+      ret.task = new Model(elem.task, 'task');
     }
 
     if (is_defined(elem.detection) && is_defined(elem.detection.result)) {

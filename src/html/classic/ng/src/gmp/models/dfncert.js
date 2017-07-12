@@ -23,9 +23,11 @@
 
 import {extend} from '../utils.js';
 
-import Model from '../model.js';
+import Info from './info.js';
 
-export class CertBundAdv extends Model {
+class DfnCertAdv extends Info {
+
+  static info_type = 'dfn_cert_adv';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -42,6 +44,6 @@ export class CertBundAdv extends Model {
   }
 }
 
-export default CertBundAdv;
+export default DfnCertAdv;
 
 // vim: set ts=2 sw=2 tw=80:

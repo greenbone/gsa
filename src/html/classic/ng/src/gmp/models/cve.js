@@ -23,9 +23,11 @@
 
 import {extend} from '../utils.js';
 
-import Model from '../model.js';
+import Info from './info.js';
 
-export class Cve extends Model {
+class Cve extends Info {
+
+  static info_type = 'cve';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

@@ -23,6 +23,8 @@
 
 import {is_defined, is_object, for_each} from '../utils.js';
 
+import {parse_yesno, YES_VALUE} from '../parser.js';
+
 import Model from '../model.js';
 
 
@@ -42,14 +44,16 @@ const create_values = data => {
   return values;
 };
 
-export class Alert extends Model {
+class Alert extends Model {
+
+  static entity_type = 'alert';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
-    let types = ['condition', 'method', 'event'];
+    const types = ['condition', 'method', 'event'];
 
-    for (let type of types) {
+    for (const type of types) {
       if (is_object(ret[type])) {
         let data = {};
 
@@ -71,14 +75,16 @@ export class Alert extends Model {
     }
 
     if (is_defined(ret.filter)) {
-      ret.filter = new Model(ret.filter);
+      ret.filter = new Model(ret.filter, 'filter');
     }
+
+    ret.active = parse_yesno(elem.active);
 
     return ret;
   }
 
   isActive() {
-    return this.active === '1';
+    return this.active === YES_VALUE;
   }
 }
 

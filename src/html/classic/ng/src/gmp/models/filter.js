@@ -319,7 +319,9 @@ export class FilterTermList {
  *
  * @extends Model
  */
-export class Filter extends Model {
+class Filter extends Model {
+
+  static entity_type = 'filter';
 
   get length() {
     return this.terms.length;

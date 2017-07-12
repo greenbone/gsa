@@ -25,13 +25,15 @@ import {is_defined, is_empty, map} from '../utils.js';
 
 import Model from '../model.js';
 
-export class User extends Model {
+class User extends Model {
+
+  static entity_type = 'user';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
     ret.roles = map(elem.role, role => {
-      return new Model(role);
+      return new Model(role, 'role');
     });
 
     delete ret.role;
@@ -41,7 +43,7 @@ export class User extends Model {
     }
     else {
       ret.groups = map(elem.groups.group, group => {
-        return new Model(group);
+        return new Model(group, 'group');
       });
     }
 

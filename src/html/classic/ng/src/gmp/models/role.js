@@ -23,7 +23,8 @@
 
 import Model from '../model.js';
 
-export class Role extends Model {
+class Role extends Model {
+  static entity_type = 'role';
 }
 
 export default Role;

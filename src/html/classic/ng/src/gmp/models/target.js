@@ -25,7 +25,7 @@ import Model from '../model.js';
 
 import PortList from './portlist.js';
 
-export class Target extends Model {
+class Target extends Model {
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -36,7 +36,7 @@ export class Target extends Model {
       'esxi_credential'];
 
     for (let cred of creds) {
-      ret[cred] = new Model(ret[cred]);
+      ret[cred] = new Model(ret[cred], 'credential');
     }
 
     return ret;

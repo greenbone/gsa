@@ -21,30 +21,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import moment from 'moment';
-
-import {is_defined, is_empty} from '../utils.js';
+import {is_defined} from '../utils.js';
 
 import Model from '../model.js';
 
-class Tag extends Model {
+class Info extends Model {
 
-  static entity_type = 'tag';
+  static info_type = 'unknown';
+  static entity_type = 'info';
 
-  parseProperties(elem) {
-    let ret = super.parseProperties(elem);
-    ret.modified = moment(elem.modified);
+  constructor(elem, info_type) {
+    super(elem);
 
-    if (is_defined(elem.resource) && !is_empty(elem.resource._id)) {
-      ret.resource = new Model(elem.resource, elem.resource.type);
+    if (!is_defined(this.info_type)) { // only overwrite if not already set
+      this.info_type = is_defined(info_type) ? info_type :
+        this.constructor.info_type;
     }
-    else {
-      delete ret.resource;
-    }
-    return ret;
   }
 }
 
-export default Tag;
+export default Info;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -27,7 +27,9 @@ import Model from '../model.js';
 
 import {is_defined} from '../utils.js';
 
-export class Agent extends Model {
+class Agent extends Model {
+
+  static entity_type = 'agent';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

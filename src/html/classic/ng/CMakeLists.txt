@@ -95,6 +95,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/model.js
      ${NG_SRC_DIR}/src/gmp/models/agent.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js
+     ${NG_SRC_DIR}/src/gmp/models/asset.js
      ${NG_SRC_DIR}/src/gmp/models/certbund.js
      ${NG_SRC_DIR}/src/gmp/models/chartpreferences.js
      ${NG_SRC_DIR}/src/gmp/models/cpe.js
@@ -104,6 +105,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/filter.js
      ${NG_SRC_DIR}/src/gmp/models/group.js
      ${NG_SRC_DIR}/src/gmp/models/host.js
+     ${NG_SRC_DIR}/src/gmp/models/info.js
      ${NG_SRC_DIR}/src/gmp/models/login.js
      ${NG_SRC_DIR}/src/gmp/models/note.js
      ${NG_SRC_DIR}/src/gmp/models/nvt.js

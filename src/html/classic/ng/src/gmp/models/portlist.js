@@ -25,10 +25,13 @@ import Model from '../model.js';
 
 import {is_defined, map} from '../utils.js';
 
-export class PortRange extends Model {
+class PortRange extends Model {
+  static entity_type = 'port_range';
 }
 
-export class PortList extends Model {
+class PortList extends Model {
+
+  static entity_type = 'port_list';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

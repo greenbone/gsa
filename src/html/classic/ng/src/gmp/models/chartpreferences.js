@@ -28,7 +28,9 @@ import Model from '../model.js';
 
 const log = logger.getLogger('gmp.models.chartpreferences');
 
-export class ChartPreferences extends Model {
+// FIXME should this really be a Model class?
+
+class ChartPreferences extends Model {
 
   constructor(element) {
     super(element);

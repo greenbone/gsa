@@ -23,9 +23,11 @@
 
 import {extend} from '../utils.js';
 
-import Model from '../model.js';
+import Info from './info.js';
 
-export class CertBundAdv extends Model {
+class CertBundAdv extends Info {
+
+  static info_type = 'cert_bund_adv';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

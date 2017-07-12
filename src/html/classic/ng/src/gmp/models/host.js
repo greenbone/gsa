@@ -26,7 +26,11 @@ import {is_defined, for_each} from '../utils.js';
 import Model from '../model.js';
 import {parse_severity} from '../parser.js';
 
-export class Host extends Model {
+import Asset from './asset.js';
+
+class Host extends Asset {
+
+  static asset_type = 'host';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -38,6 +42,7 @@ export class Host extends Model {
     let identifiers = {};
     if (is_defined(ret.identifiers)) {
       for_each(ret.identifiers.identifier, identifier => {
+        // FIXME check if Model class fits here
         identifiers[identifier.name] = new Model(identifier);
       });
     }

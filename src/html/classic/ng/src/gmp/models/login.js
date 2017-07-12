@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,9 @@
 
 import Model from '../model.js';
 
-import {parse_int} from '../utils.js';
+import {parse_int} from '../parser.js';
 
-export class Login extends Model {
+class Login extends Model {
 
   parseProperties(elem) {
     return {
@@ -44,3 +44,5 @@ export class Login extends Model {
 }
 
 export default Login;
+
+// vim: set ts=2 sw=2 tw=80:

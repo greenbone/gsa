@@ -27,17 +27,24 @@ import {
   extend,
   is_defined,
   map,
+} from './utils.js';
+
+import {
   parse_yesno,
   NO_VALUE,
   YES_VALUE,
-} from './utils.js';
+} from './parser.js';
 
 import Capabilities from './capabilities.js';
 
-export class Model {
+class Model {
 
-  constructor(element) {
+  static entity_type = 'unknown';
+
+  constructor(element, type) {
     this.init();
+
+    this.entity_type = is_defined(type) ? type : this.constructor.entity_type;
 
     if (element) {
       this.updateFromElement(element);
@@ -96,7 +103,7 @@ export class Model {
 
     if (is_defined(elem.user_tags)) {
       copy.user_tags = map(elem.user_tags.tag, tag => {
-        return new Model(tag);
+        return new Model(tag, 'tag');
       });
     }
 
@@ -104,6 +111,12 @@ export class Model {
     copy.writeable = parse_yesno(elem.writeable);
     copy.orphan = parse_yesno(elem.orphan);
     copy.active = parse_yesno(elem.active);
+
+    if (is_defined(copy.type)) {
+      // type should not be used directly
+      copy._type = copy.type;
+      delete copy.type;
+    }
 
     return copy;
   }

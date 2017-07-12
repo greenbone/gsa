@@ -24,7 +24,7 @@
 import _ from '../locale.js';
 import {extend, is_defined} from '../utils.js';
 
-import Model from '../model.js';
+import Info from './info.js';
 
 export const secinfo_type = (type, unknown = _('N/A')) => {
   if (!is_defined(type)) {
@@ -48,15 +48,21 @@ export const secinfo_type = (type, unknown = _('N/A')) => {
   }
 };
 
-export class SecInfo extends Model {
+class SecInfo extends Info {
+
+  static info_type = 'allinfo';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
     if (elem.allinfo) { // we have an info element
-      extend(ret, elem.allinfo);
+      const {type, ...other} = elem.allinfo; // filter out type
+      extend(ret, other);
+      ret._type = type;
       delete ret.allinfo;
     }
+
+    ret.info_type = ret._type;
 
     return ret;
   }

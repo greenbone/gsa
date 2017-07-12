@@ -27,6 +27,8 @@ import Model from '../model.js';
 
 import {is_defined} from '../utils.js';
 
+import {parse_yesno, NO_VALUE} from '../parser.js';
+
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';
 export const CLIENT_CERTIFICATE_CREDENTIAL_TYPE = 'cc';
@@ -69,7 +71,9 @@ export const esxi_credential_filter = credential =>
 export const snmp_credential_filter = credential =>
   credential.type === SNMP_CREDENTIAL_TYPE;
 
-export class Credential extends Model {
+class Credential extends Model {
+
+  static entity_type = 'credential';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -82,11 +86,14 @@ export class Credential extends Model {
         ret.certificate_info.expiration_time
       );
     }
+
+    ret.allow_insecure = parse_yesno(elem.allow_insecure);
+
     return ret;
   }
 
   isAllowInsecure() {
-    return this.allow_insecure !== '0';
+    return this.allow_insecure !== NO_VALUE;
   }
 }
 

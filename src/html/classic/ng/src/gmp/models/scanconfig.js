@@ -25,9 +25,10 @@ import {
   for_each,
   is_defined,
   is_empty,
-  parse_int,
   shallow_copy,
 } from '../utils.js';
+
+import {parse_int} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -35,14 +36,16 @@ export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =
   'daba56c8-73ec-11df-a475-002264764cea';
 
-export const OSP_SCAN_CONFIG_TYPE = '1';
-export const OPENVAS_SCAN_CONFIG_TYPE = '0';
+export const OSP_SCAN_CONFIG_TYPE = 1;
+export const OPENVAS_SCAN_CONFIG_TYPE = 0;
 
 export const parse_count = count => {
   return !is_empty(count) && count !== '-1' ? parse_int(count) : undefined;
 };
 
-export class ScanConfig extends Model {
+class ScanConfig extends Model {
+
+  static entity_type = 'config'; // TODO should be scan_config in future
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -123,6 +126,8 @@ export class ScanConfig extends Model {
       scanner: scanner_preferences,
       nvt: nvt_preferences,
     };
+
+    ret.scan_config_type = parse_int(elem.type);
 
     return ret;
   }

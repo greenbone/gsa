@@ -23,7 +23,9 @@
 
 import Model from '../model.js';
 
-export class Group extends Model {
+class Group extends Model {
+
+  static entity_type = 'group';
 
 }
 

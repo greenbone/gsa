@@ -22,12 +22,16 @@
  */
 import moment from 'moment';
 
-import {is_defined, parse_float} from '../utils.js';
+import {is_defined} from '../utils.js';
 
 import Model from '../model.js';
-import {parse_severity} from '../parser.js';
+import {parse_severity, parse_float} from '../parser.js';
+
+// FIXME the report xml structure is really ugly
 
 class ReportReport extends Model {
+
+  static entity_type = 'report';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
@@ -40,28 +44,29 @@ class ReportReport extends Model {
 
     ret.severity_class = new Model(ret.severity_class);
 
-    ret.task = new Model(task);
-    ret.task.target = new Model(task.target);
+    ret.task = new Model(task, 'task');
 
     return ret;
   }
 
 }
 
-export class Report extends Model {
+class Report extends Model {
+
+  static entity_type = 'report';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
     ret.report = new ReportReport(ret.report);
-    ret.report_format = new Model(ret.report_format);
-    ret.task = new Model(ret.task);
+    ret.report_format = new Model(ret.report_format, 'report_format');
+    ret.task = new Model(ret.task, 'task');
 
     if (is_defined(ret.severity)) {
       ret.severity = parse_severity(ret.severity);
     }
 
-    ret.type = ret._type;
+    ret.report_type = ret._type; // FIXME is there any other type then 'scan'?
     ret.content_type = ret._content_type;
 
     ret.scan_start = moment(elem.scan_start);

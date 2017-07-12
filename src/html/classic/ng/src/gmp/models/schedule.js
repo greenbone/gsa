@@ -23,11 +23,15 @@
 
 import moment from 'moment';
 
-import {is_defined, is_empty, parse_int} from '../utils.js';
+import {is_defined, is_empty} from '../utils.js';
 
 import Model from '../model.js';
 
-export class Schedule extends Model {
+import {parse_int} from '../parser.js';
+
+class Schedule extends Model {
+
+  static entity_type = 'schedule';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
