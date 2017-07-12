@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, extend, map} from '../utils.js';
+import {is_defined, is_empty, extend, map} from '../utils.js';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -42,12 +42,20 @@ export class Note extends Model {
 
     ret.severity = parse_severity(ret.severity);
 
-    if (is_defined(ret.task)) {
-      ret.task = new Model(ret.task);
+    if (is_defined(ret.task) && !is_empty(ret.task._id)) {
+      ret.task = new Model(ret.task, 'task');
     }
-    if (is_defined(ret.result)) {
-      ret.result = new Model(ret.result);
+    else {
+      delete ret.task;
     }
+
+    if (is_defined(ret.result) && !is_empty(ret.result._id)) {
+      ret.result = new Model(ret.result, 'result');
+    }
+    else {
+      delete ret.result;
+    }
+
     return ret;
   }
 
