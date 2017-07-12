@@ -203,7 +203,7 @@ export const render_yesno = value => {
     case '0':
       return _('No');
     default:
-      return _('Unkown');
+      return _('Unknown');
   }
 };
 
