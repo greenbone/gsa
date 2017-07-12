@@ -60,7 +60,7 @@ class Model {
         if (!key.startsWith('_')) {
           Object.defineProperty(this, key, {
             value,
-            writeable: false,
+            writable: false,
             enumerable: true,
           });
         }
@@ -137,7 +137,7 @@ class Model {
     return this.trash === YES_VALUE;
   }
 
-  isWriteable() {
+  isWritable() {
     return this.writable !== NO_VALUE;
   }
 

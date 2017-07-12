@@ -43,7 +43,7 @@ export const EntityTrashIcon = ({
     displayName = _(capitalize_first_letter(name));
   }
 
-  let active = capabilities.mayDelete(name) && entity.isWriteable() &&
+  let active = capabilities.mayDelete(name) && entity.isWritable() &&
       !entity.isInUse();
   if (!is_defined(title)) {
     if (active) {
@@ -52,7 +52,7 @@ export const EntityTrashIcon = ({
     else if (entity.isInUse()) {
       title = _('{{entity}} is still in use', {entity: displayName});
     }
-    else if (!entity.isWriteable()) {
+    else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
     }
     else if (!capabilities.mayDelete(name)) { // eslint-disable-line no-negated-condition

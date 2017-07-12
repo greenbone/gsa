@@ -46,13 +46,13 @@ export const EntityEditIcon = ({
   const {permissions} = entity;
   const may_edit = capabilities.mayEdit(name) && (!is_defined(permissions) ||
     permissions.mayEdit(name));
-  let active = may_edit && entity.isWriteable();
+  let active = may_edit && entity.isWritable();
 
   if (!is_defined(title)) {
     if (active) {
       title = _('Edit {{entity}}', {entity: displayName});
     }
-    else if (!entity.isWriteable()) {
+    else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
     }
     else if (!may_edit) {  // eslint-disable-line no-negated-condition
