@@ -1,5 +1,10 @@
 2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/permissions/row.js: Change missing
+	isWriteAble method call to isWritAble.
+
+2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js,
 	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
 	src/html/classic/ng/src/web/entities/icons/entityediticon.js,
