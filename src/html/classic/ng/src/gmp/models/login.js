@@ -21,25 +21,21 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Model from '../model.js';
-
 import {parse_int} from '../parser.js';
 
-class Login extends Model {
+class Login {
 
-  parseProperties(elem) {
-    return {
-      autorefresh: parse_int(elem.autorefresh._interval),
-      client_address: elem.client_address,
-      guest: elem.guest,
-      i18n: elem.i18n,
-      role: elem.role,
-      severity: elem.severity,
-      timezone: elem.timezone,
-      token: elem.token,
-      vendor_version: elem.vendor_version,
-      version: elem.version,
-    };
+  constructor(elem) {
+    this.autorefresh =  parse_int(elem.autorefresh._interval);
+    this.client_address =  elem.client_address;
+    this.guest =  elem.guest;
+    this.i18n =  elem.i18n;
+    this.role =  elem.role;
+    this.severity =  elem.severity;
+    this.timezone =  elem.timezone;
+    this.token =  elem.token;
+    this.vendor_version =  elem.vendor_version;
+    this.version =  elem.version;
   }
 }
 

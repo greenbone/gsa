@@ -1,5 +1,11 @@
 2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/login.js: Fix login. Login class is not
+	related to any kind of Model instance. It's only a container for the login
+	info.
+
+2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
 	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
 	src/html/classic/ng/src/web/entities/icons/entityediticon.js,
