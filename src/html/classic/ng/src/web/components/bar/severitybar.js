@@ -27,20 +27,34 @@ import _ from 'gmp/locale.js';
 import {parse_float, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {result_cvss_risk_factor, cvss_number_format} from '../../utils/render.js';
+import {
+  cvss_number_format,
+  result_cvss_risk_factor,
+  N_A,
+} from '../../utils/render.js';
 
 import './css/statusbar.css';
 
 const SeverityBar = ({severity, scale = 10}) => {
-  let cvss = parse_float(severity);
-  let threat = result_cvss_risk_factor(cvss);
-  let title = _(threat);
-  let width = 10 * scale;
-  let fill = is_defined(cvss) && cvss > 0 ? cvss * scale : 0;
-  let style = {width: fill + 'px'};
+  let cvss;
+  let threat;
+  let title;
+
+  if (is_defined(severity)) {
+    cvss = parse_float(severity);
+    threat = result_cvss_risk_factor(cvss);
+    title = _(threat);
+  }
+  else {
+    title = N_A;
+  }
+
+  const width = 10 * scale;
+  const fill = is_defined(cvss) && cvss > 0 ? cvss * scale : 0;
+  const style = {width: fill + 'px'};
 
   let text;
-  if (cvss < 0 || isNaN(cvss)) {
+  if (!is_defined(cvss) || cvss < 0 || isNaN(cvss)) {
     text = title;
   }
   else {
@@ -72,7 +86,7 @@ const SeverityBar = ({severity, scale = 10}) => {
 };
 
 SeverityBar.propTypes = {
-  severity: PropTypes.numberOrNumberString.isRequired,
+  severity: PropTypes.numberOrNumberString,
   scale: PropTypes.number,
 };
 
