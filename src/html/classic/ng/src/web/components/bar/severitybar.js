@@ -23,7 +23,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
 import {parse_float, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -31,6 +30,9 @@ import {
   cvss_number_format,
   result_cvss_risk_factor,
   N_A,
+  LOG,
+  MEDIUM,
+  HIGH,
 } from '../../utils/render.js';
 
 import './css/statusbar.css';
@@ -43,7 +45,7 @@ const SeverityBar = ({severity, scale = 10}) => {
   if (is_defined(severity)) {
     cvss = parse_float(severity);
     threat = result_cvss_risk_factor(cvss);
-    title = _(threat);
+    title = threat;
   }
   else {
     title = N_A;
@@ -62,13 +64,13 @@ const SeverityBar = ({severity, scale = 10}) => {
   }
 
   let css;
-  if (threat === 'Log') {
+  if (threat === LOG) {
     css = 'statusbar gray';
   }
-  else if (threat === 'Medium') {
+  else if (threat === MEDIUM) {
     css = 'statusbar request';
   }
-  else if (threat === 'High') {
+  else if (threat === HIGH) {
     css = 'statusbar error';
   }
   else {

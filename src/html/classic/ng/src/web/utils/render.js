@@ -32,14 +32,14 @@ import Wrapper from '../components/layout/wrapper.js';
 
 const log = logger.getLogger('web.render');
 
-const LOG = _('Log');
-const LOW = _('Low');
-const MEDIUM = _('Medium');
-const HIGH = _('High');
-const NONE = _('None');
-const FALSE_POSITIVE = _('False Positive');
-const ERROR = _('Error');
-const DEBUG = _('Debug');
+export const LOG = _('Log');
+export const LOW = _('Low');
+export const MEDIUM = _('Medium');
+export const HIGH = _('High');
+export const NONE = _('None');
+export const FALSE_POSITIVE = _('False Positive');
+export const ERROR = _('Error');
+export const DEBUG = _('Debug');
 
 export const N_A = _('N/A');
 
