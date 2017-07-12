@@ -24,24 +24,20 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils.js';
+import {is_defined, is_empty, pluralize_type} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
 import LegacyLink from '../components/link/legacylink.js';
 
-export const EntityLink = ({
-    entity,
-    type,
-    ...props,
-  }, {capabilities}) => {
-  const {id, trash, name, permissions, deleted} = entity;
+const EntityLink = ({
+  entity,
+  ...props,
+}, {capabilities}) => {
+  const {id, name, permissions, deleted} = entity;
+  const type = entity.entity_type;
 
-  if (!is_defined(type)) {
-    type = entity.type;
-  }
-
-  if (trash === '1') {
+  if (entity.isInTrash()) {
     return (
       <span>
         {name} (<span>in </span>
@@ -53,13 +49,14 @@ export const EntityLink = ({
     );
   }
 
-  if (is_defined(deleted) && deleted !== '0') {
+  if (is_defined(deleted) && deleted !== '0') { // FIXME is this still used?
     return (
       <b>{_('Orphan')}</b>
     );
   }
 
-  if (is_defined(permissions) && is_empty(permissions)) {
+  if ((is_defined(permissions) && is_empty(permissions)) ||
+    !capabilities.mayAccess(type)) {
     return (
       <span>
         {name}
@@ -71,39 +68,22 @@ export const EntityLink = ({
   let id_name;
   let other = {};
 
-  if (type === 'cve' || type === 'cpe' || type === 'ovaldef' ||
-    type === 'cert_bund_adv' || type === 'dfn_cert_adv') {
+  if (type === 'info') {
     id_name = 'info_id';
-    cmd = 'get_info';
-    other.info_type = type;
-    type = 'info';
+    other.info_type = entity.info_type;
+    if (entity.info_type === 'nvt') {
+      other.details = '1';
+    }
   }
-  else if (type === 'nvt') {
-    id_name = 'info_id';
-    cmd = 'get_info';
-    other.info_type = type;
-    other.details = '1';
-    type = 'info';
-  }
-  else if (type === 'host' || type === 'os') {
+  else if (type === 'asset') {
     id_name = 'asset_id';
-    cmd = 'get_asset';
-    other.asset_type = type;
-    type = 'assets';
+    other.asset_type = entity.asset_type;
   }
   else {
     id_name = type + '_id';
-    cmd = 'get_' + type;
-    type += 's';
   }
 
-  if (!capabilities.mayAccess(type)) {
-    return (
-      <span>
-        {name}
-      </span>
-    );
-  }
+  cmd = 'get_' + pluralize_type(type);
 
   props[id_name] = id;
   return (
@@ -118,7 +98,6 @@ export const EntityLink = ({
 
 EntityLink.propTypes = {
   entity: PropTypes.model.isRequired,
-  type: PropTypes.string,
 };
 
 EntityLink.contextTypes = {
