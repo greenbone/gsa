@@ -111,19 +111,19 @@ class Model {
       });
     }
 
-    copy.in_use = parse_yesno(elem.in_use);
-    copy.writable = parse_yesno(elem.writable);
-    copy.orphan = parse_yesno(elem.orphan);
-    copy.active = parse_yesno(elem.active);
+    const yes_no_props = ['in_use', 'writable', 'orphan', 'active', 'trash'];
+
+    for (const name of yes_no_props) {
+      const prop = elem[name];
+      if (is_defined(prop)) {
+        copy[name] = parse_yesno(prop);
+      }
+    }
 
     if (is_defined(copy.type)) {
       // type should not be used directly
       copy._type = copy.type;
       delete copy.type;
-    }
-
-    if (is_defined(elem.trash)) {
-      copy.trash = parse_yesno(elem.trash);
     }
 
     return copy;
