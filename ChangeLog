@@ -1,5 +1,11 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/permissions.js: Fix rendering when
+	permissions are not defined yet. Add dialog for creating multiple permissions.
+	Open edit permission dialog with disabled resource uuid field.
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/permissions/withPermissionsComponent.js:
 	Allow to open the permission dialog with disabled resource uuid field.
 

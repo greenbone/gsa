@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined, select_save_id} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -35,9 +35,11 @@ import NewIcon from '../components/icon/newicon.js';
 import Icon from '../components/icon/icon.js';
 
 import IconDivider from '../components/layout/icondivider.js';
+import Wrapper from '../components/layout/wrapper.js';
 
 import Section from '../components/section/section.js';
 
+import MultiplePermissionDialog from '../pages/permissions/multipledialog.js';
 import PermissionsTable from '../pages/permissions/table.js';
 import withPermissionsComponent from '../pages/permissions/withPermissionsComponent.js'; // eslint-disable-line max-len
 
@@ -74,52 +76,139 @@ const PermissionIcon = props => {
   );
 };
 
-const EntityPermissions = ({
-  entity,
-  foldable = true,
-  permissions,
-  onPermissionCreateClick,
-  ...props,
-}) => {
-  const extra = (
-    <SectionElements
-      entity={entity}
-      onPermissionCreateClick={onPermissionCreateClick}
-    />
-  );
-  const has_permissions = is_defined(permissions);
-  const count = has_permissions ? permissions.length : 0;
-  return (
-    <Section
-      foldable={foldable}
-      extra={extra}
-      img={<PermissionIcon/>}
-      title={_('Permissions ({{count}})', {count})}
-    >
-      {permissions.length > 0 &&
-        <PermissionsTable
-          {...props}
-          entities={permissions}
-          pagination={false}
-          footer={false}
-          footnote={false}
-        />
-      }
-    </Section>
-  );
-};
+class EntityPermissions extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.state = {};
+
+    this.handleSave = this.handleSave.bind(this);
+    this.openMultiplePermissionDialog = this.openMultiplePermissionDialog
+      .bind(this);
+    this.openPermissionDialog = this.openPermissionDialog.bind(this);
+  }
+
+  openPermissionDialog(permission) {
+    const {onPermissionEditClick} = this.props;
+
+    if (is_defined(onPermissionEditClick)) {
+      onPermissionEditClick(permission, true);
+    }
+  }
+
+  openMultiplePermissionDialog(permission) {
+    const {relatedResourcesLoaders = [], entity} = this.props;
+    const {gmp} = this.context;
+
+    this.dialog.show({
+      entity_type: entity.entity_type,
+      entity_name: entity.name,
+      id: entity.id,
+    });
+
+    Promise
+      .all(relatedResourcesLoaders.map(func => func(entity, gmp)))
+      .then(loaded => {
+        const related = loaded.reduce((sum, cur) => sum.concat(cur), []);
+
+        this.dialog.setValues({
+          related,
+        });
+      });
+
+    gmp.groups.getAll().then(groups => {
+      this.dialog.setValues({
+        groups,
+        group_id: select_save_id(groups),
+      });
+    });
+    gmp.roles.getAll().then(roles => {
+      this.dialog.setValues({
+        roles,
+        role_id: select_save_id(roles),
+      });
+    });
+    gmp.users.getAll().then(users => {
+      this.dialog.setValues({
+        users,
+        user_id: select_save_id(users),
+      });
+    });
+  }
+
+  handleSave(data) {
+    const {onChanged} = this.props;
+    const {gmp} = this.context;
+    return gmp.permissions.create(data).then(onChanged);
+  }
+
+  render() {
+    const {
+      entity,
+      foldable = true,
+      permissions,
+      ...props,
+    } = this.props;
+
+    const extra = (
+      <SectionElements
+        entity={entity}
+        onPermissionCreateClick={this.openMultiplePermissionDialog}
+      />
+    );
+    const has_permissions = is_defined(permissions);
+    const count = has_permissions ? permissions.length : 0;
+
+    return (
+      <Wrapper>
+        <Section
+          foldable={foldable}
+          extra={extra}
+          img={<PermissionIcon/>}
+          title={_('Permissions ({{count}})', {count})}
+        >
+          {count > 0 &&
+            <PermissionsTable
+              {...props}
+              entities={permissions}
+              pagination={false}
+              footer={false}
+              footnote={false}
+              onPermissionEditClick={this.openPermissionDialog}
+            />
+          }
+          <MultiplePermissionDialog
+            ref={ref => this.dialog = ref}
+            onSave={this.handleSave}
+          />
+        </Section>
+      </Wrapper>
+    );
+  }
+}
 
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
   permissions: PropTypes.arrayLike,
+  relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   foldable: PropTypes.bool,
-  onPermissionCreateClick: PropTypes.func.isRequired,
+  onChanged: PropTypes.func.isRequired,
+  onPermissionEditClick: PropTypes.func.isRequired,
+};
+
+EntityPermissions.contextTypes = {
+  gmp: PropTypes.gmp.isRequired,
 };
 
 export default withPermissionsComponent({
   onCloned: 'onChanged',
   onDeleted: 'onChanged',
   onSaved: 'onChanged',
+  onSaveError: 'onError',
+  onDeleteError: 'onError',
+  onDownloadError: 'onError',
+  onCloneError: 'onError',
 })(EntityPermissions);
 
 // vim: set ts=2 sw=2 tw=80:
