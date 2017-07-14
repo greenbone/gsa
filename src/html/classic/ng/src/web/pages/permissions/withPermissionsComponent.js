@@ -65,7 +65,7 @@ const withPermissionsComponent = (mapping = {}) => Component => {
       this.openPermissionDialog = this.openPermissionDialog.bind(this);
     }
 
-    openPermissionDialog(permission) {
+    openPermissionDialog(permission, fixed = false) {
       let {gmp, capabilities} = this.context;
 
       let users_promise;
@@ -109,6 +109,8 @@ const withPermissionsComponent = (mapping = {}) => Component => {
       else {
         state = {};
       }
+
+      state.fixedResource = fixed;
 
       if (capabilities.mayAccess('users')) {
         users_promise = gmp.users.getAll({cache: false});
