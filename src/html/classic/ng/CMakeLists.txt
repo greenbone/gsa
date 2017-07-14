@@ -349,6 +349,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/page.js
      ${NG_SRC_DIR}/src/web/pages/permissions/dialog.js
      ${NG_SRC_DIR}/src/web/pages/permissions/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/permissions/multipledialog.js
      ${NG_SRC_DIR}/src/web/pages/permissions/row.js
      ${NG_SRC_DIR}/src/web/pages/permissions/table.js
      ${NG_SRC_DIR}/src/web/pages/permissions/withPermissionsComponent.js
