@@ -1,5 +1,10 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tasks/detailspage.js: Add resource loaders
+	for task which get called when opening the create multiple permissions dialog.
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/permissions.js: Pass parameters as object
 	to resource loader functions.
 

@@ -25,12 +25,17 @@ import React from 'react';
 
 import _, {short_date} from 'gmp/locale.js';
 import logger from 'gmp/log.js';
+import Promise from 'gmp/promise.js';
 import {is_defined} from 'gmp/utils.js';
+
+import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_yesno} from '../../utils/render.js';
+import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import EntityPage from '../../entity/page.js';
+import EntityPermissions from '../../entity/permissions.js';
 import {withEntityContainer} from '../../entity/container.js';
 
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
@@ -352,6 +357,41 @@ const Page = withTaskComponent({
   onContainerSaved: 'onChanged',
 })(EntityPage);
 
+const TaskPermissions = withComponentDefaults({
+  relatedResourcesLoaders: [
+    ({entity, gmp}) => is_defined(entity.alerts) ?
+      Promise.resolve([...entity.alerts]) : Promise.resolve([]),
+    ({entity, gmp}) => {
+      const resources = [];
+      const names = ['config', 'scanner', 'schedule'];
+
+      for (const name of names) {
+        if (is_defined(entity[name])) {
+          resources.push(entity[name]);
+        }
+      }
+      return Promise.resolve(resources);
+    },
+    ({entity, gmp}) => {
+      if (is_defined(entity.target)) {
+        return gmp.target.get(entity.target).then(response => {
+          const target = response.data;
+          const resources = [target];
+
+          for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
+            const cred = target[name];
+            if (is_defined(cred)) {
+              resources.push(cred);
+            }
+          }
+          return resources;
+        });
+      }
+      return Promise.resolve([]);
+    },
+  ],
+})(EntityPermissions);
+
 const loader = name => function(id) {
   const {gmp} = this.context;
 
@@ -383,6 +423,7 @@ export default withEntityContainer('task', {
   toolBarIcons: ToolBarIcons,
   details: Details,
   loaders: [loader('notes'), loader('overrides')],
+  permissionsComponent: TaskPermissions,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
