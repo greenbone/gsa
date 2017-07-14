@@ -1,5 +1,11 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/layout/divider.js: Use display
+	inline-flex for outer divider html element to be able to use a Divider within
+	inline elments like span or li.
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/permissions.js: Add gmp api to create
 	multiple permissions.
 

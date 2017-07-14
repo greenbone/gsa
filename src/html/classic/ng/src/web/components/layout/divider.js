@@ -55,18 +55,24 @@ DividerComponent.displayName = 'DividerComponent';
 
 DividerComponent = withLayout(DividerComponent);
 
+const DividerContainer = glamorous.div({
+  display: 'inline-flex',
+});
+
+DividerContainer.displayName = 'DividerContainer';
+
 const Divider = ({
   margin = DEFAULT_MARGIN,
   ...props,
 }) => {
   // put Divider into a container div to allow dividers in dividers
   return (
-    <div>
+    <DividerContainer>
       <DividerComponent
         margin={margin}
         flex="row"
         {...props}/>
-    </div>
+    </DividerContainer>
   );
 };
 
