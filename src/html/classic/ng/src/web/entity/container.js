@@ -261,7 +261,7 @@ class EntityContainer extends React.Component {
   handleError(error) {
     log.error(error);
     this.handleShowError(error.message);
-    return Promise.reject();
+    return Promise.reject(error);
   }
 
   handleShowError(error) {
