@@ -1,5 +1,10 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/container.js: Adjust tag dialog title for
+	editing a tag.
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/container.js: Return the actual error
 	from the handleError function. This allows to get the error in chained
 	handlers too.

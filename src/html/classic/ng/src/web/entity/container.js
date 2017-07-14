@@ -339,8 +339,8 @@ class EntityContainer extends React.Component {
         value: t.value,
         comment: t.comment,
         resource_id: t.resource.id,
-        resource_type: t.resource.type,
-      });
+        resource_type: t.resource.entity_type,
+      }, {title: _('Edit Tag {{name}}', tag)});
     });
   }
 
