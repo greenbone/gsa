@@ -1,5 +1,10 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/permissions.js: Pass parameters as object
+	to resource loader functions.
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/container.js: Don't forget to clear the
 	loading time if the component will be removed from the dom.
 

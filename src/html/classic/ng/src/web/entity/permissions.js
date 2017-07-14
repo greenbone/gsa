@@ -108,7 +108,7 @@ class EntityPermissions extends React.Component {
     });
 
     Promise
-      .all(relatedResourcesLoaders.map(func => func(entity, gmp)))
+      .all(relatedResourcesLoaders.map(func => func({entity, gmp})))
       .then(loaded => {
         const related = loaded.reduce((sum, cur) => sum.concat(cur), []);
 
