@@ -169,6 +169,22 @@ const ToolBarIcons = ({
             </DetailsLink>
           }
 
+          {is_defined(entity.last_report) &&
+            <DetailsLink
+              legacy
+              type="report"
+              id={entity.last_report.id}
+              title={_('Last Report on Task {{name}} from {{- date}}', {
+                name: entity.name,
+                date: short_date(entity.last_report.scan_start),
+              })}
+            >
+              <Icon
+                img="report.svg"
+              />
+            </DetailsLink>
+          }
+
           <Badge
             content={entity.report_count.total}>
             <Link
