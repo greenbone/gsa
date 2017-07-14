@@ -71,6 +71,8 @@ export const loader = (name, filter_func) => function(id) {
   });
 };
 
+const permissions_loader = loader('permissions', id => 'resource_uuid=' + id);
+
 class EntityContainer extends React.Component {
 
   constructor(...args) {
@@ -125,16 +127,20 @@ class EntityContainer extends React.Component {
   }
 
   load(id) {
-    log.debug('Loading data for entity', id);
-
     const {gmp} = this.context;
-    const loaders = [this.loadEntity, this.loadPermissions];
+    const {loaders, permissionsComponent} = this.props;
 
-    if (is_defined(this.props.loaders)) {
-      loaders.push(...this.props.loaders);
+    const all_loaders = [this.loadEntity];
+
+    if (permissionsComponent !== false) {
+      all_loaders.push(permissions_loader);
     }
 
-    const promises = loaders.map(loader_func => loader_func.call(this, id));
+    if (is_defined(loaders)) {
+      all_loaders.push(...this.props.loaders);
+    }
+
+    const promises = all_loaders.map(loader_func => loader_func.call(this, id));
 
     this.setState({loading: true});
 
@@ -155,6 +161,8 @@ class EntityContainer extends React.Component {
   }
 
   loadEntity(id) {
+    log.debug('Loading entity', id);
+
     return this.entity_command.get({id}).then(response => {
 
       this.setState({entity: response.data, loading: false});
@@ -168,34 +176,6 @@ class EntityContainer extends React.Component {
     })
     .catch(err => {
       this.setState({entity: undefined});
-      return this.handleError(err);
-    });
-  }
-
-  loadPermissions(id) {
-    if (this.props.permissionsComponent === false) {
-      return Promise.resolve(false);
-    }
-
-    const {gmp} = this.context;
-
-    return gmp.permissions.getAll({
-      filter: 'resource_uuid=' + id
-    }).then(permissions => {
-
-      this.setState({permissions});
-
-      const meta = permissions.getMeta();
-
-      if (meta.fromcache && meta.dirty) {
-        log.debug('Forcing reload of permissions', meta.dirty);
-        return true;
-      }
-
-      return false;
-    })
-    .catch(err => {
-      this.setState({permissions: undefined});
       return this.handleError(err);
     });
   }
