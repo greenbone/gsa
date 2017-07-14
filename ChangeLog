@@ -1,5 +1,10 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/utils.js: Add helper function for checking if
+	sub model is available.
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js: Simplify parsing yes/no values on
 	models. Also only define them on the resulting model if they are defined.
 
