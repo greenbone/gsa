@@ -88,6 +88,10 @@ class EntityContainer extends React.Component {
     this.load(id);
   }
 
+  componentWillUnmount() {
+    this.clearTimer();
+  }
+
   componentWillReceiveProps(next) {
     const {id} = this.props.params;
     if (id !== next.params.id) {
