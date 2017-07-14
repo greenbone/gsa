@@ -101,6 +101,39 @@ export class PermissionsCommand extends EntitiesCommand {
     super(http, 'permission', Permission);
   }
 
+  create({
+    id,
+    permission,
+    entity_type,
+    comment = '',
+    group_id,
+    role_id,
+    user_id,
+    subject_type,
+    include_related,
+    related = [],
+  }) {
+    const data = {
+      cmd: 'create_permissions',
+      comment,
+      permission,
+      permission_group_id: group_id,
+      permission_role_id: role_id,
+      permission_user_id: user_id,
+      resource_id: id,
+      resource_type: entity_type,
+      include_related,
+      subject_type,
+    };
+
+    for (const resource in related) {
+      data['related:' + resource.id] = resource.name;
+    }
+
+    log.debug('Creating new permission', data);
+    return this.httpPost(data).then(this.transformResponse);
+  }
+
   getEntitiesResponse(root) {
     return root.get_permissions.get_permissions_response;
   }

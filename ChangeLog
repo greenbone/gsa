@@ -1,5 +1,10 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/permissions.js: Add gmp api to create
+	multiple permissions.
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/permissions/dialog.js: Add option to
 	permission dialog to disable changing the resource uuid. Maybe it shouldn't
 	allowed to change the resource uuid at all...
