@@ -1,5 +1,13 @@
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/target.js: Improve Taget model. Add
+	missing new entity_type. Only add sub models if they are defined (this pattern
+	should be used in all models for consistency now). Export array with
+	credential child model names (will be required for create multiple perm
+	dialog).
+
+2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/layout/divider.js: Use display
 	inline-flex for outer divider html element to be able to use a Divider within
 	inline elments like span or li.

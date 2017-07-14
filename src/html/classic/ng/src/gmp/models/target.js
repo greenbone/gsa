@@ -23,20 +23,39 @@
 
 import Model from '../model.js';
 
+import {is_defined, is_empty} from '../utils.js';
+
 import PortList from './portlist.js';
 
+export const TARGET_CREDENTIAL_NAMES = [
+  'smb_credential',
+  'snmp_credential',
+  'ssh_credential',
+  'esxi_credential',
+];
+
 class Target extends Model {
+
+  static entity_type = "target";
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
-    ret.port_list = new PortList(ret.port_list);
+    if (is_defined(elem.port_list) && !is_empty(elem.port_list._id)) {
+      ret.port_list = new PortList(ret.port_list);
+    }
+    else {
+      delete ret.port_list;
+    }
 
-    const creds = ['smb_credential', 'snmp_credential', 'ssh_credential',
-      'esxi_credential'];
-
-    for (let cred of creds) {
-      ret[cred] = new Model(ret[cred], 'credential');
+    for (const name of TARGET_CREDENTIAL_NAMES) {
+      const cred = ret[name];
+      if (is_defined(cred) && !is_empty(cred._id)) {
+        ret[name] = new Model(cred, 'credential');
+      }
+      else {
+        delete ret[name];
+      }
     }
 
     return ret;
