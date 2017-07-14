@@ -46,6 +46,31 @@ import Promise from 'gmp/promise.js';
 
 const log = logger.getLogger('web.entity.container');
 
+export const loader = (name, filter_func) => function(id) {
+  const {gmp} = this.context;
+
+  log.debug('Loading', name, 'for entity', id);
+
+  return gmp[name].getAll({
+    filter: filter_func(id),
+  }).then(entities => {
+
+    this.setState({[name]: entities});
+
+    const meta = entities.getMeta();
+
+    if (meta.fromcache && meta.dirty) {
+      log.debug('Forcing reload of', name, meta.dirty);
+      return true;
+    }
+
+    return false;
+  }).catch(err => {
+    this.setState({[name]: undefined});
+    return this.handleError(err);
+  });
+};
+
 class EntityContainer extends React.Component {
 
   constructor(...args) {
@@ -109,7 +134,7 @@ class EntityContainer extends React.Component {
       loaders.push(...this.props.loaders);
     }
 
-    const promises = loaders.map(loader => loader.call(this, id));
+    const promises = loaders.map(loader_func => loader_func.call(this, id));
 
     this.setState({loading: true});
 

@@ -24,7 +24,6 @@
 import React from 'react';
 
 import _, {short_date} from 'gmp/locale.js';
-import logger from 'gmp/log.js';
 import Promise from 'gmp/promise.js';
 import {is_defined} from 'gmp/utils.js';
 
@@ -36,7 +35,7 @@ import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
-import {withEntityContainer} from '../../entity/container.js';
+import {withEntityContainer, loader} from '../../entity/container.js';
 
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
@@ -71,8 +70,6 @@ import StopIcon from './icons/stopicon.js';
 import TaskDetails from './details.js';
 import TaskStatus from './status.js';
 import withTaskComponent from './withTaskComponent.js';
-
-const log = logger.getLogger('web.pages.task.detailspage');
 
 const ToolBarIcons = ({
   entity,
@@ -392,37 +389,17 @@ const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const loader = name => function(id) {
-  const {gmp} = this.context;
-
-  log.debug('Loading notes');
-
-  return gmp[name].getAll({
-    filter: 'task_id=' + id
-  }).then(entities => {
-
-    this.setState({[name]: entities});
-
-    const meta = entities.getMeta();
-
-    if (meta.fromcache && meta.dirty) {
-      log.debug('Forcing reload of', name, meta.dirty);
-      return true;
-    }
-
-    return false;
-  }).catch(err => {
-    this.setState({[name]: undefined});
-    return this.handleError(err);
-  });
-};
+const task_id_filter = id => 'task_id=' + id;
 
 export default withEntityContainer('task', {
   sectionIcon: 'task.svg',
   title: _('Task'),
   toolBarIcons: ToolBarIcons,
   details: Details,
-  loaders: [loader('notes'), loader('overrides')],
+  loaders: [
+    loader('notes', task_id_filter),
+    loader('overrides', task_id_filter),
+  ],
   permissionsComponent: TaskPermissions,
 })(Page);
 
