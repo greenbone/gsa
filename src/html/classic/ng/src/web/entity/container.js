@@ -344,12 +344,12 @@ class EntityContainer extends React.Component {
     });
   }
 
-  openCreateTagDialog({type, entity}) {
+  openCreateTagDialog(entity) {
     this.tag_dialog.show({
       fixed: true,
       resource_id: entity.id,
-      resource_type: type,
-      name: _('{{type}}:unnamed', {type}),
+      resource_type: entity.entity_type,
+      name: _('{{type}}:unnamed', {type: entity.entity_type}),
     });
   }
 

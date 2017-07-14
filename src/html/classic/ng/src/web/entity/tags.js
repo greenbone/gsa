@@ -179,7 +179,7 @@ const SectionElements = ({
       <IconDivider>
         <NewIcon
           title={_('New Tag')}
-          value={{type: 'result', entity}}
+          value={entity}
           onClick={onNewTagClick}
         />
         <HelpIcon

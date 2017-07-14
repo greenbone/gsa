@@ -1,3 +1,8 @@
+2017-07-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entity/container.js,
+	src/html/classic/ng/src/web/entity/tags.js: Create tag for the current entity.
+
 2017-07-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/login.js: Fix login. Login class is not
