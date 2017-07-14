@@ -120,20 +120,21 @@ const need_resource_id = [
 ];
 
 const PermissionDialog = ({
-    permission,
-    comment,
-    name,
-    group_id,
-    role_id,
-    user_id,
-    resource_id,
-    resource_type,
-    roles = [],
-    groups = [],
-    users = [],
-    subject_type,
-    onValueChange,
-  }, {capabilities}) => {
+  comment,
+  fixedResource = false,
+  group_id,
+  groups = [],
+  name,
+  permission,
+  resource_id,
+  resource_type,
+  role_id,
+  roles = [],
+  subject_type,
+  user_id,
+  users = [],
+  onValueChange,
+}, {capabilities}) => {
 
   let show_resource_id = includes(need_resource_id, name);
 
@@ -311,6 +312,7 @@ const PermissionDialog = ({
           <TextField
             name="resource_id"
             value={resource_id}
+            disabled={fixedResource}
             size="50"
             maxLength="100"
             onChange={onValueChange}/>
@@ -326,6 +328,7 @@ const PermissionDialog = ({
 
 PermissionDialog.propTypes = {
   comment: PropTypes.string,
+  fixedResource: PropTypes.bool,
   groups: PropTypes.arrayLike,
   name: PropTypes.string,
   permission: PropTypes.model,
