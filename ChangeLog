@@ -1,5 +1,10 @@
 2017-07-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Use const
+	instead of let where possible.
+
+2017-07-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/scanconfigs/editdialog.js,
 	src/html/classic/ng/src/web/pages/scanconfigs/nvtpreference.js: Fix setting
 	nvt preferences in edit scan config dialogs.

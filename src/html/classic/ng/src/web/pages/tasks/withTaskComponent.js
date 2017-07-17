@@ -349,12 +349,12 @@ const withTaskComponent = (mapping = {}) => Component => {
     }
 
     openTaskWizard() {
-      let {gmp} = this.context;
+      const {gmp} = this.context;
 
       this.task_wizard.show({});
 
       gmp.wizard.task().then(response => {
-        let settings = response.data;
+        const settings = response.data;
         this.task_wizard.setValues({
           hosts: settings.client_address,
           port_list_id: settings.get('Default Port List').value,
@@ -369,25 +369,26 @@ const withTaskComponent = (mapping = {}) => Component => {
     }
 
     openAdvancedTaskWizard() {
-      let {gmp} = this.context;
+      const {gmp} = this.context;
+
       gmp.wizard.advancedTask().then(response => {
-        let settings = response.data;
+        const settings = response.data;
         let config_id = settings.get('Default OpenVAS Scan Config').value;
 
         if (!is_defined(config_id) || config_id.length === 0) {
           config_id = FULL_AND_FAST_SCAN_CONFIG_ID;
         }
 
-        let credentials = settings.credentials;
+        const {credentials} = settings;
 
-        let ssh_credential = select_save_id(credentials,
+        const ssh_credential = select_save_id(credentials,
           settings.get('Default SSH Credential').value, '');
-        let smb_credential = select_save_id(credentials,
+        const smb_credential = select_save_id(credentials,
           settings.get('Default SMB Credential').value, '');
-        let esxi_credential = select_save_id(credentials,
+        const esxi_credential = select_save_id(credentials,
           settings.get('Default ESXi Credential').value, '');
 
-        let now = moment().tz(settings.timezone);
+        const now = moment().tz(settings.timezone);
 
         this.advanced_task_wizard.show({
           credentials,
@@ -411,11 +412,11 @@ const withTaskComponent = (mapping = {}) => Component => {
     }
 
     openModifyTaskWizard() {
-      let {gmp} = this.context;
+      const {gmp} = this.context;
 
       gmp.wizard.modifyTask().then(response => {
-        let settings = response.data;
-        let now = moment().tz(settings.timezone);
+        const settings = response.data;
+        const now = moment().tz(settings.timezone);
 
         this.modify_task_wizard.show({
           date: now,
