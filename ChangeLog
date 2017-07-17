@@ -1,3 +1,11 @@
+2017-07-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/commands/tasks.js,
+	src/html/classic/ng/src/web/pages/tasks/dialog.js,
+	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Fix changed type
+	property changes on Scanner and ScanConfig models. This change will allow to
+	select a scan config at the create task dialog again.
+
 2017-07-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entity/container.js: Use loader function to load

@@ -68,13 +68,13 @@ import ContainerTaskDialog from './containerdialog.js';
 const log = logger.getLogger('web.tasks.taskcomponent');
 
 const sort_scan_configs = scan_configs => {
-  let sorted_scan_configs = {
+  const sorted_scan_configs = {
     [OPENVAS_SCAN_CONFIG_TYPE]: [],
     [OSP_SCAN_CONFIG_TYPE]: [],
   };
 
   for_each(scan_configs, config => {
-    let {type} = config;
+    const type = config.scan_config_type;
     if (!is_array(sorted_scan_configs[type])) {
       sorted_scan_configs[type] = [];
     }
@@ -256,12 +256,12 @@ const withTaskComponent = (mapping = {}) => Component => {
 
       if (task) {
         gmp.task.editTaskSettings(task).then(response => {
-          let settings = response.data;
-          let {targets, scan_configs, alerts, scanners, schedules} = settings;
+          const settings = response.data;
+          const {targets, scan_configs, alerts, scanners, schedules} = settings;
 
           log.debug('Loaded edit task dialog settings', settings);
 
-          let sorted_scan_configs = sort_scan_configs(scan_configs);
+          const sorted_scan_configs = sort_scan_configs(scan_configs);
 
           let schedule_id;
           if (capabilities.mayAccess('schedules') &&
@@ -287,7 +287,7 @@ const withTaskComponent = (mapping = {}) => Component => {
             name: task.name,
             scan_configs: sorted_scan_configs,
             scanner_id: task.isChangeable() ? task.scanner.id : '0',
-            scanner_type: task.scanner.type,
+            scanner_type: task.scanner.scanner_type,
             scanners,
             schedule_id,
             schedules,
@@ -301,7 +301,7 @@ const withTaskComponent = (mapping = {}) => Component => {
       }
       else {
         gmp.task.newTaskSettings().then(response => {
-          let settings = response.data;
+          const settings = response.data;
           let {schedule_id, alert_id, target_id,
             targets, scanner_id = OPENVAS_DEFAULT_SCANNER_ID, scan_configs,
             config_id = FULL_AND_FAST_SCAN_CONFIG_ID, alerts, scanners,
@@ -309,7 +309,7 @@ const withTaskComponent = (mapping = {}) => Component => {
 
           log.debug('Loaded new task dialog settings', settings);
 
-          let sorted_scan_configs = sort_scan_configs(scan_configs);
+          const sorted_scan_configs = sort_scan_configs(scan_configs);
 
           scanner_id = select_save_id(scanners, scanner_id);
 
@@ -319,7 +319,7 @@ const withTaskComponent = (mapping = {}) => Component => {
 
           alert_id = includes_id(alerts, alert_id) ? alert_id : undefined;
 
-          let alert_ids = is_defined(alert_id) ? [alert_id] : [];
+          const alert_ids = is_defined(alert_id) ? [alert_id] : [];
 
           this.task_dialog.show({
             alert_ids,

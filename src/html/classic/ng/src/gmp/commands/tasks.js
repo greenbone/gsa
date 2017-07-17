@@ -27,6 +27,7 @@ import logger from '../log.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 import Model from '../model.js';
 
+import ScanConfig from '../models/scanconfig.js';
 import Scanner from '../models/scanner.js';
 import Schedule from '../models/schedule.js';
 import Target from '../models/target.js';
@@ -98,15 +99,15 @@ export class TaskCommand extends EntityCommand {
       settings.targets = map(new_task.get_targets_response.target,
         target => new Target(target));
       settings.scan_configs = map(new_task.get_configs_response.config,
-        config => new Model(config));
+        config => new ScanConfig(config));
       settings.alerts = map(new_task.get_alerts_response.alert,
-        alert => new Model(alert));
+        alert => new Model(alert, 'alert'));
       settings.schedules = map(new_task.get_schedules_response.schedule,
         schedule => new Schedule(schedule));
       settings.scanners = map(new_task.get_scanners_response.scanner,
         scanner => new Scanner(scanner));
       settings.tags = map(new_task.get_tags_response.tag,
-        tag => new Model(tag));
+        tag => new Model(tag, 'tag'));
       settings.alert_id = is_empty(new_task.alert_id) ?
         undefined : new_task.alert_id;
       settings.config_id = is_empty(new_task.config_id) ?
@@ -137,9 +138,9 @@ export class TaskCommand extends EntityCommand {
       inst.targets = map(resp.get_targets_response.target,
         target => new Target(target));
       inst.scan_configs = map(resp.get_configs_response.config,
-        config => new Model(config));
+        config => new ScanConfig(config));
       inst.alerts = map(resp.get_alerts_response.alert,
-        alert => new Model(alert));
+        alert => new Model(alert, 'alert'));
       inst.schedules = map(resp.get_schedules_response.schedule,
         schedule => new Schedule(schedule));
       inst.scanners = map(resp.get_scanners_response.scanner,

@@ -91,7 +91,7 @@ class ScannerSelect extends React.Component {
     let config_id;
 
     let scanner = get_scanner(scanners, value);
-    let scanner_type = is_defined(scanner) ? scanner.type : undefined;
+    let scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
 
     if (scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner_type === SLAVE_SCANNER_TYPE) {
@@ -176,16 +176,16 @@ const TaskDialog = ({
     onNewTargetClick,
     onValueChange,
   }, {capabilities}) => {
-  let scanner = get_scanner(scanners, scanner_id);
+  const scanner = get_scanner(scanners, scanner_id);
 
-  let is_osp_scanner = is_defined(scanner) &&
-    scanner.type === OSP_SCANNER_TYPE;
+  const is_osp_scanner = is_defined(scanner) &&
+    scanner.scanner_type === OSP_SCANNER_TYPE;
 
-  let use_openvas_scan_config = is_defined(scanner) &&
-    (scanner.type === OPENVAS_SCANNER_TYPE ||
-      scanner.type === SLAVE_SCANNER_TYPE);
+  const use_openvas_scan_config = is_defined(scanner) &&
+    (scanner.scanner_type === OPENVAS_SCANNER_TYPE ||
+      scanner.scanner_type === SLAVE_SCANNER_TYPE);
 
-  let tag_opts = tags.map(tag => {
+  const tag_opts = tags.map(tag => {
     return (
       <option key={tag.name} value={tag.name}>
         {tag.name}
@@ -193,28 +193,28 @@ const TaskDialog = ({
     );
   });
 
-  let target_opts = render_options(targets);
+  const target_opts = render_options(targets);
 
-  let schedule_opts = render_options(schedules, 0);
+  const schedule_opts = render_options(schedules, 0);
 
 
-  let osp_scan_config_opts = is_osp_scanner && render_options(
+  const osp_scan_config_opts = is_osp_scanner && render_options(
     scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
-  let openvas_scan_config_opts = use_openvas_scan_config &&
+  const openvas_scan_config_opts = use_openvas_scan_config &&
     render_options(
       scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
         // Skip the "empty" config
         return config.id !== EMPTY_SCAN_CONFIG_ID;
       }));
 
-  let alert_opts = render_options(alerts);
+  const alert_opts = render_options(alerts);
 
-  let change_task = task ? task.isChangeable() : true;
+  const change_task = task ? task.isChangeable() : true;
 
-  let osp_config_id = select_save_id(scan_configs[OSP_SCAN_CONFIG_TYPE],
+  const osp_config_id = select_save_id(scan_configs[OSP_SCAN_CONFIG_TYPE],
     config_id);
-  let openvas_config_id =  select_save_id(
+  const openvas_config_id =  select_save_id(
     scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id);
 
   return (
