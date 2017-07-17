@@ -33,6 +33,7 @@ import {render_options} from '../../utils/render.js';
 import {withDialog} from '../../components/dialog/dialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
+import {noop_convert} from '../../components/form/form.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
 import TextField from '../../components/form/textfield.js';
@@ -197,6 +198,7 @@ class ScannerPreference extends React.Component {
                 noValue="no"
                 name={name}
                 value={value}
+                convert={noop_convert}
                 onChange={onPreferenceChange}
               />
             </Layout> :

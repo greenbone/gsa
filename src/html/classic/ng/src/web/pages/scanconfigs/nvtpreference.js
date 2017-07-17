@@ -30,6 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import FileField from '../../components/form/filefield.js';
+import {noop_convert} from '../../components/form/form.js';
 import PasswordField from '../../components/form/passwordfield.js';
 import Radio from '../../components/form/radio.js';
 import TextField from '../../components/form/textfield.js';
@@ -85,6 +86,7 @@ class NvtPreference extends React.Component {
           yesValue="yes"
           noValue="no"
           value={value}
+          convert={noop_convert}
           onChange={this.onPreferenceChange}
         />
 
