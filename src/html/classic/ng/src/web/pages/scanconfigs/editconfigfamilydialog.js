@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {map, is_empty} from 'gmp/utils.js';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -99,10 +100,10 @@ class Nvt extends React.Component {
         </TableData>
         <TableData flex align="center">
           <Checkbox
-            checked={selected === '1'}
+            checked={selected === YES_VALUE}
             name={oid}
-            checkedValue="1"
-            unCheckedValue="0"
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
             onChange={onSelectedChange}
           />
         </TableData>

@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils.js';
+import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
@@ -332,17 +333,19 @@ class NvtFamily extends React.Component {
           <Radio
             flex
             name={name}
-            checked={trend === '1'}
+            checked={trend === YES_VALUE}
+            convert={parse_yesno}
+            value={YES_VALUE}
             onChange={onTrendChange}
-            value="1"
           />
           <Trend trend="1"/>
           <Radio
             flex
             name={name}
-            checked={trend === '0'}
+            checked={trend === NO_VALUE}
+            convert={parse_yesno}
+            value={NO_VALUE}
             onChange={onTrendChange}
-            value="0"
           />
           <Trend trend="0"/>
         </TableData>
@@ -350,10 +353,9 @@ class NvtFamily extends React.Component {
           <Checkbox
             flex
             name={name}
-            checked={select === '1'}
-            value="1"
-            checkedValue="1"
-            unCheckedValue="0"
+            checked={select === YES_VALUE}
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
             onChange={onSelectChange}
           />
         </TableData>
@@ -372,12 +374,8 @@ class NvtFamily extends React.Component {
 NvtFamily.propTypes = {
   config: PropTypes.model.isRequired,
   family: PropTypes.object.isRequired,
-  select: PropTypes.oneOf([
-    '1', '0',
-  ]).isRequired,
-  trend: PropTypes.oneOf([
-    '1', '0',
-  ]).isRequired,
+  select: PropTypes.yesno.isRequired,
+  trend: PropTypes.yesno.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onSelectChange: PropTypes.func,
   onTrendChange: PropTypes.func,

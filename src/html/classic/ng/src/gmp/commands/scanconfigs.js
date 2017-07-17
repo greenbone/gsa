@@ -26,7 +26,7 @@ import {extend, for_each, map, is_defined} from '../utils.js';
 
 import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-import {parse_counts} from '../parser.js';
+import {parse_counts, YES_VALUE, NO_VALUE} from '../parser.js';
 
 import Nvt from '../models/nvt.js';
 import ScanConfig, {parse_count} from '../models/scanconfig.js';
@@ -44,7 +44,7 @@ const convert = (values, prefix) => {
 const convert_select = (values, prefix) => {
   let ret = {};
   for (let [key, value] of Object.entries(values)) {
-    if (value === '1') {
+    if (value === YES_VALUE) {
       ret[prefix + key] = value;
     }
   }
@@ -182,13 +182,13 @@ export class ScanConfigCommand extends EntityCommand {
       name: config_name,
       family: family_name,
     }).then(response => {
-      let {data} = response;
-      let config_resp = data.get_config_family_response;
-      let settings = {};
+      const {data} = response;
+      const config_resp = data.get_config_family_response;
+      const settings = {};
 
-      settings.config = new Model(config_resp.config);
+      settings.config = new Model(config_resp.config, 'config');
 
-      let nvts = {};
+      const nvts = {};
       for_each(config_resp.get_nvts_response.nvt, nvt => {
         let oid = nvt._oid;
         nvts[oid] = true;
@@ -201,7 +201,7 @@ export class ScanConfigCommand extends EntityCommand {
         nvt.severity = nvt.cvss_base;
         delete nvt.cvss_base;
 
-        nvt.selected = nvt.oid in nvts ? '1' : '0';
+        nvt.selected = nvt.oid in nvts ? YES_VALUE : NO_VALUE;
         return nvt;
       });
 
@@ -252,7 +252,7 @@ export class ScanConfigCommand extends EntityCommand {
       let settings = {};
       let config_resp = data.get_config_nvt_response;
 
-      settings.config = new Model(config_resp.config);
+      settings.config = new Model(config_resp.config, 'config');
       settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
 
       settings.nvt.notes_counts = parse_counts(data.get_notes_response, 'note');

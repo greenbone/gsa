@@ -31,6 +31,7 @@ import {
   select_save_id,
   shorten,
 } from 'gmp/utils.js';
+import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -212,12 +213,13 @@ class Page extends React.Component {
         let config_family = scanconfig.families[name];
 
         if (is_defined(config_family)) {
-          trend[name] = config_family.trend;
-          select[name] = config_family.nvts.count === family.max ? '1' : '0';
+          trend[name] = parse_yesno(config_family.trend);
+          select[name] = config_family.nvts.count === family.max ? YES_VALUE :
+            NO_VALUE;
         }
         else {
-          trend[name] = '0';
-          select[name] = '0';
+          trend[name] = NO_VALUE;
+          select[name] = NO_VALUE;
         }
       });
 
