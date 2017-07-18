@@ -34,7 +34,6 @@ import SelectionType from '../utils/selectiontype.js';
 
 import EntitySelection from './selection.js';
 
-
 const EntityActions = ({
   actionsComponent,
   entity,
@@ -50,13 +49,15 @@ const EntityActions = ({
 
   return (
     <td className="table-actions">
-      {selectionType === SelectionType.SELECTION_USER ?
-        <Layout flex align={['center', 'center']}>
-          <EntitySelection entity={entity} onSelected={onEntitySelected}
-            onDeselected={onEntityDeselected}/>
-        </Layout> :
+      <Layout flex align={['center', 'center']}>
+        {selectionType === SelectionType.SELECTION_USER ?
+          <Layout flex align={['center', 'center']}>
+            <EntitySelection entity={entity} onSelected={onEntitySelected}
+              onDeselected={onEntityDeselected}/>
+          </Layout> :
           render_component(actionsComponent, {...other, entity})
-      }
+        }
+      </Layout>
     </td>
   );
 };
