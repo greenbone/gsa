@@ -83,6 +83,7 @@ import ScannersPage from './pages/scanners/listpage.js';
 import SchedulesPage from './pages/schedules/listpage.js';
 import TagsPage from './pages/tags/listpage.js';
 import TargetsPage from './pages/targets/listpage.js';
+import TargetDetailsPage from './pages/targets/detailspage.js';
 import TasksPage from './pages/tasks/listpage.js';
 import TaskDetailsPage from './pages/tasks/detailspage.js';
 import UsersPage from './pages/users/listpage.js';
@@ -289,6 +290,10 @@ ReactDOM.render(
         <Route
           path="task/:id"
           component={TaskDetailsPage}
+        />
+        <Route
+          path="target/:id"
+          component={TargetDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

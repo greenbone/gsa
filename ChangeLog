@@ -1,5 +1,13 @@
 2017-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/pages/targets/details.js,
+	src/html/classic/ng/src/web/pages/targets/detailspage.js: Start to implement
+	target details.
+
+2017-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/listpage.js,
 	src/html/classic/ng/src/web/pages/targets/row.js: Use divider components to
 	fix layout of icons at the targets list page.
