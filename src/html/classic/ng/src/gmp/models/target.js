@@ -23,7 +23,9 @@
 
 import Model from '../model.js';
 
-import {is_defined, is_empty} from '../utils.js';
+import {is_defined, is_empty, map} from '../utils.js';
+
+import {parse_int, parse_yesno} from '../parser.js';
 
 import PortList from './portlist.js';
 
@@ -56,6 +58,20 @@ class Target extends Model {
       else {
         delete ret[name];
       }
+    }
+
+    ret.hosts = is_empty(elem.hosts) ? [] :
+      map(elem.hosts, host => host); // always get an array
+    ret.exclude_hosts = is_empty(elem.exclude_hosts) ? [] :
+      map(elem.exclude_hosts, host => host); // always get an array
+
+    ret.max_hosts = parse_int(elem.max_hosts);
+
+    ret.reverse_lookup_only = parse_yesno(elem.reverse_lookup_only);
+    ret.reverse_lookup_unify = parse_yesno(elem.reverse_lookup_unify);
+
+    if (is_defined(elem.tasks)) {
+      ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
     }
 
     return ret;
