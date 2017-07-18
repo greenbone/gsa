@@ -266,6 +266,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/footer.js
      ${NG_SRC_DIR}/src/web/entities/header.js
      ${NG_SRC_DIR}/src/web/entities/icons/entitycloneicon.js
+     ${NG_SRC_DIR}/src/web/entities/icons/entitycreateicon.js
      ${NG_SRC_DIR}/src/web/entities/icons/entitydeleteicon.js
      ${NG_SRC_DIR}/src/web/entities/icons/entityediticon.js
      ${NG_SRC_DIR}/src/web/entities/icons/entityobservericon.js
