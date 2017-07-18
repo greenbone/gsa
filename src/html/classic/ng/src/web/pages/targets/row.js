@@ -41,6 +41,7 @@ import Text from '../../components/form/text.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
@@ -56,7 +57,7 @@ const IconActions = ({
     onEntityDownload,
   }) => {
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider flex align={['center', 'center']}>
       <TrashIcon
         displayName={_('Target')}
         name="target"
@@ -79,7 +80,7 @@ const IconActions = ({
         title={_('Export Target')}
         onClick={onEntityDownload}
       />
-    </Layout>
+    </IconDivider>
   );
 };
 

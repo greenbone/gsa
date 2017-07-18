@@ -26,12 +26,13 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined, is_empty} from 'gmp/utils.js';
 
-import Layout from '../../components/layout/layout.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
+
+import IconDivider from '../../components/layout/icondivider.js';
+import Layout from '../../components/layout/layout.js';
 
 import EntitiesPage from '../../entities/page.js';
 import {withEntitiesContainer} from '../../entities/container.js';
@@ -44,12 +45,12 @@ import {TARGETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = ({onNewTargetClick}) => {
   return (
-    <Layout flex box>
+    <IconDivider>
       <HelpIcon page="targets"/>
       <NewIcon
         title={_('New Target')}
         onClick={onNewTargetClick}/>
-    </Layout>
+    </IconDivider>
   );
 };
 
