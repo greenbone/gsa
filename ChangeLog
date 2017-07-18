@@ -1,5 +1,11 @@
 2017-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/targets/row.js,
+	src/html/classic/ng/src/web/pages/targets/table.js: Allow to toggle the
+	details of a target at the targets list page.
+
+2017-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/pages/targets/details.js,

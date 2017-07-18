@@ -30,6 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import Select2 from '../../components/form/select2.js';
 import Text from '../../components/form/text.js';
@@ -40,6 +41,7 @@ import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import TargetDetails from './details.js';
 import TargetRow from './row.js';
 
 const Header = ({
@@ -125,6 +127,7 @@ export default createEntitiesTable({
   row: TargetRow,
   header: TargetsHeader,
   footer: Footer,
+  rowDetails: withRowDetails('target', 10)(TargetDetails),
 });
 
 // vim: set ts=2 sw=2 tw=80:

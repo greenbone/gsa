@@ -29,9 +29,8 @@ import {is_defined, is_empty, shorten} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
-import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
@@ -123,17 +122,18 @@ const Row = ({
   actions,
   entity,
   links = true,
+  onToggleDetailsClick,
   ...props
 }, {capabilities}) => {
   return (
     <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="target"
-        displayName={_('Target')}
-      />
+      <TableData>
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
+          {entity.name}
+        </RowDetailsToggle>
+      </TableData>
       <TableData>
         {shorten(entity.hosts, 500)}
       </TableData>
@@ -172,6 +172,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 Row.contextTypes = {
