@@ -39,6 +39,10 @@ const EntityEditIcon = ({
     ...props,
   }, {capabilities}) => {
 
+  if (!is_defined(name)) {
+    name = entity.entity_type;
+  }
+
   if (!is_defined(displayName)) {
     displayName = _(capitalize_first_letter(name));
   }
@@ -46,7 +50,7 @@ const EntityEditIcon = ({
   const {permissions} = entity;
   const may_edit = capabilities.mayEdit(name) && (!is_defined(permissions) ||
     permissions.mayEdit(name));
-  let active = may_edit && entity.isWritable();
+  const active = may_edit && entity.isWritable();
 
   if (!is_defined(title)) {
     if (active) {
@@ -75,7 +79,7 @@ const EntityEditIcon = ({
 EntityEditIcon.propTypes = {
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   title: PropTypes.string,
   onClick: PropTypes.func,
 };

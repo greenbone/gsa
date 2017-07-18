@@ -40,11 +40,15 @@ const EntityCloneIcon = ({
     ...props,
   }, {capabilities}) => {
 
+  if (!is_defined(name)) {
+    name = entity.entity_type;
+  }
+
   if (!is_defined(displayName)) {
     displayName = _(capitalize_first_letter(name));
   }
 
-  let active = mayClone && capabilities.mayClone(name);
+  const active = mayClone && capabilities.mayClone(name);
   if (!is_defined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
@@ -70,7 +74,7 @@ EntityCloneIcon.propTypes = {
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   mayClone: PropTypes.bool,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   title: PropTypes.string,
   onClick: PropTypes.func,
 };

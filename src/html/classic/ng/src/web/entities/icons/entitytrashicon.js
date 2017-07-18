@@ -39,11 +39,15 @@ const EntityTrashIcon = ({
     ...props,
   }, {capabilities}) => {
 
+  if (!is_defined(name)) {
+    name = entity.entity_type;
+  }
+
   if (!is_defined(displayName)) {
     displayName = _(capitalize_first_letter(name));
   }
 
-  let active = capabilities.mayDelete(name) && entity.isWritable() &&
+  const active = capabilities.mayDelete(name) && entity.isWritable() &&
       !entity.isInUse();
   if (!is_defined(title)) {
     if (active) {
@@ -76,7 +80,7 @@ const EntityTrashIcon = ({
 EntityTrashIcon.propTypes = {
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   title: PropTypes.string,
   onClick: PropTypes.func,
 };
