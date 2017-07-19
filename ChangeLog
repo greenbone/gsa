@@ -1,5 +1,14 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt;
+	src/html/classic/ng/src/web/components/dialog/withDialog.js: Implement a new
+	withDialog HOC that removes some obstacles of the old implementation. The new
+	implementation isn't splitted into two components which did result in issues
+	during closing the dialog (the close handler may already had lost the ref to
+	the dialog). The old implementation will be removed in future.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/withEntityComponent.js: Add helper
 	functions to create handlers for changing the current displayed page.
 
