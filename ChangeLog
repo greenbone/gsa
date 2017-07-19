@@ -1,3 +1,8 @@
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/yarn.lock: Revert yarn lockfile to r29110. It was
+	changed unintentionally.
+
 2017-07-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add comment field to user create and edit dialogs and fix user edit
