@@ -1,5 +1,11 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/targets/withTargetComponent.js: Introduce
+	new withTargetComponent HOC.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/dialog.js: Change TargetDialog to
 	use new withDialog HOC.
 
