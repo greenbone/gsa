@@ -46,6 +46,7 @@ class Dialog extends React.Component {
       access_ifaces,
       access_hosts,
       auth_method,
+      comment,
       groups,
       group_ids,
       hosts_allow,
@@ -71,6 +72,15 @@ class Dialog extends React.Component {
             size="30"
             onChange={onValueChange}
             maxLength="80"/>
+        </FormGroup>
+
+        <FormGroup title={_('Comment')}>
+          <TextField
+            name="comment"
+            value={comment}
+            grow="1"
+            size="30" maxLength="400"
+            onChange={onValueChange}/>
         </FormGroup>
 
         {!is_edit &&
@@ -142,15 +152,28 @@ class Dialog extends React.Component {
                 onChange={onValueChange}
               />
             </Layout>
-            <Layout flex box>
-              <Radio
-                title={_('LDAP Authentication Only')}
-                name="auth_method"
-                value="2"
-                checked={auth_method === "2"}
-                onChange={onValueChange}
-              />
-            </Layout>
+            {settings.get('method:ldap_connect').enable === 'true' &&
+              <Layout flex box>
+                <Radio
+                  title={_('LDAP Authentication Only')}
+                  name="auth_method"
+                  value="2"
+                  checked={auth_method === "2"}
+                  onChange={onValueChange}
+                />
+              </Layout>
+            }
+            {settings.get('method:radius_connect').enable === 'true' &&
+              <Layout flex box>
+                <Radio
+                  title={_('RADIUS Authentication Only')}
+                  name="auth_method"
+                  value="2"
+                  checked={auth_method === "3"}
+                  onChange={onValueChange}
+                />
+              </Layout>
+            }
           </FormGroup>
         }
 
@@ -271,12 +294,14 @@ Dialog.propTypes = {
   access_hosts: PropTypes.string,
   access_ifaces: PropTypes.string,
   auth_method: PropTypes.oneOf(['0', '1']).isRequired,
+  comment: PropTypes.string,
   group_ids: PropTypes.array,
   groups: PropTypes.arrayLike,
   hosts_allow: PropTypes.oneOf(['0', '1']).isRequired,
   id: PropTypes.id,
   ifaces_allow: PropTypes.oneOf(['0', '1']).isRequired,
   name: PropTypes.string,
+  old_name: PropTypes.string,
   password: PropTypes.string,
   role_ids: PropTypes.array,
   roles: PropTypes.arrayLike,
@@ -295,6 +320,7 @@ export default withDialog(Dialog, {
     access_hosts: '',
     access_ifaces: '',
     auth_method: '0',
+    comment: '',
     group_ids: [],
     hosts_allow: '0',
     ifaces_allow: '0',

@@ -34297,6 +34297,14 @@ should not have received it.
           </div>
         </div>
         <div class="form-group">
+          <label for="comment" class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Comment')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="comment" class="form-control" size="30" maxlength="400"/>
+          </div>
+        </div>
+        <div class="form-group">
           <label class="col-2 control-label">
             <xsl:value-of select="gsa:i18n ('Authentication')"/>
           </label>
@@ -34818,6 +34826,14 @@ should not have received it.
                 </xsl:otherwise>
               </xsl:choose>
             </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="comment" class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Comment')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="comment" class="form-control" size="30" maxlength="400"/>
           </div>
         </div>
         <div class="form-group">

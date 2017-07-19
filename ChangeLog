@@ -1,3 +1,29 @@
+2017-07-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add comment field to user create and edit dialogs and fix user edit
+	dialog.
+
+	* src/gsad_gmp.c (create_user_gmp, save_user_gmp): Add optional comment
+	and make password optional.
+
+	* src/html/classic/omp.xsl (html-create-user-form, user [edit]):
+
+	* src/html/classic/ng/src/gmp/commands/users.js
+	(UserCommand.create): Add comment parameter.
+	(UserCommand.save): Add comment and old_login parameters.
+
+	* src/html/classic/ng/src/web/pages/users/dialog.js
+	(Dialog.render): Add comment field.  In edit mode, add condition for
+	LDAP option and add RADIUS option.
+	
+	(Dialog.propTypes): Add comment and old_name.
+	(export default): Add comment member to defaultState.
+
+	* src/html/classic/ng/src/web/pages/users/listpage.js
+	(Page.openUserDialog): Get group_ids, role_ids, old_name, access_hosts,
+	access_ifaces, comment, hosts_allow and ifaces_allow from user and
+	pass them to the dialog.
+
 2017-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/targets/row.js,

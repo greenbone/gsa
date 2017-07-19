@@ -116,9 +116,25 @@ class Page extends React.Component {
 
     gmp.user.currentAuthSettings().then(response => {
       if (is_defined(user)) {
+        let group_ids = user.groups.map (function (group) {
+              return group.id;
+            });
+
+        let role_ids = user.roles.map (function (role) {
+              return role.id;
+            });
+
         this.dialog.show({
           id: user.id,
           name: user.name,
+          old_name: user.name,
+          access_hosts: user.hosts.addresses,
+          access_ifaces: user.ifaces.addresses,
+          comment: user.comment,
+          group_ids: group_ids,
+          hosts_allow: user.hosts.allow,
+          ifaces_allow: user.hosts.allow,
+          role_ids: role_ids,
           settings: response.data,
         }, {
           title: _('Edit User {{name}}', user)

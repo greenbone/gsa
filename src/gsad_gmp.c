@@ -24444,7 +24444,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   const char *no_redirect;
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
-  const char *auth_method;
+  const char *auth_method, *comment;
   int ret;
   params_t *groups, *roles;
   GString *group_elements, *role_elements, *string;
@@ -24459,13 +24459,23 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
   ifaces = params_value (params, "access_ifaces");
   ifaces_allow = params_value (params, "ifaces_allow");
   auth_method = params_value (params, "auth_method");
+  comment = params_value (params, "comment");
 
   CHECK_PARAM_INVALID (name, "Create User", "new_user");
-  CHECK_PARAM_INVALID (password, "Create User", "new_user");
   CHECK_PARAM_INVALID (hosts, "Create User", "new_user");
   CHECK_PARAM_INVALID (hosts_allow, "Create User", "new_user");
   CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
   CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
+
+  if (auth_method && strcmp (auth_method, "1") == 0)
+    {
+      CHECK_PARAM_INVALID (password, "Create User", "new_user");
+    }
+
+  if (params_given (params, "comment"))
+    {
+      CHECK_PARAM_INVALID (comment, "Create User", "new_user");
+    }
 
   /* Create the user. */
 
@@ -24473,7 +24483,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
   buf = g_markup_printf_escaped ("<name>%s</name>"
                                  "<password>%s</password>",
                                  name,
-                                 password);
+                                 password ? password : "");
 
   g_string_append (string, buf);
   g_free (buf);
@@ -24538,6 +24548,12 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
   else if (auth_method && !strcmp (auth_method, "2"))
     g_string_append
      (string, "<sources><source>radius_connect</source></sources>");
+
+  if (comment)
+    {
+      xml_string_append (string, "<comment>%s</comment>", comment);
+    }
+
   g_string_append (string, "</create_user>");
 
   buf = g_string_free (string, FALSE);
@@ -24888,7 +24904,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   gchar *html, *response, *buf;
   const char *no_redirect;
   const char *user_id, *login, *old_login, *modify_password, *password;
-  const char *hosts, *hosts_allow, *ifaces, *ifaces_allow;
+  const char *hosts, *hosts_allow, *ifaces, *ifaces_allow, *comment;
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
@@ -24911,14 +24927,24 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   modify_password = params_value (params, "modify_password");
   password = params_value (params, "password");
   user_id = params_value (params, "user_id");
+  comment = params_value (params, "comment");
 
   CHECK_PARAM_INVALID (user_id, "Edit User", "edit_user");
   CHECK_PARAM_INVALID (modify_password, "Edit User", "edit_user");
-  CHECK_PARAM_INVALID (password, "Edit User", "edit_user");
   CHECK_PARAM_INVALID (hosts, "Edit User", "edit_user");
   CHECK_PARAM_INVALID (hosts_allow, "Edit User", "edit_user");
   CHECK_PARAM_INVALID (ifaces, "Save User", "edit_user");
   CHECK_PARAM_INVALID (ifaces_allow, "Save User", "edit_user");
+
+  if (modify_password && strcmp (modify_password, "1"))
+    {
+      CHECK_PARAM_INVALID (password, "Create User", "new_user");
+    }
+
+  if (params_given (params, "comment"))
+    {
+      CHECK_PARAM_INVALID (comment, "Save User", "edit_user");
+    }
 
   if (params_given (params, "login")
       && !(params_given (params, "current_user")))
@@ -24935,7 +24961,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                  "%s</password>",
                                  user_id,
                                  modify_password,
-                                 password);
+                                 password ? password : "");
   g_string_append (command, buf);
   g_free (buf);
 
@@ -25013,6 +25039,11 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (command, role_elements->str);
   g_string_free (role_elements, TRUE);
+
+  if (comment)
+    {
+      xml_string_append (command, "<comment>%s</comment>", comment);
+    }
 
   g_string_append (command, "</modify_user>");
 
