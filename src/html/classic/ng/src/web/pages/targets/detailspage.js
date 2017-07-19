@@ -48,7 +48,7 @@ import TableRow from '../../components/table/row.js';
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
 import {withEntityContainer} from '../../entity/container.js';
-import withEntityComponent from '../../entity/withEntityComponent.js';
+import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
 
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import CreateIcon from '../../entities/icons/entitycreateicon.js';
@@ -56,6 +56,7 @@ import EditIcon from '../../entities/icons/entityediticon.js';
 import TrashIcon from '../../entities/icons/entitytrashicon.js';
 
 import TargetDetails from './details.js';
+import withTargetComponent from './withTargetComponent.js';
 
 const ToolBarIcons = ({
   entity,
@@ -113,8 +114,6 @@ ToolBarIcons.propTypes = {
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
-const goto_target = ({router}, {data}) => router.push('/ng/target/' + data.id);
-
 const Details = ({
   entity,
   ...props,
@@ -153,19 +152,15 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = withEntityComponent('target', {
+const goto_target = goto_details('target');
+
+const Page = withTargetComponent({
   onCloned: goto_target,
-  onClone: 'onTargetCloneClick',
   onCloneError: 'onError',
-  onCreate: 'onTargetCreateClick',
   onCreated: goto_target,
   onCreateError: undefined,
-  onDeleted: ({router}) => {
-    router.push('/ng/targets/');
-  },
-  onDelete: 'onTargetDeleteClick',
+  onDeleted: goto_list('targets'),
   onDeleteError: 'onError',
-  onDownload: 'onTargetDownloadClick',
   onDownloadError: 'onError',
   onSaved: 'onChanged',
   onSaveError: undefined,

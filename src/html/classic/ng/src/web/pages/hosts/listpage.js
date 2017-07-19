@@ -32,6 +32,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SelectionType from '../../utils/selectiontype.js';
 
+import {goto_details} from '../../entity/withEntityComponent.js';
+
 import EntitiesPage from '../../entities/page.js';
 import {withEntitiesContainer} from '../../entities/container.js';
 
@@ -40,7 +42,7 @@ import {withDashboard} from '../../components/dashboard/dashboard.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import TargetDialogContainer from '../../pages/targets/dialogcontainer.js';
+import withTargetComponent from '../../pages/targets/withTargetComponent.js';
 
 import HostsCharts from './charts.js';
 import HostDialog from './dialog.js';
@@ -123,7 +125,8 @@ class Page extends React.Component {
   }
 
   _openTargetDialog(count, filterstring) {
-    this.target_dialog.show({
+    const {onTargetCreateClick} = this.props;
+    onTargetCreateClick({
       target_source: 'asset_hosts',
       hosts_count: count,
       hosts_filter: filterstring,
@@ -158,10 +161,6 @@ class Page extends React.Component {
           ref={ref => this.hosts_dialog = ref}
           onSave={this.handleSaveHost}
         />
-        <TargetDialogContainer
-          ref={ref => this.target_dialog = ref}
-          onSave={this.handleCreateTarget}
-        />
       </Layout>
     );
   }
@@ -173,11 +172,17 @@ Page.propTypes = {
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
   onChanged: PropTypes.func,
+  onTargetCreateClick: PropTypes.func.isRequired,
 };
 
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
+
+Page = withTargetComponent({
+  onCreated: goto_details('target'),
+  onSaved: 'onChanged',
+})(Page);
 
 export default withEntitiesContainer(Page, 'host', {
   filtersFilter: ASSETS_FILTER_FILTER,

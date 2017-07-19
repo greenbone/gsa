@@ -24,7 +24,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -32,95 +31,38 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
 
 import EntitiesPage from '../../entities/page.js';
 import {withEntitiesContainer} from '../../entities/container.js';
 
 import TargetsFilterDialog from './filterdialog.js';
 import TargetsTable from './table.js';
-import TargetDialogContainer from './dialogcontainer.js';
+import withTargetComponent from './withTargetComponent.js';
 
 import {TARGETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-const ToolBarIcons = ({onNewTargetClick}) => {
+const ToolBarIcons = ({onTargetCreateClick}) => {
   return (
     <IconDivider>
       <HelpIcon page="targets"/>
       <NewIcon
         title={_('New Target')}
-        onClick={onNewTargetClick}/>
+        onClick={onTargetCreateClick}/>
     </IconDivider>
   );
 };
 
 ToolBarIcons.propTypes = {
-  onNewTargetClick: PropTypes.func,
+  onTargetCreateClick: PropTypes.func.isRequired,
 };
 
-const id_or__ = value => {
-  return is_defined(value) && !is_empty(value.id) ? value.id : 0;
-};
+const TargetsPageNew = withTargetComponent({
+  onCreated: 'onChanged',
+  onEdit: 'onEditTarget',
+  onSaved: 'onChanged',
+})(EntitiesPage);
 
-class TargetsPage extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.openTargetDialog = this.openTargetDialog.bind(this);
-  }
-
-  openTargetDialog(entity) {
-    if (entity && entity.id) {
-      this.target_dialog.show({
-        id: entity.id,
-        alive_tests: entity.alive_tests,
-        comment: entity.comment,
-        esxi_credential_id: id_or__(entity.esxi_credential),
-        exclude_hosts: entity.exclude_hosts,
-        hosts: entity.hosts,
-        in_use: entity.isInUse(),
-        name: entity.name,
-        port_list_id: id_or__(entity.port_list),
-        port: is_empty(entity.ssh_credential.id) ?
-          '22' : entity.ssh_credential.port,
-        reverse_lookup_only: entity.reverse_lookup_only,
-        reverse_lookup_unify: entity.reverse_lookup_unify,
-        smb_credential_id: id_or__(entity.smb_credential),
-        snmp_credential_id: id_or__(entity.snmp_credential),
-        ssh_credential_id: id_or__(entity.ssh_credential),
-        target_source: 'manual',
-        target_exclude_source: 'manual',
-      }, {
-        title: _('Edit Target {{name}}', entity),
-      });
-    }
-    else {
-      this.target_dialog.show({});
-    }
-  }
-
-  render() {
-    const {onChanged} = this.props;
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEditTarget={this.openTargetDialog}
-          onNewTargetClick={this.openTargetDialog}/>
-        <TargetDialogContainer
-          ref={ref => this.target_dialog = ref}
-          onSave={onChanged}/>
-      </Layout>
-    );
-  };
-}
-
-TargetsPage.propTypes = {
-  onChanged: PropTypes.func,
-};
-
-export default withEntitiesContainer(TargetsPage, 'target', {
+export default withEntitiesContainer(TargetsPageNew, 'target', {
   filterEditDialog: TargetsFilterDialog,
   filtersFilter: TARGETS_FILTER_FILTER,
   sectionIcon: 'target.svg',
