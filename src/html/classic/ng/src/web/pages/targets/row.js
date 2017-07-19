@@ -135,7 +135,7 @@ const Row = ({
         </RowDetailsToggle>
       </TableData>
       <TableData>
-        {shorten(entity.hosts, 500)}
+        {shorten(entity.hosts.join(', '), 500)}
       </TableData>
       <TableData flex align="center">
         {entity.max_hosts}
