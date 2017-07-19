@@ -32,13 +32,15 @@ import DialogError from './error.js';
 import DialogFooter from './footer.js';
 import DialogTitle from './title.js';
 
+import withDialogNew from './withDialog.js';
+
 import './css/dialog.css';
 
 const log = logger.getLogger('web.dialog');
 
 const DEFAULT_DIALOG_WIDTH = '800px';
 
-export class Dialog extends React.Component {
+class Dialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -348,6 +350,6 @@ export const withDialog = (Component, options = {}) => {
   return DialogWrapper;
 };
 
-export default Dialog;
+export default withDialogNew()();
 
 // vim: set ts=2 sw=2 tw=80:

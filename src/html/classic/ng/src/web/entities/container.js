@@ -37,11 +37,10 @@ import SelectionType from '../utils/selectiontype.js';
 
 import withCache from '../utils/withCache.js';
 
-import Dialog from '../components/dialog/dialog.js';
+import NoticeDialog from '../components/dialog/noticedialog.js';
 
 import withDownload from '../components/form/withDownload.js';
 
-import Layout from '../components/layout/layout.js';
 import Wrapper from '../components/layout/wrapper.js';
 
 import CacheProvider from '../components/provider/cacheprovider.js';
@@ -341,24 +340,18 @@ class EntitiesContainer extends React.Component {
     this.handleShowError(error.message);
   }
 
-  handleShowError(error) {
+  handleShowError(message) {
     this.notice_dialog.show({
-      content: (
-        <Layout flex align="center">
-          {error}
-        </Layout>
-      ),
+      message,
+    }, {
       title: _('Error'),
     });
   }
 
   handleShowSuccess(message) {
     this.notice_dialog.show({
-      content: (
-        <Layout flex align="center">
-          {message}
-        </Layout>
-      ),
+      message,
+    }, {
       title: _('Success'),
     });
   }
@@ -405,7 +398,7 @@ class EntitiesContainer extends React.Component {
           showError={this.handleShowError}
           showSuccess={this.handleShowSuccess}
         />
-        <Dialog
+        <NoticeDialog
           width="400px"
           ref={ref => this.notice_dialog = ref}
         />

@@ -1,5 +1,15 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/dialog/dialog.js,
+	src/html/classic/ng/src/web/components/powerfilter/dialog.js: Change Dialog to
+	be created with new withDialog HOC.
+
+	* src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entity/container.js: Use new NoticeDialog to show
+	error and success messages.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/dialog/noticedialog.js: Add a new
 	NoticeDialog component for displaying success and error messages.

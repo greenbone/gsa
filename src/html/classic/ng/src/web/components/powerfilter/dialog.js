@@ -123,8 +123,6 @@ export const withFilterDialog = (FilterDialogComponent, options = {}) => {
       if (this.props.onFilterChanged && !filter.equals(this.orig_filter)) {
         this.props.onFilterChanged(filter);
       }
-
-      this.dialog.close();
     }
 
     onFilterValueChange(value, name, relation = '=') {
@@ -162,7 +160,7 @@ export const withFilterDialog = (FilterDialogComponent, options = {}) => {
           title={_('Update Filter')}
           footer={_('Update')}
           width="800px"
-          onSaveClick={this.handleSave}>
+          onSave={this.handleSave}>
           {filter &&
             <FilterDialogComponent {...options} {...this.props}
               onFilterValueChange={this.onFilterValueChange}

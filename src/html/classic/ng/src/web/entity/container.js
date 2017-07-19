@@ -29,11 +29,10 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-import Dialog from '../components/dialog/dialog.js';
+import NoticeDialog from '../components/dialog/noticedialog.js';
 
 import withDownload from '../components/form/withDownload.js';
 
-import Layout from '../components/layout/layout.js';
 import Wrapper from '../components/layout/wrapper.js';
 
 import NoteDialog from '../pages/notes/dialog.js';
@@ -273,24 +272,18 @@ class EntityContainer extends React.Component {
     return Promise.reject(error);
   }
 
-  handleShowError(error) {
+  handleShowError(message) {
     this.notice_dialog.show({
-      content: (
-        <Layout flex align="center">
-          {error}
-        </Layout>
-      ),
+      message,
+    }, {
       title: _('Error'),
     });
   }
 
   handleShowSuccess(message) {
     this.notice_dialog.show({
-      content: (
-        <Layout flex align="center">
-          {message}
-        </Layout>
-      ),
+      message,
+    }, {
       title: _('Success'),
     });
   }
@@ -395,7 +388,7 @@ class EntityContainer extends React.Component {
           ref={ref => this.tag_dialog = ref}
           onSave={this.handleSaveTag}
         />
-        <Dialog
+        <NoticeDialog
           width="400px"
           ref={ref => this.notice_dialog = ref}
         />
