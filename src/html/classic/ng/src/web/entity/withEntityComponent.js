@@ -30,6 +30,11 @@ import PropTypes from '../utils/proptypes.js';
 
 const log = logger.getLogger('web.entity.withEntityComponent');
 
+export const goto_details = type => ({router}, {data}) =>
+  router.push('/ng/' + type +  '/' + data.id);
+
+export const goto_list = type => ({router}) => router.push('/ng/' + type);
+
 export const set_handlers = (handlers, props) => {
   const set_handler = (name, named, handler) => {
     if (process.env.NODE_ENV !== 'production' && !is_defined(name)) {
