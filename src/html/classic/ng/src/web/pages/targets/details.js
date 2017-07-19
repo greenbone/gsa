@@ -169,6 +169,7 @@ const TargetDetails = ({
                       type="credential">
                       {ssh_credential.name}
                     </DetailsLink>
+                    {_(' on Port {{port}}', {port: ssh_credential.port})}
                   </TableData>
                 </TableRow>
               }
