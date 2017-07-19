@@ -1,5 +1,10 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/utils.js: Add new function to exclude properties
+	by name from an object.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/target.js: The returned hosts and
 	exclude_hosts fields from the xml response are strings with ips seperated with
 	comma.

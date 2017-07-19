@@ -283,6 +283,9 @@ export function exclude(object, func) {
     .map(key => ({[key]: object[key]})));
 }
 
+export const exclude_object_props = (object, exclude_array) =>
+  exclude(object, key => includes(exclude_array, key));
+
 export function split(string, seperator, limit) {
   // split('abc_def_hij', 1) => ['abc', 'def_hij']
   let splits = string.split(seperator, limit);
