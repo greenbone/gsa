@@ -1,5 +1,11 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/user.js,
+	src/html/classic/ng/src/web/pages/users/dialog.js: Use constants for user
+	hosts and ifaces allow values.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/users.js,
 	src/html/classic/ng/src/gmp/models/user.js,
 	src/html/classic/ng/src/web/pages/users/dialog.js,

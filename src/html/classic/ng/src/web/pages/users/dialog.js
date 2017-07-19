@@ -27,6 +27,8 @@ import  _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils.js';
 
 import {
+  ACCESS_ALLOW_ALL,
+  ACCESS_DENY_ALL,
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_PASSWORD,
@@ -239,15 +241,15 @@ class Dialog extends React.Component {
             <Radio
               name="hosts_allow"
               title={_('Allow all and deny')}
-              value="0"
-              checked={hosts_allow === "0"}
+              value={ACCESS_ALLOW_ALL}
+              checked={hosts_allow === ACCESS_ALLOW_ALL}
               onChange={onValueChange}
             />
             <Radio
               name="hosts_allow"
               title={_('Deny all and allow')}
-              value="1"
-              checked={hosts_allow === "1"}
+              value={ACCESS_DENY_ALL}
+              checked={hosts_allow === ACCESS_DENY_ALL}
               onChange={onValueChange}
             />
           </Layout>
@@ -269,15 +271,15 @@ class Dialog extends React.Component {
             <Radio
               name="ifaces_allow"
               title={_('Allow all and deny')}
-              value="0"
-              checked={ifaces_allow === "0"}
+              value={ACCESS_ALLOW_ALL}
+              checked={ifaces_allow === ACCESS_ALLOW_ALL}
               onChange={onValueChange}
             />
             <Radio
               name="ifaces_allow"
               title={_('Deny all and allow')}
-              value="1"
-              checked={ifaces_allow === "1"}
+              value={ACCESS_DENY_ALL}
+              checked={ifaces_allow === ACCESS_DENY_ALL}
               onChange={onValueChange}
             />
           </Layout>
@@ -309,9 +311,15 @@ Dialog.propTypes = {
   comment: PropTypes.string,
   group_ids: PropTypes.array,
   groups: PropTypes.arrayLike,
-  hosts_allow: PropTypes.oneOf(['0', '1']).isRequired,
+  hosts_allow: PropTypes.oneOf([
+    ACCESS_ALLOW_ALL,
+    ACCESS_DENY_ALL,
+  ]).isRequired,
   id: PropTypes.id,
-  ifaces_allow: PropTypes.oneOf(['0', '1']).isRequired,
+  ifaces_allow: PropTypes.oneOf([
+    ACCESS_ALLOW_ALL,
+    ACCESS_DENY_ALL,
+  ]).isRequired,
   name: PropTypes.string,
   old_name: PropTypes.string,
   password: PropTypes.string,
@@ -334,8 +342,8 @@ export default withDialog(Dialog, {
     auth_method: AUTH_METHOD_PASSWORD,
     comment: '',
     group_ids: [],
-    hosts_allow: '0',
-    ifaces_allow: '0',
+    hosts_allow: ACCESS_ALLOW_ALL,
+    ifaces_allow: ACCESS_ALLOW_ALL,
     name: _('Unnamed'),
     role_ids: [],
   },

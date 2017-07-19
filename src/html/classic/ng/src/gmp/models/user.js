@@ -30,6 +30,9 @@ export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';
 export const AUTH_METHOD_LDAP = 'ldap';
 export const AUTH_METHOD_RADIUS = 'radius';
 
+export const ACCESS_ALLOW_ALL = '0';
+export const ACCESS_DENY_ALL = '1';
+
 class User extends Model {
 
   static entity_type = 'user';
