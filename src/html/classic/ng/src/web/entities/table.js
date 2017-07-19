@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, for_each, exclude, includes} from 'gmp/utils.js';
+import {is_defined, for_each, exclude_object_props} from 'gmp/utils.js';
 
 import FootNote from '../components/footnote/footnote.js';
 
@@ -85,7 +85,7 @@ export class EntitiesTable extends React.Component {
       props.pagination : Pagination;
     let BodyComponent = is_defined(props.body) ? props.body : TableBody;
 
-    const other = exclude(props, key => includes(exclude_props, key));
+    const other = exclude_object_props(props, exclude_props);
 
     let filterstring = filter ? filter.toFilterString() : '';
 

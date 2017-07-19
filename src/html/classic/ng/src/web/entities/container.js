@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, is_array, exclude, includes} from 'gmp/utils.js';
+import {is_defined, is_array, exclude_object_props} from 'gmp/utils.js';
 
 import PromiseFactory from 'gmp/promise.js';
 import Filter from 'gmp/models/filter.js';
@@ -375,7 +375,7 @@ class EntitiesContainer extends React.Component {
     const {onDownload} = this.props;
     const {entity_command, entities_command} = this;
     const Component = this.props.component;
-    const other = exclude(this.props, key => includes(exclude_props, key));
+    const other = exclude_object_props(this.props, exclude_props);
     return (
       <Wrapper>
         <Component

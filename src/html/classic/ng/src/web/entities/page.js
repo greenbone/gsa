@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, exclude, includes} from 'gmp/utils.js';
+import {is_defined, exclude_object_props} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -171,7 +171,7 @@ export class EntitiesPage extends React.Component {
       return null;
     }
 
-    other = exclude(other, key => includes(exclude_props, key));
+    other = exclude_object_props(other, exclude_props);
 
     return (
       <TableComponent
@@ -229,7 +229,7 @@ export class EntitiesPage extends React.Component {
     if (React.isValidElement(toolBarIcons)) {
       return toolBarIcons;
     }
-    other = exclude(other, key => includes(exclude_props));
+    other = exclude_object_props(other, exclude_props);
     return React.createElement(toolBarIcons, other);
   }
 
