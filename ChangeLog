@@ -1,5 +1,10 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/targets/dialog.js: Change TargetDialog to
+	use new withDialog HOC.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/dialog/dialog.js,
 	src/html/classic/ng/src/web/components/powerfilter/dialog.js: Change Dialog to
 	be created with new withDialog HOC.

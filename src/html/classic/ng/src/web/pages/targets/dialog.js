@@ -29,7 +29,7 @@ import {NO_VALUE} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -388,7 +388,7 @@ TargetDialog.propTypes = {
   in_use: PropTypes.bool,
   port_list_id: PropTypes.idOrZero,
   port_lists: PropTypes.arrayLike,
-  port: PropTypes.number,
+  port: PropTypes.numberOrNumberString,
   reverse_lookup_only: PropTypes.yesno,
   reverse_lookup_unify: PropTypes.yesno,
   smb_credential_id: PropTypes.idOrZero,
@@ -403,7 +403,7 @@ TargetDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(TargetDialog, {
+export default withDialog({
   title: _('New Target'),
   footer: _('Save'),
   defaultState: {
@@ -423,6 +423,6 @@ export default withDialog(TargetDialog, {
     target_source: 'manual',
     target_exclude_source: 'manual',
   },
-});
+})(TargetDialog);
 
 // vim: set ts=2 sw=2 tw=80:
