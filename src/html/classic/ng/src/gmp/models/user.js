@@ -25,6 +25,11 @@ import {is_defined, is_empty, map} from '../utils.js';
 
 import Model from '../model.js';
 
+export const AUTH_METHOD_PASSWORD = 'password';
+export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';
+export const AUTH_METHOD_LDAP = 'ldap';
+export const AUTH_METHOD_RADIUS = 'radius';
+
 class User extends Model {
 
   static entity_type = 'user';
@@ -67,7 +72,16 @@ class User extends Model {
       ret.ifaces = {};
     }
 
-    ret.auth_method = elem.sources.source;
+    const {source} = elem.sources;
+    if (source === 'ldap_connect') {
+      ret.auth_method = AUTH_METHOD_LDAP;
+    }
+    else if (source === 'radius_connect') {
+      ret.auth_method = AUTH_METHOD_RADIUS;
+    }
+    else {
+      ret.auth_method = AUTH_METHOD_PASSWORD;
+    }
     delete ret.sources;
 
     return ret;

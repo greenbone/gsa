@@ -26,6 +26,13 @@ import React from 'react';
 import  _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils.js';
 
+import {
+  AUTH_METHOD_LDAP,
+  AUTH_METHOD_NEW_PASSWORD,
+  AUTH_METHOD_PASSWORD,
+  AUTH_METHOD_RADIUS,
+} from 'gmp/models/user.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import {withDialog} from '../../components/dialog/dialog.js';
@@ -43,8 +50,8 @@ class Dialog extends React.Component {
   render() {
     const {
       id,
-      access_ifaces,
-      access_hosts,
+      access_ifaces = '',
+      access_hosts = '',
       auth_method,
       comment,
       groups,
@@ -91,8 +98,8 @@ class Dialog extends React.Component {
               <Radio
                 title={_('Password')}
                 name="auth_method"
-                value="0"
-                checked={auth_method === "0"}
+                value={AUTH_METHOD_PASSWORD}
+                checked={auth_method === AUTH_METHOD_PASSWORD}
                 onChange={onValueChange}
               />
               <PasswordField
@@ -106,8 +113,8 @@ class Dialog extends React.Component {
                 <Radio
                   title={_('LDAP Authentication Only')}
                   name="auth_method"
-                  value="1"
-                  checked={auth_method === "1"}
+                  value={AUTH_METHOD_LDAP}
+                  checked={auth_method === AUTH_METHOD_LDAP}
                   onChange={onValueChange}
                 />
               </Layout>
@@ -117,8 +124,8 @@ class Dialog extends React.Component {
                 <Radio
                   title={_('RADIUS Authentication Only')}
                   name="auth_method"
-                  value="2"
-                  checked={auth_method === "2"}
+                  value={AUTH_METHOD_RADIUS}
+                  checked={auth_method === AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
                 />
               </Layout>
@@ -133,8 +140,8 @@ class Dialog extends React.Component {
               <Radio
                 title={_('Password: Use existing Password')}
                 name="auth_method"
-                value="0"
-                checked={auth_method === "0"}
+                value={AUTH_METHOD_PASSWORD}
+                checked={auth_method === AUTH_METHOD_PASSWORD}
                 onChange={onValueChange}
               />
             </Layout>
@@ -142,8 +149,8 @@ class Dialog extends React.Component {
               <Radio
                 title={_('New Password')}
                 name="auth_method"
-                value="1"
-                checked={auth_method === "1"}
+                value={AUTH_METHOD_NEW_PASSWORD}
+                checked={auth_method === AUTH_METHOD_NEW_PASSWORD}
                 onChange={onValueChange}
               />
               <PasswordField
@@ -157,8 +164,8 @@ class Dialog extends React.Component {
                 <Radio
                   title={_('LDAP Authentication Only')}
                   name="auth_method"
-                  value="2"
-                  checked={auth_method === "2"}
+                  value={AUTH_METHOD_LDAP}
+                  checked={auth_method === AUTH_METHOD_LDAP}
                   onChange={onValueChange}
                 />
               </Layout>
@@ -168,8 +175,8 @@ class Dialog extends React.Component {
                 <Radio
                   title={_('RADIUS Authentication Only')}
                   name="auth_method"
-                  value="2"
-                  checked={auth_method === "3"}
+                  value={AUTH_METHOD_RADIUS}
+                  checked={auth_method === AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
                 />
               </Layout>
@@ -293,7 +300,12 @@ class Dialog extends React.Component {
 Dialog.propTypes = {
   access_hosts: PropTypes.string,
   access_ifaces: PropTypes.string,
-  auth_method: PropTypes.oneOf(['0', '1']).isRequired,
+  auth_method: PropTypes.oneOf([
+    AUTH_METHOD_LDAP,
+    AUTH_METHOD_NEW_PASSWORD,
+    AUTH_METHOD_PASSWORD,
+    AUTH_METHOD_RADIUS,
+  ]).isRequired,
   comment: PropTypes.string,
   group_ids: PropTypes.array,
   groups: PropTypes.arrayLike,
@@ -319,7 +331,7 @@ export default withDialog(Dialog, {
   defaultState: {
     access_hosts: '',
     access_ifaces: '',
-    auth_method: '0',
+    auth_method: AUTH_METHOD_PASSWORD,
     comment: '',
     group_ids: [],
     hosts_allow: '0',

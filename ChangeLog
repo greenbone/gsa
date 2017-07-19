@@ -1,5 +1,14 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/users.js,
+	src/html/classic/ng/src/gmp/models/user.js,
+	src/html/classic/ng/src/web/pages/users/dialog.js,
+	src/html/classic/ng/src/web/pages/users/listpage.js,
+	src/html/classic/ng/src/web/pages/users/row.js: Fix editing users and improve
+	auth_method handling.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/hosts/listpage.js,
 	src/html/classic/ng/src/web/pages/targets/detailspage.js,
 	src/html/classic/ng/src/web/pages/targets/listpage.js: Use withTargetComponent

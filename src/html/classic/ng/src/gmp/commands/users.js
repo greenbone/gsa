@@ -27,7 +27,11 @@ import {for_each} from '../utils.js';
 import logger from '../log.js';
 
 import Capabilities from '../capabilities.js';
-import User from '../models/user.js';
+import User, {
+  AUTH_METHOD_LDAP,
+  AUTH_METHOD_NEW_PASSWORD,
+  AUTH_METHOD_RADIUS,
+} from '../models/user.js';
 import Settings from '../models/settings.js';
 import ChartPreferences from '../models/chartpreferences.js';
 
@@ -115,6 +119,15 @@ export class UserCommand extends EntityCommand {
     password,
     role_ids,
   }) {
+    if (auth_method === AUTH_METHOD_LDAP) {
+      auth_method = '1';
+    }
+    else if (auth_method === AUTH_METHOD_RADIUS) {
+      auth_method = '2';
+    }
+    else {
+      auth_method = '0';
+    }
     const data = {
       cmd: 'create_user',
       next: 'get_user',
@@ -135,10 +148,10 @@ export class UserCommand extends EntityCommand {
 
   save({
     id,
-    access_hosts,
-    access_ifaces,
+    access_hosts = '',
+    access_ifaces = '',
     auth_method,
-    comment,
+    comment = '',
     group_ids,
     hosts_allow,
     ifaces_allow,
@@ -147,6 +160,18 @@ export class UserCommand extends EntityCommand {
     password,
     role_ids,
   }) {
+    if (auth_method === AUTH_METHOD_LDAP) {
+      auth_method = '2';
+    }
+    else if (auth_method === AUTH_METHOD_RADIUS) {
+      auth_method = '3';
+    }
+    else if (auth_method === AUTH_METHOD_NEW_PASSWORD) {
+      auth_method = '1';
+    }
+    else {
+      auth_method = '0';
+    }
     const data = {
       cmd: 'save_user',
       next: 'get_user',
@@ -158,8 +183,8 @@ export class UserCommand extends EntityCommand {
       id,
       ifaces_allow,
       login: name,
-      'modify_password': auth_method,
-      'old_login': old_name,
+      modify_password: auth_method,
+      old_login: old_name,
       password,
       'role_ids:': role_ids,
     };

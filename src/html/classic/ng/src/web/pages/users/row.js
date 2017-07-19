@@ -26,6 +26,8 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_empty, map} from 'gmp/utils.js';
 
+import {AUTH_METHOD_LDAP, AUTH_METHOD_RADIUS} from 'gmp/models/user.js';
+
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
@@ -130,10 +132,10 @@ const Row = ({
   ));
 
   let auth_method;
-  if (entity.auth_method === 'ldap_connect') {
+  if (entity.auth_method === AUTH_METHOD_LDAP) {
     auth_method = _('LDAP');
   }
-  else if (entity.auth_method === 'radius_connect') {
+  else if (entity.auth_method === AUTH_METHOD_RADIUS) {
     auth_method = _('RADIUS');
   }
   else {
