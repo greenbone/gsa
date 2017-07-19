@@ -1,5 +1,10 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/hosts/row.js: Use IconDivider to fix
+	displaying the action icons at each host row.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/utils.js: Add new function to exclude properties
 	by name from an object.
 

@@ -42,7 +42,7 @@ import ExportIcon from '../../components/icon/exporticon.js';
 import NewIcon from '../../components/icon/newicon.js';
 import OsIcon from '../../components/icon/osicon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import AssetLink from '../../components/link/assetlink.js';
 
@@ -66,7 +66,7 @@ const Actions = ({
     new_title = _('Permission to create Target denied');
   }
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider>
       <DeleteIcon
         entity={entity}
         name="asset"
@@ -87,7 +87,7 @@ const Actions = ({
         title={_('Export Host')}
         onClick={onEntityDownload}
       />
-    </Layout>
+    </IconDivider>
   );
 };
 
