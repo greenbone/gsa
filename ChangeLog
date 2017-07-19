@@ -1,5 +1,11 @@
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/target.js: The returned hosts and
+	exclude_hosts fields from the xml response are strings with ips seperated with
+	comma.
+
+2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/icons/entitycreateicon.js: Don't pass
 	entity as value to the click handler. Normally the value must be empty.
 

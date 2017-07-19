@@ -61,9 +61,9 @@ class Target extends Model {
     }
 
     ret.hosts = is_empty(elem.hosts) ? [] :
-      map(elem.hosts, host => host); // always get an array
+      elem.hosts.split(', '); // always get an array
     ret.exclude_hosts = is_empty(elem.exclude_hosts) ? [] :
-      map(elem.exclude_hosts, host => host); // always get an array
+      elem.exclude_hosts.split(', '); // always get an array
 
     ret.max_hosts = parse_int(elem.max_hosts);
 
