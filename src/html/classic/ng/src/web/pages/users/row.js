@@ -41,7 +41,7 @@ import EditIcon from '../../entities/icons/entityediticon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
@@ -58,7 +58,7 @@ const IconActions = ({
     onEntityDownload,
   }) => {
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider>
       <DeleteIcon
         displayName={_('User')}
         name="user"
@@ -81,7 +81,7 @@ const IconActions = ({
         title={_('Export User')}
         onClick={onEntityDownload}
       />
-    </Layout>
+    </IconDivider>
   );
 };
 
