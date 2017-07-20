@@ -58,8 +58,9 @@ ToolBarIcons.propTypes = {
 
 const TargetsPageNew = withTargetComponent({
   onCreated: 'onChanged',
-  onEdit: 'onEditTarget',
   onSaved: 'onChanged',
+  onCloned: 'onChanged',
+  onDeleted: 'onChanged',
 })(EntitiesPage);
 
 export default withEntitiesContainer(TargetsPageNew, 'target', {

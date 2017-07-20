@@ -49,46 +49,44 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const IconActions = ({
-    entity,
-    onEditTarget,
-    onEntityClone,
-    onEntityDelete,
-    onEntityDownload,
-  }) => {
-  return (
-    <IconDivider flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Target')}
-        name="target"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Target')}
-        name="target"
-        entity={entity}
-        onClick={onEditTarget}/>
-      <CloneIcon
-        displayName={_('Target')}
-        name="target"
-        entity={entity}
-        title={_('Clone Target')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Target')}
-        onClick={onEntityDownload}
-      />
-    </IconDivider>
-  );
-};
+  entity,
+  onTargetEditClick,
+  onTargetCloneClick,
+  onTargetDownloadClick,
+  onTargetDeleteClick,
+}) => (
+  <IconDivider flex align={['center', 'center']}>
+    <TrashIcon
+      displayName={_('Target')}
+      name="target"
+      entity={entity}
+      onClick={onTargetDeleteClick}/>
+    <EditIcon
+      displayName={_('Target')}
+      name="target"
+      entity={entity}
+      onClick={onTargetEditClick}/>
+    <CloneIcon
+      displayName={_('Target')}
+      name="target"
+      entity={entity}
+      title={_('Clone Target')}
+      value={entity}
+      onClick={onTargetCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Target')}
+      onClick={onTargetDownloadClick}
+    />
+  </IconDivider>
+);
 
 IconActions.propTypes = {
   entity: PropTypes.model,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onEditTarget: PropTypes.func,
-  onEntityClone: PropTypes.func,
+  onTargetCloneClick: PropTypes.func.isRequired,
+  onTargetDeleteClick: PropTypes.func.isRequired,
+  onTargetDownloadClick: PropTypes.func.isRequired,
+  onTargetEditClick: PropTypes.func.isRequired,
 };
 
 const Cred = ({cred, title, links}) => {

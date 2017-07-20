@@ -1,5 +1,13 @@
 2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/targets/listpage.js,
+	src/html/classic/ng/src/web/pages/targets/row.js: Use handlers from
+	TargetComponentWrapper instead of EntitiesContainer. The entity handlers in
+	EntitiesContainer will be removed in future after all list pages have been
+	converted to use withEntityComponent HOC.
+
+2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/withEntityComponent.js,
 	src/html/classic/ng/src/web/pages/targets/withTargetComponent.js,
 	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Improve and
