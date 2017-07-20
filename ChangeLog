@@ -1,3 +1,10 @@
+2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/components/table/simple.js,
+	src/html/classic/ng/src/web/components/table/table.js: Allow to set the width
+	of a Table component by a new size property. Size cann be auto, full or all
+	allowed width units.
+
 2017-07-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/users/listpage.js,

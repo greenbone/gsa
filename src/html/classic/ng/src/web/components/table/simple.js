@@ -21,13 +21,22 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import React from 'react';
+
+import PropTypes from '../../utils/proptypes.js';
+
 import Table from './table.js';
 
-import glamorous from 'glamorous';
+const SimpleTable = ({size = 'auto', ...props}) => (
+  <Table {...props} size={size} />
+);
 
-const SimpleTable = glamorous(Table)({
-  width: 'auto',
-});
+SimpleTable.propTypes = {
+  size: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+};
 
 export default SimpleTable;
 

@@ -65,7 +65,6 @@ export default glamorous(Table)(
     borderSpacing: '2px',
     fontSize: '12px',
     textAlign: 'left',
-    width: '100%',
 
     '& th, & td': {
       padding: '4px',
@@ -79,7 +78,20 @@ export default glamorous(Table)(
       borderCollapse: 'collapse',
     },
   },
-  props => ({tableLayout: props.fixed ? 'fixed' : 'auto'}),
+  ({fixed}) => ({tableLayout: fixed ? 'fixed' : 'auto'}),
+  ({size = 'full'}) => {
+    if (size === 'auto') {
+      return {};
+    }
+    if (size === 'full') {
+      return {
+        width: '100%'
+      };
+    }
+    return {
+      width: size,
+    };
+  },
 );
 
 // vim: set ts=2 sw=2 tw=80:
