@@ -43,9 +43,10 @@ const Indent = glamorous.div({
   width: '3em',
   borderRight: '2px solid black',
   marginRight: '1em',
+  flexShrink: 0, // don't shrink at all
 });
 
-Indent.displayName = 'indent';
+Indent.displayName = 'Indent';
 
 const StyledTableRow = glamorous(TableRow, {
   displayName: 'StyledTableRow',

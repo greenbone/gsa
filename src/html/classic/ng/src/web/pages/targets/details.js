@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import {Col} from 'glamorous';
+
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
@@ -66,14 +68,18 @@ const TargetDetails = ({
 
       <DetailsBlock
         title={_('Hosts')}>
-        <InfoTable>
+        <InfoTable size="full">
+          <colgroup>
+            <Col width="20%"/>
+            <Col width="80%"/>
+          </colgroup>
           <TableBody>
             <TableRow>
               <TableData>
                 {_('Included')}
               </TableData>
               <TableData>
-                <Divider>
+                <Divider flex wrap>
                   {hosts.map(host => (
                     <span key={host}>{host}</span>
                   ))}
