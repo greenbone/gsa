@@ -24,10 +24,8 @@
 import React from 'react';
 
 import  _ from 'gmp/locale.js';
-import {is_defined, is_empty, shorten} from 'gmp/utils.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -40,9 +38,9 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import NotesCharts from './charts.js';
-import NoteDialog from './dialog.js';
 import FilterDialog from './filterdialog.js';
 import NotesTable from './table.js';
+import withNoteComponent from './withNoteComponent.js';
 
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -54,7 +52,7 @@ const Dashboard = withDashboard(NotesCharts, {
   defaultControllerString: 'note-by-active-days',
 });
 
-const ToolBarIcons = ({onNewNoteClick}, {capabilities}) => {
+const ToolBarIcons = ({onNoteCreateClick}, {capabilities}) => {
   return (
     <IconDivider>
       <HelpIcon
@@ -62,7 +60,7 @@ const ToolBarIcons = ({onNewNoteClick}, {capabilities}) => {
         title={_('Help: Notes')}/>
       {capabilities.mayCreate('note') &&
         <NewIcon title={_('New Note')}
-          onClick={onNewNoteClick}/>
+          onClick={onNoteCreateClick}/>
       }
     </IconDivider>
   );
@@ -73,94 +71,15 @@ ToolBarIcons.contextTypes = {
 };
 
 ToolBarIcons.propTypes = {
-  onNewNoteClick: PropTypes.func,
+  onNoteCreateClick: PropTypes.func,
 };
 
-
-class Page extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.handleSaveNote = this.handleSaveNote.bind(this);
-    this.openNoteDialog = this.openNoteDialog.bind(this);
-  }
-
-  openNoteDialog(note) {
-    let {gmp} = this.context;
-
-    if (is_defined(note) && note.id) {
-      let active = '0';
-      if (note.isActive()) {
-        if (is_empty(note.end_time)) {
-          active = '-1';
-        }
-        else {
-          active = '-2';
-        }
-      }
-      this.note_dialog.show({
-        active,
-        hosts: is_defined(note.hosts) ? '--' : '',
-        hosts_manual: note.hosts,
-        port: note.port,
-        oid: is_defined(note.nvt) ? note.nvt.oid : undefined,
-        note,
-        note_id: note.id,
-        nvt: note.nvt,
-        note_severity: note.severity,
-        task_id: is_defined(note.task) && is_defined(note.task.id) ? '0' : '',
-        task_uuid: is_defined(note.task) ? note.task.id : '',
-        result_id: is_defined(note.result) && is_defined(note.result.id) ?
-          '0' : '',
-        result_uuid: is_defined(note.result) ? note.result.id : '',
-        severity: note.severity,
-        text: note.text,
-      }, {
-        title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
-      });
-    }
-    else {
-      this.note_dialog.show({});
-    }
-    gmp.tasks.getAll().then(tasks => this.note_dialog.setValue('tasks', tasks));
-  }
-
-  handleSaveNote(data) {
-    let {entityCommand, onChanged} = this.props;
-    let promise;
-    if (data.note && data.note.id) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.create(data);
-    }
-    return promise.then(() => onChanged());
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEditNoteClick={this.openNoteDialog}
-          onNewNoteClick={this.openNoteDialog}/>
-        <NoteDialog
-          ref={ref => this.note_dialog = ref}
-          onSave={this.handleSaveNote}/>
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func.isRequired,
-};
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
+const Page = withNoteComponent({
+  onCreated: 'onChanged',
+  onCloned: 'onChanged',
+  onSaved: 'onChanged',
+  onDeleted: 'onChanged',
+})(EntitiesPage);
 
 export default withEntitiesContainer(Page, 'note', {
   dashboard: Dashboard,

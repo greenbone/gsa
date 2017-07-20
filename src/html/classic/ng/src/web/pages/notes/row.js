@@ -48,29 +48,29 @@ import TableData from '../../components/table/data.js';
 
 const Actions = ({
     entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEditNoteClick,
+    onNoteDeleteClick,
+    onNoteDownloadClick,
+    onNoteCloneClick,
+    onNoteEditClick,
   }) => {
   return (
     <IconDivider>
       <TrashIcon
         entity={entity}
         name="note"
-        onClick={onEntityDelete}/>
+        onClick={onNoteDeleteClick}/>
       <EditIcon
         entity={entity}
         name="note"
-        onClick={onEditNoteClick}/>
+        onClick={onNoteEditClick}/>
       <CloneIcon
         entity={entity}
         name="note"
-        onClick={onEntityClone}/>
+        onClick={onNoteCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Note')}
-        onClick={onEntityDownload}
+        onClick={onNoteDownloadClick}
       />
     </IconDivider>
   );
@@ -78,10 +78,10 @@ const Actions = ({
 
 Actions.propTypes = {
   entity: PropTypes.model,
-  onEditNoteClick: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
+  onNoteCloneClick: PropTypes.func.isRequired,
+  onNoteDeleteClick: PropTypes.func.isRequired,
+  onNoteDownloadClick: PropTypes.func.isRequired,
+  onNoteEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({entity, links = true, actions, ...props}) => {
