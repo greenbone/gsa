@@ -26,6 +26,7 @@ import React from 'react';
 import  _ from 'gmp/locale.js';
 import {is_defined, is_empty, shorten} from 'gmp/utils.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -55,7 +56,7 @@ const Dashboard = withDashboard(NotesCharts, {
 
 const ToolBarIcons = ({onNewNoteClick}, {capabilities}) => {
   return (
-    <Layout flex box>
+    <IconDivider>
       <HelpIcon
         page="notes"
         title={_('Help: Notes')}/>
@@ -63,7 +64,7 @@ const ToolBarIcons = ({onNewNoteClick}, {capabilities}) => {
         <NewIcon title={_('New Note')}
           onClick={onNewNoteClick}/>
       }
-    </Layout>
+    </IconDivider>
   );
 };
 

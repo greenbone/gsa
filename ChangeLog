@@ -1,5 +1,11 @@
 2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/notes/listpage.js,
+	src/html/classic/ng/src/web/pages/notes/row.js: Fix icon layout at notes list
+	page.
+
+2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/listpage.js,
 	src/html/classic/ng/src/web/pages/targets/row.js: Use handlers from
 	TargetComponentWrapper instead of EntitiesContainer. The entity handlers in
