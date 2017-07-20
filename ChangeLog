@@ -1,5 +1,10 @@
 2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/notes/dialog.js: Change NoteDialog to use
+	the new withDialog HOC.
+
+2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/notes/listpage.js,
 	src/html/classic/ng/src/web/pages/notes/row.js,

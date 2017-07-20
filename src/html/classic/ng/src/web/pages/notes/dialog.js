@@ -35,7 +35,7 @@ import {
   result_cvss_risk_factor,
 } from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Text from '../../components/form/text.js';
@@ -362,7 +362,7 @@ NoteDialog.propTypes = {
   onValueChange: PropTypes.func.isRequired,
 };
 
-export default withDialog(NoteDialog, {
+export default withDialog({
   title: _('New Note'),
   footer: _('Save'),
   defaultState: {
@@ -382,6 +382,6 @@ export default withDialog(NoteDialog, {
     text: '',
     tasks: [],
   },
-});
+})(NoteDialog);
 
 // vim: set ts=2 sw=2 tw=80:
