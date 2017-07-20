@@ -1,5 +1,13 @@
 2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/withEntityComponent.js,
+	src/html/classic/ng/src/web/pages/targets/withTargetComponent.js,
+	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Improve and
+	simplify handler mapping for entity component hocs. The new code is easier to
+	read and understand.
+
+2017-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/withRowDetails.js,
 	src/html/classic/ng/src/web/pages/targets/details.js: Fix difficult rendering
 	problem of target row details when a target has many hosts.

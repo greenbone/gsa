@@ -59,7 +59,8 @@ import TaskWizard from '../../wizard/taskwizard.js';
 
 import withEntityComponent, {
   handle_promise,
-  set_handlers,
+  create_handler_props,
+  has_mapping,
 } from '../../entity/withEntityComponent.js';
 
 import TaskDialog from './dialogcontainer.js';
@@ -432,60 +433,30 @@ const withTaskComponent = (mapping = {}) => Component => {
 
     render() {
       const {
-        onCreate,
-        onCreated,
-        onEdit,
         onSave,
-        onContainerCreate,
-        onContainerCreated,
-        onReportImport,
-        onReportImported,
-        onResume,
-        onResumed,
-        onStart,
-        onStarted,
-        onStop,
-        onStopped,
-        onAdvancedTaskWizard,
-        onAdvancedTaskWizardSaved,
-        onModifyTaskWizard,
-        onModifyTaskWizardSaved,
-        onTaskWizard,
-        onTaskWizardSaved,
       } = mapping;
 
-      const onSaveClick  = this.props[onSave];
-      const has_save = is_defined(onSaveClick);
+      const onSaveHandler  = this.props[onSave];
+      const has_save = is_defined(onSaveHandler) &&
+        has_mapping(this.props, mapping, 'onSaved');
+      const has_create = is_defined(onSaveHandler) &&
+        has_mapping(this.props, mapping, 'onCreated');
 
-      const handlers = {
-        [onEdit]: has_save ? this.openTaskDialog : undefined,
-      };
-
-      set_handlers(handlers, this.props)(
-        // this is a bit too complicated:
-        // onCreate opens the dialog which calls onSave handler on the
-        // EntityComponentWrapper that differentiates between create and edit
-        // and calls onCreated afterwards. Therefore onCreated must be set to
-        // allow calling onCreate
-        onCreate, onCreated, this.openTaskDialog,
-      )(
-        onContainerCreate, onContainerCreated, this.openContainerTaskDialog,
-      )(
-        onReportImport, onReportImported, this.openReportImportDialog,
-      )(
-        onResume, onResumed, this.handleTaskResume,
-      )(
-        onStart, onStarted, this.handleTaskStart,
-      )(
-        onStop, onStopped, this.handleTaskStop,
-      )(
-        onAdvancedTaskWizard, onAdvancedTaskWizardSaved,
-        this.openAdvancedTaskWizard,
-      )(
-        onModifyTaskWizard, onModifyTaskWizardSaved, this.openModifyTaskWizard,
-      )(
-        onTaskWizard, onTaskWizardSaved, this.openTaskWizard,
-      );
+      const handlers = create_handler_props(this.props, mapping)
+        .set('onCreate', has_create, this.openTaskDialog)
+        .set('onEdit', has_save, this.openTaskDialog)
+        .set('onContainerCreate', 'onContainerCreated',
+          this.openContainerTaskDialog)
+        .set('onReportImport', 'onReportImported',
+          this.openReportImportDialog)
+        .set('onResume', 'onResumed', this.handleTaskResume)
+        .set('onStart', 'onStarted', this.handleTaskStart)
+        .set('onStop', 'onStopped', this.handleTaskStop)
+        .set('onAdvancedTaskWizard', 'onAdvancedTaskWizardSaved',
+          this.openAdvancedTaskWizard)
+        .set('onModifyTaskWizard', 'onModifyTaskWizardSaved',
+          this.openModifyTaskWizard)
+        .set('onTaskWizard', 'onTaskWizardSaved', this.openTaskWizard);
 
       return (
         <Layout>
@@ -497,7 +468,7 @@ const withTaskComponent = (mapping = {}) => Component => {
 
           <TaskDialog
             ref={ref => this.task_dialog = ref}
-            onSave={onSaveClick}/>
+            onSave={onSaveHandler}/>
 
           <ContainerTaskDialog
             ref={ref => this.container_dialog = ref}

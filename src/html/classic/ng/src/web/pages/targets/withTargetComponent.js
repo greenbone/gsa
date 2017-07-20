@@ -30,7 +30,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../../components/layout/layout.js';
 import withEntityComponent, {
-  set_handlers,
+  create_handler_props,
+  has_mapping,
 } from '../../entity/withEntityComponent.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
@@ -172,22 +173,19 @@ const withTargetComponent = (mapping = {}) => Component => {
 
     render() {
       const {
-        onCreate,
-        onCreated,
-        onEdit,
         onSave,
       } = mapping;
 
-      const onSaveClick  = this.props[onSave];
-      const has_save = is_defined(onSaveClick);
+      const onSaveHandler  = this.props[onSave];
 
-      const handlers = {
-        [onEdit]: has_save ? this.openTargetDialog : undefined,
-      };
+      const has_save = is_defined(onSaveHandler) &&
+        has_mapping(this.props, mapping, 'onSaved');
+      const has_create = is_defined(onSaveHandler) &&
+        has_mapping(this.props, mapping, 'onCreated');
 
-      set_handlers(handlers, this.props)(
-        onCreate, onCreated, this.openCreateTargetDialog,
-      );
+      const handlers = create_handler_props(this.props, mapping)
+        .set('onEdit', has_save, this.openTargetDialog)
+        .set('onCreate', has_create, this.openCreateTargetDialog);
 
       return (
         <Layout>
@@ -199,7 +197,7 @@ const withTargetComponent = (mapping = {}) => Component => {
             ref={ref => this.target_dialog = ref}
             onNewCredentialsClick={this.openCredentialsDialog}
             onNewPortListClick={this.openPortListDialog}
-            onSave={onSaveClick}
+            onSave={onSaveHandler}
           />
           <CredentialsDialog
             ref={ref => this.credentials_dialog = ref}

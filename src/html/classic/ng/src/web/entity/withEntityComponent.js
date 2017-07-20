@@ -24,7 +24,7 @@
 import React from 'react';
 
 import logger from 'gmp/log.js';
-import {is_defined, is_function} from 'gmp/utils.js';
+import {is_defined, is_function, is_string} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -35,18 +35,36 @@ export const goto_details = type => ({router}, {data}) =>
 
 export const goto_list = type => ({router}) => router.push('/ng/' + type);
 
-export const set_handlers = (handlers, props) => {
-  const set_handler = (name, named, handler) => {
-    if (process.env.NODE_ENV !== 'production' && !is_defined(name)) {
-      log.error('No name for entity handler set');
-    }
-    handlers[name] = is_function(named) || is_defined(props[named]) ? handler :
-      undefined;
-    return set_handler;
-  };
-  return set_handler;
+export const has_mapping = (props, mapping, name) => {
+  const func_name = mapping[name];
+
+  return is_function(func_name) || is_defined(props[func_name]);
 };
 
+export const create_handler_props = (props, mapping, handlers = {}) => {
+
+  const set_handler = (name, named, handler) => {
+    const onName = mapping[name];
+
+    if (process.env.NODE_ENV !== 'production' && !is_defined(onName)) {
+      log.error('No name for entity handler set');
+      return handlers;
+    }
+
+    const condition = is_string(named) ? has_mapping(props, mapping, named) :
+      named;
+
+    handlers[onName] = condition ? handler : undefined;
+
+    return handlers;
+  };
+
+  Object.defineProperty(handlers, 'set', {
+    value: set_handler,
+  });
+
+  return handlers;
+};
 
 export const handle_promise = (promise, props, success, error) => {
   let onSuccess;
@@ -149,32 +167,12 @@ const withEntityComponent = (name, mapping) => Component => {
     }
 
     render() {
-      const {
-        onClone,
-        onCloned,
-        onCreate,
-        onCreated,
-        onDelete,
-        onDeleted,
-        onSave,
-        onSaved,
-        onDownload,
-        onDownloaded,
-      } = mapping;
-
-      const handlers = {};
-
-      set_handlers(handlers, this.props)(
-        onCreate, onCreated, this.handleEntitySave,
-      )(
-        onClone, onCloned, this.handleEntityClone
-      )(
-        onDelete, onDeleted, this.handleEntityDelete
-      )(
-        onSave, onSaved, this.handleEntitySave,
-      )(
-        onDownload, onDownloaded, this.handleEntityDownload,
-      );
+      const handlers = create_handler_props(this.props, mapping)
+        .set('onCreate', 'onCreated', this.handleEntitySave)
+        .set('onClone', 'onCloned', this.handleEntityClone)
+        .set('onDelete', 'onDeleted', this.handleEntityDelete)
+        .set('onSave', 'onSaved', this.handleEntitySave)
+        .set('onDownload', 'onDownloaded', this.handleEntityDownload);
 
       return (
         <Component
