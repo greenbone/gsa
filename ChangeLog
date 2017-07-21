@@ -5677,14 +5677,14 @@
 	* src/html/classic/omp.xsl (html-feed-row): Mention explicitly that
 	feed is current in status text when it is newer than 10 days.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for report formats list page.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/reportformats/dialog.js,
 	src/html/classic/ng/src/web/reportformats/reportformatspage.js: Finally handle
@@ -5692,27 +5692,27 @@
 	parameter differs a lot from other paramter types and seems only be necessary
 	for the ZIP report format.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/proptypes.js: Fix typo.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/reportformats.js: Add special handling
 	for report format lists when saving a report format.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/reportformat.js: Fix parsing type,
 	default and value of report format params. Add special handling for the
 	report_format_list type param.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/reportformats.js: verify_report_command
 	requires a next parameter. Otherwise gsad will return an error.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/reportformats/dialog.js,
@@ -5721,7 +5721,7 @@
 	src/html/classic/ng/src/web/reportformats/table.js: Add react components for
 	report formats list page.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/reportformats.js,
@@ -5729,13 +5729,13 @@
 	src/html/classic/ng/src/gmp/models/reportformat.js: Add gmp api for report
 	formats.
 
-2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/http.js: Add root (envelope) object to rejection
 	if an error has occured and the response has xml content. This allows easier
 	extraction of the error messages.
 
-2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/alerts/row.js,
 	src/html/classic/ng/src/web/schedules/row.js: Use correct event handler for
@@ -5746,7 +5746,7 @@
 	* src/gsad_gmp.c, src/gsad_gmp.h: Update file names in documentation
 	to match name changes of the files themselves.
 
-2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Start to display errors
 	when they occur at list pages. This is just a start and there is still much
@@ -5761,14 +5761,14 @@
 	* src/CMakeLists.txt, src/gsad.c, src/gsad_http_handler.c: Adjust
 	filename change accordingly.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for schedule list page.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/schedules/row.js,
@@ -5776,81 +5776,81 @@
 	src/html/classic/ng/src/web/schedules/table.js: Add react components for
 	schedules list page.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/schedules/dialog.js: Update proptypes of
 	Schedule dialog.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/alerts/row.js,
 	src/html/classic/ng/src/web/credentials/row.js,
 	src/html/classic/ng/src/web/filters/row.js: Fix toggling selection at alert,
 	schedule and filters list pages.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/schedules.js: Implement save schedule
 	gmp api.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/schedules.js: Add schedules gmp
 	command.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/schedule.js: Add parsing of Schedule
 	models.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/proptypes.js: Use momentDate proptype to
 	validate date property of Datepicker.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/proptypes.js: Allow to require momentDate
 	proptypes.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/form/select2.js: Fix properties comparision if
 	no properties are set when checking if a select component should be updated.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/proptypes.js: Add new proptypes for date
 	validation.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/locale.js: Add function to format a long date
 	(date time with timezone info) and to get an interval string from a duration
 	in seconds.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/locale.js: Use moment.js to format dates.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/utils.js: Add utility function to checking if a
 	value is a js Date object.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/locale.js: Set momements locale when detecting
 	language setting. This allows to localize date formats via moment.js.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for alerts list page.
 
-2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/alerts/alertspage.js,
@@ -5858,12 +5858,12 @@
 	src/html/classic/ng/src/web/alerts/table.js: Add react components for alert
 	list page.
 
-2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Allow to show simple
 	error and success messages via a dialog.
 
-2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/alerts/dialog.js,
 	src/html/classic/ng/src/web/alerts/dialogcontainer.js: Implement editing of an
@@ -5871,71 +5871,71 @@
 	alert dialog is much much to complex and must be simplified in future to be
 	maintainable.
 
-2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/alerts.js: Implement editAlertSettings
 	and save methods for alert gmp command.
 
-2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/alert.js: Parse id of event, condition
 	and method data correctly.
 
-2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/form/select2.js: Update select input element if
 	disabled property of an option has changed.
 
-2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/alerts/emailmethodpart.js: Only display report
 	format selection for email alert if event is a task event.
 
-2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/filters/dialog.js,
 	src/html/classic/ng/src/web/filters/filterspage.js: Fix creating and editing
 	type of a filter.
 
-2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dialog/dialog.js: Allow to set content of a
 	dialog via its show method.
 
-2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/alerts.js: Add gmp api for testing an
 	alert.
 
-2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/alert.js: Implement parsing of Alert
 	model properties.
 
-2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/secinfo.js,
 	src/html/classic/ng/src/web/secinfo/row.js: Mode secinfo_type function into
 	secinfo model module.
 
-2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/yarn.lock: Update js dependencies.
 
-2016-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* .eslintrc.json: Update eslint config and remove rules which are already
 	defined by eslint-config-react-app.
 
-2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for filters list page.
 
-2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/filters/dialog.js,
@@ -5944,17 +5944,17 @@
 	src/html/classic/ng/src/web/filters/table.js: Add components for the filters
 	list page.
 
-2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/filters.js: Add gmp api to change an
 	existing filter.
 
-2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/credentials/row.js: Add missing import for
 	Comment component.
 
-2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/certbund/filterdialog.js,
 	src/html/classic/ng/src/web/cpes/filterdialog.js,
@@ -5971,13 +5971,13 @@
 	src/html/classic/ng/src/web/targets/filterdialog.js,
 	src/html/classic/ng/src/web/vulns/filterdialog.js: Use createFilterDialog HOC.
 
-2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/powerfilter/dialog.js: Add createFilterDialog
 	HOC for easier filter dialog creation. Most filter dialogs are using
 	the DefaultFilterDialog. So add a HOC that uses it automatically.
 
-2016-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/filters.js: Fix parsing collection
 	counts for filters. Due to the bad count naming scheme we have to sub elements
@@ -5990,14 +5990,14 @@
 	template match="get_overrides"): Removed. These are fully covered
 	by NG.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for credentials list page.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/credentials/credentialspage.js,
@@ -6007,12 +6007,12 @@
 	src/html/classic/ng/src/web/credentials/table.js: Add implementation of
 	credentials list page.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/targets/row.js: Adjust proptype validation of
 	target row component.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/credentials.js: Accept password as
 	argument for creating a credential. Map password to lsc_password in http post
@@ -6021,22 +6021,22 @@
 	* src/html/classic/ng/src/web/credentials/dialog.js: Fix some typos and extend
 	CredentialDialog for also support editing.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/credentials.js: Implement gmp api for
 	saving a credential.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/credential.js: Add ALL_CREDENTIAL_TYPES
 	array constant and isAllowInsecure method to Credential model class.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/table/head.js: Allow to set rowspan and colspan
 	on table heads again. This fixed displaying e.g. the tasks list table header.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/alerts/dialogcontainer.js,
@@ -6045,80 +6045,80 @@
 	src/html/classic/ng/src/web/targets/dialogcontainer.js: Rename credentials
 	dialog2 module to dialog after the old dialog has been removed.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/credentials/dialog.js: Remove obsolete, old and
 	replaced first version of the CredentialsDialog.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/omp.xsl: Always use ng for targets list page after sorting by
 	credentials is implemented now.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/targets/table.js: Allow sorting by credential
 	types at targets list page.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/table/head.js: Allow to use flexbox layout in
 	table head easily.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for port lists page.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/portlists/dialog.js,
 	src/html/classic/ng/src/web/portlists/portlistspage.js: Implment editing of
 	port lists.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/portlists/portrangedialog.js: Add a dialog for
 	creating a new port range.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/portlists.js: Implement saving an
 	existing port list, creating and deleting a port range.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/portlist.js: Add port list id to each
 	port range model instance.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/targets/row.js: Username is now passed via
 	context instead of props.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dashboard/dashboard.js,
 	src/html/classic/ng/src/web/entities/container.js,
 	src/html/classic/ng/src/web/entities/page.js: Use context instead of props to
 	pass cache to dashboards.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/section.js: Don't required section icon for a
 	section.
 
-2016-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/page.js: Allow to customize section in
 	entities pages.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,,
 	src/html/classic/ng/src/web/portlists/filterdialog.js,
@@ -6128,38 +6128,38 @@
 	src/html/classic/ng/src/web/portlists/table.js: Implement port lists list
 	page. Editing a port list is still missing.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/portlists/dialog.js: Prepare port list dialog
 	for implementing editing of a port list.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/portlists.js: Add gmp api for importing
 	a port list via xml file.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/portlist.js: Allow to parse port ranges
 	of port lists.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Fix export of entities
 	from list pages.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/filter.js: Add filter filter for port
 	lists.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/targets/row.js: Improve target row by using the
 	common entity icons for edit, clone and delete. Also display observers via
 	observer icon and use comment component.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/tasks/row.js: User ObserverIcon in task list
 	table.
@@ -6167,43 +6167,43 @@
 	* src/html/classic/ng/src/web/tasks/taskspage.js: Remove username passing as
 	probs. It is now passed already via context.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/icons/entityobservericon.js: Add new
 	entities observer icon.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Pass username via context
 	to child components of EntitiesContainer.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/icons/entityediticon.js: Fix displaying
 	active status of entity edit button.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/model.js: Fix check if entity is writable.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/tasks/taskspage.js: Add capability checks for
 	create and modify task permissions to show wizards.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/tasks/taskspage.js: Finish porting of tasks list
 	page by re-adding the wizards.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dialog/dialog.js: All dialogs should now be
 	converted to "new style" dialogs. Therefore the Dialog class can be simplified
 	by removing obsolete code.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/wizard/advancedtaskwizard.js,
 	src/html/classic/ng/src/web/wizard/modifytaskwizard.js,
@@ -6211,18 +6211,18 @@
 	style" dialogs by using withDialog HOC instead of inheriting from Dialog
 	class.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/wizard.js: Fix modifyTask command by
 	filtering container tasks and adding the current timezone info. Container
 	tasks should not be changed with the modify task wizard.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dialog/dialog.js: Allow to close dialogs which
 	have been created with withDialog HOC to be closed via ref.
 
-2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/listpage.js,
@@ -6231,7 +6231,7 @@
 	src/html/classic/ng/src/web/tasks/taskslistrow.js: Remove now obsole files for
 	old entities list page.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/tasks/actions.js,
@@ -6243,13 +6243,13 @@
 	page to use new component composition pattern. This fixes several glitches at
 	the tasks page.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/tasks/dialogcontainer.js: Add new
 	TaskDialogContainer component.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/scanners.js,
 	src/html/classic/ng/src/gmp/models/scanner.js: Move constant scanner varibales
@@ -6258,31 +6258,31 @@
 	* src/html/classic/ng/src/web/tasks/dialog.js: Refactor TaskDialog to use
 	composition via withDialog HOC instead of inheritence.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/utils.js: Remove now obsolete convert_data function
 	from utils module.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/http.js: Avoid eslint warning for for in loops
 	(http://eslint.org/docs/rules/guard-for-in)
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/form/formpart.js,
 	src/html/classic/ng/src/web/form/radioselectformpart.js: Remove now unused
 	FormPart components.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/alerts/dialogcontainer.js: Add new
 	AlertDialogContainer component to encapsulate all AlertDialog related
 	functionality in one component.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/alerts.js: Adjust alert create to use
 	new data structures. Now all data is contained in one object and not splitted
@@ -6307,43 +6307,43 @@
 	are now independent and don't inherit from FormPart classes anymore. They are
 	now completely stateless and could be used independent of AlertDialog.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/schedules/dialog.js: Refactor ScheduleDialog to
 	use withDialog HOC instead of inherit from Dialog.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/render.js: Add withPrefix HOC. This HOC will be
 	used for the alert dialog form parts in future.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dialog/dialog.js: Only render child component of
 	DialogWrapper if the dialog is visible.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/capabilities.js: Add mayAccess method to
 	capabilities.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/wizard.js: Use own convert_data
 	function in wizard command. The convert_data function will be removed from
 	utils in future.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/commands/tasks.js: Fix setting alerts for tasks.
 	Creating and saving tasks did ignore the alert_ids.
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/http.js: Add support for submitting array values
 	via http post (and put).
 
-2016-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/form/checkbox.js,
 	src/html/classic/ng/src/web/results/filterdialog.js: Use camel case for all
@@ -6363,22 +6363,22 @@
 	* src/html/classic/ng/src/web/urls.js: New file.  Manages URL
 	overrides.
 
-2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/targets/dialogcontainer.js: Rename
 	handleCreateTarget method to handleSaveTarget. It already did saving changes
 	and creating a new target.
 
-2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/proptypes.js: Add proptype for Capabilities.
 
-2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/parser.js: Be more cautious with info counts.
 	They are very fragile from js view.
 
-2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
 	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
@@ -6386,12 +6386,12 @@
 	src/html/classic/ng/src/web/entities/icons/entitytrashicon.js: Don't cause
 	react prop type warning if no handler function is passed to entity icons.
 
-2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/comment.js: Allow to use child elements for
 	comment text.
 
-2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/overrides/dialog.js,
@@ -6402,19 +6402,19 @@
 	src/html/classic/ng/src/web/overrides/table.js: Update overrides list page to
 	use composition instead of inheritance.
 
-2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/notes/dialog.js: Remove debug output.
 
 	* src/html/classic/ng/src/web/notes/row.js: Fix link to note details and title
 	of export button.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad.c (main): Increase session timeout limit from 1 day two 4 weeks.
 	Also display default timeout in console help.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_http.c: Fix cookie handling for newer browsers if server time is
 	behind the client. RFC 6265 defines a max-age parameter for Set-Cookie header
@@ -6423,13 +6423,13 @@
 	browsers (> IE 8) already understand max-age. max-age takes precedence before
 	expire. Therefore we can keep the possibly outdated expire for older browsers.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_http.c: Use RFC 2616
 	(https://tools.ietf.org/html/rfc2616#section-3.3.1) compliant date format for
 	Set-Cookie http header expire param.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/notes/dialog.js,
@@ -6440,7 +6440,7 @@
 	src/html/classic/ng/src/web/notes/table.js: Update notes list to use
 	composition instead of inheritence.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
 	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
@@ -6450,12 +6450,12 @@
 	to make it more obvious about expecting a translated string which will be
 	displayed.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/hosts/row.js: Add capabilities checks for host
 	actions.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
@@ -6466,37 +6466,37 @@
 	corresponding action and also if the current user has the necessary
 	capability.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/icons/newicon.js: Allow to render inactive new
 	icon.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/targets/row.js,
 	src/html/classic/ng/src/web/targets/table.js: Update coding style.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/reports/row.js: Display inactive delete button
 	if a scan for the report is running.
 
-2016-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Allow to set extra
 	parames for loading entities. This will be required for notes and overrides to
 	add defails http param.
 
-2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Only start fast reload if
 	the first loaded data was from cache.
 
-2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/response.js: Add missing response class.
 
-2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/certbund/row.js,
 	src/html/classic/ng/src/web/cpes/row.js,
@@ -6509,7 +6509,7 @@
 	React was complaining about missing tbody elements. Now it is optional to use
 	own table bodies for entity rows.
 
-2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/collectionlist.js,
@@ -6555,12 +6555,12 @@
 	of a Response object. But the CollectionList now also contains the meta
 	object.
 
-2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/http.js: Rename TIMEOUT constant to
 	DEFAULT_TIMEOUT.
 
-2016-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/result.js: Always use functions from
 	utils module for checking variables. Also use ternary operator for simple
@@ -6577,30 +6577,30 @@
 	* src/html/classic/ng/src/gmp/models/result.js
 	(Result.parseProperties): Add field "vulnerability".
 
-2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Fix auto refresh of
 	entities pages. Pass a loading prop to child components. This will allow to
 	show a loading bar in future. Improve logging for refresh timers. Also handle
 	load errors more gracefully.
 
-2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/page.js,
 	src/html/classic/ng/src/web/entities/table.js: Move displaying loading of
 	entries into EntitiesPage component. Also don't display table at all if no
 	entities are available.
 
-2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/app.js: Add gmp as global object. This allows to
 	inspect (and also set) gmp settings via the dev console.
 
-2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/page.js: Coding style update.
 
-2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/assetspage.js
 	src/html/classic/ng/src/web/entities/container.js,
@@ -6614,7 +6614,7 @@
 	charts. Currently there is no reloading of the chart data implemented.
 	Therefore the charts won't show any new data after initial rendering.
 
-2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/certbund/charts.js,
 	src/html/classic/ng/src/web/cpes/charts.js,
@@ -6636,41 +6636,41 @@
 	src/html/classic/ng/src/web/vulns/charts.js: Allow to pass a cache object to
 	all charts.
 
-2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/app.js: Add cache to the context of all
 	components in ng. This introduces a global cache object usable for alle
 	react components.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/app.js: Set a global cache in app. This cache
 	will be used for the charts in future too.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/http.js: Change Http class to accept an options
 	object for optional parameters. Also allow to set http cache via the options.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js: Don't clear cache if filter has
 	changed. This isn't necessary anymore because we are using the uri as key for
 	the cache which already includes the filter.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js: Use uri to identify requests instead
 	of the filter id. This will allow to use global caching in future.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js: Use ng for all secinfo list page.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/secinfo/filterdialog.js,
@@ -6679,7 +6679,7 @@
 	src/html/classic/ng/src/web/secinfo/table.js: Add components for all secinfo
 	list page.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/secinfo.js,
@@ -6691,20 +6691,20 @@
 	* src/html/classic/ng/src/web/results/row.js: Show OID of NVT if
 	there is no name for the result.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/menu/menubar.js: Display all secinfo entiry in
 	main menu as a section. This renders a border line above the entry.
 	Also fix link to the help page.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for dfn cert advisories.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/dfncert/dfncertadvspage.js,
@@ -6712,7 +6712,7 @@
 	src/html/classic/ng/src/web/dfncert/table.js: Add components for dfn cert
 	advisories list page.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/dfncert.js,
@@ -6720,7 +6720,7 @@
 	src/html/classic/ng/src/gmp/models/dfncert.js: Add gmp js api for dfn cert
 	advisories.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/certbund/row.js: Fix link to cert bund adv
 	details.
@@ -6732,14 +6732,14 @@
 	* src/html/classic/ng/src/gmp/parser.js (parse_report_result_entities):
 	New function for parsing the results from a report.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for cert bund advisiories.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/certbund/certbundadvspage.js,
@@ -6748,7 +6748,7 @@
 	src/html/classic/ng/src/web/certbund/table.js: Add components for cert bund
 	advisories list page.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/certbund.js,
@@ -6756,40 +6756,40 @@
 	src/html/classic/ng/src/gmp/models/certbund.js: Add gmp js api for cert bund
 	advisories.
 
-2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/cpes/row.js: Align cve refs to the right in the
 	cpe table.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/cve.js: Fix parsing the severity for
 	cves.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dashboard/datasource.js: Don't consider a sort
 	change as a changed filter for charts. This avoids reloading and rerendering
 	of the dashboard charts if the sort column has been changed.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/filter.js: Add Filter simple method to
 	return a filter copy without first, rows and sort terms set.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js: Always set first to 1
 	if sort column has changed.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js,
 	src/html/classic/omp.xsl: Use ng for ovaldefs list page.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/ovaldefs/filterdialog.js,
@@ -6798,34 +6798,34 @@
 	src/html/classic/ng/src/web/ovaldefs/table.js: Add components for ovaldef list
 	page.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/ovaldefs.js,
 	src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/models/ovaldef.js: Add gmp js api for ovaldefs.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/collectionlist.js: Allow to sort a
 	CollectionList.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/cpe.js: Fix parsing the severity of a
 	cpe.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/results/row.js: Allow to deactive links in
 	result rows.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dashboard/datasource.js: Don't update charts if
 	the new filter only has changed rows or first parameters.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/http.js,
@@ -6835,17 +6835,17 @@
 	as an error through the whole stack and therefore don't show up in the
 	browsers console anymore.
 
-2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+2017-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Sort by modification time for get_info and
 	info_type is cpe as default.
 
-2016-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2017-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (start_https_daemon): Add mhd version guard removed in
 	previous commit.
 
-2016-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2017-02-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Allow setting multiple addresses with --listen calls.
 
@@ -8973,7 +8973,7 @@
 	* src/gsad_omp.c (new_permissions): Test if related is NULL before
 	trying to iterate over table of related resources.
 
-2016-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2017-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/validator.c (openvas_validator_rule_free): Fix memory leak.
 
@@ -8999,7 +8999,7 @@
 	for gradients to ensure they work when exported.  Fix y2 attribute of
 	gradients.
 
-2016-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2017-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_http_handler.c (handle_setup_user, handle_omp_post),
 	src/gsad_omp.c (get_many): Fix memory leaks.
@@ -9062,7 +9062,7 @@
 	src/html/classic/ng/src/web/menu/iconmenu.js: Allow to use icon css on icon
 	menu by extractint a withIconCss HOC from Icon component.
 
-2016-01-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2017-01-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_http.c (handler_send_response), src/gsad_http_handler.c
 	(handle_request), src/gsad_omp.c (get_aggregate_omp)
@@ -20277,7 +20277,7 @@
 	src/html/classic/help_ru.xsl, src/html/classic/help_zh_CN.xsl
 	(mode="help" match="contents.html"): Removed unnecessary note.
 
-2015-01-05  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-01-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Allow the sysadmin to provide an alternate login image.
 
@@ -20286,14 +20286,14 @@
 	* src/html/classic/gsad.xsl (login_box): If ALTERNATE_LABEL is not 0
 	then use label.png instead of login-label.png.
 
-2015-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2016-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_config): Get credentials information.
 
 	* src/html/classic/omp.xsl (preference-details, edit-config-preference):
 	Handle osp_credential_username and osp_credential_password.
 
-2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add version to login page header.  Add option --vendor-version, so that
 	the user can override the version (in the header and on the About page).
@@ -20316,7 +20316,7 @@
 
 	* src/html/classic/help.xsl (help [about]): Set version from XML.
 
-2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_report_omp, create_container_task_omp)
 	(create_task_omp, move_task_omp, save_credential_omp)
@@ -20324,7 +20324,7 @@
 	response from "omp" when return value is -1, because in this case
 	there is no entity available, so a break leads to a segfault.
 
-2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Consolidate multiple login XML locations into single function.
 
@@ -29884,7 +29884,7 @@
 	* src/html/classic/po/de.xml: Make "Details" strings available in
 	"Window" context.
 
-2013-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+2014-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_config): Check if extra_xml is NULL before trying
 	to parse it and before trying to free the entity.
@@ -30878,7 +30878,7 @@
 
 	* src/html/help.xsl, CMakeLists.txt: Updated
 
-2013-01-13  Benoit Allard  <benoit.allard@greenbone.net>
+2014-01-13  Benoit Allard  <benoit.allard@greenbone.net>
 
 	Preparing the gsa 5.0+beta4 release.
 
