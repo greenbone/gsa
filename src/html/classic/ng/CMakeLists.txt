@@ -280,8 +280,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/table.js
      ${NG_SRC_DIR}/src/web/entities/withRowDetails.js
      ${NG_SRC_DIR}/src/web/entity/block.js
+     ${NG_SRC_DIR}/src/web/entity/box.js
      ${NG_SRC_DIR}/src/web/entity/container.js
      ${NG_SRC_DIR}/src/web/entity/info.js
+     ${NG_SRC_DIR}/src/web/entity/note.js
      ${NG_SRC_DIR}/src/web/entity/page.js
      ${NG_SRC_DIR}/src/web/entity/permissions.js
      ${NG_SRC_DIR}/src/web/entity/tags.js

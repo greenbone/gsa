@@ -23,15 +23,14 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
-
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {result_cvss_risk_factor} from '../../utils/render.js';
 
 import DetailsBlock from '../../entity/block.js';
+import EntityBox from '../../entity/box.js';
+import Note from '../../entity/note.js';
 import EntityPage from '../../entity/page.js';
 import {withEntityContainer} from '../../entity/container.js';
 
@@ -56,72 +55,6 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 import ResultDetails from './details.js';
-
-const Pre = glamorous.pre({
-  whiteSpace: 'pre-line',
-  wordWrap: 'normal',
-});
-
-const InfoLayout = glamorous(Layout)({
-  border: '1px solid #CCCCCC',
-  padding: '5px',
-  marginBottom: '10px',
-  width: '400px',
-  '& h3': {
-    marginTop: 0,
-  },
-});
-
-const InfoBox = ({
-  children,
-  modified,
-  end,
-  text,
-  title,
-  toolbox,
-  ...props
-}) => {
-  return (
-    <InfoLayout {...props} flex="column" align="space-between">
-      <Layout flex align={['space-between', 'start']}>
-        <h3>{title}</h3>
-        {is_defined(toolbox) && toolbox}
-      </Layout>
-      <Pre>{text}</Pre>
-      {children}
-      <InfoTable>
-        <TableBody>
-          {is_defined(end) &&
-            <TableRow>
-              <TableData>
-                {_('Active until')}
-              </TableData>
-              <TableData>
-                {datetime(end)}
-              </TableData>
-            </TableRow>
-          }
-          <TableRow>
-            <TableData>
-              {_('Modifed')}
-            </TableData>
-            <TableData>
-              {datetime(modified)}
-            </TableData>
-          </TableRow>
-        </TableBody>
-      </InfoTable>
-    </InfoLayout>
-  );
-};
-
-InfoBox.propTypes = {
-  modified: PropTypes.momentDate,
-  end: PropTypes.momentDate,
-  text: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  toolbox: PropTypes.element,
-};
 
 const Override = ({
   override,
@@ -156,7 +89,7 @@ const Override = ({
     </IconDivider>
   );
   return (
-    <InfoBox
+    <EntityBox
       title={_('Override from {{- severity}} to {{- new_severity}}',
         {severity, new_severity})}
       text={override.text}
@@ -170,36 +103,6 @@ const Override = ({
 Override.propTypes = {
   className: PropTypes.string,
   override: PropTypes.model.isRequired,
-};
-
-const Note = ({
-  note,
-}) => {
-  const toolbox = (
-    <IconDivider>
-      <DetailsLink
-        legacy
-        id={note.id}
-        type="note"
-        title={_('Note Details')}
-      >
-        <Icon img="details.svg"/>
-      </DetailsLink>
-    </IconDivider>
-  );
-  return (
-    <InfoBox
-      title={_('Note')}
-      text={note.text}
-      end={note.end_time}
-      toolbox={toolbox}
-      modified={note.modification_time}>
-    </InfoBox>
-  );
-};
-
-Note.propTypes = {
-  note: PropTypes.model.isRequired,
 };
 
 const ToolBarIcons = ({

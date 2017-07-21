@@ -1,5 +1,13 @@
 2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/box.js,
+	src/html/classic/ng/src/web/entity/note.js,
+	src/html/classic/ng/src/web/pages/results/detailspage.js: Extract box
+	components (InfoBox, NoteBox) into own js modules.
+
+2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/note.js,
 	src/html/classic/ng/src/gmp/models/target.js,
 	src/html/classic/ng/src/gmp/parser.js: Introduce new parse_csv function for
