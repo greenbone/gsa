@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
 import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
@@ -39,8 +39,6 @@ import TrashIcon from '../../entities/icons/entitytrashicon.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-
-import DetailsLink from '../../components/link/detailslink.js';
 
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
@@ -84,8 +82,14 @@ Actions.propTypes = {
   onNoteEditClick: PropTypes.func.isRequired,
 };
 
-const Row = ({entity, links = true, actions, ...props}) => {
-  let text = (
+const Row = ({
+  entity,
+  links = true,
+  actions,
+  onToggleDetailsClick,
+  ...props,
+}) => {
+  const text = (
     <div>
       {entity.isOrphan() &&
         <div><b>{_('Orphan')}</b></div>
@@ -96,19 +100,17 @@ const Row = ({entity, links = true, actions, ...props}) => {
   return (
     <TableRow>
       <TableData>
-        <DetailsLink
-          legacy
-          type="note"
-          id={entity.id}
-          textOnly={!links}>
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
           {text}
-        </DetailsLink>
+        </RowDetailsToggle>
       </TableData>
       <TableData>
         {entity.nvt ? entity.nvt.name : ""}
       </TableData>
       <TableData title={entity.hosts}>
-        {shorten(entity.hosts)}
+        {shorten(entity.hosts.join(', '))}
       </TableData>
       <TableData title={entity.port}>
         {shorten(entity.port)}
@@ -125,6 +127,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

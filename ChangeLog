@@ -1,5 +1,11 @@
 2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/notes/row.js,
+	src/html/classic/ng/src/web/pages/notes/table.js: Allow to toggle the note
+	details a the notes list page.
+
+2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/note.js: Link to ng in note boxes.
 
 2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
