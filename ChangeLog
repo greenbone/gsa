@@ -1,5 +1,9 @@
 2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/note.js: Link to ng in note boxes.
+
+2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/pages/notes/details.js,

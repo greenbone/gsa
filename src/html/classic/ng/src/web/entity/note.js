@@ -42,7 +42,6 @@ const NoteBox = ({
   const toolbox = detailsLink ? (
     <IconDivider>
       <DetailsLink
-        legacy
         id={note.id}
         type="note"
         title={_('Note Details')}
