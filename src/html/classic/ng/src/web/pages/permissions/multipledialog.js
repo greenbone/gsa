@@ -39,6 +39,10 @@ import Text from '../../components/form/text.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
+export const CURRENT_RESOURCE_ONLY = '0';
+export const INCLUDE_RELATED_RESOURCES = '1';
+export const RELATED_RESOURCES_ONY = '2';
+
 const MultiplePermissionDialog = ({
   entity_name,
   entity_type,
@@ -54,6 +58,7 @@ const MultiplePermissionDialog = ({
   users = [],
   onValueChange,
 }, {capabilities}) => {
+  const has_related = related.length > 0;
   return (
     <Layout flex="column">
       <FormGroup
@@ -149,17 +154,30 @@ const MultiplePermissionDialog = ({
         title={_('on')}
         flex="column">
         <Divider>
-          <Text>{type_name(entity_type) + ' ' + entity_name}</Text>
+          <Text>{type_name(entity_type)}</Text>
+          <i>{entity_name}</i>
           <Select2
             name="include_related"
             value={include_related}
             onChange={onValueChange}>
-            <option value="1">{_('including related resources')}</option>
-            <option value="0">{_('for current resource only')}</option>
-            <option value="2">{_('for related resources only')}</option>
+            {has_related &&
+              <option value={INCLUDE_RELATED_RESOURCES}>
+                {_('including related resources')}
+              </option>
+            }
+
+            <option value={CURRENT_RESOURCE_ONLY}>
+              {_('for current resource only')}
+            </option>
+
+            {has_related &&
+              <option value={RELATED_RESOURCES_ONY}>
+                {_('for related resources only')}
+              </option>
+            }
           </Select2>
         </Divider>
-        {related.length > 0 &&
+        {has_related &&
           <ul>
             {related.map(rentity => (
               <li key={rentity.id}>
@@ -182,7 +200,11 @@ MultiplePermissionDialog.propTypes = {
   entity_name: PropTypes.string.isRequired,
   group_id: PropTypes.id,
   groups: PropTypes.arrayLike,
-  include_related: PropTypes.oneOf(['0', '1', '2']).isRequired,
+  include_related: PropTypes.oneOf([
+    CURRENT_RESOURCE_ONLY,
+    INCLUDE_RELATED_RESOURCES,
+    RELATED_RESOURCES_ONY,
+  ]).isRequired,
   permission: PropTypes.oneOf(['read', 'proxy']).isRequired,
   related: PropTypes.array, // array of models
   role_id: PropTypes.id,
@@ -203,7 +225,7 @@ export default withDialog(MultiplePermissionDialog, {
   title: _('Create Multiple Permissions'),
   footer: _('Save'),
   defaultState: {
-    include_related: '1',
+    include_related: INCLUDE_RELATED_RESOURCES,
     permission: 'read',
     subject_type: 'user',
   },
