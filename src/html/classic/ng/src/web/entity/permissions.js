@@ -39,7 +39,10 @@ import Wrapper from '../components/layout/wrapper.js';
 
 import Section from '../components/section/section.js';
 
-import MultiplePermissionDialog from '../pages/permissions/multipledialog.js';
+import MultiplePermissionDialog, {
+  CURRENT_RESOURCE_ONLY,
+  INCLUDE_RELATED_RESOURCES,
+} from '../pages/permissions/multipledialog.js';
 import PermissionsTable from '../pages/permissions/table.js';
 import withPermissionsComponent from '../pages/permissions/withPermissionsComponent.js'; // eslint-disable-line max-len
 
@@ -105,6 +108,8 @@ class EntityPermissions extends React.Component {
       entity_type: entity.entity_type,
       entity_name: entity.name,
       id: entity.id,
+      include_related: relatedResourcesLoaders.length === 0 ?
+        CURRENT_RESOURCE_ONLY : INCLUDE_RELATED_RESOURCES,
     });
 
     Promise
