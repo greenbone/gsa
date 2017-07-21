@@ -43,6 +43,7 @@ class Note extends Model {
 
     if (ret.nvt) {
       ret.nvt = new Nvt(ret.nvt);
+      ret.name = ret.nvt.name;
     }
 
     ret = extend(ret, parse_text(ret.text));
