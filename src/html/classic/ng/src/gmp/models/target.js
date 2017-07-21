@@ -25,7 +25,7 @@ import Model from '../model.js';
 
 import {is_defined, is_empty, map} from '../utils.js';
 
-import {parse_int, parse_yesno} from '../parser.js';
+import {parse_int, parse_yesno, parse_csv} from '../parser.js';
 
 import PortList from './portlist.js';
 
@@ -60,10 +60,8 @@ class Target extends Model {
       }
     }
 
-    ret.hosts = is_empty(elem.hosts) ? [] :
-      elem.hosts.split(', '); // always get an array
-    ret.exclude_hosts = is_empty(elem.exclude_hosts) ? [] :
-      elem.exclude_hosts.split(', '); // always get an array
+    ret.hosts = parse_csv(elem.hosts);
+    ret.exclude_hosts = parse_csv(elem.exclude_hosts);
 
     ret.max_hosts = parse_int(elem.max_hosts);
 

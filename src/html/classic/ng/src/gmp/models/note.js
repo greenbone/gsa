@@ -26,6 +26,7 @@ import {is_defined, is_empty, extend, map} from '../utils.js';
 import List from '../list.js';
 import Model from '../model.js';
 import {
+  parse_csv,
   parse_severity,
   parse_text,
   parse_yesno,
@@ -66,6 +67,8 @@ class Note extends Model {
 
     ret.active = parse_yesno(elem.active);
     ret.text_excerpt = parse_yesno(elem.text_excerpt);
+
+    ret.hosts = parse_csv(elem.hosts);
 
     return ret;
   }

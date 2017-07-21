@@ -147,6 +147,13 @@ export function parse_elements(response, name) {
   return response[name];
 }
 
+export function parse_csv(value) {
+  if (is_empty(value)) {
+    return [];
+  }
+  return value.split(',').map(val => val.trim());
+}
+
 export function parse_envelope_meta(envelope) {
   let meta = {};
 
