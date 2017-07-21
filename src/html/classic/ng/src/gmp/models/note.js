@@ -70,6 +70,10 @@ class Note extends Model {
 
     ret.hosts = parse_csv(elem.hosts);
 
+    if (is_empty(elem.port)) {
+      delete ret.port;
+    }
+
     return ret;
   }
 
