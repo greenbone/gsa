@@ -1,5 +1,10 @@
 2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/nvt.js: Set nvt_type property on Nvt
+	model.
+
+2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/note.js: Remove Note port property if it
 	is empty.
 

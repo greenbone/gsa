@@ -55,8 +55,12 @@ class Nvt extends Info {
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
+    ret.nvt_type = elem.type;
+
     if (elem.nvt) { // we have an info element
       extend(ret, elem.nvt);
+      ret.nvt_type = ret.type;
+      delete ret.type;
       delete ret.nvt;
     }
 
