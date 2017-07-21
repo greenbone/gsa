@@ -67,6 +67,7 @@ import FiltersPage from './pages/filters/listpage.js';
 import GroupsPage from './pages/groups/listpage.js';
 import HostsPage from './pages/hosts/listpage.js';
 import NotesPage from './pages/notes/listpage.js';
+import NoteDetailsPage from './pages/notes/detailspage.js';
 import NvtsPage from './pages/nvts/listpage.js';
 import OperatingSystemsPage from './pages/os/listpage.js';
 import OvaldefsPage from './pages/ovaldefs/listpage.js';
@@ -294,6 +295,10 @@ ReactDOM.render(
         <Route
           path="target/:id"
           component={TargetDetailsPage}
+        />
+        <Route
+          path="note/:id"
+          component={NoteDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

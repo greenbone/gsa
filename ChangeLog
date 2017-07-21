@@ -1,5 +1,12 @@
 2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/pages/notes/details.js,
+	src/html/classic/ng/src/web/pages/notes/detailspage.js: Add note details page.
+
+2017-07-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/nvt.js: Set nvt_type property on Nvt
 	model.
 
