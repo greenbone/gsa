@@ -30,6 +30,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import {withLayout} from '../layout/layout.js';
 
+import withChangeHandler from './withChangeHandler.js';
+
 import 'select2';
 
 import './css/select2.css';
@@ -146,6 +148,8 @@ Select2Component.propTypes = {
   className: PropTypes.string
 };
 
-export default withLayout(Select2Component, {box: true});
+export default withLayout(withChangeHandler({
+  value_func: value => value,
+})(Select2Component), {box: true});
 
 // vim: set ts=2 sw=2 tw=80:
