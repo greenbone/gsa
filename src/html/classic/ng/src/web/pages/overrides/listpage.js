@@ -36,6 +36,7 @@ import {withDashboard} from '../../components/dashboard/dashboard.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import OverridesCharts from './charts.js';
@@ -58,7 +59,7 @@ const ToolBarIcons = ({
     onNewOverrideClick,
   }, {capabilities}) => {
   return (
-    <Layout flex box>
+    <IconDivider>
       <HelpIcon
         page="overrides"
         title={_('Help: Overrides')}/>
@@ -67,7 +68,7 @@ const ToolBarIcons = ({
         <NewIcon title={_('New Override')}
           onClick={onNewOverrideClick}/>
       }
-    </Layout>
+    </IconDivider>
   );
 };
 

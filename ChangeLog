@@ -1,5 +1,11 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/overrides/listpage.js,
+	src/html/classic/ng/src/web/pages/overrides/row.js: Fix icon layouts at
+	overrides list page.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/footer.js: Fix icon layout at list
 	table footers.
 

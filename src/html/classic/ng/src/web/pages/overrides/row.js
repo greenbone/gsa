@@ -40,7 +40,7 @@ import SeverityBar from '../../components/bar/severitybar.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
@@ -66,7 +66,7 @@ const Actions = ({
     onEditOverrideClick,
   }) => {
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider>
       <TrashIcon
         entity={entity}
         name="override"
@@ -84,7 +84,7 @@ const Actions = ({
         title={_('Export Override')}
         onClick={onEntityDownload}
       />
-    </Layout>
+    </IconDivider>
   );
 };
 
