@@ -88,7 +88,7 @@ export const handle_promise = (promise, props, success, error) => {
 
 export const DEFAULT_MAPPING = {
   onCreate: 'onEntityCreateClick',
-  onCreateError: 'onCreateError',
+  onCreateError: undefined, // let dialogs handle error via returned promise
   onCreated: 'onCreated',
   onClone: 'onEntityCloneClick',
   onCloneError: 'onCloneError',
@@ -97,7 +97,7 @@ export const DEFAULT_MAPPING = {
   onDeleteError: 'onDeleteError',
   onDeleted: 'onDeleted',
   onSave: 'onEntitySaveClick',
-  onSaveError: 'onSaveError',
+  onSaveError: undefined, // same as onCreateError
   onSaved: 'onSaved',
   onDownload: 'onEntityDownloadClick',
   onDownloadError: 'onDownloadError',

@@ -1,5 +1,12 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/withEntityComponent.js: Allow to handle
+	onCreateError and onSaveError via the dialogs by default. All onSaved and
+	onCreated handlers will be called from dialogs. Therefore this should be the
+	default instead of having to redefine it on every component.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/form/select2.js: Allow set a convert
 	function on selects.
 
