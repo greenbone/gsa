@@ -1,5 +1,10 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/override.js: Allow to deactive the link
+	icon to the override details page at the override box.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/overrides/details.js,
 	src/html/classic/ng/src/web/pages/overrides/detailspage.js: Implement

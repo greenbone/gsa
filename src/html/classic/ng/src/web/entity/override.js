@@ -38,6 +38,7 @@ import DetailsLink from '../components/link/detailslink.js';
 
 const OverrideBox = ({
   override,
+  detailsLink = true,
 }) => {
   let severity;
   let new_severity = '';
@@ -56,7 +57,7 @@ const OverrideBox = ({
   }
   new_severity += result_cvss_risk_factor(override.new_severity);
 
-  const toolbox = (
+  const toolbox = detailsLink ? (
     <IconDivider>
       <DetailsLink
         legacy
@@ -67,7 +68,7 @@ const OverrideBox = ({
         <Icon img="details.svg"/>
       </DetailsLink>
     </IconDivider>
-  );
+  ) : undefined;
   return (
     <EntityBox
       title={_('Override from {{- severity}} to {{- new_severity}}',
@@ -82,6 +83,7 @@ const OverrideBox = ({
 
 OverrideBox.propTypes = {
   className: PropTypes.string,
+  detailsLink: PropTypes.bool,
   override: PropTypes.model.isRequired,
 };
 
