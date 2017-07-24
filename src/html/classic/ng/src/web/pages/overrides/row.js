@@ -112,7 +112,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
         {entity.nvt ? entity.nvt.name : ""}
       </TableData>
       <TableData title={entity.hosts}>
-        {shorten(entity.hosts)}
+        {shorten(entity.hosts.join(', '))}
       </TableData>
       <TableData title={entity.port}>
         {shorten(entity.port)}

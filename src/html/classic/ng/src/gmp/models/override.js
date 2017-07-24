@@ -70,6 +70,8 @@ class Override extends Model {
     ret.active = parse_yesno(elem.active);
     ret.text_excerpt = parse_yesno(elem.text_excerpt);
 
+    ret.hosts = parse_csv(ret.hosts);
+
     return ret;
   }
 

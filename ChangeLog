@@ -1,5 +1,11 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/override.js,
+	src/html/classic/ng/src/web/pages/overrides/row.js: Parse overrides.hosts
+	always as array.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/override.js: Delete task and result
 	properties from Override model if they don't contain a model element.
 
