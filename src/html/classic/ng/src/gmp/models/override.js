@@ -25,7 +25,13 @@ import {extend, is_defined, is_model_element, map} from '../utils.js';
 
 import List from '../list.js';
 import Model from '../model.js';
-import {parse_severity, parse_text, parse_yesno, YES_VALUE} from '../parser.js';
+import {
+  parse_csv,
+  parse_severity,
+  parse_text,
+  parse_yesno,
+  YES_VALUE,
+} from '../parser.js';
 
 import Nvt from './nvt.js';
 
@@ -50,8 +56,15 @@ class Override extends Model {
     if (is_model_element(ret.task)) {
       ret.task = new Model(ret.task, 'task');
     }
+    else {
+      delete ret.task;
+    }
+
     if (is_model_element(ret.result)) {
       ret.result = new Model(ret.result, 'result');
+    }
+    else {
+      delete ret.result;
     }
 
     ret.active = parse_yesno(elem.active);
