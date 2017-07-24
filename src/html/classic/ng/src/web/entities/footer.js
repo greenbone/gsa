@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../components/layout/divider.js';
+import IconDivider from '../components/layout/icondivider.js';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../utils/proptypes.js';
@@ -60,37 +62,39 @@ export const EntitiesFooter = ({
       <td colSpan={span}>
         {actions ?
           <Layout flex align={['end', 'center']}>
-            {selection &&
-              <Select2
-                value={selectionType}
-                onChange={onSelectionTypeChange}>
-                <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
-                  {_('Apply to page contents')}
-                </option>
-                <option value={SelectionType.SELECTION_USER}>
-                  {_('Apply to selection')}
-                </option>
-                <option value={SelectionType.SELECTION_FILTER}>
-                  {_('Apply to all filtered')}
-                </option>
-              </Select2>
-            }
-            <Layout flex box>
-              {trash &&
-                <TrashIcon onClick={onTrashClick}
-                  selectionType={selectionType}/>
+            <Divider>
+              {selection &&
+                <Select2
+                  value={selectionType}
+                  onChange={onSelectionTypeChange}>
+                  <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
+                    {_('Apply to page contents')}
+                  </option>
+                  <option value={SelectionType.SELECTION_USER}>
+                    {_('Apply to selection')}
+                  </option>
+                  <option value={SelectionType.SELECTION_FILTER}>
+                    {_('Apply to all filtered')}
+                  </option>
+                </Select2>
               }
-              {deleteEntities &&
-                <DeleteIcon onClick={onDeleteClick}
-                  selectionType={selectionType}/>
-              }
-              {download &&
-                <ExportIcon onClick={onDownloadClick}
-                  selectionType={selectionType}
-                  value={download}/>
-              }
-              {children}
-            </Layout>
+              <IconDivider>
+                {trash &&
+                  <TrashIcon onClick={onTrashClick}
+                    selectionType={selectionType}/>
+                }
+                {deleteEntities &&
+                  <DeleteIcon onClick={onDeleteClick}
+                    selectionType={selectionType}/>
+                }
+                {download &&
+                  <ExportIcon onClick={onDownloadClick}
+                    selectionType={selectionType}
+                    value={download}/>
+                }
+                {children}
+              </IconDivider>
+            </Divider>
           </Layout> : children
         }
       </td>
