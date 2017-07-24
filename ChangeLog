@@ -1,5 +1,10 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/override.js: Use nvt name as name for
+	override and only add task and result if both properties are model elements.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/overrides/listpage.js,
 	src/html/classic/ng/src/web/pages/overrides/row.js: Fix icon layouts at
 	overrides list page.

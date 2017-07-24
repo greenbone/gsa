@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend, is_defined, map} from '../utils.js';
+import {extend, is_defined, is_model_element, map} from '../utils.js';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -38,6 +38,7 @@ class Override extends Model {
 
     if (ret.nvt) {
       ret.nvt = new Nvt(ret.nvt);
+      ret.name = ret.nvt.name;
     }
 
     ret.severity = parse_severity(ret.severity);
@@ -46,10 +47,10 @@ class Override extends Model {
 
     ret = extend(ret, parse_text(ret.text));
 
-    if (is_defined(ret.task)) {
+    if (is_model_element(ret.task)) {
       ret.task = new Model(ret.task, 'task');
     }
-    if (is_defined(ret.result)) {
+    if (is_model_element(ret.result)) {
       ret.result = new Model(ret.result, 'result');
     }
 
