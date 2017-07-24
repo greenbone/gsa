@@ -1,5 +1,12 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/override.js,
+	src/html/classic/ng/src/web/pages/results/detailspage.js: Extract the override
+	box from result details page. It will be reused also at the override details.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/override.js,
 	src/html/classic/ng/src/web/pages/overrides/row.js: Parse overrides.hosts
 	always as array.

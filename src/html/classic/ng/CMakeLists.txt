@@ -285,6 +285,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entity/container.js
      ${NG_SRC_DIR}/src/web/entity/info.js
      ${NG_SRC_DIR}/src/web/entity/note.js
+     ${NG_SRC_DIR}/src/web/entity/override.js
      ${NG_SRC_DIR}/src/web/entity/page.js
      ${NG_SRC_DIR}/src/web/entity/permissions.js
      ${NG_SRC_DIR}/src/web/entity/tags.js

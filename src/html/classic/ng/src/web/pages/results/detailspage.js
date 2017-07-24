@@ -26,12 +26,11 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {result_cvss_risk_factor} from '../../utils/render.js';
 
 import DetailsBlock from '../../entity/block.js';
-import EntityBox from '../../entity/box.js';
-import Note from '../../entity/note.js';
 import EntityPage from '../../entity/page.js';
+import Note from '../../entity/note.js';
+import Override from '../../entity/override.js';
 import {withEntityContainer} from '../../entity/container.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
@@ -56,54 +55,6 @@ import TableRow from '../../components/table/row.js';
 
 import ResultDetails from './details.js';
 
-const Override = ({
-  override,
-}) => {
-  let severity;
-  let new_severity = '';
-  if (override.severity === 0) {
-    severity = _('Any');
-  }
-  else if (override.severity > 0.0) {
-    severity = _('Severity > 0.0');
-  }
-  else {
-    severity = result_cvss_risk_factor(override.severity);
-  }
-
-  if (override.new_severity > 0) {
-    new_severity = override.new_severity + ': ';
-  }
-  new_severity += result_cvss_risk_factor(override.new_severity);
-
-  const toolbox = (
-    <IconDivider>
-      <DetailsLink
-        legacy
-        id={override.id}
-        type="override"
-        title={_('Override Details')}
-      >
-        <Icon img="details.svg"/>
-      </DetailsLink>
-    </IconDivider>
-  );
-  return (
-    <EntityBox
-      title={_('Override from {{- severity}} to {{- new_severity}}',
-        {severity, new_severity})}
-      text={override.text}
-      end={override.end_time}
-      toolbox={toolbox}
-      modified={override.modification_time}
-    />
-  );
-};
-
-Override.propTypes = {
-  className: PropTypes.string,
-  override: PropTypes.model.isRequired,
-};
 
 const ToolBarIcons = ({
   entity,
