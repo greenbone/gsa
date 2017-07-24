@@ -1,5 +1,14 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/form/form.js,
+	src/html/classic/ng/src/web/components/form/withChangeHandler.js: Extract
+	withChangeHandler HOC into an own js module and change its signature to a
+	combosable HOC (a function with optional params that returns a function that
+	expects a component and returns a component).
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/override.js: Use nvt name as name for
 	override and only add task and result if both properties are model elements.
 

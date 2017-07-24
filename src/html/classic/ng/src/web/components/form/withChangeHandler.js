@@ -1,3 +1,4 @@
+
 /* Greenbone Security Assistant
  *
  * Authors:
@@ -25,47 +26,36 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withChangeHandlerNew, {
-  noop_convert,
-  target_value,
-} from './withChangeHandler.js';
+export const noop_convert = value => value;
 
-export {noop_convert, target_value};
+export const target_value = event => event.target.value;
 
-export const props_value = (event, props) => props.value;
-
-export const withChangeHandler = (
-  Component,
-  options = {},
-) => withChangeHandlerNew(options)(Component);
-
-export const withClickHandler = (
-    Component,
-    options = {},
-  ) => {
+const withChangeHandler = (options = {}) => Component => {
   const {
     convert_func = noop_convert,
-    value_func = props_value,
+    value_func = target_value,
   } = options;
 
-  const ClickHandler = ({onClick, convert = convert_func, ...props}) => {
+  const ChangeHandler = ({onChange, convert = convert_func, ...props}) => {
 
-    const handleClick = event => {
-      if (onClick) {
-        onClick(convert(value_func(event, props), props), props.name);
+    const handleChange = event => {
+      if (onChange) {
+        onChange(convert(value_func(event, props), props), props.name);
       }
     };
 
-    return <Component {...props} onClick={handleClick}/>;
+    return <Component {...props} onChange={handleChange}/>;
   };
 
-  ClickHandler.propTypes = {
+  ChangeHandler.propTypes = {
     convert: PropTypes.func,
     name: PropTypes.string,
-    onClick: PropTypes.func,
+    onChange: PropTypes.func,
   };
 
-  return ClickHandler;
+  return ChangeHandler;
 };
+
+export default withChangeHandler;
 
 // vim: set ts=2 sw=2 tw=80:
