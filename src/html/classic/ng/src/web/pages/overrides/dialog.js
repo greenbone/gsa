@@ -24,7 +24,8 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined, is_empty, parse_float} from 'gmp/utils.js';
+import {is_defined, is_empty} from 'gmp/utils.js';
+import {parse_float} from 'gmp/parser.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -35,7 +36,7 @@ import {
   result_cvss_risk_factor,
 } from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
@@ -224,14 +225,14 @@ const OverrideDialog = ({
             <Radio name="severity"
               value="0.1"
               title={_('> 0.0')}
-              checked={severity === '0.1'}
+              checked={severity === 0.1}
               convert={parse_float}
               onChange={onValueChange}>
             </Radio>
             <Radio name="severity"
               value="0.0"
               title={_('Log')}
-              checked={severity === '0.0'}
+              checked={severity === 0.0}
               convert={parse_float}
               onChange={onValueChange}>
             </Radio>
@@ -264,6 +265,7 @@ const OverrideDialog = ({
         <Select2 name="new_severity_from_list"
           value={new_severity_from_list}
           disabled={custom_severity !== '0'}
+          convert={parse_float}
           onChange={onValueChange}>
           {is_edit &&
             <option value="">--</option>
@@ -375,7 +377,7 @@ OverrideDialog.propTypes = {
 };
 
 
-export default withDialog(OverrideDialog, {
+export default withDialog({
   title: _('New Override'),
   footer: _('Save'),
   defaultState: {
@@ -396,6 +398,6 @@ export default withDialog(OverrideDialog, {
     tasks: [],
     text: '',
   },
-});
+})(OverrideDialog);
 
 // vim: set ts=2 sw=2 tw=80:
