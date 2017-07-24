@@ -72,6 +72,7 @@ import NvtsPage from './pages/nvts/listpage.js';
 import OperatingSystemsPage from './pages/os/listpage.js';
 import OvaldefsPage from './pages/ovaldefs/listpage.js';
 import OverridesPage from './pages/overrides/listpage.js';
+import OverrideDetailsPage from './pages/overrides/detailspage.js';
 import PermissionsPage from './pages/permissions/listpage.js';
 import PortListsPage from './pages/portlists/listpage.js';
 import ReportFormatsPage from './pages/reportformats/listpage.js';
@@ -299,6 +300,10 @@ ReactDOM.render(
         <Route
           path="note/:id"
           component={NoteDetailsPage}
+        />
+        <Route
+          path="override/:id"
+          component={OverrideDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
