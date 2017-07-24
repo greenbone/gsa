@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {render_component, result_cvss_risk_factor} from '../../utils/render.js';
 
 import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
@@ -41,8 +41,6 @@ import SeverityBar from '../../components/bar/severitybar.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-
-import DetailsLink from '../../components/link/detailslink.js';
 
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
@@ -96,17 +94,21 @@ Actions.propTypes = {
   onOverrideEditClick: PropTypes.func.isRequired,
 };
 
-const Row = ({entity, links = true, actions, ...props}) => {
+const Row = ({
+  entity,
+  links = true,
+  actions,
+  onToggleDetailsClick,
+  ...props,
+}) => {
   return (
     <TableRow>
       <TableData>
-        <DetailsLink
-          legacy
-          type="override"
-          id={entity.id}
-          textOnly={!links}>
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
           {shorten(entity.text)}
-        </DetailsLink>
+        </RowDetailsToggle>
       </TableData>
       <TableData>
         {entity.nvt ? entity.nvt.name : ""}
@@ -135,6 +137,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

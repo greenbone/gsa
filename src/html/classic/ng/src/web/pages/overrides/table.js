@@ -30,11 +30,13 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import OverrideDetails from './details.js';
 import Row from './row.js';
 
 const Header = ({onSortChange, links = true, sort = true, actions}) => {
@@ -92,6 +94,7 @@ Header.propTypes = {
 export default createEntitiesTable({
   emptyTitle: _('No Overrides available'),
   row: Row,
+  rowDetails: withRowDetails('override', 8)(OverrideDetails),
   header: withEntitiesHeader(Header),
   footer: createEntitiesFooter({
     span: 10,

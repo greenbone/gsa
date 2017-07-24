@@ -60,7 +60,6 @@ const OverrideBox = ({
   const toolbox = detailsLink ? (
     <IconDivider>
       <DetailsLink
-        legacy
         id={override.id}
         type="override"
         title={_('Override Details')}
