@@ -1,5 +1,10 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/note.js: Use is_model_element utility
+	function for checking task and result properties of note.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/override.js: Set port property to
 	undefined if it is empty. This will show any for port at the override details
 	page.
