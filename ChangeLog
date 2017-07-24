@@ -1,5 +1,11 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/override.js: Set port property to
+	undefined if it is empty. This will show any for port at the override details
+	page.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/override.js,
 	src/html/classic/ng/src/web/pages/overrides/row.js,
 	src/html/classic/ng/src/web/pages/overrides/table.js: Add toggle to display

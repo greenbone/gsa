@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend, is_defined, is_model_element, map} from '../utils.js';
+import {extend, is_defined, is_empty, is_model_element, map} from '../utils.js';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -71,6 +71,10 @@ class Override extends Model {
     ret.text_excerpt = parse_yesno(elem.text_excerpt);
 
     ret.hosts = parse_csv(ret.hosts);
+
+    if (is_empty(elem.port)) {
+      delete ret.port;
+    }
 
     return ret;
   }
