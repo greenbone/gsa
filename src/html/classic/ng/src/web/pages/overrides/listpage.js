@@ -24,8 +24,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, includes, shorten} from 'gmp/utils.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
@@ -37,12 +35,11 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
 
 import OverridesCharts from './charts.js';
-import OverrideDialog from './dialog.js';
 import FilterDialog from './filterdialog.js';
 import Table from './table.js';
+import withOverrideComponent from './withOverrideComponent.js';
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -56,8 +53,8 @@ const Dashboard = withDashboard(OverridesCharts, {
 });
 
 const ToolBarIcons = ({
-    onNewOverrideClick,
-  }, {capabilities}) => {
+  onOverrideCreateClick
+}, {capabilities}) => {
   return (
     <IconDivider>
       <HelpIcon
@@ -66,7 +63,7 @@ const ToolBarIcons = ({
 
       {capabilities.mayCreate('override') &&
         <NewIcon title={_('New Override')}
-          onClick={onNewOverrideClick}/>
+          onClick={onOverrideCreateClick}/>
       }
     </IconDivider>
   );
@@ -77,109 +74,15 @@ ToolBarIcons.contextTypes = {
 };
 
 ToolBarIcons.propTypes = {
-  onNewOverrideClick: PropTypes.func,
+  onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
-class Page extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.openOverrideDialog = this.openOverrideDialog.bind(this);
-    this.handleSaveOverride = this.handleSaveOverride.bind(this);
-  }
-
-  openOverrideDialog(override) {
-    let {gmp} = this.context;
-
-    if (is_defined(override)) {
-      let active = '0';
-      if (override.isActive()) {
-        if (is_empty(override.end_time)) {
-          active = '-1';
-        }
-        else {
-          active = '-2';
-        }
-      }
-
-      let custom_severity = '0';
-      let new_severity_from_list = '';
-      let new_severity = '';
-
-      if (includes([10, 5, 2, 0, -1], override.new_severity)) {
-        new_severity_from_list = override.new_severity;
-      }
-      else {
-        custom_severity = '1';
-        new_severity = override.new_severity;
-      }
-      this.override_dialog.show({
-        active,
-        custom_severity,
-        hosts: override.hosts,
-        new_severity,
-        new_severity_from_list,
-        nvt: override.nvt,
-        oid: override.nvt ? override.nvt.oid : undefined,
-        override,
-        override_id: override.id,
-        override_severity: override.severity,
-        port: override.port,
-        result_id: is_empty(override.result.id) ? '' : '0',
-        result_uuid: override.result.id,
-        severity: override.severity,
-        task_id: is_empty(override.task.id) ? '' : '0',
-        task_uuid: override.task.id,
-        text: override.text,
-        visible: true,
-      }, {
-        title: _('Edit Override {{name}}',
-          {name: shorten(override.text, 20)}),
-      });
-    }
-    else {
-      this.override_dialog.show({});
-    }
-
-    gmp.tasks.getAll().then(tasks =>
-      this.override_dialog.setValue('tasks', tasks));
-  }
-
-  handleSaveOverride(data) {
-    let {entityCommand, onChanged} = this.props;
-    let promise;
-    if (is_defined(data.override) && data.override.id) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.create(data);
-    }
-    return promise.then(() => onChanged());
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEditOverrideClick={this.openOverrideDialog}
-          onNewOverrideClick={this.openOverrideDialog}/>
-        <OverrideDialog
-          ref={ref => this.override_dialog = ref}
-          onSave={this.handleSaveOverride}/>
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func.isRequired,
-};
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
+const Page = withOverrideComponent({
+  onCloned: 'onChanged',
+  onCreated: 'onChanged',
+  onDeleted: 'onChanged',
+  onSaved: 'onChanged',
+})(EntitiesPage);
 
 export default withEntitiesContainer(Page, 'override', {
   dashboard: Dashboard,

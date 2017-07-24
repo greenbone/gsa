@@ -60,40 +60,40 @@ const render_severity = severity => {
 
 const Actions = ({
     entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEditOverrideClick,
+    onOverrideDeleteClick,
+    onOverrideDownloadClick,
+    onOverrideCloneClick,
+    onOverrideEditClick,
   }) => {
   return (
     <IconDivider>
       <TrashIcon
         entity={entity}
         name="override"
-        onClick={onEntityDelete}/>
+        onClick={onOverrideDeleteClick}/>
       <EditIcon
         entity={entity}
         name="override"
-        onClick={onEditOverrideClick}/>
+        onClick={onOverrideEditClick}/>
       <CloneIcon
         entity={entity}
         name="override"
-        onClick={onEntityClone}/>
+        onClick={onOverrideCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Override')}
-        onClick={onEntityDownload}
+        onClick={onOverrideDownloadClick}
       />
     </IconDivider>
   );
 };
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onEditOverrideClick: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onOverrideCloneClick: PropTypes.func.isRequired,
+  onOverrideDeleteClick: PropTypes.func.isRequired,
+  onOverrideDownloadClick: PropTypes.func.isRequired,
+  onOverrideEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({entity, links = true, actions, ...props}) => {

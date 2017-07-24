@@ -1,5 +1,13 @@
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/overrides/listpage.js,
+	src/html/classic/ng/src/web/pages/overrides/row.js,
+	src/html/classic/ng/src/web/pages/overrides/withOverrideComponent.js: Extract
+	a withOverrideComponent HOC from overrides list page. Adjust handler names.
+
+2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/overrides/dialog.js: Change OverrideDialog
 	to use new withDialog HOC and use float values for new_severity_from_list.
 

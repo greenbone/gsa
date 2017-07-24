@@ -355,6 +355,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/overrides/listpage.js
      ${NG_SRC_DIR}/src/web/pages/overrides/row.js
      ${NG_SRC_DIR}/src/web/pages/overrides/table.js
+     ${NG_SRC_DIR}/src/web/pages/overrides/withOverrideComponent.js
      ${NG_SRC_DIR}/src/web/pages/page.js
      ${NG_SRC_DIR}/src/web/pages/permissions/dialog.js
      ${NG_SRC_DIR}/src/web/pages/permissions/listpage.js
