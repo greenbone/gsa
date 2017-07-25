@@ -234,7 +234,7 @@ export class Http {
 
   handleTimeout(resolve, reject, xhr, options) {
     let rej = new Rejection(xhr, 'timeout',
-      _('A timeout for the request to url {{url}} occurred.',
+      _('A timeout for the request to url {{- url}} occurred.',
         {url: options.url}));
     try {
       reject(this.transformRejection(rej, options));
@@ -327,7 +327,7 @@ export class GmpHttp extends Http {
       log.error('An error occurred while converting gmp response to js for ' +
         'url', this.url, xhr);
       throw new Rejection(xhr, 'error',  _('An error occurred while ' +
-        'converting gmp response to js for url {{url}}', {url: options.url}));
+        'converting gmp response to js for url {{- url}}', {url: options.url}));
     }
   }
 
