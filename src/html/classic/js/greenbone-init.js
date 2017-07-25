@@ -526,7 +526,7 @@
         form.find('.form-selection-item-' + name).hide();
 
         if (gsa.is_defined(value)) {
-          /* show elements wich have the selected value css class set */
+          /* show elements which have the selected value css class set */
 
           form.find('.form-selection-input-' + name + '--' + value).prop(
               'disabled', false);

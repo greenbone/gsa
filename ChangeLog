@@ -1,5 +1,19 @@
 2017-07-25  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/tasks.js,
+	src/html/classic/ng/src/gmp/models/__tests__/filter.js: Fix typos in
+	output.
+
+	* src/html/classic/js/greenbone-init.js,
+	src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/js/gsa_line_chart.js,
+	src/html/classic/ng/src/gmp/commands/alerts.js,
+	src/html/classic/ng/src/gmp/models/filter.js,
+	src/html/classic/ng/src/web/utils/compose.js: Fix typos in comments.
+
+2017-07-25  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/classic/os.xml: Fix typo in comment.
 
 2017-07-25  Michael Wiegand <michael.wiegand@greenbone.net>

@@ -54,7 +54,7 @@ export class TaskCommand extends EntityCommand {
       return this.get({id});
     })
     .catch(err => {
-      log.error('An error occured while starting the task', id, err);
+      log.error('An error occurred while starting the task', id, err);
       throw err;
     });
   }
@@ -72,7 +72,7 @@ export class TaskCommand extends EntityCommand {
       return this.get({id});
     })
     .catch(err => {
-      log.error('An error occured while stopping the task', id, err);
+      log.error('An error occurred while stopping the task', id, err);
       throw err;
     });
   }
@@ -86,7 +86,7 @@ export class TaskCommand extends EntityCommand {
       return this.get({id});
     })
     .catch(err => {
-      log.error('An error occured while resuming the task', id, err);
+      log.error('An error occurred while resuming the task', id, err);
       throw err;
     });
   }

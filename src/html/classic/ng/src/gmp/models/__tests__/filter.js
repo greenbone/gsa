@@ -330,7 +330,7 @@ describe('Filter has', () => {
     expect(filter.has('def')).toEqual(true);
   });
 
-  test('should not have unkown filter term', () => {
+  test('should not have unknown filter term', () => {
     let filter = Filter.fromString('abc=1');
     expect(filter.has('def')).toEqual(false);
   });
@@ -350,7 +350,7 @@ describe('Filter delete', () => {
     expect(filter.delete('abc').toFilterString()).toEqual('def=1');
   });
 
-  test('should ignore unkown filter term to delete', () => {
+  test('should ignore unknown filter term to delete', () => {
     let filter = Filter.fromString('abc=1');
     expect(filter.delete('def').toFilterString()).toEqual('abc=1');
   });

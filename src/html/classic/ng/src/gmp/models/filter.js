@@ -337,7 +337,7 @@ class Filter extends Model {
   }
 
   /**
-   * Parse properties from the passed element object for beeing set in this
+   * Parse properties from the passed element object for being set in this
    * Filter model.
    *
    * @param {Object} elem  Element object to parse properties from.
@@ -368,11 +368,11 @@ class Filter extends Model {
   }
 
   /**
-   * Get the the first FilterTerm for a keyword
+   * Get the first FilterTerm for a keyword
    *
    * @private
    *
-   * @param {String} key  FilterTerm keyword to seach for
+   * @param {String} key  FilterTerm keyword to search for
    *
    * @return {String} Returns the first FilterTerm for the passed keyword
    *                  or undefined of not FilterTerm for the keyword exists in
@@ -455,7 +455,7 @@ class Filter extends Model {
    *
    * @private
    *
-   * @param {String} key  FilterTerm keyword to seach for
+   * @param {String} key  FilterTerm keyword to search for
    *
    * @return {FilterTermList} The FilterTermList for the passed keyword or
    *                          undefined.
@@ -540,7 +540,7 @@ class Filter extends Model {
   /**
    * Get the value of a FilterTerm
    *
-   * @param {String} key  FilterTerm keyword to seach for
+   * @param {String} key  FilterTerm keyword to search for
    *
    * @return {String} Returns the first FilterTerm value for the passed keyword
    *                  or undefined of not FilterTerm for the keyword exists in

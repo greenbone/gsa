@@ -843,7 +843,7 @@
           .style('fill', '#008800')
           .style('opacity', '0.25');
 
-      // Create tange selection tooltip
+      // Create range selection tooltip
       self.range_info_box = self.svg.append('rect')
         .style('fill', 'white')
         .style('opacity', '0.75')
@@ -1342,7 +1342,7 @@
            old_data.records[data_index][self.t_field].getTime() <
            times[Number(t_index) + 1].getTime())) {
 
-        // collect values from orgin data which fit to the time value
+        // collect values from origin data which fit to the time value
 
         if (!gsa.is_date(old_data.records[data_index][self.t_field])) {
           data_index++;

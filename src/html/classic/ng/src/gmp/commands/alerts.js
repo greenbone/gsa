@@ -108,7 +108,7 @@ export class AlertCommand extends EntityCommand {
     return this.httpPost(data).then(this.transformResponse);
   }
 
-  newAlertSettings() { // should be removed after all corresponsing omp commands are implemented
+  newAlertSettings() { // should be removed after all corresponding omp commands are implemented
     return this.httpGet({
       cmd: 'new_alert',
     }).then(response => {

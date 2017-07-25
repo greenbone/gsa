@@ -50,7 +50,7 @@
  * @see https://github.com/acdlite/recompose/blob/master/docs/API.md#compose
  *
  * @param {...Function} [funcs] The HOCs to compose.
- * @returns {Funciton} New HOC that wraps
+ * @returns {Function} New HOC that wraps
  */
 const compose = (...funcs) => {
   if (funcs.length === 0) {

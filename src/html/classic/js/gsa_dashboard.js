@@ -222,7 +222,7 @@
     this.controller_factories = {};
     this.filters = [EMPTY_FILTER];
 
-    this.reordering = false; // indicator if the dashboard rows are currently reorderd
+    this.reordering = false; // indicator if the dashboard rows are currently reordered
 
     this._configUnchanged();
   }
@@ -550,7 +550,7 @@
   };
 
   /**
-   * Createsa a new dashboard row and adds a display to it.
+   * Creates a new dashboard row and adds a display to it.
    *
    * @param displayd    The display to add.
    * @param position    The position of the new row.
@@ -794,7 +794,7 @@
   };
 
   /**
-   * Updates the filter, controllers and heights string and saves ithem to the
+   * Updates the filter, controllers and heights string and saves it to the
    * user's settings if they have changed or force is set to true
    *
    * @param force Set to true to force saving
@@ -841,7 +841,7 @@
   };
 
   /**
-   * Iterate over all rows in the order of their occurence
+   * Iterate over all rows in the order of their occurrence
    *
    * @param callback A callback function as following function(row)
    */
@@ -885,7 +885,7 @@
   };
 
   /**
-   * Initializes the Displays with the values in the defailt displays string.
+   * Initializes the Displays with the values in the default displays string.
    *
    * @return  This dashboard
    */
@@ -1014,7 +1014,7 @@
   };
 
   /**
-   * Checks wether a row has displays and removes it if not
+   * Checks whether a row has displays and removes it if not
    *
    * @return This dashboard
    */
@@ -1062,7 +1062,7 @@
 
   /**
    * (Re-)build the rows and displays from provided controllers, filters and
-   * heights strings. Within these strings rows are seperated by '#' and
+   * heights strings. Within these strings rows are separated by '#' and
    * displays by '|'
    *
    * @param controllers_string Contains the chart names to be used for the
@@ -1287,7 +1287,7 @@
   };
 
   /**
-   * Iterate over each display in order of occurence
+   * Iterate over each display in order of occurrence
    *
    * @param callback A callback function as following function(display)
    */
@@ -1815,7 +1815,7 @@
   };
 
   /**
-   * Sets tht config og the display
+   * Sets the config of the display
    *
    * @return This display
    */
@@ -2547,7 +2547,7 @@
   };
 
   /**
-   * Returns wether the filter selection element should be shown
+   * Returns whether the filter selection element should be shown
    *
    * @return true if the filter selection should be shown
    */
@@ -2556,7 +2556,7 @@
   };
 
   /**
-   * Returns wether the controller selection element should be shown
+   * Returns whether the controller selection element should be shown
    *
    * @return true if the controller selection should be shown
    */
@@ -3084,7 +3084,7 @@
   };
 
   /**
-   * Notifiy all controllers about available data
+   * Notify all controllers about available data
    *
    * @param data Data to notify the requesting controllers about
    * @param uri  URI of the request

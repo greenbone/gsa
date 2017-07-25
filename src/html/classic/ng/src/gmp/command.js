@@ -238,7 +238,7 @@ export class EntityCommand extends HttpCommand {
       return this.transformResponse(response);
     })
     .catch(err => {
-      log.error('An error occured while cloning', this.name, id, err);
+      log.error('An error occurred while cloning', this.name, id, err);
       throw err;
     });
   }
