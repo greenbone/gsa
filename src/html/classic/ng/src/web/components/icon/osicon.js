@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined, is_string} from 'gmp/utils.js';
 
 import OperatingSystems from '../../utils/os.js';
 
@@ -40,10 +40,12 @@ const OsIcon = ({
   osName = false,
   ...props,
 }) => {
-  let {best_os_txt, best_os_cpe} = host.details;
+  const {best_os_txt, best_os_cpe} = host.details;
+
   let title;
   let os_icon;
-  if (best_os_txt && best_os_txt.value &&
+
+  if (is_defined(best_os_txt) && is_string(best_os_txt.value) &&
     best_os_txt.value.includes('[possible conflict]')) {
     os_icon = 'os_conflict.svg';
     if (osCpe) {
@@ -58,8 +60,8 @@ const OsIcon = ({
       });
     }
   }
-  else if (best_os_cpe) {
-    let os = OperatingSystems.find(best_os_cpe.value);
+  else if (is_defined(best_os_cpe)) {
+    const os = OperatingSystems.find(best_os_cpe.value);
     if (os) {
       os_icon = os.icon;
       title = os.title;
