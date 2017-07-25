@@ -1,0 +1,215 @@
+/* Greenbone Security Assistant
+ *
+ * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2017 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+import React from 'react';
+
+import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
+
+import PropTypes from '../../utils/proptypes.js';
+
+import ExportIcon from '../../components/icon/exporticon.js';
+import HelpIcon from '../../components/icon/helpicon.js';
+import Icon from '../../components/icon/icon.js';
+import ListIcon from '../../components/icon/listicon.js';
+import OsIcon from '../../components/icon/osicon.js';
+
+import Divider from '../../components/layout/divider.js';
+import IconDivider from '../../components/layout/icondivider.js';
+import Layout from '../../components/layout/layout.js';
+
+import InfoLink from '../../components/link/infolink.js';
+import Link from '../../components/link/link.js';
+
+import InfoTable from '../../components/table/info.js';
+import TableBody from '../../components/table/body.js';
+import TableData from '../../components/table/data.js';
+import TableRow from '../../components/table/row.js';
+
+import EntityPage from '../../entity/page.js';
+import {withEntityContainer} from '../../entity/container.js';
+import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
+
+import CloneIcon from '../../entities/icons/entitycloneicon.js';
+import CreateIcon from '../../entities/icons/entitycreateicon.js';
+import EditIcon from '../../entities/icons/entityediticon.js';
+import TrashIcon from '../../entities/icons/entitytrashicon.js';
+
+import NoteDetails from './details.js';
+import withHostComponent from './withHostComponent.js';
+
+const ToolBarIcons = ({
+  entity,
+  onHostCloneClick,
+  onHostCreateClick,
+  onHostDeleteClick,
+  onHostDownloadClick,
+  onHostEditClick,
+}, {capabilities}) => {
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <HelpIcon
+          page="host_details"
+          title={_('Help: Host Details')}
+        />
+        <ListIcon
+          title={_('Host List')}
+          page="hosts"
+        />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon
+          entity={entity}
+          displayName={_('Host')}
+          onClick={onHostCreateClick}
+        />
+        <CloneIcon
+          entity={entity}
+          displayName={_('Host')}
+          onClick={onHostCloneClick}
+        />
+        <EditIcon
+          entity={entity}
+          displayName={_('Host')}
+          onClick={onHostEditClick}
+        />
+        <TrashIcon
+          entity={entity}
+          displayName={_('Host')}
+          onClick={onHostDeleteClick}
+        />
+        <ExportIcon
+          value={entity}
+          title={_('Export Host as XML')}
+          onClick={onHostDownloadClick}
+        />
+      </IconDivider>
+      <IconDivider>
+        <Link
+          to="reports"
+          filter={'host=' + entity.name}
+          title={_('Results for this Host')}
+        >
+          <Icon
+            img="report.svg"
+          />
+        </Link>
+      </IconDivider>
+    </Divider>
+  );
+};
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onHostCloneClick: PropTypes.func.isRequired,
+  onHostCreateClick: PropTypes.func.isRequired,
+  onHostDeleteClick: PropTypes.func.isRequired,
+  onHostDownloadClick: PropTypes.func.isRequired,
+  onHostEditClick: PropTypes.func.isRequired,
+};
+
+const Details = ({
+  entity,
+  ...props,
+}) => {
+  const {details} = entity;
+  const cpe_name = is_defined(details) && is_defined(details.best_os_cpe) ?
+    details.best_os_cpe.value : undefined;
+  return (
+    <Layout flex="column">
+      <InfoTable>
+        <TableBody>
+          <TableRow>
+            <TableData>
+              {_('Hostname')}
+            </TableData>
+            <TableData>
+              {entity.hostname}
+            </TableData>
+          </TableRow>
+
+          <TableRow>
+            <TableData>
+              {_('IP Address')}
+            </TableData>
+            <TableData>
+              {entity.ip}
+            </TableData>
+          </TableRow>
+
+          <TableRow>
+            <TableData>
+              {_('Comment')}
+            </TableData>
+            <TableData>
+              {entity.comment}
+            </TableData>
+          </TableRow>
+
+          <TableRow>
+            <TableData>
+              {_('OS')}
+            </TableData>
+            <TableData>
+              <InfoLink
+                type="cpe"
+                textOnly={!is_defined(cpe_name)}
+                name={cpe_name}
+              >
+                <OsIcon osName host={entity}/>
+              </InfoLink>
+            </TableData>
+          </TableRow>
+        </TableBody>
+      </InfoTable>
+
+      <NoteDetails
+        entity={entity}
+        {...props}
+      />
+    </Layout>
+  );
+};
+
+Details.propTypes = {
+  entity: PropTypes.model.isRequired,
+};
+
+const goto_host = goto_details('host');
+
+const Page = withHostComponent({
+  onCloned: goto_host,
+  onDeleted: goto_list('hosts'),
+  onCreated: goto_host,
+  onSaved: 'onChanged',
+})(EntityPage);
+
+export default withEntityContainer('host', {
+  details: Details,
+  sectionIcon: 'host.svg',
+  title: _('Host'),
+  toolBarIcons: ToolBarIcons,
+})(Page);
+
+// vim: set ts=2 sw=2 tw=80:
