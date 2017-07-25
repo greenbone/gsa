@@ -34,7 +34,7 @@ set (NG_PKG_FILES
 
 if (NOT YARN_FOUND)
   MESSAGE (WARNING "Yarn package manager not found. Please install "
-    "yarn for reproducable builds (see https://yarnpkg.com/en/docs/install). "
+    "yarn for reproducible builds (see https://yarnpkg.com/en/docs/install). "
     "Trying to use npm instead.")
   find_package (Npm REQUIRED)
   set (INSTALLER ${NPM_EXECUTABLE})

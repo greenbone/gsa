@@ -73,7 +73,7 @@ if (MANDATORY_TOOL_MISSING)
                       "your system. Please check the logs above.")
 endif (MANDATORY_TOOL_MISSING)
 
-## Check for existance of required libraries
+## Check for existence of required libraries
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
 pkg_check_modules (GLIB REQUIRED glib-2.0>=2.32)

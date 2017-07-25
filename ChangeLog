@@ -1,3 +1,9 @@
+2017-07-25  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Fix typo in comment.
+
+	* src/html/classic/ng/CMakeLists.txt: Fix typo in warning message.
+
 2017-07-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/note.js: Use is_model_element utility
