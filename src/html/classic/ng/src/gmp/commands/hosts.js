@@ -29,10 +29,11 @@ import Host from '../models/host.js';
 
 const log = logger.getLogger('gmp.commands.hosts');
 
-export class HostCommand extends EntityCommand {
+class HostCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'host', Host);
+    super(http, 'asset', Host);
+    this.setParam('asset_type', 'host');
   }
 
   create(args) {
@@ -56,7 +57,7 @@ export class HostCommand extends EntityCommand {
   }
 }
 
-export class HostsCommand extends EntitiesCommand {
+class HostsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'asset', Host);
