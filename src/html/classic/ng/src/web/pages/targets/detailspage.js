@@ -188,4 +188,5 @@ export default withEntityContainer('target', {
   title: _('Target'),
   toolBarIcons: ToolBarIcons,
 })(Page);
+
 // vim: set ts=2 sw=2 tw=80:

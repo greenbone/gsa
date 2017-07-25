@@ -36,6 +36,7 @@ import withComponentDefaults from '../../utils/withComponentDefaults.js';
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
 import {withEntityContainer, loader} from '../../entity/container.js';
+import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
 
 import CloneIcon from '../../entities/icons/entitycloneicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
@@ -337,13 +338,11 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const goto_task = ({router}, {data}) => router.push('ng/task/' + data.id);
+const goto_task = goto_details('task');
 
 const Page = withTaskComponent({
   onCloned: goto_task,
-  onDeleted: ({router}) => {
-    router.push('/ng/tasks/');
-  },
+  onDeleted: goto_list('tasks'),
   onCreated: goto_task,
   onSaved: 'onChanged',
   onStarted: 'onChanged',

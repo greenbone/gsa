@@ -189,7 +189,6 @@ const Page = withNoteComponent({
 
 export default withEntityContainer('note', {
   details: Details,
-  // permissionsComponent: TargetPermissions,
   sectionIcon: 'note.svg',
   title: _('Note'),
   toolBarIcons: ToolBarIcons,
