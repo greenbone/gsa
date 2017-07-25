@@ -25,7 +25,7 @@ import React from 'react';
 
 import  _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -44,19 +44,25 @@ import withHostComponent from './withHostComponent.js';
 
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-const ToolBarIcons = ({onNewHostClick}) => {
-  return (
-    <Layout flex box>
-      <HelpIcon page="hosts"/>
+const ToolBarIcons = ({
+  onHostCreateClick,
+}, {capabilities}) => (
+  <IconDivider>
+    <HelpIcon page="hosts"/>
+    {capabilities.mayCreate('host') &&
       <NewIcon
         title={_('New Host')}
-        onClick={onNewHostClick}/>
-    </Layout>
-  );
+        onClick={onHostCreateClick}/>
+    }
+  </IconDivider>
+);
+
+ToolBarIcons.contextTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
 };
 
 ToolBarIcons.propTypes = {
-  onNewHostClick: PropTypes.func,
+  onHostCreateClick: PropTypes.func.isRequired,
 };
 
 const Dashboard = withDashboard(HostsCharts, {
