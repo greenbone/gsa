@@ -51,10 +51,10 @@ import TableRow from '../../components/table/row.js';
 
 const Actions = ({
     entity,
-    onCreateTarget,
-    onEditHost,
-    onEntityDelete,
-    onEntityDownload,
+    onTargetCreateFromHostClick,
+    onHostEditClick,
+    onHostDeleteClick,
+    onHostDownloadClick,
   }, {capabilities}) => {
 
   let new_title;
@@ -71,21 +71,21 @@ const Actions = ({
         entity={entity}
         name="asset"
         displayName={_('Host')}
-        onClick={onEntityDelete}/>
+        onClick={onHostDeleteClick}/>
       <EditIcon
         entity={entity}
         name="asset"
         displayName={_('Host')}
-        onClick={onEditHost}/>
+        onClick={onHostEditClick}/>
       <NewIcon
         value={entity}
         active={can_create_target}
         title={new_title}
-        onClick={onCreateTarget}/>
+        onClick={onTargetCreateFromHostClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Host')}
-        onClick={onEntityDownload}
+        onClick={onHostDownloadClick}
       />
     </IconDivider>
   );
@@ -93,10 +93,10 @@ const Actions = ({
 
 Actions.propTypes = {
   entity: PropTypes.model,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onCreateTarget: PropTypes.func,
-  onEditHost: PropTypes.func,
+  onHostDeleteClick: PropTypes.func,
+  onHostDownloadClick: PropTypes.func,
+  onTargetCreateFromHostClick: PropTypes.func,
+  onHostEditClick: PropTypes.func,
 };
 
 Actions.contextTypes = {

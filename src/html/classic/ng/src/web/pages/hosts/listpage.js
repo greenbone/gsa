@@ -24,15 +24,10 @@
 import React from 'react';
 
 import  _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-
-import SelectionType from '../../utils/selectiontype.js';
-
-import {goto_details} from '../../entity/withEntityComponent.js';
 
 import EntitiesPage from '../../entities/page.js';
 import {withEntitiesContainer} from '../../entities/container.js';
@@ -42,12 +37,10 @@ import {withDashboard} from '../../components/dashboard/dashboard.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import withTargetComponent from '../../pages/targets/withTargetComponent.js';
-
 import HostsCharts from './charts.js';
-import HostDialog from './dialog.js';
 import HostsFilterDialog from './filterdialog.js';
 import HostsTable from './table.js';
+import withHostComponent from './withHostComponent.js';
 
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -74,115 +67,12 @@ const Dashboard = withDashboard(HostsCharts, {
   defaultControllerString: 'hosts-by-cvss',
 });
 
-
-class Page extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.openHostDialog = this.openHostDialog.bind(this);
-    this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
-    this.openCreateTargetSelectionDialog =
-      this.openCreateTargetSelectionDialog.bind(this);
-    this.handleSaveHost = this.handleSaveHost.bind(this);
-  }
-
-  openHostDialog(host) {
-    this.hosts_dialog.show({
-      host,
-      id: is_defined(host) ? host.id : undefined,
-      name: is_defined(host) ? host.name : '127.0.0.1',
-      comment: is_defined(host) ? host.comment : '',
-    });
-  }
-
-  openCreateTargetDialog(host) {
-    this._openTargetDialog(1, 'uuid=' + host.id);
-  }
-
-  openCreateTargetSelectionDialog() {
-    let {entities, entitiesSelected, selectionType, filter} = this.props;
-
-    let size;
-    let filterstring;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      let hosts = [...entitiesSelected]; // convert set to array
-      size = entitiesSelected.size;
-      filterstring = map(hosts, host => 'uuid=' + host.id).join(" ");
-
-    }
-    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      size = entities.length;
-      filterstring = filter.toFilterString();
-    }
-    else {
-      let counts = entities.getCounts();
-      size = counts.filtered;
-      filterstring = filter.all().toFilterString();
-    }
-    this._openTargetDialog(size, filterstring);
-  }
-
-  _openTargetDialog(count, filterstring) {
-    const {onTargetCreateClick} = this.props;
-    onTargetCreateClick({
-      target_source: 'asset_hosts',
-      hosts_count: count,
-      hosts_filter: filterstring,
-    });
-  }
-
-  handleSaveHost(data) {
-    let {gmp} = this.context;
-    let {onChanged} = this.props;
-    let promise;
-
-    if (is_defined(data.host)) {
-      promise = gmp.host.save(data);
-    }
-    else {
-      promise = gmp.host.create(data);
-    }
-    return promise.then(() => onChanged());
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onCreateTargetSelection={this.openCreateTargetSelectionDialog}
-          onCreateTarget={this.openCreateTargetDialog}
-          onNewHostClick={this.openHostDialog}
-          onEditHost={this.openHostDialog}
-        />
-        <HostDialog
-          ref={ref => this.hosts_dialog = ref}
-          onSave={this.handleSaveHost}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  selectionType: PropTypes.string,
-  entities: PropTypes.collection,
-  entitiesSelected: PropTypes.set,
-  filter: PropTypes.filter,
-  onChanged: PropTypes.func,
-  onTargetCreateClick: PropTypes.func.isRequired,
-};
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-Page = withTargetComponent({
-  onCreated: goto_details('target'),
+const Page = withHostComponent({
+  onCreated: 'onChanged',
   onSaved: 'onChanged',
-})(Page);
+  onCloned: 'onChanged',
+  onDeleted: 'onChanged',
+})(EntitiesPage);
 
 export default withEntitiesContainer(Page, 'host', {
   filtersFilter: ASSETS_FILTER_FILTER,

@@ -93,7 +93,7 @@ Header.propTypes = {
 
 const HostsHeader = withEntitiesHeader(Header);
 
-const Footer = ({onCreateTargetSelection, selectionType, ...props}) => {
+const Footer = ({onTargetCreateFromSelection, selectionType, ...props}) => {
   let title;
   if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
     title = _('Create Target from page contents');
@@ -108,14 +108,14 @@ const Footer = ({onCreateTargetSelection, selectionType, ...props}) => {
     <EntitiesFooter {...props} selectionType={selectionType}>
       <NewIcon
         title={title}
-        onClick={onCreateTargetSelection}/>
+        onClick={onTargetCreateFromSelection}/>
     </EntitiesFooter>
   );
 };
 
 Footer.propTypes = {
   selectionType: PropTypes.string,
-  onCreateTargetSelection: PropTypes.func,
+  onTargetCreateFromSelection: PropTypes.func.isRequired,
 };
 
 
