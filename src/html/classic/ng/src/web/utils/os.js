@@ -1095,7 +1095,7 @@ const operating_systems = [
 ];
 
 export default {
-  find: name => operating_systems.find(os => os.pattern.includes(name)),
+  find: name => operating_systems.find(os => name.includes(os.pattern)),
 };
 
 // vim: set ts=2 sw=2 tw=80:
