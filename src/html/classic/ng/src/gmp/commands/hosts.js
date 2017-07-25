@@ -41,9 +41,10 @@ class HostCommand extends EntityCommand {
     log.debug('Creating host', args);
     return this.httpPost({
       cmd: 'create_host',
+      next: 'get_asset',
       name,
       comment,
-    });
+    }).then(this.transformResponse);
   }
 
   save(args) {
@@ -51,9 +52,10 @@ class HostCommand extends EntityCommand {
     log.debug('Saving host', args);
     return this.httpPost({
       cmd: 'save_asset',
+      next: 'get_asset',
       asset_id: id,
       comment,
-    });
+    }).then(this.transformResponse);
   }
 
   getElementFromRoot(root) {
