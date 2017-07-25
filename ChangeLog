@@ -1,5 +1,9 @@
 2017-07-25  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/html/classic/os.xml: Fix typo in comment.
+
+2017-07-25  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* CMakeLists.txt: Fix typo in comment.
 
 	* src/html/classic/ng/CMakeLists.txt: Fix typo in warning message.
