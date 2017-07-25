@@ -129,7 +129,7 @@ class AppHttpInterceptor extends HttpInterceptor {
   }
 
   responseError(xhr) {
-    if (xhr.status === 401) {
+    if (xhr.status === 401 && window.location.pathname !== '/login') {
       this.app.toLoginPage();
       return PromiseFactory.resolve(xhr);
     }
