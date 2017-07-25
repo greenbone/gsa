@@ -1,5 +1,10 @@
 2017-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/icon/osicon.js: Improve layout of
+	OsIcon. Add divider between icon image and its text.
+
+2017-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/hosts.js: Return the host model after
 	saving and creating.
 

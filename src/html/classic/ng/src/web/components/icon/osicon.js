@@ -30,6 +30,7 @@ import OperatingSystems from '../../utils/os.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Divider from '../layout/divider.js';
 import Layout from '../layout/layout.js';
 
 import Icon from './icon.js';
@@ -83,14 +84,16 @@ const OsIcon = ({
 
   return (
     <Layout flex>
-      <Icon
-        {...props}
-        title={title}
-        img={os_icon}
-      />
-      {osName && best_os_txt &&
-        best_os_txt.value
-      }
+      <Divider>
+        <Icon
+          {...props}
+          title={title}
+          img={os_icon}
+        />
+        {osName && best_os_txt &&
+          <span>{best_os_txt.value}</span>
+        }
+      </Divider>
     </Layout>
   );
 };
