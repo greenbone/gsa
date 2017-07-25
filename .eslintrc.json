@@ -1,7 +1,6 @@
 {
     "extends": "react-app",
     "rules": {
-        "strict": "safe",
         "accessor-pairs": "error",
         "array-bracket-spacing": [
             "error",
