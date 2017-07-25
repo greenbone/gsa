@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {KeyCode, is_empty} from 'gmp/utils.js';
+import {is_defined, KeyCode, is_empty} from 'gmp/utils.js';
 
 import Layout from '../components/layout/layout.js';
 
@@ -95,7 +95,7 @@ class LoginForm extends React.Component {
       return;
     }
 
-    let {username, password} = this.state;
+    const {username, password} = this.state;
     this.props.onSubmit(username, password);
   }
 
@@ -110,12 +110,12 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    let {error} = this.props;
-    let {username, password} = this.state;
-    let protocol_insecure = (window.location.protocol !== 'https:');
+    const {error} = this.props;
+    const {username, password} = this.state;
+    const protocol_insecure = (window.location.protocol !== 'https:');
     return (
       <Layout flex="column">
-        {error &&
+        {is_defined(error) &&
           <Panel>
             <Error>{error}</Error>
           </Panel>
