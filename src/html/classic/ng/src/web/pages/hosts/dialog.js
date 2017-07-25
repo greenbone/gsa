@@ -30,7 +30,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
@@ -74,11 +74,11 @@ HostsDialog.propTypes = {
 };
 
 
-export default withDialog(HostsDialog, {
+export default withDialog({
   title: _('New Host'),
   footer: _('Save'),
   defaultState: {
     name: '127.0.0.1',
     comment: '',
   },
-});
+})(HostsDialog);
