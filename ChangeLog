@@ -1,5 +1,10 @@
 2017-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/hosts/withHostComponent.js: Use correct
+	method for opening the host create dialog.
+
+2017-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/hosts/listpage.js: Fix create new host
 	icon by using the correct handler function and check if the user is allowed to
 	create the host.

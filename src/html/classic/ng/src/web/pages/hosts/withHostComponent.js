@@ -130,7 +130,7 @@ const withHostComponent = (mapping = {}) => Component => {
 
       const handlers = create_handler_props(this.props, mapping)
         .set('onEdit', has_save, this.openHostDialog)
-        .set('onCreate', has_create, this.openCreateHostDialog);
+        .set('onCreate', has_create, this.openHostDialog);
 
       return (
         <Wrapper>
