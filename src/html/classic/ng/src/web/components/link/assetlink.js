@@ -36,7 +36,7 @@ const AssetLink = ({
   return (
     <LegacyLink
       {...props}
-      cmd="get_assets"
+      cmd="get_asset"
       asset_type={type}
       asset_id={id}
     />
