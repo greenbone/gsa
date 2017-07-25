@@ -55,6 +55,10 @@ class HostCommand extends EntityCommand {
       comment,
     });
   }
+
+  getElementFromRoot(root) {
+    return root.get_asset.get_assets_response.asset;
+  }
 }
 
 class HostsCommand extends EntitiesCommand {
