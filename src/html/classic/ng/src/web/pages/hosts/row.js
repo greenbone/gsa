@@ -32,7 +32,7 @@ import {render_component} from '../../utils/render.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
 import DeleteIcon from '../../entities/icons/entitydeleteicon.js';
 import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
@@ -43,8 +43,6 @@ import NewIcon from '../../components/icon/newicon.js';
 import OsIcon from '../../components/icon/osicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-
-import AssetLink from '../../components/link/assetlink.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
@@ -103,16 +101,21 @@ Actions.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-const Row = ({entity, links = true, actions, ...props}) => {
+const Row = ({
+  entity,
+  links = true,
+  actions,
+  onToggleDetailsClick,
+  ...props,
+}) => {
   return (
     <TableRow>
       <TableData flex="column">
-        <AssetLink
-          legacy
-          type="host"
-          id={entity.id}>
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
           {entity.name}
-        </AssetLink>
+        </RowDetailsToggle>
         <Comment text={entity.comment}/>
       </TableData>
       <TableData>
@@ -139,8 +142,9 @@ const Row = ({entity, links = true, actions, ...props}) => {
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: PropTypes.model,
+  entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(Row, withEntityActions(Actions));

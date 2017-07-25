@@ -66,6 +66,7 @@ import DfnCertAdvsPage from './pages/dfncert/listpage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import GroupsPage from './pages/groups/listpage.js';
 import HostsPage from './pages/hosts/listpage.js';
+import HostDetailsPage from './pages/hosts/detailspage.js';
 import NotesPage from './pages/notes/listpage.js';
 import NoteDetailsPage from './pages/notes/detailspage.js';
 import NvtsPage from './pages/nvts/listpage.js';
@@ -304,6 +305,10 @@ ReactDOM.render(
         <Route
           path="override/:id"
           component={OverrideDetailsPage}
+        />
+        <Route
+          path="host/:id"
+          component={HostDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

@@ -32,6 +32,7 @@ import SelectionType from '../../utils/selectiontype.js';
 import EntitiesFooter, {withEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
@@ -39,6 +40,7 @@ import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import HostDetails from './details.js';
 import HostRow from './row.js';
 
 const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
@@ -128,6 +130,7 @@ const HostsFooter = withEntitiesFooter(Footer, {
 export const HostsTable = createEntitiesTable({
   emptyTitle: _('No hosts available'),
   row: HostRow,
+  rowDetails: withRowDetails('host', 10)(HostDetails),
   header: HostsHeader,
   footer: HostsFooter,
 });
