@@ -23,6 +23,14 @@
 
 import {is_defined, for_each, pluralize_type} from './utils.js';
 
+const check_type = type => {
+  if (type === 'host' || type === 'hosts' || type === 'os') {
+    return 'asset';
+  }
+  // TODO add info
+  return type;
+};
+
 export class Capabilities {
 
   constructor(element) {
@@ -57,7 +65,7 @@ export class Capabilities {
   }
 
   mayAccess(type) {
-    return this.mayOp('get_' + pluralize_type(type));
+    return this.mayOp('get_' + pluralize_type(check_type(type)));
   }
 
   mayOp(value) {
@@ -65,19 +73,19 @@ export class Capabilities {
   }
 
   mayClone(type) {
-    return this.mayOp('create_' + type);
+    return this.mayOp('create_' + check_type(type));
   }
 
   mayEdit(type) {
-    return this.mayOp('modify_' + type);
+    return this.mayOp('modify_' + check_type(type));
   }
 
   mayDelete(type) {
-    return this.mayOp('delete_' + type);
+    return this.mayOp('delete_' + check_type(type));
   }
 
   mayCreate(type) {
-    return this.mayOp('create_' + type);
+    return this.mayOp('create_' + check_type(type));
   }
 
   get length() {

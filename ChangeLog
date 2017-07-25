@@ -1,5 +1,13 @@
 2017-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/capabilities.js: Sumarizing hosts and os as
+	assets (and also the info types) does cost a lot of extra checks. Therefore
+	try to minimize these checks by moving them into the lowest layer as possible.
+	With this change it is possible to check caps with type host and os instead of
+	having to use asset here.
+
+2017-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/hosts/listpage.js,
 	src/html/classic/ng/src/web/pages/hosts/row.js,
