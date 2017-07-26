@@ -40546,7 +40546,7 @@
 
 	* src/gsad.c (init_validator): Add ; and ' to comment.
 
-2011-03-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-03-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Post release version bump.
 
@@ -40554,7 +40554,7 @@
 
 	* src/html/help.xsl: Updated version number to 3.0.1.
 
-2011-03-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-03-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Preparing the gsa 3.0.0 release.
 
@@ -40628,7 +40628,7 @@
 	(modify_auth_oap): Allow ldap_connect method, fixed typo in trace
 	msg.
 
-2011-03-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-03-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Post release version bump.
 
@@ -40636,7 +40636,7 @@
 
 	* src/html/help.xsl: Updated version number to 3.0+rc2.
 
-2011-03-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-03-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Preparing the gsa 3.0+rc1 release.
 
@@ -40662,7 +40662,7 @@
 	"enable_ldap_connect", allow "ldap_connect" for "group" parameter,
 	allow "@" within login names for "user@domain"- scenarios.
 
-2011-03-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-03-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/wizard.png: New.
 
@@ -40920,20 +40920,20 @@
 	(html-targets-trash-table): Switch to port list.
 	(get_trash): Add port lists.
 
-2011-02-10  Henri Doreau <henri.doreau@greenbone.net>
+2012-02-10  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: Added new entry for VMWare ESXi.
 
-2011-02-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-02-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/os_vmware.png: New.
 
-2011-02-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-02-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl, src/html/gsad.xsl, src/html/help.xsl: Extend
 	copyright notice to 2012.
 
-2011-02-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-02-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-note-form, note [note], note [details])
 	(html-edit-override-form, override [override], override [details])
@@ -40959,7 +40959,7 @@
 	* src/gsad_base.c (params_append_bin): Get the length of the value from
 	the structure instead of using strlen, because the value is binary.
 
-2011-01-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2012-01-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/gsa-style.css (gb_menu): Adjusted to work with
 	the Chrome browser family. Patch by Karl-Heinz Ruskowski.
