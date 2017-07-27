@@ -58,23 +58,24 @@ class EntityPage extends React.Component {
   }
 
   renderSection() {
-    const {entity, sectionIcon, foldable, title} = this.props;
-    let SectionComponent = this.props.section;
+    const {
+      details: Details,
+      entity,
+      foldable,
+      sectionIcon,
+      section: SectionComponent = Section,
+      title,
+      ...other,
+    } = this.props;
 
     if (SectionComponent === false) {
       return null;
-    }
-
-    if (!is_defined(SectionComponent)) {
-      SectionComponent = Section;
     }
 
     let section_title = title;
     if (is_defined(entity)) {
       section_title = title + ': ' + entity.name;
     }
-
-    const Details = this.props.details;
 
     return (
       <SectionComponent
@@ -84,6 +85,7 @@ class EntityPage extends React.Component {
         foldable={foldable}
       >
         <Details
+          {...other}
           entity={entity}
         />
       </SectionComponent>
