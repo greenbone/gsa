@@ -1,5 +1,12 @@
 2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js,
+	src/html/classic/ng/src/gmp/parser.js: Extract parsing and setting the default
+	model properties into own functions. This allows to reuse the parsing code for
+	simple objects on model properties.
+
+2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/hosts.js: Add deleteIdentifier method
 	to host command.
 

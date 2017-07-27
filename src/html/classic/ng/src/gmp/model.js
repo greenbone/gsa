@@ -24,13 +24,14 @@
 import moment from 'moment';
 
 import {
-  extend,
   is_defined,
   map,
 } from './utils.js';
 
 import {
+  parse_properties,
   parse_yesno,
+  set_properties,
   NO_VALUE,
   YES_VALUE,
 } from './parser.js';
@@ -55,18 +56,7 @@ class Model {
   }
 
   setProperties(properties) {
-    if (is_defined(properties)) {
-      for (const [key, value] of Object.entries(properties)) {
-        if (!key.startsWith('_')) {
-          Object.defineProperty(this, key, {
-            value,
-            writable: false,
-            enumerable: true,
-          });
-        }
-      }
-    }
-    return this;
+    return set_properties(properties, this);
   }
 
   updateFromElement(elem) {
@@ -78,15 +68,8 @@ class Model {
   }
 
   parseProperties(elem) {
-    let copy = extend({}, elem);
-    copy.id = elem._id;
+    const copy = parse_properties(elem);
 
-    if (is_defined(elem.creation_time)) {
-      copy.creation_time = moment(elem.creation_time);
-    }
-    if (is_defined(elem.modification_time)) {
-      copy.modification_time = moment(elem.modification_time);
-    }
     if (is_defined(elem.end_time)) {
       if (elem.end_time.length === 0) {
         delete copy.end_time;
@@ -118,12 +101,6 @@ class Model {
       if (is_defined(prop)) {
         copy[name] = parse_yesno(prop);
       }
-    }
-
-    if (is_defined(copy.type)) {
-      // type should not be used directly
-      copy._type = copy.type;
-      delete copy.type;
     }
 
     return copy;

@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import moment from 'moment';
+
 import logger from './log.js';
 import {
   is_array,
@@ -241,6 +243,45 @@ export function parse_collection_list(response, name, modelclass,
     counts: collection_count_parse_func(response, name, plural_name),
   });
 }
+
+export const parse_properties = (element, object = {}) => {
+  const copy = {...object, ...element}; // create shallow copy
+
+  copy.id = element._id;
+
+  if (is_defined(element.creation_time)) {
+    copy.creation_time = moment(element.creation_time);
+  }
+  if (is_defined(element.modification_time)) {
+    copy.modification_time = moment(element.modification_time);
+  }
+
+  if (is_defined(copy.type)) {
+    // type should not be used directly
+    copy._type = copy.type;
+    delete copy.type;
+  }
+
+  return copy;
+};
+
+export const set_properties = (properties, object = {}) => {
+  if (is_defined(properties)) {
+    for (const [key, value] of Object.entries(properties)) {
+      if (!key.startsWith('_')) {
+        Object.defineProperty(object, key, {
+          value,
+          writable: false,
+          enumerable: true,
+        });
+      }
+    }
+  }
+  return object;
+};
+
+export const new_properties = (properties, object = {}) =>
+  set_properties(parse_properties(properties, object));
 
 // vim: set ts=2 sw=2 tw=80:
 
