@@ -1,5 +1,10 @@
 2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tasks/row.js: Fix links to reports at
+	tasks list page.
+
+2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/hosts/details.js,
 	src/html/classic/ng/src/web/pages/hosts/detailspage.js,

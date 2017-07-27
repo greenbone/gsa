@@ -78,9 +78,9 @@ const render_report_total = (entity, links) => {
   return (
     <Layout flex align={['center', 'center']}>
       <Link
-        to={'reports?replace_task_id=1&' +
-            'filter=task_id=' + entity.id + ' and status=Done ' +
-            'sort-reverse=date&filt_id=-2'}
+        to={'reports'}
+        filter={'task_id=' + entity.id + ' and status=Done ' +
+          'sort-reverse=date&filt_id=-2'}
         title={_('View list of all finished reports for Task {{name}}',
           {name: entity.name})}
         textOnly={!links || entity.report_count.finished === 0}
@@ -90,8 +90,8 @@ const render_report_total = (entity, links) => {
       <span>&nbsp;</span>
       (
       <Link
-        to={'reports?replace_task_id=1&' +
-            'filter=task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
+        to={'reports'}
+        filter={'task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
         title={_('View list of all reports for Task {{name}},' +
                  ' including unfinished ones', {name: entity.name})}
         textOnly={!links || entity.report_count.total === 0}
