@@ -58,6 +58,15 @@ class HostCommand extends EntityCommand {
     }).then(this.transformResponse);
   }
 
+  deleteIdentifier({id}) {
+    log.debug('Deleting Host Identifier with id', id);
+    return this.httpPost({
+      cmd: 'delete_asset',
+      next: 'get_asset',
+      asset_id: id,
+    }).then(this.transformResponse);
+  }
+
   getElementFromRoot(root) {
     return root.get_asset.get_assets_response.asset;
   }
