@@ -25,6 +25,12 @@ import React from 'react';
 
 import  _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils.js';
+import {
+  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+  SNMP_CREDENTIAL_TYPE,
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+} from 'gmp/models/credential.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -42,7 +48,7 @@ import TextField from '../../components/form/textfield.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
 const type_names = {
-  up: _('Usename + Password'),
+  up: _('Username + Password'),
   usk: _('Username + SSH Key'),
   cc: _('Client Cerficate'),
   snmp: _('SNMP'),
@@ -58,7 +64,8 @@ class CredentialsDialog extends React.Component {
 
   handleTypeChange(base) {
     let {autogenerate, onValueChange} = this.props;
-    if (base !== 'up' && base !== 'usk') {
+    if (base !== USERNAME_PASSWORD_CREDENTIAL_TYPE &&
+      base !== USERNAME_SSH_KEY_CREDENTIAL_TYPE) {
       // autogenerate is only possible with username+password and username+ssh
       autogenerate = 0;
     }
@@ -140,7 +147,8 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Auto-generate')}
-          condition={(base === 'up' || base === 'usk') && !is_edit}>
+          condition={(base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+            base === USERNAME_SSH_KEY_CREDENTIAL_TYPE) && !is_edit}>
           <YesNoRadio
             name="autogenerate"
             value={autogenerate}
@@ -148,7 +156,7 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('SNMP Community')}
-          condition={base === 'snmp'}>
+          condition={base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
               name="change_community"
@@ -166,7 +174,11 @@ class CredentialsDialog extends React.Component {
 
         <FormGroup title={_('Username')}
           flex
-          condition={base === 'up' || base === 'usk' || base === 'snmp'}>
+          condition={
+            base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+            base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+            base === SNMP_CREDENTIAL_TYPE
+          }>
           <TextField
             name="credential_login"
             value={credential_login}
@@ -174,7 +186,8 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Password')}
-          condition={base === 'up' || base === 'snmp'}>
+          condition={base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+              base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
               name="change_password"
@@ -193,7 +206,7 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Passphrase')}
-          condition={base === 'usk'}>
+          condition={base === USERNAME_SSH_KEY_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
               name="change_passphrase"
@@ -212,7 +225,7 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Privacy Password')}
-          condition={base === 'snmp'}>
+          condition={base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
               name="change_privacy_password"
@@ -230,21 +243,24 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Certificate')}
-          condition={base === 'cc'}>
+          condition={base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE}>
           <FileField
             name="certificate"
             onChange={onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Private Key')}
-          condition={base === 'usk' || base === 'cc'}>
+          condition={
+            base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+            base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE
+          }>
           <FileField
             name="private_key"
             onChange={onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Auth Algorithm')}
-          condition={base === 'snmp'}>
+          condition={base === SNMP_CREDENTIAL_TYPE}>
           <Radio
             value="md5"
             title="MD5"
@@ -260,7 +276,7 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Privacy Algorithm')}
-          condition={base === 'snmp'}>
+          condition={base === SNMP_CREDENTIAL_TYPE}>
           <Radio
             value="aes"
             title="AES"
@@ -286,7 +302,10 @@ class CredentialsDialog extends React.Component {
 }
 
 const pwtypes =  PropTypes.oneOf([
-  'up', 'usk', 'cc', 'snmp',
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+  SNMP_CREDENTIAL_TYPE,
 ]);
 
 CredentialsDialog.propTypes = {
@@ -328,7 +347,7 @@ export default withDialog(CredentialsDialog, {
     allow_insecure: 0,
     auth_algorithm: 'sha1',
     autogenerate: 0,
-    base: 'up',
+    base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
     change_community: '0',
     change_passphrase: '0',
     change_password: '0',
