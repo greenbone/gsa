@@ -59,7 +59,7 @@ export const ALL_CREDENTIAL_TYPES = [
 ];
 
 export const ssh_credential_filter = credential =>
-  credential.credential_type === SSH_CREDENTIAL_TYPES ||
+  credential.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
   credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const smb_credential_filter = credential =>
