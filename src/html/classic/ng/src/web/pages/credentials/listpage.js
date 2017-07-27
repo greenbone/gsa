@@ -95,7 +95,7 @@ class Page extends React.Component {
       this.credentials_dialog.show({
         allow_insecure: credential.allow_insecure,
         auth_algorithm: credential.auth_algorithm,
-        base: credential.type,
+        base: credential.credential_type,
         comment: credential.comment,
         credential,
         credential_login: credential.login,
@@ -103,7 +103,7 @@ class Page extends React.Component {
         name: credential.name,
         privacy_algorithm: is_defined(credential.privacy) ?
           credential.privacy.algorithm : undefined,
-        types: [credential.type],
+        types: [credential.credential_type],
       }, {
         title: _('Edit Credential {{name}}', {name: credential.name}),
       });
