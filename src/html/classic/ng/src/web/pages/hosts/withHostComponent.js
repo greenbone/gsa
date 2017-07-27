@@ -34,8 +34,9 @@ import SelectionType from '../../utils/selectiontype.js';
 import Wrapper from '../../components/layout/wrapper.js';
 
 import withEntityComponent, {
-  goto_details,
   create_handler_props,
+  goto_details,
+  handle_promise,
   has_mapping,
 } from '../../entity/withEntityComponent.js';
 
@@ -50,6 +51,9 @@ const DEFAULT_MAPPING = {
   onSave: 'onHostSaveClick',
   onDownload: 'onHostDownloadClick',
   onEdit: 'onHostEditClick',
+  onIdentifierDelete: 'onHostIdentifierDeleteClick',
+  onIdentifierDeleted: 'onHostIdentifierDeleted',
+  onIdentifierDeleteError: 'onError',
 };
 
 const withHostComponent = (mapping = {}) => Component => {
@@ -64,10 +68,18 @@ const withHostComponent = (mapping = {}) => Component => {
     constructor(...args) {
       super(...args);
 
+      this.handleIdentifierDelete = this.handleIdentifierDelete.bind(this);
       this.openHostDialog = this.openHostDialog.bind(this);
       this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
       this.openCreateTargetSelectionDialog =
         this.openCreateTargetSelectionDialog.bind(this);
+    }
+
+    handleIdentifierDelete(identifier) {
+      const {onIdentifierDeleted, onIdentifierDeleteError} = mapping;
+      const {gmp} = this.context;
+      return handle_promise(gmp.host.deleteIdentifier(identifier), this.props,
+        onIdentifierDeleted, onIdentifierDeleteError);
     }
 
     openHostDialog(host) {
@@ -130,7 +142,9 @@ const withHostComponent = (mapping = {}) => Component => {
 
       const handlers = create_handler_props(this.props, mapping)
         .set('onEdit', has_save, this.openHostDialog)
-        .set('onCreate', has_create, this.openHostDialog);
+        .set('onCreate', has_create, this.openHostDialog)
+        .set('onIdentifierDelete', 'onIdentifierDeleted',
+          this.handleIdentifierDelete);
 
       return (
         <Wrapper>
@@ -155,6 +169,10 @@ const withHostComponent = (mapping = {}) => Component => {
     entitiesSelected: PropTypes.set,
     filter: PropTypes.filter,
     onTargetCreateClick: PropTypes.func.isRequired,
+  };
+
+  HostComponentWrapper.contextTypes = {
+    gmp: PropTypes.gmp.isRequired,
   };
 
   return compose(

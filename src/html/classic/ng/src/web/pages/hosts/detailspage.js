@@ -23,10 +23,14 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import SeverityBar from '../../components/bar/severitybar.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 import HelpIcon from '../../components/icon/helpicon.js';
@@ -38,6 +42,7 @@ import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
+import DetailsLink from '../../components/link/detailslink.js';
 import InfoLink from '../../components/link/infolink.js';
 import Link from '../../components/link/link.js';
 
@@ -55,7 +60,7 @@ import CreateIcon from '../../entities/icons/entitycreateicon.js';
 import EditIcon from '../../entities/icons/entityediticon.js';
 import TrashIcon from '../../entities/icons/entitytrashicon.js';
 
-import NoteDetails from './details.js';
+import HostDetails from './details.js';
 import withHostComponent from './withHostComponent.js';
 
 const ToolBarIcons = ({
@@ -107,7 +112,7 @@ const ToolBarIcons = ({
       </IconDivider>
       <IconDivider>
         <Link
-          to="reports"
+          to="results"
           filter={'host=' + entity.name}
           title={_('Results for this Host')}
         >
@@ -129,11 +134,29 @@ ToolBarIcons.propTypes = {
   onHostEditClick: PropTypes.func.isRequired,
 };
 
+const RouteList = glamorous.ul({
+  margin: 0,
+  paddingLeft: '20px',
+});
+
+const Hop = glamorous.div({
+  display: 'inline-flex',
+  '&:not(:last-child) > *': {
+    paddingRight: '5px',
+  },
+  '&:not(:last-child)': {
+    paddingRight: '5px',
+  },
+  '&:not(:last-child)::after': {
+    content: `'►'`, // \u25BA == &#9658;
+  },
+});
+
 const Details = ({
   entity,
   ...props,
 }) => {
-  const {details} = entity;
+  const {details, routes, severity} = entity;
   const cpe_name = is_defined(details) && is_defined(details.best_os_cpe) ?
     details.best_os_cpe.value : undefined;
   return (
@@ -181,10 +204,48 @@ const Details = ({
               </InfoLink>
             </TableData>
           </TableRow>
+
+          {routes.length > 0 &&
+            <TableRow>
+              <TableData>
+                {_('Route')}
+              </TableData>
+              <TableData>
+                <RouteList>
+                  {routes.map((route, idx) => (
+                    <li key={idx}>
+                      {route.map(host => (
+                        <Hop key={host.ip}>
+                          <DetailsLink
+                            type="host"
+                            id={host.id}
+                            textOnly={!is_defined(host.id)}
+                          >
+                            {host.ip}
+                          </DetailsLink>
+                        </Hop>
+                      ))}
+                    </li>
+                  ))}
+                </RouteList>
+              </TableData>
+            </TableRow>
+          }
+
+          <TableRow>
+            <TableData>
+              {_('Severity')}
+            </TableData>
+            <TableData>
+              <SeverityBar
+                severity={severity}
+              />
+            </TableData>
+          </TableRow>
         </TableBody>
       </InfoTable>
 
-      <NoteDetails
+      <HostDetails
         entity={entity}
         {...props}
       />
@@ -203,6 +264,7 @@ const Page = withHostComponent({
   onDeleted: goto_list('hosts'),
   onCreated: goto_host,
   onSaved: 'onChanged',
+  onIdentifierDeleted: 'onChanged',
 })(EntityPage);
 
 export default withEntityContainer('host', {

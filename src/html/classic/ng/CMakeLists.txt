@@ -323,6 +323,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/hosts/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dialog.js
      ${NG_SRC_DIR}/src/web/pages/hosts/filterdialog.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/identifiers.js
      ${NG_SRC_DIR}/src/web/pages/hosts/listpage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/row.js
      ${NG_SRC_DIR}/src/web/pages/hosts/table.js

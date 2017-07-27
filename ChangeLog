@@ -1,5 +1,14 @@
 2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/hosts/details.js,
+	src/html/classic/ng/src/web/pages/hosts/detailspage.js,
+	src/html/classic/ng/src/web/pages/hosts/identifiers.js,
+	src/html/classic/ng/src/web/pages/hosts/withHostComponent.js: Add host
+	details (mostly host identifiers).
+
+2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/page.js: Pass additional props to the
 	details.
 

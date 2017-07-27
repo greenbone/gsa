@@ -23,10 +23,33 @@
 
 import React from 'react';
 
-const HostDetails = () => {
+import PropTypes from '../../utils/proptypes.js';
+
+import Layout from '../../components/layout/layout.js';
+
+import Identifiers from './identifiers.js';
+
+const HostDetails = ({
+  entity,
+    onHostIdentifierDeleteClick,
+}) => {
+  const {identifiers} = entity;
   return (
-    <div/>
+    <Layout
+      grow="1"
+      flex="column">
+      <Identifiers
+        displayActions
+        identifiers={identifiers}
+        onDelete={onHostIdentifierDeleteClick}
+      />
+    </Layout>
   );
+};
+
+HostDetails.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onHostIdentifierDeleteClick: PropTypes.func,
 };
 
 export default HostDetails;
