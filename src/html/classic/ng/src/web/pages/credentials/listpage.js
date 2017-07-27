@@ -37,6 +37,7 @@ import {createEntitiesTable} from '../../entities/table.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
@@ -60,7 +61,7 @@ const ToolBarIcons = ({
     onNewCredentialClick
   }, {capabilities}) => {
   return (
-    <Layout flex>
+    <IconDivider>
       <HelpIcon
         page="credentials"
         title={_('Help: Credentials')}/>
@@ -69,7 +70,7 @@ const ToolBarIcons = ({
           title={_('New Credential')}
           onClick={onNewCredentialClick}/>
       }
-    </Layout>
+    </IconDivider>
   );
 };
 

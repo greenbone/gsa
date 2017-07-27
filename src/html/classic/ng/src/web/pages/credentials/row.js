@@ -42,7 +42,7 @@ import Text from '../../components/form/text.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
@@ -57,7 +57,7 @@ const Actions = ({
     onEditCredential,
   }) => {
   return (
-    <Layout flex align={['start', 'center']}>
+    <IconDivider>
       <TrashIcon
         displayName={_('Credential')}
         name="credential"
@@ -82,7 +82,7 @@ const Actions = ({
       />
       <CredentialDownloadIcon
         credential={entity}/>
-    </Layout>
+    </IconDivider>
   );
 };
 
