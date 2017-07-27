@@ -59,17 +59,17 @@ export const ALL_CREDENTIAL_TYPES = [
 ];
 
 export const ssh_credential_filter = credential =>
-  credential.type === SSH_CREDENTIAL_TYPES ||
-  credential.type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credential_type === SSH_CREDENTIAL_TYPES ||
+  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const smb_credential_filter = credential =>
-  credential.type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const esxi_credential_filter = credential =>
-  credential.type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const snmp_credential_filter = credential =>
-  credential.type === SNMP_CREDENTIAL_TYPE;
+  credential.credential_type === SNMP_CREDENTIAL_TYPE;
 
 class Credential extends Model {
 
@@ -86,6 +86,8 @@ class Credential extends Model {
         ret.certificate_info.expiration_time
       );
     }
+
+    ret.credential_type = elem.type;
 
     ret.allow_insecure = parse_yesno(elem.allow_insecure);
 

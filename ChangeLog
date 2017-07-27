@@ -1,5 +1,10 @@
 2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/credential.js: Fix setting the type of a
+	credential model.
+
+2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/results/detailspage.js: Link to new
 	detailspage of corresponding task.
 
