@@ -42,6 +42,8 @@ const OsIcon = ({
   ...props,
 }) => {
   const {best_os_txt, best_os_cpe} = host.details;
+  const os = is_defined(best_os_cpe) ?
+    OperatingSystems.find(best_os_cpe.value) : undefined;
 
   let title;
   let os_icon;
@@ -61,14 +63,11 @@ const OsIcon = ({
       });
     }
   }
-  else if (is_defined(best_os_cpe)) {
-    const os = OperatingSystems.find(best_os_cpe.value);
-    if (os) {
-      os_icon = os.icon;
-      title = os.title;
-      if (osCpe && best_os_cpe) {
-        title += ' (' + best_os_cpe.value + ')';
-      }
+  else if (is_defined(os)) {
+    os_icon = os.icon;
+    title = os.title;
+    if (osCpe) {
+      title += ' (' + best_os_cpe.value + ')';
     }
   }
 
@@ -84,14 +83,13 @@ const OsIcon = ({
 
   return (
     <Layout flex>
-      <Divider>
+      <Divider title={title}>
         <Icon
           {...props}
-          title={title}
           img={os_icon}
         />
-        {osName && best_os_txt &&
-          <span>{best_os_txt.value}</span>
+        {osName && is_defined(os) &&
+          <span>{os.title}</span>
         }
       </Divider>
     </Layout>
