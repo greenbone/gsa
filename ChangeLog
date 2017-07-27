@@ -1,5 +1,10 @@
 2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/host.js: Improve and extend parsing of
+	host identifiers. Also parse routes.
+
+2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js,
 	src/html/classic/ng/src/gmp/parser.js: Extract parsing and setting the default
 	model properties into own functions. This allows to reuse the parsing code for

@@ -21,12 +21,41 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, for_each} from '../utils.js';
+import {is_defined, is_empty, for_each, map} from '../utils.js';
 
-import Model from '../model.js';
-import {parse_severity} from '../parser.js';
+import {
+  new_properties,
+  parse_int,
+  parse_properties,
+  parse_severity,
+  parse_yesno,
+  set_properties,
+} from '../parser.js';
 
 import Asset from './asset.js';
+
+const get_identifier = (identifiers, name) => identifiers.filter(
+  identifier => identifier.name === name)[0];
+
+class Identifier {
+
+  constructor(element) {
+    const props = parse_properties(element);
+
+    if (is_defined(props.source)) {
+      props.source = new_properties({
+        ...props.source,
+        source_type: props.source.type,
+      });
+    }
+
+    if (is_defined(props.os)) {
+      props.os = new_properties(props.os);
+    }
+
+    set_properties(props, this);
+  }
+}
 
 class Host extends Asset {
 
@@ -39,19 +68,22 @@ class Host extends Asset {
       ret.severity = parse_severity(ret.host.severity.value);
     }
 
-    let identifiers = {};
     if (is_defined(ret.identifiers)) {
-      for_each(ret.identifiers.identifier, identifier => {
-        // FIXME check if Model class fits here
-        identifiers[identifier.name] = new Model(identifier);
+      ret.identifiers = map(ret.identifiers.identifier, identifier => {
+        return new Identifier(identifier);
       });
     }
+    else {
+      ret.identifiers = [];
+    }
 
-    ret.identifiers = identifiers;
+    let hostname = get_identifier(ret.identifiers, 'hostname');
 
-    let hostname = ret.identifiers.hostname ||
-      ret.identifiers['DNS-via-TargetDefinition'];
-    let ip = ret.identifiers.ip;
+    if (!is_defined(hostname)) {
+      hostname = get_identifier(ret.identifiers, 'DNS-via-TargetDefinition');
+    }
+
+    const ip = get_identifier(ret.identifiers, 'ip');
 
     ret.hostname = is_defined(hostname) ? hostname.value : undefined;
     ret.ip = is_defined(ip) ? ip.value : undefined;
@@ -62,12 +94,26 @@ class Host extends Asset {
       for_each(ret.host.detail, details => {
         ret.details[details.name] = {
           value: details.value,
-          source: new Model(details.source),
+          source: new_properties(details.source),
         };
       });
-    }
 
-    delete ret.host;
+      if (is_defined(ret.host.routes)) {
+        ret.routes = map(ret.host.routes.route, route =>
+          map(route.host, host => ({
+            ip: host.ip,
+            id: is_empty(host._id) ? undefined : host._id,
+            distance: parse_int(host._distance),
+            same_source: parse_yesno(host._same_source), // host/hop was found in the same scan
+          }))
+        );
+      }
+
+      delete ret.host;
+    }
+    else {
+      ret.routes = [];
+    }
 
     return ret;
   }
