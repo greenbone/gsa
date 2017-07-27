@@ -341,6 +341,10 @@ class EntitiesContainer extends React.Component {
   }
 
   handleShowError(message) {
+    if (!is_defined(this.notice_dialog)) {
+      log.error('Error Dialog not ready.', message);
+      return;
+    }
     this.notice_dialog.show({
       message,
     }, {

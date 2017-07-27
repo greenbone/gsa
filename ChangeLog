@@ -1,5 +1,10 @@
 2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js: Safety check to not cause
+	an additional error if the error dialog isn't available.
+
+2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/tasks/row.js: Fix links to reports at
 	tasks list page.
 
