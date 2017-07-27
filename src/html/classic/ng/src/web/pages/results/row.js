@@ -35,18 +35,19 @@ import SeverityBar from '../../components/bar/severitybar.js';
 
 import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
 
-import AssetLink from '../../components/link/assetlink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...other,
-  }) => {
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...other,
+}) => {
+  const {host} = entity;
   const shown_name = is_defined(entity.name) ? entity.name : entity.nvt.oid;
   const has_tags = is_defined(entity.nvt) && is_defined(entity.nvt.tags);
   return (
@@ -70,14 +71,13 @@ const Row = ({
         {entity.qod.value} %
       </TableData>
       <TableData flex align="center">
-        <AssetLink
-          legacy
+        <DetailsLink
           type="host"
-          id={entity.host.id}
+          id={host.id}
           textOnly={!links}
         >
-          {entity.host.name}
-        </AssetLink>
+          {host.name}
+        </DetailsLink>
       </TableData>
       <TableData>
         {entity.port}

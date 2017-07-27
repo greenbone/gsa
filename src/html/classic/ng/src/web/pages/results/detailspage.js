@@ -93,7 +93,6 @@ const ToolBarIcons = ({
       </IconDivider>
       <IconDivider>
         <DetailsLink
-          legacy
           type="task"
           id={entity.task.id}
         >
