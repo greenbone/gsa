@@ -22,8 +22,8 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "d3": "^3.5.17",
-    "glamor": "^2.20.25",
-    "glamorous": "^3.23.5",
+    "glamor": "^2.20.37",
+    "glamorous": "^3.25.0",
     "i18next": "^8.4.0",
     "i18next-browser-languagedetector": "^1.0.0",
     "i18next-xhr-backend": "^1.4.2",

@@ -1,3 +1,8 @@
+2017-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/package.json,
+	src/html/classic/ng/yarn.lock: Update glamor and glamorous to newest versions.
+
 2017-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/app.js,
