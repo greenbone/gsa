@@ -17291,6 +17291,47 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   if (! omp_success (entity))
     modify_failed = 1;
 
+  /* Send Auto Cache Rebuild setting. */
+  text = params_value (params, "auto_cache_rebuild");
+  text_64 = (text
+                 ? g_base64_encode ((guchar*) text, strlen (text))
+                 : g_strdup (""));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"a09285b0-2d47-49b6-a4ef-946ee71f1d5c\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            text_64 ? text_64 : "")
+      == -1)
+    {
+      g_free (text_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (text_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  if (! omp_success (entity))
+    modify_failed = 1;
+
   /* Get the Filters and other resources. */
   commands = g_string_new ("<commands>");
   if (command_enabled (credentials, "GET_ALERTS"))

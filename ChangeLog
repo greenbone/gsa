@@ -1,3 +1,15 @@
+2017-07-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r29237.
+
+	* src/gsad.c (init_validator): Add "auto_cache_rebuild".
+
+	* src/gsad_omp.c (save_my_settings_omp): Add "Auto Cache Rebuild"
+	setting.
+
+	* src/html/classic/omp.xsl (get_my_settings, edit_my_settings): Add
+	"Auto Cache Rebuild" setting.
+
 2017-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_slave_omp): Use g_markup_printf_escaped to

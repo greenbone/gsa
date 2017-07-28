@@ -1316,6 +1316,7 @@ init_validator ()
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_min_qod", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
+  openvas_validator_alias (validator, "auto_cache_rebuild", "boolean");
   openvas_validator_alias (validator, "base",            "name");
   openvas_validator_alias (validator, "build_filter",    "boolean");
   /* the "bulk_[...].x" parameters are used to identify the image type

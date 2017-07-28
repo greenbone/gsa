@@ -34932,6 +34932,19 @@ should not have received it.
                 </td>
               </tr>
             </xsl:if>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Auto Cache Rebuild', 'My Settings')"/></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="get_settings_response/setting[name='Auto Cache Rebuild']/value = 0">
+                    <xsl:value-of select="gsa:i18n ('No')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="gsa:i18n ('Yes')"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
           </xsl:if>
         </table>
       </div>
@@ -35602,6 +35615,26 @@ should not have received it.
                 </td>
               </tr>
             </xsl:if>
+
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Auto Cache Rebuild', 'My Settings')"/></td>
+              <td>
+                <xsl:variable name="current_auto_cache_rebuild"
+                              select="gsa:param-or ('auto_cache_rebuild', get_settings_response/setting[name='Auto Cache Rebuild']/value)"/>
+                <select name="auto_cache_rebuild" style="width:100px;" class="setting-control" data-setting="auto_cache_rebuild">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'1'"/>
+                    <xsl:with-param name="content" select="gsa:i18n ('Yes')"/>
+                    <xsl:with-param name="select-value" select="$current_auto_cache_rebuild"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'0'"/>
+                    <xsl:with-param name="content" select="gsa:i18n ('No')"/>
+                    <xsl:with-param name="select-value" select="$current_auto_cache_rebuild"/>
+                  </xsl:call-template>
+                </select>
+              </td>
+            </tr>
 
             <tr>
               <td colspan="2" style="text-align:right;">
