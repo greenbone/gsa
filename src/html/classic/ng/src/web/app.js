@@ -71,6 +71,7 @@ import NotesPage from './pages/notes/listpage.js';
 import NoteDetailsPage from './pages/notes/detailspage.js';
 import NvtsPage from './pages/nvts/listpage.js';
 import OperatingSystemsPage from './pages/os/listpage.js';
+import OperatingSystemDetailsPage from './pages/os/detailspage.js';
 import OvaldefsPage from './pages/ovaldefs/listpage.js';
 import OverridesPage from './pages/overrides/listpage.js';
 import OverrideDetailsPage from './pages/overrides/detailspage.js';
@@ -309,6 +310,10 @@ ReactDOM.render(
         <Route
           path="host/:id"
           component={HostDetailsPage}
+        />
+        <Route
+          path="operatingsystem/:id"
+          component={OperatingSystemDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

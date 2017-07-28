@@ -39,7 +39,7 @@ import ExportIcon from '../../components/icon/exporticon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
-import AssetLink from '../../components/link/assetlink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
 
 import TableData from '../../components/table/data.js';
@@ -77,13 +77,13 @@ const Row = ({entity, links = true, actions, ...props}) => {
       <TableData>
         <IconDivider flex align={['start', 'center']}>
           <CpeIcon name={entity.name}/>
-          <AssetLink
-            legacy
+          <DetailsLink
             type="os"
+            page="operatingsystem"
             id={entity.id}
             textOnly={!links}>
             {entity.name}
-          </AssetLink>
+          </DetailsLink>
         </IconDivider>
       </TableData>
       <TableData>

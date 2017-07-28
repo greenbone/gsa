@@ -345,6 +345,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/nvts/row.js
      ${NG_SRC_DIR}/src/web/pages/nvts/table.js
      ${NG_SRC_DIR}/src/web/pages/os/charts.js
+     ${NG_SRC_DIR}/src/web/pages/os/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/os/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/os/listpage.js
      ${NG_SRC_DIR}/src/web/pages/os/row.js
