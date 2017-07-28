@@ -32,6 +32,7 @@ const DetailsLink = ({
   id,
   legacy = false,
   type,
+  page = type,
   textOnly = false,
   ...props,
 }, {capabilities}) => {
@@ -52,7 +53,7 @@ const DetailsLink = ({
     <Link
       {...props}
       textOnly={textOnly}
-      to={'/' + type + '/' + id}
+      to={'/' + page + '/' + id}
     />
   );
 };
@@ -65,6 +66,7 @@ DetailsLink.propTypes = {
   id: PropTypes.id.isRequired,
   legacy: PropTypes.bool,
   textOnly: PropTypes.bool,
+  page: PropTypes.string,
   type: PropTypes.string.isRequired,
 };
 

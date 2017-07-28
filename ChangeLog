@@ -10,6 +10,12 @@
 
 2017-07-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/link/detailslink.js: Allow to set a
+	page for detail links. The page to visit may be different from the entity
+	type.
+
+2017-07-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/overrides/withOverrideComponent.js: Pass
 	override id as id to the dialog. This id is used in the save handler to decide
 	whether the call is a create or edit.
