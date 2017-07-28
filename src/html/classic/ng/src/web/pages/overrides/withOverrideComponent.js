@@ -87,6 +87,7 @@ const withOverrideComponent = (mapping = {}) => Component => {
           new_severity = override.new_severity;
         }
         this.override_dialog.show({
+          id: override.id,
           active,
           custom_severity,
           hosts: override.hosts,
@@ -95,7 +96,6 @@ const withOverrideComponent = (mapping = {}) => Component => {
           nvt: override.nvt,
           oid: override.nvt ? override.nvt.oid : undefined,
           override,
-          override_id: override.id,
           override_severity: override.severity,
           port: override.port,
           result_id: is_defined(override.result) ? '' : '0',

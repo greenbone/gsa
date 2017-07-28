@@ -1,5 +1,11 @@
 2017-07-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/overrides/withOverrideComponent.js: Pass
+	override id as id to the dialog. This id is used in the save handler to decide
+	whether the call is a create or edit.
+
+2017-07-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/dialog.js: Fix username password
 	credential list by using the correct property name for the credential type in
 	the filter. Also use const and update indentation.
