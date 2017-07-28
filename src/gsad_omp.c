@@ -20533,6 +20533,62 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
     }
 
+  /* Send Auto Cache Rebuild setting. */
+
+  changed_value = params_value (changed, "auto_cache_rebuild");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
+    {
+      text = params_value (params, "auto_cache_rebuild");
+      text_64 = (text
+                    ? g_base64_encode ((guchar*) text, strlen (text))
+                    : g_strdup (""));
+
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"a09285b0-2d47-49b6-a4ef-946ee71f1d5c\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    text_64 ? text_64 : "")
+          == -1)
+        {
+          g_free (text_64);
+          openvas_connection_close (&connection);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      g_free (text_64);
+
+      entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "a09285b0-2d47-49b6-a4ef-946ee71f1d5c");
+      if (read_entity_and_string_c (&connection, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_connection_close (&connection);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      xml_string_append (xml, "</save_setting>");
+      if (! omp_success (entity))
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
+    }
+
   openvas_connection_close (&connection);
   if (modify_failed)
     return edit_my_settings (credentials, params, g_string_free (xml, FALSE),
