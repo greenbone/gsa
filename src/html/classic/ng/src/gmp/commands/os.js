@@ -25,15 +25,19 @@ import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import OperatingSystem from '../models/os.js';
 
-export class HostCommand extends EntityCommand {
+class OperatingSystemCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'asset', OperatingSystem);
     this.setParam('asset_type', 'os');
   }
+
+  getElementFromRoot(root) {
+    return root.get_asset.get_assets_response.asset;
+  }
 }
 
-export class HostsCommand extends EntitiesCommand {
+class OperatingSystemsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'asset', OperatingSystem);
@@ -45,7 +49,7 @@ export class HostsCommand extends EntitiesCommand {
   }
 }
 
-register_command('operatingsystem', HostCommand);
-register_command('operatingsystems', HostsCommand);
+register_command('operatingsystem', OperatingSystemCommand);
+register_command('operatingsystems', OperatingSystemsCommand);
 
 // vim: set ts=2 sw=2 tw=80:
