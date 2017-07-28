@@ -88,34 +88,34 @@ const NEW_SNMP = {
 };
 
 const TargetDialog = ({
-    alive_tests,
-    comment = '',
-    credentials,
-    esxi_credential_id,
-    exclude_hosts,
-    hosts,
-    hosts_count,
-    in_use = false,
-    name,
-    port,
-    port_list_id,
-    port_lists,
-    reverse_lookup_only,
-    reverse_lookup_unify,
-    smb_credential_id,
-    snmp_credential_id,
-    ssh_credential_id,
-    target_source,
-    target_exclude_source,
-    onValueChange,
-    onNewCredentialsClick,
-    onNewPortListClick,
-  }, {capabilities}) => {
+  alive_tests,
+  comment = '',
+  credentials,
+  esxi_credential_id,
+  exclude_hosts,
+  hosts,
+  hosts_count,
+  in_use = false,
+  name,
+  port,
+  port_list_id,
+  port_lists,
+  reverse_lookup_only,
+  reverse_lookup_unify,
+  smb_credential_id,
+  snmp_credential_id,
+  ssh_credential_id,
+  target_source,
+  target_exclude_source,
+  onValueChange,
+  onNewCredentialsClick,
+  onNewPortListClick,
+}, {capabilities}) => {
 
-  let ssh_credentials = credentials.filter(ssh_credential_filter);
-  let up_credentials = credentials.filter(value =>
-    value.type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
-  let snmp_credentials = credentials.filter(snmp_credential_filter);
+  const ssh_credentials = credentials.filter(ssh_credential_filter);
+  const up_credentials = credentials.filter(value =>
+    value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
+  const snmp_credentials = credentials.filter(snmp_credential_filter);
 
   return (
     <Layout flex="column">

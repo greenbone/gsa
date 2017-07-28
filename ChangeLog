@@ -1,5 +1,11 @@
 2017-07-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/targets/dialog.js: Fix username password
+	credential list by using the correct property name for the credential type in
+	the filter. Also use const and update indentation.
+
+2017-07-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/os/row.js: Fix icon layout and link to
 	corresponding hosts.
 
