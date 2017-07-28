@@ -37,7 +37,7 @@ import CpeIcon from '../../components/icon/cpeicon.js';
 import DeleteIcon from '../../components/icon/deleteicon.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import AssetLink from '../../components/link/assetlink.js';
 import Link from '../../components/link/link.js';
@@ -45,25 +45,23 @@ import Link from '../../components/link/link.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const IconActions = ({entity, onEntityDelete, onEntityDownload}) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      {entity.isInUse() ?
-        <DeleteIcon
-          active={false}
-          title={_('Operating System is in use')}/> :
-        <DeleteIcon
-          value={entity}
-          title={_('Delete')}
-          onClick={onEntityDelete}/>
-      }
-      <ExportIcon
+const IconActions = ({entity, onEntityDelete, onEntityDownload}) => (
+  <IconDivider>
+    {entity.isInUse() ?
+      <DeleteIcon
+        active={false}
+        title={_('Operating System is in use')}/> :
+      <DeleteIcon
         value={entity}
-        onClick={onEntityDownload}
-        title={_('Export Operating System')}/>
-    </Layout>
-  );
-};
+        title={_('Delete')}
+        onClick={onEntityDelete}/>
+    }
+    <ExportIcon
+      value={entity}
+      onClick={onEntityDownload}
+      title={_('Export Operating System')}/>
+  </IconDivider>
+);
 
 IconActions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -76,15 +74,17 @@ const Actions = withEntityActions(IconActions);
 const Row = ({entity, links = true, actions, ...props}) => {
   return (
     <TableRow>
-      <TableData flex align={['start', 'center']}>
-        <CpeIcon name={entity.name}/>
-        <AssetLink
-          legacy
-          type="os"
-          id={entity.id}
-          textOnly={!links}>
-          {entity.name}
-        </AssetLink>
+      <TableData>
+        <IconDivider flex align={['start', 'center']}>
+          <CpeIcon name={entity.name}/>
+          <AssetLink
+            legacy
+            type="os"
+            id={entity.id}
+            textOnly={!links}>
+            {entity.name}
+          </AssetLink>
+        </IconDivider>
       </TableData>
       <TableData>
         {entity.title}
@@ -100,7 +100,8 @@ const Row = ({entity, links = true, actions, ...props}) => {
       </TableData>
       <TableData flex align="center">
         <Link
-          to={'hosts?filter=os~"' + entity.name + '"'}
+          to={'hosts'}
+          filter={'os~"' + entity.name + '"'}
           textOnly={!links}>
           {entity.hosts.length}
         </Link>
