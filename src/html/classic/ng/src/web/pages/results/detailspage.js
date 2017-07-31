@@ -97,25 +97,29 @@ const ToolBarIcons = ({
       }
     </IconDivider>
     <IconDivider>
-      <DetailsLink
-        type="task"
-        id={entity.task.id}
-      >
-        <Icon
-          img="task.svg"
-          title={_('Corresponding Task ({{name}})', entity.task)}
-        />
-      </DetailsLink>
-      <DetailsLink
-        legacy
-        type="report"
-        id={entity.report.id}
-      >
-        <Icon
-          img="report.svg"
-          title={_('Corresponding Report')}
-        />
-      </DetailsLink>
+      {capabilities.mayAccess('tasks') &&
+        <DetailsLink
+          type="task"
+          id={entity.task.id}
+        >
+          <Icon
+            img="task.svg"
+            title={_('Corresponding Task ({{name}})', entity.task)}
+          />
+        </DetailsLink>
+      }
+      {capabilities.mayAccess('reports') &&
+        <DetailsLink
+          legacy
+          type="report"
+          id={entity.report.id}
+        >
+          <Icon
+            img="report.svg"
+            title={_('Corresponding Report')}
+          />
+        </DetailsLink>
+      }
     </IconDivider>
   </Divider>
 );
