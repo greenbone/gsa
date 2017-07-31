@@ -220,7 +220,12 @@ export class EntityCommand extends HttpCommand {
   }
 
   transformResponse(response) {
-    return response.setData(this.getModelFromResponse(response));
+    let entity = this.getModelFromResponse(response);
+    if (!is_defined(entity.id)) {
+      log.warn('Entity with undefined id found.'); // FIXME gsad MUST return 404 if no entity has been found
+      entity = undefined;
+    }
+    return response.setData(entity);
   }
 
   clone({id}) {
