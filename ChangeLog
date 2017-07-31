@@ -1,3 +1,11 @@
+2017-07-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/utils/withCapabilities.js,
+	src/html/classic/ng/src/web/utils/withContext.js: Add new withContext and
+	withCapabilities HOCs. Both will simplify using functional components together
+	with context.
+
 2017-07-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Add "auto_cache_rebuild".
