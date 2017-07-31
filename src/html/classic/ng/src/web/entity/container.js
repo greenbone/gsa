@@ -54,6 +54,8 @@ export const loader = (name, filter_func) => function(id) {
     filter: filter_func(id),
   }).then(entities => {
 
+    log.debug('Loaded', name, entities);
+
     this.setState({[name]: entities});
 
     const meta = entities.getMeta();
@@ -65,8 +67,11 @@ export const loader = (name, filter_func) => function(id) {
 
     return false;
   }).catch(err => {
+    // call handleError before setting state. setting state may hide the root
+    // error
+    const rej = this.handleError(err);
     this.setState({[name]: undefined});
-    return this.handleError(err);
+    return rej;
   });
 };
 
@@ -164,6 +169,8 @@ class EntityContainer extends React.Component {
 
     return this.entity_command.get({id}).then(response => {
 
+      log.debug('Loaded entity', response.data);
+
       this.setState({entity: response.data, loading: false});
 
       const meta = response.getMeta();
@@ -174,8 +181,9 @@ class EntityContainer extends React.Component {
       return false;
     })
     .catch(err => {
+      const rej = this.handleError(err);
       this.setState({entity: undefined});
-      return this.handleError(err);
+      return rej;
     });
   }
 
