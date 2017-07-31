@@ -66,12 +66,11 @@ const withNoteComponent = (mapping = {}) => Component => {
       super(...args);
 
       this.openNoteDialog = this.openNoteDialog.bind(this);
+      this.openCreateNoteDialog = this.openCreateNoteDialog.bind(this);
     }
 
     openNoteDialog(note) {
-      const {gmp} = this.context;
-
-      if (is_defined(note) && note.id) {
+      if (is_defined(note)) {
         let active = '0';
         if (note.isActive()) {
           if (is_empty(note.end_time)) {
@@ -102,12 +101,22 @@ const withNoteComponent = (mapping = {}) => Component => {
         }, {
           title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
         });
+
+        this.loadTasks();
       }
-      else {
-        this.note_dialog.show({});
-      }
+    }
+
+    openCreateNoteDialog(initial = {}) {
+      this.note_dialog.show(initial);
+
+      this.loadTasks();
+    }
+
+    loadTasks() {
+      const {gmp} = this.context;
+
       gmp.tasks.getAll().then(tasks =>
-        this.note_dialog.setValue('tasks', tasks));
+          this.note_dialog.setValue('tasks', tasks));
     }
 
     render() {
@@ -122,7 +131,7 @@ const withNoteComponent = (mapping = {}) => Component => {
         has_mapping(this.props, mapping, 'onCreated');
 
       const handlers = create_handler_props(this.props, mapping)
-        .set('onCreate', has_create, this.openNoteDialog)
+        .set('onCreate', has_create, this.openCreateNoteDialog)
         .set('onEdit', has_save, this.openNoteDialog);
 
       return (

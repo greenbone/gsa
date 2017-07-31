@@ -1,5 +1,12 @@
 2017-07-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/notes/withNoteComponent.js,
+	src/html/classic/ng/src/web/pages/overrides/withOverrideComponent.js: Use
+	different handlers for opening edit and create dialogs. This allows to call
+	these handlers from child components.
+
+2017-07-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/command.js: Circumvent webpage crash if an empty
 	entity is returned from gsad for an unknown/invalid id. gsad MUST return a
 	http 404 in future for this cases!

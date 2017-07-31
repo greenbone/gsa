@@ -58,12 +58,11 @@ const withOverrideComponent = (mapping = {}) => Component => {
     constructor(...args) {
       super(...args);
 
+      this.openCreateOverrideDialog = this.openCreateOverrideDialog.bind(this);
       this.openOverrideDialog = this.openOverrideDialog.bind(this);
     }
 
     openOverrideDialog(override) {
-      const {gmp} = this.context;
-
       if (is_defined(override)) {
         let active = '0';
         if (override.isActive()) {
@@ -109,10 +108,19 @@ const withOverrideComponent = (mapping = {}) => Component => {
           title: _('Edit Override {{- name}}',
             {name: shorten(override.text, 20)}),
         });
+
+        this.loadTasks();
       }
-      else {
-        this.override_dialog.show({});
-      }
+    }
+
+    openCreateOverrideDialog(initial = {}) {
+      this.override_dialog.show(initial);
+
+      this.loadTasks();
+    }
+
+    loadTasks() {
+      const {gmp} = this.context;
 
       gmp.tasks.getAll().then(tasks =>
         this.override_dialog.setValue('tasks', tasks));
@@ -130,7 +138,7 @@ const withOverrideComponent = (mapping = {}) => Component => {
         has_mapping(this.props, mapping, 'onCreated');
 
       const handlers = create_handler_props(this.props, mapping)
-        .set('onCreate', has_create, this.openOverrideDialog)
+        .set('onCreate', has_create, this.openCreateOverrideDialog)
         .set('onEdit', has_save, this.openOverrideDialog);
       return (
         <Wrapper>
