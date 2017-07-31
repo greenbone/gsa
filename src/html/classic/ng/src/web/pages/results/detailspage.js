@@ -26,6 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
@@ -57,72 +58,84 @@ import ResultDetails from './details.js';
 
 
 const ToolBarIcons = ({
+  capabilities,
   entity,
   onNewNoteClick,
   onNewOverrideClick
-}) => {
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <HelpIcon
-          page="result_details"
-          title={_('Help: Result Details')}
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <HelpIcon
+        page="result_details"
+        title={_('Help: Result Details')}
+      />
+      <LegacyLink
+        cmd="export_result"
+        result_id={entity.id}
+      >
+        <ExportIcon
+          title={_('Export Result as XML')}
         />
-        <LegacyLink
-          cmd="export_result"
-          result_id={entity.id}
-        >
-          <ExportIcon
-            title={_('Export Result as XML')}
-          />
-        </LegacyLink>
-      </IconDivider>
-      <IconDivider>
+      </LegacyLink>
+    </IconDivider>
+    <IconDivider>
+      {capabilities.mayCreate('note') &&
         <Icon
           img="new_note.svg"
           title={_('Add new Note')}
           value={entity}
           onClick={onNewNoteClick}
         />
+      }
+      {capabilities.mayCreate('override') &&
         <Icon
           img="new_override.svg"
           title={_('Add new Override')}
           value={entity}
           onClick={onNewOverrideClick}
         />
-      </IconDivider>
-      <IconDivider>
-        <DetailsLink
-          type="task"
-          id={entity.task.id}
-        >
-          <Icon
-            img="task.svg"
-            title={_('Corresponding Task ({{name}})', entity.task)}
-          />
-        </DetailsLink>
-        <DetailsLink
-          legacy
-          type="report"
-          id={entity.report.id}
-        >
-          <Icon
-            img="report.svg"
-            title={_('Corresponding Report')}
-          />
-        </DetailsLink>
-      </IconDivider>
-    </Divider>
-  );
-};
+      }
+    </IconDivider>
+    <IconDivider>
+      <DetailsLink
+        type="task"
+        id={entity.task.id}
+      >
+        <Icon
+          img="task.svg"
+          title={_('Corresponding Task ({{name}})', entity.task)}
+        />
+      </DetailsLink>
+      <DetailsLink
+        legacy
+        type="report"
+        id={entity.report.id}
+      >
+        <Icon
+          img="report.svg"
+          title={_('Corresponding Report')}
+        />
+      </DetailsLink>
+    </IconDivider>
+  </Divider>
+);
 
 ToolBarIcons.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
-  onNewNoteClick: PropTypes.func,
-  onNewOverrideClick: PropTypes.func,
+  onNewNoteClick: PropTypes.func.isRequired,
+  onNewOverrideClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, ...props}) => {
+const active_filter = entity => entity.isActive();
+
+const Details = ({
+  entity,
+  ...props,
+}) => {
+  const {notes, overrides, qod, host, user_tags} = entity;
+  const active_notes = notes.filter(active_filter);
+  const active_overrides = overrides.filter(active_filter);
   return (
     <Layout flex="column">
       <DetailsBlock
@@ -141,10 +154,10 @@ const Details = ({entity, ...props}) => {
               <TableData>
                 {_('Severity')}
               </TableData>
-              <TableData>
+              <TableData flex align={['start', 'center']}>
                 <Divider>
                   <SeverityBar severity={entity.severity}/>
-                  {entity.overrides.active &&
+                  {overrides.active &&
                     <InnerLink
                       to="overrides">
                       <Icon img="override.svg"
@@ -160,7 +173,7 @@ const Details = ({entity, ...props}) => {
                 {_('QoD')}
               </TableData>
               <TableData>
-                {entity.qod.value} %
+                {qod.value} %
               </TableData>
             </TableRow>
             <TableRow>
@@ -170,8 +183,8 @@ const Details = ({entity, ...props}) => {
               <TableData>
                 <AssetLink
                   type="host"
-                  id={entity.host.id}>
-                  {entity.host.name}
+                  id={host.id}>
+                  {host.name}
                 </AssetLink>
               </TableData>
             </TableRow>
@@ -187,12 +200,12 @@ const Details = ({entity, ...props}) => {
         </InfoTable>
       </DetailsBlock>
 
-      {entity.user_tags.length > 0 &&
+      {user_tags.length > 0 &&
         <DetailsBlock
           title={_('Tags')}
         >
           <Divider>
-            {entity.user_tags.map(tag => (
+            {user_tags.map(tag => (
               <DetailsLink
                 legacy
                 key={tag.id}
@@ -211,43 +224,45 @@ const Details = ({entity, ...props}) => {
         {...props}
       />
 
-      <DetailsBlock
-        id="overrides"
-        title={_('Overrides')}>
-        <Divider
-          wrap
-          align={['start', 'stretch']}
-          width="15px">
-          {
-            entity.overrides.filter(override => override.isActive())
-              .map(override => (
+      {active_overrides.length > 0 &&
+        <DetailsBlock
+          id="overrides"
+          title={_('Overrides')}>
+          <Divider
+            wrap
+            align={['start', 'stretch']}
+            width="15px">
+            {
+              active_overrides.map(override => (
                 <Override
                   key={override.id}
                   override={override}
                 />
               ))
-          }
-        </Divider>
-      </DetailsBlock>
+            }
+          </Divider>
+        </DetailsBlock>
+      }
 
-      <DetailsBlock
-        id="notes"
-        title={_('Notes')}>
-        <Divider
-          wrap
-          align={['start', 'stretch']}
-          width="15px">
-          {
-            entity.notes.filter(note => note.isActive())
-              .map(note => (
+      {active_notes.length > 0 &&
+        <DetailsBlock
+          id="notes"
+          title={_('Notes')}>
+          <Divider
+            wrap
+            align={['start', 'stretch']}
+            width="15px">
+            {
+              active_notes.map(note => (
                 <Note
                   key={note.id}
                   note={note}
                 />
               ))
-          }
-        </Divider>
-      </DetailsBlock>
+            }
+          </Divider>
+        </DetailsBlock>
+      }
     </Layout>
   );
 };
@@ -259,7 +274,7 @@ Details.propTypes = {
 export default withEntityContainer('result', {
   sectionIcon: 'result.svg',
   title: _('Result'),
-  toolBarIcons: ToolBarIcons,
+  toolBarIcons: withCapabilities(ToolBarIcons),
   details: Details,
   permissionsComponent: false,
 })(EntityPage);
