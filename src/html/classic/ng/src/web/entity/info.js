@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _, {long_date} from 'gmp/locale.js';
-import {classes} from 'gmp/utils.js';
+import {classes, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -45,10 +45,16 @@ const Table = glamorous(InfoTable)({
 });
 
 const EntityInfo = ({
-    className,
-    entity,
-  }) => {
+  className,
+  entity,
+}) => {
   className = classes(className, 'entity-info');
+  const {
+    id,
+    owner,
+    creation_time,
+    modification_time,
+  } = entity;
   return (
     <Table className={className}>
       <TableBody>
@@ -57,7 +63,7 @@ const EntityInfo = ({
             {_('ID')}
           </TableData>
           <TableData>
-            {entity.id}
+            {id}
           </TableData>
         </TableRow>
         <TableRow>
@@ -65,7 +71,7 @@ const EntityInfo = ({
             {_('Created')}
           </TableData>
           <TableData>
-            {long_date(entity.creation_time)}
+            {long_date(creation_time)}
           </TableData>
         </TableRow>
         <TableRow>
@@ -73,17 +79,19 @@ const EntityInfo = ({
             {_('Modified')}
           </TableData>
           <TableData>
-            {long_date(entity.modification_time)}
+            {long_date(modification_time)}
           </TableData>
         </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Owner')}
-          </TableData>
-          <TableData>
-            {entity.owner.name}
-          </TableData>
-        </TableRow>
+        {is_defined(owner) &&
+          <TableRow>
+            <TableData>
+              {_('Owner')}
+            </TableData>
+            <TableData>
+              {owner.name}
+            </TableData>
+          </TableRow>
+        }
       </TableBody>
     </Table>
   );

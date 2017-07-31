@@ -1,5 +1,10 @@
 2017-07-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/info.js: Only display owner info if the
+	displayed entity has an owner.
+
+2017-07-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/container.js: Call error handling before
 	setting the state. Setting the state may cause an additional error (if
 	rendering did already crash due to an previous error) and therefore hide the
