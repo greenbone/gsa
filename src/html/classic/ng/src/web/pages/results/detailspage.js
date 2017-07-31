@@ -43,6 +43,7 @@ import Icon from '../../components/icon/icon.js';
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
+import Wrapper from '../../components/layout/wrapper.js';
 
 import AssetLink from '../../components/link/assetlink.js';
 import DetailsLink from '../../components/link/detailslink.js';
@@ -54,14 +55,17 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import ResultDetails from './details.js';
+import NoteDialog from '../notes/dialog.js';
 
+import OverrideDialog from '../overrides/dialog.js';
+
+import ResultDetails from './details.js';
 
 const ToolBarIcons = ({
   capabilities,
   entity,
-  onNewNoteClick,
-  onNewOverrideClick
+  onNoteCreateClick,
+  onOverrideCreateClick
 }) => (
   <Divider margin="10px">
     <IconDivider>
@@ -84,7 +88,7 @@ const ToolBarIcons = ({
           img="new_note.svg"
           title={_('Add new Note')}
           value={entity}
-          onClick={onNewNoteClick}
+          onClick={onNoteCreateClick}
         />
       }
       {capabilities.mayCreate('override') &&
@@ -92,7 +96,7 @@ const ToolBarIcons = ({
           img="new_override.svg"
           title={_('Add new Override')}
           value={entity}
-          onClick={onNewOverrideClick}
+          onClick={onOverrideCreateClick}
         />
       }
     </IconDivider>
@@ -127,8 +131,8 @@ const ToolBarIcons = ({
 ToolBarIcons.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
-  onNewNoteClick: PropTypes.func.isRequired,
-  onNewOverrideClick: PropTypes.func.isRequired,
+  onNoteCreateClick: PropTypes.func.isRequired,
+  onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
 const active_filter = entity => entity.isActive();
@@ -275,12 +279,107 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
+class Page extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.handleSaveNote = this.handleSaveNote.bind(this);
+    this.handleSaveOverride = this.handleSaveOverride.bind(this);
+
+    this.openNoteDialog = this.openNoteDialog.bind(this);
+    this.openOverrideDialog = this.openOverrideDialog.bind(this);
+  }
+
+  handleSaveNote(data) {
+    const {gmp} = this.context;
+    const {onChanged} = this.props;
+
+    return gmp.note.create(data).then(onChanged);
+  }
+
+  handleSaveOverride(data) {
+    const {gmp} = this.context;
+    const {onChanged} = this.props;
+
+    return gmp.override.create(data).then(onChanged);
+  }
+
+  openNoteDialog(result) {
+    this.note_dialog.show({
+      fixed: true,
+      oid: result.nvt.oid,
+      nvt: result.nvt,
+      task_id: '0',
+      task_name: result.task.name,
+      result_id: '',
+      task_uuid: result.task.id,
+      result_uuid: result.id,
+      result_name: result.name,
+      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
+      note_severity: result.original_severity,
+      hosts: '--',
+      hosts_manual: result.host.name,
+      port: '--',
+      port_manual: result.port,
+    });
+  }
+
+  openOverrideDialog(result) {
+    this.override_dialog.show({
+      fixed: true,
+      oid: result.nvt.oid,
+      nvt: result.nvt,
+      task_id: '0',
+      task_name: result.task.name,
+      result_id: '',
+      task_uuid: result.task.id,
+      result_uuid: result.id,
+      result_name: result.name,
+      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
+      note_severity: result.original_severity,
+      hosts: '--',
+      hosts_manual: result.host.name,
+      port: '--',
+      port_manual: result.port,
+    });
+  }
+
+  render() {
+    return (
+      <Wrapper>
+        <EntityPage
+          {...this.props}
+          onNoteCreateClick={this.openNoteDialog}
+          onOverrideCreateClick={this.openOverrideDialog}
+        />
+        <NoteDialog
+          ref={ref => this.note_dialog = ref}
+          onSave={this.handleSaveNote}
+        />
+        <OverrideDialog
+          ref={ref => this.override_dialog = ref}
+          onSave={this.handleSaveOverride}
+        />
+      </Wrapper>
+    );
+  }
+}
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+};
+
+Page.contextTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
 export default withEntityContainer('result', {
   sectionIcon: 'result.svg',
   title: _('Result'),
   toolBarIcons: withCapabilities(ToolBarIcons),
   details: Details,
   permissionsComponent: false,
-})(EntityPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

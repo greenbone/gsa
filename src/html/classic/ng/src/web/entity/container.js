@@ -35,10 +35,6 @@ import withDownload from '../components/form/withDownload.js';
 
 import Wrapper from '../components/layout/wrapper.js';
 
-import NoteDialog from '../pages/notes/dialog.js';
-
-import OverrideDialog from '../pages/overrides/dialog.js';
-
 import TagDialog from '../pages/tags/dialog.js';
 
 import Promise from 'gmp/promise.js';
@@ -101,15 +97,11 @@ class EntityContainer extends React.Component {
     this.handleDisableTag = this.handleDisableTag.bind(this);
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleError = this.handleError.bind(this);
-    this.handleSaveNote = this.handleSaveNote.bind(this);
-    this.handleSaveOverride = this.handleSaveOverride.bind(this);
     this.handleSaveTag = this.handleSaveTag.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
     this.handleShowError = this.handleShowError.bind(this);
     this.handleShowSuccess = this.handleShowSuccess.bind(this);
 
-    this.openNoteDialog = this.openNoteDialog.bind(this);
-    this.openOverrideDialog = this.openOverrideDialog.bind(this);
     this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
     this.openEditTagDialog = this.openEditTagDialog.bind(this);
   }
@@ -217,18 +209,6 @@ class EntityContainer extends React.Component {
     this.reload();
   }
 
-  handleSaveNote(data) {
-    const {gmp} = this.context;
-
-    return gmp.note.create(data).then(this.reload);
-  }
-
-  handleSaveOverride(data) {
-    const {gmp} = this.context;
-
-    return gmp.override.create(data).then(this.reload);
-  }
-
   handleSaveTag(data) {
     const {gmp} = this.context;
 
@@ -296,46 +276,6 @@ class EntityContainer extends React.Component {
     });
   }
 
-  openNoteDialog(result) {
-    this.note_dialog.show({
-      fixed: true,
-      oid: result.nvt.oid,
-      nvt: result.nvt,
-      task_id: '0',
-      task_name: result.task.name,
-      result_id: '',
-      task_uuid: result.task.id,
-      result_uuid: result.id,
-      result_name: result.name,
-      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
-      note_severity: result.original_severity,
-      hosts: '--',
-      hosts_manual: result.host.name,
-      port: '--',
-      port_manual: result.port,
-    });
-  }
-
-  openOverrideDialog(result) {
-    this.override_dialog.show({
-      fixed: true,
-      oid: result.nvt.oid,
-      nvt: result.nvt,
-      task_id: '0',
-      task_name: result.task.name,
-      result_id: '',
-      task_uuid: result.task.id,
-      result_uuid: result.id,
-      result_name: result.name,
-      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
-      note_severity: result.original_severity,
-      hosts: '--',
-      hosts_manual: result.host.name,
-      port: '--',
-      port_manual: result.port,
-    });
-  }
-
   openEditTagDialog(tag) {
     const {gmp} = this.context;
 
@@ -373,8 +313,6 @@ class EntityContainer extends React.Component {
           {...this.state}
           entityCommand={this.entity_command}
           onAddTag={this.handleAddTag}
-          onNewNoteClick={this.openNoteDialog}
-          onNewOverrideClick={this.openOverrideDialog}
           onNewTagClick={this.openCreateTagDialog}
           onEditTagClick={this.openEditTagDialog}
           onEnableTag={this.handleEnableTag}
@@ -383,14 +321,6 @@ class EntityContainer extends React.Component {
           onDownloaded={onDownload}
           onChanged={this.handleChanged}
           onError={this.handleError}
-        />
-        <NoteDialog
-          ref={ref => this.note_dialog = ref}
-          onSave={this.handleSaveNote}
-        />
-        <OverrideDialog
-          ref={ref => this.override_dialog = ref}
-          onSave={this.handleSaveOverride}
         />
         <TagDialog
           ref={ref => this.tag_dialog = ref}
