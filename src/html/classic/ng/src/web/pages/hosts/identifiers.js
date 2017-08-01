@@ -33,9 +33,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DeleteIcon from '../../components/icon/deleteicon.js';
 
-import AssetLink from '../../components/link/assetlink.js';
 import DetailsLink from '../../components/link/detailslink.js';
-import InfoLink from '../../components/link/infolink.js';
 
 import Table from '../../components/table/stripped.js';
 import TableBody from '../../components/table/body.js';
@@ -80,12 +78,12 @@ const Source = ({source}) => {
             (NVT
           </span>
           {' '}
-          <InfoLink
+          <DetailsLink
             type="nvt"
             id={data}
           >
             {data}
-          </InfoLink>
+          </DetailsLink>
           <span>)</span>
         </span>
       </div>
@@ -254,15 +252,16 @@ class Identifiers extends React.Component {
                   {identifier.name}
                 </TableData>
                 <TableData>
-                  <AssetLink
+                  <DetailsLink
                     type="os"
+                    page="operatingsystem"
                     id={is_defined(identifier.os) ? identifier.os.id : ''}
                     textOnly={identifier.name !== 'OS'}
                   >
                     <Div wordBreak="break-all">
                       {identifier.value}
                     </Div>
-                  </AssetLink>
+                  </DetailsLink>
                 </TableData>
                 <TableData>
                   {datetime(identifier.creation_time)}

@@ -159,14 +159,14 @@ const ResultDetails = ({
                   )}
                   {is_defined(oid) &&
                       oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
-                        <InfoLink
+                        <DetailsLink
                           type="nvt"
                           id={oid}
                           textOnly={!links}
                         >
                           {render_nvt_name(nvt)}
                           {' OID: ' + oid}
-                        </InfoLink>
+                        </DetailsLink>
                       )}
                   {!is_defined(oid) &&
                     _('No details available for this method.')

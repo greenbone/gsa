@@ -30,7 +30,7 @@ import {render_component} from '../../utils/render.js';
 
 import {withEntityRow} from '../../entities/row.js';
 
-import InfoLink from '../../components/link/infolink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
@@ -42,13 +42,12 @@ const Row = ({entity, links = true, actions, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        <InfoLink
-          legacy
+        <DetailsLink
           type="nvt"
           id={entity.id}
           textOnly={!links}>
           {entity.name}
-        </InfoLink>
+        </DetailsLink>
       </TableData>
       <TableData>
         {datetime(entity.results.oldest)}
