@@ -21,11 +21,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend, is_defined, is_string, map, shallow_copy} from '../utils.js';
+import {
+  extend,
+  is_defined,
+  is_empty,
+  is_string,
+  map,
+  shallow_copy,
+} from '../utils.js';
 
-import {parse_severity} from '../parser.js';
+import {parse_float, parse_severity} from '../parser.js';
 
 import Info from './info.js';
+
+export const TAG_NA = 'N/A';
 
 const parse_tags = tags => {
   let newtags = {};
@@ -122,7 +131,7 @@ class Nvt extends Info {
       delete ret.cert_refs;
     }
 
-    const xrefs = parse_ids(ret.xref, 'NOXREF');
+    const xrefs = parse_ids(ret.xrefs, 'NOXREF');
 
     ret.xrefs = xrefs.map(xref => {
       let type = 'other';
@@ -135,6 +144,26 @@ class Nvt extends Info {
     });
 
     delete ret.xref;
+
+    if (is_defined(elem.qod)) {
+      if (is_empty(elem.qod.value)) {
+        delete ret.qod.value;
+      }
+      else {
+        ret.qod.value = parse_float(elem.qod.value);
+      }
+
+      if (is_empty(elem.qod.type)) {
+        delete ret.qod.type;
+      }
+    }
+
+    if (is_empty(elem.timeout)) {
+      delete ret.timeout;
+    }
+    else {
+      ret.timeout = parse_float(elem.timeout);
+    }
 
     return ret;
   }
