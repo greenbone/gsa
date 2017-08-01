@@ -27,6 +27,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 import {is_empty, is_defined} from 'gmp/utils.js';
+import {TAG_NA} from 'gmp/models/nvt.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -35,13 +36,7 @@ import {render_nvt_name} from '../../utils/render.js';
 
 import DetailsBlock from '../../entity/block.js';
 
-import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
-
-import Divider from '../../components/layout/divider.js';
-
-import CveLink from '../../components/link/cvelink.js';
 import DetailsLink from '../../components/link/detailslink.js';
-import ExternalLink from '../../components/link/externallink.js';
 import InfoLink from '../../components/link/infolink.js';
 
 import InfoTable from '../../components/table/info.js';
@@ -49,11 +44,8 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const N_A = 'N/A';
-
-const B = glamorous.b({
-  marginRight: '0.5em',
-});
+import References from '../nvts/references.js';
+import Solution from '../nvts/solution.js';
 
 const Pre = glamorous.pre({
   whiteSpace: 'pre-line',
@@ -61,46 +53,6 @@ const Pre = glamorous.pre({
 });
 
 const P = Pre.withComponent('div');
-
-const CertLink = ({
-    id,
-    textOnly = false,
-    type,
-  }) => {
-
-  if (type !== 'CERT-Bund' && type !== 'DFN-CERT') {
-    return (
-      <span><b>?</b>{id}</span>
-    );
-  }
-
-  let info_type;
-  let title;
-
-  if (type === 'CERT-Bund') {
-    info_type = 'cert_bund_adv';
-    title = _('View details fo CERT-Bund Advisory {{name}}', {name: id});
-  }
-  else if (type === 'DFN-CERT') {
-    title = _('View details fo DFN-CERT Advisory {{name}}', {name: id});
-    info_type = 'dfn_cert_adv';
-  }
-  return (
-    <InfoLink
-      title={title}
-      name={id}
-      type={info_type}
-      textOnly={textOnly}>
-      {id}
-    </InfoLink>
-  );
-};
-
-CertLink.propTypes = {
-  id: PropTypes.string.isRequired,
-  textOnly: PropTypes.bool,
-  type: PropTypes.string.isRequired,
-};
 
 const ResultDetails = ({
     className,
@@ -116,8 +68,6 @@ const ResultDetails = ({
   const detection_title = result.severity > 0 || result.nvt.severity > 0 ?
     _('Vulnerability Detection Method') : _('Log Method');
   const is_oval = is_defined(oid) && oid.startsWith('oval:');
-  const has_reference = nvt.cves.length > 0 || nvt.bids.length > 0 ||
-    nvt.certs.length > 0 || nvt.xrefs.length > 0;
   const has_detection = is_defined(result.detection) &&
     is_defined(result.detection.result);
 
@@ -151,7 +101,7 @@ const ResultDetails = ({
         }
       </DetailsBlock>
 
-      {is_defined(tags.impact) && tags.impact !== N_A &&
+      {is_defined(tags.impact) && tags.impact !== TAG_NA &&
         <DetailsBlock
           title={_('Impact')}>
           <P>
@@ -160,24 +110,12 @@ const ResultDetails = ({
         </DetailsBlock>
       }
 
-      {is_defined(tags.solution) && tags.solution !== N_A &&
-        <DetailsBlock
-          title={_('Solution')}>
-          <Layout
-            flex
-            className="solution-type">
-            <B>{_('Solution Type:')}</B>
-            <SolutionTypeIcon
-              displayTitleText
-              type={tags.solution_type}/>
-          </Layout>
-          <P>
-            {tags.solution}
-          </P>
-        </DetailsBlock>
-      }
+      <Solution
+        solution={tags.solution}
+        solutionType={tags.solution_type}
+      />
 
-      {is_defined(tags.affected) && tags.affected !== N_A &&
+      {is_defined(tags.affected) && tags.affected !== TAG_NA &&
         <DetailsBlock
           title={_('Affected Software/OS')}>
           <P>
@@ -186,7 +124,7 @@ const ResultDetails = ({
         </DetailsBlock>
       }
 
-      {is_defined(tags.insight) && tags.insight !== N_A &&
+      {is_defined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
           title={_('Vulnerability Insight')}>
           <P>
@@ -308,104 +246,11 @@ const ResultDetails = ({
         </DetailsBlock>
       }
 
-      {has_reference &&
-        <DetailsBlock
-          title={_('References')}>
-          <InfoTable>
-            <TableBody>
-              {nvt.cves.length > 0 &&
-                <TableRow>
-                  <TableData>
-                    {_('CVE')}
-                  </TableData>
-                  <TableData>
-                    <Divider>
-                      {
-                        nvt.cves.map(cve_id => (
-                          <CveLink
-                            title={_('View Details of {{cve_id}}', {cve_id})}
-                            key={cve_id}
-                            id={cve_id}
-                            textOnly={!links}
-                          />
-                        ))
-                      }
-                    </Divider>
-                  </TableData>
-                </TableRow>
-              }
+      <References
+        links={links}
+        nvt={nvt}
+      />
 
-              {nvt.bids.length > 0 &&
-                <TableRow>
-                  <TableData>
-                    {_('BID')}
-                  </TableData>
-                  <TableData>
-                    <Divider wrap>
-                      {
-                        nvt.bids.map(bid => {
-                          return (
-                            <span key={bid}>{bid}</span>
-                          );
-                        })
-                      }
-                    </Divider>
-                  </TableData>
-                </TableRow>
-              }
-
-              {nvt.certs.length > 0 &&
-                <TableRow>
-                  <TableData>
-                    {_('CERT')}
-                  </TableData>
-                  <TableData>
-                    <Divider wrap>
-                      {
-                        nvt.certs.map(cert => {
-                          return (
-                            <CertLink
-                              key={cert.id}
-                              type={cert.type}
-                              id={cert.id}
-                              links={links}
-                            />
-                          );
-                        })
-
-                      }
-                    </Divider>
-                  </TableData>
-                </TableRow>
-              }
-
-              {nvt.xrefs.length > 0 &&
-                <TableRow>
-                  <TableData>
-                    {_('Other')}
-                  </TableData>
-                  <TableData>
-                    <Divider wrap>
-                      {
-                        nvt.xrefs.map(xref => {
-                          return (
-                            <ExternalLink
-                              key={xref.ref}
-                              textOnly={!links || xref.type !== 'URL'}
-                              href={xref.ref}>
-                              {xref.ref}
-                            </ExternalLink>
-                          );
-                        })
-                      }
-                    </Divider>
-                  </TableData>
-                </TableRow>
-              }
-            </TableBody>
-          </InfoTable>
-        </DetailsBlock>
-      }
     </Layout>
   );
 };

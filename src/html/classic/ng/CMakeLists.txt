@@ -225,6 +225,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/wrapper.js
      ${NG_SRC_DIR}/src/web/components/loading/loading.js
      ${NG_SRC_DIR}/src/web/components/link/assetlink.js
+     ${NG_SRC_DIR}/src/web/components/link/certlink.js
      ${NG_SRC_DIR}/src/web/components/link/cvelink.js
      ${NG_SRC_DIR}/src/web/components/link/detailslink.js
      ${NG_SRC_DIR}/src/web/components/link/externallink.js
@@ -342,7 +343,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
      ${NG_SRC_DIR}/src/web/pages/nvts/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/nvts/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/references.js
      ${NG_SRC_DIR}/src/web/pages/nvts/row.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/solution.js
      ${NG_SRC_DIR}/src/web/pages/nvts/table.js
      ${NG_SRC_DIR}/src/web/pages/os/charts.js
      ${NG_SRC_DIR}/src/web/pages/os/detailspage.js
