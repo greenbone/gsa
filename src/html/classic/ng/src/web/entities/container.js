@@ -103,20 +103,31 @@ class EntitiesContainer extends React.Component {
   }
 
   componentDidMount() {
-    let filter_string = this.props.location.query.filter;
-    let filter;
-
-    if (filter_string) {
-      filter = Filter.fromString(filter_string);
-    }
-
-    this.load(filter, {reload: true}); // use data from cache and reload afterwards
+    const {filter} = this.props.location.query;
+    this.updateFilter(filter, true); // use data from cache and reload afterwards
     this.loadFilters();
   }
 
   componentWillUnmount() {
     this.clearTimer();
   }
+
+  componentWillReceiveProps(next) {
+    if (is_defined(next.location) && is_defined(next.location.query) &&
+      is_defined(next.location.query.filter) &&
+      next.location.query.filter !== this.props.location.query.filter) {
+      const {filter} = next.location.query;
+      this.updateFilter(filter);
+    }
+  }
+
+  updateFilter(filterstring, reload = false) {
+    const filter = is_defined(filterstring) ? Filter.fromString(filterstring) :
+      undefined;
+
+    this.load(filter, {reload});
+  }
+
 
   load(filter, options = {}) {
     const {entities_command} = this;
