@@ -37,7 +37,7 @@ import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
-import InfoLink from '../../components/link/infolink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 
 import InfoTable from '../../components/table/info.js';
 import TableBody from '../../components/table/body.js';
@@ -125,13 +125,12 @@ const Details = ({
             </TableData>
             <TableData>
               {is_defined(nvt) ?
-                <InfoLink
+                <DetailsLink
                   id={nvt.id}
-                  type={nvt.nvt_type}
-                  details
+                  type="nvt"
                 >
                   {nvt.name}
-                </InfoLink> :
+                </DetailsLink> :
                 _('None. Result was an open port.')
               }
             </TableData>

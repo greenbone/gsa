@@ -87,7 +87,6 @@ const TaskDetails = ({
         <DetailsBlock
           title={_('Target')}>
           <DetailsLink
-            legacy
             textOnly={!links}
             type="target"
             id={target.id}>

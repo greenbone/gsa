@@ -1,5 +1,12 @@
 2017-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/notes/detailspage.js,
+	src/html/classic/ng/src/web/pages/overrides/detailspage.js,
+	src/html/classic/ng/src/web/pages/tasks/details.js: Link to ng for nvt and
+	task details.
+
+2017-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/link.js: Use DetailsLink inside
 	EntityLink to allow linking to ng.
 
