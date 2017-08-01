@@ -32,6 +32,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import Icon from '../../components/icon/icon.js';
 
@@ -41,6 +42,7 @@ import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import NvtDetails from './details.js';
 import NvtRow from './row.js';
 
 const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
@@ -127,6 +129,7 @@ const NvtsFooter = createEntitiesFooter({
 export const NvtsTable = createEntitiesTable({
   emptyTitle: _('No NVTs available'),
   row: NvtRow,
+  rowDetails: withRowDetails('nvt', 10)(NvtDetails),
   header: NvtsHeader,
   footer: NvtsFooter,
 });

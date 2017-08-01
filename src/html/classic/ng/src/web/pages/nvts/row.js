@@ -28,7 +28,7 @@ import {datetime} from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
@@ -37,24 +37,26 @@ import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
 import Divider from '../../components/layout/divider.js';
 
 import CveLink from '../../components/link/cvelink.js';
-import InfoLink from '../../components/link/infolink.js';
 import Link from '../../components/link/link.js';
 
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
-const Row = ({entity, links = true, actions, ...other}) => {
+const Row = ({
+  entity,
+  links = true,
+  actions,
+  onToggleDetailsClick,
+  ...other,
+}) => {
   return (
     <TableRow>
       <TableData>
-        <InfoLink
-          legacy
-          type="nvt"
-          id={entity.id}
-          textOnly={!links}
-        >
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
           {entity.name}
-        </InfoLink>
+        </RowDetailsToggle>
       </TableData>
       <TableData>
         <Link
@@ -103,8 +105,9 @@ const Row = ({entity, links = true, actions, ...other}) => {
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
-  entity: PropTypes.model,
+  entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(Row);
