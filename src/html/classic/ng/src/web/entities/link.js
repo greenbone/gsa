@@ -24,10 +24,11 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, pluralize_type} from 'gmp/utils.js';
+import {is_defined, is_empty} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
+import DetailsLink from '../components/link/detailslink.js';
 import LegacyLink from '../components/link/legacylink.js';
 
 const EntityLink = ({
@@ -35,7 +36,7 @@ const EntityLink = ({
   ...props,
 }, {capabilities}) => {
   const {id, name, permissions, deleted} = entity;
-  const type = entity.entity_type;
+  let type = entity.entity_type;
 
   if (entity.isInTrash()) {
     return (
@@ -64,35 +65,31 @@ const EntityLink = ({
     );
   }
 
-  let cmd;
-  let id_name;
   let other = {};
 
   if (type === 'info') {
-    id_name = 'info_id';
-    other.info_type = entity.info_type;
     if (entity.info_type === 'nvt') {
-      other.details = '1';
+      type = entity.info_type;
+    }
+    else {
+      other.legacy = true;
+      other.info_type = entity.info_type;
     }
   }
   else if (type === 'asset') {
-    id_name = 'asset_id';
+    other.legacy = true;
     other.asset_type = entity.asset_type;
   }
-  else {
-    id_name = type + '_id';
-  }
 
-  cmd = 'get_' + pluralize_type(type);
-
-  props[id_name] = id;
   return (
-    <LegacyLink
+    <DetailsLink
       {...props}
       {...other}
-      cmd={cmd}>
+      id={id}
+      type={type}
+    >
       {name}
-    </LegacyLink>
+    </DetailsLink>
   );
 };
 
