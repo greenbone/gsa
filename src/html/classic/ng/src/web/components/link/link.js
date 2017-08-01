@@ -93,7 +93,7 @@ Link = glamorous(
   withTextOnly(Link),
   {displayName: 'Link'},
 )({
-  display: 'flex',
+  display: 'inline-flex',
 });
 
 export default Link;

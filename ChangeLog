@@ -1,5 +1,11 @@
 2017-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/link/link.js: Set css display to
+	inline-flex for all links. This allows to use links without beeing rendered as
+	block which adds newlines.
+
+2017-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/nvts/row.js,
 	src/html/classic/ng/src/web/pages/nvts/table.js: Add toggling of nvt details
 	to the nvts list page.
