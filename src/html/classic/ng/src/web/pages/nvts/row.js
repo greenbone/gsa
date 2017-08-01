@@ -38,6 +38,7 @@ import Divider from '../../components/layout/divider.js';
 
 import CveLink from '../../components/link/cvelink.js';
 import InfoLink from '../../components/link/infolink.js';
+import Link from '../../components/link/link.js';
 
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
@@ -56,14 +57,13 @@ const Row = ({entity, links = true, actions, ...other}) => {
         </InfoLink>
       </TableData>
       <TableData>
-        <InfoLink
-          legacy
-          type="nvt"
+        <Link
+          to="nvts"
           filter={'family="' + entity.family + '"'}
           textOnly={!links}
         >
           {entity.family}
-        </InfoLink>
+        </Link>
       </TableData>
       <TableData>
         {datetime(entity.creation_time)}
