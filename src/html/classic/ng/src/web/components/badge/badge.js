@@ -31,7 +31,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 const BadgeContainer = glamorous.div({
   position: 'relative',
-  display: 'inline-block',
+  display: 'inline-flex',
 },
   ({margin}) => ({marginRight: margin}),
 );
