@@ -341,8 +341,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/notes/withNoteComponent.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/details.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/nvts/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/preferences.js
      ${NG_SRC_DIR}/src/web/pages/nvts/references.js
      ${NG_SRC_DIR}/src/web/pages/nvts/row.js
      ${NG_SRC_DIR}/src/web/pages/nvts/solution.js

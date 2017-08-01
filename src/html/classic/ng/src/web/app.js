@@ -70,6 +70,7 @@ import HostDetailsPage from './pages/hosts/detailspage.js';
 import NotesPage from './pages/notes/listpage.js';
 import NoteDetailsPage from './pages/notes/detailspage.js';
 import NvtsPage from './pages/nvts/listpage.js';
+import NvtDetailsPage from './pages/nvts/detailspage.js';
 import OperatingSystemsPage from './pages/os/listpage.js';
 import OperatingSystemDetailsPage from './pages/os/detailspage.js';
 import OvaldefsPage from './pages/ovaldefs/listpage.js';
@@ -314,6 +315,10 @@ ReactDOM.render(
         <Route
           path="operatingsystem/:id"
           component={OperatingSystemDetailsPage}
+        />
+        <Route
+          path="nvt/:id"
+          component={NvtDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
