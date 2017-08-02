@@ -283,5 +283,115 @@ export const set_properties = (properties, object = {}) => {
 export const new_properties = (properties, object = {}) =>
   set_properties(parse_properties(properties, object));
 
+export const parse_cvss_base_vector = ({
+  access_complexity,
+  access_vector,
+  authentication,
+  availability_impact,
+  confidentiality_impact,
+  integrity_impact,
+}) => {
+  if (!is_defined(access_vector) &&
+    !is_defined(access_complexity) &&
+    !is_defined(authentication) &&
+    !is_defined(confidentiality_impact) &&
+    !is_defined(integrity_impact) &&
+    !is_defined(availability_impact)) {
+    return undefined;
+  }
+
+  let vector = 'AV:';
+
+  switch (access_vector) {
+    case 'LOCAL':
+      vector += 'L';
+      break;
+    case 'NETWORK':
+      vector += 'N';
+      break;
+    case 'ADJACENT_NETWORK':
+      vector += 'A';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/AC:';
+  switch (access_complexity) {
+    case 'LOW':
+      vector += 'L';
+      break;
+    case 'MEDIUM':
+      vector += 'M';
+      break;
+    case 'HIGH':
+      vector += 'H';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/Au:';
+  switch (authentication) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'MULTIPLE_INSTANCES':
+      vector += 'M';
+      break;
+    case 'SINGLE_INSTANCE':
+      vector += 'S';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/C:';
+  switch (confidentiality_impact) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'PARTIAL':
+      vector += 'P';
+      break;
+    case 'COMPLETE':
+      vector += 'C';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/I:';
+  switch (integrity_impact) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'PARTIAL':
+      vector += 'P';
+      break;
+    case 'COMPLETE':
+      vector += 'C';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/A:';
+  switch (availability_impact) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'PARTIAL':
+      vector += 'P';
+      break;
+    case 'COMPLETE':
+      vector += 'C';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+  return vector;
+};
+
 // vim: set ts=2 sw=2 tw=80:
 
