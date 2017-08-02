@@ -1,5 +1,19 @@
 2017-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/page.js,
+	src/html/classic/ng/src/web/pages/hosts/detailspage.js,
+	src/html/classic/ng/src/web/pages/notes/detailspage.js,
+	src/html/classic/ng/src/web/pages/nvts/detailspage.js,
+	src/html/classic/ng/src/web/pages/os/detailspage.js,
+	src/html/classic/ng/src/web/pages/overrides/detailspage.js,
+	src/html/classic/ng/src/web/pages/results/detailspage.js,
+	src/html/classic/ng/src/web/pages/targets/detailspage.js,
+	src/html/classic/ng/src/web/pages/tasks/detailspage.js: Make property naming
+	more consitent. Always use xyzComponent for properties that require a
+	component.
+
+2017-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/parser.js: Add new function to parse a cvss base
 	vector from an object.
 

@@ -182,7 +182,7 @@ const TargetPermissions = withComponentDefaults({
 })(EntityPermissions);
 
 export default withEntityContainer('target', {
-  details: Details,
+  detailsComponent: Details,
   permissionsComponent: TargetPermissions,
   sectionIcon: 'target.svg',
   title: _('Target'),

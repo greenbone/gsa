@@ -394,7 +394,7 @@ export default withEntityContainer('task', {
   sectionIcon: 'task.svg',
   title: _('Task'),
   toolBarIcons: ToolBarIcons,
-  details: Details,
+  detailsComponent: Details,
   loaders: [
     loader('notes', task_id_filter),
     loader('overrides', task_id_filter),

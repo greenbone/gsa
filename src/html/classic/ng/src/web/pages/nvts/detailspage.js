@@ -291,7 +291,7 @@ Page = compose(
 const nvt_id_filter = id => 'nvt_id=' + id;
 
 export default withEntityContainer('nvt', {
-  details: Details,
+  detailsComponent: Details,
   sectionIcon: 'nvt.svg',
   title: _('NVT'),
   toolBarIcons: withCapabilities(ToolBarIcons),

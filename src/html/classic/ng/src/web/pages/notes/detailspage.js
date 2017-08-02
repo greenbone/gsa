@@ -187,7 +187,7 @@ const Page = withNoteComponent({
 })(EntityPage);
 
 export default withEntityContainer('note', {
-  details: Details,
+  detailsComponent: Details,
   sectionIcon: 'note.svg',
   title: _('Note'),
   toolBarIcons: ToolBarIcons,

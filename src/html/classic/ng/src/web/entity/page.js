@@ -59,11 +59,11 @@ class EntityPage extends React.Component {
 
   renderSection() {
     const {
-      details: Details,
+      detailsComponent: Details,
       entity,
       foldable,
       sectionIcon,
-      section: SectionComponent = Section,
+      sectionComponent: SectionComponent = Section,
       title,
       ...other,
     } = this.props;
@@ -94,7 +94,7 @@ class EntityPage extends React.Component {
 
   renderInfo() {
     const {entity} = this.props;
-    let InfoComponent = this.props.info;
+    let InfoComponent = this.props.infoComponent;
 
     if (InfoComponent === false) {
       return null;
@@ -116,6 +116,7 @@ class EntityPage extends React.Component {
   renderUserTags() {
     const {
       entity,
+      tagsComponent: TagsComponent = EntityTags,
       onAddTag,
       onDeleteTag,
       onDisableTag,
@@ -123,14 +124,8 @@ class EntityPage extends React.Component {
       onEnableTag,
       onNewTagClick,
     } = this.props;
-    let TagsComponent = this.props.tags;
-
     if (TagsComponent === false) {
       return null;
-    }
-
-    if (!is_defined(TagsComponent)) {
-      TagsComponent = EntityTags;
     }
 
     return (
@@ -150,18 +145,14 @@ class EntityPage extends React.Component {
     const {
       entity,
       permissions,
+      permissionsComponent: PermissionsComponent = EntityPermissions,
       onChanged,
       onDownloaded,
       onError,
     } = this.props;
-    let PermissionsComponent = this.props.permissionsComponent;
 
     if (PermissionsComponent === false) {
       return null;
-    }
-
-    if (!is_defined(PermissionsComponent)) {
-      PermissionsComponent = EntityPermissions;
     }
 
     return (
@@ -202,16 +193,16 @@ class EntityPage extends React.Component {
 }
 
 EntityPage.propTypes = {
-  details: PropTypes.component,
+  detailsComponent: PropTypes.component,
   entity: PropTypes.model,
   foldable: PropTypes.bool,
-  info: PropTypes.componentOrFalse,
+  infoComponent: PropTypes.componentOrFalse,
   loading: PropTypes.bool,
   permissions: PropTypes.arrayLike,
   permissionsComponent: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
-  section: PropTypes.componentOrFalse,
-  tags: PropTypes.componentOrFalse,
+  sectionComponent: PropTypes.componentOrFalse,
+  tagsComponent: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
   onAddTag: PropTypes.func.isRequired,

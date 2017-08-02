@@ -187,8 +187,7 @@ const Page = withOverrideComponent({
 })(EntityPage);
 
 export default withEntityContainer('override', {
-  details: Details,
-  // permissionsComponent: TargetPermissions,
+  detailsComponent: Details,
   sectionIcon: 'override.svg',
   title: _('Override'),
   toolBarIcons: ToolBarIcons,

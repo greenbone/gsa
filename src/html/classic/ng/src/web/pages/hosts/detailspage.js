@@ -268,7 +268,7 @@ const Page = withHostComponent({
 })(EntityPage);
 
 export default withEntityContainer('host', {
-  details: Details,
+  detailsComponent: Details,
   sectionIcon: 'host.svg',
   title: _('Host'),
   toolBarIcons: ToolBarIcons,

@@ -378,7 +378,7 @@ export default withEntityContainer('result', {
   sectionIcon: 'result.svg',
   title: _('Result'),
   toolBarIcons: withCapabilities(ToolBarIcons),
-  details: Details,
+  detailsComponent: Details,
   permissionsComponent: false,
 })(Page);
 
