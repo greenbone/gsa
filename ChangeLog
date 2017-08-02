@@ -1,5 +1,10 @@
 2017-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/cve.js: Parse additional cve details
+	data.
+
+2017-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/results/detailspage.js: Add icon to go to
 	the list of results to result details page.
 
