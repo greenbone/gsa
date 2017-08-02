@@ -25,6 +25,7 @@ import moment from 'moment';
 
 import {
   is_defined,
+  is_empty,
   map,
 } from './utils.js';
 
@@ -101,6 +102,10 @@ class Model {
       if (is_defined(prop)) {
         copy[name] = parse_yesno(prop);
       }
+    }
+
+    if (is_defined(elem.owner) && is_empty(elem.owner.name)) {
+      delete copy.owner;
     }
 
     return copy;

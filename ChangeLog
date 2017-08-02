@@ -1,5 +1,10 @@
 2017-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js: Remove owner property if all model
+	instances if owner name is an empty string or undefined.
+
+2017-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/cves.js: Allow receiving single cves.
 	Always request details and add object "path" to the cve data.
 
