@@ -1,5 +1,11 @@
 2017-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/nvts/detailspage.js: Remove
+	withEntityComponent HOC for nvt. It is not required here because nvts can't be
+	created, edited, cloned, ...
+
+2017-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/notes/detailspage.js,
 	src/html/classic/ng/src/web/pages/overrides/detailspage.js,
 	src/html/classic/ng/src/web/pages/tasks/details.js: Link to ng for nvt and

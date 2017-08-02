@@ -34,9 +34,6 @@ import Note from '../../entity/note.js';
 import Override from '../../entity/override.js';
 import EntityPage from '../../entity/page.js';
 import {withEntityContainer, loader} from '../../entity/container.js';
-import withEntityComponent, {
-  goto_list,
-} from '../../entity/withEntityComponent.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -288,11 +285,6 @@ Page = compose(
   withOverrideComponent({
     onCreated: 'onChanged',
     onSaved: 'onChanged',
-  }),
-  withEntityComponent('nvt', {
-    onDelete: 'onOperatingSystemDeleteClick',
-    onDeleted: goto_list('nvts'),
-    onDownload: 'onOperatingSystemDownloadClick',
   }),
 )(Page);
 
