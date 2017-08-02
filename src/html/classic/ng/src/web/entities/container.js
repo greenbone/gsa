@@ -86,20 +86,24 @@ class EntitiesContainer extends React.Component {
 
     this.load = this.load.bind(this);
     this.reload = this.reload.bind(this);
-    this.handleSelected = this.handleSelected.bind(this);
-    this.handleDeselected = this.handleDeselected.bind(this);
-    this.handleTimer = this.handleTimer.bind(this);
-    this.handleSelectionTypeChange = this.handleSelectionTypeChange.bind(this);
-    this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
-    this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
-    this.handleDeleteEntity = this.handleDeleteEntity.bind(this);
     this.handleCloneEntity = this.handleCloneEntity.bind(this);
+    this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
+    this.handleDeleteEntity = this.handleDeleteEntity.bind(this);
+    this.handleDeselected = this.handleDeselected.bind(this);
+    this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
     this.handleError = this.handleError.bind(this);
+    this.handleFirst = this.handleFirst.bind(this);
+    this.handleLast = this.handleLast.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handlePrevious = this.handlePrevious.bind(this);
     this.handleSaveEntity = this.handleSaveEntity.bind(this);
-    this.handleSortChange = this.handleSortChange.bind(this);
+    this.handleSelected = this.handleSelected.bind(this);
+    this.handleSelectionTypeChange = this.handleSelectionTypeChange.bind(this);
     this.handleShowError = this.handleShowError.bind(this);
     this.handleShowSuccess = this.handleShowSuccess.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
+    this.handleTimer = this.handleTimer.bind(this);
   }
 
   componentDidMount() {
@@ -371,6 +375,34 @@ class EntitiesContainer extends React.Component {
     });
   }
 
+  handleFirst() {
+    const {loaded_filter: filter} = this.state;
+
+    this.load(filter.first());
+  }
+
+  handleNext() {
+    const {loaded_filter: filter} = this.state;
+
+    this.load(filter.next());
+  }
+
+  handlePrevious() {
+    const {loaded_filter: filter} = this.state;
+
+    this.load(filter.previous());
+  }
+
+  handleLast() {
+    const {loaded_filter: filter, entities} = this.state;
+    const counts = entities.getCounts();
+
+    const last = Math.floor((counts.filtered - 1) / counts.rows) *
+      counts.rows + 1;
+
+    this.load(filter.first(last));
+  }
+
   render() {
     const {
       entities,
@@ -410,6 +442,10 @@ class EntitiesContainer extends React.Component {
           onEntityDownload={this.handleDownloadEntity}
           onEntityClone={this.handleCloneEntity}
           onEntitySave={this.handleSaveEntity}
+          onFirstClick={this.handleFirst}
+          onLastClick={this.handleLast}
+          onNextClick={this.handleNext}
+          onPreviousClick={this.handlePrevious}
           showError={this.handleShowError}
           showSuccess={this.handleShowSuccess}
         />

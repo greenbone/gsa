@@ -53,17 +53,12 @@ const exclude_props = [
   'toolBarIcons',
 ];
 
-export class EntitiesPage extends React.Component {
+class EntitiesPage extends React.Component {
 
   constructor(...args) {
     super(...args);
 
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterChanged = this.handleFilterChanged.bind(this);
-    this.onFirst = this.onFirst.bind(this);
-    this.onLast = this.onLast.bind(this);
-    this.onNext = this.onNext.bind(this);
-    this.onPrevious = this.onPrevious.bind(this);
   }
 
   getSectionTitle() {
@@ -81,42 +76,6 @@ export class EntitiesPage extends React.Component {
     if (this.filter_dialog) {
       this.filter_dialog.show();
     }
-  }
-
-  handleFilterChanged(filter) {
-    let {onFilterChanged} = this.props;
-
-    if (onFilterChanged) {
-      onFilterChanged(filter);
-    }
-  }
-
-  onFirst() {
-    let {filter} = this.props;
-
-    this.handleFilterChanged(filter.first());
-  }
-
-  onNext() {
-    let {filter} = this.props;
-
-    this.handleFilterChanged(filter.next());
-  }
-
-  onPrevious() {
-    let {filter} = this.props;
-
-    this.handleFilterChanged(filter.previous());
-  }
-
-  onLast() {
-    let {filter, entities} = this.props;
-    let counts = entities.getCounts();
-
-    let last = Math.floor((counts.filtered - 1) / counts.rows) *
-      counts.rows + 1;
-
-    this.handleFilterChanged(filter.first(last));
   }
 
   renderSection() {
@@ -164,24 +123,25 @@ export class EntitiesPage extends React.Component {
   }
 
   renderTable() {
-    let {filter, entities, ...other} = this.props;
-    const TableComponent = this.props.table;
+    const {
+      filter,
+      entities,
+      table: TableComponent,
+      ...props,
+    } = this.props;
 
     if (!is_defined(entities) || !is_defined(TableComponent)) {
       return null;
     }
 
-    other = exclude_object_props(other, exclude_props);
+    const other = exclude_object_props(props, exclude_props);
 
     return (
       <TableComponent
         {...other}
         filter={filter}
         entities={entities}
-        onFirstClick={this.onFirst}
-        onLastClick={this.onLast}
-        onNextClick={this.onNext}
-        onPreviousClick={this.onPrevious}/>
+      />
     );
   }
 
@@ -243,7 +203,10 @@ export class EntitiesPage extends React.Component {
   }
 
   renderDialogs() {
-    let {filter} = this.props;
+    const {
+      filter,
+      onFilterChanged,
+    } = this.props;
     let FilterDialogComponent = this.props.filterEditDialog;
 
     if (!FilterDialogComponent) {
@@ -254,7 +217,7 @@ export class EntitiesPage extends React.Component {
       <FilterDialogComponent
         filter={filter}
         ref={ref => this.filter_dialog = ref}
-        onFilterChanged={this.handleFilterChanged}/>
+        onFilterChanged={onFilterChanged}/>
     );
   }
 
