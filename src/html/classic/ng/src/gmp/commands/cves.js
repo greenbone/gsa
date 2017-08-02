@@ -35,6 +35,11 @@ export class CveCommand extends EntityCommand {
   constructor(http) {
     super(http, 'info', Cve);
     this.setParam('info_type', 'cve');
+    this.setParam('details', '1');
+  }
+
+  getElementFromRoot(root) {
+    return root.get_info.get_info_response.info[0];
   }
 }
 
