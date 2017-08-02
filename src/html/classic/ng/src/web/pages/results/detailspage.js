@@ -39,6 +39,7 @@ import SeverityBar from '../../components/bar/severitybar.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
+import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
@@ -72,6 +73,10 @@ const ToolBarIcons = ({
       <HelpIcon
         page="result_details"
         title={_('Help: Result Details')}
+      />
+      <ListIcon
+        title={_('Results List')}
+        page="results"
       />
       <LegacyLink
         cmd="export_result"
