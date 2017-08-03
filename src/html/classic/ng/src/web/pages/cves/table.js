@@ -30,11 +30,13 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import CveDetails from './details.js';
 import CveRow from './row.js';
 
 const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
@@ -113,6 +115,7 @@ export const CvesTable = createEntitiesTable({
   body: false,
   emptyTitle: _('No CVEs available'),
   row: CveRow,
+  rowDetails: withRowDetails('cve')(CveDetails),
   header: CvesHeader,
   footer: CvesFooter,
 });

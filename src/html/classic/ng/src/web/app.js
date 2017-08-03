@@ -62,6 +62,7 @@ import CertBundAdvsPage from './pages/certbund/listpage.js';
 import CpesPage from './pages/cpes/listpage.js';
 import CredentialsPage from './pages/credentials/listpage.js';
 import CvesPage from './pages/cves/listpage.js';
+import CveDetailsPage from './pages/cves/detailspage.js';
 import DfnCertAdvsPage from './pages/dfncert/listpage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import GroupsPage from './pages/groups/listpage.js';
@@ -319,6 +320,10 @@ ReactDOM.render(
         <Route
           path="nvt/:id"
           component={NvtDetailsPage}
+        />
+        <Route
+          path="cve/:id"
+          component={CveDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

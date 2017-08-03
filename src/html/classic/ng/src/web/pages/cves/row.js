@@ -30,9 +30,7 @@ import {shorten} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {na, render_component} from '../../utils/render.js';
 
-import {withEntityRow} from '../../entities/row.js';
-
-import InfoLink from '../../components/link/infolink.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
@@ -42,20 +40,23 @@ import TableBody from '../../components/table/body.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
-const Row = ({entity, links = true, actions, ...other}) => {
+const Row = ({
+  entity,
+  links = true,
+  actions,
+  onToggleDetailsClick,
+  ...other,
+}) => {
   return (
     <TableBody>
       <TableRow>
         <TableData
           rowSpan="2">
-          <InfoLink
-            legacy
-            details
-            type="cve"
-            id={entity.id}
-            textOnly={!links}>
+          <RowDetailsToggle
+            name={entity.id}
+            onClick={onToggleDetailsClick}>
             {entity.name}
-          </InfoLink>
+          </RowDetailsToggle>
           <Comment text={entity.comment}/>
         </TableData>
         <TableData>
@@ -97,6 +98,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(Row);

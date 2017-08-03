@@ -303,6 +303,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cpes/row.js
      ${NG_SRC_DIR}/src/web/pages/cpes/table.js
      ${NG_SRC_DIR}/src/web/pages/cves/charts.js
+     ${NG_SRC_DIR}/src/web/pages/cves/details.js
+     ${NG_SRC_DIR}/src/web/pages/cves/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/cves/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/cves/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cves/row.js
