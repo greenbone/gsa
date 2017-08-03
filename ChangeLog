@@ -1,3 +1,10 @@
+2017-08-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* CMakeLists.txt: Move location of certificates from
+	lib/openvas/ to lib/gvm/. This requires to copy over
+	the already installed certficates which should happen
+	as part of updating a today's version of module "gvm".
+
 2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,

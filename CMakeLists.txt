@@ -224,7 +224,7 @@ if (NOT GSAD_PID_DIR)
   set (GSAD_PID_DIR "${LOCALSTATEDIR}/run")
 endif (NOT GSAD_PID_DIR)
 
-set (OPENVAS_STATE_DIR "${LOCALSTATEDIR}/lib/openvas")
+set (GVM_STATE_DIR "${LOCALSTATEDIR}/lib/gvm")
 set (GVM_LOG_DIR   "${LOCALSTATEDIR}/log/gvm")
 set (GSA_DATA_DIR "${DATADIR}/gvm/gsad")
 set (GSA_LOCALE_SUBDIR "locale")
@@ -232,9 +232,9 @@ set (GSA_LOCALE_DIR "${GSA_DATA_DIR}/${GSA_LOCALE_SUBDIR}")
 set (GSA_CHROOT_LOCALE_DIR "/${GSA_LOCALE_SUBDIR}")
 
 # TODO: Eventually use own certificates
-set (OPENVAS_SERVER_CERTIFICATE "${OPENVAS_STATE_DIR}/CA/servercert.pem")
-set (OPENVAS_SERVER_KEY         "${OPENVAS_STATE_DIR}/private/CA/serverkey.pem")
-set (OPENVAS_CA_CERTIFICATE     "${OPENVAS_STATE_DIR}/CA/cacert.pem")
+set (OPENVAS_SERVER_CERTIFICATE "${GVM_STATE_DIR}/CA/servercert.pem")
+set (OPENVAS_SERVER_KEY         "${GVM_STATE_DIR}/private/CA/serverkey.pem")
+set (OPENVAS_CA_CERTIFICATE     "${GVM_STATE_DIR}/CA/cacert.pem")
 
 set (GSA_CONFIG_DIR         "${SYSCONFDIR}/gvm/")
 
