@@ -43,8 +43,6 @@ import withDownload from '../components/form/withDownload.js';
 
 import Wrapper from '../components/layout/wrapper.js';
 
-import CacheProvider from '../components/provider/cacheprovider.js';
-
 const log = logger.getLogger('web.entities.container');
 
 const exclude_props = [
@@ -482,14 +480,6 @@ EntitiesContainer = compose(
   withDownload,
 )(EntitiesContainer);
 
-export const withEntitiesContainer = (component, gmpname, options = {}) => {
-  const EntitiesContainerWrapper = props => (
-    <CacheProvider name={gmpname}>
-      <EntitiesContainer {...options} {...props}
-        gmpname={gmpname} component={component}/>
-    </CacheProvider>
-  );
-  return EntitiesContainerWrapper;
-};
+export default EntitiesContainer;
 
 // vim: set ts=2 sw=2 tw=80:

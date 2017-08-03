@@ -31,7 +31,7 @@ import Layout from '../../components/layout/layout.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -198,13 +198,13 @@ Page.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withEntitiesContainer(Page, 'portlist', {
+export default withEntitiesContainer('portlist', {
   filterEditDialog: FilterDialog,
   filtersFilter: PORTLISTS_FILTER_FILTER,
   sectionIcon: 'port_list.svg',
   table: Table,
   title: _('Port Lists'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -52,13 +52,13 @@ const Dashboard = withDashboard(CpeCharts, {
   defaultControllerString: 'cpe-by-cvss',
 });
 
-export default withEntitiesContainer(EntitiesPage, 'cpe', {
+export default withEntitiesContainer('cpe', {
   dashboard: Dashboard,
   filterEditDialog: CpeFilterDialog,
   sectionIcon: 'cpe.svg',
   table: CpesTable,
   title: _('CPEs'),
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

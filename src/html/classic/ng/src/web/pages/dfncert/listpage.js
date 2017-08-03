@@ -29,7 +29,7 @@ import _ from 'gmp/locale.js';
 import FilterDialog from '../certbund/filterdialog.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -54,13 +54,13 @@ const Dashboard = withDashboard(DfnCertCharts, {
   defaultControllerString: 'dfn_cert_adv-by-cvss',
 });
 
-export default withEntitiesContainer(EntitiesPage, 'dfncertadv', {
+export default withEntitiesContainer('dfncertadv', {
   dashboard: Dashboard,
   filterEditDialog: FilterDialog,
   sectionIcon: 'dfn_cert_adv.svg',
   table: DfnCertTable,
   title: _('DFN-CERT Advisories'),
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

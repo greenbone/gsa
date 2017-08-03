@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -79,7 +79,7 @@ Page.propTypes = {
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
 };
-export default withEntitiesContainer(Page, 'permission', {
+export default withEntitiesContainer('permission', {
   filterEditDialog: createFilterDialog({
     sortFields: SORT_FIELDS,
   }),
@@ -87,6 +87,6 @@ export default withEntitiesContainer(Page, 'permission', {
   table: Table,
   title: _('Permissions'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

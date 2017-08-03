@@ -31,7 +31,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -151,7 +151,7 @@ const Table = createEntitiesTable({
   }),
 });
 
-export default withEntitiesContainer(Page, 'group', {
+export default withEntitiesContainer('group', {
   filterEditDialog: createFilterDialog({
     sortFields: SORT_FIELDS,
   }),
@@ -160,6 +160,6 @@ export default withEntitiesContainer(Page, 'group', {
   table: Table,
   title: _('Groups'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

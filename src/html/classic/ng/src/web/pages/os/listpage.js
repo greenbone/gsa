@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import Layout from '../../components/layout/layout.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -58,7 +58,7 @@ const ToolbarIcons = props => {
   );
 };
 
-export default withEntitiesContainer(EntitiesPage, 'operatingsystem', {
+export default withEntitiesContainer('operatingsystem', {
   dashboard: Dashboard,
   filterEditDialog: OsFilterDialog,
   filtersFilter: ASSETS_FILTER_FILTER,
@@ -66,4 +66,4 @@ export default withEntitiesContainer(EntitiesPage, 'operatingsystem', {
   table: OsTable,
   title: _('Operating Systems'),
   toolBarIcons: ToolbarIcons,
-});
+})(EntitiesPage);

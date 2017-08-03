@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import Layout from '../../components/layout/layout.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -55,7 +55,7 @@ const ToolBarIcons = () => {
   );
 };
 
-export default withEntitiesContainer(EntitiesPage, 'vuln', {
+export default withEntitiesContainer('vuln', {
   dashboard: Dashboard,
   filterEditDialog: VulnsFilterDialog,
   filtersFilter: VULNS_FILTER_FILTER,
@@ -63,4 +63,4 @@ export default withEntitiesContainer(EntitiesPage, 'vuln', {
   title: _('Vulnerabilities'),
   sectionIcon: 'vulnerability.svg',
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);

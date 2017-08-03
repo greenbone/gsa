@@ -1,3 +1,41 @@
+2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entities/withEntitiesContainer.js,
+	src/html/classic/ng/src/web/pages/agents/listpage.js,
+	src/html/classic/ng/src/web/pages/alerts/listpage.js,
+	src/html/classic/ng/src/web/pages/allsecinfo/listpage.js,
+	src/html/classic/ng/src/web/pages/certbund/listpage.js,
+	src/html/classic/ng/src/web/pages/cpes/listpage.js,
+	src/html/classic/ng/src/web/pages/credentials/listpage.js,
+	src/html/classic/ng/src/web/pages/cves/listpage.js,
+	src/html/classic/ng/src/web/pages/dfncert/listpage.js,
+	src/html/classic/ng/src/web/pages/filters/listpage.js,
+	src/html/classic/ng/src/web/pages/groups/listpage.js,
+	src/html/classic/ng/src/web/pages/hosts/listpage.js,
+	src/html/classic/ng/src/web/pages/notes/listpage.js,
+	src/html/classic/ng/src/web/pages/nvts/listpage.js,
+	src/html/classic/ng/src/web/pages/os/listpage.js,
+	src/html/classic/ng/src/web/pages/ovaldefs/listpage.js,
+	src/html/classic/ng/src/web/pages/overrides/listpage.js,
+	src/html/classic/ng/src/web/pages/permissions/listpage.js,
+	src/html/classic/ng/src/web/pages/portlists/listpage.js,
+	src/html/classic/ng/src/web/pages/reportformats/listpage.js,
+	src/html/classic/ng/src/web/pages/reports/listpage.js,
+	src/html/classic/ng/src/web/pages/results/listpage.js,
+	src/html/classic/ng/src/web/pages/roles/listpage.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/listpage.js,
+	src/html/classic/ng/src/web/pages/scanners/listpage.js,
+	src/html/classic/ng/src/web/pages/schedules/listpage.js,
+	src/html/classic/ng/src/web/pages/tags/listpage.js,
+	src/html/classic/ng/src/web/pages/targets/listpage.js,
+	src/html/classic/ng/src/web/pages/tasks/listpage.js,
+	src/html/classic/ng/src/web/pages/users/listpage.js,
+	src/html/classic/ng/src/web/pages/vulns/listpage.js: Extract
+	withEntitiesComponent to and own js module and change function signature to be
+	a composable HOC.
+
 2017-08-03  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Remove -O2 from being added to

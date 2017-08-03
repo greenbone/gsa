@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -52,13 +52,13 @@ const Dashboard = withDashboard(CveCharts, {
   defaultControllerString: 'cve-by-cvss',
 });
 
-export default withEntitiesContainer(EntitiesPage, 'cve', {
+export default withEntitiesContainer('cve', {
   dashboard: Dashboard,
   filterEditDialog: CveFilterDialog,
   sectionIcon: 'cve.svg',
   table: CvesTable,
   title: _('CVEs'),
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -30,7 +30,7 @@ import IconDivider from '../../components/layout/icondivider.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -81,7 +81,7 @@ const Page = withNoteComponent({
   onDeleted: 'onChanged',
 })(EntitiesPage);
 
-export default withEntitiesContainer(Page, 'note', {
+export default withEntitiesContainer('note', {
   dashboard: Dashboard,
   extraLoadParams: {details: 1},
   filterEditDialog: FilterDialog,
@@ -90,6 +90,6 @@ export default withEntitiesContainer(Page, 'note', {
   table: NotesTable,
   title: _('Notes'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -28,7 +28,7 @@ import  _ from 'gmp/locale.js';
 import Layout from '../../components/layout/layout.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -57,7 +57,7 @@ const ToolBarIcons = props => {
   );
 };
 
-export default withEntitiesContainer(EntitiesPage, 'result', {
+export default withEntitiesContainer('result', {
   filtersFilter: RESULTS_FILTER_FILTER,
   dashboard: Dashboard,
   title: _('Results'),
@@ -65,7 +65,7 @@ export default withEntitiesContainer(EntitiesPage, 'result', {
   toolBarIcons: ToolBarIcons,
   table: ResultsTable,
   filterEditDialog: ResultsFilterDialog,
-});
+})(EntitiesPage);
 
 // export default ResultsPage;
 

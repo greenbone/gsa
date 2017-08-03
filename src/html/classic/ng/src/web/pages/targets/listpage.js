@@ -33,7 +33,7 @@ import NewIcon from '../../components/icon/newicon.js';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import TargetsFilterDialog from './filterdialog.js';
 import TargetsTable from './table.js';
@@ -63,13 +63,13 @@ const TargetsPageNew = withTargetComponent({
   onDeleted: 'onChanged',
 })(EntitiesPage);
 
-export default withEntitiesContainer(TargetsPageNew, 'target', {
+export default withEntitiesContainer('target', {
   filterEditDialog: TargetsFilterDialog,
   filtersFilter: TARGETS_FILTER_FILTER,
   sectionIcon: 'target.svg',
   table: TargetsTable,
   title: _('Targets'),
   toolBarIcons: ToolBarIcons,
-});
+})(TargetsPageNew);
 
 // vim: set ts=2 sw=2 tw=80:

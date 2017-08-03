@@ -28,7 +28,7 @@ import  _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
@@ -123,7 +123,7 @@ const Page = withTaskComponent({
   onReportImported: 'onChanged',
 })(EntitiesPage);
 
-export default withEntitiesContainer(Page, 'task', {
+export default withEntitiesContainer('task', {
   dashboard: Dashboard,
   filterEditDialog: TaskFilterDialog,
   filtersFilter: TASKS_FILTER_FILTER,
@@ -131,6 +131,6 @@ export default withEntitiesContainer(Page, 'task', {
   table: Table,
   title: _('Tasks'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -84,7 +84,7 @@ const Page = withOverrideComponent({
   onSaved: 'onChanged',
 })(EntitiesPage);
 
-export default withEntitiesContainer(Page, 'override', {
+export default withEntitiesContainer('override', {
   dashboard: Dashboard,
   extraLoadParams: {details: 1},
   filterEditDialog: FilterDialog,
@@ -93,6 +93,6 @@ export default withEntitiesContainer(Page, 'override', {
   table: Table,
   title: _('Overrides'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

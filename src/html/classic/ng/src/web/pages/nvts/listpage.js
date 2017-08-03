@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -52,13 +52,13 @@ const ToolBarIcons = props => {
   );
 };
 
-export default withEntitiesContainer(EntitiesPage, 'nvt', {
+export default withEntitiesContainer('nvt', {
   dashboard: Dashboard,
   filterEditDialog: NvtsFilterDialog,
   sectionIcon: 'nvt.svg',
   table: NvtsTable,
   title: _('NVTs'),
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

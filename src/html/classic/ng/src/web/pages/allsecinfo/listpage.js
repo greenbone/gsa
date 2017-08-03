@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -51,13 +51,13 @@ const Dashboard = withDashboard(SecInfoCharts, {
   defaultControllerString: 'allinfo-by-cvss',
 });
 
-export default withEntitiesContainer(EntitiesPage, 'secinfo', {
+export default withEntitiesContainer('secinfo', {
   dashboard: Dashboard,
   filterEditDialog: SecInfoFilterDialog,
   sectionIcon: 'allinfo.svg',
   table: SecInfosTable,
   title: _('All SecInfo Information'),
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

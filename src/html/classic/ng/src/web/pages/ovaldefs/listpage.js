@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -52,13 +52,13 @@ const Dashboard = withDashboard(OvaldefCharts, {
   defaultControllerString: 'ovaldef-by-cvss',
 });
 
-export default withEntitiesContainer(EntitiesPage, 'ovaldef', {
+export default withEntitiesContainer('ovaldef', {
   dashboard: Dashboard,
   filterEditDialog: OvaldefFilterDialog,
   sectionIcon: 'ovaldef.svg',
   table: OvaldefsTable,
   title: _('OVAL Definitions'),
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

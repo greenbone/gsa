@@ -30,7 +30,7 @@ import IconDivider from '../../components/layout/icondivider.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -80,7 +80,7 @@ const Page = withHostComponent({
   onDeleted: 'onChanged',
 })(EntitiesPage);
 
-export default withEntitiesContainer(Page, 'host', {
+export default withEntitiesContainer('host', {
   filtersFilter: ASSETS_FILTER_FILTER,
   dashboard: Dashboard,
   filterEditDialog: HostsFilterDialog,
@@ -88,6 +88,6 @@ export default withEntitiesContainer(Page, 'host', {
   table: HostsTable,
   title: _('Hosts'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

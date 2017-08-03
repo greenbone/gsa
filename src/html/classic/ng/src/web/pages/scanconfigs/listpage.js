@@ -36,7 +36,7 @@ import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
 
@@ -375,7 +375,7 @@ const Table = createEntitiesTable({
   }),
 });
 
-export default withEntitiesContainer(Page, 'scanconfig', {
+export default withEntitiesContainer('scanconfig', {
   filterEditDialog: createFilterDialog({
     sortFields: SORT_FIELDS,
   }),
@@ -384,6 +384,6 @@ export default withEntitiesContainer(Page, 'scanconfig', {
   title: _('Scan Configs'),
   toolBarIcons: ToolBarIcons,
   foldable: true,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

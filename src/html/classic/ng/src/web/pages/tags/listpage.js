@@ -29,7 +29,7 @@ import {is_defined, shorten} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
@@ -159,7 +159,7 @@ const Table = createEntitiesTable({
   }),
 });
 
-export default withEntitiesContainer(Page, 'tag', {
+export default withEntitiesContainer('tag', {
   filterEditDialog: createFilterDialog({
     sortFields: SORT_FIELDS,
   }),
@@ -167,6 +167,6 @@ export default withEntitiesContainer(Page, 'tag', {
   table: Table,
   title: _('Tags'),
   toolBarIcons: ToolBarIcons,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

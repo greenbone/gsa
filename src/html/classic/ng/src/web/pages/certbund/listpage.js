@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -52,13 +52,13 @@ const Dashboard = withDashboard(CertBundCharts, {
   defaultControllerString: 'cert_bund_adv-by-cvss',
 });
 
-export default withEntitiesContainer(EntitiesPage, 'certbundadv', {
+export default withEntitiesContainer('certbundadv', {
   dashboard: Dashboard,
   filterEditDialog: CertBundFilterDialog,
   sectionIcon: 'cert_bund_adv.svg',
   table: CertBundTable,
   title: _('CERT-Bund Advisories'),
   toolBarIcons: ToolBarIcons,
-});
+})(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -29,7 +29,7 @@ import {select_save_id} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {withEntitiesContainer} from '../../entities/container.js';
+import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -142,7 +142,7 @@ Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withEntitiesContainer(Page, 'report', {
+export default withEntitiesContainer('report', {
   filtersFilter: REPORTS_FILTER_FILTER,
   dashboard: Dashboard,
   title: _('Reports'),
@@ -150,6 +150,6 @@ export default withEntitiesContainer(Page, 'report', {
   filterEditDialog: ReportFilterDialog,
   toolBarIcons: ToolBarIcons,
   table: ReportsTable,
-});
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
