@@ -1,5 +1,12 @@
 2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/css/row.css,
+	src/html/classic/ng/src/web/entities/row.js: Remove css for entities row
+	details toggle and use glamorous for styling instead. Fix toggling rows which
+	got broken in the last commit.
+
+2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/footer.js,
 	src/html/classic/ng/src/web/entities/header.js,
 	src/html/classic/ng/src/web/entities/row.js,
