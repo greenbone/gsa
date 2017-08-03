@@ -109,17 +109,17 @@ if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION=\\\"${GSAD_VERSION}\\\")
 endif (GSAD_VERSION)
 
-if (OPENVAS_SERVER_CERTIFICATE)
-  add_definitions (-DOPENVAS_SERVER_CERTIFICATE=\\\"${OPENVAS_SERVER_CERTIFICATE}\\\")
-endif (OPENVAS_SERVER_CERTIFICATE)
+if (GVM_SERVER_CERTIFICATE)
+  add_definitions (-DGVM_SERVER_CERTIFICATE=\\\"${GVM_SERVER_CERTIFICATE}\\\")
+endif (GVM_SERVER_CERTIFICATE)
 
-if (OPENVAS_SERVER_KEY)
-  add_definitions (-DOPENVAS_SERVER_KEY=\\\"${OPENVAS_SERVER_KEY}\\\")
-endif (OPENVAS_SERVER_KEY)
+if (GVM_SERVER_KEY)
+  add_definitions (-DGVM_SERVER_KEY=\\\"${GVM_SERVER_KEY}\\\")
+endif (GVM_SERVER_KEY)
 
-if (OPENVAS_CA_CERTIFICATE)
-  add_definitions (-DOPENVAS_CA_CERTIFICATE=\\\"${OPENVAS_CA_CERTIFICATE}\\\")
-endif (OPENVAS_CA_CERTIFICATE)
+if (GVM_CA_CERTIFICATE)
+  add_definitions (-DGVM_CA_CERTIFICATE=\\\"${GVM_CA_CERTIFICATE}\\\")
+endif (GVM_CA_CERTIFICATE)
 
 if (GVM_RUN_DIR)
   add_definitions (-DGVM_RUN_DIR=\\\"${GVM_RUN_DIR}\\\")
@@ -145,7 +145,7 @@ if (GSA_CHROOT_LOCALE_DIR)
   add_definitions (-DGSA_CHROOT_LOCALE_DIR=\\\"${GSA_CHROOT_LOCALE_DIR}\\\")
 endif (GSA_CHROOT_LOCALE_DIR)
 
-add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
+add_definitions (-DGVM_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 
 ## Install

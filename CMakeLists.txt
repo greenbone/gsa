@@ -232,9 +232,9 @@ set (GSA_LOCALE_DIR "${GSA_DATA_DIR}/${GSA_LOCALE_SUBDIR}")
 set (GSA_CHROOT_LOCALE_DIR "/${GSA_LOCALE_SUBDIR}")
 
 # TODO: Eventually use own certificates
-set (OPENVAS_SERVER_CERTIFICATE "${GVM_STATE_DIR}/CA/servercert.pem")
-set (OPENVAS_SERVER_KEY         "${GVM_STATE_DIR}/private/CA/serverkey.pem")
-set (OPENVAS_CA_CERTIFICATE     "${GVM_STATE_DIR}/CA/cacert.pem")
+set (GVM_SERVER_CERTIFICATE "${GVM_STATE_DIR}/CA/servercert.pem")
+set (GVM_SERVER_KEY         "${GVM_STATE_DIR}/private/CA/serverkey.pem")
+set (GVM_CA_CERTIFICATE     "${GVM_STATE_DIR}/CA/cacert.pem")
 
 set (GSA_CONFIG_DIR         "${SYSCONFDIR}/gvm/")
 

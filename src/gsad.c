@@ -2905,8 +2905,8 @@ main (int argc, char **argv)
   static gchar *gsad_manager_port_string = NULL;
   static gchar *gsad_vendor_version_string = NULL;
   static gchar *gsad_login_label_name = NULL;
-  static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
-  static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
+  static gchar *ssl_private_key_filename = GVM_SERVER_KEY;
+  static gchar *ssl_certificate_filename = GVM_SERVER_CERTIFICATE;
   static gchar *dh_params_filename = NULL;
   static gchar *unix_socket_path = NULL;
   static gchar *gnutls_priorities = "NORMAL";
@@ -3151,7 +3151,7 @@ main (int argc, char **argv)
   /* Enable GNUTLS debugging if requested via env variable.  */
   {
     const char *s;
-    if ((s=getenv ("OPENVAS_GNUTLS_DEBUG")))
+    if ((s=getenv ("GVM_GNUTLS_DEBUG")))
       {
         gnutls_global_set_log_function (log_func_for_gnutls);
         gnutls_global_set_log_level (atoi (s));
