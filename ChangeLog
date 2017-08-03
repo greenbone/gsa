@@ -1,5 +1,10 @@
 2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/info.js: Export EntityInfoTable. This
+	allows changing the EntityInfo.
+
+2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/capabilities.js: Use object to transform types
 	to correct permission types e.g. cve to info.
 

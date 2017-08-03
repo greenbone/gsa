@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _, {long_date} from 'gmp/locale.js';
-import {classes, is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -36,19 +36,20 @@ import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
 
 
-const Table = glamorous(InfoTable)({
-  borderSpacing: 0,
+export const EntityInfoTable = glamorous(InfoTable)(
+  'entity-info',
+  {
+    borderSpacing: 0,
 
-  '& td': {
-    padding: 0,
+    '& td': {
+      padding: 0,
+    },
   },
-});
+);
 
 const EntityInfo = ({
-  className,
   entity,
 }) => {
-  className = classes(className, 'entity-info');
   const {
     id,
     owner,
@@ -56,7 +57,7 @@ const EntityInfo = ({
     modification_time,
   } = entity;
   return (
-    <Table className={className}>
+    <EntityInfoTable>
       <TableBody>
         <TableRow>
           <TableData>
@@ -93,7 +94,7 @@ const EntityInfo = ({
           </TableRow>
         }
       </TableBody>
-    </Table>
+    </EntityInfoTable>
   );
 };
 
