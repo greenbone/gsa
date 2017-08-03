@@ -1,3 +1,8 @@
+2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/capabilities.js: Use object to transform types
+	to correct permission types e.g. cve to info.
+
 2017-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/models/cve.js: Parse additional cve details

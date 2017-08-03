@@ -23,15 +23,23 @@
 
 import {is_defined, for_each, pluralize_type} from './utils.js';
 
+const types = {
+  host: 'asset',
+  hosts: 'asset',
+  os: 'asset',
+  cve: 'info',
+  cves: 'info',
+};
+
 const check_type = type => {
-  if (type === 'host' || type === 'hosts' || type === 'os') {
-    return 'asset';
+  const ctype = types[type];
+  if (is_defined(ctype)) {
+    return ctype;
   }
-  // TODO add info
   return type;
 };
 
-export class Capabilities {
+class Capabilities {
 
   constructor(element) {
     this._capabilities = new Set();
