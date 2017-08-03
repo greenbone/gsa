@@ -82,6 +82,6 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-export default withEntitiesHeader(Header);
+export default withEntitiesHeader()(Header);
 
 // vim: set ts=2 sw=2 tw=80:

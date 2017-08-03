@@ -116,7 +116,7 @@ EntitiesFooter.propTypes = {
   onTrashClick: PropTypes.func,
 };
 
-export const withEntitiesFooter = (Component, options = {}) => {
+export const withEntitiesFooter = (options = {}) => Component => {
 
   const EntitiesFooterWrapper = ({onDownloadBulk, onDeleteBulk, ...props}) => {
     return (
@@ -136,7 +136,7 @@ export const withEntitiesFooter = (Component, options = {}) => {
 };
 
 export const createEntitiesFooter = options =>
-  withEntitiesFooter(EntitiesFooter, options);
+  withEntitiesFooter(options)(EntitiesFooter);
 
 export default EntitiesFooter;
 

@@ -98,7 +98,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const OvaldefsHeader = withEntitiesHeader(Header, true);
+const OvaldefsHeader = withEntitiesHeader(true)(Header);
 
 const OvaldefsFooter = createEntitiesFooter({
   span: 10,

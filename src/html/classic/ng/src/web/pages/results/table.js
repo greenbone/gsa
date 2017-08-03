@@ -108,7 +108,7 @@ export default createEntitiesTable({
     span: 8,
     download: 'results.xml',
   }),
-  header: withEntitiesHeader(Header, true),
+  header: withEntitiesHeader(true)(Header),
   row: ResultsRow,
   rowDetails: withRowDetails('result', 7)(ResultDetails),
 });

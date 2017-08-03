@@ -85,7 +85,7 @@ export default createEntitiesTable({
   emptyTitle: _('No Notes available'),
   row: Row,
   rowDetails: withRowDetails('note', 6)(NoteDetails),
-  header: withEntitiesHeader(Header),
+  header: withEntitiesHeader()(Header),
   footer: createEntitiesFooter({
     span: 10,
     trash: true,

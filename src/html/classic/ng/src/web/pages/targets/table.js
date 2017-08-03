@@ -114,7 +114,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const TargetsHeader = withEntitiesHeader(Header);
+const TargetsHeader = withEntitiesHeader()(Header);
 
 const Footer = createEntitiesFooter({
   span: 6,

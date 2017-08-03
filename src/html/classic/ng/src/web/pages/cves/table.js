@@ -104,7 +104,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const CvesHeader = withEntitiesHeader(Header, true);
+const CvesHeader = withEntitiesHeader(true)(Header);
 
 const CvesFooter = createEntitiesFooter({
   span: 10,

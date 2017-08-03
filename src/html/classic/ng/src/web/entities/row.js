@@ -23,21 +23,12 @@
 
 import React from 'react';
 
-import {classes, is_defined} from 'gmp/utils.js';
-
-import PropTypes from '../utils/proptypes.js';
-
-import Text from '../components/form/text.js';
+import glamorous from 'glamorous';
 
 import EntityActions from './actions.js';
 
-import './css/row.css';
-
-export const withEntityRow = (Component, actions, options = {}) => {
-
-  if (!is_defined(actions)) {
-    actions = EntityActions;
-  }
+export const withEntityRow = (actions = EntityActions, options = {}) =>
+  Component => {
 
   const EntityRowWrapper = props => {
     return (
@@ -51,19 +42,20 @@ export const withEntityRow = (Component, actions, options = {}) => {
   return EntityRowWrapper;
 };
 
-export const RowDetailsToggle = ({
-    className,
-    ...props,
-  }) => {
-  className = classes(className, 'row-details-toggle');
-  return (
-    <Text {...props} className={className} />
-  );
-};
-
-RowDetailsToggle.propTypes = {
-  className: PropTypes.string,
-};
-
+export const RowDetailsToggle = glamorous.div(
+  'row-details-toggle',
+  {
+    cursor: 'pointer',
+    textDecoration: 'none',
+    color: 'blue',
+    ':hover': {
+      textDecoration: 'underline',
+      color: 'blue',
+    },
+    '@media print': {
+      color: 'black',
+    }
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

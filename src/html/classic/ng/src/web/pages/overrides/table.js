@@ -95,7 +95,7 @@ export default createEntitiesTable({
   emptyTitle: _('No Overrides available'),
   row: Row,
   rowDetails: withRowDetails('override', 8)(OverrideDetails),
-  header: withEntitiesHeader(Header),
+  header: withEntitiesHeader()(Header),
   footer: createEntitiesFooter({
     span: 10,
     trash: true,

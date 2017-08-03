@@ -82,7 +82,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const DfnCertAdvsHeader = withEntitiesHeader(Header, true);
+const DfnCertAdvsHeader = withEntitiesHeader(true)(Header);
 
 const DfnCertAdvsFooter = createEntitiesFooter({
   span: 10,

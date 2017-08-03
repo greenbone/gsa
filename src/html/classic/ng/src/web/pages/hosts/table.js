@@ -93,7 +93,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const HostsHeader = withEntitiesHeader(Header);
+const HostsHeader = withEntitiesHeader()(Header);
 
 const Footer = ({onTargetCreateFromSelection, selectionType, ...props}) => {
   let title;
@@ -121,11 +121,11 @@ Footer.propTypes = {
 };
 
 
-const HostsFooter = withEntitiesFooter(Footer, {
+const HostsFooter = withEntitiesFooter({
   span: 7,
   delete: true,
   download: 'hosts.xml',
-});
+})(Footer);
 
 export const HostsTable = createEntitiesTable({
   emptyTitle: _('No hosts available'),

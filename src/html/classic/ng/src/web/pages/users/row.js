@@ -196,6 +196,6 @@ Row.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withEntityRow(Row, withEntityActions(IconActions));
+export default withEntityRow(withEntityActions(IconActions))(Row);
 
 // vim: set ts=2 sw=2 tw=80:

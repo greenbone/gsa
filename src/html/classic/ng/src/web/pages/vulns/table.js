@@ -89,7 +89,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const VulnsHeader = withEntitiesHeader(Header, true);
+const VulnsHeader = withEntitiesHeader(true)(Header);
 
 const Footer = createEntitiesFooter({
   span: 8,

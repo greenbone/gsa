@@ -102,7 +102,7 @@ export default createEntitiesTable({
   emptyTitle: _('No Tasks available'),
   row: Row,
   rowDetails: withRowDetails('task', 10)(TaskDetails),
-  header: withEntitiesHeader(Header),
+  header: withEntitiesHeader()(Header),
   footer: createEntitiesFooter({
     span: 10,
     trash: true,

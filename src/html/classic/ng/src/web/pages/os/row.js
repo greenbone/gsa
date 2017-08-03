@@ -120,6 +120,6 @@ Row.propTypes = {
   links: PropTypes.bool,
 };
 
-export default withEntityRow(Row, Actions);
+export default withEntityRow(Actions)(Row);
 
 // vim: set ts=2 sw=2 tw=80:

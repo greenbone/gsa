@@ -23,7 +23,6 @@
 
 import React from 'react';
 
-import {is_defined} from 'gmp/utils.js';
 import  _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
@@ -33,6 +32,10 @@ import SelectionType from '../utils/selectiontype.js';
 import TableHead from '../components/table/head.js';
 import TableHeader from '../components/table/header.js';
 import TableRow from '../components/table/row.js';
+
+const defaultactions = (
+  <TableHead width="10em">{_('Actions')}</TableHead>
+);
 
 /**
  * A higher order component to create table headers which support entity
@@ -50,20 +53,16 @@ import TableRow from '../components/table/row.js';
  * If actions is false no actions (a null value in react) will be passed to
  * Component.
  *
- * @param {Component} Component React component rendered as header
  * @param {Element}   actions   React element, undefined or boolean value.
  * @param {Object}    options   Default properties for Component.
+ * @param {Component} Component React component rendered as header
  *
  * @return A new EntitiesHeader component
  */
-export const withEntitiesHeader = (Component, actions, options = {}) => {
+export const withEntitiesHeader = (actions = defaultactions, options = {}) =>
+  Component => {
 
-  if (!is_defined(actions)) {
-    actions = (
-      <TableHead width="10em">{_('Actions')}</TableHead>
-    );
-  }
-  else if (actions === false) {
+  if (actions === false) {
     actions = null;
   }
 
@@ -145,7 +144,7 @@ export const createEntitiesHeader = (columns, action_element, options = {}) => {
     sort: PropTypes.bool,
     onSortChange: PropTypes.func,
   };
-  return withEntitiesHeader(Header, action_element, options);
+  return withEntitiesHeader(action_element, options)(Header);
 };
 
 // vim: set ts=2 sw=2 tw=80:

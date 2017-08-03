@@ -119,7 +119,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const NvtsHeader = withEntitiesHeader(Header, true);
+const NvtsHeader = withEntitiesHeader(true)(Header);
 
 const NvtsFooter = createEntitiesFooter({
   span: 10,

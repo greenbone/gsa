@@ -82,7 +82,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const CertBundsHeader = withEntitiesHeader(Header, true);
+const CertBundsHeader = withEntitiesHeader(true)(Header);
 
 const CertBundsFooter = createEntitiesFooter({
   span: 10,

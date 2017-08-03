@@ -87,7 +87,7 @@ export default createEntitiesTable({
   body: false,
   emptyTitle: _('No SecInfo Information available'),
   row: Row,
-  header: withEntitiesHeader(Header, true),
+  header: withEntitiesHeader(true)(Header),
   footer: createEntitiesFooter({
     span: 10,
     download: 'allsecinfo.xml',

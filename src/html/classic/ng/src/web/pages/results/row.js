@@ -97,6 +97,6 @@ Row.propTypes = {
   onToggleDetailsClick: PropTypes.func,
 };
 
-export default withEntityRow(Row);
+export default withEntityRow()(Row);
 
 // vim: set ts=2 sw=2 tw=80:
