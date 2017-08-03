@@ -1,3 +1,10 @@
+2017-08-03  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Remove -O2 from being added to
+	CMAKE_C_FLAGS_RELEASE. This actually causes optimization flags from
+	CMAKE_C_FLAGS_RELEASE to be duplicated or even superseded for no good
+	reason.
+
 2017-08-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Move location of certificates from
