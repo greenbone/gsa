@@ -36,7 +36,7 @@ import DetailsLink from '../components/link/detailslink.js';
 
 import TableData from '../components/table/data.js';
 
-import ObserverIcon from './icons/entityobservericon.js';
+import ObserverIcon from '../entity/icon/observericon.js';
 
 const EntityNameTableData = ({
   entity,

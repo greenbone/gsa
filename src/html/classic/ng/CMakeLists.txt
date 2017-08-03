@@ -269,13 +269,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/entitynametabledata.js
      ${NG_SRC_DIR}/src/web/entities/footer.js
      ${NG_SRC_DIR}/src/web/entities/header.js
-     ${NG_SRC_DIR}/src/web/entities/icons/entitycloneicon.js
-     ${NG_SRC_DIR}/src/web/entities/icons/entitycreateicon.js
-     ${NG_SRC_DIR}/src/web/entities/icons/entitydeleteicon.js
-     ${NG_SRC_DIR}/src/web/entities/icons/entityediticon.js
-     ${NG_SRC_DIR}/src/web/entities/icons/entityobservericon.js
-     ${NG_SRC_DIR}/src/web/entities/icons/entitytrashicon.js
-     ${NG_SRC_DIR}/src/web/entities/link.js
      ${NG_SRC_DIR}/src/web/entities/page.js
      ${NG_SRC_DIR}/src/web/entities/row.js
      ${NG_SRC_DIR}/src/web/entities/selection.js
@@ -285,7 +278,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entity/block.js
      ${NG_SRC_DIR}/src/web/entity/box.js
      ${NG_SRC_DIR}/src/web/entity/container.js
+     ${NG_SRC_DIR}/src/web/entity/icon/cloneicon.js
+     ${NG_SRC_DIR}/src/web/entity/icon/createicon.js
+     ${NG_SRC_DIR}/src/web/entity/icon/deleteicon.js
+     ${NG_SRC_DIR}/src/web/entity/icon/editicon.js
+     ${NG_SRC_DIR}/src/web/entity/icon/observericon.js
+     ${NG_SRC_DIR}/src/web/entity/icon/trashicon.js
      ${NG_SRC_DIR}/src/web/entity/info.js
+     ${NG_SRC_DIR}/src/web/entity/link.js
      ${NG_SRC_DIR}/src/web/entity/note.js
      ${NG_SRC_DIR}/src/web/entity/override.js
      ${NG_SRC_DIR}/src/web/entity/page.js

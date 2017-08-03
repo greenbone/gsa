@@ -41,7 +41,7 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import EntityLink from '../../entities/link.js';
+import EntityLink from '../../entity/link.js';
 
 import DetailsBlock from '../../entity/block.js';
 import NoteBox from '../../entity/note.js';

@@ -55,10 +55,10 @@ import EntityPage from '../../entity/page.js';
 import {withEntityContainer} from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
 
-import CloneIcon from '../../entities/icons/entitycloneicon.js';
-import CreateIcon from '../../entities/icons/entitycreateicon.js';
-import EditIcon from '../../entities/icons/entityediticon.js';
-import TrashIcon from '../../entities/icons/entitytrashicon.js';
+import CloneIcon from '../../entity/icon/cloneicon.js';
+import CreateIcon from '../../entity/icon/createicon.js';
+import EditIcon from '../../entity/icon/editicon.js';
+import TrashIcon from '../../entity/icon/trashicon.js';
 
 import HostDetails from './details.js';
 import withHostComponent from './withHostComponent.js';

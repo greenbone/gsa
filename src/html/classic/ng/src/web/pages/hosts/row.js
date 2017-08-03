@@ -29,8 +29,8 @@ import {is_defined} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
-import EditIcon from '../../entities/icons/entityediticon.js';
-import DeleteIcon from '../../entities/icons/entitydeleteicon.js';
+import EditIcon from '../../entity/icon/editicon.js';
+import DeleteIcon from '../../entity/icon/deleteicon.js';
 import {withEntityActions} from '../../entities/actions.js';
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 

@@ -1,3 +1,51 @@
+2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/entitynametabledata.js,
+	src/html/classic/ng/src/web/entities/icons/entitycloneicon.js,
+	src/html/classic/ng/src/web/entity/icon/cloneicon.js,
+	src/html/classic/ng/src/web/entities/icons/entitycreateicon.js,
+	src/html/classic/ng/src/web/entity/icon/createicon.js,
+	src/html/classic/ng/src/web/entities/icons/entitydeleteicon.js,
+	src/html/classic/ng/src/web/entity/icon/deleteicon.js,
+	src/html/classic/ng/src/web/entities/icons/entityediticon.js,
+	src/html/classic/ng/src/web/entity/icon/editicon.js,
+	src/html/classic/ng/src/web/entities/icons/entityobservericon.js,
+	src/html/classic/ng/src/web/entity/icon/observericon.js,
+	src/html/classic/ng/src/web/entities/icons/entitytrashicon.js,
+	src/html/classic/ng/src/web/entity/icon/trashicon.js,
+	src/html/classic/ng/src/web/entities/link.js,
+	src/html/classic/ng/src/web/entity/link.js,
+	src/html/classic/ng/src/web/pages/agents/row.js,
+	src/html/classic/ng/src/web/pages/alerts/row.js,
+	src/html/classic/ng/src/web/pages/credentials/row.js,
+	src/html/classic/ng/src/web/pages/filters/row.js,
+	src/html/classic/ng/src/web/pages/groups/row.js,
+	src/html/classic/ng/src/web/pages/hosts/detailspage.js,
+	src/html/classic/ng/src/web/pages/hosts/row.js,
+	src/html/classic/ng/src/web/pages/notes/details.js,
+	src/html/classic/ng/src/web/pages/notes/detailspage.js,
+	src/html/classic/ng/src/web/pages/notes/row.js,
+	src/html/classic/ng/src/web/pages/overrides/details.js,
+	src/html/classic/ng/src/web/pages/overrides/detailspage.js,
+	src/html/classic/ng/src/web/pages/overrides/row.js,
+	src/html/classic/ng/src/web/pages/permissions/row.js,
+	src/html/classic/ng/src/web/pages/portlists/row.js,
+	src/html/classic/ng/src/web/pages/reportformats/row.js,
+	src/html/classic/ng/src/web/pages/roles/row.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/row.js,
+	src/html/classic/ng/src/web/pages/scanners/row.js,
+	src/html/classic/ng/src/web/pages/schedules/row.js,
+	src/html/classic/ng/src/web/pages/tags/row.js,
+	src/html/classic/ng/src/web/pages/targets/detailspage.js,
+	src/html/classic/ng/src/web/pages/targets/row.js,
+	src/html/classic/ng/src/web/pages/tasks/actions.js,
+	src/html/classic/ng/src/web/pages/tasks/detailspage.js,
+	src/html/classic/ng/src/web/pages/tasks/row.js,
+	src/html/classic/ng/src/web/pages/users/row.js: Move older entity components
+	from entities to entity directory. Remove entity prefix from icon module
+	names.
+
 2017-08-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt, src/CMakeLists.txt, src/gsad.c: Rename CERTFICATE

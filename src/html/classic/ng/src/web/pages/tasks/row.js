@@ -32,7 +32,7 @@ import withUserName from '../../utils/withUserName.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
-import ObserverIcon from '../../entities/icons/entityobservericon.js';
+import ObserverIcon from '../../entity/icon/observericon.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 

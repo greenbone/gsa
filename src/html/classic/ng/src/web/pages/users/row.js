@@ -35,9 +35,9 @@ import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
 import {withEntityRow} from '../../entities/row.js';
 
-import CloneIcon from '../../entities/icons/entitycloneicon.js';
-import DeleteIcon from '../../entities/icons/entitydeleteicon.js';
-import EditIcon from '../../entities/icons/entityediticon.js';
+import CloneIcon from '../../entity/icon/cloneicon.js';
+import DeleteIcon from '../../entity/icon/deleteicon.js';
+import EditIcon from '../../entity/icon/editicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
