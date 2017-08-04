@@ -1170,9 +1170,9 @@ braces@^1.8.2:
     preserve "^0.2.0"
     repeat-element "^1.1.2"
 
-brcast@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/brcast/-/brcast-2.0.0.tgz#9e627ab82209895664c1d6c1f45cd8c43422e3f6"
+brcast@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/brcast/-/brcast-3.0.0.tgz#40b80dbb75086f0a32b2c2752dbecbbb34d8b197"
 
 brorand@^1.0.1:
   version "1.1.0"
@@ -2854,20 +2854,21 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-glamor@^2.20.37:
-  version "2.20.37"
-  resolved "https://registry.yarnpkg.com/glamor/-/glamor-2.20.37.tgz#3cd576deb760eaaf475dcc1f9b77bf6a7d2f8b26"
+glamor@^2.20.38:
+  version "2.20.38"
+  resolved "https://registry.yarnpkg.com/glamor/-/glamor-2.20.38.tgz#5aa908fc044891588ed05bdbeda59c5328a615a4"
   dependencies:
     fbjs "^0.8.12"
     inline-style-prefixer "^3.0.6"
     object-assign "^4.1.1"
     prop-types "^15.5.10"
+    through "^2.3.8"
 
-glamorous@^3.25.0:
-  version "3.25.0"
-  resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-3.25.0.tgz#d6d66c3dfffdc194761469adcbd996d4b70222e1"
+glamorous@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-4.0.0.tgz#89ca0508e50195a8439c3caea13705d15f1aeaaf"
   dependencies:
-    brcast "^2.0.0"
+    brcast "^3.0.0"
     fast-memoize "^2.2.7"
     html-tag-names "^1.1.1"
     react-html-attributes "^1.3.0"
@@ -6257,7 +6258,7 @@ throat@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-3.0.0.tgz#e7c64c867cbb3845f10877642f7b60055b8ec0d6"
 
-through@^2.3.6:
+through@^2.3.6, through@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
