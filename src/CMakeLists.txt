@@ -106,47 +106,47 @@ else (USE_LIBXSLT)
 endif (USE_LIBXSLT)
 
 if (GSAD_VERSION)
-  add_definitions (-DGSAD_VERSION=\\\"${GSAD_VERSION}\\\")
+  add_definitions (-DGSAD_VERSION="${GSAD_VERSION}")
 endif (GSAD_VERSION)
 
 if (GVM_SERVER_CERTIFICATE)
-  add_definitions (-DGVM_SERVER_CERTIFICATE=\\\"${GVM_SERVER_CERTIFICATE}\\\")
+  add_definitions (-DGVM_SERVER_CERTIFICATE="${GVM_SERVER_CERTIFICATE}")
 endif (GVM_SERVER_CERTIFICATE)
 
 if (GVM_SERVER_KEY)
-  add_definitions (-DGVM_SERVER_KEY=\\\"${GVM_SERVER_KEY}\\\")
+  add_definitions (-DGVM_SERVER_KEY="${GVM_SERVER_KEY}")
 endif (GVM_SERVER_KEY)
 
 if (GVM_CA_CERTIFICATE)
-  add_definitions (-DGVM_CA_CERTIFICATE=\\\"${GVM_CA_CERTIFICATE}\\\")
+  add_definitions (-DGVM_CA_CERTIFICATE="${GVM_CA_CERTIFICATE}")
 endif (GVM_CA_CERTIFICATE)
 
 if (GVM_RUN_DIR)
-  add_definitions (-DGVM_RUN_DIR=\\\"${GVM_RUN_DIR}\\\")
+  add_definitions (-DGVM_RUN_DIR="${GVM_RUN_DIR}")
 endif (GVM_RUN_DIR)
 
 if (GSA_DATA_DIR)
-  add_definitions (-DGSA_DATA_DIR=\\\"${GSA_DATA_DIR}\\\")
+  add_definitions (-DGSA_DATA_DIR="${GSA_DATA_DIR}")
 endif (GSA_DATA_DIR)
 
 if (GSAD_PID_DIR)
-  add_definitions (-DGSAD_PID_DIR=\\\"${GSAD_PID_DIR}\\\")
+  add_definitions (-DGSAD_PID_DIR="${GSAD_PID_DIR}")
 endif (GSAD_PID_DIR)
 
 if (GSA_CONFIG_DIR)
-  add_definitions (-DGSA_CONFIG_DIR=\\\"${GSA_CONFIG_DIR}\\\")
+  add_definitions (-DGSA_CONFIG_DIR="${GSA_CONFIG_DIR}")
 endif (GSA_CONFIG_DIR)
 
 if (GSA_LOCALE_DIR)
-  add_definitions (-DGSA_LOCALE_DIR=\\\"${GSA_LOCALE_DIR}\\\")
+  add_definitions (-DGSA_LOCALE_DIR="${GSA_LOCALE_DIR}")
 endif (GSA_LOCALE_DIR)
 
 if (GSA_CHROOT_LOCALE_DIR)
-  add_definitions (-DGSA_CHROOT_LOCALE_DIR=\\\"${GSA_CHROOT_LOCALE_DIR}\\\")
+  add_definitions (-DGSA_CHROOT_LOCALE_DIR="${GSA_CHROOT_LOCALE_DIR}")
 endif (GSA_CHROOT_LOCALE_DIR)
 
-add_definitions (-DGVM_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
-add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
+add_definitions (-DGVM_OS_NAME="${CMAKE_SYSTEM}")
+add_definitions (-DPREFIX="${CMAKE_INSTALL_PREFIX}")
 
 ## Install
 

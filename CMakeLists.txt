@@ -31,7 +31,7 @@ project (greenbone-security-assistant C)
 cmake_minimum_required (VERSION 2.8)
 
 if (POLICY CMP0005)
-  cmake_policy (SET CMP0005 OLD)
+  cmake_policy (SET CMP0005 NEW)
 endif (POLICY CMP0005)
 
 # Needed for 'pkg_check_modules' function
