@@ -1,3 +1,21 @@
+2017-08-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/collectioncounts.js,
+	src/html/classic/ng/src/gmp/collection/collectioncounts.js,
+	src/html/classic/ng/src/gmp/collectionlist.js,
+	src/html/classic/ng/src/gmp/collection/collectionlist.js,
+	src/html/classic/ng/src/gmp/collection/parser.js,
+	src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/filters.js,
+	src/html/classic/ng/src/gmp/commands/scanconfigs.js,
+	src/html/classic/ng/src/gmp/models/settings.js,
+	src/html/classic/ng/src/gmp/parser.js,
+	src/html/classic/ng/src/web/utils/proptypes.js: Extract parsing collection
+	related functions into an own parser and move all collection related modules
+	to a collection subdir in gmp. This removes a cyclic dependency between
+	model.js and parser.js.
+
 2017-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/css/row.css,

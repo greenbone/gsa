@@ -21,9 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, parse_int} from './utils.js';
+import {is_defined} from '../utils.js';
 
-export class CollectionCounts {
+import {parse_int} from '../parser.js';
+
+class CollectionCounts {
 
   constructor({first, all, filtered, length, rows}) {
     this.first = parse_int(first);

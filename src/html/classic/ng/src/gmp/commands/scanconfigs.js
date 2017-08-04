@@ -26,7 +26,9 @@ import {extend, for_each, map, is_defined} from '../utils.js';
 
 import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-import {parse_counts, YES_VALUE, NO_VALUE} from '../parser.js';
+import {YES_VALUE, NO_VALUE} from '../parser.js';
+
+import {parse_counts}  from '../collection/parser.js';
 
 import Nvt from '../models/nvt.js';
 import ScanConfig, {parse_count} from '../models/scanconfig.js';

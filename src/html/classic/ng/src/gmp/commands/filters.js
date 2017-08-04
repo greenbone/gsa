@@ -23,9 +23,10 @@
 
 import logger from '../log.js';
 
-import CollectionCounts from '../collectioncounts.js';
+import CollectionCounts from '../collection/collectioncounts.js';
+import {parse_collection_list} from '../collection/parser.js';
+
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-import {parse_collection_list} from '../parser.js';
 
 import Filter from '../models/filter.js';
 

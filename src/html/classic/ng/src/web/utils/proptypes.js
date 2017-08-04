@@ -28,16 +28,16 @@ import {is_defined} from 'gmp/utils.js';
 
 import {CacheFactory, Cache} from 'gmp/cache.js';
 
-import CollectionList from 'gmp/collectionlist.js';
-
+import Gmp from 'gmp/gmp.js';
 import Model from 'gmp/model.js';
 import Capabilities from 'gmp/capabilities.js';
+import {EntityCommand, EntitiesCommand} from 'gmp/command.js';
+
+import CollectionList from 'gmp/collection/collectionlist.js';
 
 import Filter from 'gmp/models/filter.js';
 import Settings from 'gmp/models/settings.js';
 
-import Gmp from 'gmp/gmp.js';
-import {EntityCommand, EntitiesCommand} from 'gmp/command.js';
 
 export const component = ReactPropTypes.oneOfType([
   ReactPropTypes.func,

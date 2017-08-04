@@ -26,8 +26,11 @@ import logger from './log.js';
 
 import Filter, {ALL_FILTER} from './models/filter.js';
 
-import {parse_collection_list, parse_info_entities,
-  parse_info_counts} from './parser.js';
+import {
+  parse_collection_list,
+  parse_info_entities,
+  parse_info_counts,
+} from './collection/parser.js';
 
 const log = logger.getLogger('gmp.command');
 

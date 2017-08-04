@@ -21,9 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import List from './list.js';
+import List from '../list.js';
 
-export class CollectionList extends List {
+class CollectionList extends List {
 
   constructor({entries = [], filter, counts, meta = {}}) {
     super(entries);
