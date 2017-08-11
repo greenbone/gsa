@@ -24102,7 +24102,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
       response = NULL;
       entity = NULL;
       switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<get_groups/>"))
+                   "<get_groups filter=\"permission=modify_group\"/>"))
         {
           case 0:
           case -1:
@@ -24731,7 +24731,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
       response = NULL;
       entity = NULL;
       switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<get_groups/>"))
+                   "<get_groups filter=\"permission=modify_group\"/>"))
         {
           case 0:
           case -1:

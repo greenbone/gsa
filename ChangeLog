@@ -1,3 +1,8 @@
+2017-07-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_gmp.c (new_user, edit_user): Add filter because user1 may only
+	add users to groups that user1 may modify.
+
 2017-08-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add ng component class for basic Apps table and allow hiding columns
@@ -1021,7 +1026,7 @@
 	* src/html/classic/ng/src/web/pages/users/dialog.js
 	(Dialog.render): Add comment field.  In edit mode, add condition for
 	LDAP option and add RADIUS option.
-	
+
 	(Dialog.propTypes): Add comment and old_name.
 	(export default): Add comment member to defaultState.
 
