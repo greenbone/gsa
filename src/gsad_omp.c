@@ -17609,7 +17609,7 @@ get_system_reports_omp (openvas_connection_t *connection,
                                       : time_broken->tm_year;
       start_time.tm_mon = start_month ? atoi (start_month) - 1
                                       : time_broken->tm_mon;
-      start_time.tm_mday = start_day ? atoi (start_day) 
+      start_time.tm_mday = start_day ? atoi (start_day)
                                      : time_broken->tm_mday;
       start_time.tm_hour = start_hour ? atoi (start_hour)
                                       : time_broken->tm_hour;
@@ -24453,7 +24453,7 @@ new_user (openvas_connection_t *connection, credentials_t *credentials,
       response = NULL;
       entity = NULL;
       switch (omp (connection, credentials, &response, &entity, response_data,
-                   "<get_groups/>"))
+                   "<get_groups filter=\"permission=modify_group\"/>"))
         {
           case 0:
           case -1:
@@ -25066,7 +25066,7 @@ edit_user (openvas_connection_t *connection, credentials_t * credentials,
       response = NULL;
       entity = NULL;
       switch (omp (connection, credentials, &response, &entity, response_data,
-                   "<get_groups/>"))
+                   "<get_groups filter=\"permission=modify_group\"/>"))
         {
           case 0:
           case -1:
