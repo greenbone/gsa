@@ -1,3 +1,20 @@
+2017-08-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add ng component class for basic Apps table and allow hiding columns
+	in the Vulnerabilities table not needed in the report section.
+
+	* src/html/classic/ng/src/web/pages/apps/row.js: New JS file for an
+	Apps table row.
+
+	* src/html/classic/ng/src/web/pages/apps/table.js: New JS file for an
+	Apps table.
+
+	* src/html/classic/ng/src/web/pages/vulns/row.js: Add hideColumns
+	prop to allow hiding the "Oldest Result" and "Newest Result" columns.
+
+	* src/html/classic/ng/src/web/pages/vulns/table.js: Add hideColumns
+	prop to allow hiding the "Oldest Result" and "Newest Result" columns.
+
 2017-08-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Switch to NEW behavior for CMake policy CMP0005. The policy was

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Timo Pollmeier <timo.pollmeier@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -27,17 +28,23 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
+import SelectionType from '../../utils/selectiontype.js';
+
+import EntitiesFooter, {withEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+// import withRowDetails from '../../entities/withRowDetails.js';
+
+import NewIcon from '../../components/icon/newicon.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
-import VulnsRow from './row.js';
+// import AppDetails from './details.js';
+import AppRow from './row.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions,
+const Header = ({onSortChange, links = true, sort = true, actions = true,
                  hideColumns = {}}) => {
   return (
     <TableHeader>
@@ -45,41 +52,25 @@ const Header = ({onSortChange, links = true, sort = true, actions,
         <TableHead
           sortby={sort ? 'name' : false}
           onSortChange={onSortChange}>
-          {_('Name')}
+          {_('Application CPE')}
         </TableHead>
-        {hideColumns['oldest'] ? null :
-          <TableHead
-            sortby={sort ? 'oldest' : false}
-            onSortChange={onSortChange}>
-            {_('Oldest Result')}
-          </TableHead>}
-        {hideColumns['oldest'] ? null :
-          <TableHead
-            sortby={sort ? 'newest' : false}
-            onSortChange={onSortChange}>
-            {_('Newest Result')}
-          </TableHead>}
-        <TableHead width="10em"
-          sortby={sort ? 'severity' : false}
-          onSortChange={onSortChange}>
-          {_('Severity')}
-        </TableHead>
-        <TableHead width="6em"
-          sortby={sort ? 'qod' : false}
-          onSortChange={onSortChange}>
-          {_('QoD')}
-        </TableHead>
-        <TableHead width="6em"
-          sortby={sort ? 'results' : false}
-          onSortChange={onSortChange}>
-          {_('Results')}
-        </TableHead>
-        <TableHead width="6em"
+        <TableHead
           sortby={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
-        {actions}
+        <TableHead
+          sortby={sort ? 'occurrences' : false}
+          onSortChange={onSortChange}>
+          {_('Occurrences')}
+        </TableHead>
+        <TableHead
+          width="10em"
+          sortby={sort ? 'severity' : false}
+          onSortChange={onSortChange}>
+          {_('Severity')}
+        </TableHead>
+        {actions ? actions : null}
       </TableRow>
     </TableHeader>
   );
@@ -92,20 +83,35 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const VulnsHeader = withEntitiesHeader(true)(Header);
+const AppsHeader = withEntitiesHeader()(Header);
 
-const Footer = createEntitiesFooter({
-  span: 8,
-  download: 'vulnerabilites.xml',
+const Footer = ({onTargetCreateFromSelection, selectionType, ...props}) => {
+  return (
+    <EntitiesFooter {...props} selectionType={selectionType}>
+    </EntitiesFooter>
+  );
+};
+
+Footer.propTypes = {
+  selectionType: PropTypes.string,
+  onTargetCreateFromSelection: PropTypes.func.isRequired,
+};
+
+
+const AppsFooter = withEntitiesFooter({
+  span: 7,
+  delete: true,
+  download: 'hosts.xml',
+})(Footer);
+
+export const AppsTable = createEntitiesTable({
+  emptyTitle: _('No apps available'),
+  row: AppRow,
+/*  rowDetails: withRowDetails('app', 10)(AppDetails), */
+  header: AppsHeader,
+  footer: AppsFooter,
 });
 
-export const VulnsTable = createEntitiesTable({
-  emptyTitle: _('No vulnerabilites available'),
-  header: VulnsHeader,
-  footer: Footer,
-  row: VulnsRow,
-});
-
-export default VulnsTable;
+export default AppsTable;
 
 // vim: set ts=2 sw=2 tw=80:

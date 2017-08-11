@@ -38,7 +38,7 @@ import SeverityBar from '../../components/bar/severitybar.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
-const Row = ({entity, links = true, actions, ...other}) => {
+const Row = ({entity, links = true, actions, hideColumns = {}, ...other}) => {
   return (
     <TableRow>
       <TableData>
@@ -49,12 +49,14 @@ const Row = ({entity, links = true, actions, ...other}) => {
           {entity.name}
         </DetailsLink>
       </TableData>
-      <TableData>
-        {datetime(entity.results.oldest)}
-      </TableData>
-      <TableData>
-        {datetime(entity.results.newest)}
-      </TableData>
+      {hideColumns['oldest'] ? null :
+        <TableData>
+          {datetime(entity.results.oldest)}
+        </TableData>}
+      {hideColumns['newest'] ? null :
+        <TableData>
+          {datetime(entity.results.newest)}
+        </TableData>}
       <TableData flex align="center">
         <SeverityBar severity={entity.severity}/>
       </TableData>
