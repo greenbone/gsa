@@ -2086,6 +2086,10 @@
 
     // autorefresh
     start_auto_refresh();
+
+    $(window).bind('beforeunload', function() {
+      stop_auto_refresh();
+    });
   });
 
 })(window, window.document, window.$, window.console, window.localStorage,
