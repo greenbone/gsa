@@ -1,3 +1,8 @@
+2017-08-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/greenbone-init.js ($(document).ready): Add a
+	beforeunload event callback to stop the auto-refresh.
+
 2017-07-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_gmp.c (new_user, edit_user): Add filter because user1 may only

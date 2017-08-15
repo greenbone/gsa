@@ -754,6 +754,10 @@
 
     // autorefresh
     gsa.start_auto_refresh();
+
+    $(window).bind('beforeunload', function() {
+      stop_auto_refresh();
+    });
   });
 
 
