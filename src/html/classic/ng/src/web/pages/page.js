@@ -34,6 +34,8 @@ import MenuBar from '../components/bar/menubar.js';
 
 import StickyContainer from '../components/sticky/container.js';
 
+import CapabilitiesProvider from '../components/provider/capabilitiesprovider.js'; // eslint-disable-line max-len
+
 import Footer from '../components/structure/footer.js';
 import Header from '../components/structure/header.js';
 import Main from '../components/structure/main.js';
@@ -62,12 +64,6 @@ class Page extends React.Component {
     });
   }
 
-  getChildContext() {
-    return {
-      capabilities: this.state.capabilities,
-    };
-  }
-
   render() {
     let {children} = this.props;
     let {capabilities} = this.state;
@@ -79,16 +75,19 @@ class Page extends React.Component {
     }
 
     return (
-      <Div>
-        <Header/>
-        <StickyContainer>
-          <MenuBar/>
-          <Main>
-            {children}
-          </Main>
-          <Footer/>
-        </StickyContainer>
-      </Div>
+      <CapabilitiesProvider
+        capabilities={capabilities}>
+        <Div>
+          <Header/>
+          <StickyContainer>
+            <MenuBar/>
+            <Main>
+              {children}
+            </Main>
+            <Footer/>
+          </StickyContainer>
+        </Div>
+      </CapabilitiesProvider>
     );
   }
 }
