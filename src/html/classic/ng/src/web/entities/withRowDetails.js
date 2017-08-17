@@ -57,7 +57,7 @@ const StyledTableRow = glamorous(TableRow, {
 });
 
 const withRowDetails = (type, colSpan = '10') => Component => {
-  const RowDetailsWrapper = ({entity, ...props}) => (
+  const RowDetailsWrapper = ({entity, links = true, ...props}) => (
     <StyledTableRow>
       <TableData
         colSpan={colSpan}
@@ -66,24 +66,28 @@ const withRowDetails = (type, colSpan = '10') => Component => {
         <Indent/>
         <Component
           {...props}
+          links={links}
           entity={entity}
         />
-        <Layout flex align={['start', 'start']}>
-          <DetailsLink
-            type={type}
-            id={entity.id}>
-            <Icon img="details.svg"
-              size="small"
-              title={_('Show details')}
-            />
-          </DetailsLink>
-        </Layout>
+        {links &&
+          <Layout flex align={['start', 'start']}>
+            <DetailsLink
+              type={type}
+              id={entity.id}>
+              <Icon img="details.svg"
+                size="small"
+                title={_('Show details')}
+              />
+            </DetailsLink>
+          </Layout>
+        }
       </TableData>
     </StyledTableRow>
   );
 
   RowDetailsWrapper.propTypes = {
     entity: PropTypes.model.isRequired,
+    links: PropTypes.bool,
   };
   return RowDetailsWrapper;
 };
