@@ -1,3 +1,8 @@
+2017-08-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/collection/collectioncounts.js: Add some
+	documentation for the CollectionCount constructor parameters.
+
 2017-08-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/greenbone-init.js ($(document).ready): Add a

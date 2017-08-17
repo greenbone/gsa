@@ -27,6 +27,15 @@ import {parse_int} from '../parser.js';
 
 class CollectionCounts {
 
+  /**
+   * Create new CollectionCounts
+   *
+   * @param {number} first    - Index of the first item in the collection
+   * @param {number} all      - Count of all available items (max number)
+   * @param {number} filtered - Count of filtered items (always <= all)
+   * @param {number} length   - Current number of items in the collection
+   * @param {number} rows     - Count of max. requested items
+   */
   constructor({first, all, filtered, length, rows}) {
     this.first = parse_int(first);
     this.all = parse_int(all);
