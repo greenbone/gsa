@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import {is_defined} from '../utils.js';
+
 import List from '../list.js';
 
 class CollectionList extends List {
@@ -34,13 +36,18 @@ class CollectionList extends List {
   }
 
   filter(func) {
-    const f_entries = this._entries.filter(func);
-    const counts = this.getCounts().clone({filtered: f_entries.length});
-    return new CollectionList({
-      entries: f_entries,
-      filter: this.getFilter(),
+    const entries = this._entries.filter(func);
+    const counts = this.getCounts().clone({filtered: entries.length});
+    return this.clone({
+      entries,
       counts,
-      meta: this.getMeta(),
+    });
+  }
+
+  sort(func) {
+    const entries = this._entries.sort(func);
+    return this.clone({
+      entries,
     });
   }
 
@@ -54,6 +61,15 @@ class CollectionList extends List {
 
   getMeta() {
     return this._meta;
+  }
+
+  clone({entries, filter, counts, meta}) {
+    return new CollectionList({
+      entries: is_defined(entries) ? entries : this._entries,
+      filter: is_defined(filter) ? filter : this._filter,
+      counts: is_defined(counts) ? counts : this._counts,
+      meta: is_defined(meta) ? meta : this._meta,
+    });
   }
 
   get meta() {

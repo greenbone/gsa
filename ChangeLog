@@ -1,5 +1,11 @@
 2017-08-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/collection/collectionlist.js: Add new clone
+	method to CollectionList and fix sorting. Sort must return a new
+	CollectionList instead of an array.
+
+2017-08-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/collection/collectioncounts.js: Add some
 	documentation for the CollectionCount constructor parameters.
 
