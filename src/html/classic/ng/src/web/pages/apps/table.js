@@ -28,24 +28,22 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import SelectionType from '../../utils/selectiontype.js';
-
-import EntitiesFooter, {withEntitiesFooter} from '../../entities/footer.js';
+import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
-// import withRowDetails from '../../entities/withRowDetails.js';
-
-import NewIcon from '../../components/icon/newicon.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
-// import AppDetails from './details.js';
 import AppRow from './row.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions = true,
-                 hideColumns = {}}) => {
+const Header = ({
+  links = true,
+  sort = true,
+  actions,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -70,7 +68,7 @@ const Header = ({onSortChange, links = true, sort = true, actions = true,
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
-        {actions ? actions : null}
+        {actions}
       </TableRow>
     </TableHeader>
   );
@@ -83,31 +81,17 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const AppsHeader = withEntitiesHeader()(Header);
+const AppsHeader = withEntitiesHeader(true)(Header);
 
-const Footer = ({onTargetCreateFromSelection, selectionType, ...props}) => {
-  return (
-    <EntitiesFooter {...props} selectionType={selectionType}>
-    </EntitiesFooter>
-  );
-};
-
-Footer.propTypes = {
-  selectionType: PropTypes.string,
-  onTargetCreateFromSelection: PropTypes.func.isRequired,
-};
-
-
-const AppsFooter = withEntitiesFooter({
+const AppsFooter = createEntitiesFooter({
   span: 7,
   delete: true,
-  download: 'hosts.xml',
-})(Footer);
+  download: 'apps.xml',
+});
 
 export const AppsTable = createEntitiesTable({
   emptyTitle: _('No apps available'),
   row: AppRow,
-/*  rowDetails: withRowDetails('app', 10)(AppDetails), */
   header: AppsHeader,
   footer: AppsFooter,
 });

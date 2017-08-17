@@ -37,8 +37,13 @@ import TableRow from '../../components/table/row.js';
 
 import VulnsRow from './row.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions,
-                 hideColumns = {}}) => {
+const Header = ({
+  links = true,
+  sort = true,
+  actions,
+  hideColumns = {},
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -47,18 +52,20 @@ const Header = ({onSortChange, links = true, sort = true, actions,
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
-        {hideColumns['oldest'] ? null :
+        {hideColumns.oldest !== true &&
           <TableHead
             sortby={sort ? 'oldest' : false}
             onSortChange={onSortChange}>
             {_('Oldest Result')}
-          </TableHead>}
-        {hideColumns['oldest'] ? null :
+          </TableHead>
+        }
+        {hideColumns.oldest !== true &&
           <TableHead
             sortby={sort ? 'newest' : false}
             onSortChange={onSortChange}>
             {_('Newest Result')}
-          </TableHead>}
+          </TableHead>
+        }
         <TableHead width="10em"
           sortby={sort ? 'severity' : false}
           onSortChange={onSortChange}>
@@ -87,6 +94,7 @@ const Header = ({onSortChange, links = true, sort = true, actions,
 
 Header.propTypes = {
   actions: PropTypes.element,
+  hideColumns: PropTypes.object,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

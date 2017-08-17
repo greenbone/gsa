@@ -4,7 +4,7 @@
  * Timo Pollmeier <timo.pollmeier@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-var img_url_overrides = {};
+const img_url_overrides = {};
 
-function get_img_url (name) {
+export function get_img_url(name) {
   let overridden = img_url_overrides[name];
   if (overridden) {
     return overridden;
@@ -32,8 +32,8 @@ function get_img_url (name) {
   return process.env.PUBLIC_URL + '/img/' + name; // eslint-disable-line no-process-env,no-undef
 };
 
-function set_img_url_override (name, new_url) {
+export function set_img_url_override(name, new_url) {
   img_url_overrides[name] = new_url;
 };
 
-export {get_img_url, set_img_url_override};
+// vim: set ts=2 sw=2 tw=80:

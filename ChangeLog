@@ -1,5 +1,12 @@
 2017-08-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/apps/table.js,
+	src/html/classic/ng/src/web/pages/vulns/table.js,
+	src/html/classic/ng/src/web/utils/urls.js: Coding style improvements and fix
+	for the app table row actions.
+
+2017-08-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/collection/collectionlist.js: Add new clone
 	method to CollectionList and fix sorting. Sort must return a new
 	CollectionList instead of an array.
