@@ -23,10 +23,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
 import {is_defined, exclude_object_props} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
+import {render_section_title} from '../utils/render.js';
 
 import Toolbar from '../components/bar/toolbar.js';
 
@@ -64,12 +64,7 @@ class EntitiesPage extends React.Component {
   getSectionTitle() {
     let {entities, title} = this.props;
 
-    if (!entities) {
-      return title;
-    }
-
-    let counts = entities.getCounts();
-    return _('{{title}} ({{filtered}} of {{all}})', {title, ...counts});
+    return render_section_title(entities, title);
   }
 
   handleFilterEditClick() {

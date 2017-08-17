@@ -1,5 +1,11 @@
 2017-08-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/utils/render.js: Extract rendering the page
+	section title into a function.
+
+2017-08-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/withRowDetails.js: Fix toggling details
 	when no links should be displayed.
 

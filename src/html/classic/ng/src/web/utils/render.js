@@ -584,4 +584,13 @@ export function simple_permission_description_with_subject(name, subject) {
   }
 }
 
+export const render_section_title = (entities, title) => {
+  if (!is_defined(entities)) {
+    return title;
+  }
+
+  const counts = entities.getCounts();
+  return _('{{title}} ({{filtered}} of {{all}})', {title, ...counts});
+};
+
 // vim: set ts=2 sw=2 tw=80:
