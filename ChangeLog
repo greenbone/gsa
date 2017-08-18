@@ -1,5 +1,12 @@
 2017-08-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/form/spinner.js: Update coding style,
+	get rid of autobind function and allow to debounce value changes if spinner
+	component. Also to allow to adopt the changed value (and notify parent
+	compoenent) if the user presses enter key.
+
+2017-08-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/form/withChangeHandler.js: Allow
 	using a string for setting the debounce timeout value. Also fix change handler
 	for the uncontrolled input when no value prop is set by the parent component.

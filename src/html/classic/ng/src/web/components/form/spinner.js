@@ -24,13 +24,14 @@
 import React from 'react';
 
 import {
-  autobind,
   classes,
+  debounce,
   includes,
   is_defined,
   KeyCode,
-  parse_float,
 } from 'gmp/utils.js';
+
+import {parse_float, parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -43,7 +44,7 @@ class SpinnerComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    let {step, value, type} = this.props;
+    const {step, value, type} = this.props;
     if (is_defined(step)) {
       this.step = parse_float(step);
     }
@@ -72,20 +73,38 @@ class SpinnerComponent extends React.Component {
       down_active: false,
     };
 
-    autobind(this, 'handle');
+    this.handleBlur = this.handleBlur.bind(this);
+    this.handleDbClick = this.handleDbClick.bind(this);
+    this.handleDownMouse = this.handleDownMouse.bind(this);
+    this.handleDown = this.handleDown.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleMouseWheel = this.handleMouseWheel.bind(this);
+    this.handleUp = this.handleUp.bind(this);
+    this.handleUpMouse = this.handleUpMouse.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+
+    const debounce_value = parse_int(this.props.debounce);
+
+    if (is_defined(debounce_value) && debounce_value > 0) {
+      this.notifyChange = debounce(this.notifyChange, debounce_value);
+    }
   }
 
   componentWillReceiveProps(new_props) {
-    this.setState({value: parse_float(new_props.value)});
+    const new_value = parse_float(new_props.value);
+
+    if (new_value !== this.state.value) {
+      this.setState({value: new_value});
+    }
   }
 
   handleBlur(event) {
-    let {value} = event.target;
+    const {value} = event.target;
     this.setValue(value);
   }
 
   handleUp(event) {
-    let {value, step} = this;
+    const {value, step} = this;
 
     event.preventDefault();
 
@@ -93,7 +112,7 @@ class SpinnerComponent extends React.Component {
   }
 
   handleDown(event) {
-    let {value, step} = this;
+    const {value, step} = this;
 
     event.preventDefault();
 
@@ -101,8 +120,8 @@ class SpinnerComponent extends React.Component {
   }
 
   handleKeyDown(event) {
-    let key_code = event.keyCode;
-    let {allowed, disallowed} = this;
+    const key_code = event.keyCode;
+    const {allowed, disallowed} = this;
 
     // '9' == keycode 57 and 105 on numpad
     // '0' == keycode 48 and 96 on numpad
@@ -113,6 +132,7 @@ class SpinnerComponent extends React.Component {
         event.preventDefault();
         return;
     }
+
     switch (key_code) {
       case KeyCode.UP:
       case KeyCode.PAGE_UP:
@@ -131,14 +151,18 @@ class SpinnerComponent extends React.Component {
     if (this.props.disabled) {
       return;
     }
-    let value = parse_float(event.target.value);
+
+    const value = parse_float(event.target.value);
+
     this.setState({value});
   }
 
   handleMouseWheel(event) {
-    let {step} = this;
-    let direction = event.deltaY > 1  ? 1 : -1;
+    const {step} = this;
+    const direction = event.deltaY > 1  ? 1 : -1;
+
     event.preventDefault();
+
     this.setAdjustedValue(this.state.value + (step * direction));
   }
 
@@ -148,23 +172,34 @@ class SpinnerComponent extends React.Component {
 
   handleDownMouse(event) {
     this.setState({down_active: !this.state.down_active});
+
     event.preventDefault();
   }
 
   handleUpMouse(event) {
     this.setState({up_active: !this.state.up_active});
+
     event.preventDefault();
   }
 
+  notifyChange(value) {
+    const {onChange, name} = this.props;
+
+    if (onChange) {
+      onChange(value, name);
+    }
+  }
+
   setAdjustedValue(value) {
-    let {step} = this;
-    let {min, disabled} = this.props;
+    const {step} = this;
+    const {min, disabled} = this.props;
 
     if (disabled) {
       return;
     }
 
-    let base = is_defined(min) ? parse_float(min) : 0;
+    const base = is_defined(min) ? parse_float(min) : 0;
+
     let above_min = value - base;
 
     // - round to the nearest step
@@ -180,7 +215,8 @@ class SpinnerComponent extends React.Component {
   }
 
   setValue(value) {
-    let {onChange, min, max, disabled, name} = this.props;
+    const {disabled} = this.props;
+    let {min, max} = this.props;
 
     if (disabled) {
       return;
@@ -200,34 +236,46 @@ class SpinnerComponent extends React.Component {
       if (is_defined(min) && value < min) {
         value = min;
       }
+
       this.value = value;
 
-      if (onChange) {
-        onChange(value, name);
-      }
+      this.notifyChange(value);
     }
 
     this.setState({value});
   }
 
   getPrecision() {
-    let {step} = this;
+    const {step} = this;
     let precision = this.precisionOf(step);
+
     precision = Math.max(precision, this.precisionOf(step));
+
     return precision;
   }
 
   precisionOf(num) {
-    let str = num.toString();
-    let decimal = str.indexOf(".");
+    const str = num.toString();
+    const decimal = str.indexOf(".");
+
     return decimal === -1 ? 0 : str.length - decimal - 1;
   }
 
   render() {
-    let {value, down_active, up_active} = this.state;
-    let {size, type, min, max, disabled, maxLength, name,
-      className} = this.props;
-    let css = classes(disabled ? 'spinner disabled' : 'spinner', className);
+    const {value, down_active, up_active} = this.state;
+    const {
+      size,
+      type,
+      min,
+      max,
+      disabled,
+      maxLength,
+      name,
+      className,
+    } = this.props;
+
+    const css = classes(disabled ? 'spinner disabled' : 'spinner', className);
+
     return (
       <span className={css}
         onWheel={this.handleMouseWheel}>
@@ -271,16 +319,17 @@ SpinnerComponent.defaultProps = {
 };
 
 SpinnerComponent.propTypes = {
-  size: PropTypes.numberOrNumberString,
+  className: PropTypes.string,
+  debounce: PropTypes.numberOrNumberString,
+  disabled: PropTypes.bool,
   maxLength: PropTypes.numberOrNumberString,
-  min: PropTypes.numberOrNumberString,
   max: PropTypes.numberOrNumberString,
+  min: PropTypes.numberOrNumberString,
+  name: PropTypes.string,
+  size: PropTypes.numberOrNumberString,
   step: PropTypes.numberOrNumberString,
   type: PropTypes.oneOf(['int', 'float']),
-  name: PropTypes.string,
-  disabled: PropTypes.bool,
   value: PropTypes.numberOrNumberString,
-  className: PropTypes.string,
   onChange: PropTypes.func,
 };
 
