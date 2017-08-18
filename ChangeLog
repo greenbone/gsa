@@ -1,5 +1,11 @@
 2017-08-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/utils.js: Change parse_float to behave like
+	parse_int. If both value conversions got not a number (NaN) the parsing
+	functions return undefined now.
+
+2017-08-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/form/withChangeHandler.js: Allow to
 	debounce all change handlers. debouncing lowers the interval when change
 	handlers are called. This is often required for scoll handlers or filter

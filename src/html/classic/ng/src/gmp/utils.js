@@ -169,15 +169,23 @@ export function classes(...args) {
 }
 
 export function parse_int(value) {
-  let val = parseInt(value, 10);
+  const val = parseInt(value, 10);
+
   if (isNaN(val)) {
-    val = undefined;
+    return undefined;
   }
+
   return val;
 }
 
 export function parse_float(value) {
-  return parseFloat(value);
+  const val = parseFloat(value);
+
+  if (isNaN(val)) {
+    return undefined;
+  }
+
+  return val;
 }
 
 export const YES_VALUE = 1;
