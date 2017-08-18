@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import {is_defined, debounce} from 'gmp/utils.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 export const noop_convert = value => value;
@@ -36,19 +38,77 @@ const withChangeHandler = (options = {}) => Component => {
     value_func = target_value,
   } = options;
 
-  const ChangeHandler = ({onChange, convert = convert_func, ...props}) => {
+  class ChangeHandler extends React.Component {
 
-    const handleChange = event => {
-      if (onChange) {
-        onChange(convert(value_func(event, props), props), props.name);
+    constructor(...args) {
+      super(...args);
+
+      this.state = {};
+
+      this.handleChange = this.handleChange.bind(this);
+
+      if (is_defined(this.props.debounce) && this.props.debounce > 0) {
+        this.notifyChange = debounce(this.notifyChange, this.props.debounce);
       }
-    };
+    }
 
-    return <Component {...props} onChange={handleChange}/>;
-  };
+    componentWillReceiveProps(next) {
+      const {value} = this.state;
+
+      const new_value = this.convertValue(next.value);
+
+      if (new_value !== value) {
+        this.setState({value: new_value});
+      }
+    }
+
+    convertValue(value) {
+      const {convert = convert_func} = this.props;
+      const props = this.getOtherProps();
+
+      return convert(value, props);
+    }
+
+    notifyChange(value) {
+      const {name, onChange} = this.props;
+
+      if (is_defined(onChange)) {
+        onChange(value, name);
+      }
+    }
+
+    getOtherProps() {
+      const {
+        convert = convert_func, // eslint-disable-line no-unused-vars
+        debounce: debounce_func,
+        ...props,
+      } = this.props;
+
+      return props;
+    }
+
+    handleChange(event) {
+      const value = this.convertValue(value_func(event, this.getOtherProps()));
+
+      this.setState({value});
+
+      this.notifyChange(value);
+    }
+
+    render() {
+      const props = this.getOtherProps();
+      return (
+        <Component
+          {...props}
+          onChange={this.handleChange}
+        />
+      );
+    }
+  }
 
   ChangeHandler.propTypes = {
     convert: PropTypes.func,
+    debounce: PropTypes.number,
     name: PropTypes.string,
     onChange: PropTypes.func,
   };
