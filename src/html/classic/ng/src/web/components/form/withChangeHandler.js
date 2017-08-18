@@ -26,6 +26,8 @@ import React from 'react';
 
 import {is_defined, debounce} from 'gmp/utils.js';
 
+import {parse_int} from 'gmp/parser.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 export const noop_convert = value => value;
@@ -43,17 +45,27 @@ const withChangeHandler = (options = {}) => Component => {
     constructor(...args) {
       super(...args);
 
-      this.state = {};
+      this.state = {
+        value: this.props.value,
+      };
 
       this.handleChange = this.handleChange.bind(this);
 
-      if (is_defined(this.props.debounce) && this.props.debounce > 0) {
-        this.notifyChange = debounce(this.notifyChange, this.props.debounce);
+      const debounce_value = parse_int(this.props.debounce);
+
+      if (is_defined(debounce_value) && debounce_value > 0) {
+        this.notifyChange = debounce(this.notifyChange, debounce_value);
       }
     }
 
     componentWillReceiveProps(next) {
       const {value} = this.state;
+
+      // we may be an uncontrolled input
+      // https://facebook.github.io/react/docs/uncontrolled-components.html
+      if (!is_defined(next.value)) {
+        return;
+      }
 
       const new_value = this.convertValue(next.value);
 
@@ -80,7 +92,7 @@ const withChangeHandler = (options = {}) => Component => {
     getOtherProps() {
       const {
         convert = convert_func, // eslint-disable-line no-unused-vars
-        debounce: debounce_func,
+        debounce: debounce_value,
         ...props,
       } = this.props;
 
@@ -97,9 +109,11 @@ const withChangeHandler = (options = {}) => Component => {
 
     render() {
       const props = this.getOtherProps();
+      const {value} = this.state;
       return (
         <Component
           {...props}
+          value={value}
           onChange={this.handleChange}
         />
       );
@@ -108,8 +122,9 @@ const withChangeHandler = (options = {}) => Component => {
 
   ChangeHandler.propTypes = {
     convert: PropTypes.func,
-    debounce: PropTypes.number,
+    debounce: PropTypes.numberOrNumberString,
     name: PropTypes.string,
+    value: PropTypes.any,
     onChange: PropTypes.func,
   };
 
