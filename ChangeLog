@@ -1,5 +1,11 @@
 2017-08-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/reports/hoststable.js: Add hosts table for
+	report details. Currently it's only used at the gsr-html report.
+
+2017-08-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/sort.js: Convert IPv4 address to number for
 	comparision.
 
