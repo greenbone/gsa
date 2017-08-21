@@ -2,6 +2,7 @@
  *
  * Authors:
  * Timo Pollmeier <timo.pollmeier@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -21,7 +22,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-function genericCompareAsc(a_val, b_val) {
+import logger from './log.js';
+
+import {is_defined, is_function} from './utils.js';
+
+import {parse_int, parse_float} from './parser.js';
+
+const log = logger.getLogger('gmp.sort');
+
+function generic_compare_asc(a_val, b_val) {
   if (a_val > b_val) {
     return +1;
   }
@@ -31,7 +40,7 @@ function genericCompareAsc(a_val, b_val) {
   return 0;
 }
 
-function genericCompareDesc(a_val, b_val) {
+function generic_compare_desc(a_val, b_val) {
   if (a_val < b_val) {
     return +1;
   }
@@ -41,24 +50,30 @@ function genericCompareDesc(a_val, b_val) {
   return 0;
 }
 
-function getProperty(object, property) {
-  if (property instanceof Array) {
-    let ret = object;
-    for (let i = 0; i < property.length; i++) {
-      ret = ret[property[i]];
+function get_property(object, property) {
+  try {
+    if (is_function(property)) {
+      return property(object);
     }
-    return ret;
-  }
 
-  return object[property];
+    return object[property];
+  }
+  catch (err) {
+    log.error('Could not get property', property, object);
+    return undefined;
+  }
 }
 
 function expand_ip(original) {
+  if (!is_defined(original)) {
+    return original;
+  }
+
   let split = original.split('.');
   if (split.length === 4) {
     let ret = '';
     for (let i = 0; i < split.length; i++) {
-      let number = Number(split[i]);
+      let number = parse_int(split[i]);
 
       if (number.toString() !== split[i] || number < 0 || number > 255) {
         return original;
@@ -79,48 +94,28 @@ function expand_ip(original) {
     }
     return ret;
   }
+
   return original;
 }
 
-export function makeCompareSelection(makeCompareFunct, property) {
-  return {
-    'sort': makeCompareFunct(property, false),
-    'sort-reverse': makeCompareFunct(property, true),
-  };
-}
+const get_value = (convert_func, value, property) =>
+  convert_func(get_property(value, property));
 
-export function makeCompareString(property, reverse) {
-  var val_compare = reverse ? genericCompareDesc : genericCompareAsc;
-  return function (a, b) {
-    let a_val = getProperty(a, property).toString();
-    let b_val = getProperty(b, property).toString();
-    return val_compare(a_val, b_val);
-  };
-}
+const make_compare = convert_func => property => reverse => {
+  const val_compare = reverse ? generic_compare_desc : generic_compare_asc;
 
-export function makeCompareNumber(property, reverse) {
-  var val_compare = reverse ? genericCompareDesc : genericCompareAsc;
-  return function (a, b) {
-    let a_val = Number(getProperty(a, property));
-    let b_val = Number(getProperty(b, property));
-    return val_compare(a_val, b_val);
-  };
-}
+  return (a, b) => val_compare(
+    get_value(convert_func, a, property),
+    get_value(convert_func, b, property)
+  );
+};
 
-export function makeCompareDate(property, reverse) {
-  var val_compare = reverse ? genericCompareDesc : genericCompareAsc;
-  return function (a, b) {
-    let a_val = Date.parse(getProperty(a, property));
-    let b_val = Date.parse(getProperty(b, property));
-    return val_compare(a_val, b_val);
-  };
-}
+export const make_compare_string = make_compare(value => '' + value);
 
-export function makeCompareIP(property, reverse) {
-  var val_compare = reverse ? genericCompareDesc : genericCompareAsc;
-  return function (a, b) {
-    let a_val = expand_ip(getProperty(a, property));
-    let b_val = expand_ip(getProperty(b, property));
-    return val_compare(a_val, b_val);
-  };
-}
+export const make_compare_number = make_compare(value => parse_float(value));
+
+export const make_compare_date = make_compare(value => value);
+
+export const make_compare_ip = make_compare(value => expand_ip(value));
+
+// vim: set ts=2 sw=2 tw=80:
