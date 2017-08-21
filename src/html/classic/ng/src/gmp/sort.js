@@ -64,39 +64,31 @@ function get_property(object, property) {
   }
 }
 
-function expand_ip(original) {
+const ip_to_number = original => {
   if (!is_defined(original)) {
-    return original;
+    return undefined;
   }
 
-  let split = original.split('.');
-  if (split.length === 4) {
-    let ret = '';
-    for (let i = 0; i < split.length; i++) {
-      let number = parse_int(split[i]);
+  const split = original.split('.');
+  if (split.length === 4) { // should be an ipv4 address
+    let ret = 0;
+    for (const item of split) {
+      ret = ret << 8; // eslint-disable-line no-bitwise
+      const number = parse_int(item);
 
-      if (number.toString() !== split[i] || number < 0 || number > 255) {
+      if (!is_defined(number)) { // wasn't a number. it's not an ip
         return original;
       }
-      else if (number < 10) {
-        ret += '00' + number;
-      }
-      else if (number < 100) {
-        ret += '0' + number;
-      }
-      else {
-        ret += number;
-      }
 
-      if (i < split.length - 1) {
-        ret += '.';
-      }
+      ret = ret | number; // eslint-disable-line no-bitwise
     }
     return ret;
   }
 
-  return original;
-}
+  // TODO support ipv6
+
+  return original; // use original value for comparision
+};
 
 const get_value = (convert_func, value, property) =>
   convert_func(get_property(value, property));
@@ -116,6 +108,6 @@ export const make_compare_number = make_compare(value => parse_float(value));
 
 export const make_compare_date = make_compare(value => value);
 
-export const make_compare_ip = make_compare(value => expand_ip(value));
+export const make_compare_ip = make_compare(value => ip_to_number(value));
 
 // vim: set ts=2 sw=2 tw=80:
