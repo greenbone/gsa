@@ -24,11 +24,12 @@
 import React from 'react';
 
 import  _ from 'gmp/locale.js';
+import {YES_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -41,63 +42,60 @@ import NewIcon from '../../components/icon/newicon.js';
 import Layout from '../../components/layout/layout.js';
 
 const ImportDialog = ({
-    in_assets = 1,
-    newContainerTask = true,
-    task_id,
-    tasks,
-    onNewContainerTaskClick,
-    onValueChange,
-  }) => {
-
-  return (
-    <Layout flex="column">
-      <FormGroup title={_('Report')}>
-        <FileField
-          name="xml_file"
-          onChange={onValueChange}/>
-      </FormGroup>
-      <FormGroup title={_('Container Task')} flex>
-        <Select2 name="task_id"
-          value={task_id}
-          onChange={onValueChange}>
-          {render_options(tasks)}
-        </Select2>
-        {newContainerTask &&
-          <Layout flex box>
-            <NewIcon
-              title={_('Create new Container Task')}
-              onClick={onNewContainerTaskClick}/>
-          </Layout>
-        }
-      </FormGroup>
-      <FormGroup title={_('Add to Assets')}>
-        <Layout flex="column">
-          <Text>
-            {_('Add to Assets with QoD >= 70% and Overrides enabled')}
-          </Text>
-          <YesNoRadio
-            value={in_assets}
-            name="in_assets"
-            onChange={onValueChange}/>
+  in_assets = YES_VALUE,
+  newContainerTask = true,
+  task_id,
+  tasks,
+  onNewContainerTaskClick,
+  onValueChange,
+}) => (
+  <Layout flex="column">
+    <FormGroup title={_('Report')}>
+      <FileField
+        name="xml_file"
+        onChange={onValueChange}/>
+    </FormGroup>
+    <FormGroup title={_('Container Task')} flex>
+      <Select2 name="task_id"
+        value={task_id}
+        onChange={onValueChange}>
+        {render_options(tasks)}
+      </Select2>
+      {newContainerTask &&
+        <Layout flex box>
+          <NewIcon
+            title={_('Create new Container Task')}
+            onClick={onNewContainerTaskClick}/>
         </Layout>
-      </FormGroup>
-    </Layout>
-  );
-};
+      }
+    </FormGroup>
+    <FormGroup title={_('Add to Assets')}>
+      <Layout flex="column">
+        <Text>
+          {_('Add to Assets with QoD >= 70% and Overrides enabled')}
+        </Text>
+        <YesNoRadio
+          value={in_assets}
+          name="in_assets"
+          onChange={onValueChange}/>
+      </Layout>
+    </FormGroup>
+  </Layout>
+);
 
 ImportDialog.propTypes = {
   in_assets: PropTypes.yesno,
   newContainerTask: PropTypes.bool,
   task_id: PropTypes.id,
-  tasks: PropTypes.array,
+  tasks: PropTypes.arrayLike,
   onValueChange: PropTypes.func,
   onNewContainerTaskClick: PropTypes.func,
 };
 
 
-export default withDialog(ImportDialog, {
+export default withDialog({
   title: _('Import Report'),
   footer: _('Import'),
-});
+})(ImportDialog);
 
 // vim: set ts=2 sw=2 tw=80:
