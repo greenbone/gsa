@@ -142,6 +142,9 @@ class SpinnerComponent extends React.Component {
       case KeyCode.PAGE_DOWN:
         this.handleDown(event);
         return;
+      case KeyCode.ENTER:
+        this.notifyChange(this.state.value);
+        return;
       default:
         break;
     }
