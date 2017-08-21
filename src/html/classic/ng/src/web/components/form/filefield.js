@@ -23,22 +23,48 @@
 
 import React from 'react';
 
+import PropTypes from '../../utils/proptypes.js';
+
 import {withLayout} from '../layout/layout.js';
 
-import {withChangeHandler} from './form.js';
+class FileFieldComponent extends React.Component {
 
-const FileFieldComponent = props => {
-  return (
-    <input {...props} type="file"/>
-  );
+  constructor(...args) {
+    super(...args);
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    const {onChange, name} = this.props;
+
+    event.preventDefault();
+
+    if (onChange) {
+      onChange(event.target.files[0], name);
+    }
+  }
+
+  render() {
+    const {
+      onChange,
+      ...props
+    } = this.props;
+    return (
+      <input
+        {...props}
+        type="file"
+        onChange={this.handleChange}
+      />
+    );
+  }
+}
+
+FileFieldComponent.propTypes = {
+  name: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
-export default withLayout(
-  withChangeHandler(FileFieldComponent, {
-    convert_func: value => value,
-    value_func: event => event.target.files[0],
-  }),
-  {box: true}
-);
+export default withLayout(FileFieldComponent);
 
 // vim: set ts=2 sw=2 tw=80:

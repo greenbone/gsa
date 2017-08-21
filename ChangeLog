@@ -1,3 +1,9 @@
+2017-08-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/components/form/filefield.js: Don't use
+	withChangeHandler for FileField andymore. FileField is a bit special because
+	the file value isn't put into the state.
+
 2017-08-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/components/form/spinner.js: Update coding style,
