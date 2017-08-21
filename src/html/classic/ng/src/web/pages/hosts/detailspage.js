@@ -156,9 +156,11 @@ const Details = ({
   entity,
   ...props,
 }) => {
-  const {details, routes, severity} = entity;
-  const cpe_name = is_defined(details) && is_defined(details.best_os_cpe) ?
-    details.best_os_cpe.value : undefined;
+  const {details = {}, routes, severity} = entity;
+  const os_cpe = is_defined(details.best_os_cpe) ? details.best_os_cpe.value :
+    undefined;
+  const os_txt = is_defined(details.best_os_txt) ? details.best_os_txt.value :
+    undefined;
   return (
     <Layout flex="column">
       <InfoTable>
@@ -197,10 +199,14 @@ const Details = ({
             <TableData>
               <InfoLink
                 type="cpe"
-                textOnly={!is_defined(cpe_name)}
-                name={cpe_name}
+                textOnly={!is_defined(os_cpe)}
+                name={os_cpe}
               >
-                <OsIcon osName host={entity}/>
+                <OsIcon
+                  displayOsName
+                  osCpe={os_cpe}
+                  osTxt={os_txt}
+                />
               </InfoLink>
             </TableData>
           </TableRow>

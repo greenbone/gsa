@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_string} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import OperatingSystems from '../../utils/os.js';
 
@@ -36,45 +36,44 @@ import Layout from '../layout/layout.js';
 import Icon from './icon.js';
 
 const OsIcon = ({
-  host,
-  osCpe = true,
-  osName = false,
+  displayOsCpe = true,
+  displayOsName = false,
+  osTxt,
+  osCpe,
   ...props,
 }) => {
-  const {best_os_txt, best_os_cpe} = host.details;
-  const os = is_defined(best_os_cpe) ?
-    OperatingSystems.find(best_os_cpe.value) : undefined;
+  const os = is_defined(osCpe) ?
+    OperatingSystems.find(osCpe) : undefined;
 
   let title;
   let os_icon;
 
-  if (is_defined(best_os_txt) && is_string(best_os_txt.value) &&
-    best_os_txt.value.includes('[possible conflict]')) {
+  if (is_defined(osTxt) && osTxt.includes('[possible conflict]')) {
     os_icon = 'os_conflict.svg';
-    if (osCpe) {
+    if (displayOsCpe) {
       title = _('OS Conflict: {{best_os_txt}} ({{best_os_cpe}})', {
-        best_os_txt: best_os_txt.value,
-        best_os_cpe: best_os_cpe.value,
+        best_os_txt: osTxt,
+        best_os_cpe: osCpe,
       });
     }
     else {
       title = _('OS Conflict: {{best_os_txt}}', {
-        best_os_txt: best_os_txt.value,
+        best_os_txt: osTxt,
       });
     }
   }
   else if (is_defined(os)) {
     os_icon = os.icon;
     title = os.title;
-    if (osCpe) {
-      title += ' (' + best_os_cpe.value + ')';
+    if (displayOsCpe) {
+      title += ' (' + osCpe + ')';
     }
   }
 
   if (!is_defined(os_icon)) {
     os_icon = 'os_unknown.svg';
-    if (best_os_txt) {
-      title = best_os_txt.value;
+    if (osTxt) {
+      title = osTxt;
     }
     else {
       title = _('No information about the Operation System');
@@ -88,7 +87,7 @@ const OsIcon = ({
           {...props}
           img={os_icon}
         />
-        {osName && is_defined(os) &&
+        {displayOsName && is_defined(os) &&
           <span>{os.title}</span>
         }
       </Divider>
@@ -97,9 +96,10 @@ const OsIcon = ({
 };
 
 OsIcon.propTypes = {
-  host: PropTypes.model.isRequired,
-  osName: PropTypes.bool,
-  osCpe: PropTypes.bool,
+  displayOsName: PropTypes.bool,
+  displayOsCpe: PropTypes.bool,
+  osTxt: PropTypes.string,
+  osCpe: PropTypes.string,
 };
 
 

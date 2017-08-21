@@ -108,6 +108,11 @@ const Row = ({
   onToggleDetailsClick,
   ...props,
 }) => {
+  const {details = {}} = entity;
+  const os_cpe = is_defined(details.best_os_cpe) ? details.best_os_cpe.value :
+    undefined;
+  const os_txt = is_defined(details.best_os_txt) ? details.best_os_txt.value :
+    undefined;
   return (
     <TableRow>
       <TableData flex="column">
@@ -125,7 +130,10 @@ const Row = ({
         {entity.ip}
       </TableData>
       <TableData flex align="center">
-        <OsIcon host={entity}/>
+        <OsIcon
+          osCpe={os_cpe}
+          osTxt={os_txt}
+        />
       </TableData>
       <TableData flex align="center">
         <SeverityBar severity={entity.severity}/>
