@@ -4321,6 +4321,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="task-icons">
   <xsl:param name="next" select="'get_tasks'"/>
+  <xsl:param name="enable-resume-when-scheduled" select="false ()"/>
   <xsl:param name="show-start-when-scheduled" select="false ()"/>
   <xsl:param name="show-stop-when-scheduled" select="false ()"/>
   <xsl:choose>
@@ -4442,7 +4443,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img src="/img/resume_inactive.svg" alt="{gsa:i18n ('Resume')}" title="{gsa:i18n ('Task is a container')}"
          class="icon icon-sm"/>
     </xsl:when>
-    <xsl:when test="string-length(schedule/@id) &gt; 0">
+    <xsl:when test="(string-length(schedule/@id) &gt; 0) and not($enable-resume-when-scheduled)">
       <img src="/img/resume_inactive.svg" alt="{gsa:i18n ('Resume')}" title="{gsa:i18n ('Task is scheduled')}"
            class="icon icon-sm"/>
     </xsl:when>
@@ -4546,6 +4547,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="divider"/>
     <xsl:call-template name="task-icons">
       <xsl:with-param name="next" select="'get_task'"/>
+      <xsl:with-param name="enable-resume-when-scheduled" select="1"/>
       <xsl:with-param name="show-start-when-scheduled" select="1"/>
       <xsl:with-param name="show-stop-when-scheduled" select="1"/>
     </xsl:call-template>
