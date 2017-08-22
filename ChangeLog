@@ -1,5 +1,12 @@
 2017-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r29405.
+
+	* src/gsad_omp.c (create_report_omp, create_container_task_omp)
+	(create_task_omp, create_agent_omp): XML escape name and comment.
+
+2017-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r29402.
 
 	* src/html/classic/omp.xsl (task-icons): Add new param
