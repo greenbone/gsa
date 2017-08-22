@@ -1,4 +1,4 @@
-{
+module.exports = {
     "extends": "react-app",
     "rules": {
         "accessor-pairs": "error",
@@ -268,4 +268,4 @@
             }
         ]
     }
-}
+};
