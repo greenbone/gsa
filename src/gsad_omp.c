@@ -3200,16 +3200,25 @@ create_report_omp (credentials_t * credentials, params_t *params)
                                task_id ? task_id : "0",
                                xml_file_escaped ? xml_file_escaped : "");
   else
-    command = g_strdup_printf ("<create_report>"
-                               "<task>"
-                               "<name>%s</name>"
-                                "<comment>%s</comment>"
-                               "</task>"
-                               "%s"
-                               "</create_report>",
-                               name,
-                               comment,
-                               xml_file_escaped);
+    {
+      gchar *name_escaped, *comment_escaped;
+      name_escaped = name ? g_markup_escape_text (name, -1)
+                          : NULL;
+      comment_escaped = comment ? g_markup_escape_text (comment, -1)
+                                : NULL;
+      command = g_strdup_printf ("<create_report>"
+                                 "<task>"
+                                 "<name>%s</name>"
+                                 "<comment>%s</comment>"
+                                 "</task>"
+                                 "%s"
+                                 "</create_report>",
+                                 name_escaped,
+                                 comment_escaped,
+                                 xml_file_escaped);
+      g_free (name_escaped);
+      g_free (comment_escaped);
+    }
   g_free (xml_file_escaped);
 
   ret = omp (credentials,
@@ -3288,6 +3297,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   const char *max_checks, *max_hosts;
   const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
   const char *add_tag, *tag_name, *tag_value, *auto_delete, *auto_delete_data;
+  gchar *name_escaped, *comment_escaped;
   params_t *alerts;
   GString *alert_element;
 
@@ -3407,6 +3417,9 @@ create_task_omp (credentials_t * credentials, params_t *params)
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
 
+  name_escaped = name ? g_markup_escape_text (name, -1) : NULL;
+  comment_escaped = comment ? g_markup_escape_text (comment, -1) : NULL;
+
   command = g_strdup_printf ("<create_task>"
                              "<config id=\"%s\"/>"
                              "<schedule_periods>%s</schedule_periods>"
@@ -3452,8 +3465,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              target_id,
                              scanner_id,
                              hosts_ordering,
-                             name,
-                             comment,
+                             name_escaped,
+                             comment_escaped,
                              max_checks,
                              max_hosts,
                              strcmp (in_assets, "0") ? "yes" : "no",
@@ -3461,6 +3474,9 @@ create_task_omp (credentials_t * credentials, params_t *params)
                              auto_delete,
                              auto_delete_data,
                              alterable ? strcmp (alterable, "0") : 0);
+
+  g_free (name_escaped);
+  g_free (comment_escaped);
 
   ret = omp (credentials,
              &response,
@@ -5596,6 +5612,7 @@ create_agent_omp (credentials_t * credentials, params_t *params)
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
+  gchar *name_escaped, *comment_escaped;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -5639,6 +5656,9 @@ create_agent_omp (credentials_t * credentials, params_t *params)
                                         howto_use_size)
                      : g_strdup ("");
 
+      name_escaped = name ? g_markup_escape_text (name, -1) : NULL;
+      comment_escaped = comment ? g_markup_escape_text (comment, -1) : NULL;
+
       command = g_strdup_printf ("<create_agent>"
                                  "<name>%s</name>"
                                  "%s%s%s"
@@ -5650,9 +5670,10 @@ create_agent_omp (credentials_t * credentials, params_t *params)
                                  "<howto_install>%s</howto_install>"
                                  "<howto_use>%s</howto_use>"
                                  "</create_agent>",
-                                 name, comment ? "<comment>" : "",
-                                 comment ? comment : "",
-                                 comment ? "</comment>" : "",
+                                 name_escaped,
+                                 comment_escaped ? "<comment>" : "",
+                                 comment_escaped ? comment_escaped : "",
+                                 comment_escaped ? "</comment>" : "",
                                  installer_64,
                                  installer_sig_64,
                                  installer_filename ? installer_filename : "",
@@ -5668,6 +5689,8 @@ create_agent_omp (credentials_t * credentials, params_t *params)
       g_free (installer_64);
       g_free (howto_install_64);
       g_free (howto_use_64);
+      g_free (name_escaped);
+      g_free (comment_escaped);
 
       switch (ret)
         {
