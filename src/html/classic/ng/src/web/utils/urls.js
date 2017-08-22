@@ -2,6 +2,7 @@
  *
  * Authors:
  * Timo Pollmeier <timo.pollmeier@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -21,19 +22,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-const img_url_overrides = {};
-
-export function get_img_url(name) {
-  let overridden = img_url_overrides[name];
-  if (overridden) {
-    return overridden;
-  }
-
+const public_url_loader = name => {
   return process.env.PUBLIC_URL + '/img/' + name; // eslint-disable-line no-process-env,no-undef
 };
 
-export function set_img_url_override(name, new_url) {
-  img_url_overrides[name] = new_url;
+let url_loader = public_url_loader;
+
+export function get_img_url(name) {
+  return url_loader(name);
 };
+
+export const set_url_loader = loader => url_loader = loader;
 
 // vim: set ts=2 sw=2 tw=80:
