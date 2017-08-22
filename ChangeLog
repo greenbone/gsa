@@ -1,5 +1,10 @@
 2017-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_gmp.c (create_report_gmp, create_container_task_gmp)
+	(create_task_gmp, create_agent_gmp): XML escape name and comment.
+
+2017-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (task-icons): Add new param
 	enable-resume-when-scheduled.
 	(task [details]): Enable the resume button for scheduled tasks.
