@@ -11,6 +11,10 @@
 
 2017-08-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* .eslintrc.js: Use two spaces as indentation and use ' instead of ".
+
+2017-08-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* .eslintrc.json, .eslintrc.js,
 	src/html/classic/ng/.eslintrc.js, src/html/classic/ng/.eslintrc.json: Use js
 	module to specify eslint config instead of a json file. This will allow to add
