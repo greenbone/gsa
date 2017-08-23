@@ -37,55 +37,68 @@ class Result extends Model {
   static entity_type = 'result';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const copy = super.parseProperties(elem);
 
-    let host = ret.host;
+    const {
+      detection,
+      host,
+      name,
+      notes,
+      nvt = {},
+      original_severity,
+      overrides,
+      report,
+      severity,
+      task,
+    } = elem;
 
-    ret.host = {
+    copy.host = {
       name: host.__text,
       id: is_defined(host.asset) ? host.asset._asset_id : undefined, // for openvas 8 where host.asset doesn't exist
     };
 
-    ret.nvt = new Nvt(ret.nvt);
+    copy.nvt = new Nvt(nvt);
 
-    if (is_defined(ret.severity)) {
-      ret.severity = parse_severity(ret.severity);
+    if (is_defined(severity)) {
+      copy.severity = parse_severity(severity);
     }
 
-    ret.vulnerability = is_defined(ret.name) ? ret.name : ret.nvt.oid;
+    copy.vulnerability = is_defined(name) ? name : nvt.oid;
 
-    if (is_defined(elem.report)) {
-      ret.report = new Model(elem.report, 'report');
+    if (is_defined(report)) {
+      copy.report = new Model(report, 'report');
     }
 
-    if (is_defined(elem.task)) {
-      ret.task = new Model(elem.task, 'task');
+    if (is_defined(task)) {
+      copy.task = new Model(task, 'task');
     }
 
-    if (is_defined(elem.detection) && is_defined(elem.detection.result)) {
-      let d_result = {
-        id: ret.detection.result._id,
-      };
-      let details = {};
+    if (is_defined(detection) && is_defined(detection.result)) {
+      const details = {};
 
-      if (is_defined(ret.detection.result.details)) {
-        for_each(ret.detection.result.details.detail, detail => {
+      if (is_defined(detection.result.details)) {
+        for_each(detection.result.details.detail, detail => {
           details[detail.name] = detail.value;
         });
       }
 
-      d_result.details = details;
-      ret.detection.result = d_result;
+      copy.detection = {...detection}; // create shallow copy
+
+      copy.detection.result = {
+        id: detection.result._id,
+        details: details,
+      };
+
     }
 
-    if (is_defined(ret.original_severity)) {
-      ret.original_severity = parse_severity(ret.original_severity);
+    if (is_defined(original_severity)) {
+      copy.original_severity = parse_severity(original_severity);
     }
 
-    ret.notes = parse_notes(elem.notes);
-    ret.overrides = parse_overrides(elem.overrides);
+    copy.notes = parse_notes(notes);
+    copy.overrides = parse_overrides(overrides);
 
-    return ret;
+    return copy;
   }
 }
 

@@ -1,3 +1,10 @@
+2017-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/models/result.js: Fix result detection parsing.
+	Don't override objects from the original data. Objects must always be copied
+	before changing them. Also make clear that the returned object is a copy and
+	update coding style.
+
 2017-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_gmp.c (create_report_gmp, create_container_task_gmp)
