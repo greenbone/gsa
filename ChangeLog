@@ -1,5 +1,11 @@
 2017-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* .eslintrc.js: Improve eslint config file. Remove unnecessary configs.
+	Comment most config settings and add some new style validations. Also change
+	style rules to be only warnings.
+
+2017-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/nvts/references.js: Fix displaying cert
 	links within nvt references for details without links. Don't crash in gsr-html
 	report when expanding result detais with nvt cert references.
