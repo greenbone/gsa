@@ -1,5 +1,11 @@
 2017-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/nvts/references.js: Fix displaying cert
+	links within nvt references for details without links. Don't crash in gsr-html
+	report when expanding result detais with nvt cert references.
+
+2017-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/result.js: Fix result detection parsing.
 	Don't override objects from the original data. Objects must always be copied
 	before changing them. Also make clear that the returned object is a copy and

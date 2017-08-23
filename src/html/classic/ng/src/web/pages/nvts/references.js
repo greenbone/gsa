@@ -104,7 +104,7 @@ const References = ({
                       key={cert.id}
                       type={cert.type}
                       id={cert.id}
-                      links={links}
+                      textOnly={!links}
                     />
                   ))}
                 </Divider>
@@ -140,8 +140,8 @@ const References = ({
 };
 
 References.propTypes = {
-  nvt: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  nvt: PropTypes.model.isRequired,
 };
 
 export default References;
