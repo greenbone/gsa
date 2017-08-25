@@ -90,24 +90,29 @@ const ip_to_number = original => {
   return original; // use original value for comparision
 };
 
-const get_value = (convert_func, value, property) =>
-  convert_func(get_property(value, property));
+const get_value = (convert_func, value, property, undefined_val) => {
+  const val = convert_func(get_property(value, property));
 
-const make_compare = convert_func => property => reverse => {
+  return is_defined(val) ? val : undefined_val;
+};
+
+const make_compare = convert_func => (property, undefined_val) => reverse => {
   const val_compare = reverse ? generic_compare_desc : generic_compare_asc;
 
   return (a, b) => val_compare(
-    get_value(convert_func, a, property),
-    get_value(convert_func, b, property)
+    get_value(convert_func, a, property, undefined_val),
+    get_value(convert_func, b, property, undefined_val),
   );
 };
 
+export const make_compare_plain = make_compare(value => value);
+
 export const make_compare_string = make_compare(value => '' + value);
 
-export const make_compare_number = make_compare(value => parse_float(value));
+export const make_compare_number = make_compare(parse_float);
 
-export const make_compare_date = make_compare(value => value);
+export const make_compare_date = make_compare_plain;
 
-export const make_compare_ip = make_compare(value => ip_to_number(value));
+export const make_compare_ip = make_compare(ip_to_number);
 
 // vim: set ts=2 sw=2 tw=80:

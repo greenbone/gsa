@@ -1,5 +1,11 @@
 2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/sort.js: Allow to define a undefined value for
+	sort functions. This value is used if one of the to be compared values is not
+	defined.
+
+2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/collection/collectionlist.js: Don't change
 	entities array when calling sort function. CollectionList must be immutable.
 
