@@ -1,5 +1,11 @@
 2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/reports/operatingsystemstable.js: Add a new
+	table to list all operating systems of a report.
+
+2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/hoststable.js,
 	src/html/classic/ng/src/web/pages/vulns/table.js: Improve text when no
 	entities are available for hosts and vulnerabilities tables.
