@@ -45,7 +45,8 @@ class CollectionList extends List {
   }
 
   sort(func) {
-    const entries = this._entries.sort(func);
+    // array is sorted in place therefore make a shallow copy with slice
+    const entries = this._entries.slice().sort(func);
     return this.clone({
       entries,
     });
