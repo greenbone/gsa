@@ -159,7 +159,7 @@ Row.propTypes = {
 
 export default createEntitiesTable({
   header: Header,
-  emptyTitle: _('No Tasks available'),
+  emptyTitle: _('No Hosts available'),
   row: Row,
 });
 

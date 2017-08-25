@@ -1,5 +1,11 @@
 2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/hoststable.js,
+	src/html/classic/ng/src/web/pages/vulns/table.js: Improve text when no
+	entities are available for hosts and vulnerabilities tables.
+
+2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/hoststable.js: Display severity at
 	report hosts table.
 
