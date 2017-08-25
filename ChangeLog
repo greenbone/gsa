@@ -1,6 +1,17 @@
 2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/apps/row.js,
+	src/html/classic/ng/src/web/pages/apps/table.js,
+	src/html/classic/ng/src/web/pages/reports/applicationstable.js: Merge
+	report applications components into reports/applicationstable.js module. Also
+	remove unnecessary code and simplify table creation. We don't have table
+	actions at the report. Therefore no need to call the more complex entites
+	HOCs.
+
+2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/reports/operatingsystemstable.js: Add a new
 	table to list all operating systems of a report.
 

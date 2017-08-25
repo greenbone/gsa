@@ -395,6 +395,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/charts.js
      ${NG_SRC_DIR}/src/web/pages/reports/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/reports/importdialog.js
+     ${NG_SRC_DIR}/src/web/pages/reports/applicationstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/hoststable.js
      ${NG_SRC_DIR}/src/web/pages/reports/operatingsystemstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/listpage.js

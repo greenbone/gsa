@@ -2,7 +2,6 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Timo Pollmeier <timo.pollmeier@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -28,20 +27,18 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {withEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
+import SeverityBar from '../../components/bar/severitybar.js';
 
+import TableData from '../../components/table/data.js';
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
-import AppRow from './row.js';
+import {createEntitiesTable} from '../../entities/table.js';
 
 const Header = ({
   links = true,
   sort = true,
-  actions,
   onSortChange,
 }) => {
   return (
@@ -68,34 +65,51 @@ const Header = ({
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
-        {actions}
       </TableRow>
     </TableHeader>
   );
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };
 
-const AppsHeader = withEntitiesHeader(true)(Header);
+const Row = ({
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
+  return (
+    <TableRow>
+      <TableData>
+        {entity.name}
+      </TableData>
+      <TableData>
+        {entity.hosts.count}
+      </TableData>
+      <TableData>
+        {entity.occurrences.total}
+      </TableData>
+      <TableData flex align="center">
+        <SeverityBar severity={entity.severity}/>
+      </TableData>
+    </TableRow>
+  );
+};
 
-const AppsFooter = createEntitiesFooter({
-  span: 7,
-  delete: true,
-  download: 'apps.xml',
+Row.propTypes = {
+  entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
+};
+
+export default createEntitiesTable({
+  emptyTitle: _('No Applications available'),
+  row: Row,
+  header: Header,
 });
 
-export const AppsTable = createEntitiesTable({
-  emptyTitle: _('No apps available'),
-  row: AppRow,
-  header: AppsHeader,
-  footer: AppsFooter,
-});
-
-export default AppsTable;
-
-// vim: set ts=2 sw=2 tw=80:
+// vim: set ts=4 sw=4 tw=80:
