@@ -23,9 +23,11 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import SeverityBar from '../../components/bar/severitybar.js';
 
 import OsIcon from '../../components/icon/osicon.js';
 
@@ -94,6 +96,12 @@ const Header = ({
         onSortChange={onSortChange}>
         {_('Total')}
       </TableHead>
+      <TableHead
+        sortby={sort ? 'severity' : false}
+        width="10%"
+        onSortChange={onSortChange}>
+        {_('Severity')}
+      </TableHead>
     </TableRow>
   </TableHeader>
 );
@@ -104,7 +112,7 @@ Header.propTypes = {
 };
 
 const Row = ({entity}) => {
-  const {details = {}, result_counts = {}} = entity;
+  const {details = {}, result_counts = {}, severity} = entity;
   const {best_os_cpe, best_os_txt} = details;
   return (
     <TableRow>
@@ -137,6 +145,9 @@ const Row = ({entity}) => {
       </TableData>
       <TableData flex align="center">
         {result_counts.total}
+      </TableData>
+      <TableData flex align="center">
+        <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>
   );

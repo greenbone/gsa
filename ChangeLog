@@ -1,5 +1,10 @@
 2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/hoststable.js: Display severity at
+	report hosts table.
+
+2017-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/sort.js: Allow to define a undefined value for
 	sort functions. This value is used if one of the to be compared values is not
 	defined.
