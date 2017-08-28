@@ -26,7 +26,7 @@ import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 import {for_each, map} from '../utils.js';
 import logger from '../log.js';
 
-import Capabilities from '../capabilities.js';
+import Capabilities from '../capabilities/capabilities.js';
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,

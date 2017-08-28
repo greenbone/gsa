@@ -37,7 +37,7 @@ import {
   YES_VALUE,
 } from './parser.js';
 
-import Capabilities from './capabilities.js';
+import Capabilities from './capabilities/capabilities.js';
 
 class Model {
 

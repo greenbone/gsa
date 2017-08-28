@@ -30,8 +30,9 @@ import {CacheFactory, Cache} from 'gmp/cache.js';
 
 import Gmp from 'gmp/gmp.js';
 import Model from 'gmp/model.js';
-import Capabilities from 'gmp/capabilities.js';
 import {EntityCommand, EntitiesCommand} from 'gmp/command.js';
+
+import Capabilities from 'gmp/capabilities/capabilities.js';
 
 import CollectionList from 'gmp/collection/collectionlist.js';
 

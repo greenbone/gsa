@@ -1,5 +1,15 @@
 2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/capabilities.js,
+	src/html/classic/ng/src/gmp/capabilities/capabilities.js,
+	src/html/classic/ng/src/gmp/commands/users.js,
+	src/html/classic/ng/src/gmp/model.js,
+	src/html/classic/ng/src/web/utils/proptypes.js: Move capabilities js module to
+	a sub directory. There will be at least one more capabilities class in future.
+
+2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/yarn.lock: Update some dependencies for gsa-ng.
 

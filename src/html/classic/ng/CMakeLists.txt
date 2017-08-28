@@ -51,7 +51,7 @@ set (NG_SRC_FILES
 set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/index.js
      ${NG_SRC_DIR}/src/gmp/cache.js
-     ${NG_SRC_DIR}/src/gmp/capabilities.js
+     ${NG_SRC_DIR}/src/gmp/capabilities/capabilities.js
      ${NG_SRC_DIR}/src/gmp/collection/collectioncounts.js
      ${NG_SRC_DIR}/src/gmp/collection/collectionlist.js
      ${NG_SRC_DIR}/src/gmp/collection/parser.js
