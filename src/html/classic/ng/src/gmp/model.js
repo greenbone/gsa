@@ -62,7 +62,7 @@ class Model {
 
   updateFromElement(elem) {
     if (is_defined(elem)) {
-      let properties = this.parseProperties(elem);
+      const properties = this.parseProperties(elem);
       this.setProperties(properties);
     }
     return this;
@@ -107,6 +107,10 @@ class Model {
 
     if (is_defined(elem.owner) && is_empty(elem.owner.name)) {
       delete copy.owner;
+    }
+
+    if (is_empty(elem.comment)) {
+      delete copy.comment;
     }
 
     return copy;
