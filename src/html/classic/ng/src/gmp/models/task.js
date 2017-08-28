@@ -98,8 +98,15 @@ class Task extends Model {
 
   parseProperties(elem) {
     elem = super.parseProperties(elem);
-    elem.report_count.total = parse_int(elem.report_count.__text);
-    elem.report_count.finished = parse_int(elem.report_count.finished);
+
+    const {report_count} = elem;
+
+    if (is_defined(report_count)) {
+      elem.report_count = {...report_count};
+      elem.report_count.total = parse_int(report_count.__text);
+      elem.report_count.finished = parse_int(report_count.finished);
+    }
+
     elem.alterable = parse_yesno(elem.alterable);
     elem.result_count = parse_int(elem.result_count);
 
