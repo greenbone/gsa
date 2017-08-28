@@ -1,5 +1,10 @@
 2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/locale.js: Add function to display a duration
+	between two moment dates.
+
+2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js: Set comment to undefined if it is
 	empty.
 
