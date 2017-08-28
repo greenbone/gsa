@@ -1,6 +1,13 @@
 2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/capabilities/everything.js: Add a new
+	EverythingCapabilities class. This capabilities class is intended to allow
+	everything for the current user. It will be used at the gsr-html report.
+
+2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/capabilities.js,
 	src/html/classic/ng/src/gmp/capabilities/capabilities.js,
 	src/html/classic/ng/src/gmp/commands/users.js,
