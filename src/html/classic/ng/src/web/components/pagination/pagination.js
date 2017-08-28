@@ -46,6 +46,12 @@ const PaginationLayout = glamorous(Layout)(
   }
 );
 
+const NavigationIcon = glamorous(Icon)({
+  '@media print': {
+    display: 'none',
+  },
+});
+
 const Pagination = ({
     counts,
     onFirstClick,
@@ -64,14 +70,18 @@ const Pagination = ({
       align={['end', 'center']}>
       {counts.hasPrevious() ?
         <IconDivider>
-          <Icon img="first.svg" title={_('First')}
+          <NavigationIcon
+            img="first.svg"
+            title={_('First')}
             onClick={onFirstClick}/>
-          <Icon img="previous.svg" title={_('Previous')}
+          <NavigationIcon
+            img="previous.svg"
+            title={_('Previous')}
             onClick={onPreviousClick}/>
         </IconDivider> :
         <IconDivider>
-          <Icon img="first_inactive.svg" title={_('First')}/>
-          <Icon img="previous_inactive.svg" title={_('Previous')}/>
+          <NavigationIcon img="first_inactive.svg" title={_('First')}/>
+          <NavigationIcon img="previous_inactive.svg" title={_('Previous')}/>
         </IconDivider>
       }
       <PaginationText>
@@ -79,14 +89,18 @@ const Pagination = ({
       </PaginationText>
       {counts.hasNext() ?
         <IconDivider>
-          <Icon img="next.svg" title={_('Next')}
+          <NavigationIcon
+            img="next.svg"
+            title={_('Next')}
             onClick={onNextClick}/>
-          <Icon img="last.svg" title={_('Last')}
+          <NavigationIcon
+            img="last.svg"
+            title={_('Last')}
             onClick={onLastClick}/>
         </IconDivider> :
         <IconDivider>
-          <Icon img="next_inactive.svg" title={_('Next')}/>
-          <Icon img="last_inactive.svg" title={_('Last')}/>
+          <NavigationIcon img="next_inactive.svg" title={_('Next')}/>
+          <NavigationIcon img="last_inactive.svg" title={_('Last')}/>
         </IconDivider>
       }
     </PaginationLayout>
