@@ -156,14 +156,15 @@ export class EntitiesTable extends React.Component {
         <StrippedTable header={header} footer={footer}>
           {body}
         </StrippedTable>
-        <Layout flex align="space-between">
-          {footnote &&
+        {footnote ?
+          <Layout flex align="space-between">
             <FootNote>
               {_('(Applied filter: {{filter}})', {filter: filterstring})}
             </FootNote>
-          }
-          {pagination}
-        </Layout>
+            {pagination}
+          </Layout> :
+          pagination
+        }
       </div>
     );
   }

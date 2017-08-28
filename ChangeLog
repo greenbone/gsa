@@ -1,5 +1,10 @@
 2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/table.js: Fix layout of pagination when
+	no footer is set.
+
+2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js: Only parse report_count for task
 	if it is available. Also don't change original data.
 
