@@ -1,5 +1,13 @@
 2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/reports/vulnerabilitiestable.js,
+	src/html/classic/ng/src/web/pages/vulns/row.js,
+	src/html/classic/ng/src/web/pages/vulns/table.js: Create a new vulernabilities
+	table for report details. Remove hideColumns from the original table.
+
+2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/collection/parser.js,
 	src/html/classic/ng/src/gmp/commands/users.js,
 	src/html/classic/ng/src/gmp/locale.js,

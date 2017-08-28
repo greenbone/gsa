@@ -23,25 +23,25 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
 
-import {withEntityRow} from '../../entities/row.js';
+import {createEntitiesTable} from '../../entities/table.js';
+
+import SeverityBar from '../../components/bar/severitybar.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
 
-import SeverityBar from '../../components/bar/severitybar.js';
-
-import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
+import TableHead from '../../components/table/head.js';
+import TableHeader from '../../components/table/header.js';
+import TableRow from '../../components/table/row.js';
 
 const Row = ({
   entity,
   links = true,
-  actions,
   ...other
 }) => {
   return (
@@ -54,12 +54,6 @@ const Row = ({
           {entity.name}
         </DetailsLink>
       </TableData>
-      <TableData>
-        {datetime(entity.results.oldest)}
-      </TableData>
-      <TableData>
-        {datetime(entity.results.newest)}
-      </TableData>
       <TableData flex align="center">
         <SeverityBar severity={entity.severity}/>
       </TableData>
@@ -68,7 +62,8 @@ const Row = ({
       </TableData>
       <TableData flex align="center">
         <Link
-          to={'results?filter=nvt=' + entity.id}
+          to="results"
+          filter={'nvt=' + entity.id}
           textOnly={!links}>
           {entity.results.count}
         </Link>
@@ -76,17 +71,68 @@ const Row = ({
       <TableData flex align="center">
         {entity.hosts.count}
       </TableData>
-      {render_component(actions, {...other, entity})}
     </TableRow>
   );
 };
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
 };
 
-export default withEntityRow()(Row);
+const Header = ({
+  links = true,
+  sort = true,
+  onSortChange,
+}) => {
+  return (
+    <TableHeader>
+      <TableRow>
+        <TableHead
+          sortby={sort ? 'name' : false}
+          onSortChange={onSortChange}>
+          {_('Name')}
+        </TableHead>
+        <TableHead
+          width="10em"
+          sortby={sort ? 'severity' : false}
+          onSortChange={onSortChange}>
+          {_('Severity')}
+        </TableHead>
+        <TableHead
+          width="6em"
+          sortby={sort ? 'qod' : false}
+          onSortChange={onSortChange}>
+          {_('QoD')}
+        </TableHead>
+        <TableHead
+          width="6em"
+          sortby={sort ? 'results' : false}
+          onSortChange={onSortChange}>
+          {_('Results')}
+        </TableHead>
+        <TableHead
+          width="6em"
+          sortby={sort ? 'hosts' : false}
+          onSortChange={onSortChange}>
+          {_('Hosts')}
+        </TableHead>
+      </TableRow>
+    </TableHeader>
+  );
+};
+
+Header.propTypes = {
+  actions: PropTypes.element,
+  hideColumns: PropTypes.object,
+  links: PropTypes.bool,
+  sort: PropTypes.bool,
+  onSortChange: PropTypes.func,
+};
+export default createEntitiesTable({
+  emptyTitle: _('No Vulnerabilites available'),
+  header: Header,
+  row: Row,
+});
 
 // vim: set ts=2 sw=2 tw=80:

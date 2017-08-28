@@ -66,22 +66,26 @@ const Header = ({
             {_('Newest Result')}
           </TableHead>
         }
-        <TableHead width="10em"
+        <TableHead
+          width="10em"
           sortby={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
-        <TableHead width="6em"
+        <TableHead
+          width="6em"
           sortby={sort ? 'qod' : false}
           onSortChange={onSortChange}>
           {_('QoD')}
         </TableHead>
-        <TableHead width="6em"
+        <TableHead
+          width="6em"
           sortby={sort ? 'results' : false}
           onSortChange={onSortChange}>
           {_('Results')}
         </TableHead>
-        <TableHead width="6em"
+        <TableHead
+          width="6em"
           sortby={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
