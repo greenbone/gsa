@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, for_each, pluralize_type} from './utils.js';
+import {is_defined, map, pluralize_type} from './utils.js';
 
 const types = {
   host: 'asset',
@@ -41,13 +41,16 @@ const check_type = type => {
 
 class Capabilities {
 
-  constructor(element) {
-    this._capabilities = new Set();
-    this._has_caps = is_defined(element);
+  constructor(cap_names) {
+    this._has_caps = is_defined(cap_names);
 
-    for_each(element, command => {
-      this._capabilities.add(command.name.toLowerCase());
-    });
+    let caps;
+
+    if (this._has_caps) {
+      caps = map(cap_names, name => name.toLowerCase());
+    }
+
+    this._capabilities = new Set(caps);
   }
 
   [Symbol.iterator]() {
@@ -56,7 +59,7 @@ class Capabilities {
 
   get(name) {
     name = name.toLowerCase();
-    let capability = this._capabilities.get(name);
+    const capability = this._capabilities.get(name);
     return is_defined(capability) ? capability : {};
   }
 

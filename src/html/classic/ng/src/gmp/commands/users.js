@@ -23,7 +23,7 @@
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import {for_each} from '../utils.js';
+import {for_each, map} from '../utils.js';
 import logger from '../log.js';
 
 import Capabilities from '../capabilities.js';
@@ -91,7 +91,9 @@ export class UserCommand extends EntityCommand {
       cmd: 'get_my_settings',
     }, options,
     ).then(response => {
-      let caps = response.data.capabilities.help_response.schema.command;
+      const {data} = response;
+      const {command: commands} = data.capabilities.help_response.schema;
+      const caps = map(commands, command => command.name);
       return response.setData(new Capabilities(caps));
     });
   }

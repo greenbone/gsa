@@ -82,7 +82,8 @@ class Model {
 
     if (is_defined(elem.permissions)) {
       // these are the permissions the current user has on the entity
-      copy.user_capabilities = new Capabilities(elem.permissions.permission);
+      const caps = map(elem.permissions.permission, perm => perm.name);
+      copy.user_capabilities = new Capabilities(caps);
       delete copy.permissions;
     }
     else {
