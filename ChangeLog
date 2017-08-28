@@ -1,5 +1,22 @@
 2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/collection/parser.js,
+	src/html/classic/ng/src/gmp/commands/users.js,
+	src/html/classic/ng/src/gmp/locale.js,
+	src/html/classic/ng/src/gmp/models/filter.js,
+	src/html/classic/ng/src/gmp/models/task.js,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/components/link/infolink.js,
+	src/html/classic/ng/src/web/entities/footer.js,
+	src/html/classic/ng/src/web/entities/header.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/pages/page.js,
+	src/html/classic/ng/src/web/utils/proptypes.js,
+	src/html/classic/ng/src/web/utils/urls.js: Coding style improvements: Use
+	const where possible, max. two properties on one line, ...
+
+2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/table.js: Fix layout of pagination when
 	no footer is set.
 

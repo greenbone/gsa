@@ -55,18 +55,18 @@ class Page extends React.Component {
   }
 
   componentDidMount() {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
 
     gmp.user.currentCapabilities().then(response => {
-      let capabilities = response.data;
+      const capabilities = response.data;
       log.debug('User capabilities', capabilities);
       this.setState({capabilities});
     });
   }
 
   render() {
-    let {children} = this.props;
-    let {capabilities} = this.state;
+    const {children} = this.props;
+    const {capabilities} = this.state;
 
     if (!is_defined(capabilities)) {
       // only show content after caps have been loaded

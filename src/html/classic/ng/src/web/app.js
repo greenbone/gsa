@@ -111,8 +111,8 @@ function is_logged_in(next_state, replace) {
     replace({
       pathname: '/login',
       state: {
-        next: next_state.location.pathname
-      }
+        next: next_state.location.pathname,
+      },
     });
   }
 }
@@ -159,7 +159,7 @@ class App extends React.Component {
       pathname: '/login',
       state: {
         next: this.props.location.pathname,
-      }
+      },
     });
   }
 

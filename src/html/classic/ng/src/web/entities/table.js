@@ -69,31 +69,31 @@ export class EntitiesTable extends React.Component {
   }
 
   render() {
-    let {props} = this;
-    let {details} = this.state;
-    let {filter, entities, emptyTitle, footnote = true} = props;
+    const {props} = this;
+    const {details} = this.state;
+    const {filter, entities, emptyTitle, footnote = true} = props;
 
     if (!is_defined(entities)) {
       return null;
     }
 
-    let RowComponent = props.row;
-    let RowDetailsComponent = props.rowDetails;
-    let HeaderComponent = props.header;
-    let FooterComponent = props.footer;
-    let PaginationComponent = is_defined(props.pagination) ?
+    const RowComponent = props.row;
+    const RowDetailsComponent = props.rowDetails;
+    const HeaderComponent = props.header;
+    const FooterComponent = props.footer;
+    const PaginationComponent = is_defined(props.pagination) ?
       props.pagination : Pagination;
-    let BodyComponent = is_defined(props.body) ? props.body : TableBody;
+    const BodyComponent = is_defined(props.body) ? props.body : TableBody;
 
     const other = exclude_object_props(props, exclude_props);
 
-    let filterstring = filter ? filter.toFilterString() : '';
+    const filterstring = is_defined(filter) ? filter.toFilterString() : '';
 
     if (entities.length === 0) {
       return <div className="entities-table">{emptyTitle}</div>;
     }
 
-    let rows = [];
+    const rows = [];
     if (RowComponent) {
       for_each(entities, entity => {
         rows.push(

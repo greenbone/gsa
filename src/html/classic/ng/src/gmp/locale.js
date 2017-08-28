@@ -118,7 +118,7 @@ export function interval(seconds = 0) {
     if (seconds === WEEK) {
       return translate('One week');
     }
-    let weeks = parse_int(seconds / WEEK);
+    const weeks = parse_int(seconds / WEEK);
     return translate('{{number}} weeks', {number: weeks});
   }
 
@@ -126,7 +126,7 @@ export function interval(seconds = 0) {
     if (seconds === DAY) {
       return translate('One day');
     }
-    let days = parse_int(seconds / DAY);
+    const days = parse_int(seconds / DAY);
     return translate('{{number}} days', {number: days});
   }
 
@@ -134,7 +134,7 @@ export function interval(seconds = 0) {
     if (seconds === HOUR) {
       return translate('One hour');
     }
-    let hours = parse_int(seconds / HOUR);
+    const hours = parse_int(seconds / HOUR);
     return translate('{{number}} hours', {number: hours});
   }
 
@@ -142,7 +142,7 @@ export function interval(seconds = 0) {
     if (seconds === MINUTE) {
       return translate('One minute');
     }
-    let minutes = parse_int(seconds / MINUTE);
+    const minutes = parse_int(seconds / MINUTE);
     return translate('{{number}} minutes', {number: minutes});
   }
 

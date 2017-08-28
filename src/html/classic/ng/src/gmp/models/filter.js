@@ -34,15 +34,28 @@ import {
 import Model from '../model.js';
 
 function convert_boolean_int(keyword, value, relation) {
-  return {keyword, value: parse_int(value) >= 1 ? 1 : 0, relation};
+  return {
+    keyword,
+    value:
+    parse_int(value) >= 1 ? 1 : 0,
+    relation,
+  };
 }
 
 function convert_int(keyword, value, relation) {
-  return {keyword, value: parse_int(value), relation};
+  return {
+    keyword,
+    value: parse_int(value),
+    relation,
+  };
 }
 
 function convert_no_relation(keyword, value, relation) {
-  return {keyword, value, relation: ''};
+  return {
+    keyword,
+    value,
+    relation: '',
+  };
 }
 
 const KEYWORD_CONVERTERS = {
@@ -77,7 +90,11 @@ function convert(keyword, value, relation) {
     return {value, relation};
   }
 
-  return {value, keyword, relation};
+  return {
+    value,
+    keyword,
+    relation,
+  };
 }
 
 const RELATIONS = [
@@ -121,9 +138,9 @@ export class FilterTerm {
    * @return {String} filter term as a String
    */
   toString() {
-    let relation = is_defined(this.relation) ? this.relation : '';
-    let value = is_defined(this.value) ? this.value : '';
-    let keyword = is_defined(this.keyword) ? this.keyword : '';
+    const relation = is_defined(this.relation) ? this.relation : '';
+    const value = is_defined(this.value) ? this.value : '';
+    const keyword = is_defined(this.keyword) ? this.keyword : '';
 
     return keyword + relation + value;
   }
@@ -150,16 +167,16 @@ export class FilterTerm {
    * @return {String} a new FilterTerm created from termstring
    */
   static fromString(termstring) {
-    for (let rel of RELATIONS) {
+    for (const rel of RELATIONS) {
       if (termstring.includes(rel)) {
-        let index = termstring.indexOf(rel);
-        let key = termstring.slice(0, index);
-        let value = termstring.slice(index + 1);
-        let converted = convert(key, value, rel);
+        const index = termstring.indexOf(rel);
+        const key = termstring.slice(0, index);
+        const value = termstring.slice(index + 1);
+        const converted = convert(key, value, rel);
         return new FilterTerm(converted);
       }
     }
-    let converted = convert(undefined, termstring, undefined);
+    const converted = convert(undefined, termstring, undefined);
     return new FilterTerm(converted);
   }
 }
@@ -215,9 +232,9 @@ export class FilterTermList {
       return false;
     }
 
-    for (let term of this.terms) {
+    for (const term of this.terms) {
       let found = false;
-      for (let oterm of list.terms) {
+      for (const oterm of list.terms) {
         if (term.equals(oterm)) {
           found = true;
           break;
@@ -350,11 +367,9 @@ class Filter extends Model {
     if (is_defined(elem.keywords)) {
       for_each(elem.keywords.keyword, keyword => {
 
-        let key = keyword.column;
-        let relation = keyword.relation;
-        let value = keyword.value;
+        const {relation, value, column: key} = keyword;
 
-        let converted = convert(key, value, relation);
+        const converted = convert(key, value, relation);
 
         this._addTerm(new FilterTerm(converted));
       });
@@ -379,7 +394,7 @@ class Filter extends Model {
    *                  this Filter.
    */
   _getTerm(key) {
-    let tlist = this.terms.find(list => key === list.keyword);
+    const tlist = this.terms.find(list => key === list.keyword);
     return is_defined(tlist) ? tlist.get() : undefined;
   }
 
@@ -391,7 +406,7 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   _setTerm(term) {
-    let key = term.keyword;
+    const key = term.keyword;
 
     // special handling of sort. should be put into a more generic solution in
     // future
@@ -424,7 +439,7 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   _addTerm(term) {
-    let key = term.keyword;
+    const key = term.keyword;
 
     if (!is_defined(key) || !this.has(key)) {
       this._addTermList(new FilterTermList(term, key));
@@ -465,11 +480,11 @@ class Filter extends Model {
   }
 
   _getTermLists() {
-    let withKeywords = [];
-    let withoutKeywords = [];
+    const withKeywords = [];
+    const withoutKeywords = [];
 
     this.forEach(list => {
-      let keywordlist = list.hasKeyword() ? withKeywords : withoutKeywords;
+      const keywordlist = list.hasKeyword() ? withKeywords : withoutKeywords;
       keywordlist.push(list);
     });
 
@@ -547,7 +562,7 @@ class Filter extends Model {
    *                  this Filter.
    */
   get(key) {
-    let term = this._getTerm(key);
+    const term = this._getTerm(key);
     if (is_defined(term)) {
       return term.value;
     }
@@ -567,7 +582,11 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
    set(keyword, value, relation = '=') {
-     this._setTerm(new FilterTerm({keyword, value, relation}));
+     this._setTerm(new FilterTerm({
+       keyword,
+       value,
+       relation,
+     }));
      return this;
    }
 
@@ -580,7 +599,7 @@ class Filter extends Model {
    *                this Filter.
    */
   has(key) {
-    let index = this.terms.findIndex(term => term.keyword === key);
+    const index = this.terms.findIndex(term => term.keyword === key);
     return index !== -1;
   }
 
@@ -592,7 +611,7 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   delete(key) {
-    let index = this.terms.findIndex(term => term.keyword === key);
+    const index = this.terms.findIndex(term => term.keyword === key);
     if (index !== -1) {
       this.terms.splice(index, 1);
     }
@@ -628,7 +647,7 @@ class Filter extends Model {
       // this isn't completely correct but required for and, or, ... currently
       // "abc and def" is the same as "def and abc" but "abc and def" won't be
       // the same as "and abc def"
-      let otherlist = other.withoutKeywords[index];
+      const otherlist = other.withoutKeywords[index];
       return list.equals(otherlist);
     });
 
@@ -636,9 +655,9 @@ class Filter extends Model {
       return false;
     }
 
-    for (let list of our.withKeywords) {
+    for (const list of our.withKeywords) {
       // lists with keywords may occur in different order
-      let otherlist = filter._getTermList(list.keyword);
+      const otherlist = filter._getTermList(list.keyword);
       if (!list.equals(otherlist)) {
         return false;
       }
@@ -658,7 +677,7 @@ class Filter extends Model {
    * @return {Filter} A shallow copy of this filter.
    */
   copy() {
-    let f = new Filter();
+    const f = new Filter();
     this.forEach(list => {
       f._addTermList(list.copy());
     });
@@ -671,7 +690,7 @@ class Filter extends Model {
    * @return {Filter} Copy of this filter but pointing to the next items.
    */
   next() {
-    let filter = this.copy();
+    const filter = this.copy();
     let first = filter.get('first');
     let rows = filter.get('rows');
 
@@ -698,7 +717,7 @@ class Filter extends Model {
    * @return {Filter} Copy of this filter but pointing to the previous items.
    */
   previous() {
-    let filter = this.copy();
+    const filter = this.copy();
     let first = filter.get('first');
     let rows = filter.get('rows');
 
@@ -732,7 +751,7 @@ class Filter extends Model {
    * @return {Filter} Copy of this filter but pointing to the first items.
    */
   first(first = 1) {
-    let filter = this.copy();
+    const filter = this.copy();
 
     filter.set('first', first, '=');
 
@@ -748,7 +767,7 @@ class Filter extends Model {
    *                  restriction.
    */
   all() {
-    let filter = this.copy();
+    const filter = this.copy();
 
     filter.set('first', 1, '=');
     filter.set('rows', -1, '=');
@@ -763,7 +782,7 @@ class Filter extends Model {
    *                  sort/sort-reverse terms.
    */
   simple() {
-    let filter = this.copy();
+    const filter = this.copy();
 
     filter.delete('first');
     filter.delete('rows');
@@ -787,7 +806,7 @@ class Filter extends Model {
    * @return {String} The sort order. 'sort' or 'sort-reverse'.
    */
   getSortBy() {
-    let order = this.getSortOrder();
+    const order = this.getSortOrder();
     return this.get(order);
   }
 
@@ -799,7 +818,7 @@ class Filter extends Model {
    * @return {Filter} This filter.
    */
   setSortOrder(value) {
-    let sortby = this.getSortBy();
+    const sortby = this.getSortBy();
     value = value === 'sort-reverse' ? 'sort-reverse' : 'sort';
     this.set(value, sortby);
     return this;
@@ -813,7 +832,7 @@ class Filter extends Model {
    * @return {Filter} This filter.
    */
   setSortBy(value) {
-    let order = this.getSortOrder();
+    const order = this.getSortOrder();
     this.set(order, value);
     return this;
   }
@@ -827,7 +846,7 @@ class Filter extends Model {
    */
   parseString(filterstring) {
     if (is_string(filterstring)) {
-      let fterms = filterstring.split(' ');
+      const fterms = filterstring.split(' ');
       for (let fterm of fterms) {
         // strip whitespace
         fterm = fterm.trim();
@@ -849,12 +868,12 @@ class Filter extends Model {
    * @return {Filter} New Filter with FilterTerms parsed from filterstring.
    */
   static fromString(filterstring, filter) {
-    let f = new Filter();
+    const f = new Filter();
     f.parseString(filterstring);
 
     if (is_defined(filter)) {
       filter.forEach(list => {
-        let key = list.keyword;
+        const {keyword: key} = list;
         if (is_defined(key) && includes(EXTRA_KEYWORDS, key) && !f.has(key)) {
           f._addTermList(list.copy());
         }

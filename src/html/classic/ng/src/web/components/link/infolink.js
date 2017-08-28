@@ -35,7 +35,7 @@ const InfoLink = ({
   legacy = false,
   name,
   type,
-  ...props,
+  ...props
 }) => {
   if (is_defined(id)) {
     props.info_id = id; // eslint-disable-line react/prop-types

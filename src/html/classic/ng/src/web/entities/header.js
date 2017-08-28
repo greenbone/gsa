@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -67,7 +67,7 @@ export const withEntitiesHeader = (actions = defaultactions, options = {}) =>
   }
 
   const HeaderWrapper = props => {
-    let {selectionType} = props;
+    const {selectionType} = props;
     let column = actions;
 
     if (actions === true) {

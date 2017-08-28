@@ -53,7 +53,7 @@ export function parse_info_counts(response) {
   //  this should be fixed in gmp xml by using a different elements for counts
   //  or by using the same pattern (with 's') for info
 
-  let infos = response.info;
+  const infos = response.info;
   // its getting even uglier... if no entites are returned we get a single info
   // element for start and max counts.
   let es = is_array(infos) ? infos[infos.length - 1] : infos;
@@ -80,7 +80,7 @@ export function parse_info_counts(response) {
     };
   }
 
-  let counts =  {
+  const counts = {
     first: es._start,
     rows: es._max,
     length: ec.page,
@@ -98,8 +98,8 @@ export function parse_counts(element, name, plural_name) {
   if (!is_defined(plural_name)) {
     plural_name = name + 's';
   }
-  let es = element[plural_name];
-  let ec = element[name + '_count'];
+  const es = element[plural_name];
+  const ec = element[name + '_count'];
   return {
     first: es._start,
     rows: es._max,

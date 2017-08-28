@@ -54,7 +54,7 @@ export const EntitiesFooter = ({
     onDownloadClick,
     onSelectionTypeChange,
     onTrashClick,
-    ...props,
+    ...props
   }) => {
   const deleteEntities = props.delete;
   return (
@@ -80,15 +80,18 @@ export const EntitiesFooter = ({
               }
               <IconDivider>
                 {trash &&
-                  <TrashIcon onClick={onTrashClick}
+                  <TrashIcon
+                    onClick={onTrashClick}
                     selectionType={selectionType}/>
                 }
                 {deleteEntities &&
-                  <DeleteIcon onClick={onDeleteClick}
+                  <DeleteIcon
+                    onClick={onDeleteClick}
                     selectionType={selectionType}/>
                 }
                 {download &&
-                  <ExportIcon onClick={onDownloadClick}
+                  <ExportIcon
+                    onClick={onDownloadClick}
                     selectionType={selectionType}
                     value={download}/>
                 }
@@ -120,16 +123,19 @@ export const withEntitiesFooter = (options = {}) => Component => {
 
   const EntitiesFooterWrapper = ({onDownloadBulk, onDeleteBulk, ...props}) => {
     return (
-      <Component {...options} {...props}
+      <Component
+        {...options}
+        {...props}
         onDownloadClick={onDownloadBulk}
         onDeleteClick={onDeleteBulk}
-        onTrashClick={onDeleteBulk}/>
+        onTrashClick={onDeleteBulk}
+      />
     );
   };
 
   EntitiesFooterWrapper.propTypes = {
-    onDownloadBulk: PropTypes.func,
     onDeleteBulk: PropTypes.func,
+    onDownloadBulk: PropTypes.func,
   };
 
   return EntitiesFooterWrapper;

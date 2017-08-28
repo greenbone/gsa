@@ -110,7 +110,7 @@ class Task extends Model {
     elem.alterable = parse_yesno(elem.alterable);
     elem.result_count = parse_int(elem.result_count);
 
-    let reports = [
+    const reports = [
       'first_report',
       'last_report',
       'second_last_report',
@@ -118,22 +118,22 @@ class Task extends Model {
     ];
 
     reports.forEach(name => {
-      let report = elem[name];
+      const report = elem[name];
       if (is_defined(report)) {
         elem[name] = new Report(report.report);
       }
     });
 
-    let models = [
+    const models = [
       'config',
       'slave',
       'target',
     ];
     models.forEach(item => {
-      let name = item;
-      let model = Model;
+      const name = item;
+      const model = Model;
 
-      let data = elem[name];
+      const data = elem[name];
       if (is_defined(data) && !is_empty(data._id)) {
         elem[name] = new model(data, name);
       }

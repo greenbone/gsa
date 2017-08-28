@@ -62,7 +62,7 @@ export const numberOrNumberString = ReactPropTypes.oneOfType([
   numberString,
 ]);
 
-export const icon =  ReactPropTypes.oneOfType([
+export const icon = ReactPropTypes.oneOfType([
   ReactPropTypes.string,
   ReactPropTypes.element,
 ]);
@@ -135,7 +135,7 @@ const momentDateValidator = (props, prop_name, component_name) => {
 
 export const momentDate = mayRequire(momentDateValidator);
 
-export const timeunit =  ReactPropTypes.oneOf([
+export const timeunit = ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
 ]);
 

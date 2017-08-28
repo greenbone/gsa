@@ -32,6 +32,8 @@ export function get_img_url(name) {
   return url_loader(name);
 };
 
-export const set_url_loader = loader => url_loader = loader;
+export const set_url_loader = loader => {
+  url_loader = loader;
+};
 
 // vim: set ts=2 sw=2 tw=80:
