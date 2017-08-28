@@ -44,6 +44,7 @@ const Row = ({
   actions,
   ...other
 }) => {
+  const {results = {}, hosts = {}} = entity;
   return (
     <TableRow>
       <TableData>
@@ -55,10 +56,10 @@ const Row = ({
         </DetailsLink>
       </TableData>
       <TableData>
-        {datetime(entity.results.oldest)}
+        {datetime(results.oldest)}
       </TableData>
       <TableData>
-        {datetime(entity.results.newest)}
+        {datetime(results.newest)}
       </TableData>
       <TableData flex align="center">
         <SeverityBar severity={entity.severity}/>
@@ -68,13 +69,14 @@ const Row = ({
       </TableData>
       <TableData flex align="center">
         <Link
-          to={'results?filter=nvt=' + entity.id}
+          to="results"
+          filter={'nvt=' + entity.id}
           textOnly={!links}>
-          {entity.results.count}
+          {results.count}
         </Link>
       </TableData>
       <TableData flex align="center">
-        {entity.hosts.count}
+        {hosts.count}
       </TableData>
       {render_component(actions, {...other, entity})}
     </TableRow>
