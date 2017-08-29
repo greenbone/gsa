@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
 import {KeyCode, is_defined} from 'gmp/utils.js';
 import logger from 'gmp/log.js';
@@ -42,16 +44,29 @@ import Icon from '../icon/icon.js';
 import HelpIcon from '../icon/helpicon.js';
 import NewIcon from '../icon/newicon.js';
 
+import Divider from '../layout/divider.js';
 import IconDivider from '../layout/icondivider.js';
 import Layout from '../layout/layout.js';
 
 import Filter from 'gmp/models/filter.js';
 
-import './css/powerfilter.css';
-
 const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
+
+const StyledFootNote = glamorous(FootNote)({
+  marginTop: '5px',
+});
+
+const FilterSelect = glamorous(Select2)({
+  '& .select2-container': {
+    minWidth: '100px',
+  },
+});
+
+const Label = glamorous.label({
+  marginRight: '5px',
+});
 
 class PowerFilter extends React.Component {
 
@@ -75,7 +90,7 @@ class PowerFilter extends React.Component {
   }
 
   updateFilter(filter) {
-    let {onUpdate} = this.props;
+    const {onUpdate} = this.props;
 
     if (!is_defined(this.state.filter)) {
       // filter hasn't been loaded yet
@@ -121,9 +136,9 @@ class PowerFilter extends React.Component {
   }
 
   onNamedFilterChange(value) {
-    let {filters} = this.props;
+    const {filters} = this.props;
 
-    let filter = filters.find(f => f.id === value);
+    const filter = filters.find(f => f.id === value);
 
     this.updateFilter(filter);
   }
@@ -131,7 +146,7 @@ class PowerFilter extends React.Component {
   onCreateFilter() {
     let {filter, userfilter = '', filtername = ''} = this.state;
 
-    let {onCreateClick} = this.props;
+    const {onCreateClick} = this.props;
 
     if (userfilter.trim().length === 0 || filtername.trim().length === 0) {
       return;
@@ -148,8 +163,8 @@ class PowerFilter extends React.Component {
   }
 
   createFilter(filter) {
-    let {filtername = ''} = this.state;
-    let {onFilterCreated} = this.props;
+    const {filtername = ''} = this.state;
+    const {onFilterCreated} = this.props;
 
     if (this.context.gmp) {
       this.context.gmp.filter.create({
@@ -170,7 +185,7 @@ class PowerFilter extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    let {filter, filters} = props;
+    const {filter, filters} = props;
 
     this.setState({
       filters,
@@ -185,27 +200,30 @@ class PowerFilter extends React.Component {
   }
 
   render() {
-    let {capabilities} = this.context;
-    let {userfilter = '', filter, filtername = ''} = this.state;
-    let {filters, onEditClick, onResetClick} = this.props;
-    let namedfilterid = filter && filter.id ? filter.id : DEFAULT_FILTER_ID;
+    const {capabilities} = this.context;
+    const {userfilter = '', filter, filtername = ''} = this.state;
+    const {filters, onEditClick, onResetClick} = this.props;
+    const namedfilterid = filter && filter.id ? filter.id : DEFAULT_FILTER_ID;
 
-    let filterstring = filter ? filter.toFilterExtraString() : '';
+    const filterstring = filter ? filter.toFilterExtraString() : '';
 
-    let filter_opts = render_options(filters, DEFAULT_FILTER_ID);
+    const filter_opts = render_options(filters, DEFAULT_FILTER_ID);
 
-    let can_create = capabilities.mayCreate('filter') &&
+    const can_create = capabilities.mayCreate('filter') &&
       filtername.trim().length > 0;
 
     return (
-      <Layout flex align={['end', 'center']}
-        className="powerfilter">
-        <Layout flex="column" align={['center', 'start']}>
-          <Layout flex align={['end', 'center']}>
+      <Layout
+        flex="column"
+        align={['center', 'stetch']}
+        className="powerfilter"
+      >
+        <Layout flex align={['space-between', 'center']}>
+          <Divider align={['start', 'center']}>
             <FormGroup flex align={['start', 'center']}>
-              <label className="control-label">
+              <Label>
                 <b>{_('Filter')}</b>
-              </label>
+              </Label>
               <TextField
                 name="userfilter"
                 size="53"
@@ -216,7 +234,9 @@ class PowerFilter extends React.Component {
             </FormGroup>
             <FormGroup flex>
               <IconDivider flex align={['start', 'center']}>
-                <Icon img="refresh.svg" title={_('Update Filter')}
+                <Icon
+                  img="refresh.svg"
+                  title={_('Update Filter')}
                   onClick={this.onUpdateFilter}/>
 
                 {onResetClick &&
@@ -224,8 +244,8 @@ class PowerFilter extends React.Component {
                     img="delete.svg"
                     title={_('Reset Filter')}
                     active={is_defined(filter)}
-                    onClick={is_defined(filter) ?
-                        this.onResetClick : undefined}/>
+                    onClick={is_defined(filter) ? this.onResetClick : undefined}
+                  />
                 }
 
                 <HelpIcon page="powerfilter" />
@@ -238,6 +258,8 @@ class PowerFilter extends React.Component {
                 }
               </IconDivider>
             </FormGroup>
+          </Divider>
+          <Divider align={['end', 'center']}>
             <FormGroup flex align={['start', 'center']}>
               {capabilities.mayCreate('filter') &&
                 <TextField
@@ -253,23 +275,25 @@ class PowerFilter extends React.Component {
                 <NewIcon
                   title={_('Create new filter from current term')}
                   onClick={this.onCreateFilter}/> :
-                <Icon img="new_inactive.svg"
+                <Icon
+                  img="new_inactive.svg"
                   title={_('Please insert a filter name')}/>
-                }
+              }
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
               {capabilities.mayAccess('filters') &&
-                <Select2 value={namedfilterid}
+                <FilterSelect
+                  value={namedfilterid}
                   onChange={this.onNamedFilterChange}>
                   {filter_opts}
-                </Select2>
+                </FilterSelect>
               }
             </FormGroup>
-          </Layout>
-          <FootNote>
-            {filterstring}
-          </FootNote>
+          </Divider>
         </Layout>
+        <StyledFootNote>
+          {filterstring}
+        </StyledFootNote>
       </Layout>
     );
   }
@@ -278,11 +302,11 @@ class PowerFilter extends React.Component {
 PowerFilter.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.arrayLike,
-  onResetClick: PropTypes.func,
-  onEditClick: PropTypes.func,
   onCreateClick: PropTypes.func,
-  onUpdate: PropTypes.func,
+  onEditClick: PropTypes.func,
   onFilterCreated: PropTypes.func,
+  onResetClick: PropTypes.func,
+  onUpdate: PropTypes.func,
 };
 
 PowerFilter.contextTypes = {

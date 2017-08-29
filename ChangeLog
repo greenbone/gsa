@@ -1,3 +1,13 @@
+2017-08-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/powerfilter/css/powerfilter.css,
+	src/html/classic/ng/src/web/components/powerfilter/powerfilter.js: Use
+	glamorous for styling the powerfilter and get rid of the css file. Improve
+	layout of powerfilter if the filter term gets longer. Don't align powerfilter
+	on the left by default. Only align its content. Let parent components align
+	the powerfilter.
+
 2017-08-29  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Make it possible skip dependency checks during configuration. This
