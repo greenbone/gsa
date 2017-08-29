@@ -24,6 +24,42 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
+## Check for existence of required libraries
+pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
+pkg_check_modules (LIBXML REQUIRED libxml-2.0)
+pkg_check_modules (GLIB REQUIRED glib-2.0>=2.32)
+pkg_check_modules (LIBEXSLT REQUIRED libexslt)
+pkg_check_modules (LIBGVM_BASE REQUIRED libgvm_base>=1.0.0)
+pkg_check_modules (LIBGVM_UTIL REQUIRED libgvm_util>=1.0.0)
+pkg_check_modules (LIBGVM_GMP REQUIRED libgvm_gmp>=1.0.0)
+pkg_check_modules (LIBXSLT REQUIRED libxslt)
+pkg_check_modules (GNUTLS REQUIRED gnutls>=3.2.15)
+
+message (STATUS "Looking for libgcrypt...")
+find_library (LIBGCRYPT gcrypt)
+if (NOT LIBGCRYPT)
+  message (SEND_ERROR "The libgcrypt library is required.")
+else (NOT LIBGCRYPT)
+  message (STATUS "Looking for libgcrypt... ${LIBGCRYPT}")
+  execute_process (COMMAND libgcrypt-config --libs
+    OUTPUT_VARIABLE LIBGCRYPT_LDFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process (COMMAND libgcrypt-config --cflags
+    OUTPUT_VARIABLE LIBGCRYPT_CFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif (NOT LIBGCRYPT)
+
+if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
+    (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
+    LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT
+    LIBGCRYPT)
+  message (FATAL_ERROR "One or more required libraries was not found "
+    "(see message above), please install the missing "
+    "libraries and run cmake again.")
+endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
+  (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
+  LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
+
 ## Config
 
 include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
