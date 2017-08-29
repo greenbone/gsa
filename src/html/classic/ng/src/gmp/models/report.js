@@ -24,8 +24,11 @@ import moment from 'moment';
 
 import {is_defined} from '../utils.js';
 
-import Model from '../model.js';
 import {parse_severity, parse_float} from '../parser.js';
+
+import Model from '../model.js';
+
+import Filter from '../models/filter.js';
 
 // FIXME the report xml structure is really ugly
 
@@ -34,19 +37,19 @@ class ReportReport extends Model {
   static entity_type = 'report';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
-    let {task, severity} = ret;
+    const copy = super.parseProperties(elem);
+    const {task, severity} = elem;
 
-    ret.severity = {
+    copy.severity = {
       filtered: parse_float(severity.filtered),
       full: parse_float(severity.full),
     };
 
-    ret.severity_class = new Model(ret.severity_class);
+    copy.severity_class = new Model(copy.severity_class);
 
-    ret.task = new Model(task, 'task');
+    copy.task = new Model(task, 'task');
 
-    return ret;
+    return copy;
   }
 
 }
@@ -56,26 +59,43 @@ class Report extends Model {
   static entity_type = 'report';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const copy = super.parseProperties(elem);
 
-    ret.report = new ReportReport(ret.report);
-    ret.report_format = new Model(ret.report_format, 'report_format');
-    ret.task = new Model(ret.task, 'task');
+    const {
+      report,
+      report_format,
+      severity,
+      _type: type,
+      _content_type: content_type,
+      task,
+      scan_start,
+      scan_end,
+      timestamp,
+    } = elem;
 
-    if (is_defined(ret.severity)) {
-      ret.severity = parse_severity(ret.severity);
+    copy.report = new ReportReport(report);
+    copy.report_format = new Model(report_format, 'report_format');
+    copy.task = new Model(task, 'task');
+
+    if (is_defined(severity)) {
+      copy.severity = parse_severity(severity);
     }
 
-    ret.report_type = ret._type; // FIXME is there any other type then 'scan'?
-    ret.content_type = ret._content_type;
+    copy.report_type = type; // FIXME is there any other type then 'scan'?
+    copy.content_type = content_type;
 
-    ret.scan_start = moment(elem.scan_start);
-    ret.timestamp = moment(elem.timestamp);
-    if (is_defined(elem.scan_end)) {
-      ret.scan_end = moment(elem.scan_end);
+    copy.scan_start = moment(scan_start);
+    copy.timestamp = moment(timestamp);
+
+    if (is_defined(scan_end)) {
+      copy.scan_end = moment(scan_end);
     }
 
-    return ret;
+    if (is_defined(report)) {
+      copy.filter = new Filter(report.filters);
+    }
+
+    return copy;
   }
 }
 
