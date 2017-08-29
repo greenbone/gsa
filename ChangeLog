@@ -1,5 +1,10 @@
 2017-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/reports.js: Allow to parse Report from
+	a repsonse.
+
+2017-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report.js: Parse filter of Report if
 	available. Also update coding style (use const and object destruction).
 

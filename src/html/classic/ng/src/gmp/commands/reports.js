@@ -57,6 +57,10 @@ export class ReportCommand extends EntityCommand {
       xml_file,
     });
   }
+
+  getElementFromRoot(root) {
+    return root.get_report.get_reports_response.report;
+  }
 }
 
 register_command('report', ReportCommand);
