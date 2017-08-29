@@ -66,7 +66,7 @@ export class HttpCommand {
   }
 
   httpGet(params, options = {}) {
-    let {extra_params, ...other} = options;
+    const {extra_params, ...other} = options;
     return this.http.request('get', {
       args: this.getParams(params, extra_params),
       ...other,
@@ -74,7 +74,7 @@ export class HttpCommand {
   }
 
   httpPost(params, options = {}) {
-    let {extra_params, ...other} = options;
+    const {extra_params, ...other} = options;
     return this.http.request('post', {
       data: this.getParams(params, extra_params),
       ...other,
@@ -92,8 +92,8 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   getParams(params = {}, extra_params = {}) {
-    let {filter, ...other} = params;
-    let rparams = super.getParams(other, extra_params);
+    const {filter, ...other} = params;
+    const rparams = super.getParams(other, extra_params);
 
     if (is_defined(filter)) {
       if (is_defined(filter.toFilterString)) {
@@ -107,7 +107,7 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   getCollectionListFromRoot(root, meta) {
-    let response = this.getEntitiesResponse(root);
+    const response = this.getEntitiesResponse(root);
     return parse_collection_list(response, this.name, this.clazz, {meta});
   }
 
@@ -141,13 +141,13 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   exportByIds(ids) {
-    let params = {
+    const params = {
       cmd: 'process_bulk',
       resource_type: this.name,
       bulk_select: 1,
       'bulk_export.x': 1,
     };
-    for (let id of ids) {
+    for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
     return this.httpPost(params, {plain: true})
@@ -155,7 +155,7 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   exportByFilter(filter) {
-    let params = {
+    const params = {
       cmd: 'process_bulk',
       resource_type: this.name,
       bulk_select: 0,
@@ -172,12 +172,12 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   deleteByIds(ids, extra_params = {}) {
-    let params = extend(extra_params, {
+    const params = extend(extra_params, {
       cmd: 'bulk_delete',
       resource_type: this.name,
       no_redirect: '1',
     });
-    for (let id of ids) {
+    for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
     return this.httpPost(params).then(response => response.setData(ids));
@@ -206,8 +206,8 @@ export class EntityCommand extends HttpCommand {
   }
 
   getParams(params, extra_params = {}) {
-    let {id, ...other} = params;
-    let rparams = super.getParams(other, extra_params);
+    const {id, ...other} = params;
+    const rparams = super.getParams(other, extra_params);
     if (is_defined(id)) {
       rparams[this.id_name] = id;
     }
@@ -232,13 +232,13 @@ export class EntityCommand extends HttpCommand {
   }
 
   clone({id}) {
-    let extra_params = {
+    const extra_params = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
     return this.httpPost({
       cmd: 'clone',
       resource_type: this.name,
-      next: 'get_'  + this.name,
+      next: 'get_' + this.name,
     }, {
       extra_params,
     }).then(response => {
@@ -254,7 +254,7 @@ export class EntityCommand extends HttpCommand {
   delete({id}) {
     log.debug('Deleting', this.name, id);
 
-    let params = {
+    const params = {
       cmd: 'delete_' + this.name,
       id,
       no_redirect: '1',
@@ -263,7 +263,7 @@ export class EntityCommand extends HttpCommand {
   }
 
   export({id}) {
-    let params = {
+    const params = {
       cmd: 'process_bulk',
       resource_type: this.name,
       bulk_select: 1,
@@ -301,11 +301,11 @@ export class InfoEntitiesCommand extends EntitiesCommand {
   }
 
   getCollectionListFromRoot(root, meta) {
-    let response = this.getEntitiesResponse(root);
+    const response = this.getEntitiesResponse(root);
     return parse_collection_list(response, this.name, this.clazz, {
       meta,
       entities_parse_func: this.parseInfoEntities,
-      collection_count_parse_func: parse_info_counts
+      collection_count_parse_func: parse_info_counts,
     });
   }
 }

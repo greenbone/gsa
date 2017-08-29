@@ -64,7 +64,7 @@ export function build_url_params(params) {
   let argcount = 0;
   let uri = '';
 
-  for (let key in params) {
+  for (const key in params) {
     if (params.hasOwnProperty(key)) {
       if (argcount++) {
         uri += '&';
@@ -85,7 +85,11 @@ function formdata_append(formdata, key, value) {
 export class Http {
 
   constructor(url, options = {}) {
-    let {timeout = DEFAULT_TIMEOUT, promise_factory = PromiseFactory} = options;
+    const {
+      timeout = DEFAULT_TIMEOUT,
+      promise_factory = PromiseFactory,
+    } = options;
+
     this.url = url;
     this.params = {};
     this.timeout = timeout;
@@ -106,13 +110,13 @@ export class Http {
   }
 
   _createFormData(data) {
-    let formdata = new FormData();
+    const formdata = new FormData();
 
-    for (let key in data) {
+    for (const key in data) {
       if (data.hasOwnProperty(key)) { // don't add undefined and null values to form
-        let value = data[key];
+        const value = data[key];
         if (is_array(value)) {
-          for (let val of value) {
+          for (const val of value) {
             formdata_append(formdata, key, val);
           }
         }
@@ -131,9 +135,9 @@ export class Http {
     url = this.url,
     cache,
     force = false,
-    ...other,
+    ...other
   }) {
-    let self = this;
+    const self = this;
     let formdata;
 
     method = method.toUpperCase();
@@ -162,9 +166,16 @@ export class Http {
     }
 
     let xhr;
-    let options = {method, url, formdata, cache, force, ...other};
+    const options = {
+      method,
+      url,
+      formdata,
+      cache,
+      force,
+      ...other,
+    };
 
-    let promise = this.promise_factory.create(function(resolve, reject) {
+    const promise = this.promise_factory.create(function(resolve, reject) {
       xhr = new XMLHttpRequest();
 
       xhr.open(method, url, true);
@@ -175,7 +186,8 @@ export class Http {
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
           self.handleSuccess(resolve, reject, this, options);
-        } else {
+        }
+        else {
           self.handleError(resolve, reject, this, options);
         }
       };
@@ -200,7 +212,7 @@ export class Http {
 
   handleSuccess(resolve, reject, xhr, options) {
     try {
-      let response = this.transformSuccess(xhr, options);
+      const response = this.transformSuccess(xhr, options);
 
       this._cacheData(response, options);
 
@@ -215,13 +227,13 @@ export class Http {
   handleError(resolve, reject, xhr, options) {
     let promise = PromiseFactory.resolve(xhr);
 
-    for (let interceptor of this.interceptors) {
+    for (const interceptor of this.interceptors) {
       promise = promise.then(interceptor.responseError);
     }
 
     promise.catch(request => {
 
-      let rej = new Rejection(request, 'error');
+      const rej = new Rejection(request, 'error');
       try {
         reject(this.transformRejection(rej, options));
       }
@@ -233,7 +245,7 @@ export class Http {
   }
 
   handleTimeout(resolve, reject, xhr, options) {
-    let rej = new Rejection(xhr, 'timeout',
+    const rej = new Rejection(xhr, 'timeout',
       _('A timeout for the request to url {{- url}} occurred.',
         {url: options.url}));
     try {
@@ -248,7 +260,7 @@ export class Http {
   handleCancel(resolve, reject, xhr, options) {
     // canceling the promise is currently not possible but should be supported
     // in future
-    let rej = new Rejection(xhr, 'cancel');
+    const rej = new Rejection(xhr, 'cancel');
     try {
       reject(this.transformRejection(rej, options));
     }
@@ -298,7 +310,7 @@ export function build_server_url(server, path = '', protocol) {
 export class GmpHttp extends Http {
 
   constructor(server, protocol, options) {
-    let url = build_server_url(server, 'omp', protocol);
+    const url = build_server_url(server, 'omp', protocol);
     super(url, options);
 
     this.params.xml = 1;
@@ -317,8 +329,8 @@ export class GmpHttp extends Http {
       return super.transformSuccess(xhr, options);
     }
     try {
-      let {envelope} = xml2json(xhr.responseXML);
-      let meta = parse_envelope_meta(envelope);
+      const {envelope} = xml2json(xhr.responseXML);
+      const meta = parse_envelope_meta(envelope);
       let response = super.transformSuccess(xhr, options);
       response = response.set(envelope, meta);
       return response;
@@ -326,7 +338,7 @@ export class GmpHttp extends Http {
     catch (error) {
       log.error('An error occurred while converting gmp response to js for ' +
         'url', this.url, xhr);
-      throw new Rejection(xhr, 'error',  _('An error occurred while ' +
+      throw new Rejection(xhr, 'error', _('An error occurred while ' +
         'converting gmp response to js for url {{- url}}', {url: options.url}));
     }
   }
@@ -334,9 +346,9 @@ export class GmpHttp extends Http {
   transformRejection(rej, options) {
     if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
 
-      let root = xml2json(rej.xhr.responseXML).envelope;
+      const root = xml2json(rej.xhr.responseXML).envelope;
 
-      if (is_defined(root))  {
+      if (is_defined(root)) {
         rej.root = root;
 
         if (is_defined(root.gsad_response)) {

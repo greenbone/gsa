@@ -11,22 +11,22 @@ module.exports = {
     'accessor-pairs': 'error', // require get xyz if set xyz is defined
     'array-bracket-spacing': [ // disallow spaces inside of arrays
       'warn',
-      'never'
+      'never',
     ],
     'arrow-parens': [ // only require parens in arrow function arguments as needed
       'warn',
-      'as-needed'
+      'as-needed',
     ],
     'arrow-spacing': [ // spaces after and before an arrow: (a) => {}
       'warn', {
         after: true,
-        before: true
-      }
+        before: true,
+      },
     ],
     'block-scoped-var': 'error', // require var usage and definition at the same block
     'brace-style': [ // use Stroustrup brace style. else, if-else, ... must be on its own line after closing brace
       'warn',
-      'stroustrup'
+      'stroustrup',
     ],
     'callback-return': 'error',
     camelcase: 'off', // don't require camelCase for functions and properties
@@ -38,27 +38,27 @@ module.exports = {
         imports: 'always-multiline',
         exports: 'always-multiline',
         functions: 'ignore',
-      }
+      },
     ],
     'comma-spacing': [ // enforces space after commas, disallow space before commas
       'warn', {
         after: true,
-        before: false
-      }
+        before: false,
+      },
     ],
     'comma-style': [ // require a comma after and on the same line as an array element, object property, or variable declaration
       'warn',
-      'last'
+      'last',
     ],
     'computed-property-spacing': [ // disallows spaces inside computed property brackets a[y], b['z']
       'warn',
-      'never'
+      'never',
     ],
     'consistent-this': 'off',
     curly: 'error', // always require braces if (a) foo() is not allowed
     'dot-notation': [ // require dot notation for object: abc.def instead of abc['def']
       'warn', {
-        allowKeywords: true
+        allowKeywords: true,
       },
     ],
     'eol-last': [ // require newline at the end of files
@@ -68,7 +68,7 @@ module.exports = {
     'func-call-spacing': 'warn', // disallow spacing between function identifiers and their invocations
     'func-names': [ // disallow named function expressions
       'warn',
-      'never'
+      'never',
     ],
     'func-style': [ // enforce function expression instead of declaration
       'warn',
@@ -84,24 +84,24 @@ module.exports = {
     'init-declarations': 'off',
     'jsx-quotes': [ // prefer double quotes " for jsx props
       'warn',
-      'prefer-double'
+      'prefer-double',
     ],
     'key-spacing': [ // enforce consistent spacing between keys and values in object literal properties
       'warn', {
         beforeColon: false, // no space before colon :
         afterColon: true, // require space after colon :
         mode: 'strict', // enforces exactly one space before or after colons in object literals not two or more
-      }
+      },
     ],
     'keyword-spacing': [ // enforce consistent spacing before and after js keywords (function, if, ...)
       'warn', {
         after: true,
-        before: true
-      }
+        before: true,
+      },
     ],
     'linebreak-style': [ // require unix line endings (only \n)
       'error',
-      'unix'
+      'unix',
     ],
     'lines-around-comment': [ // require empty lines around comments
       'warn', {
@@ -111,7 +111,7 @@ module.exports = {
 
         allowArrayStart: true, // allow comments to appear at the start of an array declaration without empty line
 
-      }
+      },
     ],
     'max-depth': [ // enforce a maximum depth of 4 that blocks can be nested
       'warn',
@@ -120,13 +120,13 @@ module.exports = {
     'max-len': [
       'warn',
       80, {
-        ignoreComments: true
+        ignoreComments: true,
       },
     ],
     'max-lines': [
       'warn', {
         max: 5000,
-        skipBlankLines: true
+        skipBlankLines: true,
       },
     ],
     'max-nested-callbacks': 'error',
@@ -137,7 +137,7 @@ module.exports = {
     'max-statements': 'off',
     'max-statements-per-line': [
       'warn', {
-        max: 2
+        max: 2,
       },
     ],
     'multiline-ternary': 'off',
@@ -175,8 +175,8 @@ module.exports = {
           '+', // includes +value and '' + value
           '!!',
           '*',
-        ]
-      }
+        ],
+      },
     ],
     'no-implicit-globals': 'error', // disallow variable and function declarations in the global scope
     'no-lonely-if': 'warn', // disallow if statements as the only statement in else blocks
@@ -184,14 +184,17 @@ module.exports = {
     'no-multi-spaces': [ // don't allow multiple spaces: let a  = 1;
       'warn', {
         ignoreEOLComments: true, // allow multiple spaces at comments
-      }
+      },
     ],
     'no-multiple-empty-lines': 'warn',
     'no-negated-condition': 'warn',
     'no-new-require': 'error', // disallow new require: var appHeader = new require('app-header');
     'no-path-concat': 'error',
     'no-proto': 'error', // disallow use of __proto__
-    'no-return-assign': 'warn', // disallow assignment in return Statement
+    // disbale no-return-assign until there is an option for disabling this rule
+    // for arrow functions. it's causing warning for all react refs currently
+    // https://github.com/eslint/eslint/issues/5150
+    // 'no-return-assign': 'warn', // disallow assignment in return Statement
     'no-shadow': 'warn', // disallow variable declarations from shadowing variables declared in the outer scope
     'no-shadow-restricted-names': 'error', // disallow shadowing of restricted names e.g. var undefined = 'foo';
     'no-tabs': 'warn', // disallow all tabs \n
@@ -218,7 +221,7 @@ module.exports = {
     ],
     'object-curly-spacing': [ // disallow spaces after { and before } within objects
       'warn',
-      'never'
+      'never',
     ],
     'object-shorthand': 'off', // don't require {a} instead of {a: a}
     'one-var': [ // require every variable to be declared on seperate statement
@@ -227,7 +230,7 @@ module.exports = {
     ],
     'operator-linebreak': [ // enforce consistent linebreak style for operators
       'warn',
-      'after'
+      'after',
     ],
     'padded-blocks': 'off',
     'prefer-arrow-callback': 'off',
@@ -314,7 +317,7 @@ module.exports = {
     'yield-star-spacing': 'error',
     yoda: [ // disallow yoda conditions: if (1 === b)
       'error',
-      'never'
+      'never',
     ],
     'react/prop-types': [ // warn if not proptypes are defined for a component
       'warn', {
@@ -347,17 +350,17 @@ module.exports = {
     'react/jsx-max-props-per-line': [ // Limit maximum of props on a single line in JSX to 2
       'warn', {
         maximum: 2,
-      }
+      },
     ],
     'react/jsx-no-bind': [ // No .bind() in JSX Props
       'warn', {
         ignoreRefs: true,
-        allowArrowFunctions: true
-      }
+        allowArrowFunctions: true,
+      },
     ],
     'react/jsx-no-duplicate-props': 'error', // prevent duplicate props in JSX
     'react/jsx-wrap-multilines': 'warn', // prevent missing parentheses around multiline JSX
-  }
+  },
 };
 
 // vim: set ts=2 sw=2 tw=80:

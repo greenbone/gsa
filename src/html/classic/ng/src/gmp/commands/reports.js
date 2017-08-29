@@ -29,7 +29,7 @@ import Report from '../models/report.js';
 
 const log = logger.getLogger('gmp.commands.reports');
 
-export class ReportsCommand extends EntitiesCommand {
+class ReportsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'report', Report);
@@ -40,14 +40,14 @@ export class ReportsCommand extends EntitiesCommand {
   }
 }
 
-export class ReportCommand extends EntityCommand {
+class ReportCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'report', Report);
   }
 
   import(args) {
-    let {task_id, in_assets = 1, xml_file} = args;
+    const {task_id, in_assets = 1, xml_file} = args;
     log.debug('Importing report', args);
     return this.httpPost({
       cmd: 'import_report',

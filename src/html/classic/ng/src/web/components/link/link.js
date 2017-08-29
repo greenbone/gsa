@@ -41,7 +41,14 @@ export const withTextOnly = Component => {
     if (textOnly) {
       const {className, children, style, title} = props;
       return (
-        <span {...{className, children, style, title}}/>
+        <span
+          {...{
+            className,
+            children,
+            title,
+            style,
+          }}
+        />
       );
     }
 
@@ -49,9 +56,9 @@ export const withTextOnly = Component => {
   };
 
   TextOnly.propTypes = {
-    textOnly: PropTypes.bool,
     className: PropTypes.string,
     style: PropTypes.object,
+    textOnly: PropTypes.bool,
     title: PropTypes.string,
   };
 
@@ -70,10 +77,10 @@ let Link = ({
     pathname += to;
   }
   else {
-    pathname += "/" + to;
+    pathname += '/' + to;
   }
 
-  let location = {
+  const location = {
     pathname,
     query: {},
   };
@@ -85,8 +92,8 @@ let Link = ({
 };
 
 Link.propTypes = {
-  to: PropTypes.string.isRequired,
   filter: PropTypes.string,
+  to: PropTypes.string.isRequired,
 };
 
 Link = glamorous(

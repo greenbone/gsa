@@ -31,7 +31,7 @@ import PropTypes from '../utils/proptypes.js';
 const log = logger.getLogger('web.entity.withEntityComponent');
 
 export const goto_details = type => ({router}, {data}) =>
-  router.push('/ng/' + type +  '/' + data.id);
+  router.push('/ng/' + type + '/' + data.id);
 
 export const goto_list = type => ({router}) => router.push('/ng/' + type);
 

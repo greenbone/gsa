@@ -63,7 +63,7 @@ class EntitiesPage extends React.Component {
   }
 
   getSectionTitle() {
-    let {entities, title} = this.props;
+    const {entities, title} = this.props;
 
     return render_section_title(entities, title);
   }
@@ -81,9 +81,12 @@ class EntitiesPage extends React.Component {
       foldable,
       loading,
       sectionIcon,
+      dashboard: DashboardComponent,
     } = this.props;
-    let DashboardComponent = this.props.dashboard;
-    let SectionComponent = this.props.section;
+
+    let {
+      section: SectionComponent,
+    } = this.props;
 
     if (SectionComponent === false) {
       return null;
@@ -128,7 +131,7 @@ class EntitiesPage extends React.Component {
       filter,
       entities,
       table: TableComponent,
-      ...props,
+      ...props
     } = this.props;
 
     if (!is_defined(entities) || !is_defined(TableComponent)) {
@@ -166,7 +169,8 @@ class EntitiesPage extends React.Component {
       this.handleFilterEditClick : undefined;
 
     return (
-      <Layout flex
+      <Layout
+        flex
         align="end"
         grow="1">
         <PowerFilterComponent
@@ -206,9 +210,9 @@ class EntitiesPage extends React.Component {
   renderDialogs() {
     const {
       filter,
+      filterEditDialog: FilterDialogComponent,
       onFilterChanged,
     } = this.props;
-    let FilterDialogComponent = this.props.filterEditDialog;
 
     if (!FilterDialogComponent) {
       return null;
@@ -236,14 +240,14 @@ class EntitiesPage extends React.Component {
 EntitiesPage.propTypes = {
   dashboard: PropTypes.componentOrFalse,
   entities: PropTypes.collection,
-  foldable: PropTypes.bool,
-  filterEditDialog: PropTypes.component,
   filter: PropTypes.filter,
+  filterEditDialog: PropTypes.component,
   filters: PropTypes.arrayLike,
+  foldable: PropTypes.bool,
   loading: PropTypes.bool,
   powerfilter: PropTypes.componentOrFalse,
-  sectionIcon: PropTypes.icon,
   section: PropTypes.componentOrFalse,
+  sectionIcon: PropTypes.icon,
   table: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.componentOrElement,

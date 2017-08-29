@@ -89,15 +89,16 @@ const Section = ({
 
 Section.propTypes = {
   className: PropTypes.string,
+  extra: PropTypes.element,
   foldState: PropTypes.string,
+  foldable: PropTypes.bool,
   img: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
   ]),
   title: PropTypes.string.isRequired,
-  extra: PropTypes.element,
-  onFoldToggle: PropTypes.func,
   onFoldStepEnd: PropTypes.func,
+  onFoldToggle: PropTypes.func,
 };
 
 const HeaderLayout = glamorous(Layout)(

@@ -1,5 +1,27 @@
 2017-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* .eslintrc.js,
+	src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/reports.js,
+	src/html/classic/ng/src/gmp/commands/tasks.js,
+	src/html/classic/ng/src/gmp/http.js,
+	src/html/classic/ng/src/web/components/folding/folding.js,
+	src/html/classic/ng/src/web/components/form/formgroup.js,
+	src/html/classic/ng/src/web/components/link/link.js,
+	src/html/classic/ng/src/web/components/section/section.js,
+	src/html/classic/ng/src/web/components/table/data.js,
+	src/html/classic/ng/src/web/entities/page.js,
+	src/html/classic/ng/src/web/entity/container.js,
+	src/html/classic/ng/src/web/entity/page.js,
+	src/html/classic/ng/src/web/entity/withEntityComponent.js,
+	src/html/classic/ng/src/web/pages/homepage.js,
+	src/html/classic/ng/src/web/pages/tasks/row.js,
+	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Update coding
+	style. Add trailing commas, fix indentation, remove unnecessary whitespace,
+	use const, ...
+
+2017-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/section/section.js: Only use
 	FoldableLayout if the section is foldable. This removes the foldable code from
 	beeing rendered if not necessary.

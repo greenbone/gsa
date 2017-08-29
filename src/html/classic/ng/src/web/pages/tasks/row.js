@@ -58,7 +58,7 @@ const render_report = (report, links) => {
   if (!is_defined(report)) {
     return null;
   }
-  let date = datetime(report.timestamp);
+  const date = datetime(report.timestamp);
   return (
     <DetailsLink
       legacy
@@ -109,7 +109,7 @@ const Row = ({
   actions,
   userName,
   onToggleDetailsClick,
-  ...props,
+  ...props
 }) => {
   const {scanner} = entity;
   return (
@@ -168,7 +168,11 @@ const Row = ({
       <TableData flex align="center">
         <Trend name={entity.trend}/>
       </TableData>
-      {render_component(actions, {links, ...props, entity})}
+      {render_component(actions, {
+        links,
+        ...props,
+        entity,
+      })}
     </TableRow>
   );
 };

@@ -35,13 +35,13 @@ const FormGroup = ({
     children,
     className,
     condition,
-    flex = "row",
+    flex = 'row',
     offset,
     size,
     title,
     titleOffset = 0,
     titleSize = 2,
-    ...other,
+    ...other
   }) => {
 
   if (is_defined(condition) && !condition) {
@@ -84,17 +84,17 @@ const FormGroup = ({
 };
 
 FormGroup.propTypes = {
-  title: PropTypes.string,
   className: PropTypes.string,
   condition: PropTypes.bool,
-  size: PropTypes.numberOrNumberString,
-  offset: PropTypes.numberOrNumberString,
-  titleSize: PropTypes.numberOrNumberString,
-  titleOffset: PropTypes.numberOrNumberString,
   flex: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.bool,
   ]),
+  offset: PropTypes.numberOrNumberString,
+  size: PropTypes.numberOrNumberString,
+  title: PropTypes.string,
+  titleOffset: PropTypes.numberOrNumberString,
+  titleSize: PropTypes.numberOrNumberString,
 };
 
 export default FormGroup;

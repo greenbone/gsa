@@ -65,7 +65,7 @@ class EntityPage extends React.Component {
       sectionIcon,
       sectionComponent: SectionComponent = Section,
       title,
-      ...other,
+      ...other
     } = this.props;
 
     if (SectionComponent === false) {
@@ -94,7 +94,7 @@ class EntityPage extends React.Component {
 
   renderInfo() {
     const {entity} = this.props;
-    let InfoComponent = this.props.infoComponent;
+    let {infoComponent: InfoComponent} = this.props;
 
     if (InfoComponent === false) {
       return null;
@@ -200,19 +200,19 @@ EntityPage.propTypes = {
   loading: PropTypes.bool,
   permissions: PropTypes.arrayLike,
   permissionsComponent: PropTypes.componentOrFalse,
-  sectionIcon: PropTypes.icon,
   sectionComponent: PropTypes.componentOrFalse,
+  sectionIcon: PropTypes.icon,
   tagsComponent: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
   onAddTag: PropTypes.func.isRequired,
   onChanged: PropTypes.func,
+  onDeleteTag: PropTypes.func.isRequired,
+  onDisableTag: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func,
   onEditTagClick: PropTypes.func.isRequired,
   onEnableTag: PropTypes.func.isRequired,
   onError: PropTypes.func,
-  onDeleteTag: PropTypes.func.isRequired,
-  onDisableTag: PropTypes.func.isRequired,
   onNewTagClick: PropTypes.func.isRequired,
 };
 

@@ -51,13 +51,13 @@ export const withFolding = (Component, defaults = {}) => {
     style = {},
     onFoldStepEnd,
     onFoldToggle,
-    ...props,
+    ...props
   }) => {
     let height;
     let animation;
     let display;
-    let window_height = Math.ceil(window.innerHeight * 1.2) + 'px';
-    let new_style = extend({}, style);
+    const window_height = Math.ceil(window.innerHeight * 1.2) + 'px';
+    const new_style = extend({}, style);
 
     switch (foldState) {
       case FoldState.FOLDED:
@@ -201,8 +201,8 @@ export const withFoldToggle = Component => {
     }
 
     render() {
-      let {...other} = this.props;
-      let {foldState} = this.state;
+      const {...other} = this.props;
+      const {foldState} = this.state;
 
       return (
         <Component

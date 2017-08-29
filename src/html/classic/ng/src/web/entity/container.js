@@ -161,11 +161,12 @@ class EntityContainer extends React.Component {
 
     return this.entity_command.get({id}).then(response => {
 
-      log.debug('Loaded entity', response.data);
+      const {data: entity, meta} = response;
 
-      this.setState({entity: response.data, loading: false});
+      log.debug('Loaded entity', entity);
 
-      const meta = response.getMeta();
+      this.setState({entity, loading: false});
+
       if (meta.fromcache && meta.dirty) {
         log.debug('Forcing reload of entity', meta.dirty);
         return true;
@@ -184,7 +185,7 @@ class EntityContainer extends React.Component {
   }
 
   startTimer(refresh) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
 
     refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
 

@@ -25,7 +25,7 @@ import React from 'react';
 
 import moment from 'moment-timezone';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import {
   first,
@@ -186,7 +186,7 @@ const withTaskComponent = (mapping = {}) => Component => {
     handleTaskStop(task) {
       const {onStopped} = mapping;
 
-      const promise =  this.cmd.stop(task);
+      const promise = this.cmd.stop(task);
       return handle_promise(promise, this.props, onStopped, 'onError');
     }
 
@@ -292,7 +292,7 @@ const withTaskComponent = (mapping = {}) => Component => {
             scanners,
             schedule_id,
             schedules,
-            target_id: task.isChangeable() ?  task.target.id : '0',
+            target_id: task.isChangeable() ? task.target.id : '0',
             targets,
             task: task,
           }, {
@@ -303,10 +303,18 @@ const withTaskComponent = (mapping = {}) => Component => {
       else {
         gmp.task.newTaskSettings().then(response => {
           const settings = response.data;
-          let {schedule_id, alert_id, target_id,
-            targets, scanner_id = OPENVAS_DEFAULT_SCANNER_ID, scan_configs,
-            config_id = FULL_AND_FAST_SCAN_CONFIG_ID, alerts, scanners,
-            schedules, tags} = settings;
+          let {
+            schedule_id,
+            alert_id,
+            target_id,
+            targets,
+            scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
+            scan_configs,
+            config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
+            alerts, scanners,
+            schedules,
+            tags,
+          } = settings;
 
           log.debug('Loaded new task dialog settings', settings);
 
@@ -436,7 +444,7 @@ const withTaskComponent = (mapping = {}) => Component => {
         onSave,
       } = mapping;
 
-      const onSaveHandler  = this.props[onSave];
+      const onSaveHandler = this.props[onSave];
       const has_save = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onSaved');
       const has_create = is_defined(onSaveHandler) &&

@@ -35,7 +35,7 @@ import Task from '../models/task.js';
 
 const log = logger.getLogger('gmp.commands.tasks');
 
-export class TaskCommand extends EntityCommand {
+class TaskCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'task', Task);
@@ -93,9 +93,9 @@ export class TaskCommand extends EntityCommand {
 
   newTaskSettings() {
     return this.httpGet({cmd: 'new_task'}).then(response => {
-      let {data} = response;
-      let settings = {};
-      let {new_task} = data;
+      const {data} = response;
+      const settings = {};
+      const {new_task} = data;
       settings.targets = map(new_task.get_targets_response.target,
         target => new Target(target));
       settings.scan_configs = map(new_task.get_configs_response.config,
@@ -131,10 +131,10 @@ export class TaskCommand extends EntityCommand {
       cmd: 'edit_task',
       id,
     }).then(response => {
-      let {data} = response;
+      const {data} = response;
 
-      let inst = {};
-      let resp = data.edit_task.commands_response;
+      const inst = {};
+      const resp = data.edit_task.commands_response;
       inst.targets = map(resp.get_targets_response.target,
         target => new Target(target));
       inst.scan_configs = map(resp.get_configs_response.config,
@@ -150,13 +150,32 @@ export class TaskCommand extends EntityCommand {
   }
 
   create(args) {
-    let {name, comment = '', target_id, schedule_id = 0, in_assets,
-      apply_overrides, min_qod, alterable, auto_delete, auto_delete_data,
-      scanner_type, scanner_id, config_id, slave_id = 0, alert_ids = [],
-      source_iface = '', hosts_ordering, max_checks, max_hosts, cve_scanner_id,
-      tag_name = '', tag_value = ''} = args;
+    const {
+      name,
+      comment = '',
+      target_id,
+      schedule_id = 0,
+      in_assets,
+      apply_overrides,
+      min_qod,
+      alterable,
+      auto_delete,
+      auto_delete_data,
+      scanner_type,
+      scanner_id,
+      config_id,
+      slave_id = 0,
+      alert_ids = [],
+      source_iface = '',
+      hosts_ordering,
+      max_checks,
+      max_hosts,
+      cve_scanner_id,
+      tag_name = '',
+      tag_value = '',
+    } = args;
 
-    let data = {
+    const data = {
       cmd: 'create_task',
       next: 'get_task',
       'alert_ids:': alert_ids,
@@ -187,7 +206,7 @@ export class TaskCommand extends EntityCommand {
   }
 
   createContainer(args) {
-    let {name, comment = ''} = args;
+    const {name, comment = ''} = args;
     log.debug('Creating container task', args);
     return this.httpPost({
       cmd: 'create_container_task',
@@ -198,11 +217,29 @@ export class TaskCommand extends EntityCommand {
   }
 
   save(args) {
-    let {id, name, comment = '', target_id, schedule_id = 0, in_assets,
-      apply_overrides, min_qod, alterable, auto_delete, auto_delete_data,
-      scanner_type, scanner_id, config_id, slave_id = 0, alert_ids = [],
-      source_iface = '', hosts_ordering, max_checks, max_hosts} = args;
-    let data = {
+    const {
+      id,
+      name,
+      comment = '',
+      target_id,
+      schedule_id = 0,
+      in_assets,
+      apply_overrides,
+      min_qod,
+      alterable,
+      auto_delete,
+      auto_delete_data,
+      scanner_type,
+      scanner_id,
+      config_id,
+      slave_id = 0,
+      alert_ids = [],
+      source_iface = '',
+      hosts_ordering,
+      max_checks,
+      max_hosts,
+    } = args;
+    const data = {
       cmd: 'save_task',
       next: 'get_task',
       alterable,
@@ -231,8 +268,14 @@ export class TaskCommand extends EntityCommand {
   }
 
   saveContainer(args) {
-    let {name, comment = '', in_assets = '1', auto_delete = 'no',
-      auto_delete_data, id} = args;
+    const {
+      name,
+      comment = '',
+      in_assets = '1',
+      auto_delete = 'no',
+      auto_delete_data,
+      id,
+    } = args;
     log.debug('Saving container task', args);
     return this.httpPost({
       cmd: 'save_container_task',
@@ -251,7 +294,7 @@ export class TaskCommand extends EntityCommand {
   }
 }
 
-export class TasksCommand extends EntitiesCommand {
+class TasksCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'task', Task);

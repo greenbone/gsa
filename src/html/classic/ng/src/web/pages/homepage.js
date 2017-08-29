@@ -50,7 +50,9 @@ import SecinfoCharts from './allsecinfo/charts.js';
 
 const Home = () => (
   <CacheProvider name="homedashboard">
-    <Section title={_('Dashboard')} img="dashboard.svg"
+    <Section
+      title={_('Dashboard')}
+      img="dashboard.svg"
       extra={<DashboardControls/>}>
       <Dashboard
         configPrefId="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
