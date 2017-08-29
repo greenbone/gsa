@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import Layout from './layout.js';
+
 /**
  * Component to wrap several child components
  *
@@ -34,7 +36,16 @@ import React from 'react';
  * @returns {Element} A wrapper element
  *
  */
-const Wrapper = props => <div {...props}/>;
+const Wrapper = ({
+  children,
+}) => (
+  <Layout
+    flex="column"
+    align={['start', 'stretch']}
+    grow="1">
+    {children}
+  </Layout>
+);
 
 export default Wrapper;
 

@@ -33,6 +33,7 @@ import Toolbar from '../components/bar/toolbar.js';
 import DashboardControls from '../components/dashboard/controls.js';
 
 import Layout from '../components/layout/layout.js';
+import Wrapper from '../components/layout/wrapper.js';
 
 import Loading from '../components/loading/loading.js';
 
@@ -99,13 +100,18 @@ class EntitiesPage extends React.Component {
         img={sectionIcon}
         foldable={foldable}
         extra={DashboardComponent ? <DashboardControls/> : null}>
-        {DashboardComponent &&
-          <DashboardComponent filter={filter}/>
-        }
-        {loading && !is_defined(entities) ?
-          this.renderLoading() :
-          this.renderTable()
-        }
+        <Layout
+          flex="column"
+          grow="1"
+        >
+          {DashboardComponent &&
+            <DashboardComponent filter={filter}/>
+          }
+          {loading && !is_defined(entities) ?
+            this.renderLoading() :
+            this.renderTable()
+          }
+        </Layout>
       </SectionComponent>
     );
   }
@@ -218,11 +224,11 @@ class EntitiesPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <Wrapper>
         {this.renderToolbar()}
         {this.renderSection()}
         {this.renderDialogs()}
-      </div>
+      </Wrapper>
     );
   }
 }

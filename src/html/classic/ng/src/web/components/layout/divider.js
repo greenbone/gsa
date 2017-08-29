@@ -27,11 +27,11 @@ import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withLayout} from './layout.js';
+import withLayout from './withLayout.js';
 
 const DEFAULT_MARGIN = '5px';
 
-let DividerComponent = glamorous.div(
+const DividerComponent = withLayout()(glamorous.div(
   {
     '& > *': {
       display: 'inline-flex',
@@ -46,14 +46,12 @@ let DividerComponent = glamorous.div(
 
       '& > *': {
         ['margin' + edge]: props.margin,
-      }
+      },
     };
   }
-);
+));
 
 DividerComponent.displayName = 'DividerComponent';
-
-DividerComponent = withLayout(DividerComponent);
 
 const DividerContainer = glamorous.div({
   display: 'inline-flex',
@@ -63,15 +61,15 @@ DividerContainer.displayName = 'DividerContainer';
 
 const Divider = ({
   margin = DEFAULT_MARGIN,
-  ...props,
+  ...props
 }) => {
   // put Divider into a container div to allow dividers in dividers
   return (
     <DividerContainer>
       <DividerComponent
         margin={margin}
-        flex="row"
-        {...props}/>
+        {...props}
+      />
     </DividerContainer>
   );
 };

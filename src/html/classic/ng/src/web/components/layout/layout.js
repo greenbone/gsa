@@ -21,136 +21,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
-import {classes, is_defined, is_empty, is_array} from 'gmp/utils.js';
-
-import PropTypes from '../../utils/proptypes.js';
-
-import './css/layout.css';
-
-const LAYOUT_PROPNAMES = [
-  'flex', 'align', 'grow', 'shrink', 'basis', 'box', 'offset',
-];
+import withLayoutNew from './withLayout.js';
 
 export const withLayout = (Component, defaults = {}) => {
-  const LayoutWrapper = ({
-    align = defaults.align,
-    basis = defaults.basis,
-    box = defaults.box,
-    className,
-    flex = defaults.flex,
-    grow = defaults.grow,
-    offset = defaults.offset,
-    shrink = defaults.shrink,
-    style = {},
-    wrap = defaults.wrap,
-    ...other,
-  }) => {
-    let css = className;
-
-    if (is_defined(flex)) {
-
-      if (is_empty(flex) || flex === true) {
-        flex = 'row';
-      }
-      css = classes('flex', flex, wrap ? 'wrap' : undefined, css);
-
-      if (is_defined(align)) {
-        if (is_array(align)) {
-          css = classes('justify-' + align[0], 'align-' + align[1], css);
-        }
-        else {
-          css = classes('justify-' + align, css);
-        }
-      }
-      // use sane defaults
-      else if (flex === 'row') {
-        css = classes('justify-start', 'align-center', css);
-      }
-      else {
-        css = classes('justify-center', 'align-stretch', css);
-      }
-    }
-
-    if (box) {
-      css = classes('box', css);
-    }
-
-    if (is_defined(offset)) {
-      css = classes('offset-' + offset, css);
-    }
-
-    if (is_defined(grow)) {
-      style.flexGrow = grow;
-    }
-    if (is_defined(shrink)) {
-      style.flexShrink = shrink;
-    }
-    if (is_defined(basis)) {
-      style.flexBasis = basis;
-    }
-
-    return (
-      <Component
-        {...other}
-        className={css}
-        style={style}
-      />
-    );
-  };
-
-  LayoutWrapper.propTypes = {
-    className: PropTypes.string,
-    flex: PropTypes.oneOf(['row', 'column', true]),
-    wrap: PropTypes.bool,
-    box: PropTypes.bool,
-    align: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array,
-    ]),
-    grow: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    shrink: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    basis: PropTypes.string,
-    offset: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    style: PropTypes.object,
-  };
-
-  return LayoutWrapper;
+  return withLayoutNew(defaults)(Component);
 };
 
-const LayoutComponent = props => {
-  return (
-    <div {...props}/>
-  );
-};
+export const Layout = withLayoutNew()('div');
 
-export const get_layout_props = props => {
-  let values = {};
-
-  if (!is_defined(props)) {
-    return values;
-  }
-
-  for (let name of LAYOUT_PROPNAMES) {
-    if (props.hasOwnProperty(name)) {
-      values[name] = props[name];
-    }
-  }
-
-  return values;
-};
-
-export const Layout = withLayout(LayoutComponent);
+Layout.displayName = 'Layout';
 
 export default Layout;
 

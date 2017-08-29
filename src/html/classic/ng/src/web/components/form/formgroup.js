@@ -68,7 +68,10 @@ const FormGroup = ({
     css = classes('offset-' + offset, css);
   }
   return (
-    <div className={className}>
+    <Layout
+      flex
+      align={['start', 'center']}
+      className={className}>
       {title}
       <Layout
         {...other}
@@ -76,7 +79,7 @@ const FormGroup = ({
         className={css}>
         {children}
       </Layout>
-    </div>
+    </Layout>
   );
 };
 

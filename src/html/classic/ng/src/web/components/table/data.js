@@ -35,10 +35,11 @@ const TableData = ({
     ...other
   }) => {
   return (
-    <td className={className}
+    <td
+      className={className}
       colSpan={colSpan}
       rowSpan={rowSpan}>
-      <Layout {...other}>
+      <Layout flex="column" {...other}>
         {children}
       </Layout>
     </td>

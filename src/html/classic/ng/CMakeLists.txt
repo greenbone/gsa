@@ -224,6 +224,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/divider.js
      ${NG_SRC_DIR}/src/web/components/layout/icondivider.js
      ${NG_SRC_DIR}/src/web/components/layout/layout.js
+     ${NG_SRC_DIR}/src/web/components/layout/withLayout.js
      ${NG_SRC_DIR}/src/web/components/layout/wrapper.js
      ${NG_SRC_DIR}/src/web/components/loading/loading.js
      ${NG_SRC_DIR}/src/web/components/link/assetlink.js
@@ -510,7 +511,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
      ${NG_SRC_DIR}/src/web/components/form/css/select2.css
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
-     ${NG_SRC_DIR}/src/web/components/layout/css/layout.css
      ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
      ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css

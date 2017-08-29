@@ -23,8 +23,6 @@
 
 import glamorous from 'glamorous';
 
-import {withLayout} from '../layout/layout.js';
-
 const Main = glamorous.main(
   'main',
   {
@@ -35,6 +33,6 @@ const Main = glamorous.main(
 
 Main.displayName = 'Main';
 
-export default withLayout(Main);
+export default Main;
 
 // vim: set ts=2 sw=2 tw=80:
