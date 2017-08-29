@@ -74,19 +74,21 @@ const Section = ({
           }
         </Layout>
       </SectionHeader>
-      <FoldableLayout
-        grow="1"
-        foldState={foldState}
-        onFoldStepEnd={onFoldStepEnd}>
-        {children}
-      </FoldableLayout>
+      {foldable ?
+        <FoldableLayout
+          grow="1"
+          foldState={foldState}
+          onFoldStepEnd={onFoldStepEnd}>
+          {children}
+        </FoldableLayout> :
+        children
+      }
     </section>
   );
 };
 
 Section.propTypes = {
   className: PropTypes.string,
-  foldable: PropTypes.bool,
   foldState: PropTypes.string,
   img: PropTypes.oneOfType([
     PropTypes.string,

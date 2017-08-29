@@ -1,5 +1,11 @@
 2017-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/section/section.js: Only use
+	FoldableLayout if the section is foldable. This removes the foldable code from
+	beeing rendered if not necessary.
+
+2017-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/reports.js: Allow to parse Report from
 	a repsonse.
 
