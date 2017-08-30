@@ -269,13 +269,15 @@ class LoginPage extends React.Component {
     return (
       <LoginLayout flex="column" className="login">
         <LoginHeader/>
-        <LoginMain
-          flex
-          align={['space-around', 'center']}
-          grow="1"
-          wrap>
-          <LoginForm onSubmit={this.onSubmit} error={message}/>
-          <GreenboneIcon/>
+        <LoginMain>
+          <Layout
+            flex
+            align={['space-around', 'center']}
+            grow="1"
+            wrap>
+            <LoginForm onSubmit={this.onSubmit} error={message}/>
+            <GreenboneIcon/>
+          </Layout>
         </LoginMain>
         <Footer/>
       </LoginLayout>

@@ -32,6 +32,8 @@ import PropTypes from '../utils/proptypes.js';
 
 import MenuBar from '../components/bar/menubar.js';
 
+import Layout from '../components/layout/layout.js';
+
 import StickyContainer from '../components/sticky/container.js';
 
 import CapabilitiesProvider from '../components/provider/capabilitiesprovider.js'; // eslint-disable-line max-len
@@ -42,7 +44,7 @@ import Main from '../components/structure/main.js';
 
 const log = logger.getLogger('web.page');
 
-const Div = glamorous.div({
+const StyledLayout = glamorous(Layout)({
   height: '100%',
 });
 
@@ -77,7 +79,9 @@ class Page extends React.Component {
     return (
       <CapabilitiesProvider
         capabilities={capabilities}>
-        <Div>
+        <StyledLayout
+          flex="column"
+          align={['start', 'stretch']}>
           <Header/>
           <StickyContainer>
             <MenuBar/>
@@ -86,7 +90,7 @@ class Page extends React.Component {
             </Main>
             <Footer/>
           </StickyContainer>
-        </Div>
+        </StyledLayout>
       </CapabilitiesProvider>
     );
   }
