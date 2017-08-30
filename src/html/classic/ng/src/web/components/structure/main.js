@@ -20,19 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import glamorous from 'glamorous';
 
-const Main = glamorous.main(
-  'main',
-  {
-    padding: '5px 10px',
-    height: '100%',
-  }
-);
+import withLayout from '../layout/withLayout.js';
+
+const Main = glamorous.main({
+  padding: '5px 10px',
+  height: '100%',
+});
 
 Main.displayName = 'Main';
 
-export default Main;
+export default withLayout({
+  flex: 'column',
+  align: ['start', 'stretch'],
+})(Main);
 
 // vim: set ts=2 sw=2 tw=80:
