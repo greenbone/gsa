@@ -1,5 +1,10 @@
 2017-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/powerfilter/powerfilter.js: Improve
+	layout of Powerfilter by removing the FormGroups.
+
+2017-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/layout/withLayout.js: Improve
 	displayed css class in browser devtools for easier debugging of layout issues.
 

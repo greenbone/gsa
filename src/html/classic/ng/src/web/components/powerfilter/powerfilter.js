@@ -34,7 +34,6 @@ import {render_options} from '../../utils/render.js';
 
 import FootNote from '../footnote/footnote.js';
 
-import FormGroup from '../form/formgroup.js';
 import Select2 from '../form/select2.js';
 import TextField from '../form/textfield.js';
 
@@ -65,6 +64,10 @@ const FilterSelect = glamorous(Select2)({
 });
 
 const Label = glamorous.label({
+  marginRight: '5px',
+});
+
+const LeftDivider = glamorous(Divider)({
   marginRight: '5px',
 });
 
@@ -215,12 +218,12 @@ class PowerFilter extends React.Component {
     return (
       <Layout
         flex="column"
-        align={['center', 'stetch']}
+        align={['start', 'stetch']}
         className="powerfilter"
       >
         <Layout flex align={['space-between', 'center']}>
-          <Divider align={['start', 'center']}>
-            <FormGroup flex align={['start', 'center']}>
+          <LeftDivider align={['start', 'center']}>
+            <Layout flex align={['start', 'center']}>
               <Label>
                 <b>{_('Filter')}</b>
               </Label>
@@ -231,64 +234,56 @@ class PowerFilter extends React.Component {
                 value={userfilter}
                 onKeyDown={this.onUserFilterKeyPress}
                 onChange={this.onValueChange}/>
-            </FormGroup>
-            <FormGroup flex>
-              <IconDivider flex align={['start', 'center']}>
-                <Icon
-                  img="refresh.svg"
-                  title={_('Update Filter')}
-                  onClick={this.onUpdateFilter}/>
+            </Layout>
+            <IconDivider flex align={['start', 'center']}>
+              <Icon
+                img="refresh.svg"
+                title={_('Update Filter')}
+                onClick={this.onUpdateFilter}/>
 
-                {onResetClick &&
-                  <DeleteIcon
-                    img="delete.svg"
-                    title={_('Reset Filter')}
-                    active={is_defined(filter)}
-                    onClick={is_defined(filter) ? this.onResetClick : undefined}
-                  />
-                }
+              {onResetClick &&
+                <DeleteIcon
+                  img="delete.svg"
+                  title={_('Reset Filter')}
+                  active={is_defined(filter)}
+                  onClick={is_defined(filter) ? this.onResetClick : undefined}
+                />
+              }
 
-                <HelpIcon page="powerfilter" />
+              <HelpIcon page="powerfilter" />
 
-                {onEditClick &&
-                  <EditIcon
-                    title={_('Edit Filter')}
-                    active={is_defined(filter)}
-                    onClick={is_defined(filter) ? onEditClick : undefined}/>
-                }
-              </IconDivider>
-            </FormGroup>
-          </Divider>
+              {onEditClick &&
+                <EditIcon
+                  title={_('Edit Filter')}
+                  active={is_defined(filter)}
+                  onClick={is_defined(filter) ? onEditClick : undefined}/>
+              }
+            </IconDivider>
+          </LeftDivider>
           <Divider align={['end', 'center']}>
-            <FormGroup flex align={['start', 'center']}>
-              {capabilities.mayCreate('filter') &&
-                <TextField
-                  name="filtername"
-                  size="10"
-                  maxLength="80"
-                  value={filtername}
-                  onChange={this.onValueChange}/>
-              }
-            </FormGroup>
-            <FormGroup flex align={['start', 'center']}>
-              {can_create ?
-                <NewIcon
-                  title={_('Create new filter from current term')}
-                  onClick={this.onCreateFilter}/> :
-                <Icon
-                  img="new_inactive.svg"
-                  title={_('Please insert a filter name')}/>
-              }
-            </FormGroup>
-            <FormGroup flex align={['start', 'center']}>
-              {capabilities.mayAccess('filters') &&
-                <FilterSelect
-                  value={namedfilterid}
-                  onChange={this.onNamedFilterChange}>
-                  {filter_opts}
-                </FilterSelect>
-              }
-            </FormGroup>
+            {capabilities.mayCreate('filter') &&
+              <TextField
+                name="filtername"
+                size="10"
+                maxLength="80"
+                value={filtername}
+                onChange={this.onValueChange}/>
+            }
+            {can_create ?
+              <NewIcon
+                title={_('Create new filter from current term')}
+                onClick={this.onCreateFilter}/> :
+              <Icon
+                img="new_inactive.svg"
+                title={_('Please insert a filter name')}/>
+            }
+            {capabilities.mayAccess('filters') &&
+              <FilterSelect
+                value={namedfilterid}
+                onChange={this.onNamedFilterChange}>
+                {filter_opts}
+              </FilterSelect>
+            }
           </Divider>
         </Layout>
         <StyledFootNote>
