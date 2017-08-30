@@ -35,13 +35,19 @@ const convert_align = align => {
   }
 };
 
+const set_default_flex = defaults => is_defined(defaults.flex) ?
+  defaults.flex : 'row';
+
 const withLayout = (defaults = {}) => Component => {
-  return glamorous(Component)(
-    'layout',
+  return glamorous(Component, {
+    withProps: ({
+      flex = set_default_flex(defaults),
+    }) => ({className: flex === true ? 'layout-row' : 'layout-' + flex}),
+  })(
     ({
       align = defaults.align,
       basis = defaults.basis,
-      flex = is_defined(defaults.flex) ? defaults.flex : 'row',
+      flex = set_default_flex(defaults),
       grow = defaults.grow,
       shrink = defaults.shrink,
       wrap = defaults.wrap,
