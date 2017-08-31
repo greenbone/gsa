@@ -47,7 +47,7 @@ import Main from '../components/structure/main.js';
 
 const log = logger.getLogger('web.login');
 
-const panelcss =  {
+const panelcss = {
   marginTop: '30px',
   marginBottom: '30px',
   padding: '10px',
@@ -112,7 +112,7 @@ class LoginForm extends React.Component {
   render() {
     const {error} = this.props;
     const {username, password} = this.state;
-    const protocol_insecure = (window.location.protocol !== 'https:');
+    const protocol_insecure = window.location.protocol !== 'https:';
     return (
       <Layout flex="column">
         {is_defined(error) &&
@@ -139,7 +139,8 @@ class LoginForm extends React.Component {
             grow="1">
             <Layout flex="column">
               <FormGroup title={_('Username')} titleSize="4">
-                <TextField name="username"
+                <TextField
+                  name="username"
                   grow="1"
                   placeholder={_('e.g. johndoe')}
                   value={username}
@@ -148,7 +149,8 @@ class LoginForm extends React.Component {
                   onChange={this.onValueChange}/>
               </FormGroup>
               <FormGroup title={_('Password')} titleSize="4">
-                <PasswordField name="password"
+                <PasswordField
+                  name="password"
                   grow="1"
                   placeholder={_('Password')}
                   value={password}
@@ -200,10 +202,10 @@ class LoginPage extends React.Component {
   }
 
   onSubmit(username, password) {
-    let {router, gmp} = this.context;
+    const {router, gmp} = this.context;
 
     gmp.login(username, password).then(token => {
-      let {location} = this.props;
+      const {location} = this.props;
       if (location && location.state && location.state.next &&
           location.state.next !== location.pathname) {
         router.replace(location.state.next);
@@ -219,13 +221,13 @@ class LoginPage extends React.Component {
 
   componentWillMount() {
     // reset token
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     gmp.token = undefined;
   }
 
   render() {
-    let {type} = this.props.location.query;
-    let {error} = this.state;
+    const {type} = this.props.location.query;
+    const {error} = this.state;
     let message;
 
     switch (type) {

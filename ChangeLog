@@ -1,3 +1,8 @@
+2017-08-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/pages/loginpage.js: Update coding style at login
+	page.
+
 2017-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/loginpage.js,
