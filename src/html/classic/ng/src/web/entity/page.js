@@ -179,7 +179,7 @@ class EntityPage extends React.Component {
     }
 
     return (
-      <Layout flex="column">
+      <Layout flex="column" grow="1">
         <Toolbar>
           {this.renderToolbarIcons()}
         </Toolbar>
