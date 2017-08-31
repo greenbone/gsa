@@ -48,7 +48,7 @@ const exclude_props = [
   'children',
 ];
 
-export class EntitiesTable extends React.Component {
+class EntitiesTable extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -151,7 +151,10 @@ export class EntitiesTable extends React.Component {
     }
 
     return (
-      <div className="entities-table">
+      <Layout
+        flex="column"
+        grow="1"
+        className="entities-table">
         {pagination}
         <StrippedTable header={header} footer={footer}>
           {body}
@@ -165,7 +168,7 @@ export class EntitiesTable extends React.Component {
           </Layout> :
           pagination
         }
-      </div>
+      </Layout>
     );
   }
 }
