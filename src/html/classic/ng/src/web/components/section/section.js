@@ -26,16 +26,17 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_string} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import {withFolding, withFoldToggle} from '../folding/folding.js';
 
-import Icon from '../icon/icon.js';
 import FoldIcon from '../icon/foldicon.js';
 
-import Layout, {withLayout} from '../layout/layout.js';
+import Layout from '../layout/layout.js';
+
+import SectionHeader from './header.js';
 
 const FoldableLayout = withFolding(Layout);
 
@@ -44,19 +45,19 @@ const FoldLayout = glamorous(Layout)({
 });
 
 const Section = ({
-    children,
-    className,
-    extra,
-    foldable,
-    foldState,
-    img,
-    title,
-    onFoldToggle,
-    onFoldStepEnd,
-  }) => {
-
-  return (
-    <section className={className}>
+  children,
+  className,
+  extra,
+  foldable,
+  foldState,
+  header,
+  img,
+  title,
+  onFoldToggle,
+  onFoldStepEnd,
+}) => {
+  if (!is_defined(header)) {
+    header = (
       <SectionHeader
         img={img}
         title={title}>
@@ -74,6 +75,11 @@ const Section = ({
           }
         </Layout>
       </SectionHeader>
+    );
+  }
+  return (
+    <section className={className}>
+      {header}
       {foldable ?
         <FoldableLayout
           grow="1"
@@ -92,59 +98,14 @@ Section.propTypes = {
   extra: PropTypes.element,
   foldState: PropTypes.string,
   foldable: PropTypes.bool,
+  header: PropTypes.element,
   img: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
   ]),
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   onFoldStepEnd: PropTypes.func,
   onFoldToggle: PropTypes.func,
-};
-
-const HeaderLayout = glamorous(Layout)(
-  'section-header',
-  {
-    margin: '10px 0px',
-    borderBottom: '2px solid black',
-    position: 'relative',
-  },
-);
-
-const HeaderHeading = withLayout(glamorous.h2({
-  margin: '0 0 1px 0',
-}));
-
-const HeaderIconLayout = glamorous(Layout)({
-  marginRight: '5px',
-});
-
-export const SectionHeader = ({children, title, img}) => {
-  return (
-    <HeaderLayout
-      flex
-      align={['space-between', 'end']}
-      className="section-header">
-      <HeaderHeading flex align={['start', 'stretch']}>
-        <HeaderIconLayout flex>
-          {is_string(img) ?
-            <Icon size="large" img={img}/> : img
-          }
-        </HeaderIconLayout>
-        <Layout flex align={['start', 'end']}>
-          {title}
-        </Layout>
-      </HeaderHeading>
-      {children}
-    </HeaderLayout>
-  );
-};
-
-SectionHeader.propTypes = {
-  img: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
-  title: PropTypes.string.isRequired,
 };
 
 export default withFoldToggle(Section);
