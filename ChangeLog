@@ -1,5 +1,11 @@
 2017-08-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/hoststable.js,
+	src/html/classic/ng/src/web/pages/reports/operatingsystemstable.js: Don't
+	require onSortChange callbacks. Both tables don't need seem to work correctly.
+
+2017-08-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/section/header.js,
 	src/html/classic/ng/src/web/components/section/section.js: Extract

@@ -74,7 +74,7 @@ const Header = ({
 
 Header.propTypes = {
   sort: PropTypes.bool,
-  onSortChange: PropTypes.func.isRequired,
+  onSortChange: PropTypes.func,
 };
 
 const Row = ({entity}) => {
