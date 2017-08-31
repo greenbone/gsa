@@ -48,6 +48,7 @@ const withLayout = (defaults = {}) => Component => {
     <Component {...props}/>;
 
   return glamorous(Filter, {
+    displayName: 'withLayout(' + Component.displayName + ')',
     withProps: ({
       flex = set_default_flex(defaults),
     }) => ({className: flex === true ? 'layout-row' : 'layout-' + flex}),
