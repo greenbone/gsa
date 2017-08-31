@@ -24,35 +24,13 @@ import moment from 'moment';
 
 import {is_defined} from '../utils.js';
 
-import {parse_severity, parse_float} from '../parser.js';
+import {parse_severity} from '../parser.js';
 
 import Model from '../model.js';
 
-import Filter from '../models/filter.js';
+import ReportReport from './report/report.js';
 
 // FIXME the report xml structure is really ugly
-
-class ReportReport extends Model {
-
-  static entity_type = 'report';
-
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
-    const {task, severity} = elem;
-
-    copy.severity = {
-      filtered: parse_float(severity.filtered),
-      full: parse_float(severity.full),
-    };
-
-    copy.severity_class = new Model(copy.severity_class);
-
-    copy.task = new Model(task, 'task');
-
-    return copy;
-  }
-
-}
 
 class Report extends Model {
 
@@ -73,7 +51,10 @@ class Report extends Model {
       timestamp,
     } = elem;
 
-    copy.report = new ReportReport(report);
+    if (is_defined(report)) {
+      copy.report = new ReportReport(report);
+    }
+
     copy.report_format = new Model(report_format, 'report_format');
     copy.task = new Model(task, 'task');
 
@@ -89,10 +70,6 @@ class Report extends Model {
 
     if (is_defined(scan_end)) {
       copy.scan_end = moment(scan_end);
-    }
-
-    if (is_defined(report)) {
-      copy.filter = new Filter(report.filters);
     }
 
     return copy;
