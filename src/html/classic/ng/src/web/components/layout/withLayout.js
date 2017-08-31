@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import React from 'react';
+
 import glamorous from 'glamorous';
 
 import {is_defined, map} from 'gmp/utils.js';
@@ -39,7 +41,13 @@ const set_default_flex = defaults => is_defined(defaults.flex) ?
   defaults.flex : 'row';
 
 const withLayout = (defaults = {}) => Component => {
-  return glamorous(Component, {
+  // get rid of anoying unkown props warning
+  // should be obsolete with never glamorous version and filterProps option in future
+  // eslint-disable-next-line react/prop-types
+  const Filter = ({align, basis, flex, grow, shrink, wrap, ...props}) =>
+    <Component {...props}/>;
+
+  return glamorous(Filter, {
     withProps: ({
       flex = set_default_flex(defaults),
     }) => ({className: flex === true ? 'layout-row' : 'layout-' + flex}),
