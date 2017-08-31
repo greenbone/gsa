@@ -27,11 +27,13 @@ import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withLayout from './withLayout.js';
+import Layout from './layout.js';
 
 const DEFAULT_MARGIN = '5px';
 
-const DividerComponent = withLayout()(glamorous.div(
+const DividerComponent = glamorous(Layout, {
+  rootEl: 'div',
+})(
   {
     '& > *': {
       display: 'inline-flex',
@@ -49,7 +51,7 @@ const DividerComponent = withLayout()(glamorous.div(
       },
     };
   }
-));
+);
 
 DividerComponent.displayName = 'DividerComponent';
 

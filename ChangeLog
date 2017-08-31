@@ -1,5 +1,10 @@
 2017-08-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/layout/divider.js: Fix vertical
+	layout of Divider component.
+
+2017-08-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/layout/withLayout.js: Get rid of
 	anoying unkown props warning.
 
