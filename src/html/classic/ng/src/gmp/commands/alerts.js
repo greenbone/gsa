@@ -42,7 +42,8 @@ const method_data_fields = [
   'verinice_server_credential', 'verinice_server_report_format',
   'start_task_task', 'send_host', 'send_port', 'send_report_format',
   'scp_credential', 'scp_host', 'scp_known_hosts', 'scp_path',
-  'scp_report_format',
+  'scp_report_format', 'smb_credential', 'smb_file_path', 'smb_report_format',
+  'smb_share_path',
 ];
 const condition_data_fields = [
   'severity', 'direction', 'at_least_filter_id',

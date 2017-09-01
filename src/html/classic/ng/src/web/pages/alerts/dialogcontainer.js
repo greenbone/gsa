@@ -87,6 +87,7 @@ export class AlertDialogContainer extends React.Component {
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
 
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
+    this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
       this);
 
@@ -129,6 +130,9 @@ export class AlertDialogContainer extends React.Component {
       if (data.type === 'scp') {
         this.alert_dialog.setValue('method_data_scp_credential', credential.id);
       }
+      else if (data.type === 'smb') {
+        this.alert_dialog.setValue('method_data_smb_credential', credential.id);
+      }
       else if (data.type === 'verinice') {
         this.alert_dialog.setValue('method_data_verinice_server_credential',
           credential.id);
@@ -144,6 +148,10 @@ export class AlertDialogContainer extends React.Component {
 
   openScpCredentialDialog(types) {
     this.openCredentialDialog({type: 'scp', types});
+  }
+
+  openSmbCredentialDialog(types) {
+    this.openCredentialDialog({type: 'smb', types});
   }
 
   openVeriniceCredentialDialog(types) {
@@ -299,6 +307,12 @@ export class AlertDialogContainer extends React.Component {
           method_data_send_report_format: select_save_id(report_formats,
             value(method.data.send_report_format)),
 
+          method_data_smb_credential: value(method.data.smb_credential, ''),
+          method_data_smb_file_path: value(method.data.smb_file_path, ''),
+          method_data_smb_report_format:
+            value(method.data.smb_report_format, ''),
+          method_data_smb_share_path: value(method.data.smb_share_path, ''),
+
           method_data_snmp_agent: value(method.data.snmp_agent, ''),
           method_data_snmp_community: value(method.data.snmp_community,
             ''),
@@ -372,6 +386,7 @@ export class AlertDialogContainer extends React.Component {
         <AlertDialog
           ref={ref => this.alert_dialog = ref}
           onNewScpCredentialClick={this.openScpCredentialDialog}
+          onNewSmbCredentialClick={this.openSmbCredentialDialog}
           onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
           onSave={this.handleSaveAlert}
         />

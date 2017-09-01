@@ -44,6 +44,7 @@ import ScpMethodPart from './scpmethodpart.js';
 import EmailMethodPart from './emailmethodpart.js';
 import SendMethodPart from './sendmethodpart.js';
 import StartTaskMethodPart from './starttaskmethodpart.js';
+import SmbMethodPart from './smbmethodpart.js';
 import SnmpMethodPart from './snmpmethodpart.js';
 import SourcefireMethodPart from './sourcefiremethodpart.js';
 import VeriniceMethodPart from './verinicemethodpart.js';
@@ -241,6 +242,10 @@ class AlertDialog extends React.Component {
       method_data_send_port,
       method_data_send_report_format,
       method_data_start_task_task,
+      method_data_smb_credential,
+      method_data_smb_file_path,
+      method_data_smb_report_format,
+      method_data_smb_share_path,
       method_data_snmp_agent,
       method_data_snmp_community,
       method_data_snmp_message,
@@ -254,6 +259,7 @@ class AlertDialog extends React.Component {
       result_filters,
       tasks,
       onNewScpCredentialClick,
+      onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
       onValueChange,
     } = this.props;
@@ -376,6 +382,7 @@ class AlertDialog extends React.Component {
             </option>
             <option value="SCP">{_('SCP')}</option>
             <option value="Send">{_('Send to host')}</option>
+            <option value="SMB">{_('SMB')}</option>
             <option value="SNMP">{_('SNMP')}</option>
             <option value="Sourcefire Connector" disabled={!is_task_event}>
               {_('Sourcefire Connector')}
@@ -444,6 +451,19 @@ class AlertDialog extends React.Component {
             tasks={tasks}
             startTaskTask={method_data_start_task_task}
             onChange={onValueChange}/>
+        }
+
+        {method === 'SMB' &&
+          <SmbMethodPart
+            prefix="method_data"
+            credentials={credentials}
+            reportFormats={report_formats}
+            onChange={onValueChange}
+            smbCredential={method_data_smb_credential}
+            smbFilePath={method_data_smb_file_path}
+            smbSharePath={method_data_smb_share_path}
+            smbReportFormat={method_data_smb_report_format}
+            onNewCredentialClick={onNewSmbCredentialClick}/>
         }
 
         {method === 'SNMP' &&
@@ -527,6 +547,10 @@ AlertDialog.propTypes = {
   method_data_send_port: PropTypes.string,
   method_data_send_report_format: PropTypes.id,
   method_data_start_task_task: PropTypes.id,
+  method_data_smb_credential: PropTypes.id,
+  method_data_smb_file_path: PropTypes.string,
+  method_data_smb_report_format: PropTypes.id,
+  method_data_smb_share_path: PropTypes.string,
   method_data_snmp_agent: PropTypes.string,
   method_data_snmp_community: PropTypes.string,
   method_data_snmp_message: PropTypes.string,
@@ -540,6 +564,7 @@ AlertDialog.propTypes = {
   secinfo_filters: PropTypes.arrayLike,
   tasks: PropTypes.arrayLike,
   onNewScpCredentialClick: PropTypes.func,
+  onNewSmbCredentialClick: PropTypes.func,
   onNewVeriniceCredentialClick: PropTypes.func,
   onValueChange: PropTypes.func,
 };
@@ -581,6 +606,8 @@ export default withDialog(AlertDialog, {
     method_data_scp_known_hosts: '',
     method_data_send_host: '',
     method_data_send_port: '',
+    method_data_smb_file_path: 'report.xml',
+    method_data_smb_share_path: '\\\\localhost\\gvm-reports',
     method_data_snmp_agent: 'localhost',
     method_data_snmp_community: 'public',
     method_data_snmp_message: '$e',

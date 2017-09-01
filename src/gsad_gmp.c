@@ -8078,6 +8078,11 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                     || strcmp (name, "scp_known_hosts") == 0
                     || strcmp (name, "scp_path") == 0
                     || strcmp (name, "scp_report_format") == 0))
+            || (strcmp (method, "SMB") == 0
+                && (strcmp (name, "smb_credential") == 0
+                    || strcmp (name, "smb_file_path") == 0
+                    || strcmp (name, "smb_report_format") == 0
+                    || strcmp (name, "smb_share_path") == 0))
             || (strcmp (method, "SNMP") == 0
                 && (strcmp (name, "snmp_community") == 0
                     || strcmp (name, "snmp_agent") == 0
