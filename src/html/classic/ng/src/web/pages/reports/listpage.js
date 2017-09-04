@@ -37,6 +37,7 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
 
 import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import ContainerTaskDialog from '../../pages/tasks/containerdialog.js';
 
@@ -55,17 +56,16 @@ const Dashboard = withDashboard(ReportCharts, {
   defaultControllerString: 'report-by-cvss',
 });
 
-const ToolBarIcons = props => {
-  return (
-    <Layout flex box>
-      <HelpIcon page="reports"/>
-      <Icon size="small"
-        title={_('Upload report')}
-        img="upload.svg"
-        onClick={props.onUploadReportClick}/>
-    </Layout>
-  );
-};
+const ToolBarIcons = ({onUploadReportClick}) => (
+  <IconDivider>
+    <HelpIcon page="reports"/>
+    <Icon
+      size="small"
+      title={_('Upload report')}
+      img="upload.svg"
+      onClick={onUploadReportClick}/>
+  </IconDivider>
+);
 
 ToolBarIcons.propTypes = {
   onUploadReportClick: PropTypes.func,
