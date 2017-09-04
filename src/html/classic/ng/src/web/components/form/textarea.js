@@ -25,11 +25,12 @@ import React from 'react';
 
 import {classes} from 'gmp/utils.js';
 
+import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 
-import {withLayout} from '../layout/layout.js';
+import withLayout from '../layout/withLayout.js';
 
-import {withChangeHandler} from './form.js';
+import withChangeHandler from './withChangeHandler.js';
 
 const TextAreaComponent = ({className, value = '', ...props}) => {
   className = classes('form-control', className);
@@ -45,9 +46,9 @@ TextAreaComponent.propTypes = {
   value: PropTypes.any,
 };
 
-export default withLayout(
-  withChangeHandler(TextAreaComponent),
-  {box: true}
-);
+export default compose(
+  withLayout(),
+  withChangeHandler(),
+)(TextAreaComponent);
 
 // vim: set ts=2 sw=2 tw=80:

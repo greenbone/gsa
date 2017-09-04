@@ -1,5 +1,18 @@
 2017-09-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/form/checkbox.js,
+	src/html/classic/ng/src/web/components/form/field.js,
+	src/html/classic/ng/src/web/components/form/radio.js,
+	src/html/classic/ng/src/web/components/form/select2.js,
+	src/html/classic/ng/src/web/components/form/spinner.js,
+	src/html/classic/ng/src/web/components/form/text.js,
+	src/html/classic/ng/src/web/components/form/textarea.js,
+	src/html/classic/ng/src/web/components/form/timezoneselect.js: Get rid of the
+	box property of the old withLayout HOC. The box property is obsolete now. Also
+	use new versions of withLayout and withChangeHandler HOCs.
+
+2017-09-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/layout/withLayout.js: Get rid of the
 	temporary Filter component in withLayout after a new version glamorous has
 	been released.

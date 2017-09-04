@@ -26,9 +26,10 @@ import $ from 'jquery';
 
 import {is_defined, is_array} from 'gmp/utils.js';
 
+import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 
-import {withLayout} from '../layout/layout.js';
+import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
 
@@ -148,8 +149,11 @@ Select2Component.propTypes = {
   className: PropTypes.string
 };
 
-export default withLayout(withChangeHandler({
-  value_func: value => value,
-})(Select2Component), {box: true});
+export default compose(
+  withLayout(),
+  withChangeHandler({
+    value_func: value => value,
+  }),
+)(Select2Component);
 
 // vim: set ts=2 sw=2 tw=80:

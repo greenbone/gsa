@@ -29,7 +29,7 @@ import timezones from 'gmp/timezones.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withLayout} from '../layout/layout.js';
+import withLayout from '../layout/withLayout.js';
 
 import Select2 from './select2.js';
 
@@ -54,6 +54,6 @@ TimeZoneSelectComponent.propTypes = {
   value: PropTypes.string,
 };
 
-export default withLayout(TimeZoneSelectComponent, {box: true});
+export default withLayout()(TimeZoneSelectComponent);
 
 // vim: set ts=2 sw=2 tw=80:

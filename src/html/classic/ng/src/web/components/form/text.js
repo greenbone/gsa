@@ -23,9 +23,10 @@
 
 import React from 'react';
 
+import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 
-import {withLayout} from '../layout/layout.js';
+import withLayout from '../layout/withLayout.js';
 
 import {withClickHandler} from './form.js';
 
@@ -40,9 +41,9 @@ TextComponent.propTypes = {
   value: PropTypes.any,
 };
 
-export default withLayout(
-  withClickHandler(TextComponent),
-  {box: true},
-);
+export default compose(
+  withLayout(),
+  withClickHandler,
+)(TextComponent);
 
 // vim: set ts=2 sw=2 tw=80:

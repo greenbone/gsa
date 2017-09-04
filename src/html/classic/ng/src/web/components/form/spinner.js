@@ -35,7 +35,7 @@ import {parse_float, parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withLayout} from '../layout/layout.js';
+import withLayout from '../layout/withLayout.js';
 
 import './css/spinner.css';
 
@@ -336,6 +336,6 @@ SpinnerComponent.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default withLayout(SpinnerComponent, {box: true});
+export default withLayout()(SpinnerComponent);
 
 // vim: set ts=2 sw=2 tw=80:

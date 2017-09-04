@@ -25,10 +25,12 @@ import React from 'react';
 
 import {classes, is_defined} from 'gmp/utils.js';
 
+import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
-import {withLayout} from '../layout/layout.js';
 
-import {withChangeHandler} from './form.js';
+import withLayout from '../layout/withLayout.js';
+
+import withChangeHandler from './withChangeHandler.js';
 
 import './css/form.css';
 import './css/checkboxradio.css';
@@ -82,12 +84,12 @@ CheckboxComponent.propTypes = {
   unCheckedValue: PropTypes.any,
 };
 
-export default withLayout(
-  withChangeHandler(CheckboxComponent, {
+export default compose(
+  withLayout(),
+  withChangeHandler({
     convert_func: convert_checked,
     value_func: event => event.target.checked,
   }),
-  {box: true}
-);
+)(CheckboxComponent);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -25,11 +25,12 @@ import React from 'react';
 
 import {classes, is_defined} from 'gmp/utils.js';
 
+import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 
-import {withLayout} from '../layout/layout.js';
+import withLayout from '../layout/withLayout.js';
 
-import {withChangeHandler} from './form.js';
+import withChangeHandler from './withChangeHandler.js';
 
 import './css/form.css';
 import './css/checkboxradio.css';
@@ -65,7 +66,12 @@ RadioComponent.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default withLayout(withChangeHandler(RadioComponent),
-  {align: ['start', 'center'], box: true, flex: true});
+export default compose(
+  withLayout({
+    align: ['start', 'center'],
+    flex: 'row',
+  }),
+  withChangeHandler(),
+)(RadioComponent);
 
 // vim: set ts=2 sw=2 tw=80:
