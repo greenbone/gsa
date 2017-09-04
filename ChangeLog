@@ -1,5 +1,11 @@
 2017-09-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/layout/withLayout.js: Get rid of the
+	temporary Filter component in withLayout after a new version glamorous has
+	been released.
+
+2017-09-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json,
 	src/html/classic/ng/yarn.lock: Update glamorous to 4.7.0 and react-scripts to
 	1.0.13.
