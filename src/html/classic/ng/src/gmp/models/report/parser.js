@@ -47,7 +47,7 @@ const empty_collection_list = filter => {
 
 export const parse_vulnerabilities = (report, filter) => {
   const temp_vulns = {};
-  const {vulns, results} = report;
+  const {vulns, results = {}} = report;
   const {count: full_count} = vulns;
 
   if (!is_defined(vulns)) {
@@ -96,7 +96,7 @@ export const parse_vulnerabilities = (report, filter) => {
 };
 
 export const parse_apps = (report, filter) => {
-  const {host: hosts, apps, results} = report;
+  const {host: hosts, apps, results = {}} = report;
   const apps_temp = {};
   const cpe_host_details = {};
   const full_count = apps.count;
