@@ -1,5 +1,11 @@
 2017-09-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/package.json,
+	src/html/classic/ng/yarn.lock: Update glamorous to 4.7.0 and react-scripts to
+	1.0.13.
+
+2017-09-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/parser.js: Fix parsing report
 	results for report list page. The data for the list page doesn't contain any
 	report results.

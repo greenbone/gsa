@@ -2946,9 +2946,9 @@ glamor@^2.20.40:
     prop-types "^15.5.10"
     through "^2.3.8"
 
-glamorous@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-4.5.0.tgz#d9428dbaedec265849a7528d0c8c7073d8aa19a1"
+glamorous@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-4.7.0.tgz#4327565f4a65895359e37ff63ec13becccd4fd58"
   dependencies:
     brcast "^3.0.0"
     fast-memoize "^2.2.7"
@@ -5464,9 +5464,9 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dev-utils@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.0.0.tgz#76467b380946197e738aab5683336b5439e979ba"
+react-dev-utils@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.0.1.tgz#106ae3d29f811c169d459bb9215a5933b7e11fb6"
   dependencies:
     address "1.0.2"
     babel-code-frame "6.22.0"
@@ -5480,7 +5480,7 @@ react-dev-utils@^4.0.0:
     inquirer "3.2.1"
     is-root "1.0.0"
     opn "5.1.0"
-    react-error-overlay "^2.0.0"
+    react-error-overlay "^2.0.1"
     recursive-readdir "2.2.1"
     shell-quote "1.6.1"
     sockjs-client "1.1.4"
@@ -5496,9 +5496,9 @@ react-dev-utils@^4.0.0:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-react-error-overlay@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-2.0.0.tgz#0251951eb6315dee45f532f3f59f854086c1462e"
+react-error-overlay@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-2.0.1.tgz#622e3cc85cdfb4bcfc8e93f47ddcddd38e1e176e"
   dependencies:
     anser "1.4.1"
     babel-code-frame "6.22.0"
@@ -5527,9 +5527,9 @@ react-router@^3.0.5:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react-scripts@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-1.0.12.tgz#a08a8214431c45db7424246d6f5510cc19b42927"
+react-scripts@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-1.0.13.tgz#a51d775a4b195ab2653c562b735735c8f70cba0e"
   dependencies:
     autoprefixer "7.1.2"
     babel-core "6.25.0"
@@ -5558,7 +5558,7 @@ react-scripts@^1.0.12:
     postcss-flexbugs-fixes "3.2.0"
     postcss-loader "2.0.6"
     promise "8.0.1"
-    react-dev-utils "^4.0.0"
+    react-dev-utils "^4.0.1"
     style-loader "0.18.2"
     sw-precache-webpack-plugin "0.11.4"
     url-loader "0.5.9"

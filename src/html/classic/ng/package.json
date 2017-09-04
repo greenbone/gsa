@@ -23,7 +23,7 @@
     "babel-polyfill": "^6.26.0",
     "d3": "^3.5.17",
     "glamor": "^2.20.40",
-    "glamorous": "^4.5.0",
+    "glamorous": "^4.7.0",
     "i18next": "^9.0.0",
     "i18next-browser-languagedetector": "^2.0.0",
     "i18next-xhr-backend": "^1.4.2",
@@ -35,7 +35,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router": "^3.0.5",
-    "react-scripts": "^1.0.12",
+    "react-scripts": "^1.0.13",
     "select2": "^4.0.3"
   },
   "scripts": {
