@@ -1,5 +1,12 @@
 2017-09-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r29503 without ng parts.
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add note about security of SMB protocol.
+
+2017-09-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r29490 without ng parts.
 
 	Add new SMB alert method.

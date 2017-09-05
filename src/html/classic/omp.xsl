@@ -10619,6 +10619,13 @@ should not have received it.
         <!-- Method: SMB. -->
 
         <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2"/>
+          <div class="col-10">
+            <xsl:value-of select="gsa:i18n ('Security note: The SMB protocol does not offer a fingerprint to establish complete mutual trust. Thus a man-in-the-middle attack can not be fully prevented.')"/>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
           <label class="col-2 control-label">
             <xsl:value-of select="gsa:i18n ('Credential')"/>
           </label>
@@ -11771,6 +11778,13 @@ should not have received it.
         </div>
 
         <!-- Method: SMB. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2"/>
+          <div class="col-10">
+            <xsl:value-of select="gsa:i18n ('Security note: The SMB protocol does not offer a fingerprint to establish complete mutual trust. Thus a man-in-the-middle attack can not be fully prevented.')"/>
+          </div>
+        </div>
 
         <div class="form-group form-selection-item-method form-selection-item-method--smb">
           <label class="col-2 control-label">
