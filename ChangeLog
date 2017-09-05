@@ -1,3 +1,11 @@
+2017-09-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/ng/src/web/pages/alerts/smbmethodpart.js: Add note
+	about security of SMB protocol.
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add note about security of SMB protocol.
+
 2017-09-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/reports/listpage.js: Fix icon layout at

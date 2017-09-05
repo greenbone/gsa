@@ -35,7 +35,7 @@ import withPrefix from '../../utils/withPrefix.js';
 import Select2 from '../../components/form/select2.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
-import TextArea from '../../components/form/textarea.js';
+import Text from '../../components/form/text.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
@@ -58,6 +58,10 @@ const SmbMethodPart = ({
       flex="column"
       box
       grow="1">
+      <FormGroup title=" ">
+        <Text>{_('Security note: The SMB protocol does not offer a fingerprint to establish complete mutual trust. Thus a man-in-the-middle attack can not be fully prevented.')}</Text>
+      </FormGroup>
+
       <FormGroup title={_('Credential')}>
         <Select2
           name={prefix + 'smb_credential'}
