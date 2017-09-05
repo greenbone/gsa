@@ -10144,6 +10144,9 @@ should not have received it.
               <option data-select="send" value="Send">
                 <xsl:value-of select="gsa:i18n ('Send to host ')"/>
               </option>
+              <option data-select="smb" value="SMB">
+                <xsl:value-of select="gsa:i18n ('SMB')"/>
+              </option>
               <option data-select="snmp" value="SNMP">
                 <xsl:value-of select="gsa:i18n ('SNMP')"/>
               </option>
@@ -10613,6 +10616,66 @@ should not have received it.
           </div>
         </div>
 
+        <!-- Method: SMB. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:smb_credential">
+              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+            </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:smb_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Share path')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:smb_share_path"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('File path')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:smb_file_path"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report Format')"/></label>
+          <div class="col-10">
+            <select name="method_data:smb_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -11010,6 +11073,19 @@ should not have received it.
                 <xsl:otherwise>
                   <option data-select="send" value="Send">
                     <xsl:value-of select="gsa:i18n ('Send to host ')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'SMB'">
+                  <option data-select="smb" value="SMB" selected="1">
+                    <xsl:value-of select="gsa:i18n ('SMB')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="smb" value="SMB">
+                    <xsl:value-of select="gsa:i18n ('SMB')"/>
                   </option>
                 </xsl:otherwise>
               </xsl:choose>
@@ -11691,6 +11767,80 @@ should not have received it.
             <input type="text" name="method_data:snmp_message" size="30" maxlength="301"
               value="{$method/data[name='snmp_message']/text()}"
               class="form-control"/>
+          </div>
+        </div>
+
+        <!-- Method: SMB. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:smb_credential">
+              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+                <xsl:choose>
+                  <xsl:when test="@id=$method/data[name='smb_credential']/text()">
+                    <option value="{@id}" selected="1">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:smb_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Share path')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:smb_share_path"
+                class="form-control"
+                value="{$method/data[name='smb_share_path']/text()}"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('File Path')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input name="method_data:smb_file_path"
+                class="form-control"
+                value="{$method/data[name='smb_file_path']/text()}"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--smb">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report Format')"/></label>
+          <div class="col-10">
+            <select name="method_data:smb_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="@id"/>
+                  <xsl:with-param name="content" select="name"/>
+                  <xsl:with-param name="select-value" select="$method/data[name='smb_report_format']/text()"/>
+                </xsl:call-template>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
           </div>
         </div>
 
