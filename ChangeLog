@@ -1,3 +1,12 @@
+2017-09-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r29514.
+
+	* src/html/classic/help.xsl (new_alert.html): Add section about SMB.
+	(path_placeholders_list): New template.
+	(my_settings.html): Use new template path_placeholders_list for the
+	section "Details/List/Report Export File Name".
+
 2017-09-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r29503 without ng parts.
