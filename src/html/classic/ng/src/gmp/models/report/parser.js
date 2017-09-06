@@ -304,10 +304,12 @@ const parse_report_report_counts = elem => {
   const es = elem.results;
   const ec = elem.result_count;
 
+  const length = is_defined(es.result) ? es.result.length : 0;
+
   const counts = {
     first: es._start,
     rows: ec.filtered,
-    length: ec.filtered,
+    length,
     all: ec.full,
     filtered: ec.filtered,
   };
