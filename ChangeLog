@@ -1,3 +1,18 @@
+2017-09-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Remove the handling of the new asset management from XSL because it
+	is now fully implemented for ng.
+
+	* src/html/classic/omp.xsl (template name="html-create-host-form",
+	template match="new_host", template match="asset" mode="os-details",
+	template match="create_asset_response",
+	template match="delete_asset_response",
+	template name="html-edit-asset-form", template match="edit_asset",
+	template match="asset" mode="host-details",
+	template match="get_asset", template match="get_assets",
+	template match="asset/host", template match="asset/os":
+	Removed.
+
 2017-09-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/help.xsl (new_alert.html): Add section about SMB.
