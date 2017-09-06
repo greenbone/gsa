@@ -37,6 +37,10 @@ const log = logger.getLogger('gmp.command');
 const COMMANDS = {
 };
 
+const convert_filter = filter => {
+  return is_defined(filter.toFilterString) ? filter.toFilterString() : filter;
+};
+
 export function register_command(name, clazz, ...options) {
   COMMANDS[name] = {clazz, options};
 }
@@ -96,12 +100,7 @@ export class EntitiesCommand extends HttpCommand {
     const rparams = super.getParams(other, extra_params);
 
     if (is_defined(filter)) {
-      if (is_defined(filter.toFilterString)) {
-        rparams.filter = filter.toFilterString();
-      }
-      else {
-        rparams.filter = filter;
-      }
+      rparams.filter = convert_filter(filter);
     }
     return rparams;
   }
@@ -206,8 +205,12 @@ export class EntityCommand extends HttpCommand {
   }
 
   getParams(params, extra_params = {}) {
-    const {id, ...other} = params;
+    const {id, filter, ...other} = params;
     const rparams = super.getParams(other, extra_params);
+
+    if (is_defined(filter)) {
+      rparams.filter = convert_filter(filter);
+    }
     if (is_defined(id)) {
       rparams[this.id_name] = id;
     }
@@ -218,8 +221,8 @@ export class EntityCommand extends HttpCommand {
     return new this.clazz(this.getElementFromRoot(response.data));
   }
 
-  get({id}, options) {
-    return this.httpGet({id}, options).then(this.transformResponse);
+  get({id}, {filter, ...options} = {}) {
+    return this.httpGet({id, filter}, options).then(this.transformResponse);
   }
 
   transformResponse(response) {
