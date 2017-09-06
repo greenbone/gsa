@@ -1643,6 +1643,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li> $S: $s, but plural: "NVTs", "CERT-Bund Advisories", ...</li>
         <li> $T: Total number of resources in the list for SecInfo alerts; 0 for Task alerts.</li>
       </ul>
+
+      <h3>SMB</h3>
+
+      <p>
+        The report will be copied to the given destination using the SMB
+        protocol with the given login credentials.
+      </p>
+
+      <p>
+        The "Share Path" contains the part of the UNC path that contains the
+        host and the share name, e.g. "\\host\share".
+      </p>
+
+      <p>
+        The "File Path" field will
+        The following replacements will be done in the "Path" field:
+        <xsl:call-template name="path_placeholders_list"/>
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -5147,6 +5165,33 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template name="path_placeholders_list">
+      <ul>
+        <li><b>%C</b> - The creation date in the format YYYYMMDD.<br/>
+        This gives the current date if a creation is not available, e.g.
+        when exporting lists of resources.</li>
+        <li><b>%c</b> - The creation time in the format HHMMSS.<br/>
+        Falls back to the current time similar to %C.
+        </li>
+        <li><b>%D</b> - The current date in the format YYYYMMDD.</li>
+        <li><b>%F</b> - The name of the format plugin used (XML for lists and types other than reports).</li>
+        <li><b>%M</b> - The modification date in the format YYYYMMDD.<br/>
+        If the modification date is not available this gives either creation
+        date or the current date if a creation date is not available as well,
+        e.g. when exporting lists of resources.</li>
+        <li><b>%m</b> - The modification time in the format HHMMSS.<br/>
+        Falls back to the creation time or current time similar to %M.</li>
+        <li><b>%N</b> - The name of the resource or the associated task for
+        reports. Lists and types without a name will use the type (see <b>%T</b>).</li>
+        <li><b>%T</b> - The resource type, e.g. "task", "port_list".
+        Pluralized for list pages.</li>
+        <li><b>%t</b> - The current time in the format HHMMSS.</li>
+        <li><b>%U</b> - The unique ID of the resource or "list" for lists of multiple resources.</li>
+        <li><b>%u</b> - The name of the currently logged in user.</li>
+        <li><b>%%</b> - The percent sign (%)</li>
+      </ul>
+</xsl:template>
+
 <xsl:template mode="help" match="my_settings.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'My Settings'"/>
@@ -5237,30 +5282,7 @@ Public License instead of this License.
         contain alphanumeric characters, hyphens, underscores and placeholders
         that will be replaced as follows:
       </p>
-      <ul>
-        <li><b>%C</b> - The creation date in the format YYYYMMDD.<br/>
-        This gives the current date if a creation is not available, e.g.
-        when exporting lists of resources.</li>
-        <li><b>%c</b> - The creation time in the format HHMMSS.<br/>
-        Falls back to the current time similar to %C.
-        </li>
-        <li><b>%D</b> - The current date in the format YYYYMMDD.</li>
-        <li><b>%F</b> - The name of the format plugin used (XML for lists and types other than reports).</li>
-        <li><b>%M</b> - The modification date in the format YYYYMMDD.<br/>
-        If the modification date is not available this gives either creation
-        date or the current date if a creation date is not available as well,
-        e.g. when exporting lists of resources.</li>
-        <li><b>%m</b> - The modification time in the format HHMMSS.<br/>
-        Falls back to the creation time or current time similar to %M.</li>
-        <li><b>%N</b> - The name of the resource or the associated task for
-        reports. Lists and types without a name will use the type (see <b>%T</b>).</li>
-        <li><b>%T</b> - The resource type, e.g. "task", "port_list".
-        Pluralized for list pages.</li>
-        <li><b>%t</b> - The current time in the format HHMMSS.</li>
-        <li><b>%U</b> - The unique ID of the resource or "list" for lists of multiple resources.</li>
-        <li><b>%u</b> - The name of the currently logged in user.</li>
-        <li><b>%%</b> - The percent sign (%)</li>
-      </ul>
+      <xsl:call-template name="path_placeholders_list"/>
       <a name="severity_class"/>
       <h3>Severity Class</h3>
       <p>
