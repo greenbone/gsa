@@ -1,5 +1,11 @@
 2017-09-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/table/detailstable.js: Add new details
+	table and fix table js file dependencies in CMakeLists.txt.
+
+2017-09-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/table/info.js,
 	src/html/classic/ng/src/web/components/table/infotable.js,,
 	src/html/classic/ng/src/web/components/table/simple.js,

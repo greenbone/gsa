@@ -268,12 +268,13 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/structure/main.js
      ${NG_SRC_DIR}/src/web/components/table/body.js
      ${NG_SRC_DIR}/src/web/components/table/data.js
+     ${NG_SRC_DIR}/src/web/components/table/detailstable.js
      ${NG_SRC_DIR}/src/web/components/table/header.js
      ${NG_SRC_DIR}/src/web/components/table/head.js
-     ${NG_SRC_DIR}/src/web/components/table/info.js
+     ${NG_SRC_DIR}/src/web/components/table/infotable.js
      ${NG_SRC_DIR}/src/web/components/table/row.js
-     ${NG_SRC_DIR}/src/web/components/table/simple.js
-     ${NG_SRC_DIR}/src/web/components/table/stripped.js
+     ${NG_SRC_DIR}/src/web/components/table/simpletable.js
+     ${NG_SRC_DIR}/src/web/components/table/strippedtable.js
      ${NG_SRC_DIR}/src/web/components/table/table.js
      ${NG_SRC_DIR}/src/web/entities/actions.js
      ${NG_SRC_DIR}/src/web/entities/container.js
