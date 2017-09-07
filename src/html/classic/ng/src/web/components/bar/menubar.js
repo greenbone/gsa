@@ -147,14 +147,6 @@ const MenuBar = (props, {gmp, capabilities}) => {
             <MenuEntry
               title={_('Operating Systems')}
               to="operatingsystems"/>
-            <MenuEntry
-              legacy
-              title={_('Hosts (Classic)')}
-              cmd="get_report"
-              type="assets"
-              apply_overrides="1"
-              levels="hm"
-              caps="get_reports"/>
           </Menu>
         }
         {capabilities.mayOp('get_info') &&

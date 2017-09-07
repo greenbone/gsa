@@ -1,3 +1,22 @@
+2017-09-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Remove the classic asset management.
+
+	* src/html/classic/ng/src/web/components/bar/menubar.js (MenuBar):
+	Removed menu entry "Hosts (Classic)".
+
+	* src/html/classic/omp.xsl (function name="gsa:report-section-title"):
+	Removed calls for type "prognostic".
+	(xsl:template name="assets", template match="host" mode="classic",
+	template match="get_reports_response" mode="asset",
+	template match="report" mode="assets",
+	template match="get_reports_response/report/report"
+	mode="report-assets": Removed.
+
+	* src/html/classic/help.xsl (template mode="help"
+	match="hosts_classic.html"): Removed.
+	Also removed the link and the glossary entry.
+
 2017-09-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/components/form/checkbox.js,

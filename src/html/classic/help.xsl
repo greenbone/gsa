@@ -629,184 +629,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="hosts_classic.html">
-  <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'Hosts (Classic)'"/>
-  </xsl:call-template>
-
-  <div class="selection-box">
-    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="pull-right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Jump to dialog</a></div>
-    <div style="text-align:left">
-
-      <br/>
-      <p>
-       This page provides an overview of all the hosts found in all tasks.
-      </p>
-
-      <a name="filtering"></a>
-      <h2>Host Filtering</h2>
-      <p>
-        The Host Filtering window shows how the hosts of the scan have been
-        filtered to produce the overview.  Modifying any of the values and clicking
-        the "Apply" button will update the overview.
-      </p>
-
-      <a name="overrides"></a>
-      <h3>Overrides</h3>
-      <p>
-       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
-       The selection allows to switch to a view without applying overrides.
-       In the Filtered Hosts table the hosts and the severity counts might change
-       when switching this selection.
-       By pressing the refresh
-       <img src="/img/refresh.svg" class="icon icon-sm" alt="Refresh" title="Refresh"/> icon a change is confirmed.
-      </p>
-      <p>
-       The selection that is active for the present page is marked with a hook (&#8730;).
-      </p>
-
-      <a name="filtered"></a>
-      <h2>Filtered Hosts</h2>
-      <p>
-        The Filtered Hosts window shows all the hosts, filtered
-        according to the Hosts Filtering window.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>IP</td>
-          <td>
-            IP address of the host.
-          </td>
-        </tr>
-        <tr>
-          <td valign="top">
-            <xsl:call-template name="severity-label">
-              <xsl:with-param name="level" select="'High'"/>
-            </xsl:call-template>
-          </td>
-          <td>
-            Number of high results on most recent report.
-          </td>
-        </tr>
-        <tr class="odd">
-          <td valign="top">
-            <xsl:call-template name="severity-label">
-              <xsl:with-param name="level" select="'Medium'"/>
-            </xsl:call-template>
-          </td>
-          <td>
-            Number of medium results on most recent report.
-          </td>
-        </tr>
-        <tr>
-          <td valign="top">
-            <xsl:call-template name="severity-label">
-              <xsl:with-param name="level" select="'Low'"/>
-            </xsl:call-template>
-          </td>
-          <td>
-            Number of low results on most recent report.
-          </td>
-        </tr>
-        <tr class="odd">
-          <td>Last Report</td>
-          <td>
-            Link to most recent report.
-          </td>
-        </tr>
-        <tr>
-          <td>OS</td>
-          <td>
-            Icon for detected operating system in most recent report.
-          </td>
-        </tr>
-        <tr class="odd">
-          <td>Ports</td>
-          <td>
-            Number of open ports found in most recent report.
-          </td>
-        </tr>
-        <tr>
-          <td>Apps</td>
-          <td>
-            Number of applications detected in most recent report, according
-            to CPEs.
-          </td>
-        </tr>
-        <tr class="odd">
-          <td>Reports</td>
-          <td>
-            Number of complete reports that include this host.
-          </td>
-        </tr>
-        <tr>
-          <td>Distance</td>
-          <td>
-            Distance to host from server running the Scanner, according to
-            most recent report.
-          </td>
-        </tr>
-        <tr>
-          <td valign="top">Prognosis</td>
-          <td>
-            The maximum severity for the host, predicted from what is currently
-            known about the host. Severity is determined by comparing the
-            detected applications for this host to a list of vulnerable ones.
-            Note that the host might be only vulnerable for specific
-            configurations or combinations of applications.
-          </td>
-        </tr>
-      </table>
-
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Prognostic Report</h4>
-      <p>
-       Pressing the
-       <a href="glossary.html?token={/envelope/token}#prognostic_report">prognostic report</a>
-       icon
-       <img src="/img/prognosis.svg" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
-       will switch to a prognostic report on this host.
-      </p>
-
-      <a name="host_details"></a>
-      <h2>Host Details</h2>
-      <p>
-       Provides detailed information about the host.
-       This includes all the information from the Filtered Hosts table, plus the list of
-       open ports and the list of applications.
-      </p>
-
-      <a name="scap_missing"></a>
-      <h2>Warning: SCAP Database Missing</h2>
-      <p>
-        This warning dialog occurs when the SCAP database is missing on the OMP server.
-      </p>
-      <p>
-        The prognostic reporting requires the SCAP data.  As a result all prognostic
-        report icons
-        <img src="/img/prognosis.svg" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
-        will be greyed out
-        <img src="/img/prognosis_inactive.svg" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
-        when the database is missing.
-      </p>
-      <p>
-        The SCAP data is updated during a SCAP data feed sync.
-        Most likely the data will appear after the next such feed sync.
-        This is usually taken care of automatically by a periodic
-        background process.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
 <xsl:template mode="help" match="agent_details.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Agent Details'"/>
@@ -3786,7 +3608,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="os_details.html?token={/envelope/token}">Operating System Details</a></li>
               </ul>
-            <li> <a href="hosts_classic.html?token={/envelope/token}">Hosts (Classic)</a></li>
           </ul>
           <li> SecInfo </li>
           <ul>
@@ -4560,21 +4381,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        A port list is a list of ports.  Each <a href="#target">Target</a> is
        associated with a Port List.  This determines which ports are scanned
        during a scan of the Target.
-      </p>
-
-      <a name="prognostic_report"></a>
-      <h2>Prognostic Report</h2>
-      <p>
-        Prognostic scans allow an upfront analysis about potential
-        vulnerabilities of hosts. This happens without accessing these
-        systems via the network and therefore the scan duration is
-        virtually zero.
-      </p>
-      <p>
-        Prognostic scans use product detections from previous scans and
-        compare this inventory data with the most current security
-        information (CVE) to match which products (meanwhile) are known to
-        be vulnerable.
       </p>
 
       <a name="qod"></a>
@@ -9568,10 +9374,6 @@ Public License instead of this License.
        The exception is the "Tasks" link that refers to the
        <a href="/help/glossary.html?token={/envelope/token}#task">task</a>'s
        <a href="/help/reports.html?token={/envelope/token}">list of reports</a>.
-      </p>
-      <p>
-        The View Report page is also used to display
-       <a href="glossary.html?token={/envelope/token}#prognostic_report">prognostic reports</a>.
       </p>
 
       <a name="overrides"></a>
