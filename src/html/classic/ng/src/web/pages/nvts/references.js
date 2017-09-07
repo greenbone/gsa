@@ -35,7 +35,7 @@ import CertLink from '../../components/link/certlink.js';
 import CveLink from '../../components/link/cvelink.js';
 import ExternalLink from '../../components/link/externallink.js';
 
-import InfoTable from '../../components/table/info.js';
+import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';

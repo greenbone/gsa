@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,19 +21,30 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import SimpleTable from './simple.js';
+import Table from './table.js';
 
 import glamorous from 'glamorous';
 
-const Table = glamorous(SimpleTable)({
-  '& td': {
-    padding: '4px 4px 4px 0',
+const StrippedTable = glamorous(Table)({
+  '& th, & td': {
+    padding: '4px',
   },
-  '& tr td:first-child': {
-    paddingRight: '1em',
+  '& tfoot tr': {
+    background: '#DDDDDD',
+  },
+
+  '@media screen': {
+    ['& > tbody:nth-of-type(even), ' +
+    '& > tbody:only-of-type > tr:nth-of-type(even)']: {
+      backgroundColor: '#EEEEEE',
+    },
+    ['& > tbody:not(:only-of-type):hover, ' +
+    '& > tbody:only-of-type > tr:hover']: {
+      background: '#DDDDDD',
+    },
   },
 });
 
-export default Table;
+export default StrippedTable;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -35,7 +35,7 @@ import DeleteIcon from '../../components/icon/deleteicon.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
-import Table from '../../components/table/stripped.js';
+import Table from '../../components/table/strippedtable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableHeader from '../../components/table/header.js';

@@ -46,16 +46,16 @@ const Table = ({
 };
 
 Table.propTypes = {
-  header: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
+  className: PropTypes.string,
   fixed: PropTypes.bool,
   footer: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
   ]),
-  className: PropTypes.string,
+  header: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
 };
 
 export default glamorous(Table)(
@@ -65,14 +65,6 @@ export default glamorous(Table)(
     borderSpacing: '2px',
     fontSize: '12px',
     textAlign: 'left',
-
-    '& th, & td': {
-      padding: '4px',
-    },
-
-    '& tfoot tr': {
-      background: '#DDDDDD',
-    },
 
     '@media print': {
       borderCollapse: 'collapse',
@@ -85,7 +77,7 @@ export default glamorous(Table)(
     }
     if (size === 'full') {
       return {
-        width: '100%'
+        width: '100%',
       };
     }
     return {

@@ -33,7 +33,7 @@ import Layout from '../components/layout/layout.js';
 import Pagination from '../components/pagination/pagination.js';
 
 import TableBody from '../components/table/body.js';
-import StrippedTable from '../components/table/stripped.js';
+import StrippedTable from '../components/table/strippedtable.js';
 
 import PropTypes from '../utils/proptypes.js';
 

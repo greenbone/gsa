@@ -40,7 +40,7 @@ import Layout from '../../components/layout/layout.js';
 
 import LegacyLink from '../../components/link/legacylink.js';
 
-import SimpleTable from '../../components/table/simple.js';
+import SimpleTable from '../../components/table/simpletable.js';
 import Table from '../../components/table/table.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';

@@ -40,7 +40,7 @@ import ExportIcon from '../../components/icon/exporticon.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
-import InfoTable from '../../components/table/info.js';
+import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';

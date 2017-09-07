@@ -41,7 +41,7 @@ import Layout from '../../components/layout/layout.js';
 import CertLink from '../../components/link/certlink.js';
 import DetailsLink from '../../components/link/detailslink.js';
 
-import StrippedTable from '../../components/table/stripped.js';
+import StrippedTable from '../../components/table/strippedtable.js';
 import TableHeader from '../../components/table/header.js';
 import TableHead from '../../components/table/head.js';
 import TableBody from '../../components/table/body.js';

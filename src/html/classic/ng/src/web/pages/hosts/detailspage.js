@@ -46,7 +46,7 @@ import DetailsLink from '../../components/link/detailslink.js';
 import InfoLink from '../../components/link/infolink.js';
 import Link from '../../components/link/link.js';
 
-import InfoTable from '../../components/table/info.js';
+import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';

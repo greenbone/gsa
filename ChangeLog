@@ -1,3 +1,41 @@
+2017-09-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/components/table/info.js,
+	src/html/classic/ng/src/web/components/table/infotable.js,,
+	src/html/classic/ng/src/web/components/table/simple.js,
+	src/html/classic/ng/src/web/components/table/simpletable.js,
+	src/html/classic/ng/src/web/components/table/stripped.js,
+	src/html/classic/ng/src/web/components/table/strippedtable.js,
+	src/html/classic/ng/src/web/components/table/table.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/entity/box.js,
+	src/html/classic/ng/src/web/entity/info.js,
+	src/html/classic/ng/src/web/entity/tags.js,
+	src/html/classic/ng/src/web/pages/cves/details.js,
+	src/html/classic/ng/src/web/pages/cves/detailspage.js,
+	src/html/classic/ng/src/web/pages/hosts/detailspage.js,
+	src/html/classic/ng/src/web/pages/hosts/identifiers.js,
+	src/html/classic/ng/src/web/pages/notes/details.js,
+	src/html/classic/ng/src/web/pages/notes/detailspage.js,
+	src/html/classic/ng/src/web/pages/nvts/details.js,
+	src/html/classic/ng/src/web/pages/nvts/detailspage.js,
+	src/html/classic/ng/src/web/pages/nvts/preferences.js,
+	src/html/classic/ng/src/web/pages/nvts/references.js,
+	src/html/classic/ng/src/web/pages/os/detailspage.js,
+	src/html/classic/ng/src/web/pages/overrides/details.js,
+	src/html/classic/ng/src/web/pages/overrides/detailspage.js,
+	src/html/classic/ng/src/web/pages/results/details.js,
+	src/html/classic/ng/src/web/pages/results/detailspage.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/editconfigfamilydialog.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/editnvtdetailsdialog.js,
+	src/html/classic/ng/src/web/pages/targets/details.js,
+	src/html/classic/ng/src/web/pages/targets/detailspage.js,
+	src/html/classic/ng/src/web/pages/tasks/details.js,
+	src/html/classic/ng/src/web/pages/tasks/detailspage.js: Rename table js
+	modules to end with table.js. Reduce default styling of the base table.
+	This will make it easier to derive other tables without having to override a
+	lot of css.
+
 2017-09-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/classic/help.xsl: Fix typos.
