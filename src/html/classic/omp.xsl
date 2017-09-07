@@ -932,19 +932,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
-<xsl:template name="prognostic-description">
-  <xsl:param name="string"/>
-
-  <xsl:for-each select="str:split($string, '&#10;&#10;')">
-    <p>
-      <xsl:for-each select="str:split(., '&#10;')">
-        <xsl:value-of select="."/>
-        <br/>
-      </xsl:for-each>
-    </p>
-  </xsl:for-each>
-</xsl:template>
-
 <xsl:template name="feedback-icon">
 <!-- You may fill in here to_name and to_adress and un-comment the block
      to enable a feedback button for support or similar purposes. -->
@@ -3042,9 +3029,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="apply_filter" select="/envelope/params/apply_filter"/>
   <xsl:variable name="link">
     <xsl:choose>
-      <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-      </xsl:when>
       <xsl:when test="@type='delta'">
         <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $expand, '&amp;apply_filter=', $apply_filter, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
       </xsl:when>
@@ -3084,15 +3068,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <input type="hidden" name="report_id" value="{report/@id}"/>
-      <xsl:if test="@type='prognostic'">
-        <input type="hidden" name="type" value="prognostic"/>
-        <input type="hidden" name="host" value="{report/filters/host}"/>
-        <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-        <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-        <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-        <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-        <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
-      </xsl:if>
       <input type="hidden" name="details" value="{/envelope/params/details}"/>
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <xsl:if test="../../delta">
@@ -3181,10 +3156,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </label>
       </div>
 
-      <xsl:choose>
-        <xsl:when test="@type='prognostic'">
-        </xsl:when>
-        <xsl:otherwise>
           <div class="form-group">
             <xsl:value-of select="gsa:i18n ('Auto-FP')"/>:
             <div style="margin-left: 30px">
@@ -3225,13 +3196,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </div>
             </div>
           </div>
-        </xsl:otherwise>
-      </xsl:choose>
 
-      <xsl:choose>
-        <xsl:when test="@type='prognostic'">
-        </xsl:when>
-        <xsl:otherwise>
           <div class="form-group">
             <label>
               <xsl:choose>
@@ -3245,8 +3210,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="gsa:i18n ('Show Notes')"/>
             </label>
           </div>
-        </xsl:otherwise>
-      </xsl:choose>
 
       <div class="form-group">
         <label>
@@ -3461,15 +3424,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="report_section" value="{$report_section}"/>
       <input type="hidden" name="overrides" value="{$apply-overrides}"/>
       <input type="hidden" name="details" value="{/envelope/params/details}"/>
-      <xsl:if test="@type='prognostic'">
-        <input type="hidden" name="type" value="prognostic"/>
-        <input type="hidden" name="host" value="{filters/host}"/>
-        <input type="hidden" name="host_search_phrase" value="{/envelope/params/host_search_phrase}"/>
-        <input type="hidden" name="host_levels" value="{/envelope/params/host_levels}"/>
-        <input type="hidden" name="host_first_result" value="{/envelope/params/host_first_result}"/>
-        <input type="hidden" name="host_max_results" value="{/envelope/params/host_max_results}"/>
-        <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
-      </xsl:if>
       <xsl:if test="@type='delta'">
         <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
       </xsl:if>
@@ -3593,32 +3547,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <value><xsl:value-of select="../@type"/></value>
           </param>
         </xsl:if>
-        <xsl:if test="../@type='prognostic'">
-          <param>
-            <name>host</name>
-            <value><xsl:value-of select="filters/host"/></value>
-          </param>
-          <param>
-            <name>host_search_phrase</name>
-            <value><xsl:value-of select="/envelope/params/host_search_phrase"/></value>
-          </param>
-          <param>
-            <name>host_levels</name>
-            <value><xsl:value-of select="/envelope/params/host_levels"/></value>
-          </param>
-          <param>
-            <name>host_first_result</name>
-            <value><xsl:value-of select="/envelope/params/host_first_result"/></value>
-          </param>
-          <param>
-            <name>host_max_results</name>
-            <value><xsl:value-of select="/envelope/params/host_max_results"/></value>
-          </param>
-          <param>
-            <name>pos</name>
-            <value><xsl:value-of select="/envelope/params/pos"/></value>
-          </param>
-        </xsl:if>
         <xsl:if test="delta/report/@id">
           <param>
             <name>delta_report_id</name>
@@ -3649,15 +3577,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:text>&amp;report_section=</xsl:text><xsl:value-of select="$section"/>
       <xsl:text>&amp;apply_overrides=</xsl:text><xsl:value-of select="/envelope/params/apply_overrides"/>
       <xsl:text>&amp;details=</xsl:text><xsl:value-of select="/envelope/params/details"/>
-      <xsl:if test="@type='prognostic'">
-        <xsl:text>&amp;type=</xsl:text><xsl:value-of select="'prognostic'"/>
-        <xsl:text>&amp;host=</xsl:text><xsl:value-of select="filters/host"/>
-        <xsl:text>&amp;host_search_phrase=</xsl:text><xsl:value-of select="/envelope/params/host_search_phrase"/>
-        <xsl:text>&amp;host_levels=</xsl:text><xsl:value-of select="/envelope/params/host_levels"/>
-        <xsl:text>&amp;host_first_result=</xsl:text><xsl:value-of select="/envelope/params/host_first_result"/>
-        <xsl:text>&amp;host_max_results=</xsl:text><xsl:value-of select="/envelope/params/host_max_results"/>
-        <xsl:text>&amp;pos=</xsl:text><xsl:value-of select="/envelope/params/pos"/>
-      </xsl:if>
       <xsl:if test="@type='delta'">
         <xsl:text>&amp;delta_report_id=</xsl:text><xsl:value-of select="delta/report/@id"/>
       </xsl:if>
@@ -3833,11 +3752,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:apply-templates select="report" mode="details"/>
               <tr>
                 <td class="footnote" colspan="1000">
-                  <xsl:variable name="prognostic">
-                    <xsl:if test="report/@type='prognostic'">
-                      <xsl:value-of select="concat ('&amp;type=prognostic&amp;host=', report/filters/host, '&amp;host_search_phrase=', host_search_phrase, '&amp;host_levels=', host_levels, '&amp;host_first_result=', results/@start, '&amp;host_max_results=', results/@max, '&amp;pos=', /envelope/params/pos)"/>
-                    </xsl:if>
-                  </xsl:variable>
                   <xsl:variable name="delta">
                     <xsl:if test="report/@type='delta'">
                       <xsl:value-of select="concat ('&amp;delta_report_id=', report/delta/report/@id)"/>
@@ -3853,7 +3767,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </div>
                   (<xsl:value-of select="gsa:i18n('Applied filter:')"/>
                   <a class="footnote"
-                     href="/omp?cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=results&amp;overrides={$apply-overrides}&amp;details={/envelope/params/details}&amp;filter={report/filters/term}{$prognostic}{$delta}&amp;token={/envelope/token}">
+                     href="/omp?cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=results&amp;overrides={$apply-overrides}&amp;details={/envelope/params/details}&amp;filter={report/filters/term}{$delta}&amp;token={/envelope/token}">
                     <xsl:value-of select="report/filters/term"/>
                   </a>)
                 </td>
@@ -27621,11 +27535,6 @@ should not have received it.
   <xsl:apply-templates select="get_reports_response"/>
 </xsl:template>
 
-<xsl:template match="get_prognostic_report">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="get_reports_response"/>
-</xsl:template>
-
 <!--     GET_REPORTS -->
 
 <xsl:template match="get_reports">
@@ -28429,9 +28338,6 @@ should not have received it.
   <xsl:variable name="expand" select="$details"/>
   <xsl:variable name="link-start">
     <xsl:choose>
-      <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand)"/>
-      </xsl:when>
       <xsl:when test="@type='delta'">
         <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', delta/report/@id, '&amp;host=', /envelope/params/host, '&amp;pos=', /envelope/params/pos, '&amp;details=', $expand)"/>
       </xsl:when>
@@ -28474,7 +28380,6 @@ should not have received it.
   <xsl:param name="note-buttons"/>
   <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
-  <xsl:param name="prognostic"/>
   <xsl:param name="collapse-details-button"/>
 
   <!-- Header line. -->
@@ -28565,9 +28470,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <xsl:if test="$prognostic != 1">
-      <td style="width: {gsa:actions-width (3)}px"><xsl:value-of select="gsa:i18n ('Actions')"/></td>
-    </xsl:if>
+    <td style="width: {gsa:actions-width (3)}px"><xsl:value-of select="gsa:i18n ('Actions')"/></td>
   </tr>
 </xsl:template>
 
@@ -28575,7 +28478,6 @@ should not have received it.
   <xsl:param name="note-buttons"/>
   <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
-  <xsl:param name="prognostic"/>
   <xsl:param name="collapse-details-button"/>
 
   <xsl:variable name="class">
@@ -28641,7 +28543,7 @@ should not have received it.
         </xsl:choose>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="$prognostic=1 or type = 'cve'">
+        <xsl:when test="type = 'cve'">
           <xsl:call-template name="get_info_cve_lnk">
             <xsl:with-param name="cve" select="nvt/@oid"/>
           </xsl:call-template>
@@ -28695,13 +28597,6 @@ should not have received it.
     </td>
     <td> <!-- Severity -->
       <xsl:variable name="severity_title">
-        <xsl:choose>
-          <xsl:when test="$prognostic=1">
-            <xsl:if test="string-length(nvt/cvss_base) &gt; 0">
-              <xsl:value-of select="nvt/cvss_base"/>
-            </xsl:if>
-          </xsl:when>
-        </xsl:choose>
         <xsl:choose>
           <xsl:when test="original_severity">
             <xsl:choose>
@@ -28779,7 +28674,7 @@ should not have received it.
     </td>
     <td> <!-- Location -->
       <xsl:choose>
-        <xsl:when test="$prognostic=1 or type = 'cve'">
+        <xsl:when test="type = 'cve'">
           <xsl:call-template name="get_info_cpe_lnk">
             <xsl:with-param name="cpe" select="nvt/cpe/@id"/>
           </xsl:call-template>
@@ -28790,7 +28685,6 @@ should not have received it.
       </xsl:choose>
     </td>
     <!-- Action Icons -->
-    <xsl:if test="$prognostic != 1">
       <td>
         <xsl:if test="$note-buttons = 1">
           <xsl:choose>
@@ -28873,7 +28767,6 @@ should not have received it.
           </xsl:choose>
         </xsl:if>
       </td>
-    </xsl:if>
   </tr>
 </xsl:template>
 
@@ -28882,7 +28775,6 @@ should not have received it.
   <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
   <xsl:param name="show-overrides"/>
-  <xsl:param name="prognostic"/>
 
   <tr>
     <td colspan="7" style="padding: 0">
@@ -28905,23 +28797,6 @@ should not have received it.
       </xsl:if>
 
       <!-- Result -->
-      <xsl:choose>
-        <xsl:when test="$prognostic=1">
-          <div class="result_section">
-            <xsl:choose>
-              <xsl:when test="delta/text() = 'changed'">
-                <b><xsl:value-of select="gsa:i18n ('Result')"/> 1</b>
-                <p></p>
-              </xsl:when>
-            </xsl:choose>
-            <p>
-              <xsl:call-template name="prognostic-description">
-                <xsl:with-param name="string" select="description"/>
-              </xsl:call-template>
-            </p>
-          </div>
-        </xsl:when>
-        <xsl:otherwise>
           <div class="result_section">
             <xsl:choose>
               <xsl:when test="delta/text() = 'changed'">
@@ -28941,8 +28816,6 @@ should not have received it.
               </xsl:otherwise>
             </xsl:choose>
           </div>
-        </xsl:otherwise>
-      </xsl:choose>
 
       <xsl:if test="string-length (gsa:get-nvt-tag (nvt/tags, 'impact')) &gt; 0 and gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
         <div class="result_section">
@@ -29012,11 +28885,6 @@ should not have received it.
               <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_id={$ovaldef_id}&amp;details=1&amp;token={/envelope/token}"
                  title="{gsa:view_details_title ('OVAL Definition', $ovaldef_id)}"><xsl:value-of select="$ovaldef_id"/></a>
             </xsl:when>
-            <xsl:when test="$prognostic=1">
-              <xsl:call-template name="get_info_cve_lnk">
-                <xsl:with-param name="cve" select="nvt/@oid"/>
-              </xsl:call-template>
-            </xsl:when>
             <xsl:when test="string-length(nvt/@oid) &gt; 1 and starts-with(nvt/@oid, '1.3.6.1.4.1.25623.1.0.')">
               <xsl:variable name="max" select="80"/>
               <a href="?cmd=get_info&amp;info_type=nvt&amp;info_id={nvt/@oid}&amp;token={/envelope/token}">
@@ -29041,15 +28909,11 @@ should not have received it.
             </xsl:otherwise>
           </xsl:choose>
         </p>
-        <xsl:choose>
-          <xsl:when test="not($prognostic=1)">
             <xsl:if test="scan_nvt_version != ''">
               <p>
                 <xsl:value-of select="gsa:i18n ('Version used')"/>: <xsl:value-of select="scan_nvt_version"/>
               </p>
             </xsl:if>
-          </xsl:when>
-        </xsl:choose>
       </div>
 
       <xsl:if test="count (detection)">
@@ -29136,16 +29000,7 @@ should not have received it.
           <xsl:when test="delta/text() = 'changed'">
             <div class="result_section">
               <b><xsl:value-of select="gsa:i18n ('Result')"/> 2</b>
-              <xsl:choose>
-                <xsl:when test="$prognostic=1">
-                  <xsl:call-template name="prognostic-description">
-                    <xsl:with-param name="string" select="delta/result/description"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
                   <pre><xsl:value-of select="delta/result/description"/></pre>
-                </xsl:otherwise>
-              </xsl:choose>
             </div>
             <xsl:variable name="cve_ref_2">
               <xsl:if test="delta/result/nvt/cve != '' and delta/result/nvt/cve != 'NOCVE'">
@@ -29296,7 +29151,6 @@ should not have received it.
   <xsl:param name="override-buttons">1</xsl:param>
   <xsl:param name="show-overrides">0</xsl:param>
   <xsl:param name="result-details"/>
-  <xsl:param name="prognostic"/>
   <xsl:param name="show-header">1</xsl:param>
   <xsl:param name="collapse-details-button"/>
   <xsl:param name="result-body">1</xsl:param>
@@ -29310,7 +29164,6 @@ should not have received it.
       <xsl:with-param name="note-buttons" select="$note-buttons"/>
       <xsl:with-param name="override-buttons" select="$override-buttons"/>
       <xsl:with-param name="result-details" select="$result-details"/>
-      <xsl:with-param name="prognostic" select="$prognostic"/>
       <xsl:with-param name="collapse-details-button" select="$collapse-details-button"/>
     </xsl:apply-templates>
   </xsl:if>
@@ -29321,7 +29174,6 @@ should not have received it.
     <xsl:with-param name="note-buttons" select="$note-buttons"/>
     <xsl:with-param name="override-buttons" select="$override-buttons"/>
     <xsl:with-param name="result-details" select="$result-details"/>
-    <xsl:with-param name="prognostic" select="$prognostic"/>
     <xsl:with-param name="collapse-details-button" select="$collapse-details-button"/>
   </xsl:apply-templates>
 
@@ -29333,12 +29185,6 @@ should not have received it.
       <xsl:with-param name="override-buttons" select="$override-buttons"/>
       <xsl:with-param name="result-details" select="$result-details"/>
       <xsl:with-param name="show-overrides" select="$show-overrides"/>
-      <xsl:with-param name="prognostic">
-        <xsl:choose>
-          <xsl:when test="($prognostic = 1) or (type = 'cve')">1</xsl:when>
-          <xsl:otherwise>0</xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
     </xsl:apply-templates>
   </xsl:if>
 </xsl:template>
@@ -29732,9 +29578,6 @@ should not have received it.
 
   <xsl:variable name="link">
     <xsl:choose>
-      <xsl:when test="$type = 'prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', $section, '&amp;apply_filter=', $apply_filter, '&amp;type=prognostic&amp;host=', $host, '&amp;pos=', $pos, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;host_levels=', /envelope/params/host_levels, '&amp;host_search_phrase=', /envelope/params/host_search_phrase, '&amp;host_first_result=', /envelope/params/host_first_result, '&amp;host_max_results=', /envelope/params/host_max_results, '&amp;token=', /envelope/token)"/>
-      </xsl:when>
       <xsl:when test="$type = 'delta'">
         <xsl:variable name="delta" select="delta/report/@id"/>
         <xsl:value-of select="concat('/omp?cmd=get_report_section&amp;report_section=', $section, '&amp;apply_filter=', $apply_filter, '&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;filter=', $filter_term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
@@ -29797,7 +29640,7 @@ should not have received it.
             </xsl:apply-templates>
           </li>
           <li>
-            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+            <xsl:if test="$type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="vulns/count"/>
                 <xsl:with-param name="section" select="'vulns'"/>
@@ -29814,7 +29657,7 @@ should not have received it.
             </xsl:if>
           </li>
           <li>
-            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+            <xsl:if test="$type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="ports/count"/>
                 <xsl:with-param name="section" select="'ports'"/>
@@ -29827,17 +29670,12 @@ should not have received it.
                 <xsl:with-param name="count" select="apps/count"/>
                 <xsl:with-param name="section" select="'apps'"/>
                 <xsl:with-param name="type" select="$type"/>
-                <xsl:with-param name="class">
-                  <xsl:choose>
-                    <xsl:when test="$type = 'prognostic'">last</xsl:when>
-                    <xsl:otherwise>section_sublist</xsl:otherwise>
-                  </xsl:choose>
-                </xsl:with-param>
+                <xsl:with-param name="class">section_sublist</xsl:with-param>
               </xsl:apply-templates>
             </xsl:if>
           </li>
           <li>
-            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+            <xsl:if test="$type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="$os_count"/>
                 <xsl:with-param name="section" select="'os'"/>
@@ -29845,7 +29683,7 @@ should not have received it.
             </xsl:if>
           </li>
           <li>
-            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+            <xsl:if test="$type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="cves/count"/>
                 <xsl:with-param name="section" select="'cves'"/>
@@ -29853,7 +29691,7 @@ should not have received it.
             </xsl:if>
           </li>
           <li>
-            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+            <xsl:if test="$type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="closed_cves/count"/>
                 <xsl:with-param name="section" select="'closed_cves'"/>
@@ -29861,7 +29699,7 @@ should not have received it.
             </xsl:if>
           </li>
           <li>
-            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+            <xsl:if test="$type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="ssl_certs/count"/>
                 <xsl:with-param name="section" select="'ssl_certs'"/>
@@ -29869,7 +29707,7 @@ should not have received it.
             </xsl:if>
           </li>
           <li>
-            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+            <xsl:if test="$type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
                 <xsl:with-param name="count" select="errors/count"/>
                 <xsl:with-param name="section" select="'errors'"/>
@@ -29896,8 +29734,6 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="get_report_hosts_response">
-  <xsl:apply-templates select="get_prognostic_report/get_reports_response/report"
-                       mode="prognostic_hosts"/>
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="hosts"/>
 </xsl:template>
@@ -30309,67 +30145,6 @@ should not have received it.
   </div>
 </xsl:template>
 
-<xsl:template match="report" mode="prognostic_hosts">
-  <xsl:apply-templates select="gsad_msg"/>
-
-  <xsl:apply-templates select="." mode="report-section-toolbar">
-    <xsl:with-param name="section" select="'hosts'"/>
-  </xsl:apply-templates>
-  <xsl:call-template name="report-section-header">
-    <xsl:with-param name="section" select="'hosts'"/>
-    <xsl:with-param name="filtered-count" select="count(report/host)"/>
-    <xsl:with-param name="full-count" select="report/hosts/count"/>
-  </xsl:call-template>
-
-  <div id="table-box" class="section-box">
-      <table class="gbntable">
-        <col/>
-        <col/>
-        <col/>
-        <col width="100px"/>
-        <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Host')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Ports')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Distance', 'Host')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Severity')"/></td>
-        </tr>
-        <xsl:for-each select="report/host" >
-          <xsl:variable name="current_host" select="ip"/>
-          <xsl:variable name="id" select="../@id"/>
-          <tr class="{gsa:table-row-class(position())}">
-            <td>
-              <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
-              <a href="?cmd=get_report&amp;type=assets&amp;host={$current_host}&amp;token={/envelope/token}">
-                <xsl:value-of select="$current_host"/>
-              </a>
-              <xsl:if test="$hostname">
-                <xsl:value-of select="concat(' (', $hostname, ')')"/>
-              </xsl:if>
-            </td>
-            <td>
-              <xsl:value-of select="detail[name = 'port_count']/value"/>
-            </td>
-            <td>
-              <xsl:call-template name="host-distance">
-                <xsl:with-param name="host" select="."/>
-              </xsl:call-template>
-            </td>
-            <td style="text-align:right">
-              <xsl:for-each select="../results/result[host = $current_host]">
-                <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
-                <xsl:if test="position() = 1">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="nvt/cvss_base"/>
-                  </xsl:call-template>
-                </xsl:if>
-              </xsl:for-each>
-            </td>
-          </tr>
-        </xsl:for-each>
-      </table>
-  </div>
-</xsl:template>
-
 <xsl:template match="get_report_ports_response">
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="ports"/>
@@ -30607,8 +30382,6 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="get_report_apps_response">
-  <xsl:apply-templates select="get_prognostic_report/get_reports_response/report"
-                       mode="prognostic_apps"/>
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="apps"/>
 </xsl:template>
@@ -30711,63 +30484,6 @@ should not have received it.
 
 <xsl:key name="key_prog_apps" match="report/results/result" use="nvt/cpe/@id"/>
 
-<xsl:template match="report" mode="prognostic_apps">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:variable name="report" select="report"/>
-
-  <xsl:apply-templates select="." mode="report-section-toolbar">
-    <xsl:with-param name="section" select="'apps'"/>
-  </xsl:apply-templates>
-  <xsl:call-template name="report-section-header">
-    <xsl:with-param name="section" select="'apps'"/>
-    <xsl:with-param name="filtered-count" select="count(report/results/result[generate-id() = generate-id(key('key_prog_apps', nvt/cpe/@id))])"/>
-    <xsl:with-param name="full-count" select="report/apps/count"/>
-  </xsl:call-template>
-
-  <div id="table-box" class="section-box">
-      <table class="gbntable">
-          <col/>
-          <col/>
-          <col/>
-          <col width="100px"/>
-        <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Application CPE')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Hosts')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Occurrences')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Severity')"/></td>
-        </tr>
-
-        <xsl:for-each select="report/results/result[generate-id() = generate-id(key('key_prog_apps', nvt/cpe/@id))]">
-          <xsl:variable name="cpe_id" select="nvt/cpe/@id"/>
-          <tr class="{gsa:table-row-class(position())}">
-            <td>
-              <xsl:call-template name="get_info_cpe_lnk">
-                <xsl:with-param name="cpe" select="$cpe_id"/>
-                <xsl:with-param name="cpe_id" select="$cpe_id"/>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:value-of select="count(../../host[detail/name = 'App' and detail/value = $cpe_id])"/>
-            </td>
-            <td>
-              <xsl:value-of select="count(../result[nvt/cpe/@id = $cpe_id])"/>
-            </td>
-            <td>
-              <xsl:for-each select="../result[nvt/cpe/@id = $cpe_id]">
-                <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
-                <xsl:if test="position() = 1">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="nvt/cvss_base"/>
-                  </xsl:call-template>
-                </xsl:if>
-              </xsl:for-each>
-            </td>
-          </tr>
-        </xsl:for-each>
-      </table>
-  </div>
-</xsl:template>
-
 <xsl:template name="report-help-icon">
   <a href="/help/view_report.html?token={/envelope/token}#viewreport"
     title="{concat(gsa:i18n('Help'),': ',gsa:i18n('View Report'))}"
@@ -30789,9 +30505,6 @@ should not have received it.
         <xsl:choose>
           <xsl:when test="string-length ($report_format_id) &gt; 0">
             <xsl:choose>
-              <xsl:when test="$outer_type='prognostic' and @id=$report_format_id">
-                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-              </xsl:when>
               <xsl:when test="../../delta and @id=$report_format_id">
                 <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
               </xsl:when>
@@ -30805,9 +30518,6 @@ should not have received it.
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
-              <xsl:when test="$outer_type='prognostic' and name='PDF'">
-                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-              </xsl:when>
               <xsl:when test="../../delta and name='PDF'">
                 <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
               </xsl:when>
@@ -30858,14 +30568,6 @@ should not have received it.
         <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
         <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
       </xsl:when>
-      <xsl:when test="@type='prognostic'">
-        <input type="hidden" name="type" value="prognostic"/>
-        <input type="hidden" name="host" value="{report/filters/host}"/>
-        <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-        <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-        <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-        <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-      </xsl:when>
     </xsl:choose>
 
     <input type="hidden" name="first_result" value="{report/results/@start}"/>
@@ -30880,9 +30582,6 @@ should not have received it.
         <xsl:choose>
           <xsl:when test="string-length ($report_format_id) &gt; 0">
             <xsl:choose>
-              <xsl:when test="$outer_type='prognostic' and @id=$report_format_id">
-                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-              </xsl:when>
               <xsl:when test="../../delta and @id=$report_format_id">
                 <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
               </xsl:when>
@@ -30896,9 +30595,6 @@ should not have received it.
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
-              <xsl:when test="$outer_type='prognostic' and name='PDF'">
-                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-              </xsl:when>
               <xsl:when test="../../delta and name='PDF'">
                 <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
               </xsl:when>
@@ -31450,8 +31146,6 @@ should not have received it.
   <xsl:apply-templates select="modify_tag_response"/>
   <xsl:apply-templates select="get_report/get_reports_alert_response/get_reports_response"
                        mode="alert"/>
-  <xsl:apply-templates select="get_prognostic_report/get_reports_response/report"
-                       mode="summary"/>
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="summary"/>
   <xsl:for-each select="get_report/get_reports_response/report/report">
@@ -31482,30 +31176,8 @@ should not have received it.
 
   <div id="table-box" class="section-box">
     <div>
-      <xsl:choose>
-        <xsl:when test="@type='prognostic'">
-          <div class="pull-right">
-            <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Hosts</a>
-          </div>
-        </xsl:when>
-      </xsl:choose>
-
       <a name="summary"/>
       <table cellspacing="0" cellpadding="3">
-        <xsl:choose>
-          <xsl:when test="@type='prognostic' and string-length (report/filters/host) &gt; 0">
-            <tr>
-              <td><b><xsl:value-of select="gsa:i18n ('Host')"/>:</b></td>
-              <td><b><xsl:value-of select="report/filters/host"/></b></td>
-            </tr>
-          </xsl:when>
-          <xsl:when test="@type='prognostic'">
-            <tr>
-              <td><b><xsl:value-of select="gsa:i18n ('Multiple hosts')"/></b></td>
-              <td></td>
-            </tr>
-          </xsl:when>
-          <xsl:otherwise>
             <tr>
               <td><b><xsl:value-of select="gsa:i18n ('Result of Task')"/>:</b></td>
               <td>
@@ -31514,11 +31186,7 @@ should not have received it.
                 </a>
               </td>
             </tr>
-          </xsl:otherwise>
-        </xsl:choose>
         <xsl:choose>
-          <xsl:when test="@type='prognostic'">
-          </xsl:when>
           <xsl:when test="../../delta">
             <tr>
               <td><xsl:value-of select="gsa:i18n ('Report')"/> 1:</td>
@@ -31699,9 +31367,6 @@ should not have received it.
           </td>
           <td><xsl:value-of select="gsa:i18n ('Total', 'Results')"/></td>
           <xsl:choose>
-            <xsl:when test="@type='prognostic'">
-              <td><xsl:value-of select="gsa:i18n ('Download', 'Action Verb')"/></td>
-            </xsl:when>
             <xsl:when test="../../delta">
               <td><xsl:value-of select="gsa:i18n ('Download', 'Action Verb')"/></td>
             </xsl:when>
@@ -31712,8 +31377,6 @@ should not have received it.
           </xsl:choose>
         </tr>
         <xsl:choose>
-          <xsl:when test="@type='prognostic'">
-          </xsl:when>
           <xsl:when test="../../delta">
           </xsl:when>
           <xsl:otherwise>
@@ -31816,8 +31479,6 @@ should not have received it.
             <xsl:value-of select="report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered"/>
           </td>
           <xsl:choose>
-            <xsl:when test="@type='prognostic'">
-            </xsl:when>
             <xsl:when test="../../delta">
             </xsl:when>
             <xsl:otherwise>
@@ -31889,23 +31550,12 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="get_reports_response/report/report" mode="details">
-  <xsl:variable name="prognostic">
-    <xsl:if test="@type='prognostic'">1</xsl:if>
-  </xsl:variable>
-
-  <xsl:variable name="on">
-    <xsl:choose>
-      <xsl:when test="$prognostic=1">0</xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
 
   <xsl:for-each select="results/result">
     <xsl:call-template name="result-detailed">
-      <xsl:with-param name="prognostic" select="$prognostic"/>
-      <xsl:with-param name="note-buttons" select="$on"/>
-      <xsl:with-param name="override-buttons" select="$on"/>
-      <xsl:with-param name="show-overrides" select="$on"/>
+      <xsl:with-param name="note-buttons" select="1"/>
+      <xsl:with-param name="override-buttons" select="1"/>
+      <xsl:with-param name="show-overrides" select="1"/>
       <xsl:with-param name="show-header" select="position() = 1 or /envelope/params/details = 1"/>
       <xsl:with-param name="collapse-details-button" select="1"/>
       <xsl:with-param name="result-body" select="/envelope/params/details"/>

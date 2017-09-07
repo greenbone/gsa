@@ -1,5 +1,11 @@
 2017-09-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/omp.xsl: Removed any handling of the removed
+	prognostic-feature. This occured in many functions, templates
+	etc in form of conditionals for the prognostic case.
+
+2017-09-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Remove the classic asset management.
 
 	* src/html/classic/ng/src/web/components/bar/menubar.js (MenuBar):
