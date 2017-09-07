@@ -484,12 +484,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('Operating Systems')"/></name>
           </item>
         </xsl:if>
-        <xsl:if test="gsa:may-op ('GET_REPORTS')">
-          <item>
-            <page>get_report&amp;type=assets&amp;apply_overrides=1&amp;levels=hm</page>
-            <name><xsl:value-of select="gsa:i18n ('Hosts (Classic)')"/></name>
-          </item>
-        </xsl:if>
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>

@@ -1,5 +1,14 @@
 2017-09-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/gsad.xsl (template name="html-gsa-navigation"):
+	Remove menu item for Hosts Classic.
+
+	* src/html/classic/omp.xsl (template match="get_reports_response"):
+	Remove a leftover from the previous elimination of the classic asset
+	management.
+
+2017-09-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl: Removed any handling of the removed
 	prognostic-feature. This occured in many functions, templates
 	etc in form of conditionals for the prognostic case.

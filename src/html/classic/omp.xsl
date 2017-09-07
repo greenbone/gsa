@@ -27509,14 +27509,7 @@ should not have received it.
     </xsl:when>
     <xsl:otherwise>
       <xsl:for-each select="report">
-        <xsl:choose>
-          <xsl:when test="@type = 'assets'">
-            <xsl:call-template name="assets"/>
-          </xsl:when>
-          <xsl:otherwise>
             <xsl:apply-templates select="." mode="results"/>
-          </xsl:otherwise>
-        </xsl:choose>
       </xsl:for-each>
     </xsl:otherwise>
   </xsl:choose>
