@@ -1022,7 +1022,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
         This table provides an overview of all configured
-        <a href="glossary.html?token={/envelope/token}#credential">Credentials</a>.
+        <a href="glossary.html?token={/envelope/token}#credential">Credentials</a>
         and summarizes the essential aspects of it.
       </p>
 
@@ -1282,7 +1282,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Private key</td>
           <td>yes</td>
           <td>--</td>
-          <td>File containing an a private key in PEM format</td>
+          <td>File containing a private key in PEM format</td>
           <td></td>
         </tr>
 
@@ -1571,7 +1571,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
         The URL will be issued as HTTP GET.
-        This can be used eg. to automatically send a SMS via
+        This can be used e.g. to automatically send a SMS via
         a HTTP GET gateway or automatically create a
         bug report in an issue tracker.
       </p>
@@ -3464,7 +3464,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Permission types</h3>
       <h4>Read</h4>
       <p>
-        Granting "read" permissions means granting the permission to view the
+        Granting "read" permissions means granting the permission to view
         the resource on list pages and its details page (get_[...]).
       </p>
       <h4>Proxy</h4>
@@ -7303,7 +7303,7 @@ Public License instead of this License.
       </p>
       <h3>From Vector</h3>
       <p>
-        Insert the Base Vector (eg: <a href="/omp?cmd=cvss_calculator&amp;cvss_vector=AV:N/AC:M/Au:S/C:P/I:P/A:C&amp;token={/envelope/token}">AV:N/AC:M/Au:S/C:P/I:P/A:C</a>)
+        Insert the Base Vector (e.g. <a href="/omp?cmd=cvss_calculator&amp;cvss_vector=AV:N/AC:M/Au:S/C:P/I:P/A:C&amp;token={/envelope/token}">AV:N/AC:M/Au:S/C:P/I:P/A:C</a>)
         in the input box, and hit the "Calculate" button to calculate the CVSS
         Base Score directly from a Base Vector.
       </p>
@@ -8052,7 +8052,7 @@ Public License instead of this License.
       <p>
         Additionally, the Permissions can be filtered for orphaned permissions by
         using "orphan=1". Those are permissions where the referring resource were
-        meanwhile deleted. With "orphan=0" you exclude the orhphaned entries.
+        meanwhile deleted. With "orphan=0" you exclude the orphaned entries.
       </p>
 
     </div>

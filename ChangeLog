@@ -1,3 +1,7 @@
+2017-09-07  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/classic/help.xsl: Fix typos.
+
 2017-09-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Remove the handling of the new asset management from XSL because it
