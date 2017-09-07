@@ -35,9 +35,11 @@ import withChangeHandler from './withChangeHandler.js';
 const TextAreaComponent = ({className, value = '', ...props}) => {
   className = classes('form-control', className);
   return (
-    <textarea {...props}
+    <textarea
+      {...props}
       value={value}
-      className={className}/>
+      className={className}
+    />
   );
 };
 

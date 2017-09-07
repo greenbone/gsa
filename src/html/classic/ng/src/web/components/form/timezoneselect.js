@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {map} from 'gmp/utils.js';
 import timezones from 'gmp/timezones.js';
 
@@ -36,7 +36,7 @@ import Select2 from './select2.js';
 
 const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
 
-  let timezone_opts = map(timezones, zone => {
+  const timezone_opts = map(timezones, zone => {
     return <option key={zone.name} value={zone.name}>{zone.name}</option>;
   });
 

@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -70,18 +70,23 @@ const ToolBarIcons = ({
         page="tasks"
         title={_('Help: Tasks')}/>
       {capabilities.mayOp('run_wizard') &&
-        <IconMenu img="wizard.svg" size="small"
+        <IconMenu
+          img="wizard.svg"
+          size="small"
           onClick={onTaskWizardClick}>
           {capabilities.mayCreate('task') &&
-            <MenuEntry title={_('Task Wizard')}
+            <MenuEntry
+              title={_('Task Wizard')}
               onClick={onTaskWizardClick}/>
           }
           {capabilities.mayCreate('task') &&
-            <MenuEntry title={_('Advanced Task Wizard')}
+            <MenuEntry
+              title={_('Advanced Task Wizard')}
               onClick={onAdvancedTaskWizardClick}/>
           }
           {capabilities.mayEdit('task') &&
-            <MenuEntry title={_('Modify Task Wizard')}
+            <MenuEntry
+              title={_('Modify Task Wizard')}
               onClick={onModifyTaskWizardClick}/>
           }
         </IconMenu>
@@ -101,8 +106,8 @@ ToolBarIcons.contextTypes = {
 
 ToolBarIcons.propTypes = {
   onAdvancedTaskWizardClick: PropTypes.func.isRequired,
-  onModifyTaskWizardClick: PropTypes.func.isRequired,
   onContainerTaskCreateClick: PropTypes.func.isRequired,
+  onModifyTaskWizardClick: PropTypes.func.isRequired,
   onTaskCreateClick: PropTypes.func.isRequired,
   onTaskWizardClick: PropTypes.func.isRequired,
 };

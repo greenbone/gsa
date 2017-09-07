@@ -91,7 +91,7 @@ class Page extends React.Component {
   }
 
   openImportDialog(task_id) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     gmp.tasks.get()
       .then(tasks => tasks.filter(task => task.isContainer()))
       .then(tasks => this.showImportDialog(tasks, task_id));
@@ -102,14 +102,14 @@ class Page extends React.Component {
   }
 
   handleDialogSave(data) {
-    let {entityCommand, onChanged} = this.props;
+    const {entityCommand, onChanged} = this.props;
     return entityCommand.import(data).then(() => onChanged());
   }
 
   handleCreateContainerTask(data) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     return gmp.task.createContainer(data).then(response => {
-      let task = response.data;
+      const task = response.data;
       this.openImportDialog(task.id);
     });
   }

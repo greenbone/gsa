@@ -51,8 +51,8 @@ function equal_array(arr1, arr2) {
   }
 
   for (let i = 0; i < arr1.length; i++) {
-    let props1 = arr1[i].props || {};
-    let props2 = arr2[i].props || {};
+    const props1 = arr1[i].props || {};
+    const props2 = arr2[i].props || {};
     if (arr1[i].key !== arr2[i].key ||
       props1.disabled !== props2.disabled) {
       return false;
@@ -78,7 +78,7 @@ class Select2Component extends React.Component {
   }
 
   componentWillReceiveProps(next) {
-    let {value} = this.props;
+    const {value} = this.props;
 
     if (this.select2 && next.value !== value) {
       this.setValue(next.value);
@@ -101,7 +101,7 @@ class Select2Component extends React.Component {
   }
 
   handleChange() {
-    let {onChange, name} = this.props;
+    const {onChange, name} = this.props;
     if (onChange) {
       onChange(this.select2.val(), name);
     }
@@ -112,7 +112,7 @@ class Select2Component extends React.Component {
   }
 
   init() {
-    let {value} = this.props;
+    const {value} = this.props;
 
     this.select2 = $(this.select).select2();
 
@@ -132,7 +132,7 @@ class Select2Component extends React.Component {
   }
 
   render() {
-    let {onChange, value, className, ...other} = this.props; // eslint-disable-line no-unused-vars
+    const {onChange, value, className, ...other} = this.props; // eslint-disable-line no-unused-vars
     return (
       <span className={className}>
         <select {...other} ref={ref => this.select = ref}/>
@@ -142,11 +142,11 @@ class Select2Component extends React.Component {
 }
 
 Select2Component.propTypes = {
+  className: PropTypes.string,
   disabled: PropTypes.bool,
   name: PropTypes.string,
-  onChange: PropTypes.func,
   value: PropTypes.any,
-  className: PropTypes.string
+  onChange: PropTypes.func,
 };
 
 export default compose(

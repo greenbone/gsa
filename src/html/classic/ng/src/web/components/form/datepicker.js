@@ -58,10 +58,10 @@ class DatePicker extends React.Component {
   }
 
   init() {
-    let {value} = this.props;
-    let date = value.toDate();
+    const {value} = this.props;
+    const date = value.toDate();
 
-    let button = $(this.button);
+    const button = $(this.button);
     button.datepicker({
       showOn: 'button',
       buttonImage: '/img/calendar.svg',
@@ -85,8 +85,8 @@ class DatePicker extends React.Component {
   }
 
   handleChange() {
-    let {onChange, name} = this.props;
-    let date = $(this.button).datepicker('getDate');
+    const {onChange, name} = this.props;
+    const date = $(this.button).datepicker('getDate');
     if (date && onChange) {
       onChange(moment(date), name);
     }
@@ -97,11 +97,15 @@ class DatePicker extends React.Component {
   }
 
   render() {
-    let {onChange, name, value, ...other} = this.props; // eslint-disable-line no-unused-vars
+    const {onChange, name, value, ...other} = this.props; // eslint-disable-line no-unused-vars
     return (
-      <Layout {...other} box>
-        <input className="datepicker-button" size="26"
-          ref={ref => this.button = ref} onClick={this.handleClick}/>
+      <Layout {...other}>
+        <input
+          className="datepicker-button"
+          size="26"
+          ref={ref => this.button = ref}
+          onClick={this.handleClick}
+        />
       </Layout>
     );
   }

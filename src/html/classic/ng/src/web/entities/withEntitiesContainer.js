@@ -30,8 +30,12 @@ import CacheProvider from '../components/provider/cacheprovider.js';
 const withEntitiesContainer = (gmpname, options = {}) => component => {
   const EntitiesContainerWrapper = props => (
     <CacheProvider name={gmpname}>
-      <EntitiesContainer {...options} {...props}
-        gmpname={gmpname} component={component}/>
+      <EntitiesContainer
+        {...options}
+        {...props}
+        gmpname={gmpname}
+        component={component}
+      />
     </CacheProvider>
   );
   return EntitiesContainerWrapper;

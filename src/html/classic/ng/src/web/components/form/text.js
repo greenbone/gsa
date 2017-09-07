@@ -30,12 +30,7 @@ import withLayout from '../layout/withLayout.js';
 
 import {withClickHandler} from './form.js';
 
-const TextComponent = ({
-    value,
-    ...props,
-  }) => {
-  return <span {...props} />;
-};
+const TextComponent = ({value, ...props}) => (<span {...props} />);
 
 TextComponent.propTypes = {
   value: PropTypes.any,

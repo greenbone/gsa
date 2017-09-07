@@ -59,9 +59,9 @@ const RadioComponent = ({title, children, className, disabled, ...other}) => {
 };
 
 RadioComponent.propTypes = {
-  name: PropTypes.string,
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  name: PropTypes.string,
   title: PropTypes.string,
   onChange: PropTypes.func,
 };

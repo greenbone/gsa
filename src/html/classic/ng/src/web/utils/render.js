@@ -44,7 +44,7 @@ export const DEBUG = _('Debug');
 export const N_A = _('N/A');
 
 export function render_options(list, default_opt_value, default_opt = '--') {
-  let options = map(list, entry => {
+  const options = map(list, entry => {
     return (
       <option key={entry.id} value={entry.id}>{entry.name}</option>
     );
@@ -367,7 +367,7 @@ export function permission_description_resource(name, resource) {
         resource_type);
     }
 
-    let [type] = split(name, '_', 1);
+    const [type] = split(name, '_', 1);
     switch (type) {
       case 'create':
         return _('May create a new {{type}}', resource_type);
@@ -389,7 +389,7 @@ export function permission_description_resource_with_subject(name, resource,
   subject) {
   if (is_defined(resource) && !is_empty(resource.type)) {
     name = name.toLowerCase();
-    let type = {
+    const type = {
       subject_type: type_name(subject.type, false),
       subject_name: subject.name,
       resource_type: type_name(resource.type, false),
@@ -401,7 +401,7 @@ export function permission_description_resource_with_subject(name, resource,
         'all resources of {{resource_type}} {{resource_name}}', type);
     }
 
-    let [command_type, command_name] = split(name, '_', 1);
+    const [command_type, command_name] = split(name, '_', 1);
     type.resource_type = type_name(command_name, false);
     switch (command_type) {
       case 'create':
@@ -461,7 +461,7 @@ export function simple_permission_description(name) {
       break;
   }
 
-  let [type, res] = split(name, '_', 1);
+  const [type, res] = split(name, '_', 1);
   switch (type) {
     case 'create':
       return _('May create a new {{type}}', {type: type_name(res)});
@@ -539,7 +539,7 @@ export function simple_permission_description_with_subject(name, subject) {
       break;
   }
 
-  let [command_type, res] = split(name, '_', 1);
+  const [command_type, res] = split(name, '_', 1);
   type = {
     subject_type: type_name(subject.type, false),
     subject_name: subject.name,
@@ -584,13 +584,20 @@ export function simple_permission_description_with_subject(name, subject) {
   }
 }
 
+export const render_entities_counts = entities => {
+  const counts = entities.getCounts();
+  return _('{{filtered}} of {{all}}', counts);
+};
+
 export const render_section_title = (entities, title) => {
   if (!is_defined(entities)) {
     return title;
   }
 
-  const counts = entities.getCounts();
-  return _('{{title}} ({{filtered}} of {{all}})', {title, ...counts});
+  return _('{{title}} ({{counts}})', {
+    title,
+    counts: render_entities_counts(entities),
+  });
 };
 
 // vim: set ts=2 sw=2 tw=80:

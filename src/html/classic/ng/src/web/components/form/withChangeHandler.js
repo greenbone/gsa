@@ -93,7 +93,7 @@ const withChangeHandler = (options = {}) => Component => {
       const {
         convert = convert_func, // eslint-disable-line no-unused-vars
         debounce: debounce_value,
-        ...props,
+        ...props
       } = this.props;
 
       return props;

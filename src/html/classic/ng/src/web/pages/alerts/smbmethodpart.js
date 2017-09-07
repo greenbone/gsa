@@ -50,8 +50,8 @@ const SmbMethodPart = ({
     onChange,
     onNewCredentialClick,
   }) => {
-  let smb_credential_opts = render_options(credentials);
-  let smb_report_format_opts = render_options(reportFormats);
+  const smb_credential_opts = render_options(credentials);
+  const smb_report_format_opts = render_options(reportFormats);
 
   return (
     <Layout
@@ -59,7 +59,11 @@ const SmbMethodPart = ({
       box
       grow="1">
       <FormGroup title=" ">
-        <Text>{_('Security note: The SMB protocol does not offer a fingerprint to establish complete mutual trust. Thus a man-in-the-middle attack can not be fully prevented.')}</Text>
+        <Text>
+          {_('Security note: The SMB protocol does not offer a ' +
+             'fingerprint to establish complete mutual trust. Thus a ' +
+             'man-in-the-middle attack can not be fully prevented.')}
+        </Text>
       </FormGroup>
 
       <FormGroup title={_('Credential')}>
@@ -113,8 +117,8 @@ SmbMethodPart.propTypes = {
   reportFormats: PropTypes.arrayLike,
   smbCredential: PropTypes.id,
   smbFilePath: PropTypes.string.isRequired,
-  smbSharePath: PropTypes.string.isRequired,
   smbReportFormat: PropTypes.id,
+  smbSharePath: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   onNewCredentialClick: PropTypes.func,
 };

@@ -36,7 +36,7 @@ import './css/form.css';
 import './css/checkboxradio.css';
 
 const convert_checked = (value, props) => {
-  let {checkedValue, unCheckedValue} = props;
+  const {checkedValue, unCheckedValue} = props;
 
   if (value && is_defined(checkedValue)) {
     value = checkedValue;
@@ -54,7 +54,7 @@ const CheckboxComponent = ({
     disabled,
     checkedValue,
     unCheckedValue,
-    ...other,
+    ...other
   }) => {
 
   className = classes(className, 'checkbox', disabled ? 'disabled' : '');
@@ -75,13 +75,13 @@ const CheckboxComponent = ({
 };
 
 CheckboxComponent.propTypes = {
-  name: PropTypes.string,
-  disabled: PropTypes.bool,
-  title: PropTypes.string,
-  className: PropTypes.string,
-  onChange: PropTypes.func,
   checkedValue: PropTypes.any,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  name: PropTypes.string,
+  title: PropTypes.string,
   unCheckedValue: PropTypes.any,
+  onChange: PropTypes.func,
 };
 
 export default compose(

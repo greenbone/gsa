@@ -162,7 +162,7 @@ class SpinnerComponent extends React.Component {
 
   handleMouseWheel(event) {
     const {step} = this;
-    const direction = event.deltaY > 1  ? 1 : -1;
+    const direction = event.deltaY > 1 ? 1 : -1;
 
     event.preventDefault();
 
@@ -259,7 +259,7 @@ class SpinnerComponent extends React.Component {
 
   precisionOf(num) {
     const str = num.toString();
-    const decimal = str.indexOf(".");
+    const decimal = str.indexOf('.');
 
     return decimal === -1 ? 0 : str.length - decimal - 1;
   }
@@ -280,9 +280,11 @@ class SpinnerComponent extends React.Component {
     const css = classes(disabled ? 'spinner disabled' : 'spinner', className);
 
     return (
-      <span className={css}
+      <span
+        className={css}
         onWheel={this.handleMouseWheel}>
-        <input className="spinner-input"
+        <input
+          className="spinner-input"
           data-type={type}
           min={min}
           max={max}
@@ -294,7 +296,8 @@ class SpinnerComponent extends React.Component {
           onKeyDown={this.handleKeyDown}
           size={size} maxLength={maxLength}>
         </input>
-        <a className={classes('spinner-button spinner-up',
+        <a
+          className={classes('spinner-button spinner-up',
           up_active ? ' active' : '')}
           onClick={this.handleUp}
           onMouseDown={this.handleUpMouse}
@@ -302,7 +305,8 @@ class SpinnerComponent extends React.Component {
           onDoubleClick={this.handleDbClick}>
           ▲
         </a>
-        <a className={classes('spinner-button spinner-down',
+        <a
+          className={classes('spinner-button spinner-down',
           down_active ? ' active' : '')}
           onClick={this.handleDown}
           onMouseDown={this.handleDownMouse}
@@ -325,8 +329,8 @@ SpinnerComponent.propTypes = {
   className: PropTypes.string,
   debounce: PropTypes.numberOrNumberString,
   disabled: PropTypes.bool,
-  maxLength: PropTypes.numberOrNumberString,
   max: PropTypes.numberOrNumberString,
+  maxLength: PropTypes.numberOrNumberString,
   min: PropTypes.numberOrNumberString,
   name: PropTypes.string,
   size: PropTypes.numberOrNumberString,

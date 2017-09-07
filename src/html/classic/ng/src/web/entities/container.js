@@ -76,7 +76,7 @@ class EntitiesContainer extends React.Component {
     }
     else {
       entity_command_name = gmpname;
-      entities_command_name  = gmpname + 's';
+      entities_command_name = gmpname + 's';
     }
 
     this.entity_command = gmp[entity_command_name];
@@ -134,7 +134,7 @@ class EntitiesContainer extends React.Component {
   load(filter, options = {}) {
     const {entities_command} = this;
     let {force = false, refresh, reload = false} = options;
-    let {cache, extraLoadParams = {}} = this.props;
+    const {cache, extraLoadParams = {}} = this.props;
 
     this.setState({loading: true});
 
@@ -145,7 +145,12 @@ class EntitiesContainer extends React.Component {
         const meta = entities.getMeta();
         const loaded_filter = entities.getFilter();
 
-        this.setState({entities, filter, loaded_filter, loading: false});
+        this.setState({
+          entities,
+          filter,
+          loaded_filter,
+          loading: false,
+        });
 
         if (meta.fromcache && (meta.dirty || reload)) {
           log.debug('Forcing reload of entities', meta.dirty, reload);
@@ -191,7 +196,7 @@ class EntitiesContainer extends React.Component {
   }
 
   startTimer(refresh) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
     if (refresh && refresh >= 0) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
@@ -228,8 +233,8 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDownloadBulk(filename = 'export.xml') {
-    let {entities_command} = this;
-    let {selected, selection_type, loaded_filter} = this.state;
+    const {entities_command} = this;
+    const {selected, selection_type, loaded_filter} = this.state;
     let promise;
 
     if (selection_type === SelectionType.SELECTION_USER) {
@@ -250,18 +255,18 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDeleteBulk() {
-    let {entities_command} = this;
-    let {selected, selection_type, loaded_filter} = this.state;
+    const {entities_command} = this;
+    const {selected, selection_type, loaded_filter} = this.state;
     let promise;
 
     if (selection_type === SelectionType.SELECTION_USER) {
       promise = entities_command.delete(selected);
     }
     else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise  = entities_command.deleteByFilter(loaded_filter);
+      promise = entities_command.deleteByFilter(loaded_filter);
     }
     else {
-      promise  = entities_command.deleteByFilter(loaded_filter.all());
+      promise = entities_command.deleteByFilter(loaded_filter.all());
     }
 
     promise.then(deleted => {
@@ -271,7 +276,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleSelected(entity) {
-    let {selected} = this.state;
+    const {selected} = this.state;
 
     selected.add(entity);
 
@@ -279,7 +284,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDeselected(entity) {
-    let {selected} = this.state;
+    const {selected} = this.state;
 
     selected.delete(entity);
 
@@ -287,7 +292,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDeleteEntity(entity) {
-    let {entity_command} = this;
+    const {entity_command} = this;
 
     entity_command.delete(entity).then(() => {
       this.reload({invalidate: true});
@@ -296,7 +301,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleCloneEntity(entity) {
-    let {entity_command} = this;
+    const {entity_command} = this;
 
     entity_command.clone(entity).then(() => {
       this.reload({invalidate: true});
@@ -305,12 +310,12 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDownloadEntity(entity) {
-    let {entities_command} = this;
-    let {gmpname, onDownload} = this.props;
+    const {entities_command} = this;
+    const {gmpname, onDownload} = this.props;
 
-    let name = is_array(gmpname) ? gmpname[0] : gmpname;
+    const name = is_array(gmpname) ? gmpname[0] : gmpname;
 
-    let filename = name + '-' + entity.id + '.xml';
+    const filename = name + '-' + entity.id + '.xml';
 
     entities_command.export([entity]).then(response => {
       onDownload({filename, data: response.data});
@@ -318,7 +323,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleSaveEntity(data) {
-    let {entity_command} = this;
+    const {entity_command} = this;
     let promise;
 
     if (is_defined(data.id)) {
@@ -337,7 +342,7 @@ class EntitiesContainer extends React.Component {
     let sort = 'sort';
     const sort_field = loaded_filter.getSortBy();
 
-    let filter = loaded_filter.first();
+    const filter = loaded_filter.first();
 
     if (sort_field && sort_field === field) {
       sort = filter.getSortOrder() === 'sort' ? 'sort-reverse' : 'sort';
@@ -460,8 +465,8 @@ class EntitiesContainer extends React.Component {
 EntitiesContainer.propTypes = {
   cache: PropTypes.cache.isRequired,
   component: PropTypes.component.isRequired,
-  extraLoadParams: PropTypes.object,
   entities: PropTypes.collection,
+  extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   filtersFilter: PropTypes.filter,
   gmpname: PropTypes.oneOfType([
