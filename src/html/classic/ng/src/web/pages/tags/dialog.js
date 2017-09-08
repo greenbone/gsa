@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
@@ -201,7 +201,7 @@ TagDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(TagDialog, {
+export default withDialog({
   title: _('New Tag'),
   footer: _('Save'),
   defaultState: {
@@ -213,6 +213,6 @@ export default withDialog(TagDialog, {
     resource_type: 'agent',
     resource_id: '',
   },
-});
+})(TagDialog);
 
 // vim: set ts=2 sw=2 tw=80:

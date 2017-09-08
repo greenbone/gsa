@@ -1,5 +1,10 @@
 2017-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tags/dialog.js: Use new withDialog HOC for
+	Tag dialog.
+
+2017-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/section/header.js: Improve styling of
 	section header. The header is displayed above the horizontal line. Add a
 	padding to the bottom to add margin between the header content and the
