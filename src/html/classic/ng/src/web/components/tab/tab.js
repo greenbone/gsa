@@ -31,6 +31,7 @@ const StyledDiv = glamorous.div(
   {
     fontSize: '16px',
     display: 'flex',
+    alignItems: 'center',
     flexGrow: '1',
     paddingLeft: '3px',
     paddingRight: '3px',
