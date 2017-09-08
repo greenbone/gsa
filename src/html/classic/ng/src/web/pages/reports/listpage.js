@@ -36,8 +36,8 @@ import {withDashboard} from '../../components/dashboard/dashboard.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
 
-import Layout from '../../components/layout/layout.js';
 import IconDivider from '../../components/layout/icondivider.js';
+import Wrapper from '../../components/layout/wrapper.js';
 
 import ContainerTaskDialog from '../../pages/tasks/containerdialog.js';
 
@@ -116,7 +116,7 @@ class Page extends React.Component {
 
   render() {
     return (
-      <Layout>
+      <Wrapper>
         <EntitiesPage
           {...this.props}
           onUploadReportClick={this.openImportDialog}
@@ -128,7 +128,7 @@ class Page extends React.Component {
         <ContainerTaskDialog
           ref={ref => this.container_task_dialog = ref}
           onSave={this.handleCreateContainerTask}/>
-      </Layout>
+      </Wrapper>
     );
   }
 }
