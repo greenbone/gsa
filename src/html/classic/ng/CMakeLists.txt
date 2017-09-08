@@ -309,6 +309,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entity/permissions.js
      ${NG_SRC_DIR}/src/web/entity/tags.js
      ${NG_SRC_DIR}/src/web/entity/withEntityComponent.js
+     ${NG_SRC_DIR}/src/web/entity/withHandleTags.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/listpage.js

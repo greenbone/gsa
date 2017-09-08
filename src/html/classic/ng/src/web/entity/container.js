@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
+import Promise from 'gmp/promise.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
@@ -35,9 +36,7 @@ import withDownload from '../components/form/withDownload.js';
 
 import Wrapper from '../components/layout/wrapper.js';
 
-import TagDialog from '../pages/tags/dialog.js';
-
-import Promise from 'gmp/promise.js';
+import withHandleTags from './withHandleTags.js';
 
 const log = logger.getLogger('web.entity.container');
 
@@ -91,19 +90,11 @@ class EntityContainer extends React.Component {
 
     this.reload = this.reload.bind(this);
 
-    this.handleAddTag = this.handleAddTag.bind(this);
     this.handleChanged = this.handleChanged.bind(this);
-    this.handleDeleteTag = this.handleDeleteTag.bind(this);
-    this.handleDisableTag = this.handleDisableTag.bind(this);
-    this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleError = this.handleError.bind(this);
-    this.handleSaveTag = this.handleSaveTag.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
     this.handleShowError = this.handleShowError.bind(this);
     this.handleShowSuccess = this.handleShowSuccess.bind(this);
-
-    this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
-    this.openEditTagDialog = this.openEditTagDialog.bind(this);
   }
 
   componentDidMount() {
@@ -210,51 +201,6 @@ class EntityContainer extends React.Component {
     this.reload();
   }
 
-  handleSaveTag(data) {
-    const {gmp} = this.context;
-
-    let promise;
-
-    if (is_defined(data.id)) {
-      promise = gmp.tag.save(data);
-    }
-    else {
-      promise = gmp.tag.create(data);
-    }
-
-    return promise.then(this.reload);
-  }
-
-  handleAddTag({name, value, entity}) {
-    const {gmp} = this.context;
-
-    return gmp.tag.create({
-      name,
-      value,
-      active: 1,
-      resource_id: entity.id,
-      resource_type: this.name,
-    }).then(this.reload, this.handleError);
-  }
-
-  handleEnableTag(tag) {
-    const {gmp} = this.context;
-
-    return gmp.tag.enable(tag).then(this.reload, this.handleError);
-  }
-
-  handleDisableTag(tag) {
-    const {gmp} = this.context;
-
-    return gmp.tag.disable(tag).then(this.reload, this.handleError);
-  }
-
-  handleDeleteTag(tag) {
-    const {gmp} = this.context;
-
-    return gmp.tag.delete(tag).then(this.reload, this.handleError);
-  }
-
   handleError(error) {
     log.error(error);
     this.handleShowError(error.message);
@@ -277,55 +223,25 @@ class EntityContainer extends React.Component {
     });
   }
 
-  openEditTagDialog(tag) {
-    const {gmp} = this.context;
-
-    gmp.tag.get(tag).then(response => {
-      const t = response.data;
-      this.tag_dialog.show({
-        fixed: true,
-        id: t.id,
-        active: t.active,
-        name: t.name,
-        value: t.value,
-        comment: t.comment,
-        resource_id: t.resource.id,
-        resource_type: t.resource.entity_type,
-      }, {title: _('Edit Tag {{name}}', tag)});
-    });
-  }
-
-  openCreateTagDialog(entity) {
-    this.tag_dialog.show({
-      fixed: true,
-      resource_id: entity.id,
-      resource_type: entity.entity_type,
-      name: _('{{type}}:unnamed', {type: entity.entity_type}),
-    });
-  }
-
   render() {
-    const Component = this.props.component;
-    const {children, component, name, onDownload, ...other} = this.props;
+    const {
+      children,
+      component: Component,
+      name,
+      onDownload,
+      ...other
+    } = this.props;
     return (
       <Wrapper>
         <Component
           {...other}
           {...this.state}
           entityCommand={this.entity_command}
-          onAddTag={this.handleAddTag}
-          onNewTagClick={this.openCreateTagDialog}
-          onEditTagClick={this.openEditTagDialog}
-          onEnableTag={this.handleEnableTag}
-          onDeleteTag={this.handleDeleteTag}
-          onDisableTag={this.handleDisableTag}
+          resourceType={this.name}
           onDownloaded={onDownload}
           onChanged={this.handleChanged}
+          onSuccess={this.handleChanged}
           onError={this.handleError}
-        />
-        <TagDialog
-          ref={ref => this.tag_dialog = ref}
-          onSave={this.handleSaveTag}
         />
         <NoticeDialog
           width="400px"
@@ -351,6 +267,9 @@ EntityContainer.contextTypes = {
 EntityContainer = withDownload(EntityContainer);
 
 export const withEntityContainer = (name, options = {}) => component => {
+
+  component = withHandleTags()(component);
+
   const EntityContainerWrapper = props => {
     return (
       <EntityContainer
