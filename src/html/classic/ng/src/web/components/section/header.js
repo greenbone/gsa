@@ -41,6 +41,7 @@ const HeaderLayout = glamorous(Layout, {
   'section-header',
   {
     margin: '10px 0px',
+    paddingBottom: '1px',
     borderBottom: '2px solid black',
     position: 'relative',
   },
@@ -60,17 +61,21 @@ const HeaderIconLayout = glamorous(Layout, {
 
 const SectionHeader = ({
   children,
+  align = ['space-between', 'end'],
   title,
   img,
 }) => {
   return (
     <HeaderLayout
       flex
-      align={['space-between', 'end']}
+      align={align}
       className="section-header">
       <HeaderHeading flex align={['start', 'stretch']}>
         {is_defined(img) &&
-          <HeaderIconLayout flex>
+          <HeaderIconLayout
+            flex
+            align={['start', 'end']}
+          >
             {is_string(img) ?
               <Icon size="large" img={img}/> : img
             }
@@ -88,6 +93,10 @@ const SectionHeader = ({
 };
 
 SectionHeader.propTypes = {
+  align: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
   img: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,

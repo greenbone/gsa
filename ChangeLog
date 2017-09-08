@@ -1,5 +1,13 @@
 2017-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/section/header.js: Improve styling of
+	section header. The header is displayed above the horizontal line. Add a
+	padding to the bottom to add margin between the header content and the
+	horizontal line. Also allow to define an alignment of the section handler
+	content.
+
+2017-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entity/container.js,
 	src/html/classic/ng/src/web/entity/withHandleTags.js: Extract handling of tags
