@@ -22,8 +22,11 @@
  */
 
 import 'babel-polyfill';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import {ThemeProvider} from 'glamorous';
 
 import {
   browserHistory,
@@ -46,6 +49,7 @@ import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'
 import PropTypes from './utils/proptypes.js';
 
 import {get_severity_levels} from './utils/render.js';
+import theme from './utils/theme.js';
 
 import AssetsPage from './pages/assetspage.js';
 import HomePage from './pages/homepage.js';
@@ -166,7 +170,9 @@ class App extends React.Component {
   render() {
     return (
       <CacheFactoryProvider caches={caches}>
-        {this.props.children}
+        <ThemeProvider theme={theme}>
+          {this.props.children}
+        </ThemeProvider>
       </CacheFactoryProvider>
     );
   }
