@@ -1,5 +1,11 @@
 2017-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/layout/withLayout.js: Allow to set
+	only wrap prop without argument on withLayout based components to set
+	flex-wrap css property to wrap.
+
+2017-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/listpage.js: Use Wrapper instead
 	of Layout. There is no real usecase for Layout here. The dialog is positioned
 	abosolutely and doesn't need to be layouted.

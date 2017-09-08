@@ -58,6 +58,10 @@ const withLayout = (defaults = {}) => Component => {
         flex = 'row';
       }
 
+      if (wrap === true) {
+        wrap = 'wrap';
+      }
+
       if (is_defined(align)) {
         align = map(align, al => convert_align(al));
       }
