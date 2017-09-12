@@ -181,9 +181,9 @@ export const parse_cvss_base_vector = ({
     case 'MULTIPLE_INSTANCES':
       vector += 'M';
       break;
-    case 'SINGLE_INSTANCE':
-      vector += 'S';
-      break;
+    case 'SINGLE_INSTANCES':
+        vector += 'S';
+        break;
     default:
       vector += 'ERROR';
   }
@@ -233,7 +233,109 @@ export const parse_cvss_base_vector = ({
       vector += 'ERROR';
   }
   return vector;
+
+};
+
+export const parse_cvss_base_from_vector = cvss_vector => {
+  if (!is_defined(cvss_vector)) {
+    return undefined;
+  }
+
+  let av = '';
+  let ac = '';
+  let au = '';
+  let c = '';
+  let i = '';
+  let a = '';
+
+  const values = cvss_vector.split('/');
+
+  for (const currentvalue of values) {
+    const property = String.toLowerCase(currentvalue.substr(0,
+                                        currentvalue.indexOf(':')));
+    const val = String.toLowerCase(currentvalue.substr(currentvalue.indexOf(':')
+                                  + 1, currentvalue.length));
+    switch (property) {
+      case 'av':
+        if (val === 'l') {
+          av = 'LOCAL';
+        }
+        else if (val === 'a') {
+          av = 'ADJACENT_NETWORK';
+        }
+        else {
+          av = 'NETWORK';
+        }
+        break;
+      case 'ac':
+        if (val === 'h') {
+          ac = 'HIGH';
+        }
+        else if (val === 'm') {
+          ac = 'MEDIUM';
+        }
+        else {
+          ac = 'LOW';
+        }
+        break;
+      case 'au':
+        if (val === 'm') {
+          au = 'MULTIPLE_INSTANCES';
+        }
+        else if (val === 's') {
+          au = 'SINGLE_INSTANCES';
+        }
+        else {
+          au = 'NONE';
+        }
+        break;
+      case 'c':
+        if (val === 'c') {
+          c = 'COMPLETE';
+        }
+        else if (val === 'p') {
+          c = 'PARTIAL';
+        }
+        else {
+          c = 'NONE';
+        }
+        break;
+      case 'i':
+        if (val === 'c') {
+          i = 'COMPLETE';
+        }
+        else if (val === 'p') {
+          i = 'PARTIAL';
+        }
+        else {
+          i = 'NONE';
+        }
+        break;
+      case 'a':
+        if (val === 'c') {
+          a = 'COMPLETE';
+        }
+        else if (val === 'p') {
+          a = 'PARTIAL';
+        }
+        else {
+          a = 'NONE';
+        }
+        break;
+      default:
+        return undefined;
+    }
+  }
+
+  const cvss_values = {
+    accessvector: av,
+    accesscomplexity: ac,
+    authentication: au,
+    confidentiality: c,
+    integrity: i,
+    availability: a,
+  };
+  return cvss_values;
 };
 
 // vim: set ts=2 sw=2 tw=80:
-

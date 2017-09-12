@@ -31,6 +31,7 @@ import './commands/certbund.js';
 import './commands/credentials.js';
 import './commands/cpes.js';
 import './commands/cves.js';
+import './commands/cvsscalculator.js';
 import './commands/dfncert.js';
 import './commands/filters.js';
 import './commands/groups.js';

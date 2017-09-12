@@ -65,6 +65,7 @@ import CpesPage from './pages/cpes/listpage.js';
 import CredentialsPage from './pages/credentials/listpage.js';
 import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
+import CvssCalculatorPage from './pages/extras/cvsscalculatorpage.js';
 import DfnCertAdvsPage from './pages/dfncert/listpage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import GroupsPage from './pages/groups/listpage.js';
@@ -194,6 +195,9 @@ ReactDOM.render(
         component={Page}
         onEnter={is_logged_in}>
         <IndexRoute component={HomePage}/>
+        <Route
+          path="cvsscalculator"
+          component={CvssCalculatorPage}/>
         <Route
           path="tasks"
           component={TasksPage}/>
