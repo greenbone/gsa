@@ -1,5 +1,10 @@
 2017-09-12  Steffen Waterkamp <steffen.waterkamp@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/bar/menubar.js: Added menue
+	item for CVSS calculator page.
+
+2017-09-12  Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/cvsscalculator.js,
 	src/html/classic/ng/src/gmp/gmp.js,

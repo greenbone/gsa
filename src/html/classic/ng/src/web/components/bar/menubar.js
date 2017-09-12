@@ -243,9 +243,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
             slave_id="0"
             caps="get_system_reports"/>
           <MenuEntry
-            legacy
             title={_('CVSS Calculator')}
-            cmd="cvss_calculator"/>
+            to="cvsscalculator"/>
           <MenuEntry
             legacy
             title={_('Feed Status')}
