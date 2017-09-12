@@ -26,42 +26,74 @@ import Filter, {FilterTerm, FilterTermList} from '../filter.js';
 describe('FilterTerm equals', () => {
 
   test('should not equal object', () => {
-    let term = new FilterTerm({});
+    const term = new FilterTerm({});
     expect(term.equals({})).toBe(false);
   });
 
   test('should equal self', () => {
-    let term = new FilterTerm({});
+    const term = new FilterTerm({});
     expect(term.equals(term)).toBe(true);
   });
 
   test('empty terms should be equal', () => {
-    let term1 = new FilterTerm({});
-    let term2 = new FilterTerm({});
+    const term1 = new FilterTerm({});
+    const term2 = new FilterTerm({});
     expect(term1.equals(term2)).toBe(true);
   });
 
   test('terms with different keywords should not be equal', () => {
-    let term1 = new FilterTerm({keyword: 'abc', relation: '=', value: '1'});
-    let term2 = new FilterTerm({keyword: 'def', relation: '=', value: '1'});
+    const term1 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '1',
+    });
+    const term2 = new FilterTerm({
+      keyword: 'def',
+      relation: '=',
+      value: '1',
+    });
     expect(term1.equals(term2)).toBe(false);
   });
 
   test('terms with different relations should not be equal', () => {
-    let term1 = new FilterTerm({keyword: 'abc', relation: '=', value: '1'});
-    let term2 = new FilterTerm({keyword: 'abc', relation: '~', value: '1'});
+    const term1 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '1',
+    });
+    const term2 = new FilterTerm({
+      keyword: 'abc',
+      relation: '~',
+      value: '1',
+    });
     expect(term1.equals(term2)).toBe(false);
   });
 
   test('terms with different values should not be equal', () => {
-    let term1 = new FilterTerm({keyword: 'abc', relation: '=', value: '1'});
-    let term2 = new FilterTerm({keyword: 'abc', relation: '=', value: '2'});
+    const term1 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '1',
+    });
+    const term2 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '2',
+    });
     expect(term1.equals(term2)).toBe(false);
   });
 
   test('terms should be equal', () => {
-    let term1 = new FilterTerm({keyword: 'abc', relation: '=', value: '1'});
-    let term2 = new FilterTerm({keyword: 'abc', relation: '=', value: '1'});
+    const term1 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '1',
+    });
+    const term2 = new FilterTerm({
+      keyword: 'abc',
+      relation: '=',
+      value: '1',
+    });
     expect(term1.equals(term2)).toBe(true);
   });
 });
@@ -69,22 +101,22 @@ describe('FilterTerm equals', () => {
 describe('FilterTermList constructor', () => {
 
   test('should accept undefined', () => {
-    let termlist = new FilterTermList();
+    const termlist = new FilterTermList();
     expect(termlist.terms).toEqual([]);
     expect(termlist.toString()).toEqual('');
   });
 
   test('should accept single term', () => {
-    let term = new FilterTerm({});
-    let termlist = new FilterTermList(term);
+    const term = new FilterTerm({});
+    const termlist = new FilterTermList(term);
     expect(termlist.terms.length).toBe(1);
     expect(termlist.toString()).toEqual('');
   });
 
   test('should accept term array', () => {
-    let term1 = new FilterTerm({});
-    let term2 = new FilterTerm({});
-    let termlist = new FilterTermList([term1, term2]);
+    const term1 = new FilterTerm({});
+    const term2 = new FilterTerm({});
+    const termlist = new FilterTermList([term1, term2]);
     expect(termlist.terms.length).toBe(2);
     expect(termlist.toString()).toEqual('');
   });
@@ -93,12 +125,12 @@ describe('FilterTermList constructor', () => {
 describe('FilterTermList hasKeyword', () => {
 
   test('should have a keyword', () => {
-    let list = new FilterTermList([], 'abc');
+    const list = new FilterTermList([], 'abc');
     expect(list.hasKeyword()).toBe(true);
   });
 
   test('should not have a keyword', () => {
-    let list = new FilterTermList([]);
+    const list = new FilterTermList([]);
     expect(list.hasKeyword()).toBe(false);
   });
 });
@@ -106,18 +138,18 @@ describe('FilterTermList hasKeyword', () => {
 describe('FilterTermList copy', () => {
 
   test('should contain same terms', () => {
-    let term1 = new FilterTerm({
+    const term1 = new FilterTerm({
       keyword: 'abc',
       relation: '=',
       value: '1',
     });
-    let term2 = new FilterTerm({
+    const term2 = new FilterTerm({
       keyword: 'abc',
       relation: '=',
       value: '2',
     });
-    let list1 = new FilterTermList([term1, term2], 'abc');
-    let list2 = list1.copy();
+    const list1 = new FilterTermList([term1, term2], 'abc');
+    const list2 = list1.copy();
 
     expect(list1.length).toBe(list2.length);
     expect(list1.terms[0].equals(list2.terms[0])).toBe(true);
@@ -125,19 +157,19 @@ describe('FilterTermList copy', () => {
   });
 
   test('should contain same keyword', () => {
-    let list1 = new FilterTermList([], 'abc');
-    let list2 = list1.copy();
+    const list1 = new FilterTermList([], 'abc');
+    const list2 = list1.copy();
 
     expect(list1.keyword).toBe(list2.keyword);
   });
 
   test('changing copy should not change origin', () => {
-    let term1 = new FilterTerm({
+    const term1 = new FilterTerm({
       keyword: 'abc',
       relation: '=',
       value: '1',
     });
-    let list1 = new FilterTermList(term1, 'abc');
+    const list1 = new FilterTermList(term1, 'abc');
     let list2 = list1.copy();
 
     list2.add(new FilterTerm({
@@ -166,45 +198,45 @@ describe('FilterTermList copy', () => {
 describe('Filter parse from string tests', () => {
 
   test('should parse aprox relation without column', () => {
-    let filter = Filter.fromString('~abc');
+    const filter = Filter.fromString('~abc');
     expect(filter.toFilterString()).toEqual('~abc');
   });
 
   test('should parse approx relation without relation and column', () => {
-    let filter = Filter.fromString('abc');
+    const filter = Filter.fromString('abc');
     expect(filter.toFilterString()).toEqual('abc');
   });
 
   test('should parse equal relation without column', () => {
-    let filter = Filter.fromString('=abc');
+    const filter = Filter.fromString('=abc');
     expect(filter.toFilterString()).toEqual('=abc');
   });
 
   test('should parse equal relation without column and with quotes', () => {
-    let filter = Filter.fromString('="abc def"');
+    const filter = Filter.fromString('="abc def"');
     expect(filter.toFilterString()).toEqual('="abc def"');
   });
 
   test('should parse above relation without column', () => {
-    let filter = Filter.fromString('>1.0');
+    const filter = Filter.fromString('>1.0');
     expect(filter.toFilterString()).toEqual('>1.0');
   });
 
   test('should parse below relation without column', () => {
-    let filter = Filter.fromString('<1.0');
+    const filter = Filter.fromString('<1.0');
     expect(filter.toFilterString()).toEqual('<1.0');
   });
 
   test('should parse below relation without column', () => {
-    let filter = Filter.fromString(':abc');
+    const filter = Filter.fromString(':abc');
     expect(filter.toFilterString()).toEqual(':abc');
   });
 
   test('should parse and keep sequence order', () => {
-    let fstrings = [
+    const fstrings = [
       'abc and not def',
       '~abc and not ~def',
-      'abc and not def rows=10 first=1 sort=name'
+      'abc and not def rows=10 first=1 sort=name',
     ];
 
     fstrings.forEach(fstring => {
@@ -216,18 +248,18 @@ describe('Filter parse from string tests', () => {
 describe('Filter parse from keywords', () => {
 
   test('should parse aprox relation without column', () => {
-    let elem = {
+    const elem = {
       keywords: {
         keyword: [
           {
             column: '',
             relation: '~',
-            value: 'abc'
+            value: 'abc',
           },
-        ]
-      }
+        ],
+      },
     };
-    let filter = new Filter(elem);
+    const filter = new Filter(elem);
     expect(filter.toFilterString()).toEqual('~abc');
   });
 
@@ -238,25 +270,25 @@ describe('Filter parse from keywords', () => {
           {
             column: '',
             relation: '~',
-            value: 'abc'
+            value: 'abc',
           },
           {
             column: '',
             relation: '~',
-            value: 'and'
+            value: 'and',
           },
           {
             column: '',
             relation: '~',
-            value: 'not'
+            value: 'not',
           },
           {
             column: '',
             relation: '~',
-            value: 'def'
+            value: 'def',
           },
-        ]
-      }
+        ],
+      },
     };
     let filter = new Filter(elem);
     expect(filter.toFilterString()).toEqual('~abc and not ~def');
@@ -267,40 +299,40 @@ describe('Filter parse from keywords', () => {
           {
             column: '',
             relation: '~',
-            value: 'abc'
+            value: 'abc',
           },
           {
             column: '',
             relation: '~',
-            value: 'and'
+            value: 'and',
           },
           {
             column: '',
             relation: '~',
-            value: 'not'
+            value: 'not',
           },
           {
             column: '',
             relation: '~',
-            value: 'def'
+            value: 'def',
           },
           {
             column: 'rows',
             relation: '=',
-            value: '10'
+            value: '10',
           },
           {
             column: 'first',
             relation: '=',
-            value: '1'
+            value: '1',
           },
           {
             column: 'sort',
             relation: '=',
-            value: 'name'
-          }
-        ]
-      }
+            value: 'name',
+          },
+        ],
+      },
     };
     filter = new Filter(elem);
     expect(filter.toFilterString()).toEqual(
@@ -311,12 +343,12 @@ describe('Filter parse from keywords', () => {
 describe('Filter set', () => {
 
   test('should allow to set a filter term', () => {
-    let filter = new Filter();
+    const filter = new Filter();
     expect(filter.set('abc', '1', '=').toFilterString()).toEqual('abc=1');
   });
 
   test('should allow to change a filter term', () => {
-    let filter = Filter.fromString('abc=1');
+    const filter = Filter.fromString('abc=1');
     expect(filter.set('abc', '2', '=').toFilterString()).toEqual('abc=2');
   });
 
@@ -325,18 +357,18 @@ describe('Filter set', () => {
 describe('Filter has', () => {
 
   test('should have filter terms', () => {
-    let filter = Filter.fromString('abc=1 def=1');
+    const filter = Filter.fromString('abc=1 def=1');
     expect(filter.has('abc')).toEqual(true);
     expect(filter.has('def')).toEqual(true);
   });
 
   test('should not have unknown filter term', () => {
-    let filter = Filter.fromString('abc=1');
+    const filter = Filter.fromString('abc=1');
     expect(filter.has('def')).toEqual(false);
   });
 
   test('should not have filter terms without keyword', () => {
-    let filter = Filter.fromString('abc=1 ~def');
+    const filter = Filter.fromString('abc=1 ~def');
     expect(filter.has('def')).toEqual(false);
     expect(filter.has('~def')).toEqual(false);
   });
@@ -346,17 +378,17 @@ describe('Filter has', () => {
 describe('Filter delete', () => {
 
   test('should allow to delete a filter term', () => {
-    let filter = Filter.fromString('abc=1 def=1');
+    const filter = Filter.fromString('abc=1 def=1');
     expect(filter.delete('abc').toFilterString()).toEqual('def=1');
   });
 
   test('should ignore unknown filter term to delete', () => {
-    let filter = Filter.fromString('abc=1');
+    const filter = Filter.fromString('abc=1');
     expect(filter.delete('def').toFilterString()).toEqual('abc=1');
   });
 
   test('should not delete filter terms without keyword', () => {
-    let filter = Filter.fromString('abc=1 ~def');
+    const filter = Filter.fromString('abc=1 ~def');
     expect(filter.delete('def').toFilterString()).toEqual('abc=1 ~def');
     expect(filter.delete('~def').toFilterString()).toEqual('abc=1 ~def');
   });
@@ -373,37 +405,37 @@ describe('Filter equal', () => {
   });
 
   test('filter should equal itself', () => {
-    let filter = Filter.fromString('abc=1 def=1');
+    const filter = Filter.fromString('abc=1 def=1');
     expect(filter.equals(filter)).toEqual(true);
   });
 
   test('filter with number of terms should not equal', () => {
-    let filter1 = Filter.fromString('abc=1 def=1');
-    let filter2 = Filter.fromString('abc=1 def=1 hij=1');
+    const filter1 = Filter.fromString('abc=1 def=1');
+    const filter2 = Filter.fromString('abc=1 def=1 hij=1');
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
   test('filter with same keywords in other order should equal', () => {
-    let filter1 = Filter.fromString('abc=1 def=1');
-    let filter2 = Filter.fromString('def=1 abc=1');
+    const filter1 = Filter.fromString('abc=1 def=1');
+    const filter2 = Filter.fromString('def=1 abc=1');
     expect(filter1.equals(filter2)).toEqual(true);
   });
 
   test('filter with different keywords should not equal', () => {
-    let filter1 = Filter.fromString('abc=1');
-    let filter2 = Filter.fromString('def=1');
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('def=1');
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
   test('filter with different relations should not equal', () => {
-    let filter1 = Filter.fromString('abc=1');
-    let filter2 = Filter.fromString('abc~1');
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('abc~1');
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
   test('filter with different values should not equal', () => {
-    let filter1 = Filter.fromString('abc=1');
-    let filter2 = Filter.fromString('abc=2');
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('abc=2');
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
@@ -423,8 +455,8 @@ describe('Filter equal', () => {
 
   test('filter without keywords in other order should not equal', () => {
     // this is not completely correct but currently required for and, or, ...
-    let filter1 = Filter.fromString('abc def');
-    let filter2 = Filter.fromString('def abc');
+    const filter1 = Filter.fromString('abc def');
+    const filter2 = Filter.fromString('def abc');
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
@@ -442,7 +474,7 @@ describe('Filter get', () => {
   });
 
   test('should not get value', () => {
-    let filter = Filter.fromString('abc=1');
+    const filter = Filter.fromString('abc=1');
     expect(filter.get('def')).toBeUndefined();
   });
 
@@ -460,8 +492,8 @@ describe('Filter get', () => {
 describe('Filter copy', () => {
 
   test('should copy all values', () => {
-    let filter1 = Filter.fromString('abc=1 def=2');
-    let filter2 = filter1.copy();
+    const filter1 = Filter.fromString('abc=1 def=2');
+    const filter2 = filter1.copy();
     expect(filter1).not.toBe(filter2);
     expect(filter2.get('abc')).toBe('1');
     expect(filter2.get('def')).toBe('2');
