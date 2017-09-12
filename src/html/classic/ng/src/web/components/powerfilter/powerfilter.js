@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {KeyCode, is_defined} from 'gmp/utils.js';
+import {KeyCode, is_defined, is_string} from 'gmp/utils.js';
 import logger from 'gmp/log.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -55,6 +55,8 @@ const DEFAULT_FILTER_ID = '0';
 
 const StyledFootNote = glamorous(FootNote)({
   marginTop: '5px',
+  lineHeight: '1.2em',
+  minHeight: '1.2em',
 });
 
 const FilterSelect = glamorous(Select2)({
@@ -84,12 +86,11 @@ class PowerFilter extends React.Component {
       filtername: '',
     };
 
-    this.onCreateFilter = this.onCreateFilter.bind(this);
-    this.onNamedFilterChange = this.onNamedFilterChange.bind(this);
-    this.onResetClick = this.onResetClick.bind(this);
-    this.onUpdateFilter = this.onUpdateFilter.bind(this);
-    this.onUserFilterKeyPress = this.onUserFilterKeyPress.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
+    this.handleCreateFilter = this.handleCreateFilter.bind(this);
+    this.handleNamedFilterChange = this.handleNamedFilterChange.bind(this);
+    this.handleUpdateFilter = this.handleUpdateFilter.bind(this);
+    this.handleUserFilterKeyPress = this.handleUserFilterKeyPress.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   updateFilter(filter) {
@@ -104,9 +105,21 @@ class PowerFilter extends React.Component {
       onUpdate(filter);
     }
 
+    let userfilter;
+
+    if (is_defined(filter) && is_defined(filter.toFilterCriteriaString)) {
+      userfilter = filter.toFilterCriteriaString();
+    }
+    else if (is_string(filter)) {
+      userfilter = filter;
+    }
+    else {
+      userfilter = '';
+    }
+
     this.setState({
       filter,
-      userfilter: filter ? filter.toFilterCriteriaString() : '',
+      userfilter,
     });
   }
 
@@ -118,27 +131,21 @@ class PowerFilter extends React.Component {
     this.updateFilter(filter);
   }
 
-  onValueChange(value, name) {
+  handleValueChange(value, name) {
     this.setState({[name]: value});
   }
 
-  onUpdateFilter() {
+  handleUpdateFilter() {
     this.updateFromUserFilter();
   }
 
-  onUserFilterKeyPress(event) {
+  handleUserFilterKeyPress(event) {
     if (event.keyCode === KeyCode.ENTER) {
       this.updateFromUserFilter();
     }
   }
 
-  onResetClick() {
-    if (this.props.onResetClick) {
-      this.props.onResetClick();
-    }
-  }
-
-  onNamedFilterChange(value) {
+  handleNamedFilterChange(value) {
     const {filters} = this.props;
 
     const filter = filters.find(f => f.id === value);
@@ -146,18 +153,18 @@ class PowerFilter extends React.Component {
     this.updateFilter(filter);
   }
 
-  onCreateFilter() {
+  handleCreateFilter() {
     let {filter, userfilter = '', filtername = ''} = this.state;
 
     const {onCreateClick} = this.props;
 
-    if (userfilter.trim().length === 0 || filtername.trim().length === 0) {
+    if (filtername.trim().length === 0) {
       return;
     }
 
     filter = Filter.fromString(userfilter, filter);
 
-    if (onCreateClick) {
+    if (is_defined(onCreateClick)) {
       onCreateClick(filter);
     }
     else {
@@ -167,24 +174,29 @@ class PowerFilter extends React.Component {
 
   createFilter(filter) {
     const {filtername = ''} = this.state;
-    const {onFilterCreated} = this.props;
+    const {createFilterType, onError, onFilterCreated} = this.props;
+    const {gmp} = this.context;
 
-    if (this.context.gmp) {
-      this.context.gmp.filter.create({
-        term: filter.toFilterString(),
-        type: 'task',
-        name: filtername,
-      }).then(f => {
-        this.updateFilter(f);
-        this.setState({filtername: ''});
+    gmp.filter.create({
+      term: filter.toFilterString(),
+      type: createFilterType,
+      name: filtername,
+    }).then(response => {
+      const {data: f} = response;
+      this.updateFilter(f);
+      this.setState({filtername: ''});
 
-        if (onFilterCreated) {
-          onFilterCreated(f);
-        }
-      }, err => {
+      if (onFilterCreated) {
+        onFilterCreated(f);
+      }
+    }, err => {
+      if (is_defined(onError)) {
+        onError(err);
+      }
+      else {
         log.error(err);
-      });
-    }
+      }
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -206,9 +218,10 @@ class PowerFilter extends React.Component {
     const {capabilities} = this.context;
     const {userfilter = '', filter, filtername = ''} = this.state;
     const {filters, onEditClick, onResetClick} = this.props;
-    const namedfilterid = filter && filter.id ? filter.id : DEFAULT_FILTER_ID;
+    const namedfilterid = is_defined(filter) && is_defined(filter.id) ?
+      filter.id : DEFAULT_FILTER_ID;
 
-    const filterstring = filter ? filter.toFilterExtraString() : '';
+    const filterstring = is_defined(filter) ? filter.toFilterExtraString() : '';
 
     const filter_opts = render_options(filters, DEFAULT_FILTER_ID);
 
@@ -232,21 +245,21 @@ class PowerFilter extends React.Component {
                 size="53"
                 maxLength="1000"
                 value={userfilter}
-                onKeyDown={this.onUserFilterKeyPress}
-                onChange={this.onValueChange}/>
+                onKeyDown={this.handleUserFilterKeyPress}
+                onChange={this.handleValueChange}/>
             </Layout>
             <IconDivider flex align={['start', 'center']}>
               <Icon
                 img="refresh.svg"
                 title={_('Update Filter')}
-                onClick={this.onUpdateFilter}/>
+                onClick={this.handleUpdateFilter}/>
 
               {onResetClick &&
                 <DeleteIcon
                   img="delete.svg"
                   title={_('Reset Filter')}
                   active={is_defined(filter)}
-                  onClick={is_defined(filter) ? this.onResetClick : undefined}
+                  onClick={is_defined(filter) ? onResetClick : undefined}
                 />
               }
 
@@ -267,12 +280,12 @@ class PowerFilter extends React.Component {
                 size="10"
                 maxLength="80"
                 value={filtername}
-                onChange={this.onValueChange}/>
+                onChange={this.handleValueChange}/>
             }
             {can_create ?
               <NewIcon
                 title={_('Create new filter from current term')}
-                onClick={this.onCreateFilter}/> :
+                onClick={this.handleCreateFilter}/> :
               <Icon
                 img="new_inactive.svg"
                 title={_('Please insert a filter name')}/>
@@ -280,7 +293,7 @@ class PowerFilter extends React.Component {
             {capabilities.mayAccess('filters') &&
               <FilterSelect
                 value={namedfilterid}
-                onChange={this.onNamedFilterChange}>
+                onChange={this.handleNamedFilterChange}>
                 {filter_opts}
               </FilterSelect>
             }
@@ -295,10 +308,12 @@ class PowerFilter extends React.Component {
 }
 
 PowerFilter.propTypes = {
+  createFilterType: PropTypes.string,
   filter: PropTypes.filter,
   filters: PropTypes.arrayLike,
   onCreateClick: PropTypes.func,
   onEditClick: PropTypes.func,
+  onError: PropTypes.func,
   onFilterCreated: PropTypes.func,
   onResetClick: PropTypes.func,
   onUpdate: PropTypes.func,
