@@ -80,39 +80,37 @@ const Actions = ({
 
 Actions.propTypes = {
   entity: PropTypes.model,
-  onEntityEdit: PropTypes.func,
   onEntityClone: PropTypes.func,
   onEntityDelete: PropTypes.func,
   onEntityDownload: PropTypes.func,
+  onEntityEdit: PropTypes.func,
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="filter"
-        displayName={_('Filter')}
-      />
-      <TableData>
-        {entity.term}
-      </TableData>
-      <TableData>
-        {entity.type}
-      </TableData>
-      {render_component(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+  actions,
+  entity,
+  links = true,
+  ...props
+}, {
+  capabilities,
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      legacy
+      entity={entity}
+      link={links}
+      type="filter"
+      displayName={_('Filter')}
+    />
+    <TableData>
+      {entity.term}
+    </TableData>
+    <TableData>
+      {entity.filter_type}
+    </TableData>
+    {render_component(actions, {...props, entity})}
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,

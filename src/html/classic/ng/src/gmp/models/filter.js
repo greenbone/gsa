@@ -364,6 +364,8 @@ class Filter extends Model {
   parseProperties(elem) {
     elem = super.parseProperties(elem);
 
+    elem.filter_type = elem._type;
+
     if (is_defined(elem.keywords)) {
       for_each(elem.keywords.keyword, keyword => {
 

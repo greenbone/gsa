@@ -1,5 +1,13 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/filter.js,
+	src/html/classic/ng/src/web/pages/filters/row.js: Fix displaying the filter
+	type. The type property can't be used for model instances since some time.
+	Therefore the original filter.type property must be converted to
+	filter.filter_type.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/bar/titlebar.js: Fix layout of
 	displaying the current user info at the titlebar.
 
