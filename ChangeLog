@@ -1,5 +1,19 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/models/__tests__/filter.js,
+	src/html/classic/ng/src/gmp/models/filter.js,
+	src/html/classic/ng/src/gmp/models/filter/__tests__/filterterm.js,
+	src/html/classic/ng/src/gmp/models/filter/__tests__/filtertermlist.js,
+	src/html/classic/ng/src/gmp/models/filter/convert.js,
+	src/html/classic/ng/src/gmp/models/filter/filterterm.js,
+	src/html/classic/ng/src/gmp/models/filter/filtertermlist.js,
+	src/html/classic/ng/src/gmp/models/filter/keywords.js,
+	src/html/classic/ng/src/gmp/models/filter/utils.js: Split filter.js into
+	several modules.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/__tests__/filter.js: Update coding style
 	of filter test.
 

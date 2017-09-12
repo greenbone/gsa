@@ -105,6 +105,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/cve.js
      ${NG_SRC_DIR}/src/gmp/models/dfncert.js
      ${NG_SRC_DIR}/src/gmp/models/filter.js
+     ${NG_SRC_DIR}/src/gmp/models/filter/convert.js
+     ${NG_SRC_DIR}/src/gmp/models/filter/filterterm.js
+     ${NG_SRC_DIR}/src/gmp/models/filter/filtertermlist.js
+     ${NG_SRC_DIR}/src/gmp/models/filter/keywords.js
      ${NG_SRC_DIR}/src/gmp/models/group.js
      ${NG_SRC_DIR}/src/gmp/models/host.js
      ${NG_SRC_DIR}/src/gmp/models/info.js
