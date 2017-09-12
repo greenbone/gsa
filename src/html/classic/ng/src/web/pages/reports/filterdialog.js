@@ -23,20 +23,23 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js'; // eslint-disable-line max-len
+/* eslint-disable max-len */
+
+import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js';
 import FilterStringGroup from '../../components/powerfilter/filterstringgroup.js';
 import FirstResultGroup from '../../components/powerfilter/firstresultgroup.js';
 import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
-import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js'; // eslint-disable-line max-len
+import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../../components/powerfilter/sortbygroup.js';
-import {
-  DefaultFilterDialogPropTypes,
-  withFilterDialog,
-} from '../../components/powerfilter/dialog.js';
+import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
+import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
+
+/* eslint-enable */
+
 
 const SORT_FIELDS = [
   ['date', _('Date')],
@@ -66,13 +69,15 @@ const ReportFilterDialogComponent = ({
   return (
     <Layout flex="column">
 
-      <FilterStringGroup name="filterstring"
+      <FilterStringGroup
+        name="filterstring"
         filter={filterstring}
         onChange={onFilterStringChange}/>
 
       <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange}/>
 
-      <MinQodGroup name="min_qod"
+      <MinQodGroup
+        name="min_qod"
         filter={filter}
         onChange={onFilterValueChange}/>
 
@@ -94,8 +99,8 @@ const ReportFilterDialogComponent = ({
   );
 };
 
-ReportFilterDialogComponent.propTypes = DefaultFilterDialogPropTypes;
+ReportFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
-export default withFilterDialog(ReportFilterDialogComponent);
+export default withFilterDialog()(ReportFilterDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:

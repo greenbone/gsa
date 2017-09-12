@@ -23,19 +23,22 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import PropTypes from '../../utils/proptypes.js';
+/* eslint-disable max-len */
 
-import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js'; // eslint-disable-line max-len
+import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js';
 import FilterStringGroup from '../../components/powerfilter/filterstringgroup.js';
 import FirstResultGroup from '../../components/powerfilter/firstresultgroup.js';
 import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
-import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js'; // eslint-disable-line max-len
+import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../../components/powerfilter/sortbygroup.js';
-import {withFilterDialog} from '../../components/powerfilter/dialog.js';
+import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
+import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
+
+/* eslint-enable */
 
 const SORT_FIELDS = [
   ['name', _('Name')],
@@ -70,7 +73,8 @@ const TaskFilterDialogComponent = ({
         filter={filter}
         onChange={onFilterValueChange}/>
 
-      <MinQodGroup name="min_qod"
+      <MinQodGroup
+        name="min_qod"
         filter={filter}
         onChange={onFilterValueChange}/>
 
@@ -91,17 +95,8 @@ const TaskFilterDialogComponent = ({
   );
 };
 
-TaskFilterDialogComponent.propTypes = {
-  filter: PropTypes.filter,
-  filterstring: PropTypes.string,
-  onSortByChange: PropTypes.func,
-  onSortOrderChange: PropTypes.func,
-  onFilterValueChange: PropTypes.func,
-  onFilterStringChange: PropTypes.func,
-};
+TaskFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
-export const TaskFilterDialog = withFilterDialog(TaskFilterDialogComponent);
-
-export default TaskFilterDialog;
+export default withFilterDialog()(TaskFilterDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:
