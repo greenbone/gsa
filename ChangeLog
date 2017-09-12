@@ -1,6 +1,14 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/powerfilter/severitylevelsgroup.js,
+	src/html/classic/ng/src/web/pages/results/filterdialog.js: Extract a
+	SeverityLevelsGroup from results filter dialog. Also update results filter
+	dialog to use new withFilterDialog api.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/powerfilter/dialog.js,
 	src/html/classic/ng/src/web/components/powerfilter/dialogproptypes.js,
 	src/html/classic/ng/src/web/components/powerfilter/dialog.js,

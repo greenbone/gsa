@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {parse_int} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -32,18 +32,19 @@ import Checkbox from '../../components/form/checkbox.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
 
-import SeverityClassLabel from '../../components/label/severityclass.js';
+/* eslint-disable max-len */
 
-import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js'; // eslint-disable-line max-len
+import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js';
 import FilterStringGroup from '../../components/powerfilter/filterstringgroup.js';
 import FirstResultGroup from '../../components/powerfilter/firstresultgroup.js';
 import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
-import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js'; // eslint-disable-line max-len
+import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../../components/powerfilter/sortbygroup.js';
-import {
-  DefaultFilterDialogPropTypes,
-  withFilterDialog,
-} from '../../components/powerfilter/dialog.js';
+import SeverityLevelsGroup from '../../components/powerfilter/severitylevelsgroup.js';
+import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
+import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
+
+/* eslint-enable */
 
 const SORT_FIELDS = [
   ['vulnerability', _('Vulnerability')],
@@ -55,149 +56,89 @@ const SORT_FIELDS = [
   ['created', _('Created')],
 ];
 
-class ResultsFilterDialogComponent extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.handleLevelChange = this.handleLevelChange.bind(this);
+const ResultsFilterDialogComponent = ({
+  filter,
+  filterstring,
+  onFilterStringChange,
+  onFilterValueChange,
+  onSortByChange,
+  onSortOrderChange,
+}) => {
+  if (!filter) {
+    return null;
   }
 
-  handleLevelChange(value, level) {
-    let {filter, onFilterValueChange} = this.props;
-    let levels = filter.get('levels');
+  const autofp = filter.get('autofp');
 
-    if (!levels) {
-      levels = '';
-    }
+  return (
+    <Layout flex="column">
 
-    if (value && !levels.includes(level)) {
-      levels += level;
-      onFilterValueChange(levels, 'levels');
-    }
-    else if (!value && level.includes(level)) {
-      levels = levels.replace(level, '');
-      onFilterValueChange(levels, 'levels');
-    }
-  }
+      <FilterStringGroup
+        name="filterstring"
+        filter={filterstring}
+        onChange={onFilterStringChange}/>
 
-  render() {
-    const {
-      filter,
-      filterstring,
-      onFilterStringChange,
-      onFilterValueChange,
-      onSortByChange,
-      onSortOrderChange,
-    } = this.props;
+      <ApplyOverridesGroup
+        filter={filter}
+        onChange={onFilterValueChange}/>
 
-    if (!filter) {
-      return null;
-    }
-
-    let autofp = filter.get('autofp');
-    let levels = filter.get('levels');
-
-    if (!levels) {
-      levels = '';
-    }
-
-    return (
-      <Layout flex="column">
-
-        <FilterStringGroup name="filterstring"
-          filter={filterstring}
-          onChange={onFilterStringChange}/>
-
-        <ApplyOverridesGroup
-          filter={filter}
+      <FormGroup title={_('Auto-FP')} flex="column">
+        <Checkbox
+          name="autofp"
+          checkedValue={1}
+          unCheckedValue={0}
+          checked={autofp >= 1}
+          title={_('Trust vendor security updates')}
           onChange={onFilterValueChange}/>
-
-        <FormGroup title={_('Auto-FP')} flex="column">
-          <Checkbox
+        <Layout flex box>
+          <Radio
             name="autofp"
-            checkedValue={1}
-            unCheckedValue={0}
-            checked={autofp >= 1}
-            title={_('Trust vendor security updates')}
+            title={_('Full CVE match')}
+            value={1}
+            disabled={autofp === 0}
+            checked={autofp === 1}
+            convert={parse_int}
             onChange={onFilterValueChange}/>
-          <Layout flex box>
-            <Radio
-              name="autofp"
-              title={_('Full CVE match')}
-              value={1}
-              disabled={autofp === 0}
-              checked={autofp === 1}
-              convert={parse_int}
-              onChange={onFilterValueChange}/>
-            <Radio
-              name="autofp"
-              title={_('Partial CVE match')}
-              value="2"
-              disabled={autofp === 0}
-              checked={autofp === 2}
-              convert={parse_int}
-              onChange={onFilterValueChange}/>
-          </Layout>
-        </FormGroup>
+          <Radio
+            name="autofp"
+            title={_('Partial CVE match')}
+            value="2"
+            disabled={autofp === 0}
+            checked={autofp === 2}
+            convert={parse_int}
+            onChange={onFilterValueChange}/>
+        </Layout>
+      </FormGroup>
 
-        <MinQodGroup name="min_qod"
-          filter={filter}
-          onChange={onFilterValueChange}/>
+      <SeverityLevelsGroup
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
 
-        <FormGroup title={_('Severity (Class)')}>
-          <Checkbox
-            checked={levels.includes('h')}
-            name="h"
-            onChange={this.handleLevelChange}>
-            <SeverityClassLabel.High/>
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('m')}
-            name="m"
-            onChange={this.handleLevelChange}>
-            <SeverityClassLabel.Medium/>
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('l')}
-            name="l"
-            onChange={this.handleLevelChange}>
-            <SeverityClassLabel.Low/>
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('g')}
-            name="g"
-            onChange={this.handleLevelChange}>
-            <SeverityClassLabel.Log/>
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('f')}
-            name="f"
-            onChange={this.handleLevelChange}>
-            <SeverityClassLabel.FalsePositive/>
-          </Checkbox>
-        </FormGroup>
+      <MinQodGroup
+        name="min_qod"
+        filter={filter}
+        onChange={onFilterValueChange}/>
 
-        <FirstResultGroup
-          filter={filter}
-          onChange={onFilterValueChange}/>
+      <FirstResultGroup
+        filter={filter}
+        onChange={onFilterValueChange}/>
 
-        <ResultsPerPageGroup
-          filter={filter}
-          onChange={onFilterValueChange}/>
+      <ResultsPerPageGroup
+        filter={filter}
+        onChange={onFilterValueChange}/>
 
-        <SortByGroup
-          filter={filter}
-          fields={SORT_FIELDS}
-          onSortOrderChange={onSortOrderChange}
-          onSortByChange={onSortByChange}/>
-      </Layout>
-    );
-  }
-}
+      <SortByGroup
+        filter={filter}
+        fields={SORT_FIELDS}
+        onSortOrderChange={onSortOrderChange}
+        onSortByChange={onSortByChange}/>
+    </Layout>
+  );
+};
 
-ResultsFilterDialogComponent.propTypes = DefaultFilterDialogPropTypes;
+ResultsFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
-export default withFilterDialog(ResultsFilterDialogComponent);
+export default withFilterDialog()(ResultsFilterDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:

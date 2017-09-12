@@ -258,6 +258,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/powerfilter/minqodgroup.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/powerfilter.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/resultsperpagegroup.js
+     ${NG_SRC_DIR}/src/web/components/powerfilter/severitylevelsgroup.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/withFilterDialog.js
      ${NG_SRC_DIR}/src/web/components/provider/cachefactoryprovider.js
