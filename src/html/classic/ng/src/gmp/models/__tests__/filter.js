@@ -319,6 +319,27 @@ describe('Filter get', () => {
 
 });
 
+describe('Filter parse elem', () => {
+
+  test('Should parse public properties', () => {
+    const filter1 = new Filter({
+      _id: '100',
+      type: 'foo',
+    });
+
+    expect(filter1.id).toBe('100');
+    expect(filter1.filter_type).toBe('foo');
+  });
+
+  test('Should not parse term as public property', () => {
+    const filter1 = new Filter({
+      term: 'abc=1',
+    });
+
+    expect(filter1.term).toBeUndefined();
+  });
+});
+
 describe('Filter copy', () => {
 
   test('should copy all values', () => {

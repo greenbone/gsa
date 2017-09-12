@@ -83,6 +83,11 @@ class Filter extends Model {
     }
     else if (is_defined(elem.term)) {
       this.parseString(elem.term);
+
+      // elem.term should not be part of the public api
+      // but it's helpful for debug purposes
+      elem._term = elem.term;
+      delete elem.term;
     }
 
     return elem;
