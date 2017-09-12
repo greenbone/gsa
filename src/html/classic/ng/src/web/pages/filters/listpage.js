@@ -38,6 +38,7 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
@@ -51,21 +52,19 @@ const SORT_FIELDS = [
 ];
 
 const ToolBarIcons = ({
-    onNewFilterClick
-  }, {capabilities}) => {
-  return (
-    <Layout flex>
-      <HelpIcon
-        page="filters"
-        title={_('Help: Filters')}/>
-      {capabilities.mayCreate('filter') &&
-        <NewIcon
-          title={_('New Filter')}
-          onClick={onNewFilterClick}/>
-      }
-    </Layout>
-  );
-};
+  onNewFilterClick,
+}, {capabilities}) => (
+  <IconDivider>
+    <HelpIcon
+      page="filters"
+      title={_('Help: Filters')}/>
+    {capabilities.mayCreate('filter') &&
+      <NewIcon
+        title={_('New Filter')}
+        onClick={onNewFilterClick}/>
+    }
+  </IconDivider>
+);
 
 const FILTER_OPTIONS = [
   ['agents', 'Agent', _('Agent')],

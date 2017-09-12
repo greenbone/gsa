@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -51,7 +51,7 @@ const Actions = ({
     onEntityEdit,
   }) => {
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider align={['center', 'center']}>
       <TrashIcon
         displayName={_('Filter')}
         name="filter"
@@ -74,7 +74,7 @@ const Actions = ({
         title={_('Export Filter')}
         onClick={onEntityDownload}
       />
-    </Layout>
+    </IconDivider>
   );
 };
 
