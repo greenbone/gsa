@@ -89,11 +89,21 @@ class ReportFormat extends Model {
 
     ret.active = parse_yesno(elem.active);
 
+    ret.predefined = parse_yesno(elem.predefined);
+
     return ret;
+  }
+
+  isPredefined() {
+    return this.predefined === YES_VALUE;
   }
 
   isActive() {
     return this.active === YES_VALUE;
+  }
+
+  isTrusted() {
+    return this.trust.value === 'yes';
   }
 }
 
