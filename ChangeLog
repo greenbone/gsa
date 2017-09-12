@@ -1,5 +1,10 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/powerfilter/filterstringgroup.js,
+	src/html/classic/ng/src/web/pages/filters/listpage.js: Update coding style.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/filterdialog.js,
 	src/html/classic/ng/src/web/pages/tasks/filterdialog.js: Update filter dialog
 	to new api and also improve coding style.

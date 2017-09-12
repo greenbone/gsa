@@ -95,7 +95,7 @@ const filter_types = (caps, name) => {
 };
 
 const includes_type = (types, type) => {
-  for (let option of types) {
+  for (const option of types) {
     if (option[1] === type) {
       return true;
     }
@@ -121,9 +121,9 @@ class Page extends React.Component {
   }
 
   openFilterDialog(filter) {
-    let {capabilities} = this.context;
+    const {capabilities} = this.context;
 
-    let types = FILTER_OPTIONS.filter(option =>
+    const types = FILTER_OPTIONS.filter(option =>
         filter_types(capabilities, option[0]));
 
     if (is_defined(filter)) {
@@ -142,7 +142,7 @@ class Page extends React.Component {
       });
     }
     else {
-      let type = first(types, [])[1];
+      const type = first(types, [])[1];
 
       this.filter_dialog.show({
         type,
@@ -152,7 +152,7 @@ class Page extends React.Component {
   }
 
   handleSaveFilter(data) {
-    let {entityCommand, onChanged} = this.props;
+    const {entityCommand, onChanged} = this.props;
     let promise;
     if (data.filter) {
       promise = entityCommand.save(data);

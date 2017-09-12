@@ -32,7 +32,7 @@ import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
 const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
-  let filterstring = is_string(filter) ?
+  const filterstring = is_string(filter) ?
     filter : filter.toFilterCriteriaString();
   return (
     <FormGroup title={_('Filter')} flex>
@@ -47,11 +47,11 @@ const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
 };
 
 FilterStringGroup.propTypes = {
-  name: PropTypes.string,
   filter: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.filter,
   ]).isRequired,
+  name: PropTypes.string,
   onChange: PropTypes.func,
 };
 
