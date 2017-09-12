@@ -58,6 +58,36 @@ class ReportCommand extends EntityCommand {
     });
   }
 
+  download({id}, {report_format_id, filter}) {
+    const params = {
+      cmd: 'get_report',
+      report_id: id,
+      report_format_id,
+      filter,
+    };
+    return this.httpGet(params, {plain: true})
+      .then(response => response.setData(response.data.responseText));
+  }
+
+  addAssets({id}, {filter = ''}) {
+    return this.httpPost({
+      cmd: 'create_asset',
+      report_id: id,
+      no_redirect: '1',
+      filter,
+    });
+  }
+
+  removeAssets({id}, {filter = ''}) {
+    return this.httpPost({
+      cmd: 'delete_asset',
+      report_id: id,
+      no_redirect: '1',
+      filter,
+      next: 'get_report', // seems not to work without next param
+    });
+  }
+
   getElementFromRoot(root) {
     return root.get_report.get_reports_response.report;
   }
