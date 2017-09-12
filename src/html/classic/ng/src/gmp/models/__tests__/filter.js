@@ -329,6 +329,19 @@ describe('Filter copy', () => {
     expect(filter2.get('def')).toBe('2');
   });
 
+  test('should copy public properties', () => {
+    const filter1 = new Filter({
+      term: 'abc=1',
+      _id: '100',
+      type: 'foo',
+    });
+    const filter2 = filter1.copy();
+
+    expect(filter2.get('abc')).toBe('1');
+    expect(filter2.id).toBe('100');
+    expect(filter2.filter_type).toBe('foo');
+  });
+
 });
 
 describe('Filter next', () => {

@@ -384,6 +384,11 @@ class Filter extends Model {
    */
   copy() {
     const f = new Filter();
+
+    // copy public properties
+    f.id = this.id;
+    f.filter_type = this.filter_type;
+
     this.forEach(list => {
       f._addTermList(list.copy());
     });

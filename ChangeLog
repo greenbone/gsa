@@ -1,5 +1,11 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/__tests__/filter.js,
+	src/html/classic/ng/src/gmp/models/filter.js: Copy public properties when
+	calling filter.copy() not only the filter terms.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/models/__tests__/filter.js,
 	src/html/classic/ng/src/gmp/models/filter.js,
