@@ -151,12 +151,15 @@ class EntitiesPage extends React.Component {
 
   renderPowerFilter() {
     const {
+      createFilterType,
       filter,
       filterEditDialog,
       filters,
       powerfilter = PowerFilter,
+      onError,
       onFilterChanged,
       onFilterCreateClick,
+      onFilterCreated,
     } = this.props;
 
     if (!powerfilter) {
@@ -174,12 +177,16 @@ class EntitiesPage extends React.Component {
         align="end"
         grow="1">
         <PowerFilterComponent
+          createFilterType={createFilterType}
           filter={filter}
           filters={filters}
-          onEditClick={handler}
           onCreateClick={onFilterCreateClick}
+          onEditClick={handler}
+          onError={onError}
+          onFilterCreated={onFilterCreated}
           onResetClick={onFilterChanged}
-          onUpdate={onFilterChanged}/>
+          onUpdate={onFilterChanged}
+        />
       </Layout>
     );
   }
@@ -238,6 +245,7 @@ class EntitiesPage extends React.Component {
 }
 
 EntitiesPage.propTypes = {
+  createFilterType: PropTypes.string,
   dashboard: PropTypes.componentOrFalse,
   entities: PropTypes.collection,
   filter: PropTypes.filter,
@@ -251,8 +259,10 @@ EntitiesPage.propTypes = {
   table: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.componentOrElement,
+  onError: PropTypes.func,
   onFilterChanged: PropTypes.func,
   onFilterCreateClick: PropTypes.func,
+  onFilterCreated: PropTypes.func,
 };
 
 export const createEntitiesPage = (options = {}) => {

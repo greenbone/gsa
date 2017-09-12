@@ -1,5 +1,11 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entities/page.js: Fix named filter creation on
+	entities list pages.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/powerfilter/powerfilter.js: Fix some
 	issues with the powerfilter. Especially the named filter selection and create
 	named filter action.

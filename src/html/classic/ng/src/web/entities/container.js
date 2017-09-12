@@ -79,6 +79,8 @@ class EntitiesContainer extends React.Component {
       entities_command_name = gmpname + 's';
     }
 
+    this.name = entity_command_name;
+
     this.entity_command = gmp[entity_command_name];
     this.entities_command = gmp[entities_command_name];
 
@@ -102,6 +104,7 @@ class EntitiesContainer extends React.Component {
     this.handleShowSuccess = this.handleShowSuccess.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
+    this.handleFilterCreated = this.handleFilterCreated.bind(this);
   }
 
   componentDidMount() {
@@ -311,9 +314,9 @@ class EntitiesContainer extends React.Component {
 
   handleDownloadEntity(entity) {
     const {entities_command} = this;
-    const {gmpname, onDownload} = this.props;
+    const {onDownload} = this.props;
 
-    const name = is_array(gmpname) ? gmpname[0] : gmpname;
+    const {name} = this;
 
     const filename = name + '-' + entity.id + '.xml';
 
@@ -406,6 +409,11 @@ class EntitiesContainer extends React.Component {
     this.load(filter.first(last));
   }
 
+  handleFilterCreated(filter) {
+    this.loadFilters();
+    this.load(filter);
+  }
+
   render() {
     const {
       entities,
@@ -422,6 +430,7 @@ class EntitiesContainer extends React.Component {
     return (
       <Wrapper>
         <Component
+          createFilterType={this.name}
           {...other}
           loading={loading}
           entitiesCommand={entities_command}
@@ -445,6 +454,7 @@ class EntitiesContainer extends React.Component {
           onEntityDownload={this.handleDownloadEntity}
           onEntityClone={this.handleCloneEntity}
           onEntitySave={this.handleSaveEntity}
+          onFilterCreated={this.handleFilterCreated}
           onFirstClick={this.handleFirst}
           onLastClick={this.handleLast}
           onNextClick={this.handleNext}
