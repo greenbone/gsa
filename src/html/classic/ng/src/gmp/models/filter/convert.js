@@ -51,11 +51,14 @@ function convert_no_relation(keyword, value, relation) {
 }
 
 const KEYWORD_CONVERTERS = {
-  min_qod: convert_int,
   apply_overrides: convert_boolean_int,
-  rows: convert_int,
-  first: convert_int,
   autofp: convert_int,
+  first: convert_int,
+  min_qod: convert_int,
+  notes: convert_boolean_int,
+  overrides: convert_boolean_int,
+  result_hosts_only: convert_boolean_int,
+  rows: convert_int,
 };
 
 const VALUE_CONVERTERS = {

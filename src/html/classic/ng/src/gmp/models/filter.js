@@ -201,6 +201,30 @@ class Filter extends Model {
   }
 
   /**
+   * Merges additional EXTRA KEYWORD terms from filter into this Filter
+   *
+   * Only extra keywords not included in this filter will be merged.
+   *
+   * @private
+   *
+   * @param {Filter} filter  Use extra params terms filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+  _merge(filter) {
+    if (is_defined(filter)) {
+      filter.forEach(list => {
+        const {keyword: key} = list;
+        if (is_defined(key) && includes(EXTRA_KEYWORDS, key) &&
+          !this.has(key)) {
+          this._addTermList(list.copy());
+        }
+      });
+    }
+    return this;
+  }
+
+  /**
    * Calls passed function for each FilterTermList in this Filter
    *
    * @param {function} func  Function to call for each FilterTermList.
@@ -549,6 +573,22 @@ class Filter extends Model {
   }
 
   /**
+   * Merges additional EXTRA KEYWORD terms from filter into this Filter
+   *
+   * This filter will not be changed. Instead a copy with merged terms will be
+   * created and returned. Only extra keywords not included in this filter will
+   * be merged.
+   *
+   * @param {Filter} filter  Use extra params terms filter to be merged.
+   *
+   * @return {Filter} A new filter with merged terms.
+   */
+  mergeExtraKeywords(filter) {
+    const f = this.copy();
+    return f._merge(filter);
+  }
+
+  /**
    * Parses FilterTerms from filterstring and adds them to this Filter
    *
    * @param {String} filterstring  Filter representation as a string
@@ -573,23 +613,16 @@ class Filter extends Model {
    * Creates a new Filter from filterstring
    *
    * @param {String} filterstring  String to parse FilterTerms from.
-   * @param {Filter} filter        Use extra params from filter if not already
+   * @param {Filter} filter        Use extra terms from filter if not already
    *                               parsed from filterstring.
    *
    * @return {Filter} New Filter with FilterTerms parsed from filterstring.
    */
   static fromString(filterstring, filter) {
     const f = new Filter();
-    f.parseString(filterstring);
 
-    if (is_defined(filter)) {
-      filter.forEach(list => {
-        const {keyword: key} = list;
-        if (is_defined(key) && includes(EXTRA_KEYWORDS, key) && !f.has(key)) {
-          f._addTermList(list.copy());
-        }
-      });
-    }
+    f.parseString(filterstring);
+    f._merge(filter);
 
     return f;
   }

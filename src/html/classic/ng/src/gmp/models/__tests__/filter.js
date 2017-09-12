@@ -358,4 +358,54 @@ describe('Filter next', () => {
   });
 
 });
+
+describe('Filter merge extra keywords', () => {
+
+  test('should merge extra keywords', () => {
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('apply_overrides=1 overrides=1 ' +
+      'autofp=1 delta_states=1 first=1 levels=hml min_qod=70 notes=1 ' +
+      'result_hosts_only=1 rows=10 sort=name timezone=CET');
+
+    const filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3.get('abc')).toBe('1');
+    expect(filter3.get('apply_overrides')).toBe(1);
+    expect(filter3.get('overrides')).toBe(1);
+    expect(filter3.get('autofp')).toBe(1);
+    expect(filter3.get('delta_states')).toBe('1');
+    expect(filter3.get('first')).toBe(1);
+    expect(filter3.get('levels')).toBe('hml');
+    expect(filter3.get('min_qod')).toBe(70);
+    expect(filter3.get('notes')).toBe(1);
+    expect(filter3.get('result_hosts_only')).toBe(1);
+    expect(filter3.get('rows')).toBe(10);
+    expect(filter3.get('sort')).toBe('name');
+    expect(filter3.get('timezone')).toBe('CET');
+  });
+
+  test('should not merge non extra keywords', () => {
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('apply_overrides=1 def=1');
+
+    const filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3.get('abc')).toBe('1');
+    expect(filter3.get('apply_overrides')).toBe(1);
+    expect(filter3.get('def')).toBeUndefined();
+  });
+
+  test('should not merge existing extra keywords', () => {
+    const filter1 = Filter.fromString('abc=1 min_qod=80');
+    const filter2 = Filter.fromString('apply_overrides=1 min_qod=70');
+
+    const filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3.get('abc')).toBe('1');
+    expect(filter3.get('apply_overrides')).toBe(1);
+    expect(filter3.get('min_qod')).toBe(80);
+  });
+
+});
+
 // vim: set ts=2 sw=2 tw=80:
