@@ -266,21 +266,21 @@ ToolBarIcons.propTypes = {
   links: PropTypes.bool,
   notes: PropTypes.collection,
   overrides: PropTypes.collection,
-  onTaskDeleteClick: PropTypes.func.isRequired,
+  onContainerTaskCreateClick: PropTypes.func.isRequired,
+  onReportImportClick: PropTypes.func.isRequired,
   onTaskCloneClick: PropTypes.func.isRequired,
+  onTaskCreateClick: PropTypes.func.isRequired,
+  onTaskDeleteClick: PropTypes.func.isRequired,
   onTaskDownloadClick: PropTypes.func.isRequired,
   onTaskEditClick: PropTypes.func.isRequired,
-  onReportImportClick: PropTypes.func.isRequired,
-  onTaskCreateClick: PropTypes.func.isRequired,
-  onContainerTaskCreateClick: PropTypes.func.isRequired,
+  onTaskResumeClick: PropTypes.func.isRequired,
   onTaskStartClick: PropTypes.func.isRequired,
   onTaskStopClick: PropTypes.func.isRequired,
-  onTaskResumeClick: PropTypes.func.isRequired,
 };
 
 const Details = ({
   entity,
-  ...props,
+  ...props
 }) => {
   return (
     <Layout flex="column">

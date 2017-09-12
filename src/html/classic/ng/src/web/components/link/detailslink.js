@@ -34,7 +34,7 @@ const DetailsLink = ({
   type,
   page = type,
   textOnly = false,
-  ...props,
+  ...props
 }, {capabilities}) => {
 
   textOnly = textOnly || !capabilities.mayAccess(type);
@@ -65,8 +65,8 @@ DetailsLink.contextTypes = {
 DetailsLink.propTypes = {
   id: PropTypes.id.isRequired,
   legacy: PropTypes.bool,
-  textOnly: PropTypes.bool,
   page: PropTypes.string,
+  textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
 };
 

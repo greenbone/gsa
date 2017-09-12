@@ -33,7 +33,7 @@ import LegacyLink from '../components/link/legacylink.js';
 
 const EntityLink = ({
   entity,
-  ...props,
+  ...props
 }, {capabilities}) => {
   const {id, name, permissions, deleted} = entity;
   let type = entity.entity_type;
@@ -65,7 +65,7 @@ const EntityLink = ({
     );
   }
 
-  let other = {};
+  const other = {};
 
   if (type === 'info') {
     if (entity.info_type === 'nvt') {

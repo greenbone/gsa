@@ -108,7 +108,7 @@ export function map(array, func, empty = []) {
   }
 
   if (is_defined(array.forEach)) { // support array like objects e.g. Set and Map
-    let result = [];
+    const result = [];
 
     array.forEach(entry => result.push(func(entry)));
 
@@ -156,8 +156,8 @@ export const KeyCode = {
 };
 
 export function classes(...args) {
-  let css = [];
-  for (let arg of args) {
+  const css = [];
+  for (const arg of args) {
     if (is_array(arg)) {
       css.push(classes(...arg));
     }
@@ -213,14 +213,14 @@ export function autobind(instance, options) {
     return;
   }
 
-  let include = is_array(options) ? options : undefined;
-  let startswith = is_string(options) ? options : undefined;
+  const include = is_array(options) ? options : undefined;
+  const startswith = is_string(options) ? options : undefined;
 
-  let proto = Object.getPrototypeOf(instance);
-  let props = include || Object.getOwnPropertyNames(proto);
+  const proto = Object.getPrototypeOf(instance);
+  const props = include || Object.getOwnPropertyNames(proto);
 
-  for (let key of props) {
-    let func = proto[key];
+  for (const key of props) {
+    const func = proto[key];
     if (!includes(bind_exclude_methods, key) && is_function(func) &&
       (!is_defined(startswith) || key.startsWith(startswith)) &&
       proto.hasOwnProperty(key)) {
@@ -247,7 +247,7 @@ export function first(array, non = {}) {
 }
 
 export function includes_id(list, id) {
-  for (let value of list) {
+  for (const value of list) {
     if (value.id === id) {
       return true;
     }
@@ -296,9 +296,9 @@ export const exclude_object_props = (object, exclude_array) =>
 
 export function split(string, seperator, limit) {
   // split('abc_def_hij', 1) => ['abc', 'def_hij']
-  let splits = string.split(seperator, limit);
+  const splits = string.split(seperator, limit);
 
-  let left = string.replace(splits.join(seperator), '');
+  const left = string.replace(splits.join(seperator), '');
   if (left.trim().length > 0) {
     splits.push(left.slice(1));
   }
@@ -314,7 +314,7 @@ export function debounce(func, wait, immediate = false) {
       timeout = undefined;
       func.apply(context, args);
     };
-    let callNow = immediate && !timeout;
+    const callNow = immediate && !timeout;
 
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);

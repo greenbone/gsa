@@ -39,14 +39,12 @@ import MenuEntry from '../menu/menuentry.js';
 
 import Sticky from '../sticky/sticky.js';
 
-const GreenboneIcon = glamorous(GBIcon)(
-  {
-    visibility: 'hidden',
-    '.sticky &': {
-      visibility: 'visible',
-    }
-  }
-);
+const GreenboneIcon = glamorous(GBIcon)({
+  visibility: 'hidden',
+  '.sticky &': {
+    visibility: 'visible',
+  },
+});
 
 const Ul = glamorous.ul({
   width: '100%',

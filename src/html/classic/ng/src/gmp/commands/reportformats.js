@@ -33,7 +33,7 @@ import ReportFormat from '../models/reportformat.js';
 
 const log = logger.getLogger('gmp.commands.reportformats');
 
-export class ReportFormatCommand extends EntityCommand {
+class ReportFormatCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'report_format', ReportFormat);
@@ -65,15 +65,15 @@ export class ReportFormatCommand extends EntityCommand {
       name,
       summary,
     };
-    for (let prefname in preferences) {
-      let prefix = 'preference:nvt[string]:'; // only the format of the prefix is important
+    for (const prefname in preferences) {
+      const prefix = 'preference:nvt[string]:'; // only the format of the prefix is important
       data[prefix + prefname] = preferences[prefname];
     }
 
-    let id_list = [];
-    for (let lname in id_lists) {
+    const id_list = [];
+    for (const lname in id_lists) {
       data['include_id_list:' + lname] = 1;
-      for (let val of id_lists[lname]) {
+      for (const val of id_lists[lname]) {
         id_list.push(lname + ':' + val);
       }
     }
@@ -90,11 +90,11 @@ export class ReportFormatCommand extends EntityCommand {
       next: 'get_report_format',
       id,
     }).then(this.transformRequest, rej => {
-      let {root} = rej;
+      const {root} = rej;
 
       if (is_defined(root) && is_defined(root.get_report_formats) &&
         is_defined(root.get_report_formats.verify_report_format_response)) {
-        let response = root.get_report_formats.verify_report_format_response;
+        const response = root.get_report_formats.verify_report_format_response;
         rej.setMessage(response._status_text);
       }
 
@@ -107,7 +107,7 @@ export class ReportFormatCommand extends EntityCommand {
   }
 }
 
-export class ReportFormatsCommand extends EntitiesCommand {
+class ReportFormatsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'report_format', ReportFormat);

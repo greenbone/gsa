@@ -25,7 +25,7 @@ import React from 'react';
 
 import Titlebar from '../bar/titlebar.js';
 
-const Header = () =>  (
+const Header = () => (
   <header>
     <Titlebar />
   </header>

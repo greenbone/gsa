@@ -1,5 +1,20 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/reportformats.js,
+	src/html/classic/ng/src/gmp/models/reportformat.js,
+	src/html/classic/ng/src/gmp/parser.js,
+	src/html/classic/ng/src/gmp/utils.js,
+	src/html/classic/ng/src/web/components/bar/menubar.js,
+	src/html/classic/ng/src/web/components/link/detailslink.js,
+	src/html/classic/ng/src/web/components/link/externallink.js,
+	src/html/classic/ng/src/web/components/menu/menu.js,
+	src/html/classic/ng/src/web/components/structure/header.js,
+	src/html/classic/ng/src/web/entity/link.js,
+	src/html/classic/ng/src/web/pages/tasks/detailspage.js: Coding style
+	improvements.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/__tests__/filter.js,
 	src/html/classic/ng/src/gmp/models/filter.js: Don't add filter.term as public
 	api for filter model instances.

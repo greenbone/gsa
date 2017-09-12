@@ -69,9 +69,9 @@ export function parse_csv(value) {
 }
 
 export function parse_envelope_meta(envelope) {
-  let meta = {};
+  const meta = {};
 
-  let props = [
+  const props = [
     'version',
     'backend_operation',
     'vendor_version',
@@ -80,7 +80,7 @@ export function parse_envelope_meta(envelope) {
     'timezone',
   ];
 
-  for (let name of props) {
+  for (const name of props) {
     meta[name] = envelope[name];
   }
   return meta;

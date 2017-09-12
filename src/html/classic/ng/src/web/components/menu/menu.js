@@ -33,7 +33,7 @@ import LegacyLink from '../link/legacylink.js';
 import './css/menu.css';
 
 function create_link(title, options = {}) {
-  let {to, legacy, children, caps, ...other} = options; // eslint-disable-line no-unused-vars
+  const {to, legacy, children, caps, ...other} = options; // eslint-disable-line no-unused-vars
   if (legacy) {
     return <LegacyLink {...other}>{title}</LegacyLink>;
   }
@@ -50,7 +50,7 @@ const Menu = ({children, title, ...props}) => {
     // create link from first menu entry
     // this allows to have different links depending on the capabilities of a
     // user
-    let child = children[0];
+    const [child] = children;
     link = create_link(title, child.props);
   }
   return (
@@ -68,8 +68,8 @@ const Menu = ({children, title, ...props}) => {
 
 Menu.propTypes = {
   legacy: PropTypes.bool,
-  to: PropTypes.string,
   title: PropTypes.string.isRequired,
+  to: PropTypes.string,
 };
 
 export default Menu;

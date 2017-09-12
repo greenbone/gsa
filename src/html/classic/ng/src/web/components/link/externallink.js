@@ -32,13 +32,14 @@ import {withTextOnly} from './link.js';
 const ExternalLink = ({
   className,
   children,
-  ...props,
+  ...props
 }) => {
 
   className = classes(className, 'external-link');
 
   return (
-    <a {...props}
+    <a
+      {...props}
       className={className}
       rel="noopener noreferrer"
       target="_blank">

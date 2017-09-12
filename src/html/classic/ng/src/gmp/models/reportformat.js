@@ -68,7 +68,7 @@ class ReportFormat extends Model {
   static entity_type = 'report_format';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (is_defined(ret.trust)) {
       ret.trust = {
