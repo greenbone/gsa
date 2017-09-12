@@ -1,5 +1,15 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/powerfilter/dialog.js,
+	src/html/classic/ng/src/web/components/powerfilter/dialogproptypes.js,
+	src/html/classic/ng/src/web/components/powerfilter/dialog.js,
+	src/html/classic/ng/src/web/components/powerfilter/withFilterDialog.js:
+	Extract filter dialog proptypes and withFilterDialog HOC into own modules.
+	Change withFilterDialog HOC to be composable.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/__tests__/filter.js,
 	src/html/classic/ng/src/gmp/utils.js,
 	src/html/classic/ng/src/web/app.js: Move importing the polyfills into
