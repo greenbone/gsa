@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import 'babel-polyfill'; // required for Object.entries, Object.values
+
 export const is_array = Array.isArray;
 
 export function is_defined(value) {

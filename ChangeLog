@@ -1,5 +1,13 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/__tests__/filter.js,
+	src/html/classic/ng/src/gmp/utils.js,
+	src/html/classic/ng/src/web/app.js: Move importing the polyfills into
+	gmp/utils.js. This module is used most other modules. Therefore the polyfills
+	will be included nearly automatically.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/container.js,
 	src/html/classic/ng/src/web/entities/page.js: Fix named filter creation on
 	entities list pages.
