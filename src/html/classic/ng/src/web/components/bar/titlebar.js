@@ -32,6 +32,7 @@ import PropTypes from '../../utils/proptypes.js';
 import GBIcon from '../icon/greenboneicon.js';
 import Icon from '../icon/icon.js';
 
+import Divider from '../layout/divider.js';
 import Layout from '../layout/layout.js';
 
 import Link from '../link/link.js';
@@ -126,14 +127,14 @@ class Titlebar extends React.Component {
           </Link>
         }
         {gmp.isLoggedIn() ?
-          <Layout>
+          <Divider>
             <span>Logged in as </span>
             <UserLink cmd="get_my_settings">
               <b>{gmp.username}</b>
             </UserLink>
             <span> | </span>
             <LogoutLink onClick={this.handleLogout}>Logout</LogoutLink>
-          </Layout> :
+          </Divider> :
           <Greenbone/>
         }
       </TitlebarLayout>
