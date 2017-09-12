@@ -1,6 +1,13 @@
 2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/powerfilter/autofpgroup.js,
+	src/html/classic/ng/src/web/pages/results/filterdialog.js: Extract a
+	AutoFpGroup from results filter dialog.
+
+2017-09-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/powerfilter/severitylevelsgroup.js,
 	src/html/classic/ng/src/web/pages/results/filterdialog.js: Extract a
 	SeverityLevelsGroup from results filter dialog. Also update results filter

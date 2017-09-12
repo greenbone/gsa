@@ -24,13 +24,8 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {parse_int} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
-
-import Checkbox from '../../components/form/checkbox.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
 
 /* eslint-disable max-len */
 
@@ -43,6 +38,7 @@ import SortByGroup from '../../components/powerfilter/sortbygroup.js';
 import SeverityLevelsGroup from '../../components/powerfilter/severitylevelsgroup.js';
 import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
 import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
+import AutoFpGroup from '../../components/powerfilter/autofpgroup.js';
 
 /* eslint-enable */
 
@@ -63,79 +59,48 @@ const ResultsFilterDialogComponent = ({
   onFilterValueChange,
   onSortByChange,
   onSortOrderChange,
-}) => {
-  if (!filter) {
-    return null;
-  }
+}) => (
+  <Layout flex="column">
 
-  const autofp = filter.get('autofp');
+    <FilterStringGroup
+      name="filterstring"
+      filter={filterstring}
+      onChange={onFilterStringChange}/>
 
-  return (
-    <Layout flex="column">
+    <ApplyOverridesGroup
+      filter={filter}
+      onChange={onFilterValueChange}/>
 
-      <FilterStringGroup
-        name="filterstring"
-        filter={filterstring}
-        onChange={onFilterStringChange}/>
+    <AutoFpGroup
+      filter={filter}
+      onChange={onFilterValueChange}
+    />
 
-      <ApplyOverridesGroup
-        filter={filter}
-        onChange={onFilterValueChange}/>
+    <SeverityLevelsGroup
+      filter={filter}
+      onChange={onFilterValueChange}
+    />
 
-      <FormGroup title={_('Auto-FP')} flex="column">
-        <Checkbox
-          name="autofp"
-          checkedValue={1}
-          unCheckedValue={0}
-          checked={autofp >= 1}
-          title={_('Trust vendor security updates')}
-          onChange={onFilterValueChange}/>
-        <Layout flex box>
-          <Radio
-            name="autofp"
-            title={_('Full CVE match')}
-            value={1}
-            disabled={autofp === 0}
-            checked={autofp === 1}
-            convert={parse_int}
-            onChange={onFilterValueChange}/>
-          <Radio
-            name="autofp"
-            title={_('Partial CVE match')}
-            value="2"
-            disabled={autofp === 0}
-            checked={autofp === 2}
-            convert={parse_int}
-            onChange={onFilterValueChange}/>
-        </Layout>
-      </FormGroup>
+    <MinQodGroup
+      name="min_qod"
+      filter={filter}
+      onChange={onFilterValueChange}/>
 
-      <SeverityLevelsGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+    <FirstResultGroup
+      filter={filter}
+      onChange={onFilterValueChange}/>
 
-      <MinQodGroup
-        name="min_qod"
-        filter={filter}
-        onChange={onFilterValueChange}/>
+    <ResultsPerPageGroup
+      filter={filter}
+      onChange={onFilterValueChange}/>
 
-      <FirstResultGroup
-        filter={filter}
-        onChange={onFilterValueChange}/>
-
-      <ResultsPerPageGroup
-        filter={filter}
-        onChange={onFilterValueChange}/>
-
-      <SortByGroup
-        filter={filter}
-        fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
-        onSortByChange={onSortByChange}/>
-    </Layout>
-  );
-};
+    <SortByGroup
+      filter={filter}
+      fields={SORT_FIELDS}
+      onSortOrderChange={onSortOrderChange}
+      onSortByChange={onSortByChange}/>
+  </Layout>
+);
 
 ResultsFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
