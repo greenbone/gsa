@@ -182,8 +182,8 @@ export const parse_cvss_base_vector = ({
       vector += 'M';
       break;
     case 'SINGLE_INSTANCES':
-        vector += 'S';
-        break;
+      vector += 'S';
+      break;
     default:
       vector += 'ERROR';
   }
