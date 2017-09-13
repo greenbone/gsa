@@ -238,104 +238,104 @@ export const parse_cvss_base_vector = ({
 
 export const parse_cvss_base_from_vector = cvss_vector => {
   if (!is_defined(cvss_vector)) {
-    return undefined;
+    return {};
   }
 
-  let av = '';
-  let ac = '';
-  let au = '';
-  let c = '';
-  let i = '';
-  let a = '';
+  let av;
+  let ac;
+  let au;
+  let c;
+  let i;
+  let a;
 
   const values = cvss_vector.split('/');
 
   for (const currentvalue of values) {
-    const property = String.toLowerCase(currentvalue.substr(0,
-                                        currentvalue.indexOf(':')));
-    const val = String.toLowerCase(currentvalue.substr(currentvalue.indexOf(':')
-                                  + 1, currentvalue.length));
-    switch (property) {
+    let [metric, value] = currentvalue.split(':');
+
+    metric = metric.toLowerCase();
+    value = value.toLowerCase();
+
+    switch (metric) {
       case 'av':
-        if (val === 'l') {
+        if (value === 'l') {
           av = 'LOCAL';
         }
-        else if (val === 'a') {
+        else if (value === 'a') {
           av = 'ADJACENT_NETWORK';
         }
-        else {
+        else if (value === 'n') {
           av = 'NETWORK';
         }
         break;
       case 'ac':
-        if (val === 'h') {
+        if (value === 'h') {
           ac = 'HIGH';
         }
-        else if (val === 'm') {
+        else if (value === 'm') {
           ac = 'MEDIUM';
         }
-        else {
+        else if (value === 'l') {
           ac = 'LOW';
         }
         break;
       case 'au':
-        if (val === 'm') {
+        if (value === 'm') {
           au = 'MULTIPLE_INSTANCES';
         }
-        else if (val === 's') {
+        else if (value === 's') {
           au = 'SINGLE_INSTANCES';
         }
-        else {
+        else if (value === 'n') {
           au = 'NONE';
         }
         break;
       case 'c':
-        if (val === 'c') {
+        if (value === 'c') {
           c = 'COMPLETE';
         }
-        else if (val === 'p') {
+        else if (value === 'p') {
           c = 'PARTIAL';
         }
-        else {
+        else if (value === 'n') {
           c = 'NONE';
         }
         break;
       case 'i':
-        if (val === 'c') {
+        if (value === 'c') {
           i = 'COMPLETE';
         }
-        else if (val === 'p') {
+        else if (value === 'p') {
           i = 'PARTIAL';
         }
-        else {
+        if (value === 'n') {
           i = 'NONE';
         }
         break;
       case 'a':
-        if (val === 'c') {
+        if (value === 'c') {
           a = 'COMPLETE';
         }
-        else if (val === 'p') {
+        else if (value === 'p') {
           a = 'PARTIAL';
         }
-        else {
+        if (value === 'n') {
           a = 'NONE';
         }
         break;
       default:
-        return undefined;
+        break;
     }
   }
 
-  const cvss_values = {
-    accessvector: av,
-    accesscomplexity: ac,
+  return {
+    access_vector: av,
+    access_complexity: ac,
     authentication: au,
-    confidentiality: c,
-    integrity: i,
-    availability: a,
+    confidentiality_impact: c,
+    integrity_impact: i,
+    availability_impact: a,
   };
-  return cvss_values;
 };
 
 // vim: set ts=2 sw=2 tw=80:

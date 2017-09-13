@@ -23,35 +23,22 @@
  */
 import {HttpCommand, register_command} from '../command.js';
 
- class CvssCalculator extends HttpCommand {
-   constructor(http) {
-     super(http, {cmd: 'cvss_calculator'});
-   }
+class CvssCalculator extends HttpCommand {
 
-   get({
-     cvss_vector,
-     access_complexity,
-     access_vector,
-     authentication,
-     availability_impact,
-     confidentiality_impact,
-     integrity_impact,
-   }) {
-     return this.httpGet({
-       cvss_vector,
-       cvss_av: access_vector,
-       cvss_au: authentication,
-       cvss_ac: access_complexity,
-       cvss_c: confidentiality_impact,
-       cvss_i: integrity_impact,
-       cvss_a: availability_impact,
-     }).then(
-       response => {
-         const envelope = response.data;
-         return response.setData(envelope.cvss_calculator);
-      }
-    );
-   }
- }
+  constructor(http) {
+    super(http, {cmd: 'cvss_calculator'});
+  }
 
- register_command('cvsscalculator', CvssCalculator);
+  calculateScoreFromVector(cvss_vector) {
+    return this.httpGet({
+      cvss_vector,
+    }).then(response => {
+      const envelope = response.data;
+      return response.setData(envelope.cvss_calculator);
+    });
+  }
+}
+
+register_command('cvsscalculator', CvssCalculator);
+
+// vim: set ts=2 sw=2 tw=80:

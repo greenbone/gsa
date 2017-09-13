@@ -1,5 +1,20 @@
 2017-09-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/cvsscalculator.js: Rename
+	gmp.cvsscalculator.get to gmp.cvsscalculator.calculateScoreFromVector and
+	remove unnecessary parameters.
+
+	* src/html/classic/ng/src/gmp/parser.js: Rewrite parse_cvss_base_from_vector
+	to always return an object. Also parse_cvss_base_from_vector not returns
+	undefined for unknown/invalid metrics.
+
+	* src/html/classic/ng/src/web/pages/extras/cvsscalculatorpage.js: Rename
+	methods for more consistency. Use same variable names across js modules.
+	Update coding style. Only display new calculated cvss vector if the vector is
+	valid.
+
+2017-09-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/parser.js: Fix indentation.
 
 2017-09-12  Steffen Waterkamp <steffen.waterkamp@greenbone.net>
