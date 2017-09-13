@@ -1,5 +1,10 @@
 2017-09-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/app.js: Add url mapping for report details page
+	(/ng/report/<uuid>).
+
+2017-09-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/cvsscalculator.js: Rename
 	gmp.cvsscalculator.get to gmp.cvsscalculator.calculateScoreFromVector and
 	remove unnecessary parameters.

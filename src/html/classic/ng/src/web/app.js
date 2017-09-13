@@ -84,6 +84,7 @@ import PermissionsPage from './pages/permissions/listpage.js';
 import PortListsPage from './pages/portlists/listpage.js';
 import ReportFormatsPage from './pages/reportformats/listpage.js';
 import ReportsPage from './pages/reports/listpage.js';
+import ReportDetailsPage from './pages/reports/detailspage.js';
 import ResultsPage from './pages/results/listpage.js';
 import ResultDetailsPage from './pages/results/detailspage.js';
 import RolesPage from './pages/roles/listpage.js';
@@ -332,6 +333,10 @@ ReactDOM.render(
         <Route
           path="cve/:id"
           component={CveDetailsPage}
+        />
+        <Route
+          path="report/:id"
+          component={ReportDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
