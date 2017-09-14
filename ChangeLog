@@ -1,3 +1,11 @@
+2017-09-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entities/container.js,
+	src/html/classic/ng/src/web/entity/container.js: Be more robust against
+	errors. It may be possible that the notice dialog isn't available anymore when
+	an error occurs. If it isn't available react sets its value to null and not
+	undefined as expected before.
+
 2017-09-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/app.js: Add url mapping for report details page

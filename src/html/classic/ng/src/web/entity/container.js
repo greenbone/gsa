@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import Promise from 'gmp/promise.js';
-import {is_defined} from 'gmp/utils.js';
+import {has_value, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -208,6 +208,10 @@ class EntityContainer extends React.Component {
   }
 
   handleShowError(message) {
+    if (!has_value(this.notice_dialog)) {
+      log.error('Error Dialog not ready.', message);
+      return;
+    }
     this.notice_dialog.show({
       message,
     }, {

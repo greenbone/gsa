@@ -25,7 +25,12 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, is_array, exclude_object_props} from 'gmp/utils.js';
+import {
+  is_defined,
+  is_array,
+  has_value,
+  exclude_object_props,
+} from 'gmp/utils.js';
 
 import PromiseFactory from 'gmp/promise.js';
 import Filter from 'gmp/models/filter.js';
@@ -362,7 +367,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleShowError(message) {
-    if (!is_defined(this.notice_dialog)) {
+    if (!has_value(this.notice_dialog)) {
       log.error('Error Dialog not ready.', message);
       return;
     }
