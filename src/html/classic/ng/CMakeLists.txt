@@ -65,6 +65,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/cves.js
      ${NG_SRC_DIR}/src/gmp/commands/cvsscalculator.js
      ${NG_SRC_DIR}/src/gmp/commands/dfncert.js
+     ${NG_SRC_DIR}/src/gmp/commands/feedstatus.js
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
      ${NG_SRC_DIR}/src/gmp/commands/groups.js
      ${NG_SRC_DIR}/src/gmp/commands/hosts.js
@@ -342,6 +343,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/dfncert/row.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
      ${NG_SRC_DIR}/src/web/pages/extras/cvsscalculatorpage.js
+     ${NG_SRC_DIR}/src/web/pages/extras/feedstatuspage.js
      ${NG_SRC_DIR}/src/web/pages/filters/dialog.js
      ${NG_SRC_DIR}/src/web/pages/filters/listpage.js
      ${NG_SRC_DIR}/src/web/pages/filters/row.js

@@ -308,7 +308,7 @@ export const parse_cvss_base_from_vector = cvss_vector => {
         else if (value === 'p') {
           i = 'PARTIAL';
         }
-        if (value === 'n') {
+        else if (value === 'n') {
           i = 'NONE';
         }
         break;
@@ -319,7 +319,7 @@ export const parse_cvss_base_from_vector = cvss_vector => {
         else if (value === 'p') {
           a = 'PARTIAL';
         }
-        if (value === 'n') {
+        else if (value === 'n') {
           a = 'NONE';
         }
         break;

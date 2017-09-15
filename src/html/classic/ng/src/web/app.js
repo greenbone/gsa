@@ -67,6 +67,7 @@ import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
 import CvssCalculatorPage from './pages/extras/cvsscalculatorpage.js';
 import DfnCertAdvsPage from './pages/dfncert/listpage.js';
+import FeedStatusPage from './pages/extras/feedstatuspage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import GroupsPage from './pages/groups/listpage.js';
 import HostsPage from './pages/hosts/listpage.js';
@@ -196,6 +197,9 @@ ReactDOM.render(
         component={Page}
         onEnter={is_logged_in}>
         <IndexRoute component={HomePage}/>
+        <Route
+          path="feedstatus"
+          component={FeedStatusPage}/>
         <Route
           path="cvsscalculator"
           component={CvssCalculatorPage}/>

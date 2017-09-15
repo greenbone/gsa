@@ -33,6 +33,7 @@ import './commands/cpes.js';
 import './commands/cves.js';
 import './commands/cvsscalculator.js';
 import './commands/dfncert.js';
+import './commands/feedstatus.js';
 import './commands/filters.js';
 import './commands/groups.js';
 import './commands/hosts.js';

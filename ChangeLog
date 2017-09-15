@@ -1,3 +1,14 @@
+2017-09-15 Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+        
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/commands/feedstatus.js,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/parser.js: Corrected if-else blocks
+	
+	* src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/pages/extras/feedstatuspage.js: Added new
+	feed status page.
+
 2017-09-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/container.js,
