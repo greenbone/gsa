@@ -246,9 +246,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
             title={_('CVSS Calculator')}
             to="cvsscalculator"/>
           <MenuEntry
-            legacy
             title={_('Feed Status')}
-            cmd="get_feeds"
+            to="feedstatus"
             caps="get_feeds"/>
         </Menu>
         <Menu title={_('Administration')}>
