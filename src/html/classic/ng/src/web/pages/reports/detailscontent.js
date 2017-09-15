@@ -63,6 +63,8 @@ import ResultsTable from '../results/table.js';
 import ApplicationsTable from './applicationstable.js';
 import HostsTable from './hoststable.js';
 import OperatingSystemsTable from './operatingsystemstable.js';
+import PortsTable from './portstable.js';
+import TLSCertificatesTable from './tlscertificatestable.js';
 
 import EntityInfo from '../../entity/info.js';
 
@@ -209,7 +211,9 @@ const PageContent = ({
     applications,
     hosts,
     operatingsystems,
+    ports,
     results,
+    tls_certificates,
   } = report;
 
   const header = (
@@ -243,6 +247,12 @@ const PageContent = ({
           </Tab>
           <Tab>
             <TabTitle
+              title={_('Ports')}
+              entities={ports}
+            />
+          </Tab>
+          <Tab>
+            <TabTitle
               title={_('Applications')}
               entities={applications}
             />
@@ -251,6 +261,12 @@ const PageContent = ({
             <TabTitle
               title={_('Operating Systems')}
               entities={operatingsystems}
+            />
+          </Tab>
+          <Tab>
+            <TabTitle
+              title={_('TLS Certificates')}
+              entities={tls_certificates}
             />
           </Tab>
         </TabList>
@@ -320,6 +336,15 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
+              <ReportEntitiesContainer entities={ports}>
+                {props => (
+                  <PortsTable
+                    {...props}
+                  />
+                )}
+              </ReportEntitiesContainer>
+            </TabPanel>
+            <TabPanel>
               <ReportEntitiesContainer entities={applications}>
                 {props => (
                   <ApplicationsTable
@@ -332,6 +357,15 @@ const PageContent = ({
               <ReportEntitiesContainer entities={operatingsystems}>
                 {props => (
                   <OperatingSystemsTable
+                    {...props}
+                  />
+                )}
+              </ReportEntitiesContainer>
+            </TabPanel>
+            <TabPanel>
+              <ReportEntitiesContainer entities={tls_certificates}>
+                {props => (
+                  <TLSCertificatesTable
                     {...props}
                   />
                 )}

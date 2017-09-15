@@ -37,7 +37,9 @@ import {
   parse_apps,
   parse_hosts,
   parse_operatingsystems,
+  parse_ports,
   parse_results,
+  parse_tls_certificates,
   parse_vulnerabilities,
 } from './parser.js';
 
@@ -69,6 +71,8 @@ class ReportReport extends Model {
 
     copy.hosts = parse_hosts(elem, filter);
 
+    copy.tls_certificates = parse_tls_certificates(elem, filter);
+
     delete copy.host;
 
     copy.applications = parse_apps(elem, filter);
@@ -76,6 +80,8 @@ class ReportReport extends Model {
     copy.vulnerabilities = parse_vulnerabilities(elem, filter);
 
     copy.operatingsystems = parse_operatingsystems(elem, filter);
+
+    copy.ports = parse_ports(elem, filter);
 
     copy.scan_start = moment(scan_start);
 

@@ -433,11 +433,13 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/importdialog.js
      ${NG_SRC_DIR}/src/web/pages/reports/listpage.js
      ${NG_SRC_DIR}/src/web/pages/reports/operatingsystemstable.js
+     ${NG_SRC_DIR}/src/web/pages/reports/portstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/reportentitiescontainer.js
      ${NG_SRC_DIR}/src/web/pages/reports/row.js
      ${NG_SRC_DIR}/src/web/pages/reports/scaninfo.js
      ${NG_SRC_DIR}/src/web/pages/reports/summary.js
      ${NG_SRC_DIR}/src/web/pages/reports/table.js
+     ${NG_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js
      ${NG_SRC_DIR}/src/web/pages/reports/vulnerabilitiestable.js
      ${NG_SRC_DIR}/src/web/pages/results/charts.js
      ${NG_SRC_DIR}/src/web/pages/results/details.js
