@@ -1,5 +1,9 @@
 2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/row.js: Link to ng report details.
+
+2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/applicationstable.js,
 	src/html/classic/ng/src/web/pages/reports/hoststable.js,
 	src/html/classic/ng/src/web/pages/reports/operatingsystemstable.js,

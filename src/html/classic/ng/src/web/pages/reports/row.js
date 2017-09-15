@@ -95,7 +95,6 @@ const Row = ({entity, links = true, actions, ...other}) => {
     <TableRow>
       <TableData>
         <DetailsLink
-          legacy
           type="report"
           id={entity.id}
           textOnly={!links}>
