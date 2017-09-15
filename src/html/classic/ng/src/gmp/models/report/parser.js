@@ -21,9 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import 'babel-polyfill'; // required for Object.entries, Object.values
+
 import {filter as filter_func, for_each, is_defined, map} from '../../utils.js';
 
-import {parse_severity} from '../../parser.js';
+import {parse_int, parse_severity} from '../../parser.js';
 
 import {
   parse_collection_list,
@@ -35,14 +37,61 @@ import CollectionList from '../../collection/collectionlist.js';
 import CollectionCounts from '../../collection/collectioncounts.js';
 
 import App from './app.js';
-import OperatingSystem from './os.js';
 import Host from './host.js';
+import OperatingSystem from './os.js';
+import Port from './port.js';
 import Vulerability from './vulnerability.js';
 
 import Result from '../result.js';
 
 const empty_collection_list = filter => {
   return new CollectionList({filter});
+};
+
+export const parse_ports = (report, filter) => {
+  const temp_ports = {};
+  const {ports} = report;
+
+  if (!is_defined(ports)) {
+    return empty_collection_list(filter);
+  }
+
+  const {count: full_count} = ports;
+
+  for_each(ports.port, port => {
+    const {__text: id} = port;
+
+    let tport = temp_ports[id];
+
+    if (is_defined(tport)) {
+      const severity = parse_severity(port.severity);
+
+      tport.setSeverity(severity);
+    }
+    else {
+      tport = new Port(port);
+      temp_ports[id] = tport;
+    }
+
+    tport.addHost({ip: port.host});
+  });
+
+  const ports_array = Object.values(temp_ports);
+  const filtered_count = ports_array.length;
+
+  const counts = new CollectionCounts({
+    all: full_count,
+    filtered: filtered_count,
+    first: 1,
+    length: filtered_count,
+    rows: filtered_count,
+  });
+
+  return new CollectionList({
+    entries: ports_array.sort((porta, portb) => porta.number > portb.number),
+    filter: is_defined(filter) ? filter : parse_filter(report),
+    counts,
+  });
 };
 
 export const parse_vulnerabilities = (report, filter) => {
