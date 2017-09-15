@@ -23,9 +23,11 @@
 
 import 'babel-polyfill'; // required for Object.entries, Object.values
 
+import moment from 'moment';
+
 import {filter as filter_func, for_each, is_defined, map} from '../../utils.js';
 
-import {parse_int, parse_severity} from '../../parser.js';
+import {parse_severity} from '../../parser.js';
 
 import {
   parse_collection_list,
@@ -43,9 +45,117 @@ import Port from './port.js';
 import Vulerability from './vulnerability.js';
 
 import Result from '../result.js';
+import TLSCertificate from './tlscertificate.js';
 
 const empty_collection_list = filter => {
   return new CollectionList({filter});
+};
+
+const get_cert = (certs, fingerprint) => {
+  let cert = certs[fingerprint];
+
+  if (!is_defined(cert)) {
+    cert = new TLSCertificate(fingerprint);
+    certs[fingerprint] = cert;
+
+  }
+  return cert;
+};
+
+export const parse_tls_certificates = (report, filter) => {
+  const {host: hosts, ssl_certs} = report;
+  const {count: full_count} = ssl_certs;
+
+  if (!is_defined(ssl_certs)) {
+    return empty_collection_list(filter);
+  }
+
+  let certs_array = [];
+
+  for_each(hosts, host => {
+    const host_certs = {};
+    let hostname;
+
+    for_each(host.detail, detail => {
+      const {name, value} = detail;
+
+      if (name.startsWith('SSLInfo')) {
+        const [port, fingerprint] = value.split('::');
+
+        const cert = get_cert(host_certs, fingerprint);
+
+        cert.ip = host.ip;
+
+        cert.addPort(port);
+      }
+      else if (name.startsWith('SSLDetails')) {
+        const [, fingerprint] = name.split(':');
+
+        const cert = get_cert(host_certs, fingerprint);
+
+        value.split('|').reduce((c, v) => {
+          let [key, val] = v.split(':');
+          if (key === 'notAfter' || key === 'notBefore') {
+            val = is_defined(val) ? moment(val) : val;
+          }
+          c[key.toLowerCase()] = val;
+          return c;
+        }, cert);
+
+        cert.details = value;
+      }
+      else if (name.startsWith('Cert')) {
+        const [, fingerprint] = name.split(':');
+
+        const cert = get_cert(host_certs, fingerprint);
+
+        cert.data = value;
+      }
+      else if (name === 'hostname') {
+        // collect hostnames
+        hostname = value;
+      }
+    });
+
+    const certs = Object.values(host_certs);
+
+    if (is_defined(hostname)) {
+      for (const cert of certs) {
+        cert.hostname = hostname;
+      }
+    }
+
+    certs_array = certs_array.concat(certs);
+  });
+
+  // create a cert per port
+  const certs_per_port = [];
+  certs_array.forEach(cert => {
+    cert.ports.forEach(port => {
+      cert = cert.copy();
+      cert.port = port;
+
+      delete cert.ports;
+
+      certs_per_port.push(cert);
+    });
+  });
+
+  const filtered_count = certs_per_port.length;
+
+  const counts = new CollectionCounts({
+    all: full_count,
+    filtered: filtered_count,
+    first: 1,
+    length: filtered_count,
+    rows: filtered_count,
+  });
+
+  return new CollectionList({
+    counts,
+    entries: certs_per_port,
+    filter: is_defined(filter) ? filter : parse_filter(report),
+  });
 };
 
 export const parse_ports = (report, filter) => {
