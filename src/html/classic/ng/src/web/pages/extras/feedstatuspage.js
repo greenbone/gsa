@@ -77,7 +77,7 @@ class FeedStatus extends React.Component {
 
   readFeeds() {
     const {gmp} = this.props;
-    gmp.feedstatus.read_feed_information().then(response => {
+    gmp.feedstatus.readFeedInformation().then(response => {
       const feedData = response.data;
 
       for (const current_feed of feedData.feed) {

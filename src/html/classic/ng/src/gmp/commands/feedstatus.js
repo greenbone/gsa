@@ -29,7 +29,7 @@ class FeedStatus extends HttpCommand {
     super(http, {cmd: 'get_feeds'});
   }
 
-  read_feed_information() {
+  readFeedInformation() {
     return this.httpGet().then(response => {
       const envelope = response.data;
       return response.setData(
