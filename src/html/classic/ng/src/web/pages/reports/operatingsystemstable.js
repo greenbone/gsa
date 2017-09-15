@@ -33,6 +33,8 @@ import OsIcon from '../../components/icon/osicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
+import Link from '../../components/link/link.js';
+
 import TableData from '../../components/table/data.js';
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
@@ -77,23 +79,38 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Row = ({entity}) => {
+const Row = ({
+  entity,
+  links = true,
+}) => {
   const {name, cpe, hosts, severity} = entity;
   return (
     <TableRow>
       <TableData>
-        <IconDivider>
-          <OsIcon
-            osCpe={cpe}
-            osTxt={name}
-          />
-          <span>
-            {name}
-          </span>
-        </IconDivider>
+        <Link
+          to="operatingsystems"
+          filter={'name=' + cpe}
+          textOnly={!links}
+        >
+          <IconDivider>
+            <OsIcon
+              osCpe={cpe}
+              osTxt={name}
+            />
+            <span>
+              {name}
+            </span>
+          </IconDivider>
+        </Link>
       </TableData>
       <TableData>
-        {cpe}
+        <Link
+          to="operatingsystems"
+          filter={'name=' + cpe}
+          textOnly={!links}
+        >
+          {cpe}
+        </Link>
       </TableData>
       <TableData flex align="center">
         {hosts.count}
@@ -107,6 +124,7 @@ const Row = ({entity}) => {
 
 Row.propTypes = {
   entity: PropTypes.object.isRequired,
+  links: PropTypes.bool,
 };
 
 export default createEntitiesTable({

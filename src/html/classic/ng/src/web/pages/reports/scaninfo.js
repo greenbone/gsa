@@ -30,14 +30,16 @@ import PropTypes from '../../utils/proptypes.js';
 
 import StatusBar from '../../components/bar/statusbar.js';
 
+import DetailsLink from '../../components/link/detailslink.js';
+
 import Table from '../../components/table/detailstable.js';
 import TableBody from '../../components/table/body.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
-
 const ReportScanInfoTable = ({
   filterString,
+  links = true,
   report,
 }) => {
   const {
@@ -52,7 +54,7 @@ const ReportScanInfoTable = ({
     timezone_abbrev,
   } = report;
 
-  const {name, comment, progress} = task;
+  const {id, name, comment, progress} = task;
 
   let hosts_count;
 
@@ -79,7 +81,13 @@ const ReportScanInfoTable = ({
             {_('Task Name')}
           </TableData>
           <TableData>
-            {name}
+            <DetailsLink
+              textOnly={!links}
+              type="task"
+              id={id}
+            >
+              {name}
+            </DetailsLink>
           </TableData>
         </TableRow>
         {is_defined(comment) &&
@@ -162,6 +170,7 @@ const ReportScanInfoTable = ({
 
 ReportScanInfoTable.propTypes = {
   filterString: PropTypes.string,
+  links: PropTypes.bool,
   report: PropTypes.model.isRequired,
 };
 

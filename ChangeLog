@@ -1,5 +1,13 @@
 2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/applicationstable.js,
+	src/html/classic/ng/src/web/pages/reports/hoststable.js,
+	src/html/classic/ng/src/web/pages/reports/operatingsystemstable.js,
+	src/html/classic/ng/src/web/pages/reports/scaninfo.js: Add links to other
+	entity/entites pages from report details and its tables.
+
+2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/bar/menubar.js: Use new ng feed
 	status page instead of the old one.
 

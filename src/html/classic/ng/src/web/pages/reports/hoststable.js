@@ -31,6 +31,8 @@ import SeverityBar from '../../components/bar/severitybar.js';
 
 import OsIcon from '../../components/icon/osicon.js';
 
+import Link from '../../components/link/link.js';
+
 import TableData from '../../components/table/data.js';
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
@@ -111,13 +113,22 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Row = ({entity}) => {
-  const {details = {}, result_counts = {}, severity} = entity;
+const Row = ({
+  entity,
+  links = true,
+}) => {
+  const {ip, details = {}, result_counts = {}, severity} = entity;
   const {best_os_cpe, best_os_txt} = details;
   return (
     <TableRow>
       <TableData>
-        {entity.ip}
+        <Link
+          to="hosts"
+          filter={'name=' + ip}
+          textOnly={!links}
+        >
+          {ip}
+        </Link>
       </TableData>
       <TableData>
         <i>{entity.hostname}</i>
@@ -155,6 +166,7 @@ const Row = ({entity}) => {
 
 Row.propTypes = {
   entity: PropTypes.object.isRequired,
+  links: PropTypes.bool,
 };
 
 export default createEntitiesTable({

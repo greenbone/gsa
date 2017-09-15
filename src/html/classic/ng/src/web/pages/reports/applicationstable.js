@@ -29,6 +29,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
+import InfoLink from '../../components/link/infolink.js';
+
 import TableData from '../../components/table/data.js';
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
@@ -60,7 +62,7 @@ const Header = ({
           {_('Occurrences')}
         </TableHead>
         <TableHead
-          width="10em"
+          width="10%"
           sortby={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
@@ -82,19 +84,27 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const {name, hosts, occurrences, severity} = entity;
   return (
     <TableRow>
       <TableData>
-        {entity.name}
+        <InfoLink
+          legacy
+          type="cpe"
+          name={name}
+          textOnly={!links}
+        >
+          {name}
+        </InfoLink>
       </TableData>
       <TableData>
-        {entity.hosts.count}
+        {hosts.count}
       </TableData>
       <TableData>
-        {entity.occurrences.total}
+        {occurrences.total}
       </TableData>
       <TableData flex align="center">
-        <SeverityBar severity={entity.severity}/>
+        <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>
   );
@@ -112,4 +122,4 @@ export default createEntitiesTable({
   header: Header,
 });
 
-// vim: set ts=4 sw=4 tw=80:
+// vim: set ts=2 sw=2 tw=80:
