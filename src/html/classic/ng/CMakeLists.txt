@@ -129,6 +129,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/report/os.js
      ${NG_SRC_DIR}/src/gmp/models/report/parser.js
      ${NG_SRC_DIR}/src/gmp/models/report/report.js
+     ${NG_SRC_DIR}/src/gmp/models/report/task.js
      ${NG_SRC_DIR}/src/gmp/models/report/vulnerability.js
      ${NG_SRC_DIR}/src/gmp/models/result.js
      ${NG_SRC_DIR}/src/gmp/models/role.js

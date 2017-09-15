@@ -1,5 +1,15 @@
 2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/models/report/report.js,
+	src/html/classic/ng/src/gmp/models/report/task.js: Add own model class for
+	report task. The main task class isn't used here because that would introduce
+	a cyclic dependency. But we need a possibility to check if a report task is a
+	container task. Therefore an additonal extre report task model class is
+	introduced.
+
+2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/row.js: Link to ng report details.
 
 2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>

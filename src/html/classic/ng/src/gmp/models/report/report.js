@@ -31,6 +31,8 @@ import {parse_filter} from '../../collection/parser.js';
 
 import Model from '../../model.js';
 
+import ReportTask from './task.js';
+
 import {
   parse_apps,
   parse_hosts,
@@ -61,7 +63,7 @@ class ReportReport extends Model {
 
     copy.severity_class = new Model(copy.severity_class);
 
-    copy.task = new Model(task, 'task');
+    copy.task = new ReportTask(task, 'task');
 
     copy.results = parse_results(elem, filter);
 
