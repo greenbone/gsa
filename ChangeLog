@@ -1,3 +1,8 @@
+2017-09-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/models/report/parser.js: Don't show general/tcp
+	in report details ports list.
+
 2017-09-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,

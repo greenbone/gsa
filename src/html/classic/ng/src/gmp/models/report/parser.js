@@ -47,6 +47,8 @@ import Vulerability from './vulnerability.js';
 import Result from '../result.js';
 import TLSCertificate from './tlscertificate.js';
 
+const GENERAL_TCP = 'general/tcp';
+
 const empty_collection_list = filter => {
   return new CollectionList({filter});
 };
@@ -185,6 +187,8 @@ export const parse_ports = (report, filter) => {
 
     tport.addHost({ip: port.host});
   });
+
+  delete temp_ports[GENERAL_TCP];
 
   const ports_array = Object.values(temp_ports);
   const filtered_count = ports_array.length;
