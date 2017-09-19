@@ -25,30 +25,25 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import InfoLink from './infolink.js';
+import DetailsLink from './detailslink.js';
 
 const CveLink = ({
     id,
-    title,
-    ...props,
+    ...props
   }) => {
   return (
-    <span className="cve-id">
-      <InfoLink
-        title={title}
-        type="cve"
-        name={id}
-        {...props}
-      >
-        {id}
-      </InfoLink>
-    </span>
+    <DetailsLink
+      type="cve"
+      id={id}
+      {...props}
+    >
+      {id}
+    </DetailsLink>
   );
 };
 
 CveLink.propTypes = {
   id: PropTypes.string,
-  title: PropTypes.string,
 };
 
 export default CveLink;

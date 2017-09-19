@@ -1,5 +1,10 @@
 2017-09-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/link/cvelink.js: Use DetailsLink
+	internally for CveLink. This will link to ng cve details.
+
+2017-09-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/result.js: Fix parsing result host for
 	openvas 8.
 
