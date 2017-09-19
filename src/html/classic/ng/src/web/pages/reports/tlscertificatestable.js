@@ -139,7 +139,7 @@ Row.propTypes = {
 
 export default createEntitiesTable({
   header: Header,
-  emptyTitle: _('No Ports available'),
+  emptyTitle: _('No TLS Certificates available'),
   row: Row,
 });
 
