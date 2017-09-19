@@ -35,6 +35,8 @@ import ReportTask from './task.js';
 
 import {
   parse_apps,
+  parse_closed_cves,
+  parse_cves,
   parse_hosts,
   parse_operatingsystems,
   parse_ports,
@@ -101,6 +103,10 @@ class ReportReport extends Model {
         };
       }
     }
+
+    copy.cves = parse_cves(elem, filter);
+
+    copy.closed_cves = parse_closed_cves(elem, filter);
 
     return copy;
   }

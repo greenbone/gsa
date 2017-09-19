@@ -39,13 +39,14 @@ import CollectionList from '../../collection/collectionlist.js';
 import CollectionCounts from '../../collection/collectioncounts.js';
 
 import App from './app.js';
+import Cve from './cve.js';
 import Host from './host.js';
 import OperatingSystem from './os.js';
 import Port from './port.js';
+import TLSCertificate from './tlscertificate.js';
 import Vulerability from './vulnerability.js';
 
 import Result from '../result.js';
-import TLSCertificate from './tlscertificate.js';
 
 const GENERAL_TCP = 'general/tcp';
 
@@ -489,6 +490,114 @@ export const parse_results = (report, filter) => {
   return parse_collection_list(report, 'result', Result, {
     entities_parse_func: parse_report_result_entities,
     collection_count_parse_func: parse_report_report_counts,
+  });
+};
+
+export const parse_closed_cves = (report, filter) => {
+  const {host: hosts, closed_cves} = report;
+
+  if (!is_defined(closed_cves)) {
+    return empty_collection_list(filter);
+  }
+
+  // const {count: full_count} = closed_cves;
+
+  let cves_array = [];
+
+  for_each(hosts, host => {
+    let host_cves = [];
+    let hostname;
+
+    for_each(host.detail, detail => {
+      const {name, value, extra, source} = detail;
+
+      if (name.startsWith('Closed CVE')) {
+        host_cves = host_cves.concat(value.split(',').map(val => {
+          return {
+            id: val.trim(),
+            host: {
+              ip: host.ip,
+              id: is_defined(host.asset) ? host.asset._asset_id : undefined,
+            },
+            source,
+            severity: parse_severity(extra),
+          };
+        }));
+      }
+      else if (name === 'hostname') {
+        // collect hostname
+        hostname = value;
+      }
+    });
+
+    if (is_defined(hostname)) {
+      host_cves.forEach(cve => {
+        cve.host.name = hostname;
+      });
+    }
+
+    cves_array = cves_array.concat(host_cves);
+  });
+
+  const filtered_count = cves_array.length;
+
+  const counts = new CollectionCounts({
+    all: filtered_count,
+    filtered: filtered_count,
+    first: 1,
+    length: filtered_count,
+    rows: filtered_count,
+  });
+
+  return new CollectionList({
+    counts,
+    entries: cves_array,
+    filter: is_defined(filter) ? filter : parse_filter(report),
+  });
+};
+
+export const parse_cves = (report, filter) => {
+  const {results} = report;
+  if (!is_defined(results)) {
+    return empty_collection_list(filter);
+  }
+
+  const cves = {};
+
+  const results_with_cve = filter_func(report.results.result,
+  result => result.nvt.cve !== 'NOCVE');
+
+  results_with_cve.forEach(result => {
+    const {host, nvt} = result;
+    const {__text: ip} = host;
+    const {cve: id} = nvt;
+    let cve = cves[id];
+
+    if (!is_defined(cve)) {
+      cve = new Cve(nvt);
+      cves[id] = cve;
+    }
+
+    cve.addHost({ip});
+    cve.addResult(result);
+  });
+
+  const cves_array = Object.values(cves);
+
+  const filtered_count = cves_array.length;
+
+  const counts = new CollectionCounts({
+    all: filtered_count, // TODO
+    filtered: filtered_count,
+    first: 1,
+    length: filtered_count,
+    rows: filtered_count,
+  });
+
+  return new CollectionList({
+    counts,
+    entries: cves_array,
+    filter: is_defined(filter) ? filter : parse_filter(report),
   });
 };
 
