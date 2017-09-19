@@ -1,5 +1,13 @@
 2017-09-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/reports/closedcvestable.js,
+	src/html/classic/ng/src/web/pages/reports/cvestable.js,
+	src/html/classic/ng/src/web/pages/reports/detailscontent.js: Add cves and
+	closed cves table to report details page.
+
+2017-09-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/parser.js,
 	src/html/classic/ng/src/gmp/models/report/report.js: Parse cves and closed
 	cves in reports.

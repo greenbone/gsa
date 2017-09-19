@@ -61,6 +61,8 @@ import SectionHeader from '../../components/section/header.js';
 import ResultsTable from '../results/table.js';
 
 import ApplicationsTable from './applicationstable.js';
+import ClosedCvesTable from './closedcvestable.js';
+import CvesTable from './cvestable.js';
 import HostsTable from './hoststable.js';
 import OperatingSystemsTable from './operatingsystemstable.js';
 import PortsTable from './portstable.js';
@@ -209,6 +211,8 @@ const PageContent = ({
 
   const {
     applications,
+    closed_cves,
+    cves,
     hosts,
     operatingsystems,
     ports,
@@ -261,6 +265,18 @@ const PageContent = ({
             <TabTitle
               title={_('Operating Systems')}
               entities={operatingsystems}
+            />
+          </Tab>
+          <Tab>
+            <TabTitle
+              title={_('CVEs')}
+              entities={cves}
+            />
+          </Tab>
+          <Tab>
+            <TabTitle
+              title={_('Closed CVEs')}
+              entities={closed_cves}
             />
           </Tab>
           <Tab>
@@ -357,6 +373,24 @@ const PageContent = ({
               <ReportEntitiesContainer entities={operatingsystems}>
                 {props => (
                   <OperatingSystemsTable
+                    {...props}
+                  />
+                )}
+              </ReportEntitiesContainer>
+            </TabPanel>
+            <TabPanel>
+              <ReportEntitiesContainer entities={cves}>
+                {props => (
+                  <CvesTable
+                    {...props}
+                  />
+                )}
+              </ReportEntitiesContainer>
+            </TabPanel>
+            <TabPanel>
+              <ReportEntitiesContainer entities={closed_cves}>
+                {props => (
+                  <ClosedCvesTable
                     {...props}
                   />
                 )}

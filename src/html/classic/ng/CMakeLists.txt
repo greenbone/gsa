@@ -426,6 +426,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reportformats/row.js
      ${NG_SRC_DIR}/src/web/pages/reports/applicationstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/charts.js
+     ${NG_SRC_DIR}/src/web/pages/reports/closedcvestable.js
+     ${NG_SRC_DIR}/src/web/pages/reports/cvestable.js
      ${NG_SRC_DIR}/src/web/pages/reports/detailscontent.js
      ${NG_SRC_DIR}/src/web/pages/reports/detailsfilterdialog.js
      ${NG_SRC_DIR}/src/web/pages/reports/detailspage.js
