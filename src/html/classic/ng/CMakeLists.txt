@@ -125,6 +125,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/reportformat.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
      ${NG_SRC_DIR}/src/gmp/models/report/app.js
+     ${NG_SRC_DIR}/src/gmp/models/report/cve.js
      ${NG_SRC_DIR}/src/gmp/models/report/host.js
      ${NG_SRC_DIR}/src/gmp/models/report/os.js
      ${NG_SRC_DIR}/src/gmp/models/report/parser.js
