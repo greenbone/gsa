@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {for_each, is_defined} from '../utils.js';
+import {for_each, is_defined, is_string} from '../utils.js';
 
 import Model from '../model.js';
 import {parse_severity} from '../parser.js';
@@ -52,10 +52,19 @@ class Result extends Model {
       task,
     } = elem;
 
-    copy.host = {
-      name: host.__text,
-      id: is_defined(host.asset) ? host.asset._asset_id : undefined, // for openvas 8 where host.asset doesn't exist
-    };
+    if (is_string(host)) {
+      // openvas 8
+      copy.host = {
+        name: host,
+        id: host,
+      };
+    }
+    else {
+      copy.host = {
+        name: host.__text,
+        id: is_defined(host.asset) ? host.asset._asset_id : host.__text,
+      };
+    }
 
     copy.nvt = new Nvt(nvt);
 
