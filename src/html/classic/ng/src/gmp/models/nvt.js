@@ -37,12 +37,12 @@ import Info from './info.js';
 export const TAG_NA = 'N/A';
 
 const parse_tags = tags => {
-  let newtags = {};
+  const newtags = {};
 
   if (tags) {
-    let splited = tags.split('|');
-    for (let t of splited) {
-      let [key, value] = t.split('=');
+    const splited = tags.split('|');
+    for (const t of splited) {
+      const [key, value] = t.split('=');
       newtags[key] = value;
     }
   }
@@ -62,7 +62,7 @@ class Nvt extends Info {
   static info_type = 'nvt';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     ret.nvt_type = elem.type;
 
@@ -95,7 +95,7 @@ class Nvt extends Info {
 
     if (is_defined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
-        let pref = shallow_copy(preference);
+        const pref = shallow_copy(preference);
         delete pref.nvt;
         return pref;
       });

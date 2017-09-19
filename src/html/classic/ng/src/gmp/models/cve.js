@@ -55,7 +55,7 @@ class Cve extends Info {
   static info_type = 'cve';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (elem.cve) { // we have an info element
       extend(ret, elem.cve);

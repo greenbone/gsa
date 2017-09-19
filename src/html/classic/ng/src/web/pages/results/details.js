@@ -94,10 +94,8 @@ const ResultDetails = ({
             <Pre>
               {result.description}
             </Pre>
-          ) : (
-            _('Vulnerability was detected according to the Vulnerability ' +
+          ) : _('Vulnerability was detected according to the Vulnerability ' +
             'Detection Method.')
-          )
         }
       </DetailsBlock>
 
@@ -257,8 +255,8 @@ const ResultDetails = ({
 
 ResultDetails.propTypes = {
   className: PropTypes.string,
-  links: PropTypes.bool,
   entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 export default ResultDetails;

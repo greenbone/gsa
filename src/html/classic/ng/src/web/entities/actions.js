@@ -40,7 +40,7 @@ const EntityActions = ({
   selectionType,
   onEntityDeselected,
   onEntitySelected,
-  ...other,
+  ...other
 }) => {
   if (!is_defined(actionsComponent) &&
     selectionType !== SelectionType.SELECTION_USER) {
@@ -52,7 +52,9 @@ const EntityActions = ({
       <Layout flex align={['center', 'center']}>
         {selectionType === SelectionType.SELECTION_USER ?
           <Layout flex align={['center', 'center']}>
-            <EntitySelection entity={entity} onSelected={onEntitySelected}
+            <EntitySelection
+              entity={entity}
+              onSelected={onEntitySelected}
               onDeselected={onEntityDeselected}/>
           </Layout> :
           render_component(actionsComponent, {...other, entity})
@@ -66,8 +68,8 @@ EntityActions.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model,
   selectionType: PropTypes.string,
-  onEntitySelected: PropTypes.func,
   onEntityDeselected: PropTypes.func,
+  onEntitySelected: PropTypes.func,
 };
 
 export const withEntityActions = component => {

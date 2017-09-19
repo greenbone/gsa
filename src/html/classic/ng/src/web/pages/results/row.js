@@ -45,7 +45,7 @@ const Row = ({
   entity,
   links = true,
   onToggleDetailsClick,
-  ...other,
+  ...other
 }) => {
   const {host} = entity;
   const shown_name = is_defined(entity.name) ? entity.name : entity.nvt.oid;

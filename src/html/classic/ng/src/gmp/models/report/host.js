@@ -95,15 +95,16 @@ class Host {
 
     if (is_array(elem.detail)) {
       elem.detail.forEach(details => {
-        switch (details.name) {
+        const {name, value} = details;
+        switch (name) {
           case 'hostname':
-            copy.hostname = details.value;
+            copy.hostname = value;
             break;
           case 'best_os_cpe':
-            copy.details.best_os_cpe = details.value;
+            copy.details.best_os_cpe = value;
             break;
           case 'best_os_txt':
-            copy.details.best_os_txt = details.value;
+            copy.details.best_os_txt = value;
             break;
           default:
             break;

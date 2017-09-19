@@ -45,19 +45,14 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const IconActions = ({entity, onEntityDelete}) => {
-  let {report} = entity;
-  let active = report.scan_run_status !== 'Running' &&
+  const {report} = entity;
+  const active = report.scan_run_status !== 'Running' &&
     report.scan_run_status !== 'Requested' &&
     report.scan_run_status !== 'Stop Requested' &&
     report.scan_run_status !== 'Resume Requested';
 
-  let title;
-  if (active) {
-    title = _('Delete Report');
-  }
-  else {
-    title = _('Scan is active');
-  }
+  const title = active ? _('Delete Report') : _('Scan is active');
+
   return (
     <Layout flex align={['center', 'center']}>
       <DeleteIcon
@@ -75,7 +70,7 @@ IconActions.propTypes = {
 };
 
 const Row = ({entity, links = true, actions, ...other}) => {
-  let {report} = entity;
+  const {report} = entity;
 
   let status = report.scan_run_status;
   let progress;

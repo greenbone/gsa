@@ -64,27 +64,32 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
             }
           </Layout>
         </TableHead>
-        <TableHead width="10em"
+        <TableHead
+          width="10em"
           sortby={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
-        <TableHead width="6em"
+        <TableHead
+          width="6em"
           sortby={sort ? 'qod' : false}
           onSortChange={onSortChange}>
           {_('QoD')}
         </TableHead>
-        <TableHead width="10em"
+        <TableHead
+          width="10em"
           sortby={sort ? 'host' : false}
           onSortChange={onSortChange}>
           {_('Host')}
         </TableHead>
-        <TableHead width="10em"
+        <TableHead
+          width="10em"
           sortby={sort ? 'location' : false}
           onSortChange={onSortChange}>
           {_('Location')}
         </TableHead>
-        <TableHead width="20em"
+        <TableHead
+          width="20em"
           sortby={sort ? 'created' : false}
           onSortChange={onSortChange}>
           {_('Created')}
