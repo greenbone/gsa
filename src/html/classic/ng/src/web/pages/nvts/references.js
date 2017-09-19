@@ -61,7 +61,7 @@ const References = ({
                 {_('CVE')}
               </TableData>
               <TableData>
-                <Divider>
+                <Divider wrap>
                   {
                     cves.map(cve_id => (
                       <CveLink
