@@ -37,6 +37,7 @@ import {
   parse_apps,
   parse_closed_cves,
   parse_cves,
+  parse_errors,
   parse_hosts,
   parse_operatingsystems,
   parse_ports,
@@ -85,6 +86,12 @@ class ReportReport extends Model {
 
     copy.ports = parse_ports(elem, filter);
 
+    copy.cves = parse_cves(elem, filter);
+
+    copy.closed_cves = parse_closed_cves(elem, filter);
+
+    copy.errors = parse_errors(elem, filter);
+
     copy.scan_start = moment(scan_start);
 
     if (is_defined(scan_end)) {
@@ -103,10 +110,6 @@ class ReportReport extends Model {
         };
       }
     }
-
-    copy.cves = parse_cves(elem, filter);
-
-    copy.closed_cves = parse_closed_cves(elem, filter);
 
     return copy;
   }

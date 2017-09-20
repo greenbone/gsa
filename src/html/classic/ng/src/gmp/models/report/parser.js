@@ -493,6 +493,64 @@ export const parse_results = (report, filter) => {
   });
 };
 
+export const parse_errors = (report, filter) => {
+  const {host: hosts, errors} = report;
+
+  if (!is_defined(errors)) {
+    return empty_collection_list(filter);
+  }
+
+  const {count: full_count} = errors;
+
+  const hosts_by_ip = {};
+  for_each(hosts, host => {
+    let hostname;
+
+    for_each(host.detail, detail => {
+      const {name, value} = detail;
+      if (name === 'hostname') {
+        // collect hostname
+        hostname = value;
+      }
+    });
+
+    hosts_by_ip[host.ip] = {
+      ip: host.ip,
+      id: is_defined(host.asset) ? host.asset._asset_id : undefined,
+      name: hostname,
+    };
+  });
+
+  const errors_array = map(errors.error, error => {
+    const {host: ip, description, port, nvt} = error;
+    return {
+      description,
+      host: hosts_by_ip[ip],
+      nvt: {
+        id: nvt._oid,
+        name: nvt.name,
+      },
+      port,
+    };
+  });
+
+  const filtered_count = errors_array.length;
+
+  const counts = new CollectionCounts({
+    all: full_count,
+    filtered: filtered_count,
+    first: 1,
+    length: filtered_count,
+    rows: filtered_count,
+  });
+
+  return new CollectionList({
+    counts,
+    entries: errors_array,
+    filter: is_defined(filter) ? filter : parse_filter(report),
+  });
+};
+
 export const parse_closed_cves = (report, filter) => {
   const {host: hosts, closed_cves} = report;
 
