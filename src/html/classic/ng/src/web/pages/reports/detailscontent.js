@@ -63,6 +63,7 @@ import ResultsTable from '../results/table.js';
 import ApplicationsTable from './applicationstable.js';
 import ClosedCvesTable from './closedcvestable.js';
 import CvesTable from './cvestable.js';
+import ErrorsTable from './errorstable.js';
 import HostsTable from './hoststable.js';
 import OperatingSystemsTable from './operatingsystemstable.js';
 import PortsTable from './portstable.js';
@@ -213,6 +214,7 @@ const PageContent = ({
     applications,
     closed_cves,
     cves,
+    errors,
     hosts,
     operatingsystems,
     ports,
@@ -283,6 +285,12 @@ const PageContent = ({
             <TabTitle
               title={_('TLS Certificates')}
               entities={tls_certificates}
+            />
+          </Tab>
+          <Tab>
+            <TabTitle
+              title={_('Error Messages')}
+              entities={errors}
             />
           </Tab>
         </TabList>
@@ -400,6 +408,15 @@ const PageContent = ({
               <ReportEntitiesContainer entities={tls_certificates}>
                 {props => (
                   <TLSCertificatesTable
+                    {...props}
+                  />
+                )}
+              </ReportEntitiesContainer>
+            </TabPanel>
+            <TabPanel>
+              <ReportEntitiesContainer entities={errors}>
+                {props => (
+                  <ErrorsTable
                     {...props}
                   />
                 )}
