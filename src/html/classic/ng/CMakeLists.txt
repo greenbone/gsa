@@ -431,6 +431,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/detailscontent.js
      ${NG_SRC_DIR}/src/web/pages/reports/detailsfilterdialog.js
      ${NG_SRC_DIR}/src/web/pages/reports/detailspage.js
+     ${NG_SRC_DIR}/src/web/pages/reports/errorstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/reports/hoststable.js
      ${NG_SRC_DIR}/src/web/pages/reports/importdialog.js
