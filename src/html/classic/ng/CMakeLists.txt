@@ -184,6 +184,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/certbund/table.js
      ${NG_SRC_DIR}/src/web/components/badge/badge.js
      ${NG_SRC_DIR}/src/web/components/bar/menubar.js
+     ${NG_SRC_DIR}/src/web/components/bar/progressbar.js
      ${NG_SRC_DIR}/src/web/components/bar/severitybar.js
      ${NG_SRC_DIR}/src/web/components/bar/statusbar.js
      ${NG_SRC_DIR}/src/web/components/bar/titlebar.js
@@ -542,7 +543,6 @@ set (NG_JS_SRC_FILES
 
 
 set (NG_CSS_SRC_FILES
-     ${NG_SRC_DIR}/src/web/components/bar/css/statusbar.css
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/components/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/components/folding/css/folding.css

@@ -25,30 +25,15 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import './css/statusbar.css';
+import ProgressBar from './progressbar.js';
 
 const StatusBar = ({status = 'Unknown', progress = '0'}) => {
   const st = status.toLowerCase();
   let text = status;
-  let css_class = st;
 
   if (st === 'unknown' || st === 'new' || st === 'done' || st === 'container' ||
       st.includes('requested')) {
     progress = '100';
-  }
-
-  const style = {
-    width: progress + 'px',
-  };
-
-  if (st === 'stopped' || st.includes('requested')) {
-    css_class = 'request';
-  }
-  else if (st.includes('error')) {
-    css_class = 'error';
-  }
-  else if (st === 'uploading' || st === 'container') {
-    css_class = 'done';
   }
 
   if (st === 'stopped') {
@@ -58,18 +43,37 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     text = progress + ' %';
   }
 
+  let background;
+  if (st === 'stopped' || st.includes('requested')) {
+    background = 'warn';
+  }
+  else if (st.includes('error')) {
+    background = 'error';
+  }
+  else if (st === 'uploading' || st === 'container' ||
+    st === 'done') {
+    background = 'low';
+  }
+  else if (st === 'new') {
+    background = 'new';
+  }
+  else if (st === 'running') {
+    background = 'run';
+  }
   return (
-    <div className="statusbar statusbar-box" title={status}>
-      <div className={'statusbar ' + css_class} style={style}></div>
-      <p>{text}</p>
-    </div>
+    <ProgressBar
+      title={status}
+      progress={progress}
+      background={background}
+    >
+      {text}
+    </ProgressBar>
   );
 };
 
 StatusBar.propTypes = {
   progress: PropTypes.numberOrNumberString,
   status: PropTypes.string,
-  suffix: PropTypes.string,
 };
 
 export default StatusBar;

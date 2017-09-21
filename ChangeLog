@@ -1,5 +1,14 @@
 2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/bar/css/statusbar.css,
+	src/html/classic/ng/src/web/components/bar/progressbar.js,
+	src/html/classic/ng/src/web/components/bar/severitybar.js,
+	src/html/classic/ng/src/web/components/bar/statusbar.js: Extract a ProgressBar
+	from StatusBar and SeverityBar components. Use glamorous for styling.
+
+2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js,
 	src/html/classic/ng/src/web/components/bar/statusbar.js: Change progress to be
 	parsed as number instead of string.

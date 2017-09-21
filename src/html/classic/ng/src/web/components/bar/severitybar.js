@@ -35,9 +35,9 @@ import {
   HIGH,
 } from '../../utils/render.js';
 
-import './css/statusbar.css';
+import ProgressBar from './progressbar.js';
 
-const SeverityBar = ({severity, scale = 10}) => {
+const SeverityBar = ({severity}) => {
   let cvss;
   let threat;
   let title;
@@ -51,9 +51,7 @@ const SeverityBar = ({severity, scale = 10}) => {
     title = N_A;
   }
 
-  const width = 10 * scale;
-  const fill = is_defined(cvss) && cvss > 0 ? cvss * scale : 0;
-  const style = {width: fill + 'px'};
+  const fill = is_defined(cvss) && cvss > 0 ? cvss * 10 : 0;
 
   let text;
   if (!is_defined(cvss) || cvss < 0 || isNaN(cvss)) {
@@ -63,33 +61,32 @@ const SeverityBar = ({severity, scale = 10}) => {
     text = cvss_number_format(cvss) + ' (' + title + ')';
   }
 
-  let css;
+  let type;
   if (threat === LOG) {
-    css = 'statusbar gray';
+    type = 'log';
   }
   else if (threat === MEDIUM) {
-    css = 'statusbar request';
+    type = 'warn';
   }
   else if (threat === HIGH) {
-    css = 'statusbar error';
+    type = 'error';
   }
   else {
-    css = 'statusbar done';
+    type = 'low';
   }
   return (
-    <div className="statusbar statusbar-box" title={title}
-      style={{width: width + 'px'}}>
-      <div className={css} style={style}/>
-      <p>
-        {text}
-      </p>
-    </div>
+    <ProgressBar
+      title={title}
+      progress={fill}
+      background={type}
+    >
+      {text}
+    </ProgressBar>
   );
 };
 
 SeverityBar.propTypes = {
   severity: PropTypes.numberOrNumberString,
-  scale: PropTypes.number,
 };
 
 export default SeverityBar;
