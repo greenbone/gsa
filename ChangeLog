@@ -23,6 +23,12 @@
 
 2017-09-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/report/parser.js,
+	src/html/classic/ng/src/gmp/models/report/vulnerability.js: Cleanup parsing of
+	report elements.
+
+2017-09-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/parser.js: Don't display general
 	ports at all. The port counts are confusing.
 

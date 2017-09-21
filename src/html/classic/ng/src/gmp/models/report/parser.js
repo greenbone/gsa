@@ -65,11 +65,12 @@ const get_cert = (certs, fingerprint) => {
 
 export const parse_tls_certificates = (report, filter) => {
   const {host: hosts, ssl_certs} = report;
-  const {count: full_count} = ssl_certs;
 
   if (!is_defined(ssl_certs)) {
     return empty_collection_list(filter);
   }
+
+  const {count: full_count} = ssl_certs;
 
   let certs_array = [];
 
@@ -142,7 +143,7 @@ export const parse_tls_certificates = (report, filter) => {
     });
   });
 
-  const filtered_count = certs_per_port.length;
+  const {length: filtered_count} = certs_per_port;
 
   const counts = new CollectionCounts({
     all: full_count,
@@ -191,7 +192,7 @@ export const parse_ports = (report, filter) => {
   });
 
   const ports_array = Object.values(temp_ports);
-  const filtered_count = ports_array.length;
+  const {length: filtered_count} = ports_array;
 
   const counts = new CollectionCounts({
     all: full_count,
@@ -221,14 +222,11 @@ export const parse_vulnerabilities = (report, filter) => {
     const {nvt, host} = result;
     const {_oid: oid} = nvt;
 
+    const severity = parse_severity(result.severity);
+
     let vuln = temp_vulns[oid];
 
     if (is_defined(vuln)) {
-      const severity = parse_severity(result.severity);
-
-      if (severity > vuln.severity) {
-        vuln.severity = severity;
-      }
 
       vuln.addResult(results);
     }
@@ -237,6 +235,7 @@ export const parse_vulnerabilities = (report, filter) => {
       temp_vulns[oid] = vuln;
     }
 
+    vuln.setSeverity(severity);
     vuln.addHost(host);
   });
 
@@ -262,12 +261,12 @@ export const parse_apps = (report, filter) => {
   const {host: hosts, apps, results = {}} = report;
   const apps_temp = {};
   const cpe_host_details = {};
-  const full_count = apps.count;
 
   if (!is_defined(apps)) {
     return empty_collection_list(filter);
   }
 
+  const {count: full_count} = apps;
   const severities = {};
 
   // if the there are several results find the highest severity for the cpe
@@ -331,7 +330,7 @@ export const parse_apps = (report, filter) => {
     app.addOccurence(details_count_for_cpe);
   };
 
-  const filtered_count = apps_array.length;
+  const {length: filtered_count} = apps_array;
 
   const counts = new CollectionCounts({
     all: full_count,
@@ -415,7 +414,7 @@ export const parse_operatingsystems = (report, filter) => {
   });
 
   const os_array = Object.values(operating_systems);
-  const filtered_count = os_array.length;
+  const {length: filtered_count} = os_array;
 
   const counts = new CollectionCounts({
     all: os_count.count,
@@ -446,7 +445,7 @@ export const parse_hosts = (report, filter) => {
     return new Host({...host, severity});
   });
 
-  const filtered_count = hosts_array.length;
+  const {length: filtered_count} = hosts_array;
 
   const counts = new CollectionCounts({
     all: hosts_count.count,
@@ -557,6 +556,8 @@ export const parse_closed_cves = (report, filter) => {
     return empty_collection_list(filter);
   }
 
+  // count doesn't fit to our counting of cves. we split the db rows with a csv
+  // list of cves into several cves.
   // const {count: full_count} = closed_cves;
 
   let cves_array = [];
@@ -596,7 +597,7 @@ export const parse_closed_cves = (report, filter) => {
     cves_array = cves_array.concat(host_cves);
   });
 
-  const filtered_count = cves_array.length;
+  const {length: filtered_count} = cves_array;
 
   const counts = new CollectionCounts({
     all: filtered_count,
@@ -615,13 +616,14 @@ export const parse_closed_cves = (report, filter) => {
 
 export const parse_cves = (report, filter) => {
   const {results} = report;
+
   if (!is_defined(results)) {
     return empty_collection_list(filter);
   }
 
   const cves = {};
 
-  const results_with_cve = filter_func(report.results.result,
+  const results_with_cve = filter_func(results.result,
   result => result.nvt.cve !== 'NOCVE');
 
   results_with_cve.forEach(result => {
@@ -641,10 +643,10 @@ export const parse_cves = (report, filter) => {
 
   const cves_array = Object.values(cves);
 
-  const filtered_count = cves_array.length;
+  const {length: filtered_count} = cves_array;
 
   const counts = new CollectionCounts({
-    all: filtered_count, // TODO
+    all: filtered_count,
     filtered: filtered_count,
     first: 1,
     length: filtered_count,
