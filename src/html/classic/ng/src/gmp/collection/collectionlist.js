@@ -76,6 +76,10 @@ class CollectionList extends List {
   get meta() {
     return this.getMeta();
   }
+
+  get counts() {
+    return this.getCounts();
+  }
 }
 
 export default CollectionList;

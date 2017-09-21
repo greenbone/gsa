@@ -1,5 +1,11 @@
 2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/collection/collectionlist.js: Add get property
+	counts to CollectionList class. This allows to use object destructuring
+	const {counts} = collectionlist;
+
+2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/layout/withLayout.js: Allow to set
 	grow prop without any value on layout components. grow will now default to 1.
 
