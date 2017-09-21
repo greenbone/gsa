@@ -1,5 +1,11 @@
 2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/task.js,
+	src/html/classic/ng/src/web/components/bar/statusbar.js: Change progress to be
+	parsed as number instead of string.
+
+2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/collection/collectionlist.js: Add get property
 	counts to CollectionList class. This allows to use object destructuring
 	const {counts} = collectionlist;

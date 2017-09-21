@@ -27,12 +27,12 @@ import {
   is_array,
   is_defined,
   is_empty,
-  is_string,
   map,
 } from '../utils.js';
 
 import {
   parse_int,
+  parse_float,
   parse_yesno,
   NO_VALUE,
   YES_VALUE,
@@ -46,15 +46,12 @@ import Scanner from './scanner.js';
 
 function parse_progress(value) {
   if (!is_defined(value)) {
-    return '0';
-  }
-  if (is_string(value)) {
-    return value;
+    return 0;
   }
   if (is_defined(value.__text)) {
-    return value.__text;
+    value = value.__text;
   }
-  return '0';
+  return parse_float(value);
 }
 
 function parse_yes(value) {

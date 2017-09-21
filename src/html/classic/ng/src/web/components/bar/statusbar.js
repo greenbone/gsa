@@ -28,8 +28,8 @@ import PropTypes from '../../utils/proptypes.js';
 import './css/statusbar.css';
 
 const StatusBar = ({status = 'Unknown', progress = '0'}) => {
+  const st = status.toLowerCase();
   let text = status;
-  let st = status.toLowerCase();
   let css_class = st;
 
   if (st === 'unknown' || st === 'new' || st === 'done' || st === 'container' ||
@@ -37,7 +37,7 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     progress = '100';
   }
 
-  let style = {
+  const style = {
     width: progress + 'px',
   };
 
@@ -67,8 +67,8 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
 };
 
 StatusBar.propTypes = {
+  progress: PropTypes.numberOrNumberString,
   status: PropTypes.string,
-  progress: PropTypes.string,
   suffix: PropTypes.string,
 };
 
