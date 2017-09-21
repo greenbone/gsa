@@ -55,7 +55,7 @@ const DividerComponent = glamorous(Layout, {
 
 DividerComponent.displayName = 'DividerComponent';
 
-const DividerContainer = glamorous.div({
+const DividerContainer = glamorous(Layout)({
   display: 'inline-flex',
 });
 
@@ -63,13 +63,15 @@ DividerContainer.displayName = 'DividerContainer';
 
 const Divider = ({
   margin = DEFAULT_MARGIN,
+  grow,
   ...props
 }) => {
   // put Divider into a container div to allow dividers in dividers
   return (
-    <DividerContainer>
+    <DividerContainer grow={grow}>
       <DividerComponent
         margin={margin}
+        grow={grow}
         {...props}
       />
     </DividerContainer>
@@ -77,6 +79,10 @@ const Divider = ({
 };
 
 Divider.propTypes = {
+  grow: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.numberOrNumberString,
+  ]),
   margin: PropTypes.string,
 };
 
