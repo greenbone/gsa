@@ -1,5 +1,10 @@
 2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/report/task.js: Parse progress also in
+	Report Task model.
+
+2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js,
 	src/html/classic/ng/src/gmp/parser.js: Move parse_progress from task model to
 	parse module.
