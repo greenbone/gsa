@@ -15804,6 +15804,10 @@ should not have received it.
                   <xsl:when test="string-length($timeout) &gt; 0">
                     <xsl:value-of select="$timeout"/>
                   </xsl:when>
+                  <xsl:when test="string-length(default_timeout) &gt; 0">
+                    <xsl:value-of select="gsa:i18n ('default', 'Timeout')"/>
+                    (<xsl:value-of select="default_timeout"/>)
+                  </xsl:when>
                   <xsl:otherwise>
                     <xsl:value-of select="gsa:i18n ('default', 'Timeout')"/>
                   </xsl:otherwise>
@@ -15928,6 +15932,10 @@ should not have received it.
             <xsl:choose>
               <xsl:when test="string-length(timeout) &gt; 0">
                 <xsl:value-of select="timeout"/>
+              </xsl:when>
+              <xsl:when test="string-length(default_timeout) &gt; 0">
+                <xsl:value-of select="gsa:i18n ('default', 'Timeout')"/>
+                (<xsl:value-of select="default_timeout"/>)
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="gsa:i18n ('default', 'Timeout')"/>
@@ -16353,19 +16361,32 @@ should not have received it.
       <!-- Special case the NVT timeout. -->
       <tr class="even">
         <td><xsl:value-of select="gsa:i18n ('Timeout')"/></td>
+        <xsl:if test="$config != ''">
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(timeout) &gt; 0">
+                <xsl:value-of select="timeout"/>
+              </xsl:when>
+              <xsl:when test="string-length(default_timeout) &gt; 0">
+                <xsl:value-of select="default_timeout"/>
+                (<xsl:value-of select="gsa:i18n ('NVT default', 'Timeout')"/>)
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n ('default', 'Timeout')"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </xsl:if>
         <td>
           <xsl:choose>
-            <xsl:when test="string-length(timeout) &gt; 0">
-              <xsl:value-of select="timeout"/>
+            <xsl:when test="string-length(default_timeout) &gt; 0">
+              <xsl:value-of select="default_timeout"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="gsa:i18n ('default', 'Timeout')"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
-        <xsl:if test="$config != ''">
-          <td><xsl:value-of select="gsa:i18n ('default', 'Timeout')"/></td>
-        </xsl:if>
         <td></td>
       </tr>
 
@@ -16408,6 +16429,9 @@ should not have received it.
               </xsl:otherwise>
             </xsl:choose>
             <xsl:value-of select="gsa:i18n ('Apply default timeout')"/>
+            <xsl:if test="string-length(default_timeout) &gt; 0">
+              (<xsl:value-of select="default_timeout"/>)
+            </xsl:if>
           </label>
           <div>
             <xsl:choose>
@@ -16430,7 +16454,9 @@ should not have received it.
                   maxlength="400"/>
           </div>
         </td>
-        <td></td>
+        <td>
+          <xsl:value-of select="default_timeout"/>
+        </td>
         <td></td>
       </tr>
 

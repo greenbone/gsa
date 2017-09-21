@@ -228,6 +228,11 @@ class EditDialog extends React.Component {
                   />
                   <Text>
                     {_('Apply default timeout')}
+                    {
+                      is_defined (nvt.default_timeout) ?
+                          ' (' + nvt.default_timeout + ')' :
+                          ''
+                    }
                   </Text>
                 </Layout>
                 <Layout flex box>
@@ -247,6 +252,11 @@ class EditDialog extends React.Component {
                 </Layout>
               </TableData>
               <TableData>
+                {
+                  is_defined (nvt.default_timeout) ?
+                      nvt.default_timeout :
+                      ''
+                }
               </TableData>
               <TableData>
               </TableData>

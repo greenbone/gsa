@@ -37,7 +37,7 @@ import TableRow from '../../components/table/row.js';
 
 const Preferences = ({
   preferences = [],
-  timeout,
+  default_timeout,
 }) => {
   return (
     <Table>
@@ -57,8 +57,8 @@ const Preferences = ({
             {_('Timeout')}
           </TableData>
           <TableData>
-            {is_defined(timeout) ?
-              timeout :
+            {is_defined(default_timeout) ?
+              default_timeout :
               _('default')
             }
           </TableData>
@@ -80,7 +80,7 @@ const Preferences = ({
 };
 
 Preferences.propTypes = {
-  timeout: PropTypes.number,
+  default_timeout: PropTypes.number,
   preferences: PropTypes.arrayLike,
 };
 

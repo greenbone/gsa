@@ -137,7 +137,7 @@ const Details = ({
 }) => {
   overrides = overrides.filter(override => override.isActive());
   notes = notes.filter(note => note.isActive());
-  const {version, family, oid, preferences, timeout} = entity;
+  const {version, family, oid, preferences, default_timeout} = entity;
   return (
     <Layout flex="column">
       <InfoTable>
@@ -179,7 +179,7 @@ const Details = ({
         title={_('Preferences')}>
         <Preferences
           preferences={preferences}
-          timeout={timeout}
+          default_timeout={default_timeout}
         />
       </DetailsBlock>
 

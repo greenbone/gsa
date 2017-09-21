@@ -75,6 +75,7 @@ class Nvt extends React.Component {
       oid,
       severity,
       timeout,
+      default_timeout,
     } = nvt;
     return (
       <TableRow>
@@ -93,6 +94,10 @@ class Nvt extends React.Component {
           {is_empty(timeout) ?
               _('default') :
               timeout
+          }
+          {!(is_empty(default_timeout)) ?
+              ' (' + default_timeout + ')' :
+              ''
           }
         </TableData>
         <TableData>

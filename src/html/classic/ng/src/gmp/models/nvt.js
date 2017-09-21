@@ -158,6 +158,13 @@ class Nvt extends Info {
       }
     }
 
+    if (is_empty(elem.default_timeout)) {
+      delete ret.default_timeout;
+    }
+    else {
+      ret.default_timeout = parse_float(elem.default_timeout);
+    }
+
     if (is_empty(elem.timeout)) {
       delete ret.timeout;
     }
