@@ -62,6 +62,10 @@ const withLayout = (defaults = {}) => Component => {
         wrap = 'wrap';
       }
 
+      if (grow === true) {
+        grow = 1;
+      }
+
       if (is_defined(align)) {
         align = map(align, al => convert_align(al));
       }
