@@ -47,6 +47,16 @@ export function parse_severity(value) {
   return is_empty(value) ? undefined : parse_float(value);
 }
 
+export function parse_progress(value) {
+  if (!is_defined(value)) {
+    return 0;
+  }
+  if (is_defined(value.__text)) {
+    value = value.__text;
+  }
+  return parse_float(value);
+}
+
 export function parse_text(text) {
   if (is_defined(text.__text)) {
     return {

@@ -1,5 +1,11 @@
 2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/task.js,
+	src/html/classic/ng/src/gmp/parser.js: Move parse_progress from task model to
+	parse module.
+
+2017-09-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/bar/css/statusbar.css,
 	src/html/classic/ng/src/web/components/bar/progressbar.js,

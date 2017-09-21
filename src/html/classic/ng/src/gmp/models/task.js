@@ -32,7 +32,7 @@ import {
 
 import {
   parse_int,
-  parse_float,
+  parse_progress,
   parse_yesno,
   NO_VALUE,
   YES_VALUE,
@@ -43,16 +43,6 @@ import Model from '../model.js';
 import Report from './report.js';
 import Schedule from './schedule.js';
 import Scanner from './scanner.js';
-
-function parse_progress(value) {
-  if (!is_defined(value)) {
-    return 0;
-  }
-  if (is_defined(value.__text)) {
-    value = value.__text;
-  }
-  return parse_float(value);
-}
 
 function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
