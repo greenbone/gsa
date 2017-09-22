@@ -23,11 +23,15 @@
 
 import React from 'react';
 
+import logger from 'gmp/log.js';
+
 import {is_defined} from 'gmp/utils.js';
 
 import CollectionList from 'gmp/collection/collectionlist.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+const log = logger.getLogger('web.pages.reports.reportentitiescontainer');
 
 class ReportEntitiesContainer extends React.Component {
 
@@ -40,6 +44,7 @@ class ReportEntitiesContainer extends React.Component {
     this.handleLast = this.handleLast.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handlePrevious = this.handlePrevious.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
   }
 
   componentDidMount() {
@@ -58,17 +63,28 @@ class ReportEntitiesContainer extends React.Component {
 
   updateFromEntities(entities) {
     const counts = entities.getCounts();
+    const filter = entities.getFilter();
+
+    const reverse = filter.get('sort-reverse');
+    const field = is_defined(reverse) ? reverse : filter.get('sort');
+
+    const sort = {
+      reverse,
+      field,
+    };
 
     this.load({
       entities,
       next_entity_index: counts.first - 1,
+      sort,
     });
   }
 
-  load({entities, rows, next_entity_index} = {}) {
+  load({entities, rows, sort, next_entity_index} = {}) {
     const {
       entities: state_entities,
       current_entity_index,
+      sort: state_sort,
     } = this.state;
 
     const index = is_defined(next_entity_index) ? next_entity_index :
@@ -76,6 +92,10 @@ class ReportEntitiesContainer extends React.Component {
 
     if (!is_defined(entities)) {
       entities = state_entities;
+    }
+
+    if (!is_defined(sort)) {
+      sort = state_sort;
     }
 
     const filter = entities.getFilter();
@@ -109,6 +129,36 @@ class ReportEntitiesContainer extends React.Component {
       entities,
       paged_entities: paged,
       filter,
+      sort,
+    });
+  }
+
+  handleSortChange(field) {
+    const {
+      entities,
+      sort: old_sort,
+    } = this.state;
+
+    const {sortFunctions = {}} = this.props;
+
+    const new_sort = {
+      field,
+      reverse: field === old_sort.field ? !old_sort.reverse : false,
+    };
+
+    const compare_func = sortFunctions[field];
+
+    if (!is_defined(compare_func)) {
+      // ensure not to crash if a compare function hasn't be defined yet
+      log.error('Missing compare function for column', field);
+      return;
+    }
+
+    const compare = compare_func(new_sort.reverse);
+
+    this.load({
+      entities: entities.sort(compare),
+      sort: new_sort,
     });
   }
 
@@ -153,7 +203,7 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   render() {
-    const {children} = this.props;
+    const {children, sortFunctions} = this.props;
     const {paged_entities: entities, filter} = this.state;
 
     if (!is_defined(children)) {
@@ -167,6 +217,8 @@ class ReportEntitiesContainer extends React.Component {
       onLastClick: this.handleLast,
       onNextClick: this.handleNext,
       onPreviousClick: this.handlePrevious,
+      onSortChange: is_defined(sortFunctions) ? this.handleSortChange :
+        undefined,
     });
   }
 }
@@ -174,6 +226,7 @@ class ReportEntitiesContainer extends React.Component {
 ReportEntitiesContainer.propTypes = {
   children: PropTypes.func,
   entities: PropTypes.collection.isRequired,
+  sortFunctions: PropTypes.object,
 };
 
 export default ReportEntitiesContainer;
