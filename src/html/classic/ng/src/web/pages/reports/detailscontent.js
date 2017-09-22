@@ -58,8 +58,6 @@ import Tabs from '../../components/tab/tabs.js';
 import Section from '../../components/section/section.js';
 import SectionHeader from '../../components/section/header.js';
 
-import ResultsTable from '../results/table.js';
-
 import ApplicationsTable from './applicationstable.js';
 import ClosedCvesTable from './closedcvestable.js';
 import CvesTable from './cvestable.js';
@@ -67,6 +65,7 @@ import ErrorsTable from './errorstable.js';
 import HostsTable from './hoststable.js';
 import OperatingSystemsTable from './operatingsystemstable.js';
 import PortsTable from './portstable.js';
+import ResultsTab from './resultstab.js';
 import TLSCertificatesTable from './tlscertificatestable.js';
 
 import EntityInfo from '../../entity/info.js';
@@ -107,7 +106,7 @@ const ToolBarIcons = ({
   onReportFormatChange,
 }) => {
   const {task} = report;
-  const task_id = task.id;
+  const {id: task_id} = task;
   return (
     <IconSizeProvider size="medium">
       <Divider margin="15px">
@@ -191,12 +190,16 @@ const PageContent = ({
   filters,
   report_formats,
   report_format_id,
-  onAddToAssetsClick,
   onActivateTab,
+  onAddToAssetsClick,
   onError,
+  onFilterAddLogLevelClick,
   onFilterChanged,
   onFilterCreated,
+  onFilterDecreaseMinQoDClick,
   onFilterEditClick,
+  onFilterRemoveSeverityClick,
+  onFilterResetClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onReportFormatChange,
@@ -219,6 +222,7 @@ const PageContent = ({
     operatingsystems,
     ports,
     results,
+    task,
     tls_certificates,
   } = report;
 
@@ -323,7 +327,7 @@ const PageContent = ({
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
-            onResetClick={onFilterChanged}
+            onResetClick={onFilterResetClick}
             onUpdate={onFilterChanged}
           />
         </Layout>
@@ -342,13 +346,16 @@ const PageContent = ({
               />
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={results}>
-                {props => (
-                  <ResultsTable
-                    {...props}
-                  />
-                )}
-              </ReportEntitiesContainer>
+              <ResultsTab
+                filter={filter}
+                results={results}
+                progress={task.progress}
+                onFilterAddLogLevelClick={onFilterAddLogLevelClick}
+                onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
+                onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
+                onFilterEditClick={onFilterEditClick}
+                onFilterResetClick={onFilterResetClick}
+              />
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer entities={hosts}>
@@ -439,9 +446,13 @@ PageContent.propTypes = {
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onFilterCreated: PropTypes.func.isRequired,
+  onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
+  onFilterRemoveSeverityClick: PropTypes.func.isRequired,
+  onFilterResetClick: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,

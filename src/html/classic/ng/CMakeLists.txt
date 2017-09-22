@@ -433,6 +433,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/detailscontent.js
      ${NG_SRC_DIR}/src/web/pages/reports/detailsfilterdialog.js
      ${NG_SRC_DIR}/src/web/pages/reports/detailspage.js
+     ${NG_SRC_DIR}/src/web/pages/reports/emptyreport.js
+     ${NG_SRC_DIR}/src/web/pages/reports/emptyresultsreport.js
      ${NG_SRC_DIR}/src/web/pages/reports/errorstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/reports/hoststable.js
@@ -441,6 +443,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/operatingsystemstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/portstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/reportentitiescontainer.js
+     ${NG_SRC_DIR}/src/web/pages/reports/reportpanel.js
+     ${NG_SRC_DIR}/src/web/pages/reports/resultstab.js
      ${NG_SRC_DIR}/src/web/pages/reports/row.js
      ${NG_SRC_DIR}/src/web/pages/reports/scaninfo.js
      ${NG_SRC_DIR}/src/web/pages/reports/summary.js

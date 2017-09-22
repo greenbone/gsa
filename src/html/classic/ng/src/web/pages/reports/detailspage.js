@@ -57,13 +57,19 @@ class ReportDetails extends React.Component {
     this.handleAddToAssets = this.handleAddToAssets.bind(this);
     this.handleChanged = this.handleChanged.bind(this);
     this.handleError = this.handleError.bind(this);
+    this.handleFilterAddLogLevel = this.handleFilterAddLogLevel.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.handleFilterDecreaseMinQoD =
+      this.handleFilterDecreaseMinQoD.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleTimer = this.handleTimer.bind(this);
+    this.handleFilterRemoveSeverity =
+      this.handleFilterRemoveSeverity.bind(this);
+    this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
     this.handleReportFormatChange = this.handleReportFormatChange.bind(this);
+    this.handleTimer = this.handleTimer.bind(this);
   }
 
   componentDidMount() {
@@ -232,6 +238,10 @@ class ReportDetails extends React.Component {
     this.load(id, filter);
   }
 
+  handleFilterResetClick(filter) {
+    this.handleFilterChange();
+  }
+
   handleActivateTab(index) {
     this.setState({activeTab: index});
   }
@@ -301,6 +311,38 @@ class ReportDetails extends React.Component {
     this.loadFilters();
   }
 
+  handleFilterAddLogLevel() {
+    const {id, filter} = this.state;
+    let levels = filter.get('levels', '');
+
+    if (!levels.includes('g')) {
+      levels += 'g';
+      const lfilter = filter.copy();
+      lfilter.set('levels', levels);
+      this.load(id, lfilter);
+    }
+  }
+
+  handleFilterRemoveSeverity() {
+    const {id, filter} = this.state;
+
+    if (filter.has('severity')) {
+      const lfilter = filter.copy();
+      lfilter.delete('severity');
+      this.load(id, lfilter);
+    }
+  }
+
+  handleFilterDecreaseMinQoD() {
+    const {id, filter} = this.state;
+
+    if (filter.has('min_qod')) {
+      const lfilter = filter.copy();
+      lfilter.set('min_qod', 30);
+      this.load(id, lfilter);
+    }
+  }
+
   render() {
     const {...props} = this.props;
     const {filter} = this.state;
@@ -312,13 +354,17 @@ class ReportDetails extends React.Component {
           onActivateTab={this.handleActivateTab}
           onAddToAssetsClick={this.handleAddToAssets}
           onError={this.handleError}
-          onTagSuccess={this.handleChanged}
+          onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
+          onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
           onFilterChanged={this.handleFilterChange}
-          onFilterEditClick={this.handleFilterEditClick}
           onFilterCreated={this.handleFilterCreated}
+          onFilterEditClick={this.handleFilterEditClick}
+          onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
+          onFilterResetClick={this.handleFilterResetClick}
           onRemoveFromAssetsClick={this.handleRemoveFromAssets}
-          onReportFormatChange={this.handleReportFormatChange}
           onReportDownloadClick={this.handleReportDownload}
+          onReportFormatChange={this.handleReportFormatChange}
+          onTagSuccess={this.handleChanged}
         />
         <NoticeDialog
           width="400px"
