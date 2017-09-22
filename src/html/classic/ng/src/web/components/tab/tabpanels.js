@@ -21,18 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import PropTypes from '../../utils/proptypes.js';
 
 const TabPanels = ({
   active = 0,
   children,
-}) => (
-  <div>
-    {children[active]}
-  </div>
-);
+}) => children[active];
 
 TabPanels.propTypes = {
   active: PropTypes.number,

@@ -23,13 +23,20 @@
 
 import React from 'react';
 
+import Wrapper from '../layout/wrapper.js';
+
 const TabPanel = ({
   children,
-}) => (
-  <div>
-    {children}
-  </div>
-);
+}) => {
+  if (React.Children.count(children) > 1) {
+    return (
+      <Wrapper>
+        {children}
+      </Wrapper>
+    );
+  }
+  return children;
+};
 
 export default TabPanel;
 
