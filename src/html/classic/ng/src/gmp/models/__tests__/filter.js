@@ -317,6 +317,51 @@ describe('Filter get', () => {
 
 });
 
+describe('Filter getTerm', () => {
+
+  test('should get term', () => {
+    let filter = Filter.fromString('abc=1');
+    expect(filter.getTerm('abc')).toBeDefined();
+
+    filter = Filter.fromString('abc=1 def=2');
+    expect(filter.getTerm('abc')).toBeDefined();
+    expect(filter.getTerm('def')).toBeDefined();
+  });
+
+  test('should not get term', () => {
+    const filter = Filter.fromString('abc=1');
+    expect(filter.getTerm('def')).toBeUndefined();
+  });
+
+  test('should not get term without keyword', () => {
+    let filter = Filter.fromString('abc');
+    expect(filter.getTerm('abc')).toBeUndefined();
+
+    filter = Filter.fromString('~abc');
+    expect(filter.getTerm('abc')).toBeUndefined();
+    expect(filter.getTerm('~abc')).toBeUndefined();
+  });
+
+  test('should match term', () => {
+    let filter = Filter.fromString('abc=1');
+    let term = filter.getTerm('abc');
+    expect(term.keyword).toBe('abc');
+    expect(term.relation).toBe('=');
+    expect(term.value).toBe('1');
+
+    filter = Filter.fromString('abc<1 def~2');
+    term = filter.getTerm('abc');
+    expect(term.keyword).toBe('abc');
+    expect(term.relation).toBe('<');
+    expect(term.value).toBe('1');
+
+    term = filter.getTerm('def');
+    expect(term.keyword).toBe('def');
+    expect(term.relation).toBe('~');
+    expect(term.value).toBe('2');
+  });
+});
+
 describe('Filter parse elem', () => {
 
   test('Should parse public properties', () => {

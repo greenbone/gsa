@@ -94,22 +94,6 @@ class Filter extends Model {
   }
 
   /**
-   * Get the first FilterTerm for a keyword
-   *
-   * @private
-   *
-   * @param {String} key  FilterTerm keyword to search for
-   *
-   * @return {String} Returns the first FilterTerm for the passed keyword
-   *                  or undefined of not FilterTerm for the keyword exists in
-   *                  this Filter.
-   */
-  _getTerm(key) {
-    const tlist = this.terms.find(list => key === list.keyword);
-    return is_defined(tlist) ? tlist.get() : undefined;
-  }
-
-  /**
    * @private
    *
    * @param {FilterTerm} term  FilterTerm to set
@@ -288,20 +272,36 @@ class Filter extends Model {
   }
 
   /**
-   * Get the value of a FilterTerm
+   * Get the first FilterTerm for a keyword
    *
    * @param {String} key  FilterTerm keyword to search for
    *
-   * @return {String} Returns the first FilterTerm value for the passed keyword
+   * @return {String} Returns the first FilterTerm for the passed keyword
    *                  or undefined of not FilterTerm for the keyword exists in
    *                  this Filter.
    */
-  get(key) {
-    const term = this._getTerm(key);
+  getTerm(key) {
+    const tlist = this.terms.find(list => key === list.keyword);
+    return is_defined(tlist) ? tlist.get() : undefined;
+  }
+
+  /**
+   * Get the value of a FilterTerm
+   *
+   * @param {String} key  FilterTerm keyword to search for
+   * @param {String} def  Value returned if no FilterTerm for key could be
+   *                      found. Defaults to undefined.
+   *
+   * @return {String} Returns the first FilterTerm value for the passed keyword
+   *                  or def if no FilterTerm for the keyword exists in this
+   *                  Filter.
+   */
+  get(key, def = undefined) {
+    const term = this.getTerm(key);
     if (is_defined(term)) {
       return term.value;
     }
-    return undefined;
+    return def;
   }
 
   /**
