@@ -257,6 +257,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/components/menu/menu.js
      ${NG_SRC_DIR}/src/web/components/pagination/pagination.js
+     ${NG_SRC_DIR}/src/web/components/panel/infopanel.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/applyoverridesgroup.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/autofpgroup.js
      ${NG_SRC_DIR}/src/web/components/powerfilter/dialog.js
