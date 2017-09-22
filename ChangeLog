@@ -1,3 +1,13 @@
+2017-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Cancel GMP commands if client connection is closed.
+
+	* src/gsad.c (connection_watcher_data_t): New typedef.
+	(connection_watcher_data_new, watch_client_connection): New functions.
+	(exec_gmp_get): Watch whether the client connection is closed in a
+	new thread.
+	(main): Add option client-watch-interval.
+
 2017-09-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/reports/reportentitiescontainer.js: Allow

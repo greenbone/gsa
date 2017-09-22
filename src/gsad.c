@@ -155,6 +155,11 @@
 #define MAX_SESSION_TIMEOUT 40320
 
 /**
+ * @brief Default value for client_watch_interval
+ */
+#define DEFAULT_CLIENT_WATCH_INTERVAL 1
+
+/**
  * @brief Default face name.
  */
 #define DEFAULT_GSAD_FACE "classic"
@@ -238,6 +243,11 @@ GSList *log_config = NULL;
  * @brief Whether chroot is used
  */
 int chroot_state = 0;
+
+/**
+ * @brief Interval in seconds to check whether client connection was closed.
+ */
+int client_watch_interval = DEFAULT_CLIENT_WATCH_INTERVAL;
 
 /**
  * @brief Parameter validator.
@@ -1898,6 +1908,106 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
   return MHD_YES;
 }
 
+/*
+ * Connection watcher thread data
+ */
+typedef struct {
+  int client_socket_fd;
+  gvm_connection_t *gvm_connection;
+  int connection_closed;
+  pthread_mutex_t mutex;
+} connection_watcher_data_t;
+
+/**
+ * @brief  Create a new connection watcher thread data structure.
+ *
+ * @param[in]  gvm_connection   GVM connection to close if client conn. closes.
+ * @param[in]  client_socket_fd File descriptor of client connection to watch.
+ *
+ * @return  Newly allocated watcher thread data.
+ */
+static connection_watcher_data_t*
+connection_watcher_data_new (gvm_connection_t *gvm_connection,
+                             int client_socket_fd)
+{
+  connection_watcher_data_t *watcher_data;
+  watcher_data = g_malloc (sizeof (connection_watcher_data_t));
+
+  watcher_data->gvm_connection = gvm_connection;
+  watcher_data->client_socket_fd = client_socket_fd;
+  watcher_data->connection_closed = 0;
+  pthread_mutex_init  (&(watcher_data->mutex), NULL);
+
+  return watcher_data;
+}
+
+/**
+ * @brief   Thread start routine watching the client connection.
+ *
+ * @param[in] data  The connection data watcher struct.
+ *
+ * @return  Always NULL.
+ */
+static void*
+watch_client_connection (void* data)
+{
+  int active;
+  connection_watcher_data_t *watcher_data;
+
+  pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
+  watcher_data = (connection_watcher_data_t*) data;
+
+  pthread_mutex_lock (&(watcher_data->mutex));
+  active = 1;
+  pthread_mutex_unlock (&(watcher_data->mutex));
+
+  while (active)
+    {
+      pthread_setcancelstate (PTHREAD_CANCEL_ENABLE, NULL);
+      sleep (client_watch_interval);
+      pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
+
+      pthread_mutex_lock (&(watcher_data->mutex));
+
+      if (watcher_data->connection_closed)
+        {
+          active = 0;
+          pthread_mutex_unlock (&(watcher_data->mutex));
+          break;
+        }
+      int ret;
+      char buf[1];
+      errno = 0;
+      ret = recv (watcher_data->client_socket_fd, buf, 1, MSG_PEEK);
+
+      if (ret >= 0)
+        {
+          if (watcher_data->connection_closed == 0)
+            {
+              watcher_data->connection_closed = 1;
+              active = 0;
+              g_debug ("%s: Client connection closed", __FUNCTION__);
+
+              if (watcher_data->gvm_connection->tls)
+                {
+                  gvm_connection_t *gvm_conn;
+                  gvm_conn = watcher_data->gvm_connection;
+                  gnutls_bye (gvm_conn->session, GNUTLS_SHUT_RDWR);
+                }
+              else
+                {
+                  gvm_connection_close (watcher_data->gvm_connection);
+                }
+            }
+        }
+
+      pthread_mutex_unlock (&(watcher_data->mutex));
+    }
+
+  return NULL;
+}
+
+
 #undef ELSE
 
 /**
@@ -1932,6 +2042,8 @@ exec_gmp_get (http_connection_t *con,
   gsize res_len = 0;
   http_response_t *response;
   cmd_response_data_t *response_data;
+  pthread_t watch_thread;
+  connection_watcher_data_t *watcher_data;
 
   response_data = cmd_response_data_new ();
 
@@ -2028,6 +2140,20 @@ exec_gmp_get (http_connection_t *con,
     }
 
   gettimeofday (&credentials->cmd_start, NULL);
+
+  if (client_watch_interval)
+    {
+      const union MHD_ConnectionInfo *mhd_con_info;
+      mhd_con_info
+        = MHD_get_connection_info (con,
+                                   MHD_CONNECTION_INFO_CONNECTION_FD);
+
+      watcher_data = connection_watcher_data_new (&connection,
+                                                  mhd_con_info->connect_fd);
+
+      pthread_create (&watch_thread, NULL,
+                      watch_client_connection, watcher_data);
+    }
 
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
@@ -2318,7 +2444,23 @@ exec_gmp_get (http_connection_t *con,
       add_guest_chart_content_security_headers (response);
     }
 
-  gvm_connection_close (&connection);
+  if (client_watch_interval)
+    {
+      pthread_mutex_lock (&(watcher_data->mutex));
+      if (watcher_data->connection_closed == 0 
+          || watcher_data->gvm_connection->tls)
+        {
+          gvm_connection_close (watcher_data->gvm_connection);
+        }
+      watcher_data->connection_closed = 1;
+      pthread_mutex_unlock (&(watcher_data->mutex));
+      pthread_cancel (watch_thread);
+      g_free (watcher_data);
+    }
+  else
+    {
+      gvm_connection_close (&connection);
+    }
 
   return handler_send_response (con, response, response_data, credentials->sid);
 }
@@ -2987,6 +3129,12 @@ main (int argc, char **argv)
      0, G_OPTION_ARG_INT, &timeout,
      "Minutes of user idle time before session expires. Defaults to "
      G_STRINGIFY (SESSION_TIMEOUT) " minutes", "<number>"},
+    {"client-watch-interval", '\0',
+     0, G_OPTION_ARG_INT, &client_watch_interval,
+     "Check if client connection was closed every <number> seconds."
+     " 0 to disable. Defaults to " G_STRINGIFY (DEFAULT_CLIENT_WATCH_INTERVAL)
+     " seconds.",
+     "<number>"},
     {"debug-tls", 0,
      0, G_OPTION_ARG_INT, &debug_tls,
      "Enable TLS debugging at <level>", "<level>"},
@@ -3179,6 +3327,11 @@ main (int argc, char **argv)
     }
 
   set_session_timeout (timeout);
+
+  if (client_watch_interval < 0)
+    {
+      client_watch_interval = 0;
+    }
 
   if (guest_user)
     {
