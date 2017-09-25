@@ -84,15 +84,14 @@ import {
   tls_certificates_sort_functions,
 } from './sort.js';
 
-const StyledSection = glamorous(Section, {
-  diplayName: 'Section',
-})({
-  marginTop: '10px',
-});
-
-const StyledLayout = glamorous(Layout)({
+const TabLayout = glamorous(Layout)({
   marginLeft: '10px',
   marginRight: '10px',
+});
+
+const EntityInfoLayout = glamorous(Layout)({
+  marginTop: '15px',
+  marginBottom: '-10px',
 });
 
 const TabTitle = ({title, entities}) => (
@@ -244,7 +243,7 @@ const PageContent = ({
       title={_('Report:')}
       align={['space-between', 'stretch']}
     >
-      <StyledLayout
+      <TabLayout
         grow="1"
         align={['start', 'end']}>
         <TabList
@@ -310,10 +309,7 @@ const PageContent = ({
             />
           </Tab>
         </TabList>
-      </StyledLayout>
-      <EntityInfo
-        entity={entity}
-      />
+      </TabLayout>
     </SectionHeader>
   );
   return (
@@ -345,7 +341,13 @@ const PageContent = ({
         </Layout>
       </ToolBar>
 
-      <StyledSection
+      <EntityInfoLayout align="end">
+        <EntityInfo
+          entity={entity}
+        />
+      </EntityInfoLayout>
+
+      <Section
         header={header}
       >
         <Tabs active={activeTab}>
@@ -469,7 +471,7 @@ const PageContent = ({
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </StyledSection>
+      </Section>
     </Layout>
   );
 };
