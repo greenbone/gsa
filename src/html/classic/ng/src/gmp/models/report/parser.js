@@ -111,7 +111,19 @@ export const parse_tls_certificates = (report, filter) => {
 
         const cert = get_cert(host_certs, fingerprint);
 
-        cert.data = value;
+        // currently cert data starts with x509:
+        // not sure if there are other types of certs
+        // therefore keep orginal data
+
+        cert._data = value;
+
+        if (value.includes(':')) {
+          const [, data] = value.split(':');
+          cert.data = data;
+        }
+        else {
+          cert.data = value;
+        }
       }
       else if (name === 'hostname') {
         // collect hostnames
@@ -269,7 +281,7 @@ export const parse_apps = (report, filter) => {
   const {count: full_count} = apps;
   const severities = {};
 
-  // if the there are several results find the highest severity for the cpe
+  // if there are several results find the highest severity for the cpe
   for_each(results.result, result => {
     const result_severity = parse_severity(result.severity);
     if (is_defined(result.detection)) {
