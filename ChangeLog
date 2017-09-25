@@ -1,5 +1,10 @@
 2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/row.js: Add temporary link to the
+	legacy report details page.
+
+2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/reports/detailscontent.js,
 	src/html/classic/ng/src/web/pages/reports/resultstab.js,
