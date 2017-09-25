@@ -185,9 +185,8 @@ export const parse_ports = (report, filter) => {
   for_each(ports.port, port => {
     const {__text: id} = port;
 
-    let tport = temp_ports[id];
-
-    if (!id.startsWith('general')) {
+    if (is_defined(id) && !id.startsWith('general')) {
+      let tport = temp_ports[id];
 
       if (is_defined(tport)) {
         const severity = parse_severity(port.severity);
