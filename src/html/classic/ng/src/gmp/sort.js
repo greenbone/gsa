@@ -115,4 +115,7 @@ export const make_compare_date = make_compare_plain;
 
 export const make_compare_ip = make_compare(ip_to_number);
 
+export const make_compare_severity = (name = 'severity') =>
+  make_compare_number(name, 0);
+
 // vim: set ts=2 sw=2 tw=80:
