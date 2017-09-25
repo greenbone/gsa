@@ -31,6 +31,7 @@ import {first, is_defined} from 'gmp/utils.js';
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import {create_pem_certificate} from '../../utils/cert.js';
 
 import NoticeDialog from '../../components/dialog/noticedialog.js';
 
@@ -70,6 +71,8 @@ class ReportDetails extends React.Component {
     this.handleReportDownload = this.handleReportDownload.bind(this);
     this.handleReportFormatChange = this.handleReportFormatChange.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
+    this.handleTlsCertificateDownload = this.handleTlsCertificateDownload
+      .bind(this);
   }
 
   componentDidMount() {
@@ -304,6 +307,17 @@ class ReportDetails extends React.Component {
     }, this.handleError);
   }
 
+  handleTlsCertificateDownload(cert) {
+    const {onDownload} = this.props;
+
+    const {data, serial} = cert;
+
+    onDownload({
+      filename: 'tls-cert-' + serial + '.pem',
+      data: create_pem_certificate(data),
+    });
+  }
+
   handleFilterCreated(filter) {
     const {id} = this.state;
 
@@ -353,6 +367,7 @@ class ReportDetails extends React.Component {
           {...this.state}
           onActivateTab={this.handleActivateTab}
           onAddToAssetsClick={this.handleAddToAssets}
+          onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
           onError={this.handleError}
           onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
           onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}

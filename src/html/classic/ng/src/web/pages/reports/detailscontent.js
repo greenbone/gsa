@@ -203,6 +203,7 @@ const PageContent = ({
   report_format_id,
   onActivateTab,
   onAddToAssetsClick,
+  onTlsCertificateDownloadClick,
   onError,
   onFilterAddLogLevelClick,
   onFilterChanged,
@@ -447,6 +448,8 @@ const PageContent = ({
               >
                 {props => (
                   <TLSCertificatesTable
+                    onTlsCertificateDownloadClick={
+                      onTlsCertificateDownloadClick}
                     {...props}
                   />
                 )}
@@ -492,6 +495,7 @@ PageContent.propTypes = {
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,
   onTagSuccess: PropTypes.func.isRequired,
+  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
 export default PageContent;

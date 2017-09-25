@@ -6,6 +6,13 @@
 
 2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/detailscontent.js,
+	src/html/classic/ng/src/web/pages/reports/detailspage.js,
+	src/html/classic/ng/src/web/pages/reports/tlscertificatestable.js: Allow to
+	download pem files of x509 certificates at the report details page.
+
+2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/utils/cert.js: Add utility function to create a
 	pem file from a x509 certificate.

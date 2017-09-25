@@ -27,6 +27,8 @@ import _, {short_date} from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Icon from '../../components/icon/icon.js';
+
 import Link from '../../components/link/link.js';
 
 import TableData from '../../components/table/data.js';
@@ -94,6 +96,7 @@ Header.propTypes = {
 const Row = ({
   entity,
   links = true,
+  onTlsCertificateDownloadClick,
 }) => {
   const {issuer, serial, notafter, notbefore, hostname, ip, port} = entity;
   return (
@@ -127,6 +130,12 @@ const Row = ({
         {port}
       </TableData>
       <TableData flex align="center">
+        <Icon
+          img="download.svg"
+          title={_('Download TLS Certificate')}
+          value={entity}
+          onClick={onTlsCertificateDownloadClick}
+        />
       </TableData>
     </TableRow>
   );
@@ -135,6 +144,7 @@ const Row = ({
 Row.propTypes = {
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
+  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
 export default createEntitiesTable({
