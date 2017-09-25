@@ -73,6 +73,17 @@ import EntityInfo from '../../entity/info.js';
 import ReportEntitiesContainer from './reportentitiescontainer.js';
 import Summary from './summary.js';
 
+import {
+  apps_sort_functions,
+  closed_cves_sort_functions,
+  cves_sort_functions,
+  errors_sort_functions,
+  hosts_sort_functions,
+  operatingssystems_sort_functions,
+  ports_sort_functions,
+  tls_certificates_sort_functions,
+} from './sort.js';
+
 const StyledSection = glamorous(Section, {
   diplayName: 'Section',
 })({
@@ -358,7 +369,10 @@ const PageContent = ({
               />
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={hosts}>
+              <ReportEntitiesContainer
+                entities={hosts}
+                sortFunctions={hosts_sort_functions}
+              >
                 {props => (
                   <HostsTable
                     {...props}
@@ -367,7 +381,10 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={ports}>
+              <ReportEntitiesContainer
+                entities={ports}
+                sortFunctions={ports_sort_functions}
+              >
                 {props => (
                   <PortsTable
                     {...props}
@@ -376,7 +393,10 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={applications}>
+              <ReportEntitiesContainer
+                entities={applications}
+                sortFunctions={apps_sort_functions}
+              >
                 {props => (
                   <ApplicationsTable
                     {...props}
@@ -385,7 +405,10 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={operatingsystems}>
+              <ReportEntitiesContainer
+                entities={operatingsystems}
+                sortFunctions={operatingssystems_sort_functions}
+              >
                 {props => (
                   <OperatingSystemsTable
                     {...props}
@@ -394,7 +417,10 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={cves}>
+              <ReportEntitiesContainer
+                entities={cves}
+                sortFunctions={cves_sort_functions}
+              >
                 {props => (
                   <CvesTable
                     {...props}
@@ -403,7 +429,10 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={closed_cves}>
+              <ReportEntitiesContainer
+                entities={closed_cves}
+                sortFunctions={closed_cves_sort_functions}
+              >
                 {props => (
                   <ClosedCvesTable
                     {...props}
@@ -412,7 +441,10 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={tls_certificates}>
+              <ReportEntitiesContainer
+                entities={tls_certificates}
+                sortFunctions={tls_certificates_sort_functions}
+              >
                 {props => (
                   <TLSCertificatesTable
                     {...props}
@@ -421,7 +453,10 @@ const PageContent = ({
               </ReportEntitiesContainer>
             </TabPanel>
             <TabPanel>
-              <ReportEntitiesContainer entities={errors}>
+              <ReportEntitiesContainer
+                entities={errors}
+                sortFunctions={errors_sort_functions}
+              >
                 {props => (
                   <ErrorsTable
                     {...props}

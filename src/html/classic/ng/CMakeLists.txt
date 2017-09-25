@@ -447,6 +447,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/resultstab.js
      ${NG_SRC_DIR}/src/web/pages/reports/row.js
      ${NG_SRC_DIR}/src/web/pages/reports/scaninfo.js
+     ${NG_SRC_DIR}/src/web/pages/reports/sort.js
      ${NG_SRC_DIR}/src/web/pages/reports/summary.js
      ${NG_SRC_DIR}/src/web/pages/reports/table.js
      ${NG_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js

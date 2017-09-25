@@ -31,6 +31,8 @@ import EmptyReport from './emptyreport.js';
 import EmptyResultsReport from './emptyresultsreport.js';
 import ReportEntitiesContainer from './reportentitiescontainer.js';
 
+import {results_sort_functions} from './sort.js';
+
 const ResultsTab = ({
   filter,
   results,
@@ -65,7 +67,10 @@ const ResultsTab = ({
     }
   }
   return (
-    <ReportEntitiesContainer entities={results}>
+    <ReportEntitiesContainer
+      entities={results}
+      sortFunctions={results_sort_functions}
+    >
       {props => (
         <ResultsTable
           {...props}

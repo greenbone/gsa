@@ -73,7 +73,7 @@ const Header = ({
         {_('Hostname')}
       </TableHead>
       <TableHead
-        sortby={sort ? '' : false}
+        sortby={sort ? 'port' : false}
         onSortChange={onSortChange}>
         {_('Port')}
       </TableHead>

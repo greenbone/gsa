@@ -1,5 +1,14 @@
 2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/reports/detailscontent.js,
+	src/html/classic/ng/src/web/pages/reports/resultstab.js,
+	src/html/classic/ng/src/web/pages/reports/sort.js,
+	src/html/classic/ng/src/web/pages/reports/tlscertificatestable.js: Sort report
+	tables via javascript.
+
+2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/sort.js: Add sort compare function for severity.
 
 2017-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
