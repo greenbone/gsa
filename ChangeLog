@@ -1,5 +1,11 @@
 2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/report/parser.js: Be paranoid about
+	missing report details data. Don't fail parsing of report details data if the
+	expected data structure isn't available.
+
+2017-09-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/parser.js: Fix report details for
 	CVE scanners. There are no ports with id at cve scanner report details.
 

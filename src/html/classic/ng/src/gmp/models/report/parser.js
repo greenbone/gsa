@@ -79,7 +79,7 @@ export const parse_tls_certificates = (report, filter) => {
     let hostname;
 
     for_each(host.detail, detail => {
-      const {name, value} = detail;
+      const {name = '', value = ''} = detail;
 
       if (name.startsWith('SSLInfo')) {
         const [port, fingerprint] = value.split('::');
@@ -230,24 +230,26 @@ export const parse_vulnerabilities = (report, filter) => {
   }
 
   for_each(results.result, result => {
-    const {nvt, host} = result;
+    const {nvt = {}, host} = result;
     const {_oid: oid} = nvt;
 
-    const severity = parse_severity(result.severity);
+    if (is_defined(oid)) {
+      const severity = parse_severity(result.severity);
 
-    let vuln = temp_vulns[oid];
+      let vuln = temp_vulns[oid];
 
-    if (is_defined(vuln)) {
+      if (is_defined(vuln)) {
 
-      vuln.addResult(results);
+        vuln.addResult(results);
+      }
+      else {
+        vuln = new Vulerability(result);
+        temp_vulns[oid] = vuln;
+      }
+
+      vuln.setSeverity(severity);
+      vuln.addHost(host);
     }
-    else {
-      vuln = new Vulerability(result);
-      temp_vulns[oid] = vuln;
-    }
-
-    vuln.setSeverity(severity);
-    vuln.addHost(host);
   });
 
   const vulns_array = Object.values(temp_vulns);
@@ -283,20 +285,25 @@ export const parse_apps = (report, filter) => {
   // if there are several results find the highest severity for the cpe
   for_each(results.result, result => {
     const result_severity = parse_severity(result.severity);
-    if (is_defined(result.detection)) {
+
+    if (is_defined(result.detection) && is_defined(result.detection.result) &&
+      is_defined(result.detection.result.details)) {
       filter_func(result.detection.result.details.detail,
         detail => detail.name === 'product'
       ).forEach(detail => {
         const {value: cpe} = detail;
-        const severity = severities[cpe];
 
-        if (is_defined(severity)) {
-          if (severity < result_severity) {
+        if (is_defined(cpe)) {
+          const severity = severities[cpe];
+
+          if (is_defined(severity)) {
+            if (severity < result_severity) {
+              severities[cpe] = result_severity;
+            }
+          }
+          else {
             severities[cpe] = result_severity;
           }
-        }
-        else {
-          severities[cpe] = result_severity;
         }
       });
     }
@@ -307,7 +314,7 @@ export const parse_apps = (report, filter) => {
     const {detail: details} = host;
 
     for_each(details, detail => {
-      const {name} = detail;
+      const {name = ''} = detail;
 
       if (name === 'App') {
         const cpe = detail.value;
@@ -365,16 +372,19 @@ export const parse_host_severities = (results = {}) => {
   for_each(results.result, result => {
     const {host} = result;
     const {__text: ip} = host;
-    const result_severity = parse_severity(result.severity);
-    const severity = severities[ip];
 
-    if (is_defined(severity)) {
-      if (severity < result_severity) {
+    if (is_defined(ip)) {
+      const result_severity = parse_severity(result.severity);
+      const severity = severities[ip];
+
+      if (is_defined(severity)) {
+        if (severity < result_severity) {
+          severities[ip] = result_severity;
+        }
+      }
+      else {
         severities[ip] = result_severity;
       }
-    }
-    else {
-      severities[ip] = result_severity;
     }
   });
 
@@ -398,29 +408,31 @@ export const parse_operatingsystems = (report, filter) => {
     let best_os_cpe;
     let best_os_txt;
 
-    for_each(details, detail => {
-      const {name, value} = detail;
-      if (name === 'best_os_cpe') {
-        best_os_cpe = value;
-      }
-      else if (name === 'best_os_txt') {
-        best_os_txt = value;
-      }
-    });
+    if (is_defined(ip)) {
+      for_each(details, detail => {
+        const {name, value} = detail;
+        if (name === 'best_os_cpe') {
+          best_os_cpe = value;
+        }
+        else if (name === 'best_os_txt') {
+          best_os_txt = value;
+        }
+      });
 
-    if (is_defined(best_os_cpe)) {
-      let os = operating_systems[best_os_cpe];
-      const severity = severities[ip];
+      if (is_defined(best_os_cpe)) {
+        let os = operating_systems[best_os_cpe];
+        const severity = severities[ip];
 
-      if (!is_defined(os)) {
-        os = operating_systems[best_os_cpe] = new OperatingSystem({
-          best_os_cpe,
-          best_os_txt,
-        });
+        if (!is_defined(os)) {
+          os = operating_systems[best_os_cpe] = new OperatingSystem({
+            best_os_cpe,
+            best_os_txt,
+          });
+        }
+
+        os.addHost(host);
+        os.addSeverity(severity);
       }
-
-      os.addHost(host);
-      os.addSeverity(severity);
     }
   });
 
@@ -512,25 +524,32 @@ export const parse_errors = (report, filter) => {
   const {count: full_count} = errors;
 
   const hosts_by_ip = {};
+
   for_each(hosts, host => {
     let hostname;
+    const {ip} = host;
 
-    for_each(host.detail, detail => {
-      const {name, value} = detail;
-      if (name === 'hostname') {
-        // collect hostname
-        hostname = value;
-      }
-    });
+    if (is_defined(ip)) {
+      for_each(host.detail, detail => {
+        const {name, value} = detail;
+        if (name === 'hostname') {
+          // collect hostname
+          hostname = value;
+        }
+      });
 
-    hosts_by_ip[host.ip] = {
-      ip: host.ip,
-      id: is_defined(host.asset) ? host.asset._asset_id : undefined,
-      name: hostname,
-    };
+      hosts_by_ip[ip] = {
+        ip,
+        id: is_defined(host.asset) ? host.asset._asset_id : undefined,
+        name: hostname,
+      };
+    }
   });
 
-  const errors_array = map(errors.error, error => {
+  const errors_array = filter_func(errors.error, error => {
+    const {host: ip, nvt} = error;
+    return is_defined(ip) && is_defined(nvt);
+  }).map(error => {
     const {host: ip, description, port, nvt} = error;
     return {
       description,
@@ -578,24 +597,26 @@ export const parse_closed_cves = (report, filter) => {
     let hostname;
 
     for_each(host.detail, detail => {
-      const {name, value, extra, source} = detail;
+      const {name, value = '', extra, source} = detail;
 
-      if (name.startsWith('Closed CVE')) {
-        host_cves = host_cves.concat(value.split(',').map(val => {
-          return {
-            id: val.trim(),
-            host: {
-              ip: host.ip,
-              id: is_defined(host.asset) ? host.asset._asset_id : undefined,
-            },
-            source,
-            severity: parse_severity(extra),
-          };
-        }));
-      }
-      else if (name === 'hostname') {
-        // collect hostname
-        hostname = value;
+      if (is_defined(name)) {
+        if (name.startsWith('Closed CVE')) {
+          host_cves = host_cves.concat(value.split(',').map(val => {
+            return {
+              id: val.trim(),
+              host: {
+                ip: host.ip,
+                id: is_defined(host.asset) ? host.asset._asset_id : undefined,
+              },
+              source,
+              severity: parse_severity(extra),
+            };
+          }));
+        }
+        else if (name === 'hostname') {
+          // collect hostname
+          hostname = value;
+        }
       }
     });
 
@@ -638,18 +659,24 @@ export const parse_cves = (report, filter) => {
   result => result.nvt.cve !== 'NOCVE');
 
   results_with_cve.forEach(result => {
-    const {host, nvt} = result;
-    const {__text: ip} = host;
+    const {host = {}, nvt = {}} = result;
     const {cve: id} = nvt;
-    let cve = cves[id];
 
-    if (!is_defined(cve)) {
-      cve = new Cve(nvt);
-      cves[id] = cve;
+    if (is_defined(id)) {
+      let cve = cves[id];
+
+      if (!is_defined(cve)) {
+        cve = new Cve(nvt);
+        cves[id] = cve;
+      }
+
+      const {__text: ip} = host;
+
+      if (is_defined(ip)) {
+        cve.addHost({ip});
+      }
+      cve.addResult(result);
     }
-
-    cve.addHost({ip});
-    cve.addResult(result);
   });
 
   const cves_array = Object.values(cves);
