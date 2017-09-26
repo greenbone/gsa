@@ -46,7 +46,7 @@ class IconComponent extends React.Component {
   }
 
   handleClick() {
-    let {value, onClick} = this.props;
+    const {value, onClick} = this.props;
 
     if (onClick) {
       onClick(value);
@@ -54,8 +54,8 @@ class IconComponent extends React.Component {
   }
 
   render() {
-    const {img, href, alt = '', value, onClick, ...other} = this.props; // eslint-disable-line no-unused-vars
-    let img_path = get_img_url(img);
+    const {img, href, alt = '', value, onClick, ...other} = this.props;
+    const img_path = get_img_url(img);
 
     if (href) {
       return (

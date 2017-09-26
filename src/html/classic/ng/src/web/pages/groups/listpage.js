@@ -102,7 +102,7 @@ class Page extends React.Component {
         comment: group.comment,
         users,
       }, {
-        title: _('Edit Group {{name}}', group)
+        title: _('Edit Group {{name}}', group),
       });
     }
     else {

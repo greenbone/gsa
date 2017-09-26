@@ -134,7 +134,7 @@ class Page extends React.Component {
           role_ids: role_ids,
           settings: response.data,
         }, {
-          title: _('Edit User {{name}}', user)
+          title: _('Edit User {{name}}', user),
         });
       }
       else {
@@ -184,7 +184,7 @@ class Page extends React.Component {
         }
 
         promise.then(deleteUsers => {
-          let ids = deleteUsers.map(luser => luser.id);
+          const ids = deleteUsers.map(luser => luser.id);
 
           users = users.filter(luser => !ids.includes(luser.id));
 
@@ -225,9 +225,9 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entities: PropTypes.collection,
-  entityCommand: PropTypes.entitycommand,
   entitiesCommand: PropTypes.entitiescommand,
   entitiesSelected: PropTypes.set,
+  entityCommand: PropTypes.entitycommand,
   filter: PropTypes.filter,
   selectionType: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,

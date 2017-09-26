@@ -1,5 +1,12 @@
 2017-09-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/icon/icon.js,
+	src/html/classic/ng/src/web/pages/groups/listpage.js,
+	src/html/classic/ng/src/web/pages/users/listpage.js: Update coding style to
+	fix eslint warnings.
+
+2017-09-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/filter.js: Add a report formats filter
 	filter.
 
