@@ -1,5 +1,10 @@
 2017-09-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/filter.js: Add a report formats filter
+	filter.
+
+2017-09-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/users/listpage.js: Only allow the current
 	user to create a new user with groups the current user can edit. This ports
 	r29337 to ng.
