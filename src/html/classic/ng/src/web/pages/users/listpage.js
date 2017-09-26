@@ -141,7 +141,9 @@ class Page extends React.Component {
         this.dialog.show({settings: response.data});
       }
 
-      gmp.groups.getAll().then(groups =>
+      gmp.groups.getAll({
+        filter: 'permission=modify_group', //  list only groups current user may modify
+      }).then(groups =>
         this.dialog.setValue('groups', groups));
       gmp.roles.getAll().then(roles => this.dialog.setValue('roles', roles));
     });
