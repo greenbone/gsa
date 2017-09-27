@@ -23,9 +23,13 @@
 
 import logger from '../log.js';
 
+import {is_defined} from '../utils.js';
+
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Report from '../models/report.js';
+
+import {ALL_FILTER} from '../models/filter.js';
 
 const log = logger.getLogger('gmp.commands.reports');
 
@@ -59,14 +63,14 @@ class ReportCommand extends EntityCommand {
   }
 
   download({id}, {report_format_id, filter}) {
-    const params = {
+    return this.httpGet({
       cmd: 'get_report',
       report_id: id,
       report_format_id,
-      filter,
-    };
-    return this.httpGet(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+      filter: is_defined(filter) ? filter.all() : ALL_FILTER,
+    }, {
+      plain: true,
+    }).then(response => response.setData(response.data.responseText));
   }
 
   addAssets({id}, {filter = ''}) {

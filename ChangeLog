@@ -1,3 +1,9 @@
+2017-09-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/commands/reports.js: Always export all results
+	(max rows) of the report not only the defined count at the displayed rows
+	param of the filter.
+
 2017-09-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/components/icon/icon.js,
