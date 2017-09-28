@@ -1,5 +1,10 @@
 2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/detailspage.js: Don't crash if the
+	page will be unmounted and no ref to the notice dialog is available.
+
+2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/reportentitiescontainer.js: Fix
 	pagination of report entites tables when a report is reloaded. Don't move to
 	the first page if a report has been reloaded.

@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 
-import {first, is_defined} from 'gmp/utils.js';
+import {first, has_value, is_defined} from 'gmp/utils.js';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -223,19 +223,23 @@ class ReportDetails extends React.Component {
   }
 
   handleShowError(message) {
-    this.notice_dialog.show({
-      message,
-    }, {
-      title: _('Error'),
-    });
+    if (has_value(this.notice_dialog)) {
+      this.notice_dialog.show({
+        message,
+      }, {
+        title: _('Error'),
+      });
+    }
   }
 
   handleShowSuccess(message) {
-    this.notice_dialog.show({
-      message,
-    }, {
-      title: _('Success'),
-    });
+    if (has_value(this.notice_dialog)) {
+      this.notice_dialog.show({
+        message,
+      }, {
+        title: _('Success'),
+      });
+    }
   }
 
   handleFilterChange(filter) {
