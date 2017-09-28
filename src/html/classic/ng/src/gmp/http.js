@@ -66,7 +66,7 @@ class Rejection {
   }
 }
 
-export const DEFAULT_TIMEOUT = 60000; // 60 sec
+export const DEFAULT_TIMEOUT = 300000; // 5 min
 
 export function build_url_params(params) {
   let argcount = 0;

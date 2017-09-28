@@ -1,5 +1,10 @@
 2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/http.js: Extend the default timeout to 5
+	minutes.
+
+2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Add support for CancelToken in all http
 	requests. Canceling a request will result in a promise rejection with
 	REASON_CANCEL set. This can be checked in the promise.catch method then.
