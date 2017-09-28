@@ -34,9 +34,13 @@ import {parse_envelope_meta} from './parser.js';
 
 const log = logger.getLogger('gmp.http');
 
+const REASON_ERROR = 'error';
+const REASON_TIMEOUT = 'timeout';
+const REASON_CANCEL = 'cancel';
+
 class Rejection {
 
-  constructor(xhr, reason = 'error', message = '') {
+  constructor(xhr, reason = REASON_ERROR, message = '') {
     this.name = 'Rejection';
     this.message = message;
     this.reason = reason;
@@ -45,11 +49,11 @@ class Rejection {
   }
 
   isError() {
-    return this.reason === 'error';
+    return this.reason === REASON_ERROR;
   }
 
   isTimeout() {
-    return this.reason === 'timeout';
+    return this.reason === REASON_TIMEOUT;
   }
 
   setMessage(message) {
@@ -231,7 +235,7 @@ export class Http {
 
     promise.catch(request => {
 
-      const rej = new Rejection(request, 'error');
+      const rej = new Rejection(request, REASON_ERROR);
       try {
         reject(this.transformRejection(rej, options));
       }
@@ -243,7 +247,7 @@ export class Http {
   }
 
   handleTimeout(resolve, reject, xhr, options) {
-    const rej = new Rejection(xhr, 'timeout',
+    const rej = new Rejection(xhr, REASON_TIMEOUT,
       _('A timeout for the request to url {{- url}} occurred.',
         {url: options.url}));
     try {
@@ -258,7 +262,7 @@ export class Http {
   handleCancel(resolve, reject, xhr, options) {
     // canceling the promise is currently not possible but should be supported
     // in future
-    const rej = new Rejection(xhr, 'cancel');
+    const rej = new Rejection(xhr, REASON_CANCEL);
     try {
       reject(this.transformRejection(rej, options));
     }
@@ -336,7 +340,7 @@ export class GmpHttp extends Http {
     catch (error) {
       log.error('An error occurred while converting gmp response to js for ' +
         'url', this.url, xhr);
-      throw new Rejection(xhr, 'error', _('An error occurred while ' +
+      throw new Rejection(xhr, REASON_ERROR, _('An error occurred while ' +
         'converting gmp response to js for url {{- url}}', {url: options.url}));
     }
   }
