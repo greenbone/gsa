@@ -172,7 +172,10 @@ class ReportDetails extends React.Component {
       }
 
       const rej = this.handleError(err);
-      this.setState({entity: undefined});
+      this.setState({
+        entity: undefined,
+        loading: false,
+      });
       return rej;
     });
   }
