@@ -140,6 +140,7 @@ export class Http {
     data,
     url = this.url,
     cache,
+    cancel_token,
     force = false,
     ...other
   }) {
@@ -207,8 +208,15 @@ export class Http {
       };
 
       xhr.onabort = function() {
-        self.handleCancel(resolve, reject, this, options);
+        log.debug('Canceled http request', method, url);
       };
+
+      if (is_defined(cancel_token)) {
+        cancel_token.promise.then(reason => {
+          xhr.abort();
+          reject(new Rejection(this, REASON_CANCEL, reason));
+        });
+      }
 
       xhr.send(formdata);
     });
@@ -260,19 +268,6 @@ export class Http {
     catch (error) {
       log.error('Error while transforming timeout rejection', error);
       reject(rej);
-    }
-  }
-
-  handleCancel(resolve, reject, xhr, options) {
-    // canceling the promise is currently not possible but should be supported
-    // in future
-    const rej = new Rejection(xhr, REASON_CANCEL);
-    try {
-      reject(this.transformRejection(rej, options));
-    }
-    catch (error) {
-      log.error('Error while transforming cancel rejection', error);
-      reject(error);
     }
   }
 
