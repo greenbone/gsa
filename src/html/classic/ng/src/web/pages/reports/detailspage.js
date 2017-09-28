@@ -113,6 +113,8 @@ class ReportDetails extends React.Component {
     log.debug('Loading report', id);
     const {gmp} = this.context;
 
+    this.setState({loading: true});
+
     return gmp.report.get({id}, {
       filter,
       extra_params: {

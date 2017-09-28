@@ -1,3 +1,9 @@
+2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/pages/reports/detailscontent.js,
+	src/html/classic/ng/src/web/pages/reports/detailspage.js: Display loading
+	component when report is loading and no report has been loaded yet.
+
 2017-09-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/http.js: Remove option to set a promise factory

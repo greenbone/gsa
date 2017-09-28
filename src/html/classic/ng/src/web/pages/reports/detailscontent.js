@@ -42,6 +42,8 @@ import IconDivider from '../../components/layout/icondivider.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
+import Loading from '../../components/loading/loading.js';
+
 import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
 
@@ -198,6 +200,7 @@ const PageContent = ({
   entity,
   filter,
   filters,
+  loading = false,
   report_formats,
   report_format_id,
   onActivateTab,
@@ -217,7 +220,9 @@ const PageContent = ({
   onTagSuccess,
 }) => {
   if (!is_defined(entity)) {
-    return null;
+    return (
+      <Loading loading={loading}/>
+    );
   }
 
   const {
@@ -481,6 +486,7 @@ PageContent.propTypes = {
   entity: PropTypes.model,
   filter: PropTypes.filter,
   filters: PropTypes.arrayLike,
+  loading: PropTypes.bool,
   report_format_id: PropTypes.id,
   report_formats: PropTypes.collection,
   onActivateTab: PropTypes.func.isRequired,
