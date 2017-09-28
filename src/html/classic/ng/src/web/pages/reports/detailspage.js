@@ -26,6 +26,8 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 
+import CancelToken from 'gmp/cancel.js';
+
 import {first, has_value, is_defined} from 'gmp/utils.js';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
@@ -85,6 +87,7 @@ class ReportDetails extends React.Component {
   }
 
   componentWillUnmount() {
+    this.cancelLastRequest();
     this.clearTimer();
   }
 
@@ -109,18 +112,31 @@ class ReportDetails extends React.Component {
     }
   }
 
+  cancelLastRequest() {
+    if (is_defined(this.cancel)) {
+      this.cancel();
+    }
+  }
+
   load(id, filter) {
     log.debug('Loading report', id);
     const {gmp} = this.context;
+
+    this.cancelLastRequest();
+
+    const token = new CancelToken(cancel => this.cancel = cancel);
 
     this.setState({loading: true});
 
     return gmp.report.get({id}, {
       filter,
+      cancel_token: token,
       extra_params: {
         ignore_pagination: '1',
       },
     }).then(response => {
+
+      this.cancel = undefined;
 
       const {data: entity, meta} = response;
       const {report} = entity;
@@ -151,6 +167,10 @@ class ReportDetails extends React.Component {
       }
     })
     .catch(err => {
+      if (is_defined(err.isCancel) && err.isCancel()) {
+        return;
+      }
+
       const rej = this.handleError(err);
       this.setState({entity: undefined});
       return rej;
