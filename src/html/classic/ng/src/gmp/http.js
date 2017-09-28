@@ -27,7 +27,7 @@ import _ from './locale.js';
 
 import {is_defined, has_value, is_array, extend} from './utils.js';
 
-import PromiseFactory from './promise.js';
+import Promise from './promise.js';
 import Response from './response.js';
 import xml2json from './xml2json.js';
 import {parse_envelope_meta} from './parser.js';
@@ -87,13 +87,11 @@ export class Http {
   constructor(url, options = {}) {
     const {
       timeout = DEFAULT_TIMEOUT,
-      promise_factory = PromiseFactory,
     } = options;
 
     this.url = url;
     this.params = {};
     this.timeout = timeout;
-    this.promise_factory = promise_factory;
 
     this.interceptors = [];
 
@@ -158,7 +156,7 @@ export class Http {
         dirty: entry.dirty,
       });
 
-      return this.promise_factory.resolve(responsedata);
+      return Promise.resolve(responsedata);
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
@@ -175,7 +173,7 @@ export class Http {
       ...other,
     };
 
-    const promise = this.promise_factory.create(function(resolve, reject) {
+    const promise = Promise.create(function(resolve, reject) {
       xhr = new XMLHttpRequest();
 
       xhr.open(method, url, true);
@@ -225,7 +223,7 @@ export class Http {
   }
 
   handleError(resolve, reject, xhr, options) {
-    let promise = PromiseFactory.resolve(xhr);
+    let promise = Promise.resolve(xhr);
 
     for (const interceptor of this.interceptors) {
       promise = promise.then(interceptor.responseError);
@@ -291,7 +289,7 @@ export class HttpInterceptor {
   }
 
   responseError(xhr) {
-    return PromiseFactory.reject(xhr);
+    return Promise.reject(xhr);
   }
 }
 
