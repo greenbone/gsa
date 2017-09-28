@@ -48,6 +48,10 @@ class Rejection {
     this.stack = (new Error()).stack;
   }
 
+  isCancel() {
+    return this.reason === REASON_CANCEL;
+  }
+
   isError() {
     return this.reason === REASON_ERROR;
   }
