@@ -1,5 +1,11 @@
 2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/reportentitiescontainer.js: Fix
+	pagination of report entites tables when a report is reloaded. Don't move to
+	the first page if a report has been reloaded.
+
+2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/detailscontent.js,
 	src/html/classic/ng/src/web/pages/reports/detailspage.js: Display loading
 	component when report is loading and no report has been loaded yet.

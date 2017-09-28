@@ -62,11 +62,20 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   updateFromEntities(entities) {
+    const {
+      sort: state_sort,
+    } = this.state;
+
     const counts = entities.getCounts();
     const filter = entities.getFilter();
 
-    const reverse = filter.get('sort-reverse');
-    const field = is_defined(reverse) ? reverse : filter.get('sort');
+    const reverse_field = filter.get('sort-reverse');
+    const reverse = is_defined(reverse_field);
+    const field = reverse ? reverse_field : filter.get('sort');
+
+    // only goto first page if sorting has changed
+    const next = !is_defined(state_sort) || state_sort.reverse !== reverse ||
+      state_sort.field !== field ? counts.first - 1 : undefined;
 
     const sort = {
       reverse,
@@ -75,7 +84,7 @@ class ReportEntitiesContainer extends React.Component {
 
     this.load({
       entities,
-      next_entity_index: counts.first - 1,
+      next_entity_index: next,
       sort,
     });
   }
