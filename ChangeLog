@@ -1,5 +1,14 @@
 2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/component.js,
+	src/html/classic/ng/src/web/pages/targets/component.js:: Provide reusable
+	components for entity and target specific access. These components are using
+	the "render props" pattern and should replace the with<entity type>Component
+	HOCs at the end (or at least make them easier to implement).
+
+2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/emptyreport.js: Update message
 	when the report is empty.
 
