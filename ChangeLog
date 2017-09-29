@@ -1,5 +1,11 @@
 2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/package.json,
+	src/html/classic/ng/yarn.lock: Update js dependencies. We are using react 16
+	now.
+
+2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/form/form.js,
 	src/html/classic/ng/src/web/components/form/withClickHandler.js: Move
