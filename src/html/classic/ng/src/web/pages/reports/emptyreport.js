@@ -78,8 +78,9 @@ const EmptyReport = ({
             onClick={may_edit_target ? onTargetEditClick : undefined}
           >
             {_('You should change the Alive Test Method of the ' +
-              'target. However, if the targets are indeed dead, ' +
-              'the scan duration might increase significantly.')}
+               'target for the next scan. However, if the target hosts ' +
+               'are indeed dead, the scan duration might increase ' +
+               'significantly.')}
           </ReportPanel>
         }
       </Divider>
