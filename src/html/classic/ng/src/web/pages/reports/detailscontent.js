@@ -218,6 +218,7 @@ const PageContent = ({
   onReportDownloadClick,
   onReportFormatChange,
   onTagSuccess,
+  onTargetEditClick,
 }) => {
   if (!is_defined(entity)) {
     return (
@@ -319,6 +320,7 @@ const PageContent = ({
   );
   return (
     <Layout
+      grow
       flex="column"
       align={['start', 'stretch']}
     >
@@ -374,6 +376,7 @@ const PageContent = ({
                 onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                 onFilterEditClick={onFilterEditClick}
                 onFilterResetClick={onFilterResetClick}
+                onTargetEditClick={onTargetEditClick}
               />
             </TabPanel>
             <TabPanel>
@@ -503,6 +506,7 @@ PageContent.propTypes = {
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,
   onTagSuccess: PropTypes.func.isRequired,
+  onTargetEditClick: PropTypes.func.isRequired,
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 

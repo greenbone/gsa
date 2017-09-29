@@ -91,7 +91,7 @@ const EmptyReport = ({
 EmptyReport.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   progress: PropTypes.numberOrNumberString,
-  onTargetEditClick: PropTypes.func,
+  onTargetEditClick: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(EmptyReport);

@@ -42,6 +42,7 @@ const ResultsTab = ({
   onFilterEditClick,
   onFilterRemoveSeverityClick,
   onFilterResetClick,
+  onTargetEditClick,
 }) => {
   const {counts} = results;
   if (counts.filtered === 0) {
@@ -49,6 +50,7 @@ const ResultsTab = ({
       return (
         <EmptyReport
           progress={progress}
+          onTargetEditClick={onTargetEditClick}
         />
       );
     }
@@ -89,6 +91,7 @@ ResultsTab.propTypes = {
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
+  onTargetEditClick: PropTypes.func.isRequired,
 };
 
 export default ResultsTab;

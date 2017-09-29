@@ -41,10 +41,15 @@ import withDownload from '../../components/form/withDownload.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
+import TargetComponent from '../targets/component.js';
+
 import Page from './detailscontent.js';
 import FilterDialog from './detailsfilterdialog.js';
 
 const log = logger.getLogger('web.pages.report.details');
+
+const connect = (in_func, out_func) => (...args) =>
+  in_func(...args).then(out_func);
 
 class ReportDetails extends React.Component {
 
@@ -75,6 +80,8 @@ class ReportDetails extends React.Component {
     this.handleTimer = this.handleTimer.bind(this);
     this.handleTlsCertificateDownload = this.handleTlsCertificateDownload
       .bind(this);
+
+    this.loadTarget = this.loadTarget.bind(this);
   }
 
   componentDidMount() {
@@ -386,30 +393,44 @@ class ReportDetails extends React.Component {
     }
   }
 
+  loadTarget() {
+    const {entity} = this.state;
+    const {gmp} = this.context;
+    const {report} = entity;
+    const {task} = report;
+    const {target} = task;
+
+    return gmp.target.get(target).then(response => response.data);
+  }
+
   render() {
-    const {...props} = this.props;
     const {filter} = this.state;
     return (
       <Wrapper>
-        <Page
-          {...props}
-          {...this.state}
-          onActivateTab={this.handleActivateTab}
-          onAddToAssetsClick={this.handleAddToAssets}
-          onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
-          onError={this.handleError}
-          onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
-          onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
-          onFilterChanged={this.handleFilterChange}
-          onFilterCreated={this.handleFilterCreated}
-          onFilterEditClick={this.handleFilterEditClick}
-          onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
-          onFilterResetClick={this.handleFilterResetClick}
-          onRemoveFromAssetsClick={this.handleRemoveFromAssets}
-          onReportDownloadClick={this.handleReportDownload}
-          onReportFormatChange={this.handleReportFormatChange}
-          onTagSuccess={this.handleChanged}
-        />
+        <TargetComponent>
+          {({edit}) => (
+            <Page
+              {...this.props}
+              {...this.state}
+              onActivateTab={this.handleActivateTab}
+              onAddToAssetsClick={this.handleAddToAssets}
+              onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
+              onError={this.handleError}
+              onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
+              onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
+              onFilterChanged={this.handleFilterChange}
+              onFilterCreated={this.handleFilterCreated}
+              onFilterEditClick={this.handleFilterEditClick}
+              onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
+              onFilterResetClick={this.handleFilterResetClick}
+              onRemoveFromAssetsClick={this.handleRemoveFromAssets}
+              onReportDownloadClick={this.handleReportDownload}
+              onReportFormatChange={this.handleReportFormatChange}
+              onTagSuccess={this.handleChanged}
+              onTargetEditClick={connect(this.loadTarget, edit)}
+            />
+          )}
+        </TargetComponent>
         <NoticeDialog
           width="400px"
           ref={ref => this.notice_dialog = ref}
