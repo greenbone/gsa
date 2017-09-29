@@ -1,5 +1,13 @@
 2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/form/form.js,
+	src/html/classic/ng/src/web/components/form/withClickHandler.js: Move
+	withClickHandler HOC into and own js module and make it composable. Provide
+	a compatible version of the HOC in form.js.
+
+2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/task.js: Set entity type on target
 	Model instance of a report task.
 

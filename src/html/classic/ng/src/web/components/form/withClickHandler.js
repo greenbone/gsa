@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,23 +20,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import withChangeHandlerNew, {
-  noop_convert,
-  target_value,
-} from './withChangeHandler.js';
 
-import withClickHandlerNew from './withClickHandler.js';
+import React from 'react';
 
-export {noop_convert, target_value};
+import PropTypes from '../../utils/proptypes.js';
 
-export const withChangeHandler = (
-  Component,
-  options = {},
-) => withChangeHandlerNew(options)(Component);
+import {noop_convert} from './withChangeHandler.js';
 
-export const withClickHandler = (
-  Component,
-  options = {},
-) => withClickHandlerNew(options)(Component);
+const props_value = (event, props) => props.value;
+
+export const withClickHandler = (options = {}) => Component => {
+  const {
+    convert_func = noop_convert,
+    value_func = props_value,
+  } = options;
+
+  const ClickHandler = ({onClick, convert = convert_func, ...props}) => {
+
+    const handleClick = event => {
+      if (onClick) {
+        onClick(convert(value_func(event, props), props), props.name);
+      }
+    };
+
+    return <Component {...props} onClick={handleClick}/>;
+  };
+
+  ClickHandler.propTypes = {
+    convert: PropTypes.func,
+    name: PropTypes.string,
+    onClick: PropTypes.func,
+  };
+
+  return ClickHandler;
+};
+
+export default withClickHandler;
 
 // vim: set ts=2 sw=2 tw=80:

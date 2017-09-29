@@ -220,6 +220,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/textfield.js
      ${NG_SRC_DIR}/src/web/components/form/timezoneselect.js
      ${NG_SRC_DIR}/src/web/components/form/withChangeHandler.js
+     ${NG_SRC_DIR}/src/web/components/form/withClickHandler.js
      ${NG_SRC_DIR}/src/web/components/form/withDownload.js
      ${NG_SRC_DIR}/src/web/components/form/yesnoradio.js
      ${NG_SRC_DIR}/src/web/components/icon/cloneicon.js
