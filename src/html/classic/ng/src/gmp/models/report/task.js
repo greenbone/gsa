@@ -39,7 +39,7 @@ class ReportTask extends Model {
 
     const {target} = elem;
     if (is_defined(target) && !is_empty(target._id)) {
-      copy.target = new Model(target);
+      copy.target = new Model(target, 'target');
     }
     else {
       delete copy.target;
