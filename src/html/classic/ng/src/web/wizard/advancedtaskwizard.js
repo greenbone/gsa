@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../utils/proptypes.js';
 import {render_options} from '../utils/render.js';
 
-import {withDialog} from '../components/dialog/dialog.js';
+import withDialog from '../components/dialog/withDialog.js';
 
 import Select2 from '../components/form/select2.js';
 import Spinner from '../components/form/spinner.js';
@@ -294,7 +294,7 @@ AdvancedTaskWizard.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(AdvancedTaskWizard, {
+export default withDialog({
   title: _('Advanced Task Wizard'),
   footer: _('Create'),
   defaultState: {
@@ -303,6 +303,6 @@ export default withDialog(AdvancedTaskWizard, {
       auto_start: '2',
       ssh_port: 22,
   },
-});
+})(AdvancedTaskWizard);
 
 // vim: set ts=2 sw=2 tw=80:

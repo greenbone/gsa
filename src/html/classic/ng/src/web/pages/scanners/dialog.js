@@ -29,7 +29,7 @@ import {is_defined, filter, parse_int, select_save_id} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FootNote from '../../components/footnote/footnote.js';
 
@@ -297,7 +297,7 @@ ScannerDialog.propTypes = {
   onNewCredentialClick: PropTypes.func,
 };
 
-export default withDialog(ScannerDialog, {
+export default withDialog({
   title: _('New Scanner'),
   footer: _('Save'),
   defaultState: {
@@ -307,6 +307,6 @@ export default withDialog(ScannerDialog, {
     port: '9391',
     type: OPENVAS_SCANNER_TYPE,
   },
-});
+})(ScannerDialog);
 
 // vim: set ts=2 sw=2 tw=80:

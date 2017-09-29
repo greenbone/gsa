@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -55,7 +55,7 @@ ImportDialog.propTypes = {
 };
 
 
-export default withDialog(ImportDialog, {
+export default withDialog({
   title: _('Import Port List'),
   footer: _('Import'),
-});
+})(ImportDialog);

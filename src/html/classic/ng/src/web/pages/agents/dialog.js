@@ -30,7 +30,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -96,13 +96,13 @@ AgentDialog.propTypes = {
 };
 
 
-export default withDialog(AgentDialog, {
+export default withDialog({
   title: _('New Alert'),
   footer: _('Save'),
   defaultState: {
     comment: '',
     name: _('Unnamed'),
   },
-});
+})(AgentDialog);
 
 // vim: set ts=2 sw=2 tw=80:

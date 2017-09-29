@@ -36,7 +36,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import FileField from '../../components/form/filefield.js';
@@ -340,7 +340,7 @@ CredentialsDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(CredentialsDialog, {
+export default withDialog({
   title: _('New Credential'),
   footer: _('Save'),
   defaultState: {
@@ -361,6 +361,6 @@ export default withDialog(CredentialsDialog, {
     privacy_algorithm: 'aes',
     privacy_password: '',
   },
-});
+})(CredentialsDialog);
 
 // vim: set ts=2 sw=2 tw=80:

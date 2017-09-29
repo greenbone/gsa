@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
@@ -94,9 +94,9 @@ ContainerTaskDialog.propTypes = {
 };
 
 
-export default withDialog(ContainerTaskDialog, {
+export default withDialog({
   title: _('Create Container Task'),
   footer: _('Save'),
-});
+})(ContainerTaskDialog);
 
 // vim: set ts=2 sw=2 tw=80:

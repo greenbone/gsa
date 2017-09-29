@@ -27,7 +27,7 @@ import  _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
@@ -91,12 +91,12 @@ PortRangeDialog.propTypes = {
 };
 
 
-export default withDialog(PortRangeDialog, {
+export default withDialog({
   title: _('New Port Range'),
   footer: _('Save'),
   defaultState: {
     port_type: 'tcp',
-  }
-});
+  },
+})(PortRangeDialog);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -30,7 +30,7 @@ import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import {noop_convert} from '../../components/form/form.js';
@@ -587,11 +587,11 @@ EditDialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withDialog(EditDialog, {
+export default withDialog({
   footer: _('Save'),
   defaultState: {
     comment: '',
   },
-});
+})(EditDialog);
 
 // vim: set ts=2 sw=2 tw=80:

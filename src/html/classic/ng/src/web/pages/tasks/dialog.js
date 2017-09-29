@@ -49,7 +49,7 @@ import {
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import Select2 from '../../components/form/select2.js';
 import Spinner from '../../components/form/spinner.js';
@@ -511,7 +511,7 @@ TaskDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(TaskDialog, {
+export default withDialog({
   title: _('New Task'),
   footer: _('Save'),
   defaultState: {
@@ -541,6 +541,6 @@ export default withDialog(TaskDialog, {
     target_id: '0',
     targets: [],
   },
-});
+})(TaskDialog);
 
 // vim: set ts=2 sw=2 tw=80:

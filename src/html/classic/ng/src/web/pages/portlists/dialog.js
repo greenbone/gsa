@@ -30,7 +30,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -205,7 +205,7 @@ PortListsDialog.propTypes = {
 };
 
 
-export default withDialog(PortListsDialog, {
+export default withDialog({
   title: _('New Port List'),
   footer: _('Save'),
   defaultState: {
@@ -214,6 +214,6 @@ export default withDialog(PortListsDialog, {
     from_file: 0,
     port_range: 'T:1-5,7,9,U:1-3,5,7,9',
   },
-});
+})(PortListsDialog);
 
 // vim: set ts=2 sw=2 tw=80:

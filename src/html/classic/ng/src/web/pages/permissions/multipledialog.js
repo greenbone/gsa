@@ -29,7 +29,7 @@ import {map} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {type_name} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
@@ -221,7 +221,7 @@ MultiplePermissionDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(MultiplePermissionDialog, {
+export default withDialog({
   title: _('Create Multiple Permissions'),
   footer: _('Save'),
   defaultState: {
@@ -229,6 +229,6 @@ export default withDialog(MultiplePermissionDialog, {
     permission: 'read',
     subject_type: 'user',
   },
-});
+})(MultiplePermissionDialog);
 
 // vim: set ts=2 sw=2 tw=80:

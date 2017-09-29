@@ -31,7 +31,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 
@@ -237,10 +237,10 @@ EditDialogComponent.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withDialog(EditDialogComponent, {
+export default withDialog({
   footer: _('Save'),
   defaultState: {
   },
-});
+})(EditDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:

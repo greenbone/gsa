@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-import {withDialog} from '../components/dialog/dialog.js';
+import withDialog from '../components/dialog/withDialog.js';
 
 import TextField from '../components/form/textfield.js';
 
@@ -106,9 +106,9 @@ TaskWizard.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withDialog(TaskWizard, {
+export default withDialog({
   title: _('Task Wizard'),
   footer: _('Start Scan'),
-});
+})(TaskWizard);
 
 // vim: set ts=2 sw=2 tw=80:

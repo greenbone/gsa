@@ -28,7 +28,7 @@ import {includes, is_empty, is_defined, map} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
@@ -349,7 +349,7 @@ PermissionDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(PermissionDialog, {
+export default withDialog({
   title: _('New Permission'),
   footer: _('Save'),
   defaultState: {
@@ -357,6 +357,6 @@ export default withDialog(PermissionDialog, {
     comment: '',
     resource_type: '',
   },
-});
+})(PermissionDialog);
 
 // vim: set ts=2 sw=2 tw=80:

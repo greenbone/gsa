@@ -28,7 +28,7 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Select2 from '../../components/form/select2.js';
@@ -93,6 +93,6 @@ ConfirmDeleteDialog.propTypes = {
   onValueChange: PropTypes.func.isRequired,
 };
 
-export default withDialog(ConfirmDeleteDialog, {
+export default withDialog({
   footer: _('Delete'),
-});
+})(ConfirmDeleteDialog);

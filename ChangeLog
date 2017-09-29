@@ -1,3 +1,34 @@
+2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/pages/agents/dialog.js,
+	src/html/classic/ng/src/web/pages/alerts/dialog.js,
+	src/html/classic/ng/src/web/pages/credentials/dialog.js,
+	src/html/classic/ng/src/web/pages/filters/dialog.js,
+	src/html/classic/ng/src/web/pages/groups/dialog.js,
+	src/html/classic/ng/src/web/pages/permissions/dialog.js,
+	src/html/classic/ng/src/web/pages/permissions/multipledialog.js,
+	src/html/classic/ng/src/web/pages/portlists/dialog.js,
+	src/html/classic/ng/src/web/pages/portlists/importdialog.js,
+	src/html/classic/ng/src/web/pages/portlists/portrangedialog.js,
+	src/html/classic/ng/src/web/pages/reportformats/dialog.js,
+	src/html/classic/ng/src/web/pages/roles/dialog.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/dialog.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/editconfigfamilydialog.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/editdialog.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/editnvtdetailsdialog.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/importdialog.js,
+	src/html/classic/ng/src/web/pages/scanners/dialog.js,
+	src/html/classic/ng/src/web/pages/schedules/dialog.js,
+	src/html/classic/ng/src/web/pages/tasks/containerdialog.js,
+	src/html/classic/ng/src/web/pages/tasks/dialog.js,
+	src/html/classic/ng/src/web/pages/users/confirmdeletedialog.js,
+	src/html/classic/ng/src/web/pages/users/dialog.js,
+	src/html/classic/ng/src/web/wizard/advancedtaskwizard.js,
+	src/html/classic/ng/src/web/wizard/modifytaskwizard.js,
+	src/html/classic/ng/src/web/wizard/taskwizard.js: Use newer withDialog HOC for
+	all dialogs. This allows to get rid of the really old
+	components/dialog/dialog.js finally.
+
 2017-09-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/reports/detailspage.js: We are not loading

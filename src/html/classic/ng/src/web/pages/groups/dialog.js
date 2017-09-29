@@ -30,7 +30,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -122,12 +122,12 @@ Dialog.propTypes = {
 };
 
 
-export default withDialog(Dialog, {
+export default withDialog({
   title: _('New Group'),
   footer: _('Save'),
   defaultState: {
     name: _('Unnamed'),
   },
-});
+})(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:

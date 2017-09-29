@@ -28,7 +28,7 @@ import {is_defined, is_array, has_value, map} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -314,11 +314,11 @@ Dialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withDialog(Dialog, {
+export default withDialog({
   title: _('New Report Format'),
   footer: _('Save'),
   defaultState: {
   },
-});
+})(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:

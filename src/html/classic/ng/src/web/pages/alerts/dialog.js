@@ -29,7 +29,7 @@ import {select_save_id} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import Select2 from '../../components/form/select2.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -573,7 +573,7 @@ AlertDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(AlertDialog, {
+export default withDialog({
   title: _('New Alert'),
   footer: _('Save'),
   defaultState: {
@@ -621,6 +621,6 @@ export default withDialog(AlertDialog, {
     result_filters: [],
     secinfo_filters: [],
   },
-});
+})(AlertDialog);
 
 // vim: set ts=2 sw=2 tw=80:

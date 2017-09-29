@@ -29,7 +29,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
@@ -99,13 +99,13 @@ FilterDialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withDialog(FilterDialog, {
+export default withDialog({
   title: _('New Filter'),
   footer: _('Save'),
   defaultState: {
     comment: '',
     name: _('Unnamed'),
   },
-});
+})(FilterDialog);
 
 // vim: set ts=2 sw=2 tw=80:

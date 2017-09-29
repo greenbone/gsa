@@ -29,7 +29,7 @@ import {is_empty} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
@@ -122,7 +122,7 @@ Dialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withDialog(Dialog, {
+export default withDialog({
   title: _('New Scan Config'),
   footer: _('Save'),
   defaultState: {
@@ -130,6 +130,6 @@ export default withDialog(Dialog, {
     comment: '',
     name: _('Unnamed'),
   },
-});
+})(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:

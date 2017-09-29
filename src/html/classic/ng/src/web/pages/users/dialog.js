@@ -37,7 +37,7 @@ import {
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import PasswordField from '../../components/form/passwordfield.js';
@@ -333,7 +333,7 @@ Dialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog(Dialog, {
+export default withDialog({
   title: _('New User'),
   footer: _('Save'),
   defaultState: {
@@ -347,6 +347,6 @@ export default withDialog(Dialog, {
     name: _('Unnamed'),
     role_ids: [],
   },
-});
+})(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:

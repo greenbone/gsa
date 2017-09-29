@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-import {withDialog} from '../components/dialog/dialog.js';
+import withDialog from '../components/dialog/withDialog.js';
 
 import Select2 from '../components/form/select2.js';
 import Spinner from '../components/form/spinner.js';
@@ -188,12 +188,12 @@ ModifyTaskWizard.propTypes = {
 };
 
 
-export default withDialog(ModifyTaskWizard, {
+export default withDialog({
   title: _('Modify Task Wizard'),
   footer: _('Modify'),
   defaultState: {
     tasks: [],
   },
-});
+})(ModifyTaskWizard);
 
 // vim: set ts=2 sw=2 tw=80:

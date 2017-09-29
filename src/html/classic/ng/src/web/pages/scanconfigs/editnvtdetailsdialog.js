@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
-import {withDialog} from '../../components/dialog/dialog.js';
+import withDialog from '../../components/dialog/withDialog.js';
 
 import Radio from '../../components/form/radio.js';
 import Text from '../../components/form/text.js';
@@ -291,11 +291,11 @@ EditDialog.propTypes = {
   onValueChange: PropTypes.func.isRequired,
 };
 
-export default withDialog(EditDialog, {
+export default withDialog({
   footer: _('Save'),
   defaultState: {
     manual_timeout: '',
   },
-});
+})(EditDialog);
 
 // vim: set ts=2 sw=2 tw=80:
