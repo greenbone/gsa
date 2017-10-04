@@ -145,10 +145,10 @@ const withTargetComponent = (mapping = {}) => Component => {
     }
 
     handleCreateCredential(data) {
-      let {gmp} = this.context;
+      const {gmp} = this.context;
       return gmp.credential.create(data).then(response => {
-        let credential = response.data;
-        let {credentials = []} = this;
+        const credential = response.data;
+        const {credentials = []} = this;
         credentials.push(credential);
 
         this.target_dialog.setValues({
@@ -159,10 +159,10 @@ const withTargetComponent = (mapping = {}) => Component => {
     }
 
     handleCreatePortList(data) {
-      let {gmp} = this.context;
+      const {gmp} = this.context;
       return gmp.portlist.create(data).then(response => {
-        let portlist = response.data;
-        let {port_lists = []} = this;
+        const portlist = response.data;
+        const {port_lists = []} = this;
         port_lists.push(portlist);
         this.target_dialog.setValues({
           port_lists,
@@ -176,7 +176,7 @@ const withTargetComponent = (mapping = {}) => Component => {
         onSave,
       } = mapping;
 
-      const onSaveHandler  = this.props[onSave];
+      const onSaveHandler = this.props[onSave];
 
       const has_save = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onSaved');

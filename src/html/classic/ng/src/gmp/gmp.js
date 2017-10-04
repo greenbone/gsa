@@ -68,13 +68,13 @@ const log = logger.getLogger('gmp');
 export class Gmp {
 
   constructor(options = {}) {
-    let {
+    const {
       autorefresh,
       protocol,
       server,
       storage = localStorage,
       caches,
-      ...httpoptions,
+      ...httpoptions
     } = options;
 
     this._commands = {};
@@ -99,16 +99,16 @@ export class Gmp {
       window.gsa = {};
     }
 
-    let commands = get_commands();
-    for (let name in commands) { // eslint-disable-line guard-for-in
-      let cmd = commands[name];
-      let instance = new cmd.clazz(this.http, ...cmd.options);
+    const commands = get_commands();
+    for (const name in commands) { // eslint-disable-line guard-for-in
+      const cmd = commands[name];
+      const instance = new cmd.clazz(this.http, ...cmd.options);
       this._commands[name] = instance;
 
       Object.defineProperty(this, name, {
         get: function() {
           return this._commands[name];
-        }
+        },
       });
     }
   }
@@ -131,8 +131,8 @@ export class Gmp {
   }
 
   logout() {
-    let uri = this.buildUrl('logout');
-    let args = {xml: 1};
+    const uri = this.buildUrl('logout');
+    const args = {xml: 1};
     return this.http.request('get', {uri, args})
       .then(xhr => {
         this.token = undefined;

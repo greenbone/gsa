@@ -336,8 +336,8 @@ const TaskDetails = ({
 
 TaskDetails.propTypes = {
   className: PropTypes.string,
-  links: PropTypes.bool,
   entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 export default TaskDetails;
