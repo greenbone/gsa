@@ -23,18 +23,18 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import Promise from 'gmp/promise.js';
-import {has_value, is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
+import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
-
-import NoticeDialog from '../components/dialog/noticedialog.js';
 
 import withDownload from '../components/form/withDownload.js';
 
 import Wrapper from '../components/layout/wrapper.js';
+
+import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
 import withHandleTags from './withHandleTags.js';
 
@@ -93,8 +93,6 @@ class EntityContainer extends React.Component {
     this.handleChanged = this.handleChanged.bind(this);
     this.handleError = this.handleError.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
-    this.handleShowError = this.handleShowError.bind(this);
-    this.handleShowSuccess = this.handleShowSuccess.bind(this);
   }
 
   componentDidMount() {
@@ -202,29 +200,10 @@ class EntityContainer extends React.Component {
   }
 
   handleError(error) {
+    const {showError} = this.props;
     log.error(error);
-    this.handleShowError(error.message);
+    showError(error.message);
     return Promise.reject(error);
-  }
-
-  handleShowError(message) {
-    if (!has_value(this.notice_dialog)) {
-      log.error('Error Dialog not ready.', message);
-      return;
-    }
-    this.notice_dialog.show({
-      message,
-    }, {
-      title: _('Error'),
-    });
-  }
-
-  handleShowSuccess(message) {
-    this.notice_dialog.show({
-      message,
-    }, {
-      title: _('Success'),
-    });
   }
 
   render() {
@@ -247,10 +226,6 @@ class EntityContainer extends React.Component {
           onSuccess={this.handleChanged}
           onError={this.handleError}
         />
-        <NoticeDialog
-          width="400px"
-          ref={ref => this.notice_dialog = ref}
-        />
       </Wrapper>
     );
   }
@@ -261,6 +236,8 @@ EntityContainer.propTypes = {
   loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
   permissionsComponent: PropTypes.componentOrFalse,
+  showError: PropTypes.func.isRequired,
+  showSuccess: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
 
@@ -268,7 +245,10 @@ EntityContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-EntityContainer = withDownload(EntityContainer);
+EntityContainer = compose(
+  withDialogNotification,
+  withDownload,
+)(EntityContainer);
 
 export const withEntityContainer = (name, options = {}) => component => {
 

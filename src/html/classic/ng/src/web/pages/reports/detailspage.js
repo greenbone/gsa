@@ -28,18 +28,19 @@ import logger from 'gmp/log.js';
 
 import CancelToken from 'gmp/cancel.js';
 
-import {first, has_value, is_defined} from 'gmp/utils.js';
+import {first, is_defined} from 'gmp/utils.js';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {create_pem_certificate} from '../../utils/cert.js';
-
-import NoticeDialog from '../../components/dialog/noticedialog.js';
+import compose from '../../utils/compose.js';
 
 import withDownload from '../../components/form/withDownload.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
+
+import withDialogNotification from '../../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
 import TargetComponent from '../targets/component.js';
 
@@ -247,29 +248,9 @@ class ReportDetails extends React.Component {
   }
 
   handleError(error) {
+    const {showError} = this.props;
     log.error(error);
-    this.handleShowError(error.message);
-    return Promise.reject(error);
-  }
-
-  handleShowError(message) {
-    if (has_value(this.notice_dialog)) {
-      this.notice_dialog.show({
-        message,
-      }, {
-        title: _('Error'),
-      });
-    }
-  }
-
-  handleShowSuccess(message) {
-    if (has_value(this.notice_dialog)) {
-      this.notice_dialog.show({
-        message,
-      }, {
-        title: _('Success'),
-      });
-    }
+    showError(error.message);
   }
 
   handleFilterChange(filter) {
@@ -291,10 +272,11 @@ class ReportDetails extends React.Component {
 
   handleAddToAssets() {
     const {gmp} = this.context;
+    const {showSuccess} = this.props;
     const {entity, filter} = this.state;
 
     gmp.report.addAssets(entity, {filter}).then(response => {
-      this.handleShowSuccess(
+      showSuccess(
         _('Report content added to Assets with QoD>=70% and Overrides enabled.')
       );
     }, this.handleError);
@@ -302,10 +284,11 @@ class ReportDetails extends React.Component {
 
   handleRemoveFromAssets() {
     const {gmp} = this.context;
+    const {showSuccess} = this.props;
     const {entity, filter} = this.state;
 
     gmp.report.removeAssets(entity, {filter}).then(response => {
-      this.handleShowSuccess(
+      showSuccess(
         _('Report content removed from Assets.')
       );
     }, this.handleError);
@@ -407,7 +390,9 @@ class ReportDetails extends React.Component {
     const {filter} = this.state;
     return (
       <Wrapper>
-        <TargetComponent>
+        <TargetComponent
+          onError={this.handleError}
+        >
           {({edit}) => (
             <Page
               {...this.props}
@@ -431,10 +416,6 @@ class ReportDetails extends React.Component {
             />
           )}
         </TargetComponent>
-        <NoticeDialog
-          width="400px"
-          ref={ref => this.notice_dialog = ref}
-        />
         <FilterDialog
           filter={filter}
           ref={ref => this.filter_dialog = ref}
@@ -450,9 +431,14 @@ ReportDetails.contextTypes = {
 };
 
 ReportDetails.propTypes = {
+  showError: PropTypes.func.isRequired,
+  showSuccess: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
 
-export default withDownload(ReportDetails);
+export default compose(
+  withDialogNotification,
+  withDownload,
+)(ReportDetails);
 
 // vim: set ts=2 sw=2 tw=80:

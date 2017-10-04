@@ -23,12 +23,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import {
   is_defined,
   is_array,
-  has_value,
   exclude_object_props,
 } from 'gmp/utils.js';
 
@@ -42,11 +40,11 @@ import SelectionType from '../utils/selectiontype.js';
 
 import withCache from '../utils/withCache.js';
 
-import NoticeDialog from '../components/dialog/noticedialog.js';
-
 import withDownload from '../components/form/withDownload.js';
 
 import Wrapper from '../components/layout/wrapper.js';
+
+import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
 const log = logger.getLogger('web.entities.container');
 
@@ -105,8 +103,6 @@ class EntitiesContainer extends React.Component {
     this.handleSaveEntity = this.handleSaveEntity.bind(this);
     this.handleSelected = this.handleSelected.bind(this);
     this.handleSelectionTypeChange = this.handleSelectionTypeChange.bind(this);
-    this.handleShowError = this.handleShowError.bind(this);
-    this.handleShowSuccess = this.handleShowSuccess.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
@@ -362,28 +358,9 @@ class EntitiesContainer extends React.Component {
   }
 
   handleError(error) {
+    const {showError} = this.props;
     log.error(error);
-    this.handleShowError(error.message);
-  }
-
-  handleShowError(message) {
-    if (!has_value(this.notice_dialog)) {
-      log.error('Error Dialog not ready.', message);
-      return;
-    }
-    this.notice_dialog.show({
-      message,
-    }, {
-      title: _('Error'),
-    });
-  }
-
-  handleShowSuccess(message) {
-    this.notice_dialog.show({
-      message,
-    }, {
-      title: _('Success'),
-    });
+    showError(error.message);
   }
 
   handleFirst() {
@@ -428,7 +405,11 @@ class EntitiesContainer extends React.Component {
       selected,
       selection_type,
     } = this.state;
-    const {onDownload} = this.props;
+    const {
+      onDownload,
+      showError,
+      showSuccess,
+    } = this.props;
     const {entity_command, entities_command} = this;
     const Component = this.props.component;
     const other = exclude_object_props(this.props, exclude_props);
@@ -464,12 +445,8 @@ class EntitiesContainer extends React.Component {
           onLastClick={this.handleLast}
           onNextClick={this.handleNext}
           onPreviousClick={this.handlePrevious}
-          showError={this.handleShowError}
-          showSuccess={this.handleShowSuccess}
-        />
-        <NoticeDialog
-          width="400px"
-          ref={ref => this.notice_dialog = ref}
+          showError={showError}
+          showSuccess={showSuccess}
         />
       </Wrapper>
     );
@@ -488,6 +465,8 @@ EntitiesContainer.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
+  showError: PropTypes.func.isRequired,
+  showSuccess: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
 
@@ -497,6 +476,7 @@ EntitiesContainer.contextTypes = {
 
 EntitiesContainer = compose(
   withCache,
+  withDialogNotification,
   withDownload,
 )(EntitiesContainer);
 

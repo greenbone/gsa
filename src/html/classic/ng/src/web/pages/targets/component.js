@@ -149,24 +149,31 @@ class TargetComponent extends React.Component {
   render() {
     const {
       children,
+      onError,
       onCloned,
+      onCloneError = onError,
       onCreated,
+      onCreateError = onError,
       onDeleted,
-      onDeleteError,
+      onDeleteError = onError,
       onDownloaded,
-      onDownloadError,
+      onDownloadError = onError,
       onSaved,
+      onSaveError = onError,
     } = this.props;
     return (
       <EntityComponent
         name="target"
         onCreated={onCreated}
+        onCreateError={onCreateError}
         onCloned={onCloned}
+        onCloneError={onCloneError}
         onDeleted={onDeleted}
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
         onSaved={onSaved}
+        onSaveError={onSaveError}
       >
         {({
           save,
@@ -201,12 +208,16 @@ class TargetComponent extends React.Component {
 
 TargetComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
+  onCreateError: PropTypes.func,
   onCreated: PropTypes.func,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onError: PropTypes.func,
+  onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
 
