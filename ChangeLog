@@ -1,3 +1,22 @@
+2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/dialog/button.js,
+	src/html/classic/ng/src/web/components/dialog/container.js,
+	src/html/classic/ng/src/web/components/dialog/content.js,
+	src/html/classic/ng/src/web/components/dialog/css/dialog.css,
+	src/html/classic/ng/src/web/components/dialog/dialog.js,
+	src/html/classic/ng/src/web/components/dialog/error.js,
+	src/html/classic/ng/src/web/components/dialog/footer.js,
+	src/html/classic/ng/src/web/components/dialog/overlay.js,
+	src/html/classic/ng/src/web/components/dialog/scrollablecontent.js,
+	src/html/classic/ng/src/web/components/dialog/title.js,
+	src/html/classic/ng/src/web/components/dialog/withDialog.js,
+	src/html/classic/ng/src/web/components/powerfilter/withFilterDialog.js:
+	Refactor dialog components and get rid of the oldest version. Introduce a new
+	version which uses render props pattern and is more dump and basic. At the
+	long term the new version should even replace the second dialog version.
+
 2017-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/reports/detailscontent.js,

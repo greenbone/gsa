@@ -31,6 +31,10 @@ import Filter from 'gmp/models/filter.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import Dialog from '../dialog/dialog.js';
+import DialogContent from '../dialog/content.js';
+import DialogTitle from '../dialog/title.js';
+import DialogFooter from '../dialog/footer.js';
+import ScrollableContent from '../dialog/scrollablecontent.js';
 
 const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
@@ -43,6 +47,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
       this.setFilter(this.props.filter);
 
+      this.handleClose = this.handleClose.bind(this);
       this.handleSave = this.handleSave.bind(this);
       this.onFilterValueChange = this.onFilterValueChange.bind(this);
       this.onFilterStringChange = this.onFilterStringChange.bind(this);
@@ -61,6 +66,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
       this.setState({
         filter: filter.copy(),
         filterstring: filter.toFilterCriteriaString(),
+        visible: false,
       });
     }
 
@@ -69,7 +75,11 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
       this.setFilter(filter);
 
-      this.dialog.show();
+      this.setState({visible: true});
+    }
+
+    close() {
+      this.setState({visible: false});
     }
 
     handleSave() {
@@ -80,6 +90,12 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
       if (this.props.onFilterChanged && !filter.equals(this.orig_filter)) {
         this.props.onFilterChanged(filter);
       }
+
+      this.close();
+    }
+
+    handleClose() {
+      this.close();
     }
 
     onFilterValueChange(value, name, relation = '=') {
@@ -115,26 +131,45 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
     }
 
     render() {
-      const {filter, filterstring} = this.state;
+      const {filter, filterstring, visible} = this.state;
+
+      if (!is_defined(filter)) {
+        return null;
+      }
+
       return (
         <Dialog
-          ref={ref => this.dialog = ref}
-          title={_('Update Filter')}
-          footer={_('Update')}
+          visible={visible}
           width="800px"
-          onSave={this.handleSave}>
-          {filter &&
-            <FilterDialogComponent
-              {...options}
-              {...this.props}
-              onFilterValueChange={this.onFilterValueChange}
-              onFilterStringChange={this.onFilterStringChange}
-              onSortOrderChange={this.onSortOrderChange}
-              onSortByChange={this.onSortByChange}
-              onValueChange={this.onValueChange}
-              filterstring={filterstring}
-              filter={filter}/>
-          }
+          onClose={this.handleClose}>
+          {({close, getMoveProps}) => (
+            <DialogContent>
+              <DialogTitle
+                title={_('Update Filter')}
+                onCloseClick={close}
+                {...getMoveProps()}
+              />
+
+              <ScrollableContent>
+                <FilterDialogComponent
+                  {...options}
+                  {...this.props}
+                  onFilterValueChange={this.onFilterValueChange}
+                  onFilterStringChange={this.onFilterStringChange}
+                  onSortOrderChange={this.onSortOrderChange}
+                  onSortByChange={this.onSortByChange}
+                  onValueChange={this.onValueChange}
+                  filterstring={filterstring}
+                  filter={filter}
+                />
+              </ScrollableContent>
+
+              <DialogFooter
+                title={_('Update')}
+                onClick={this.handleSave}
+              />
+            </DialogContent>
+          )}
         </Dialog>
       );
     }

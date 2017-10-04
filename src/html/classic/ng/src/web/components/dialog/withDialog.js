@@ -23,16 +23,19 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
-
+import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 import {is_defined, KeyCode, exclude_object_props} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import DialogContainer from './container.js';
+import DialogContent from './content.js';
 import DialogError from './error.js';
 import DialogFooter from './footer.js';
+import DialogOverlay from './overlay.js';
 import DialogTitle from './title.js';
+import ScrollableContent from './scrollablecontent.js';
 
 const log = logger.getLogger('web.components.dialog.withDialog');
 
@@ -46,30 +49,6 @@ const exclude_props = [
   'onSave',
   'onClose',
 ];
-
-const DialogContainer = glamorous.div(
-  {
-    position: 'relative',
-    margin: '10% auto',
-    padding: '5px 5px 5px 5px',
-    background: '#eee',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    outline: '0',
-  },
-  ({width}) => ({
-    width: is_defined(width) ? width : '400px',
-  }),
-  ({posX, posY}) => (is_defined(posX) || is_defined(posY) ? {
-    position: 'absolute',
-    top: posY,
-    left: posX,
-    margin: 0,
-  } : undefined),
-);
-
-DialogContainer.displayName = 'DialogContainer';
-
 
 const withDialog = (options = {}) => Component => {
 
@@ -108,7 +87,7 @@ const withDialog = (options = {}) => Component => {
       const {defaultState = {}} = options;
       const {
         title,
-        footer,
+        footer = _('Save'),
         width = DEFAULT_DIALOG_WIDTH,
       } = {...options, ...this.props};
       return {
@@ -216,7 +195,7 @@ const withDialog = (options = {}) => Component => {
 
     onMouseDown(event) {
       if (event.buttons & 1) { // eslint-disable-line no-bitwise
-        let box = this.dialog.getBoundingClientRect();
+        const box = this.dialog.getBoundingClientRect();
         this.relX = event.pageX - box.left;
         this.relY = event.pageY - box.top;
         document.addEventListener('mousemove', this.onMouseMove);
@@ -246,30 +225,44 @@ const withDialog = (options = {}) => Component => {
     renderTitle() {
       const {title} = {...this.state, ...this.props};
 
-      if (title) {
-        return (
-          <DialogTitle
-            title={title}
-            onCloseClick={this.handleClose}
-            onMouseDown={this.onMouseDown}
-          />
-        );
+      if (!is_defined(title)) {
+        return null;
       }
-      return null;
+      return (
+        <DialogTitle
+          title={title}
+          onCloseClick={this.handleClose}
+          onMouseDown={this.onMouseDown}
+        />
+      );
     }
 
     renderFooter() {
       const {footer} = {...this.state, ...this.props};
 
-      if (footer) {
-        return (
-          <DialogFooter
-            title={footer}
-            onSaveClick={this.handleSave}
-          />
-        );
+      if (!is_defined(footer)) {
+        return null;
       }
-      return null;
+      return (
+        <DialogFooter
+          title={footer}
+          onClick={this.handleSave}
+        />
+      );
+    }
+
+    renderError() {
+      const {error} = this.state;
+
+      if (!is_defined(error)) {
+        return null;
+      }
+      return (
+        <DialogError
+          error={error}
+          onCloseClick={this.onErrorClose}
+        />
+      );
     }
 
     render() {
@@ -278,7 +271,6 @@ const withDialog = (options = {}) => Component => {
         visible = false,
         posX,
         posY,
-        error,
       } = this.state;
 
       if (!visible) {
@@ -291,53 +283,55 @@ const withDialog = (options = {}) => Component => {
 
       const other = exclude_object_props(this.props, exclude_props);
 
-      const c_props = {...other, ...data, onValueChange: this.onValueChange};
+      const c_props = {
+        ...other,
+        ...data,
+        onValueChange: this.onValueChange,
+      };
 
       const component = is_defined(Component) ?
         React.createElement(Component, c_props) :
         React.cloneElement(React.Children.only(children), c_props);
 
       return (
-        <div className="dialogs">
-          <div className="dialog dialog-modal"
+        <div className="dialog">
+          <DialogOverlay
             onClick={this.onOuterClick}
             onKeyDown={this.onKeyDown}
-            tabIndex="0"
-            role="dialog">
-
+          >
             <DialogContainer
               tabIndex="1"
+              role="dialog"
               width={width}
               posX={posX}
               posY={posY}
               innerRef={ref => this.dialog = ref}>
+              <DialogContent>
 
-              {this.renderTitle()}
+                {this.renderTitle()}
 
-              <DialogError
-                error={error}
-                onCloseClick={this.onErrorClose}/>
+                {this.renderError()}
 
-              <div className="dialog-content">
-                {component}
-              </div>
+                <ScrollableContent>
+                  {component}
+                </ScrollableContent>
 
-              {this.renderFooter()}
+                {this.renderFooter()}
 
+              </DialogContent>
             </DialogContainer>
-
-          </div>
+          </DialogOverlay>
         </div>
       );
     }
   };
 
   DialogWrapper.propTypes = {
-    title: PropTypes.string,
     footer: PropTypes.string,
+    title: PropTypes.string,
     width: PropTypes.string,
-    onSave: PropTypes.func,
     onClose: PropTypes.func,
+    onSave: PropTypes.func,
   };
 
   return DialogWrapper;

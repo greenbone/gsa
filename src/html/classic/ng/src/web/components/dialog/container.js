@@ -21,41 +21,30 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes.js';
+import {is_defined} from 'gmp/utils.js';
 
-import Layout from '../layout/layout.js';
-
-import Button from './button.js';
-
-const StyledLayout = glamorous(Layout)({
-  borderWidth: '1px 0 0 0',
-  borderStyle: 'solid',
-  borderColor: '#ddd',
-  marginTop: '15px',
-  padding: '10px 15px 10px 15px',
-});
-
-const DialogFooter = ({title, onClick}) => (
-  <StyledLayout
-    align={['end', 'center']}>
-    <Button
-      onClick={onClick}
-      title={title}>
-      {title}
-    </Button>
-  </StyledLayout>
+const DialogContainer = glamorous.div(
+  {
+    position: 'relative',
+    margin: '10% auto',
+    border: 0,
+    outline: '0',
+  },
+  ({width}) => ({
+    width: is_defined(width) ? width : '400px',
+  }),
+  ({posX, posY}) => (is_defined(posX) || is_defined(posY) ? {
+    position: 'absolute',
+    top: posY,
+    left: posX,
+    margin: 0,
+  } : undefined),
 );
 
-DialogFooter.propTypes = {
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
+DialogContainer.displayName = 'DialogContainer';
 
-export default DialogFooter;
+export default DialogContainer;
 
 // vim: set ts=2 sw=2 tw=80:
-

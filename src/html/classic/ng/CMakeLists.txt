@@ -195,10 +195,15 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
      ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
+     ${NG_SRC_DIR}/src/web/components/dialog/button.js
+     ${NG_SRC_DIR}/src/web/components/dialog/container.js
+     ${NG_SRC_DIR}/src/web/components/dialog/content.js
      ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
      ${NG_SRC_DIR}/src/web/components/dialog/noticedialog.js
+     ${NG_SRC_DIR}/src/web/components/dialog/overlay.js
+     ${NG_SRC_DIR}/src/web/components/dialog/scrollablecontent.js
      ${NG_SRC_DIR}/src/web/components/dialog/title.js
      ${NG_SRC_DIR}/src/web/components/dialog/withDialog.js
      ${NG_SRC_DIR}/src/web/components/folding/folding.js
@@ -555,7 +560,6 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
-     ${NG_SRC_DIR}/src/web/components/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
      ${NG_SRC_DIR}/src/web/components/form/css/button.css
      ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css

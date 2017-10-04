@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,41 +21,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes.js';
-
-import Layout from '../layout/layout.js';
-
-import Button from './button.js';
-
-const StyledLayout = glamorous(Layout)({
-  borderWidth: '1px 0 0 0',
-  borderStyle: 'solid',
-  borderColor: '#ddd',
-  marginTop: '15px',
-  padding: '10px 15px 10px 15px',
+const ScrollableContent = glamorous.div({
+  overflow: 'auto',
+  background: '#eee',
+  padding: '0 15px',
+  maxHeight: '500px',
 });
 
-const DialogFooter = ({title, onClick}) => (
-  <StyledLayout
-    align={['end', 'center']}>
-    <Button
-      onClick={onClick}
-      title={title}>
-      {title}
-    </Button>
-  </StyledLayout>
-);
-
-DialogFooter.propTypes = {
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
-
-export default DialogFooter;
+export default ScrollableContent;
 
 // vim: set ts=2 sw=2 tw=80:
-

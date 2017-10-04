@@ -23,39 +23,63 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Button from '../form/button.js';
+import Layout from '../layout/layout.js';
+
+import Button from './button.js';
+
+const DialogTitleBar = glamorous(Layout)({
+  padding: '.4em .4em .4em 1em',
+  marginBottom: '15px',
+  borderRadius: '4px',
+  border: '1px solid #519032',
+  color: '#fff',
+  fontWeight: 'bold',
+  background: '#66c430 50% 50% repeat-x',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  cursor: 'move',
+});
+
+const DialogCloseButton = glamorous(Button)({
+  background: 'none',
+  opacity: '.7',
+  height: '20px',
+  width: '20px',
+  lineHeight: '0',
+  padding: '0',
+});
 
 const DialogTitle = ({
-  showClose,
+  showClose = true,
   title,
   onCloseClick,
   onMouseDown,
 }) => {
   return (
-    <div className="dialog-titlebar" onMouseDown={onMouseDown}>
-      <span className="dialog-title-text">{title}</span>
+    <DialogTitleBar
+      align={['space-between', 'center']}
+      onMouseDown={onMouseDown}>
+      <span>{title}</span>
       {showClose &&
-        <Button className="dialog-close-button"
+        <DialogCloseButton
           onClick={onCloseClick}
-          title={_('Close')}>x</Button>
+          title={_('Close')}>x</DialogCloseButton>
       }
-    </div>
+    </DialogTitleBar>
   );
 };
 
 DialogTitle.propTypes = {
   showClose: PropTypes.bool,
+  title: PropTypes.string,
   onCloseClick: PropTypes.func,
   onMouseDown: PropTypes.func,
-  title: PropTypes.string,
-};
-
-DialogTitle.defaultProps = {
-  showClose: true,
 };
 
 export default DialogTitle;

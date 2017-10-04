@@ -23,24 +23,50 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Button from '../form/button.js';
+import Layout from '../layout/layout.js';
+
+import Button from './button.js';
+
+const StyledLayout = glamorous(Layout)({
+  padding: '15px',
+  margin: '20px 1em',
+  border: '1px solid #ebccd1',
+  borderRadius: '4px',
+  color: '#a94442',
+  backgroundColor: '#f2dede',
+});
+
+const DialogCloseButton = glamorous(Button)({
+  border: '0',
+  background: '0',
+  color: 'inherit',
+
+  ':hover': {
+    background: '0',
+    color: '#000',
+    opacity: '.5',
+  },
+});
 
 const DialogError = ({error, onCloseClick}) => {
   if (!is_defined(error)) {
     return null;
   }
   return (
-    <div className="dialog-error">
-      <span className="dialog-error-text">{error}</span>
-      <Button className="dialog-close-button"
+    <StyledLayout
+      align={['space-between', 'center']}>
+      <span>{error}</span>
+      <DialogCloseButton
         onClick={onCloseClick}
-        title={_('Close')}>x</Button>
-    </div>
+        title={_('Close')}>x</DialogCloseButton>
+    </StyledLayout>
   );
 };
 
