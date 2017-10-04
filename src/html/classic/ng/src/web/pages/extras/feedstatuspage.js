@@ -46,8 +46,7 @@ import TableRow from '../../components/table/row.js';
 import TableHead from '../../components/table/head.js';
 import TableData from '../../components/table/data.js';
 
-import withContext from '../../utils/withContext.js';
-
+import withGmp from '../../utils/withGmp.js';
 
 const ToolBarIcons = () => (
   <HelpIcon
@@ -281,6 +280,4 @@ FeedStatus.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withContext({
-  gmp: PropTypes.gmp.isRequired,
-})(FeedStatus);
+export default withGmp(FeedStatus);

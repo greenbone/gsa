@@ -7,6 +7,17 @@
 
 2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/component.js,
+	src/html/classic/ng/src/web/entity/withHandleTags.js,
+	src/html/classic/ng/src/web/pages/extras/cvsscalculatorpage.js,
+	src/html/classic/ng/src/web/pages/extras/feedstatuspage.js,
+	src/html/classic/ng/src/web/utils/withGmp.js: Introduce withGmp HOC. Often
+	only Gmp is required from react context. Therefore add a simple HOC to put gmp
+	from context to the components props.
+
+2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/dialog/dialog.js: Fix moving a
 	dialog. Pass the correct handler down to the child component.
 

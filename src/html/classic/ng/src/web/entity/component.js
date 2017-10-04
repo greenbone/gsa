@@ -27,7 +27,7 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-import withContext from '../utils/withContext.js';
+import withGmp from '../utils/withGmp.js';
 
 class EntityComponent extends React.Component {
 
@@ -106,8 +106,6 @@ EntityComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withContext({
-  gmp: PropTypes.gmp.isRequired,
-})(EntityComponent);
+export default withGmp(EntityComponent);
 
 // vim: set ts=2 sw=2 tw=80:

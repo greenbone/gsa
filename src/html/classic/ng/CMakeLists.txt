@@ -547,6 +547,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/withCapabilities.js
      ${NG_SRC_DIR}/src/web/utils/withComponentDefaults.js
      ${NG_SRC_DIR}/src/web/utils/withContext.js
+     ${NG_SRC_DIR}/src/web/utils/withGmp.js
      ${NG_SRC_DIR}/src/web/utils/withPrefix.js
      ${NG_SRC_DIR}/src/web/utils/withUserName.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js

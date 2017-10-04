@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
-import withContext from '../utils/withContext.js';
+import withGmp from '../utils/withGmp.js';
 
 import Wrapper from '../components/layout/wrapper.js';
 
@@ -156,9 +156,7 @@ const withHandleTags = ({resource_type} = {}) => Component => {
     onSuccess: PropTypes.func,
   };
 
-  return withContext({
-    gmp: PropTypes.gmp.isRequired,
-  })(HandleTagsWrapper);
+  return withGmp(HandleTagsWrapper);
 };
 
 export default withHandleTags;

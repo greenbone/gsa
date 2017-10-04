@@ -45,7 +45,7 @@ import Section from '../../components/section/section.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import withContext from '../../utils/withContext.js';
+import withGmp from '../../utils/withGmp.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -277,6 +277,4 @@ CvssCalculator.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withContext({
-  gmp: PropTypes.gmp.isRequired,
-})(CvssCalculator);
+export default withGmp(CvssCalculator);
