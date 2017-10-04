@@ -1,5 +1,12 @@
 2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/http.js: Don't log errors on lower levels. It's
+	confusing to get several error log messages at the console for the same error.
+	And because it is async they are even not in the correct order if several
+	errors occur.
+
+2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/dialog/noticedialog.js,
 	src/html/classic/ng/src/web/entities/container.js,

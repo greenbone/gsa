@@ -233,7 +233,6 @@ export class Http {
       resolve(response);
     }
     catch (error) {
-      log.error('Error while transforming success response', error);
       reject(error);
     }
   }
@@ -252,7 +251,6 @@ export class Http {
         reject(this.transformRejection(rej, options));
       }
       catch (error) {
-        log.error('Error while transforming error rejection', error);
         reject(error);
       }
     });
@@ -266,7 +264,6 @@ export class Http {
       reject(this.transformRejection(rej, options));
     }
     catch (error) {
-      log.error('Error while transforming timeout rejection', error);
       reject(rej);
     }
   }
@@ -337,8 +334,6 @@ export class GmpHttp extends Http {
       return response;
     }
     catch (error) {
-      log.error('An error occurred while converting gmp response to js for ' +
-        'url', this.url, xhr);
       throw new Rejection(xhr, REASON_ERROR, _('An error occurred while ' +
         'converting gmp response to js for url {{- url}}', {url: options.url}));
     }
