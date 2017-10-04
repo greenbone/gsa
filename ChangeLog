@@ -1,3 +1,14 @@
+2017-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Open and close manager connection in general handlers like r26933.
+
+	* src/gsad_omp.c, src/gsad_omp.h: Do not open manager connection in
+	OMP functions and use one passed as a new parameter instead to simplify
+	error handling.
+
+	* src/gsad.c: Open and handle connection to manager in exec_omp_post,
+	exec_omp_get and system_report case of handle_request.
+
 2017-09-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r29514.
