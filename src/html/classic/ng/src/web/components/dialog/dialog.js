@@ -122,7 +122,7 @@ class Dialog extends React.Component {
 
   getMoveProps() {
     return {
-      onMouseMove: this.onMouseMove,
+      onMouseDown: this.onMouseDown,
     };
   }
 
