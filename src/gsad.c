@@ -1973,7 +1973,7 @@ watch_client_connection (void* data)
         {
           active = 0;
           pthread_mutex_unlock (&(watcher_data->mutex));
-          break;
+          continue;
         }
       int ret;
       char buf[1];
@@ -2153,6 +2153,10 @@ exec_gmp_get (http_connection_t *con,
 
       pthread_create (&watch_thread, NULL,
                       watch_client_connection, watcher_data);
+    }
+  else
+    {
+      watcher_data = NULL;
     }
 
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
@@ -2444,7 +2448,7 @@ exec_gmp_get (http_connection_t *con,
       add_guest_chart_content_security_headers (response);
     }
 
-  if (client_watch_interval)
+  if (watcher_data)
     {
       pthread_mutex_lock (&(watcher_data->mutex));
       if (watcher_data->connection_closed == 0 

@@ -1,3 +1,10 @@
+2017-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (watch_client_connection): Fix use of "active" variable
+	in connection_closed case.
+	(exec_gmp_get): Init watcher_data as NULL if it's not used and check
+	if watcher_data is NULL instead of client_watch_interval.
+
 2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/gmp.js,
