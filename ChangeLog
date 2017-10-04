@@ -1,5 +1,11 @@
 2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/page.js: Don't display blank page if an
+	error has occured while getting the capabilities. Use empty capabilities
+	instead and display stub of requested page with error message.
+
+2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Don't log errors on lower levels. It's
 	confusing to get several error log messages at the console for the same error.
 	And because it is async they are even not in the correct order if several

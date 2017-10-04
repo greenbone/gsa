@@ -26,6 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import logger from 'gmp/log.js';
+import Capabilities from 'gmp/capabilities/capabilities.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
@@ -63,6 +64,10 @@ class Page extends React.Component {
       const capabilities = response.data;
       log.debug('User capabilities', capabilities);
       this.setState({capabilities});
+    }).catch(rejection => {
+      log.error('An error occured during fetching capabilities', rejection);
+      // use empty capabilities
+      this.setState({capabilities: new Capabilities()});
     });
   }
 
