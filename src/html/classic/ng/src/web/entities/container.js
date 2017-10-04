@@ -360,7 +360,7 @@ class EntitiesContainer extends React.Component {
   handleError(error) {
     const {showError} = this.props;
     log.error(error);
-    showError(error.message);
+    showError(error);
   }
 
   handleFirst() {
@@ -407,8 +407,8 @@ class EntitiesContainer extends React.Component {
     } = this.state;
     const {
       onDownload,
-      showError,
-      showSuccess,
+      showErrorMessage,
+      showSuccessMessage,
     } = this.props;
     const {entity_command, entities_command} = this;
     const Component = this.props.component;
@@ -445,8 +445,8 @@ class EntitiesContainer extends React.Component {
           onLastClick={this.handleLast}
           onNextClick={this.handleNext}
           onPreviousClick={this.handlePrevious}
-          showError={showError}
-          showSuccess={showSuccess}
+          showError={showErrorMessage}
+          showSuccess={showSuccessMessage}
         />
       </Wrapper>
     );
@@ -466,7 +466,8 @@ EntitiesContainer.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
   showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
+  showErrorMessage: PropTypes.func.isRequired,
+  showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
 

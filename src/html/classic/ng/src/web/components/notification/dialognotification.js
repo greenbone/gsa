@@ -42,30 +42,29 @@ class DialogNotification extends React.Component {
 
     this.handleDialogClose = this.handleDialogClose.bind(this);
     this.handleShowError = this.handleShowError.bind(this);
+    this.handleShowErrorMessage = this.handleShowErrorMessage.bind(this);
     this.handleShowMessage = this.handleShowMessage.bind(this);
-    this.handleShowSuccess = this.handleShowError.bind(this);
+    this.handleShowSuccessMessage = this.handleShowSuccessMessage.bind(this);
 
     this.state = {};
   }
 
-  handleShowError(message) {
-    this.setState({
-      message,
-      title: _('Error'),
-    });
+  handleShowError(error) {
+    this.handleShowErrorMessage(error.message);
   }
 
-  handleShowSuccess(message) {
-    this.setState({
-      message,
-      title: _('Success'),
-    });
+  handleShowErrorMessage(message) {
+    this.handleShowMessage(message, _('Error'));
   }
 
-  handleShowMessage(message) {
+  handleShowSuccessMessage(message) {
+    this.handleShowMessage(message, _('Success'));
+  }
+
+  handleShowMessage(message, subject = _('Message')) {
     this.setState({
       message,
-      title: _('Message'),
+      title: subject,
     });
   }
 
@@ -89,8 +88,9 @@ class DialogNotification extends React.Component {
       <Wrapper>
         {children({
           showError: this.handleShowError,
+          showErrorMessage: this.handleShowErrorMessage,
           showMessage: this.handleShowMessage,
-          showSuccess: this.handleShowSuccess,
+          showSuccessMessage: this.handleShowSuccessMessage,
         })}
         <Dialog
           width="400px"

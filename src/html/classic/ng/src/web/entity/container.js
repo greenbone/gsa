@@ -202,7 +202,7 @@ class EntityContainer extends React.Component {
   handleError(error) {
     const {showError} = this.props;
     log.error(error);
-    showError(error.message);
+    showError(error);
     return Promise.reject(error);
   }
 
@@ -237,7 +237,6 @@ EntityContainer.propTypes = {
   name: PropTypes.string.isRequired,
   permissionsComponent: PropTypes.componentOrFalse,
   showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
 

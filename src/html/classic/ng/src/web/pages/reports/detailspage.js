@@ -250,7 +250,7 @@ class ReportDetails extends React.Component {
   handleError(error) {
     const {showError} = this.props;
     log.error(error);
-    showError(error.message);
+    showError(error);
   }
 
   handleFilterChange(filter) {
@@ -272,11 +272,11 @@ class ReportDetails extends React.Component {
 
   handleAddToAssets() {
     const {gmp} = this.context;
-    const {showSuccess} = this.props;
+    const {showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
 
     gmp.report.addAssets(entity, {filter}).then(response => {
-      showSuccess(
+      showSuccessMessage(
         _('Report content added to Assets with QoD>=70% and Overrides enabled.')
       );
     }, this.handleError);
@@ -284,11 +284,11 @@ class ReportDetails extends React.Component {
 
   handleRemoveFromAssets() {
     const {gmp} = this.context;
-    const {showSuccess} = this.props;
+    const {showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
 
     gmp.report.removeAssets(entity, {filter}).then(response => {
-      showSuccess(
+      showSuccessMessage(
         _('Report content removed from Assets.')
       );
     }, this.handleError);
@@ -432,7 +432,7 @@ ReportDetails.contextTypes = {
 
 ReportDetails.propTypes = {
   showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
+  showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
 
