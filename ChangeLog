@@ -1,6 +1,14 @@
 2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/components/notification/dialognotification.js,
+	src/html/classic/ng/src/web/components/notification/withDialogNotifiaction.js:
+	Add new component for displaying notifications via a dialog. This will replace
+	the NoticeDialog and provide a future path for improved user notifications.
+
+2017-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/components/dialog/button.js,
 	src/html/classic/ng/src/web/components/dialog/container.js,
 	src/html/classic/ng/src/web/components/dialog/content.js,
