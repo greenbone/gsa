@@ -14438,6 +14438,117 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
+ * @brief Run alert for a report.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+report_alert_gmp (gvm_connection_t *connection,
+                  credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
+{
+  entity_t entity;
+  const char *alert_id, *report_id;
+  const char *status, *filter;
+  gchar *response, *html;
+  int ret;
+
+  alert_id = params_value (params, "alert_id");
+  report_id = params_value (params, "report_id");
+
+  if ((alert_id == NULL) || (report_id == NULL))
+    {
+      cmd_response_data_set_status_code(response_data, MHD_HTTP_BAD_REQUEST);
+      return gsad_message_new (credentials,
+                               "Bad Request", __FUNCTION__, __LINE__,
+                               "Missing parameter alert_id or report_id. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_reports", 1, response_data);
+    }
+
+  filter = params_value (params, "filter");
+
+  if (filter == NULL && !params_given (params, "filter"))
+    filter = "first=1 rows=-1"
+      "  result_hosts_only=0"
+      "  apply_overrides=1"
+      "  notes=1 overrides=1"
+      "  sort-reverse=severity";
+
+  ret = gvm_connection_sendf_xml (connection,
+                                  "<get_reports"
+                                  " report_id=\"%s\""
+                                  " ignore_pagination=\"1\""
+                                  " filter=\"%s\""
+                                  " alert_id=\"%s\"/>",
+                                  report_id,
+                                  filter ? filter : "",
+                                  alert_id);
+  if (ret == -1)
+    {
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message_new (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks", 1, response_data);
+    }
+
+  if (read_entity_and_text_c (connection, &entity, &response))
+    {
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message_new (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to receive response from "
+                           "manager daemon.",
+                           "/omp?cmd=get_tasks", 1, response_data);
+    }
+
+  status = entity_attribute (entity, "status");
+  if ((status == NULL) || (strlen (status) == 0))
+    {
+      free_entity (entity);
+      g_free (response);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message_new (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to parse response from manager daemon.",
+                               "/omp?cmd=get_tasks", 1, response_data);
+    }
+  if (strcmp(status, "200"))
+    {
+      free_entity (entity);
+      g_free (response);
+      cmd_response_data_set_status_code(response_data, MHD_HTTP_BAD_REQUEST);
+      return gsad_message_new (credentials,
+                               "Failed", __FUNCTION__, __LINE__,
+                               "Running the report alert failed."
+                               "The report could not be delivered.",
+                               "/omp?cmd=get_tasks", 1, response_data);
+
+    }
+
+  html = response_from_entity (connection, credentials, params, entity, 1,
+                              NULL, "report_alert",
+                              NULL, "report_alert",
+                              "Report Alert", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+/**
  * @brief Get all reports, XSL transform the result.
  *
  * @param[in]  connection     Connection to manager.

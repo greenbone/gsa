@@ -1,3 +1,9 @@
+2017-10-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad.c, src/gsad_gmp.c, src/gsad_gmp.h: Add new report_alert command.
+	Allow running a alert for an report without xslt transformation and returning
+	the report xml.
+
 2017-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (watch_client_connection): Fix use of "active" variable

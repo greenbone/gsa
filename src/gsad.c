@@ -487,6 +487,7 @@ init_validator ()
                          "|(new_task)"
                          "|(new_user)"
                          "|(process_bulk)"
+                         "|(report_alert)"
                          "|(restore)"
                          "|(resume_task)"
                          "|(run_wizard)"
@@ -1671,6 +1672,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (import_report_format)
   ELSE (process_bulk)
   ELSE (move_task)
+  ELSE (report_alert)
   ELSE (restore)
   ELSE (resume_task)
   ELSE (run_wizard)

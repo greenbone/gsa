@@ -106,6 +106,9 @@ char * get_report_section_gmp (gvm_connection_t *,
                                credentials_t *, params_t *,
                                cmd_response_data_t*);
 
+char * report_alert_gmp (gvm_connection_t *, credentials_t *,
+                         params_t *, cmd_response_data_t*);
+
 char * download_ssl_cert (gvm_connection_t *, credentials_t *,
                           params_t *, cmd_response_data_t*);
 char * download_ca_pub (gvm_connection_t *, credentials_t *,
