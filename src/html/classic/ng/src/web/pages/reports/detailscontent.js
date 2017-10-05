@@ -31,6 +31,8 @@ import {is_defined} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_entities_counts, render_options} from '../../utils/render.js';
 
+import EntityInfo from '../../entity/info.js';
+
 import ToolBar from '../../components/bar/toolbar.js';
 
 import Select2 from '../../components/form/select2.js';
@@ -60,6 +62,7 @@ import Tabs from '../../components/tab/tabs.js';
 import Section from '../../components/section/section.js';
 import SectionHeader from '../../components/section/header.js';
 
+import AlertActions from './alertactions.js';
 import ApplicationsTable from './applicationstable.js';
 import ClosedCvesTable from './closedcvestable.js';
 import CvesTable from './cvestable.js';
@@ -67,13 +70,10 @@ import ErrorsTable from './errorstable.js';
 import HostsTable from './hoststable.js';
 import OperatingSystemsTable from './operatingsystemstable.js';
 import PortsTable from './portstable.js';
-import ResultsTab from './resultstab.js';
-import TLSCertificatesTable from './tlscertificatestable.js';
-
-import EntityInfo from '../../entity/info.js';
-
 import ReportEntitiesContainer from './reportentitiescontainer.js';
+import ResultsTab from './resultstab.js';
 import Summary from './summary.js';
+import TLSCertificatesTable from './tlscertificatestable.js';
 
 import {
   apps_sort_functions,
@@ -109,6 +109,7 @@ TabTitle.propTypes = {
 };
 
 const ToolBarIcons = ({
+  filter,
   report,
   report_formats,
   report_format_id,
@@ -116,6 +117,9 @@ const ToolBarIcons = ({
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onReportFormatChange,
+  showError,
+  showErrorMessage,
+  showSuccessMessage,
 }) => {
   const {task} = report;
   const {id: task_id} = task;
@@ -180,15 +184,26 @@ const ToolBarIcons = ({
             />
           </Link>
         </IconDivider>
+        <AlertActions
+          filter={filter}
+          report={report}
+          showError={showError}
+          showSuccessMessage={showSuccessMessage}
+          showErrorMessage={showErrorMessage}
+        />
       </Divider>
     </IconSizeProvider>
   );
 };
 
 ToolBarIcons.propTypes = {
+  filter: PropTypes.filter,
   report: PropTypes.model.isRequired,
   report_format_id: PropTypes.id,
   report_formats: PropTypes.collection,
+  showError: PropTypes.func.isRequired,
+  showErrorMessage: PropTypes.func.isRequired,
+  showSuccessMessage: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
@@ -203,6 +218,9 @@ const PageContent = ({
   loading = false,
   report_formats,
   report_format_id,
+  showError,
+  showErrorMessage,
+  showSuccessMessage,
   onActivateTab,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
@@ -326,9 +344,13 @@ const PageContent = ({
     >
       <ToolBar>
         <ToolBarIcons
+          filter={filter}
           report={report}
           report_format_id={report_format_id}
           report_formats={report_formats}
+          showError={showError}
+          showSuccessMessage={showSuccessMessage}
+          showErrorMessage={showErrorMessage}
           onAddToAssetsClick={onAddToAssetsClick}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
           onReportDownloadClick={onReportDownloadClick}
@@ -492,6 +514,9 @@ PageContent.propTypes = {
   loading: PropTypes.bool,
   report_format_id: PropTypes.id,
   report_formats: PropTypes.collection,
+  showError: PropTypes.func.isRequired,
+  showErrorMessage: PropTypes.func.isRequired,
+  showSuccessMessage: PropTypes.func.isRequired,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

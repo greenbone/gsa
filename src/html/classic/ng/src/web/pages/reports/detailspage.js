@@ -432,6 +432,7 @@ ReportDetails.contextTypes = {
 
 ReportDetails.propTypes = {
   showError: PropTypes.func.isRequired,
+  showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
