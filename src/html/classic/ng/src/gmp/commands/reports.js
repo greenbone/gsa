@@ -92,6 +92,15 @@ class ReportCommand extends EntityCommand {
     });
   }
 
+  alert({alert_id, report_id, filter}) {
+    return this.httpPost({
+      cmd: 'report_alert',
+      alert_id,
+      report_id,
+      filter,
+    });
+  }
+
   getElementFromRoot(root) {
     return root.get_report.get_reports_response.report;
   }
