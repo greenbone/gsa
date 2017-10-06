@@ -1,6 +1,13 @@
 2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/reports/deltaresultsfiltergroup.js,
+	src/html/classic/ng/src/web/pages/reports/detailsfilterdialog.js: Allow to
+	select delta states for report result filtering.
+
+2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/results/delta.js,
 	src/html/classic/ng/src/web/pages/results/row.js,
 	src/html/classic/ng/src/web/pages/results/table.js: Allow to display delta

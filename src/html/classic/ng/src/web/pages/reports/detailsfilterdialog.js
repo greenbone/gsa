@@ -43,6 +43,8 @@ import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
 import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
 import SeverityLevelsGroup from '../../components/powerfilter/severitylevelsgroup.js';
 
+import DeltaResultsFilterGroup from './deltaresultsfiltergroup.js';
+
 /* eslint-enable */
 
 const SORT_FIELDS = [
@@ -55,6 +57,7 @@ const SORT_FIELDS = [
 ];
 
 const FilterDialog = ({
+  delta = false,
   filter,
   filterstring,
   onFilterStringChange,
@@ -73,6 +76,13 @@ const FilterDialog = ({
         filter={filterstring}
         onChange={onFilterStringChange}
       />
+
+      {delta &&
+        <DeltaResultsFilterGroup
+          filter={filter}
+          onChange={onFilterValueChange}
+        />
+      }
 
       <ApplyOverridesGroup
         filter={filter}
