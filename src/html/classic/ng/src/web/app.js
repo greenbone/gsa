@@ -339,6 +339,10 @@ ReactDOM.render(
           component={CveDetailsPage}
         />
         <Route
+          path="report/delta/:id/:deltaid"
+          component={ReportDetailsPage}
+        />
+        <Route
           path="report/:id"
           component={ReportDetailsPage}
         />
