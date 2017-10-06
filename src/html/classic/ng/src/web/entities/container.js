@@ -106,6 +106,7 @@ class EntitiesContainer extends React.Component {
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
+    this.handleFilterChanged = this.handleFilterChanged.bind(this);
   }
 
   componentDidMount() {
@@ -396,6 +397,10 @@ class EntitiesContainer extends React.Component {
     this.load(filter);
   }
 
+  handleFilterChanged(filter) {
+    this.load(filter);
+  }
+
   render() {
     const {
       entities,
@@ -429,7 +434,7 @@ class EntitiesContainer extends React.Component {
           onChanged={this.reload}
           onDownloaded={onDownload}
           onError={this.handleError}
-          onFilterChanged={this.load}
+          onFilterChanged={this.handleFilterChanged}
           onSortChange={this.handleSortChange}
           onSelectionTypeChange={this.handleSelectionTypeChange}
           onDownloadBulk={this.handleDownloadBulk}
