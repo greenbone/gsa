@@ -36,7 +36,7 @@ const TabList = ({
   ...props
 }) => {
   children = React.Children.map(children, (child, index) => {
-    if (child.type === Tab) {
+    if (child !== null && child.type === Tab) {
       return React.cloneElement(child, {
         isActive: active === index,
         onActivate: () => onActivateTab(index),
