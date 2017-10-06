@@ -495,7 +495,7 @@ const parse_report_report_counts = elem => {
     first: es._start,
     rows: ec.filtered,
     length,
-    all: ec.full,
+    all: is_defined(ec.full) ? ec.full : ec.filtered, // ec.full isn't available for delta reports
     filtered: ec.filtered,
   };
   return new CollectionCounts(counts);
