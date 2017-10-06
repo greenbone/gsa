@@ -62,9 +62,10 @@ class ReportCommand extends EntityCommand {
     });
   }
 
-  download({id}, {report_format_id, filter}) {
+  download({id}, {report_format_id, delta_report_id, filter}) {
     return this.httpGet({
       cmd: 'get_report',
+      delta_report_id,
       report_id: id,
       report_format_id,
       filter: is_defined(filter) ? filter.all() : ALL_FILTER,
