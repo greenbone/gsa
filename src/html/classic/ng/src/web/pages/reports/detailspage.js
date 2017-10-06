@@ -86,10 +86,14 @@ class ReportDetails extends React.Component {
   }
 
   componentDidMount() {
-    const {id} = this.props.params;
+    const {id, deltaid} = this.props.params;
     const {filter} = this.props.location.query;
 
-    this.load(id, filter);
+    this.load({
+      id,
+      delta_id: deltaid,
+      filter,
+    });
     this.loadFilters();
     this.loadReportFormats();
   }
@@ -100,8 +104,8 @@ class ReportDetails extends React.Component {
   }
 
   componentWillReceiveProps(next) {
-    const {id: old_id} = this.props.params;
-    const {id: next_id} = next.params;
+    const {id: old_id, deltaid: old_deltaid} = this.props.params;
+    const {id: next_id, deltaid: next_deltaid} = next.params;
 
     let next_filter;
     let old_filter;
@@ -115,8 +119,13 @@ class ReportDetails extends React.Component {
       old_filter = this.props.location.query.filter;
     }
 
-    if (old_id !== next_id || old_filter !== next_filter) {
-      this.load(next_filter, next_filter);
+    if (old_id !== next_id || old_deltaid !== next_deltaid ||
+      old_filter !== next_filter) {
+      this.load({
+        id: next_id,
+        delta_id: next_deltaid,
+        filter: next_filter,
+      });
     }
   }
 
@@ -126,8 +135,12 @@ class ReportDetails extends React.Component {
     }
   }
 
-  load(id, filter) {
-    log.debug('Loading report', id);
+  load({
+    id = this.state.id,
+    delta_id = this.state.delta_id,
+    filter = this.state.filter,
+  } = {}) {
+    log.debug('Loading report', id, delta_id, filter);
     const {gmp} = this.context;
 
     this.cancelLastRequest();
@@ -136,17 +149,26 @@ class ReportDetails extends React.Component {
 
     this.setState({loading: true});
 
-    return gmp.report.get({id}, {
+    const options = {
       filter,
       cancel_token: token,
       extra_params: {
         ignore_pagination: '1',
       },
-    }).then(response => {
+    };
 
+    let promise;
+    if (is_defined(delta_id)) {
+      promise = gmp.report.getDelta({id}, {id: delta_id}, options);
+    }
+    else {
+      promise = gmp.report.get({id}, options);
+    }
+    return promise.then(response => {
       this.cancel = undefined;
 
       const {data: entity, meta} = response;
+
       const {report} = entity;
       const {filter: loaded_filter} = report;
 
@@ -163,6 +185,7 @@ class ReportDetails extends React.Component {
         entity,
         filter,
         id,
+        delta_id,
         loading: false,
       });
 
@@ -213,8 +236,7 @@ class ReportDetails extends React.Component {
   }
 
   reload() {
-    const {id, filter} = this.state;
-    this.load(id, filter);
+    this.load();
   }
 
   startTimer(refresh) {
@@ -254,8 +276,7 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterChange(filter) {
-    const {id} = this.state;
-    this.load(id, filter);
+    this.load({filter});
   }
 
   handleFilterResetClick(filter) {
@@ -306,6 +327,7 @@ class ReportDetails extends React.Component {
     const {
       entity,
       filter,
+      delta_id,
       report_format_id,
       report_formats,
     } = this.state;
@@ -318,6 +340,7 @@ class ReportDetails extends React.Component {
 
     gmp.report.download(entity, {
       report_format_id,
+      delta_report_id: delta_id,
       filter,
     }).then(response => {
       const {data} = response;
@@ -338,41 +361,39 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterCreated(filter) {
-    const {id} = this.state;
-
-    this.load(id, filter);
+    this.load({filter});
     this.loadFilters();
   }
 
   handleFilterAddLogLevel() {
-    const {id, filter} = this.state;
+    const {filter} = this.state;
     let levels = filter.get('levels', '');
 
     if (!levels.includes('g')) {
       levels += 'g';
       const lfilter = filter.copy();
       lfilter.set('levels', levels);
-      this.load(id, lfilter);
+      this.load({filter: lfilter});
     }
   }
 
   handleFilterRemoveSeverity() {
-    const {id, filter} = this.state;
+    const {filter} = this.state;
 
     if (filter.has('severity')) {
       const lfilter = filter.copy();
       lfilter.delete('severity');
-      this.load(id, lfilter);
+      this.load({filter: lfilter});
     }
   }
 
   handleFilterDecreaseMinQoD() {
-    const {id, filter} = this.state;
+    const {filter} = this.state;
 
     if (filter.has('min_qod')) {
       const lfilter = filter.copy();
       lfilter.set('min_qod', 30);
-      this.load(id, lfilter);
+      this.load({filter: lfilter});
     }
   }
 
@@ -387,7 +408,8 @@ class ReportDetails extends React.Component {
   }
 
   render() {
-    const {filter} = this.state;
+    const {filter, entity = {}} = this.state;
+    const {report} = entity;
     return (
       <Wrapper>
         <TargetComponent
@@ -418,6 +440,7 @@ class ReportDetails extends React.Component {
         </TargetComponent>
         <FilterDialog
           filter={filter}
+          delta={is_defined(report) && report.isDeltaReport()}
           ref={ref => this.filter_dialog = ref}
           onFilterChanged={this.handleFilterChange}
         />
