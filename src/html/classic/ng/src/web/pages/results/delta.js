@@ -46,7 +46,7 @@ const ResultDelta = ({delta}) => {
     case Delta.TYPE_GONE:
       return (
         <span title={_('Gone')}>
-          [ \u2212 ]
+          [ &#8722; ]
         </span>
       );
     case Delta.TYPE_SAME:

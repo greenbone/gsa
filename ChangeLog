@@ -1,5 +1,10 @@
 2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/results/delta.js: Display minus symbol
+	correctly by using the html entity.
+
+2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/parser.js: Fix displaying result
 	count for delta reports. The full count isn't correct now because it may not
 	include all results but it's better to display the filtered count instead of
