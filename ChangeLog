@@ -1,5 +1,10 @@
 2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/report/report.js: Don't crash if report
+	doesn't have a severity (e.g. in a delta report).
+
+2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Don't pass undefined values as url
 	parameter. Most of the time using a undefined value as a url parameter is a
 	bug. If it may be indented it must be passed as a string now. Also use ES6

@@ -61,10 +61,12 @@ class ReportReport extends Model {
 
     delete copy.filters;
 
-    copy.severity = {
-      filtered: parse_severity(severity.filtered),
-      full: parse_severity(severity.full),
-    };
+    if (is_defined(severity)) {
+      copy.severity = {
+        filtered: parse_severity(severity.filtered),
+        full: parse_severity(severity.full),
+      };
+    }
 
     copy.severity_class = new Model(copy.severity_class);
 
