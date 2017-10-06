@@ -32,6 +32,23 @@ import {parse_notes} from './note.js';
 
 import {parse_overrides} from './override.js';
 
+export class Delta {
+
+  static TYPE_NEW = 'new';
+  static TYPE_SAME = 'same';
+  static TYPE_CHANGED = 'changed';
+  static TYPE_GONE = 'gone';
+
+  constructor(elem) {
+    if (is_string(elem)) {
+      this.delta_type = elem;
+    }
+    else {
+      this.delta_type = elem.__text;
+    }
+  }
+}
+
 class Result extends Model {
 
   static entity_type = 'result';
@@ -50,6 +67,7 @@ class Result extends Model {
       report,
       severity,
       task,
+      delta,
     } = elem;
 
     if (is_string(host)) {
@@ -100,6 +118,10 @@ class Result extends Model {
 
     }
 
+    if (is_defined(delta)) {
+      copy.delta = new Delta(delta);
+    }
+
     if (is_defined(original_severity)) {
       copy.original_severity = parse_severity(original_severity);
     }
@@ -108,6 +130,10 @@ class Result extends Model {
     copy.overrides = parse_overrides(overrides);
 
     return copy;
+  }
+
+  hasDelta() {
+    return is_defined(this.delta);
   }
 }
 

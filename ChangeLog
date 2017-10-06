@@ -1,5 +1,11 @@
 2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/report/report.js,
+	src/html/classic/ng/src/gmp/models/result.js: Support delta reports and their
+	results. Parse delta info.
+
+2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/report.js: Don't crash if report
 	doesn't have a severity (e.g. in a delta report).
 

@@ -53,11 +53,13 @@ class ReportReport extends Model {
   parseProperties(elem) {
     const copy = super.parseProperties(elem);
 
-    const {severity, scan_start, scan_end, task, scan} = elem;
+    const {delta, severity, scan_start, scan_end, task, scan} = elem;
 
     const filter = parse_filter(elem);
 
     copy.filter = filter;
+
+    copy.report_type = elem._type;
 
     delete copy.filters;
 
@@ -113,7 +115,23 @@ class ReportReport extends Model {
       }
     }
 
+    if (is_defined(delta) && is_defined(delta.report)) {
+      copy.delta_report = {
+        id: delta.report._id,
+        scan_run_status: delta.report.scan_run_status,
+        scan_end: moment(delta.report.scan_end),
+        scan_start: moment(delta.report.scan_start),
+        timestamp: moment(delta.report.timestamp),
+      };
+
+      delete copy.delta;
+    }
+
     return copy;
+  }
+
+  isDeltaReport() {
+    return this.report_type === 'delta';
   }
 }
 
