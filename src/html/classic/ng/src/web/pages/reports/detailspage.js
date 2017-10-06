@@ -121,7 +121,10 @@ class ReportDetails extends React.Component {
 
     if (old_id !== next_id || old_deltaid !== next_deltaid ||
       old_filter !== next_filter) {
-      this.load({
+
+      this.setState({activeTab: 1});
+
+      this.loadInternal({
         id: next_id,
         delta_id: next_deltaid,
         filter: next_filter,
@@ -140,6 +143,18 @@ class ReportDetails extends React.Component {
     delta_id = this.state.delta_id,
     filter = this.state.filter,
   } = {}) {
+    return this.loadInternal({
+      id,
+      delta_id,
+      filter,
+    });
+  }
+
+  loadInternal({
+    id,
+    delta_id,
+    filter,
+  }) {
     log.debug('Loading report', id, delta_id, filter);
     const {gmp} = this.context;
 
