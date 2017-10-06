@@ -1,5 +1,10 @@
 2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/powerfilter/severitylevelsgroup.js:
+	Fix typo in severity level selection.
+
+2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/reports.js: Add api to request delta
 	reports.
 

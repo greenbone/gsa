@@ -55,7 +55,7 @@ class SeverityLevelsFilterGroup extends React.Component {
       levels += level;
       onChange(levels, 'levels');
     }
-    else if (!value && level.includes(level)) {
+    else if (!value && levels.includes(level)) {
       levels = levels.replace(level, '');
       onChange(levels, 'levels');
     }
