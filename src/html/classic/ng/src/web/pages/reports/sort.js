@@ -85,6 +85,7 @@ export const ports_sort_functions = {
 };
 
 export const results_sort_functions = {
+  delta: make_compare_string(entity => entity.delta.delta_type),
   created: make_compare_date('creation_time'),
   host: make_compare_ip(entity => entity.host.name),
   location: make_compare_string('port'),

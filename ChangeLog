@@ -1,5 +1,10 @@
 2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/sort.js: Add sorting of report
+	results by delta states.
+
+2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/reports/deltaresultsfiltergroup.js,
 	src/html/classic/ng/src/web/pages/reports/detailsfilterdialog.js: Allow to
