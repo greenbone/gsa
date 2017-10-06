@@ -43,6 +43,7 @@ const ReportScanInfoTable = ({
   report,
 }) => {
   const {
+    delta_report,
     filter,
     hosts,
     scan_end,
@@ -73,6 +74,8 @@ const ReportScanInfoTable = ({
   const status = is_defined(task.isContainer) && task.isContainer() ?
     _('Container') : scan_run_status;
 
+  const delta = report.isDeltaReport();
+
   return (
     <Table>
       <TableBody>
@@ -100,10 +103,26 @@ const ReportScanInfoTable = ({
             </TableData>
           </TableRow>
         }
+        {delta &&
+          <TableRow>
+            <TableData>
+              {_('Report 1')}
+            </TableData>
+            <TableData>
+              <DetailsLink
+                textOnly={!links}
+                type="report"
+                id={report.id}
+              >
+                {report.id}
+              </DetailsLink>
+            </TableData>
+          </TableRow>
+        }
         {is_defined(scan_start) &&
           <TableRow>
             <TableData>
-              {_('Scan Time')}
+              {delta ? _('Scan Time Report 1') : _('Scan Time')}
             </TableData>
             <TableData>
               {datetime(scan_start)}
@@ -114,10 +133,69 @@ const ReportScanInfoTable = ({
         {is_defined(scan_end) &&
           <TableRow>
             <TableData>
-              {_('Scan Duration')}
+              {delta ? _('Scan  Duration Report 1') : _('Scan Duration')}
             </TableData>
             <TableData>
               {duration(scan_start, scan_end)}
+            </TableData>
+          </TableRow>
+        }
+        <TableRow>
+          <TableData>
+            {delta ? _('Scan Status Report 1') : _('Scan Status')}
+          </TableData>
+          <TableData>
+            <StatusBar
+              status={status}
+              progress={progress}/>
+          </TableData>
+        </TableRow>
+        {delta &&
+          <TableRow>
+            <TableData>
+              {_('Report 2')}
+            </TableData>
+            <TableData>
+              <DetailsLink
+                textOnly={!links}
+                type="report"
+                id={delta_report.id}
+              >
+                {delta_report.id}
+              </DetailsLink>
+            </TableData>
+          </TableRow>
+        }
+        {delta &&
+          <TableRow>
+            <TableData>
+              {_('Scan Time Report 2')}
+            </TableData>
+            <TableData>
+              {datetime(delta_report.scan_start)}
+              {scan_end ? ' - ' + datetime(delta_report.scan_end) : ''}
+            </TableData>
+          </TableRow>
+        }
+        {delta &&
+          <TableRow>
+            <TableData>
+              {_('Scan  Duration Report 2')}
+            </TableData>
+            <TableData>
+              {duration(delta_report.scan_start, delta_report.scan_end)}
+            </TableData>
+          </TableRow>
+        }
+        {delta &&
+          <TableRow>
+            <TableData>
+              {_('Scan Status Report 2')}
+            </TableData>
+            <TableData>
+              <StatusBar
+                status={delta_report.scan_run_status}
+              />
             </TableData>
           </TableRow>
         }
@@ -131,16 +209,6 @@ const ReportScanInfoTable = ({
             </TableData>
           </TableRow>
         }
-        <TableRow>
-          <TableData>
-            {_('Scan Status')}
-          </TableData>
-          <TableData>
-            <StatusBar
-              status={status}
-              progress={progress}/>
-          </TableData>
-        </TableRow>
         {hosts_count > 0 &&
           <TableRow>
             <TableData>
