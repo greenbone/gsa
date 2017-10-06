@@ -413,6 +413,7 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ResultsTab
+                delta={delta}
                 filter={filter}
                 results={results}
                 progress={task.progress}

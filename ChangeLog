@@ -1,5 +1,11 @@
 2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/detailscontent.js,
+	src/html/classic/ng/src/web/pages/reports/resultstab.js: Allow to display
+	delta column at report results table.
+
+2017-10-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/detailscontent.js: Only display
 	summary and result table for delta reports.
 

@@ -34,6 +34,7 @@ import ReportEntitiesContainer from './reportentitiescontainer.js';
 import {results_sort_functions} from './sort.js';
 
 const ResultsTab = ({
+  delta = false,
   filter,
   results,
   progress,
@@ -76,6 +77,7 @@ const ResultsTab = ({
       {props => (
         <ResultsTable
           {...props}
+          delta={delta}
         />
       )}
     </ReportEntitiesContainer>
@@ -83,6 +85,7 @@ const ResultsTab = ({
 };
 
 ResultsTab.propTypes = {
+  delta: PropTypes.bool,
   filter: PropTypes.filter.isRequired,
   progress: PropTypes.number.isRequired,
   results: PropTypes.collection.isRequired,
