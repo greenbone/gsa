@@ -36,15 +36,21 @@ import SeverityBar from '../../components/bar/severitybar.js';
 import StatusBar from '../../components/bar/statusbar.js';
 
 import DeleteIcon from '../../components/icon/deleteicon.js';
+import Icon from '../../components/icon/icon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const IconActions = ({entity, onEntityDelete}) => {
+const IconActions = ({
+  entity,
+  selectedDeltaReport,
+  onEntityDelete,
+  onReportDeltaSelect,
+}) => {
   const {report} = entity;
   const active = report.scan_run_status !== 'Running' &&
     report.scan_run_status !== 'Requested' &&
@@ -54,19 +60,41 @@ const IconActions = ({entity, onEntityDelete}) => {
   const title = active ? _('Delete Report') : _('Scan is active');
 
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider align={['center', 'center']}>
+      {is_defined(selectedDeltaReport) ?
+        entity.id === selectedDeltaReport.id ?
+          <Icon
+            img="delta_inactive.svg"
+            title={_('Report is selected for delta comparision')}
+          /> :
+          <Icon
+            img="delta_second.svg"
+            title={_('Select Report for delta comparision')}
+            value={entity}
+            onClick={onReportDeltaSelect}
+          /> :
+          <Icon
+            img="delta.svg"
+            title={_('Select Report for delta comparision')}
+            value={entity}
+            onClick={onReportDeltaSelect}
+          />
+      }
       <DeleteIcon
         active={active}
         value={entity}
         title={title}
-        onClick={onEntityDelete}/>
-    </Layout>
+        onClick={onEntityDelete}
+      />
+    </IconDivider>
   );
 };
 
 IconActions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onEntityDelete: PropTypes.func,
+  selectedDeltaReport: PropTypes.model,
+  onEntityDelete: PropTypes.func.isRequired,
+  onReportDeltaSelect: PropTypes.func.isRequired,
 };
 
 const Row = ({entity, links = true, actions, ...other}) => {

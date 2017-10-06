@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {select_save_id} from 'gmp/utils.js';
+import {is_defined, select_save_id} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -46,7 +46,7 @@ import ReportFilterDialog from './filterdialog.js';
 import ImportReportDialog from './importdialog.js';
 import ReportsTable from './table.js';
 
-import {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
+import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const Dashboard = withDashboard(ReportCharts, {
   hideFilterSelect: true,
@@ -76,10 +76,25 @@ class Page extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {};
+
     this.handleDialogSave = this.handleDialogSave.bind(this);
     this.handleCreateContainerTask = this.handleCreateContainerTask.bind(this);
+    this.handleReportDeltaSelect = this.handleReportDeltaSelect.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
     this.openCreateTaskDialog = this.openCreateTaskDialog.bind(this);
+  }
+
+  componentWillReceiveProps(next) {
+    const {filter} = next;
+    const {selectedDeltaReport} = this.state;
+
+    if (is_defined(selectedDeltaReport) &&
+      (!is_defined(filter) ||
+        filter.get('task_id') !== selectedDeltaReport.task.id)) {
+      // filter has changed. reset delta report selection
+      this.setState({selectedDeltaReport: undefined});
+    }
   }
 
   showImportDialog(tasks, task_id) {
@@ -114,12 +129,29 @@ class Page extends React.Component {
     });
   }
 
+  handleReportDeltaSelect(report) {
+    const {selectedDeltaReport} = this.state;
+
+    if (is_defined(selectedDeltaReport)) {
+      const {router} = this.props;
+      router.push('/ng/report/delta/' + selectedDeltaReport.id + '/' +
+        report.id);
+    }
+    else {
+      const {onFilterChanged, filter = new Filter()} = this.props;
+      onFilterChanged(filter.copy().set('task_id', report.task.id));
+      this.setState({selectedDeltaReport: report});
+    }
+  }
+
   render() {
     return (
       <Wrapper>
         <EntitiesPage
           {...this.props}
+          {...this.state}
           onUploadReportClick={this.openImportDialog}
+          onReportDeltaSelect={this.handleReportDeltaSelect}
         />
         <ImportReportDialog
           ref={ref => this.import_dialog = ref}
@@ -134,8 +166,11 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func,
+  entityCommand: PropTypes.entitycommand.isRequired,
+  filter: PropTypes.filter,
+  router: PropTypes.object.isRequired,
+  onChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
 };
 
 Page.contextTypes = {
