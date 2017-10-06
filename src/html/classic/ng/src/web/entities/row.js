@@ -56,7 +56,7 @@ export const RowDetailsToggle = glamorous(Text)(
     },
     '@media print': {
       color: 'black',
-    }
+    },
   },
 );
 

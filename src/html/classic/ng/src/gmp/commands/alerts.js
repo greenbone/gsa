@@ -52,9 +52,9 @@ const condition_data_fields = [
 ];
 
 function convert_data(prefix, data, fields) {
-  let converted = {};
-  for (let field of fields) {
-    let name = prefix + '_' + field;
+  const converted = {};
+  for (const field of fields) {
+    const name = prefix + '_' + field;
     if (data.hasOwnProperty(name)) {
       converted[prefix + ':' + field] = data[name];
     }
@@ -69,9 +69,17 @@ export class AlertCommand extends EntityCommand {
   }
 
   create(args) {
-    let {active, name, comment = '', event, condition, filter_id, method,
-      ...other} = args;
-    let data = extend({
+    const {
+      active,
+      name,
+      comment = '',
+      event,
+      condition,
+      filter_id,
+      method,
+      ...other
+    } = args;
+    const data = extend({
       cmd: 'create_alert',
       next: 'get_alert',
       active,
@@ -81,17 +89,27 @@ export class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-    }, convert_data("method_data", other, method_data_fields),
-      convert_data("condition_data", other, condition_data_fields),
-      convert_data("event_data", other, event_data_fields));
+    },
+      convert_data('method_data', other, method_data_fields),
+      convert_data('condition_data', other, condition_data_fields),
+      convert_data('event_data', other, event_data_fields));
     log.debug('Creating new alert', args, data);
     return this.httpPost(data).then(this.transformResponse);
   }
 
   save(args) {
-    let {active, id, name, comment = '', event, condition, filter_id, method,
-      ...other} = args;
-    let data = extend({
+    const {
+      active,
+      id,
+      name,
+      comment = '',
+      event,
+      condition,
+      filter_id,
+      method,
+      ...other
+    } = args;
+    const data = extend({
       cmd: 'save_alert',
       next: 'get_alert',
       id,
@@ -102,9 +120,10 @@ export class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-    }, convert_data("method_data", other, method_data_fields),
-      convert_data("condition_data", other, condition_data_fields),
-      convert_data("event_data", other, event_data_fields));
+    },
+      convert_data('method_data', other, method_data_fields),
+      convert_data('condition_data', other, condition_data_fields),
+      convert_data('event_data', other, event_data_fields));
     log.debug('Saving alert', args, data);
     return this.httpPost(data).then(this.transformResponse);
   }
@@ -113,7 +132,7 @@ export class AlertCommand extends EntityCommand {
     return this.httpGet({
       cmd: 'new_alert',
     }).then(response => {
-      let {new_alert} = response.data;
+      const {new_alert} = response.data;
       new_alert.report_formats = map(
         new_alert.get_report_formats_response.report_format,
         format => new Model(format));
@@ -133,7 +152,7 @@ export class AlertCommand extends EntityCommand {
       cmd: 'edit_alert',
       id,
     }).then(response => {
-      let {edit_alert} = response.data;
+      const {edit_alert} = response.data;
 
       edit_alert.alert = new Alert(edit_alert.get_alerts_response.alert);
       delete edit_alert.get_alerts_response;
