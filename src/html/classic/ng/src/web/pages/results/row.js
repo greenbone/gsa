@@ -40,8 +40,11 @@ import DetailsLink from '../../components/link/detailslink.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
+import ResultDelta from './delta.js';
+
 const Row = ({
   actions,
+  delta = false,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -52,6 +55,15 @@ const Row = ({
   const has_tags = is_defined(entity.nvt) && is_defined(entity.nvt.tags);
   return (
     <TableRow>
+      {delta &&
+        <TableData align={['center', 'center']}>
+          {entity.hasDelta() &&
+            <ResultDelta
+              delta={entity.delta}
+            />
+          }
+        </TableData>
+      }
       <TableData>
         <RowDetailsToggle
           name={entity.id}
@@ -92,6 +104,7 @@ const Row = ({
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
+  delta: PropTypes.bool,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func,

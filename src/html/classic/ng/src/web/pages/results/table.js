@@ -45,10 +45,24 @@ import TableRow from '../../components/table/row.js';
 import ResultsRow from './row.js';
 import ResultDetails from './details.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions}) => {
+const Header = ({
+  actions,
+  delta = false,
+  links = true,
+  sort = true,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>
+        {delta &&
+          <TableHead
+            width="5em"
+            sortby={sort ? 'delta' : false}
+            onSortChange={onSortChange}>
+            {_('Delta')}
+          </TableHead>
+        }
         <TableHead
           sortby={sort ? 'vulnerability' : false}
           onSortChange={onSortChange}>
@@ -102,6 +116,7 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
 
 Header.propTypes = {
   actions: PropTypes.element,
+  delta: PropTypes.bool,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

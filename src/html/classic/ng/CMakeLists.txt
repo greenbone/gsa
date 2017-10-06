@@ -464,6 +464,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js
      ${NG_SRC_DIR}/src/web/pages/reports/vulnerabilitiestable.js
      ${NG_SRC_DIR}/src/web/pages/results/charts.js
+     ${NG_SRC_DIR}/src/web/pages/results/delta.js
      ${NG_SRC_DIR}/src/web/pages/results/details.js
      ${NG_SRC_DIR}/src/web/pages/results/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/results/filterdialog.js
