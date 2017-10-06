@@ -102,6 +102,14 @@ class ReportCommand extends EntityCommand {
     });
   }
 
+  getDelta({id}, {id: delta_report_id}, {filter, ...options} = {}) {
+    return this.httpGet({
+      id,
+      delta_report_id,
+      filter,
+    }, options).then(this.transformResponse);
+  }
+
   getElementFromRoot(root) {
     return root.get_report.get_reports_response.report;
   }
