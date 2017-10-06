@@ -72,13 +72,13 @@ export function build_url_params(params) {
   let argcount = 0;
   let uri = '';
 
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
+  for (const [key, value] of Object.entries(params)) {
+    if (is_defined(value)) {
       if (argcount++) {
         uri += '&';
       }
       uri += encodeURIComponent(key) + '=' +
-        encodeURIComponent(params[key]);
+        encodeURIComponent(value);
     }
   }
   return uri;
