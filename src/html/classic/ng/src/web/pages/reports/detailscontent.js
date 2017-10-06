@@ -109,6 +109,7 @@ TabTitle.propTypes = {
 };
 
 const ToolBarIcons = ({
+  delta = false,
   filter,
   report,
   report_formats,
@@ -184,19 +185,22 @@ const ToolBarIcons = ({
             />
           </Link>
         </IconDivider>
-        <AlertActions
-          filter={filter}
-          report={report}
-          showError={showError}
-          showSuccessMessage={showSuccessMessage}
-          showErrorMessage={showErrorMessage}
-        />
+        {!delta &&
+          <AlertActions
+            filter={filter}
+            report={report}
+            showError={showError}
+            showSuccessMessage={showSuccessMessage}
+            showErrorMessage={showErrorMessage}
+          />
+        }
       </Divider>
     </IconSizeProvider>
   );
 };
 
 ToolBarIcons.propTypes = {
+  delta: PropTypes.bool,
   filter: PropTypes.filter,
   report: PropTypes.model.isRequired,
   report_format_id: PropTypes.id,
@@ -260,6 +264,8 @@ const PageContent = ({
     task,
     tls_certificates,
   } = report;
+
+  const delta = report.isDeltaReport();
 
   const header = (
     <SectionHeader
@@ -344,6 +350,7 @@ const PageContent = ({
     >
       <ToolBar>
         <ToolBarIcons
+          delta={delta}
           filter={filter}
           report={report}
           report_format_id={report_format_id}
