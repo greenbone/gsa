@@ -51,9 +51,9 @@ export function get_commands() {
 
 export class HttpCommand {
 
-  constructor(http, params) {
+  constructor(http, params = {}) {
     this.http = http;
-    this._params = is_defined(params) ? params : {};
+    this._params = params;
   }
 
   getParam(name) {
