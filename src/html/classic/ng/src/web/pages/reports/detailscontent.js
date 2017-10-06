@@ -290,54 +290,70 @@ const PageContent = ({
               entities={results}
             />
           </Tab>
-          <Tab>
-            <TabTitle
-              title={_('Hosts')}
-              entities={hosts}
-            />
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('Ports')}
-              entities={ports}
-            />
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('Applications')}
-              entities={applications}
-            />
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('Operating Systems')}
-              entities={operatingsystems}
-            />
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('CVEs')}
-              entities={cves}
-            />
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('Closed CVEs')}
-              entities={closed_cves}
-            />
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('TLS Certificates')}
-              entities={tls_certificates}
-            />
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('Error Messages')}
-              entities={errors}
-            />
-          </Tab>
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('Hosts')}
+                entities={hosts}
+              />
+            </Tab>
+          }
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('Ports')}
+                entities={ports}
+              />
+            </Tab>
+          }
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('Applications')}
+                entities={applications}
+              />
+            </Tab>
+          }
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('Operating Systems')}
+                entities={operatingsystems}
+              />
+            </Tab>
+          }
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('CVEs')}
+                entities={cves}
+              />
+            </Tab>
+          }
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('Closed CVEs')}
+                entities={closed_cves}
+              />
+            </Tab>
+          }
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('TLS Certificates')}
+                entities={tls_certificates}
+              />
+            </Tab>
+          }
+          {!delta &&
+            <Tab>
+              <TabTitle
+                title={_('Error Messages')}
+                entities={errors}
+              />
+            </Tab>
+          }
         </TabList>
       </TabLayout>
     </SectionHeader>
