@@ -135,25 +135,21 @@ Dashboard.childContextTypes = {
 };
 
 Dashboard.propTypes = {
-  usersettingsCache: PropTypes.cache.isRequired,
-  id: PropTypes.id,
-  filter: PropTypes.filter,
   configPrefId: PropTypes.id,
-  hideFilterSelect: PropTypes.bool,
   defaultControllerString: PropTypes.string,
   defaultControllersString: PropTypes.string,
+  filter: PropTypes.filter,
+  hideFilterSelect: PropTypes.bool,
+  id: PropTypes.id,
   maxComponents: PropTypes.numberOrNumberString,
-};
-
-Dashboard.defaultProps = {
-  id: 'dashboard',
+  usersettingsCache: PropTypes.cache.isRequired,
 };
 
 Dashboard.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-Dashboard = withCache(Dashboard, {usersettingsCache: 'usersettings'});
+Dashboard = withCache({usersettingsCache: 'usersettings'})(Dashboard);
 
 export const withDashboard = (Charts, options = {}) => {
 

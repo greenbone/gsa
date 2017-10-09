@@ -481,7 +481,7 @@ EntitiesContainer.contextTypes = {
 };
 
 EntitiesContainer = compose(
-  withCache,
+  withCache(),
   withDialogNotification,
   withDownload,
 )(EntitiesContainer);

@@ -27,13 +27,13 @@ import {is_object} from 'gmp/utils.js';
 
 import PropTypes from './proptypes.js';
 
-export const withCache = (Component, names) => {
+export const withCache = names => Component => {
   const CacheWrapper = (props, {cache, caches}) => {
-    let cache_props = {cache};
+    const cache_props = {cache};
 
-    if (is_object(names)){
-      for (const key in names) {
-        cache_props[key] = caches.get(names[key]);
+    if (is_object(names)) {
+      for (const [key, value] of Object.entries(names)) {
+        cache_props[key] = caches.get(value);
       }
     }
     return (
