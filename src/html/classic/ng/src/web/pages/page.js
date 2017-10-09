@@ -101,10 +101,6 @@ class Page extends React.Component {
   }
 }
 
-Page.childContextTypes = {
-  capabilities: PropTypes.capabilities,
-};
-
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
