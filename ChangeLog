@@ -1,5 +1,10 @@
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/report.js: Remove FIXME comment. There
+	are other report types then scan: delta reports.
+
+2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/scaninfo.js: Improve report
 	summary when a report is still running.
 

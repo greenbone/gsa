@@ -62,7 +62,7 @@ class Report extends Model {
       copy.severity = parse_severity(severity);
     }
 
-    copy.report_type = type; // FIXME is there any other type then 'scan'?
+    copy.report_type = type;
     copy.content_type = content_type;
 
     copy.scan_start = moment(scan_start);
