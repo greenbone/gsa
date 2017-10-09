@@ -1,5 +1,12 @@
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/.env,
+	src/html/classic/ng/package.json: Move setting NODE_PATH environment variable
+	from package.json to env dotfile. The NODE_PATH variable is used to determine
+	the path to the js modules.
+
+2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/tasks/status.js: Link to new report
 	details.
 
