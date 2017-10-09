@@ -99,19 +99,16 @@ IconActions.propTypes = {
 
 const Row = ({entity, links = true, actions, ...other}) => {
   const {report} = entity;
+  const {scan_run_status, task} = report;
 
-  let status = report.scan_run_status;
+  let status = scan_run_status;
   let progress;
 
-  if (is_defined(report.task)) {
-    if (is_defined(report.task.target) && report.task.target.id === '' &&
-        report.scan_run_status === 'Running') {
-      status = 'Uploading';
+  if (is_defined(task)) {
+    if (task.isContainer()) {
+      status = status === 'Running' ? 'Uploading' : 'Container';
     }
-    else if (is_defined(report.task.target) && report.task.target.id === '') {
-      status = 'Container';
-    }
-    progress = report.task.progress;
+    progress = task.progress;
   }
 
   return (
