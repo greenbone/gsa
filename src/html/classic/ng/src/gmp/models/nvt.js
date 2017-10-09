@@ -51,7 +51,7 @@ const parse_tags = tags => {
 };
 
 const parse_ids = (ids, no) => {
-  if (is_string(ids) && ids !== no) {
+  if (is_string(ids) && ids.length > 0 && ids !== no) {
     return ids.split(',').map(id => id.trim());
   }
   return [];
