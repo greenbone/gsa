@@ -76,6 +76,7 @@ const ReportScanInfoTable = ({
 
   const delta = report.isDeltaReport();
 
+  const is_ended = is_defined(scan_end) && scan_end.isValid();
   return (
     <Table>
       <TableBody>
@@ -126,11 +127,11 @@ const ReportScanInfoTable = ({
             </TableData>
             <TableData>
               {datetime(scan_start)}
-              {scan_end ? ' - ' + datetime(scan_end) : ''}
+              {is_ended ? ' - ' + datetime(scan_end) : ''}
             </TableData>
           </TableRow>
         }
-        {is_defined(scan_end) &&
+        {is_ended &&
           <TableRow>
             <TableData>
               {delta ? _('Scan  Duration Report 1') : _('Scan Duration')}
@@ -173,11 +174,13 @@ const ReportScanInfoTable = ({
             </TableData>
             <TableData>
               {datetime(delta_report.scan_start)}
-              {scan_end ? ' - ' + datetime(delta_report.scan_end) : ''}
+              {is_defined(delta_report.scan_end) &&
+                delta_report.scan_end.isValid() ?
+                ' - ' + datetime(delta_report.scan_end) : ''}
             </TableData>
           </TableRow>
         }
-        {delta &&
+        {delta && delta_report.scan_end.isValid() &&
           <TableRow>
             <TableData>
               {_('Scan  Duration Report 2')}
