@@ -1,5 +1,12 @@
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/detailspage.js: Ignore rows and
+	first paramters when loading reports. It seems that ignore_pagination param
+	isn't working for delta report results. Display 100 entries by default at each
+	report table.
+
+2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/resultstab.js: Pass filter to the
 	results table. This fixes the pagination for delta report results.
 

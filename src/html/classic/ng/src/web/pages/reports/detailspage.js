@@ -52,6 +52,8 @@ const log = logger.getLogger('web.pages.report.details');
 const connect = (in_func, out_func) => (...args) =>
   in_func(...args).then(out_func);
 
+const DEFAULT_NUM_ROWS = 100; // displayed rows after first request
+
 class ReportDetails extends React.Component {
 
   constructor(...args) {
@@ -165,7 +167,7 @@ class ReportDetails extends React.Component {
     this.setState({loading: true});
 
     const options = {
-      filter,
+      filter: is_defined(filter) ? filter.all() : undefined,
       cancel_token: token,
       extra_params: {
         ignore_pagination: '1',
@@ -191,7 +193,7 @@ class ReportDetails extends React.Component {
         filter = filter.mergeExtraKeywords(loaded_filter);
       }
       else {
-        filter = loaded_filter;
+        filter = loaded_filter.set('rows', DEFAULT_NUM_ROWS);
       }
 
       log.debug('Loaded report', entity);
