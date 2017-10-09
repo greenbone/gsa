@@ -48,26 +48,27 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   componentDidMount() {
-    const {entities} = this.props;
+    const {entities, filter} = this.props;
 
-    this.updateFromEntities(entities);
+    this.updateFromEntities(entities, filter);
   }
 
   componentWillReceiveProps(next) {
-    const {entities} = next;
+    const {entities, filter} = next;
 
-    if (entities !== this.props.entities) {
-      this.updateFromEntities(entities);
+    if (entities !== this.props.entities ||
+      (is_defined(filter) && !filter.equals(this.props.filter))) {
+      this.updateFromEntities(entities, filter);
     }
   }
 
-  updateFromEntities(entities) {
+  updateFromEntities(entities, filter) {
     const {
       sort: state_sort,
     } = this.state;
 
     const counts = entities.getCounts();
-    const filter = entities.getFilter();
+    filter = is_defined(filter) ? filter : entities.getFilter();
 
     const reverse_field = filter.get('sort-reverse');
     const reverse = is_defined(reverse_field);
@@ -84,16 +85,18 @@ class ReportEntitiesContainer extends React.Component {
 
     this.load({
       entities,
+      filter,
       next_entity_index: next,
       sort,
     });
   }
 
-  load({entities, rows, sort, next_entity_index} = {}) {
+  load({entities, filter, rows, sort, next_entity_index} = {}) {
     const {
       entities: state_entities,
       current_entity_index,
       sort: state_sort,
+      filter: state_filter,
     } = this.state;
 
     const index = is_defined(next_entity_index) ? next_entity_index :
@@ -107,7 +110,10 @@ class ReportEntitiesContainer extends React.Component {
       sort = state_sort;
     }
 
-    const filter = entities.getFilter();
+    if (!is_defined(filter)) {
+      filter = state_filter;
+    }
+
     const counts = entities.getCounts();
     let entries = entities.getEntries();
 
@@ -235,6 +241,7 @@ class ReportEntitiesContainer extends React.Component {
 ReportEntitiesContainer.propTypes = {
   children: PropTypes.func,
   entities: PropTypes.collection.isRequired,
+  filter: PropTypes.filter,
   sortFunctions: PropTypes.object,
 };
 

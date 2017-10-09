@@ -1,5 +1,12 @@
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/reportentitiescontainer.js: Allow
+	to pass filter to report entities container component. With this change it
+	will be possible to modify the filter in js code without reloading from
+	gsad/manager.
+
+2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report.js: Remove FIXME comment. There
 	are other report types then scan: delta reports.
 
