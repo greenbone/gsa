@@ -1,5 +1,10 @@
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/tasks/icons/stopicon.js: Don't display
+	resume icon action for container tasks.
+
+2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/row.js: Fix displaying the status
 	of reports.
 

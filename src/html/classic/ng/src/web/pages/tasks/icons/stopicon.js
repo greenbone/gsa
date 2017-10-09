@@ -34,7 +34,7 @@ const StopIcon = ({
   task,
   onClick,
 }) => {
-  if (task.isRunning()) {
+  if (task.isRunning() && !task.isContainer()) {
     return (
       <Icon
         size={size}
