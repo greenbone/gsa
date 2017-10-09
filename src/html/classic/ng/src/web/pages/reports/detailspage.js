@@ -34,6 +34,8 @@ import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {create_pem_certificate} from '../../utils/cert.js';
+import withCache from '../../utils/withCache.js';
+import withGmp from '../../utils/withGmp.js';
 import compose from '../../utils/compose.js';
 
 import withDownload from '../../components/form/withDownload.js';
@@ -91,10 +93,11 @@ class ReportDetails extends React.Component {
     const {id, deltaid} = this.props.params;
     const {filter} = this.props.location.query;
 
-    this.load({
+    this.loadInternal({
       id,
       delta_id: deltaid,
       filter,
+      reload: true, // reload after initial load from cache
     });
     this.loadFilters();
     this.loadReportFormats();
@@ -144,11 +147,13 @@ class ReportDetails extends React.Component {
     id = this.state.id,
     delta_id = this.state.delta_id,
     filter = this.state.filter,
+    force,
   } = {}) {
     return this.loadInternal({
       id,
       delta_id,
       filter,
+      force,
     });
   }
 
@@ -156,9 +161,11 @@ class ReportDetails extends React.Component {
     id,
     delta_id,
     filter,
+    force = false,
+    reload = false,
   }) {
     log.debug('Loading report', id, delta_id, filter);
-    const {gmp} = this.context;
+    const {gmp, cache} = this.props;
 
     this.cancelLastRequest();
 
@@ -167,6 +174,8 @@ class ReportDetails extends React.Component {
     this.setState({loading: true});
 
     const options = {
+      cache,
+      force,
       filter: is_defined(filter) ? filter.all() : undefined,
       cancel_token: token,
       extra_params: {
@@ -206,7 +215,7 @@ class ReportDetails extends React.Component {
         loading: false,
       });
 
-      if (meta.fromcache && meta.dirty) {
+      if (meta.fromcache && (meta.dirty || reload)) {
         log.debug('Forcing reload of report', meta.dirty);
         this.startTimer(1);
       }
@@ -229,7 +238,7 @@ class ReportDetails extends React.Component {
   }
 
   loadReportFormats() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.reportformats.getAll().then(report_formats => {
       report_formats = report_formats.filter(format => {
@@ -245,7 +254,7 @@ class ReportDetails extends React.Component {
   }
 
   loadFilters() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.filters.getAll({filter: RESULTS_FILTER_FILTER}).then(filters => {
       this.setState({filters});
@@ -253,11 +262,12 @@ class ReportDetails extends React.Component {
   }
 
   reload() {
-    this.load();
+    // reload data from backend
+    this.load({force: true});
   }
 
   startTimer(refresh) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
 
@@ -309,8 +319,7 @@ class ReportDetails extends React.Component {
   }
 
   handleAddToAssets() {
-    const {gmp} = this.context;
-    const {showSuccessMessage} = this.props;
+    const {gmp, showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
 
     gmp.report.addAssets(entity, {filter}).then(response => {
@@ -321,8 +330,7 @@ class ReportDetails extends React.Component {
   }
 
   handleRemoveFromAssets() {
-    const {gmp} = this.context;
-    const {showSuccessMessage} = this.props;
+    const {gmp, showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
 
     gmp.report.removeAssets(entity, {filter}).then(response => {
@@ -339,8 +347,7 @@ class ReportDetails extends React.Component {
   }
 
   handleReportDownload() {
-    const {gmp} = this.context;
-    const {onDownload} = this.props;
+    const {gmp, onDownload} = this.props;
     const {
       entity,
       filter,
@@ -416,7 +423,7 @@ class ReportDetails extends React.Component {
 
   loadTarget() {
     const {entity} = this.state;
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     const {report} = entity;
     const {task} = report;
     const {target} = task;
@@ -466,11 +473,9 @@ class ReportDetails extends React.Component {
   }
 }
 
-ReportDetails.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
 ReportDetails.propTypes = {
+  cache: PropTypes.cache.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -478,6 +483,8 @@ ReportDetails.propTypes = {
 };
 
 export default compose(
+  withCache({cache: 'report'}),
+  withGmp,
   withDialogNotification,
   withDownload,
 )(ReportDetails);
