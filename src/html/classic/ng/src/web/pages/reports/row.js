@@ -84,7 +84,7 @@ const IconActions = ({
         active={active}
         value={entity}
         title={title}
-        onClick={onEntityDelete}
+        onClick={active ? onEntityDelete : undefined}
       />
     </IconDivider>
   );

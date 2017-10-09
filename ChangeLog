@@ -1,5 +1,10 @@
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/row.js: Don't add delete handler
+	if delete action icon is not active.
+
+2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/report/parser.js: Skip nvts with empty
 	cve list when parsing report cves.
 
