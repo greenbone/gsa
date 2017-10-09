@@ -39,11 +39,7 @@ class Dashboard extends React.Component {
   constructor(...args) {
     super(...args);
 
-    let {id} = this.props;
-
-    if (!is_defined(id)) {
-      id = "dashboard";
-    }
+    const {id = 'dashboard'} = this.props;
 
     this.dashboard = new window.gsa.charts.Dashboard(id, undefined, {
       config_pref_id: this.props.configPrefId,
@@ -75,7 +71,7 @@ class Dashboard extends React.Component {
     const cache = this.props.usersettingsCache;
     const pref_id = this.props.configPrefId;
 
-    let promises = [
+    const promises = [
       gmp.user.currentChartPreferences({cache}),
     ];
 
@@ -84,9 +80,9 @@ class Dashboard extends React.Component {
     }
 
     PromiseFactory.all(promises).then(([prefresp, filtersresp]) => {
-      let filters = is_defined(filtersresp) ? filtersresp.data : undefined;
-      let prefs = prefresp.data;
-      let pref = prefs.get(pref_id);
+      const filters = is_defined(filtersresp) ? filtersresp.data : undefined;
+      const prefs = prefresp.data;
+      const pref = prefs.get(pref_id);
 
       for_each(filters, filter => {
         dashboard.addFilter(filter.id, filter.name, filter.term, filter.type);
@@ -120,7 +116,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    let {id} = this.state;
+    const {id} = this.state;
     return (
       <div className="dashboard">
         <div id={id}></div>
@@ -160,10 +156,13 @@ export const withDashboard = (Charts, options = {}) => {
     }
 
     render() {
-      let {filter, ...other} = this.props;
+      const {filter, ...other} = this.props;
       return (
-        <Dashboard {...options} {...other}
-          ref={ref => this.dashboard = ref}>
+        <Dashboard
+          {...options}
+          {...other}
+          ref={ref => this.dashboard = ref}
+        >
           <Charts filter={filter}/>
         </Dashboard>
       );
