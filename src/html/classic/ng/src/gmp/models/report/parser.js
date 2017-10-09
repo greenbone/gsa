@@ -25,7 +25,13 @@ import 'babel-polyfill'; // required for Object.entries, Object.values
 
 import moment from 'moment';
 
-import {filter as filter_func, for_each, is_defined, map} from '../../utils.js';
+import {
+  filter as filter_func,
+  for_each,
+  is_defined,
+  is_empty,
+  map,
+} from '../../utils.js';
 
 import {parse_severity} from '../../parser.js';
 
@@ -656,7 +662,7 @@ export const parse_cves = (report, filter) => {
   const cves = {};
 
   const results_with_cve = filter_func(results.result,
-  result => result.nvt.cve !== 'NOCVE');
+    result => result.nvt.cve !== 'NOCVE' && !is_empty(result.nvt.cve));
 
   results_with_cve.forEach(result => {
     const {host = {}, nvt = {}} = result;
