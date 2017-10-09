@@ -46,11 +46,8 @@ const TaskStatus = ({task, links = true}) => {
 
   return (
     <DetailsLink
-      legacy
       type="report"
       id={report_id}
-      result_hosts_only="1"
-      notes="1"
       textOnly={!links}
     >
       <StatusBar
