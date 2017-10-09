@@ -72,6 +72,7 @@ const ResultsTab = ({
   return (
     <ReportEntitiesContainer
       entities={results}
+      filter={filter}
       sortFunctions={results_sort_functions}
     >
       {props => (

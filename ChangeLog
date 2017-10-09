@@ -1,5 +1,10 @@
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/reports/resultstab.js: Pass filter to the
+	results table. This fixes the pagination for delta report results.
+
+2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/reports/reportentitiescontainer.js: Allow
 	to pass filter to report entities container component. With this change it
 	will be possible to modify the filter in js code without reloading from
