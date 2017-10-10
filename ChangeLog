@@ -1,3 +1,15 @@
+2017-10-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/.env,
+	src/html/classic/ng/package.json: Revert r29797. The nodejs debian package
+	from https://deb.nodesource.com installs a /etc/profile.d/nodejs.sh file. This
+	file gets sourced when starting a new interactive bash shell. In this file a
+	NODE_PATH environment variable is already set. If a environment variable is
+	already set it doesn't get overridden by the one from the .env file. This
+	causes a bug while building ng because the gmp js module can't be found.
+	Therefore override the NODE_PATH variable when running yarn (or npm) build via
+	package.json.
+
 2017-10-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/components/dashboard/dashboard.js: Code cleanup
