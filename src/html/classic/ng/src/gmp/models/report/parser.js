@@ -552,6 +552,7 @@ export const parse_errors = (report, filter) => {
     const {__text: ip, asset} = host;
     const hostname = hostnames_by_ip[ip];
     return {
+      id: ip + nvt._oid, // unique id for react key
       description,
       host: {
         ip,
