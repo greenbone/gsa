@@ -1,5 +1,12 @@
 2017-10-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/targets/component.js: Don't add a generic
+	onError handler to TargetComponent. Using this handler may have resulted in
+	issues while saving and creating targets. In this cases errors should be
+	handled by the dialogs which wouldn't be possibe if onError is set.
+
+2017-10-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/page.js: Remove onFilterCreateClick
 	from EntitiesPage. This handler wasn't ever used and now also is removed from
 	Powerfilter component. Require other handlers of EntitiesPage.

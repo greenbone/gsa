@@ -149,17 +149,16 @@ class TargetComponent extends React.Component {
   render() {
     const {
       children,
-      onError,
       onCloned,
-      onCloneError = onError,
+      onCloneError,
       onCreated,
-      onCreateError = onError,
+      onCreateError,
       onDeleted,
-      onDeleteError = onError,
+      onDeleteError,
       onDownloaded,
-      onDownloadError = onError,
+      onDownloadError,
       onSaved,
-      onSaveError = onError,
+      onSaveError,
     } = this.props;
     return (
       <EntityComponent
@@ -216,7 +215,6 @@ TargetComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onError: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
