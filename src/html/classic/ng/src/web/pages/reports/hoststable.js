@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -31,6 +32,7 @@ import SeverityBar from '../../components/bar/severitybar.js';
 
 import OsIcon from '../../components/icon/osicon.js';
 
+import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
 
 import TableData from '../../components/table/data.js';
@@ -117,18 +119,27 @@ const Row = ({
   entity,
   links = true,
 }) => {
-  const {ip, details = {}, result_counts = {}, severity} = entity;
+  const {ip, details = {}, result_counts = {}, severity, asset} = entity;
   const {best_os_cpe, best_os_txt} = details;
   return (
     <TableRow>
       <TableData>
-        <Link
-          to="hosts"
-          filter={'name=' + ip}
-          textOnly={!links}
-        >
-          {ip}
-        </Link>
+        {is_defined(asset.id) ?
+          <DetailsLink
+            type="host"
+            id={asset.id}
+            textOnly={!links}
+          >
+            {ip}
+          </DetailsLink> :
+          <Link
+            to="hosts"
+            filter={'name=' + ip}
+            textOnly={!links}
+          >
+            {ip}
+          </Link>
+        }
       </TableData>
       <TableData>
         <i>{entity.hostname}</i>
