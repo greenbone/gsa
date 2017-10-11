@@ -32,8 +32,6 @@ import PropTypes from '../utils/proptypes.js';
 
 import withDownload from '../components/form/withDownload.js';
 
-import Wrapper from '../components/layout/wrapper.js';
-
 import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
 import withHandleTags from './withHandleTags.js';
@@ -209,30 +207,23 @@ class EntityContainer extends React.Component {
   render() {
     const {
       children,
-      component: Component,
-      name,
       onDownload,
       ...other
     } = this.props;
-    return (
-      <Wrapper>
-        <Component
-          {...other}
-          {...this.state}
-          entityCommand={this.entity_command}
-          resourceType={this.name}
-          onDownloaded={onDownload}
-          onChanged={this.handleChanged}
-          onSuccess={this.handleChanged}
-          onError={this.handleError}
-        />
-      </Wrapper>
-    );
+    return children({
+      ...other,
+      ...this.state,
+      entityCommand: this.entity_command,
+      resourceType: this.name,
+      onDownloaded: onDownload,
+      onChanged: this.handleChanged,
+      onSuccess: this.handleChanged,
+      onError: this.handleError,
+    });
   }
 }
 
 EntityContainer.propTypes = {
-  component: PropTypes.component.isRequired,
   loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
   permissionsComponent: PropTypes.componentOrFalse,
@@ -249,9 +240,9 @@ EntityContainer = compose(
   withDownload,
 )(EntityContainer);
 
-export const withEntityContainer = (name, options = {}) => component => {
+export const withEntityContainer = (name, options = {}) => Component => {
 
-  component = withHandleTags()(component);
+  Component = withHandleTags()(Component);
 
   const EntityContainerWrapper = props => {
     return (
@@ -259,8 +250,9 @@ export const withEntityContainer = (name, options = {}) => component => {
         {...options}
         {...props}
         name={name}
-        component={component}
-      />
+      >
+        {cprops => <Component {...cprops} />}
+      </EntityContainer>
     );
   };
   return EntityContainerWrapper;
