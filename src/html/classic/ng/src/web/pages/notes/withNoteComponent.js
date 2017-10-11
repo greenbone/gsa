@@ -38,19 +38,19 @@ import withEntityComponent, {
 import NoteDialog from './dialog.js';
 
 const DEFAULT_MAPPING = {
-  onClone: 'onNoteCloneClick',
+  clone: 'onNoteCloneClick',
   onCloned: 'onCloned',
-  onCreate: 'onNoteCreateClick',
+  create: 'onNoteCreateClick',
   onCreated: 'onCreated',
   onCreateError: undefined, // let dialog handle error via returned promise
-  onDelete: 'onNoteDeleteClick',
+  delete: 'onNoteDeleteClick',
   onDeleted: 'onDeleted',
-  onSave: 'onNoteSaveClick',
+  save: 'onNoteSaveClick',
   onSaved: 'onSaved',
   onSaveError: undefined, // same as onCreateError
-  onDownload: 'onNoteDownloadClick',
+  download: 'onNoteDownloadClick',
   onDownloaded: 'onDownloaded',
-  onEdit: 'onNoteEditClick',
+  edit: 'onNoteEditClick',
 };
 
 const withNoteComponent = (mapping = {}) => Component => {
@@ -121,18 +121,18 @@ const withNoteComponent = (mapping = {}) => Component => {
 
     render() {
       const {
-        onSave,
+        save,
       } = mapping;
 
-      const onSaveHandler  = this.props[onSave];
+      const onSaveHandler = this.props[save];
       const has_save = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onSaved');
       const has_create = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onCreated');
 
       const handlers = create_handler_props(this.props, mapping)
-        .set('onCreate', has_create, this.openCreateNoteDialog)
-        .set('onEdit', has_save, this.openNoteDialog);
+        .set('create', has_create, this.openCreateNoteDialog)
+        .set('edit', has_save, this.openNoteDialog);
 
       return (
         <Wrapper>

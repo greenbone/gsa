@@ -45,12 +45,12 @@ import withTargetComponent from '../targets/withTargetComponent.js';
 import HostDialog from './dialog.js';
 
 const DEFAULT_MAPPING = {
-  onClone: 'onHostCloneClick',
-  onCreate: 'onHostCreateClick',
-  onDelete: 'onHostDeleteClick',
-  onSave: 'onHostSaveClick',
-  onDownload: 'onHostDownloadClick',
-  onEdit: 'onHostEditClick',
+  clone: 'onHostCloneClick',
+  create: 'onHostCreateClick',
+  delete: 'onHostDeleteClick',
+  save: 'onHostSaveClick',
+  download: 'onHostDownloadClick',
+  edit: 'onHostEditClick',
   onIdentifierDelete: 'onHostIdentifierDeleteClick',
   onIdentifierDeleted: 'onHostIdentifierDeleted',
   onIdentifierDeleteError: 'onError',
@@ -130,10 +130,10 @@ const withHostComponent = (mapping = {}) => Component => {
 
     render() {
       const {
-        onSave,
+        save,
       } = mapping;
 
-      const onSaveHandler  = this.props[onSave];
+      const onSaveHandler = this.props[save];
 
       const has_save = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onSaved');
@@ -141,8 +141,8 @@ const withHostComponent = (mapping = {}) => Component => {
         has_mapping(this.props, mapping, 'onCreated');
 
       const handlers = create_handler_props(this.props, mapping)
-        .set('onEdit', has_save, this.openHostDialog)
-        .set('onCreate', has_create, this.openHostDialog)
+        .set('edit', has_save, this.openHostDialog)
+        .set('create', has_create, this.openHostDialog)
         .set('onIdentifierDelete', 'onIdentifierDeleted',
           this.handleIdentifierDelete);
 

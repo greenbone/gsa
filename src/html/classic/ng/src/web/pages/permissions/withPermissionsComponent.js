@@ -37,16 +37,16 @@ import withEntityComponent from '../../entity/withEntityComponent.js';
 import PermissionDialog from './dialog.js';
 
 const DEFAULT_MAPPING = {
-  onClone: 'onPermissionCloneClick',
+  clone: 'onPermissionCloneClick',
   onCloned: 'onCloned',
-  onDelete: 'onPermissionDeleteClick',
+  delete: 'onPermissionDeleteClick',
   onDeleted: 'onDeleted',
-  onSave: 'onPermissionSaveClick',
+  save: 'onPermissionSaveClick',
   onSaved: 'onSaved',
-  onDownload: 'onPermissionDownloadClick',
+  download: 'onPermissionDownloadClick',
   onDownloaded: 'onDownloaded',
-  onCreate: 'onPermissionCreateClick',
-  onEdit: 'onPermissionEditClick',
+  create: 'onPermissionCreateClick',
+  edit: 'onPermissionEditClick',
 };
 
 const withPermissionsComponent = (mapping = {}) => Component => {
@@ -173,17 +173,17 @@ const withPermissionsComponent = (mapping = {}) => Component => {
 
     render() {
       const {
-        onCreate,
-        onEdit,
-        onSave,
+        create,
+        edit,
+        save,
       } = mapping;
 
-      const onSaveClick  = this.props[onSave];
+      const onSaveClick = this.props[save];
       const has_save = is_defined(onSaveClick);
 
       const handlers = {
-        [onCreate]: has_save ? this.openPermissionDialog : undefined,
-        [onEdit]: has_save ? this.openPermissionDialog : undefined,
+        [create]: has_save ? this.openPermissionDialog : undefined,
+        [edit]: has_save ? this.openPermissionDialog : undefined,
       };
 
       return (

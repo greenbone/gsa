@@ -38,12 +38,12 @@ import withEntityComponent, {
 import OverrideDialog from './dialog.js';
 
 const DEFAULT_MAPPING = {
-  onClone: 'onOverrideCloneClick',
-  onCreate: 'onOverrideCreateClick',
-  onDelete: 'onOverrideDeleteClick',
-  onSave: 'onOverrideSaveClick',
-  onDownload: 'onOverrideDownloadClick',
-  onEdit: 'onOverrideEditClick',
+  clone: 'onOverrideCloneClick',
+  create: 'onOverrideCreateClick',
+  delete: 'onOverrideDeleteClick',
+  save: 'onOverrideSaveClick',
+  download: 'onOverrideDownloadClick',
+  edit: 'onOverrideEditClick',
 };
 
 const withOverrideComponent = (mapping = {}) => Component => {
@@ -128,18 +128,18 @@ const withOverrideComponent = (mapping = {}) => Component => {
 
     render() {
       const {
-        onSave,
+        save,
       } = mapping;
 
-      const onSaveHandler  = this.props[onSave];
+      const onSaveHandler = this.props[save];
       const has_save = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onSaved');
       const has_create = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onCreated');
 
       const handlers = create_handler_props(this.props, mapping)
-        .set('onCreate', has_create, this.openCreateOverrideDialog)
-        .set('onEdit', has_save, this.openOverrideDialog);
+        .set('create', has_create, this.openCreateOverrideDialog)
+        .set('edit', has_save, this.openOverrideDialog);
       return (
         <Wrapper>
           <Component

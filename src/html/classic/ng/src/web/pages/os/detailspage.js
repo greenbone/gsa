@@ -180,9 +180,9 @@ Details.propTypes = {
 };
 
 const Page = withEntityComponent('operatingsystem', {
-  onDelete: 'onOperatingSystemDeleteClick',
+  delete: 'onOperatingSystemDeleteClick',
   onDeleted: goto_list('operatingsystems'),
-  onDownload: 'onOperatingSystemDownloadClick',
+  download: 'onOperatingSystemDownloadClick',
 })(EntityPage);
 
 export default withEntityContainer('operatingsystem', {

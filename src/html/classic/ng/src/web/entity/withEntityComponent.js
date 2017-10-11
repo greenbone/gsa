@@ -24,9 +24,9 @@
 import React from 'react';
 
 import logger from 'gmp/log.js';
-import {is_defined, is_function, is_string} from 'gmp/utils.js';
+import {is_defined, is_function} from 'gmp/utils.js';
 
-import PropTypes from '../utils/proptypes.js';
+import EntityComponent from './component.js';
 
 const log = logger.getLogger('web.entity.withEntityComponent');
 
@@ -43,7 +43,7 @@ export const has_mapping = (props, mapping, name) => {
 
 export const create_handler_props = (props, mapping, handlers = {}) => {
 
-  const set_handler = (name, named, handler) => {
+  const set_handler = (name, _, handler) => {
     const onName = mapping[name];
 
     if (process.env.NODE_ENV !== 'production' && !is_defined(onName)) {
@@ -51,10 +51,7 @@ export const create_handler_props = (props, mapping, handlers = {}) => {
       return handlers;
     }
 
-    const condition = is_string(named) ? has_mapping(props, mapping, named) :
-      named;
-
-    handlers[onName] = condition ? handler : undefined;
+    handlers[onName] = handler;
 
     return handlers;
   };
@@ -64,6 +61,14 @@ export const create_handler_props = (props, mapping, handlers = {}) => {
   });
 
   return handlers;
+};
+
+export const get_handler = (props, handler) => {
+
+  if (is_function(handler)) {
+    return (...args) => handler(props, ...args);
+  }
+  return props[handler];
 };
 
 export const handle_promise = (promise, props, success, error) => {
@@ -87,19 +92,19 @@ export const handle_promise = (promise, props, success, error) => {
 };
 
 export const DEFAULT_MAPPING = {
-  onCreate: 'onEntityCreateClick',
+  create: 'onEntityCreateClick',
   onCreateError: undefined, // let dialogs handle error via returned promise
   onCreated: 'onCreated',
-  onClone: 'onEntityCloneClick',
+  clone: 'onEntityCloneClick',
   onCloneError: 'onCloneError',
   onCloned: 'onCloned',
-  onDelete: 'onEntityDeleteClick',
+  delete: 'onEntityDeleteClick',
   onDeleteError: 'onDeleteError',
   onDeleted: 'onDeleted',
-  onSave: 'onEntitySaveClick',
+  save: 'onEntitySaveClick',
   onSaveError: undefined, // same as onCreateError
   onSaved: 'onSaved',
-  onDownload: 'onEntityDownloadClick',
+  download: 'onEntityDownloadClick',
   onDownloadError: 'onDownloadError',
   onDownloaded: 'onDownloaded',
 };
@@ -111,84 +116,54 @@ const withEntityComponent = (name, mapping) => Component => {
     ...mapping,
   };
 
-  class EntityComponentWrapper extends React.Component {
-
-    constructor(...args) {
-      super(...args);
-
-      const {gmp} = this.context;
-
-      this.cmd = gmp[name];
-
-      this.handleEntityClone = this.handleEntityClone.bind(this);
-      this.handleEntityDelete = this.handleEntityDelete.bind(this);
-      this.handleEntityDownload = this.handleEntityDownload.bind(this);
-      this.handleEntitySave = this.handleEntitySave.bind(this);
-    }
-
-    handleEntityDelete(entity) {
-      const {onDeleted, onDeleteError} = mapping;
-      const promise = this.cmd.delete(entity);
-
-      return handle_promise(promise, this.props, onDeleted, onDeleteError);
-    }
-
-    handleEntityClone(entity) {
-      const {onCloned, onCloneError} = mapping;
-      const promise = this.cmd.clone(entity);
-
-      return handle_promise(promise, this.props, onCloned, onCloneError);
-    }
-
-    handleEntitySave(data) {
-      let promise;
-
-      if (is_defined(data.id)) {
-        const {onSaved, onSaveError} = mapping;
-        promise = this.cmd.save(data);
-        return handle_promise(promise, this.props, onSaved, onSaveError);
-      }
-
-      const {onCreated, onCreateError} = mapping;
-      promise = this.cmd.create(data);
-      return handle_promise(promise, this.props, onCreated, onCreateError);
-
-    }
-
-    handleEntityDownload(entity) {
-      const {onDownloaded, onDownloadError} = mapping;
-
-      const promise = this.cmd.export(entity).then(response => {
-        const filename = name + '-' + entity.id + '.xml';
-        return {filename, data: response.data};
-      });
-
-      return handle_promise(promise, this.props, onDownloaded, onDownloadError);
-    }
-
-    render() {
-      const handlers = create_handler_props(this.props, mapping)
-        .set('onCreate', 'onCreated', this.handleEntitySave)
-        .set('onClone', 'onCloned', this.handleEntityClone)
-        .set('onDelete', 'onDeleted', this.handleEntityDelete)
-        .set('onSave', 'onSaved', this.handleEntitySave)
-        .set('onDownload', 'onDownloaded', this.handleEntityDownload);
-
-      return (
-        <Component
-          {...handlers}
-          {...this.props}
-        />
-      );
-    }
-  }
-
-  EntityComponentWrapper.propTypes = {
-    onError: PropTypes.func,
-  };
-
-  EntityComponentWrapper.contextTypes = {
-    gmp: PropTypes.gmp.isRequired,
+  const EntityComponentWrapper = props => {
+    const {
+      create: create_name,
+      clone: clone_name,
+      delete: delete_name,
+      download: download_name,
+      save: save_name,
+      onCreated,
+      onCreateError,
+      onDeleted,
+      onDeleteError,
+      onSaved,
+      onSaveError,
+      onDownloaded,
+      onDownloadError,
+    } = mapping;
+    return (
+      <EntityComponent
+        name={name}
+        onCreated={get_handler(props, onCreated)}
+        onCreateError={get_handler(props, onCreateError)}
+        onDeleted={get_handler(props, onDeleted)}
+        onDeleteError={get_handler(props, onDeleteError)}
+        onSaved={get_handler(props, onSaved)}
+        onSaveError={get_handler(props, onSaveError)}
+        onDownloaded={get_handler(props, onDownloaded)}
+        onDownloadError={get_handler(props, onDownloadError)}
+      >
+        {({
+          create,
+          clone,
+          delete: delete_func,
+          save,
+          download,
+        }) => {
+          const cprops = {
+            [create_name]: create,
+            [clone_name]: clone,
+            [delete_name]: delete_func,
+            [download_name]: download,
+            [save_name]: save,
+          };
+          return (
+            <Component {...props} {...cprops} />
+          );
+        }}
+      </EntityComponent>
+    );
   };
 
   return EntityComponentWrapper;

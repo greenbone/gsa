@@ -85,19 +85,19 @@ const sort_scan_configs = scan_configs => {
 };
 
 const DEFAULT_MAPPING = {
-  onClone: 'onTaskCloneClick',
+  clone: 'onTaskCloneClick',
   onCloned: 'onCloned',
-  onCreate: 'onTaskCreateClick',
+  create: 'onTaskCreateClick',
   onCreated: 'onCreated',
   onCreateError: undefined, // let dialog handle error via returned promise
-  onDelete: 'onTaskDeleteClick',
+  delete: 'onTaskDeleteClick',
   onDeleted: 'onDeleted',
-  onSave: 'onTaskSaveClick',
+  save: 'onTaskSaveClick',
   onSaved: 'onSaved',
   onSaveError: undefined, // same as onCreateError
-  onDownload: 'onTaskDownloadClick',
+  download: 'onTaskDownloadClick',
   onDownloaded: 'onDownloaded',
-  onEdit: 'onTaskEditClick',
+  edit: 'onTaskEditClick',
   onReportImport: 'onReportImportClick',
   onReportImported: 'onReportImported',
   onContainerCreate: 'onContainerTaskCreateClick',
@@ -441,18 +441,18 @@ const withTaskComponent = (mapping = {}) => Component => {
 
     render() {
       const {
-        onSave,
+        save,
       } = mapping;
 
-      const onSaveHandler = this.props[onSave];
+      const onSaveHandler = this.props[save];
       const has_save = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onSaved');
       const has_create = is_defined(onSaveHandler) &&
         has_mapping(this.props, mapping, 'onCreated');
 
       const handlers = create_handler_props(this.props, mapping)
-        .set('onCreate', has_create, this.openTaskDialog)
-        .set('onEdit', has_save, this.openTaskDialog)
+        .set('create', has_create, this.openTaskDialog)
+        .set('edit', has_save, this.openTaskDialog)
         .set('onContainerCreate', 'onContainerCreated',
           this.openContainerTaskDialog)
         .set('onReportImport', 'onReportImported',
