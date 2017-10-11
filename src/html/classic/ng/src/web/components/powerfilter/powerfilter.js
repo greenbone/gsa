@@ -156,20 +156,13 @@ class PowerFilter extends React.Component {
   handleCreateFilter() {
     let {filter, userfilter = '', filtername = ''} = this.state;
 
-    const {onCreateClick} = this.props;
-
     if (filtername.trim().length === 0) {
       return;
     }
 
     filter = Filter.fromString(userfilter, filter);
 
-    if (is_defined(onCreateClick)) {
-      onCreateClick(filter);
-    }
-    else {
-      this.createFilter(filter);
-    }
+    this.createFilter(filter);
   }
 
   createFilter(filter) {
@@ -311,7 +304,6 @@ PowerFilter.propTypes = {
   createFilterType: PropTypes.string,
   filter: PropTypes.filter,
   filters: PropTypes.arrayLike,
-  onCreateClick: PropTypes.func,
   onEditClick: PropTypes.func,
   onError: PropTypes.func,
   onFilterCreated: PropTypes.func,
