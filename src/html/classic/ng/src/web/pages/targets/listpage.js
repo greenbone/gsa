@@ -37,7 +37,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import TargetsFilterDialog from './filterdialog.js';
 import TargetsTable from './table.js';
-import withTargetComponent from './withTargetComponent.js';
+import TargetComponent from './component.js';
 
 import {TARGETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -56,12 +56,50 @@ ToolBarIcons.propTypes = {
   onTargetCreateClick: PropTypes.func.isRequired,
 };
 
-const TargetsPageNew = withTargetComponent({
-  onCreated: 'onChanged',
-  onSaved: 'onChanged',
-  onCloned: 'onChanged',
-  onDeleted: 'onChanged',
-})(EntitiesPage);
+const TargetsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <TargetComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+  }) => (
+    <EntitiesPage
+      {...props}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onTargetCloneClick={clone}
+      onTargetCreateClick={create}
+      onTargetDeleteClick={delete_func}
+      onTargetDownloadClick={download}
+      onTargetEditClick={edit}
+      onTargetSaveClick={save}
+    />
+  )}
+  </TargetComponent>
+);
+
+TargetsPage.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('target', {
   filterEditDialog: TargetsFilterDialog,
@@ -70,6 +108,6 @@ export default withEntitiesContainer('target', {
   table: TargetsTable,
   title: _('Targets'),
   toolBarIcons: ToolBarIcons,
-})(TargetsPageNew);
+})(TargetsPage);
 
 // vim: set ts=2 sw=2 tw=80:

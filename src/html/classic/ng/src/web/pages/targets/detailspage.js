@@ -48,7 +48,7 @@ import TableRow from '../../components/table/row.js';
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
 import {withEntityContainer} from '../../entity/container.js';
-import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
+import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import CreateIcon from '../../entity/icon/createicon.js';
@@ -56,7 +56,7 @@ import EditIcon from '../../entity/icon/editicon.js';
 import TrashIcon from '../../entity/icon/trashicon.js';
 
 import TargetDetails from './details.js';
-import withTargetComponent from './withTargetComponent.js';
+import TargetComponent from './component.js';
 
 const ToolBarIcons = ({
   entity,
@@ -154,17 +154,53 @@ Details.propTypes = {
 
 const goto_target = goto_details('target');
 
-const Page = withTargetComponent({
-  onCloned: goto_target,
-  onCloneError: 'onError',
-  onCreated: goto_target,
-  onCreateError: undefined,
-  onDeleted: goto_list('targets'),
-  onDeleteError: 'onError',
-  onDownloadError: 'onError',
-  onSaved: 'onChanged',
-  onSaveError: undefined,
-})(EntityPage);
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => {
+  return (
+    <TargetComponent
+      onCloned={goto_target(props)}
+      onCloneError={onError}
+      onCreated={goto_target(props)}
+      onDeleted={goto_list('targets', props)}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onSaved={onChanged}
+    >
+      {({
+        clone,
+        create,
+        delete: delete_func,
+        download,
+        edit,
+        save,
+      }) => (
+        <EntityPage
+          {...props}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onTargetCloneClick={clone}
+          onTargetCreateClick={create}
+          onTargetDeleteClick={delete_func}
+          onTargetDownloadClick={download}
+          onTargetEditClick={edit}
+          onTargetSaveClick={save}
+        />
+      )}
+    </TargetComponent>
+  );
+};
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 const TargetPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
