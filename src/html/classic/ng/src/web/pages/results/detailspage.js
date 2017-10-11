@@ -66,7 +66,7 @@ const ToolBarIcons = ({
   capabilities,
   entity,
   onNoteCreateClick,
-  onOverrideCreateClick
+  onOverrideCreateClick,
 }) => (
   <Divider margin="10px">
     <IconDivider>
@@ -143,7 +143,7 @@ const active_filter = entity => entity.isActive();
 
 const Details = ({
   entity,
-  ...props,
+  ...props
 }) => {
   const {notes, overrides, qod, host, user_tags} = entity;
   const active_notes = notes.filter(active_filter);
@@ -172,7 +172,8 @@ const Details = ({
                   {overrides.active &&
                     <InnerLink
                       to="overrides">
-                      <Icon img="override.svg"
+                      <Icon
+                        img="override.svg"
                         title={_('Overrides are applied')}
                       />
                     </InnerLink>

@@ -75,7 +75,11 @@ SectionElements.propTypes = {
 
 const PermissionIcon = props => {
   return (
-    <Icon {...props} img="permission.svg" size="small" />
+    <Icon
+      {...props}
+      img="permission.svg"
+      size="small"
+    />
   );
 };
 
@@ -153,7 +157,7 @@ class EntityPermissions extends React.Component {
       entity,
       foldable = true,
       permissions,
-      ...props,
+      ...props
     } = this.props;
 
     const extra = (
@@ -195,9 +199,9 @@ class EntityPermissions extends React.Component {
 
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
+  foldable: PropTypes.bool,
   permissions: PropTypes.arrayLike,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
-  foldable: PropTypes.bool,
   onChanged: PropTypes.func.isRequired,
   onPermissionEditClick: PropTypes.func.isRequired,
 };

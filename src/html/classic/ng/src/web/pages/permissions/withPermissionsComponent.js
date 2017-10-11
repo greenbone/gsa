@@ -66,7 +66,7 @@ const withPermissionsComponent = (mapping = {}) => Component => {
     }
 
     openPermissionDialog(permission, fixed = false) {
-      let {gmp, capabilities} = this.context;
+      const {gmp, capabilities} = this.context;
 
       let users_promise;
       let roles_promise;
@@ -75,7 +75,7 @@ const withPermissionsComponent = (mapping = {}) => Component => {
       let state;
 
       if (is_defined(permission)) {
-        let subject_type = is_defined(permission.subject) ?
+        const subject_type = is_defined(permission.subject) ?
           permission.subject.type : undefined;
 
         state = {

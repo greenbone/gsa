@@ -154,7 +154,7 @@ const Hop = glamorous.div({
 
 const Details = ({
   entity,
-  ...props,
+  ...props
 }) => {
   const {details = {}, routes, severity} = entity;
   const os_cpe = is_defined(details.best_os_cpe) ? details.best_os_cpe.value :

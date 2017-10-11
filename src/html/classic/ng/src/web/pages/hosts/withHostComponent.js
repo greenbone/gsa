@@ -104,7 +104,7 @@ const withHostComponent = (mapping = {}) => Component => {
       if (selectionType === SelectionType.SELECTION_USER) {
         const hosts = [...entitiesSelected]; // convert set to array
         size = entitiesSelected.size;
-        filterstring = map(hosts, host => 'uuid=' + host.id).join(" ");
+        filterstring = map(hosts, host => 'uuid=' + host.id).join(' ');
 
       }
       else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -164,10 +164,10 @@ const withHostComponent = (mapping = {}) => Component => {
   }
 
   HostComponentWrapper.propTypes = {
-    selectionType: PropTypes.string,
     entities: PropTypes.collection,
     entitiesSelected: PropTypes.set,
     filter: PropTypes.filter,
+    selectionType: PropTypes.string,
     onTargetCreateClick: PropTypes.func.isRequired,
   };
 

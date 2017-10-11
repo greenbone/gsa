@@ -116,7 +116,7 @@ ToolBarIcons.propTypes = {
 
 const Details = ({
   entity,
-  ...props,
+  ...props
 }) => (
   <Layout flex="column">
     <InfoTable>

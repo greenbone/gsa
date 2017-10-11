@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {is_defined, is_empty, shorten} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
