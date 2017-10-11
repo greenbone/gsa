@@ -529,10 +529,9 @@ export const parse_errors = (report, filter) => {
 
   const {count: full_count} = errors;
 
-  const hosts_by_ip = {};
+  const hostnames_by_ip = {};
 
   for_each(hosts, host => {
-    let hostname;
     const {ip} = host;
 
     if (is_defined(ip)) {
@@ -540,26 +539,26 @@ export const parse_errors = (report, filter) => {
         const {name, value} = detail;
         if (name === 'hostname') {
           // collect hostname
-          hostname = value;
+          hostnames_by_ip[ip] = value;
         }
       });
-
-      hosts_by_ip[ip] = {
-        ip,
-        id: is_defined(host.asset) ? host.asset._asset_id : undefined,
-        name: hostname,
-      };
     }
   });
 
-  const errors_array = filter_func(errors.error, error => {
-    const {host: ip, nvt} = error;
-    return is_defined(ip) && is_defined(nvt);
-  }).map(error => {
-    const {host: ip, description, port, nvt} = error;
+  const errors_array = filter_func(errors.error, error =>
+    is_defined(error.host) && is_defined(error.nvt)
+  ).map(error => {
+    const {host, description, port, nvt} = error;
+    const {__text: ip, asset} = host;
+    const hostname = hostnames_by_ip[ip];
     return {
       description,
-      host: hosts_by_ip[ip],
+      host: {
+        ip,
+        name: hostname,
+        id: is_defined(asset) && !is_empty(asset._asset_id) ?
+          asset._asset_id : undefined,
+      },
       nvt: {
         id: nvt._oid,
         name: nvt.name,
