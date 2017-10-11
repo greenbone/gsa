@@ -53,6 +53,7 @@ export const cves_sort_functions = {
 export const errors_sort_functions = {
   error: make_compare_string('description'),
   host: make_compare_ip(entity => entity.host.ip),
+  hostname: make_compare_string(entity => entity.host.name),
   nvt: make_compare_string(entity => entity.nvt.name),
   port: make_compare_string('port'),
 };

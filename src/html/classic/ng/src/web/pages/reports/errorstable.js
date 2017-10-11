@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -53,6 +54,11 @@ const Header = ({
         {_('Host')}
       </TableHead>
       <TableHead
+        sortby={sort ? 'hostname' : false}
+        onSortChange={onSortChange}>
+        {_('Hostname')}
+      </TableHead>
+      <TableHead
         sortby={sort ? 'nvt' : false}
         onSortChange={onSortChange}>
         {_('NVT')}
@@ -71,7 +77,10 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Row = ({entity}) => {
+const Row = ({
+  entity,
+  links = true,
+}) => {
   const {nvt, host, port, description} = entity;
   return (
     <TableRow>
@@ -79,17 +88,25 @@ const Row = ({entity}) => {
         {description}
       </TableData>
       <TableData>
-        <DetailsLink
-          type="host"
-          id={host.id}
-        >
-          {host.ip}
-        </DetailsLink>
+        {is_defined(host.id) ?
+          <DetailsLink
+            type="host"
+            id={host.id}
+            textOnly={!links}
+          >
+            {host.ip}
+          </DetailsLink> :
+          host.ip
+        }
+      </TableData>
+      <TableData>
+        <i>{host.name}</i>
       </TableData>
       <TableData>
         <DetailsLink
           type="nvt"
           id={nvt.id}
+          textOnly={!links}
         >
           {nvt.name}
         </DetailsLink>
@@ -103,6 +120,7 @@ const Row = ({entity}) => {
 
 Row.propTypes = {
   entity: PropTypes.object.isRequired,
+  links: PropTypes.bool,
 };
 
 export default createEntitiesTable({
