@@ -23,41 +23,22 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {first, is_defined} from 'gmp/utils.js';
+import {get_handler} from '../../entity/withEntityComponent.js';
 
-import PropTypes from '../../utils/proptypes.js';
-
-import Layout from '../../components/layout/layout.js';
-import withEntityComponent, {
-  create_handler_props,
-  has_mapping,
-} from '../../entity/withEntityComponent.js';
-
-import CredentialsDialog from '../credentials/dialog.js';
-
-import PortListDialog from '../portlists/dialog.js';
-
-import TargetDialog from './dialog.js';
-
-const id_or__ = value => {
-  return is_defined(value) ? value.id : 0;
-};
+import TargetComponent from './component.js';
 
 const DEFAULT_MAPPING = {
-  onClone: 'onTargetCloneClick',
+  clone: 'onTargetCloneClick',
   onCloned: 'onCloned',
-  onCreate: 'onTargetCreateClick',
+  create: 'onTargetCreateClick',
   onCreated: 'onCreated',
-  onCreateError: undefined, // let dialog handle error via returned promise
-  onDelete: 'onTargetDeleteClick',
+  delete: 'onTargetDeleteClick',
   onDeleted: 'onDeleted',
-  onSave: 'onTargetSaveClick',
+  save: 'onTargetSaveClick',
   onSaved: 'onSaved',
-  onSaveError: undefined, // same as onCreateError
-  onDownload: 'onTargetDownloadClick',
+  download: 'onTargetDownloadClick',
   onDownloaded: 'onDownloaded',
-  onEdit: 'onTargetEditClick',
+  edit: 'onTargetEditClick',
 };
 
 const withTargetComponent = (mapping = {}) => Component => {
@@ -67,160 +48,58 @@ const withTargetComponent = (mapping = {}) => Component => {
     ...mapping,
   };
 
-  class TargetComponentWrapper extends React.Component {
-
-    constructor(...args) {
-      super(...args);
-
-      this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-      this.openPortListDialog = this.openPortListDialog.bind(this);
-      this.openTargetDialog = this.openTargetDialog.bind(this);
-      this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
-      this.handleCreateCredential = this.handleCreateCredential.bind(this);
-      this.handleCreatePortList = this.handleCreatePortList.bind(this);
-    }
-
-    openCredentialsDialog(data) {
-      this.credentials_dialog.show({
-        types: data.types,
-        base: first(data.types),
-        id_field: data.id_field,
-      }, {
-        title: data.title,
-      });
-    }
-
-    openTargetDialog(entity) {
-      if (is_defined(entity)) {
-        this.target_dialog.show({
-          id: entity.id,
-          alive_tests: entity.alive_tests,
-          comment: entity.comment,
-          esxi_credential_id: id_or__(entity.esxi_credential),
-          exclude_hosts: is_defined(entity.exclude_hosts) ?
-            entity.exclude_hosts.join(', ') : '',
-          hosts: entity.hosts.join(', '),
-          in_use: entity.isInUse(),
-          name: entity.name,
-          port_list_id: id_or__(entity.port_list),
-          port: is_defined(entity.ssh_credential) ?
-            entity.ssh_credential.port : '22',
-          reverse_lookup_only: entity.reverse_lookup_only,
-          reverse_lookup_unify: entity.reverse_lookup_unify,
-          smb_credential_id: id_or__(entity.smb_credential),
-          snmp_credential_id: id_or__(entity.snmp_credential),
-          ssh_credential_id: id_or__(entity.ssh_credential),
-          target_source: 'manual',
-          target_exclude_source: 'manual',
-        }, {
-          title: _('Edit Target {{name}}', entity),
-        });
-
-        this.loadData();
-      }
-    }
-
-    openCreateTargetDialog(initial = {}) {
-      this.target_dialog.show(initial);
-
-      this.loadData();
-    }
-
-    loadData() {
-      const {gmp} = this.context;
-
-      gmp.portlists.getAll().then(port_lists => {
-        this.port_lists = port_lists;
-        this.target_dialog.setValues({port_lists});
-      });
-
-      gmp.credentials.getAll().then(credentials => {
-        this.credentials = credentials;
-        this.target_dialog.setValues({credentials});
-      });
-    }
-
-    openPortListDialog() {
-      this.port_list_dialog.show({});
-    }
-
-    handleCreateCredential(data) {
-      const {gmp} = this.context;
-      return gmp.credential.create(data).then(response => {
-        const credential = response.data;
-        const {credentials = []} = this;
-        credentials.push(credential);
-
-        this.target_dialog.setValues({
-          credentials,
-          [data.id_field]: credential.id,
-        });
-      });
-    }
-
-    handleCreatePortList(data) {
-      const {gmp} = this.context;
-      return gmp.portlist.create(data).then(response => {
-        const portlist = response.data;
-        const {port_lists = []} = this;
-        port_lists.push(portlist);
-        this.target_dialog.setValues({
-          port_lists,
-          port_list_id: portlist.id,
-        });
-      });
-    }
-
-    render() {
-      const {
-        onSave,
-      } = mapping;
-
-      const onSaveHandler = this.props[onSave];
-
-      const has_save = is_defined(onSaveHandler) &&
-        has_mapping(this.props, mapping, 'onSaved');
-      const has_create = is_defined(onSaveHandler) &&
-        has_mapping(this.props, mapping, 'onCreated');
-
-      const handlers = create_handler_props(this.props, mapping)
-        .set('onEdit', has_save, this.openTargetDialog)
-        .set('onCreate', has_create, this.openCreateTargetDialog);
-
-      return (
-        <Layout>
-          <Component
-            {...this.props}
-            {...handlers}
-          />
-          <TargetDialog
-            ref={ref => this.target_dialog = ref}
-            onNewCredentialsClick={this.openCredentialsDialog}
-            onNewPortListClick={this.openPortListDialog}
-            onSave={onSaveHandler}
-          />
-          <CredentialsDialog
-            ref={ref => this.credentials_dialog = ref}
-            onSave={this.handleCreateCredential}
-          />
-          <PortListDialog
-            ref={ref => this.port_list_dialog = ref}
-            onSave={this.handleCreatePortList}
-          />
-        </Layout>
-      );
-    }
+  const TargetComponentWrapper = props => {
+    const {
+      create: create_name,
+      clone: clone_name,
+      delete: delete_name,
+      download: download_name,
+      save: save_name,
+      onError,
+      onCreated,
+      onCreateError,
+      onDeleted,
+      onDeleteError,
+      onSaved,
+      onSaveError,
+      onDownloaded,
+      onDownloadError,
+    } = mapping;
+    return (
+      <TargetComponent
+        onError={get_handler(props, onError)}
+        onCreated={get_handler(props, onCreated)}
+        onCreateError={get_handler(props, onCreateError)}
+        onDeleted={get_handler(props, onDeleted)}
+        onDeleteError={get_handler(props, onDeleteError)}
+        onSaved={get_handler(props, onSaved)}
+        onSaveError={get_handler(props, onSaveError)}
+        onDownloaded={get_handler(props, onDownloaded)}
+        onDownloadError={get_handler(props, onDownloadError)}
+      >
+        {({
+          create,
+          clone,
+          delete: delete_func,
+          save,
+          download,
+        }) => {
+          const cprops = {
+            [create_name]: create,
+            [clone_name]: clone,
+            [delete_name]: delete_func,
+            [download_name]: download,
+            [save_name]: save,
+          };
+          return (
+            <Component {...props} {...cprops} />
+          );
+        }}
+      </TargetComponent>
+    );
   };
 
-  TargetComponentWrapper.propTypes = {
-    onError: PropTypes.func.isRequired,
-  };
-
-  TargetComponentWrapper.contextTypes = {
-    gmp: PropTypes.gmp.isRequired,
-  };
-
-  return withEntityComponent('target', mapping)(TargetComponentWrapper);
+  return TargetComponentWrapper;
 };
 
 export default withTargetComponent;
