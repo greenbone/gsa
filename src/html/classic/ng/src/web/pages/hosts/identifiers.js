@@ -65,7 +65,6 @@ const Source = ({source}) => {
         <span>{_('Report')}</span>
         {' '}
         <DetailsLink
-          legacy
           textOnly={deleted !== '0'}
           type="report"
           id={id}
@@ -96,7 +95,6 @@ const Source = ({source}) => {
         <span>{_('Report')}</span>
         {' '}
         <DetailsLink
-          legacy
           textOnly={deleted !== '0'}
           type="report"
           id={id}

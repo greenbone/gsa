@@ -119,7 +119,6 @@ const ToolBarIcons = ({
       }
       {capabilities.mayAccess('reports') &&
         <DetailsLink
-          legacy
           type="report"
           id={entity.report.id}
         >

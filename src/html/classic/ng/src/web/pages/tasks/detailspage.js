@@ -158,7 +158,6 @@ const ToolBarIcons = ({
         <IconDivider>
           {is_defined(entity.current_report) &&
             <DetailsLink
-              legacy
               type="report"
               id={entity.current_report.id}
               title={_('Current Report on Task {{name}} from {{- date}}', {
@@ -174,7 +173,6 @@ const ToolBarIcons = ({
 
           {is_defined(entity.last_report) &&
             <DetailsLink
-              legacy
               type="report"
               id={entity.last_report.id}
               title={_('Last Report on Task {{name}} from {{- date}}', {
