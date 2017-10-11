@@ -29,6 +29,16 @@ import PropTypes from '../utils/proptypes.js';
 
 import withGmp from '../utils/withGmp.js';
 
+export const goto_details = type => props => ({data}) => {
+  const {router} = props;
+  return router.push('/ng/' + type + '/' + data.id);
+};
+
+export const goto_list = (type, props) => () => {
+  const {router} = props;
+  return router.push('/ng/' + type);
+};
+
 class EntityComponent extends React.Component {
 
   constructor(...args) {
