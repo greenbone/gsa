@@ -158,7 +158,6 @@ class EntitiesPage extends React.Component {
       powerfilter = PowerFilter,
       onError,
       onFilterChanged,
-      onFilterCreateClick,
       onFilterCreated,
     } = this.props;
 
@@ -180,7 +179,6 @@ class EntitiesPage extends React.Component {
           createFilterType={createFilterType}
           filter={filter}
           filters={filters}
-          onCreateClick={onFilterCreateClick}
           onEditClick={handler}
           onError={onError}
           onFilterCreated={onFilterCreated}
@@ -259,10 +257,9 @@ EntitiesPage.propTypes = {
   table: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.componentOrElement,
-  onError: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreateClick: PropTypes.func,
-  onFilterCreated: PropTypes.func,
+  onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onFilterCreated: PropTypes.func.isRequired,
 };
 
 export const createEntitiesPage = (options = {}) => {
