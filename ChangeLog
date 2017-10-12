@@ -1,3 +1,13 @@
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/container.js,
+	src/html/classic/ng/src/web/entity/tagshandler.js,
+	src/html/classic/ng/src/web/entity/withHandleTags.js,
+	src/html/classic/ng/src/web/pages/reports/summary.js: Convert withHandleTags
+	HOC into a TagsHandler component. The new TagsHandler component uses the
+	render props pattern and should be easier to understand then the HOC.
+
 2017-10-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entity/permissions.js,

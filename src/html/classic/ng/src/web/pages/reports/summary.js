@@ -29,31 +29,42 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import withHandleTags from '../../entity/withHandleTags.js';
+import TagsHandler from '../../entity/tagshandler.js';
 
 import ScanInfo from './scaninfo.js';
 
 const Summary = ({
   report,
+  onError,
+  onSuccess,
   ...props
 }) => (
   <Layout flex="column">
     <ScanInfo
       report={report}
     />
-    <EntityTags
-      {...props}
-      entity={report}
-    />
+    <TagsHandler
+      onError={onError}
+      onSuccess={onSuccess}
+      resourceType="report"
+    >
+      {tprops => (
+        <EntityTags
+          {...props}
+          {...tprops}
+          entity={report}
+        />
+      )}
+    </TagsHandler>
   </Layout>
 );
 
 Summary.propTypes = {
   report: PropTypes.model.isRequired,
+  onError: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired,
 };
 
-export default withHandleTags({
-  resource_type: 'report',
-})(Summary);
+export default Summary;
 
 // vim: set ts=2 sw=2 tw=80:

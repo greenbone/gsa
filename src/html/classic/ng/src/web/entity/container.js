@@ -34,7 +34,7 @@ import withDownload from '../components/form/withDownload.js';
 
 import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
-import withHandleTags from './withHandleTags.js';
+import TagsHandler from './tagshandler.js';
 
 const log = logger.getLogger('web.entity.container');
 
@@ -207,19 +207,32 @@ class EntityContainer extends React.Component {
   render() {
     const {
       children,
+      resourceType,
+      showError,
+      showSuccessMessage,
       onDownload,
       ...other
     } = this.props;
-    return children({
-      ...other,
-      ...this.state,
-      entityCommand: this.entity_command,
-      resourceType: this.name,
-      onDownloaded: onDownload,
-      onChanged: this.handleChanged,
-      onSuccess: this.handleChanged,
-      onError: this.handleError,
-    });
+    return (
+      <TagsHandler
+        resourceType={resourceType}
+        onError={this.handleError}
+        onSuccess={this.handleChanged}
+      >
+        {tprops => children({
+          entityCommand: this.entity_command,
+          resourceType: this.name,
+          onDownloaded: onDownload,
+          onChanged: this.handleChanged,
+          onSuccess: this.handleChanged,
+          onError: this.handleError,
+          ...tprops,
+          ...other,
+          ...this.state,
+        })}
+      </TagsHandler>
+
+    );
   }
 }
 
@@ -227,7 +240,9 @@ EntityContainer.propTypes = {
   loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
   permissionsComponent: PropTypes.componentOrFalse,
+  resourceType: PropTypes.string,
   showError: PropTypes.func.isRequired,
+  showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
 
@@ -241,8 +256,6 @@ EntityContainer = compose(
 )(EntityContainer);
 
 export const withEntityContainer = (name, options = {}) => Component => {
-
-  Component = withHandleTags()(Component);
 
   const EntityContainerWrapper = props => {
     return (
