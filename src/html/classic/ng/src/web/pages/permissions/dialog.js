@@ -136,7 +136,7 @@ const PermissionDialog = ({
   onValueChange,
 }, {capabilities}) => {
 
-  let show_resource_id = includes(need_resource_id, name);
+  const show_resource_id = includes(need_resource_id, name);
 
   let resource_id_title;
   if (resource_type === 'user') {
@@ -176,7 +176,7 @@ const PermissionDialog = ({
     subject.name = subject_obj.name;
   }
 
-  let perm_opts = [];
+  const perm_opts = [];
 
   capabilities.forEach(cap => {
     perm_opts.push(
@@ -213,7 +213,8 @@ const PermissionDialog = ({
           onChange={onValueChange}/>
       </FormGroup>
 
-      <FormGroup title={_('Subject')}
+      <FormGroup
+        title={_('Subject')}
         flex="column">
         {capabilities.mayAccess('users') &&
           <Layout flex box>
@@ -329,18 +330,18 @@ const PermissionDialog = ({
 PermissionDialog.propTypes = {
   comment: PropTypes.string,
   fixedResource: PropTypes.bool,
+  group_id: PropTypes.id,
   groups: PropTypes.arrayLike,
   name: PropTypes.string,
   permission: PropTypes.model,
-  group_id: PropTypes.id,
-  role_id: PropTypes.id,
-  user_id: PropTypes.id,
   resource_id: PropTypes.string,
   resource_type: PropTypes.string,
+  role_id: PropTypes.id,
   roles: PropTypes.arrayLike,
   subject_type: PropTypes.oneOf([
     'user', 'role', 'group',
   ]),
+  user_id: PropTypes.id,
   users: PropTypes.arrayLike,
   onValueChange: PropTypes.func,
 };

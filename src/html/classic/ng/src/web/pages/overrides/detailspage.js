@@ -112,7 +112,7 @@ ToolBarIcons.propTypes = {
 
 const Details = ({
   entity,
-  ...props,
+  ...props
 }) => {
   const {nvt} = entity;
   return (

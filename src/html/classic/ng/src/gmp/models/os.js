@@ -29,7 +29,7 @@ class OperatingSystem extends Asset {
   static asset_type = 'os';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (ret.os) {
       ret.average_severity = ret.os.average_severity ?

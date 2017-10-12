@@ -182,7 +182,8 @@ const withHostComponent = (mapping = {}) => Component => {
     }),
     withEntityComponent('host', mapping),
   )(HostComponentWrapper);
-
 };
 
 export default withHostComponent;
+
+// vim: set ts=2 sw=2 tw=80:

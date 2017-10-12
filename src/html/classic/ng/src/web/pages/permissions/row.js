@@ -87,10 +87,10 @@ const Actions = ({
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onPermissionEditClick: PropTypes.func.isRequired,
   onPermissionCloneClick: PropTypes.func.isRequired,
   onPermissionDeleteClick: PropTypes.func.isRequired,
   onPermissionDownloadClick: PropTypes.func.isRequired,
+  onPermissionEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({

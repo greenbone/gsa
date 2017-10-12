@@ -274,8 +274,8 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  onOverrideCreateClick: PropTypes.func.isRequired,
   onNoteCreateClick: PropTypes.func.isRequired,
+  onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
 Page = compose(

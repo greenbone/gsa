@@ -32,7 +32,7 @@ class Tag extends Model {
   static entity_type = 'tag';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
     ret.modified = moment(elem.modified);
 
     if (is_defined(elem.resource) && !is_empty(elem.resource._id)) {

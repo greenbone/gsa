@@ -1,5 +1,16 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/os.js,
+	src/html/classic/ng/src/gmp/models/tag.js,
+	src/html/classic/ng/src/web/pages/hosts/withHostComponent.js,
+	src/html/classic/ng/src/web/pages/nvts/detailspage.js,
+	src/html/classic/ng/src/web/pages/overrides/detailspage.js,
+	src/html/classic/ng/src/web/pages/permissions/dialog.js,
+	src/html/classic/ng/src/web/pages/permissions/row.js: Update code to keep
+	eslint quiet.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/withEntityContainer.js: Pass only
 	necessary props to EntityContainer. All other props go to its child.
 
