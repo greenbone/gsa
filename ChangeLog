@@ -1,5 +1,14 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/notes/component.js,
+	src/html/classic/ng/src/web/pages/notes/withNoteComponent.js: Extract a
+	NoteComponent from withNoteComponent. The new NoteComponent uses the render
+	props pattern. withNoteComponent HOC is now implemented using the new
+	NoteComponent.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/results/detailspage.js: Use
 	EntityComponent directly instead of withEntityComponent for result details
 	page.
