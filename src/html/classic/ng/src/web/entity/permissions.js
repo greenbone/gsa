@@ -212,6 +212,7 @@ EntityPermissions.contextTypes = {
 
 export default withPermissionsComponent({
   onCloned: 'onChanged',
+  onCreated: 'onChanged',
   onDeleted: 'onChanged',
   onSaved: 'onChanged',
   onSaveError: 'onError',
