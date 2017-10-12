@@ -39,10 +39,10 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import Table, {SORT_FIELDS} from './table.js';
 
-import withPermissionsComponent from './withPermissionsComponent.js';
+import PermissionComponent from './component.js';
 
 const ToolBarIcons = ({
-    onPermissionCreateClick
+    onPermissionCreateClick,
   }, {capabilities}) => {
   return (
     <Layout flex>
@@ -66,27 +66,50 @@ ToolBarIcons.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-const Page = withPermissionsComponent({
-  onCloned: 'onChanged',
-  onDeleted: 'onChanged',
-  onSaved: 'onChanged',
-})(EntitiesPage);
+const FilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
+
+const Page = ({
+  onChanged,
+  onDownloaded,
+  ...props
+}) => (
+  <PermissionComponent
+    onCloned={onChanged}
+    onDeleted={onChanged}
+    onSaved={onChanged}
+    onDownloaded={onDownloaded}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+    }) => (
+      <EntitiesPage
+        {...props}
+        sectionIcon="permission.svg"
+        table={Table}
+        filterEditDialog={FilterDialog}
+        title={_('Permissions')}
+        toolBarIcons={ToolBarIcons}
+        onPermissionCloneClick={clone}
+        onPermissionCreateClick={create}
+        onPermissionDeleteClick={delete_func}
+        onPermissionDownloadClick={download}
+        onPermissionEditClick={edit}
+      />
+    )}
+  </PermissionComponent>
+);
 
 Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func,
-  onEntitySave: PropTypes.func,
-  showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
 };
-export default withEntitiesContainer('permission', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
-  sectionIcon: 'permission.svg',
-  table: Table,
-  title: _('Permissions'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+
+export default withEntitiesContainer('permission')(Page);
 
 // vim: set ts=2 sw=2 tw=80:
