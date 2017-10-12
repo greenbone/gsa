@@ -35,9 +35,8 @@ import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
-import {loader} from '../../entity/container.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
-import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
+import EntityContainer, {loader} from '../../entity/container.js';
+import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import EditIcon from '../../entity/icon/editicon.js';
@@ -71,7 +70,7 @@ import StopIcon from './icons/stopicon.js';
 
 import TaskDetails from './details.js';
 import TaskStatus from './status.js';
-import withTaskComponent from './withTaskComponent.js';
+import TaskComponent from './component.js';
 
 const ToolBarIcons = ({
   entity,
@@ -339,18 +338,70 @@ Details.propTypes = {
 
 const goto_task = goto_details('task');
 
-const Page = withTaskComponent({
-  onCloned: goto_task,
-  onDeleted: goto_list('tasks'),
-  onCreated: goto_task,
-  onSaved: 'onChanged',
-  onStarted: 'onChanged',
-  onStopped: 'onChanged',
-  onResumed: 'onChanged',
-  onReportImported: 'onChanged',
-  onContainerCreated: goto_task,
-  onContainerSaved: 'onChanged',
-})(EntityPage);
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <TaskComponent
+    onCloned={goto_task(props)}
+    onCloneError={onError}
+    onCreated={goto_task(props)}
+    onContainerCreated={goto_task(props)}
+    onDeleted={goto_list('tasks', props)}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onSaved={onChanged}
+    onStarted={onChanged}
+    onStartError={onError}
+    onStopped={onChanged}
+    onStopError={onError}
+    onResumed={onChanged}
+    onResumeError={onError}
+    onContainerSaved={onChanged}
+    onReportImported={onChanged}
+  >
+    {({
+      clone,
+      create,
+      createcontainer,
+      delete: delete_func,
+      download,
+      edit,
+      start,
+      stop,
+      resume,
+      reportimport,
+    }) => (
+      <EntityPage
+        {...props}
+        sectionIcon="task.svg"
+        title={_('Task')}
+        toolBarIcons={ToolBarIcons}
+        detailsComponent={Details}
+        onChanged={onChanged}
+        onContainerTaskCreateClick={createcontainer}
+        onReportImportClick={reportimport}
+        onTaskCloneClick={clone}
+        onTaskCreateClick={create}
+        onTaskDeleteClick={delete_func}
+        onTaskDownloadClick={download}
+        onTaskEditClick={edit}
+        onTaskResumeClick={resume}
+        onTaskStartClick={start}
+        onTaskStopClick={stop}
+      />
+    )}
+  </TaskComponent>
+);
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
@@ -389,16 +440,20 @@ const TaskPermissions = withComponentDefaults({
 
 const task_id_filter = id => 'task_id=' + id;
 
-export default withEntityContainer('task', {
-  sectionIcon: 'task.svg',
-  title: _('Task'),
-  toolBarIcons: ToolBarIcons,
-  detailsComponent: Details,
-  loaders: [
-    loader('notes', task_id_filter),
-    loader('overrides', task_id_filter),
-  ],
-  permissionsComponent: TaskPermissions,
-})(Page);
+const TaskPage = props => (
+  <EntityContainer
+    {...props}
+    name="task"
+    loaders={[
+      loader('notes', task_id_filter),
+      loader('overrides', task_id_filter),
+    ]}
+    permissionsComponent={TaskPermissions}
+  >
+    {cprops => <Page {...cprops} />}
+  </EntityContainer>
+);
+
+export default TaskPage;
 
 // vim: set ts=2 sw=2 tw=80:

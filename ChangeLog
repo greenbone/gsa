@@ -1,6 +1,15 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/tasks/detailspage.js,
+	src/html/classic/ng/src/web/pages/tasks/listpage.js,
+	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Use
+	TaskComponent directly instead of withTaskComponent HOC. The withTaskComponent
+	HOC is now obsolete and got removed.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/tasks/component.js,
 	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Extract a
 	TaskComponent from withTaskComponent HOC. The new component uses the render

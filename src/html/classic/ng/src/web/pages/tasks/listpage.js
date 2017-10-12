@@ -47,7 +47,7 @@ import MenuEntry from '../../components/menu/menuentry.js';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-import withTaskComponent from './withTaskComponent.js';
+import TaskComponent from './component.js';
 
 const Dashboard = withDashboard(TaskCharts, {
   hideFilterSelect: true,
@@ -112,30 +112,84 @@ ToolBarIcons.propTypes = {
   onTaskWizardClick: PropTypes.func.isRequired,
 };
 
-const Page = withTaskComponent({
-  onCloned: 'onChanged',
-  onCreated: 'onChanged',
-  onContainerCreated: 'onChanged',
-  onDeleted: 'onChanged',
-  onSaved: 'onChanged',
-  onStarted: 'onChanged',
-  onStopped: 'onChanged',
-  onResumed: 'onChanged',
-  onAdvancedTaskWizardSaved: 'onChanged',
-  onModifyTaskWizardSaved: 'onChanged',
-  onTaskWizardSaved: 'onChanged',
-  onContainerSaved: 'onChanged',
-  onReportImported: 'onChanged',
-})(EntitiesPage);
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <TaskComponent
+    onCloned={onChanged}
+    onCloneError={onError}
+    onCreated={onChanged}
+    onContainerCreated={onChanged}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onSaved={onChanged}
+    onStarted={onChanged}
+    onStartError={onError}
+    onStopped={onChanged}
+    onStopError={onError}
+    onResumed={onChanged}
+    onResumeError={onError}
+    onAdvancedTaskWizardSaved={onChanged}
+    onModifyTaskWizardSaved={onChanged}
+    onTaskWizardSaved={onChanged}
+    onContainerSaved={onChanged}
+    onReportImported={onChanged}
+  >
+    {({
+      clone,
+      create,
+      createcontainer,
+      delete: delete_func,
+      download,
+      edit,
+      start,
+      stop,
+      resume,
+      reportimport,
+      advancedtaskwizard,
+      modifytaskwizard,
+      taskwizard,
+    }) => (
+      <EntitiesPage
+        {...props}
+        dashboard={Dashboard}
+        filterEditDialog={TaskFilterDialog}
+        sectionIcon="task.svg"
+        table={Table}
+        title={_('Tasks')}
+        toolBarIcons={ToolBarIcons}
+        onContainerTaskCreateClick={createcontainer}
+        onError={onError}
+        onReportImportClick={reportimport}
+        onTaskCloneClick={clone}
+        onTaskCreateClick={create}
+        onTaskDeleteClick={delete_func}
+        onTaskDownloadClick={download}
+        onTaskEditClick={edit}
+        onTaskResumeClick={resume}
+        onTaskStartClick={start}
+        onTaskStopClick={stop}
+        onAdvancedTaskWizardClick={advancedtaskwizard}
+        onModifyTaskWizardClick={modifytaskwizard}
+        onTaskWizardClick={taskwizard}
+      />
+    )}
+  </TaskComponent>
+);
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('task', {
-  dashboard: Dashboard,
-  filterEditDialog: TaskFilterDialog,
   filtersFilter: TASKS_FILTER_FILTER,
-  sectionIcon: 'task.svg',
-  table: Table,
-  title: _('Tasks'),
-  toolBarIcons: ToolBarIcons,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
