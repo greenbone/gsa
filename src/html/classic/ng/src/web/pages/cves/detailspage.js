@@ -29,7 +29,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
-import {withEntityContainer} from '../../entity/container.js';
+import withEntityContainer from '../../entity/withEntityContainer.js';
 import {EntityInfoTable} from '../../entity/info.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';

@@ -35,7 +35,8 @@ import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
-import {withEntityContainer, loader} from '../../entity/container.js';
+import {loader} from '../../entity/container.js';
+import withEntityContainer from '../../entity/withEntityContainer.js';
 import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';

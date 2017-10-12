@@ -32,7 +32,7 @@ import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
 import Note from '../../entity/note.js';
 import Override from '../../entity/override.js';
-import {withEntityContainer} from '../../entity/container.js';
+import withEntityContainer from '../../entity/withEntityContainer.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 

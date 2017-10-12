@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
-import {withEntityContainer} from '../../entity/container.js';
+import withEntityContainer from '../../entity/withEntityContainer.js';
 import withEntityComponent, {
   goto_list,
 } from '../../entity/withEntityComponent.js';

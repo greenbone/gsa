@@ -255,20 +255,6 @@ EntityContainer = compose(
   withDownload,
 )(EntityContainer);
 
-export const withEntityContainer = (name, options = {}) => Component => {
-
-  const EntityContainerWrapper = props => {
-    return (
-      <EntityContainer
-        {...options}
-        {...props}
-        name={name}
-      >
-        {cprops => <Component {...cprops} />}
-      </EntityContainer>
-    );
-  };
-  return EntityContainerWrapper;
-};
+export default EntityContainer;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -33,7 +33,8 @@ import DetailsBlock from '../../entity/block.js';
 import Note from '../../entity/note.js';
 import Override from '../../entity/override.js';
 import EntityPage from '../../entity/page.js';
-import {withEntityContainer, loader} from '../../entity/container.js';
+import {loader} from '../../entity/container.js';
+import withEntityContainer from '../../entity/withEntityContainer.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';

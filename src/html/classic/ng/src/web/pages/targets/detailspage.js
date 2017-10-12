@@ -47,7 +47,7 @@ import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
-import {withEntityContainer} from '../../entity/container.js';
+import withEntityContainer from '../../entity/withEntityComponent.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
