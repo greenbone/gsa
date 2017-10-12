@@ -513,6 +513,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/addresultstoassetsgroup.js
      ${NG_SRC_DIR}/src/web/pages/tasks/autodeletereportsgroup.js
      ${NG_SRC_DIR}/src/web/pages/tasks/charts.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/component.js
      ${NG_SRC_DIR}/src/web/pages/tasks/containerdialog.js
      ${NG_SRC_DIR}/src/web/pages/tasks/details.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dialogcontainer.js

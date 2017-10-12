@@ -1,5 +1,14 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/tasks/component.js,
+	src/html/classic/ng/src/web/pages/tasks/withTaskComponent.js: Extract a
+	TaskComponent from withTaskComponent HOC. The new component uses the render
+	props pattern. The current withTaskComponent HOC is re-implemented by using
+	the new TaskComponent.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/detailspage.js: Use
 	EntityContainer directly for target details page. Also move setting EntityPage
 	props directly to the EntityPage.
