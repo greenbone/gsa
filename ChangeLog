@@ -1,5 +1,11 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/targets/detailspage.js: Use
+	EntityContainer directly for target details page. Also move setting EntityPage
+	props directly to the EntityPage.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/os.js,
 	src/html/classic/ng/src/gmp/models/tag.js,
 	src/html/classic/ng/src/web/pages/hosts/withHostComponent.js,

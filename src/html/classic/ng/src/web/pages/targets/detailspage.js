@@ -47,7 +47,7 @@ import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
-import withEntityContainer from '../../entity/withEntityComponent.js';
+import EntityContainer from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
@@ -181,6 +181,10 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
+          detailsComponent={Details}
+          sectionIcon="target.svg"
+          toolBarIcons={ToolBarIcons}
+          title={_('Target')}
           onChanged={onChanged}
           onDownloaded={onDownloaded}
           onError={onError}
@@ -217,12 +221,16 @@ const TargetPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-export default withEntityContainer('target', {
-  detailsComponent: Details,
-  permissionsComponent: TargetPermissions,
-  sectionIcon: 'target.svg',
-  title: _('Target'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+const TargetPage = props => (
+  <EntityContainer
+    {...props}
+    name="target"
+    permissionsComponent={TargetPermissions}
+  >
+    {cprops => <Page {...cprops} />}
+  </EntityContainer>
+);
+
+export default TargetPage;
 
 // vim: set ts=2 sw=2 tw=80:
