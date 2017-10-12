@@ -450,7 +450,7 @@ const TaskPage = props => (
     ]}
     permissionsComponent={TaskPermissions}
   >
-    {cprops => <Page {...cprops} />}
+    {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>
 );
 

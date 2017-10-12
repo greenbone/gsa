@@ -227,7 +227,7 @@ const TargetPage = props => (
     name="target"
     permissionsComponent={TargetPermissions}
   >
-    {cprops => <Page {...cprops} />}
+    {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>
 );
 
