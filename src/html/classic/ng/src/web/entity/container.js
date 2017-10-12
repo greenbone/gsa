@@ -207,11 +207,8 @@ class EntityContainer extends React.Component {
   render() {
     const {
       children,
-      resourceType,
-      showError,
-      showSuccessMessage,
+      resourceType = this.name,
       onDownload,
-      ...other
     } = this.props;
     return (
       <TagsHandler
@@ -221,13 +218,12 @@ class EntityContainer extends React.Component {
       >
         {tprops => children({
           entityCommand: this.entity_command,
-          resourceType: this.name,
+          resourceType,
           onDownloaded: onDownload,
           onChanged: this.handleChanged,
           onSuccess: this.handleChanged,
           onError: this.handleError,
           ...tprops,
-          ...other,
           ...this.state,
         })}
       </TagsHandler>
@@ -239,6 +235,7 @@ class EntityContainer extends React.Component {
 EntityContainer.propTypes = {
   loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
+  params: PropTypes.object.isRequired,
   permissionsComponent: PropTypes.componentOrFalse,
   resourceType: PropTypes.string,
   showError: PropTypes.func.isRequired,
