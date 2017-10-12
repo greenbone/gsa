@@ -28,13 +28,26 @@ import EntityContainer from './container.js';
 const withEntityContainer = (name, options = {}) => Component => {
 
   const EntityContainerWrapper = props => {
+    const {
+      loaders,
+      permissionsComponent,
+      resourceType,
+      ...other
+    } = {...options, ...props};
+    const {params} = props;
     return (
       <EntityContainer
-        {...options}
-        {...props}
+        resourceType={resourceType}
+        permissionsComponent={permissionsComponent}
         name={name}
+        params={params}
       >
-        {cprops => <Component {...cprops} />}
+        {cprops => (
+          <Component
+            {...cprops}
+            {...other}
+          />)
+        }
       </EntityContainer>
     );
   };
