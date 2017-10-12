@@ -32,7 +32,7 @@ import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
 import Note from '../../entity/note.js';
 import Override from '../../entity/override.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
+import EntityContainer from '../../entity/container.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
@@ -62,7 +62,7 @@ import OverrideDialog from '../overrides/dialog.js';
 
 import ResultDetails from './details.js';
 
-const ToolBarIcons = ({
+let ToolBarIcons = ({
   capabilities,
   entity,
   onNoteCreateClick,
@@ -138,6 +138,8 @@ ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func.isRequired,
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
+
+ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const active_filter = entity => entity.isActive();
 
@@ -355,6 +357,10 @@ class Page extends React.Component {
       <Wrapper>
         <EntityPage
           {...this.props}
+          sectionIcon="result.svg"
+          title={_('Result')}
+          toolBarIcons={ToolBarIcons}
+          detailsComponent={Details}
           onNoteCreateClick={this.openNoteDialog}
           onOverrideCreateClick={this.openOverrideDialog}
         />
@@ -379,12 +385,16 @@ Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withEntityContainer('result', {
-  sectionIcon: 'result.svg',
-  title: _('Result'),
-  toolBarIcons: withCapabilities(ToolBarIcons),
-  detailsComponent: Details,
-  permissionsComponent: false,
-})(Page);
+const ResultPage = props => (
+  <EntityContainer
+    {...props}
+    name="result"
+    permissionsComponent={false}
+  >
+    {cprops => <Page {...cprops} />}
+  </EntityContainer>
+);
+
+export default ResultPage;
 
 // vim: set ts=2 sw=2 tw=80:
