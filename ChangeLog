@@ -1,5 +1,10 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/notes/detailspage.js: Use EntityContainer
+	and NoteComponent directly at note details page.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/detailspage.js,
 	src/html/classic/ng/src/web/pages/tasks/detailspage.js: Pass router props also
 	to the Page components. They are required for being able to change the page on

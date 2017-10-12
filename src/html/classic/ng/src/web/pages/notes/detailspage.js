@@ -45,8 +45,8 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
-import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
+import EntityContainer from '../../entity/container.js';
+import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import CreateIcon from '../../entity/icon/createicon.js';
@@ -54,7 +54,7 @@ import EditIcon from '../../entity/icon/editicon.js';
 import TrashIcon from '../../entity/icon/trashicon.js';
 
 import NoteDetails from './details.js';
-import withNoteComponent from './withNoteComponent.js';
+import NoteComponent from './component.js';
 
 const ToolBarIcons = ({
   entity,
@@ -112,7 +112,7 @@ ToolBarIcons.propTypes = {
 
 const Details = ({
   entity,
-  ...props,
+  ...props
 }) => {
   const {nvt} = entity;
   return (
@@ -174,23 +174,65 @@ Details.propTypes = {
 
 const goto_note = goto_details('note');
 
-const Page = withNoteComponent({
-  onCloned: goto_note,
-  onCloneError: 'onError',
-  onCreated: goto_note,
-  onCreateError: undefined,
-  onDeleted: goto_list('notes'),
-  onDeleteError: 'onError',
-  onDownloadError: 'onError',
-  onSaved: 'onChanged',
-  onSaveError: undefined,
-})(EntityPage);
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <NoteComponent
+    onCloned={goto_note(props)}
+    onCloneError={onError}
+    onCreated={goto_note(props)}
+    onDeleted={goto_list('notes', props)}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onSaved={onChanged}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+      save,
+    }) => (
+      <EntityPage
+        {...props}
+        sectionIcon="note.svg"
+        title={_('Note')}
+        detailsComponent={Details}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onNoteCloneClick={clone}
+        onNoteCreateClick={create}
+        onNoteDeleteClick={delete_func}
+        onNoteDownloadClick={download}
+        onNoteEditClick={edit}
+        onNoteSaveClick={save}
+      />
+    )}
+  </NoteComponent>
+);
 
-export default withEntityContainer('note', {
-  detailsComponent: Details,
-  sectionIcon: 'note.svg',
-  title: _('Note'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
+
+const NotePage = props => (
+  <EntityContainer
+    {...props}
+    name="note"
+  >
+    {cprops => <Page {...props} {...cprops} />}
+  </EntityContainer>
+);
+
+export default NotePage;
 
 // vim: set ts=2 sw=2 tw=80:
