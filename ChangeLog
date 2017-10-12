@@ -1,5 +1,10 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/container.js: Export composed component
+	directly. No need to store it in a variable before.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/permissions/withPermissionsComponent.js,
 	src/html/classic/ng/src/web/pages/targets/withTargetComponent.js: Use
 	withComponent function to implement withTargetComponent and

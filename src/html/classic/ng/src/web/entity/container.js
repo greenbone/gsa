@@ -250,11 +250,9 @@ EntityContainer.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-EntityContainer = compose(
+export default compose(
   withDialogNotification,
   withDownload,
 )(EntityContainer);
-
-export default EntityContainer;
 
 // vim: set ts=2 sw=2 tw=80:
