@@ -186,6 +186,7 @@ const Page = withEntityComponent('operatingsystem', {
 })(EntityPage);
 
 export default withEntityContainer('operatingsystem', {
+  resourceType: 'os',
   detailsComponent: Details,
   sectionIcon: 'os.svg',
   title: _('Operating System'),
