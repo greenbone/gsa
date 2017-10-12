@@ -39,7 +39,10 @@ const withComponent = (default_mapping, EntityComponent) => (mapping = {}) =>
       clone: clone_name,
       delete: delete_name,
       download: download_name,
+      edit: edit_name,
       save: save_name,
+      onCloned,
+      onCloneError,
       onCreated,
       onCreateError,
       onDeleted,
@@ -53,6 +56,8 @@ const withComponent = (default_mapping, EntityComponent) => (mapping = {}) =>
       <EntityComponent
         onCreated={get_handler(props, onCreated)}
         onCreateError={get_handler(props, onCreateError)}
+        onCloned={get_handler(props, onCloned)}
+        onCloneError={get_handler(props, onCloneError)}
         onDeleted={get_handler(props, onDeleted)}
         onDeleteError={get_handler(props, onDeleteError)}
         onSaved={get_handler(props, onSaved)}
@@ -64,6 +69,7 @@ const withComponent = (default_mapping, EntityComponent) => (mapping = {}) =>
           create,
           clone,
           delete: delete_func,
+          edit,
           save,
           download,
         }) => {
@@ -72,6 +78,7 @@ const withComponent = (default_mapping, EntityComponent) => (mapping = {}) =>
             [clone_name]: clone,
             [delete_name]: delete_func,
             [download_name]: download,
+            [edit_name]: edit,
             [save_name]: save,
           };
           return (

@@ -1,5 +1,10 @@
 2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/withComponent.js: Don't forget to pass
+	action handler to child componets and to add handlers for cloning.
+
+2017-10-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/permissions/listpage.js: Implement
 	permissions page with PermissionComponent instead of withPermissionsComponent
 	HOC. With this change it is easier to understand what's happening when
