@@ -371,6 +371,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/groups/row.js
      ${NG_SRC_DIR}/src/web/pages/homepage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/charts.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/component.js
      ${NG_SRC_DIR}/src/web/pages/hosts/details.js
      ${NG_SRC_DIR}/src/web/pages/hosts/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dialog.js
