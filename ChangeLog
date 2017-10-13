@@ -1,5 +1,14 @@
 2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/overrides/component.js,
+	src/html/classic/ng/src/web/pages/overrides/withOverrideComponent.js: Extract
+	an OverrideComponent from withOverrideComponent. The new component uses the
+	render props pattern and the old HOC is rebuild by using the new
+	OverrideComponent.
+
+2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/listpage.js: Move props up to the
 	EntityPage where they are consumed.
 

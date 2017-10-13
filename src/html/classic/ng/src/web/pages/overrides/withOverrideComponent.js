@@ -21,21 +21,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, is_empty, includes, shorten} from 'gmp/utils.js';
+import withComponent from '../../entity/withComponent.js';
 
-import PropTypes from '../../utils/proptypes.js';
-
-import Wrapper from '../../components/layout/wrapper.js';
-
-import withEntityComponent, {
-  create_handler_props,
-  has_mapping,
-} from '../../entity/withEntityComponent.js';
-
-import OverrideDialog from './dialog.js';
+import OverrideComponent from './component.js';
 
 const DEFAULT_MAPPING = {
   clone: 'onOverrideCloneClick',
@@ -46,122 +35,6 @@ const DEFAULT_MAPPING = {
   edit: 'onOverrideEditClick',
 };
 
-const withOverrideComponent = (mapping = {}) => Component => {
-
-  mapping = {
-    ...DEFAULT_MAPPING,
-    ...mapping,
-  };
-
-  class OverrideComponentWrapper extends React.Component {
-
-    constructor(...args) {
-      super(...args);
-
-      this.openCreateOverrideDialog = this.openCreateOverrideDialog.bind(this);
-      this.openOverrideDialog = this.openOverrideDialog.bind(this);
-    }
-
-    openOverrideDialog(override) {
-      if (is_defined(override)) {
-        let active = '0';
-        if (override.isActive()) {
-          if (is_empty(override.end_time)) {
-            active = '-1';
-          }
-          else {
-            active = '-2';
-          }
-        }
-
-        let custom_severity = '0';
-        let new_severity_from_list;
-        let new_severity;
-
-        if (includes([10, 5, 2, 0, -1], override.new_severity)) {
-          new_severity_from_list = override.new_severity;
-        }
-        else {
-          custom_severity = '1';
-          new_severity = override.new_severity;
-        }
-        this.override_dialog.show({
-          id: override.id,
-          active,
-          custom_severity,
-          hosts: override.hosts,
-          new_severity,
-          new_severity_from_list,
-          nvt: override.nvt,
-          oid: override.nvt ? override.nvt.oid : undefined,
-          override,
-          override_severity: override.severity,
-          port: override.port,
-          result_id: is_defined(override.result) ? '' : '0',
-          result_uuid: is_defined(override.result) ? override.result.id : '',
-          severity: override.severity,
-          task_id: is_defined(override.task) ? '' : '0',
-          task_uuid: is_defined(override.task) ? override.task.id : '',
-          text: override.text,
-          visible: true,
-        }, {
-          title: _('Edit Override {{- name}}',
-            {name: shorten(override.text, 20)}),
-        });
-
-        this.loadTasks();
-      }
-    }
-
-    openCreateOverrideDialog(initial = {}) {
-      this.override_dialog.show(initial);
-
-      this.loadTasks();
-    }
-
-    loadTasks() {
-      const {gmp} = this.context;
-
-      gmp.tasks.getAll().then(tasks =>
-        this.override_dialog.setValue('tasks', tasks));
-    }
-
-    render() {
-      const {
-        save,
-      } = mapping;
-
-      const onSaveHandler = this.props[save];
-      const has_save = is_defined(onSaveHandler) &&
-        has_mapping(this.props, mapping, 'onSaved');
-      const has_create = is_defined(onSaveHandler) &&
-        has_mapping(this.props, mapping, 'onCreated');
-
-      const handlers = create_handler_props(this.props, mapping)
-        .set('create', has_create, this.openCreateOverrideDialog)
-        .set('edit', has_save, this.openOverrideDialog);
-      return (
-        <Wrapper>
-          <Component
-            {...this.props}
-            {...handlers}
-          />
-          <OverrideDialog
-            ref={ref => this.override_dialog = ref}
-            onSave={onSaveHandler}/>
-        </Wrapper>
-      );
-    }
-  }
-
-  OverrideComponentWrapper.contextTypes = {
-    gmp: PropTypes.gmp.isRequired,
-  };
-
-  return withEntityComponent('override', mapping)(OverrideComponentWrapper);
-
-};
-
-export default withOverrideComponent;
+export default withComponent(DEFAULT_MAPPING, OverrideComponent);
 
 // vim: set ts=2 sw=2 tw=80:
