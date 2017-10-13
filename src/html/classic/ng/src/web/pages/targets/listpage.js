@@ -81,6 +81,11 @@ const TargetsPage = ({
   }) => (
     <EntitiesPage
       {...props}
+      filterEditDialog={TargetsFilterDialog}
+      sectionIcon="target.svg"
+      table={TargetsTable}
+      title={_('Targets')}
+      toolBarIcons={ToolBarIcons}
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
@@ -102,12 +107,7 @@ TargetsPage.propTypes = {
 };
 
 export default withEntitiesContainer('target', {
-  filterEditDialog: TargetsFilterDialog,
   filtersFilter: TARGETS_FILTER_FILTER,
-  sectionIcon: 'target.svg',
-  table: TargetsTable,
-  title: _('Targets'),
-  toolBarIcons: ToolBarIcons,
 })(TargetsPage);
 
 // vim: set ts=2 sw=2 tw=80:

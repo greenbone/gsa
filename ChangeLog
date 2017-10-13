@@ -1,5 +1,10 @@
 2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/targets/listpage.js: Move props up to the
+	EntityPage where they are consumed.
+
+2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/targets/component.js: Use Wrapper instead
 	of Layout.
 
