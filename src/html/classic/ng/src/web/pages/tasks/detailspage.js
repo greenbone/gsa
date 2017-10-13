@@ -336,8 +336,6 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const goto_task = goto_details('task');
-
 const Page = ({
   onChanged,
   onDownloaded,
@@ -345,10 +343,10 @@ const Page = ({
   ...props
 }) => (
   <TaskComponent
-    onCloned={goto_task(props)}
+    onCloned={goto_details('task', props)}
     onCloneError={onError}
-    onCreated={goto_task(props)}
-    onContainerCreated={goto_task(props)}
+    onCreated={goto_details('task', props)}
+    onContainerCreated={goto_details('task', props)}
     onDeleted={goto_list('tasks', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}

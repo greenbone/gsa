@@ -172,8 +172,6 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const goto_override = goto_details('override');
-
 const Page = ({
   onError,
   onChanged,
@@ -181,9 +179,9 @@ const Page = ({
   ...props
 }) => (
   <OverrideComponent
-    onCloned={goto_override(props)}
+    onCloned={goto_details('override', props)}
     onCloneError={onError}
-    onCreated={goto_override(props)}
+    onCreated={goto_details('override', props)}
     onDeleted={goto_list('overrides', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}

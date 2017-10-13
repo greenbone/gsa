@@ -172,8 +172,6 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const goto_note = goto_details('note');
-
 const Page = ({
   onChanged,
   onDownloaded,
@@ -181,9 +179,9 @@ const Page = ({
   ...props
 }) => (
   <NoteComponent
-    onCloned={goto_note(props)}
+    onCloned={goto_details('note', props)}
     onCloneError={onError}
-    onCreated={goto_note(props)}
+    onCreated={goto_details('note', props)}
     onDeleted={goto_list('notes', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
