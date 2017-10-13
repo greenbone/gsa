@@ -40,6 +40,7 @@ import Comment from '../../components/comment/comment.js';
 
 import Icon from '../../components/icon/icon.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
@@ -121,31 +122,33 @@ const Row = ({
             onClick={onToggleDetailsClick}>
             {entity.name}
           </RowDetailsToggle>
-          {entity.alterable === 1 &&
-            <Icon
-              size="small"
-              img="alterable.svg"
-              title={_('Task is alterable')}/>
-          }
-          {is_defined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
-            <Icon
-              size="small"
-              img="sensor.svg"
-              title={_('Task is configured to run on slave scanner {{name}}',
-                {name: scanner.name})}/>
-          }
-          <ObserverIcon
-            displayName={_('Task')}
-            entity={entity}
-            userName={userName}
-          />
-          {!is_empty(entity.observers) &&
-            <Icon
-              size="small"
-              img="provide_view.svg"
-              title={_('Task made visible for: {{user}}',
-                {user: entity.observers})}/> // TODO observer roles and groups
-          }
+          <IconDivider>
+            {entity.alterable === 1 &&
+              <Icon
+                size="small"
+                img="alterable.svg"
+                title={_('Task is alterable')}/>
+            }
+            {is_defined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
+              <Icon
+                size="small"
+                img="sensor.svg"
+                title={_('Task is configured to run on slave scanner {{name}}',
+                  {name: scanner.name})}/>
+            }
+            <ObserverIcon
+              displayName={_('Task')}
+              entity={entity}
+              userName={userName}
+            />
+            {!is_empty(entity.observers) &&
+              <Icon
+                size="small"
+                img="provide_view.svg"
+                title={_('Task made visible for: {{user}}',
+                  {user: entity.observers})}/> // TODO observer roles and groups
+            }
+          </IconDivider>
         </Layout>
         {entity.comment &&
           <Comment>({entity.comment})</Comment>
