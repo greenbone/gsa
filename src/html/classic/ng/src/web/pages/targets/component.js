@@ -28,7 +28,7 @@ import {first, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Layout from '../../components/layout/layout.js';
+import Wrapper from '../../components/layout/wrapper.js';
 
 import EntityComponent from '../../entity/component.js';
 
@@ -178,7 +178,7 @@ class TargetComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Layout>
+          <Wrapper>
             {children({
               ...other,
               create: this.openCreateTargetDialog,
@@ -198,7 +198,7 @@ class TargetComponent extends React.Component {
               ref={ref => this.port_list_dialog = ref}
               onSave={this.handleCreatePortList}
             />
-          </Layout>
+          </Wrapper>
         )}
       </EntityComponent>
     );
