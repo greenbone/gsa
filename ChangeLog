@@ -1,6 +1,15 @@
 2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/hosts/detailspage.js,
+	src/html/classic/ng/src/web/pages/hosts/listpage.js,
+	src/html/classic/ng/src/web/pages/hosts/withHostComponent.js: Convert host
+	details and list pages to use HostComponent instead of withHostComponent HOC.
+	Remove the now obsolete withHostComponent HOC.
+
+2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/hosts/component.js: Create new HostComponent
 	based on render props pattern.
 

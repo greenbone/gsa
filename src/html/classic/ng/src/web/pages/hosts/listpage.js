@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
@@ -31,6 +31,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+
+import {goto_details} from '../../entity/component.js';
 
 import {withDashboard} from '../../components/dashboard/dashboard.js';
 
@@ -40,7 +42,7 @@ import NewIcon from '../../components/icon/newicon.js';
 import HostsCharts from './charts.js';
 import HostsFilterDialog from './filterdialog.js';
 import HostsTable from './table.js';
-import withHostComponent from './withHostComponent.js';
+import HostComponent from './component.js';
 
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -73,21 +75,57 @@ const Dashboard = withDashboard(HostsCharts, {
   defaultControllerString: 'hosts-by-cvss',
 });
 
-const Page = withHostComponent({
-  onCreated: 'onChanged',
-  onSaved: 'onChanged',
-  onCloned: 'onChanged',
-  onDeleted: 'onChanged',
-})(EntitiesPage);
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <HostComponent
+    onTargetCreated={goto_details('target', props)}
+    onTargetCreateError={onError}
+    onCreated={onChanged}
+    onDeleted={onChanged}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onSaved={onChanged}
+  >
+    {({
+      create,
+      createtargetfromselection,
+      createtargetfromhost,
+      delete: delete_func,
+      download,
+      edit,
+    }) => (
+      <EntitiesPage
+        {...props}
+        dashboard={Dashboard}
+        filterEditDialog={HostsFilterDialog}
+        sectionIcon="host.svg"
+        table={HostsTable}
+        title={_('Hosts')}
+        toolBarIcons={ToolBarIcons}
+        onError={onError}
+        onHostCreateClick={create}
+        onHostDeleteClick={delete_func}
+        onHostDownloadClick={download}
+        onHostEditClick={edit}
+        onTargetCreateFromSelection={createtargetfromselection}
+        onTargetCreateFromHostClick={createtargetfromhost}
+      />
+    )}
+  </HostComponent>
+);
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('host', {
   filtersFilter: ASSETS_FILTER_FILTER,
-  dashboard: Dashboard,
-  filterEditDialog: HostsFilterDialog,
-  sectionIcon: 'host.svg',
-  table: HostsTable,
-  title: _('Hosts'),
-  toolBarIcons: ToolBarIcons,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

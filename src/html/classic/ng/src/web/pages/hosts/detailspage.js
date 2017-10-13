@@ -53,7 +53,7 @@ import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
 import withEntityContainer from '../../entity/withEntityContainer.js';
-import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
+import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import CreateIcon from '../../entity/icon/createicon.js';
@@ -61,7 +61,7 @@ import EditIcon from '../../entity/icon/editicon.js';
 import TrashIcon from '../../entity/icon/trashicon.js';
 
 import HostDetails from './details.js';
-import withHostComponent from './withHostComponent.js';
+import HostComponent from './component.js';
 
 const ToolBarIcons = ({
   entity,
@@ -263,21 +263,63 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const goto_host = goto_details('host');
 
-const Page = withHostComponent({
-  onCloned: goto_host,
-  onDeleted: goto_list('hosts'),
-  onCreated: goto_host,
-  onSaved: 'onChanged',
-  onIdentifierDeleted: 'onChanged',
-})(EntityPage);
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => {
+  const goto_host = goto_details('host', props);
+  return (
+    <HostComponent
+      onTargetCreated={goto_details('target', props)}
+      onTargetCreateError={onError}
+      onCloned={goto_host}
+      onCloneError={onError}
+      onCreated={goto_host}
+      onDeleted={goto_list('hosts', props)}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onIdentifierDeleted={onChanged}
+      onIdentifierDeleteError={onError}
+      onSaved={onChanged}
+    >
+      {({
+        clone,
+        create,
+        delete: delete_func,
+        deleteidentifier,
+        download,
+        edit,
+      }) => (
+        <EntityPage
+          {...props}
+          detailsComponent={Details}
+          sectionIcon="host.svg"
+          toolBarIcons={ToolBarIcons}
+          title={_('Host')}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onHostCloneClick={clone}
+          onHostCreateClick={create}
+          onHostDeleteClick={delete_func}
+          onHostDownloadClick={download}
+          onHostEditClick={edit}
+          onHostIdentifierDeleteClick={deleteidentifier}
+        />
+      )}
+    </HostComponent>
+  );
+};
 
-export default withEntityContainer('host', {
-  detailsComponent: Details,
-  sectionIcon: 'host.svg',
-  title: _('Host'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
+
+export default withEntityContainer('host')(Page);
 
 // vim: set ts=2 sw=2 tw=80:
