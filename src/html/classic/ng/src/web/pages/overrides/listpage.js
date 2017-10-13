@@ -38,8 +38,8 @@ import IconDivider from '../../components/layout/icondivider.js';
 
 import OverridesCharts from './charts.js';
 import FilterDialog from './filterdialog.js';
-import Table from './table.js';
-import withOverrideComponent from './withOverrideComponent.js';
+import OverridesTable from './table.js';
+import OverrideComponent from './component.js';
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -53,7 +53,7 @@ const Dashboard = withDashboard(OverridesCharts, {
 });
 
 const ToolBarIcons = ({
-  onOverrideCreateClick
+  onOverrideCreateClick,
 }, {capabilities}) => {
   return (
     <IconDivider>
@@ -62,8 +62,10 @@ const ToolBarIcons = ({
         title={_('Help: Overrides')}/>
 
       {capabilities.mayCreate('override') &&
-        <NewIcon title={_('New Override')}
-          onClick={onOverrideCreateClick}/>
+        <NewIcon
+          title={_('New Override')}
+          onClick={onOverrideCreateClick}
+        />
       }
     </IconDivider>
   );
@@ -77,22 +79,61 @@ ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = withOverrideComponent({
-  onCloned: 'onChanged',
-  onCreated: 'onChanged',
-  onDeleted: 'onChanged',
-  onSaved: 'onChanged',
-})(EntitiesPage);
+const Page = ({
+  onChanged,
+  onError,
+  onDownloaded,
+  ...props
+}) => (
+  <OverrideComponent
+    onCloned={onChanged}
+    onCloneError={onError}
+    onCreated={onChanged}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onSaved={onChanged}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+      save,
+    }) => (
+      <EntitiesPage
+        {...props}
+        dashboard={Dashboard}
+        filterEditDialog={FilterDialog}
+        sectionIcon="override.svg"
+        table={OverridesTable}
+        title={_('Overrides')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onOverrideCloneClick={clone}
+        onOverrideCreateClick={create}
+        onOverrideDeleteClick={delete_func}
+        onOverrideDownloadClick={download}
+        onOverrideEditClick={edit}
+        onOverrideSaveClick={save}
+      />
+    )}
+  </OverrideComponent>
+);
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('override', {
-  dashboard: Dashboard,
   extraLoadParams: {details: 1},
-  filterEditDialog: FilterDialog,
   filtersFilter: OVERRIDES_FILTER_FILTER,
-  sectionIcon: 'override.svg',
-  table: Table,
-  title: _('Overrides'),
-  toolBarIcons: ToolBarIcons,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

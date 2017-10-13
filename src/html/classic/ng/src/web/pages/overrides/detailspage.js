@@ -45,8 +45,8 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
-import {goto_details, goto_list} from '../../entity/withEntityComponent.js';
+import EntityContainer from '../../entity/container.js';
+import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import CreateIcon from '../../entity/icon/createicon.js';
@@ -54,7 +54,7 @@ import EditIcon from '../../entity/icon/editicon.js';
 import TrashIcon from '../../entity/icon/trashicon.js';
 
 import OverrideDetails from './details.js';
-import withOverrideComponent from './withOverrideComponent.js';
+import OverrideComponent from './component.js';
 
 const ToolBarIcons = ({
   entity,
@@ -174,23 +174,65 @@ Details.propTypes = {
 
 const goto_override = goto_details('override');
 
-const Page = withOverrideComponent({
-  onCloned: goto_override,
-  onCloneError: 'onError',
-  onCreated: goto_override,
-  onCreateError: undefined,
-  onDeleted: goto_list('overrides'),
-  onDeleteError: 'onError',
-  onDownloadError: 'onError',
-  onSaved: 'onChanged',
-  onSaveError: undefined,
-})(EntityPage);
+const Page = ({
+  onError,
+  onChanged,
+  onDownloaded,
+  ...props
+}) => (
+  <OverrideComponent
+    onCloned={goto_override(props)}
+    onCloneError={onError}
+    onCreated={goto_override(props)}
+    onDeleted={goto_list('overrides', props)}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onSaved={onChanged}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+      save,
+    }) => (
+      <EntityPage
+        {...props}
+        sectionIcon="override.svg"
+        title={_('Override')}
+        detailsComponent={Details}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onOverrideCloneClick={clone}
+        onOverrideCreateClick={create}
+        onOverrideDeleteClick={delete_func}
+        onOverrideDownloadClick={download}
+        onOverrideEditClick={edit}
+        onOverrideSaveClick={save}
+      />
+    )}
+  </OverrideComponent>
+);
 
-export default withEntityContainer('override', {
-  detailsComponent: Details,
-  sectionIcon: 'override.svg',
-  title: _('Override'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
+
+const OverridePage = props => (
+  <EntityContainer
+    {...props}
+    name="override"
+  >
+    {cprops => <Page {...props} {...cprops} />}
+  </EntityContainer>
+);
+
+export default OverridePage;
 
 // vim: set ts=2 sw=2 tw=80:

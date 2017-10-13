@@ -1,5 +1,11 @@
 2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/overrides/detailspage.js,
+	src/html/classic/ng/src/web/pages/overrides/listpage.js: Use OverrideComponent
+	instead of withOverrideComponent for override details and list pages.
+
+2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/overrides/component.js,
 	src/html/classic/ng/src/web/pages/overrides/withOverrideComponent.js: Extract
