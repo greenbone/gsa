@@ -510,7 +510,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/targets/listpage.js
      ${NG_SRC_DIR}/src/web/pages/targets/row.js
      ${NG_SRC_DIR}/src/web/pages/targets/table.js
-     ${NG_SRC_DIR}/src/web/pages/targets/withTargetComponent.js
      ${NG_SRC_DIR}/src/web/pages/tasks/actions.js
      ${NG_SRC_DIR}/src/web/pages/tasks/addresultstoassetsgroup.js
      ${NG_SRC_DIR}/src/web/pages/tasks/autodeletereportsgroup.js
