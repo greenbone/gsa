@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -95,31 +96,61 @@ Header.propTypes = {
 
 const HostsHeader = withEntitiesHeader()(Header);
 
-const Footer = ({onTargetCreateFromSelection, selectionType, ...props}) => {
+const Footer = ({
+  entities,
+  entitiesSelected,
+  filter,
+  selectionType,
+  onTargetCreateFromSelection,
+  ...props
+}) => {
   let title;
+  let has_selected;
+  let value;
   if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
     title = _('Create Target from page contents');
+    has_selected = entities.length > 0;
+    value = {
+      entities,
+      filter,
+      selectionType,
+    };
   }
   else if (selectionType === SelectionType.SELECTION_USER) {
     title = _('Create Target from selection');
+    has_selected = is_defined(entitiesSelected) && entitiesSelected.size > 0;
+    value = {
+      entitiesSelected,
+      selectionType,
+    };
   }
   else {
     title = _('Create Target form all filtered');
+    value = {
+      entities,
+      filter,
+      selectionType,
+    };
+    has_selected = true;
   }
   return (
     <EntitiesFooter {...props} selectionType={selectionType}>
       <NewIcon
+        active={has_selected}
         title={title}
+        value={value}
         onClick={onTargetCreateFromSelection}/>
     </EntitiesFooter>
   );
 };
 
 Footer.propTypes = {
+  entities: PropTypes.collection.isRequired,
+  entitiesSelected: PropTypes.set,
+  filter: PropTypes.filter.isRequired,
   selectionType: PropTypes.string,
   onTargetCreateFromSelection: PropTypes.func.isRequired,
 };
-
 
 const HostsFooter = withEntitiesFooter({
   span: 7,
