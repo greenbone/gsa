@@ -3602,6 +3602,7 @@ exec_omp_get (struct MHD_Connection *con,
       watcher_data->connection_closed = 1;
       pthread_mutex_unlock (&(watcher_data->mutex));
       pthread_cancel (watch_thread);
+      pthread_join (watch_thread, NULL);
       g_free (watcher_data);
     }
   else

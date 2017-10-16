@@ -1,3 +1,9 @@
+2017-10-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r29867.
+
+	* src/gsad.c (exec_omp_get): Join the watcher thread after cancel.
+
 2017-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r29652 with fixes from r29739.
