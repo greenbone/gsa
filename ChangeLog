@@ -1,3 +1,7 @@
+2017-10-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (exec_gmp_get): Join the watcher thread after cancel.
+
 2017-10-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/pages/tasks/row.js: Display all icons at the

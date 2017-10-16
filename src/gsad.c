@@ -2461,6 +2461,7 @@ exec_gmp_get (http_connection_t *con,
       watcher_data->connection_closed = 1;
       pthread_mutex_unlock (&(watcher_data->mutex));
       pthread_cancel (watch_thread);
+      pthread_join (watch_thread, NULL);
       g_free (watcher_data);
     }
   else
