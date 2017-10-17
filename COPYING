@@ -80,3 +80,11 @@ src/html/classic/js/lib/min/i18next-xhr-0.5.3.js
   Licence: MIT
   Copyright: Copyright (c) 2015 i18next
   Origin: https://github.com/i18next/i18next
+
+String function polyfills in
+src/html/classic/js/gsa_polyfill
+  License: MIT
+  Copyright: Copyright Mathias Bynens <https://mathiasbynens.be/>
+  Origin: https://github.com/mathiasbynens/String.prototype.endsWith
+          https://github.com/mathiasbynens/String.prototype.includes
+          https://github.com/mathiasbynens/String.prototype.startsWith
