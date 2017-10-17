@@ -2919,7 +2919,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>The Distinguishable Name (DN) for authentication. Place a single %s where the
               username should be inserted.</td>
           <td>Regular LDAP:<br/>
-              uid=%s,cn=users,o=center,d=org<br/>
+              cn=users,ou=center,dc=org<br/>
+	      Using the uid attribute:<br/>
+	      uid=users,ou=center,dc=org<br/>
+	      In this last case, "uid=user" will be used as filter, and
+	      "ou=center,dc=org" <br/>
+	      will be used as base object to perform a search and
+	      to retrieve the corresponding DN for the authentication:<br/>
               <br/>
               Active Directory:<br/>
               %s@mydomain<br/>
