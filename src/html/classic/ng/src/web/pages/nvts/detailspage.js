@@ -25,7 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -33,8 +32,7 @@ import DetailsBlock from '../../entity/block.js';
 import Note from '../../entity/note.js';
 import Override from '../../entity/override.js';
 import EntityPage from '../../entity/page.js';
-import {loader} from '../../entity/container.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
+import EntityContainer, {loader} from '../../entity/container.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -43,7 +41,6 @@ import ListIcon from '../../components/icon/listicon.js';
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
-import Wrapper from '../../components/layout/wrapper.js';
 
 import Link from '../../components/link/link.js';
 
@@ -52,13 +49,13 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import withOverrideComponent from '../overrides/withOverrideComponent.js';
-import withNoteComponent from '../notes/withNoteComponent.js';
+import OverrideComponent from '../overrides/component.js';
+import NoteComponent from '../notes/component.js';
 
 import NvtDetails from './details.js';
 import Preferences from './preferences.js';
 
-const ToolBarIcons = ({
+let ToolBarIcons = ({
   capabilities,
   entity,
   onNoteCreateClick,
@@ -130,6 +127,8 @@ ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func.isRequired,
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
+
+ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({
   entity,
@@ -233,74 +232,69 @@ Details.propTypes = {
   overrides: PropTypes.arrayLike,
 };
 
-class Page extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.openOverrideDialog = this.openOverrideDialog.bind(this);
-    this.openNoteDialog = this.openNoteDialog.bind(this);
-  }
-
-  openNoteDialog(nvt) {
-    const {onNoteCreateClick} = this.props;
-    onNoteCreateClick({
-      fixed: true,
-      nvt,
-      oid: nvt.oid,
-    });
-  }
-
-  openOverrideDialog(nvt) {
-    const {onOverrideCreateClick} = this.props;
-    onOverrideCreateClick({
-      fixed: true,
-      nvt,
-      oid: nvt.oid,
-    });
-  }
-
-  render() {
-    return (
-      <Wrapper>
-        <EntityPage
-          {...this.props}
-          onNoteCreateClick={this.openNoteDialog}
-          onOverrideCreateClick={this.openOverrideDialog}
-        />
-      </Wrapper>
-    );
-  }
-}
-
-Page.propTypes = {
-  onNoteCreateClick: PropTypes.func.isRequired,
-  onOverrideCreateClick: PropTypes.func.isRequired,
+const open_dialog = (nvt, func) => {
+  func({
+    fixed: true,
+    nvt,
+    oid: nvt.oid,
+  });
 };
 
-Page = compose(
-  withNoteComponent({
-    onCreated: 'onChanged',
-    onSaved: 'onChanged',
-  }),
-  withOverrideComponent({
-    onCreated: 'onChanged',
-    onSaved: 'onChanged',
-  }),
-)(Page);
+const Page = ({
+  onChanged,
+  ...props
+}) => (
+  <NoteComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+  >
+    {({
+      create: notecreate,
+    }) => (
+      <OverrideComponent
+        onCreated={onChanged}
+        onSaved={onChanged}
+      >
+        {({
+          create: overridecreate,
+        }) => (
+          <EntityPage
+            {...props}
+            detailsComponent={Details}
+            toolBarIcons={ToolBarIcons}
+            title={_('NVT')}
+            sectionIcon="nvt.svg"
+            onChanged={onChanged}
+            onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
+            onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
+          />
+        )}
+      </OverrideComponent>
+    )}
+  </NoteComponent>
+);
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 const nvt_id_filter = id => 'nvt_id=' + id;
 
-export default withEntityContainer('nvt', {
-  detailsComponent: Details,
-  sectionIcon: 'nvt.svg',
-  title: _('NVT'),
-  toolBarIcons: withCapabilities(ToolBarIcons),
-  permissionsComponent: false,
-  loaders: [
-    loader('notes', nvt_id_filter),
-    loader('overrides', nvt_id_filter),
-  ],
-})(Page);
+const NvtPage = props => (
+  <EntityContainer
+    {...props}
+    name="nvt"
+    loaders={[
+      loader('notes', nvt_id_filter),
+      loader('overrides', nvt_id_filter),
+    ]}
+    permissionsComponent={false}
+  >
+    {cprops => <Page {...props} {...cprops} />}
+  </EntityContainer>
+);
+
+export default NvtPage;
 
 // vim: set ts=2 sw=2 tw=80:
