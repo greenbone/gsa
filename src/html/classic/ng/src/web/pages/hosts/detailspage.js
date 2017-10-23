@@ -52,7 +52,7 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
+import EntityContainer from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
@@ -320,6 +320,15 @@ Page.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-export default withEntityContainer('host')(Page);
+const HostPage = props => (
+  <EntityContainer
+    {...props}
+    name="host"
+  >
+    {cprops => <Page {...props} {...cprops} />}
+  </EntityContainer>
+);
+
+export default HostPage;
 
 // vim: set ts=2 sw=2 tw=80:
