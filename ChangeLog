@@ -1,5 +1,12 @@
 2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/notes/withNoteComponent.js,
+	src/html/classic/ng/src/web/pages/overrides/withOverrideComponent.js: Get rid
+	of obsolete withNoteComponent and withOverrideComponent HOCs.
+
+2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/notes/listpage.js: Convert notes list page
 	to use NoteComponent instead of withNoteComponent HOC.
 

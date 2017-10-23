@@ -390,7 +390,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/notes/listpage.js
      ${NG_SRC_DIR}/src/web/pages/notes/row.js
      ${NG_SRC_DIR}/src/web/pages/notes/table.js
-     ${NG_SRC_DIR}/src/web/pages/notes/withNoteComponent.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
      ${NG_SRC_DIR}/src/web/pages/nvts/details.js
@@ -422,7 +421,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/overrides/listpage.js
      ${NG_SRC_DIR}/src/web/pages/overrides/row.js
      ${NG_SRC_DIR}/src/web/pages/overrides/table.js
-     ${NG_SRC_DIR}/src/web/pages/overrides/withOverrideComponent.js
      ${NG_SRC_DIR}/src/web/pages/page.js
      ${NG_SRC_DIR}/src/web/pages/permissions/component.js
      ${NG_SRC_DIR}/src/web/pages/permissions/dialog.js
