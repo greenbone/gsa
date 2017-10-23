@@ -146,9 +146,9 @@ class EntityPage extends React.Component {
       entity,
       permissions,
       permissionsComponent: PermissionsComponent = EntityPermissions,
-      onChanged,
-      onDownloaded,
-      onError,
+      onPermissionChanged,
+      onPermissionDownloaded,
+      onPermissionDownloadError,
     } = this.props;
 
     if (PermissionsComponent === false) {
@@ -159,9 +159,9 @@ class EntityPage extends React.Component {
       <PermissionsComponent
         entity={entity}
         permissions={permissions}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
+        onChanged={onPermissionChanged}
+        onDownloaded={onPermissionDownloaded}
+        onError={onPermissionDownloadError}
       />
     );
   }
@@ -206,14 +206,14 @@ EntityPage.propTypes = {
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
   onAddTag: PropTypes.func.isRequired,
-  onChanged: PropTypes.func,
   onDeleteTag: PropTypes.func.isRequired,
   onDisableTag: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func,
   onEditTagClick: PropTypes.func.isRequired,
   onEnableTag: PropTypes.func.isRequired,
-  onError: PropTypes.func,
   onNewTagClick: PropTypes.func.isRequired,
+  onPermissionChanged: PropTypes.func,
+  onPermissionDownloadError: PropTypes.func,
+  onPermissionDownloaded: PropTypes.func,
 };
 
 export default EntityPage;

@@ -181,6 +181,7 @@ Details.propTypes = {
 
 const Page = ({
   onDownloaded,
+  onChanged,
   onError,
   ...props
 }) => (
@@ -202,12 +203,16 @@ const Page = ({
         toolBarIcons={ToolBarIcons}
         onOperatingSystemDeleteClick={delete_func}
         onOperatingSystemDownloadClick={download}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
       />
     )}
   </OsComponent>
 );
 
 Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };

@@ -308,6 +308,9 @@ const Page = ({
           onHostDownloadClick={download}
           onHostEditClick={edit}
           onHostIdentifierDeleteClick={deleteidentifier}
+          onPermissionChanged={onChanged}
+          onPermissionDownloaded={onDownloaded}
+          onPermissionDownloadError={onError}
         />
       )}
     </HostComponent>

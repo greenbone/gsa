@@ -242,6 +242,8 @@ const open_dialog = (nvt, func) => {
 
 const Page = ({
   onChanged,
+  onDownloaded,
+  onError,
   ...props
 }) => (
   <NoteComponent
@@ -267,6 +269,9 @@ const Page = ({
             onChanged={onChanged}
             onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
             onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
+            onPermissionChanged={onChanged}
+            onPermissionDownloaded={onDownloaded}
+            onPermissionDownloadError={onError}
           />
         )}
       </OverrideComponent>
@@ -276,6 +281,7 @@ const Page = ({
 
 Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
 

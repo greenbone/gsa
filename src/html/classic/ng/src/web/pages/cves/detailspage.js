@@ -210,7 +210,12 @@ const CvePage = props => (
     name="cve"
     permissionsComponent={false}
   >
-    {cprops => (
+    {({
+      onChanged,
+      onDownloaded,
+      onError,
+      ...cprops
+    }) => (
       <EntityPage
         {...props}
         {...cprops}
@@ -219,6 +224,9 @@ const CvePage = props => (
         detailsComponent={Details}
         infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
       />
     )}
   </EntityContainer>

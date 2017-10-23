@@ -44,7 +44,7 @@ import MultiplePermissionDialog, {
   INCLUDE_RELATED_RESOURCES,
 } from '../pages/permissions/multipledialog.js';
 import PermissionsTable from '../pages/permissions/table.js';
-import withPermissionsComponent from '../pages/permissions/withPermissionsComponent.js'; // eslint-disable-line max-len
+import PermissionComponent from '../pages/permissions/component.js';
 
 const SectionElementDivider = glamorous(IconDivider)({
   marginBottom: '3px',
@@ -90,7 +90,7 @@ class EntityPermissions extends React.Component {
 
     this.state = {};
 
-    this.handleSave = this.handleSave.bind(this);
+    this.handleMultipleSave = this.handleMultipleSave.bind(this);
     this.openMultiplePermissionDialog = this.openMultiplePermissionDialog
       .bind(this);
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
@@ -146,7 +146,7 @@ class EntityPermissions extends React.Component {
     });
   }
 
-  handleSave(data) {
+  handleMultipleSave(data) {
     const {onChanged} = this.props;
     const {gmp} = this.context;
     return gmp.permissions.create(data).then(onChanged);
@@ -189,7 +189,7 @@ class EntityPermissions extends React.Component {
           }
           <MultiplePermissionDialog
             ref={ref => this.dialog = ref}
-            onSave={this.handleSave}
+            onSave={this.handleMultipleSave}
           />
         </Section>
       </Wrapper>
@@ -203,6 +203,9 @@ EntityPermissions.propTypes = {
   permissions: PropTypes.arrayLike,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
+  onPermissionCloneClick: PropTypes.func.isRequired,
+  onPermissionDeleteClick: PropTypes.func.isRequired,
+  onPermissionDownloadClick: PropTypes.func.isRequired,
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
@@ -210,15 +213,48 @@ EntityPermissions.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withPermissionsComponent({
-  onCloned: 'onChanged',
-  onCreated: 'onChanged',
-  onDeleted: 'onChanged',
-  onSaved: 'onChanged',
-  onSaveError: 'onError',
-  onDeleteError: 'onError',
-  onDownloadError: 'onError',
-  onCloneError: 'onError',
-})(EntityPermissions);
+const Permissions = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <PermissionComponent
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onCreated={onChanged}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onSaved={onChanged}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+    }) => (
+      <EntityPermissions
+        {...props}
+        onChanged={onChanged}
+        onPermissionCreateClick={create}
+        onPermissionCloneClick={clone}
+        onPermissionDeleteClick={delete_func}
+        onPermissionDownloadClick={download}
+        onPermissionEditClick={edit}
+      />
+    )}
+  </PermissionComponent>
+);
+
+Permissions.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
+
+export default Permissions;
 
 // vim: set ts=2 sw=2 tw=80:

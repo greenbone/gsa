@@ -1,3 +1,17 @@
+2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entity/page.js,
+	src/html/classic/ng/src/web/entity/permissions.js,
+	src/html/classic/ng/src/web/pages/cves/detailspage.js,
+	src/html/classic/ng/src/web/pages/hosts/detailspage.js,
+	src/html/classic/ng/src/web/pages/notes/detailspage.js,
+	src/html/classic/ng/src/web/pages/nvts/detailspage.js,
+	src/html/classic/ng/src/web/pages/os/detailspage.js,
+	src/html/classic/ng/src/web/pages/overrides/detailspage.js,
+	src/html/classic/ng/src/web/pages/tasks/detailspage.js: Refactor
+	EntityPermissions to use PermissionComponent instead of
+	withPermissionComponent HOC.
+
 2017-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (init-d3charts): Remove gsa_polyfill.js

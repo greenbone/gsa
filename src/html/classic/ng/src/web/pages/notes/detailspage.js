@@ -211,6 +211,9 @@ const Page = ({
         onNoteDownloadClick={download}
         onNoteEditClick={edit}
         onNoteSaveClick={save}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
       />
     )}
   </NoteComponent>

@@ -211,6 +211,9 @@ const Page = ({
         onOverrideDownloadClick={download}
         onOverrideEditClick={edit}
         onOverrideSaveClick={save}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
       />
     )}
   </OverrideComponent>

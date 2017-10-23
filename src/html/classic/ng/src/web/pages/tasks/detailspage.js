@@ -380,6 +380,7 @@ const Page = ({
         toolBarIcons={ToolBarIcons}
         detailsComponent={Details}
         onChanged={onChanged}
+        onError={onError}
         onContainerTaskCreateClick={createcontainer}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
@@ -390,6 +391,9 @@ const Page = ({
         onTaskResumeClick={resume}
         onTaskStartClick={start}
         onTaskStopClick={stop}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
       />
     )}
   </TaskComponent>
