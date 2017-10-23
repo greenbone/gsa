@@ -29,7 +29,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
+import EntityContainer from '../../entity/container.js';
 import {EntityInfoTable} from '../../entity/info.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
@@ -204,13 +204,26 @@ EntityInfo.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-export default withEntityContainer('cve', {
-  detailsComponent: Details,
-  infoComponent: EntityInfo,
-  sectionIcon: 'cve.svg',
-  title: _('CVE'),
-  toolBarIcons: ToolBarIcons,
-  permissionsComponent: false,
-})(EntityPage);
+const CvePage = props => (
+  <EntityContainer
+    {...props}
+    name="cve"
+    permissionsComponent={false}
+  >
+    {cprops => (
+      <EntityPage
+        {...props}
+        {...cprops}
+        sectionIcon="cve.svg"
+        title={_('CVE')}
+        detailsComponent={Details}
+        infoComponent={EntityInfo}
+        toolBarIcons={ToolBarIcons}
+      />
+    )}
+  </EntityContainer>
+);
+
+export default CvePage;
 
 // vim: set ts=2 sw=2 tw=80:
