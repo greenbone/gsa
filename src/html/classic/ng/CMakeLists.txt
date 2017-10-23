@@ -335,9 +335,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entity/permissions.js
      ${NG_SRC_DIR}/src/web/entity/tags.js
      ${NG_SRC_DIR}/src/web/entity/tagshandler.js
-     ${NG_SRC_DIR}/src/web/entity/withComponent.js
-     ${NG_SRC_DIR}/src/web/entity/withEntityComponent.js
-     ${NG_SRC_DIR}/src/web/entity/withEntityContainer.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/listpage.js
@@ -429,7 +426,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/permissions/multipledialog.js
      ${NG_SRC_DIR}/src/web/pages/permissions/row.js
      ${NG_SRC_DIR}/src/web/pages/permissions/table.js
-     ${NG_SRC_DIR}/src/web/pages/permissions/withPermissionsComponent.js
      ${NG_SRC_DIR}/src/web/pages/portlists/dialog.js
      ${NG_SRC_DIR}/src/web/pages/portlists/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/portlists/importdialog.js

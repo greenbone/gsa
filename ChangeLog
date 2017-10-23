@@ -1,5 +1,12 @@
 2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entity/withComponent.js
+	src/html/classic/ng/src/web/pages/permissions/withPermissionsComponent.js: Get
+	rid of the last withXyzComponent HOCs for displaying entity details.
+
+2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/page.js,
 	src/html/classic/ng/src/web/entity/permissions.js,
 	src/html/classic/ng/src/web/pages/cves/detailspage.js,
