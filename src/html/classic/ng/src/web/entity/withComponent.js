@@ -23,7 +23,15 @@
 
 import React from 'react';
 
-import {get_handler} from './withEntityComponent.js';
+import {is_function} from 'gmp/utils.js';
+
+const get_handler = (props, handler) => {
+
+  if (is_function(handler)) {
+    return (...args) => handler(props, ...args);
+  }
+  return props[handler];
+};
 
 const withComponent = (default_mapping, EntityComponent) => (mapping = {}) =>
   Component => {
