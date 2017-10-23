@@ -120,13 +120,6 @@ const Row = ({entity, links = true, actions, ...other}) => {
           textOnly={!links}>
           {datetime(report.timestamp)}
         </DetailsLink>
-        <DetailsLink
-          legacy
-          type="report"
-          id={entity.id}
-          textOnly={!links}>
-          {datetime(report.timestamp)}
-        </DetailsLink>
       </TableData>
       <TableData>
         <StatusBar
@@ -135,7 +128,6 @@ const Row = ({entity, links = true, actions, ...other}) => {
       </TableData>
       <TableData>
         <DetailsLink
-          legacy
           type="task"
           id={entity.task.id}
           textOnly={!links}>
