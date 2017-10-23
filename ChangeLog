@@ -1,5 +1,10 @@
 2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/pages/notes/listpage.js: Convert notes list page
+	to use NoteComponent instead of withNoteComponent HOC.
+
+2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/nvts/detailspage.js: Rewrite Nvt details
 	page to use render props pattern.
 

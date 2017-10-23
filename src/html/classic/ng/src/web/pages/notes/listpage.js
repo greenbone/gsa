@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
@@ -40,7 +40,7 @@ import NewIcon from '../../components/icon/newicon.js';
 import NotesCharts from './charts.js';
 import FilterDialog from './filterdialog.js';
 import NotesTable from './table.js';
-import withNoteComponent from './withNoteComponent.js';
+import NoteComponent from './component.js';
 
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -59,7 +59,8 @@ const ToolBarIcons = ({onNoteCreateClick}, {capabilities}) => {
         page="notes"
         title={_('Help: Notes')}/>
       {capabilities.mayCreate('note') &&
-        <NewIcon title={_('New Note')}
+        <NewIcon
+          title={_('New Note')}
           onClick={onNoteCreateClick}/>
       }
     </IconDivider>
@@ -74,22 +75,57 @@ ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func,
 };
 
-const Page = withNoteComponent({
-  onCreated: 'onChanged',
-  onCloned: 'onChanged',
-  onSaved: 'onChanged',
-  onDeleted: 'onChanged',
-})(EntitiesPage);
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <NoteComponent
+    onCreated={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onSaved={onChanged}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+    }) => (
+      <EntitiesPage
+        {...props}
+        dashboard={Dashboard}
+        filterEditDialog={FilterDialog}
+        sectionIcon="note.svg"
+        table={NotesTable}
+        title={_('Notes')}
+        toolBarIcons={ToolBarIcons}
+        onError={onError}
+        onNoteCloneClick={clone}
+        onNoteCreateClick={create}
+        onNoteDeleteClick={delete_func}
+        onNoteDownloadClick={download}
+        onNoteEditClick={edit}
+      />
+    )}
+  </NoteComponent>
+);
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('note', {
-  dashboard: Dashboard,
   extraLoadParams: {details: 1},
-  filterEditDialog: FilterDialog,
   filtersFilter: NOTES_FILTER_FILTER,
-  sectionIcon: 'note.svg',
-  table: NotesTable,
-  title: _('Notes'),
-  toolBarIcons: ToolBarIcons,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
