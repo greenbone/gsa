@@ -8,6 +8,13 @@
 
 2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/os/component.js,
+	src/html/classic/ng/src/web/pages/os/detailspage.js: Refactor os details page
+	to get rid of withEntityComponent and withEntityContainer HOCs.
+
+2017-10-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/pages/cves/detailspage.js: Use EntityComponent
 	instead of withEntityComponent HOC.
 

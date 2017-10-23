@@ -28,10 +28,8 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
-import withEntityContainer from '../../entity/withEntityContainer.js';
-import withEntityComponent, {
-  goto_list,
-} from '../../entity/withEntityComponent.js';
+import EntityContainer from '../../entity/container.js';
+import {goto_list} from '../../entity/component.js';
 
 import Badge from '../../components/badge/badge.js';
 
@@ -54,6 +52,8 @@ import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
+
+import OsComponent from './component.js';
 
 const ToolBarIcons = ({
   entity,
@@ -179,18 +179,51 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = withEntityComponent('operatingsystem', {
-  delete: 'onOperatingSystemDeleteClick',
-  onDeleted: goto_list('operatingsystems'),
-  download: 'onOperatingSystemDownloadClick',
-})(EntityPage);
+const Page = ({
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <OsComponent
+    onDeleted={goto_list('operatingsystems', props)}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+  >
+    {({
+      delete: delete_func,
+      download,
+    }) => (
+      <EntityPage
+        {...props}
+        detailsComponent={Details}
+        sectionIcon="os.svg"
+        title={_('Operating System')}
+        toolBarIcons={ToolBarIcons}
+        onOperatingSystemDeleteClick={delete_func}
+        onOperatingSystemDownloadClick={download}
+      />
+    )}
+  </OsComponent>
+);
 
-export default withEntityContainer('operatingsystem', {
-  resourceType: 'os',
-  detailsComponent: Details,
-  sectionIcon: 'os.svg',
-  title: _('Operating System'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+Page.propTypes = {
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
+
+const HostPage = props => (
+  <EntityContainer
+    {...props}
+    name="operatingsystem"
+    resourceType="os"
+  >
+    {cprops => (
+      <Page {...props} {...cprops} />
+    )}
+  </EntityContainer>
+);
+
+export default HostPage;
 
 // vim: set ts=2 sw=2 tw=80:
