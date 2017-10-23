@@ -1,5 +1,10 @@
 2017-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove inline style attribute from
+	bulk_selected checkboxes.
+
+2017-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r29888.
 
 	* src/html/classic/graphics.xsl (init-d3charts): Remove gsa_polyfill.js
