@@ -182,6 +182,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <script src="/js/moment-timezone-with-data.js" type="text/javascript"></script>
         <script src="/js/greenbone-ui.js" type="text/javascript"></script>
         <script src="/js/greenbone.js" type="text/javascript"></script>
+        <script src="/js/gsa_polyfill.js" type="text/javascript"></script>
         <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
       </xsl:otherwise>
     </xsl:choose>
