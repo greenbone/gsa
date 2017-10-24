@@ -35,6 +35,11 @@ export class CpeCommand extends EntityCommand {
   constructor(http) {
     super(http, 'info', Cpe);
     this.setParam('info_type', 'cpe');
+    this.setParam('details', '1');
+  }
+
+  getElementFromRoot(root) {
+    return root.get_info.get_info_response.info[0];
   }
 }
 
