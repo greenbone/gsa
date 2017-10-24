@@ -23,27 +23,23 @@
 
 import {is_defined} from '../utils.js';
 
-import {InfoEntitiesCommand, EntityCommand,
-  register_command} from '../command.js';
+import InfoEntitiesCommand from './infoentities.js';
+import InfoEntityCommand from './infoentity.js';
+
+import register_command from '../command.js';
 
 import Cpe from '../models/cpe.js';
 
 const info_filter = info => is_defined(info.cpe);
 
-export class CpeCommand extends EntityCommand {
+class CpeCommand extends InfoEntityCommand {
 
   constructor(http) {
-    super(http, 'info', Cpe);
-    this.setParam('info_type', 'cpe');
-    this.setParam('details', '1');
-  }
-
-  getElementFromRoot(root) {
-    return root.get_info.get_info_response.info[0];
+    super(http, 'cpe', Cpe);
   }
 }
 
-export class CpesCommand extends InfoEntitiesCommand {
+class CpesCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'cpe', Cpe, info_filter);

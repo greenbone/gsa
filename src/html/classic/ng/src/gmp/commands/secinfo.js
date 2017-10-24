@@ -23,22 +23,23 @@
 
 import {is_defined} from '../utils.js';
 
-import {InfoEntitiesCommand, EntityCommand,
-  register_command} from '../command.js';
+import InfoEntitiesCommand from './infoentities.js';
+import InfoEntityCommand from './infoentity.js';
+
+import register_command from '../command.js';
 
 import SecInfo from '../models/secinfo.js';
 
 const info_filter = info => is_defined(info.allinfo);
 
-export class SecInfoCommand extends EntityCommand {
+class SecInfoCommand extends InfoEntityCommand {
 
   constructor(http) {
-    super(http, 'info', SecInfo);
-    this.setParam('info_type', 'allinfo');
+    super(http, 'allinfo', SecInfo);
   }
 }
 
-export class SecInfosCommand extends InfoEntitiesCommand {
+class SecInfosCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'allinfo', SecInfo, info_filter);

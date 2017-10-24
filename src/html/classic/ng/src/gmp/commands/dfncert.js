@@ -23,22 +23,23 @@
 
 import {is_defined} from '../utils.js';
 
-import {InfoEntitiesCommand, EntityCommand,
-  register_command} from '../command.js';
+import InfoEntitiesCommand from './infoentities.js';
+import InfoEntityCommand from './infoentity.js';
+
+import register_command from '../command.js';
 
 import DfnCertAdv from '../models/dfncert.js';
 
 const info_filter = info => is_defined(info.dfn_cert_adv);
 
-export class DfnCertAdvCommand extends EntityCommand {
+class DfnCertAdvCommand extends InfoEntityCommand {
 
   constructor(http) {
-    super(http, 'info', DfnCertAdv);
-    this.setParam('info_type', 'dfn_cert_adv');
+    super(http, 'dfn_cert_adv', DfnCertAdv);
   }
 }
 
-export class DfnCertAdvsCommand extends InfoEntitiesCommand {
+class DfnCertAdvsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'dfn_cert_adv', DfnCertAdv, info_filter);

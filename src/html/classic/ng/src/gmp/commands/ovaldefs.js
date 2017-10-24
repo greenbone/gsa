@@ -23,22 +23,23 @@
 
 import {is_defined} from '../utils.js';
 
-import {InfoEntitiesCommand, EntityCommand,
-  register_command} from '../command.js';
+import InfoEntitiesCommand from './infoentities.js';
+import InfoEntityCommand from './infoentity.js';
+
+import register_command from '../command.js';
 
 import Ovaldef from '../models/ovaldef.js';
 
 const info_filter = info => is_defined(info.ovaldef);
 
-export class OvaldefCommand extends EntityCommand {
+class OvaldefCommand extends InfoEntityCommand {
 
   constructor(http) {
-    super(http, 'info', Ovaldef);
-    this.setParam('info_type', 'ovaldef');
+    super(http, 'ovaldef', Ovaldef);
   }
 }
 
-export class OvaldefsCommand extends InfoEntitiesCommand {
+class OvaldefsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'ovaldef', Ovaldef, info_filter);

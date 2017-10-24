@@ -5,6 +5,18 @@
 
 2017-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/certbund.js,
+	src/html/classic/ng/src/gmp/commands/cpes.js,
+	src/html/classic/ng/src/gmp/commands/cves.js,
+	src/html/classic/ng/src/gmp/commands/dfncert.js,
+	src/html/classic/ng/src/gmp/commands/nvt.js,
+	src/html/classic/ng/src/gmp/commands/ovaldefs.js,
+	src/html/classic/ng/src/gmp/commands/secinfo.js: Convert secinfo entity
+	command classes to use InfoEntityCommand as base class to avoid code
+	duplication. Also don't export any command class from the js modules.
+
+2017-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/commands/infoentity.js: Add an InfoEntityCommand
 	base class.

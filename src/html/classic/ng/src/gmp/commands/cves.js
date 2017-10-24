@@ -23,27 +23,23 @@
 
 import {is_defined} from '../utils.js';
 
-import {InfoEntitiesCommand, EntityCommand,
-  register_command} from '../command.js';
+import InfoEntitiesCommand from './infoentities.js';
+import InfoEntityCommand from './infoentity.js';
+
+import register_command from '../command.js';
 
 import Cve from '../models/cve.js';
 
 const info_filter = info => is_defined(info.cve);
 
-export class CveCommand extends EntityCommand {
+class CveCommand extends InfoEntityCommand {
 
   constructor(http) {
-    super(http, 'info', Cve);
-    this.setParam('info_type', 'cve');
-    this.setParam('details', '1');
-  }
-
-  getElementFromRoot(root) {
-    return root.get_info.get_info_response.info[0];
+    super(http, 'cve', Cve);
   }
 }
 
-export class CvesCommand extends InfoEntitiesCommand {
+class CvesCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'cve', Cve, info_filter);

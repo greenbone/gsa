@@ -23,22 +23,23 @@
 
 import {is_defined} from '../utils.js';
 
-import {InfoEntitiesCommand, EntityCommand,
-  register_command} from '../command.js';
+import InfoEntitiesCommand from './infoentities.js';
+import InfoEntityCommand from './infoentity.js';
+
+import register_command from '../command.js';
 
 import CertBundAdv from '../models/certbund.js';
 
 const info_filter = info => is_defined(info.cert_bund_adv);
 
-export class CertBundCommand extends EntityCommand {
+class CertBundCommand extends InfoEntityCommand {
 
   constructor(http) {
-    super(http, 'info', CertBundAdv);
-    this.setParam('info_type', 'cert_bund_adv');
+    super(http, 'cert_bund_adv', CertBundAdv);
   }
 }
 
-export class CertBundsCommand extends InfoEntitiesCommand {
+class CertBundsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'cert_bund_adv', CertBundAdv, info_filter);

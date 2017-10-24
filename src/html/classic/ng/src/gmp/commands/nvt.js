@@ -23,28 +23,23 @@
 
 import {is_defined} from '../utils.js';
 
-import {InfoEntitiesCommand, EntityCommand,
-  register_command} from '../command.js';
+import InfoEntitiesCommand from './infoentities.js';
+import InfoEntityCommand from './infoentity.js';
+
+import register_command from '../command.js';
 
 import Nvt from '../models/nvt.js';
 
 const info_filter = info => is_defined(info.nvt);
 
-export class NvtCommand extends EntityCommand {
+class NvtCommand extends InfoEntityCommand {
 
   constructor(http) {
-    super(http, 'info', Nvt);
-    this.setParam('info_type', 'nvt');
-  }
-
-  getElementFromRoot(root) {
-    // info[0] because we have always two info objects here
-    // one for the real nvt object and second for the counts (no infos)
-    return root.get_info.get_info_response.info[0].nvt;
+    super(http, 'nvt', Nvt);
   }
 }
 
-export class NvtsCommand extends InfoEntitiesCommand {
+class NvtsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'nvt', Nvt, info_filter);
