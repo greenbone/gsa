@@ -38,7 +38,7 @@ import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
 
 const Pre = glamorous.pre({
-  whiteSpace: 'pre-line',
+  whiteSpace: 'pre-wrap',
   wordWrap: 'normal',
 });
 

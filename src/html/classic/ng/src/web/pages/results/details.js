@@ -48,7 +48,7 @@ import References from '../nvts/references.js';
 import Solution from '../nvts/solution.js';
 
 const Pre = glamorous.pre({
-  whiteSpace: 'pre-line',
+  whiteSpace: 'pre-wrap',
   wordWrap: 'normal',
 });
 
