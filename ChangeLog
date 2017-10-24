@@ -5,6 +5,16 @@
 
 2017-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/entities.js,
+	src/html/classic/ng/src/gmp/commands/entity.js,
+	src/html/classic/ng/src/gmp/commands/http.js,
+	src/html/classic/ng/src/gmp/commands/infoentities.js: Move each command class
+	from command.js to an own js module.
+
+2017-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/filter/utils.js: The utils.js file got
 	committed accidentally. Remove its content and use it for real filter utility
 	functions now.

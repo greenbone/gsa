@@ -21,28 +21,46 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import EntitiesCommand from './commands/entities.js';
-import EntityCommand from './commands/entity.js';
-import HttpCommand from './commands/http.js';
-import InfoEntitiesCommand from './commands/infoentities.js';
+class HttpCommand {
 
-export {
-  EntitiesCommand,
-  EntityCommand,
-  HttpCommand,
-  InfoEntitiesCommand,
-};
+  constructor(http, params = {}) {
+    this.http = http;
+    this._params = params;
+  }
 
-/* TODO only export register_command and get_commands */
+  getParam(name) {
+    return this._params[name];
+  }
 
-const COMMANDS = {};
+  setParam(name, value) {
+    this._params[name] = value;
+    return this;
+  }
 
-export const register_command = (name, clazz, ...options) => {
-  COMMANDS[name] = {clazz, options};
-};
+  getParams(params, extra_params = {}) {
+    return {
+      ...this._params,
+      ...params,
+      ...extra_params,
+    };
+  }
 
-export const get_commands = () => COMMANDS;
+  httpGet(params, options = {}) {
+    const {extra_params, ...other} = options;
+    return this.http.request('get', {
+      args: this.getParams(params, extra_params),
+      ...other,
+    });
+  }
 
-export default register_command;
+  httpPost(params, options = {}) {
+    const {extra_params, ...other} = options;
+    return this.http.request('post', {
+      data: this.getParams(params, extra_params),
+      ...other,
+    });
+  }
+}
 
+export default HttpCommand;
 // vim: set ts=2 sw=2 tw=80:

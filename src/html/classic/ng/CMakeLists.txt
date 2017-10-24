@@ -66,10 +66,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/cves.js
      ${NG_SRC_DIR}/src/gmp/commands/cvsscalculator.js
      ${NG_SRC_DIR}/src/gmp/commands/dfncert.js
+     ${NG_SRC_DIR}/src/gmp/commands/entities.js
+     ${NG_SRC_DIR}/src/gmp/commands/entity.js
      ${NG_SRC_DIR}/src/gmp/commands/feedstatus.js
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
      ${NG_SRC_DIR}/src/gmp/commands/groups.js
      ${NG_SRC_DIR}/src/gmp/commands/hosts.js
+     ${NG_SRC_DIR}/src/gmp/commands/http.js
+     ${NG_SRC_DIR}/src/gmp/commands/infoentities.js
      ${NG_SRC_DIR}/src/gmp/commands/login.js
      ${NG_SRC_DIR}/src/gmp/commands/notes.js
      ${NG_SRC_DIR}/src/gmp/commands/nvt.js
