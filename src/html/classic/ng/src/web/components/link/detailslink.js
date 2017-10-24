@@ -53,7 +53,7 @@ const DetailsLink = ({
     <Link
       {...props}
       textOnly={textOnly}
-      to={'/' + page + '/' + id}
+      to={'/' + page + '/' + encodeURIComponent(id)}
     />
   );
 };
