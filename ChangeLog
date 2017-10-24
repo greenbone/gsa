@@ -1,3 +1,10 @@
+2017-10-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r29907.
+
+	* src/html/classic/omp.xsl (get_system_reports_response): Check for
+	status code 503 instead of 500 for slave unavailable message.
+
 2017-10-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl: Remove inline style attribute from

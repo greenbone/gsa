@@ -35156,7 +35156,7 @@ should not have received it.
     </form>
 
     <xsl:choose>
-      <xsl:when test="@status = '500'">
+      <xsl:when test="@status = '503'">
         <p>
           <xsl:value-of select="gsa:i18n ('The selected Slave Scanner can currently not be reached for retrieval of performance data.')"/>
         </p>
