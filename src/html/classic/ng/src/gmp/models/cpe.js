@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, map, extend} from '../utils.js';
+import {is_defined, is_empty, map, extend} from '../utils.js';
 
 import Info from './info.js';
 
@@ -50,6 +50,10 @@ class Cpe extends Info {
     }
     else {
       ret.cves = [];
+    }
+
+    if (is_empty(ret.status)) {
+      delete ret.status;
     }
 
     return ret;
