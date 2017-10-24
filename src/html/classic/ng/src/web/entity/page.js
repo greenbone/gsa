@@ -193,7 +193,7 @@ class EntityPage extends React.Component {
 }
 
 EntityPage.propTypes = {
-  detailsComponent: PropTypes.component,
+  detailsComponent: PropTypes.component.isRequired,
   entity: PropTypes.model,
   foldable: PropTypes.bool,
   infoComponent: PropTypes.componentOrFalse,
