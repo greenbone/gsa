@@ -21,24 +21,36 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend} from '../utils.js';
+import {is_defined, map, extend} from '../utils.js';
 
 import Info from './info.js';
+
+import {parse_severity} from '../parser.js';
 
 class Cpe extends Info {
 
   static info_type = 'cpe';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (elem.cpe) { // we have an info element
       extend(ret, elem.cpe);
       delete ret.cpe;
     }
 
-    ret.severity = ret.max_cvss;
+    ret.severity = parse_severity(ret.max_cvss);
     delete ret.max_cvss;
+
+    if (is_defined(ret.cves) && is_defined(ret.cves.cve)) {
+      ret.cves = map(ret.cves.cve.entry, cve => ({
+        id: cve._id,
+        severity: parse_severity(cve.cvss.base_metrics.score.__text),
+      }));
+    }
+    else {
+      ret.cves = [];
+    }
 
     return ret;
   }
