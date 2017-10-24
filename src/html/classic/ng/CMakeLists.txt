@@ -342,6 +342,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/table.js
      ${NG_SRC_DIR}/src/web/pages/assetspage.js
      ${NG_SRC_DIR}/src/web/pages/cpes/charts.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/details.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/cpes/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/cpes/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cpes/row.js

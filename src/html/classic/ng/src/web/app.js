@@ -62,6 +62,7 @@ import AlertsPage from './pages/alerts/listpage.js';
 import AllSecInfosPage from './pages/allsecinfo/listpage.js';
 import CertBundAdvsPage from './pages/certbund/listpage.js';
 import CpesPage from './pages/cpes/listpage.js';
+import CpeDetailsPage from './pages/cpes/detailspage.js';
 import CredentialsPage from './pages/credentials/listpage.js';
 import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
@@ -345,6 +346,10 @@ ReactDOM.render(
         <Route
           path="report/:id"
           component={ReportDetailsPage}
+        />
+        <Route
+          path="cpe/:id"
+          component={CpeDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

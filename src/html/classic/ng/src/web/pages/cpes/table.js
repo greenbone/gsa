@@ -29,11 +29,13 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import CpeDetails from './details.js';
 import CpeRow from './row.js';
 
 const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
@@ -91,6 +93,7 @@ const CpesFooter = createEntitiesFooter({
 export const CpesTable = createEntitiesTable({
   emptyTitle: _('No CPEs available'),
   row: CpeRow,
+  rowDetails: withRowDetails('cpe')(CpeDetails),
   header: CpesHeader,
   footer: CpesFooter,
 });
