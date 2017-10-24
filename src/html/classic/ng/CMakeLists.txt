@@ -112,6 +112,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/filter/filterterm.js
      ${NG_SRC_DIR}/src/gmp/models/filter/filtertermlist.js
      ${NG_SRC_DIR}/src/gmp/models/filter/keywords.js
+     ${NG_SRC_DIR}/src/gmp/models/filter/utils.js
      ${NG_SRC_DIR}/src/gmp/models/group.js
      ${NG_SRC_DIR}/src/gmp/models/host.js
      ${NG_SRC_DIR}/src/gmp/models/info.js

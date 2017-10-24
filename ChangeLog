@@ -5,6 +5,12 @@
 
 2017-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/filter/utils.js: The utils.js file got
+	committed accidentally. Remove its content and use it for real filter utility
+	functions now.
+
+2017-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/pages/cpes/details.js,
