@@ -74,6 +74,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/hosts.js
      ${NG_SRC_DIR}/src/gmp/commands/http.js
      ${NG_SRC_DIR}/src/gmp/commands/infoentities.js
+     ${NG_SRC_DIR}/src/gmp/commands/infoentity.js
      ${NG_SRC_DIR}/src/gmp/commands/login.js
      ${NG_SRC_DIR}/src/gmp/commands/notes.js
      ${NG_SRC_DIR}/src/gmp/commands/nvt.js
