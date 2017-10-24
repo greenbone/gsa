@@ -49,7 +49,7 @@ class TagsHandler extends React.Component {
   }
 
   handleSaveTag(data) {
-    const {gmp, onSuccess, onError} = this.props;
+    const {gmp, onSuccess} = this.props;
 
     let promise;
 
@@ -60,7 +60,7 @@ class TagsHandler extends React.Component {
       promise = gmp.tag.create(data);
     }
 
-    return promise.then(onSuccess, onError);
+    return promise.then(onSuccess);
   }
 
   handleAddTag({name, value, entity}) {
@@ -68,7 +68,6 @@ class TagsHandler extends React.Component {
       gmp,
       resourceType,
       onSuccess,
-      onError,
     } = this.props;
 
     return gmp.tag.create({
@@ -77,7 +76,7 @@ class TagsHandler extends React.Component {
       active: 1,
       resource_id: entity.id,
       resource_type: resourceType,
-    }).then(onSuccess, onError);
+    }).then(onSuccess);
   }
 
   handleEnableTag(tag) {
