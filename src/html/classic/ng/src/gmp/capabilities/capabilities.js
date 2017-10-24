@@ -29,6 +29,8 @@ const types = {
   os: 'asset',
   cve: 'info',
   cves: 'info',
+  cpe: 'info',
+  cpes: 'info',
 };
 
 const check_type = type => {
