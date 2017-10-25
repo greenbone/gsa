@@ -1,5 +1,15 @@
 2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/pages/ovaldefs/details.js,
+	src/html/classic/ng/src/web/pages/ovaldefs/detailspage.js,
+	src/html/classic/ng/src/web/pages/ovaldefs/row.js,
+	src/html/classic/ng/src/web/pages/ovaldefs/table.js: Implement oval definition
+	details page.
+
+2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/link/externallink.js: Use to prop for
 	setting the target location for external links.
 

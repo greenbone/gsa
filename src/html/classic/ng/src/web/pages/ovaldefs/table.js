@@ -30,11 +30,13 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import OvaldefDetails from './details.js';
 import OvaldefRow from './row.js';
 
 const Header = ({
@@ -114,6 +116,7 @@ export const OvaldefsTable = createEntitiesTable({
   body: false,
   emptyTitle: _('No OVAL Definitions available'),
   row: OvaldefRow,
+  rowDetails: withRowDetails('ovaldef', 10)(OvaldefDetails),
   header: OvaldefsHeader,
   footer: OvaldefsFooter,
 });

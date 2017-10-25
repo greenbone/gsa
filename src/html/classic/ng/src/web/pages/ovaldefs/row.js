@@ -30,7 +30,7 @@ import {shorten} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import {na, render_component} from '../../utils/render.js';
 
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import InfoLink from '../../components/link/infolink.js';
 
@@ -61,6 +61,11 @@ const Row = ({
             id={entity.id}>
             {entity.name}
           </InfoLink>
+          <RowDetailsToggle
+            name={entity.id}
+            onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle>
           <div>{shorten(entity.file, 45)}</div>
           <Comment text={entity.comment}/>
         </TableData>
@@ -100,6 +105,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow()(Row);

@@ -80,6 +80,7 @@ import NvtDetailsPage from './pages/nvts/detailspage.js';
 import OperatingSystemsPage from './pages/os/listpage.js';
 import OperatingSystemDetailsPage from './pages/os/detailspage.js';
 import OvaldefsPage from './pages/ovaldefs/listpage.js';
+import OvaldefDetailsPage from './pages/ovaldefs/detailspage.js';
 import OverridesPage from './pages/overrides/listpage.js';
 import OverrideDetailsPage from './pages/overrides/detailspage.js';
 import PermissionsPage from './pages/permissions/listpage.js';
@@ -350,6 +351,10 @@ ReactDOM.render(
         <Route
           path="cpe/:id"
           component={CpeDetailsPage}
+        />
+        <Route
+          path="ovaldef/:id"
+          component={OvaldefDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

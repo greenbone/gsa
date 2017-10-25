@@ -420,6 +420,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/os/row.js
      ${NG_SRC_DIR}/src/web/pages/os/table.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/charts.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/details.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/listpage.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/row.js
