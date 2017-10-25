@@ -74,7 +74,8 @@ const withRowDetails = (type, colSpan = '10') => Component => {
             <DetailsLink
               type={type}
               id={entity.id}>
-              <Icon img="details.svg"
+              <Icon
+                img="details.svg"
                 size="small"
                 title={_('Show details')}
               />

@@ -73,7 +73,8 @@ const Header = ({
           onSortChange={onSortChange}>
           {_('From')}
         </TableHead>
-        <TableHead width="10em"
+        <TableHead
+          width="10em"
           sortby={sort ? 'new_severity' : false}
           onSortChange={onSortChange}>
           {_('To')}

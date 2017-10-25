@@ -92,10 +92,10 @@ class Page extends React.Component {
   }
 
   openScheduleDialog(schedule) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
 
     if (is_defined(schedule)) {
-      let date = schedule.first_time;
+      const date = schedule.first_time;
       this.schedule_dialog.show({
         comment: schedule.comment,
         date,
@@ -117,8 +117,8 @@ class Page extends React.Component {
       });
     }
     else {
-      let timezone = gmp.globals.timezone;
-      let now = moment().tz(timezone);
+      const {timezone} = gmp.globals;
+      const now = moment().tz(timezone);
 
       this.schedule_dialog.show({
         timezone,

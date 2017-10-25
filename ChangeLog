@@ -1,5 +1,24 @@
 2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/withRowDetails.js,
+	src/html/classic/ng/src/web/entity/box.js,
+	src/html/classic/ng/src/web/pages/credentials/listpage.js,
+	src/html/classic/ng/src/web/pages/cves/row.js,
+	src/html/classic/ng/src/web/pages/nvts/row.js,
+	src/html/classic/ng/src/web/pages/os/table.js,
+	src/html/classic/ng/src/web/pages/ovaldefs/row.js,
+	src/html/classic/ng/src/web/pages/overrides/table.js,
+	src/html/classic/ng/src/web/pages/reportformats/listpage.js,
+	src/html/classic/ng/src/web/pages/reports/table.js,
+	src/html/classic/ng/src/web/pages/roles/listpage.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/listpage.js,
+	src/html/classic/ng/src/web/pages/schedules/listpage.js,
+	src/html/classic/ng/src/web/pages/targets/table.js,
+	src/html/classic/ng/src/web/pages/tasks/table.js: Coding style cleanups for
+	keeping eslint happy.
+
+2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entity/container.js,
 	src/html/classic/ng/src/web/pages/cpes/detailspage.js,
 	src/html/classic/ng/src/web/pages/cves/detailspage.js,

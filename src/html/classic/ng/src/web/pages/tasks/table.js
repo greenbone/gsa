@@ -39,7 +39,12 @@ import TableRow from '../../components/table/row.js';
 import Row from './row.js';
 import TaskDetails from './details.js';
 
-const Header = ({onSortChange, links = true, sort = true, actionsColumn}) => {
+const Header = ({
+  actionsColumn,
+  links = true,
+  sort = true,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>

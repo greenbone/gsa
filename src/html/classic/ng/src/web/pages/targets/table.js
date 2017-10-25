@@ -53,7 +53,7 @@ const Header = ({
 }) => {
 
   let select_sort = 'ssh_credential';
-  let sort_by = filter ? filter.getSortBy() : undefined;
+  const sort_by = filter ? filter.getSortBy() : undefined;
 
   if (sort_by === 'smb_credential' ||
     sort_by === 'esxi_credential' ||

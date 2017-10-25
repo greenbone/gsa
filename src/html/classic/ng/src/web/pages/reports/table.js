@@ -48,22 +48,28 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead rowSpan="2"
+        <TableHead
+          rowSpan="2"
           sortby={sort ? 'date' : false}
           onSortChange={onSortChange}>
           {_('Date')}
         </TableHead>
-        <TableHead rowSpan="2" width="10em"
+        <TableHead
+          rowSpan="2"
+          width="10em"
           sortby={sort ? 'status' : false}
           onSortChange={onSortChange}>
           {_('Status')}
         </TableHead>
-        <TableHead rowSpan="2"
+        <TableHead
+          rowSpan="2"
           sortby={sort ? 'task' : false}
           onSortChange={onSortChange}>
           {_('Task')}
         </TableHead>
-        <TableHead rowSpan="2" width="10em"
+        <TableHead
+          rowSpan="2"
+          width="10em"
           sortby={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
@@ -75,27 +81,32 @@ const Header = ({
         }
       </TableRow>
       <TableRow>
-        <TableHead width="5em"
+        <TableHead
+          width="5em"
           sortby={sort ? 'high' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.High/>
         </TableHead>
-        <TableHead width="5em"
+        <TableHead
+          width="5em"
           sortby={sort ? 'medium' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Medium/>
         </TableHead>
-        <TableHead width="5em"
+        <TableHead
+          width="5em"
           sortby={sort ? 'low' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Low/>
         </TableHead>
-        <TableHead width="5em"
+        <TableHead
+          width="5em"
           sortby={sort ? 'log' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Log/>
         </TableHead>
-        <TableHead width="5em"
+        <TableHead
+          width="5em"
           sortby={sort ? 'false_positive' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.FalsePositive/>

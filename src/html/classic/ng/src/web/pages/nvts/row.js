@@ -47,7 +47,7 @@ const Row = ({
   links = true,
   actions,
   onToggleDetailsClick,
-  ...other,
+  ...other
 }) => {
   return (
     <TableRow>

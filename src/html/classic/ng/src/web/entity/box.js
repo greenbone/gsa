@@ -99,8 +99,8 @@ const EntityBox = ({
 };
 
 EntityBox.propTypes = {
-  modified: PropTypes.momentDate,
   end: PropTypes.momentDate,
+  modified: PropTypes.momentDate,
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
   toolbox: PropTypes.element,

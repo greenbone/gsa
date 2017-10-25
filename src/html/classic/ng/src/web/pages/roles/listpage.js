@@ -100,7 +100,7 @@ class Page extends React.Component {
         in_use: role.isInUse(),
         users,
       }, {
-        title: _('Edit Role {{name}}', role)
+        title: _('Edit Role {{name}}', role),
       });
 
       gmp.role.editRoleSettings(role).then(response => {

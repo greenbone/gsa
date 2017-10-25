@@ -33,6 +33,8 @@ import {
 } from 'gmp/utils.js';
 import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
+import {OSP_SCANNER_TYPE} from 'gmp/models/scanner.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
@@ -51,9 +53,6 @@ import EditScanConfigDialog from './editdialog.js';
 import EditNvtDetailsDialog from './editnvtdetailsdialog.js';
 import ImportDialog from './importdialog.js';
 import ScanConfigDialog from './dialog.js';
-
-import {OSP_SCANNER_TYPE} from 'gmp/models/scanner.js';
-
 import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
@@ -82,8 +81,8 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
-  onNewConfigClick: PropTypes.func,
   onImportConfigClick: PropTypes.func,
+  onNewConfigClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
@@ -193,14 +192,14 @@ class Page extends React.Component {
     const {entityCommand} = this.props;
 
     return entityCommand.editScanConfigSettings(config).then(response => {
-      let {data} = response;
-      let {families, scanconfig} = data;
-      let trend = {};
-      let select = {};
+      const {data} = response;
+      const {families, scanconfig} = data;
+      const trend = {};
+      const select = {};
 
       for_each(families, family => {
-        let {name} = family;
-        let config_family = scanconfig.families[name];
+        const {name} = family;
+        const config_family = scanconfig.families[name];
 
         if (is_defined(config_family)) {
           trend[name] = parse_yesno(config_family.trend);
@@ -213,10 +212,10 @@ class Page extends React.Component {
         }
       });
 
-      let scanner_preference_values = {};
+      const scanner_preference_values = {};
 
       for_each(scanconfig.preferences.scanner, preference => {
-        scanner_preference_values[preference.name] =  preference.value;
+        scanner_preference_values[preference.name] = preference.value;
       });
 
       const state = {
@@ -241,9 +240,9 @@ class Page extends React.Component {
       family_name: name,
       config_name: config.name,
     }).then(response => {
-      let {data} = response;
-      let {nvts} = data;
-      let selected = {};
+      const {data} = response;
+      const {nvts} = data;
+      const selected = {};
 
       for_each(nvts, nvt => {
         selected[nvt.oid] = nvt.selected;
@@ -271,8 +270,8 @@ class Page extends React.Component {
       config_name: config.name,
       name: nvt.name,
     }).then(response => {
-      let {data} = response;
-      let preference_values = {};
+      const {data} = response;
+      const preference_values = {};
 
       for_each(data.nvt.preferences, pref => {
         let {value, type} = pref;
@@ -297,7 +296,7 @@ class Page extends React.Component {
         nvt: data.nvt,
         nvt_name: data.nvt.name,
         preference_values,
-        timeout: is_empty(data.nvt.timeout) ? "0" : "1",
+        timeout: is_empty(data.nvt.timeout) ? '0' : '1',
       };
 
       return state;

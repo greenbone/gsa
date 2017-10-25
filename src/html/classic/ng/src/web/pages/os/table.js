@@ -46,23 +46,27 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead rowSpan="2"
+        <TableHead
+          rowSpan="2"
           sortby={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
-        <TableHead rowSpan="2"
+        <TableHead
+          rowSpan="2"
           sortby={sort ? 'title' : false}
           onSortChange={onSortChange}>
           {_('Title')}
         </TableHead>
         <TableHead colSpan="3">{_('Severity')}</TableHead>
-        <TableHead rowSpan="2"
+        <TableHead
+          rowSpan="2"
           sortby={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
-        <TableHead rowSpan="2"
+        <TableHead
+          rowSpan="2"
           sortby={sort ? 'modified' : false}
           onSortChange={onSortChange}>
           {_('Modified')}

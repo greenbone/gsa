@@ -108,7 +108,7 @@ class Page extends React.Component {
   }
 
   handleSaveCredential(data) {
-    let {onChanged, entityCommand} = this.props;
+    const {onChanged, entityCommand} = this.props;
     let promise;
     if (data.credential) {
       promise = entityCommand.save(data);

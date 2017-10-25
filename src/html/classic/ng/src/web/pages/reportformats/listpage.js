@@ -121,10 +121,10 @@ class Page extends React.Component {
 
       // (re-)load report format to get params
       entityCommand.get(reportformat).then(response => {
-        let format = response.data;
-        let preferences = {};
+        const format = response.data;
+        const preferences = {};
         let load_formats = false;
-        let id_lists = {};
+        const id_lists = {};
 
         format.params.forEach(param => {
           if (param.type === 'report_format_list') {
@@ -138,7 +138,7 @@ class Page extends React.Component {
 
         // only load formats if they are required for the report format list
         // type param
-        let p2 = load_formats ? entitiesCommand.getAll() :
+        const p2 = load_formats ? entitiesCommand.getAll() :
           PromiseFactory.resolve(undefined);
 
         p2.then(formats => {
@@ -158,8 +158,7 @@ class Page extends React.Component {
       });
     }
     else {
-      this.reportformat_dialog.show({
-      });
+      this.reportformat_dialog.show({});
     }
   }
 
