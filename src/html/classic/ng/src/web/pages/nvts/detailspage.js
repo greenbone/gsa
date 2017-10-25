@@ -263,6 +263,7 @@ const Page = ({
           <EntityPage
             {...props}
             detailsComponent={Details}
+            permissionsComponent={false}
             toolBarIcons={ToolBarIcons}
             title={_('NVT')}
             sectionIcon="nvt.svg"
@@ -291,11 +292,11 @@ const NvtPage = props => (
   <EntityContainer
     {...props}
     name="nvt"
+    loadPermissions={false}
     loaders={[
       loader('notes', nvt_id_filter),
       loader('overrides', nvt_id_filter),
     ]}
-    permissionsComponent={false}
   >
     {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>

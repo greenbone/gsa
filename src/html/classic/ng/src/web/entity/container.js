@@ -111,11 +111,11 @@ class EntityContainer extends React.Component {
 
   load(id) {
     const {gmp} = this.context;
-    const {loaders, permissionsComponent} = this.props;
+    const {loaders, loadPermissions = true} = this.props;
 
     const all_loaders = [this.loadEntity];
 
-    if (permissionsComponent !== false) {
+    if (loadPermissions) {
       all_loaders.push(permissions_loader);
     }
 
@@ -233,10 +233,10 @@ class EntityContainer extends React.Component {
 }
 
 EntityContainer.propTypes = {
+  loadPermissions: PropTypes.bool,
   loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
   params: PropTypes.object.isRequired,
-  permissionsComponent: PropTypes.componentOrFalse,
   resourceType: PropTypes.string,
   showError: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

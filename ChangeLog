@@ -1,5 +1,14 @@
 2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entity/container.js,
+	src/html/classic/ng/src/web/pages/cpes/detailspage.js,
+	src/html/classic/ng/src/web/pages/cves/detailspage.js,
+	src/html/classic/ng/src/web/pages/nvts/detailspage.js: The permission
+	component isn't passed to EntityContainer anymore. Therefore change property
+	to deactivate loading of permissions.
+
+2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/components/notification/dialognotification.js:
 	DialogNotification uses the render props pattern. Therefore require children
 	to be a function.
