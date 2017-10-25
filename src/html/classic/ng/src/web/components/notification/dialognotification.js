@@ -27,6 +27,8 @@ import _ from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils.js';
 
+import PropTypes from '../../utils/proptypes.js';
+
 import Dialog from '../dialog/dialog.js';
 import DialogContent from '../dialog/content.js';
 import DialogFooter from '../dialog/footer.js';
@@ -118,6 +120,10 @@ class DialogNotification extends React.Component {
     );
   }
 }
+
+DialogNotification.propTypes = {
+  children: PropTypes.func,
+};
 
 export default DialogNotification;
 
