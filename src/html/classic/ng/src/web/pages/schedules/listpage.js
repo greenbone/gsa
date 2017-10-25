@@ -32,9 +32,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -44,19 +41,11 @@ import Layout from '../../components/layout/layout.js';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import ScheduleDialog from './dialog.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['first_run', _('First Run')],
-  ['next_run', _('Next Run')],
-  ['period', _('Period')],
-  ['duration', _('Duration')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-    onNewScheduleClick
-  }, {capabilities}) => {
+  onNewScheduleClick,
+}, {capabilities}) => {
   return (
     <Layout flex>
       <HelpIcon
@@ -159,25 +148,14 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
 };
 
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No schedules available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'schedules.xml',
-    span: 6,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('schedule', {
   filterEditDialog: createFilterDialog({

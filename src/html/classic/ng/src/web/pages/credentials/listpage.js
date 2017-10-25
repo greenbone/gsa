@@ -30,9 +30,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -48,18 +45,11 @@ import {
 } from 'gmp/models/credential.js';
 
 import CredentialsDialog from './dialog.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['type', _('Type')],
-  ['allow_insecure', _('Allow insecure use')],
-  ['login', _('Login')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-    onNewCredentialClick
-  }, {capabilities}) => {
+  onNewCredentialClick,
+}, {capabilities}) => {
   return (
     <IconDivider>
       <HelpIcon
@@ -150,17 +140,6 @@ Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
   onChanged: PropTypes.func.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No credentials available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'credentials.xml',
-    span: 6,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('credential', {
   filterEditDialog: createFilterDialog({

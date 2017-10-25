@@ -31,8 +31,6 @@ import PropTypes from '../../utils/proptypes.js';
 import SelectionType from '../../utils/selectiontype.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesTable} from '../../entities/table.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
@@ -48,20 +46,11 @@ import Promise from 'gmp/promise.js';
 
 import ConfirmDeleteDialog from './confirmdeletedialog.js';
 import UserDialog from './dialog.js';
-import Header from './header.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['roles', _('Roles')],
-  ['groups', _('Groups')],
-  ['host_access', _('Host Access')],
-  ['ldpa', _('Authentication Type')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-    onNewUserClick,
-  }, {capabilities}) => {
+  onNewUserClick,
+}, {capabilities}) => {
   return (
     <IconDivider>
       <HelpIcon
@@ -239,17 +228,6 @@ Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
   capabilities: PropTypes.capabilities.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No Users available'),
-  header: Header,
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'users.xml',
-    span: 7,
-    delete: true,
-  }),
-});
 
 export default withEntitiesContainer('user', {
   filterEditDialog: createFilterDialog({

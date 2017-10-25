@@ -30,9 +30,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import Text from '../../components/form/text.js';
 
@@ -46,7 +43,7 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 import CredentialDialog from '../credentials/dialog.js';
 
 import ScannerDialog from './dialog.js';
-import Row from './row.js';
+import Table, {SORT_FIELDS} from './table.js';
 
 import {
   SLAVE_SCANNER_TYPE,
@@ -57,17 +54,9 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential.js';
 
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['host', _('Host')],
-  ['port', _('Port')],
-  ['type', _('Type')],
-  ['credential', _('Credential')],
-];
-
 const ToolBarIcons = ({
-    onNewScannerClick
-  }, {capabilities}) => {
+  onNewScannerClick,
+}, {capabilities}) => {
   return (
     <Layout flex>
       <HelpIcon
@@ -102,8 +91,8 @@ class Page extends React.Component {
   }
 
   openScannerDialog(scanner) {
-    let {gmp} = this.context;
-    let {entityCommand} = this.props;
+    const {gmp} = this.context;
+    const {entityCommand} = this.props;
 
     if (is_defined(scanner)) {
       entityCommand.get(scanner).then(response => {
@@ -148,7 +137,7 @@ class Page extends React.Component {
   }
 
   handleVerifyScanner(scanner) {
-    let {entityCommand, showSuccess, showError} = this.props;
+    const {entityCommand, showSuccess, showError} = this.props;
 
     entityCommand.verify(scanner).then(() => {
       showSuccess(_('Scanner {{name}} verified successfully.',
@@ -169,10 +158,10 @@ class Page extends React.Component {
   }
 
   handleCreateCredential(data) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     return gmp.credential.create(data).then(response => {
-      let {credentials} = this;
-      let credential = response.data;
+      const {credentials} = this;
+      const credential = response.data;
       credentials.push(credential);
       this.scanner_dialog.setValues({
         credentials,
@@ -182,7 +171,7 @@ class Page extends React.Component {
   }
 
   render() {
-    let {onEntitySave} = this.props;
+    const {onEntitySave} = this.props;
     return (
       <Layout>
         <EntitiesPage
@@ -207,26 +196,15 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func,
-  onEntitySave: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
+  onEntitySave: PropTypes.func,
 };
 
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No scanners available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'scanners.xml',
-    span: 7,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('scanner', {
   filterEditDialog: createFilterDialog({

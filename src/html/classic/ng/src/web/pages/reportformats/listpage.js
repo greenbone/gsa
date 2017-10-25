@@ -30,9 +30,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import Text from '../../components/form/text.js';
 
@@ -46,19 +43,11 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 import PromiseFactory from 'gmp/promise.js';
 
 import ReportFormatDialog from './dialog.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['extension', _('Extension')],
-  ['content_type', _('Content Type')],
-  ['trust', _('Trust (Last Verified)')],
-  ['active', _('Active')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-    onNewReportFormatClick
-  }, {capabilities}) => {
+  onNewReportFormatClick,
+}, {capabilities}) => {
   return (
     <Layout flex>
       <HelpIcon
@@ -193,27 +182,16 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
   entitiesCommand: PropTypes.entitiescommand,
-  onChanged: PropTypes.func,
+  entityCommand: PropTypes.entitycommand,
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
 };
 
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No report formats available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'reportformats.xml',
-    span: 6,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('reportformat', {
   filterEditDialog: createFilterDialog({

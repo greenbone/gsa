@@ -30,9 +30,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -43,13 +40,7 @@ import IconDivider from '../../components/layout/icondivider.js';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import FilterEditDialog from './dialog.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['term', _('Term')],
-  ['type', _('Type')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
   onNewFilterClick,
@@ -186,21 +177,9 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
 };
 
-
 Page.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No filters available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'filters.xml',
-    span: 6,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('filter', {
   filterEditDialog: createFilterDialog({

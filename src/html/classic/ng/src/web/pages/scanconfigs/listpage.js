@@ -37,8 +37,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -51,20 +49,12 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 import EditConfigFamilyDialog from './editconfigfamilydialog.js';
 import EditScanConfigDialog from './editdialog.js';
 import EditNvtDetailsDialog from './editnvtdetailsdialog.js';
-import Header from './header.js';
 import ImportDialog from './importdialog.js';
-import Row from './row.js';
 import ScanConfigDialog from './dialog.js';
 
 import {OSP_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['families_total', _('Families: Total')],
-  ['families_trend', _('Families: Trend')],
-  ['nvts_total', _('NVTS: Total')],
-  ['nvts_trend', _('NVTs: Trend')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
     onNewConfigClick,
@@ -354,26 +344,15 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func,
-  onEntitySave: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
+  onEntitySave: PropTypes.func,
 };
 
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No Scan Configs available'),
-  header: Header,
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'scanconfigs.xml',
-    span: 7,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('scanconfig', {
   filterEditDialog: createFilterDialog({

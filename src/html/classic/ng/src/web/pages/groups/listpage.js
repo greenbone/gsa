@@ -29,8 +29,6 @@ import {is_defined, is_empty} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesTable} from '../../entities/table.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
@@ -43,16 +41,11 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 import {GROUPS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import GroupDialog from './dialog.js';
-import Header from './header.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-    onNewGroupClick,
-  }, {capabilities}) => {
+  onNewGroupClick,
+}, {capabilities}) => {
   return (
     <Layout flex box>
       <HelpIcon
@@ -139,17 +132,6 @@ Page.propTypes = {
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No Groups available'),
-  header: Header,
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'groups.xml',
-    span: 7,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('group', {
   filterEditDialog: createFilterDialog({

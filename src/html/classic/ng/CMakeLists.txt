@@ -162,6 +162,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/agents/listpage.js
      ${NG_SRC_DIR}/src/web/pages/agents/dialog.js
      ${NG_SRC_DIR}/src/web/pages/agents/row.js
+     ${NG_SRC_DIR}/src/web/pages/agents/table.js
      ${NG_SRC_DIR}/src/web/pages/alerts/component.js
      ${NG_SRC_DIR}/src/web/pages/alerts/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/alerts/dialog.js
@@ -178,6 +179,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/snmpmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/sourcefiremethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/table.js
      ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
@@ -185,6 +187,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/pages/credentials/downloadicon.js
      ${NG_SRC_DIR}/src/web/pages/credentials/row.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/table.js
      ${NG_SRC_DIR}/src/web/pages/certbund/charts.js
      ${NG_SRC_DIR}/src/web/pages/certbund/listpage.js
      ${NG_SRC_DIR}/src/web/pages/certbund/filterdialog.js
@@ -365,15 +368,18 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/dfncert/listpage.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/row.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
      ${NG_SRC_DIR}/src/web/pages/extras/cvsscalculatorpage.js
      ${NG_SRC_DIR}/src/web/pages/extras/feedstatuspage.js
      ${NG_SRC_DIR}/src/web/pages/filters/dialog.js
      ${NG_SRC_DIR}/src/web/pages/filters/listpage.js
      ${NG_SRC_DIR}/src/web/pages/filters/row.js
+     ${NG_SRC_DIR}/src/web/pages/filters/table.js
      ${NG_SRC_DIR}/src/web/pages/groups/dialog.js
      ${NG_SRC_DIR}/src/web/pages/groups/header.js
      ${NG_SRC_DIR}/src/web/pages/groups/listpage.js
      ${NG_SRC_DIR}/src/web/pages/groups/row.js
+     ${NG_SRC_DIR}/src/web/pages/groups/table.js
      ${NG_SRC_DIR}/src/web/pages/homepage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/charts.js
      ${NG_SRC_DIR}/src/web/pages/hosts/component.js
@@ -444,6 +450,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reportformats/dialog.js
      ${NG_SRC_DIR}/src/web/pages/reportformats/listpage.js
      ${NG_SRC_DIR}/src/web/pages/reportformats/row.js
+     ${NG_SRC_DIR}/src/web/pages/reportformats/table.js
      ${NG_SRC_DIR}/src/web/pages/reports/alertactions.js
      ${NG_SRC_DIR}/src/web/pages/reports/applicationstable.js
      ${NG_SRC_DIR}/src/web/pages/reports/charts.js
@@ -483,6 +490,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/roles/dialog.js
      ${NG_SRC_DIR}/src/web/pages/roles/listpage.js
      ${NG_SRC_DIR}/src/web/pages/roles/row.js
+     ${NG_SRC_DIR}/src/web/pages/roles/table.js
      ${NG_SRC_DIR}/src/web/pages/scanconfigs/dialog.js
      ${NG_SRC_DIR}/src/web/pages/scanconfigs/editconfigfamilydialog.js
      ${NG_SRC_DIR}/src/web/pages/scanconfigs/editdialog.js
@@ -496,14 +504,17 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/scanners/dialog.js
      ${NG_SRC_DIR}/src/web/pages/scanners/listpage.js
      ${NG_SRC_DIR}/src/web/pages/scanners/row.js
+     ${NG_SRC_DIR}/src/web/pages/scanners/table.js
      ${NG_SRC_DIR}/src/web/pages/scanspage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/pages/schedules/listpage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/table.js
      ${NG_SRC_DIR}/src/web/pages/secinfopage.js
      ${NG_SRC_DIR}/src/web/pages/tags/dialog.js
      ${NG_SRC_DIR}/src/web/pages/tags/listpage.js
      ${NG_SRC_DIR}/src/web/pages/tags/row.js
+     ${NG_SRC_DIR}/src/web/pages/tags/table.js
      ${NG_SRC_DIR}/src/web/pages/targets/component.js
      ${NG_SRC_DIR}/src/web/pages/targets/details.js
      ${NG_SRC_DIR}/src/web/pages/targets/detailspage.js
@@ -540,6 +551,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/users/header.js
      ${NG_SRC_DIR}/src/web/pages/users/listpage.js
      ${NG_SRC_DIR}/src/web/pages/users/row.js
+     ${NG_SRC_DIR}/src/web/pages/users/table.js
      ${NG_SRC_DIR}/src/web/pages/vulns/charts.js
      ${NG_SRC_DIR}/src/web/pages/vulns/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js

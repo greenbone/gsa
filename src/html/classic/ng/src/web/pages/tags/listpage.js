@@ -30,9 +30,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -42,20 +39,11 @@ import Layout from '../../components/layout/layout.js';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import TagDialog from './dialog.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['value', _('Value')],
-  ['active', _('Active')],
-  ['resource_type', _('Resource Type')],
-  ['resource_name', _('Resource Name')],
-  ['modified', _('Modified')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-    onNewTagClick
-  }, {capabilities}) => {
+  onNewTagClick,
+}, {capabilities}) => {
   return (
     <Layout flex>
       <HelpIcon
@@ -142,22 +130,11 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func.isRequired,
-  onEntitySave: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func.isRequired,
+  onEntitySave: PropTypes.func,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No tags available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'tags.xml',
-    span: 7,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('tag', {
   filterEditDialog: createFilterDialog({

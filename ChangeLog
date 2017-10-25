@@ -1,5 +1,34 @@
 2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/pages/agents/listpage.js,
+	src/html/classic/ng/src/web/pages/agents/table.js,
+	src/html/classic/ng/src/web/pages/alerts/listpage.js,
+	src/html/classic/ng/src/web/pages/alerts/table.js,
+	src/html/classic/ng/src/web/pages/credentials/listpage.js,
+	src/html/classic/ng/src/web/pages/credentials/table.js,
+	src/html/classic/ng/src/web/pages/filters/listpage.js,
+	src/html/classic/ng/src/web/pages/filters/table.js,
+	src/html/classic/ng/src/web/pages/groups/listpage.js,
+	src/html/classic/ng/src/web/pages/groups/table.js,
+	src/html/classic/ng/src/web/pages/reportformats/listpage.js,
+	src/html/classic/ng/src/web/pages/reportformats/table.js,
+	src/html/classic/ng/src/web/pages/roles/listpage.js,
+	src/html/classic/ng/src/web/pages/roles/table.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/listpage.js,
+	src/html/classic/ng/src/web/pages/scanconfigs/table.js,
+	src/html/classic/ng/src/web/pages/scanners/listpage.js,
+	src/html/classic/ng/src/web/pages/scanners/table.js,
+	src/html/classic/ng/src/web/pages/schedules/listpage.js,
+	src/html/classic/ng/src/web/pages/schedules/table.js,
+	src/html/classic/ng/src/web/pages/tags/listpage.js,
+	src/html/classic/ng/src/web/pages/tags/table.js,
+	src/html/classic/ng/src/web/pages/users/listpage.js,
+	src/html/classic/ng/src/web/pages/users/table.js: Extract all table components
+	to own js modules. This allows to reuse the tables.
+
+2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/header.js,
 	src/html/classic/ng/src/web/pages/allsecinfo/table.js,
 	src/html/classic/ng/src/web/pages/certbund/table.js,

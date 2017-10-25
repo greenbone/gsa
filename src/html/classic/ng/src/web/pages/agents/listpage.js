@@ -31,9 +31,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -43,18 +40,13 @@ import Layout from '../../components/layout/layout.js';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import AgentDialog from './dialog.js';
-import Row from './row.js';
+import Table, {SORT_FIELDS} from './table.js';
 
 const log = logger.getLogger('web.agents.agentspage');
 
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['trust', _('Trust')],
-];
-
 const ToolBarIcons = ({
-    onNewAgentClick
-  }, {capabilities}) => {
+  onNewAgentClick,
+}, {capabilities}) => {
   return (
     <Layout flex>
       <HelpIcon
@@ -149,21 +141,10 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No agents available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'agents.xml',
-    span: 6,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('agent', {
   filterEditDialog: createFilterDialog({

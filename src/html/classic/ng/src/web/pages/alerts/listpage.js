@@ -37,27 +37,14 @@ import NewIcon from '../../components/icon/newicon.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-
 import AlertDialog from './dialogcontainer.js';
-import Row from './row.js';
+import Table, {SORT_FIELDS} from './table.js';
 
 const log = logger.getLogger('web.alerts.alertspage');
 
-const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['event', _('Event')],
-  ['condition', _('Condition')],
-  ['method', _('Method')],
-  ['filter', _('Filter')],
-  ['active', _('Active')],
-];
-
 const ToolBarIcons = ({
-    onNewAlertClick
-  }, {capabilities}) => {
+  onNewAlertClick,
+}, {capabilities}) => {
   return (
     <Layout flex>
       <HelpIcon
@@ -131,21 +118,10 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entityCommand: PropTypes.entitycommand,
-  onChanged: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No alerts available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'alerts.xml',
-    span: 7,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('alert', {
   filterEditDialog: createFilterDialog({

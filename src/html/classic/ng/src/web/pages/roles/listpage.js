@@ -29,8 +29,6 @@ import {first, is_defined, is_empty} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesTable} from '../../entities/table.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
@@ -42,14 +40,8 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import {ROLES_FILTER_FILTER} from 'gmp/models/filter.js';
 
-import Header from '../groups/header.js';
-
 import RoleDialog from './dialog.js';
-import Row from './row.js';
-
-const SORT_FIELDS = [
-  ['name', _('Name')],
-];
+import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
     onNewRoleClick,
@@ -209,17 +201,6 @@ Page.propTypes = {
 Page.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
-
-const Table = createEntitiesTable({
-  emptyTitle: _('No Roles available'),
-  header: Header,
-  row: Row,
-  footer: createEntitiesFooter({
-    download: 'roles.xml',
-    span: 7,
-    trash: true,
-  }),
-});
 
 export default withEntitiesContainer('role', {
   filterEditDialog: createFilterDialog({
