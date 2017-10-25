@@ -39,7 +39,7 @@ import TableRow from '../../components/table/row.js';
 import Row from './row.js';
 import TaskDetails from './details.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions}) => {
+const Header = ({onSortChange, links = true, sort = true, actionsColumn}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -71,9 +71,7 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
           onSortChange={onSortChange}>
           {_('Trend')}
         </TableHead>
-        {actions &&
-          <TableHead rowSpan="2" width="10em">{_('Actions')}</TableHead>
-        }
+        {actionsColumn}
       </TableRow>
       <TableRow>
         <TableHead
@@ -92,17 +90,21 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };
 
+const actionsColumn = (
+  <TableHead rowSpan="2" width="10em">{_('Actions')}</TableHead>
+);
+
 export default createEntitiesTable({
   emptyTitle: _('No Tasks available'),
   row: Row,
   rowDetails: withRowDetails('task', 10)(TaskDetails),
-  header: withEntitiesHeader()(Header),
+  header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({
     span: 10,
     trash: true,

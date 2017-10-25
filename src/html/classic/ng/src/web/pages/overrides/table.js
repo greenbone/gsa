@@ -39,7 +39,12 @@ import TableRow from '../../components/table/row.js';
 import OverrideDetails from './details.js';
 import Row from './row.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions}) => {
+const Header = ({
+  links = true,
+  sort = true,
+  actionsColumn,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -78,14 +83,14 @@ const Header = ({onSortChange, links = true, sort = true, actions}) => {
           onSortChange={onSortChange}>
           {_('Active')}
         </TableHead>
-        {actions}
+        {actionsColumn}
       </TableRow>
     </TableHeader>
   );
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

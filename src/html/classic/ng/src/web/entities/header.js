@@ -53,24 +53,24 @@ const defaultactions = (
  * If actions is false no actions (a null value in react) will be passed to
  * Component.
  *
- * @param {Element}   actions   React element, undefined or boolean value.
- * @param {Object}    options   Default properties for Component.
- * @param {Component} Component React component rendered as header
+ * @param {Element}   actions_column  React element, undefined or boolean value.
+ * @param {Object}    options         Default properties for Component.
+ * @param {Component} Component       React component rendered as header
  *
  * @return A new EntitiesHeader component
  */
-export const withEntitiesHeader = (actions = defaultactions, options = {}) =>
-  Component => {
+export const withEntitiesHeader = (actions_column = defaultactions,
+  options = {}) => Component => {
 
-  if (actions === false) {
-    actions = null;
+  if (actions_column === false) {
+    actions_column = null;
   }
 
   const HeaderWrapper = props => {
     const {selectionType} = props;
-    let column = actions;
+    let column = actions_column;
 
-    if (actions === true) {
+    if (actions_column === true) {
       if (selectionType === SelectionType.SELECTION_USER) {
         column = <TableHead width="6em">{_('Actions')}</TableHead>;
       }
@@ -81,7 +81,7 @@ export const withEntitiesHeader = (actions = defaultactions, options = {}) =>
     return (
       <Component
         {...options}
-        actions={column}
+        actionsColumn={column}
         {...props}
       />
     );
@@ -104,15 +104,15 @@ export const withEntitiesHeader = (actions = defaultactions, options = {}) =>
  *
  * @param {Array}   columns   An array in the form of
  *                            [['<column_key>', '<column_display_name>'], ...]
- * @param {Element} action_element   React element, undefined or boolean value.
+ * @param {Element} actions_column   React element, undefined or boolean value.
  * @param {Object}  options   Default properties for Component.
  *
  * @return A new EntitiesHeader component
  */
-export const createEntitiesHeader = (columns, action_element, options = {}) => {
+export const createEntitiesHeader = (columns, actions_column, options = {}) => {
 
   const Header = ({
-    actions,
+    actionsColumn,
     links = true,
     sort = true,
     onSortChange,
@@ -132,19 +132,19 @@ export const createEntitiesHeader = (columns, action_element, options = {}) => {
               );
             })
           }
-          {actions}
+          {actionsColumn}
         </TableRow>
       </TableHeader>
     );
   };
 
   Header.propTypes = {
-    actions: PropTypes.element,
+    actionsColumn: PropTypes.element,
     links: PropTypes.bool,
     sort: PropTypes.bool,
     onSortChange: PropTypes.func,
   };
-  return withEntitiesHeader(action_element, options)(Header);
+  return withEntitiesHeader(actions_column, options)(Header);
 };
 
 // vim: set ts=2 sw=2 tw=80:

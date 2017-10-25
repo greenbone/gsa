@@ -1,3 +1,29 @@
+2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entities/header.js,
+	src/html/classic/ng/src/web/pages/allsecinfo/table.js,
+	src/html/classic/ng/src/web/pages/certbund/table.js,
+	src/html/classic/ng/src/web/pages/cpes/table.js,
+	src/html/classic/ng/src/web/pages/cves/table.js,
+	src/html/classic/ng/src/web/pages/dfncert/table.js,
+	src/html/classic/ng/src/web/pages/groups/header.js,
+	src/html/classic/ng/src/web/pages/hosts/table.js,
+	src/html/classic/ng/src/web/pages/notes/table.js,
+	src/html/classic/ng/src/web/pages/nvts/table.js,
+	src/html/classic/ng/src/web/pages/os/table.js,
+	src/html/classic/ng/src/web/pages/ovaldefs/table.js,
+	src/html/classic/ng/src/web/pages/overrides/table.js,
+	src/html/classic/ng/src/web/pages/portlists/table.js,
+	src/html/classic/ng/src/web/pages/reports/table.js,
+	src/html/classic/ng/src/web/pages/results/table.js,
+	src/html/classic/ng/src/web/pages/targets/table.js,
+	src/html/classic/ng/src/web/pages/tasks/table.js,
+	src/html/classic/ng/src/web/pages/users/header.js,
+	src/html/classic/ng/src/web/pages/vulns/table.js: Allow overriding of table
+	action headers. Before the same prop name was used for the table actions
+	header and the row actions components which lead to a naming clash when using
+	HOCs. Now table action headers are named actionsColumn.
+
 2017-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entity/box.js,

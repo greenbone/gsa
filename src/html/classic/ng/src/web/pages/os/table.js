@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -36,7 +37,12 @@ import TableRow from '../../components/table/row.js';
 
 import OsRow from './row.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
+const Header = ({
+  actionsColumn,
+  links = true,
+  sort = true,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -61,7 +67,8 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
           onSortChange={onSortChange}>
           {_('Modified')}
         </TableHead>
-        {actions &&
+        {is_defined(actionsColumn) ?
+          actionsColumn :
           <TableHead rowSpan="2" width="5em">{_('Actions')}</TableHead>
         }
       </TableRow>
@@ -87,7 +94,7 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

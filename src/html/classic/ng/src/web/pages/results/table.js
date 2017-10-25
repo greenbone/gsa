@@ -46,7 +46,7 @@ import ResultsRow from './row.js';
 import ResultDetails from './details.js';
 
 const Header = ({
-  actions,
+  actionsColumn,
   delta = false,
   links = true,
   sort = true,
@@ -108,14 +108,14 @@ const Header = ({
           onSortChange={onSortChange}>
           {_('Created')}
         </TableHead>
-        {actions}
+        {actionsColumn}
       </TableRow>
     </TableHeader>
   );
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   delta: PropTypes.bool,
   links: PropTypes.bool,
   sort: PropTypes.bool,

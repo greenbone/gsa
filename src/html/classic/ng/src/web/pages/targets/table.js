@@ -45,12 +45,12 @@ import TargetDetails from './details.js';
 import TargetRow from './row.js';
 
 const Header = ({
-    actions,
-    filter,
-    links = true,
-    sort = true,
-    onSortChange,
-  }) => {
+  actionsColumn,
+  filter,
+  links = true,
+  sort = true,
+  onSortChange,
+}) => {
 
   let select_sort = 'ssh_credential';
   let sort_by = filter ? filter.getSortBy() : undefined;
@@ -100,14 +100,14 @@ const Header = ({
             </Select2>
           }
         </TableHead>
-        {actions}
+        {actionsColumn}
       </TableRow>
     </TableHeader>
   );
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   filter: PropTypes.filter,
   links: PropTypes.bool,
   sort: PropTypes.bool,

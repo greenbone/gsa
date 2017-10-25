@@ -38,7 +38,12 @@ import TableRow from '../../components/table/row.js';
 import CpeDetails from './details.js';
 import CpeRow from './row.js';
 
-const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
+const Header = ({
+  actionsColumn,
+  links = true,
+  sort = true,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -70,14 +75,14 @@ const Header = ({onSortChange, links = true, sort = true, actions = true}) => {
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
-        {actions}
+        {actionsColumn}
       </TableRow>
     </TableHeader>
   );
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

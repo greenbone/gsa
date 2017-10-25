@@ -40,7 +40,7 @@ import VulnsRow from './row.js';
 const Header = ({
   links = true,
   sort = true,
-  actions,
+  actionsColumn,
   hideColumns = {},
   onSortChange,
 }) => {
@@ -90,14 +90,14 @@ const Header = ({
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
-        {actions}
+        {actionsColumn}
       </TableRow>
     </TableHeader>
   );
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   hideColumns: PropTypes.object,
   links: PropTypes.bool,
   sort: PropTypes.bool,

@@ -34,12 +34,12 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 const Header = ({
-    actions,
-    filter,
-    links = true,
-    sort = true,
-    onSortChange,
-  }) => {
+  actionsColumn,
+  filter,
+  links = true,
+  sort = true,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -68,14 +68,14 @@ const Header = ({
           onClick={onSortChange}>
           {_('Authentication Type')}
         </TableHead>
-        {actions}
+        {actionsColumn}
       </TableRow>
     </TableHeader>
   );
 };
 
 Header.propTypes = {
-  actions: PropTypes.element,
+  actionsColumn: PropTypes.element,
   filter: PropTypes.filter,
   links: PropTypes.bool,
   sort: PropTypes.bool,
