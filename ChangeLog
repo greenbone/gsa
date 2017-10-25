@@ -1,5 +1,11 @@
 2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/components/dialog/dialog.js: Remove the width
+	and visibility states from the new dialog component. They must be handled in
+	the parent component already and shouldn't be duplicated in the dialog.
+
+2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/pages/agents/listpage.js,
 	src/html/classic/ng/src/web/pages/agents/table.js,

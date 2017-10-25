@@ -59,15 +59,9 @@ class Dialog extends React.Component {
   }
 
   defaultState() {
-    const {
-      width = DEFAULT_DIALOG_WIDTH,
-      visible = false,
-    } = this.props;
     return {
       posX: undefined,
       posY: undefined,
-      visible,
-      width,
     };
   }
 
@@ -126,27 +120,21 @@ class Dialog extends React.Component {
     };
   }
 
-  componentWillReceiveProps(next) {
-    if (next.visible !== this.props.visible &&
-      next.visible !== this.state.visible) {
-      this.setState({visible: next.visible});
-    }
-  }
-
   render() {
     const {
-      visible = false,
       posX,
       posY,
     } = this.state;
 
+    const {
+      children,
+      visible,
+      width = DEFAULT_DIALOG_WIDTH,
+    } = this.props;
+
     if (!visible) {
       return null;
     }
-
-    const {children} = this.props;
-
-    const {width} = {...this.state};
 
     return (
       <DialogOverlay
@@ -171,9 +159,9 @@ class Dialog extends React.Component {
 };
 
 Dialog.propTypes = {
-  visible: PropTypes.bool,
+  visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
-  onClose: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Dialog;
