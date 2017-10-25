@@ -31,6 +31,8 @@ const types = {
   cves: 'info',
   cpe: 'info',
   cpes: 'info',
+  ovaldefs: 'info',
+  ovaldef: 'info',
 };
 
 const check_type = type => {
