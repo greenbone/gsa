@@ -1,5 +1,10 @@
 2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/ovaldef.js: Improve parsing of ovaldef
+	data for displaying the details.
+
+2017-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/withRowDetails.js,
 	src/html/classic/ng/src/web/entity/box.js,
 	src/html/classic/ng/src/web/pages/credentials/listpage.js,
