@@ -32,8 +32,6 @@ import {na, render_component} from '../../utils/render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
-import InfoLink from '../../components/link/infolink.js';
-
 import SeverityBar from '../../components/bar/severitybar.js';
 
 import Comment from '../../components/comment/comment.js';
@@ -54,13 +52,6 @@ const Row = ({
       <TableRow>
         <TableData
           rowSpan="2">
-          <InfoLink
-            legacy
-            details
-            type="ovaldef"
-            id={entity.id}>
-            {entity.name}
-          </InfoLink>
           <RowDetailsToggle
             name={entity.id}
             onClick={onToggleDetailsClick}>
