@@ -23,6 +23,8 @@
 
 import {extend} from '../utils.js';
 
+import {parse_severity} from '../parser.js';
+
 import Info from './info.js';
 
 class CertBundAdv extends Info {
@@ -32,7 +34,7 @@ class CertBundAdv extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cert_bund_adv');
 
-    ret.severity = ret.max_cvss;
+    ret.severity = parse_severity(ret.max_cvss);
     delete ret.max_cvss;
 
     return ret;
