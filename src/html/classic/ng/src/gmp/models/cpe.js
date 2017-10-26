@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, map, extend} from '../utils.js';
+import {is_defined, is_empty, map} from '../utils.js';
 
 import Info from './info.js';
 
@@ -32,12 +32,7 @@ class Cpe extends Info {
   static info_type = 'cpe';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem);
-
-    if (elem.cpe) { // we have an info element
-      extend(ret, elem.cpe);
-      delete ret.cpe;
-    }
+    const ret = super.parseProperties(elem, 'cpe');
 
     ret.severity = parse_severity(ret.max_cvss);
     delete ret.max_cvss;

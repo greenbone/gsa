@@ -22,7 +22,6 @@
  */
 
 import {
-  extend,
   is_defined,
   is_empty,
   is_string,
@@ -62,16 +61,9 @@ class Nvt extends Info {
   static info_type = 'nvt';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem, 'nvt');
 
-    ret.nvt_type = elem.type;
-
-    if (elem.nvt) { // we have an info element
-      extend(ret, elem.nvt);
-      ret.nvt_type = ret.type;
-      delete ret.type;
-      delete ret.nvt;
-    }
+    ret.nvt_type = elem._type;
 
     ret.oid = ret._oid;
     ret.id = ret.oid;

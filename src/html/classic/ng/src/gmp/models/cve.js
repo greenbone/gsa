@@ -23,7 +23,7 @@
 
 import moment from 'moment';
 
-import {is_empty, is_defined, extend, map} from '../utils.js';
+import {is_empty, is_defined, map} from '../utils.js';
 
 import {
   parse_severity,
@@ -55,12 +55,7 @@ class Cve extends Info {
   static info_type = 'cve';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem);
-
-    if (elem.cve) { // we have an info element
-      extend(ret, elem.cve);
-      delete ret.cve;
-    }
+    const ret = super.parseProperties(elem, 'cve');
 
     if (is_defined(ret.update_time)) {
       ret.update_time = moment(ret.update_time);

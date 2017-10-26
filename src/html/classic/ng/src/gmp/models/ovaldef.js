@@ -23,7 +23,7 @@
 
 import moment from 'moment';
 
-import {is_defined, is_empty, extend, map} from '../utils.js';
+import {is_defined, is_empty, map} from '../utils.js';
 
 import {parse_severity, parse_yesno, YES_VALUE} from '../parser.js';
 
@@ -76,12 +76,7 @@ class Ovaldef extends Info {
   static info_type = 'ovaldef';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem);
-
-    if (elem.ovaldef) { // we have an info element
-      extend(ret, elem.ovaldef);
-      delete ret.ovaldef;
-    }
+    const ret = super.parseProperties(elem, 'ovaldef');
 
     ret.severity = parse_severity(ret.max_cvss);
     delete ret.max_cvss;

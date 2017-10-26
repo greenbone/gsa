@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend} from '../utils.js';
 
 import Info from './info.js';
 
@@ -30,12 +29,7 @@ class DfnCertAdv extends Info {
   static info_type = 'dfn_cert_adv';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
-
-    if (elem.dfn_cert_adv) { // we have an info element
-      extend(ret, elem.dfn_cert_adv);
-      delete ret.dfn_cert_adv;
-    }
+    const ret = super.parseProperties(elem, 'dfn_cert_adv');
 
     ret.severity = ret.max_cvss;
     delete ret.max_cvss;

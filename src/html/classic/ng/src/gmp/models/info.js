@@ -38,6 +38,21 @@ class Info extends Model {
         this.constructor.info_type;
     }
   }
+
+  parseProperties(elem, info_type) {
+    const info_elem = elem[info_type];
+
+    if (is_defined(info_elem)) { // elem is an info element content is in its child
+      elem = {
+        ...elem,
+        ...info_elem,
+      };
+
+      delete elem[info_type];
+    }
+
+    return super.parseProperties(elem);
+  }
 }
 
 export default Info;
