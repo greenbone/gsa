@@ -22,6 +22,8 @@
  */
 
 
+import {parse_severity} from '../parser.js';
+
 import Info from './info.js';
 
 class DfnCertAdv extends Info {
@@ -31,7 +33,7 @@ class DfnCertAdv extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'dfn_cert_adv');
 
-    ret.severity = ret.max_cvss;
+    ret.severity = parse_severity(ret.max_cvss);
     delete ret.max_cvss;
 
     return ret;
