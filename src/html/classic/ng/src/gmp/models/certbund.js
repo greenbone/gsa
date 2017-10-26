@@ -30,12 +30,7 @@ class CertBundAdv extends Info {
   static info_type = 'cert_bund_adv';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
-
-    if (elem.cert_bund_adv) { // we have an info element
-      extend(ret, elem.cert_bund_adv);
-      delete ret.cert_bund_adv;
-    }
+    const ret = super.parseProperties(elem, 'cert_bund_adv');
 
     ret.severity = ret.max_cvss;
     delete ret.max_cvss;
