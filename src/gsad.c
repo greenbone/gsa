@@ -4994,7 +4994,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                          strlen ("/system_report/")))
         {
           params_t *params;
-          gsize res_len;
+          gsize res_len = 0;
           const char *slave_id;
 
           params = params_new ();
@@ -5028,7 +5028,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                              &url[0] + strlen ("/system_report/"),
                                              params,
                                              &content_type,
-                                             &res_len,
+                                             &response_size,
                                              &response_data);
                 break;
               case -1:
@@ -5055,6 +5055,15 @@ handle_request (void *cls, struct MHD_Connection *connection,
                 break;
             }
           openvas_connection_close (&con);
+
+          if (response_size > 0)
+            {
+              res_len = response_size;
+            }
+          else
+            {
+              res_len = strlen (res);
+            }
 
           if (res == NULL)
             {
