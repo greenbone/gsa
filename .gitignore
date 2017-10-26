@@ -1,0 +1,4 @@
+build/
+tags
+node_modules/
+.env.local
