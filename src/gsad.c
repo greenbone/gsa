@@ -38,7 +38,7 @@
 /**
  * \mainpage
  * \section Introduction
- * \verbinclude README
+ * \verbinclude README.md
  *
  * \section Installation
  * \verbinclude INSTALL
