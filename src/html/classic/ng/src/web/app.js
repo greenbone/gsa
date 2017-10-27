@@ -99,6 +99,7 @@ import TargetsPage from './pages/targets/listpage.js';
 import TargetDetailsPage from './pages/targets/detailspage.js';
 import TasksPage from './pages/tasks/listpage.js';
 import TaskDetailsPage from './pages/tasks/detailspage.js';
+import TrashcanPage from './pages/extras/trashcanpage.js';
 import UsersPage from './pages/users/listpage.js';
 import VulnerabilitiesPage from './pages/vulns/listpage.js';
 
@@ -199,6 +200,9 @@ ReactDOM.render(
         component={Page}
         onEnter={is_logged_in}>
         <IndexRoute component={HomePage}/>
+        <Route
+          path="trashcan"
+          component={TrashcanPage}/>
         <Route
           path="feedstatus"
           component={FeedStatusPage}/>
