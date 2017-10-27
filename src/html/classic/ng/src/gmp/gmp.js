@@ -55,6 +55,7 @@ import './commands/secinfo.js';
 import './commands/tags.js';
 import './commands/targets.js';
 import './commands/tasks.js';
+import './commands/trashcan.js';
 import './commands/users.js';
 import './commands/vulns.js';
 import './commands/wizard.js';

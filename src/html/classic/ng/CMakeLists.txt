@@ -94,6 +94,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/tags.js
      ${NG_SRC_DIR}/src/gmp/commands/targets.js
      ${NG_SRC_DIR}/src/gmp/commands/tasks.js
+     ${NG_SRC_DIR}/src/gmp/commands/trashcan.js
      ${NG_SRC_DIR}/src/gmp/commands/users.js
      ${NG_SRC_DIR}/src/gmp/commands/vulns.js
      ${NG_SRC_DIR}/src/gmp/gmp.js
@@ -248,7 +249,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/icon/listicon.js
      ${NG_SRC_DIR}/src/web/components/icon/newicon.js
      ${NG_SRC_DIR}/src/web/components/icon/osicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${NG_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${NG_SRC_DIR}/src/web/components/icon/trashicon.js
      ${NG_SRC_DIR}/src/web/components/icon/withIconCss.js
      ${NG_SRC_DIR}/src/web/components/icon/withIconSize.js
@@ -372,6 +375,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
      ${NG_SRC_DIR}/src/web/pages/extras/cvsscalculatorpage.js
      ${NG_SRC_DIR}/src/web/pages/extras/feedstatuspage.js
+     ${NG_SRC_DIR}/src/web/pages/extras/trashcanactions.js
+     ${NG_SRC_DIR}/src/web/pages/extras/trashcanpage.js
      ${NG_SRC_DIR}/src/web/pages/filters/dialog.js
      ${NG_SRC_DIR}/src/web/pages/filters/listpage.js
      ${NG_SRC_DIR}/src/web/pages/filters/row.js
