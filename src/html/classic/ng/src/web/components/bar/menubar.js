@@ -229,9 +229,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
         </Menu>
         <Menu title={_('Extras')}>
           <MenuEntry
-            legacy
             title={_('Trashcan')}
-            cmd="get_trash"/>
+            to="trashcan"/>
           <MenuEntry
             legacy title={_('My Settings')}
             cmd="get_my_settings"
