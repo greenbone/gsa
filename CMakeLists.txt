@@ -73,29 +73,6 @@ if (MANDATORY_TOOL_MISSING)
                       "your system. Please check the logs above.")
 endif (MANDATORY_TOOL_MISSING)
 
-## Retrieve svn revision (at configure time)
-#  Not using Subversion_WC_INFO, as it would have to connect to the repo
-find_program (SVN_EXECUTABLE svn DOC "subversion command line client")
-
-macro (Subversion_GET_REVISION dir variable)
-  execute_process (COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}/${dir}
-    OUTPUT_VARIABLE ${variable}
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-  string (REGEX REPLACE "^(.*\n)?Revision: ([^\n]+).*"
-    "\\2" ${variable} "${${variable}}")
-endmacro (Subversion_GET_REVISION)
-
-if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-  if (EXISTS "${CMAKE_SOURCE_DIR}/.svn/" OR EXISTS "${CMAKE_SOURCE_DIR}/../.svn/")
-    if (SVN_EXECUTABLE)
-      Subversion_GET_REVISION(. ProjectRevision)
-      set (SVN_REVISION "~svn${ProjectRevision}")
-    else (SVN_EXECUTABLE)
-      set (SVN_REVISION "~svn")
-    endif (SVN_EXECUTABLE)
-  endif (EXISTS "${CMAKE_SOURCE_DIR}/.svn/" OR EXISTS "${CMAKE_SOURCE_DIR}/../.svn/")
-endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-
 ## Project version
 # The following three variables should be set through the project command once
 # we require CMake >= 3.0
@@ -106,10 +83,6 @@ set (PROJECT_VERSION_PATCH 0)
 # Set beta version if this is a beta release series,
 # unset if this is a stable release series.
 set (PROJECT_BETA_RELEASE 1)
-
-if (SVN_REVISION)
-  set (PROJECT_VERSION_SVN "${SVN_REVISION}")
-endif (SVN_REVISION)
 
 # If PROJECT_BETA_RELEASE is set, the version string will be set to:
 #   "major.minor+beta${PROJECT_BETA_RELEASE}"
@@ -143,9 +116,9 @@ set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set (CPACK_PACKAGE_VENDOR "Greenbone Networks")
 set (CPACK_SOURCE_IGNORE_FILES
-"${CMAKE_BINARY_DIR}"
-"/.svn/"
-"swp$"
+    "${CMAKE_BINARY_DIR}"
+    "/.git/"
+    "swp$"
 )
 
 include (CPack)
