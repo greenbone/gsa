@@ -106,10 +106,6 @@
 #include "validator.h"
 #include "xslt_i18n.h"
 
-#ifdef SVN_REV_AVAILABLE
-#include "svnrevision.h"
-#endif
-
 #undef G_LOG_DOMAIN
 /**
  * @brief GLib log domain.

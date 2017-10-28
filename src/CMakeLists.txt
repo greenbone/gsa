@@ -106,27 +106,6 @@ add_executable (gsad
 target_link_libraries (gsad gsad_gmp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
-if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-  # If we got SVN_REVISION at configure time,
-  # assume we can get it at build time as well
-  if (SVN_REVISION)
-    # a custom target that is always built
-    add_custom_target (revisiontag ALL)
-
-    # creates svnversion.h using cmake script
-    add_custom_command (TARGET revisiontag COMMAND ${CMAKE_COMMAND}
-                        -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
-                        -P ${CMAKE_SOURCE_DIR}/getsvn.cmake)
-
-    # explicitly say that the executable depends on custom target
-    add_dependencies (gsad revisiontag)
-
-    # include the output directory, where the svnversion.h file is generated
-    include_directories (${CMAKE_CURRENT_BINARY_DIR})
-    add_definitions (-DSVN_REV_AVAILABLE)
-  endif (SVN_REVISION)
-endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-
 if (SERVE_STATIC_ASSETS)
   message (STATUS "Static asset serving is builtin, use with care.")
   add_definitions (-DSERVE_STATIC_ASSETS)
