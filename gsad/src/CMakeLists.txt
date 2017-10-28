@@ -227,9 +227,6 @@ add_custom_target (ctags COMMENT "Building tags..."
 add_custom_target (tags COMMENT "Building tags files...")
 add_dependencies (tags etags ctags)
 
-## NG
-add_subdirectory (html/classic/ng)
-
 ## gettext translations
 add_subdirectory (po)
 
