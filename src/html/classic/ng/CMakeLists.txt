@@ -371,6 +371,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cves/row.js
      ${NG_SRC_DIR}/src/web/pages/cves/table.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/charts.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/details.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/listpage.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/row.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
