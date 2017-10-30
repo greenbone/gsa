@@ -30,11 +30,13 @@ import PropTypes from '../../utils/proptypes.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
+import DfnCertAdvDetails from './details.js';
 import DfnCertAdvRow from './row.js';
 
 const Header = ({
@@ -97,6 +99,7 @@ const DfnCertAdvsFooter = createEntitiesFooter({
 export default createEntitiesTable({
   emptyTitle: _('No DFN-CERT Advisories available'),
   row: DfnCertAdvRow,
+  rowDetails: withRowDetails('dfncertadv')(DfnCertAdvDetails),
   header: DfnCertAdvsHeader,
   footer: DfnCertAdvsFooter,
 });

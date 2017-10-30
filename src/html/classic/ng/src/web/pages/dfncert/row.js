@@ -28,9 +28,7 @@ import {datetime} from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 import {na, render_component} from '../../utils/render.js';
 
-import {withEntityRow} from '../../entities/row.js';
-
-import InfoLink from '../../components/link/infolink.js';
+import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
@@ -39,18 +37,21 @@ import Comment from '../../components/comment/comment.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
-const Row = ({entity, links = true, actions, ...other}) => {
+const Row = ({
+  entity,
+  links = true,
+  actions,
+  onToggleDetailsClick,
+  ...other
+}) => {
   return (
     <TableRow>
       <TableData>
-        <InfoLink
-          legacy
-          details
-          type="dfn_cert_adv"
-          id={entity.id}
-          textOnly={!links}>
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
           {entity.name}
-        </InfoLink>
+        </RowDetailsToggle>
         <Comment text={entity.comment}/>
       </TableData>
       <TableData>
@@ -74,6 +75,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow()(Row);
