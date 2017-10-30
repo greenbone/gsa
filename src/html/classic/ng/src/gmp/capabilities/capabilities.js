@@ -33,6 +33,8 @@ const types = {
   cpes: 'info',
   ovaldefs: 'info',
   ovaldef: 'info',
+  certbundadv: 'info',
+  certbundadvs: 'info',
 };
 
 const check_type = type => {
