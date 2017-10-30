@@ -69,6 +69,7 @@ import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
 import CvssCalculatorPage from './pages/extras/cvsscalculatorpage.js';
 import DfnCertAdvsPage from './pages/dfncert/listpage.js';
+import DfnCertAdvDetailsPage from './pages/dfncert/detailspage.js';
 import FeedStatusPage from './pages/extras/feedstatuspage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import GroupsPage from './pages/groups/listpage.js';
@@ -364,6 +365,10 @@ ReactDOM.render(
         <Route
           path="certbundadv/:id"
           component={CertBundAdvDetailsPage}
+        />
+        <Route
+          path="dfncertadv/:id"
+          component={DfnCertAdvDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
