@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
+import {is_defined, for_each, map} from '../utils.js';
 
 import {parse_severity} from '../parser.js';
 
@@ -35,6 +35,34 @@ class DfnCertAdv extends Info {
 
     ret.severity = parse_severity(ret.max_cvss);
     delete ret.max_cvss;
+
+    const {raw_data} = ret;
+
+    ret.additional_links = [];
+    ret.cves = [];
+
+    if (is_defined(raw_data) && is_defined(raw_data.entry)) {
+      const {entry} = raw_data;
+
+      if (is_defined(entry.link)) {
+        for_each(entry.link, link => {
+          if (link._rel === 'alternate') {
+            ret.advisory_link = link._href;
+          }
+          else {
+            ret.additional_links.push(link._href);
+          }
+        });
+      }
+
+      if (is_defined(entry.summary)) {
+        ret.summary = entry.summary.__text;
+      }
+
+      if (is_defined(entry.cve)) {
+        ret.cves = map(entry.cve, cve => cve.__text);
+      }
+    }
 
     return ret;
   }
