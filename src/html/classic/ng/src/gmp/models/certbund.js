@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend} from '../utils.js';
+import {is_defined, for_each, map} from '../utils.js';
 
 import {parse_severity} from '../parser.js';
 
@@ -36,6 +36,47 @@ class CertBundAdv extends Info {
 
     ret.severity = parse_severity(ret.max_cvss);
     delete ret.max_cvss;
+
+    ret.categories = [];
+    ret.description = [];
+    ret.cves = [];
+    ret.additional_information = [];
+
+    if (is_defined(ret.raw_data) && is_defined(ret.raw_data.Advisory)) {
+      const {raw_data} = ret;
+      const {Advisory: advisory} = raw_data;
+
+      ret.version = advisory.Version;
+      ret.software = advisory.Software;
+      ret.platform = advisory.Platform;
+      ret.effect = advisory.effect;
+      ret.remote_attack = advisory.RemoteAttack;
+      ret.risk = advisory.Risk;
+      ret.reference_source = advisory.Reference_Source;
+      ret.reference_url = advisory.Reference_URL;
+      ret.categories = advisory.CategoryTree;
+
+      if (is_defined(advisory.Description) &&
+        is_defined(advisory.Description.Element)) {
+        for_each(advisory.Description.Element, element => {
+          if (is_defined(element.TextBlock)) {
+            ret.description.push(element.TextBlock);
+          }
+          else if (is_defined(element.Infos)) {
+            ret.additional_information = ret.additional_information.concat(
+              map(element.Infos.Info, info => ({
+                issuer: info._Info_Issuer,
+                url: info._Info_URL,
+              }))
+            );
+          }
+        });
+      }
+
+      if (is_defined(advisory.CVEList && is_defined(advisory.CVEList.CVE))) {
+        ret.cves = map(advisory.CVEList.CVE, cve => cve);
+      }
+    }
 
     return ret;
   }
