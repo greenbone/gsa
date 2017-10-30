@@ -31,6 +31,8 @@ const types = {
   cves: 'info',
   cpe: 'info',
   cpes: 'info',
+  dfncertadv: 'info',
+  dfncertadvs: 'info',
   ovaldefs: 'info',
   ovaldef: 'info',
   certbundadv: 'info',
