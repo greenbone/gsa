@@ -2,3 +2,4 @@ build/
 tags
 node_modules/
 .env.local
+config.local.js
