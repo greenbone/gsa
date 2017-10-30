@@ -189,6 +189,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/credentials/row.js
      ${NG_SRC_DIR}/src/web/pages/credentials/table.js
      ${NG_SRC_DIR}/src/web/pages/certbund/charts.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/details.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/certbund/listpage.js
      ${NG_SRC_DIR}/src/web/pages/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/certbund/row.js
