@@ -380,7 +380,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
      ${NG_SRC_DIR}/src/web/pages/extras/cvsscalculatorpage.js
      ${NG_SRC_DIR}/src/web/pages/extras/feedstatuspage.js
-     ${NG_SRC_DIR}/src/web/pages/extras/trashcanactions.js
+     ${NG_SRC_DIR}/src/web/pages/extras/trashactions.js
      ${NG_SRC_DIR}/src/web/pages/extras/trashcanpage.js
      ${NG_SRC_DIR}/src/web/pages/filters/dialog.js
      ${NG_SRC_DIR}/src/web/pages/filters/listpage.js
