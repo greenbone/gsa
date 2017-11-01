@@ -561,6 +561,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/trend.js
      ${NG_SRC_DIR}/src/web/pages/users/component.js
      ${NG_SRC_DIR}/src/web/pages/users/confirmdeletedialog.js
+     ${NG_SRC_DIR}/src/web/pages/users/details.js
+     ${NG_SRC_DIR}/src/web/pages/users/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/users/dialog.js
      ${NG_SRC_DIR}/src/web/pages/users/header.js
      ${NG_SRC_DIR}/src/web/pages/users/listpage.js
