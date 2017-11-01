@@ -27,6 +27,8 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 
+import {is_function} from 'gmp/utils.js';
+
 import PropTypes from '../utils/proptypes.js';
 
 import Icon from '../components/icon/icon.js';
@@ -72,7 +74,7 @@ const withRowDetails = (type, colSpan = '10') => Component => {
         {links &&
           <Layout flex align={['start', 'start']}>
             <DetailsLink
-              type={type}
+              type={is_function(type) ? type(entity) : type}
               id={entity.id}>
               <Icon
                 img="details.svg"
