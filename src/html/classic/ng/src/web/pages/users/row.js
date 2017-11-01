@@ -97,6 +97,7 @@ const Row = ({
     actions,
     entity,
     links = true,
+    onToggleDetailsClick,
     ...props
   }, {
     capabilities,
@@ -168,6 +169,7 @@ const Row = ({
         link={links}
         type="user"
         displayName={_('User')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData flex className="roles">
         {roles}
@@ -190,6 +192,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 Row.contextTypes = {

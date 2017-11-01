@@ -24,7 +24,9 @@ import _ from 'gmp/locale.js';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import UserDetails from './details.js';
 import Header from './header.js';
 import Row from './row.js';
 
@@ -40,6 +42,7 @@ const UsersTable = createEntitiesTable({
   emptyTitle: _('No Users available'),
   header: Header,
   row: Row,
+  rowDetails: withRowDetails('user')(UserDetails),
   footer: createEntitiesFooter({
     download: 'users.xml',
     span: 7,
