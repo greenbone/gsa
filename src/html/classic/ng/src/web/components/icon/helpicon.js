@@ -27,20 +27,27 @@ import _ from 'gmp/locale.js';
 import {is_defined, capitalize_first_letter} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp.js';
 
 import Icon from './icon.js';
 
-export const HelpIcon = ({page, title, ...other}, {gmp}) => {
-  let path = 'help/' + page + '.html';
-  let params = {
+const HelpIcon = ({
+  gmp,
+  page,
+  title,
+  ...other
+}) => {
+  const params = {
     token: gmp.token,
   };
+
+  const path = 'help/' + page + '.html';
 
   if (!is_defined(title)) {
     title = _('Help: {{pagename}}', {pagename: capitalize_first_letter(page)});
   }
 
-  let url = gmp.buildUrl(path, params);
+  const url = gmp.buildUrl(path, params);
   return (
     <Icon
       img="help.svg"
@@ -51,15 +58,12 @@ export const HelpIcon = ({page, title, ...other}, {gmp}) => {
 };
 
 HelpIcon.propTypes = {
-  title: PropTypes.string,
-  page: PropTypes.string.isRequired,
-};
-
-HelpIcon.contextTypes = {
   gmp: PropTypes.gmp.isRequired,
+  page: PropTypes.string.isRequired,
+  title: PropTypes.string,
 };
 
-export default HelpIcon;
+export default withGmp(HelpIcon);
 
 // vim: set ts=2 sw=2 tw=80:
 
