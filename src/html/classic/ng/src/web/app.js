@@ -103,6 +103,7 @@ import TasksPage from './pages/tasks/listpage.js';
 import TaskDetailsPage from './pages/tasks/detailspage.js';
 import TrashcanPage from './pages/extras/trashcanpage.js';
 import UsersPage from './pages/users/listpage.js';
+import UserDetailsPage from './pages/users/detailspage.js';
 import VulnerabilitiesPage from './pages/vulns/listpage.js';
 
 import './css/gsa-base.css';
@@ -369,6 +370,10 @@ ReactDOM.render(
         <Route
           path="dfncertadv/:id"
           component={DfnCertAdvDetailsPage}
+        />
+        <Route
+          path="user/:id"
+          component={UserDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
