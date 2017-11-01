@@ -44,7 +44,7 @@ const References = ({
   nvt,
   links = true,
 }) => {
-  const {cves, bids, certs, xrefs} = nvt;
+  const {cves = [], bids = [], certs = [], xrefs = []} = nvt;
   const has_reference = cves.length > 0 || bids.length > 0 ||
     certs.length > 0 || xrefs.length > 0;
   if (!has_reference) {

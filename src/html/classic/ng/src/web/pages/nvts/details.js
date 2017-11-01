@@ -49,18 +49,20 @@ const NvtDetails = ({
   entity,
   links = true,
 }) => {
-  const {tags, severity, qod} = entity;
+  const {tags = {}, severity, qod} = entity;
   return (
     <Layout
       flex="column"
       grow="1">
 
-      <DetailsBlock
-        title={_('Summary')}>
-        <p>
-          {tags.summary}
-        </p>
-      </DetailsBlock>
+      {is_defined(tags.summary) &&
+        <DetailsBlock
+          title={_('Summary')}>
+          <p>
+            {tags.summary}
+          </p>
+        </DetailsBlock>
+      }
 
       {is_defined(tags.affected) && tags.affected !== TAG_NA &&
         <DetailsBlock
