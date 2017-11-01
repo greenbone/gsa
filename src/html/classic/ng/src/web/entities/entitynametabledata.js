@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 import withUserName from '../utils/withUserName.js';
@@ -38,6 +39,8 @@ import TableData from '../components/table/data.js';
 
 import ObserverIcon from '../entity/icon/observericon.js';
 
+import {RowDetailsToggle} from './row.js';
+
 const EntityNameTableData = ({
   entity,
   legacy = false,
@@ -45,6 +48,7 @@ const EntityNameTableData = ({
   displayName,
   userName,
   children,
+  onToggleDetailsClick,
 }) => {
   const linktext = (
     <Layout flex="column">
@@ -57,13 +61,20 @@ const EntityNameTableData = ({
   return (
     <TableData flex="column">
       <Layout flex align="space-between">
-        <DetailsLink
-          legacy={legacy}
-          type={entity.entity_type}
-          id={entity.id}
-          textOnly={!links}>
-          {linktext}
-        </DetailsLink>
+        {is_defined(onToggleDetailsClick) ?
+          <RowDetailsToggle
+            name={entity.id}
+            onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle> :
+          <DetailsLink
+            legacy={legacy}
+            type={entity.entity_type}
+            id={entity.id}
+            textOnly={!links}>
+            {linktext}
+          </DetailsLink>
+        }
         <ObserverIcon
           displayName={displayName}
           entity={entity}
@@ -79,11 +90,12 @@ const EntityNameTableData = ({
 };
 
 EntityNameTableData.propTypes = {
+  displayName: PropTypes.string.isRequired,
   entity: PropTypes.model.isRequired,
   legacy: PropTypes.bool,
   links: PropTypes.bool,
-  displayName: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
+  onToggleDetailsClick: PropTypes.func,
 };
 
 export default withUserName(EntityNameTableData);
