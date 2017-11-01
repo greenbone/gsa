@@ -352,6 +352,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entity/tags.js
      ${NG_SRC_DIR}/src/web/entity/tagshandler.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
+     ${NG_SRC_DIR}/src/web/pages/allsecinfo/details.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/listpage.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/row.js
