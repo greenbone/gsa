@@ -67,30 +67,40 @@ const OvaldefDetails = ({
               </TableData>
             </TableRow>
           }
-          <TableRow>
-            <TableData>
-              {_('Version')}
-            </TableData>
-            <TableData>
-              {version}
-            </TableData>
-          </TableRow>
-          <TableRow>
-            <TableData>
-              {_('Definition Class')}
-            </TableData>
-            <TableData>
-              {entity.class}
-            </TableData>
-          </TableRow>
-          <TableRow>
-            <TableData>
-              {_('Referenced CVEs')}
-            </TableData>
-            <TableData>
-              {cve_refs}
-            </TableData>
-          </TableRow>
+
+          {is_defined(version) &&
+            <TableRow>
+              <TableData>
+                {_('Version')}
+              </TableData>
+              <TableData>
+                {version}
+              </TableData>
+            </TableRow>
+          }
+
+          {is_defined(entity.class) &&
+            <TableRow>
+              <TableData>
+                {_('Definition Class')}
+              </TableData>
+              <TableData>
+                {entity.class}
+              </TableData>
+            </TableRow>
+          }
+
+          {is_defined(cve_refs) &&
+            <TableRow>
+              <TableData>
+                {_('Referenced CVEs')}
+              </TableData>
+              <TableData>
+                {cve_refs}
+              </TableData>
+            </TableRow>
+          }
+
           <TableRow>
             <TableData>
               {_('Severity')}
@@ -101,7 +111,8 @@ const OvaldefDetails = ({
               />
             </TableData>
           </TableRow>
-          {entity.isDeprecated() &&
+
+          {is_defined(entity.isDeprecated) && entity.isDeprecated() &&
             <TableRow>
               <TableData>
                 {_('Deprecated')}
@@ -111,14 +122,18 @@ const OvaldefDetails = ({
               </TableData>
             </TableRow>
           }
-          <TableRow>
-            <TableData>
-              {_('File')}
-            </TableData>
-            <TableData>
-              {file}
-            </TableData>
-          </TableRow>
+
+          {is_defined(file) &&
+            <TableRow>
+              <TableData>
+                {_('File')}
+              </TableData>
+              <TableData>
+                {file}
+              </TableData>
+            </TableRow>
+          }
+
         </TableBody>
       </InfoTable>
 

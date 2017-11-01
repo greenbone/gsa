@@ -58,7 +58,7 @@ const CveDetails = ({
     cvss_base_vector,
     cwe_id,
     description,
-    references,
+    references = [],
     severity,
   } = entity;
 
@@ -82,10 +82,12 @@ const CveDetails = ({
         </InfoTable>
       }
 
-      <DetailsBlock
-        title={_('Description')}>
-        <p>{description}</p>
-      </DetailsBlock>
+      {is_defined(description) &&
+        <DetailsBlock
+          title={_('Description')}>
+          <p>{description}</p>
+        </DetailsBlock>
+      }
 
       <DetailsBlock
         title={_('CVSS')}>
