@@ -24,7 +24,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -40,11 +39,11 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import {GROUPS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-import GroupDialog from './dialog.js';
+import GroupComponent from './component.js';
 import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-  onNewGroupClick,
+  onGroupCreateClick,
 }, {capabilities}) => {
   return (
     <Layout flex box>
@@ -54,85 +53,75 @@ const ToolBarIcons = ({
       {capabilities.mayCreate('group') &&
         <NewIcon
           title={_('New Group')}
-          onClick={onNewGroupClick}/>
+          onClick={onGroupCreateClick}/>
       }
     </Layout>
   );
 };
 
 ToolBarIcons.propTypes = {
-  onNewGroupClick: PropTypes.func.isRequired,
+  onGroupCreateClick: PropTypes.func.isRequired,
 };
 
 ToolBarIcons.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-class Page extends React.Component {
+const GroupsFilterDialog = createFilterDialog({sortFields: SORT_FIELDS});
 
-  constructor(...args) {
-    super(...args);
+const GroupsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <GroupComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+      save,
+    }) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={GroupsFilterDialog}
+        sectionIcon="group.svg"
+        table={Table}
+        title={_('Groups')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onGroupCloneClick={clone}
+        onGroupCreateClick={create}
+        onGroupDeleteClick={delete_func}
+        onGroupDownloadClick={download}
+        onGroupEditClick={edit}
+        onGroupSaveClick={save}
+      />
+    )}
+  </GroupComponent>
+);
 
-    this.openDialog = this.openDialog.bind(this);
-  }
-
-  openDialog(group) {
-    const {gmp} = this.context;
-
-    if (is_defined(group)) {
-      this.dialog.show({
-        id: group.id,
-        name: group.name,
-        comment: group.comment,
-        users: group.users,
-      }, {
-        title: _('Edit Group {{name}}', group),
-      });
-    }
-    else {
-      this.dialog.show({});
-    }
-
-    gmp.users.getAll().then(users => {
-      this.dialog.setValue('all_users', users);
-    });
-  }
-
-  render() {
-    const {onEntitySave} = this.props;
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onNewGroupClick={this.openDialog}
-          onEditGroup={this.openDialog}
-        />
-        <GroupDialog
-          ref={ref => this.dialog = ref}
-          onSave={onEntitySave}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  onEntitySave: PropTypes.func.isRequired,
-};
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
+GroupsPage.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('group', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
   filtersFilter: GROUPS_FILTER_FILTER,
-  sectionIcon: 'group.svg',
-  table: Table,
-  title: _('Groups'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+})(GroupsPage);
 
 // vim: set ts=2 sw=2 tw=80:

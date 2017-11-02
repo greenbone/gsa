@@ -44,10 +44,10 @@ import TableRow from '../../components/table/row.js';
 
 const IconActions = ({
     entity,
-    onEditGroup,
-    onEntityClone,
-    onEntityDelete,
-    onEntityDownload,
+    onGroupEditClick,
+    onGroupCloneClick,
+    onGroupDeleteClick,
+    onGroupDownloadClick,
   }) => {
   return (
     <Layout flex align={['center', 'center']}>
@@ -55,23 +55,23 @@ const IconActions = ({
         displayName={_('Group')}
         name="group"
         entity={entity}
-        onClick={onEntityDelete}/>
+        onClick={onGroupDeleteClick}/>
       <EditIcon
         displayName={_('Group')}
         name="group"
         entity={entity}
-        onClick={onEditGroup}/>
+        onClick={onGroupEditClick}/>
       <CloneIcon
         displayName={_('Group')}
         name="user"
         entity={entity}
         title={_('Clone Group')}
         value={entity}
-        onClick={onEntityClone}/>
+        onClick={onGroupCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Group')}
-        onClick={onEntityDownload}
+        onClick={onGroupDownloadClick}
       />
     </Layout>
   );
@@ -79,10 +79,10 @@ const IconActions = ({
 
 IconActions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onEditGroup: PropTypes.func.isRequired,
-  onEntityClone: PropTypes.func.isRequired,
-  onEntityDelete: PropTypes.func.isRequired,
-  onEntityDownload: PropTypes.func.isRequired,
+  onGroupCloneClick: PropTypes.func.isRequired,
+  onGroupDeleteClick: PropTypes.func.isRequired,
+  onGroupDownloadClick: PropTypes.func.isRequired,
+  onGroupEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
