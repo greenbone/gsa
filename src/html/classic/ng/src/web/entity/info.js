@@ -35,6 +35,16 @@ import TableBody from '../components/table/body.js';
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
 
+const OwnerInfo = ({
+  owner,
+}) => is_defined(owner) ?
+  owner.name :
+  <i>{_('(Global Object)')}</i>
+;
+
+OwnerInfo.propTypes = {
+  owner: PropTypes.object,
+};
 
 export const EntityInfoTable = glamorous(InfoTable)(
   'entity-info',
@@ -83,16 +93,15 @@ const EntityInfo = ({
             {long_date(modification_time)}
           </TableData>
         </TableRow>
-        {is_defined(owner) &&
-          <TableRow>
-            <TableData>
-              {_('Owner')}
-            </TableData>
-            <TableData>
-              {owner.name}
-            </TableData>
-          </TableRow>
-        }
+
+        <TableRow>
+          <TableData>
+            {_('Owner')}
+          </TableData>
+          <TableData>
+            <OwnerInfo owner={owner}/>
+          </TableData>
+        </TableRow>
       </TableBody>
     </EntityInfoTable>
   );
