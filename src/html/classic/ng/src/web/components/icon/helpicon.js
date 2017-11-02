@@ -32,6 +32,7 @@ import withGmp from '../../utils/withGmp.js';
 import Icon from './icon.js';
 
 const HelpIcon = ({
+  anchor,
   gmp,
   page,
   title,
@@ -47,7 +48,7 @@ const HelpIcon = ({
     title = _('Help: {{pagename}}', {pagename: capitalize_first_letter(page)});
   }
 
-  const url = gmp.buildUrl(path, params);
+  const url = gmp.buildUrl(path, params, anchor);
   return (
     <Icon
       img="help.svg"
@@ -58,6 +59,7 @@ const HelpIcon = ({
 };
 
 HelpIcon.propTypes = {
+  anchor: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   page: PropTypes.string.isRequired,
   title: PropTypes.string,
