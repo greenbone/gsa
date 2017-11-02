@@ -149,11 +149,15 @@ export class Gmp {
     return !is_empty(this.token);
   }
 
-  buildUrl(path, params) {
+  buildUrl(path, params, anchor) {
     let url = build_server_url(this.server, path, this.protocol);
 
     if (is_defined(params)) {
       url += '?' + build_url_params(params);
+    }
+
+    if (is_defined(anchor)) {
+      url += '#' + anchor;
     }
     return url;
   }
