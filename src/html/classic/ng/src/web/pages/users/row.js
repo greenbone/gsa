@@ -50,46 +50,44 @@ import TableRow from '../../components/table/row.js';
 import {convert_auth_method, convert_allow} from './details.js';
 
 const IconActions = ({
-    entity,
-    onEditUser,
-    onEntityClone,
-    onEntityDelete,
-    onEntityDownload,
-  }) => {
-  return (
-    <IconDivider>
-      <DeleteIcon
-        displayName={_('User')}
-        name="user"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('User')}
-        name="user"
-        entity={entity}
-        onClick={onEditUser}/>
-      <CloneIcon
-        displayName={_('User')}
-        name="user"
-        entity={entity}
-        title={_('Clone User')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export User')}
-        onClick={onEntityDownload}
-      />
-    </IconDivider>
-  );
-};
+  entity,
+  onEditUser,
+  onEntityClone,
+  onEntityDelete,
+  onEntityDownload,
+}) => (
+  <IconDivider>
+    <DeleteIcon
+      displayName={_('User')}
+      name="user"
+      entity={entity}
+      onClick={onEntityDelete}/>
+    <EditIcon
+      displayName={_('User')}
+      name="user"
+      entity={entity}
+      onClick={onEditUser}/>
+    <CloneIcon
+      displayName={_('User')}
+      name="user"
+      entity={entity}
+      title={_('Clone User')}
+      value={entity}
+      onClick={onEntityClone}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export User')}
+      onClick={onEntityDownload}
+    />
+  </IconDivider>
+);
 
 IconActions.propTypes = {
-  entity: PropTypes.model,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onEditUser: PropTypes.func,
-  onEntityClone: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onEditUser: PropTypes.func.isRequired,
+  onEntityClone: PropTypes.func.isRequired,
+  onEntityDelete: PropTypes.func.isRequired,
+  onEntityDownload: PropTypes.func.isRequired,
 };
 
 const Row = ({
