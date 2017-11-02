@@ -24,9 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_empty, map} from 'gmp/utils.js';
-
-import {AUTH_METHOD_LDAP, AUTH_METHOD_RADIUS} from 'gmp/models/user.js';
+import {map} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -49,6 +47,7 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 import './css/row.css';
+import {convert_auth_method, convert_allow} from './details.js';
 
 const IconActions = ({
     entity,
@@ -94,22 +93,16 @@ IconActions.propTypes = {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-
-  const may_acces_roles = capabilities.mayAccess('roles');
-
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   const roles = map(entity.roles, role => (
     <DetailsLink
-      className="item"
       legacy
-      textOnly={!may_acces_roles}
+      textOnly={!links}
       key={role.id}
       type="role"
       id={role.id}>
@@ -117,14 +110,10 @@ const Row = ({
     </DetailsLink>
   ));
 
-
-  const may_acces_groups = capabilities.mayAccess('groups');
-
   const groups = map(entity.groups, group => (
     <DetailsLink
-      className="item"
       legacy
-      textOnyl={!may_acces_groups}
+      textOnly={!links}
       type="group"
       key={group.id}
       id={group.id}>
@@ -132,35 +121,8 @@ const Row = ({
     </DetailsLink>
   ));
 
-  let auth_method;
-  if (entity.auth_method === AUTH_METHOD_LDAP) {
-    auth_method = _('LDAP');
-  }
-  else if (entity.auth_method === AUTH_METHOD_RADIUS) {
-    auth_method = _('RADIUS');
-  }
-  else {
-    auth_method = _('Local');
-  }
-
-  let host_allow = '';
-  if (entity.hosts.allow === '0') {
-    if (is_empty(entity.hosts.addresses)) {
-      host_allow = _('Allow all');
-    }
-    else {
-      host_allow = _('Allow all and deny from {{addresses}}', entity.hosts);
-    }
-  }
-  else if (entity.hosts.allow === '1') {
-    if (is_empty(entity.hosts.addresses)) {
-      host_allow = _('Deny all');
-    }
-    else {
-      host_allow = _('Deny all and allow from {{addresses}}', entity.hosts);
-    }
-  }
-
+  const auth_method = convert_auth_method(entity.auth_method);
+  const host_allow = convert_allow(entity.hosts);
   return (
     <TableRow>
       <EntityNameTableData
@@ -193,10 +155,6 @@ Row.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withEntityRow(withEntityActions(IconActions))(Row);
