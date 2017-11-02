@@ -73,6 +73,7 @@ import DfnCertAdvDetailsPage from './pages/dfncert/detailspage.js';
 import FeedStatusPage from './pages/extras/feedstatuspage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import GroupsPage from './pages/groups/listpage.js';
+import GroupDetailsPage from './pages/groups/detailspage.js';
 import HostsPage from './pages/hosts/listpage.js';
 import HostDetailsPage from './pages/hosts/detailspage.js';
 import NotesPage from './pages/notes/listpage.js';
@@ -374,6 +375,10 @@ ReactDOM.render(
         <Route
           path="user/:id"
           component={UserDetailsPage}
+        />
+        <Route
+          path="group/:id"
+          component={GroupDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
