@@ -191,9 +191,6 @@ const CpePage = props => (
         infoComponent={EntityInfo}
         permissionsComponent={false}
         toolBarIcons={ToolBarIcons}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       />
     )}
   </EntityContainer>
