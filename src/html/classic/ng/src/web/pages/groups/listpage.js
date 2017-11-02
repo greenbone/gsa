@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -80,20 +80,11 @@ class Page extends React.Component {
     const {gmp} = this.context;
 
     if (is_defined(group)) {
-      let users;
-
-      if (is_empty(group.users)) {
-        users = [];
-      }
-      else {
-        users = group.users.split(',').map(user => user.trim());
-      }
-
       this.dialog.show({
         id: group.id,
         name: group.name,
         comment: group.comment,
-        users,
+        users: group.users,
       }, {
         title: _('Edit Group {{name}}', group),
       });
