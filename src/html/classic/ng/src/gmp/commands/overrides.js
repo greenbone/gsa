@@ -62,7 +62,7 @@ export class OverrideCommand extends EntityCommand {
       cmd,
       next: 'get_override',
       oid,
-      override_id,
+      override_id: id,
       active,
       custom_severity,
       new_severity,
