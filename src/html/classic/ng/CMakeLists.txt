@@ -387,6 +387,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/filters/listpage.js
      ${NG_SRC_DIR}/src/web/pages/filters/row.js
      ${NG_SRC_DIR}/src/web/pages/filters/table.js
+     ${NG_SRC_DIR}/src/web/pages/groups/component.js
+     ${NG_SRC_DIR}/src/web/pages/groups/details.js
+     ${NG_SRC_DIR}/src/web/pages/groups/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/groups/dialog.js
      ${NG_SRC_DIR}/src/web/pages/groups/header.js
      ${NG_SRC_DIR}/src/web/pages/groups/listpage.js
