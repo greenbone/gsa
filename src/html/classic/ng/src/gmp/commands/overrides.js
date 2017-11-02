@@ -29,6 +29,9 @@ import Override from '../models/override.js';
 
 const log = logger.getLogger('gmp.commands.overrides');
 
+export const MANUAL = '1';
+export const ANY = '0';
+
 export class OverrideCommand extends EntityCommand {
 
   constructor(http) {
@@ -65,13 +68,13 @@ export class OverrideCommand extends EntityCommand {
       new_severity,
       new_severity_from_list,
       days,
-      hosts,
+      hosts: hosts === MANUAL ? '--' : '',
       hosts_manual,
       result_id,
       result_uuid,
       task_id,
       task_uuid,
-      port,
+      port: port === MANUAL ? '--' : '',
       port_manual,
       severity,
       text,

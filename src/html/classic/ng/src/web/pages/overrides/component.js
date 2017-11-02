@@ -26,6 +26,8 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined, is_empty, includes, shorten} from 'gmp/utils.js';
 
+import {ANY, MANUAL} from 'gmp/commands/overrides.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
@@ -70,14 +72,16 @@ class OverrideComponent extends React.Component {
         id: override.id,
         active,
         custom_severity,
-        hosts: override.hosts,
+        hosts: override.hosts.length > 0 ? MANUAL : ANY,
+        hosts_manual: override.hosts.join(' '),
         new_severity,
         new_severity_from_list,
         nvt: override.nvt,
         oid: override.nvt ? override.nvt.oid : undefined,
         override,
         override_severity: override.severity,
-        port: override.port,
+        port: is_defined(override.port) ? MANUAL : ANY,
+        port_manual: override.port,
         result_id: is_defined(override.result) ? '' : '0',
         result_uuid: is_defined(override.result) ? override.result.id : '',
         severity: override.severity,

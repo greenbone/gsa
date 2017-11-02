@@ -26,6 +26,7 @@ import React from 'react';
 import _, {datetime} from 'gmp/locale.js';
 import {is_defined, is_empty} from 'gmp/utils.js';
 import {parse_float} from 'gmp/parser.js';
+import {ANY, MANUAL} from 'gmp/commands/overrides.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -151,22 +152,22 @@ const OverrideDialog = ({
 
       <FormGroup title={_('Hosts')}>
         <Radio name="hosts"
-          value=""
+          value={ANY}
           title={_('Any')}
-          checked={hosts === ''}
+          checked={hosts === ANY}
           onChange={onValueChange}>
         </Radio>
         <Layout flex box>
           <Radio name="hosts"
-            value="--"
+            value={MANUAL}
             title={fixed ? hosts_manual : ''}
-            checked={hosts === '--'}
+            checked={hosts === MANUAL}
             onChange={onValueChange}>
           </Radio>
           {!fixed &&
             <TextField name="hosts_manual"
               value={hosts_manual}
-              disabled={hosts !== '--'}
+              disabled={hosts !== MANUAL}
               onChange={onValueChange}/>
           }
         </Layout>
@@ -174,22 +175,22 @@ const OverrideDialog = ({
 
       <FormGroup title={_('Location')}>
         <Radio name="port"
-          value=""
+          value={ANY}
           title={_('Any')}
-          checked={port === ''}
+          checked={port === ANY}
           onChange={onValueChange}>
         </Radio>
         <Layout flex box>
           <Radio name="port"
-            value="--"
+            value={MANUAL}
             title={fixed ? port_manual : ''}
-            checked={port === '--'}
+            checked={port === MANUAL}
             onChange={onValueChange}>
           </Radio>
           {!fixed &&
             <TextField name="port_manual"
               value={port_manual}
-              disabled={port !== '--'}
+              disabled={port !== MANUAL}
               onChange={onValueChange}/>
           }
         </Layout>
@@ -385,9 +386,9 @@ export default withDialog({
     days: 30,
     fixed: false,
     oid: '1.3.6.1.4.1.25623.1.0.',
-    hosts: '',
+    hosts: ANY,
     hosts_manual: '',
-    port: '',
+    port: ANY,
     port_manual: '',
     custom_severity: '0',
     new_severity_from_list: -1,
