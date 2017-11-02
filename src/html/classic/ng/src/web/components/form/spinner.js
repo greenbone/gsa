@@ -321,7 +321,7 @@ class SpinnerComponent extends React.Component {
 
 SpinnerComponent.defaultProps = {
   size: 4,
-  maxLenght: 5,
+  maxLength: 5,
   type: 'int',
 };
 
