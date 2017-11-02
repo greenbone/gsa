@@ -78,29 +78,28 @@ const IconActions = ({
 };
 
 IconActions.propTypes = {
-  entity: PropTypes.model,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onEditGroup: PropTypes.func,
-  onEntityClone: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onEditGroup: PropTypes.func.isRequired,
+  onEntityClone: PropTypes.func.isRequired,
+  onEntityDelete: PropTypes.func.isRequired,
+  onEntityDownload: PropTypes.func.isRequired,
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   return (
     <TableRow>
       <EntityNameTableData
-        legacy
         entity={entity}
         link={links}
         type="group"
         displayName={_('Group')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       {render_component(actions, {...props, entity})}
     </TableRow>
@@ -111,10 +110,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(IconActions))(Row);

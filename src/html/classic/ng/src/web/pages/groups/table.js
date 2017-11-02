@@ -24,7 +24,9 @@ import _ from 'gmp/locale.js';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import GroupDetails from './details.js';
 import Header from './header.js';
 import Row from './row.js';
 
@@ -36,6 +38,7 @@ const GroupsTable = createEntitiesTable({
   emptyTitle: _('No Groups available'),
   header: Header,
   row: Row,
+  rowDetails: withRowDetails('group')(GroupDetails),
   footer: createEntitiesFooter({
     download: 'groups.xml',
     span: 7,
