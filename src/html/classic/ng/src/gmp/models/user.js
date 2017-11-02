@@ -38,7 +38,7 @@ class User extends Model {
   static entity_type = 'user';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     ret.roles = map(elem.role, role => {
       return new Model(role, 'role');
