@@ -83,14 +83,15 @@ class SaveDialogContent extends React.Component {
   render() {
     const {
       children,
-      title,
+      initialData = {},
       moveprops,
+      title,
     } = this.props;
     const {
       error,
     } = this.state;
     return (
-      <State>
+      <State {...initialData}>
         {({
           state,
           onValueChange,
@@ -126,6 +127,7 @@ class SaveDialogContent extends React.Component {
 
 SaveDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
+  initialData: PropTypes.object,
   moveprops: PropTypes.object,
   title: PropTypes.string.isRequired,
   onSave: PropTypes.func.isRequired,
@@ -136,6 +138,7 @@ const SaveDialog = ({
   width,
   title,
   visible,
+  initialData,
   onClose,
   onSave,
 }) => {
@@ -151,6 +154,7 @@ const SaveDialog = ({
       }) => (
         <SaveDialogContent
           close={close}
+          initialData={initialData}
           moveprops={getMoveProps()}
           title={title}
           onSave={onSave}
@@ -163,6 +167,7 @@ const SaveDialog = ({
 };
 
 SaveDialog.propTypes = {
+  initialData: PropTypes.object,
   title: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
