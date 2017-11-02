@@ -98,7 +98,7 @@ export const parse_overrides = overrides => {
       return o;
     });
   }
-  let list = new List(entries);
+  const list = new List(entries);
   list.active = active;
   return list;
 };

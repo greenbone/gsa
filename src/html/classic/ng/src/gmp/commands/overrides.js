@@ -32,7 +32,7 @@ const log = logger.getLogger('gmp.commands.overrides');
 export const MANUAL = '1';
 export const ANY = '0';
 
-export class OverrideCommand extends EntityCommand {
+class OverrideCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'override', Override);
@@ -51,11 +51,26 @@ export class OverrideCommand extends EntityCommand {
   }
 
   _save(args) {
-    let {cmd, oid, override_id, active = '-1', days = 30, hosts = '',
-      hosts_manual = '', result_id = '', result_uuid = '', port = '',
-      port_manual = '', severity = '', task_id = '', task_uuid = '', text,
-      custom_severity = '0', new_severity = '',
-      new_severity_from_list = '-1.0'} = args;
+    const {
+      cmd,
+      oid,
+      id,
+      active = '-1',
+      days = 30,
+      hosts = ANY,
+      hosts_manual = '',
+      result_id = '',
+      result_uuid = '',
+      port = ANY,
+      port_manual = '',
+      severity = '',
+      task_id = '',
+      task_uuid = '',
+      text,
+      custom_severity = '0',
+      new_severity = '',
+      new_severity_from_list = '-1.0',
+    } = args;
 
     log.debug('Saving override', args);
     return this.httpPost({
@@ -82,7 +97,7 @@ export class OverrideCommand extends EntityCommand {
   }
 }
 
-export class OverridesCommand extends EntitiesCommand {
+class OverridesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'override', Override);
