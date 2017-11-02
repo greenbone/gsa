@@ -618,7 +618,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
-     ${NG_SRC_DIR}/src/web/pages/users/css/row.css
      ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
      )
 

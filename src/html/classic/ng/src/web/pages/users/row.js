@@ -39,6 +39,7 @@ import EditIcon from '../../entity/icon/editicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
+import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
@@ -46,7 +47,6 @@ import DetailsLink from '../../components/link/detailslink.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import './css/row.css';
 import {convert_auth_method, convert_allow} from './details.js';
 
 const IconActions = ({
@@ -133,11 +133,15 @@ const Row = ({
         displayName={_('User')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
-      <TableData flex className="roles">
-        {roles}
+      <TableData>
+        <Divider>
+          {roles}
+        </Divider>
       </TableData>
-      <TableData flex className="groups">
-        {groups}
+      <TableData>
+        <Divider>
+          {groups}
+        </Divider>
       </TableData>
       <TableData>
         {host_allow}
