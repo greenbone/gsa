@@ -38,7 +38,7 @@ class State extends React.Component {
   }
 
   handleValueChange(value, name) {
-    this.setState([name]: value);
+    this.setState({[name]: value});
   }
 
   render() {
