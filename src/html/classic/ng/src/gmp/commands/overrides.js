@@ -43,11 +43,11 @@ export class OverrideCommand extends EntityCommand {
   }
 
   create(args) {
-    return this._save({cmd: 'create_override', ...args});
+    return this._save({...args, cmd: 'create_override'});
   }
 
   save(args) {
-    return this._save({cmd: 'save_override', ...args});
+    return this._save({...args, cmd: 'save_override'});
   }
 
   _save(args) {
