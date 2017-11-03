@@ -38,12 +38,12 @@ import TagsHandler from './tagshandler.js';
 
 const log = logger.getLogger('web.entity.container');
 
-export const loader = (name, filter_func) => function(id) {
+export const loader = (type, filter_func, name = type) => function(id) {
   const {gmp} = this.context;
 
   log.debug('Loading', name, 'for entity', id);
 
-  return gmp[name].getAll({
+  return gmp[type].getAll({
     filter: filter_func(id),
   }).then(entities => {
 
