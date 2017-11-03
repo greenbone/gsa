@@ -33,7 +33,7 @@ import Role from '../models/role.js';
 
 const log = logger.getLogger('gmp.commands.roles');
 
-export class RoleCommand extends EntityCommand {
+class RoleCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'role', Role);
@@ -124,7 +124,7 @@ export class RoleCommand extends EntityCommand {
   }
 }
 
-export class RolesCommand extends EntitiesCommand {
+class RolesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'role', Role);
