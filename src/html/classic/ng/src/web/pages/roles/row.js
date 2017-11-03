@@ -86,21 +86,20 @@ IconActions.propTypes = {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   return (
     <TableRow>
       <EntityNameTableData
-        legacy
         entity={entity}
         link={links}
         type="role"
         displayName={_('Role')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       {render_component(actions, {...props, entity})}
     </TableRow>
@@ -111,10 +110,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(IconActions))(Row);

@@ -24,9 +24,11 @@ import _ from 'gmp/locale.js';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import Header from '../groups/header.js';
 import Row from './row.js';
+import RoleDetails from './details.js';
 
 export const SORT_FIELDS = [
   ['name', _('Name')],
@@ -36,6 +38,7 @@ const RolesTable = createEntitiesTable({
   emptyTitle: _('No Roles available'),
   header: Header,
   row: Row,
+  rowDetails: withRowDetails('role')(RoleDetails),
   footer: createEntitiesFooter({
     download: 'roles.xml',
     span: 7,
