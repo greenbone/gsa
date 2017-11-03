@@ -24,7 +24,7 @@
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import logger from '../log.js';
-import {is_array, is_empty, map} from '../utils.js';
+import {is_array, is_defined, map} from '../utils.js';
 
 import Model from '../model.js';
 
@@ -89,8 +89,8 @@ class RoleCommand extends EntityCommand {
 
       edit_role.permissions = map(
         edit_role.get_permissions_response.permission, permission => {
-          let perm = new Permission(permission);
-          if (is_empty(perm.resource.id)) {
+          const perm = new Permission(permission);
+          if (!is_defined(perm.resource)) {
             perm_names.add(permission.name);
           }
           return perm;
