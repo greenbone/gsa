@@ -504,6 +504,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/results/listpage.js
      ${NG_SRC_DIR}/src/web/pages/results/row.js
      ${NG_SRC_DIR}/src/web/pages/results/table.js
+     ${NG_SRC_DIR}/src/web/pages/roles/component.js
+     ${NG_SRC_DIR}/src/web/pages/roles/details.js
+     ${NG_SRC_DIR}/src/web/pages/roles/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/roles/dialog.js
      ${NG_SRC_DIR}/src/web/pages/roles/listpage.js
      ${NG_SRC_DIR}/src/web/pages/roles/row.js
