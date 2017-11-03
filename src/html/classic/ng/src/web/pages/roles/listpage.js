@@ -24,7 +24,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {first, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -40,168 +39,88 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import {ROLES_FILTER_FILTER} from 'gmp/models/filter.js';
 
-import RoleDialog from './dialog.js';
+import RoleComponent from './component.js';
 import Table, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
-    onNewRoleClick,
-  }, {capabilities}) => {
-  return (
-    <Layout flex box>
-      <HelpIcon
-        page="roles"
-        title={_('Help: Roles')}/>
-      {capabilities.mayCreate('role') &&
-        <NewIcon
-          title={_('New Role')}
-          onClick={onNewRoleClick}/>
-      }
-    </Layout>
-  );
-};
+  onRoleCreateClick,
+}, {capabilities}) => (
+  <Layout flex box>
+    <HelpIcon
+      page="roles"
+      title={_('Help: Roles')}/>
+    {capabilities.mayCreate('role') &&
+      <NewIcon
+        title={_('New Role')}
+        onClick={onRoleCreateClick}/>
+    }
+  </Layout>
+);
 
 ToolBarIcons.propTypes = {
-  onNewRoleClick: PropTypes.func.isRequired,
+  onRoleCreateClick: PropTypes.func.isRequired,
 };
 
 ToolBarIcons.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-class Page extends React.Component {
+const RolesFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
 
-  constructor(...args) {
-    super(...args);
+const RolesPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <RoleComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={RolesFilterDialog}
+      sectionIcon="role.svg"
+      table={Table}
+      title={_('Roles')}
+      toolBarIcons={ToolBarIcons}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onRoleCloneClick={clone}
+      onRoleCreateClick={create}
+      onRoleDeleteClick={delete_func}
+      onRoleDownloadClick={download}
+      onRoleEditClick={edit}
+      onRoleSaveClick={save}
+    />
+  )}
+  </RoleComponent>
+);
 
-    this.handleCreatePermission = this.handleCreatePermission.bind(this);
-    this.handleCreateSuperPermission =
-      this.handleCreateSuperPermission.bind(this);
-    this.handleDeletePermission = this.handleDeletePermission.bind(this);
-    this.openCreateDialog = this.openCreateDialog.bind(this);
-  }
-
-  openCreateDialog(role) {
-    const {gmp} = this.context;
-
-    if (is_defined(role)) {
-      this.dialog.show({
-        id: role.id,
-        name: role.name,
-        comment: role.comment,
-        in_use: role.isInUse(),
-        users: role.users,
-      }, {
-        title: _('Edit Role {{name}}', role),
-      });
-
-      gmp.role.editRoleSettings(role).then(response => {
-        const settings = response.data;
-
-        this.dialog.setValues({
-          permissions: settings.permissions,
-          all_groups: settings.groups,
-          all_permissions: settings.all_permissions,
-          group_id: first(settings.groups).id,
-          permission_name: first(settings.all_permissions).name,
-        });
-      });
-
-    }
-    else {
-      this.dialog.show();
-    }
-
-    gmp.users.getAll().then(users => {
-      this.dialog.setValue('all_users', users);
-    });
-  }
-
-  handleCreateSuperPermission({role_id, group_id}) {
-    const {gmp} = this.context;
-
-    const promise = gmp.permission.create({
-      name: 'Super',
-      resource_type: 'group',
-      resource_id: group_id,
-      role_id,
-      subject_type: 'role',
-    });
-
-    this.loadSettings(promise, role_id);
-  }
-
-  handleCreatePermission({role_id, name}) {
-    const {gmp} = this.context;
-
-    const promise = gmp.permission.create({
-      name,
-      role_id,
-      subject_type: 'role',
-    });
-
-    this.loadSettings(promise, role_id);
-  }
-
-  handleDeletePermission({role_id, permission_id}) {
-    const {gmp} = this.context;
-
-    this.loadSettings(gmp.permission.delete({id: permission_id}), role_id);
-  }
-
-  loadSettings(promise, role_id) {
-    const {gmp} = this.context;
-
-    promise
-      .then(() => gmp.role.editRoleSettings({id: role_id}))
-      .then(response => {
-        const settings = response.data;
-
-        this.dialog.setValues({
-          permissions: settings.permissions,
-          all_permissions: settings.all_permissions,
-          permission_name: first(settings.all_permissions).name,
-        });
-      }).catch(error => this.dialog.setError(error));
-  }
-
-  render() {
-    const {onEntitySave} = this.props;
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onNewRoleClick={this.openCreateDialog}
-          onEditRole={this.openCreateDialog}
-        />
-        <RoleDialog
-          ref={ref => this.dialog = ref}
-          onSave={onEntitySave}
-          onCreatePermission={this.handleCreatePermission}
-          onCreateSuperPermission={this.handleCreateSuperPermission}
-          onDeletePermission={this.handleDeletePermission}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  onEntitySave: PropTypes.func.isRequired,
-};
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
+RolesPage.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('role', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
   filtersFilter: ROLES_FILTER_FILTER,
-  sectionIcon: 'role.svg',
-  table: Table,
-  title: _('Roles'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+})(RolesPage);
 
 // vim: set ts=2 sw=2 tw=80:

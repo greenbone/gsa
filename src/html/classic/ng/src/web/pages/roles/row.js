@@ -43,46 +43,44 @@ import Layout from '../../components/layout/layout.js';
 import TableRow from '../../components/table/row.js';
 
 const IconActions = ({
-    entity,
-    onEditRole,
-    onEntityClone,
-    onEntityDelete,
-    onEntityDownload,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Role')}
-        name="role"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Role')}
-        name="role"
-        entity={entity}
-        onClick={onEditRole}/>
-      <CloneIcon
-        displayName={_('Role')}
-        name="user"
-        entity={entity}
-        title={_('Clone Role')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Role')}
-        onClick={onEntityDownload}
-      />
-    </Layout>
-  );
-};
+  entity,
+  onRoleCloneClick,
+  onRoleDeleteClick,
+  onRoleDownloadClick,
+  onRoleEditClick,
+}) => (
+  <Layout flex align={['center', 'center']}>
+    <TrashIcon
+      displayName={_('Role')}
+      name="role"
+      entity={entity}
+      onClick={onRoleDeleteClick}/>
+    <EditIcon
+      displayName={_('Role')}
+      name="role"
+      entity={entity}
+      onClick={onRoleEditClick}/>
+    <CloneIcon
+      displayName={_('Role')}
+      name="user"
+      entity={entity}
+      title={_('Clone Role')}
+      value={entity}
+      onClick={onRoleCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Role')}
+      onClick={onRoleDownloadClick}
+    />
+  </Layout>
+);
 
 IconActions.propTypes = {
   entity: PropTypes.model,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onEditRole: PropTypes.func,
-  onEntityClone: PropTypes.func,
+  onRoleCloneClick: PropTypes.func,
+  onRoleDeleteClick: PropTypes.func,
+  onRoleDownloadClick: PropTypes.func,
+  onRoleEditClick: PropTypes.func,
 };
 
 const Row = ({
