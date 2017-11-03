@@ -78,7 +78,7 @@ class RoleCommand extends EntityCommand {
       cmd: 'edit_role',
       id,
     }).then(response => {
-      let {capabilities, edit_role} = response.data;
+      const {capabilities, edit_role} = response.data;
 
       edit_role.role = new Role(
       edit_role.commands_response.get_roles_response.role);

@@ -30,7 +30,7 @@ class Permission extends Model {
   static entity_type = 'permission';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (is_defined(elem.resource) && !is_empty(elem.resource._id)) {
       ret.resource = new Model(elem.resource, elem.resource.type);
