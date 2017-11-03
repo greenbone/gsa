@@ -55,7 +55,7 @@ class PermissionsComponent extends React.Component {
 
     if (is_defined(permission)) {
       const subject_type = is_defined(permission.subject) ?
-        permission.subject.type : undefined;
+        permission.subject.entity_type : undefined;
 
       state = {
         id: permission.id,
@@ -66,7 +66,7 @@ class PermissionsComponent extends React.Component {
         resource_id: is_defined(permission.resource) ?
           permission.resource.id : '',
         resource_type: is_defined(permission.resource) ?
-          permission.resource.type : '',
+          permission.resource.entity_type : '',
       };
 
       switch (subject_type) {
