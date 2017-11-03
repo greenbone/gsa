@@ -94,6 +94,7 @@ import ReportDetailsPage from './pages/reports/detailspage.js';
 import ResultsPage from './pages/results/listpage.js';
 import ResultDetailsPage from './pages/results/detailspage.js';
 import RolesPage from './pages/roles/listpage.js';
+import RoleDetailsPage from './pages/roles/detailspage.js';
 import ScanConfigsPage from './pages/scanconfigs/listpage.js';
 import ScannersPage from './pages/scanners/listpage.js';
 import SchedulesPage from './pages/schedules/listpage.js';
@@ -379,6 +380,10 @@ ReactDOM.render(
         <Route
           path="group/:id"
           component={GroupDetailsPage}
+        />
+        <Route
+          path="role/:id"
+          component={RoleDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
