@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {first, is_defined, is_empty} from 'gmp/utils.js';
+import {first, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -84,21 +84,12 @@ class Page extends React.Component {
     const {gmp} = this.context;
 
     if (is_defined(role)) {
-      let users;
-
-      if (is_empty(role.users)) {
-        users = [];
-      }
-      else {
-        users = role.users.split(',').map(user => user.trim());
-      }
-
       this.dialog.show({
         id: role.id,
         name: role.name,
         comment: role.comment,
         in_use: role.isInUse(),
-        users,
+        users: role.users,
       }, {
         title: _('Edit Role {{name}}', role),
       });
