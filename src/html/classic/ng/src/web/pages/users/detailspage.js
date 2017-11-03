@@ -41,7 +41,6 @@ import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
 
 import UserComponent from './component.js';
 import UserDetails from './details.js';
@@ -100,26 +99,6 @@ ToolBarIcons.propTypes = {
   onUserEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  links = true,
-  ...props
-}) => {
-  return (
-    <Layout flex="column">
-      <UserDetails
-        entity={entity}
-        links={links}
-      />
-    </Layout>
-  );
-};
-
-Details.propTypes = {
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-};
-
 const Page = ({
   onChanged,
   onDownloaded,
@@ -148,7 +127,7 @@ const Page = ({
         {...props}
         sectionIcon="user.svg"
         title={_('User')}
-        detailsComponent={Details}
+        detailsComponent={UserDetails}
         toolBarIcons={ToolBarIcons}
         onUserCloneClick={clone}
         onUserCreateClick={create}
