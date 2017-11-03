@@ -68,7 +68,15 @@ export const loader = (name, filter_func) => function(id) {
   });
 };
 
-const permissions_loader = loader('permissions', id => 'resource_uuid=' + id);
+// load permissions assigned to the entity as resource
+export const permissions_resource_loader = loader('permissions',
+  id => 'resource_uuid=' + id);
+
+// load permissions assigned for the entity as subject or resource but not
+// permissions with empty resources
+export const permissions_subject_loader = loader('permissions',
+  id => 'subject_uuid=' + id + ' and not resource_uuid=""' +
+  ' or resource_uuid=' + id);
 
 class EntityContainer extends React.Component {
 
@@ -116,7 +124,9 @@ class EntityContainer extends React.Component {
     const all_loaders = [this.loadEntity];
 
     if (loadPermissions) {
-      all_loaders.push(permissions_loader);
+      // TODO remove me
+      // all entitycontainers should set their desired loaders
+      all_loaders.push(permissions_resource_loader);
     }
 
     if (is_defined(loaders)) {
