@@ -171,7 +171,7 @@ class Trashcan extends React.Component {
   render() {
     const {trash} = this.state;
     if (!is_defined(trash)) {
-      return <Loading/>;
+      return <Loading loading={true}/>;
     }
 
     const contents_table = this.createContentsTable(trash);
