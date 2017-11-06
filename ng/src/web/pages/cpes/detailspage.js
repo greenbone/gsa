@@ -174,7 +174,6 @@ const CpePage = props => (
   <EntityContainer
     {...props}
     name="cpe"
-    loadPermissions={false}
   >
     {({
       onChanged,

@@ -313,7 +313,6 @@ const CvePage = props => (
   <EntityContainer
     {...props}
     name="ovaldef"
-    loadPermissions={false}
   >
     {({
       onChanged,

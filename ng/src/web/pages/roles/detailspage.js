@@ -230,7 +230,6 @@ const RolePage = props => (
   <EntityContainer
     {...props}
     name="role"
-    loadPermissions={false}
     loaders={[
       general_permissions_loader,
       permissions_subject_loader,
