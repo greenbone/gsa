@@ -50,35 +50,35 @@ import TableRow from '../../components/table/row.js';
 import CredentialDownloadIcon from './downloadicon.js';
 
 const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEditCredential,
-  }) => {
+  entity,
+  onCredentialDeleteClick,
+  onCredentialDownloadClick,
+  onCredentialCloneClick,
+  onCredentialEditClick,
+}) => {
   return (
     <IconDivider>
       <TrashIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
-        onClick={onEntityDelete}/>
+        onClick={onCredentialDeleteClick}/>
       <EditIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
-        onClick={onEditCredential}/>
+        onClick={onCredentialEditClick}/>
       <CloneIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
         title={_('Clone Credential')}
         value={entity}
-        onClick={onEntityClone}/>
+        onClick={onCredentialCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Credential')}
-        onClick={onEntityDownload}
+        onClick={onCredentialDownloadClick}
       />
       <CredentialDownloadIcon
         credential={entity}/>
@@ -87,11 +87,11 @@ const Actions = ({
 };
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onEditCredential: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onCredentialCloneClick: PropTypes.func.isRequired,
+  onCredentialDeleteClick: PropTypes.func.isRequired,
+  onCredentialDownloadClick: PropTypes.func.isRequired,
+  onCredentialEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
