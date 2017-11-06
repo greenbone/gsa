@@ -24,11 +24,11 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {shorten} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -39,172 +39,92 @@ import NewIcon from '../../components/icon/newicon.js';
 
 import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-import FilterDialog from './filterdialog.js';
-import ImportPortListDialog from './importdialog.js';
-import PortListDialog from './dialog.js';
-import PortRangeDialog from './portrangedialog.js';
-import Table from './table.js';
+import PortListComponent from './component.js';
+import PortListsFilterDialog from './filterdialog.js';
+import PortListsTable from './table.js';
 
-const ToolBarIcons = ({
-    onNewPortListClick,
-    onImportPortListClick,
-  }, {capabilities}) => {
-  return (
-    <Layout flex box>
-      <HelpIcon
-        page="port_lists"
-        title={_('Help: Port Lists')}/>
-      {capabilities.mayCreate('port_list') &&
-        <NewIcon
-          title={_('New Port List')}
-          onClick={onNewPortListClick}/>
-      }
-      <Icon
-        img="upload.svg"
-        title={_('Import Port List')}
-        onClick={onImportPortListClick}/>
-    </Layout>
-  );
-};
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onPortListCreateClick,
+  onPortListImportClick,
+}) => (
+  <Layout flex box>
+    <HelpIcon
+      page="port_lists"
+      title={_('Help: Port Lists')}/>
+    {capabilities.mayCreate('port_list') &&
+      <NewIcon
+        title={_('New Port List')}
+        onClick={onPortListCreateClick}/>
+    }
+    <Icon
+      img="upload.svg"
+      title={_('Import Port List')}
+      onClick={onPortListImportClick}/>
+  </Layout>
+));
 
 ToolBarIcons.propTypes = {
-  onNewPortListClick: PropTypes.func,
-  onImportPortListClick: PropTypes.func,
+  onPortListCreateClick: PropTypes.func.isRequired,
+  onPortListImportClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+const PortListsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <PortListComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onImported={onChanged}
+    onImportError={onError}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+    import: import_func,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={PortListsFilterDialog}
+      sectionIcon="port_list.svg"
+      table={PortListsTable}
+      title={_('Portlists')}
+      toolBarIcons={ToolBarIcons}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onPortListCloneClick={clone}
+      onPortListCreateClick={create}
+      onPortListDeleteClick={delete_func}
+      onPortListDownloadClick={download}
+      onPortListEditClick={edit}
+      onPortListSaveClick={save}
+      onPortListImportClick={import_func}
+    />
+  )}
+  </PortListComponent>
+);
 
-class Page extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.openImportDialog = this.openImportDialog.bind(this);
-    this.openNewPortRangeDialog = this.openNewPortRangeDialog.bind(this);
-    this.openPortListDialog = this.openPortListDialog.bind(this);
-    this.handleDeletePortRange = this.handleDeletePortRange.bind(this);
-    this.handleImportPortList = this.handleImportPortList.bind(this);
-    this.handleSavePortList = this.handleSavePortList.bind(this);
-    this.handleSavePortRange = this.handleSavePortRange.bind(this);
-  }
-
-  openPortListDialog(entity) {
-    let {entityCommand} = this.props;
-    if (entity) {
-      entityCommand.get(entity).then(response => {
-        let port_list = response.data;
-        this.port_list_dialog.show({
-          id: port_list.id,
-          port_list,
-          name: port_list.name,
-          comment: port_list.comment,
-        }, {
-          title: _('Edit Port List {{name}}', {name: shorten(port_list.name)}),
-        });
-      });
-    }
-    else {
-      this.port_list_dialog.show({}, {
-          title: _('New Port List'),
-      });
-    }
-  }
-
-  openImportDialog() {
-    this.import_dialog.show({
-    });
-  }
-
-  openNewPortRangeDialog(port_list) {
-    this.port_range_dialog.show({
-      id: port_list.id,
-    });
-  }
-
-  handleDeletePortRange(range) {
-    let {entityCommand, onChanged} = this.props;
-
-    entityCommand.deletePortRange(range).then(response => {
-      this.port_list_dialog.setValue('port_list', response.data);
-      onChanged();
-    });
-  }
-
-  handleSavePortList(data) {
-    let {onChanged, entityCommand} = this.props;
-
-    let promise;
-    if (data.port_list) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.create(data);
-    }
-    return promise.then(() => onChanged());
-  }
-
-  handleSavePortRange(data) {
-    let {onChanged, entityCommand} = this.props;
-
-    return entityCommand.createPortRange(data).then(response => {
-      this.port_list_dialog.setValue('port_list', response.data);
-      onChanged();
-    });
-  }
-
-  handleImportPortList(data) {
-    let {onChanged, entityCommand} = this.props;
-    return entityCommand.import(data).then(() => onChanged());
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEditPortList={this.openPortListDialog}
-          onNewPortListClick={this.openPortListDialog}
-          onImportPortListClick={this.openImportDialog}
-        />
-        <PortListDialog
-          ref={ref => this.port_list_dialog = ref}
-          onDeletePortRangeClick={this.handleDeletePortRange}
-          onNewPortRangeClick={this.openNewPortRangeDialog}
-          onSave={this.handleSavePortList}
-        />
-        <ImportPortListDialog
-          ref={ref => this.import_dialog = ref}
-          onSave={this.handleImportPortList}
-        />
-        <PortRangeDialog
-          ref={ref => this.port_range_dialog = ref}
-          onSave={this.handleSavePortRange}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
+PortListsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
-};
-
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  capabilities: PropTypes.capabilities.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('portlist', {
-  filterEditDialog: FilterDialog,
   filtersFilter: PORTLISTS_FILTER_FILTER,
-  sectionIcon: 'port_list.svg',
-  table: Table,
-  title: _('Port Lists'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+})(PortListsPage);
 
 // vim: set ts=2 sw=2 tw=80:
