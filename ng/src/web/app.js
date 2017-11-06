@@ -88,6 +88,7 @@ import OverridesPage from './pages/overrides/listpage.js';
 import OverrideDetailsPage from './pages/overrides/detailspage.js';
 import PermissionsPage from './pages/permissions/listpage.js';
 import PortListsPage from './pages/portlists/listpage.js';
+import PortListDetailsPage from './pages/portlists/detailspage.js';
 import ReportFormatsPage from './pages/reportformats/listpage.js';
 import ReportsPage from './pages/reports/listpage.js';
 import ReportDetailsPage from './pages/reports/detailspage.js';
@@ -384,6 +385,10 @@ ReactDOM.render(
         <Route
           path="role/:id"
           component={RoleDetailsPage}
+        />
+        <Route
+          path="portlist/:id"
+          component={PortListDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
