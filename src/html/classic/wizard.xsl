@@ -141,7 +141,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="cmd" value="run_wizard"/>
     <input type="hidden" name="caller" value="{/envelope/caller}"/>
     <input type="hidden" name="name" value="quick_task"/>
-    <input type="hidden" name="refresh_interval" value="{30}"/>
     <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
     <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
     <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -428,7 +427,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="cmd" value="run_wizard"/>
     <input type="hidden" name="caller" value="{/envelope/caller}"/>
     <input type="hidden" name="name" value="modify_task"/>
-    <input type="hidden" name="refresh_interval" value="{30}"/>
     <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
     <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
     <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
