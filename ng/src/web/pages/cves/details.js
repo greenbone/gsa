@@ -119,11 +119,9 @@ const CveDetails = ({
                 </TableData>
               </TableRow>
             }
-            {Object.entries(cvss_props).map(([name, title]) => {
-              if (!is_defined(entity[name])) {
-                return null;
-              }
-              return (
+            {Object.entries(cvss_props)
+              .filter(([name]) => is_defined(entity[name]))
+              .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>
                     {title}
@@ -132,8 +130,8 @@ const CveDetails = ({
                     {entity[name]}
                   </TableData>
                 </TableRow>
-              );
-            })}
+              )
+            )}
           </TableBody>
         </InfoTable>
       </DetailsBlock>
