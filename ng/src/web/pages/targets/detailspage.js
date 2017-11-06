@@ -47,7 +47,9 @@ import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
-import EntityContainer from '../../entity/container.js';
+import EntityContainer, {
+  permissions_resource_loader,
+} from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
@@ -180,6 +182,7 @@ const Page = ({
         <EntityPage
           {...props}
           detailsComponent={Details}
+          permissionsComponent={TargetPermissions}
           sectionIcon="target.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Target')}
@@ -223,7 +226,9 @@ const TargetPage = props => (
   <EntityContainer
     {...props}
     name="target"
-    permissionsComponent={TargetPermissions}
+    loaders={[
+      permissions_resource_loader,
+    ]}
   >
     {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>

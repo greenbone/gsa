@@ -28,7 +28,9 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
-import EntityContainer from '../../entity/container.js';
+import EntityContainer, {
+  permissions_resource_loader,
+} from '../../entity/container.js';
 import {goto_list} from '../../entity/component.js';
 
 import Badge from '../../components/badge/badge.js';
@@ -222,6 +224,9 @@ const HostPage = props => (
     {...props}
     name="operatingsystem"
     resourceType="os"
+    loaders={[
+      permissions_resource_loader,
+    ]}
   >
     {cprops => (
       <Page {...props} {...cprops} />
