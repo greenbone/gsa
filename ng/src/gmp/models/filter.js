@@ -636,6 +636,7 @@ class Filter extends Model {
 
 export const ALL_FILTER = new Filter().all();
 export const ASSETS_FILTER_FILTER = Filter.fromString('type=asset');
+export const CREDENTIALS_FILTER_FILTER = Filter.fromString('type=credential');
 export const GROUPS_FILTER_FILTER = Filter.fromString('type=group');
 export const NOTES_FILTER_FILTER = Filter.fromString('type=note');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
