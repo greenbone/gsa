@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -44,18 +44,18 @@ import Section from '../../components/section/section.js';
 import PortRangesTable from './portrangestable.js';
 
 const PortListsDialog = ({
-    name,
-    comment,
-    from_file,
-    port_range,
-    port_list,
-    onDeletePortRangeClick,
-    onNewPortRangeClick,
-    onValueChange,
-  }) => {
-  let is_edit = is_defined(port_list);
+  name,
+  comment,
+  from_file,
+  port_range,
+  port_list,
+  onDeletePortRangeClick,
+  onNewPortRangeClick,
+  onValueChange,
+}) => {
+  const is_edit = is_defined(port_list);
 
-  let newrangeicon = (
+  const newrangeicon = (
     <div>
       <NewIcon
         value={port_list}
@@ -105,7 +105,8 @@ const PortListsDialog = ({
           </Layout>
 
           <Layout flex box>
-            <Radio title={_('From file')}
+            <Radio
+              title={_('From file')}
               name="from_file"
               value="1"
               onChange={onValueChange}
@@ -130,9 +131,9 @@ const PortListsDialog = ({
 };
 
 PortListsDialog.propTypes = {
-  name: PropTypes.string,
   comment: PropTypes.string,
   from_file: PropTypes.yesno,
+  name: PropTypes.string,
   port_list: PropTypes.model,
   port_range: PropTypes.string,
   onDeletePortRangeClick: PropTypes.func,

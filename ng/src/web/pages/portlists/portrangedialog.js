@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
+import {parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -36,50 +37,50 @@ import TextField from '../../components/form/textfield.js';
 import Layout from '../../components/layout/layout.js';
 
 const PortRangeDialog = ({
-    port_range_end,
-    port_range_start,
-    port_type,
-    onValueChange,
-  }) => {
-  return (
-    <Layout flex="column">
-      <FormGroup title={_('Start')}>
-        <TextField
-          name="port_range_start"
-          value={port_range_start}
-          grow="1"
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+  port_range_end,
+  port_range_start,
+  port_type,
+  onValueChange,
+}) => (
+  <Layout flex="column">
+    <FormGroup title={_('Start')}>
+      <TextField
+        name="port_range_start"
+        value={port_range_start}
+        grow="1"
+        size="30"
+        convert={parse_int}
+        onChange={onValueChange}
+        maxLength="80"/>
+    </FormGroup>
 
-      <FormGroup title={_('End')}>
-        <TextField
-          name="port_range_end"
-          value={port_range_end}
-          grow="1"
-          size="30"
-          maxLength="80"
-          onChange={onValueChange}/>
-      </FormGroup>
+    <FormGroup title={_('End')}>
+      <TextField
+        name="port_range_end"
+        value={port_range_end}
+        grow="1"
+        size="30"
+        maxLength="80"
+        convert={parse_int}
+        onChange={onValueChange}/>
+    </FormGroup>
 
-      <FormGroup title={_('Protocol')} flex>
-        <Radio
-          title={_('TCP')}
-          name="port_type"
-          value="tcp"
-          onChange={onValueChange}
-          checked={port_type === 'tcp'}/>
-        <Radio
-          title={_('UDP')}
-          name="port_type"
-          value="udp"
-          onChange={onValueChange}
-          checked={port_type === 'udp'}/>
-      </FormGroup>
-    </Layout>
-  );
-};
+    <FormGroup title={_('Protocol')} flex>
+      <Radio
+        title={_('TCP')}
+        name="port_type"
+        value="tcp"
+        onChange={onValueChange}
+        checked={port_type === 'tcp'}/>
+      <Radio
+        title={_('UDP')}
+        name="port_type"
+        value="udp"
+        onChange={onValueChange}
+        checked={port_type === 'udp'}/>
+    </FormGroup>
+  </Layout>
+);
 
 PortRangeDialog.propTypes = {
   port_range_end: PropTypes.number,
