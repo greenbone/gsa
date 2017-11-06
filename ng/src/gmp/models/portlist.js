@@ -27,6 +27,12 @@ import {is_defined, map} from '../utils.js';
 
 class PortRange extends Model {
   static entity_type = 'port_range';
+
+  parseProperties(elem) {
+    const ret = super.parseProperties(elem);
+    ret.protocol_type = elem.type;
+    return ret;
+  }
 }
 
 class PortList extends Model {
