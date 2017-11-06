@@ -37,6 +37,8 @@ const types = {
   ovaldef: 'info',
   certbundadv: 'info',
   certbundadvs: 'info',
+  portlist: 'port_list',
+  portlists: 'port_list',
 };
 
 const check_type = type => {
