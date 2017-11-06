@@ -27,7 +27,9 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
-import EntityContainer from '../../entity/container.js';
+import EntityContainer, {
+  permissions_subject_loader,
+} from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
@@ -153,6 +155,9 @@ const GroupPage = props => (
   <EntityContainer
     {...props}
     name="group"
+    loaders={[
+      permissions_subject_loader,
+    ]}
   >
     {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>
