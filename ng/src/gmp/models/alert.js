@@ -27,6 +27,10 @@ import {parse_yesno, YES_VALUE} from '../parser.js';
 
 import Model from '../model.js';
 
+export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
+export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
+export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
+
 const create_values = data => {
   const values = {value: data.__text};
   const {__text, name, ...other} = data;

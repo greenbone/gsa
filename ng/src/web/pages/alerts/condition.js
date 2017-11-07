@@ -25,6 +25,11 @@ import _ from 'gmp/locale.js';
 
 import {is_defined, parse_int} from 'gmp/utils.js';
 
+import {
+  EVENT_TYPE_UPDATED_SECINFO,
+  EVENT_TYPE_NEW_SECINFO,
+} from 'gmp/models/alert.js';
+
 const Condition = ({
   condition,
   event,
@@ -34,8 +39,8 @@ const Condition = ({
     let type;
 
     // FIXME this is not translateable
-    if (event.type === 'New SecInfo arrived' ||
-      event.type === 'Updated SecInfo arrived') {
+    if (event.type === EVENT_TYPE_NEW_SECINFO ||
+      event.type === EVENT_TYPE_UPDATED_SECINFO) {
       type = 'NVT';
     }
     else {

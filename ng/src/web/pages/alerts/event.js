@@ -26,21 +26,26 @@ import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import {secinfo_type} from 'gmp/models/secinfo.js';
+import {
+  EVENT_TYPE_UPDATED_SECINFO,
+  EVENT_TYPE_NEW_SECINFO,
+  EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+} from 'gmp/models/alert.js';
 
 const Event = ({
   event,
 }) => {
-  if (event.type === 'New SecInfo arrived') {
+  if (event.type === EVENT_TYPE_NEW_SECINFO) {
     const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
-  if (event.type === 'Updated SecInfo arrived') {
+  if (event.type === EVENT_TYPE_UPDATED_SECINFO) {
     const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
-    return _('New {{secinfo_type}} arrived', {secinfo_type: type});
+    return _('Updated {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
-  if (event.type === 'Task run status changed' &&
+  if (event.type === EVENT_TYPE_TASK_RUN_STATUS_CHANGED &&
     is_defined(event.data.status)) {
     return _('Task run status changed to {{status}}',
       {status: event.data.status.value});
