@@ -37,6 +37,13 @@ export const CONDITION_TYPE_SEVERITY_AT_LEAST = 'Severity at least';
 
 export const CONDITION_DIRECTION_DECREASED = 'decreased';
 
+export const METHOD_TYPE_SCP = 'SCP';
+export const METHOD_TYPE_SEND = 'Send';
+export const METHOD_TYPE_SNMP = 'SNMP';
+export const METHOD_TYPE_SYSLOG = 'Syslog';
+export const METHOD_TYPE_EMAIL = 'Email';
+export const METHOD_TYPE_START_TASK = 'Start Task';
+
 const create_values = data => {
   const values = {value: data.__text};
   const {__text, name, ...other} = data;

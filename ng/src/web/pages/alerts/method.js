@@ -24,11 +24,20 @@ import _ from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils.js';
 
+import {
+  METHOD_TYPE_SCP,
+  METHOD_TYPE_SEND,
+  METHOD_TYPE_SNMP,
+  METHOD_TYPE_SYSLOG,
+  METHOD_TYPE_EMAIL,
+  METHOD_TYPE_START_TASK,
+} from 'gmp/models/alert.js';
+
 const Method = ({
   method,
 }) => {
   let url = '';
-  if (method.type === 'SCP') {
+  if (method.type === METHOD_TYPE_SCP) {
     const {scp_credential} = method.data;
 
     if (is_defined(scp_credential) && is_defined(scp_credential.credential)) {
@@ -49,24 +58,25 @@ const Method = ({
     return _('SCP to {{url}}', {url});
   }
 
-  if (method.type === 'Send') {
+  if (method.type === METHOD_TYPE_SEND) {
     url += method.data.send_host.value + ':' + method.data.send_port.value;
     return _('SCP to {{url}}', {url});
   }
 
-  if (method.type === 'Syslog' && method.data.submethod.value === 'SNMP') {
+  if (method.type === METHOD_TYPE_SYSLOG &&
+    method.data.submethod.value === METHOD_TYPE_SNMP) {
     return 'SNMP';
   }
 
-  if (method.type === 'SNMP') {
+  if (method.type === METHOD_TYPE_SNMP) {
     return _('SNMP to {{agent}}', {agent: method.data.snmp_agent.value});
   }
 
-  if (method.type === 'Email' && is_defined(method.data.to_address)) {
+  if (method.type === METHOD_TYPE_EMAIL && is_defined(method.data.to_address)) {
     return _('Email to {{address}}', {address: method.data.to_address.value});
   }
 
-  if (method.type === 'Start Task') {
+  if (method.type === METHOD_TYPE_START_TASK) {
     // FIXME task name ist missing
     // in xslt the tasks have been added to the response
     // we should improve the backend to return the name for the task id here too
