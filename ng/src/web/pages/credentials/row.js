@@ -102,11 +102,11 @@ const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
-      legacy
       entity={entity}
       link={links}
       type="credential"
       displayName={_('Credential')}
+      onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData flex>
       <Divider>
@@ -132,6 +132,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
