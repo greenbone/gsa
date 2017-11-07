@@ -84,6 +84,7 @@ class AlertComponent extends React.Component {
     super(...args);
 
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
+    this.handleTestAlert = this.handleTestAlert.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
@@ -358,6 +359,21 @@ class AlertComponent extends React.Component {
     }
   }
 
+  handleTestAlert(alert) {
+    const {gmp} = this.props;
+    const {onTestSuccess, onTestError} = this.props;
+
+    gmp.alert.test(alert).then(() => {
+      if (is_defined(onTestSuccess)) {
+        onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
+      }
+    }, () => {
+      if (is_defined(onTestError)) {
+        onTestError(_('Testing the alert {{name}} failed.', alert));
+      }
+    });
+  }
+
   render() {
     const {
       children,
@@ -397,6 +413,7 @@ class AlertComponent extends React.Component {
               ...other,
               create: this.openAlertDialog,
               edit: this.openAlertDialog,
+              test: this.handleTestAlert,
             })}
             <AlertDialog
               ref={ref => this.alert_dialog = ref}
@@ -430,6 +447,8 @@ AlertComponent.propTypes = {
   onError: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  onTestError: PropTypes.func,
+  onTestSuccess: PropTypes.func,
 };
 
 export default withGmp(AlertComponent);
