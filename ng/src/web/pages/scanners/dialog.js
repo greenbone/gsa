@@ -289,7 +289,7 @@ ScannerDialog.propTypes = {
   host: PropTypes.string,
   port: PropTypes.string,
   scanner: PropTypes.model,
-  type: PropTypes.oneOf(scanner_types),
+  type: PropTypes.oneOf(scanner_types).isRequired,
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),
