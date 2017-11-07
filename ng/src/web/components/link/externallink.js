@@ -31,7 +31,6 @@ import {withTextOnly} from './link.js';
 
 const ExternalLink = ({
   to,
-  href = to,
   className,
   children,
   ...props
@@ -42,7 +41,7 @@ const ExternalLink = ({
   return (
     <a
       {...props}
-      href={href}
+      href={to}
       className={className}
       rel="noopener noreferrer"
       target="_blank">
@@ -53,7 +52,6 @@ const ExternalLink = ({
 
 ExternalLink.propTypes = {
   className: PropTypes.string,
-  href: PropTypes.string, // use to prop instead
   to: PropTypes.string.isRequired,
 };
 

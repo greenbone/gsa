@@ -42,7 +42,7 @@ const GreenboneFooter = () => {
   return (
     <Footer>
       Greenbone Security Assistant (GSA) Copyright 2009-2017 by
-      Greenbone Networks GmbH, <Link href="http://www.greenbone.net">
+      Greenbone Networks GmbH, <Link to="http://www.greenbone.net">
         www.greenbone.net</Link>
     </Footer>
   );
