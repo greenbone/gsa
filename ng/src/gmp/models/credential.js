@@ -71,12 +71,22 @@ export const esxi_credential_filter = credential =>
 export const snmp_credential_filter = credential =>
   credential.credential_type === SNMP_CREDENTIAL_TYPE;
 
+export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
+export const SNMP_AUTH_ALGORITHM_SHA1 = 'sha1';
+
+export const SNMP_PRIVACY_ALOGRITHM_NONE = '';
+export const SNMP_PRIVACY_ALGORITHM_AES = 'aes';
+export const SNMP_PRIVACY_ALGORITHM_DES = 'des';
+
+export const CERTIFICATE_STATUS_INACTIVE = 'inactive';
+export const CERTIFICATE_STATUS_EXPIRED = 'expired';
+
 class Credential extends Model {
 
   static entity_type = 'credential';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (is_defined(ret.certificate_info)) {
       ret.certificate_info.activation_time = moment(
