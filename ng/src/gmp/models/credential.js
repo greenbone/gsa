@@ -25,7 +25,7 @@ import moment from 'moment';
 
 import Model from '../model.js';
 
-import {is_defined} from '../utils.js';
+import {is_defined, map} from '../utils.js';
 
 import {parse_yesno, NO_VALUE} from '../parser.js';
 
@@ -100,6 +100,19 @@ class Credential extends Model {
     ret.credential_type = elem.type;
 
     ret.allow_insecure = parse_yesno(elem.allow_insecure);
+
+    if (is_defined(elem.targets)) {
+      ret.targets = map(elem.targets.target,
+        target => new Model(target, 'target'));
+    }
+    else {
+      ret.targets = [];
+    }
+
+    if (is_defined(elem.scanners)) {
+      ret.scanners = map(elem.scanners.scanner,
+        scanner => new Model(scanner, 'scanner'));
+    }
 
     return ret;
   }
