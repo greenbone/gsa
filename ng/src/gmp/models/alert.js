@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_object, for_each} from '../utils.js';
+import {is_defined, is_object, for_each, map} from '../utils.js';
 
 import {parse_yesno, YES_VALUE} from '../parser.js';
 
@@ -76,6 +76,14 @@ class Alert extends Model {
 
     if (is_defined(ret.filter)) {
       ret.filter = new Model(ret.filter, 'filter');
+    }
+
+    if (is_defined(elem.tasks)) {
+      ret.tasks = map(elem.tasks.task,
+        task => new Model(task, 'task'));
+    }
+    else {
+      ret.tasks = [];
     }
 
     ret.active = parse_yesno(elem.active);
