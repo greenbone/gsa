@@ -31,6 +31,12 @@ export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
 export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
 
+export const CONDITION_TYPE_FILTER_COUNT_AT_LEAST = 'Filter count at least';
+export const CONDITION_TYPE_FILTER_COUNT_CHANGED = 'Filter count changed';
+export const CONDITION_TYPE_SEVERITY_AT_LEAST = 'Severity at least';
+
+export const CONDITION_DIRECTION_DECREASED = 'decreased';
+
 const create_values = data => {
   const values = {value: data.__text};
   const {__text, name, ...other} = data;

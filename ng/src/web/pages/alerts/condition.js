@@ -28,13 +28,17 @@ import {is_defined, parse_int} from 'gmp/utils.js';
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
+  CONDITION_TYPE_FILTER_COUNT_AT_LEAST,
+  CONDITION_TYPE_FILTER_COUNT_CHANGED,
+  CONDITION_TYPE_SEVERITY_AT_LEAST,
+  CONDITION_DIRECTION_DECREASED,
 } from 'gmp/models/alert.js';
 
 const Condition = ({
   condition,
   event,
 }) => {
-  if (condition.type === 'Filter count at least') {
+  if (condition.type === CONDITION_TYPE_FILTER_COUNT_AT_LEAST) {
     const count = parse_int(condition.data.count.value);
     let type;
 
@@ -53,9 +57,10 @@ const Condition = ({
     return _('Filter matches at least {{count}} {{type}}', {count, type});
   }
 
-  if (condition.type === 'Filter count changed') {
+  if (condition.type === CONDITION_TYPE_FILTER_COUNT_CHANGED) {
     const count = parse_int(condition.data.count.value);
-    const direction = condition.data.direction.value === 'decreased' ?
+    const direction =
+      condition.data.direction.value === CONDITION_DIRECTION_DECREASED ?
       'fewer' : 'more';
 
     // FIXME this is not translateable
@@ -67,7 +72,7 @@ const Condition = ({
       });
   }
 
-  if (condition.type === 'Severity at least' &&
+  if (condition.type === CONDITION_TYPE_SEVERITY_AT_LEAST &&
     is_defined(condition.data.severity)) {
     return _('Severity at least {{severity}}',
       {severity: condition.data.severity.value});
@@ -75,7 +80,7 @@ const Condition = ({
 
   if (condition.type === 'Severity changed') {
     if (is_defined(condition.data.direction)) {
-      if (condition.data.direction.value === 'decreased') {
+      if (condition.data.direction.value === CONDITION_DIRECTION_DECREASED) {
         return _('Severity level decreased');
       }
       return _('Severity level increased');
