@@ -100,12 +100,12 @@ Actions.propTypes = {
 
 const render_event = event => {
   if (event.type === 'New SecInfo arrived') {
-    let type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
+    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
   if (event.type === 'Updated SecInfo arrived') {
-    let type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
+    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
@@ -120,7 +120,7 @@ const render_event = event => {
 const render_method = method => {
   let url = '';
   if (method.type === 'SCP') {
-    let scp_credential = method.data.scp_credential;
+    const {scp_credential} = method.data;
 
     if (is_defined(scp_credential) && is_defined(scp_credential.credential)) {
       url += scp_credential.credential.login;
@@ -169,7 +169,7 @@ const render_method = method => {
 
 const render_condition = (condition, event) => {
   if (condition.type === 'Filter count at least') {
-    let count = parse_int(condition.data.count.value);
+    const count = parse_int(condition.data.count.value);
     let type;
 
     // FIXME this is not translateable
@@ -189,8 +189,8 @@ const render_condition = (condition, event) => {
   }
 
   if (condition.type === 'Filter count changed') {
-    let count = parse_int(condition.data.count.value);
-    let direction = condition.data.direction.value === 'decreased' ?
+    const count = parse_int(condition.data.count.value);
+    const direction = condition.data.direction.value === 'decreased' ?
       'fewer' : 'more';
 
     // FIXME this is not translateable
@@ -237,13 +237,13 @@ const render_filter = (filter, caps, links = true) => {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
+  actions,
+  entity,
+  links = true,
+  ...props
+}, {
+  capabilities,
+}) => {
   return (
     <TableRow>
       <EntityNameTableData
