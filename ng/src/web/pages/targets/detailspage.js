@@ -183,15 +183,15 @@ const Page = ({
           sectionIcon="target.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Target')}
-          onChanged={onChanged}
-          onDownloaded={onDownloaded}
-          onError={onError}
           onTargetCloneClick={clone}
           onTargetCreateClick={create}
           onTargetDeleteClick={delete_func}
           onTargetDownloadClick={download}
           onTargetEditClick={edit}
           onTargetSaveClick={save}
+          onPermissionChanged={onChanged}
+          onPermissionDownloaded={onDownloaded}
+          onPermissionDownloadError={onError}
         />
       )}
     </TargetComponent>
