@@ -64,11 +64,11 @@ const scanner_types = [
 ];
 
 const client_cert_credentials_filter = credential => {
-  return credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+  return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 };
 
 const username_password_credentials_filter = credential => {
-  return credential.type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  return credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 };
 
 const filter_credentials = (credentials, type) => {
