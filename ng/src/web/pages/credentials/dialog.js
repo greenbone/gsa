@@ -82,7 +82,7 @@ class CredentialsDialog extends React.Component {
   }
 
   render() {
-    let {
+    const {
       allow_insecure,
       auth_algorithm,
       autogenerate,
@@ -104,13 +104,13 @@ class CredentialsDialog extends React.Component {
       onValueChange,
     } = this.props;
 
-    let type_opts = map(types, type => {
+    const type_opts = map(types, type => {
       return (
         <option value={type} key={type}>{type_names[type]}</option>
       );
     });
 
-    let is_edit = is_defined(credential);
+    const is_edit = is_defined(credential);
 
     return (
       <Layout flex="column">
@@ -151,7 +151,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Auto-generate')}
+        <FormGroup
+          title={_('Auto-generate')}
           condition={(base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
             base === USERNAME_SSH_KEY_CREDENTIAL_TYPE) && !is_edit}>
           <YesNoRadio
@@ -160,7 +161,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('SNMP Community')}
+        <FormGroup
+          title={_('SNMP Community')}
           condition={base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
@@ -177,7 +179,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Username')}
+        <FormGroup
+          title={_('Username')}
           flex
           condition={
             base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
@@ -190,7 +193,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Password')}
+        <FormGroup
+          title={_('Password')}
           condition={base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
               base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
@@ -210,7 +214,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Passphrase')}
+        <FormGroup
+          title={_('Passphrase')}
           condition={base === USERNAME_SSH_KEY_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
@@ -229,7 +234,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Privacy Password')}
+        <FormGroup
+          title={_('Privacy Password')}
           condition={base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
@@ -247,14 +253,16 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Certificate')}
+        <FormGroup
+          title={_('Certificate')}
           condition={base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE}>
           <FileField
             name="certificate"
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Private Key')}
+        <FormGroup
+          title={_('Private Key')}
           condition={
             base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
             base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE
@@ -264,7 +272,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Auth Algorithm')}
+        <FormGroup
+          title={_('Auth Algorithm')}
           condition={base === SNMP_CREDENTIAL_TYPE}>
           <Radio
             value={SNMP_AUTH_ALGORITHM_MD5}
