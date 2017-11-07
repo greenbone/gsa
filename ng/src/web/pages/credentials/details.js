@@ -38,6 +38,8 @@ import Footnote from '../../components/footnote/footnote.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
+import DetailsLink from '../../components/link/detailslink.js';
+
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
@@ -55,6 +57,8 @@ const CredentialDetails = ({
     privacy = {
       algorithm: SNMP_PRIVACY_ALOGRITHM_NONE,
     },
+    targets = [],
+    scanners = [],
   } = entity;
   return (
     <Layout
@@ -127,6 +131,48 @@ const CredentialDetails = ({
                   _('None') :
                   privacy.algorithm
                 }
+              </TableData>
+            </TableRow>
+          }
+
+          {targets.length > 0 &&
+            <TableRow>
+              <TableData>
+                {_('Targets using this Credential')}
+              </TableData>
+              <TableData>
+                <Divider wrap>
+                  {targets.map(target => (
+                    <DetailsLink
+                      key={target.id}
+                      id={target.id}
+                      type="target"
+                    >
+                      {target.name}
+                    </DetailsLink>
+                  ))}
+                </Divider>
+              </TableData>
+            </TableRow>
+          }
+
+          {scanners.length > 0 &&
+            <TableRow>
+              <TableData>
+                {_('Sanners using this Credential')}
+              </TableData>
+              <TableData>
+                <Divider wrap>
+                  {scanners.map(scanner => (
+                    <DetailsLink
+                      key={scanner.id}
+                      id={scanner.id}
+                      type="scanner"
+                    >
+                      {scanner.name}
+                    </DetailsLink>
+                  ))}
+                </Divider>
               </TableData>
             </TableRow>
           }
