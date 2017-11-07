@@ -27,13 +27,12 @@ import {parse_yesno, YES_VALUE} from '../parser.js';
 
 import Model from '../model.js';
 
-
 const create_values = data => {
-  let values = {value: data.__text};
-  let {__text, name, ...other} = data;
+  const values = {value: data.__text};
+  const {__text, name, ...other} = data;
 
-  for (let key of Object.keys(other)) {
-    let obj = data[key];
+  for (const key of Object.keys(other)) {
+    const obj = data[key];
     if (is_defined(obj._id)) {
       obj.id = obj._id;
       delete obj._id;
@@ -49,13 +48,13 @@ class Alert extends Model {
   static entity_type = 'alert';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     const types = ['condition', 'method', 'event'];
 
     for (const type of types) {
       if (is_object(ret[type])) {
-        let data = {};
+        const data = {};
 
         for_each(ret[type].data, value => {
           data[value.name] = create_values(value);
