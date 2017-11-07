@@ -50,53 +50,52 @@ import TableRow from '../../components/table/row.js';
 import {secinfo_type} from 'gmp/models/secinfo.js';
 
 const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-    onTestAlert,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Alert')}
-        name="alert"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Alert')}
-        name="alert"
-        entity={entity}
-        onClick={onEntityEdit}/>
-      <CloneIcon
-        displayName={_('Alert')}
-        name="alert"
-        entity={entity}
-        title={_('Clone Alert')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Alert')}
-        onClick={onEntityDownload}
-      />
-      <Icon img="start.svg"
-        value={entity}
-        title={_('Test Alert')}
-        onClick={onTestAlert}
-      />
-    </Layout>
-  );
-};
+  entity,
+  onAlertDeleteClick,
+  onAlertDownloadClick,
+  onAlertCloneClick,
+  onAlertEditClick,
+  onAlertTestClick,
+}) => (
+  <Layout flex align={['center', 'center']}>
+    <TrashIcon
+      displayName={_('Alert')}
+      name="alert"
+      entity={entity}
+      onClick={onAlertDeleteClick}/>
+    <EditIcon
+      displayName={_('Alert')}
+      name="alert"
+      entity={entity}
+      onClick={onAlertEditClick}/>
+    <CloneIcon
+      displayName={_('Alert')}
+      name="alert"
+      entity={entity}
+      title={_('Clone Alert')}
+      value={entity}
+      onClick={onAlertCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Alert')}
+      onClick={onAlertDownloadClick}
+    />
+    <Icon
+      img="start.svg"
+      value={entity}
+      title={_('Test Alert')}
+      onClick={onAlertTestClick}
+    />
+  </Layout>
+);
 
 Actions.propTypes = {
   entity: PropTypes.model,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onTestAlert: PropTypes.func,
+  onAlertCloneClick: PropTypes.func.isRequired,
+  onAlertDeleteClick: PropTypes.func.isRequired,
+  onAlertDownloadClick: PropTypes.func.isRequired,
+  onAlertEditClick: PropTypes.func.isRequired,
+  onAlertTestClick: PropTypes.func.isRequired,
 };
 
 const render_event = event => {

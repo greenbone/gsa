@@ -24,10 +24,12 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
 
-import Layout from '../../components/layout/layout.js';
+import {ALERTS_FILTER_FILTER} from 'gmp/models/filter.js';
+
+import IconDivider from '../../components/layout/icondivider.js';
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -37,100 +39,94 @@ import NewIcon from '../../components/icon/newicon.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import AlertDialog from './dialogcontainer.js';
-import Table, {SORT_FIELDS} from './table.js';
+import AlertComponent from './component.js';
+import AlertTable, {SORT_FIELDS} from './table.js';
 
-const log = logger.getLogger('web.alerts.alertspage');
-
-const ToolBarIcons = ({
-  onNewAlertClick,
-}, {capabilities}) => {
-  return (
-    <Layout flex>
-      <HelpIcon
-        page="alerts"
-        title={_('Help: Alerts')}/>
-      {capabilities.mayCreate('alert') &&
-        <NewIcon
-          title={_('New Alert')}
-          onClick={onNewAlertClick}/>
-      }
-    </Layout>
-  );
-};
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onAlertCreateClick,
+}) => (
+  <IconDivider>
+    <HelpIcon
+      page="alerts"
+      title={_('Help: Alerts')}/>
+    {capabilities.mayCreate('alert') &&
+      <NewIcon
+        title={_('New Alert')}
+        onClick={onAlertCreateClick}/>
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
-  onNewAlertClick: PropTypes.func,
-};
-
-ToolBarIcons.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
+  onAlertCreateClick: PropTypes.func.isRequired,
 };
 
-class Page extends React.Component {
+const AlertFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
 
-  constructor(...args) {
-    super(...args);
+const AlertsPage = ({
+  showError,
+  showSuccess,
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <AlertComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onTestSuccess={showSuccess}
+    onTestError={showError}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+    test,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={AlertFilterDialog}
+      sectionIcon="alert.svg"
+      table={AlertTable}
+      title={_('Alerts')}
+      toolBarIcons={ToolBarIcons}
+      onAlertCloneClick={clone}
+      onAlertCreateClick={create}
+      onAlertDeleteClick={delete_func}
+      onAlertDownloadClick={download}
+      onAlertEditClick={edit}
+      onAlertTestClick={test}
+      onAlertSaveClick={save}
+      onPermissionChanged={onChanged}
+      onPermissionDownloaded={onDownloaded}
+      onPermissionDownloadError={onError}
+    />
+  )}
+  </AlertComponent>
+);
 
-    this.handleSaveAlert = this.handleSaveAlert.bind(this);
-    this.handleTestAlert = this.handleTestAlert.bind(this);
-    this.openAlertDialog = this.openAlertDialog.bind(this);
-  }
-
-  handleSaveAlert(alert) {
-    const {onChanged} = this.props;
-    onChanged();
-  }
-
-  handleTestAlert(alert) {
-    const {entityCommand, showSuccess, showError} = this.props;
-
-    entityCommand.test(alert).then(response => {
-      showSuccess(_('Testing the alert was successful.'));
-      log.debug('testing success', response.data);
-    }, rejection => {
-      showError(_('Testing the alert bbb failed.'));
-      log.debug('testing failure', rejection);
-    });
-  }
-
-  openAlertDialog(alert) {
-    this.alert_dialog.show({alert});
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEntityEdit={this.openAlertDialog}
-          onTestAlert={this.handleTestAlert}
-          onNewAlertClick={this.openAlertDialog}
-        />
-        <AlertDialog
-          ref={ref => this.alert_dialog = ref}
-          onSave={this.handleSaveAlert}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
+AlertsPage.propTypes = {
   showError: PropTypes.func.isRequired,
   showSuccess: PropTypes.func.isRequired,
-  onChanged: PropTypes.func,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('alert', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
-  sectionIcon: 'alert.svg',
-  table: Table,
-  title: _('Alerts'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+  filtersFilter: ALERTS_FILTER_FILTER,
+})(AlertsPage);
 
 // vim: set ts=2 sw=2 tw=80:
