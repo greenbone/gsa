@@ -24,9 +24,16 @@
 import Model from '../model.js';
 
 import {is_defined, map} from '../utils.js';
+import {parse_int} from '../parser.js';
 
 class PortRange extends Model {
   static entity_type = 'port_range';
+
+  parseProperties(elem) {
+    const ret = super.parseProperties(elem);
+    ret.protocol_type = elem.type;
+    return ret;
+  }
 }
 
 class PortList extends Model {
@@ -34,12 +41,38 @@ class PortList extends Model {
   static entity_type = 'port_list';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
-    let ranges = is_defined(ret.port_ranges) ? ret.port_ranges.port_range : [];
+    const ret = super.parseProperties(elem);
+    const ranges = is_defined(ret.port_ranges) ?
+      ret.port_ranges.port_range : [];
+
     ret.port_ranges = map(ranges, range => {
       range.port_list_id = ret.id;
       return new PortRange(range);
     });
+
+    const {port_count} = elem;
+    if (is_defined(port_count)) {
+      ret.port_count = {
+        all: is_defined(port_count.all) ? parse_int(port_count.all) : 0,
+        tcp: is_defined(port_count.tcp) ? parse_int(port_count.tcp) : 0,
+        udp: is_defined(port_count.udp) ? parse_int(port_count.udp) : 0,
+      };
+    }
+    else {
+      ret.port_count = {
+        all: 0,
+        tcp: 0,
+        udp: 0,
+      };
+    }
+
+    if (is_defined(elem.targets) && is_defined(elem.targets.target)) {
+      ret.targets = map(elem.targets.target, target =>
+        new Model(target, 'target'));
+    }
+    else {
+      ret.targets = [];
+    }
     return ret;
   }
 }

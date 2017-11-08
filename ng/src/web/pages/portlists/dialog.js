@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -37,89 +37,25 @@ import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
 import TextField from '../../components/form/textfield.js';
 
-import DeleteIcon from '../../components/icon/deleteicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import Section from '../../components/section/section.js';
 
-import Table from '../../components/table/table.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
-
-const PortRangeTable = ({
-    port_ranges,
-    onDeleteClick,
-  }) => {
-  if (!is_defined(port_ranges) ||  port_ranges.lenth === 0) {
-    return null;
-  }
-  let header = (
-    <TableHeader>
-      <TableRow>
-        <TableHead>
-          {_('Start')}
-        </TableHead>
-        <TableHead>
-          {_('End')}
-        </TableHead>
-        <TableHead>
-          {_('Protocol')}
-        </TableHead>
-        <TableHead
-          width="3em">
-          {_('Actions')}
-        </TableHead>
-      </TableRow>
-    </TableHeader>
-  );
-  return (
-    <Table header={header}>
-      <TableBody>
-        {port_ranges.map(range => (
-          <TableRow key={range.id}>
-            <TableData>
-              {range.start}
-            </TableData>
-            <TableData>
-              {range.end}
-            </TableData>
-            <TableData>
-              {range.type}
-            </TableData>
-            <TableData flex align="center">
-              <DeleteIcon
-                title={_('Delete Port Range')}
-                value={range}
-                onClick={onDeleteClick}/>
-            </TableData>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
-
-PortRangeTable.propTypes = {
-  port_ranges: PropTypes.arrayLike,
-  onDeleteClick: PropTypes.func,
-};
+import PortRangesTable from './portrangestable.js';
 
 const PortListsDialog = ({
-    name,
-    comment,
-    from_file,
-    port_range,
-    port_list,
-    onDeletePortRangeClick,
-    onNewPortRangeClick,
-    onValueChange,
-  }) => {
-  let is_edit = is_defined(port_list);
+  name,
+  comment,
+  from_file,
+  port_range,
+  port_list,
+  onDeletePortRangeClick,
+  onNewPortRangeClick,
+  onValueChange,
+}) => {
+  const is_edit = is_defined(port_list);
 
-  let newrangeicon = (
+  const newrangeicon = (
     <div>
       <NewIcon
         value={port_list}
@@ -169,7 +105,8 @@ const PortListsDialog = ({
           </Layout>
 
           <Layout flex box>
-            <Radio title={_('From file')}
+            <Radio
+              title={_('From file')}
               name="from_file"
               value="1"
               onChange={onValueChange}
@@ -183,8 +120,8 @@ const PortListsDialog = ({
       {is_edit &&
         <Section title={_('Port Ranges')} extra={newrangeicon}>
           {is_defined(port_list) &&
-            <PortRangeTable
-              port_ranges={port_list.port_ranges}
+            <PortRangesTable
+              portRanges={port_list.port_ranges}
               onDeleteClick={onDeletePortRangeClick}/>
           }
         </Section>
@@ -194,9 +131,9 @@ const PortListsDialog = ({
 };
 
 PortListsDialog.propTypes = {
-  name: PropTypes.string,
   comment: PropTypes.string,
   from_file: PropTypes.yesno,
+  name: PropTypes.string,
   port_list: PropTypes.model,
   port_range: PropTypes.string,
   onDeletePortRangeClick: PropTypes.func,

@@ -47,6 +47,7 @@ const EntityNameTableData = ({
   links = true,
   displayName,
   userName,
+  type = entity.entity_type,
   children,
   onToggleDetailsClick,
 }) => {
@@ -69,7 +70,7 @@ const EntityNameTableData = ({
           </RowDetailsToggle> :
           <DetailsLink
             legacy={legacy}
-            type={entity.entity_type}
+            type={type}
             id={entity.id}
             textOnly={!links}>
             {linktext}
@@ -94,6 +95,7 @@ EntityNameTableData.propTypes = {
   entity: PropTypes.model.isRequired,
   legacy: PropTypes.bool,
   links: PropTypes.bool,
+  type: PropTypes.string,
   userName: PropTypes.string.isRequired,
   onToggleDetailsClick: PropTypes.func,
 };

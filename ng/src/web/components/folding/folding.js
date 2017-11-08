@@ -41,6 +41,11 @@ export const FoldState = {
   UNFOLDING: 'UNFOLDING',
 };
 
+const FoldStatePropType = PropTypes.oneOf([
+  FoldState.UNFOLDED, FoldState.FOLDED, FoldState.FOLDING_START,
+  FoldState.UNFOLDING_START, FoldState.FOLDING, FoldState.UNFOLDING,
+]);
+
 /**
  * HOC for making a container content component foldable
  */
@@ -112,10 +117,7 @@ export const withFolding = (Component, defaults = {}) => {
   };
 
   FoldingWrapper.propTypes = {
-    foldState: PropTypes.oneOf([
-      FoldState.UNFOLDED, FoldState.FOLDED, FoldState.FOLDING_START,
-      FoldState.UNFOLDING_START, FoldState.FOLDING, FoldState.UNFOLDING,
-    ]),
+    foldState: FoldStatePropType,
     style: PropTypes.object,
     onFoldStepEnd: PropTypes.func,
     onFoldToggle: PropTypes.func,
@@ -134,8 +136,10 @@ export const withFoldToggle = Component => {
     constructor(...args) {
       super(...args);
 
+      const {initialFoldState = FoldState.UNFOLDED} = this.props;
+
       this.state = {
-        foldState: FoldState.UNFOLDED,
+        foldState: initialFoldState,
       };
 
       this.handleFoldStepEnd = this.handleFoldStepEnd.bind(this);
@@ -213,7 +217,10 @@ export const withFoldToggle = Component => {
         />
       );
     };
+  };
 
+  FoldToggleWrapper.propTypes = {
+    initialFoldState: FoldStatePropType,
   };
 
   return FoldToggleWrapper;
