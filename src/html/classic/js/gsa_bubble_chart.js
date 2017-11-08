@@ -99,11 +99,10 @@
         false, this.show_stat_type);
 
     if (!gsa.is_defined(this.empty_text)) {
-      this.empty_text = gsa._('No matching {{resource_type}}',
+      this.empty_text = gsa._('No matching {{- resource_type}}',
           {
             resource_type: gch.resource_type_name(
                                column_info.columns.label_value.type),
-            interpolation: {escape: false},
           });
     }
 
