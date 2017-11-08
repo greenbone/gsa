@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, parse_int} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -47,7 +47,9 @@ import DetailsLink from '../../components/link/detailslink.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import {secinfo_type} from 'gmp/models/secinfo.js';
+import Condition from './condition.js';
+import Event from './event.js';
+import Method from './method.js';
 
 const Actions = ({
   entity,
@@ -98,128 +100,6 @@ Actions.propTypes = {
   onAlertTestClick: PropTypes.func.isRequired,
 };
 
-const render_event = event => {
-  if (event.type === 'New SecInfo arrived') {
-    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
-    return _('New {{secinfo_type}} arrived', {secinfo_type: type});
-  }
-
-  if (event.type === 'Updated SecInfo arrived') {
-    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
-    return _('New {{secinfo_type}} arrived', {secinfo_type: type});
-  }
-
-  if (event.type === 'Task run status changed' &&
-    is_defined(event.data.status)) {
-    return _('Task run status changed to {{status}}',
-      {status: event.data.status.value});
-  }
-  return event.type;
-};
-
-const render_method = method => {
-  let url = '';
-  if (method.type === 'SCP') {
-    const {scp_credential} = method.data;
-
-    if (is_defined(scp_credential) && is_defined(scp_credential.credential)) {
-      url += scp_credential.credential.login;
-    }
-    else {
-      url += _('(Credential unavailable)');
-    }
-
-    url += '@';
-
-    if (is_defined(method.data.scp_host)) {
-      url += method.data.scp_host.value;
-    }
-    if (is_defined(method.data.scp_path)) {
-      url += ':' + method.data.scp_path.value;
-    }
-    return _('SCP to {{url}}', {url});
-  }
-
-  if (method.type === 'Send') {
-    url += method.data.send_host.value + ':' + method.data.send_port.value;
-    return _('SCP to {{url}}', {url});
-  }
-
-  if (method.type === 'Syslog' && method.data.submethod.value === 'SNMP') {
-    return 'SNMP';
-  }
-
-  if (method.type === 'SNMP') {
-    return _('SNMP to {{agent}}', {agent: method.data.snmp_agent.value});
-  }
-
-  if (method.type === 'Email' && is_defined(method.data.to_address)) {
-    return _('Email to {{address}}', {address: method.data.to_address.value});
-  }
-
-  if (method.type === 'Start Task') {
-    // FIXME task name ist missing
-    // in xslt the tasks have been added to the response
-    // we should improve the backend to return the name for the task id here too
-    return _('Start Task');
-  }
-
-  return method.type;
-};
-
-const render_condition = (condition, event) => {
-  if (condition.type === 'Filter count at least') {
-    const count = parse_int(condition.data.count.value);
-    let type;
-
-    // FIXME this is not translateable
-    if (event.type === 'New SecInfo arrived' ||
-      event.type === 'Updated SecInfo arrived') {
-      type = 'NVT';
-    }
-    else {
-      type = 'result';
-    }
-
-    if (count > 1) {
-      type += 's';
-    }
-    return _('Filter matches at least {{count}} {{type}}',
-      {count, type});
-  }
-
-  if (condition.type === 'Filter count changed') {
-    const count = parse_int(condition.data.count.value);
-    const direction = condition.data.direction.value === 'decreased' ?
-      'fewer' : 'more';
-
-    // FIXME this is not translateable
-    return _('Filter matches at least {{count}} {{direction}} {{result}} ' +
-      'then the previous scan', {
-        count,
-        direction,
-        result: count > 0 ? 'results' : 'result',
-      });
-  }
-
-  if (condition.type === 'Severity at least' &&
-    is_defined(condition.data.severity)) {
-    return _('Severity at least {{severity}}',
-      {severity: condition.data.severity.value});
-  }
-
-  if (condition.type === 'Severity changed') {
-    if (is_defined(condition.data.direction)) {
-      if (condition.data.direction.value === 'decreased') {
-        return _('Severity level decreased');
-      }
-      return _('Severity level increased');
-    }
-    return _('Severity level changed');
-  }
-  return condition.type;
-};
-
 const render_filter = (filter, caps, links = true) => {
   if (!is_defined(filter)) {
     return null;
@@ -254,13 +134,16 @@ const Row = ({
         displayName={_('Alert')}
       />
       <TableData>
-        {render_event(entity.event)}
+        <Event event={entity.event}/>
       </TableData>
       <TableData>
-        {render_condition(entity.condition, entity.event)}
+        <Condition
+          condition={entity.condition}
+          event={entity.event}
+        />
       </TableData>
       <TableData>
-        {render_method(entity.method)}
+        <Method method={entity.method}/>
       </TableData>
       <TableData>
         {render_filter(entity.filter, capabilities)}
