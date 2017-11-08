@@ -1534,6 +1534,8 @@
         return gch.resource_type_name_plural(type);
       case 'created':
         return gsa._('creation time');
+      case 'duration':
+        return gsa._('duration');
       case 'modified':
         return gsa._('modification time');
       case 'qod':
@@ -1544,6 +1546,8 @@
         return gsa._('High');
       case 'high_per_host':
         return gsa._('High / host');
+      case 'duration_per_host':
+        return gsa._('Duration / host')
       default:
         if (gsa.is_string(field)) {
           return field.replace('_', ' ');
@@ -1587,25 +1591,37 @@
   gch.default_column_label = function(info, capitalize_label,
                                   include_type, include_stat) {
     var label = '';
+    var field_name
+          = label + gch.field_name(info.column ? info.column : info.stat,
+                                   info.type);
+
     if (include_stat) {
       switch (info.stat) {
         case 'min':
-          label = label + 'min. ';
+          label = label + gsa._('min. {{field_name}}',
+                                {field_name: field_name,
+                                 interpolation: {escape: false}});
           break;
         case 'max':
-          label = label + 'max. ';
+          label = label + gsa._('max. {{field_name}}',
+                                {field_name: field_name,
+                                 interpolation: {escape: false}});
           break;
         case 'mean':
-          label = label + 'average ';
+          label = label + gsa._('average {{field_name}}',
+                                {field_name: field_name,
+                                 interpolation: {escape: false}});
           break;
         case 'sum':
-          label = label + 'summed ';
+          label = label + gsa._('summed {{field_name}}',
+                                {field_name: field_name,
+                                 interpolation: {escape: false}});
           break;
       }
     }
-
-    label = label + gch.field_name(info.column ? info.column : info.stat,
-                                   info.type);
+    else {
+      label = label + field_name;
+    }
 
     if (include_type && info.stat !== 'count' && info.stat !== 'c_count') {
       label = label + ' (' + gch.resource_type_name(info.type) + ')';
