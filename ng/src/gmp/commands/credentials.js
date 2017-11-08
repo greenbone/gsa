@@ -29,17 +29,28 @@ import Credential from '../models/credential.js';
 
 const log = logger.getLogger('gmp.commands.credentials');
 
-export class CredentialCommand extends EntityCommand {
+class CredentialCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'credential', Credential);
   }
 
   create(args) {
-    let {name, comment = '', allow_insecure = 0, autogenerate = 0,
-      community = '', credential_login = '', password = '', passphrase = '',
-      privacy_password = '', auth_algorithm = 'sha1', certificate, base,
-      privacy_algorithm = 'aes', private_key} = args;
+    const {
+      name,
+      comment = '',
+      allow_insecure = 0,
+      autogenerate = 0,
+      community = '',
+      credential_login = '',
+      password = '',
+      passphrase = '',
+      privacy_password = '',
+      auth_algorithm = 'sha1',
+      certificate, base,
+      privacy_algorithm = 'aes',
+      private_key,
+    } = args;
     log.debug('Creating new credential', args);
     return this.httpPost({
       cmd: 'create_credential',
@@ -62,7 +73,7 @@ export class CredentialCommand extends EntityCommand {
   }
 
   save(args) {
-    let {
+    const {
       allow_insecure = 0,
       auth_algorithm,
       base,
@@ -71,7 +82,7 @@ export class CredentialCommand extends EntityCommand {
       change_passphrase = 0,
       change_password = 0,
       change_privacy_password = 0,
-      comment,
+      comment = '',
       community,
       credential_login,
       id,
@@ -80,7 +91,7 @@ export class CredentialCommand extends EntityCommand {
       password,
       privacy_algorithm,
       privacy_password,
-      private_key
+      private_key,
     } = args;
     log.debug('Saving credential', args);
     return this.httpPost({
@@ -112,7 +123,7 @@ export class CredentialCommand extends EntityCommand {
   }
 }
 
-export class CredentialsCommand extends EntitiesCommand {
+class CredentialsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'credential', Credential);

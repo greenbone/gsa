@@ -25,7 +25,7 @@ import moment from 'moment';
 
 import Model from '../model.js';
 
-import {is_defined} from '../utils.js';
+import {is_defined, map} from '../utils.js';
 
 import {parse_yesno, NO_VALUE} from '../parser.js';
 
@@ -71,12 +71,22 @@ export const esxi_credential_filter = credential =>
 export const snmp_credential_filter = credential =>
   credential.credential_type === SNMP_CREDENTIAL_TYPE;
 
+export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
+export const SNMP_AUTH_ALGORITHM_SHA1 = 'sha1';
+
+export const SNMP_PRIVACY_ALOGRITHM_NONE = '';
+export const SNMP_PRIVACY_ALGORITHM_AES = 'aes';
+export const SNMP_PRIVACY_ALGORITHM_DES = 'des';
+
+export const CERTIFICATE_STATUS_INACTIVE = 'inactive';
+export const CERTIFICATE_STATUS_EXPIRED = 'expired';
+
 class Credential extends Model {
 
   static entity_type = 'credential';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (is_defined(ret.certificate_info)) {
       ret.certificate_info.activation_time = moment(
@@ -90,6 +100,19 @@ class Credential extends Model {
     ret.credential_type = elem.type;
 
     ret.allow_insecure = parse_yesno(elem.allow_insecure);
+
+    if (is_defined(elem.targets)) {
+      ret.targets = map(elem.targets.target,
+        target => new Model(target, 'target'));
+    }
+    else {
+      ret.targets = [];
+    }
+
+    if (is_defined(elem.scanners)) {
+      ret.scanners = map(elem.scanners.scanner,
+        scanner => new Model(scanner, 'scanner'));
+    }
 
     return ret;
   }

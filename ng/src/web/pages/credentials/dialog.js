@@ -23,13 +23,18 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils.js';
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  SNMP_AUTH_ALGORITHM_MD5,
+  SNMP_AUTH_ALGORITHM_SHA1,
+  SNMP_PRIVACY_ALOGRITHM_NONE,
+  SNMP_PRIVACY_ALGORITHM_AES,
+  SNMP_PRIVACY_ALGORITHM_DES,
 } from 'gmp/models/credential.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -77,7 +82,7 @@ class CredentialsDialog extends React.Component {
   }
 
   render() {
-    let {
+    const {
       allow_insecure,
       auth_algorithm,
       autogenerate,
@@ -99,13 +104,13 @@ class CredentialsDialog extends React.Component {
       onValueChange,
     } = this.props;
 
-    let type_opts = map(types, type => {
+    const type_opts = map(types, type => {
       return (
         <option value={type} key={type}>{type_names[type]}</option>
       );
     });
 
-    let is_edit = is_defined(credential);
+    const is_edit = is_defined(credential);
 
     return (
       <Layout flex="column">
@@ -146,7 +151,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Auto-generate')}
+        <FormGroup
+          title={_('Auto-generate')}
           condition={(base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
             base === USERNAME_SSH_KEY_CREDENTIAL_TYPE) && !is_edit}>
           <YesNoRadio
@@ -155,7 +161,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('SNMP Community')}
+        <FormGroup
+          title={_('SNMP Community')}
           condition={base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
@@ -172,7 +179,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Username')}
+        <FormGroup
+          title={_('Username')}
           flex
           condition={
             base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
@@ -185,7 +193,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Password')}
+        <FormGroup
+          title={_('Password')}
           condition={base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
               base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
@@ -205,7 +214,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Passphrase')}
+        <FormGroup
+          title={_('Passphrase')}
           condition={base === USERNAME_SSH_KEY_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
@@ -224,7 +234,8 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Privacy Password')}
+        <FormGroup
+          title={_('Privacy Password')}
           condition={base === SNMP_CREDENTIAL_TYPE}>
           {is_edit &&
             <Checkbox
@@ -242,14 +253,16 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Certificate')}
+        <FormGroup
+          title={_('Certificate')}
           condition={base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE}>
           <FileField
             name="certificate"
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Private Key')}
+        <FormGroup
+          title={_('Private Key')}
           condition={
             base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
             base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE
@@ -259,49 +272,51 @@ class CredentialsDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Auth Algorithm')}
+        <FormGroup
+          title={_('Auth Algorithm')}
           condition={base === SNMP_CREDENTIAL_TYPE}>
           <Radio
-            value="md5"
+            value={SNMP_AUTH_ALGORITHM_MD5}
             title="MD5"
-            checked={auth_algorithm === 'md5'}
+            checked={auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
             name="auth_algorithm"
             onChange={onValueChange}/>
           <Radio
-            value="sha1"
+            value={SNMP_AUTH_ALGORITHM_SHA1}
             title="SHA1"
-            checked={auth_algorithm === 'sha1'}
+            checked={auth_algorithm === SNMP_AUTH_ALGORITHM_SHA1}
             name="auth_algorithm"
             onChange={onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Privacy Algorithm')}
+        <FormGroup
+          title={_('Privacy Algorithm')}
           condition={base === SNMP_CREDENTIAL_TYPE}>
           <Radio
-            value="aes"
+            value={SNMP_PRIVACY_ALGORITHM_AES}
             title="AES"
-            checked={privacy_algorithm === 'aes'}
+            checked={privacy_algorithm === SNMP_PRIVACY_ALGORITHM_AES}
             name="privacy_algorithm"
             onChange={onValueChange}/>
           <Radio
-            value="des"
+            value={SNMP_PRIVACY_ALGORITHM_DES}
             title="DES"
-            checked={privacy_algorithm === 'des'}
+            checked={privacy_algorithm === SNMP_PRIVACY_ALGORITHM_DES}
             name="privacy_algorithm"
             onChange={onValueChange}/>
           <Radio
-            value=""
+            value={SNMP_PRIVACY_ALOGRITHM_NONE}
             title={_('None')}
-            checked={privacy_algorithm === ''}
+            checked={privacy_algorithm === SNMP_PRIVACY_ALOGRITHM_NONE}
             name="privacy_algorithm"
-            onChange={this.onValueChange}/>
+            onChange={onValueChange}/>
         </FormGroup>
       </Layout>
     );
   }
 }
 
-const pwtypes =  PropTypes.oneOf([
+const pwtypes = PropTypes.oneOf([
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -309,30 +324,33 @@ const pwtypes =  PropTypes.oneOf([
 ]);
 
 CredentialsDialog.propTypes = {
-  name: PropTypes.string,
-  comment: PropTypes.string,
-  types: PropTypes.arrayOf(
-    pwtypes
-  ),
+  allow_insecure: PropTypes.yesno,
+  auth_algorithm: PropTypes.oneOf([
+    SNMP_AUTH_ALGORITHM_SHA1,
+    SNMP_AUTH_ALGORITHM_MD5,
+  ]),
+  autogenerate: PropTypes.yesno,
+  base: pwtypes,
   change_community: PropTypes.yesno,
   change_passphrase: PropTypes.yesno,
   change_password: PropTypes.yesno,
   change_privacy_password: PropTypes.yesno,
-  base: pwtypes,
-  allow_insecure: PropTypes.yesno,
-  autogenerate: PropTypes.yesno,
+  comment: PropTypes.string,
   community: PropTypes.string,
   credential: PropTypes.model,
   credential_login: PropTypes.string,
-  password: PropTypes.string,
-  privacy_password: PropTypes.string,
-  auth_algorithm: PropTypes.oneOf([
-    'md5', 'sha1',
-  ]),
-  privacy_algorithm: PropTypes.oneOf([
-    'aes', 'des', '',
-  ]),
+  name: PropTypes.string,
   passphrase: PropTypes.string,
+  password: PropTypes.string,
+  privacy_algorithm: PropTypes.oneOf([
+    SNMP_PRIVACY_ALGORITHM_AES,
+    SNMP_PRIVACY_ALGORITHM_DES,
+    SNMP_PRIVACY_ALOGRITHM_NONE,
+  ]),
+  privacy_password: PropTypes.string,
+  types: PropTypes.arrayOf(
+    pwtypes
+  ),
   onValueChange: PropTypes.func,
 };
 
@@ -345,7 +363,7 @@ export default withDialog({
   footer: _('Save'),
   defaultState: {
     allow_insecure: 0,
-    auth_algorithm: 'sha1',
+    auth_algorithm: SNMP_AUTH_ALGORITHM_SHA1,
     autogenerate: 0,
     base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
     change_community: '0',
@@ -358,7 +376,7 @@ export default withDialog({
     name: _('Unnamed'),
     passphrase: '',
     password: '',
-    privacy_algorithm: 'aes',
+    privacy_algorithm: SNMP_PRIVACY_ALGORITHM_AES,
     privacy_password: '',
   },
 })(CredentialsDialog);

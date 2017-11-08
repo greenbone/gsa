@@ -26,7 +26,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import CredentialDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -40,6 +42,7 @@ const CredentialsTable = createEntitiesTable({
   emptyTitle: _('No credentials available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('credential', 10)(CredentialDetails),
   footer: createEntitiesFooter({
     download: 'credentials.xml',
     span: 6,

@@ -38,10 +38,9 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import FootNote from '../../components/footnote/footnote.js';
 
-import Text from '../../components/form/text.js';
-
 import ExportIcon from '../../components/icon/exporticon.js';
 
+import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
@@ -50,96 +49,92 @@ import TableRow from '../../components/table/row.js';
 import CredentialDownloadIcon from './downloadicon.js';
 
 const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEditCredential,
-  }) => {
+  entity,
+  onCredentialDeleteClick,
+  onCredentialDownloadClick,
+  onCredentialCloneClick,
+  onCredentialEditClick,
+}) => {
   return (
-    <IconDivider>
+    <IconDivider align={['start', 'center']}>
       <TrashIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
-        onClick={onEntityDelete}/>
+        onClick={onCredentialDeleteClick}/>
       <EditIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
-        onClick={onEditCredential}/>
+        onClick={onCredentialEditClick}/>
       <CloneIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
         title={_('Clone Credential')}
         value={entity}
-        onClick={onEntityClone}/>
+        onClick={onCredentialCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Credential')}
-        onClick={onEntityDownload}
+        onClick={onCredentialDownloadClick}
       />
       <CredentialDownloadIcon
-        credential={entity}/>
+        type={entity.credential_type}
+        id={entity.id}
+      />
     </IconDivider>
   );
 };
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onEditCredential: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onCredentialCloneClick: PropTypes.func.isRequired,
+  onCredentialDeleteClick: PropTypes.func.isRequired,
+  onCredentialDownloadClick: PropTypes.func.isRequired,
+  onCredentialEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="credential"
-        displayName={_('Credential')}
-      />
-      <TableData flex>
-        <Text>
-          {entity.type}
-        </Text>
-        <Text>
-          <FootNote>
-            ({entity.full_type})
-          </FootNote>
-        </Text>
-      </TableData>
-      <TableData>
-        {entity.isAllowInsecure() ? _('Yes') : _('No')}
-      </TableData>
-      <TableData>
-        {entity.login}
-      </TableData>
-      {render_component(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="credential"
+      displayName={_('Credential')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData flex>
+      <Divider>
+        <span>
+          {entity.credential_type}
+        </span>
+        <FootNote>
+          ({entity.full_type})
+        </FootNote>
+      </Divider>
+    </TableData>
+    <TableData>
+      {entity.isAllowInsecure() ? _('Yes') : _('No')}
+    </TableData>
+    <TableData>
+      {entity.login}
+    </TableData>
+    {render_component(actions, {...props, entity})}
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);

@@ -184,9 +184,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/component.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/details.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/pages/credentials/downloadicon.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/listpage.js
      ${NG_SRC_DIR}/src/web/pages/credentials/row.js
      ${NG_SRC_DIR}/src/web/pages/credentials/table.js
      ${NG_SRC_DIR}/src/web/pages/certbund/charts.js

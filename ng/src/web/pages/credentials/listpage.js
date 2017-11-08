@@ -24,7 +24,8 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+
+import {CREDENTIALS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -35,17 +36,11 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import {
-  ALL_CREDENTIAL_TYPES,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential.js';
-
-import CredentialsDialog from './dialog.js';
-import Table, {SORT_FIELDS} from './table.js';
+import CredentialComponent from './component.js';
+import CredentialsTable, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = ({
   onNewCredentialClick,
@@ -72,83 +67,62 @@ ToolBarIcons.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-class Page extends React.Component {
+const CredentialsFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
 
-  constructor(...args) {
-    super(...args);
+const CredentialsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <CredentialComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={CredentialsFilterDialog}
+      sectionIcon="credential.svg"
+      table={CredentialsTable}
+      title={_('Credentials')}
+      toolBarIcons={ToolBarIcons}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onCredentialCloneClick={clone}
+      onCredentialCreateClick={create}
+      onCredentialDeleteClick={delete_func}
+      onCredentialDownloadClick={download}
+      onCredentialEditClick={edit}
+      onCredentialSaveClick={save}
+    />
+  )}
+  </CredentialComponent>
+);
 
-    this.handleSaveCredential = this.handleSaveCredential.bind(this);
-    this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-  }
-
-  openCredentialsDialog(credential) {
-    if (credential) {
-      this.credentials_dialog.show({
-        allow_insecure: credential.allow_insecure,
-        auth_algorithm: credential.auth_algorithm,
-        base: credential.credential_type,
-        comment: credential.comment,
-        credential,
-        credential_login: credential.login,
-        id: credential.id,
-        name: credential.name,
-        privacy_algorithm: is_defined(credential.privacy) ?
-          credential.privacy.algorithm : undefined,
-        types: [credential.credential_type],
-      }, {
-        title: _('Edit Credential {{name}}', {name: credential.name}),
-      });
-    }
-    else {
-      this.credentials_dialog.show({
-        types: ALL_CREDENTIAL_TYPES,
-        base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
-      });
-    }
-  }
-
-  handleSaveCredential(data) {
-    const {onChanged, entityCommand} = this.props;
-    let promise;
-    if (data.credential) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.create(data);
-    }
-    return promise.then(() => onChanged());
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          onEditCredential={this.openCredentialsDialog}
-          onNewCredentialClick={this.openCredentialsDialog}
-          {...this.props}
-        />
-        <CredentialsDialog
-          ref={ref => this.credentials_dialog = ref}
-          onSave={this.handleSaveCredential}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
+CredentialsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('credential', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
-  sectionIcon: 'credential.svg',
-  table: Table,
-  title: _('Credentials'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+  filtersFilter: CREDENTIALS_FILTER_FILTER,
+})(CredentialsPage);
 
 // vim: set ts=2 sw=2 tw=80:

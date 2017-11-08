@@ -65,6 +65,7 @@ import CertBundAdvDetailsPage from './pages/certbund/detailspage.js';
 import CpesPage from './pages/cpes/listpage.js';
 import CpeDetailsPage from './pages/cpes/detailspage.js';
 import CredentialsPage from './pages/credentials/listpage.js';
+import CredentialDetailsPage from './pages/credentials/detailspage.js';
 import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
 import CvssCalculatorPage from './pages/extras/cvsscalculatorpage.js';
@@ -389,6 +390,10 @@ ReactDOM.render(
         <Route
           path="portlist/:id"
           component={PortListDetailsPage}
+        />
+        <Route
+          path="credential/:id"
+          component={CredentialDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

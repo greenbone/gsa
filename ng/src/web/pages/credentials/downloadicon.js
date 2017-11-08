@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -34,66 +34,66 @@ import Icon from '../../components/icon/icon.js';
 import LegacyLink from '../../components/link/legacylink.js';
 
 const CredentialDownloadIcon = ({
-    credential,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      {credential.type === 'usk' &&
-        <LegacyLink
-          className="icon icon-sm"
-          cmd="download_credential"
-          credential_id={credential.id}
-          package_format="rpm"
-          title={_('Download RPM (.rpm) Package')}>
-          <Icon img="rpm.svg" />
-        </LegacyLink>
-      }
-      {credential.type === 'usk' &&
-        <LegacyLink
-          className="icon icon-sm"
-          cmd="download_credential"
-          credential_id={credential.id}
-          package_format="deb"
-          title={_('Download Debian (.deb) Package')}>
-          <Icon img="deb.svg" />
-        </LegacyLink>
-      }
-      {credential.type === 'usk' &&
-        <LegacyLink
-          className="icon icon-sm"
-          cmd="download_credential"
-          credential_id={credential.id}
-          package_format="key"
-          title={_('Download Public Key')}>
-          <Icon img="key.svg" />
-        </LegacyLink>
-      }
-      {credential.type === 'up' &&
-        <LegacyLink
-          className="icon icon-sm"
-          cmd="download_credential"
-          credential_id={credential.id}
-          package_format="exe"
-          title={_('Download Windows Executable (.exe)')}>
-          <Icon img="exe.svg" />
-        </LegacyLink>
-      }
-      {credential.type === 'cc' &&
-        <LegacyLink
-          className="icon icon-sm"
-          cmd="download_credential"
-          credential_id={credential.id}
-          package_format="pem"
-          title={_('Download Certificate (.pem)')}>
-          <Icon img="key.svg" />
-        </LegacyLink>
-      }
-    </Layout>
-  );
-};
+  id,
+  type,
+}) => (
+  <IconDivider align={['center', 'center']}>
+    {type === 'usk' &&
+      <LegacyLink
+        className="icon icon-sm"
+        cmd="download_credential"
+        credential_id={id}
+        package_format="rpm"
+        title={_('Download RPM (.rpm) Package')}>
+        <Icon img="rpm.svg" />
+      </LegacyLink>
+    }
+    {type === 'usk' &&
+      <LegacyLink
+        className="icon icon-sm"
+        cmd="download_credential"
+        credential_id={id}
+        package_format="deb"
+        title={_('Download Debian (.deb) Package')}>
+        <Icon img="deb.svg" />
+      </LegacyLink>
+    }
+    {type === 'usk' &&
+      <LegacyLink
+        className="icon icon-sm"
+        cmd="download_credential"
+        credential_id={id}
+        package_format="key"
+        title={_('Download Public Key')}>
+        <Icon img="key.svg" />
+      </LegacyLink>
+    }
+    {type === 'up' &&
+      <LegacyLink
+        className="icon icon-sm"
+        cmd="download_credential"
+        credential_id={id}
+        package_format="exe"
+        title={_('Download Windows Executable (.exe)')}>
+        <Icon img="exe.svg" />
+      </LegacyLink>
+    }
+    {type === 'cc' &&
+      <LegacyLink
+        className="icon icon-sm"
+        cmd="download_credential"
+        credential_id={id}
+        package_format="pem"
+        title={_('Download Certificate (.pem)')}>
+        <Icon img="key.svg" />
+      </LegacyLink>
+    }
+  </IconDivider>
+);
 
 CredentialDownloadIcon.propTypes = {
-  credential: PropTypes.model.isRequired,
+  id: PropTypes.id.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default CredentialDownloadIcon;
