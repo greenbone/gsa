@@ -80,7 +80,9 @@ const Actions = ({
         onClick={onCredentialDownloadClick}
       />
       <CredentialDownloadIcon
-        credential={entity}/>
+        type={entity.credential_type}
+        id={entity.id}
+      />
     </IconDivider>
   );
 };
