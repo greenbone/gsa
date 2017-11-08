@@ -1525,10 +1525,9 @@
   gch.field_name = function(field, type) {
     switch (field.toLowerCase()) {
       case 'c_count':
-        return gsa._('total {{resource_type_plural}}',
+        return gsa._('total {{- resource_type_plural}}',
             {
               resource_type_plural: gch.resource_type_name_plural(type),
-              interpolation: {escape: false},
             });
       case 'count':
         return gch.resource_type_name_plural(type);
@@ -1598,24 +1597,20 @@
     if (include_stat) {
       switch (info.stat) {
         case 'min':
-          label = label + gsa._('min. {{field_name}}',
-                                {field_name: field_name,
-                                 interpolation: {escape: false}});
+          label = label + gsa._('min. {{- field_name}}',
+                                {field_name: field_name});
           break;
         case 'max':
-          label = label + gsa._('max. {{field_name}}',
-                                {field_name: field_name,
-                                 interpolation: {escape: false}});
+          label = label + gsa._('max. {{- field_name}}',
+                                {field_name: field_name});
           break;
         case 'mean':
-          label = label + gsa._('average {{field_name}}',
-                                {field_name: field_name,
-                                 interpolation: {escape: false}});
+          label = label + gsa._('average {{- field_name}}',
+                                {field_name: field_name});
           break;
         case 'sum':
-          label = label + gsa._('summed {{field_name}}',
-                                {field_name: field_name,
-                                 interpolation: {escape: false}});
+          label = label + gsa._('summed {{- field_name}}',
+                                {field_name: field_name});
           break;
       }
     }
