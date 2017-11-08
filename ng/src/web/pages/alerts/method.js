@@ -60,7 +60,7 @@ const Method = ({
 
   if (method.type === METHOD_TYPE_SEND) {
     url += method.data.send_host.value + ':' + method.data.send_port.value;
-    return _('SCP to {{url}}', {url});
+    return _('Send to {{url}}', {url});
   }
 
   if (method.type === METHOD_TYPE_SYSLOG &&
