@@ -208,7 +208,6 @@ const CvePage = props => (
   <EntityContainer
     {...props}
     name="cve"
-    loadPermissions={false}
   >
     {({
       onChanged,

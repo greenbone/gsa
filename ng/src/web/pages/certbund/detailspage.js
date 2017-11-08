@@ -146,7 +146,6 @@ const CertBundAdvPage = props => (
   <EntityContainer
     {...props}
     name="certbundadv"
-    loadPermissions={false}
   >
     {({
       onChanged,

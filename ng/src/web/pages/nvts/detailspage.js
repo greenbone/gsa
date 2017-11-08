@@ -292,7 +292,6 @@ const NvtPage = props => (
   <EntityContainer
     {...props}
     name="nvt"
-    loadPermissions={false}
     loaders={[
       loader('notes', nvt_id_filter),
       loader('overrides', nvt_id_filter),

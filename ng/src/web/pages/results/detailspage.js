@@ -361,6 +361,7 @@ class Page extends React.Component {
           title={_('Result')}
           toolBarIcons={ToolBarIcons}
           detailsComponent={Details}
+          permissionsComponent={false}
           onNoteCreateClick={this.openNoteDialog}
           onOverrideCreateClick={this.openOverrideDialog}
         />
@@ -389,7 +390,6 @@ const ResultPage = props => (
   <EntityContainer
     {...props}
     name="result"
-    permissionsComponent={false}
   >
     {cprops => <Page {...cprops} />}
   </EntityContainer>

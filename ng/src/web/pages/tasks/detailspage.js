@@ -35,7 +35,10 @@ import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityPermissions from '../../entity/permissions.js';
-import EntityContainer, {loader} from '../../entity/container.js';
+import EntityContainer, {
+  loader,
+  permissions_resource_loader,
+} from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
@@ -379,6 +382,7 @@ const Page = ({
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
         detailsComponent={Details}
+        permissionsComponent={TaskPermissions}
         onChanged={onChanged}
         onError={onError}
         onContainerTaskCreateClick={createcontainer}
@@ -449,8 +453,8 @@ const TaskPage = props => (
     loaders={[
       loader('notes', task_id_filter),
       loader('overrides', task_id_filter),
+      permissions_resource_loader,
     ]}
-    permissionsComponent={TaskPermissions}
   >
     {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>

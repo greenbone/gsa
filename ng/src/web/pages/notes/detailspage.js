@@ -45,7 +45,9 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 import EntityPage from '../../entity/page.js';
-import EntityContainer from '../../entity/container.js';
+import EntityContainer, {
+  permissions_resource_loader,
+} from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
@@ -229,6 +231,9 @@ const NotePage = props => (
   <EntityContainer
     {...props}
     name="note"
+    loaders={[
+      permissions_resource_loader,
+    ]}
   >
     {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>

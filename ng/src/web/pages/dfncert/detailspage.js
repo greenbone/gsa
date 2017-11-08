@@ -131,7 +131,6 @@ const DfnCertAdvPage = props => (
   <EntityContainer
     {...props}
     name="dfncertadv"
-    loadPermissions={false}
   >
     {({
       onChanged,
