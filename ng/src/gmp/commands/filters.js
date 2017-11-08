@@ -23,6 +23,8 @@
 
 import logger from '../log.js';
 
+import {is_defined} from '../utils.js';
+
 import CollectionCounts from '../collection/collectioncounts.js';
 import {parse_collection_list} from '../collection/parser.js';
 
@@ -75,19 +77,25 @@ export class FilterCommand extends EntityCommand {
 // FIXME parsing counts is horrible
 
 const parse_filter = element => {
-  return new Filter(element.filters[0]);
+  const filter = is_defined(element) && is_defined(element.filters) ?
+    element.filters[0] : undefined;
+  return new Filter(filter);
 };
 
 const parse_counts = element => {
-  let es = element.filters[1];
-  let ec = element.filter_count;
-  return {
-    first: es._start,
-    rows: es._max,
-    length: ec.page,
-    all: ec.__text,
-    filtered: ec.filtered,
-  };
+  if (is_defined(element) && is_defined(element.filters) &&
+    is_defined(element.fulter_count)) {
+    let es = element.filters[1];
+    let ec = element.filter_count;
+    return {
+      first: es._start,
+      rows: es._max,
+      length: ec.page,
+      all: ec.__text,
+      filtered: ec.filtered,
+    };
+  }
+  return {};
 };
 
 const parse_collection_counts = response => {

@@ -95,18 +95,27 @@ export function parse_filter(element) {
 }
 
 export function parse_counts(element, name, plural_name) {
+  if (!is_defined(element)) {
+    return {};
+  }
+
   if (!is_defined(plural_name)) {
     plural_name = name + 's';
   }
+
   const es = element[plural_name];
   const ec = element[name + '_count'];
-  return {
-    first: es._start,
-    rows: es._max,
-    length: ec.page,
-    all: ec.__text,
-    filtered: ec.filtered,
-  };
+
+  if (is_defined(es) && is_defined(ec)) {
+    return {
+      first: es._start,
+      rows: es._max,
+      length: ec.page,
+      all: ec.__text,
+      filtered: ec.filtered,
+    };
+  }
+  return {};
 }
 
 const parse_elements = (response, name) => response[name];
@@ -181,4 +190,4 @@ export function parse_collection_list(response, name, modelclass,
   });
 }
 
-
+// vim: set ts=2 sw=2 tw=80:
