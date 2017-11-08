@@ -82,13 +82,35 @@ const MenuBar = (props, {gmp, capabilities}) => {
     return null;
   }
 
-  const may_op_tasks = capabilities.mayOp('get_tasks');
-  const may_op_reports = capabilities.mayOp('get_reports');
-  const may_op_results = capabilities.mayOp('get_results');
-  const may_op_overrides = capabilities.mayOp('get_overrides');
+  const may_op_scans = [
+    'tasks',
+    'reports',
+    'results',
+    'overrides',
+    'notes',
+  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
 
-  const may_op_scans = may_op_tasks || may_op_reports || may_op_results ||
-    may_op_overrides;
+  const may_op_configuration = [
+    'targets',
+    'port_lists',
+    'credentials',
+    'scan_configs',
+    'alerts',
+    'schedules',
+    'report_formats',
+    'agents',
+    'scanners',
+    'filters',
+    'tags',
+    'permissions',
+  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
+
+  const may_op_admin = [
+    'users',
+    'roles',
+    'groups',
+  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false) ||
+    (capabilities.mayOp('descibe_auth') && capabilities.mayOp('modify_auth'));
   return (
     <Wrapper>
       <Ul>
@@ -132,7 +154,9 @@ const MenuBar = (props, {gmp, capabilities}) => {
               caps="get_notes"/>
             <MenuEntry
               title={_('Overrides')}
-              to="overrides"/>
+              to="overrides"
+              caps="get_overrides"
+            />
           </Menu>
         }
         {capabilities.mayOp('get_assets') &&
@@ -153,141 +177,175 @@ const MenuBar = (props, {gmp, capabilities}) => {
             <MenuEntry
               section
               title={_('NVTs')}
-              to="nvts"/>
+              to="nvts"
+            />
             <MenuEntry
               title={_('CVEs')}
-              to="cves"/>
+              to="cves"
+            />
             <MenuEntry
               title={_('CPEs')}
-              to="cpes"/>
+              to="cpes"
+            />
             <MenuEntry
               title={_('OVAL Definitions')}
-              to="ovaldefs"/>
+              to="ovaldefs"
+            />
             <MenuEntry
               title={_('CERT-Bund Advisories')}
-              to="certbundadvs"/>
+              to="certbundadvs"
+            />
             <MenuEntry
               title={_('DFN-CERT Advisories')}
-              to="dfncertadvs"/>
+              to="dfncertadvs"
+            />
             <MenuEntry
               section
               title={_('All SecInfo')}
-              to="secinfos"/>
+              to="secinfos"
+            />
           </Menu>
         }
-        <Menu title={_('Configuration')}>
-          <MenuEntry
-            title={_('Targets')}
-            to="targets"
-            caps="get_targets"/>
-          <MenuEntry
-            title={_('Port Lists')}
-            to="portlists"
-            caps="get_port_lists"/>
-          <MenuEntry
-            title={_('Credentials')}
-            to="credentials"
-            caps="get_credentials"/>
-          <MenuEntry
-            title={_('Scan Configs')}
-            to="scanconfigs"
-            caps="get_configs"/>
-          <MenuEntry
-            section
-            title={_('Alerts')}
-            to="alerts"
-            caps="get_alerts"/>
-          <MenuEntry
-            title={_('Schedules')}
-            to="schedules"
-            caps="get_schedules"/>
-          <MenuEntry
-            title={_('Report Formats')}
-            to="reportformats"
-            caps="get_report_formats"/>
-          <MenuEntry
-            title={_('Agents')}
-            to="agents"
-            caps="get_agents"/>
-          <MenuEntry
-            section
-            title={_('Scanners')}
-            to="scanners"
-            caps="get_scanners"/>
-          <MenuEntry
-            title={_('Filters')}
-            to="filters"
-            caps="get_filters"/>
-          <MenuEntry
-            title={_('Tags')}
-            to="tags"
-            caps="get_tags"/>
-          <MenuEntry
-            title={_('Permissions')}
-            to="permissions"
-            caps="get_permissions"/>
-        </Menu>
+        {may_op_configuration &&
+          <Menu title={_('Configuration')}>
+            <MenuEntry
+              title={_('Targets')}
+              to="targets"
+              caps="get_targets"
+            />
+            <MenuEntry
+              title={_('Port Lists')}
+              to="portlists"
+              caps="get_port_lists"
+            />
+            <MenuEntry
+              title={_('Credentials')}
+              to="credentials"
+              caps="get_credentials"
+            />
+            <MenuEntry
+              title={_('Scan Configs')}
+              to="scanconfigs"
+              caps="get_configs"
+            />
+            <MenuEntry
+              section
+              title={_('Alerts')}
+              to="alerts"
+              caps="get_alerts"
+            />
+            <MenuEntry
+              title={_('Schedules')}
+              to="schedules"
+              caps="get_schedules"
+            />
+            <MenuEntry
+              title={_('Report Formats')}
+              to="reportformats"
+              caps="get_report_formats"
+            />
+            <MenuEntry
+              title={_('Agents')}
+              to="agents"
+              caps="get_agents"
+            />
+            <MenuEntry
+              section
+              title={_('Scanners')}
+              to="scanners"
+              caps="get_scanners"
+            />
+            <MenuEntry
+              title={_('Filters')}
+              to="filters"
+              caps="get_filters"/>
+            <MenuEntry
+              title={_('Tags')}
+              to="tags"
+              caps="get_tags"
+            />
+            <MenuEntry
+              title={_('Permissions')}
+              to="permissions"
+              caps="get_permissions"
+            />
+          </Menu>
+        }
         <Menu title={_('Extras')}>
           <MenuEntry
             title={_('Trashcan')}
-            to="trashcan"/>
+            to="trashcan"
+          />
           <MenuEntry
             legacy title={_('My Settings')}
             cmd="get_my_settings"
-            caps="get_settings"/>
+            caps="get_settings"
+          />
           <MenuEntry
             legacy
             title={_('Performance')}
             cmd="get_system_reports"
             slave_id="0"
-            caps="get_system_reports"/>
+            caps="get_system_reports"
+          />
           <MenuEntry
             title={_('CVSS Calculator')}
-            to="cvsscalculator"/>
+            to="cvsscalculator"
+          />
           <MenuEntry
             title={_('Feed Status')}
             to="feedstatus"
-            caps="get_feeds"/>
+            caps="get_feeds"
+          />
         </Menu>
-        <Menu title={_('Administration')}>
-          <MenuEntry
-            title={_('Users')}
-            to="users"
-            caps="get_users"/>
-          <MenuEntry
-            title={_('Groups')}
-            to="groups"
-            caps="get_groups"/>
-          <MenuEntry
-            title={_('Roles')}
-            to="roles"
-            caps="get_roles"/>
-          <MenuEntry
-            legacy
-            section
-            title={_('LDAP')}
-            cmd="auth_settings"
-            name="ldap"
-            caps={['describe_auth', 'modify_auth']}/>
-          <MenuEntry
-            legacy
-            title={_('Radius')}
-            cmd="auth_settings"
-            name="radius"
-            caps={['describe_auth', 'modify_auth']}/>
-        </Menu>
+        {may_op_admin &&
+          <Menu title={_('Administration')}>
+            <MenuEntry
+              title={_('Users')}
+              to="users"
+              caps="get_users"
+            />
+            <MenuEntry
+              title={_('Groups')}
+              to="groups"
+              caps="get_groups"
+            />
+            <MenuEntry
+              title={_('Roles')}
+              to="roles"
+              caps="get_roles"
+            />
+            <MenuEntry
+              legacy
+              section
+              title={_('LDAP')}
+              cmd="auth_settings"
+              name="ldap"
+              caps={['describe_auth', 'modify_auth']}
+            />
+            <MenuEntry
+              legacy
+              title={_('Radius')}
+              cmd="auth_settings"
+              name="radius"
+              caps={['describe_auth', 'modify_auth']}
+            />
+          </Menu>
+        }
         <Menu
-          legacy
           title={_('Help')}
-          path="help/contents.html">
+        >
           <MenuEntry
             legacy
             title={_('Contents')}
-            path="help/contents.html"/>
+            path="help/contents.html"
+            caps="help"
+          />
           <MenuEntry
             legacy
             title={_('About')}
-            path="help/about.html"/>
+            path="help/about.html"
+          />
         </Menu>
       </Ul>
     </Wrapper>
