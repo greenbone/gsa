@@ -129,7 +129,7 @@ const Details = ({
               {is_defined(nvt) ?
                 <DetailsLink
                   id={nvt.id}
-                  type={nvt.nvt_type}
+                  type="nvt"
                 >
                   {nvt.name}
                 </DetailsLink> :

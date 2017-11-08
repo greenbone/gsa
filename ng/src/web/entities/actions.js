@@ -49,17 +49,15 @@ const EntityActions = ({
 
   return (
     <td className="table-actions">
-      <Layout flex align={['center', 'center']}>
-        {selectionType === SelectionType.SELECTION_USER ?
-          <Layout flex align={['center', 'center']}>
-            <EntitySelection
-              entity={entity}
-              onSelected={onEntitySelected}
-              onDeselected={onEntityDeselected}/>
-          </Layout> :
-          render_component(actionsComponent, {...other, entity})
-        }
-      </Layout>
+      {selectionType === SelectionType.SELECTION_USER ?
+        <Layout flex align={['center', 'center']}>
+          <EntitySelection
+            entity={entity}
+            onSelected={onEntitySelected}
+            onDeselected={onEntityDeselected}/>
+        </Layout> :
+        render_component(actionsComponent, {...other, entity})
+      }
     </td>
   );
 };

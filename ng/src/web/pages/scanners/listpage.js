@@ -101,7 +101,7 @@ class Page extends React.Component {
           comment: scanner.comment,
           id: scanner.id,
           name: scanner.name,
-          type: scanner.type,
+          type: scanner.scanner_type,
           host: scanner.host,
           port: scanner.port,
           ca_pub: is_defined(scanner.ca_pub) ?
