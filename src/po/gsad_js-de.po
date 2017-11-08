@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-08 10:13+0100\n"
-"PO-Revision-Date: 2017-11-08 08:46+0200\n"
+"POT-Creation-Date: 2017-11-08 13:41+0100\n"
+"PO-Revision-Date: 2017-11-08 12:30+0200\n"
 "Last-Translator: Timo <timo.pollmeier@greenbone.net>\n"
 "Language-Team: German <openvas-devel@wald.intevation.org>\n"
 "Language: de\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.3\n"
-"X-POOTLE-MTIME: 1510127176.742283\n"
+"X-POOTLE-MTIME: 1510140607.106193\n"
 
 #: src/html/classic/js/greenbone.js:623 src/html/classic/js/greenbone.js:1345
 msgid "Save"
@@ -120,13 +120,11 @@ msgid "Bubble Chart"
 msgstr "Blasendiagramm"
 
 #: src/html/classic/js/gsa_bubble_chart.js:102
-#: src/html/classic/js/gsa_gantt_chart.js:125
-#: src/html/classic/js/gsa_h_bar_chart.js:152
-msgid "No matching {{resource_type}}"
-msgstr "Kein(e) passende(r/s) {{resource_type}}"
+msgid "No matching {{- resource_type}}"
+msgstr "Kein(e) passende(r/s) {{- resource_type}}"
 
 #: src/html/classic/js/gsa_chart_helpers.js:1423
-#: src/html/classic/js/gsa_chart_helpers.js:1546
+#: src/html/classic/js/gsa_chart_helpers.js:1545
 msgid "High"
 msgstr "Hoch"
 
@@ -187,106 +185,106 @@ msgid "CERT-Bund Advisories"
 msgstr "CERT-Bund-Meldungen"
 
 #: src/html/classic/js/gsa_chart_helpers.js:1528
-msgid "total {{resource_type_plural}}"
-msgstr "{{resource_type_plural}} gesamt"
+msgid "total {{- resource_type_plural}}"
+msgstr "{{- resource_type_plural}} gesamt"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1536
+#: src/html/classic/js/gsa_chart_helpers.js:1535
 msgid "creation time"
 msgstr "Erstellungszeit"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1538
+#: src/html/classic/js/gsa_chart_helpers.js:1537
 msgid "duration"
 msgstr "Laufzeit"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1540
+#: src/html/classic/js/gsa_chart_helpers.js:1539
 msgid "modification time"
 msgstr "Änderungszeit"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1542
+#: src/html/classic/js/gsa_chart_helpers.js:1541
 msgid "QoD"
 msgstr "QoD"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1544
+#: src/html/classic/js/gsa_chart_helpers.js:1543
 msgid "QoD type"
 msgstr "QoD-Typ"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1548
+#: src/html/classic/js/gsa_chart_helpers.js:1547
 msgid "High / host"
 msgstr "Hoch / Host"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1550
+#: src/html/classic/js/gsa_chart_helpers.js:1549
 msgid "Duration / host"
 msgstr "Laufzeit / Host"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1601
-msgid "min. {{field_name}}"
-msgstr "min. {{field_name}}"
+#: src/html/classic/js/gsa_chart_helpers.js:1600
+msgid "min. {{- field_name}}"
+msgstr "min. {{- field_name}}"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1606
-msgid "max. {{field_name}}"
-msgstr "max. {{field_name}}"
+#: src/html/classic/js/gsa_chart_helpers.js:1604
+msgid "max. {{- field_name}}"
+msgstr "max. {{- field_name}}"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1611
-msgid "average {{field_name}}"
-msgstr "durchschn. {{field_name}}"
+#: src/html/classic/js/gsa_chart_helpers.js:1608
+msgid "average {{- field_name}}"
+msgstr "durchschn. {{- field_name}}"
 
-#: src/html/classic/js/gsa_chart_helpers.js:1616
-msgid "summed {{field_name}}"
-msgstr "Summe {{field_name}}"
+#: src/html/classic/js/gsa_chart_helpers.js:1612
+msgid "summed {{- field_name}}"
+msgstr "Summe {{- field_name}}"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2032
+#: src/html/classic/js/gsa_chart_helpers.js:2027
 msgid "None"
 msgstr "Keiner"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2035
+#: src/html/classic/js/gsa_chart_helpers.js:2030
 msgid "Exploit"
 msgstr "Exploit"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2038
+#: src/html/classic/js/gsa_chart_helpers.js:2033
 msgid "Remote vulnerability"
 msgstr "Remote-Schwachstelle"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2041
+#: src/html/classic/js/gsa_chart_helpers.js:2036
 msgid "Package check"
 msgstr "Package-Check"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2044
+#: src/html/classic/js/gsa_chart_helpers.js:2039
 msgid "Registry check"
 msgstr "Registry-Check"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2047
+#: src/html/classic/js/gsa_chart_helpers.js:2042
 msgid "Executable version"
 msgstr "Programmdatei-Version"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2050
+#: src/html/classic/js/gsa_chart_helpers.js:2045
 msgid "Remote analysis"
 msgstr "Remote-Analyse"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2053
+#: src/html/classic/js/gsa_chart_helpers.js:2048
 msgid "Remote probe"
 msgstr "Fern-Test"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2056
+#: src/html/classic/js/gsa_chart_helpers.js:2051
 msgid "Unreliable rem. banner"
 msgstr "Unzuverlässiger Banner"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2059
+#: src/html/classic/js/gsa_chart_helpers.js:2054
 msgid "Unreliable exec. version"
 msgstr "Unzuverlässige Prog.-Version"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2551
+#: src/html/classic/js/gsa_chart_helpers.js:2546
 msgid "{{title}} (Loading...)"
 msgstr "{{title}} (Lädt...)"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2558
+#: src/html/classic/js/gsa_chart_helpers.js:2553
 msgid "{{title}} {{filter_text}} (Total: {{count}})"
 msgstr "{{title}} {{filter_text}} (Gesamt: {{count}})"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2655
+#: src/html/classic/js/gsa_chart_helpers.js:2650
 msgid "Greenbone Security Assistant - Chart data table"
 msgstr "Greenbone Security Assistant - Datentabelle"
 
-#: src/html/classic/js/gsa_chart_helpers.js:2707
+#: src/html/classic/js/gsa_chart_helpers.js:2702
 msgid "Applied filter: {{filter}}"
 msgstr "Angewandter Filter: {{filter}}"
 
@@ -422,6 +420,11 @@ msgstr "Lade Gantt-Diagramm ..."
 msgid "Gantt Chart"
 msgstr "Gantt-Diagramm"
 
+#: src/html/classic/js/gsa_gantt_chart.js:125
+#: src/html/classic/js/gsa_h_bar_chart.js:152
+msgid "No matching {{resource_type}}"
+msgstr "Kein(e) passende(r/s) {{resource_type}}"
+
 #: src/html/classic/js/gsa_graphics_base.js:203
 msgid "Show detached chart window"
 msgstr "In neuem Fenster öffnen"
@@ -478,6 +481,21 @@ msgstr "Bitte versuchen Sie einen Filter, der weniger Hosts auswählt"
 #: src/html/classic/js/gsa_topology_chart.js:143
 msgid "No hosts with topology selected"
 msgstr "Keine Hosts mit Topologie ausgewählt"
+
+#~ msgid "total {{resource_type_plural}}"
+#~ msgstr "{{resource_type_plural}} gesamt"
+
+#~ msgid "min. {{field_name}}"
+#~ msgstr "min. {{field_name}}"
+
+#~ msgid "max. {{field_name}}"
+#~ msgstr "max. {{field_name}}"
+
+#~ msgid "average {{field_name}}"
+#~ msgstr "durchschn. {{field_name}}"
+
+#~ msgid "summed {{field_name}}"
+#~ msgstr "Summe {{field_name}}"
 
 #~ msgid "Add new Component"
 #~ msgstr "Neue Komponente hinzufügen"
