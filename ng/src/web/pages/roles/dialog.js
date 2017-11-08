@@ -122,7 +122,7 @@ const Dialog = ({
             title={_('Name')}
             flex align={['space-between', 'center']}>
             <Select2
-              name="permission"
+              name="permission_name"
               value={permission_name}
               onChange={onValueChange}
             >
