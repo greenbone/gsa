@@ -36,13 +36,14 @@ class CollectionCounts {
    * @param {number} length   - Current number of items in the collection
    * @param {number} rows     - Count of max. requested items
    */
-  constructor({first, all, filtered, length, rows}) {
+  constructor({first = 0, all = 0, filtered = 0, length = 0, rows = 0} = {}) {
     this.first = parse_int(first);
     this.all = parse_int(all);
     this.filtered = parse_int(filtered);
     this.length = parse_int(length);
     this.rows = parse_int(rows);
-    this.last = this.first + this.length - 1;
+    this.last = this.first > 0 && this.last > 0 ?
+      this.first + this.length - 1 : 0;
   }
 
   isFirst() {
