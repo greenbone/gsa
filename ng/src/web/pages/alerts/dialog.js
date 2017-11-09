@@ -26,6 +26,21 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {select_save_id} from 'gmp/utils.js';
 
+import {
+  CONDITION_TYPE_ALWAYS,
+  EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+  METHOD_TYPE_SCP,
+  METHOD_TYPE_SEND,
+  METHOD_TYPE_SMB,
+  METHOD_TYPE_SNMP,
+  METHOD_TYPE_SYSLOG,
+  METHOD_TYPE_EMAIL,
+  METHOD_TYPE_START_TASK,
+  METHOD_TYPE_HTTP_GET,
+  METHOD_TYPE_SOURCEFIRE,
+  METHOD_TYPE_VERINICE,
+} from 'gmp/models/alert.js';
+
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
@@ -61,7 +76,7 @@ import FilterCountChangedConditionPart from
 export const DEFAULT_DEFENSE_CENTER_PORT = '8307';
 export const DEFAULT_DIRECTION = 'changed';
 export const DEFAULT_EVENT_STATUS = 'Done';
-export const DEFAULT_METHOD = 'Email';
+export const DEFAULT_METHOD = METHOD_TYPE_EMAIL;
 export const DEFAULT_SCP_PATH = 'report.xml';
 export const DEFAULT_SECINFO_TYPE = 'nvt';
 export const DEFAULT_SEVERITY = 0.1;
@@ -159,7 +174,7 @@ class AlertDialog extends React.Component {
       onValueChange,
     } = this.props;
 
-    let is_task_event = value === 'Task run status changed';
+    const is_task_event = value === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
     let filter_id;
 
     if (onValueChange) {
@@ -264,7 +279,7 @@ class AlertDialog extends React.Component {
       onValueChange,
     } = this.props;
     let {capabilities} = this.context;
-    let is_task_event = event === 'Task run status changed';
+    const is_task_event = event === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
     return (
       <Layout flex="column">
 
@@ -310,8 +325,8 @@ class AlertDialog extends React.Component {
           <Radio
             title={_('Always')}
             name="condition"
-            value="Always"
-            checked={condition === 'Always'}
+            value={CONDITION_TYPE_ALWAYS}
+            checked={condition === CONDITION_TYPE_ALWAYS}
             onChange={onValueChange}/>
 
           {is_task_event &&
@@ -376,28 +391,28 @@ class AlertDialog extends React.Component {
             name="method"
             value={method}
             onChange={onValueChange}>
-            <option value="Email">{_('Email')}</option>
-            <option value="HTTP Get" disabled={!is_task_event}>
+            <option value={METHOD_TYPE_EMAIL}>{_('Email')}</option>
+            <option value={METHOD_TYPE_HTTP_GET} disabled={!is_task_event}>
               {_('HTTP Get')}
             </option>
-            <option value="SCP">{_('SCP')}</option>
-            <option value="Send">{_('Send to host')}</option>
-            <option value="SMB">{_('SMB')}</option>
-            <option value="SNMP">{_('SNMP')}</option>
-            <option value="Sourcefire Connector" disabled={!is_task_event}>
+            <option value={METHOD_TYPE_SCP}>{_('SCP')}</option>
+            <option value={METHOD_TYPE_SEND}>{_('Send to host')}</option>
+            <option value={METHOD_TYPE_SMB}>{_('SMB')}</option>
+            <option value={METHOD_TYPE_SNMP}>{_('SNMP')}</option>
+            <option value={METHOD_TYPE_SOURCEFIRE} disabled={!is_task_event}>
               {_('Sourcefire Connector')}
             </option>
-            <option value="Start Task" disabled={!is_task_event}>
+            <option value={METHOD_TYPE_START_TASK} disabled={!is_task_event}>
               {_('Start Task')}
             </option>
-            <option value="Syslog">{_('System Logger')}</option>
-            <option value="verinice Connector">
+            <option value={METHOD_TYPE_SYSLOG}>{_('System Logger')}</option>
+            <option value={METHOD_TYPE_VERINICE}>
               {_('verinice.PRO Connector')}
             </option>
           </Select2>
         </FormGroup>
 
-        {method === 'Email' &&
+        {method === METHOD_TYPE_EMAIL &&
           <EmailMethodPart
             prefix="method_data"
             fromAddress={method_data_from_address}
@@ -413,14 +428,14 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         }
 
-        {method === 'HTTP Get' &&
+        {method === METHOD_TYPE_HTTP_GET &&
           <HttpMethodPart
             prefix="method_data"
             URL={method_data_URL}
             onChange={onValueChange}/>
         }
 
-        {method === 'SCP' &&
+        {method === METHOD_TYPE_SCP &&
           <ScpMethodPart
             prefix="method_data"
             credentials={credentials}
@@ -435,7 +450,7 @@ class AlertDialog extends React.Component {
             />
         }
 
-        {method === 'Send' &&
+        {method === METHOD_TYPE_SEND &&
           <SendMethodPart
             prefix="method_data"
             sendHost={method_data_send_host}
@@ -445,7 +460,7 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         }
 
-        {method === 'Start Task' &&
+        {method === METHOD_TYPE_START_TASK &&
           <StartTaskMethodPart
             prefix="method_data"
             tasks={tasks}
@@ -453,7 +468,7 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         }
 
-        {method === 'SMB' &&
+        {method === METHOD_TYPE_SMB &&
           <SmbMethodPart
             prefix="method_data"
             credentials={credentials}
@@ -466,7 +481,7 @@ class AlertDialog extends React.Component {
             onNewCredentialClick={onNewSmbCredentialClick}/>
         }
 
-        {method === 'SNMP' &&
+        {method === METHOD_TYPE_SNMP &&
           <SnmpMethodPart
             prefix="method_data"
             snmpAgent={method_data_snmp_agent}
@@ -475,7 +490,7 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         }
 
-        {method === 'Sourcefire Connector' &&
+        {method === METHOD_TYPE_SOURCEFIRE &&
           <SourcefireMethodPart
             prefix="method_data"
             defenseCenterIp={method_data_defense_center_ip}
@@ -483,7 +498,7 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         }
 
-        {method === 'verinice Connector' &&
+        {method === METHOD_TYPE_VERINICE &&
           <VeriniceMethodPart
             prefix="method_data"
             credentials={credentials}
@@ -579,7 +594,7 @@ export default withDialog({
   defaultState: {
     active: 1,
     comment: '',
-    condition: 'Always',
+    condition: CONDITION_TYPE_ALWAYS,
     condition_data_at_least_count: 1,
     condition_data_count: 1,
     condition_data_direction: DEFAULT_DIRECTION,
@@ -588,7 +603,7 @@ export default withDialog({
     event_data_feed_event: 'new',
     event_data_secinfo_type: DEFAULT_SECINFO_TYPE,
     event_data_status: DEFAULT_EVENT_STATUS,
-    event: 'Task run status changed',
+    event: EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
     filter_id: 0,
     filters: [],
     method: DEFAULT_METHOD,
