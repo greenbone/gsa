@@ -42,6 +42,7 @@ import Layout from '../../components/layout/layout.js';
 
 import {render_options} from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from '../../utils/proptypes.js';
 
 const Spacer = glamorous.div({marginLeft: '7px'});
 
@@ -142,9 +143,9 @@ const UserSettingsDialog = ({
                 size="40"
                 onChange={onValueChange}
                 maxLength="80"/>
-                <Spacer>
-                  <small>{_('Will be updated after the next login')}</small>
-                </Spacer>
+              <Spacer>
+                <small>{_('Will be updated after the next login')}</small>
+              </Spacer>
             </FormGroup>
 
 {/* FIXME Double check new password, before saving possible typos */}
@@ -685,12 +686,12 @@ const UserSettingsDialog = ({
 };
 
 UserSettingsDialog.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
+  data: PropTypes.object.isRequired,
+  optionLists: PropTypes.object.isRequired,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
-  optionLists: PropTypes.object.isRequired,
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 
