@@ -176,9 +176,9 @@ set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
 set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
 
 if (NOT SKIP_SRC)
-  add_subdirectory (gsad)
   # ng has no documentation to build so skip if src should not be build
   add_subdirectory (ng)
+  add_subdirectory (gsad)
 endif (NOT SKIP_SRC)
 
 ## Documentation
