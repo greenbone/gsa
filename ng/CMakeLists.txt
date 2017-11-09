@@ -321,13 +321,18 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/agents/row.js
      ${NG_SRC_DIR}/src/web/pages/agents/table.js
      ${NG_SRC_DIR}/src/web/pages/alerts/component.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/condition.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/details.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/alerts/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/pages/alerts/emailmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/event.js
      ${NG_SRC_DIR}/src/web/pages/alerts/filtercountchangedconditionpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/filtercountleastconditionpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/httpmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/method.js
      ${NG_SRC_DIR}/src/web/pages/alerts/scpmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/secinfoeventpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/sendmethodpart.js

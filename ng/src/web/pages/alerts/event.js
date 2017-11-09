@@ -20,37 +20,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import _ from 'gmp/locale.js';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-import withRowDetails from '../../entities/withRowDetails.js';
+import {is_defined} from 'gmp/utils.js';
 
-import AlertDetails from './details.js';
-import Row from './row.js';
+import {secinfo_type} from 'gmp/models/secinfo.js';
+import {
+  EVENT_TYPE_UPDATED_SECINFO,
+  EVENT_TYPE_NEW_SECINFO,
+  EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+} from 'gmp/models/alert.js';
 
-export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['event', _('Event')],
-  ['condition', _('Condition')],
-  ['method', _('Method')],
-  ['filter', _('Filter')],
-  ['active', _('Active')],
-];
+const Event = ({
+  event,
+}) => {
+  if (event.type === EVENT_TYPE_NEW_SECINFO) {
+    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
+    return _('New {{secinfo_type}} arrived', {secinfo_type: type});
+  }
 
-const AlertsTable = createEntitiesTable({
-  emptyTitle: _('No alerts available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  rowDetails: withRowDetails('alert')(AlertDetails),
-  footer: createEntitiesFooter({
-    download: 'alerts.xml',
-    span: 7,
-    trash: true,
-  }),
-});
+  if (event.type === EVENT_TYPE_UPDATED_SECINFO) {
+    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
+    return _('Updated {{secinfo_type}} arrived', {secinfo_type: type});
+  }
 
-export default AlertsTable;
+  if (event.type === EVENT_TYPE_TASK_RUN_STATUS_CHANGED &&
+    is_defined(event.data.status)) {
+    return _('Task run status changed to {{status}}',
+      {status: event.data.status.value});
+  }
+  return event.type;
+};
+
+export default Event;
 
 // vim: set ts=2 sw=2 tw=80:

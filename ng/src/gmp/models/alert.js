@@ -21,21 +21,49 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_object, for_each} from '../utils.js';
+import {is_defined, is_empty, is_object, for_each, map} from '../utils.js';
 
 import {parse_yesno, YES_VALUE} from '../parser.js';
 
 import Model from '../model.js';
 
+export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
+export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
+export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
+
+export const CONDITION_TYPE_FILTER_COUNT_AT_LEAST = 'Filter count at least';
+export const CONDITION_TYPE_FILTER_COUNT_CHANGED = 'Filter count changed';
+export const CONDITION_TYPE_SEVERITY_AT_LEAST = 'Severity at least';
+export const CONDITION_TYPE_ALWAYS = 'Always';
+
+export const CONDITION_DIRECTION_DECREASED = 'decreased';
+export const CONDITION_DIRECTION_INCREASED = 'increased';
+export const CONDITION_DIRECTION_CHANGED = 'changed';
+
+export const METHOD_TYPE_SCP = 'SCP';
+export const METHOD_TYPE_SEND = 'Send';
+export const METHOD_TYPE_SMB = 'SMB';
+export const METHOD_TYPE_SNMP = 'SNMP';
+export const METHOD_TYPE_SYSLOG = 'Syslog';
+export const METHOD_TYPE_EMAIL = 'Email';
+export const METHOD_TYPE_START_TASK = 'Start Task';
+export const METHOD_TYPE_HTTP_GET = 'HTTP Get';
+export const METHOD_TYPE_SOURCEFIRE = 'Sourcefire Connector';
+export const METHOD_TYPE_VERINICE = 'verinice Connector';
+
+export const EMAIL_NOTICE_INCLUDE = '0';
+export const EMAIL_NOTICE_ATTACH = '2';
 
 const create_values = data => {
-  let values = {value: data.__text};
-  let {__text, name, ...other} = data;
+  const value = is_empty(data.__text) ? undefined : data.__text;
+  const values = {value};
+  const {__text, name, ...other} = data;
 
-  for (let key of Object.keys(other)) {
-    let obj = data[key];
+  for (const [key, obj] of Object.entries(other)) {
     if (is_defined(obj._id)) {
-      obj.id = obj._id;
+      if (obj._id.length > 0) {
+        obj.id = obj._id;
+      }
       delete obj._id;
     }
     values[key] = obj;
@@ -49,13 +77,13 @@ class Alert extends Model {
   static entity_type = 'alert';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     const types = ['condition', 'method', 'event'];
 
     for (const type of types) {
       if (is_object(ret[type])) {
-        let data = {};
+        const data = {};
 
         for_each(ret[type].data, value => {
           data[value.name] = create_values(value);
@@ -76,6 +104,14 @@ class Alert extends Model {
 
     if (is_defined(ret.filter)) {
       ret.filter = new Model(ret.filter, 'filter');
+    }
+
+    if (is_defined(elem.tasks)) {
+      ret.tasks = map(elem.tasks.task,
+        task => new Model(task, 'task'));
+    }
+    else {
+      ret.tasks = [];
     }
 
     ret.active = parse_yesno(elem.active);

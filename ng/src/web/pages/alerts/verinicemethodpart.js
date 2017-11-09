@@ -38,18 +38,18 @@ import TextField from '../../components/form/textfield.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 const VeriniceMethodPart = ({
-    prefix,
-    veriniceServerUrl,
-    veriniceServerCredential,
-    veriniceServerReportFormat,
-    reportFormats,
-    credentials,
-    onChange,
-    onNewCredentialClick,
-  }) => {
-    let verinice_credential_opts = render_options(credentials);
-    let verinice_report_format_opts = render_options(
-      reportFormats.filter(format => format.extension === 'vna'));
+  prefix,
+  veriniceServerUrl,
+  veriniceServerCredential,
+  veriniceServerReportFormat,
+  reportFormats,
+  credentials,
+  onChange,
+  onNewCredentialClick,
+}) => {
+  const verinice_credential_opts = render_options(credentials);
+  const verinice_report_format_opts = render_options(
+    reportFormats.filter(format => format.extension === 'vna'));
   return (
     <Layout
       flex="column"
@@ -67,7 +67,7 @@ const VeriniceMethodPart = ({
 
       <FormGroup title={_('Credential')}>
         <Select2
-          name={prefix + '"verinice_server_credential'}
+          name={prefix + 'verinice_server_credential'}
           value={veriniceServerCredential}
           onChange={onChange}>
           {verinice_credential_opts}
@@ -100,8 +100,8 @@ VeriniceMethodPart.propTypes = {
   veriniceServerCredential: PropTypes.id,
   veriniceServerReportFormat: PropTypes.id,
   veriniceServerUrl: PropTypes.string,
-  onNewCredentialClick: PropTypes.func,
   onChange: PropTypes.func,
+  onNewCredentialClick: PropTypes.func,
 };
 
 export default withPrefix(VeriniceMethodPart);

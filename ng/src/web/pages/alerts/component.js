@@ -78,12 +78,16 @@ const value = (data = {}, def = undefined) => {
   return val;
 };
 
+const filter_results_filter = filter => filter.filter_type = 'Results';
+const filter_secinfo_filter = filter => filter.filter_type = 'SecInfo';
+
 class AlertComponent extends React.Component {
 
   constructor(...args) {
     super(...args);
 
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
+    this.handleTestAlert = this.handleTestAlert.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
@@ -155,10 +159,8 @@ class AlertComponent extends React.Component {
 
         this.credentials = credentials;
 
-        const result_filters = filters.filter(
-          filter => filter.type === 'Result');
-        const secinfo_filters = filters.filter(
-          filter => filter.type === 'SecInfo');
+        const result_filters = filters.filter(filter_results_filter);
+        const secinfo_filters = filters.filter(filter_secinfo_filter);
 
         let condition_data_filters;
         const condition_data_filter_id = value(condition.data.filter_id);
@@ -325,10 +327,8 @@ class AlertComponent extends React.Component {
 
         this.credentials = credentials;
 
-        const result_filters = filters.filter(
-          filter => filter.type === 'Result');
-        const secinfo_filters = filters.filter(
-          filter => filter.type === 'SecInfo');
+        const result_filters = filters.filter(filter_results_filter);
+        const secinfo_filters = filters.filter(filter_secinfo_filter);
 
         const result_filter_id = select_save_id(result_filters);
         const report_format_id = select_save_id(report_formats);
@@ -356,6 +356,21 @@ class AlertComponent extends React.Component {
         });
       });
     }
+  }
+
+  handleTestAlert(alert) {
+    const {gmp} = this.props;
+    const {onTestSuccess, onTestError} = this.props;
+
+    gmp.alert.test(alert).then(() => {
+      if (is_defined(onTestSuccess)) {
+        onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
+      }
+    }, () => {
+      if (is_defined(onTestError)) {
+        onTestError(_('Testing the alert {{name}} failed.', alert));
+      }
+    });
   }
 
   render() {
@@ -397,6 +412,7 @@ class AlertComponent extends React.Component {
               ...other,
               create: this.openAlertDialog,
               edit: this.openAlertDialog,
+              test: this.handleTestAlert,
             })}
             <AlertDialog
               ref={ref => this.alert_dialog = ref}
@@ -430,6 +446,8 @@ AlertComponent.propTypes = {
   onError: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  onTestError: PropTypes.func,
+  onTestSuccess: PropTypes.func,
 };
 
 export default withGmp(AlertComponent);

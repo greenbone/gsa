@@ -59,6 +59,7 @@ import SecinfoPage from './pages/secinfopage.js';
 
 import AgentsPage from './pages/agents/listpage.js';
 import AlertsPage from './pages/alerts/listpage.js';
+import AlertDetailsPage from './pages/alerts/detailspage.js';
 import AllSecInfosPage from './pages/allsecinfo/listpage.js';
 import CertBundAdvsPage from './pages/certbund/listpage.js';
 import CertBundAdvDetailsPage from './pages/certbund/detailspage.js';
@@ -330,6 +331,10 @@ ReactDOM.render(
         <Route
           path="target/:id"
           component={TargetDetailsPage}
+        />
+        <Route
+          path="alert/:id"
+          component={AlertDetailsPage}
         />
         <Route
           path="note/:id"
