@@ -165,7 +165,7 @@ class AlertDialog extends React.Component {
   }
 
   handleEventChange(value) {
-    let {
+    const {
       method_data_subject,
       method_data_message,
       method_data_message_attach,
@@ -220,7 +220,7 @@ class AlertDialog extends React.Component {
   }
 
   render() {
-    let {
+    const {
       active,
       name,
       comment,
@@ -278,7 +278,7 @@ class AlertDialog extends React.Component {
       onNewVeriniceCredentialClick,
       onValueChange,
     } = this.props;
-    let {capabilities} = this.context;
+    const {capabilities} = this.context;
     const is_task_event = event === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
     return (
       <Layout flex="column">
@@ -526,42 +526,40 @@ class AlertDialog extends React.Component {
 
 AlertDialog.propTypes = {
   active: PropTypes.yesno,
-  name: PropTypes.string,
   comment: PropTypes.string,
   condition: PropTypes.string,
-  condition_data_severity: PropTypes.number,
-  condition_data_at_least_filter_id: PropTypes.id,
   condition_data_at_least_count: PropTypes.number,
-  condition_data_filter_id: PropTypes.id,
-  condition_data_filters: PropTypes.arrayLike,
+  condition_data_at_least_filter_id: PropTypes.id,
   condition_data_count: PropTypes.number,
   condition_data_direction: PropTypes.string,
+  condition_data_filter_id: PropTypes.id,
+  condition_data_filters: PropTypes.arrayLike,
+  condition_data_severity: PropTypes.number,
   credentials: PropTypes.arrayLike,
+  event: PropTypes.string.isRequired,
   event_data_feed_event: PropTypes.string.isRequired,
   event_data_secinfo_type: PropTypes.string.isRequired,
   event_data_status: PropTypes.string.isRequired,
-  event: PropTypes.string.isRequired,
   filter_id: PropTypes.idOrZero,
   method: PropTypes.string,
+  method_data_URL: PropTypes.string,
+  method_data_defense_center_ip: PropTypes.string,
+  method_data_defense_center_port: PropTypes.string,
   method_data_details_url: PropTypes.string,
   method_data_from_address: PropTypes.string,
-  method_data_message_attach: PropTypes.string,
   method_data_message: PropTypes.string,
-  method_data_notice_attach_format: PropTypes.id,
+  method_data_message_attach: PropTypes.string,
   method_data_notice: PropTypes.string,
+  method_data_notice_attach_format: PropTypes.id,
   method_data_notice_report_format: PropTypes.id,
-  method_data_subject: PropTypes.string,
-  method_data_to_address: PropTypes.string,
   method_data_scp_credential: PropTypes.id,
   method_data_scp_host: PropTypes.string,
   method_data_scp_known_hosts: PropTypes.string,
   method_data_scp_path: PropTypes.string,
   method_data_scp_report_format: PropTypes.id,
-  method_data_URL: PropTypes.string,
   method_data_send_host: PropTypes.string,
   method_data_send_port: PropTypes.string,
   method_data_send_report_format: PropTypes.id,
-  method_data_start_task_task: PropTypes.id,
   method_data_smb_credential: PropTypes.id,
   method_data_smb_file_path: PropTypes.string,
   method_data_smb_report_format: PropTypes.id,
@@ -569,11 +567,13 @@ AlertDialog.propTypes = {
   method_data_snmp_agent: PropTypes.string,
   method_data_snmp_community: PropTypes.string,
   method_data_snmp_message: PropTypes.string,
-  method_data_defense_center_ip: PropTypes.string,
-  method_data_defense_center_port: PropTypes.string,
-  method_data_verinice_server_url: PropTypes.string,
+  method_data_start_task_task: PropTypes.id,
+  method_data_subject: PropTypes.string,
+  method_data_to_address: PropTypes.string,
   method_data_verinice_server_credential: PropTypes.id,
   method_data_verinice_server_report_format: PropTypes.id,
+  method_data_verinice_server_url: PropTypes.string,
+  name: PropTypes.string,
   report_formats: PropTypes.arrayLike,
   result_filters: PropTypes.arrayLike,
   secinfo_filters: PropTypes.arrayLike,
