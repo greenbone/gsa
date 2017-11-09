@@ -78,6 +78,9 @@ const value = (data = {}, def = undefined) => {
   return val;
 };
 
+const filter_results_filter = filter => filter.filter_type = 'Results';
+const filter_secinfo_filter = filter => filter.filter_type = 'SecInfo';
+
 class AlertComponent extends React.Component {
 
   constructor(...args) {
@@ -156,10 +159,8 @@ class AlertComponent extends React.Component {
 
         this.credentials = credentials;
 
-        const result_filters = filters.filter(
-          filter => filter.type === 'Result');
-        const secinfo_filters = filters.filter(
-          filter => filter.type === 'SecInfo');
+        const result_filters = filters.filter(filter_results_filter);
+        const secinfo_filters = filters.filter(filter_secinfo_filter);
 
         let condition_data_filters;
         const condition_data_filter_id = value(condition.data.filter_id);
@@ -326,10 +327,8 @@ class AlertComponent extends React.Component {
 
         this.credentials = credentials;
 
-        const result_filters = filters.filter(
-          filter => filter.type === 'Result');
-        const secinfo_filters = filters.filter(
-          filter => filter.type === 'SecInfo');
+        const result_filters = filters.filter(filter_results_filter);
+        const secinfo_filters = filters.filter(filter_secinfo_filter);
 
         const result_filter_id = select_save_id(result_filters);
         const report_format_id = select_save_id(report_formats);
