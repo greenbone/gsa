@@ -786,7 +786,7 @@ class UserSettings extends React.Component {
   }
 
   createRow(setting) {
-    const [name,value] = Object.entries(setting)[0];
+    const [name, value] = Object.entries(setting)[0]; // eslint-disable-line prefer-destructuring
     return (
       <TableRow key={name}>
         <TableData>
@@ -880,19 +880,26 @@ class UserSettings extends React.Component {
 
     const defaults = [
       ['Default Alert', 'alert', initial_data.defaultalert],
-      ['Default ESXi Credential', 'credential', initial_data.defaultesxicredential],
+      ['Default ESXi Credential', 'credential',
+        initial_data.defaultesxicredential],
       ['Default OSP Scan Config', 'config', initial_data.defaultospscanconfig],
       ['Default OSP Scanner', 'scanner', initial_data.defaultospscanner],
-      ['Default OpenVAS Scan Config', 'config', initial_data.defaultopenvasscanconfig],
-      ['Default OpenVAS Scanner', 'scanner', initial_data.defaultopenvasscanner],
+      ['Default OpenVAS Scan Config', 'config',
+        initial_data.defaultopenvasscanconfig],
+      ['Default OpenVAS Scanner', 'scanner',
+        initial_data.defaultopenvasscanner],
       ['Default Port List', 'port_list', initial_data.defaultportlist],
-      ['Default Report Format', 'report_format', initial_data.defaultreportformat],
-      ['Default SMB Credential', 'credential', initial_data.defaultsmbcredential],
-      ['Default SNMP Credential', 'credential', initial_data.defaultsnmpcredential],
-      ['Default SSH Credential', 'credential', initial_data.defaultsshcredential],
+      ['Default Report Format', 'report_format',
+        initial_data.defaultreportformat],
+      ['Default SMB Credential', 'credential',
+        initial_data.defaultsmbcredential],
+      ['Default SNMP Credential', 'credential',
+        initial_data.defaultsnmpcredential],
+      ['Default SSH Credential', 'credential',
+        initial_data.defaultsshcredential],
       ['Default Schedule', 'schedule', initial_data.defaultschedule],
       ['Default Target', 'target', initial_data.defaulttarget],
-    ]
+    ];
 
     const filters = [
       ['Agents Filter', initial_data.agentsfilter],
@@ -972,7 +979,11 @@ class UserSettings extends React.Component {
                         {name}
                       </TableData>
                       <TableData>
-                        <DetailsLink id={id} type={perm} legacy="true">
+                        <DetailsLink
+                          id={id}
+                          type={perm}
+                          legacy
+                        >
                           {defaults_settings[name]}
                         </DetailsLink>
                       </TableData>
@@ -1011,7 +1022,11 @@ class UserSettings extends React.Component {
                           {name}
                         </TableData>
                         <TableData>
-                          <DetailsLink id={id} type="filter" legacy="true">
+                          <DetailsLink
+                            id={id}
+                            type="filter"
+                            legacy
+                          >
                             {filter_settings[name]}
                           </DetailsLink>
                         </TableData>
@@ -1056,8 +1071,8 @@ class UserSettings extends React.Component {
 }
 
 UserSettings.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   gmp: PropTypes.gmp.isRequired,
-  capabilites: PropTypes.capabilities.isRequired,
 };
 
 export default compose(
