@@ -160,45 +160,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/timezones.js
      ${NG_SRC_DIR}/src/gmp/utils.js
      ${NG_SRC_DIR}/src/gmp/xml2json.js
-     ${NG_SRC_DIR}/src/web/pages/agents/listpage.js
-     ${NG_SRC_DIR}/src/web/pages/agents/dialog.js
-     ${NG_SRC_DIR}/src/web/pages/agents/row.js
-     ${NG_SRC_DIR}/src/web/pages/agents/table.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/component.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/dialogcontainer.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/dialog.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/emailmethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/filtercountchangedconditionpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/filtercountleastconditionpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/httpmethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/listpage.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/scpmethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/secinfoeventpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/sendmethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/severitychangedconditionpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/severityleastconditionpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/snmpmethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/sourcefiremethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/table.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/component.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/details.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/dialog.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/downloadicon.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/listpage.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/row.js
-     ${NG_SRC_DIR}/src/web/pages/credentials/table.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/charts.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/details.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/listpage.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/filterdialog.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/row.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/table.js
      ${NG_SRC_DIR}/src/web/components/badge/badge.js
      ${NG_SRC_DIR}/src/web/components/bar/menubar.js
      ${NG_SRC_DIR}/src/web/components/bar/progressbar.js
@@ -302,11 +264,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/provider/cacheprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
-     ${NG_SRC_DIR}/src/web/components/tab/tab.js
-     ${NG_SRC_DIR}/src/web/components/tab/tablist.js
-     ${NG_SRC_DIR}/src/web/components/tab/tabpanel.js
-     ${NG_SRC_DIR}/src/web/components/tab/tabpanels.js
-     ${NG_SRC_DIR}/src/web/components/tab/tabs.js
      ${NG_SRC_DIR}/src/web/components/section/header.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
@@ -315,6 +272,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/structure/footer.js
      ${NG_SRC_DIR}/src/web/components/structure/header.js
      ${NG_SRC_DIR}/src/web/components/structure/main.js
+     ${NG_SRC_DIR}/src/web/components/tab/tab.js
+     ${NG_SRC_DIR}/src/web/components/tab/tablist.js
+     ${NG_SRC_DIR}/src/web/components/tab/tabpanel.js
+     ${NG_SRC_DIR}/src/web/components/tab/tabpanels.js
+     ${NG_SRC_DIR}/src/web/components/tab/tabs.js
      ${NG_SRC_DIR}/src/web/components/table/body.js
      ${NG_SRC_DIR}/src/web/components/table/data.js
      ${NG_SRC_DIR}/src/web/components/table/detailstable.js
@@ -354,6 +316,29 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entity/permissions.js
      ${NG_SRC_DIR}/src/web/entity/tags.js
      ${NG_SRC_DIR}/src/web/entity/tagshandler.js
+     ${NG_SRC_DIR}/src/web/pages/agents/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/agents/dialog.js
+     ${NG_SRC_DIR}/src/web/pages/agents/row.js
+     ${NG_SRC_DIR}/src/web/pages/agents/table.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/component.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/dialogcontainer.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/dialog.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/emailmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/filtercountchangedconditionpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/filtercountleastconditionpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/httpmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/scpmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/secinfoeventpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/sendmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/severitychangedconditionpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/severityleastconditionpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/snmpmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/sourcefiremethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/table.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/details.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/filterdialog.js
@@ -361,6 +346,21 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/row.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/table.js
      ${NG_SRC_DIR}/src/web/pages/assetspage.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/component.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/details.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/detailspage.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/dialog.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/downloadicon.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/row.js
+     ${NG_SRC_DIR}/src/web/pages/credentials/table.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/charts.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/details.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/detailspage.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/filterdialog.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/row.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/table.js
      ${NG_SRC_DIR}/src/web/pages/cpes/charts.js
      ${NG_SRC_DIR}/src/web/pages/cpes/details.js
      ${NG_SRC_DIR}/src/web/pages/cpes/detailspage.js
@@ -582,6 +582,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/users/listpage.js
      ${NG_SRC_DIR}/src/web/pages/users/row.js
      ${NG_SRC_DIR}/src/web/pages/users/table.js
+     ${NG_SRC_DIR}/src/web/pages/usersettings/dialog.js
+     ${NG_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/charts.js
      ${NG_SRC_DIR}/src/web/pages/vulns/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js
