@@ -34,15 +34,25 @@ export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
 export const CONDITION_TYPE_FILTER_COUNT_AT_LEAST = 'Filter count at least';
 export const CONDITION_TYPE_FILTER_COUNT_CHANGED = 'Filter count changed';
 export const CONDITION_TYPE_SEVERITY_AT_LEAST = 'Severity at least';
+export const CONDITION_TYPE_ALWAYS = 'Always';
 
 export const CONDITION_DIRECTION_DECREASED = 'decreased';
+export const CONDITION_DIRECTION_INCREASED = 'increased';
+export const CONDITION_DIRECTION_CHANGED = 'changed';
 
 export const METHOD_TYPE_SCP = 'SCP';
 export const METHOD_TYPE_SEND = 'Send';
+export const METHOD_TYPE_SMB = 'SMB';
 export const METHOD_TYPE_SNMP = 'SNMP';
 export const METHOD_TYPE_SYSLOG = 'Syslog';
 export const METHOD_TYPE_EMAIL = 'Email';
 export const METHOD_TYPE_START_TASK = 'Start Task';
+export const METHOD_TYPE_HTTP_GET = 'HTTP Get';
+export const METHOD_TYPE_SOURCEFIRE = 'Sourcefire Connector';
+export const METHOD_TYPE_VERINICE = 'verinice Connector';
+
+export const EMAIL_NOTICE_INCLUDE = '0';
+export const EMAIL_NOTICE_ATTACH = '2';
 
 const create_values = data => {
   const values = {value: data.__text};
