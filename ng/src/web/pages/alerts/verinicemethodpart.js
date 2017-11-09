@@ -67,7 +67,7 @@ const VeriniceMethodPart = ({
 
       <FormGroup title={_('Credential')}>
         <Select2
-          name={prefix + '"verinice_server_credential'}
+          name={prefix + 'verinice_server_credential'}
           value={veriniceServerCredential}
           onChange={onChange}>
           {verinice_credential_opts}
