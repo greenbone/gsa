@@ -106,8 +106,9 @@ import TargetDetailsPage from './pages/targets/detailspage.js';
 import TasksPage from './pages/tasks/listpage.js';
 import TaskDetailsPage from './pages/tasks/detailspage.js';
 import TrashcanPage from './pages/extras/trashcanpage.js';
-import UsersPage from './pages/users/listpage.js';
 import UserDetailsPage from './pages/users/detailspage.js';
+import UserSettingsPage from './pages/usersettings/usersettingspage.js';
+import UsersPage from './pages/users/listpage.js';
 import VulnerabilitiesPage from './pages/vulns/listpage.js';
 
 import './css/gsa-base.css';
@@ -207,6 +208,9 @@ ReactDOM.render(
         component={Page}
         onEnter={is_logged_in}>
         <IndexRoute component={HomePage}/>
+        <Route
+          path="usersettings"
+          component={UserSettingsPage}/>
         <Route
           path="trashcan"
           component={TrashcanPage}/>

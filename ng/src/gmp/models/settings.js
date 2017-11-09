@@ -40,6 +40,10 @@ class Settings {
     }
     return {};
   }
+
+  getEntries() {
+    return Object.entries(this._settings);
+  }
 }
 
 export default Settings;
