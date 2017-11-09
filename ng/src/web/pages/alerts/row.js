@@ -120,6 +120,7 @@ const Row = ({
   actions,
   entity,
   links = true,
+  onToggleDetailsClick,
   ...props
 }, {
   capabilities,
@@ -127,11 +128,11 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
-        legacy
         entity={entity}
         link={links}
         type="alert"
         displayName={_('Alert')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         <Event event={entity.event}/>
@@ -160,6 +161,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 Row.contextTypes = {

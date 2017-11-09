@@ -25,7 +25,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import AlertDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -41,6 +43,7 @@ const AlertsTable = createEntitiesTable({
   emptyTitle: _('No alerts available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('alert')(AlertDetails),
   footer: createEntitiesFooter({
     download: 'alerts.xml',
     span: 7,
