@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_object, for_each, map} from '../utils.js';
+import {is_defined, is_empty, is_object, for_each, map} from '../utils.js';
 
 import {parse_yesno, YES_VALUE} from '../parser.js';
 
@@ -55,13 +55,15 @@ export const EMAIL_NOTICE_INCLUDE = '0';
 export const EMAIL_NOTICE_ATTACH = '2';
 
 const create_values = data => {
-  const values = {value: data.__text};
+  const value = is_empty(data.__text) ? undefined : data.__text;
+  const values = {value};
   const {__text, name, ...other} = data;
 
-  for (const key of Object.keys(other)) {
-    const obj = data[key];
+  for (const [key, obj] of Object.entries(other)) {
     if (is_defined(obj._id)) {
-      obj.id = obj._id;
+      if (obj._id.length > 0) {
+        obj.id = obj._id;
+      }
       delete obj._id;
     }
     values[key] = obj;
