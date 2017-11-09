@@ -152,9 +152,9 @@ if (GETTEXT_FOUND)
 
     add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                         COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/xsl2pot"
-                        ARGS    "${CMAKE_SOURCE_DIR}/src/html/classic"
+                        ARGS    "${CMAKE_SOURCE_DIR}/gsad/src/html/classic"
                                 "${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot"
-                        DEPENDS ${CMAKE_SOURCE_DIR}/src/html/classic/*.xsl
+                        DEPENDS ${CMAKE_SOURCE_DIR}/gsad/src/html/classic/*.xsl
                         COMMENT "Creating translation template (.pot) file from XSLT")
 
   else (PY_POLIB_FOUND)
