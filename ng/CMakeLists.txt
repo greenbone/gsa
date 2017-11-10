@@ -476,6 +476,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/portlists/portrangestable.js
      ${NG_SRC_DIR}/src/web/pages/portlists/row.js
      ${NG_SRC_DIR}/src/web/pages/portlists/table.js
+     ${NG_SRC_DIR}/src/web/pages/reportformats/component.js
      ${NG_SRC_DIR}/src/web/pages/reportformats/dialog.js
      ${NG_SRC_DIR}/src/web/pages/reportformats/listpage.js
      ${NG_SRC_DIR}/src/web/pages/reportformats/row.js
