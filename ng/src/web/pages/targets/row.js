@@ -102,7 +102,6 @@ const Cred = ({
       <Text>{title}: </Text>
       <Layout box>
         <DetailsLink
-          legacy
           type="credential"
           id={cred.id}
           textOnly={!links}>
@@ -144,8 +143,7 @@ const Row = ({
       </TableData>
       <TableData>
         <DetailsLink
-          legacy
-          type="port_list"
+          type="portlist"
           id={entity.port_list.id}
           textOnly={!links}>
           {entity.port_list.name}
