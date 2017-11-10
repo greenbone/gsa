@@ -116,15 +116,16 @@ const Row = ({
   actions,
   entity,
   links = true,
+  onToggleDetailsClick,
   ...props
 }) => (
   <TableRow>
     <EntityNameTableData
-      legacy
       entity={entity}
-      link={links}
-      type="report_format"
+      links={links}
+      type="reportformat"
       displayName={_('Report Format')}
+      onToggleDetailsClick={onToggleDetailsClick}
     >
       {entity.summary &&
         <Comment>({entity.summary})</Comment>
@@ -155,6 +156,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
