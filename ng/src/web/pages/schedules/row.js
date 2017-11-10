@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _, {long_date, interval} from 'gmp/locale.js';
+import _, {long_date} from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -42,6 +42,11 @@ import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
+import {
+  render_duration,
+  render_next_time,
+  render_period,
+} from './render.js';
 
 const Actions = ({
   entity,
@@ -87,36 +92,12 @@ Actions.propTypes = {
   onScheduleEditClick: PropTypes.func.isRequired,
 };
 
-const render_period = entity => {
-  if (entity.period === 0 && entity.period_months === 0) {
-    return _('Once');
-  }
-  if (entity.period === 0 && entity.period_months === 1) {
-    return _('One month');
-  }
-  if (entity.period === 0) {
-    return _('{{number}} months', {number: entity.period_months});
-  }
-  return interval(entity.period);
-};
-
-const render_duration = entity => {
-  if (entity.duration === 0) {
-    return _('Entire Operation');
-  }
-  return interval(entity.duration);
-};
-
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  let next_time = entity.next_time === 'over' ? '-' :
-    long_date(entity.next_time);
+  actions,
+  entity,
+  links = true,
+  ...props
+}) => {
   return (
     <TableRow>
       <EntityNameTableData
@@ -130,13 +111,13 @@ const Row = ({
         {long_date(entity.first_time)}
       </TableData>
       <TableData>
-        {next_time}
+        {render_next_time(entity.next_time)}
       </TableData>
       <TableData>
         {render_period(entity)}
       </TableData>
       <TableData>
-        {render_duration(entity)}
+        {render_duration(entity.duration)}
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
@@ -147,10 +128,6 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
