@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, shorten} from 'gmp/utils.js';
+import {is_defined, shorten} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -89,8 +89,12 @@ IconActions.propTypes = {
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
-const Cred = ({cred, title, links}) => {
-  if (!is_defined(cred) || is_empty(cred.id)) {
+const Cred = ({
+  cred,
+  title,
+  links = true,
+}) => {
+  if (!is_defined(cred) || !is_defined(cred.id)) {
     return null;
   }
   return (
