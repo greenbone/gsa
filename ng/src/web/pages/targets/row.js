@@ -150,18 +150,26 @@ const Row = ({
         </DetailsLink>
       </TableData>
       <TableData flex="column" align="center">
-        <Cred cred={entity.ssh_credential}
+        <Cred
+          cred={entity.ssh_credential}
           title={'SSH'}
-          links={links}/>
-        <Cred cred={entity.smb_credential}
+          links={links}
+        />
+        <Cred
+          cred={entity.smb_credential}
           title={'SMB'}
-          links={links}/>
-        <Cred cred={entity.esxi_credential}
+          links={links}
+        />
+        <Cred
+          cred={entity.esxi_credential}
           title={'ESXi'}
-          links={links}/>
-        <Cred cred={entity.snmp_credential}
+          links={links}
+        />
+        <Cred
+          cred={entity.snmp_credential}
           title={'SNMP'}
-          links={links}/>
+          links={links}
+        />
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
