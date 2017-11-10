@@ -539,6 +539,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/scanners/table.js
      ${NG_SRC_DIR}/src/web/pages/scanspage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/component.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/details.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/pages/schedules/listpage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
