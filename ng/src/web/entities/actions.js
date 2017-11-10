@@ -56,7 +56,9 @@ const EntityActions = ({
             onSelected={onEntitySelected}
             onDeselected={onEntityDeselected}/>
         </Layout> :
-        render_component(actionsComponent, {...other, entity})
+        <Layout flex="column" grow>
+          {render_component(actionsComponent, {...other, entity})}
+        </Layout>
       }
     </td>
   );
