@@ -23,12 +23,12 @@
 
 import React from 'react';
 
-import moment from 'moment-timezone';
-
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+
+import {SCHEDULES_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -36,135 +36,89 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import ScheduleDialog from './dialog.js';
-import Table, {SORT_FIELDS} from './table.js';
+import ScheduleComponent from './component.js';
+import SchedulesTable, {SORT_FIELDS} from './table.js';
 
-const ToolBarIcons = ({
-  onNewScheduleClick,
-}, {capabilities}) => {
-  return (
-    <Layout flex>
-      <HelpIcon
-        page="schedules"
-        title={_('Help: Schedules')}/>
-      {capabilities.mayCreate('schedule') &&
-        <NewIcon
-          title={_('New Schedule')}
-          onClick={onNewScheduleClick}/>
-      }
-    </Layout>
-  );
-};
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onScheduleCreateClick,
+}) => (
+  <IconDivider>
+    <HelpIcon
+      page="schedules"
+      title={_('Help: Schedules')}/>
+    {capabilities.mayCreate('schedule') &&
+      <NewIcon
+        title={_('New Schedule')}
+        onClick={onScheduleCreateClick}/>
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
-  onNewScheduleClick: PropTypes.func,
+  onScheduleCreateClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+const ScheduleFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
 
-class Page extends React.Component {
+const SchedulesPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <ScheduleComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={ScheduleFilterDialog}
+      sectionIcon="schedule.svg"
+      table={SchedulesTable}
+      title={_('Schedules')}
+      toolBarIcons={ToolBarIcons}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onScheduleCloneClick={clone}
+      onScheduleCreateClick={create}
+      onScheduleDeleteClick={delete_func}
+      onScheduleDownloadClick={download}
+      onScheduleEditClick={edit}
+      onScheduleSaveClick={save}
+    />
+  )}
+  </ScheduleComponent>
+);
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleSaveSchedule = this.handleSaveSchedule.bind(this);
-    this.openScheduleDialog = this.openScheduleDialog.bind(this);
-  }
-
-  handleSaveSchedule(data) {
-    const {onChanged, entityCommand} = this.props;
-    let promise;
-
-    if (is_defined(data.schedule)) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.create(data);
-    }
-
-    return promise.then(() => onChanged());
-  }
-
-  openScheduleDialog(schedule) {
-    const {gmp} = this.context;
-
-    if (is_defined(schedule)) {
-      const date = schedule.first_time;
-      this.schedule_dialog.show({
-        comment: schedule.comment,
-        date,
-        duration: schedule.simple_duration.value,
-        duration_unit: is_defined(schedule.simple_duration.unit) ?
-          schedule.simple_duration.unit : 'hour',
-        hour: date.hours(),
-        id: schedule.id,
-        minute: date.minutes(),
-        name: schedule.name,
-        period: schedule.simple_period.value,
-        period_unit: is_defined(schedule.simple_period.unit) ?
-          schedule.simple_period.unit : 'hour',
-        schedule,
-        timezone: schedule.timezone,
-
-      }, {
-        title: _('Edit Schedule {{name}}', {name: schedule.name}),
-      });
-    }
-    else {
-      const {timezone} = gmp.globals;
-      const now = moment().tz(timezone);
-
-      this.schedule_dialog.show({
-        timezone,
-        minute: now.minutes(),
-        hour: now.hours(),
-        date: now,
-      });
-    }
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEntityEdit={this.openScheduleDialog}
-          onNewScheduleClick={this.openScheduleDialog}
-        />
-        <ScheduleDialog
-          ref={ref => this.schedule_dialog = ref}
-          onSave={this.handleSaveSchedule}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
-  onChanged: PropTypes.func,
-};
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
+SchedulesPage.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('schedule', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
-  sectionIcon: 'schedule.svg',
-  table: Table,
-  title: _('Schedules'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+  filtersFilter: SCHEDULES_FILTER_FILTER,
+})(SchedulesPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -38,53 +38,53 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Schedule')}
-        name="schedule"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Schedule')}
-        name="schedule"
-        entity={entity}
-        onClick={onEntityEdit}/>
-      <CloneIcon
-        displayName={_('Schedule')}
-        name="schedule"
-        entity={entity}
-        title={_('Clone Schedule')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Schedule')}
-        onClick={onEntityDownload}
-      />
-    </Layout>
-  );
-};
+  entity,
+  onScheduleDeleteClick,
+  onScheduleDownloadClick,
+  onScheduleCloneClick,
+  onScheduleEditClick,
+}) => (
+  <IconDivider
+    grow
+    align={['center', 'center']}
+  >
+    <TrashIcon
+      displayName={_('Schedule')}
+      name="schedule"
+      entity={entity}
+      onClick={onScheduleDeleteClick}/>
+    <EditIcon
+      displayName={_('Schedule')}
+      name="schedule"
+      entity={entity}
+      onClick={onScheduleEditClick}/>
+    <CloneIcon
+      displayName={_('Schedule')}
+      name="schedule"
+      entity={entity}
+      title={_('Clone Schedule')}
+      value={entity}
+      onClick={onScheduleCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Schedule')}
+      onClick={onScheduleDownloadClick}
+    />
+  </IconDivider>
+);
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onTestSchedule: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onScheduleCloneClick: PropTypes.func.isRequired,
+  onScheduleDeleteClick: PropTypes.func.isRequired,
+  onScheduleDownloadClick: PropTypes.func.isRequired,
+  onScheduleEditClick: PropTypes.func.isRequired,
 };
 
 const render_period = entity => {
