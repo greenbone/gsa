@@ -69,9 +69,16 @@ class Schedule extends Model {
     // FIXME check what's happening during parsing without having a timezone
     ret.first_time = has_timezone ? moment(ret.first_time).tz(ret.timezone) :
       moment(ret.first_time);
-    ret.next_time = ret.next_time === 'over' ? ret.next_time :
-      has_timezone ? moment(ret.next_time).tz(ret.timezone) :
-      moment(ret.next_time);
+
+    if (is_defined(ret.next_time)) {
+      if (ret.next_time !== 'over') {
+        ret.next_time = has_timezone ? moment(ret.next_time).tz(ret.timezone) :
+          moment(ret.next_time);
+      }
+    }
+    else {
+      delete ret.next_time;
+    }
 
     return ret;
   }
