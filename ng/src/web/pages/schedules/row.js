@@ -96,16 +96,17 @@ const Row = ({
   actions,
   entity,
   links = true,
+  onToggleDetailsClick,
   ...props
 }) => {
   return (
     <TableRow>
       <EntityNameTableData
-        legacy
         entity={entity}
         link={links}
         type="schedule"
         displayName={_('Schedule')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         {long_date(entity.first_time)}
@@ -128,6 +129,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
