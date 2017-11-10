@@ -101,6 +101,7 @@ import RoleDetailsPage from './pages/roles/detailspage.js';
 import ScanConfigsPage from './pages/scanconfigs/listpage.js';
 import ScannersPage from './pages/scanners/listpage.js';
 import SchedulesPage from './pages/schedules/listpage.js';
+import ScheduleDetailsPage from './pages/schedules/detailspage.js';
 import TagsPage from './pages/tags/listpage.js';
 import TargetsPage from './pages/targets/listpage.js';
 import TargetDetailsPage from './pages/targets/detailspage.js';
@@ -403,6 +404,10 @@ ReactDOM.render(
         <Route
           path="credential/:id"
           component={CredentialDetailsPage}
+        />
+        <Route
+          path="schedule/:id"
+          component={ScheduleDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
