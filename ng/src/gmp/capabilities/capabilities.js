@@ -39,6 +39,8 @@ const types = {
   certbundadvs: 'info',
   portlist: 'port_list',
   portlists: 'port_list',
+  reportformat: 'report_format',
+  reportformats: 'report_format',
 };
 
 const check_type = type => {
