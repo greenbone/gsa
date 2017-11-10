@@ -157,6 +157,8 @@ class EntitiesContainer extends React.Component {
           loading: false,
         });
 
+        log.debug('Loaded entities', entities);
+
         if (meta.fromcache && (meta.dirty || reload)) {
           log.debug('Forcing reload of entities', meta.dirty, reload);
           refresh = 1;
