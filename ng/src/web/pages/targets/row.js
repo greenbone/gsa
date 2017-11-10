@@ -126,7 +126,7 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}, {capabilities}) => {
+}) => {
   return (
     <TableRow>
       <TableData>
@@ -147,7 +147,7 @@ const Row = ({
           legacy
           type="port_list"
           id={entity.port_list.id}
-          textOnly={!links || !capabilities.mayAccess('port_lists')}>
+          textOnly={!links}>
           {entity.port_list.name}
         </DetailsLink>
       </TableData>
@@ -175,10 +175,6 @@ Row.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withEntityRow(withEntityActions(IconActions))(Row);
