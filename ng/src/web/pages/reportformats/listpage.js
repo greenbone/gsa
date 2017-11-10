@@ -24,182 +24,107 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+
+import {REPORT_FORMATS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import Text from '../../components/form/text.js';
-
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import PromiseFactory from 'gmp/promise.js';
+import ReportFormatComponent from './component.js';
+import ReportFormatsTable, {SORT_FIELDS} from './table.js';
 
-import ReportFormatDialog from './dialog.js';
-import Table, {SORT_FIELDS} from './table.js';
-
-const ToolBarIcons = ({
-  onNewReportFormatClick,
-}, {capabilities}) => {
-  return (
-    <Layout flex>
-      <HelpIcon
-        page="report_formats"
-        title={_('Help: Report Formats')}/>
-      {capabilities.mayCreate('report_format') &&
-        <NewIcon
-          title={_('New Report Format')}
-          onClick={onNewReportFormatClick}/>
-      }
-    </Layout>
-  );
-};
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onReportFormatCreateClick,
+}) => (
+  <IconDivider>
+    <HelpIcon
+      page="report_formats"
+      title={_('Help: Report Formats')}
+    />
+    {capabilities.mayCreate('report_format') &&
+      <NewIcon
+        title={_('New Report Format')}
+        onClick={onReportFormatCreateClick}
+      />
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
-  onNewReportFormatClick: PropTypes.func,
+  onReportFormatCreateClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+const ReportFormatsFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
 
-class Page extends React.Component {
+const ReportFormatsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <ReportFormatComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onVerified={onChanged}
+    onVerifyError={onError}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+    verify,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={ReportFormatsFilterDialog}
+      sectionIcon="report_format.svg"
+      table={ReportFormatsTable}
+      title={_('Report Formats')}
+      toolBarIcons={ToolBarIcons}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onReportFormatCloneClick={clone}
+      onReportFormatCreateClick={create}
+      onReportFormatDeleteClick={delete_func}
+      onReportFormatDownloadClick={download}
+      onReportFormatEditClick={edit}
+      onReportFormatSaveClick={save}
+      onReportFormatVerifyClick={verify}
+    />
+  )}
+  </ReportFormatComponent>
+);
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleSaveReportFormat = this.handleSaveReportFormat.bind(this);
-    this.handleVerify = this.handleVerify.bind(this);
-    this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
-  }
-
-  handleVerify(format) {
-    const {entityCommand, showSuccess, showError} = this.props;
-
-    entityCommand.verify(format).then(() => {
-      showSuccess(_('Report Format {{name}} verified successfully.',
-        {name: format.name}));
-    }, error => {
-      showError(
-        <Layout flex="column">
-          <Text>
-            {_('Report Format {{name}} could not be verified.',
-                {name: format.name})}
-          </Text>
-          <Text>
-            {error.message}
-          </Text>
-        </Layout>
-        );
-    });
-  }
-
-  handleSaveReportFormat(data) {
-    const {onChanged, entityCommand} = this.props;
-    let promise;
-
-    if (is_defined(data.reportformat)) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.import(data);
-    }
-
-    return promise.then(() => onChanged());
-  }
-
-  openReportFormatDialog(reportformat) {
-    if (is_defined(reportformat)) {
-      const {entityCommand, entitiesCommand, showError} = this.props;
-
-      // (re-)load report format to get params
-      entityCommand.get(reportformat).then(response => {
-        const format = response.data;
-        const preferences = {};
-        let load_formats = false;
-        const id_lists = {};
-
-        format.params.forEach(param => {
-          if (param.type === 'report_format_list') {
-            load_formats = true;
-            id_lists[param.name] = param.value;
-          }
-          else {
-            preferences[param.name] = param.value;
-          }
-        });
-
-        // only load formats if they are required for the report format list
-        // type param
-        const p2 = load_formats ? entitiesCommand.getAll() :
-          PromiseFactory.resolve(undefined);
-
-        p2.then(formats => {
-          this.reportformat_dialog.show({
-            active: format.active,
-            formats,
-            id: format.id,
-            id_lists,
-            name: format.name,
-            preferences,
-            reportformat: format,
-            summary: format.summary,
-          }, {
-            title: _('Edit Report Format {{name}}', {name: format.name}),
-          });
-        }, error => showError(error.message));
-      });
-    }
-    else {
-      this.reportformat_dialog.show({});
-    }
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEntityEdit={this.openReportFormatDialog}
-          onNewReportFormatClick={this.openReportFormatDialog}
-          onVerifyReportFormat={this.handleVerify}
-        />
-        <ReportFormatDialog
-          ref={ref => this.reportformat_dialog = ref}
-          onSave={this.handleSaveReportFormat}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entitiesCommand: PropTypes.entitiescommand,
-  entityCommand: PropTypes.entitycommand,
-  showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
-  onChanged: PropTypes.func,
-};
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
+ReportFormatsPage.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('reportformat', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
-  sectionIcon: 'report_format.svg',
-  table: Table,
-  title: _('Report Formats'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+  filtersFilter: REPORT_FORMATS_FILTER_FILTER,
+})(ReportFormatsPage);
 
 // vim: set ts=2 sw=2 tw=80:
