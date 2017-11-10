@@ -87,6 +87,13 @@ class ReportFormat extends Model {
 
     delete ret.param;
 
+    if (is_defined(ret.alerts)) {
+      ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
+    }
+    else {
+      ret.alerts = [];
+    }
+
     ret.active = parse_yesno(elem.active);
 
     ret.predefined = parse_yesno(elem.predefined);
