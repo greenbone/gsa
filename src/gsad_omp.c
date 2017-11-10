@@ -2086,7 +2086,8 @@ get_many (openvas_connection_t *connection, const char *type,
 
   if (given_filt_id)
     {
-      if (no_filter_history == 0 && strcmp (given_filt_id, "0"))
+      if (no_filter_history == 0
+          && strcmp (given_filt_id, "0") && strcmp (given_filt_id, "-2"))
         g_tree_replace (credentials->last_filt_ids, filter_type,
                         g_strdup (given_filt_id));
       filt_id = given_filt_id;
