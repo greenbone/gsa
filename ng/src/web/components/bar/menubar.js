@@ -277,9 +277,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
             to="trashcan"
           />
           <MenuEntry
-            legacy title={_('My Settings')}
-            cmd="get_my_settings"
-            caps="get_settings"
+            title={_('My Settings')}
+            to="usersettings"
           />
           <MenuEntry
             legacy
