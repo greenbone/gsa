@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -23,7 +24,7 @@
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import {for_each, map} from '../utils.js';
+import {for_each, map, is_defined} from '../utils.js';
 import logger from '../log.js';
 
 import Capabilities from '../capabilities/capabilities.js';
@@ -58,6 +59,9 @@ class UserCommand extends EntityCommand {
 
         for_each(group.auth_conf_setting, setting => {
           values[setting.key] = setting.value;
+          if (is_defined(setting.certificate_info)) {
+            values.certificate_info = setting.certificate_info;
+          }
         });
 
         settings.set(group._name, values);
