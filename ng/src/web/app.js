@@ -78,6 +78,7 @@ import GroupsPage from './pages/groups/listpage.js';
 import GroupDetailsPage from './pages/groups/detailspage.js';
 import HostsPage from './pages/hosts/listpage.js';
 import HostDetailsPage from './pages/hosts/detailspage.js';
+import LdapPage from './pages/ldap/ldappage.js';
 import NotesPage from './pages/notes/listpage.js';
 import NoteDetailsPage from './pages/notes/detailspage.js';
 import NvtsPage from './pages/nvts/listpage.js';
@@ -211,6 +212,9 @@ ReactDOM.render(
         component={Page}
         onEnter={is_logged_in}>
         <IndexRoute component={HomePage}/>
+        <Route
+          path="ldap"
+          component={LdapPage}/>
         <Route
           path="usersettings"
           component={UserSettingsPage}/>
