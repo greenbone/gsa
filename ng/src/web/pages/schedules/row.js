@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _, {long_date, interval} from 'gmp/locale.js';
+import _, {long_date} from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -38,105 +38,87 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
+import {
+  render_duration,
+  render_next_time,
+  render_period,
+} from './render.js';
 
 const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Schedule')}
-        name="schedule"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Schedule')}
-        name="schedule"
-        entity={entity}
-        onClick={onEntityEdit}/>
-      <CloneIcon
-        displayName={_('Schedule')}
-        name="schedule"
-        entity={entity}
-        title={_('Clone Schedule')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Schedule')}
-        onClick={onEntityDownload}
-      />
-    </Layout>
-  );
-};
+  entity,
+  onScheduleDeleteClick,
+  onScheduleDownloadClick,
+  onScheduleCloneClick,
+  onScheduleEditClick,
+}) => (
+  <IconDivider
+    grow
+    align={['center', 'center']}
+  >
+    <TrashIcon
+      displayName={_('Schedule')}
+      name="schedule"
+      entity={entity}
+      onClick={onScheduleDeleteClick}/>
+    <EditIcon
+      displayName={_('Schedule')}
+      name="schedule"
+      entity={entity}
+      onClick={onScheduleEditClick}/>
+    <CloneIcon
+      displayName={_('Schedule')}
+      name="schedule"
+      entity={entity}
+      title={_('Clone Schedule')}
+      value={entity}
+      onClick={onScheduleCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Schedule')}
+      onClick={onScheduleDownloadClick}
+    />
+  </IconDivider>
+);
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onTestSchedule: PropTypes.func,
-};
-
-const render_period = entity => {
-  if (entity.period === 0 && entity.period_months === 0) {
-    return _('Once');
-  }
-  if (entity.period === 0 && entity.period_months === 1) {
-    return _('One month');
-  }
-  if (entity.period === 0) {
-    return _('{{number}} months', {number: entity.period_months});
-  }
-  return interval(entity.period);
-};
-
-const render_duration = entity => {
-  if (entity.duration === 0) {
-    return _('Entire Operation');
-  }
-  return interval(entity.duration);
+  entity: PropTypes.model.isRequired,
+  onScheduleCloneClick: PropTypes.func.isRequired,
+  onScheduleDeleteClick: PropTypes.func.isRequired,
+  onScheduleDownloadClick: PropTypes.func.isRequired,
+  onScheduleEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  let next_time = entity.next_time === 'over' ? '-' :
-    long_date(entity.next_time);
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   return (
     <TableRow>
       <EntityNameTableData
-        legacy
         entity={entity}
         link={links}
         type="schedule"
         displayName={_('Schedule')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         {long_date(entity.first_time)}
       </TableData>
       <TableData>
-        {next_time}
+        {render_next_time(entity.next_time)}
       </TableData>
       <TableData>
         {render_period(entity)}
       </TableData>
       <TableData>
-        {render_duration(entity)}
+        {render_duration(entity.duration)}
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
@@ -147,10 +129,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);

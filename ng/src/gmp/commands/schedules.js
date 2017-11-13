@@ -29,18 +29,28 @@ import Schedule from '../models/schedule.js';
 
 const log = logger.getLogger('gmp.commands.schedules');
 
-export class ScheduleCommand extends EntityCommand {
+class ScheduleCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'schedule', Schedule);
   }
 
   create(args) {
-    let {name, comment = '', hour, minute, timezone, date,
-      period, period_unit, duration, duration_unit} = args;
-    let day_of_month = date.day();
-    let month = date.month() + 1;
-    let year = date.year();
+    const {
+      name,
+      comment = '',
+      hour,
+      minute,
+      timezone,
+      date,
+      period,
+      period_unit,
+      duration,
+      duration_unit,
+    } = args;
+    const day_of_month = date.date();
+    const month = date.month() + 1;
+    const year = date.year();
     log.debug('Creating new schedule', args);
     return this.httpPost({
       cmd: 'create_schedule',
@@ -61,14 +71,25 @@ export class ScheduleCommand extends EntityCommand {
   }
 
   save(args) {
-    let {id, name, comment = '', hour, minute, timezone, date,
-      period, period_unit, duration, duration_unit} = args;
+    const {
+      id,
+      name,
+      comment = '',
+      hour,
+      minute,
+      timezone,
+      date,
+      period,
+      period_unit,
+      duration,
+      duration_unit,
+    } = args;
 
-    let day_of_month = date.day();
-    let month = date.month() + 1;
-    let year = date.year();
+    const day_of_month = date.date();
+    const month = date.month() + 1;
+    const year = date.year();
 
-    let data = {
+    const data = {
       cmd: 'save_schedule',
       next: 'get_schedule',
       comment,
@@ -94,7 +115,7 @@ export class ScheduleCommand extends EntityCommand {
   }
 }
 
-export class SchedulesCommand extends EntitiesCommand {
+class SchedulesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'schedule', Schedule);

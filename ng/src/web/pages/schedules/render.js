@@ -20,36 +20,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale.js';
+import _, {interval, long_date} from 'gmp/locale.js';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {createEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-import withRowDetails from '../../entities/withRowDetails.js';
+export const render_period = ({period, period_months}) => {
+  if (period === 0 && period_months === 0) {
+    return _('Once');
+  }
+  if (period === 0 && period_months === 1) {
+    return _('One month');
+  }
+  if (period === 0) {
+    return _('{{number}} months', {number: period_months});
+  }
+  return interval(period);
+};
 
-import ScheduleDetails from './details.js';
-import Row from './row.js';
+export const render_duration = duration => {
+  if (duration === 0) {
+    return _('Entire Operation');
+  }
+  return interval(duration);
+};
 
-export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['first_run', _('First Run')],
-  ['next_run', _('Next Run')],
-  ['period', _('Period')],
-  ['duration', _('Duration')],
-];
-
-const SchedulesTable = createEntitiesTable({
-  emptyTitle: _('No schedules available'),
-  header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  rowDetails: withRowDetails('schedule')(ScheduleDetails),
-  footer: createEntitiesFooter({
-    download: 'schedules.xml',
-    span: 6,
-    trash: true,
-  }),
-});
-
-export default SchedulesTable;
+export const render_next_time = next_time => next_time === 'over' ?
+    '-' : long_date(next_time);
 
 // vim: set ts=2 sw=2 tw=80:

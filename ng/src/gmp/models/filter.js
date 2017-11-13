@@ -651,6 +651,7 @@ export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
   'type=report_format');
+export const SCHEDULES_FILTER_FILTER = Filter.fromString('type=schedule');
 
 export default Filter;
 
