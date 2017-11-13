@@ -315,11 +315,9 @@ const MenuBar = (props, {gmp, capabilities}) => {
               caps="get_roles"
             />
             <MenuEntry
-              legacy
               section
               title={_('LDAP')}
-              cmd="auth_settings"
-              name="ldap"
+              to="ldap"
               caps={['describe_auth', 'modify_auth']}
             />
             <MenuEntry
