@@ -58,6 +58,7 @@ import ScansPage from './pages/scanspage.js';
 import SecinfoPage from './pages/secinfopage.js';
 
 import AgentsPage from './pages/agents/listpage.js';
+import AgentDetailsPage from './pages/agents/detailspage.js';
 import AlertsPage from './pages/alerts/listpage.js';
 import AlertDetailsPage from './pages/alerts/detailspage.js';
 import AllSecInfosPage from './pages/allsecinfo/listpage.js';
@@ -413,6 +414,10 @@ ReactDOM.render(
         <Route
           path="reportformat/:id"
           component={ReportFormatDetailsPage}
+        />
+        <Route
+          path="agent/:id"
+          component={AgentDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
