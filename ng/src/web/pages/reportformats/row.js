@@ -26,7 +26,8 @@ import React from 'react';
 import _, {short_date} from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import withCapabilities from '../../utils/withCapabilities.js';
+import {render_component, render_yesno} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -41,123 +42,121 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 import Icon from '../../components/icon/icon.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-    onVerifyReportFormat,
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
+const Actions = withCapabilities(({
+  capabilities,
+  entity,
+  onReportFormatCloneClick,
+  onReportFormatDeleteClick,
+  onReportFormatDownloadClick,
+  onReportFormatEditClick,
+  onReportFormatVerifyClick,
+}) => (
+  <Layout
+    grow
+    align={['center', 'center']}
+  >
+    <IconDivider>
       <TrashIcon
         displayName={_('Report Format')}
         name="report_format"
         entity={entity}
-        onClick={onEntityDelete}/>
+        onClick={onReportFormatDeleteClick}
+      />
       <EditIcon
         displayName={_('Report Format')}
         name="report_format"
         entity={entity}
-        onClick={onEntityEdit}/>
+        onClick={onReportFormatEditClick}
+      />
       <CloneIcon
         displayName={_('Report Format')}
         name="report_format"
         entity={entity}
         title={_('Clone Report Format')}
         value={entity}
-        onClick={onEntityClone}/>
+        onClick={onReportFormatCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Report Format')}
-        onClick={onEntityDownload}
+        onClick={onReportFormatDownloadClick}
       />
       {capabilities.mayOp('verify_report_format') ?
-        <Icon img="verify.svg"
+        <Icon
+          img="verify.svg"
           value={entity}
           title={_('Verify Report Format')}
-          onClick={onVerifyReportFormat}
+          onClick={onReportFormatVerifyClick}
         /> :
-        <Icon img="verify_inactive.svg"
+        <Icon
+          img="verify_inactive.svg"
           title={_('Permission to verify Report Format denied')}
         />
       }
-    </Layout>
-  );
-};
+    </IconDivider>
+  </Layout>
+));
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onVerifyReportFormat: PropTypes.func,
-};
-
-Actions.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  entity: PropTypes.model.isRequired,
+  onReportFormatCloneClick: PropTypes.func.isRequired,
+  onReportFormatDeleteClick: PropTypes.func.isRequired,
+  onReportFormatDownloadClick: PropTypes.func.isRequired,
+  onReportFormatEditClick: PropTypes.func.isRequired,
+  onReportFormatVerifyClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="report_format"
-        displayName={_('Report Format')}
-      >
-        {entity.summary &&
-          <Comment>({entity.summary})</Comment>
-        }
-      </EntityNameTableData>
-      <TableData>
-        {entity.extension}
-      </TableData>
-      <TableData>
-        {entity.content_type}
-      </TableData>
-      <TableData flex="column">
-        <span>
-          {entity.trust.value}
-        </span>
-        {entity.trust.time &&
-          <span>({short_date(entity.trust.time)})</span>
-        }
-      </TableData>
-      <TableData>
-        {entity.isActive() ? _('yes') : _('no')}
-      </TableData>
-      {render_component(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      links={links}
+      type="reportformat"
+      displayName={_('Report Format')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    >
+      {entity.summary &&
+        <Comment>({entity.summary})</Comment>
+      }
+    </EntityNameTableData>
+    <TableData>
+      {entity.extension}
+    </TableData>
+    <TableData>
+      {entity.content_type}
+    </TableData>
+    <TableData flex="column">
+      <span>
+        {render_yesno(entity.trust.value)}
+      </span>
+      {entity.trust.time &&
+        <span>({short_date(entity.trust.time)})</span>
+      }
+    </TableData>
+    <TableData>
+      {render_yesno(entity.isActive())}
+    </TableData>
+    {render_component(actions, {...props, entity})}
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);

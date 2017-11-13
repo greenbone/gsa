@@ -197,10 +197,14 @@ export const render_yesno = value => {
     case true:
     case 1:
     case '1':
+    case 'yes':
+    case 'Yes':
       return _('Yes');
     case false:
     case 0:
     case '0':
+    case 'no':
+    case 'No':
       return _('No');
     default:
       return _('Unknown');

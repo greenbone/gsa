@@ -25,7 +25,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import ReportFormatDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -40,6 +42,7 @@ const ReportFormatsTable = createEntitiesTable({
   emptyTitle: _('No report formats available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('reportformat', 10)(ReportFormatDetails),
   footer: createEntitiesFooter({
     download: 'reportformats.xml',
     span: 6,

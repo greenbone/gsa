@@ -92,6 +92,7 @@ import PermissionsPage from './pages/permissions/listpage.js';
 import PortListsPage from './pages/portlists/listpage.js';
 import PortListDetailsPage from './pages/portlists/detailspage.js';
 import ReportFormatsPage from './pages/reportformats/listpage.js';
+import ReportFormatDetailsPage from './pages/reportformats/detailspage.js';
 import ReportsPage from './pages/reports/listpage.js';
 import ReportDetailsPage from './pages/reports/detailspage.js';
 import ResultsPage from './pages/results/listpage.js';
@@ -408,6 +409,10 @@ ReactDOM.render(
         <Route
           path="schedule/:id"
           component={ScheduleDetailsPage}
+        />
+        <Route
+          path="reportformat/:id"
+          component={ReportFormatDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
