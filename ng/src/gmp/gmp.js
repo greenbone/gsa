@@ -27,6 +27,7 @@ import logger from './log.js';
 
 import './commands/agents.js';
 import './commands/alerts.js';
+import './commands/auth.js';
 import './commands/certbund.js';
 import './commands/credentials.js';
 import './commands/cpes.js';
