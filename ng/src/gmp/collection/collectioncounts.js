@@ -42,7 +42,7 @@ class CollectionCounts {
     this.filtered = parse_int(filtered);
     this.length = parse_int(length);
     this.rows = parse_int(rows);
-    this.last = this.first > 0 && this.last > 0 ?
+    this.last = this.first > 0 && this.length > 0 ?
       this.first + this.length - 1 : 0;
   }
 
