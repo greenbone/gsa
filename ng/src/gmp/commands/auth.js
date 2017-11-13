@@ -41,6 +41,21 @@ class AuthenticationCommand extends HttpCommand {
       ldaphost,
     });
   }
+
+  saveRadius({
+    enable,
+    group,
+    radiushost,
+    radiuskey,
+  }) {
+    return this.httpPost({
+      cmd: 'save_auth',
+      group: 'method:radius_connect',
+      enable,
+      radiushost,
+      radiuskey,
+    });
+  }
 }
 
 register_command('auth', AuthenticationCommand)
