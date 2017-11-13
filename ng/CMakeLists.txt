@@ -415,6 +415,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/hosts/listpage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/row.js
      ${NG_SRC_DIR}/src/web/pages/hosts/table.js
+     ${NG_SRC_DIR}/src/web/pages/ldap/ldappage.js
      ${NG_SRC_DIR}/src/web/pages/loginpage.js
      ${NG_SRC_DIR}/src/web/pages/notes/charts.js
      ${NG_SRC_DIR}/src/web/pages/notes/component.js
