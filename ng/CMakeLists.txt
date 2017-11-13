@@ -317,6 +317,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entity/permissions.js
      ${NG_SRC_DIR}/src/web/entity/tags.js
      ${NG_SRC_DIR}/src/web/entity/tagshandler.js
+     ${NG_SRC_DIR}/src/web/pages/agents/component.js
+     ${NG_SRC_DIR}/src/web/pages/agents/details.js
+     ${NG_SRC_DIR}/src/web/pages/agents/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/agents/listpage.js
      ${NG_SRC_DIR}/src/web/pages/agents/dialog.js
      ${NG_SRC_DIR}/src/web/pages/agents/row.js

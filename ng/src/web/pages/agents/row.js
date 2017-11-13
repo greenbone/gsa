@@ -25,8 +25,6 @@ import React from 'react';
 
 import _, {short_date} from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
-
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
@@ -41,101 +39,98 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 import Icon from '../../components/icon/icon.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
+
 import LegacyLink from '../../components/link/legacylink.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const Actions = ({
-    entity,
-    onDownloadAgentInstaller,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-    onVerifyAgent,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Agent')}
-        name="agent"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Agent')}
-        name="agent"
-        entity={entity}
-        onClick={onEntityEdit}/>
-      <CloneIcon
-        displayName={_('Agent')}
-        name="agent"
-        entity={entity}
-        title={_('Clone Agent')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Agent')}
-        onClick={onEntityDownload}
-      />
-      <LegacyLink
-        className="icon icon-sm"
-        cmd="download_agent"
-        agent_format="installer"
-        agent_id={entity.id}
-        title={_('Download Agent installer package')}
-        >
-        <Icon img="agent.svg"/>
-      </LegacyLink>
-      <Icon img="verify.svg"
-        value={entity}
-        title={_('Verify Agent')}
-        onClick={onVerifyAgent}
-      />
-    </Layout>
-  );
-};
+  entity,
+  onAgentDeleteClick,
+  onAgentDownloadClick,
+  onAgentCloneClick,
+  onAgentEditClick,
+  onAgentVerifyClick,
+}) => (
+  <IconDivider>
+    <TrashIcon
+      displayName={_('Agent')}
+      name="agent"
+      entity={entity}
+      onClick={onAgentDeleteClick}/>
+    <EditIcon
+      displayName={_('Agent')}
+      name="agent"
+      entity={entity}
+      onClick={onAgentEditClick}/>
+    <CloneIcon
+      displayName={_('Agent')}
+      name="agent"
+      entity={entity}
+      title={_('Clone Agent')}
+      value={entity}
+      onClick={onAgentCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Agent')}
+      onClick={onAgentDownloadClick}
+    />
+    <LegacyLink
+      className="icon icon-sm"
+      cmd="download_agent"
+      agent_format="installer"
+      agent_id={entity.id}
+      title={_('Download Agent installer package')}
+      >
+      <Icon img="agent.svg"/>
+    </LegacyLink>
+    <Icon
+      img="verify.svg"
+      value={entity}
+      title={_('Verify Agent')}
+      onClick={onAgentVerifyClick}
+    />
+  </IconDivider>
+);
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onDownloadAgentInstaller: PropTypes.func,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onVerifyAgent: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onAgentCloneClick: PropTypes.func.isRequired,
+  onAgentDeleteClick: PropTypes.func.isRequired,
+  onAgentDownloadClick: PropTypes.func.isRequired,
+  onAgentEditClick: PropTypes.func.isRequired,
+  onAgentVerifyClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="agent"
-        displayName={_('Agent')}
-      />
-      <TableData>
-        {entity.trust.status} ({short_date(entity.trust.time)})
-      </TableData>
-      {render_component(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      links={links}
+      type="agent"
+      displayName={_('Agent')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>
+      {entity.trust.status} ({short_date(entity.trust.time)})
+    </TableData>
+    {render_component(actions, {...props, entity})}
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 Row.contextTypes = {
