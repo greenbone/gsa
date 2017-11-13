@@ -321,10 +321,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
               caps={['describe_auth', 'modify_auth']}
             />
             <MenuEntry
-              legacy
               title={_('Radius')}
-              cmd="auth_settings"
-              name="radius"
+              to="radius"
               caps={['describe_auth', 'modify_auth']}
             />
           </Menu>
