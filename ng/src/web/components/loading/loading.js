@@ -1,6 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
@@ -23,25 +24,36 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import glamorous from 'glamorous';
+import {css} from 'glamor';
+
+import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const Loading = ({
-  loading = false,
-}) => {
-  if (loading) {
-    return (
-      <div>
-        {_('Loading')}
-      </div>
-    );
-  }
-  return null;
-};
+const Loader = glamorous.div({
+    margin: 'auto',
+    border: '12px solid #c8d3d9',
+    borderTop: '12px solid #66c430',
+    borderRadius: '50%',
+    width: '80px',
+    height: '80px',
+    animation: `${css.keyframes({
+      '0%': {transform: `rotate(0deg)`},
+      '100%': {transform: `rotate(360deg)`},
+    })} 2s linear infinite`,
+});
 
-Loading.propTypes = {
-  loading: PropTypes.bool,
+const StyledLayout = glamorous(Layout)({
+  width: '100%',
+});
+
+const Loading = () => {
+  return (
+    <StyledLayout align="center">
+      <Loader/>
+    </StyledLayout>
+  );
 };
 
 export default Loading;
