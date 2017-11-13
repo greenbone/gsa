@@ -24,10 +24,11 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
-import {is_defined, shorten} from 'gmp/utils.js';
+
+import {AGENTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -35,125 +36,96 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import AgentDialog from './dialog.js';
-import Table, {SORT_FIELDS} from './table.js';
+import AgentComponent from './component.js';
+import AgentsTable, {SORT_FIELDS} from './table.js';
 
-const log = logger.getLogger('web.agents.agentspage');
-
-const ToolBarIcons = ({
-  onNewAgentClick,
-}, {capabilities}) => {
-  return (
-    <Layout flex>
-      <HelpIcon
-        page="agents"
-        title={_('Help: Agents')}/>
-      {capabilities.mayCreate('agent') &&
-        <NewIcon
-          title={_('New Agent')}
-          onClick={onNewAgentClick}/>
-      }
-    </Layout>
-  );
-};
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onAgentCreateClick,
+}) => (
+  <IconDivider>
+    <HelpIcon
+      page="agents"
+      title={_('Help: Agents')}
+    />
+    {capabilities.mayCreate('agent') &&
+      <NewIcon
+        title={_('New Agent')}
+        onClick={onAgentCreateClick}
+      />
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
-  onNewAgentClick: PropTypes.func,
+  onAgentCreateClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+const AgentsFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
+
+const AgentsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <AgentComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onVerifyError={onError}
+    onVerified={onChanged}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+    verify,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={AgentsFilterDialog}
+      sectionIcon="agent.svg"
+      table={AgentsTable}
+      title={_('Agents')}
+      toolBarIcons={ToolBarIcons}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onAgentCloneClick={clone}
+      onAgentCreateClick={create}
+      onAgentDeleteClick={delete_func}
+      onAgentDownloadClick={download}
+      onAgentEditClick={edit}
+      onAgentSaveClick={save}
+      onAgentVerifyClick={verify}
+    />
+  )}
+  </AgentComponent>
+);
+
+AgentsPage.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
-class Page extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.handleSaveAgent = this.handleSaveAgent.bind(this);
-    this.handleVerifyAgent = this.handleVerifyAgent.bind(this);
-    this.openAgentDialog = this.openAgentDialog.bind(this);
-  }
-
-  handleSaveAgent(data) {
-    const {onChanged, entityCommand} = this.props;
-    let promise;
-
-    if (is_defined(data.agent)) {
-      promise = entityCommand.save(data);
-    }
-    else {
-      promise = entityCommand.create(data);
-    }
-
-    return promise.then(() => onChanged());
-  }
-
-  handleVerifyAgent(agent) {
-    const {entityCommand, showSuccess, showError} = this.props;
-
-    entityCommand.verify(agent).then(response => {
-      showSuccess(_('Verifying the agent was successful.'));
-      log.debug('verify success', response.data);
-    }, rejection => {
-      showError(_('Verifying the agent bbb failed.'));
-      log.debug('verify failure', rejection);
-    });
-  }
-
-  openAgentDialog(agent) {
-    if (is_defined(agent)) {
-      this.agent_dialog.show({
-        id: agent.id,
-        agent,
-        name: agent.name,
-        comment: agent.comment,
-      }, {
-        title: _('Edit agent {{name}}', {name: shorten(agent.name)}),
-      });
-    }
-    else {
-      this.agent_dialog.show({});
-    }
-  }
-
-  render() {
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onEntityEdit={this.openAgentDialog}
-          onVerifyAgent={this.handleVerifyAgent}
-          onNewAgentClick={this.openAgentDialog}
-        />
-        <AgentDialog
-          ref={ref => this.agent_dialog = ref}
-          onSave={this.handleSaveAgent}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
-  onChanged: PropTypes.func,
-};
 
 export default withEntitiesContainer('agent', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
-  sectionIcon: 'agent.svg',
-  table: Table,
-  title: _('Agents'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+  filtersFilter: AGENTS_FILTER_FILTER,
+})(AgentsPage);
 
 // vim: set ts=2 sw=2 tw=80:
