@@ -92,6 +92,7 @@ import OverrideDetailsPage from './pages/overrides/detailspage.js';
 import PermissionsPage from './pages/permissions/listpage.js';
 import PortListsPage from './pages/portlists/listpage.js';
 import PortListDetailsPage from './pages/portlists/detailspage.js';
+import RadiusPage from './pages/radius/radiuspage.js';
 import ReportFormatsPage from './pages/reportformats/listpage.js';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage.js';
 import ReportsPage from './pages/reports/listpage.js';
@@ -212,6 +213,9 @@ ReactDOM.render(
         component={Page}
         onEnter={is_logged_in}>
         <IndexRoute component={HomePage}/>
+        <Route
+          path="radius"
+          component={RadiusPage}/>
         <Route
           path="ldap"
           component={LdapPage}/>
