@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, shorten} from 'gmp/utils.js';
+import {is_defined, shorten} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -89,8 +89,12 @@ IconActions.propTypes = {
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
-const Cred = ({cred, title, links}) => {
-  if (!is_defined(cred) || is_empty(cred.id)) {
+const Cred = ({
+  cred,
+  title,
+  links = true,
+}) => {
+  if (!is_defined(cred) || !is_defined(cred.id)) {
     return null;
   }
   return (
@@ -98,7 +102,6 @@ const Cred = ({cred, title, links}) => {
       <Text>{title}: </Text>
       <Layout box>
         <DetailsLink
-          legacy
           type="credential"
           id={cred.id}
           textOnly={!links}>
@@ -122,7 +125,7 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}, {capabilities}) => {
+}) => {
   return (
     <TableRow>
       <TableData>
@@ -140,26 +143,33 @@ const Row = ({
       </TableData>
       <TableData>
         <DetailsLink
-          legacy
-          type="port_list"
+          type="portlist"
           id={entity.port_list.id}
-          textOnly={!links || !capabilities.mayAccess('port_lists')}>
+          textOnly={!links}>
           {entity.port_list.name}
         </DetailsLink>
       </TableData>
       <TableData flex="column" align="center">
-        <Cred cred={entity.ssh_credential}
+        <Cred
+          cred={entity.ssh_credential}
           title={'SSH'}
-          links={links}/>
-        <Cred cred={entity.smb_credential}
+          links={links}
+        />
+        <Cred
+          cred={entity.smb_credential}
           title={'SMB'}
-          links={links}/>
-        <Cred cred={entity.esxi_credential}
+          links={links}
+        />
+        <Cred
+          cred={entity.esxi_credential}
           title={'ESXi'}
-          links={links}/>
-        <Cred cred={entity.snmp_credential}
+          links={links}
+        />
+        <Cred
+          cred={entity.snmp_credential}
           title={'SNMP'}
-          links={links}/>
+          links={links}
+        />
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
@@ -171,10 +181,6 @@ Row.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withEntityRow(withEntityActions(IconActions))(Row);
