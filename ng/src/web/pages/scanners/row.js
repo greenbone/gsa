@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -52,78 +52,76 @@ import {scanner_type_name, CVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
 
 const Actions = ({
-    entity,
-    onDownloadScannerInstaller,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-    onVerifyScanner,
-  }) => {
-  return (
-    <Layout flex align={['start', 'center']}>
-      <TrashIcon
-        displayName={_('Scanner')}
-        name="permission"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Scanner')}
-        name="permission"
-        entity={entity}
-        onClick={onEntityEdit}/>
-      <CloneIcon
-        displayName={_('Scanner')}
-        name="permission"
-        entity={entity}
-        title={_('Clone Scanner')}
-        value={entity}
-        mayClone={entity.type !== CVE_SCANNER_TYPE}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Scanner')}
-        onClick={onEntityDownload}
-      />
-      <Icon img="verify.svg"
-        value={entity}
-        title={_('Verify Scanner')}
-        onClick={onVerifyScanner}
-      />
-      {is_defined(entity.credential) &&
-        <LegacyLink
-          className="icon icon-sm"
-          cmd="download_credential"
-          credential_id={entity.credential.id}
-          package_format="pem"
-          title={_('Download Certificate')}
-        >
-          <Icon img="key.svg"/>
-        </LegacyLink>
-      }
-      {is_defined(entity.ca_pub) &&
-        <LegacyLink
-          className="icon icon-sm"
-          cmd="download_ca_pub"
-          scanner_id={entity.id}
-          ca_pub={entity.ca_pub}
-          title={_('Download CA Certificate')}
-        >
-          <Icon img="key.svg"/>
-        </LegacyLink>
-      }
-    </Layout>
-  );
-};
+  entity,
+  onScannerCloneClick,
+  onScannerDeleteClick,
+  onScannerDownloadClick,
+  onScannerEditClick,
+  onScannerVerifyClick,
+}) => (
+  <IconDivider>
+    <TrashIcon
+      displayName={_('Scanner')}
+      name="permission"
+      entity={entity}
+      onClick={onScannerDeleteClick}
+    />
+    <EditIcon
+      displayName={_('Scanner')}
+      name="permission"
+      entity={entity}
+      onClick={onScannerEditClick}/>
+    <CloneIcon
+      displayName={_('Scanner')}
+      name="permission"
+      entity={entity}
+      title={_('Clone Scanner')}
+      value={entity}
+      mayClone={entity.type !== CVE_SCANNER_TYPE}
+      onClick={onScannerCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Scanner')}
+      onClick={onScannerDownloadClick}
+    />
+    <Icon
+      img="verify.svg"
+      value={entity}
+      title={_('Verify Scanner')}
+      onClick={onScannerVerifyClick}
+    />
+    {is_defined(entity.credential) &&
+      <LegacyLink
+        className="icon icon-sm"
+        cmd="download_credential"
+        credential_id={entity.credential.id}
+        package_format="pem"
+        title={_('Download Certificate')}
+      >
+        <Icon img="key.svg"/>
+      </LegacyLink>
+    }
+    {is_defined(entity.ca_pub) &&
+      <LegacyLink
+        className="icon icon-sm"
+        cmd="download_ca_pub"
+        scanner_id={entity.id}
+        ca_pub={entity.ca_pub}
+        title={_('Download CA Certificate')}
+      >
+        <Icon img="key.svg"/>
+      </LegacyLink>
+    }
+  </IconDivider>
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onDownloadScannerInstaller: PropTypes.func,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onVerifyScanner: PropTypes.func,
+  onScannerCloneClick: PropTypes.func.isRequired,
+  onScannerDeleteClick: PropTypes.func.isRequired,
+  onScannerDownloadClick: PropTypes.func.isRequired,
+  onScannerEditClick: PropTypes.func.isRequired,
+  onScannerVerifyClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
