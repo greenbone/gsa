@@ -25,7 +25,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import AgentDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -37,6 +39,7 @@ const AgentsTable = createEntitiesTable({
   emptyTitle: _('No agents available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('agent')(AgentDetails),
   footer: createEntitiesFooter({
     download: 'agents.xml',
     span: 6,

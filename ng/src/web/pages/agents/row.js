@@ -105,34 +105,32 @@ Actions.propTypes = {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="agent"
-        displayName={_('Agent')}
-      />
-      <TableData>
-        {entity.trust.status} ({short_date(entity.trust.time)})
-      </TableData>
-      {render_component(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      links={links}
+      type="agent"
+      displayName={_('Agent')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>
+      {entity.trust.status} ({short_date(entity.trust.time)})
+    </TableData>
+    {render_component(actions, {...props, entity})}
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 Row.contextTypes = {
