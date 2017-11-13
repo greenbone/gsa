@@ -60,6 +60,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/command.js
      ${NG_SRC_DIR}/src/gmp/commands/agents.js
      ${NG_SRC_DIR}/src/gmp/commands/alerts.js
+     ${NG_SRC_DIR}/src/gmp/commands/auth.js
      ${NG_SRC_DIR}/src/gmp/commands/certbund.js
      ${NG_SRC_DIR}/src/gmp/commands/cpes.js
      ${NG_SRC_DIR}/src/gmp/commands/credentials.js
