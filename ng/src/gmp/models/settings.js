@@ -34,7 +34,7 @@ class Settings {
   }
 
   get(name) {
-    let setting = this._settings[name];
+    const setting = this._settings[name];
     if (is_defined(setting)) {
       return setting;
     }
