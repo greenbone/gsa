@@ -77,7 +77,7 @@ const Row = ({
         {entity.version}
       </TableData>
       <TableData>
-        <Divider>
+        <Divider wrap>
           {entity.cves.map(id => (
             <CveLink
               key={id}
