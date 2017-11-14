@@ -57,6 +57,7 @@ import PageNotFound from './pages/notfoundpage.js';
 import ScansPage from './pages/scanspage.js';
 import SecinfoPage from './pages/secinfopage.js';
 
+import AboutPage from './pages/help/about.js';
 import AgentsPage from './pages/agents/listpage.js';
 import AgentDetailsPage from './pages/agents/detailspage.js';
 import AlertsPage from './pages/alerts/listpage.js';
@@ -215,6 +216,9 @@ ReactDOM.render(
         component={Page}
         onEnter={is_logged_in}>
         <IndexRoute component={HomePage}/>
+        <Route
+          path="about"
+          component={AboutPage}/>
         <Route
           path="radius"
           component={RadiusPage}/>

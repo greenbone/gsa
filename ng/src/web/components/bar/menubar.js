@@ -337,9 +337,8 @@ const MenuBar = (props, {gmp, capabilities}) => {
             caps="help"
           />
           <MenuEntry
-            legacy
             title={_('About')}
-            path="help/about.html"
+            to="about"
           />
         </Menu>
       </Ul>
