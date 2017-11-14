@@ -112,6 +112,16 @@
 #define RESULTS_PER_PAGE 100
 
 /**
+ * @brief filt_id value to use term or built-in default filter.
+ */
+#define FILT_ID_NONE "0"
+
+/**
+ * @brief filt_id value to use the filter in the user setting if possible.
+ */
+#define FILT_ID_USER_SETTING "-2"
+
+/**
  * @brief Whether to use TLS for Manager connections.
  */
 int manager_use_tls = 0;
@@ -2096,7 +2106,8 @@ get_many (gvm_connection_t *connection, const char *type,
   if (given_filt_id)
     {
       if (no_filter_history == 0
-          && strcmp (given_filt_id, "0") && strcmp (given_filt_id, "-2"))
+          && strcmp (given_filt_id, FILT_ID_NONE)
+          && strcmp (given_filt_id, FILT_ID_USER_SETTING))
         g_tree_replace (credentials->last_filt_ids, filter_type,
                         g_strdup (given_filt_id));
       else
@@ -2231,7 +2242,7 @@ get_many (gvm_connection_t *connection, const char *type,
                                search_phrase
                                 ? search_phrase
                                 : "");
-              filt_id = "-2";
+              filt_id = FILT_ID_USER_SETTING;
               g_free (task);
             }
           else if (strcmp (type, "info") == 0
@@ -2278,17 +2289,17 @@ get_many (gvm_connection_t *connection, const char *type,
             filter = "apply_overrides=1 rows=-2";
           if (filt_id && strcmp (filt_id, ""))
             /* Request to use "filter" instead. */
-            filt_id = "0";
+            filt_id = FILT_ID_NONE;
           else
-            filt_id = "-2";
+            filt_id = FILT_ID_USER_SETTING;
         }
       else if ((strcmp (filter, "sort=nvt") == 0)
                && ((strcmp (type, "note") == 0)
                    || (strcmp (type, "override") == 0)))
-        filt_id = "-2";
+        filt_id = FILT_ID_USER_SETTING;
       else if ((strcmp (filter, "apply_overrides=1") == 0)
                && (strcmp (type, "task") == 0))
-        filt_id = "-2";
+        filt_id = FILT_ID_USER_SETTING;
     }
   else if (replace_task_id)
     {
@@ -13664,7 +13675,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   if (sort_field == NULL && sort_order == NULL)
     if ((filt_id == NULL || strcmp (filt_id, "") == 0)
         && (filter == NULL || strcmp (filter, "") == 0))
-      filt_id = "-2";
+      filt_id = FILT_ID_USER_SETTING;
 
   if (ignore_filter)
     ret = gvm_connection_sendf_xml (connection,
