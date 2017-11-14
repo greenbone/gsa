@@ -125,51 +125,45 @@ Actions.propTypes = {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="scanner"
-        displayName={_('Scanner')}
-      />
-      <TableData>
-        {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
-          entity.host}
-      </TableData>
-      <TableData>
-        {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
-          entity.port}
-      </TableData>
-      <TableData>
-        {scanner_type_name(entity.scanner_type)}
-      </TableData>
-      <TableData>
-        {is_defined(entity.credential) &&
-          <EntityLink entity={entity.credential}/>
-        }
-      </TableData>
-      {render_component(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="scanner"
+      displayName={_('Scanner')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>
+      {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+        entity.host}
+    </TableData>
+    <TableData>
+      {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+        entity.port}
+    </TableData>
+    <TableData>
+      {scanner_type_name(entity.scanner_type)}
+    </TableData>
+    <TableData>
+      {is_defined(entity.credential) &&
+        <EntityLink entity={entity.credential}/>
+      }
+    </TableData>
+    {render_component(actions, {...props, entity})}
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
