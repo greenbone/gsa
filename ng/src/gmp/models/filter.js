@@ -26,6 +26,7 @@ import {
   is_defined,
   is_string,
   includes,
+  map,
 } from '../utils.js';
 
 import Model from '../model.js';
@@ -66,12 +67,12 @@ class Filter extends Model {
    * @return {Object} An object with properties for the new Filter model
    */
   parseProperties(elem) {
-    elem = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
-    elem.filter_type = elem._type;
+    ret.filter_type = ret._type;
 
-    if (is_defined(elem.keywords)) {
-      for_each(elem.keywords.keyword, keyword => {
+    if (is_defined(ret.keywords)) {
+      for_each(ret.keywords.keyword, keyword => {
 
         const {relation, value, column: key} = keyword;
 
@@ -79,18 +80,22 @@ class Filter extends Model {
 
         this._addTerm(new FilterTerm(converted));
       });
-      delete elem.keywords;
+      delete ret.keywords;
     }
-    else if (is_defined(elem.term)) {
-      this.parseString(elem.term);
+    else if (is_defined(ret.term)) {
+      this.parseString(ret.term);
 
-      // elem.term should not be part of the public api
+      // ret.term should not be part of the public api
       // but it's helpful for debug purposes
-      elem._term = elem.term;
-      delete elem.term;
+      ret._term = ret.term;
+      delete ret.term;
     }
 
-    return elem;
+    if (is_defined(ret.alerts)) {
+      ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
+    }
+
+    return ret;
   }
 
   /**
@@ -640,6 +645,7 @@ export const ALERTS_FILTER_FILTER = Filter.fromString('type=alert');
 export const ASSETS_FILTER_FILTER = Filter.fromString('type=asset');
 export const CREDENTIALS_FILTER_FILTER = Filter.fromString('type=credential');
 export const GROUPS_FILTER_FILTER = Filter.fromString('type=group');
+export const FILTERS_FILTER_FILTER = Filter.fromString('type=filter');
 export const NOTES_FILTER_FILTER = Filter.fromString('type=note');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
 export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');

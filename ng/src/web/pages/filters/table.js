@@ -25,7 +25,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import FilterDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -38,6 +40,7 @@ const FiltersTable = createEntitiesTable({
   emptyTitle: _('No filters available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('filter')(FilterDetails),
   footer: createEntitiesFooter({
     download: 'filters.xml',
     span: 6,

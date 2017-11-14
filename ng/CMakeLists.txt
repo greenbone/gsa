@@ -395,6 +395,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/extras/feedstatuspage.js
      ${NG_SRC_DIR}/src/web/pages/extras/trashactions.js
      ${NG_SRC_DIR}/src/web/pages/extras/trashcanpage.js
+     ${NG_SRC_DIR}/src/web/pages/filters/component.js
+     ${NG_SRC_DIR}/src/web/pages/filters/details.js
+     ${NG_SRC_DIR}/src/web/pages/filters/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/filters/dialog.js
      ${NG_SRC_DIR}/src/web/pages/filters/listpage.js
      ${NG_SRC_DIR}/src/web/pages/filters/row.js
