@@ -76,6 +76,7 @@ import DfnCertAdvsPage from './pages/dfncert/listpage.js';
 import DfnCertAdvDetailsPage from './pages/dfncert/detailspage.js';
 import FeedStatusPage from './pages/extras/feedstatuspage.js';
 import FiltersPage from './pages/filters/listpage.js';
+import FilterDetailsPage from './pages/filters/detailspage.js';
 import GroupsPage from './pages/groups/listpage.js';
 import GroupDetailsPage from './pages/groups/detailspage.js';
 import HostsPage from './pages/hosts/listpage.js';
@@ -435,6 +436,10 @@ ReactDOM.render(
         <Route
           path="agent/:id"
           component={AgentDetailsPage}
+        />
+        <Route
+          path="filter/:id"
+          component={FilterDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
