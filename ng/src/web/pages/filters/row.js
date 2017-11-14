@@ -103,7 +103,7 @@ const Row = ({
       displayName={_('Filter')}
     />
     <TableData>
-      {entity.term}
+      {entity.toFilterString()}
     </TableData>
     <TableData>
       {entity.filter_type}
