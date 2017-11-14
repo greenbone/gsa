@@ -41,8 +41,8 @@ export class FilterCommand extends EntityCommand {
   }
 
   create(args) {
-    let {term, name, type, comment = ''} = args;
-    let data = {
+    const {term, name, type, comment = ''} = args;
+    const data = {
       cmd: 'create_filter',
       next: 'get_filter',
       term,
@@ -55,8 +55,8 @@ export class FilterCommand extends EntityCommand {
   }
 
   save(args) {
-    let {id, term, name, type, comment = ''} = args;
-    let data = {
+    const {id, term, name, type, comment = ''} = args;
+    const data = {
       cmd: 'save_filter',
       next: 'get_filter',
       comment,
@@ -84,9 +84,9 @@ const parse_filter = element => {
 
 const parse_counts = element => {
   if (is_defined(element) && is_defined(element.filters) &&
-    is_defined(element.fulter_count)) {
-    let es = element.filters[1];
-    let ec = element.filter_count;
+    is_defined(element.filter_count)) {
+    const es = element.filters[1]; // eslint-disable-line prefer-destructuring
+    const ec = element.filter_count;
     return {
       first: es._start,
       rows: es._max,
@@ -113,7 +113,7 @@ export class FiltersCommand extends EntitiesCommand {
   }
 
   getCollectionListFromRoot(root, meta) {
-    let response = this.getEntitiesResponse(root);
+    const response = this.getEntitiesResponse(root);
     return parse_collection_list(response, this.name, this.clazz, {
       meta,
       filter_parse_func: parse_filter,

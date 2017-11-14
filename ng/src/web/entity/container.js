@@ -165,9 +165,9 @@ class EntityContainer extends React.Component {
       return false;
     })
     .catch(err => {
-      const rej = this.handleError(err);
+      this.handleError(err);
       this.setState({entity: undefined});
-      return rej;
+      return Promise.reject(err);
     });
   }
 
@@ -205,7 +205,6 @@ class EntityContainer extends React.Component {
     const {showError} = this.props;
     log.error(error);
     showError(error);
-    return Promise.reject(error);
   }
 
   render() {
