@@ -25,7 +25,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import ScannerDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -40,6 +42,7 @@ const ScannersTable = createEntitiesTable({
   emptyTitle: _('No scanners available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('scanner')(ScannerDetails),
   footer: createEntitiesFooter({
     download: 'scanners.xml',
     span: 7,

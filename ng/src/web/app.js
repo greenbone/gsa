@@ -104,6 +104,7 @@ import RolesPage from './pages/roles/listpage.js';
 import RoleDetailsPage from './pages/roles/detailspage.js';
 import ScanConfigsPage from './pages/scanconfigs/listpage.js';
 import ScannersPage from './pages/scanners/listpage.js';
+import ScannerDetailsPage from './pages/scanners/detailspage.js';
 import SchedulesPage from './pages/schedules/listpage.js';
 import ScheduleDetailsPage from './pages/schedules/detailspage.js';
 import TagsPage from './pages/tags/listpage.js';
@@ -418,6 +419,10 @@ ReactDOM.render(
         <Route
           path="schedule/:id"
           component={ScheduleDetailsPage}
+        />
+        <Route
+          path="scanner/:id"
+          component={ScannerDetailsPage}
         />
         <Route
           path="reportformat/:id"

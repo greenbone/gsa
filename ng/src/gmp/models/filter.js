@@ -646,6 +646,7 @@ export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const ROLES_FILTER_FILTER = Filter.fromString('type=role');
+export const SCANNERS_FILTER_FILTER = Filter.fromString('type=scanner');
 export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
