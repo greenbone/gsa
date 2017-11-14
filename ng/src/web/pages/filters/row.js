@@ -91,17 +91,16 @@ const Row = ({
   actions,
   entity,
   links = true,
+  onToggleDetailsClick,
   ...props
-}, {
-  capabilities,
 }) => (
   <TableRow>
     <EntityNameTableData
-      legacy
       entity={entity}
       link={links}
       type="filter"
       displayName={_('Filter')}
+      onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
       {entity.toFilterString()}
@@ -117,10 +116,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
