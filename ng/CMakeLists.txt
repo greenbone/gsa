@@ -407,6 +407,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/groups/listpage.js
      ${NG_SRC_DIR}/src/web/pages/groups/row.js
      ${NG_SRC_DIR}/src/web/pages/groups/table.js
+     ${NG_SRC_DIR}/src/web/pages/help/about.js
      ${NG_SRC_DIR}/src/web/pages/homepage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/charts.js
      ${NG_SRC_DIR}/src/web/pages/hosts/component.js
