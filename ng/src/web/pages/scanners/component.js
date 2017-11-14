@@ -104,7 +104,17 @@ class ScannerComponent extends React.Component {
   handleVerifyScanner(scanner) {
     const {gmp, onVerified, onVerifyError} = this.props;
 
-    gmp.scanner.verify(scanner).then(onVerified, onVerifyError);
+    return gmp.scanner.verify(scanner).then(onVerified, response => {
+      const message = is_defined(response.root) &&
+        is_defined(response.root.get_scanner) &&
+        is_defined(response.root.get_scanner.verify_scanner_response) ?
+        response.root.get_scanner.verify_scanner_response._status_text :
+        _('Unkown Error');
+
+      if (is_defined(onVerifyError)) {
+        onVerifyError(new Error(message));
+      }
+    });
   }
 
   handleCreateCredential(data) {
