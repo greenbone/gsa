@@ -75,9 +75,8 @@ const Actions = ({
       displayName={_('Scanner')}
       name="permission"
       entity={entity}
-      title={_('Clone Scanner')}
       value={entity}
-      mayClone={entity.type !== CVE_SCANNER_TYPE}
+      mayClone={entity.scanner_type !== CVE_SCANNER_TYPE}
       onClick={onScannerCloneClick}/>
     <ExportIcon
       value={entity}
