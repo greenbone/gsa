@@ -23,35 +23,30 @@
 
 import React from 'react';
 
-import {classes} from 'gmp/utils.js';
-
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../utils/proptypes.js';
 
 const DetailsBlock = ({
-    id,
-    children,
-    className,
-    title,
-  }) => {
-  className = classes(className, 'details-block');
-  return (
-    <Layout
-      flex="column"
-      id={id}
-      className={className}>
-      <h2>{title}</h2>
-      <div className="details">
-        {children}
-      </div>
-    </Layout>
-  );
-};
+  id,
+  children,
+  className,
+  title,
+}) => (
+  <Layout
+    flex="column"
+    id={id}
+    className={className}>
+    <h2>{title}</h2>
+    <div>
+      {children}
+    </div>
+  </Layout>
+);
 
 DetailsBlock.propTypes = {
-  id: PropTypes.string,
   className: PropTypes.string,
+  id: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 
