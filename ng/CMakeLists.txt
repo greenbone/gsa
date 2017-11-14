@@ -539,6 +539,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/scanconfigs/row.js
      ${NG_SRC_DIR}/src/web/pages/scanconfigs/trend.js
      ${NG_SRC_DIR}/src/web/pages/scanners/component.js
+     ${NG_SRC_DIR}/src/web/pages/scanners/details.js
+     ${NG_SRC_DIR}/src/web/pages/scanners/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/scanners/dialog.js
      ${NG_SRC_DIR}/src/web/pages/scanners/listpage.js
      ${NG_SRC_DIR}/src/web/pages/scanners/row.js
