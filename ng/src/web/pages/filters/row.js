@@ -44,46 +44,47 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-  }) => {
-  return (
-    <IconDivider align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Filter')}
-        name="filter"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Filter')}
-        name="filter"
-        entity={entity}
-        onClick={onEntityEdit}/>
-      <CloneIcon
-        displayName={_('Filter')}
-        name="filter"
-        entity={entity}
-        title={_('Clone Filter')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Filter')}
-        onClick={onEntityDownload}
-      />
-    </IconDivider>
-  );
-};
+  entity,
+  onFilterDeleteClick,
+  onFilterDownloadClick,
+  onFilterCloneClick,
+  onFilterEditClick,
+}) => (
+  <IconDivider
+    grow
+    align={['center', 'center']}
+  >
+    <TrashIcon
+      displayName={_('Filter')}
+      name="filter"
+      entity={entity}
+      onClick={onFilterDeleteClick}/>
+    <EditIcon
+      displayName={_('Filter')}
+      name="filter"
+      entity={entity}
+      onClick={onFilterEditClick}/>
+    <CloneIcon
+      displayName={_('Filter')}
+      name="filter"
+      entity={entity}
+      title={_('Clone Filter')}
+      value={entity}
+      onClick={onFilterCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Filter')}
+      onClick={onFilterDownloadClick}
+    />
+  </IconDivider>
+);
 
 Actions.propTypes = {
-  entity: PropTypes.model,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onEntityEdit: PropTypes.func,
+  entity: PropTypes.model.isRequired,
+  onFilterCloneClick: PropTypes.func.isRequired,
+  onFilterDeleteClick: PropTypes.func.isRequired,
+  onFilterDownloadClick: PropTypes.func.isRequired,
+  onFilterEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
