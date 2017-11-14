@@ -26,6 +26,7 @@ import {
   is_defined,
   is_string,
   includes,
+  map,
 } from '../utils.js';
 
 import Model from '../model.js';
@@ -88,6 +89,10 @@ class Filter extends Model {
       // but it's helpful for debug purposes
       ret._term = ret.term;
       delete ret.term;
+    }
+
+    if (is_defined(ret.alerts)) {
+      ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
     }
 
     return ret;
