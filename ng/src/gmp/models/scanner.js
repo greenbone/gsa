@@ -24,8 +24,8 @@
 import moment from 'moment';
 
 import _ from '../locale.js';
-import {is_defined, is_empty, is_string} from '../utils.js';
-import {parse_int} from '../parser.js';
+import {is_defined, is_empty, is_string, map} from '../utils.js';
+import {parse_int, parse_yesno} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -38,6 +38,10 @@ export const SLAVE_SCANNER_TYPE = 4;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
+
+export const PARAM_TYPE_OVALDEF_FILE = 'osp_ovaldef_file';
+export const PARAM_TYPE_SELECTION = 'osp_selection';
+export const PARAM_TYPE_BOOLEAN = 'osp_boolean';
 
 export function scanner_type_name(scanner_type) {
   scanner_type = parse_int(scanner_type);
@@ -56,13 +60,28 @@ export function scanner_type_name(scanner_type) {
   return _('Unknown type ({{type}})', {type: scanner_type});
 }
 
+const parse_scanner_info = (info = {}) => {
+  const data = {};
+
+  if (!is_empty(info.name)) {
+    data.name = info.name;
+  }
+  if (!is_empty(info.version)) {
+    data.version = info.version;
+  }
+
+  return data;
+};
+
 class Scanner extends Model {
 
   static entity_type = 'scanner';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
+
     ret.scanner_type = parse_int(elem.type);
+
     ret.credential = is_defined(ret.credential) &&
       !is_empty(ret.credential._id) ? new Credential(ret.credential) :
       undefined;
@@ -87,7 +106,45 @@ class Scanner extends Model {
       }
     }
 
-    // TODO parse tasks and configs
+    if (is_defined(ret.tasks)) {
+      ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
+    }
+    else {
+      ret.tasks = [];
+    }
+
+    if (is_empty(ret.configs)) {
+      ret.configs = [];
+    }
+    else {
+      ret.configs = map(ret.configs.config,
+        config => new Model(config, 'config'));
+    }
+
+    if (is_defined(ret.info)) {
+      const {scanner, daemon, description, params, protocol} = ret.info;
+
+      ret.info.scanner = parse_scanner_info(scanner);
+      ret.info.daemon = parse_scanner_info(daemon);
+      ret.info.protocol = parse_scanner_info(protocol);
+
+      if (is_empty(description)) {
+        delete ret.info.description;
+      }
+      if (is_empty(params)) {
+        delete ret.info.params;
+      }
+      else {
+        ret.info.params = map(ret.info.params.param, param => ({
+          name: param.name,
+          description: param.description,
+          param_type: param.type,
+          mandatory: parse_yesno(param.mandatory),
+          default: param.default,
+        }));
+      }
+    }
+
     return ret;
   }
 
