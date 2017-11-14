@@ -84,7 +84,7 @@ const parse_filter = element => {
 
 const parse_counts = element => {
   if (is_defined(element) && is_defined(element.filters) &&
-    is_defined(element.fulter_count)) {
+    is_defined(element.filter_count)) {
     let es = element.filters[1];
     let ec = element.filter_count;
     return {
