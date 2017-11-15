@@ -62,20 +62,25 @@ const EntityNameTableData = ({
   return (
     <TableData flex="column">
       <Layout flex align="space-between">
-        {is_defined(onToggleDetailsClick) ?
-          <RowDetailsToggle
-            name={entity.id}
-            onClick={onToggleDetailsClick}>
-            {entity.name}
-          </RowDetailsToggle> :
-          <DetailsLink
-            legacy={legacy}
-            type={type}
-            id={entity.id}
-            textOnly={!links}>
-            {linktext}
-          </DetailsLink>
-        }
+        <Layout flex="column">
+          {entity.isOrphan() &&
+            <b>{_('Orphan')}</b>
+          }
+          {is_defined(onToggleDetailsClick) ?
+            <RowDetailsToggle
+              name={entity.id}
+              onClick={onToggleDetailsClick}>
+              {entity.name}
+            </RowDetailsToggle> :
+            <DetailsLink
+              legacy={legacy}
+              type={type}
+              id={entity.id}
+              textOnly={!links}>
+              {entity.name}
+            </DetailsLink>
+          }
+        </Layout>
         <ObserverIcon
           displayName={displayName}
           entity={entity}
