@@ -72,17 +72,10 @@ const EntityLink = ({
   const other = {};
 
   if (type === 'info') {
-    if (entity.info_type === 'nvt') {
-      type = entity.info_type;
-    }
-    else {
-      other.legacy = true;
-      other.info_type = entity.info_type;
-    }
+    type = entity.info_type;
   }
   else if (type === 'asset') {
-    other.legacy = true;
-    other.asset_type = entity.asset_type;
+    type = entity.asset_type;
   }
 
   return (
