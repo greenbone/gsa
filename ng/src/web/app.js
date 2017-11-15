@@ -110,6 +110,7 @@ import ScannerDetailsPage from './pages/scanners/detailspage.js';
 import SchedulesPage from './pages/schedules/listpage.js';
 import ScheduleDetailsPage from './pages/schedules/detailspage.js';
 import TagsPage from './pages/tags/listpage.js';
+import TagDetailsPage from './pages/tags/detailspage.js';
 import TargetsPage from './pages/targets/listpage.js';
 import TargetDetailsPage from './pages/targets/detailspage.js';
 import TasksPage from './pages/tasks/listpage.js';
@@ -440,6 +441,10 @@ ReactDOM.render(
         <Route
           path="filter/:id"
           component={FilterDetailsPage}
+        />
+        <Route
+          path="tag/:id"
+          component={TagDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>
