@@ -45,6 +45,7 @@ class TagComponent extends React.Component {
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
+    this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
   }
 
   handleEnableTag(tag) {
@@ -59,7 +60,7 @@ class TagComponent extends React.Component {
     gmp.tag.disable(tag).then(onDisabled, onDisableError);
   }
 
-  openTagDialog(tag) {
+  getResourceTypes() {
     const {capabilities} = this.props;
     const resource_types = [];
     if (capabilities.mayAccess('agents')) {
@@ -140,6 +141,12 @@ class TagComponent extends React.Component {
     if (capabilities.mayAccess('users')) {
       resource_types.push(['user', _('User')]);
     }
+    return resource_types;
+  }
+
+  openTagDialog(tag) {
+    const resource_types = this.getResourceTypes();
+
     if (is_defined(tag)) {
       const {resource = {}} = tag;
 
@@ -164,6 +171,15 @@ class TagComponent extends React.Component {
         resource_types,
       });
     }
+  }
+
+  openCreateTagDialog(options = {}) {
+    const resource_types = this.getResourceTypes();
+
+    this.tag_dialog.show({
+      ...options,
+      resource_types,
+    });
   }
 
   render() {
@@ -201,7 +217,7 @@ class TagComponent extends React.Component {
           <Wrapper>
             {children({
               ...other,
-              create: this.openTagDialog,
+              create: this.openCreateTagDialog,
               edit: this.openTagDialog,
               enable: this.handleEnableTag,
               disable: this.handleDisableTag,
