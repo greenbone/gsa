@@ -3,3 +3,5 @@ build/
 node_modules/
 .env.local
 config.local.js
+.vscode/
+.tern-project
