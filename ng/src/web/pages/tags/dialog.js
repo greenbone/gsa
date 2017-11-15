@@ -37,15 +37,16 @@ import YesNoRadio from '../../components/form/yesnoradio.js';
 import Layout from '../../components/layout/layout.js';
 
 const TagDialog = ({
-    active,
-    comment,
-    fixed,
-    name,
-    resource_id,
-    resource_type,
-    value,
-    onValueChange,
-  }, {capabilities}) => {
+  active,
+  comment,
+  fixed,
+  name,
+  resource_id,
+  resource_type,
+  resource_types,
+  value,
+  onValueChange,
+}) => {
   return (
     <Layout flex="column">
 
@@ -83,84 +84,14 @@ const TagDialog = ({
           value={resource_type}
           disabled={fixed}
           onChange={onValueChange}>
-          {capabilities.mayAccess('agents') &&
-            <option value="agent">{_('Agent')}</option>
-          }
-          {capabilities.mayAccess('alerts') &&
-            <option value="alert">{_('Alert')}</option>
-          }
-          {capabilities.mayAccess('assets') &&
-            <option value="host">{_('Host')}</option>
-          }
-          {capabilities.mayAccess('assets') &&
-            <option value="os">{_('Operating System')}</option>
-          }
-          {capabilities.mayAccess('info') &&
-            <option value="cpe">{_('CPE')}</option>
-          }
-          {capabilities.mayAccess('credentials') &&
-            <option value="credential">{_('Credential')}</option>
-          }
-          {capabilities.mayAccess('info') &&
-            <option value="cve">{_('CVE')}</option>
-          }
-          {capabilities.mayAccess('info') &&
-            <option value="cert_bund_adv">{_('CERT-Bund Advisory')}</option>
-          }
-          {capabilities.mayAccess('info') &&
-            <option value="dfn_cert_adv">{_('DFN-CERT Advisory')}</option>
-          }
-          {capabilities.mayAccess('filters') &&
-            <option value="filter">{_('Filter')}</option>
-          }
-          {capabilities.mayAccess('groups') &&
-            <option value="group">{_('Group')}</option>
-          }
-          {capabilities.mayAccess('notes') &&
-            <option value="note">{_('Note')}</option>
-          }
-          {capabilities.mayAccess('info') &&
-            <option value="nvt">{_('NVT')}</option>
-          }
-          {capabilities.mayAccess('info') &&
-            <option value="ovaldef">{_('OVAL Definition')}</option>
-          }
-          {capabilities.mayAccess('overrides') &&
-            <option value="override">{_('Override')}</option>
-          }
-          {capabilities.mayAccess('permissions') &&
-            <option value="Permission">{_('Permission')}</option>
-          }
-          {capabilities.mayAccess('port_lists') &&
-            <option value="port_list">{_('Port Lists')}</option>
-          }
-          {capabilities.mayAccess('reports') &&
-            <option value="report">{_('Report')}</option>
-          }
-          {capabilities.mayAccess('report_formats') &&
-            <option value="report_format">{_('Report Format')}</option>
-          }
-          {capabilities.mayAccess('results') &&
-            <option value="result">{_('Result')}</option>
-          }
-          {capabilities.mayAccess('roles') &&
-            <option value="role">{_('Role')}</option>
-          }
-          {capabilities.mayAccess('configs') &&
-            <option value="config">{_('Scan Config')}</option>
-          }
-          {capabilities.mayAccess('schedules') &&
-            <option value="schedule">{_('Schedule')}</option>
-          }
-          {capabilities.mayAccess('targets') &&
-            <option value="target">{_('Target')}</option>
-          }
-          {capabilities.mayAccess('tasks') &&
-            <option value="task">{_('Task')}</option>
-          }
-          {capabilities.mayAccess('users') &&
-            <option value="user">{_('User')}</option>
-          }
+          {resource_types.map(type => (
+            <option
+              key={type[0]}
+              value={type[0]}
+            >
+              {type[1]}
+            </option>
+          ))}
         </Select2>
       </FormGroup>
 
@@ -192,13 +123,10 @@ TagDialog.propTypes = {
   name: PropTypes.string,
   resource_id: PropTypes.id,
   resource_type: PropTypes.string,
+  resource_types: PropTypes.array.isRequired,
   tag: PropTypes.model,
   value: PropTypes.string,
   onValueChange: PropTypes.func,
-};
-
-TagDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withDialog({

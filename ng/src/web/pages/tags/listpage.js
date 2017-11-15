@@ -24,9 +24,11 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, shorten} from 'gmp/utils.js';
+
+import {TAGS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilties from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -34,116 +36,99 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
-import TagDialog from './dialog.js';
-import Table, {SORT_FIELDS} from './table.js';
+import TagComponent from './component.js';
+import TagsTable, {SORT_FIELDS} from './table.js';
 
-const ToolBarIcons = ({
-  onNewTagClick,
-}, {capabilities}) => {
-  return (
-    <Layout flex>
-      <HelpIcon
-        page="tags"
-        title={_('Help: Tags')}/>
-      {capabilities.mayCreate('tag') &&
-        <NewIcon
-          title={_('New Tag')}
-          onClick={onNewTagClick}/>
-      }
-    </Layout>
-  );
-};
+const ToolBarIcons = withCapabilties(({
+  capabilities,
+  onTagCreateClick,
+}) => (
+  <IconDivider>
+    <HelpIcon
+      page="tags"
+      title={_('Help: Tags')}
+    />
+    {capabilities.mayCreate('tag') &&
+      <NewIcon
+        title={_('New Tag')}
+        onClick={onTagCreateClick}
+      />
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
-  onNewTagClick: PropTypes.func,
+  onTagCreateClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+const TagsFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
 
-class Page extends React.Component {
+const TagsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <TagComponent
+    onCreated={onChanged}
+    onSaved={onChanged}
+    onCloned={onChanged}
+    onCloneError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onDisableError={onError}
+    onDisabled={onChanged}
+    onEnableError={onError}
+    onEnabled={onChanged}
+  >{({
+    clone,
+    create,
+    delete: delete_func,
+    download,
+    edit,
+    save,
+    enable,
+    disable,
+  }) => (
+    <EntitiesPage
+      {...props}
+      filterEditDialog={TagsFilterDialog}
+      sectionIcon="tag.svg"
+      table={TagsTable}
+      title={_('Tags')}
+      toolBarIcons={ToolBarIcons}
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onTagCloneClick={clone}
+      onTagCreateClick={create}
+      onTagDeleteClick={delete_func}
+      onTagDownloadClick={download}
+      onTagEditClick={edit}
+      onTagSaveClick={save}
+      onTagEnableClick={enable}
+      onTagDisableClick={disable}
+    />
+  )}
+  </TagComponent>
+);
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleEnableTag = this.handleEnableTag.bind(this);
-    this.handleDisableTag = this.handleDisableTag.bind(this);
-    this.openTagDialog = this.openTagDialog.bind(this);
-  }
-
-  handleEnableTag(tag) {
-    const {onChanged, entityCommand, showError} = this.props;
-
-    entityCommand.enable(tag).then(() => onChanged(), showError);
-  }
-
-  handleDisableTag(tag) {
-    const {onChanged, entityCommand, showError} = this.props;
-
-    entityCommand.disable(tag).then(() => onChanged(), showError);
-  }
-
-  openTagDialog(tag) {
-    if (is_defined(tag)) {
-      this.tag_dialog.show({
-        id: tag.id,
-        tag,
-        name: tag.name,
-        comment: tag.comment,
-        value: tag.value,
-        active: tag.active,
-        resource_id: tag.resource.id,
-        resource_type: tag.resource.type,
-      }, {
-        title: _('Edit tag {{name}}', {name: shorten(tag.name)}),
-      });
-    }
-    else {
-      this.tag_dialog.show({});
-    }
-  }
-
-  render() {
-    const {onEntitySave} = this.props;
-    return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onTagEnable={this.handleEnableTag}
-          onTagDisable={this.handleDisableTag}
-          onEntityEdit={this.openTagDialog}
-          onNewTagClick={this.openTagDialog}
-        />
-        <TagDialog
-          ref={ref => this.tag_dialog = ref}
-          onSave={onEntitySave}
-        />
-      </Layout>
-    );
-  }
-}
-
-Page.propTypes = {
-  entityCommand: PropTypes.entitycommand,
-  showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
+TagsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
-  onEntitySave: PropTypes.func,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('tag', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
-  }),
-  sectionIcon: 'tag.svg',
-  table: Table,
-  title: _('Tags'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+  filterFilter: TAGS_FILTER_FILTER,
+})(TagsPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -33,6 +33,7 @@ import {
   type_name,
   N_A,
 } from '../../utils/render.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import EntityLink from '../../entity/link.js';
@@ -46,21 +47,21 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 import Icon from '../../components/icon/icon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const Actions = ({
-    entity,
-    onEntityClone,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityEdit,
-    onTagDisable,
-    onTagEnable,
-  }, {capabilities}) => {
-
+const Actions = withCapabilities(({
+  capabilities,
+  entity,
+  onTagCloneClick,
+  onTagDeleteClick,
+  onTagDownloadClick,
+  onTagEditClick,
+  onTagDisableClick,
+  onTagEnableClick,
+}) => {
   let endisableable = null;
 
   if (capabilities.mayEdit('tag')) {
@@ -70,7 +71,7 @@ const Actions = ({
           img="disable.svg"
           value={entity}
           title={_('Disable Tag')}
-          onClick={onTagDisable}
+          onClick={onTagDisableClick}
         />
       );
     }
@@ -80,52 +81,48 @@ const Actions = ({
           img="enable.svg"
           value={entity}
           title={_('Enable Tag')}
-          onClick={onTagEnable}
+          onClick={onTagEnableClick}
         />
       );
     }
   }
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider>
       {endisableable}
       <TrashIcon
         displayName={_('Tag')}
         name="tag"
         entity={entity}
-        onClick={onEntityDelete}/>
+        onClick={onTagDeleteClick}/>
       <EditIcon
         displayName={_('Tag')}
         name="tag"
         entity={entity}
-        onClick={onEntityEdit}/>
+        onClick={onTagEditClick}/>
       <CloneIcon
         displayName={_('Tag')}
         name="tag"
         entity={entity}
         title={_('Clone Tag')}
         value={entity}
-        onClick={onEntityClone}/>
+        onClick={onTagCloneClick}/>
       <ExportIcon
         value={entity}
         title={_('Export Tag')}
-        onClick={onEntityDownload}
+        onClick={onTagDownloadClick}
       />
-    </Layout>
+    </IconDivider>
   );
-};
+});
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
-  onEntityEdit: PropTypes.func,
-  onTagDisable: PropTypes.func,
-  onTagEnable: PropTypes.func,
-};
-
-Actions.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onTagCloneClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagDownloadClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
