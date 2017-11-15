@@ -66,6 +66,7 @@ export const withTextOnly = Component => {
 };
 
 let Link = ({
+  anchor,
   to,
   filter,
   ...other
@@ -83,6 +84,7 @@ let Link = ({
   const location = {
     pathname,
     query: {},
+    hash: is_defined(anchor) ? '#' + anchor : undefined,
   };
 
   if (is_defined(filter)) {
@@ -92,6 +94,7 @@ let Link = ({
 };
 
 Link.propTypes = {
+  anchor: PropTypes.string,
   filter: PropTypes.string,
   to: PropTypes.string.isRequired,
 };
