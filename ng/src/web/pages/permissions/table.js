@@ -26,7 +26,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import PermissionDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -42,6 +44,7 @@ const Table = createEntitiesTable({
   emptyTitle: _('No permissions available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('permission')(PermissionDetails),
   footer: createEntitiesFooter({
     download: 'permissions.xml',
     span: 7,

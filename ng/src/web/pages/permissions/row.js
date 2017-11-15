@@ -50,40 +50,42 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const Actions = ({
-    entity,
-    onPermissionDeleteClick,
-    onPermissionDownloadClick,
-    onPermissionCloneClick,
-    onPermissionEditClick,
-  }) => {
-  return (
-    <IconDivider flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Permission')}
-        name="permission"
-        entity={entity}
-        onClick={onPermissionDeleteClick}/>
-      <EditIcon
-        displayName={_('Permission')}
-        name="permission"
-        entity={entity}
-        onClick={onPermissionEditClick}/>
-      <CloneIcon
-        displayName={_('Permission')}
-        name="permission"
-        entity={entity}
-        title={_('Clone Permission')}
-        value={entity}
-        mayClone={entity.isWritable()}
-        onClick={onPermissionCloneClick}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Permission')}
-        onClick={onPermissionDownloadClick}
-      />
-    </IconDivider>
-  );
-};
+  entity,
+  onPermissionDeleteClick,
+  onPermissionDownloadClick,
+  onPermissionCloneClick,
+  onPermissionEditClick,
+}) => (
+  <IconDivider
+    flex
+    grow
+    align={['center', 'center']}
+  >
+    <TrashIcon
+      displayName={_('Permission')}
+      name="permission"
+      entity={entity}
+      onClick={onPermissionDeleteClick}/>
+    <EditIcon
+      displayName={_('Permission')}
+      name="permission"
+      entity={entity}
+      onClick={onPermissionEditClick}/>
+    <CloneIcon
+      displayName={_('Permission')}
+      name="permission"
+      entity={entity}
+      title={_('Clone Permission')}
+      value={entity}
+      mayClone={entity.isWritable()}
+      onClick={onPermissionCloneClick}/>
+    <ExportIcon
+      value={entity}
+      title={_('Export Permission')}
+      onClick={onPermissionDownloadClick}
+    />
+  </IconDivider>
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -94,54 +96,48 @@ Actions.propTypes = {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    ...props
-  }, {
-    capabilities,
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        legacy
-        entity={entity}
-        link={links}
-        type="permission"
-        displayName={_('Permission')}
-      />
-      <TableData>
-        {permission_description(entity.name, entity.resource)}
-      </TableData>
-      <TableData>
-        {is_defined(entity.resource) && type_name(entity.resource.entity_type)}
-      </TableData>
-      <TableData>
-        {is_defined(entity.resource) &&
-          <EntityLink entity={entity.resource}/>
-        }
-      </TableData>
-      <TableData>
-        {is_defined(entity.subject) && type_name(entity.subject.entity_type)}
-      </TableData>
-      <TableData>
-        {is_defined(entity.subject) &&
-          <EntityLink entity={entity.subject}/>
-        }
-      </TableData>
-      {render_component(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+  actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="permission"
+      displayName={_('Permission')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>
+      {permission_description(entity.name, entity.resource)}
+    </TableData>
+    <TableData>
+      {is_defined(entity.resource) && type_name(entity.resource.entity_type)}
+    </TableData>
+    <TableData>
+      {is_defined(entity.resource) &&
+        <EntityLink entity={entity.resource}/>
+      }
+    </TableData>
+    <TableData>
+      {is_defined(entity.subject) && type_name(entity.subject.entity_type)}
+    </TableData>
+    <TableData>
+      {is_defined(entity.subject) &&
+        <EntityLink entity={entity.subject}/>
+      }
+    </TableData>
+    {render_component(actions, {...props, entity})}
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-};
-
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
