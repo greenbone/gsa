@@ -29,10 +29,11 @@ import {is_defined, is_empty} from 'gmp/utils.js';
 import PropTypes from '../utils/proptypes.js';
 
 import DetailsLink from '../components/link/detailslink.js';
-import LegacyLink from '../components/link/legacylink.js';
+import Link from '../components/link/link.js';
 
 const EntityLink = ({
   entity,
+  textOnly,
   ...props
 }, {capabilities}) => {
   const {id, name, permissions, deleted} = entity;
@@ -42,10 +43,13 @@ const EntityLink = ({
     return (
       <span>
         {name} (<span>in </span>
-        <LegacyLink
-          cmd="get_trash">
+        <Link
+          textOnly={textOnly}
+          to="trashcan"
+          anchor={type}
+        >
           {_('Trashcan')}
-        </LegacyLink>)
+        </Link>)
       </span>
     );
   }
@@ -95,6 +99,7 @@ const EntityLink = ({
 
 EntityLink.propTypes = {
   entity: PropTypes.model.isRequired,
+  textOnly: PropTypes.bool,
 };
 
 EntityLink.contextTypes = {
