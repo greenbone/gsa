@@ -10,8 +10,8 @@
     "greenbone security assistent"
   ],
   "repository": {
-    "type": "svn",
-    "url": "https://scm.wald.intevation.org/svn/openvas/trunk/gsa/src/html/classic/ng/"
+    "type": "git",
+    "url": "https://github.com/greenbone/gsa/"
   },
   "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "GPL-2.0+",
