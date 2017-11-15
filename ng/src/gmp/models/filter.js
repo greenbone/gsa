@@ -660,6 +660,7 @@ export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
   'type=report_format');
 export const SCHEDULES_FILTER_FILTER = Filter.fromString('type=schedule');
+export const TAGS_FILTER_FILTER = Filter.fromString('type=tag');
 
 export default Filter;
 
