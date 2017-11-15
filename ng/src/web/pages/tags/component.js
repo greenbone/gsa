@@ -151,7 +151,8 @@ class TagComponent extends React.Component {
         value: tag.value,
         active: tag.active,
         resource_id: resource.id,
-        resource_type: is_defined(resource.type) ? resource.type :
+        resource_type: is_defined(resource.entity_type) ?
+          resource.entity_type :
           first(resource_types, [])[0],
         resource_types,
       }, {
