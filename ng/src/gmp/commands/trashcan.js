@@ -22,7 +22,7 @@
  */
 
 import {HttpCommand, register_command} from '../command.js';
-import {map} from '../utils.js';
+import {is_defined, map} from '../utils.js';
 
 import CollectionList from '../collection/collectionlist.js';
 
@@ -71,112 +71,110 @@ class Trashcan extends HttpCommand {
   get() {
     return this.httpGet({cmd: 'get_trash'}).then(response => {
       const trash_data = response.data.get_trash;
-
-      const agent_list = new CollectionList(
-        {
-          entries: map(trash_data.get_agents_response.agent,
-          model => new Agent(model)),
-        });
-      const alert_list = new CollectionList(
-        {
+      const data = {};
+      if (is_defined(trash_data.get_agents_response)) {
+        data.agent_list = new CollectionList({
+            entries: map(trash_data.get_agents_response.agent,
+              model => new Agent(model)),
+          });
+      }
+      if (is_defined(trash_data.get_alerts_response)) {
+        data.alert_list = new CollectionList({
           entries: map(trash_data.get_alerts_response.alert,
-          model => new Alert(model)),
+            model => new Alert(model)),
         });
-      const scan_config_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_configs_response)) {
+        data.config_list = new CollectionList({
           entries: map(trash_data.get_configs_response.config,
-          model => new Scanconfig(model)),
+            model => new Scanconfig(model)),
         });
-      const credential_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_credentials_response)) {
+        data.credential_list = new CollectionList({
           entries: map(trash_data.get_credentials_response.credential,
-          model => new Credential(model)),
+            model => new Credential(model)),
         });
-      const filter_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_filters_response)) {
+        data.filter_list = new CollectionList({
           entries: map(trash_data.get_filters_response.filter,
-          model => new Filter(model)),
+            model => new Filter(model)),
         });
-      const group_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_groups_response)) {
+        data.group_list = new CollectionList({
           entries: map(trash_data.get_groups_response.group,
-          model => new Group(model)),
+            model => new Group(model)),
         });
-      const note_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_notes_response)) {
+        data.note_list = new CollectionList({
           entries: map(trash_data.get_notes_response.note,
-          model => new Note(model)),
+            model => new Note(model)),
         });
-      const override_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_overrides_response)) {
+        data.override_list = new CollectionList({
           entries: map(trash_data.get_overrides_response.override,
-          model => new Override(model)),
+            model => new Override(model)),
         });
-      const permission_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_permissions_response)) {
+        data.permission_list = new CollectionList({
           entries: map(trash_data.get_permissions_response.permission,
-          model => new Permission(model)),
+            model => new Permission(model)),
         });
-      const port_list_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_port_lists_response)) {
+        data.port_list_list = new CollectionList({
           entries: map(trash_data.get_port_lists_response.port_list,
-          model => new PortList(model)),
+            model => new PortList(model)),
         });
-      const report_format_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_report_formats_response)) {
+        data.report_format_list = new CollectionList({
           entries: map(trash_data.get_report_formats_response.report_format,
-          model => new ReportFormat(model)),
+            model => new ReportFormat(model)),
         });
-      const role_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_roles_response)) {
+        data.role_list = new CollectionList({
           entries: map(trash_data.get_roles_response.role,
-          model => new Role(model)),
+            model => new Role(model)),
         });
-      const scanner_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_scanners_response)) {
+        data.scanner_list = new CollectionList({
           entries: map(trash_data.get_scanners_response.scanner,
-          model => new Scanner(model)),
+            model => new Scanner(model)),
         });
-      const schedule_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_schedules_response)) {
+        data.schedule_list = new CollectionList({
           entries: map(trash_data.get_schedules_response.schedule,
-          model => new Schedule(model)),
+            model => new Schedule(model)),
         });
-      const tag_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_tags_response)) {
+        data.tag_list = new CollectionList({
           entries: map(trash_data.get_tags_response.tag,
-          model => new Tag(model)),
+            model => new Tag(model)),
         });
-      const target_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_targets_response)) {
+        data.target_list = new CollectionList({
           entries: map(trash_data.get_targets_response.target,
-          model => new Target(model)),
+            model => new Target(model)),
         });
-      const task_list = new CollectionList(
-        {
+      }
+      if (is_defined(trash_data.get_tasks_response)) {
+        data.task_list = new CollectionList({
           entries: map(trash_data.get_tasks_response.task,
-          model => new Task(model)),
+            model => new Task(model)),
         });
-
-      return response.setData({
-        agent_list,
-        alert_list,
-        scan_config_list,
-        credential_list,
-        filter_list,
-        group_list,
-        note_list,
-        override_list,
-        permission_list,
-        port_list_list,
-        report_format_list,
-        role_list,
-        scanner_list,
-        schedule_list,
-        tag_list,
-        target_list,
-        task_list,
-      });
+      }
+      return response.setData(data);
     });
   }
 }
