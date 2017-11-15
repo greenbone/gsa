@@ -564,6 +564,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/schedules/table.js
      ${NG_SRC_DIR}/src/web/pages/secinfopage.js
      ${NG_SRC_DIR}/src/web/pages/tags/component.js
+     ${NG_SRC_DIR}/src/web/pages/tags/details.js
+     ${NG_SRC_DIR}/src/web/pages/tags/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/tags/dialog.js
      ${NG_SRC_DIR}/src/web/pages/tags/listpage.js
      ${NG_SRC_DIR}/src/web/pages/tags/row.js
