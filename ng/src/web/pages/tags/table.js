@@ -25,7 +25,9 @@ import _ from 'gmp/locale.js';
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
+import TagDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
@@ -41,6 +43,7 @@ const TagsTable = createEntitiesTable({
   emptyTitle: _('No tags available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
+  rowDetails: withRowDetails('tag')(TagDetails),
   footer: createEntitiesFooter({
     download: 'tags.xml',
     span: 7,

@@ -129,6 +129,7 @@ const Row = ({
     actions,
     entity,
     links = true,
+    onToggleDetailsClick,
     ...props
   }, {
     capabilities,
@@ -136,11 +137,11 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
-        legacy
         entity={entity}
         link={links}
         type="tag"
         displayName={_('Tag')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         {entity.value}
@@ -172,6 +173,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 Row.contextTypes = {
