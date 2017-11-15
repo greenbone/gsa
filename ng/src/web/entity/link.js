@@ -27,15 +27,17 @@ import _ from 'gmp/locale.js';
 import {is_defined, is_empty} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
+import withCapabilties from '../utils/withCapabilities.js';
 
 import DetailsLink from '../components/link/detailslink.js';
 import Link from '../components/link/link.js';
 
 const EntityLink = ({
+  capabilities,
   entity,
   textOnly,
   ...props
-}, {capabilities}) => {
+}) => {
   const {id, name, permissions, deleted} = entity;
   let type = entity.entity_type;
 
@@ -91,14 +93,11 @@ const EntityLink = ({
 };
 
 EntityLink.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   textOnly: PropTypes.bool,
 };
 
-EntityLink.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default EntityLink;
+export default withCapabilties(EntityLink);
 
 // vim: set ts=2 sw=2 tw=80:
