@@ -72,13 +72,18 @@ const FilterDialog = createFilterDialog({
 const Page = ({
   onChanged,
   onDownloaded,
+  onError,
   ...props
 }) => (
   <PermissionComponent
     onCloned={onChanged}
+    onCloneError={onError}
     onDeleted={onChanged}
+    onDeleteError={onError}
     onSaved={onChanged}
+    onSaveError={onError}
     onDownloaded={onDownloaded}
+    onDownloadError={onError}
   >
     {({
       clone,
@@ -94,6 +99,7 @@ const Page = ({
         filterEditDialog={FilterDialog}
         title={_('Permissions')}
         toolBarIcons={ToolBarIcons}
+        onError={onError}
         onPermissionCloneClick={clone}
         onPermissionCreateClick={create}
         onPermissionDeleteClick={delete_func}
@@ -107,6 +113,7 @@ const Page = ({
 Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('permission')(Page);
