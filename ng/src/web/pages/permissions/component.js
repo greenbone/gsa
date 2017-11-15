@@ -96,7 +96,7 @@ class PermissionsComponent extends React.Component {
     state.fixedResource = fixed;
 
     if (capabilities.mayAccess('users')) {
-      users_promise = gmp.users.getAll({cache: false});
+      users_promise = gmp.users.getAll();
 
       if (!is_defined(state.subject_type)) {
         state.subject_type = 'user';
@@ -107,7 +107,7 @@ class PermissionsComponent extends React.Component {
     }
 
     if (capabilities.mayAccess('roles')) {
-      roles_promise = gmp.roles.getAll({cache: false});
+      roles_promise = gmp.roles.getAll();
 
       if (!capabilities.mayAccess('users') &&
         !is_defined(state.subject_type)) {
@@ -119,7 +119,7 @@ class PermissionsComponent extends React.Component {
     }
 
     if (capabilities.mayAccess('groups')) {
-      groups_promise = gmp.groups.getAll({cache: false});
+      groups_promise = gmp.groups.getAll();
 
       if (!capabilities.mayAccess('users') &&
         !capabilities.mayAccess('roles') && !is_defined(state.subject_type)) {
