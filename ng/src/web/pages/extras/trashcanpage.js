@@ -66,6 +66,7 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import Loading from '../../components/loading/loading.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 import withGmp from '../../utils/withGmp.js';
 
 import TrashActions from './trashactions.js';
@@ -78,13 +79,18 @@ const ToolBarIcons = () => (
   />
 );
 
-const EmptyTrashButton = ({onClick}) => (
-  <Layout align="right">
-    <Button
-      onClick={onClick}
-    >{_('Empty Trash')}</Button>
-  </Layout>
-);
+const EmptyTrashButton = withCapabilities(({onClick, capabilities}) => {
+  if (!capabilities.mayOp('empty_trashcan')) {
+    return null;
+  }
+  return (
+    <Layout align="end">
+      <Button
+        onClick={onClick}
+      >{_('Empty Trash')}</Button>
+    </Layout>
+  );
+});
 
 class Trashcan extends React.Component {
 
@@ -130,11 +136,11 @@ class Trashcan extends React.Component {
     gmp.trashcan.empty().then(this.getTrash);
   }
 
-  createContentRow(type, count) {
+  createContentRow(type, title, count) {
     return (
       <TableRow key={type}>
         <TableData>
-          <InnerLink to={type}>{type}</InnerLink>
+          <InnerLink to={type}>{_(title)}</InnerLink>
         </TableData>
         <TableData>
           {count}
@@ -144,26 +150,60 @@ class Trashcan extends React.Component {
   }
 
   createContentsTable(trash) {
+    const render_agents = is_defined(trash.agent_list);
+    const render_alerts = is_defined(trash.alert_list);
+    const render_configs = is_defined(trash.config_list);
+    const render_credentials = is_defined(trash.credential_list);
+    const render_filters = is_defined(trash.filter_list);
+    const render_groups = is_defined(trash.group_list);
+    const render_notes = is_defined(trash.note_list);
+    const render_overrides = is_defined(trash.override_list);
+    const render_permissions = is_defined(trash.permission_list);
+    const render_port_lists = is_defined(trash.port_list_list);
+    const render_report_formats = is_defined(trash.report_format_list);
+    const render_roles = is_defined(trash.role_list);
+    const render_scanners = is_defined(trash.scanner_list);
+    const render_schedules = is_defined(trash.schedule_list);
+    const render_tags = is_defined(trash.tag_list);
+    const render_targets = is_defined(trash.target_list);
+    const render_tasks = is_defined(trash.task_list);
+
     return (
       <TableBody>
-        {this.createContentRow('Agents', trash.agent_list.length)}
-        {this.createContentRow('Alerts', trash.alert_list.length)}
-        {this.createContentRow('Configs', trash.scan_config_list.length)}
-        {this.createContentRow('Credentials', trash.credential_list.length)}
-        {this.createContentRow('Filters', trash.filter_list.length)}
-        {this.createContentRow('Groups', trash.group_list.length)}
-        {this.createContentRow('Notes', trash.note_list.length)}
-        {this.createContentRow('Overrides', trash.override_list.length)}
-        {this.createContentRow('Permissions', trash.permission_list.length)}
-        {this.createContentRow('Port Lists', trash.port_list_list.length)}
-        {this.createContentRow(
-          'Report Formats', trash.report_format_list.length)}
-        {this.createContentRow('Roles', trash.role_list.length)}
-        {this.createContentRow('Scanners', trash.scanner_list.length)}
-        {this.createContentRow('Schedules', trash.schedule_list.length)}
-        {this.createContentRow('Tags', trash.tag_list.length)}
-        {this.createContentRow('Targets', trash.target_list.length)}
-        {this.createContentRow('Tasks', trash.task_list.length)}
+        {render_agents && this.createContentRow(
+          'agent', 'Agents', trash.agent_list.length)}
+        {render_alerts && this.createContentRow(
+          'alert', 'Alerts', trash.alert_list.length)}
+        {render_configs && this.createContentRow(
+          'config', 'Configs', trash.config_list.length)}
+        {render_credentials && this.createContentRow(
+          'credential', 'Credentials', trash.credential_list.length)}
+        {render_filters && this.createContentRow(
+          'filter', 'Filters', trash.filter_list.length)}
+        {render_groups && this.createContentRow(
+          'group', 'Groups', trash.group_list.length)}
+        {render_notes && this.createContentRow(
+          'note', 'Notes', trash.note_list.length)}
+        {render_overrides && this.createContentRow(
+          'override', 'Overrides', trash.override_list.length)}
+        {render_permissions && this.createContentRow(
+          'permission', 'Permissions', trash.permission_list.length)}
+        {render_port_lists && this.createContentRow(
+          'port_list', 'Port Lists', trash.port_list_list.length)}
+        {render_report_formats && this.createContentRow(
+          'report_format', 'Report Formats', trash.report_format_list.length)}
+        {render_roles && this.createContentRow(
+          'role', 'Roles', trash.role_list.length)}
+        {render_scanners && this.createContentRow(
+          'scanner', 'Scanners', trash.scanner_list.length)}
+        {render_schedules && this.createContentRow(
+          'schedule', 'Schedules', trash.schedule_list.length)}
+        {render_tags && this.createContentRow(
+          'tag', 'Tags', trash.tag_list.length)}
+        {render_targets && this.createContentRow(
+          'target', 'Targets', trash.target_list.length)}
+        {render_tasks && this.createContentRow(
+          'task', 'Tasks', trash.task_list.length)}
       </TableBody>
     );
   };
@@ -216,125 +256,176 @@ class Trashcan extends React.Component {
           {contents_table}
         </Table>
 
-        <LinkTarget id="Agents"/>
-        <h1>{_('Agents')}</h1>
-        <AgentsTable
-          entities={trash.agent_list}
-          {...table_props}
-        />
-
-        <LinkTarget id="Alerts"/>
-        <h1>{_('Alerts')}</h1>
-        <AlertsTable
-          entities={trash.alert_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Configs"/>
-        <h1>{_('Scan Configs')}</h1>
-        <ScanConfigsTable
-          entities={trash.scan_config_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Credentials"/>
-        <h1>{_('Credentials')}</h1>
-        <CredentialsTable
-          entities={trash.credential_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Filters"/>
-        <h1>{_('Filters')}</h1>
-        <FiltersTable
-          entities={trash.filter_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Groups"/>
-        <h1>{_('Groups')}</h1>
-        <GroupsTable
-          entities={trash.group_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Notes"/>
-        <h1>{_('Notes')}</h1>
-        <NotesTable
-          entities={trash.note_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Overrides"/>
-        <h1>{_('Overrides')}</h1>
-        <OverridesTable
-          entities={trash.override_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Permissions"/>
-        <h1>{_('Permissions')}</h1>
-        <PermissionsTable
-          entities={trash.permission_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Port Lists"/>
-        <h1>{_('Port Lists')}</h1>
-        <PortListsTable
-          entities={trash.port_list_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Report Formats"/>
-        <h1>{_('Report Formats')}</h1>
-        <ReportFormatsTable
-          entities={trash.report_format_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Roles"/>
-        <h1>{_('Roles')}</h1>
-        <RolesTable
-          entities={trash.role_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Scanners"/>
-        <h1>{_('Scanners')}</h1>
-        <ScannersTable
-          entities={trash.scanner_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Schedules"/>
-        <h1>{_('Schedules')}</h1>
-        <SchedulesTable
-          entities={trash.schedule_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Tags"/>
-        <h1>{_('Tags')}</h1>
-        <TagsTable
-          entities={trash.tag_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Targets"/>
-        <h1>{_('Targets')}</h1>
-        <TargetsTable
-          entities={trash.target_list}
-          {...table_props}
-         />
-
-        <LinkTarget id="Tasks"/>
-        <h1>{_('Tasks')}</h1>
-        <TasksTable
-          entities={trash.task_list}
-          {...table_props}
-         />
-
+        {is_defined(trash.agent_list) &&
+          <span>
+            <LinkTarget id="agent"/>
+            <h1>{_('Agents')}</h1>
+            <AgentsTable
+              entities={trash.agent_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.alert_list) &&
+          <span>
+            <LinkTarget id="alert"/>
+            <h1>{_('Alerts')}</h1>
+            <AlertsTable
+              entities={trash.alert_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.config_list) &&
+          <span>
+            <LinkTarget id="config"/>
+            <h1>{_('Scan Configs')}</h1>
+            <ScanConfigsTable
+              entities={trash.config_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.credential_list) &&
+          <span>
+            <LinkTarget id="credential"/>
+            <h1>{_('Credentials')}</h1>
+            <CredentialsTable
+              entities={trash.credential_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.filter_list) &&
+          <span>
+            <LinkTarget id="filter"/>
+            <h1>{_('Filters')}</h1>
+            <FiltersTable
+              entities={trash.filter_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.group_list) &&
+          <span>
+            <LinkTarget id="group"/>
+            <h1>{_('Groups')}</h1>
+            <GroupsTable
+              entities={trash.group_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.note_list) &&
+          <span>
+            <LinkTarget id="note"/>
+            <h1>{_('Notes')}</h1>
+            <NotesTable
+              entities={trash.note_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.override_list) &&
+          <span>
+            <LinkTarget id="override"/>
+            <h1>{_('Overrides')}</h1>
+            <OverridesTable
+              entities={trash.override_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.permission_list) &&
+          <span>
+            <LinkTarget id="permission"/>
+            <h1>{_('Permissions')}</h1>
+            <PermissionsTable
+              entities={trash.permission_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.port_list_list) &&
+          <span>
+            <LinkTarget id="port_list"/>
+            <h1>{_('Port Lists')}</h1>
+            <PortListsTable
+              entities={trash.port_list_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.report_format_list) &&
+          <span>
+            <LinkTarget id="report_format"/>
+            <h1>{_('Report Formats')}</h1>
+            <ReportFormatsTable
+              entities={trash.report_format_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.role_list) &&
+          <span>
+            <LinkTarget id="role"/>
+            <h1>{_('Roles')}</h1>
+            <RolesTable
+              entities={trash.role_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.scanner_list) &&
+          <span>
+            <LinkTarget id="scanner"/>
+            <h1>{_('Scanners')}</h1>
+            <ScannersTable
+              entities={trash.scanner_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.schedule_list) &&
+          <span>
+            <LinkTarget id="schedule"/>
+            <h1>{_('Schedules')}</h1>
+            <SchedulesTable
+              entities={trash.schedule_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.tag_list) &&
+          <span>
+            <LinkTarget id="tag"/>
+            <h1>{_('Tags')}</h1>
+            <TagsTable
+              entities={trash.tag_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.target_list) &&
+          <span>
+            <LinkTarget id="target"/>
+            <h1>{_('Targets')}</h1>
+            <TargetsTable
+              entities={trash.target_list}
+              {...table_props}
+            />
+          </span>
+        }
+        {is_defined(trash.task_list) &&
+          <span>
+            <LinkTarget id="task"/>
+            <h1>{_('Tasks')}</h1>
+            <TasksTable
+              entities={trash.task_list}
+              {...table_props}
+            />
+          </span>
+        }
       </Layout>
     );
   }
