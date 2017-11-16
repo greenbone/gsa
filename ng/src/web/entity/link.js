@@ -27,14 +27,17 @@ import _ from 'gmp/locale.js';
 import {is_defined, is_empty} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
+import withCapabilties from '../utils/withCapabilities.js';
 
 import DetailsLink from '../components/link/detailslink.js';
-import LegacyLink from '../components/link/legacylink.js';
+import Link from '../components/link/link.js';
 
 const EntityLink = ({
+  capabilities,
   entity,
+  textOnly,
   ...props
-}, {capabilities}) => {
+}) => {
   const {id, name, permissions, deleted} = entity;
   let type = entity.entity_type;
 
@@ -42,10 +45,13 @@ const EntityLink = ({
     return (
       <span>
         {name} (<span>in </span>
-        <LegacyLink
-          cmd="get_trash">
+        <Link
+          textOnly={textOnly}
+          to="trashcan"
+          anchor={type}
+        >
           {_('Trashcan')}
-        </LegacyLink>)
+        </Link>)
       </span>
     );
   }
@@ -68,17 +74,10 @@ const EntityLink = ({
   const other = {};
 
   if (type === 'info') {
-    if (entity.info_type === 'nvt') {
-      type = entity.info_type;
-    }
-    else {
-      other.legacy = true;
-      other.info_type = entity.info_type;
-    }
+    type = entity.info_type;
   }
   else if (type === 'asset') {
-    other.legacy = true;
-    other.asset_type = entity.asset_type;
+    type = entity.asset_type;
   }
 
   return (
@@ -94,13 +93,11 @@ const EntityLink = ({
 };
 
 EntityLink.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
-EntityLink.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
+  entity: PropTypes.model.isRequired,
+  textOnly: PropTypes.bool,
 };
 
-export default EntityLink;
+export default withCapabilties(EntityLink);
 
 // vim: set ts=2 sw=2 tw=80:
