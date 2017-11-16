@@ -157,13 +157,14 @@ class TagComponent extends React.Component {
     return resource_types;
   }
 
-  openTagDialog(tag) {
+  openTagDialog(tag, options = {}) {
     const resource_types = this.getResourceTypes();
 
     if (is_defined(tag)) {
       const {resource = {}} = tag;
 
       this.tag_dialog.show({
+        ...options,
         id: tag.id,
         tag,
         name: tag.name,
