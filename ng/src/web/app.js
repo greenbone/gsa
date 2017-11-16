@@ -93,6 +93,7 @@ import OvaldefDetailsPage from './pages/ovaldefs/detailspage.js';
 import OverridesPage from './pages/overrides/listpage.js';
 import OverrideDetailsPage from './pages/overrides/detailspage.js';
 import PermissionsPage from './pages/permissions/listpage.js';
+import PermissionDetailsPage from './pages/permissions/detailspage.js';
 import PortListsPage from './pages/portlists/listpage.js';
 import PortListDetailsPage from './pages/portlists/detailspage.js';
 import RadiusPage from './pages/radius/radiuspage.js';
@@ -445,6 +446,10 @@ ReactDOM.render(
         <Route
           path="tag/:id"
           component={TagDetailsPage}
+        />
+        <Route
+          path="permission/:id"
+          component={PermissionDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

@@ -26,6 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -33,7 +34,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
@@ -41,29 +42,27 @@ import Table, {SORT_FIELDS} from './table.js';
 
 import PermissionComponent from './component.js';
 
-const ToolBarIcons = ({
-    onPermissionCreateClick,
-  }, {capabilities}) => {
-  return (
-    <Layout flex>
-      <HelpIcon
-        page="permissions"
-        title={_('Help: Permissions')}/>
-      {capabilities.mayCreate('permission') &&
-        <NewIcon
-          title={_('New Permission')}
-          onClick={onPermissionCreateClick}/>
-      }
-    </Layout>
-  );
-};
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onPermissionCreateClick,
+}) => (
+  <IconDivider>
+    <HelpIcon
+      page="permissions"
+      title={_('Help: Permissions')}
+    />
+    {capabilities.mayCreate('permission') &&
+      <NewIcon
+        title={_('New Permission')}
+        onClick={onPermissionCreateClick}
+      />
+    }
+
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onPermissionCreateClick: PropTypes.func,
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 const FilterDialog = createFilterDialog({
@@ -73,13 +72,18 @@ const FilterDialog = createFilterDialog({
 const Page = ({
   onChanged,
   onDownloaded,
+  onError,
   ...props
 }) => (
   <PermissionComponent
     onCloned={onChanged}
+    onCloneError={onError}
     onDeleted={onChanged}
+    onDeleteError={onError}
     onSaved={onChanged}
+    onSaveError={onError}
     onDownloaded={onDownloaded}
+    onDownloadError={onError}
   >
     {({
       clone,
@@ -95,6 +99,7 @@ const Page = ({
         filterEditDialog={FilterDialog}
         title={_('Permissions')}
         toolBarIcons={ToolBarIcons}
+        onError={onError}
         onPermissionCloneClick={clone}
         onPermissionCreateClick={create}
         onPermissionDeleteClick={delete_func}
@@ -108,6 +113,7 @@ const Page = ({
 Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('permission')(Page);

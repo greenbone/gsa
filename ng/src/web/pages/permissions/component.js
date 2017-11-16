@@ -29,6 +29,9 @@ import {is_defined, shorten, select_save_id} from 'gmp/utils.js';
 import Promise from 'gmp/promise.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import compose from '../../utils/compose.js';
+import withGmp from '../../utils/withGmp.js';
+import withCapabilties from '../../utils/withCapabilities.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
@@ -45,7 +48,7 @@ class PermissionsComponent extends React.Component {
   }
 
   openPermissionDialog(permission, fixed = false) {
-    const {gmp, capabilities} = this.context;
+    const {gmp, capabilities} = this.props;
 
     let users_promise;
     let roles_promise;
@@ -93,7 +96,7 @@ class PermissionsComponent extends React.Component {
     state.fixedResource = fixed;
 
     if (capabilities.mayAccess('users')) {
-      users_promise = gmp.users.getAll({cache: false});
+      users_promise = gmp.users.getAll();
 
       if (!is_defined(state.subject_type)) {
         state.subject_type = 'user';
@@ -104,7 +107,7 @@ class PermissionsComponent extends React.Component {
     }
 
     if (capabilities.mayAccess('roles')) {
-      roles_promise = gmp.roles.getAll({cache: false});
+      roles_promise = gmp.roles.getAll();
 
       if (!capabilities.mayAccess('users') &&
         !is_defined(state.subject_type)) {
@@ -116,7 +119,7 @@ class PermissionsComponent extends React.Component {
     }
 
     if (capabilities.mayAccess('groups')) {
-      groups_promise = gmp.groups.getAll({cache: false});
+      groups_promise = gmp.groups.getAll();
 
       if (!capabilities.mayAccess('users') &&
         !capabilities.mayAccess('roles') && !is_defined(state.subject_type)) {
@@ -202,7 +205,9 @@ class PermissionsComponent extends React.Component {
 }
 
 PermissionsComponent.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -215,11 +220,9 @@ PermissionsComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-PermissionsComponent.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default PermissionsComponent;
+export default compose(
+  withGmp,
+  withCapabilties,
+)(PermissionsComponent);
 
 // vim: set ts=2 sw=2 tw=80:
