@@ -250,7 +250,6 @@ const EntityTags = ({
                     key={tag.id}>
                     <TableData>
                       <DetailsLink
-                        legacy
                         id={tag.id}
                         type="tag">
                         {tag.name}
