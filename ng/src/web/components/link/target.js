@@ -36,8 +36,9 @@ const Target = glamorous.div({
   content: '',
   display: 'block',
   height: '35px',
-  margin: '-35px 0 0',
   zIndex: '-100',
+  margin: '-35px 0 0 0',
+  position: 'relative', // needs to be set for z-index to work in Firefox
 });
 
 export default Target;
