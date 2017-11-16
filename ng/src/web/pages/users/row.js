@@ -51,43 +51,49 @@ import {convert_auth_method, convert_allow} from './details.js';
 
 const IconActions = ({
   entity,
-  onEditUser,
-  onEntityClone,
-  onEntityDelete,
-  onEntityDownload,
+  onUserCloneClick,
+  onUserEditClick,
+  onUserDeleteClick,
+  onUserDownloadClick,
 }) => (
-  <IconDivider>
+  <IconDivider
+    grow
+    align="center"
+  >
     <DeleteIcon
       displayName={_('User')}
       name="user"
       entity={entity}
-      onClick={onEntityDelete}/>
+      onClick={onUserDeleteClick}
+    />
     <EditIcon
       displayName={_('User')}
       name="user"
       entity={entity}
-      onClick={onEditUser}/>
+      onClick={onUserEditClick}
+    />
     <CloneIcon
       displayName={_('User')}
       name="user"
       entity={entity}
       title={_('Clone User')}
       value={entity}
-      onClick={onEntityClone}/>
+      onClick={onUserCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export User')}
-      onClick={onEntityDownload}
+      onClick={onUserDownloadClick}
     />
   </IconDivider>
 );
 
 IconActions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onEditUser: PropTypes.func.isRequired,
-  onEntityClone: PropTypes.func.isRequired,
-  onEntityDelete: PropTypes.func.isRequired,
-  onEntityDownload: PropTypes.func.isRequired,
+  onUserCloneClick: PropTypes.func.isRequired,
+  onUserDeleteClick: PropTypes.func.isRequired,
+  onUserDownloadClick: PropTypes.func.isRequired,
+  onUserEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
