@@ -24,105 +24,36 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 import withGmp from '../utils/withGmp.js';
 
-import Wrapper from '../components/layout/wrapper.js';
-
-import TagDialog from '../pages/tags/dialog.js';
+import TagComponent from '../pages/tags/component.js';
 
 class TagsHandler extends React.Component {
 
   constructor(...args) {
     super(...args);
 
-    this.handleAddTag = this.handleAddTag.bind(this);
-    this.handleDeleteTag = this.handleDeleteTag.bind(this);
-    this.handleDisableTag = this.handleDisableTag.bind(this);
-    this.handleEnableTag = this.handleEnableTag.bind(this);
-    this.handleSaveTag = this.handleSaveTag.bind(this);
-
     this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
     this.openEditTagDialog = this.openEditTagDialog.bind(this);
   }
 
-  handleSaveTag(data) {
-    const {gmp, onSuccess} = this.props;
-
-    let promise;
-
-    if (is_defined(data.id)) {
-      promise = gmp.tag.save(data);
-    }
-    else {
-      promise = gmp.tag.create(data);
-    }
-
-    return promise.then(onSuccess);
-  }
-
-  handleAddTag({name, value, entity}) {
-    const {
-      gmp,
-      resourceType,
-      onSuccess,
-    } = this.props;
-
-    return gmp.tag.create({
-      name,
-      value,
-      active: 1,
-      resource_id: entity.id,
-      resource_type: resourceType,
-    }).then(onSuccess);
-  }
-
-  handleEnableTag(tag) {
-    const {gmp, onSuccess, onError} = this.props;
-
-    return gmp.tag.enable(tag).then(onSuccess, onError);
-  }
-
-  handleDisableTag(tag) {
-    const {gmp, onSuccess, onError} = this.props;
-
-    return gmp.tag.disable(tag).then(onSuccess, onError);
-  }
-
-  handleDeleteTag(tag) {
-    const {gmp, onSuccess, onError} = this.props;
-
-    return gmp.tag.delete(tag).then(onSuccess, onError);
-  }
-
-  openEditTagDialog(tag) {
-    const {
-      gmp,
-      resourceType,
-    } = this.props;
+  openEditTagDialog(tag, edit) {
+    const {gmp} = this.props;
 
     gmp.tag.get(tag).then(response => {
       const t = response.data;
-      this.tag_dialog.show({
+      edit(t, {
         fixed: true,
-        id: t.id,
-        active: t.active,
-        name: t.name,
-        value: t.value,
-        comment: t.comment,
-        resource_id: t.resource.id,
-        resource_type: is_defined(resourceType) ?
-          resourceType : t.resource.entity_type,
-      }, {title: _('Edit Tag {{name}}', tag)});
+      });
     });
   }
 
-  openCreateTagDialog(entity) {
-    const {resourceType = entity.entity_type} = this.props;
+  openCreateTagDialog(entity, create) {
+    const resourceType = entity.entity_type;
 
-    this.tag_dialog.show({
+    create({
       fixed: true,
       resource_id: entity.id,
       resource_type: resourceType,
@@ -133,31 +64,48 @@ class TagsHandler extends React.Component {
   render() {
     const {
       children,
+      onChanged,
+      onError,
     } = this.props;
     return (
-      <Wrapper>
-        {children({
-          onAddTag: this.handleAddTag,
-          onNewTagClick: this.openCreateTagDialog,
-          onEditTagClick: this.openEditTagDialog,
-          onEnableTag: this.handleEnableTag,
-          onDeleteTag: this.handleDeleteTag,
-          onDisableTag: this.handleDisableTag,
-        })}
-        <TagDialog
-          ref={ref => this.tag_dialog = ref}
-          onSave={this.handleSaveTag}
-        />
-      </Wrapper>
+      <TagComponent
+        onAdded={onChanged}
+        onAddError={onError}
+        onEnabled={onChanged}
+        onEnableError={onError}
+        onDisabled={onChanged}
+        onDisableError={onError}
+        onDeleted={onChanged}
+        onDeleteError={onError}
+        onSaved={onChanged}
+        onSaveError={onError}
+        onCreated={onChanged}
+        onCreateError={onError}
+      >{({
+          add,
+          create,
+          delete: delete_func,
+          disable,
+          edit,
+          enable,
+        }) => children({
+            add,
+            create: entity => this.openCreateTagDialog(entity, create),
+            delete: delete_func,
+            disable,
+            edit: tag => this.openEditTagDialog(tag, edit),
+            enable,
+          })
+        }
+      </TagComponent>
     );
   }
 }
 
 TagsHandler.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  resourceType: PropTypes.string,
-  onError: PropTypes.func,
-  onSuccess: PropTypes.func,
+  onChanged: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 export default withGmp(TagsHandler);

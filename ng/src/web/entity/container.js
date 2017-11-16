@@ -217,20 +217,31 @@ class EntityContainer extends React.Component {
     } = this.props;
     return (
       <TagsHandler
-        resourceType={resourceType}
+        onChanged={this.handleChanged}
         onError={this.handleError}
-        onSuccess={this.handleChanged}
-      >
-        {tprops => children({
-          entityCommand: this.entity_command,
-          resourceType,
-          onDownloaded: onDownload,
-          onChanged: this.handleChanged,
-          onSuccess: this.handleChanged,
-          onError: this.handleError,
-          ...tprops,
-          ...this.state,
-        })}
+      >{({
+          add,
+          create,
+          delete: delete_func,
+          disable,
+          edit,
+          enable,
+        }) => children({
+            resourceType,
+            entityCommand: this.entity_command,
+            onChanged: this.handleChanged,
+            onSuccess: this.handleChanged,
+            onError: this.handleError,
+            onDownloaded: onDownload,
+            onTagAddClick: add,
+            onTagCreateClick: create,
+            onTagDeleteClick: delete_func,
+            onTagDisableClick: disable,
+            onTagEditClick: edit,
+            onTagEnableClick: enable,
+            ...this.state,
+          })
+        }
       </TagsHandler>
     );
   }
