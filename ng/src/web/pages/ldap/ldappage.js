@@ -60,7 +60,7 @@ class LdapAuthentication extends React.Component {
       enable: '',
       certificate_info: {},
       loading: 'true',
-    }
+    };
 
     this.getLdapAuth = this.getLdapAuth.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
@@ -100,7 +100,12 @@ class LdapAuthentication extends React.Component {
       enable,
       ldaphost,
     } = this.state;
-    const data = {authdn, certificate_info, enable, ldaphost};
+    const data = {
+      authdn,
+      certificate_info,
+      enable,
+      ldaphost,
+    };
     const {gmp} = this.props;
     return gmp.auth.saveLdap(data);
   }
@@ -148,15 +153,15 @@ class LdapAuthentication extends React.Component {
             </TableRow>
           </TableBody>
         </Table>
-      )
+      );
     }
-    return {};
+    return [];
   }
 
   render() {
     const {loading} = this.state;
     if (loading) {
-      return <Loading/>
+      return <Loading/>;
     }
 
     const {
