@@ -27,6 +27,9 @@ import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import compose from '../../utils/compose.js';
+import withCapabilities from '../../utils/withCapabilities.js';
+import withGmp from '../../utils/withGmp.js';
 
 import SelectionType from '../../utils/selectiontype.js';
 
@@ -37,7 +40,7 @@ import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Wrapper from '../../components/layout/wrapper.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
@@ -45,35 +48,38 @@ import {USERS_FILTER_FILTER} from 'gmp/models/filter.js';
 import Promise from 'gmp/promise.js';
 
 import ConfirmDeleteDialog from './confirmdeletedialog.js';
-import UserDialog from './dialog.js';
-import Table, {SORT_FIELDS} from './table.js';
+import UserComponent from './component.js';
+import UsersTable, {SORT_FIELDS} from './table.js';
 
-const ToolBarIcons = ({
-  onNewUserClick,
-}, {capabilities}) => {
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onUserCreateClick,
+}) => {
   return (
     <IconDivider>
       <HelpIcon
         page="users"
-        title={_('Help: Users')}/>
+        title={_('Help: Users')}
+      />
       {capabilities.mayCreate('user') &&
         <NewIcon
           title={_('New User')}
-          onClick={onNewUserClick}/>
+          onClick={onUserCreateClick}
+        />
       }
     </IconDivider>
   );
-};
+});
 
 ToolBarIcons.propTypes = {
-  onNewUserClick: PropTypes.func,
+  onUserCreateClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+const UsersFilterDialog = createFilterDialog({
+  sortFields: SORT_FIELDS,
+});
 
-class Page extends React.Component {
+class UsersPage extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -81,67 +87,27 @@ class Page extends React.Component {
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
 
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
-    this.openUserDialog = this.openUserDialog.bind(this);
   }
 
   handleDeleteUser({deleteUsers, id, inheritor_id}) {
-    const {onChanged} = this.props;
+    const {gmp, onChanged} = this.props;
 
     if (inheritor_id === '--') {
       inheritor_id = undefined;
     }
 
     if (is_defined(id)) {
-      const {entityCommand} = this.props;
-      return entityCommand.delete({id, inheritor_id}).then(() => onChanged());
+      return gmp.user.delete({id, inheritor_id}).then(() => onChanged());
     }
 
-    const {entitiesCommand} = this.props;
-    return entitiesCommand.delete(deleteUsers, {inheritor_id})
+    return gmp.users.delete(deleteUsers, {inheritor_id})
       .then(() => onChanged());
   }
 
-  openUserDialog(user) {
-    const {gmp} = this.context;
-
-    gmp.user.currentAuthSettings().then(response => {
-      if (is_defined(user)) {
-        const group_ids = user.groups.map(group => group.id);
-        const role_ids = user.roles.map(role => role.id);
-
-        this.dialog.show({
-          id: user.id,
-          name: user.name,
-          old_name: user.name,
-          auth_method: user.auth_method,
-          access_hosts: user.hosts.addresses,
-          access_ifaces: user.ifaces.addresses,
-          comment: user.comment,
-          group_ids: group_ids,
-          hosts_allow: user.hosts.allow,
-          ifaces_allow: user.ifaces.allow,
-          role_ids: role_ids,
-          settings: response.data,
-        }, {
-          title: _('Edit User {{name}}', user),
-        });
-      }
-      else {
-        this.dialog.show({settings: response.data});
-      }
-
-      gmp.groups.getAll({
-        filter: 'permission=modify_group', //  list only groups current user may modify
-      }).then(groups =>
-        this.dialog.setValue('groups', groups));
-      gmp.roles.getAll().then(roles => this.dialog.setValue('roles', roles));
-    });
-  }
-
   openConfirmDeleteDialog(user) {
-    const {entitiesCommand} = this.props;
+    const {gmp} = this.props;
 
-    entitiesCommand.getAll().then(users => {
+    gmp.users.getAll().then(users => {
 
       if (is_defined(user)) {
         users = users.filter(luser => luser.id !== user.id);
@@ -169,7 +135,7 @@ class Page extends React.Component {
         }
         else {
           const {filter} = this.props;
-          promise = entitiesCommand.get({filter: filter.all()});
+          promise = gmp.users.get({filter: filter.all()});
         }
 
         promise.then(deleteUsers => {
@@ -189,55 +155,75 @@ class Page extends React.Component {
   }
 
   render() {
-    const {onEntitySave} = this.props;
+    const {
+      onChanged,
+      onDownloaded,
+      onError,
+      ...props
+    } = this.props;
     return (
-      <Layout>
-        <EntitiesPage
-          {...this.props}
-          onNewUserClick={this.openUserDialog}
-          onEditUser={this.openUserDialog}
-          onEntityDelete={this.openConfirmDeleteDialog}
-          onDeleteBulk={this.openConfirmDeleteDialog}
-        />
-        <UserDialog
-          ref={ref => this.dialog = ref}
-          onSave={onEntitySave}
-        />
+      <Wrapper>
+        <UserComponent
+          onCreated={onChanged}
+          onSaved={onChanged}
+          onCloned={onChanged}
+          onCloneError={onError}
+          onDeleted={onChanged}
+          onDeleteError={onError}
+          onDownloaded={onDownloaded}
+          onDownloadError={onError}
+        >{({
+          clone,
+          create,
+          download,
+          edit,
+          save,
+        }) => (
+          <EntitiesPage
+            {...props}
+            filterEditDialog={UsersFilterDialog}
+            sectionIcon="user.svg"
+            table={UsersTable}
+            title={_('Users')}
+            toolBarIcons={ToolBarIcons}
+            onChanged={onChanged}
+            onDeleteBulk={this.openConfirmDeleteDialog}
+            onDownloaded={onDownloaded}
+            onError={onError}
+            onUserCloneClick={clone}
+            onUserCreateClick={create}
+            onUserDeleteClick={this.openConfirmDeleteDialog}
+            onUserDownloadClick={download}
+            onUserEditClick={edit}
+            onUserSaveClick={save}
+          />
+        )}
+        </UserComponent>
         <ConfirmDeleteDialog
           ref={ref => this.confirm_delete_dialog = ref}
           onSave={this.handleDeleteUser}
         />
-      </Layout>
+      </Wrapper>
     );
   }
 }
 
-Page.propTypes = {
+UsersPage.propTypes = {
   entities: PropTypes.collection,
-  entitiesCommand: PropTypes.entitiescommand,
   entitiesSelected: PropTypes.set,
-  entityCommand: PropTypes.entitycommand,
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   selectionType: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
-  onEntitySave: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
-
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withEntitiesContainer('user', {
-  filterEditDialog: createFilterDialog({
-    sortFields: SORT_FIELDS,
+export default compose(
+  withGmp,
+  withEntitiesContainer('user', {
+    filtersFilter: USERS_FILTER_FILTER,
   }),
-  filtersFilter: USERS_FILTER_FILTER,
-  sectionIcon: 'user.svg',
-  table: Table,
-  title: _('Users'),
-  toolBarIcons: ToolBarIcons,
-})(Page);
+)(UsersPage);
 
 // vim: set ts=2 sw=2 tw=80:
