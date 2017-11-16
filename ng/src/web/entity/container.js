@@ -237,6 +237,7 @@ class EntityContainer extends React.Component {
 }
 
 EntityContainer.propTypes = {
+  children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
   loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
