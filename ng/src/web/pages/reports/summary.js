@@ -36,8 +36,7 @@ import ScanInfo from './scaninfo.js';
 const Summary = ({
   report,
   onError,
-  onSuccess,
-  ...props
+  onTagChanged,
 }) => (
   <Layout flex="column">
     <ScanInfo
@@ -45,14 +44,25 @@ const Summary = ({
     />
     <TagsHandler
       onError={onError}
-      onSuccess={onSuccess}
+      onChanged={onTagChanged}
       resourceType="report"
     >
-      {tprops => (
+      {({
+        add,
+        create,
+        delete: delete_func,
+        disable,
+        enable,
+        edit,
+      }) => (
         <EntityTags
-          {...props}
-          {...tprops}
           entity={report}
+          onTagAddClick={add}
+          onTagCreateClick={create}
+          onTagDeleteClick={delete_func}
+          onTagDisableClick={disable}
+          onTagEditClick={edit}
+          onTagEndableClick={enable}
         />
       )}
     </TagsHandler>
@@ -62,7 +72,7 @@ const Summary = ({
 Summary.propTypes = {
   report: PropTypes.model.isRequired,
   onError: PropTypes.func.isRequired,
-  onSuccess: PropTypes.func.isRequired,
+  onTagChanged: PropTypes.func.isRequired,
 };
 
 export default Summary;

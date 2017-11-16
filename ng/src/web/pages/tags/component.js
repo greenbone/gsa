@@ -44,7 +44,9 @@ class TagComponent extends React.Component {
 
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
+    this.handleAddTag = this.handleAddTag.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
+    this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
   }
 
   handleEnableTag(tag) {
@@ -59,7 +61,19 @@ class TagComponent extends React.Component {
     gmp.tag.disable(tag).then(onDisabled, onDisableError);
   }
 
-  openTagDialog(tag) {
+  handleAddTag({name, value, entity}) {
+    const {gmp, onAdded, onAddError} = this.props;
+
+    return gmp.tag.create({
+      name,
+      value,
+      active: 1,
+      resource_id: entity.id,
+      resource_type: entity.entity_type,
+    }).then(onAdded, onAddError);
+  }
+
+  getResourceTypes() {
     const {capabilities} = this.props;
     const resource_types = [];
     if (capabilities.mayAccess('agents')) {
@@ -140,10 +154,17 @@ class TagComponent extends React.Component {
     if (capabilities.mayAccess('users')) {
       resource_types.push(['user', _('User')]);
     }
+    return resource_types;
+  }
+
+  openTagDialog(tag, options = {}) {
+    const resource_types = this.getResourceTypes();
+
     if (is_defined(tag)) {
       const {resource = {}} = tag;
 
       this.tag_dialog.show({
+        ...options,
         id: tag.id,
         tag,
         name: tag.name,
@@ -164,6 +185,15 @@ class TagComponent extends React.Component {
         resource_types,
       });
     }
+  }
+
+  openCreateTagDialog(options = {}) {
+    const resource_types = this.getResourceTypes();
+
+    this.tag_dialog.show({
+      ...options,
+      resource_types,
+    });
   }
 
   render() {
@@ -201,7 +231,8 @@ class TagComponent extends React.Component {
           <Wrapper>
             {children({
               ...other,
-              create: this.openTagDialog,
+              add: this.handleAddTag,
+              create: this.openCreateTagDialog,
               edit: this.openTagDialog,
               enable: this.handleEnableTag,
               disable: this.handleDisableTag,
@@ -221,6 +252,8 @@ TagComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  onAddError: PropTypes.func,
+  onAdded: PropTypes.func,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,

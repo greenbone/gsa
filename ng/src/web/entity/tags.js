@@ -168,20 +168,20 @@ const SectionElementDivider = glamorous(Divider)({
 
 const SectionElements = ({
   entity,
-  onAddTag,
-  onNewTagClick,
+  onTagAddClick,
+  onTagCreateClick,
 }) => {
   return (
     <SectionElementDivider margin="10px">
       <AddTag
         entity={entity}
-        onAddTag={onAddTag}
+        onAddTag={onTagAddClick}
       />
       <IconDivider>
         <NewIcon
           title={_('New Tag')}
           value={entity}
-          onClick={onNewTagClick}
+          onClick={onTagCreateClick}
         />
         <HelpIcon
           page="user-tags"
@@ -194,24 +194,24 @@ const SectionElements = ({
 
 SectionElements.propTypes = {
   entity: PropTypes.model.isRequired,
-  onAddTag: PropTypes.func.isRequired,
-  onNewTagClick: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
 };
 
 const EntityTags = ({
   entity,
   foldable = true,
-  onAddTag,
-  onDeleteTag,
-  onDisableTag,
-  onEditTagClick,
-  onNewTagClick,
+  onTagAddClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagCreateClick,
 }) => {
   const extra = (
     <SectionElements
       entity={entity}
-      onAddTag={onAddTag}
-      onNewTagClick={onNewTagClick}
+      onTagAddClick={onTagAddClick}
+      onTagCreateClick={onTagCreateClick}
     />
   );
   const tags = entity.user_tags;
@@ -250,7 +250,6 @@ const EntityTags = ({
                     key={tag.id}>
                     <TableData>
                       <DetailsLink
-                        legacy
                         id={tag.id}
                         type="tag">
                         {tag.name}
@@ -268,17 +267,17 @@ const EntityTags = ({
                           img="disable.svg"
                           value={tag}
                           title={_('Disable Tag')}
-                          onClick={onDisableTag}
+                          onClick={onTagDisableClick}
                         />
                         <TrashIcon
                           value={tag}
                           title={_('Move Tag to Trashcan')}
-                          onClick={onDeleteTag}
+                          onClick={onTagDeleteClick}
                         />
                         <EditIcon
                           value={tag}
                           title={_('Edit Tag')}
-                          onClick={onEditTagClick}
+                          onClick={onTagEditClick}
                         />
                       </IconDivider>
                     </TableData>
@@ -296,11 +295,11 @@ const EntityTags = ({
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
   foldable: PropTypes.bool,
-  onAddTag: PropTypes.func.isRequired,
-  onDeleteTag: PropTypes.func.isRequired,
-  onDisableTag: PropTypes.func.isRequired,
-  onEditTagClick: PropTypes.func.isRequired,
-  onNewTagClick: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
 };
 
 export default EntityTags;

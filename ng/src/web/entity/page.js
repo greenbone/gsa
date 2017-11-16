@@ -117,12 +117,12 @@ class EntityPage extends React.Component {
     const {
       entity,
       tagsComponent: TagsComponent = EntityTags,
-      onAddTag,
-      onDeleteTag,
-      onDisableTag,
-      onEditTagClick,
-      onEnableTag,
-      onNewTagClick,
+      onTagAddClick,
+      onTagDeleteClick,
+      onTagDisableClick,
+      onTagEditClick,
+      onTagEnableClick,
+      onTagCreateClick,
     } = this.props;
     if (TagsComponent === false) {
       return null;
@@ -131,12 +131,12 @@ class EntityPage extends React.Component {
     return (
       <TagsComponent
         entity={entity}
-        onAddTag={onAddTag}
-        onDeleteTag={onDeleteTag}
-        onDisableTag={onDisableTag}
-        onEditTagClick={onEditTagClick}
-        onEnableTag={onEnableTag}
-        onNewTagClick={onNewTagClick}
+        onTagAddClick={onTagAddClick}
+        onTagDeleteClick={onTagDeleteClick}
+        onTagDisableClick={onTagDisableClick}
+        onTagEditClick={onTagEditClick}
+        onTagEnableClick={onTagEnableClick}
+        onTagCreateClick={onTagCreateClick}
       />
     );
   }
@@ -205,15 +205,15 @@ EntityPage.propTypes = {
   tagsComponent: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
-  onAddTag: PropTypes.func.isRequired,
-  onDeleteTag: PropTypes.func.isRequired,
-  onDisableTag: PropTypes.func.isRequired,
-  onEditTagClick: PropTypes.func.isRequired,
-  onEnableTag: PropTypes.func.isRequired,
-  onNewTagClick: PropTypes.func.isRequired,
   onPermissionChanged: PropTypes.func,
   onPermissionDownloadError: PropTypes.func,
   onPermissionDownloaded: PropTypes.func,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
 };
 
 export default EntityPage;

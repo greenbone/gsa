@@ -407,8 +407,8 @@ const PageContent = ({
             <TabPanel>
               <Summary
                 report={report}
-                onSuccess={onTagSuccess}
                 onError={onError}
+                onTagChanged={onTagSuccess}
               />
             </TabPanel>
             <TabPanel>
