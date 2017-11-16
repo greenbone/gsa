@@ -39,6 +39,7 @@ import PropTypes from '../utils/proptypes.js';
 import SelectionType from '../utils/selectiontype.js';
 
 import withCache from '../utils/withCache.js';
+import withGmp from '../utils/withGmp.js';
 
 import withDownload from '../components/form/withDownload.js';
 
@@ -67,40 +68,30 @@ class EntitiesContainer extends React.Component {
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
     };
 
-    const {gmpname} = this.props;
-    const {gmp} = this.context;
+    const {gmpname, gmp} = this.props;
 
-    let entity_command_name;
     let entities_command_name;
 
     if (is_array(gmpname)) {
-      entity_command_name = gmpname[0];
+      this.name = gmpname[0];
       entities_command_name = gmpname[1];
     }
     else {
-      entity_command_name = gmpname;
+      this.name = gmpname;
       entities_command_name = gmpname + 's';
     }
 
-    this.name = entity_command_name;
-
-    this.entity_command = gmp[entity_command_name];
     this.entities_command = gmp[entities_command_name];
 
     this.load = this.load.bind(this);
     this.reload = this.reload.bind(this);
-    this.handleCloneEntity = this.handleCloneEntity.bind(this);
-    this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
-    this.handleDeleteEntity = this.handleDeleteEntity.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
-    this.handleDownloadEntity = this.handleDownloadEntity.bind(this);
     this.handleError = this.handleError.bind(this);
     this.handleFirst = this.handleFirst.bind(this);
     this.handleLast = this.handleLast.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handlePrevious = this.handlePrevious.bind(this);
-    this.handleSaveEntity = this.handleSaveEntity.bind(this);
     this.handleSelected = this.handleSelected.bind(this);
     this.handleSelectionTypeChange = this.handleSelectionTypeChange.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
@@ -173,8 +164,7 @@ class EntitiesContainer extends React.Component {
   }
 
   loadFilters() {
-    const {gmp} = this.context;
-    const {cache, filtersFilter} = this.props;
+    const {cache, filtersFilter, gmp} = this.props;
 
     if (!filtersFilter) {
       return;
@@ -203,7 +193,8 @@ class EntitiesContainer extends React.Component {
   }
 
   startTimer(refresh) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
+
     refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
     if (refresh && refresh >= 0) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
@@ -298,51 +289,6 @@ class EntitiesContainer extends React.Component {
     this.setState({selected});
   }
 
-  handleDeleteEntity(entity) {
-    const {entity_command} = this;
-
-    entity_command.delete(entity).then(() => {
-      this.reload({invalidate: true});
-      log.debug('successfully deleted entity', entity);
-    }, this.handleError);
-  }
-
-  handleCloneEntity(entity) {
-    const {entity_command} = this;
-
-    entity_command.clone(entity).then(() => {
-      this.reload({invalidate: true});
-      log.debug('successfully cloned entity', entity);
-    }, this.handleError);
-  }
-
-  handleDownloadEntity(entity) {
-    const {entities_command} = this;
-    const {onDownload} = this.props;
-
-    const {name} = this;
-
-    const filename = name + '-' + entity.id + '.xml';
-
-    entities_command.export([entity]).then(response => {
-      onDownload({filename, data: response.data});
-    }, this.handleError);
-  }
-
-  handleSaveEntity(data) {
-    const {entity_command} = this;
-    let promise;
-
-    if (is_defined(data.id)) {
-      promise = entity_command.save(data);
-    }
-    else {
-      promise = entity_command.create(data);
-    }
-
-    return promise.then(() => this.reload({invalidate: true}));
-  }
-
   handleSortChange(field) {
     const {loaded_filter} = this.state;
 
@@ -417,7 +363,6 @@ class EntitiesContainer extends React.Component {
       showErrorMessage,
       showSuccessMessage,
     } = this.props;
-    const {entity_command, entities_command} = this;
     const Component = this.props.component;
     const other = exclude_object_props(this.props, exclude_props);
     return (
@@ -426,8 +371,6 @@ class EntitiesContainer extends React.Component {
           createFilterType={this.name}
           {...other}
           loading={loading}
-          entitiesCommand={entities_command}
-          entityCommand={entity_command}
           entities={entities}
           entitiesSelected={selected}
           filter={loaded_filter}
@@ -443,10 +386,6 @@ class EntitiesContainer extends React.Component {
           onDeleteBulk={this.handleDeleteBulk}
           onEntitySelected={this.handleSelected}
           onEntityDeselected={this.handleDeselected}
-          onEntityDelete={this.handleDeleteEntity}
-          onEntityDownload={this.handleDownloadEntity}
-          onEntityClone={this.handleCloneEntity}
-          onEntitySave={this.handleSaveEntity}
           onFilterCreated={this.handleFilterCreated}
           onFirstClick={this.handleFirst}
           onLastClick={this.handleLast}
@@ -468,6 +407,7 @@ EntitiesContainer.propTypes = {
   extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   filtersFilter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
@@ -478,11 +418,8 @@ EntitiesContainer.propTypes = {
   onDownload: PropTypes.func.isRequired,
 };
 
-EntitiesContainer.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
 EntitiesContainer = compose(
+  withGmp,
   withCache(),
   withDialogNotification,
   withDownload,
