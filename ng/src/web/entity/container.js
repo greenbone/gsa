@@ -24,11 +24,14 @@
 import React from 'react';
 
 import logger from 'gmp/log.js';
+
 import Promise from 'gmp/promise.js';
+
 import {is_defined} from 'gmp/utils.js';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
+import withGmp from '../utils/withGmp.js';
 
 import withDownload from '../components/form/withDownload.js';
 
@@ -39,7 +42,7 @@ import TagsHandler from './tagshandler.js';
 const log = logger.getLogger('web.entity.container');
 
 export const loader = (type, filter_func, name = type) => function(id) {
-  const {gmp} = this.context;
+  const {gmp} = this.props;
 
   log.debug('Loading', name, 'for entity', id);
 
@@ -84,7 +87,7 @@ class EntityContainer extends React.Component {
     super(...args);
 
     const {name} = this.props;
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     this.name = name;
 
@@ -118,8 +121,7 @@ class EntityContainer extends React.Component {
   }
 
   load(id) {
-    const {gmp} = this.context;
-    const {loaders} = this.props;
+    const {loaders, gmp} = this.props;
 
     const all_loaders = [this.loadEntity];
 
@@ -176,7 +178,7 @@ class EntityContainer extends React.Component {
   }
 
   startTimer(refresh) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
 
@@ -230,12 +232,12 @@ class EntityContainer extends React.Component {
           ...this.state,
         })}
       </TagsHandler>
-
     );
   }
 }
 
 EntityContainer.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
   loaders: PropTypes.array,
   name: PropTypes.string.isRequired,
   params: PropTypes.object.isRequired,
@@ -245,11 +247,8 @@ EntityContainer.propTypes = {
   onDownload: PropTypes.func.isRequired,
 };
 
-EntityContainer.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
 export default compose(
+  withGmp,
   withDialogNotification,
   withDownload,
 )(EntityContainer);
