@@ -44,6 +44,7 @@ class TagComponent extends React.Component {
 
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
+    this.handleAddTag = this.handleAddTag.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
     this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
   }
@@ -58,6 +59,18 @@ class TagComponent extends React.Component {
     const {gmp, onDisabled, onDisableError} = this.props;
 
     gmp.tag.disable(tag).then(onDisabled, onDisableError);
+  }
+
+  handleAddTag({name, value, entity}) {
+    const {gmp, onAdded, onAddError} = this.props;
+
+    return gmp.tag.create({
+      name,
+      value,
+      active: 1,
+      resource_id: entity.id,
+      resource_type: entity.entity_type,
+    }).then(onAdded, onAddError);
   }
 
   getResourceTypes() {
@@ -217,6 +230,7 @@ class TagComponent extends React.Component {
           <Wrapper>
             {children({
               ...other,
+              add: this.handleAddTag,
               create: this.openCreateTagDialog,
               edit: this.openTagDialog,
               enable: this.handleEnableTag,
@@ -237,6 +251,8 @@ TagComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  onAddError: PropTypes.func,
+  onAdded: PropTypes.func,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
