@@ -41,6 +41,8 @@ const types = {
   portlists: 'port_list',
   reportformat: 'report_format',
   reportformats: 'report_format',
+  scanconfig: 'config',
+  scanconfigs: 'config',
 };
 
 const check_type = type => {
