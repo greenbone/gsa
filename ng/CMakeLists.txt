@@ -649,7 +649,6 @@ set (NG_JS_SRC_FILES
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
-     ${NG_SRC_DIR}/src/web/components/form/css/button.css
      ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css
      ${NG_SRC_DIR}/src/web/components/form/css/datepicker.css
      ${NG_SRC_DIR}/src/web/components/form/css/form.css

@@ -23,37 +23,76 @@
 
 import React from 'react';
 
-import {classes} from 'gmp/utils.js';
+import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes.js';
-import {withLayout} from '../layout/layout.js';
+import compose from '../../utils/compose.js';
 
-import {withClickHandler} from './form.js';
+import withLayout from '../layout/withLayout.js';
 
-import './css/button.css';
+import withClickHandler from './withClickHandler.js';
 
-export const Button = ({
-    className,
-    title,
-    children = title,
-    ...other
-  }) => {
-  className = classes('button', className);
-  return (
-    <button
-      {...other}
-      className={className}
-      title={title}>
-      {children}
-    </button>
-  );
-};
+const Button = glamorous(({
+  title,
+  children = title,
+  ...other
+}) => (
+  <button
+    {...other}
+    title={title}
+  >
+    {children}
+  </button>
+), {
+  rootEl: 'button',
+})({
+  display: 'inline-block',
+  padding: '0 15px',
+  color: '#555',
+  textAlign: 'center',
+  verticalAlign: 'middle',
+  fontSize: '11px',
+  fontWeight: 'bold',
+  lineHeight: '30px',
+  textDecoration: 'none',
+  whiteSpace: 'nowrap',
+  backgroundColor: '#fff',
+  borderRadius: '4px',
+  border: '1px solid #bbb',
+  cursor: 'pointer',
+  overflow: 'visible',
+  '&:focus, &:hover': {
+    border: '1px solid #519032',
+  },
+  '&:hover': {
+    textDecoration: 'none',
+    background: '#519032',
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  '&[disabled]': {
+    cursor: 'not-allowed',
+    opacity: '0.65',
+    filter: 'alpha(opacity=65)',
+    boxShadow: 'none',
+  },
+  '& img': {
+    height: '32px',
+    width: '32px',
+    marginTop: '5px',
+    marginBottom: '5px',
+    marginRight: '10px',
+    marginLeft: '-10px',
+    verticalAlign: 'middle',
+  },
+  '&:link': {
+    textDecoration: 'none',
+    color: '#555',
+  },
+});
 
-Button.propTypes = {
-  title: PropTypes.string,
-  className: PropTypes.string,
-};
-
-export default withLayout(withClickHandler(Button));
+export default compose(
+  withLayout(),
+  withClickHandler(),
+)(Button);
 
 // vim: set ts=2 sw=2 tw=80:
