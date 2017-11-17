@@ -118,7 +118,7 @@ class DatePicker extends React.Component {
       <Layout {...other}>
         <input
           className="datepicker-button"
-          size="26"
+          size="34"
           ref={ref => this.button = ref}
           onClick={this.handleClick}
         />
