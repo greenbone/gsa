@@ -68,7 +68,8 @@ class SpinnerComponent extends React.Component {
     ];
 
     this.state = {
-      value,
+      value_set: value, // external value for the outside world
+      value, // internal value shown in the spinner
       up_active: false,
       down_active: false,
     };
@@ -93,8 +94,12 @@ class SpinnerComponent extends React.Component {
   componentWillReceiveProps(new_props) {
     const new_value = parse_float(new_props.value);
 
-    if (new_value !== this.state.value) {
-      this.setState({value: new_value});
+    if (new_value !== this.state.value_set) {
+      // parent component has set a different value then before
+      this.setState({
+        value: new_value,
+        value_set: new_value,
+      });
     }
   }
 
@@ -245,7 +250,10 @@ class SpinnerComponent extends React.Component {
       this.notifyChange(value);
     }
 
-    this.setState({value});
+    this.setState({
+      value,
+      value_set: value,
+    });
   }
 
   getPrecision() {
@@ -294,7 +302,9 @@ class SpinnerComponent extends React.Component {
           onBlur={this.handleBlur}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
-          size={size} maxLength={maxLength}>
+          size={size}
+          maxLength={maxLength}
+        >
         </input>
         <a
           className={classes('spinner-button spinner-up',
@@ -302,7 +312,8 @@ class SpinnerComponent extends React.Component {
           onClick={this.handleUp}
           onMouseDown={this.handleUpMouse}
           onMouseUp={this.handleUpMouse}
-          onDoubleClick={this.handleDbClick}>
+          onDoubleClick={this.handleDbClick}
+        >
           ▲
         </a>
         <a
@@ -311,7 +322,8 @@ class SpinnerComponent extends React.Component {
           onClick={this.handleDown}
           onMouseDown={this.handleDownMouse}
           onMouseUp={this.handleDownMouse}
-          onDoubleClick={this.handleDbClick}>
+          onDoubleClick={this.handleDbClick}
+        >
           ▼
         </a>
       </span>
