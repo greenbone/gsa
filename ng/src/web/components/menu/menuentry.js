@@ -29,18 +29,10 @@ import {is_defined, is_array} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import withClickHandler from '../form/withClickHandler.js';
+
 import Link from '../link/link.js';
 import LegacyLink from '../link/legacylink.js';
-
-// don't pass event to handler
-const handler_wrapper = handler => {
-  if (handler) {
-    return () => {
-      handler();
-    };
-  }
-  return undefined;
-};
 
 const Entry = glamorous.li({
   textDecoration: 'none',
@@ -75,6 +67,7 @@ const Entry = glamorous.li({
 );
 
 const MenuEntry = ({
+    capabilities,
     caps,
     legacy,
     section,
@@ -82,7 +75,7 @@ const MenuEntry = ({
     to,
     onClick,
     ...other,
-  }, {capabilities}) => {
+  }) => {
   let entry;
   let css = section ? "menu-entry menu-section" : "menu-entry";
 
@@ -111,8 +104,6 @@ const MenuEntry = ({
     entry = title;
   }
 
-  onClick = is_defined(onClick) ? handler_wrapper(onClick) : undefined;
-
   return (
     <Entry className={css} onClick={onClick}>{entry}</Entry>
   );
@@ -134,6 +125,6 @@ MenuEntry.contextTypes = {
   capabilities: PropTypes.capabilities,
 };
 
-export default MenuEntry;
+export default withClickHandler()(MenuEntry);
 
 // vim: set ts=2 sw=2 tw=80:
