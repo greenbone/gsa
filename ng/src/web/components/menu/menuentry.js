@@ -28,21 +28,17 @@ import glamorous from 'glamorous';
 import {is_defined, is_array} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import compose from '../../utils/compose.js';
+import withCapabilties from '../../utils/withCapabilities.js';
+
+import withClickHandler from '../form/withClickHandler.js';
 
 import Link from '../link/link.js';
 import LegacyLink from '../link/legacylink.js';
 
-// don't pass event to handler
-const handler_wrapper = handler => {
-  if (handler) {
-    return () => {
-      handler();
-    };
-  }
-  return undefined;
-};
-
 const Entry = glamorous.li({
+  display: 'flex',
+  alignItems: 'center',
   textDecoration: 'none',
   textIndent: '12px',
   textAlign: 'left',
@@ -54,7 +50,8 @@ const Entry = glamorous.li({
   width: '100%',
   backgroundColor: 'white',
   '& > a': {
-    display: 'block',
+    display: 'flex',
+    flexGrow: 1,
     background: 'none',
     textDecoration: 'none',
     color: '#3A3A3A',
@@ -75,16 +72,17 @@ const Entry = glamorous.li({
 );
 
 const MenuEntry = ({
+    capabilities,
     caps,
     legacy,
     section,
     title,
     to,
     onClick,
-    ...other,
-  }, {capabilities}) => {
+    ...other
+  }) => {
   let entry;
-  let css = section ? "menu-entry menu-section" : "menu-entry";
+  const css = section ? 'menu-entry menu-section' : 'menu-entry';
 
   if (is_defined(caps) && is_defined(capabilities)) {
 
@@ -92,7 +90,7 @@ const MenuEntry = ({
       caps = [caps];
     }
 
-    let may_op = caps.reduce((a, b) => {
+    const may_op = caps.reduce((a, b) => {
       return capabilities.mayOp(b) && a;
     }, true);
 
@@ -111,29 +109,27 @@ const MenuEntry = ({
     entry = title;
   }
 
-  onClick = is_defined(onClick) ? handler_wrapper(onClick) : undefined;
-
   return (
     <Entry className={css} onClick={onClick}>{entry}</Entry>
   );
 };
 
 MenuEntry.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   caps: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array,
   ]),
-  section: PropTypes.bool,
   legacy: PropTypes.bool,
-  to: PropTypes.string,
+  section: PropTypes.bool,
   title: PropTypes.string.isRequired,
+  to: PropTypes.string,
   onClick: PropTypes.func,
 };
 
-MenuEntry.contextTypes = {
-  capabilities: PropTypes.capabilities,
-};
-
-export default MenuEntry;
+export default compose(
+  withCapabilties,
+  withClickHandler(),
+)(MenuEntry);
 
 // vim: set ts=2 sw=2 tw=80:

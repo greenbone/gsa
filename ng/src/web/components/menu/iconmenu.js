@@ -52,6 +52,7 @@ const List = glamorous.ul({
   fontSize: '10px',
   width: '255px',
   '& .menu-entry': {
+    height: '22px',
     width: '255px',
     borderLeft: '1px solid #3A3A3A',
     borderRight: '1px solid #3A3A3A',
