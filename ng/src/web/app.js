@@ -92,6 +92,7 @@ import OvaldefsPage from './pages/ovaldefs/listpage.js';
 import OvaldefDetailsPage from './pages/ovaldefs/detailspage.js';
 import OverridesPage from './pages/overrides/listpage.js';
 import OverrideDetailsPage from './pages/overrides/detailspage.js';
+import PerformancePage from './pages/performance/performancepage.js';
 import PermissionsPage from './pages/permissions/listpage.js';
 import PermissionDetailsPage from './pages/permissions/detailspage.js';
 import PortListsPage from './pages/portlists/listpage.js';
@@ -240,6 +241,10 @@ ReactDOM.render(
         <Route
           path="cvsscalculator"
           component={CvssCalculatorPage}/>
+        <Route
+          path="performance"
+          component={PerformancePage}
+        />
         <Route
           path="tasks"
           component={TasksPage}/>
