@@ -79,10 +79,10 @@ const MenuEntry = ({
     title,
     to,
     onClick,
-    ...other,
+    ...other
   }) => {
   let entry;
-  let css = section ? "menu-entry menu-section" : "menu-entry";
+  const css = section ? 'menu-entry menu-section' : 'menu-entry';
 
   if (is_defined(caps) && is_defined(capabilities)) {
 
@@ -90,7 +90,7 @@ const MenuEntry = ({
       caps = [caps];
     }
 
-    let may_op = caps.reduce((a, b) => {
+    const may_op = caps.reduce((a, b) => {
       return capabilities.mayOp(b) && a;
     }, true);
 
@@ -120,10 +120,10 @@ MenuEntry.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
-  section: PropTypes.bool,
   legacy: PropTypes.bool,
-  to: PropTypes.string,
+  section: PropTypes.bool,
   title: PropTypes.string.isRequired,
+  to: PropTypes.string,
   onClick: PropTypes.func,
 };
 
