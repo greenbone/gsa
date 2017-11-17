@@ -30,6 +30,8 @@ import 'jquery-ui/ui/widgets/datepicker.js';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
@@ -55,6 +57,16 @@ class DatePicker extends React.Component {
 
   componentWillUnmount() {
     this.destroy();
+  }
+
+  componentWillReceiveProps(next) {
+    const {value} = this.props;
+    if (!value.isSame(next.value)) {
+      const date = is_defined(next.value) ? next.value.toDate() : undefined;
+
+      const button = $(this.button);
+      button.datepicker('setDate', date);
+    }
   }
 
   init() {
