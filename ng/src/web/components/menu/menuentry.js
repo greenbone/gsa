@@ -50,7 +50,8 @@ const Entry = glamorous.li({
   width: '100%',
   backgroundColor: 'white',
   '& > a': {
-    display: 'block',
+    display: 'flex',
+    flexGrow: 1,
     background: 'none',
     textDecoration: 'none',
     color: '#3A3A3A',
