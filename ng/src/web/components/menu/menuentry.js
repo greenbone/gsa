@@ -28,6 +28,8 @@ import glamorous from 'glamorous';
 import {is_defined, is_array} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import compose from '../../utils/compose.js';
+import withCapabilties from '../../utils/withCapabilities.js';
 
 import withClickHandler from '../form/withClickHandler.js';
 
@@ -110,6 +112,7 @@ const MenuEntry = ({
 };
 
 MenuEntry.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   caps: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array,
@@ -121,10 +124,9 @@ MenuEntry.propTypes = {
   onClick: PropTypes.func,
 };
 
-MenuEntry.contextTypes = {
-  capabilities: PropTypes.capabilities,
-};
-
-export default withClickHandler()(MenuEntry);
+export default compose(
+  withCapabilties,
+  withClickHandler(),
+)(MenuEntry);
 
 // vim: set ts=2 sw=2 tw=80:
