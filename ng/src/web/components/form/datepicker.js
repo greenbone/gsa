@@ -70,8 +70,12 @@ class DatePicker extends React.Component {
   }
 
   init() {
-    const {value} = this.props;
+    const {
+      value,
+      minDate = value,
+    } = this.props;
     const date = value.toDate();
+    const mindate = minDate ? minDate.toDate() : null;
 
     const button = $(this.button);
     button.datepicker({
@@ -80,7 +84,7 @@ class DatePicker extends React.Component {
       buttonImageOnly: true,
       buttonText: _('Select date'),
       dateFormat: 'DD, d MM, yy',
-      minDate: date,
+      minDate: mindate,
       maxDate: '+3Y',
       onClose: this.handleChange,
     });
@@ -124,6 +128,10 @@ class DatePicker extends React.Component {
 }
 
 DatePicker.propTypes = {
+  minDate: PropTypes.oneOfType([
+    PropTypes.momentDate,
+    PropTypes.oneOf([false]),
+  ]),
   name: PropTypes.string,
   value: PropTypes.momentDate.isRequired,
   onChange: PropTypes.func,
