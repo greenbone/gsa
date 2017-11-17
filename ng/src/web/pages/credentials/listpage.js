@@ -28,6 +28,7 @@ import _ from 'gmp/locale.js';
 import {CREDENTIALS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -42,25 +43,26 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 import CredentialComponent from './component.js';
 import CredentialsTable, {SORT_FIELDS} from './table.js';
 
-const ToolBarIcons = ({
-  onNewCredentialClick,
-}, {capabilities}) => {
-  return (
-    <IconDivider>
-      <HelpIcon
-        page="credentials"
-        title={_('Help: Credentials')}/>
-      {capabilities.mayCreate('credential') &&
-        <NewIcon
-          title={_('New Credential')}
-          onClick={onNewCredentialClick}/>
-      }
-    </IconDivider>
-  );
-};
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onCredentialCreateClick,
+}) => (
+  <IconDivider>
+    <HelpIcon
+      page="credentials"
+      title={_('Help: Credentials')}
+    />
+    {capabilities.mayCreate('credential') &&
+      <NewIcon
+        title={_('New Credential')}
+        onClick={onCredentialCreateClick}
+      />
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
-  onNewCredentialClick: PropTypes.func,
+  onCredentialCreateClick: PropTypes.func,
 };
 
 ToolBarIcons.contextTypes = {
