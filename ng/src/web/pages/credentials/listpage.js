@@ -62,11 +62,7 @@ const ToolBarIcons = withCapabilities(({
 ));
 
 ToolBarIcons.propTypes = {
-  onCredentialCreateClick: PropTypes.func,
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  onCredentialCreateClick: PropTypes.func.isRequired,
 };
 
 const CredentialsFilterDialog = createFilterDialog({
