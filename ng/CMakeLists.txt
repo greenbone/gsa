@@ -468,6 +468,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/overrides/row.js
      ${NG_SRC_DIR}/src/web/pages/overrides/table.js
      ${NG_SRC_DIR}/src/web/pages/page.js
+     ${NG_SRC_DIR}/src/web/pages/performance/performancepage.js
+     ${NG_SRC_DIR}/src/web/pages/performance/startendtimeselection.js
      ${NG_SRC_DIR}/src/web/pages/permissions/component.js
      ${NG_SRC_DIR}/src/web/pages/permissions/details.js
      ${NG_SRC_DIR}/src/web/pages/permissions/detailspage.js
