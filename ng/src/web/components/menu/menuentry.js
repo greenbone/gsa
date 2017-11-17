@@ -37,6 +37,8 @@ import Link from '../link/link.js';
 import LegacyLink from '../link/legacylink.js';
 
 const Entry = glamorous.li({
+  display: 'flex',
+  alignItems: 'center',
   textDecoration: 'none',
   textIndent: '12px',
   textAlign: 'left',
