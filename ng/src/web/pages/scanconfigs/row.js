@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component, na} from '../../utils/render.js';
@@ -46,46 +46,47 @@ import TableRow from '../../components/table/row.js';
 import Trend from './trend.js';
 
 const Actions = ({
-    entity,
-    onEntityDelete,
-    onEntityDownload,
-    onEntityClone,
-    onEntityEdit,
-  }) => {
-  return (
-    <Layout flex align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Scan Config')}
-        name="alert"
-        entity={entity}
-        onClick={onEntityDelete}/>
-      <EditIcon
-        displayName={_('Scan Config')}
-        name="alert"
-        entity={entity}
-        onClick={onEntityEdit}/>
-      <CloneIcon
-        displayName={_('Scan Config')}
-        name="alert"
-        entity={entity}
-        title={_('Clone Scan Config')}
-        value={entity}
-        onClick={onEntityClone}/>
-      <ExportIcon
-        value={entity}
-        title={_('Export Scan Config')}
-        onClick={onEntityDownload}
-      />
-    </Layout>
-  );
-};
+  entity,
+  onScanConfigDeleteClick,
+  onScanConfigDownloadClick,
+  onScanConfigCloneClick,
+  onScanConfigEditClick,
+}) => (
+  <IconDivider grow align={['center', 'center']}>
+    <TrashIcon
+      displayName={_('Scan Config')}
+      name="alert"
+      entity={entity}
+      onClick={onScanConfigDeleteClick}
+    />
+    <EditIcon
+      displayName={_('Scan Config')}
+      name="alert"
+      entity={entity}
+      onClick={onScanConfigEditClick}
+    />
+    <CloneIcon
+      displayName={_('Scan Config')}
+      name="alert"
+      entity={entity}
+      title={_('Clone Scan Config')}
+      value={entity}
+      onClick={onScanConfigCloneClick}
+    />
+    <ExportIcon
+      value={entity}
+      title={_('Export Scan Config')}
+      onClick={onScanConfigDownloadClick}
+    />
+  </IconDivider>
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onEntityEdit: PropTypes.func,
-  onEntityClone: PropTypes.func,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
+  onScanConfigCloneClick: PropTypes.func.isRequired,
+  onScanConfigDeleteClick: PropTypes.func.isRequired,
+  onScanConfigDownloadClick: PropTypes.func.isRequired,
+  onScanConfigEditClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
