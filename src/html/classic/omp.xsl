@@ -1163,7 +1163,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           title="{gsa:i18n ('Update Filter')}"
           src="/img/refresh.svg"
           alt="{gsa:i18n ('Update', 'Action Verb')}"/>
-        <a href="?token={/envelope/token}&amp;cmd={$get_cmd}&amp;filt_id=--{$extra_params_string}"
+        <a href="?token={/envelope/token}&amp;cmd={$get_cmd}&amp;filt_id=0{$extra_params_string}"
           class="icon icon-sm"
           title="{gsa:i18n ('Reset Filter')}">
           <img src="/img/delete.svg" />
@@ -1253,7 +1253,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="{name}" value="{value}"/>
           </xsl:for-each>
           <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id" onchange="switch_filter.submit()">
-            <option value="--">--</option>
+            <option value="0">--</option>
             <xsl:variable name="id" select="filters/@id"/>
             <xsl:for-each select="$filters/get_filters_response/filter">
               <xsl:choose>
