@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -23,7 +24,9 @@
 
 import glamorous from 'glamorous';
 
-const DialogButton = glamorous.button({
+import Button from '../form/button.js';
+
+const DialogButton = glamorous(Button)({
   border: '1px solid #519032',
   fontWeight: 'bold',
   color: '#519032',
@@ -37,7 +40,22 @@ const DialogButton = glamorous.button({
     color: '#fff',
     background: '#519032',
   },
-});
+},
+  ({loading}) => {
+    if (loading) {
+      return {
+        background: '#87d050 url(/img/loading.gif) center center no-repeat',
+        color: 'rgba(0, 0, 0, 0.0)',
+
+        // when loading, :hover needs to be overwritten explicitly
+        ':hover': {
+          background: '#87d050 url(/img/loading.gif) center center no-repeat',
+          color: 'rgba(0, 0, 0, 0.0)',
+        },
+      };
+    }
+  }
+);
 
 export default DialogButton;
 
