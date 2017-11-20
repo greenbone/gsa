@@ -754,9 +754,12 @@ handle_help_pages (http_connection_t *connection,
   g_hash_table_insert (template_attributes, "mode", "help");
 
   // Try to find the requested page template
-  template_found
-    = find_element_in_xml_file (xsl_filename, "xsl:template",
-                                template_attributes);
+  if (xsl_filename)
+    {
+      template_found
+        = find_element_in_xml_file (xsl_filename, "xsl:template",
+                                    template_attributes);
+    }
 
   if (template_found == 0)
     {
