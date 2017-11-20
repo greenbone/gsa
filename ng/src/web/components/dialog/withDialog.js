@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -107,7 +108,10 @@ const withDialog = (options = {}) => Component => {
     }
 
     setErrorMessage(message) {
-      this.setState({error: message});
+      this.setState({
+        error: message,
+        loading: false,
+      });
     }
 
     setValues(new_data) {
@@ -139,6 +143,7 @@ const withDialog = (options = {}) => Component => {
         footer,
         title,
         visible: true,
+        loading: false,
       });
     }
 
@@ -156,7 +161,7 @@ const withDialog = (options = {}) => Component => {
       const {onClose} = this.props;
 
       this.close();
-
+      this.setState({loading: false});
       if (onClose) {
         onClose();
       }
@@ -169,6 +174,7 @@ const withDialog = (options = {}) => Component => {
       if (onSave) {
         const promise = onSave(data);
         if (is_defined(promise)) {
+          this.setState({loading: true});
           promise.then(
             () => this.close(),
             error => this.setError(error)
@@ -238,10 +244,21 @@ const withDialog = (options = {}) => Component => {
     }
 
     renderFooter() {
-      const {footer} = {...this.state, ...this.props};
+      const {
+        footer,
+        loading
+      } = {...this.state, ...this.props};
 
       if (!is_defined(footer)) {
         return null;
+      }
+      if (loading) {
+        return (
+          <DialogFooter
+            title={footer}
+            loading={loading}
+          />
+        );
       }
       return (
         <DialogFooter
