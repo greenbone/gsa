@@ -33,7 +33,7 @@ import Layout from '../components/layout/layout.js';
 import Pagination from '../components/pagination/pagination.js';
 
 import TableBody from '../components/table/body.js';
-import StrippedTable from '../components/table/strippedtable.js';
+import StripedTable from '../components/table/stripedtable.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -156,9 +156,9 @@ class EntitiesTable extends React.Component {
         grow="1"
         className="entities-table">
         {pagination}
-        <StrippedTable header={header} footer={footer}>
+        <StripedTable header={header} footer={footer}>
           {body}
-        </StrippedTable>
+        </StripedTable>
         {footnote ?
           <Layout flex align="space-between">
             <FootNote>

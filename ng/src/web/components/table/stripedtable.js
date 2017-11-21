@@ -25,7 +25,7 @@ import Table from './table.js';
 
 import glamorous from 'glamorous';
 
-const StrippedTable = glamorous(Table)({
+const StripedTable = glamorous(Table)({
   '& th, & td': {
     padding: '4px',
   },
@@ -45,6 +45,6 @@ const StrippedTable = glamorous(Table)({
   },
 });
 
-export default StrippedTable;
+export default StripedTable;
 
 // vim: set ts=2 sw=2 tw=80:

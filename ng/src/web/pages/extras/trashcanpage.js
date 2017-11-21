@@ -46,7 +46,7 @@ import TagsTable from '../tags/table.js';
 import TargetsTable from '../targets/table.js';
 import TasksTable from '../tasks/table.js';
 
-import Table from '../../components/table/strippedtable.js';
+import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';

@@ -50,7 +50,7 @@ import Layout from '../../components/layout/layout.js';
 
 import Section from '../../components/section/section.js';
 
-import StripedTable from '../../components/table/strippedtable.js';
+import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableHeader from '../../components/table/header.js';
@@ -146,7 +146,7 @@ const Details = ({
         title={_('Parameters ({{count}})', {count: params.length})}
       >
         {params.length > 0 &&
-          <StripedTable>
+          <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>
@@ -171,7 +171,7 @@ const Details = ({
                 </TableRow>
               ))}
             </TableBody>
-          </StripedTable>
+          </Table>
         }
       </Section>
     </Layout>

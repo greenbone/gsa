@@ -286,7 +286,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/table/infotable.js
      ${NG_SRC_DIR}/src/web/components/table/row.js
      ${NG_SRC_DIR}/src/web/components/table/simpletable.js
-     ${NG_SRC_DIR}/src/web/components/table/strippedtable.js
+     ${NG_SRC_DIR}/src/web/components/table/stripedtable.js
      ${NG_SRC_DIR}/src/web/components/table/table.js
      ${NG_SRC_DIR}/src/web/entities/actions.js
      ${NG_SRC_DIR}/src/web/entities/container.js

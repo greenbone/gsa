@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DeleteIcon from '../../components/icon/deleteicon.js';
 
-import StripedTable from '../../components/table/strippedtable.js';
+import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableHead from '../../components/table/head.js';
@@ -46,7 +46,7 @@ const PortRangesTable = ({
     return _('No Port Ranges available');
   }
   return (
-    <StripedTable>
+    <Table>
       <TableHeader>
         <TableRow>
           <TableHead>
@@ -89,7 +89,7 @@ const PortRangesTable = ({
           </TableRow>
         ))}
       </TableBody>
-    </StripedTable>
+    </Table>
   );
 };
 
@@ -102,4 +102,3 @@ PortRangesTable.propTypes = {
 export default PortRangesTable;
 
 // vim: set ts=2 sw=2 tw=80:
-

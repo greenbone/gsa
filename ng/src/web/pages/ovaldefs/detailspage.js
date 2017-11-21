@@ -43,7 +43,7 @@ import Layout from '../../components/layout/layout.js';
 import DetailsLink from '../../components/link/detailslink.js';
 import ExternalLink from '../../components/link/externallink.js';
 
-import StrippedTable from '../../components/table/strippedtable.js';
+import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableHeader from '../../components/table/header.js';
@@ -150,7 +150,7 @@ const Details = ({
         affecteds.map(affected => (
           <div key={affected.family}>
             <h3>{_('Family {{family}}', affected)}</h3>
-            <StrippedTable>
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>
@@ -183,7 +183,7 @@ const Details = ({
                   </TableRow>
                 ))}
               </TableBody>
-            </StrippedTable>
+            </Table>
           </div>
         ))
       }
@@ -204,7 +204,7 @@ const Details = ({
       <h2>{_('References')}</h2>
       {references.length === 0 ?
         <p>{_('None')}</p> :
-        <StrippedTable>
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead>
@@ -240,7 +240,7 @@ const Details = ({
               </TableRow>
             ))}
           </TableBody>
-        </StrippedTable>
+        </Table>
       }
 
       <h2>{_('Repository History')}</h2>
@@ -250,7 +250,7 @@ const Details = ({
             <b>{_('Status')}</b>
             <span>{repository.status}</span>
           </StyledDivider>
-          <StrippedTable>
+          <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>
@@ -297,7 +297,7 @@ const Details = ({
                 </TableRow>
               ))}
             </TableBody>
-          </StrippedTable>
+          </Table>
         </div> :
         <p>{_('None')}</p>
       }
