@@ -42,7 +42,7 @@ import Layout from '../../components/layout/layout.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
-import StrippedTable from '../../components/table/strippedtable.js';
+import Table from '../../components/table/stripedtable.js';
 import TableHeader from '../../components/table/header.js';
 import TableHead from '../../components/table/head.js';
 import TableBody from '../../components/table/body.js';
@@ -126,7 +126,7 @@ const Details = ({
         title={_('Reported Vulnerabilities')}
       >
         {cves.length > 0 ?
-          <StrippedTable>
+          <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>
@@ -157,7 +157,7 @@ const Details = ({
                 </TableRow>
               ))}
             </TableBody>
-          </StrippedTable> :
+          </Table> :
           _('None')
         }
       </DetailsBlock>

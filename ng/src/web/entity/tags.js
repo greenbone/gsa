@@ -46,7 +46,7 @@ import DetailsLink from '../components/link/detailslink.js';
 
 import Section from '../components/section/section.js';
 
-import Table from '../components/table/strippedtable.js';
+import Table from '../components/table/stripedtable.js';
 import TableBody from '../components/table/body.js';
 import TableData from '../components/table/data.js';
 import TableHeader from '../components/table/header.js';

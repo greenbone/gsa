@@ -41,7 +41,7 @@ import Layout from '../../components/layout/layout.js';
 import CertLink from '../../components/link/certlink.js';
 import DetailsLink from '../../components/link/detailslink.js';
 
-import StrippedTable from '../../components/table/strippedtable.js';
+import Table from '../../components/table/stripedtable.js';
 import TableHeader from '../../components/table/header.js';
 import TableHead from '../../components/table/head.js';
 import TableBody from '../../components/table/body.js';
@@ -80,7 +80,7 @@ const Details = ({
       {certs.length > 0 &&
         <DetailsBlock
           title={_('CERT Advisories referencing this CVE')}>
-          <StrippedTable>
+          <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>
@@ -107,7 +107,7 @@ const Details = ({
                 </TableRow>
               ))}
             </TableBody>
-          </StrippedTable>
+          </Table>
         </DetailsBlock>
       }
 

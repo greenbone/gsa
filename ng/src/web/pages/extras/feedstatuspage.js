@@ -40,7 +40,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Section from '../../components/section/section.js';
 
-import Table from '../../components/table/strippedtable.js';
+import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
 import TableRow from '../../components/table/row.js';
 import TableHead from '../../components/table/head.js';
