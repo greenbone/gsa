@@ -52,7 +52,7 @@ class RadiusAuthentication extends React.Component {
       radiushost: '',
       radiuskey: '',
       loading: 'true',
-    }
+    };
 
     this.getRadiusAuth = this.getRadiusAuth.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
@@ -90,7 +90,11 @@ class RadiusAuthentication extends React.Component {
       radiushost,
       radiuskey,
     } = this.state;
-    const data = {enable, radiushost, radiuskey};
+    const data = {
+      enable,
+      radiushost,
+      radiuskey,
+    };
     const {gmp} = this.props;
     return gmp.auth.saveRadius(data);
   }
@@ -102,7 +106,7 @@ class RadiusAuthentication extends React.Component {
   render() {
     const {loading} = this.state;
     if (loading) {
-      return <Loading/>
+      return <Loading/>;
     }
 
     const {
