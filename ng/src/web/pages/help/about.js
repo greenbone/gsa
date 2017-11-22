@@ -32,18 +32,18 @@ import Img from '../../components/img/img.js';
 import Layout from '../../components/layout/layout.js';
 import Section from '../../components/section/section.js';
 
-const StyledLayout = glamorous(Layout) ({
+const StyledLayout = glamorous(Layout)({
   margin: '0 auto',
   maxWidth: '1100px',
 });
 
-const TextBlock = glamorous.p({
+const TextBlock = glamorous.div({
   maxWidth: '600px',
   minWidth: '400px',
   marginRight: '30px',
   '@media screen and (max-width: 800px)': {
-    marginRight: "0px",
-  }
+    marginRight: '0px',
+  },
 });
 
 const ImageBlock = glamorous.div({
