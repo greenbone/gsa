@@ -59,7 +59,10 @@ const Actions = ({
   onScannerEditClick,
   onScannerVerifyClick,
 }) => (
-  <IconDivider>
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
     <TrashIcon
       displayName={_('Scanner')}
       name="permission"

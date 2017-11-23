@@ -56,7 +56,10 @@ const Actions = ({
   onCredentialEditClick,
 }) => {
   return (
-    <IconDivider align={['start', 'center']}>
+    <IconDivider
+      align={['center', 'center']}
+      grow
+    >
       <TrashIcon
         displayName={_('Credential')}
         name="credential"

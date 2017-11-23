@@ -64,7 +64,10 @@ const Actions = ({
     new_title = _('Permission to create Target denied');
   }
   return (
-    <IconDivider>
+    <IconDivider
+      align={['center', 'center']}
+      grow
+    >
       <DeleteIcon
         entity={entity}
         name="asset"

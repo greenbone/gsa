@@ -26,8 +26,6 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
-import Layout from '../../components/layout/layout.js';
-
 import PropTypes from '../../utils/proptypes.js';
 import {render_component, render_yesno} from '../../utils/render.js';
 
@@ -41,6 +39,8 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 import Icon from '../../components/icon/icon.js';
+
+import IconDivider from '../../components/layout/icondivider.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
@@ -59,7 +59,10 @@ const Actions = ({
   onAlertEditClick,
   onAlertTestClick,
 }) => (
-  <Layout flex align={['center', 'center']}>
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
     <TrashIcon
       displayName={_('Alert')}
       name="alert"
@@ -88,7 +91,7 @@ const Actions = ({
       title={_('Test Alert')}
       onClick={onAlertTestClick}
     />
-  </Layout>
+  </IconDivider>
 );
 
 Actions.propTypes = {

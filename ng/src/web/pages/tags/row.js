@@ -87,7 +87,10 @@ const Actions = withCapabilities(({
     }
   }
   return (
-    <IconDivider>
+    <IconDivider
+      align={['center', 'center']}
+      grow
+    >
       {endisableable}
       <TrashIcon
         displayName={_('Tag')}

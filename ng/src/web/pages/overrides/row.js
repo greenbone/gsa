@@ -64,7 +64,10 @@ const Actions = ({
     onOverrideEditClick,
   }) => {
   return (
-    <IconDivider>
+    <IconDivider
+      align={['center', 'center']}
+      grow
+    >
       <TrashIcon
         entity={entity}
         name="override"

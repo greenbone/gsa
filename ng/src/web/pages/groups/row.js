@@ -25,8 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
-
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
@@ -37,6 +35,8 @@ import {withEntityRow} from '../../entities/row.js';
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import TrashIcon from '../../entity/icon/trashicon.js';
 import EditIcon from '../../entity/icon/editicon.js';
+
+import IconDivider from '../../components/layout/icondivider.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
@@ -50,7 +50,10 @@ const IconActions = ({
     onGroupDownloadClick,
   }) => {
   return (
-    <Layout flex align={['center', 'center']}>
+    <IconDivider
+      align={['center', 'center']}
+      grow
+    >
       <TrashIcon
         displayName={_('Group')}
         name="group"
@@ -73,7 +76,7 @@ const IconActions = ({
         title={_('Export Group')}
         onClick={onGroupDownloadClick}
       />
-    </Layout>
+    </IconDivider>
   );
 };
 

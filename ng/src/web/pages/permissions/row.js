@@ -57,9 +57,8 @@ const Actions = ({
   onPermissionEditClick,
 }) => (
   <IconDivider
-    flex
-    grow
     align={['center', 'center']}
+    grow
   >
     <TrashIcon
       displayName={_('Permission')}

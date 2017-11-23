@@ -57,7 +57,10 @@ const Actions = ({
     onTaskStopClick,
   }, {capabilities}) => {
   return (
-    <IconDivider flex align={['center', 'center']}>
+    <IconDivider
+      align={['center', 'center']}
+      grow
+    >
 
       {is_defined(entity.schedule) ?
         <ScheduleIcon task={entity} links={links} /> :

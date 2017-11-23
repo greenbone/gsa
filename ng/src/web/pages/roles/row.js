@@ -38,7 +38,7 @@ import EditIcon from '../../entity/icon/editicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import TableRow from '../../components/table/row.js';
 
@@ -49,7 +49,10 @@ const IconActions = ({
   onRoleDownloadClick,
   onRoleEditClick,
 }) => (
-  <Layout flex align={['center', 'center']}>
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
     <TrashIcon
       displayName={_('Role')}
       name="role"
@@ -72,7 +75,7 @@ const IconActions = ({
       title={_('Export Role')}
       onClick={onRoleDownloadClick}
     />
-  </Layout>
+  </IconDivider>
 );
 
 IconActions.propTypes = {

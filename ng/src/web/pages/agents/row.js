@@ -54,7 +54,10 @@ const Actions = ({
   onAgentEditClick,
   onAgentVerifyClick,
 }) => (
-  <IconDivider>
+  <IconDivider
+    grow
+    align={['center', 'center']}
+  >
     <TrashIcon
       displayName={_('Agent')}
       name="agent"
