@@ -60,7 +60,10 @@ const IconActions = ({
   const title = active ? _('Delete Report') : _('Scan is active');
 
   return (
-    <IconDivider align={['center', 'center']}>
+    <IconDivider
+      align={['center', 'center']}
+      grow
+    >
       {is_defined(selectedDeltaReport) ?
         entity.id === selectedDeltaReport.id ?
           <Icon
@@ -167,4 +170,3 @@ Row.propTypes = {
 export default withEntityRow(withEntityActions(IconActions))(Row);
 
 // vim: set ts=2 sw=2 tw=80:
-

@@ -43,7 +43,6 @@ import ExportIcon from '../../components/icon/exporticon.js';
 import Icon from '../../components/icon/icon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
@@ -57,50 +56,48 @@ const Actions = withCapabilities(({
   onReportFormatEditClick,
   onReportFormatVerifyClick,
 }) => (
-  <Layout
-    grow
+  <IconDivider
     align={['center', 'center']}
+    grow
   >
-    <IconDivider>
-      <TrashIcon
-        displayName={_('Report Format')}
-        name="report_format"
-        entity={entity}
-        onClick={onReportFormatDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Report Format')}
-        name="report_format"
-        entity={entity}
-        onClick={onReportFormatEditClick}
-      />
-      <CloneIcon
-        displayName={_('Report Format')}
-        name="report_format"
-        entity={entity}
-        title={_('Clone Report Format')}
+    <TrashIcon
+      displayName={_('Report Format')}
+      name="report_format"
+      entity={entity}
+      onClick={onReportFormatDeleteClick}
+    />
+    <EditIcon
+      displayName={_('Report Format')}
+      name="report_format"
+      entity={entity}
+      onClick={onReportFormatEditClick}
+    />
+    <CloneIcon
+      displayName={_('Report Format')}
+      name="report_format"
+      entity={entity}
+      title={_('Clone Report Format')}
+      value={entity}
+      onClick={onReportFormatCloneClick}
+    />
+    <ExportIcon
+      value={entity}
+      title={_('Export Report Format')}
+      onClick={onReportFormatDownloadClick}
+    />
+    {capabilities.mayOp('verify_report_format') ?
+      <Icon
+        img="verify.svg"
         value={entity}
-        onClick={onReportFormatCloneClick}
+        title={_('Verify Report Format')}
+        onClick={onReportFormatVerifyClick}
+      /> :
+      <Icon
+        img="verify_inactive.svg"
+        title={_('Permission to verify Report Format denied')}
       />
-      <ExportIcon
-        value={entity}
-        title={_('Export Report Format')}
-        onClick={onReportFormatDownloadClick}
-      />
-      {capabilities.mayOp('verify_report_format') ?
-        <Icon
-          img="verify.svg"
-          value={entity}
-          title={_('Verify Report Format')}
-          onClick={onReportFormatVerifyClick}
-        /> :
-        <Icon
-          img="verify_inactive.svg"
-          title={_('Permission to verify Report Format denied')}
-        />
-      }
-    </IconDivider>
-  </Layout>
+    }
+  </IconDivider>
 ));
 
 Actions.propTypes = {

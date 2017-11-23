@@ -55,7 +55,10 @@ const IconActions = ({
   onTargetDownloadClick,
   onTargetDeleteClick,
 }) => (
-  <IconDivider flex align={['center', 'center']}>
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
     <TrashIcon
       displayName={_('Target')}
       name="target"

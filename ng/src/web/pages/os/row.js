@@ -46,7 +46,10 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const IconActions = ({entity, onEntityDelete, onEntityDownload}) => (
-  <IconDivider>
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
     {entity.isInUse() ?
       <DeleteIcon
         active={false}

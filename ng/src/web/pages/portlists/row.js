@@ -38,7 +38,7 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
@@ -50,7 +50,10 @@ const IconActions = ({
   onPortListCloneClick,
   onPortListEditClick,
 }) => (
-  <Layout flex align={['center', 'center']}>
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
     <TrashIcon
       entity={entity}
       displayName={_('Port List')}
@@ -71,7 +74,7 @@ const IconActions = ({
       title={_('Export Port List')}
       onClick={onPortListDownloadClick}
     />
-  </Layout>
+  </IconDivider>
 );
 
 IconActions.propTypes = {
