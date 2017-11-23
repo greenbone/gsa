@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -25,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -51,8 +53,8 @@ const ScpMethodPart = ({
     onChange,
     onNewCredentialClick,
   }) => {
-  let scp_credential_opts = render_options(credentials);
-  let scp_report_format_opts = render_options(reportFormats);
+  const scp_credential_opts = render_options(credentials);
+  const scp_report_format_opts = render_options(reportFormats);
 
   return (
     <Layout
@@ -60,18 +62,20 @@ const ScpMethodPart = ({
       box
       grow="1">
       <FormGroup title={_('Credential')}>
-        <Select2
-          name={prefix + 'scp_credential'}
-          value={scpCredential}
-          onChange={onChange}>
-          {scp_credential_opts}
-        </Select2>
-        <Layout flex box>
-          <NewIcon
-            value={['up']}
-            title={_('Create a credential')}
-            onClick={onNewCredentialClick}/>
-        </Layout>
+        <Divider>
+          <Select2
+            name={prefix + 'scp_credential'}
+            value={scpCredential}
+            onChange={onChange}>
+            {scp_credential_opts}
+          </Select2>
+          <Layout>
+            <NewIcon
+              value={['up']}
+              title={_('Create a credential')}
+              onClick={onNewCredentialClick}/>
+          </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Host')}>
@@ -88,7 +92,8 @@ const ScpMethodPart = ({
           rows="3" cols="50"
           name={prefix + 'scp_known_hosts'}
           value={scpKnownHosts}
-          onChange={onChange}/>
+          onChange={onChange}
+          grow="1"/>
       </FormGroup>
 
       <FormGroup title={_('Path')}>

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Timo Pollmeier <timo.pollmeier@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -25,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -67,18 +69,20 @@ const SmbMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('Credential')}>
-        <Select2
-          name={prefix + 'smb_credential'}
-          value={smbCredential}
-          onChange={onChange}>
-          {smb_credential_opts}
-        </Select2>
-        <Layout flex box>
-          <NewIcon
-            value={['up']}
-            title={_('Create a credential')}
-            onClick={onNewCredentialClick}/>
-        </Layout>
+        <Divider>
+          <Select2
+            name={prefix + 'smb_credential'}
+            value={smbCredential}
+            onChange={onChange}>
+            {smb_credential_opts}
+          </Select2>
+          <Layout>
+            <NewIcon
+              value={['up']}
+              title={_('Create a credential')}
+              onClick={onNewCredentialClick}/>
+          </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Share path')}>

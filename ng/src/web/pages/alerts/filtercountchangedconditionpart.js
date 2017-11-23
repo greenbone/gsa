@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -25,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -35,7 +37,7 @@ import Select2 from '../../components/form/select2.js';
 import Spinner from '../../components/form/spinner.js';
 import Radio from '../../components/form/radio.js';
 
-const VALUE = "Filter count changed";
+const VALUE = 'Filter count changed';
 
 const FilterCountChangedConditionPart = ({
     condition,
@@ -46,8 +48,9 @@ const FilterCountChangedConditionPart = ({
     onChange,
   }) => {
   return (
-    <Layout flex box>
-      <Radio title={_('Filter')}
+    <Divider>
+      <Radio
+        title={_('Filter')}
         value={VALUE}
         checked={condition === VALUE}
         name="condition"
@@ -58,7 +61,7 @@ const FilterCountChangedConditionPart = ({
         onChange={onChange}>
         {render_options(filters)}
       </Select2>
-      <Layout flex box>
+      <Layout>
         {_('matches at least')}
       </Layout>
       <Spinner
@@ -70,7 +73,7 @@ const FilterCountChangedConditionPart = ({
       <Layout flex box>
         {_('result(s) more then previous scan')}
       </Layout>
-    </Layout>
+    </Divider>
   );
 };
 

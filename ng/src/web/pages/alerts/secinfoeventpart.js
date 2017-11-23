@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import Divider from '../../components/layout/divider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withPrefix from '../../utils/withPrefix.js';
@@ -44,7 +44,7 @@ const SecinfoEventPart = ({
     onEventChange,
   }) => {
   return (
-    <Layout flex box>
+    <Divider>
       <Radio
         name="event"
         value={VALUE}
@@ -73,7 +73,7 @@ const SecinfoEventPart = ({
         </option>
         <option value="ovaldef">{_('OVAL Definition')}</option>
       </Select2>
-    </Layout>
+    </Divider>
   );
 };
 

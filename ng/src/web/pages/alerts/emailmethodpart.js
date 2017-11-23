@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -52,7 +53,7 @@ const EmailMethodPart = ({
     onChange,
   }, {capabilities}) => {
 
-  let report_format_opts = render_options(
+  const report_format_opts = render_options(
     reportFormats.filter(format => {
       return (isTaskEvent && format.content_type.startsWith('text/')) ||
         !isTaskEvent;
@@ -88,70 +89,72 @@ const EmailMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('Content')} flex="column">
+        <Divider flex="column" grow="1">
+          <Radio
+            title={_('Simple Notice')}
+            name={prefix + 'notice'}
+            checked={notice === '1'}
+            value="1"
+            onChange={onChange}/>
 
-        <Radio title={_('Simple Notice')}
-          name={prefix + 'notice'}
-          checked={notice === '1'}
-          value="1"
-          onChange={onChange}/>
-
-        {capabilities.mayOp('get_report_formats') &&
-          <Layout flex="column" box>
-            <Layout flex box>
-              <Radio
-                name={prefix + 'notice'}
-                title={isTaskEvent ? _('Include report') :
-                  _('Include list of resources with message:')}
-                checked={notice === '0'}
-                value="0"
-                onChange={onChange}>
-              </Radio>
-              {isTaskEvent &&
-                <Select2
-                  name={prefix + 'notice_report_format'}
-                  value={noticeReportFormat}
+          {capabilities.mayOp('get_report_formats') &&
+            <Layout flex="column" box>
+              <Divider>
+                <Radio
+                  name={prefix + 'notice'}
+                  title={isTaskEvent ? _('Include report') :
+                    _('Include list of resources with message:')}
+                  checked={notice === '0'}
+                  value="0"
                   onChange={onChange}>
-                  {report_format_opts}
-                </Select2>
-              }
+                </Radio>
+                {isTaskEvent &&
+                  <Select2
+                    name={prefix + 'notice_report_format'}
+                    value={noticeReportFormat}
+                    onChange={onChange}>
+                    {report_format_opts}
+                  </Select2>
+                }
+              </Divider>
+              <TextArea
+                name={prefix + 'message'}
+                rows="8"
+                cols="50"
+                value={message}
+                onChange={onChange}/>
             </Layout>
-            <TextArea
-              name={prefix + 'message'}
-              rows="8"
-              cols="50"
-              value={message}
-              onChange={onChange}/>
-          </Layout>
-        }
+          }
 
-        {capabilities.mayOp('get_report_formats') &&
-          <Layout flex="column" box>
-            <Layout flex box>
-              <Radio
-                name={prefix + 'notice'}
-                title={isTaskEvent ? _('Attach report') :
-                  _('Attach list of resources with message:')}
-                checked={notice === '2'}
-                value="2"
-                onChange={onChange}>
-              </Radio>
-              {isTaskEvent &&
-                <Select2
-                  name={prefix + 'notice_attach_format'}
-                  value={noticeAttachFormat}
+          {capabilities.mayOp('get_report_formats') &&
+            <Layout flex="column" box>
+              <Layout flex box>
+                <Radio
+                  name={prefix + 'notice'}
+                  title={isTaskEvent ? _('Attach report') :
+                    _('Attach list of resources with message:')}
+                  checked={notice === '2'}
+                  value="2"
                   onChange={onChange}>
-                  {render_options(reportFormats)}
-                </Select2>
-              }
+                </Radio>
+                {isTaskEvent &&
+                  <Select2
+                    name={prefix + 'notice_attach_format'}
+                    value={noticeAttachFormat}
+                    onChange={onChange}>
+                    {render_options(reportFormats)}
+                  </Select2>
+                }
+              </Layout>
+              <TextArea
+                name={prefix + 'message_attach'}
+                rows="8"
+                cols="50"
+                value={messageAttach}
+                onChange={onChange}/>
             </Layout>
-            <TextArea
-              name={prefix + 'message_attach'}
-              rows="8"
-              cols="50"
-              value={messageAttach}
-              onChange={onChange}/>
-          </Layout>
-        }
+          }
+        </Divider>
       </FormGroup>
 
     </Layout>
@@ -161,10 +164,10 @@ const EmailMethodPart = ({
 EmailMethodPart.propTypes = {
   fromAddress: PropTypes.string.isRequired,
   isTaskEvent: PropTypes.bool.isRequired,
-  messageAttach: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
-  noticeAttachFormat: PropTypes.id,
+  messageAttach: PropTypes.string.isRequired,
   notice: PropTypes.string.isRequired,
+  noticeAttachFormat: PropTypes.id,
   noticeReportFormat: PropTypes.id,
   prefix: PropTypes.string.isRequired,
   reportFormats: PropTypes.arrayLike,
