@@ -33,7 +33,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
@@ -46,7 +46,7 @@ const ToolBarIcons = ({
   onGroupCreateClick,
 }, {capabilities}) => {
   return (
-    <Layout flex box>
+    <IconDivider>
       <HelpIcon
         page="groups"
         title={_('Help: Groups')}/>
@@ -55,7 +55,7 @@ const ToolBarIcons = ({
           title={_('New Group')}
           onClick={onGroupCreateClick}/>
       }
-    </Layout>
+    </IconDivider>
   );
 };
 

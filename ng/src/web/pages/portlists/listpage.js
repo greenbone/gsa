@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
@@ -48,7 +48,7 @@ const ToolBarIcons = withCapabilities(({
   onPortListCreateClick,
   onPortListImportClick,
 }) => (
-  <Layout flex box>
+  <IconDivider>
     <HelpIcon
       page="port_lists"
       title={_('Help: Port Lists')}/>
@@ -61,7 +61,7 @@ const ToolBarIcons = withCapabilities(({
       img="upload.svg"
       title={_('Import Port List')}
       onClick={onPortListImportClick}/>
-  </Layout>
+  </IconDivider>
 ));
 
 ToolBarIcons.propTypes = {
