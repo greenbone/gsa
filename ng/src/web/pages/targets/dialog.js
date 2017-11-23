@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -23,7 +24,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {NO_VALUE} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -40,6 +41,7 @@ import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {
@@ -143,35 +145,37 @@ const TargetDialog = ({
       <FormGroup
         title={_('Hosts')}
         flex="column">
-        <Layout flex box>
-          <Radio
-            value="manual"
-            title={_('Manual')}
-            name="target_source"
-            disabled={in_use}
-            onChange={onValueChange}
-            checked={target_source === 'manual'}/>
-          <TextField
-            grow="1"
-            disabled={in_use || target_source !== 'manual'}
-            value={hosts}
-            name="hosts"
-            onChange={onValueChange}/>
-        </Layout>
+        <Divider flex="column">
+          <Divider>
+            <Radio
+              value="manual"
+              title={_('Manual')}
+              name="target_source"
+              disabled={in_use}
+              onChange={onValueChange}
+              checked={target_source === 'manual'}/>
+            <TextField
+              grow="1"
+              disabled={in_use || target_source !== 'manual'}
+              value={hosts}
+              name="hosts"
+              onChange={onValueChange}/>
+          </Divider>
 
-        <Layout flex box>
-          <Radio
-            title={_('From file')}
-            name="target_source"
-            value="file"
-            disabled={in_use}
-            onChange={onValueChange}
-            checked={target_source === 'file'}/>
-          <FileField
-            name="file"
-            disabled={in_use}
-            onChange={onValueChange}/>
-        </Layout>
+          <Divider>
+            <Radio
+              title={_('From file')}
+              name="target_source"
+              value="file"
+              disabled={in_use}
+              onChange={onValueChange}
+              checked={target_source === 'file'}/>
+            <FileField
+              name="file"
+              disabled={in_use}
+              onChange={onValueChange}/>
+          </Divider>
+        </Divider>
 
         {hosts_count &&
           <Layout flex box>
@@ -191,35 +195,37 @@ const TargetDialog = ({
       <FormGroup
         title={_('Exclude Hosts')}
         flex="column">
-        <Layout flex box>
-          <Radio
-            value="manual"
-            title={_('Manual')}
-            name="target_exclude_source"
-            disabled={in_use}
-            onChange={onValueChange}
-            checked={target_exclude_source === 'manual'}/>
-          <TextField
-            grow="1"
-            disabled={in_use || target_exclude_source !== 'manual'}
-            value={exclude_hosts}
-            name="exclude_hosts"
-            onChange={onValueChange}/>
-        </Layout>
+        <Divider flex="column">
+          <Divider>
+            <Radio
+              value="manual"
+              title={_('Manual')}
+              name="target_exclude_source"
+              disabled={in_use}
+              onChange={onValueChange}
+              checked={target_exclude_source === 'manual'}/>
+            <TextField
+              grow="1"
+              disabled={in_use || target_exclude_source !== 'manual'}
+              value={exclude_hosts}
+              name="exclude_hosts"
+              onChange={onValueChange}/>
+          </Divider>
 
-        <Layout flex box>
-          <Radio
-            title={_('From file')}
-            name="target_exclude_source"
-            value="file"
-            disabled={in_use}
-            onChange={onValueChange}
-            checked={target_exclude_source === 'file'}/>
-          <FileField
-            name="exclude_file"
-            disabled={in_use}
-            onChange={onValueChange}/>
-        </Layout>
+          <Divider>
+            <Radio
+              title={_('From file')}
+              name="target_exclude_source"
+              value="file"
+              disabled={in_use}
+              onChange={onValueChange}
+              checked={target_exclude_source === 'file'}/>
+            <FileField
+              name="exclude_file"
+              disabled={in_use}
+              onChange={onValueChange}/>
+          </Divider>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Reverse Lookup Only')}>
@@ -240,20 +246,22 @@ const TargetDialog = ({
 
       {capabilities.mayOp('get_port_lists') &&
         <FormGroup title={_('Port List')}>
-          <Select2
-            onChange={onValueChange}
-            name="port_list_id"
-            disabled={in_use}
-            value={port_list_id}>
-            {render_options(port_lists)}
-          </Select2>
-          {!in_use &&
-            <Layout box flex>
-              <NewIcon
-                title={_('Create a new port list')}
-                onClick={onNewPortListClick}/>
-            </Layout>
-          }
+          <Divider>
+            <Select2
+              onChange={onValueChange}
+              name="port_list_id"
+              disabled={in_use}
+              value={port_list_id}>
+              {render_options(port_lists)}
+            </Select2>
+            {!in_use &&
+              <Layout box flex>
+                <NewIcon
+                  title={_('Create a new port list')}
+                  onClick={onNewPortListClick}/>
+              </Layout>
+            }
+          </Divider>
         </FormGroup>
       }
 
@@ -279,91 +287,99 @@ const TargetDialog = ({
 
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('SSH')}>
-          <Select2
-            box
-            name="ssh_credential_id"
-            onChange={onValueChange}
-            disabled={in_use}
-            value={ssh_credential_id}>
-            {render_options(ssh_credentials, 0)}
-          </Select2>
-          <Layout box flex>
-            {_('on port')}
-          </Layout>
-          <TextField
-            size="6"
-            name="port"
-            value={port}
-            disabled={in_use}
-            onChange={onValueChange}/>
-          {!in_use &&
-            <Layout box flex>
-              <NewIcon
-                value={NEW_SSH}
-                onClick={onNewCredentialsClick}
-                title={_('Create a new credential')}/>
+          <Divider>
+            <Select2
+              box
+              name="ssh_credential_id"
+              onChange={onValueChange}
+              disabled={in_use}
+              value={ssh_credential_id}>
+              {render_options(ssh_credentials, 0)}
+            </Select2>
+            <Layout>
+              {_('on port')}
             </Layout>
-          }
+            <TextField
+              size="6"
+              name="port"
+              value={port}
+              disabled={in_use}
+              onChange={onValueChange}/>
+            {!in_use &&
+              <Layout>
+                <NewIcon
+                  value={NEW_SSH}
+                  onClick={onNewCredentialsClick}
+                  title={_('Create a new credential')}/>
+              </Layout>
+            }
+          </Divider>
         </FormGroup>
       }
 
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('SMB')}>
-          <Select2
-            onChange={onValueChange}
-            name="smb_credential_id"
-            disabled={in_use}
-            value={smb_credential_id}>
-            {render_options(up_credentials, 0)}
-          </Select2>
-          {!in_use &&
-            <Layout box flex>
-              <NewIcon
-                value={NEW_SMB}
-                onClick={onNewCredentialsClick}
-                title={_('Create a new credential')}/>
-            </Layout>
-          }
+          <Divider>
+            <Select2
+              onChange={onValueChange}
+              name="smb_credential_id"
+              disabled={in_use}
+              value={smb_credential_id}>
+              {render_options(up_credentials, 0)}
+            </Select2>
+            {!in_use &&
+              <Layout box flex>
+                <NewIcon
+                  value={NEW_SMB}
+                  onClick={onNewCredentialsClick}
+                  title={_('Create a new credential')}/>
+              </Layout>
+            }
+          </Divider>
         </FormGroup>
       }
 
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('ESXi')}>
-          <Select2
-            disabled={in_use}
-            onChange={onValueChange}
-            name="esxi_credential_id"
-            value={esxi_credential_id}>
-            {render_options(up_credentials, 0)}
-          </Select2>
-          {!in_use &&
-            <Layout box flex>
-              <NewIcon
-                value={NEW_ESXI}
-                onClick={onNewCredentialsClick}
-                title={_('Create a new credential')}/>
-            </Layout>
-          }
+          <Divider>
+            <Select2
+              disabled={in_use}
+              onChange={onValueChange}
+              name="esxi_credential_id"
+              value={esxi_credential_id}>
+              {render_options(up_credentials, 0)}
+            </Select2>
+            {!in_use &&
+              <Layout box flex>
+                <NewIcon
+                  value={NEW_ESXI}
+                  onClick={onNewCredentialsClick}
+                  title={_('Create a new credential')}/>
+              </Layout>
+            }
+          </Divider>
         </FormGroup>
       }
 
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('SNMP')}>
-          <Select2
-            disabled={in_use}
-            onChange={onValueChange}
-            name="snmp_credential_id"
-            value={snmp_credential_id}>
-            {render_options(snmp_credentials, 0)}
-          </Select2>
-          {!in_use &&
-            <Layout box flex>
-              <NewIcon
-                value={NEW_SNMP}
-                onClick={onNewCredentialsClick}
-                title={_('Create a new credential')}/>
-            </Layout>
-          }
+          <Divider>
+            <Select2
+              disabled={in_use}
+              onChange={onValueChange}
+              name="snmp_credential_id"
+              value={snmp_credential_id}>
+              {render_options(snmp_credentials, 0)}
+            </Select2>
+            {!in_use &&
+              <Layout box flex>
+                <NewIcon
+                  value={NEW_SNMP}
+                  onClick={onNewCredentialsClick}
+                  title={_('Create a new credential')}/>
+              </Layout>
+            }
+          </Divider>
         </FormGroup>
       }
     </Layout>
@@ -371,32 +387,32 @@ const TargetDialog = ({
 };
 
 TargetDialog.propTypes = {
-  name: PropTypes.string,
-  comment: PropTypes.string,
-  target_source: PropTypes.oneOf([
-    'manual', 'file', 'asset_hosts',
-  ]),
-  target_exclude_source: PropTypes.oneOf([
-    'manual', 'file',
-  ]),
   alive_tests: PropTypes.oneOf(ALIVE_TESTS),
+  comment: PropTypes.string,
   credentials: PropTypes.arrayLike,
   esxi_credential_id: PropTypes.idOrZero,
   exclude_hosts: PropTypes.string,
-  hosts_count: PropTypes.number,
   hosts: PropTypes.string,
+  hosts_count: PropTypes.number,
   in_use: PropTypes.bool,
+  name: PropTypes.string,
+  port: PropTypes.numberOrNumberString,
   port_list_id: PropTypes.idOrZero,
   port_lists: PropTypes.arrayLike,
-  port: PropTypes.numberOrNumberString,
   reverse_lookup_only: PropTypes.yesno,
   reverse_lookup_unify: PropTypes.yesno,
   smb_credential_id: PropTypes.idOrZero,
   snmp_credential_id: PropTypes.idOrZero,
   ssh_credential_id: PropTypes.idOrZero,
-  onValueChange: PropTypes.func,
+  target_exclude_source: PropTypes.oneOf([
+    'manual', 'file',
+  ]),
+  target_source: PropTypes.oneOf([
+    'manual', 'file', 'asset_hosts',
+  ]),
   onNewCredentialsClick: PropTypes.func,
   onNewPortListClick: PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 TargetDialog.contextTypes = {

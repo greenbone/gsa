@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -23,7 +24,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {YES_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -39,6 +40,7 @@ import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 const ImportDialog = ({
@@ -56,21 +58,22 @@ const ImportDialog = ({
         onChange={onValueChange}/>
     </FormGroup>
     <FormGroup title={_('Container Task')} flex>
-      <Select2 name="task_id"
-        value={task_id}
-        onChange={onValueChange}>
-        {render_options(tasks)}
-      </Select2>
-      {newContainerTask &&
-        <Layout flex box>
+      <Divider>
+        <Select2
+          name="task_id"
+          value={task_id}
+          onChange={onValueChange}>
+          {render_options(tasks)}
+        </Select2>
+        {newContainerTask &&
           <NewIcon
             title={_('Create new Container Task')}
             onClick={onNewContainerTaskClick}/>
-        </Layout>
-      }
+        }
+      </Divider>
     </FormGroup>
     <FormGroup title={_('Add to Assets')}>
-      <Layout flex="column">
+      <Divider flex="column">
         <Text>
           {_('Add to Assets with QoD >= 70% and Overrides enabled')}
         </Text>
@@ -78,7 +81,7 @@ const ImportDialog = ({
           value={in_assets}
           name="in_assets"
           onChange={onValueChange}/>
-      </Layout>
+      </Divider>
     </FormGroup>
   </Layout>
 );
@@ -88,8 +91,8 @@ ImportDialog.propTypes = {
   newContainerTask: PropTypes.bool,
   task_id: PropTypes.id,
   tasks: PropTypes.arrayLike,
-  onValueChange: PropTypes.func,
   onNewContainerTaskClick: PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 

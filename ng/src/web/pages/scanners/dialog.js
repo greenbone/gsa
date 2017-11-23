@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -43,6 +44,7 @@ import TextField from '../../components/form/textfield.js';
 import Icon from '../../components/icon/icon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {
@@ -257,7 +259,7 @@ class ScannerDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Credential')} flex="column">
-          <Layout flex box>
+          <Divider>
             <Select2
               name="credential_id"
               value={credential_id}
@@ -270,7 +272,7 @@ class ScannerDialog extends React.Component {
                 title={_('Create a new Credential')}
                 onClick={onNewCredentialClick}/>
             </Layout>
-          </Layout>
+          </Divider>
           {show_cred_info &&
             <CertStatus info={scanner.credential.certificate_info}/>
           }
@@ -283,18 +285,18 @@ class ScannerDialog extends React.Component {
 
 ScannerDialog.propTypes = {
   comment: PropTypes.string,
-  credentials: PropTypes.arrayLike,
   credential_id: PropTypes.id,
-  name: PropTypes.string,
+  credentials: PropTypes.arrayLike,
   host: PropTypes.string,
+  name: PropTypes.string,
   port: PropTypes.string,
   scanner: PropTypes.model,
   type: PropTypes.oneOf(scanner_types).isRequired,
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),
-  onValueChange: PropTypes.func,
   onNewCredentialClick: PropTypes.func,
+  onValueChange: PropTypes.func,
 };
 
 export default withDialog({

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -41,30 +42,32 @@ const AutoFpGroup = ({
 
   return (
     <FormGroup title={_('Auto-FP')} flex="column">
-      <Checkbox
-        name="autofp"
-        checkedValue={1}
-        unCheckedValue={0}
-        checked={autofp >= 1}
-        title={_('Trust vendor security updates')}
-        onChange={onChange}/>
-      <Divider>
-        <Radio
+      <Divider flex="column">
+        <Checkbox
           name="autofp"
-          title={_('Full CVE match')}
-          value={1}
-          disabled={autofp === 0}
-          checked={autofp === 1}
-          convert={parse_int}
+          checkedValue={1}
+          unCheckedValue={0}
+          checked={autofp >= 1}
+          title={_('Trust vendor security updates')}
           onChange={onChange}/>
-        <Radio
-          name="autofp"
-          title={_('Partial CVE match')}
-          value="2"
-          disabled={autofp === 0}
-          checked={autofp === 2}
-          convert={parse_int}
-          onChange={onChange}/>
+        <Divider>
+          <Radio
+            name="autofp"
+            title={_('Full CVE match')}
+            value={1}
+            disabled={autofp === 0}
+            checked={autofp === 1}
+            convert={parse_int}
+            onChange={onChange}/>
+          <Radio
+            name="autofp"
+            title={_('Partial CVE match')}
+            value="2"
+            disabled={autofp === 0}
+            checked={autofp === 2}
+            convert={parse_int}
+            onChange={onChange}/>
+        </Divider>
       </Divider>
     </FormGroup>
   );

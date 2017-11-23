@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -35,6 +36,7 @@ import Radio from '../../components/form/radio.js';
 import Select2 from '../../components/form/select2.js';
 import TextField from '../../components/form/textfield.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {permission_description} from '../../utils/render.js';
@@ -216,83 +218,83 @@ const PermissionDialog = ({
       <FormGroup
         title={_('Subject')}
         flex="column">
-        {capabilities.mayAccess('users') &&
-          <Layout flex box>
-            <Radio
-              name="subject_type"
-              checked={subject_type === 'user'}
-              title={_('User')}
-              value="user"
-              onChange={onValueChange}>
-            </Radio>
-            <Select2
-              name="user_id"
-              value={user_id}
-              onChange={onValueChange}>
-              {map(users, user => {
-                return (
-                  <option
-                    key={user.id}
-                    value={user.id}>
-                    {user.name}
-                  </option>
-                );
-              })}
-            </Select2>
-          </Layout>
-        }
-
-        {capabilities.mayAccess('roles') &&
-          <Layout flex box>
-            <Radio
-              name="subject_type"
-              checked={subject_type === 'role'}
-              title={_('Role')}
-              value="role"
-              onChange={onValueChange}>
-            </Radio>
-            <Select2
-              name="role_id"
-              value={role_id}
-              onChange={onValueChange}>
-              {map(roles, role => {
-                return (
-                  <option
-                    key={role.id}
-                    value={role.id}>
-                    {role.name}
-                  </option>
-                );
-              })}
-            </Select2>
-          </Layout>
-        }
-
-        {capabilities.mayAccess('groups') &&
-          <Layout flex box>
-            <Radio
-              name="subject_type"
-              checked={subject_type === 'group'}
-              title={_('Group')}
-              value="group"
-              onChange={onValueChange}>
-            </Radio>
-            <Select2
-              name="group_id"
-              value={group_id}
-              onChange={onValueChange}>
-              {map(groups, group => {
-                return (
-                  <option
-                    key={group.id}
-                    value={group.id}>
-                    {group.name}
-                  </option>
-                );
-              })}
-            </Select2>
-          </Layout>
-        }
+        <Divider flex="column">
+          {capabilities.mayAccess('users') &&
+            <Divider>
+              <Radio
+                name="subject_type"
+                checked={subject_type === 'user'}
+                title={_('User')}
+                value="user"
+                onChange={onValueChange}>
+              </Radio>
+              <Select2
+                name="user_id"
+                value={user_id}
+                onChange={onValueChange}>
+                {map(users, user => {
+                  return (
+                    <option
+                      key={user.id}
+                      value={user.id}>
+                      {user.name}
+                    </option>
+                  );
+                })}
+              </Select2>
+            </Divider>
+          }
+          {capabilities.mayAccess('roles') &&
+            <Divider>
+              <Radio
+                name="subject_type"
+                checked={subject_type === 'role'}
+                title={_('Role')}
+                value="role"
+                onChange={onValueChange}>
+              </Radio>
+              <Select2
+                name="role_id"
+                value={role_id}
+                onChange={onValueChange}>
+                {map(roles, role => {
+                  return (
+                    <option
+                      key={role.id}
+                      value={role.id}>
+                      {role.name}
+                    </option>
+                  );
+                })}
+              </Select2>
+            </Divider>
+          }
+          {capabilities.mayAccess('groups') &&
+            <Divider>
+              <Radio
+                name="subject_type"
+                checked={subject_type === 'group'}
+                title={_('Group')}
+                value="group"
+                onChange={onValueChange}>
+              </Radio>
+              <Select2
+                name="group_id"
+                value={group_id}
+                onChange={onValueChange}>
+                {map(groups, group => {
+                  return (
+                    <option
+                      key={group.id}
+                      value={group.id}>
+                      {group.name}
+                    </option>
+                  );
+                })}
+              </Select2>
+            </Divider>
+          }
+        </Divider>
       </FormGroup>
 
       {name === 'Super' &&

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -32,29 +33,33 @@ import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';
 import Text from '../form/text.js';
 
+import Divider from '../layout/divider.js';
+
 const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
   if (!is_defined(qod) && is_defined(filter)) {
     qod = filter.get('min_qod');
   }
   return (
     <FormGroup title={_('QoD')}>
-      <Text>{_('must be at least')}</Text>
-      <Spinner
-        type="int"
-        name={name}
-        min="0" max="100"
-        step="1"
-        value={qod}
-        size="1"
-        onChange={onChange}/>
+      <Divider>
+        <Text>{_('must be at least')}</Text>
+        <Spinner
+          type="int"
+          name={name}
+          min="0" max="100"
+          step="1"
+          value={qod}
+          size="1"
+          onChange={onChange}/>
+      </Divider>
     </FormGroup>
   );
 };
 
 MinQodGroup.propTypes = {
+  filter: PropTypes.filter,
   name: PropTypes.string,
   qod: PropTypes.number,
-  filter: PropTypes.filter,
   onChange: PropTypes.func,
 };
 

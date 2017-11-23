@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -26,6 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -88,33 +90,34 @@ const PortListsDialog = ({
 
       {!is_edit &&
         <FormGroup title={_('Port Ranges')} flex="column">
-          <Layout flex box>
-            <Radio
-              title={_('Manual')}
-              name="from_file"
-              value="0"
-              onChange={onValueChange}
-              checked={from_file !== '1'}/>
-            <TextField
-              grow="1"
-              name="port_range"
-              value={port_range}
-              disabled={from_file === '1'}
-              onChange={onValueChange}
-              size="30" maxLength="400"/>
-          </Layout>
-
-          <Layout flex box>
-            <Radio
-              title={_('From file')}
-              name="from_file"
-              value="1"
-              onChange={onValueChange}
-              checked={from_file === '1'}/>
-            <FileField
-              name="file"
-              onChange={onValueChange}/>
-          </Layout>
+          <Divider flex="column">
+            <Divider>
+              <Radio
+                title={_('Manual')}
+                name="from_file"
+                value="0"
+                onChange={onValueChange}
+                checked={from_file !== '1'}/>
+              <TextField
+                grow="1"
+                name="port_range"
+                value={port_range}
+                disabled={from_file === '1'}
+                onChange={onValueChange}
+                size="30" maxLength="400"/>
+            </Divider>
+            <Divider>
+              <Radio
+                title={_('From file')}
+                name="from_file"
+                value="1"
+                onChange={onValueChange}
+                checked={from_file === '1'}/>
+              <FileField
+                name="file"
+                onChange={onValueChange}/>
+            </Divider>
+          </Divider>
         </FormGroup>
       }
       {is_edit &&

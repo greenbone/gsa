@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -34,6 +35,8 @@ import Radio from '../../components/form/radio.js';
 import Spinner from '../../components/form/spinner.js';
 import Text from '../../components/form/text.js';
 
+import Divider from '../../components/layout/divider.js';
+
 const AutoDeleteReportsGroup = ({
     autoDelete,
     autoDeleteData,
@@ -47,7 +50,7 @@ const AutoDeleteReportsGroup = ({
         value="no"
         onChange={onChange}
         checked={autoDelete !== 'keep'}/>
-      <Layout flex box>
+      <Divider>
         <Radio
           name="auto_delete"
           value="keep"
@@ -66,7 +69,7 @@ const AutoDeleteReportsGroup = ({
         <Text>
           {_('reports')}
         </Text>
-      </Layout>
+      </Divider>
     </FormGroup>
   );
 };

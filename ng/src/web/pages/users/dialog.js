@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -23,7 +24,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils.js';
 
 import {
@@ -45,6 +46,7 @@ import Radio from '../../components/form/radio.js';
 import Select2 from '../../components/form/select2.js';
 import TextField from '../../components/form/textfield.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 class Dialog extends React.Component {
@@ -96,7 +98,7 @@ class Dialog extends React.Component {
           <FormGroup
             title={_('Authentication')}
             flex="column">
-            <Layout flex box>
+            <Divider>
               <Radio
                 title={_('Password')}
                 name="auth_method"
@@ -109,9 +111,9 @@ class Dialog extends React.Component {
                 value={password}
                 onChange={onValueChange}
               />
-            </Layout>
+            </Divider>
             {settings.get('method:ldap_connect').enable === 'true' &&
-              <Layout flex box>
+              <Divider>
                 <Radio
                   title={_('LDAP Authentication Only')}
                   name="auth_method"
@@ -119,10 +121,10 @@ class Dialog extends React.Component {
                   checked={auth_method === AUTH_METHOD_LDAP}
                   onChange={onValueChange}
                 />
-              </Layout>
+              </Divider>
             }
             {settings.get('method:radius_connect').enable === 'true' &&
-              <Layout flex box>
+              <Divider>
                 <Radio
                   title={_('RADIUS Authentication Only')}
                   name="auth_method"
@@ -130,7 +132,7 @@ class Dialog extends React.Component {
                   checked={auth_method === AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
                 />
-              </Layout>
+              </Divider>
             }
           </FormGroup>
         }
@@ -138,7 +140,7 @@ class Dialog extends React.Component {
           <FormGroup
             title={_('Authentication')}
             flex="column">
-            <Layout flex box>
+            <Divider>
               <Radio
                 title={_('Password: Use existing Password')}
                 name="auth_method"
@@ -146,8 +148,8 @@ class Dialog extends React.Component {
                 checked={auth_method === AUTH_METHOD_PASSWORD}
                 onChange={onValueChange}
               />
-            </Layout>
-            <Layout flex box>
+            </Divider>
+            <Divider>
               <Radio
                 title={_('New Password')}
                 name="auth_method"
@@ -160,9 +162,9 @@ class Dialog extends React.Component {
                 value={password}
                 onChange={onValueChange}
               />
-            </Layout>
+            </Divider>
             {settings.get('method:ldap_connect').enable === 'true' &&
-              <Layout flex box>
+              <Divider>
                 <Radio
                   title={_('LDAP Authentication Only')}
                   name="auth_method"
@@ -170,10 +172,10 @@ class Dialog extends React.Component {
                   checked={auth_method === AUTH_METHOD_LDAP}
                   onChange={onValueChange}
                 />
-              </Layout>
+              </Divider>
             }
             {settings.get('method:radius_connect').enable === 'true' &&
-              <Layout flex box>
+              <Divider>
                 <Radio
                   title={_('RADIUS Authentication Only')}
                   name="auth_method"
@@ -181,7 +183,7 @@ class Dialog extends React.Component {
                   checked={auth_method === AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
                 />
-              </Layout>
+              </Divider>
             }
           </FormGroup>
         }
@@ -234,26 +236,24 @@ class Dialog extends React.Component {
           </FormGroup>
         }
 
-        <FormGroup
-          title={_('Host Access')}
-          flex="column">
-          <Layout flex box>
-            <Radio
-              name="hosts_allow"
-              title={_('Allow all and deny')}
-              value={ACCESS_ALLOW_ALL}
-              checked={hosts_allow === ACCESS_ALLOW_ALL}
-              onChange={onValueChange}
-            />
-            <Radio
-              name="hosts_allow"
-              title={_('Deny all and allow')}
-              value={ACCESS_DENY_ALL}
-              checked={hosts_allow === ACCESS_DENY_ALL}
-              onChange={onValueChange}
-            />
-          </Layout>
-          <Layout flex box>
+        <FormGroup title={_('Host Access')}>
+          <Divider flex="column">
+            <Divider>
+              <Radio
+                name="hosts_allow"
+                title={_('Allow all and deny')}
+                value={ACCESS_ALLOW_ALL}
+                checked={hosts_allow === ACCESS_ALLOW_ALL}
+                onChange={onValueChange}
+              />
+              <Radio
+                name="hosts_allow"
+                title={_('Deny all and allow')}
+                value={ACCESS_DENY_ALL}
+                checked={hosts_allow === ACCESS_DENY_ALL}
+                onChange={onValueChange}
+              />
+            </Divider>
             <TextField
               name="access_hosts"
               size="30"
@@ -261,29 +261,27 @@ class Dialog extends React.Component {
               value={access_hosts}
               onChange={onValueChange}
             />
-          </Layout>
+          </Divider>
         </FormGroup>
 
-        <FormGroup
-          title={_('Interface Access')}
-          flex="column">
-          <Layout flex box>
-            <Radio
-              name="ifaces_allow"
-              title={_('Allow all and deny')}
-              value={ACCESS_ALLOW_ALL}
-              checked={ifaces_allow === ACCESS_ALLOW_ALL}
-              onChange={onValueChange}
-            />
-            <Radio
-              name="ifaces_allow"
-              title={_('Deny all and allow')}
-              value={ACCESS_DENY_ALL}
-              checked={ifaces_allow === ACCESS_DENY_ALL}
-              onChange={onValueChange}
-            />
-          </Layout>
-          <Layout flex box>
+        <FormGroup title={_('Interface Access')}>
+          <Divider flex="column">
+            <Divider>
+              <Radio
+                name="ifaces_allow"
+                title={_('Allow all and deny')}
+                value={ACCESS_ALLOW_ALL}
+                checked={ifaces_allow === ACCESS_ALLOW_ALL}
+                onChange={onValueChange}
+              />
+              <Radio
+                name="ifaces_allow"
+                title={_('Deny all and allow')}
+                value={ACCESS_DENY_ALL}
+                checked={ifaces_allow === ACCESS_DENY_ALL}
+                onChange={onValueChange}
+              />
+            </Divider>
             <TextField
               name="access_ifaces"
               size="30"
@@ -291,7 +289,7 @@ class Dialog extends React.Component {
               value={access_ifaces}
               onChange={onValueChange}
             />
-          </Layout>
+          </Divider>
         </FormGroup>
 
       </Layout>

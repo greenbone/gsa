@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -28,6 +29,7 @@ import {classes, is_defined} from 'gmp/utils.js';
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 
+import Divider from '../layout/divider.js';
 import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
@@ -62,12 +64,14 @@ const CheckboxComponent = ({
   return (
     <div className={className}>
       <label>
-        <input {...other} type="checkbox" />
-        {is_defined(title) &&
-          <span>
-            {title}
-          </span>
-        }
+        <Divider>
+          <input {...other} type="checkbox" />
+          {is_defined(title) &&
+            <span>
+              {title}
+            </span>
+          }
+        </Divider>
         {children}
       </label>
     </div>

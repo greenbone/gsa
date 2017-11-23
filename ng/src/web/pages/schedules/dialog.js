@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -36,6 +37,7 @@ import TextField from '../../components/form/textfield.js';
 import DatePicker from '../../components/form/datepicker.js';
 import TimeZoneSelect from '../../components/form/timezoneselect.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 const TimeUnitSelect = props => {
@@ -89,22 +91,24 @@ const ScheduleDialog = ({
           name="date"
           value={date}
           onChange={onValueChange}/>
-        <Spinner
-          name="hour"
-          type="int"
-          min="0"
-          max="23"
-          size="2"
-          value={hour}
-          onChange={onValueChange}/> h
-        <Spinner
-          name="minute"
-          type="int"
-          min="0"
-          max="59"
-          size="2"
-          value={minute}
-          onChange={onValueChange}/> m
+        <Divider>
+          <Spinner
+            name="hour"
+            type="int"
+            min="0"
+            max="23"
+            size="2"
+            value={hour}
+            onChange={onValueChange}/> h
+          <Spinner
+            name="minute"
+            type="int"
+            min="0"
+            max="59"
+            size="2"
+            value={minute}
+            onChange={onValueChange}/> m
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Timezone')}>
@@ -115,31 +119,35 @@ const ScheduleDialog = ({
       </FormGroup>
 
       <FormGroup title={_('Period')}>
-        <Spinner
-          name="period"
-          type="int"
-          min="0"
-          size="3"
-          value={period}
-          onChange={onValueChange}/>
-        <TimeUnitSelect
-          name="period_unit"
-          value={period_unit}
-          onChange={onValueChange}/>
+        <Divider>
+          <Spinner
+            name="period"
+            type="int"
+            min="0"
+            size="3"
+            value={period}
+            onChange={onValueChange}/>
+          <TimeUnitSelect
+            name="period_unit"
+            value={period_unit}
+            onChange={onValueChange}/>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Duration')}>
-        <Spinner
-          name="duration"
-          type="int"
-          min="0"
-          size="3"
-          value={duration}
-          onChange={onValueChange}/>
-        <TimeUnitSelect
-          name="duration_unit"
-          value={duration_unit}
-          onChange={onValueChange}/>
+        <Divider>
+          <Spinner
+            name="duration"
+            type="int"
+            min="0"
+            size="3"
+            value={duration}
+            onChange={onValueChange}/>
+          <TimeUnitSelect
+            name="duration_unit"
+            value={duration_unit}
+            onChange={onValueChange}/>
+        </Divider>
       </FormGroup>
     </Layout>
   );
