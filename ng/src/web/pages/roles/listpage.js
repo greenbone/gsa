@@ -33,6 +33,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
@@ -45,7 +46,7 @@ import Table, {SORT_FIELDS} from './table.js';
 const ToolBarIcons = ({
   onRoleCreateClick,
 }, {capabilities}) => (
-  <Layout flex box>
+  <IconDivider>
     <HelpIcon
       page="roles"
       title={_('Help: Roles')}/>
@@ -54,7 +55,7 @@ const ToolBarIcons = ({
         title={_('New Role')}
         onClick={onRoleCreateClick}/>
     }
-  </Layout>
+  </IconDivider>
 );
 
 ToolBarIcons.propTypes = {
