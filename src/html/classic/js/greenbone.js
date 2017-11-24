@@ -1706,9 +1706,7 @@
         start_auto_refresh();
       });
       if (!global.autorefresh_enabled) {
-        var autorefresh_off = autorefresh.find('option[value="0"]');
-        autorefresh.prop('disabled', 'disabled');
-        autorefresh_off.prop ('selected', 'selected');
+        autorefresh.remove();
       }
     }
 
