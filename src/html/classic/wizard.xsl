@@ -68,7 +68,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </li>
           <li>
             <a href="/omp?cmd=wizard&amp;name=modify_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-              data-dialog-id="modify_task_wizard"
+              data-dialog-id="modify_task_wizard" data-button="{gsa:i18n ('Save', 'Action Verb')}"
                class="wizard-action-icon" data-name="modify_task">
               <xsl:value-of select="gsa:i18n ('Modify Task Wizard')"/>
             </a>
