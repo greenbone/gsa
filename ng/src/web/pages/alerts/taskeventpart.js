@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import Divider from '../../components/layout/divider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withPrefix from '../../utils/withPrefix.js';
@@ -43,8 +43,9 @@ const TaskEventPart = ({
     onEventChange,
   }) => {
   return (
-    <Layout flex box>
-      <Radio title={_('Task run status changed to')}
+    <Divider>
+      <Radio
+        title={_('Task run status changed to')}
         name="event"
         value={VALUE}
         checked={event === VALUE}
@@ -61,13 +62,13 @@ const TaskEventPart = ({
         <option value="Stop Requested">{_('Stop Requested')}</option>
         <option value="Stopped">{_('Stopped')}</option>
       </Select2>
-    </Layout>
+    </Divider>
   );
 };
 
 TaskEventPart.propTypes = {
-  prefix: PropTypes.string,
   event: PropTypes.string.isRequired,
+  prefix: PropTypes.string,
   status: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   onEventChange: PropTypes.func,

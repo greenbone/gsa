@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -36,6 +37,7 @@ import Radio from '../../components/form/radio.js';
 import Select2 from '../../components/form/select2.js';
 import TextField from '../../components/form/textfield.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {
@@ -75,22 +77,24 @@ const Dialog = ({
       </FormGroup>
 
       <FormGroup title={_('Base')} flex="column">
-        <Radio
-          name="base"
-          value={EMPTY_SCAN_CONFIG_ID}
-          checked={base === EMPTY_SCAN_CONFIG_ID}
-          title={_('Empty, static and fast')}
-          onChange={onValueChange}
-        />
-        <Radio
-          name="base"
-          value={FULL_AND_FAST_SCAN_CONFIG_ID}
-          checked={base === FULL_AND_FAST_SCAN_CONFIG_ID}
-          title={_('Full and fast')}
-          onChange={onValueChange}
-        />
+        <Divider flex="column">
+          <Radio
+            name="base"
+            value={EMPTY_SCAN_CONFIG_ID}
+            checked={base === EMPTY_SCAN_CONFIG_ID}
+            title={_('Empty, static and fast')}
+            onChange={onValueChange}
+          />
+          <Radio
+            name="base"
+            value={FULL_AND_FAST_SCAN_CONFIG_ID}
+            checked={base === FULL_AND_FAST_SCAN_CONFIG_ID}
+            title={_('Full and fast')}
+            onChange={onValueChange}
+          />
+        </Divider>
         {!is_empty(scanners) &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="base"
               value="0"
@@ -103,7 +107,7 @@ const Dialog = ({
               onChange={onValueChange}>
               {render_options(scanners)}
             </Select2>
-          </Layout>
+          </Divider>
         }
       </FormGroup>
 

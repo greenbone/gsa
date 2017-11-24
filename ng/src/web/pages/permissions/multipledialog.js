@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -77,7 +78,7 @@ const MultiplePermissionDialog = ({
         title={_('to')}
       >
         {capabilities.mayAccess('users') &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="subject_type"
               checked={subject_type === 'user'}
@@ -97,11 +98,11 @@ const MultiplePermissionDialog = ({
                 </option>
               ))}
             </Select2>
-          </Layout>
+          </Divider>
         }
 
         {capabilities.mayAccess('roles') &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="subject_type"
               checked={subject_type === 'role'}
@@ -123,11 +124,11 @@ const MultiplePermissionDialog = ({
                 );
               })}
             </Select2>
-          </Layout>
+          </Divider>
         }
 
         {capabilities.mayAccess('groups') &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="subject_type"
               checked={subject_type === 'group'}
@@ -147,7 +148,7 @@ const MultiplePermissionDialog = ({
                 </option>
               ))}
             </Select2>
-          </Layout>
+          </Divider>
         }
       </FormGroup>
       <FormGroup
@@ -195,11 +196,11 @@ const MultiplePermissionDialog = ({
 };
 
 MultiplePermissionDialog.propTypes = {
-  id: PropTypes.id.isRequired,
-  entity_type: PropTypes.string.isRequired,
   entity_name: PropTypes.string.isRequired,
+  entity_type: PropTypes.string.isRequired,
   group_id: PropTypes.id,
   groups: PropTypes.arrayLike,
+  id: PropTypes.id.isRequired,
   include_related: PropTypes.oneOf([
     CURRENT_RESOURCE_ONLY,
     INCLUDE_RELATED_RESOURCES,

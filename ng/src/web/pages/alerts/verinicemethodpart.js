@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -25,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -66,18 +68,20 @@ const VeriniceMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('Credential')}>
-        <Select2
-          name={prefix + 'verinice_server_credential'}
-          value={veriniceServerCredential}
-          onChange={onChange}>
-          {verinice_credential_opts}
-        </Select2>
-        <Layout flex box>
-          <NewIcon
-            title={_('Create a credential')}
-            value={['up']}
-            onClick={onNewCredentialClick}/>
-        </Layout>
+        <Divider>
+          <Select2
+            name={prefix + 'verinice_server_credential'}
+            value={veriniceServerCredential}
+            onChange={onChange}>
+            {verinice_credential_opts}
+          </Select2>
+          <Layout flex box>
+            <NewIcon
+              title={_('Create a credential')}
+              value={['up']}
+              onClick={onNewCredentialClick}/>
+          </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('verinice.PRO Report')}>

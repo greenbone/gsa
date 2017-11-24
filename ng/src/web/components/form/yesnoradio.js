@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -28,6 +29,7 @@ import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../layout/layout.js';
 
 import Radio from './radio.js';
@@ -40,26 +42,28 @@ const YesNoRadio = ({
     yesValue = YES_VALUE,
     noValue = NO_VALUE,
     onChange,
-    ...other,
+    ...other
   }) => {
   return (
     <Layout {...other} flex>
-      <Radio
-        title={_('Yes')}
-        value={yesValue}
-        name={name}
-        checked={value === yesValue}
-        convert={convert}
-        onChange={onChange}
-        disabled={disabled}/>
-      <Radio
-        title={_('No')}
-        value={noValue}
-        name={name}
-        checked={value === noValue}
-        convert={convert}
-        onChange={onChange}
-        disabled={disabled}/>
+      <Divider>
+        <Radio
+          title={_('Yes')}
+          value={yesValue}
+          name={name}
+          checked={value === yesValue}
+          convert={convert}
+          onChange={onChange}
+          disabled={disabled}/>
+        <Radio
+          title={_('No')}
+          value={noValue}
+          name={name}
+          checked={value === noValue}
+          convert={convert}
+          onChange={onChange}
+          disabled={disabled}/>
+      </Divider>
     </Layout>
   );
 };

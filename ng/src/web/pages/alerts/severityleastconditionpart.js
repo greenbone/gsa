@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -25,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import Divider from '../../components/layout/divider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withPrefix from '../../utils/withPrefix.js';
@@ -42,8 +43,9 @@ const SeverityLeastConditionPart = ({
     onChange,
   }) => {
   return (
-    <Layout flex box>
-      <Radio title={_('Severity at least')}
+    <Divider>
+      <Radio
+        title={_('Severity at least')}
         value={VALUE}
         checked={condition === VALUE}
         name="condition"
@@ -56,7 +58,7 @@ const SeverityLeastConditionPart = ({
         min="0"
         size="5"
         onChange={onChange}/>
-    </Layout>
+    </Divider>
   );
 };
 

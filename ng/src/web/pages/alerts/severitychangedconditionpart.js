@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Layout from '../../components/layout/layout.js';
+import Divider from '../../components/layout/divider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withPrefix from '../../utils/withPrefix.js';
@@ -42,8 +42,9 @@ const SeverityChangedConditionPart = ({
     onChange,
   }) => {
   return (
-    <Layout flex box>
-      <Radio title={_('Severity Level')}
+    <Divider>
+      <Radio
+        title={_('Severity Level')}
         value={VALUE}
         name="condition"
         checked={condition === VALUE}
@@ -57,7 +58,7 @@ const SeverityChangedConditionPart = ({
         <option value="increased">{_('increased')}</option>
         <option value="decreased">{_('decreased')}</option>
       </Select2>
-    </Layout>
+    </Divider>
   );
 };
 

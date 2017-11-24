@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -25,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -49,21 +51,23 @@ const SendMethodPart = ({
       box
       grow="1">
       <FormGroup title={_('Send to host')}>
-        <TextField
-          name={prefix  + 'send_host'}
-          value={sendHost}
-          size="30"
-          maxLength="256"
-          onChange={onChange}/>
-        <Layout flex box>
-          {_('on port')}
-        </Layout>
-        <TextField
-          name={prefix + 'send_port'}
-          value={sendPort}
-          maxLength="6"
-          size="6"
-          onChange={onChange}/>
+        <Divider>
+          <TextField
+            name={prefix + 'send_host'}
+            value={sendHost}
+            size="30"
+            maxLength="256"
+            onChange={onChange}/>
+          <Layout flex box>
+            {_('on port')}
+          </Layout>
+          <TextField
+            name={prefix + 'send_port'}
+            value={sendPort}
+            maxLength="6"
+            size="6"
+            onChange={onChange}/>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Report')}>

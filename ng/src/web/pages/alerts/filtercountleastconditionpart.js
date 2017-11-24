@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -46,8 +47,9 @@ const FilterCountLeastConditionPart = ({
     onChange,
   }) => {
   return (
-    <Layout flex box>
-      <Radio title={_('Filter')}
+    <Divider>
+      <Radio
+        title={_('Filter')}
         value={VALUE}
         name="condition"
         checked={condition === VALUE}
@@ -59,7 +61,7 @@ const FilterCountLeastConditionPart = ({
         onChange={onChange}>
         {render_options(filters)}
       </Select2>
-      <Layout flex box>
+      <Layout>
         {_('matches at least')}
       </Layout>
       <Spinner
@@ -72,13 +74,13 @@ const FilterCountLeastConditionPart = ({
       <Layout flex box>
         {_('result(s) NVT(s)')}
       </Layout>
-    </Layout>
+    </Divider>
   );
 };
 
 FilterCountLeastConditionPart.propTypes = {
-  atLeastFilterId: PropTypes.id,
   atLeastCount: PropTypes.number.isRequired,
+  atLeastFilterId: PropTypes.id,
   condition: PropTypes.string.isRequired,
   filters: PropTypes.arrayLike.isRequired,
   prefix: PropTypes.string,

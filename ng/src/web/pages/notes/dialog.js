@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -26,6 +27,7 @@ import React from 'react';
 import _, {datetime} from 'gmp/locale.js';
 import {is_defined, is_empty, parse_float} from 'gmp/utils.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -69,7 +71,7 @@ const NoteDialog = ({
     onValueChange,
   }) => {
 
-  let is_edit = is_defined(note);
+  const is_edit = is_defined(note);
 
   return (
     <Layout flex="column">
@@ -116,7 +118,7 @@ const NoteDialog = ({
           title={_('yes, always')}
           onChange={onValueChange}/>
         {is_edit && note.isActive() && !is_empty(note.end_time) &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="active"
               value="-2"
@@ -124,9 +126,9 @@ const NoteDialog = ({
               title={_('yes, until')}
               onChange={onValueChange}/>
             <Text>{datetime(note.end_time)}</Text>
-          </Layout>
+          </Divider>
         }
-        <Layout flex box>
+        <Divider>
           <Radio
             name="active"
             value="1"
@@ -143,7 +145,7 @@ const NoteDialog = ({
             onChange={onValueChange}
             disabled={active !== '1'}/>
           <Text>{_('days')}</Text>
-        </Layout>
+        </Divider>
         <Radio
           name="active"
           value="0"
@@ -160,7 +162,7 @@ const NoteDialog = ({
           checked={hosts === ''}
           onChange={onValueChange}>
         </Radio>
-        <Layout flex box>
+        <Divider>
           <Radio
             name="hosts"
             value="--"
@@ -175,7 +177,7 @@ const NoteDialog = ({
               value={hosts_manual}
               onChange={onValueChange}/>
           }
-        </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Location')}>
@@ -186,7 +188,7 @@ const NoteDialog = ({
           checked={port === ''}
           onChange={onValueChange}>
         </Radio>
-        <Layout flex box>
+        <Divider>
           <Radio
             name="port"
             value="--"
@@ -201,7 +203,7 @@ const NoteDialog = ({
               disabled={port !== '--'}
               onChange={onValueChange}/>
           }
-        </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Severity')}>
@@ -213,7 +215,7 @@ const NoteDialog = ({
           onChange={onValueChange}>
         </Radio>
         {is_edit && !fixed &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="severity"
               value={0.1}
@@ -230,10 +232,10 @@ const NoteDialog = ({
               convert={parse_float}
               onChange={onValueChange}>
             </Radio>
-          </Layout>
+          </Divider>
         }
         {!is_edit && !fixed &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="severity"
               value={0.1}
@@ -250,10 +252,10 @@ const NoteDialog = ({
               convert={parse_float}
               onChange={onValueChange}>
             </Radio>
-          </Layout>
+          </Divider>
         }
         {fixed &&
-          <Layout flex box>
+          <Divider>
             <Radio
               name="severity"
               value={severity}
@@ -266,7 +268,7 @@ const NoteDialog = ({
               convert={parse_float}
               onChange={onValueChange}>
             </Radio>
-          </Layout>
+          </Divider>
         }
       </FormGroup>
 
@@ -277,7 +279,7 @@ const NoteDialog = ({
           title={_('Any')}
           checked={task_id === ''}
           onChange={onValueChange}/>
-        <Layout flex box>
+        <Divider>
           <Radio
             name="task_id"
             value="0"
@@ -293,7 +295,7 @@ const NoteDialog = ({
               {render_options(tasks)}
             </Select2>
           }
-        </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Result')}>
@@ -303,7 +305,7 @@ const NoteDialog = ({
           title={_('Any')}
           checked={result_id === ''}
           onChange={onValueChange}/>
-        <Layout flex box>
+        <Divider>
           <Radio
             name="result_id"
             value="0"
@@ -322,7 +324,7 @@ const NoteDialog = ({
               disabled={result_id !== '0'}
               onChange={onValueChange}/>
           }
-        </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup title={_('Text')}>
@@ -341,23 +343,23 @@ NoteDialog.propTypes = {
   active: PropTypes.oneOf(['0', '1', '-1', '-2']),
   days: PropTypes.number,
   fixed: PropTypes.bool,
-  hosts_manual: PropTypes.string,
   hosts: PropTypes.string,
-  note_id: PropTypes.id,
+  hosts_manual: PropTypes.string,
   note: PropTypes.model,
+  note_id: PropTypes.id,
   note_severity: PropTypes.number,
   nvt: PropTypes.model,
   oid: PropTypes.string,
-  port_manual: PropTypes.string,
   port: PropTypes.string,
+  port_manual: PropTypes.string,
   result_id: PropTypes.id,
   result_name: PropTypes.string,
   result_uuid: PropTypes.id,
   severity: PropTypes.number,
   task_id: PropTypes.id,
   task_name: PropTypes.string,
-  tasks: PropTypes.arrayLike,
   task_uuid: PropTypes.id,
+  tasks: PropTypes.arrayLike,
   text: PropTypes.string,
   onValueChange: PropTypes.func.isRequired,
 };

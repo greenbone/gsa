@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -61,6 +62,7 @@ import TextField from '../../components/form/textfield.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
@@ -87,11 +89,11 @@ class ScannerSelect extends React.Component {
   }
 
   handleScannerChange(value, name) {
-    let {scanners, scanConfigs, onChange} = this.props;
+    const {scanners, scanConfigs, onChange} = this.props;
     let config_id;
 
-    let scanner = get_scanner(scanners, value);
-    let scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
+    const scanner = get_scanner(scanners, value);
+    const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
 
     if (scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner_type === SLAVE_SCANNER_TYPE) {
@@ -115,7 +117,7 @@ class ScannerSelect extends React.Component {
   }
 
   render() {
-    let {
+    const {
       changeTask,
       scannerId,
       scanners,
@@ -214,7 +216,7 @@ const TaskDialog = ({
 
   const osp_config_id = select_save_id(scan_configs[OSP_SCAN_CONFIG_TYPE],
     config_id);
-  const openvas_config_id =  select_save_id(
+  const openvas_config_id = select_save_id(
     scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id);
 
   return (
@@ -240,60 +242,67 @@ const TaskDialog = ({
       </FormGroup>
 
       <FormGroup title={_('Scan Targets')}>
-        <Select2
-          name="target_id"
-          disabled={!change_task}
-          onChange={onValueChange}
-          value={target_id}>
-          {target_opts}
-        </Select2>
-        {change_task &&
-          <Layout flex box>
-            <NewIcon
-              onClick={onNewTargetClick}
-              title={_('Create a new target')}/>
-          </Layout>
-        }
+        <Divider>
+          <Select2
+            name="target_id"
+            disabled={!change_task}
+            onChange={onValueChange}
+            value={target_id}>
+            {target_opts}
+          </Select2>
+          {change_task &&
+            <Layout flex box>
+              <NewIcon
+                onClick={onNewTargetClick}
+                title={_('Create a new target')}/>
+            </Layout>
+          }
+        </Divider>
       </FormGroup>
 
-      <FormGroup condition={capabilities.mayOp('get_alerts')}
+      <FormGroup
+        condition={capabilities.mayOp('get_alerts')}
         title={_('Alerts')}>
-        <Select2
-          name="alert_ids"
-          multiple="multiple"
-          id="alert_ids"
-          onChange={onValueChange}
-          value={alert_ids}>
-          {alert_opts}
-        </Select2>
-        <Layout flex box>
-          <NewIcon
-            title={_('Create a new alert')}
-            onClick={onNewAlertClick}/>
-        </Layout>
+        <Divider>
+          <Select2
+            name="alert_ids"
+            multiple="multiple"
+            id="alert_ids"
+            onChange={onValueChange}
+            value={alert_ids}>
+            {alert_opts}
+          </Select2>
+          <Layout flex box>
+            <NewIcon
+              title={_('Create a new alert')}
+              onClick={onNewAlertClick}/>
+          </Layout>
+        </Divider>
       </FormGroup>
 
       <FormGroup
         condition={capabilities.mayOp('get_schedules')}
         title={_('Schedule')}>
-        <Select2
-          name="schedule_id"
-          value={schedule_id}
-          onChange={onValueChange}>
-          {schedule_opts}
-        </Select2>
-        <Checkbox
-          name="schedule_periods"
-          checked={schedule_periods === YES_VALUE}
-          checkedValue={YES_VALUE}
-          unCheckedValue={NO_VALUE}
-          onChange={onValueChange}
-          title={_('Once')}/>
-        <Layout flex box>
-          <NewIcon
-            title={_('Create a new schedule')}
-            onClick={onNewScheduleClick}/>
-        </Layout>
+        <Divider>
+          <Select2
+            name="schedule_id"
+            value={schedule_id}
+            onChange={onValueChange}>
+            {schedule_opts}
+          </Select2>
+          <Checkbox
+            name="schedule_periods"
+            checked={schedule_periods === YES_VALUE}
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
+            onChange={onValueChange}
+            title={_('Once')}/>
+          <Layout flex box>
+            <NewIcon
+              title={_('Create a new schedule')}
+              onClick={onNewScheduleClick}/>
+          </Layout>
+        </Divider>
       </FormGroup>
 
 
@@ -395,7 +404,8 @@ const TaskDialog = ({
                 </option>
               </Select2>
             </FormGroup>
-            <FormGroup titleSize="4"
+            <FormGroup
+              titleSize="4"
               title={_('Maximum concurrently executed NVTs per host')}>
               <Spinner
                 name="max_checks"
@@ -404,7 +414,8 @@ const TaskDialog = ({
                 maxLength="10"
                 onChange={onValueChange}/>
             </FormGroup>
-            <FormGroup titleSize="4"
+            <FormGroup
+              titleSize="4"
               title={_('Maximum concurrently scanned hosts')}>
               <Spinner
                 name="max_hosts"
@@ -440,28 +451,31 @@ const TaskDialog = ({
         tags.length > 0 &&
         <h3>{_('Tag')}</h3>
       }
-      <FormGroup condition={capabilities.mayAccess('tags') &&
+      <FormGroup
+        condition={capabilities.mayAccess('tags') &&
         capabilities.mayCreate('task') && tags.length > 0}>
-        <Checkbox
-          name="add_tag"
-          onChange={onValueChange}
-          checkedValue={YES_VALUE}
-          unCheckedValue={NO_VALUE}
-          checked={add_tag === YES_VALUE}
-          title={_('Add Tag:')}/>
-        <Select2
-          name="tag_name"
-          onChange={onValueChange}
-          value={tag_name}>
-          {tag_opts}
-        </Select2>
-        <Text>
-          {_('with Value')}
-        </Text>
-        <TextField
-          name="tag_value"
-          value={tag_value}
-          onChange={onValueChange}/>
+        <Divider>
+          <Checkbox
+            name="add_tag"
+            onChange={onValueChange}
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
+            checked={add_tag === YES_VALUE}
+            title={_('Add Tag:')}/>
+          <Select2
+            name="tag_name"
+            onChange={onValueChange}
+            value={tag_name}>
+            {tag_opts}
+          </Select2>
+          <Text>
+            {_('with Value')}
+          </Text>
+          <TextField
+            name="tag_value"
+            value={tag_value}
+            onChange={onValueChange}/>
+        </Divider>
       </FormGroup>
 
     </Layout>
@@ -496,8 +510,8 @@ TaskDialog.propTypes = {
   schedules: PropTypes.array,
   source_iface: PropTypes.string,
   tag_name: PropTypes.string,
-  tags: PropTypes.array,
   tag_value: PropTypes.string,
+  tags: PropTypes.array,
   target_id: PropTypes.idOrZero,
   targets: PropTypes.array,
   task: PropTypes.model,
