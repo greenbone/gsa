@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -23,35 +24,85 @@
 
 import React from 'react';
 
-import {classes} from 'gmp/utils.js';
+import _ from 'gmp/locale.js';
+
+import LinkConfirmationDialog from '../dialog/linkconfirmationdialog.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import {withTextOnly} from './link.js';
 
-const ExternalLink = ({
-  to,
-  className,
-  children,
-  ...props
-}) => {
+class ExternalLink extends React.Component {
+  constructor() {
+    super();
 
-  className = classes(className, 'external-link');
+    this.state = {
+      dialogvisible: false,
+    };
 
-  return (
-    <a
-      {...props}
-      href={to}
-      className={className}
-      rel="noopener noreferrer"
-      target="_blank">
-      {children}
-    </a>
-  );
-};
+    this.handleClick = this.handleClick.bind(this);
+    this.handleCloseDialog = this.handleCloseDialog.bind(this);
+    this.handleOpenLink = this.handleOpenLink.bind(this);
+  }
+
+  handleClick(event) {
+    event.preventDefault();
+    this.setState({
+      dialogvisible: true,
+    });
+  }
+
+  handleCloseDialog() {
+    this.setState({
+      dialogvisible: false,
+    });
+  }
+
+  handleOpenLink() {
+    const url = this.props.to;
+    window.open(url, '_blank', 'noopener');
+  }
+
+  render() {
+    const {
+      dialogvisible,
+    } = this.state;
+
+    const {
+      children,
+      to,
+      ...props
+    } = this.props;
+
+    const dialogtitle = _('You are leaving GSA');
+    const dialogtext = _('This dialog will open a new window for {{- to}} ' +
+      'if you click on "follow link". Following this link is on your own ' +
+      'responsibility. Greenbone does not endorse the content you will ' +
+      'see there.', {to});
+    return (
+      <span>
+        <a
+          {...props}
+          href={to}
+          onClick={this.handleClick}
+        >
+          {children}
+        </a>
+        <LinkConfirmationDialog
+          visible={dialogvisible}
+          onClose={this.handleCloseDialog}
+          onResumeClick={this.handleOpenLink}
+          text={dialogtext}
+          title={dialogtitle}
+          to={to}
+          width="500px"
+        />
+      </span>
+    );
+  };
+}
 
 ExternalLink.propTypes = {
-  className: PropTypes.string,
   to: PropTypes.string.isRequired,
 };
 
