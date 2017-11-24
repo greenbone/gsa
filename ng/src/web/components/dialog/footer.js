@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -39,18 +40,21 @@ const StyledLayout = glamorous(Layout)({
   padding: '10px 15px 10px 15px',
 });
 
-const DialogFooter = ({title, onClick}) => (
+const DialogFooter = ({title, onClick, loading = false}) => (
   <StyledLayout
     align={['end', 'center']}>
     <Button
       onClick={onClick}
-      title={title}>
+      title={title}
+      loading={loading}
+    >
       {title}
     </Button>
   </StyledLayout>
 );
 
 DialogFooter.propTypes = {
+  loading: PropTypes.bool,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };
@@ -58,4 +62,3 @@ DialogFooter.propTypes = {
 export default DialogFooter;
 
 // vim: set ts=2 sw=2 tw=80:
-

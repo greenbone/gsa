@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -42,7 +43,9 @@ class SaveDialogContent extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {};
+    this.state = {
+      loading: false,
+    };
 
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -52,9 +55,10 @@ class SaveDialogContent extends React.Component {
   handleSaveClick(state) {
     const {onSave} = this.props;
 
-    if (onSave) {
+    if (onSave && !this.state.loading) {
       const promise = onSave(state);
       if (is_defined(promise)) {
+        this.setState({loading: true});
         promise.then(
           () => this.handleClose(),
           error => this.setError(error)
@@ -72,12 +76,18 @@ class SaveDialogContent extends React.Component {
 
   handleClose() {
     const {close} = this.props;
-    this.setState({error: undefined});
+    this.setState({
+      error: undefined,
+      loading: false,
+    });
     close();
   }
 
   setError(error) {
-    this.setState({error: error.message});
+    this.setState({
+      error: error.message,
+      loading: false,
+    });
   }
 
   render() {
@@ -116,6 +126,7 @@ class SaveDialogContent extends React.Component {
             </ScrollableContent>
             <DialogFooter
               title={_('Save')}
+              loading={this.state.loading}
               onClick={() => this.handleSaveClick(state)}
             />
           </DialogContent>
