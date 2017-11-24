@@ -452,12 +452,17 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default Alert') {
         const id = all_possible_settings[item];
-        promises.push(gmp.alert.get({id}).then(response => {
-          const {name} = response.data;
-          defaults_settings[item] = name;
-          initial_data.defaultalert = id;
-          this.setState({defaults_settings});
-        }));
+        if (is_empty(id)) {
+          defaults_settings[item] = '';
+        }
+        else {
+          promises.push(gmp.alert.get({id}).then(response => {
+            const {name} = response.data;
+            defaults_settings[item] = name;
+            initial_data.defaultalert = id;
+            this.setState({defaults_settings});
+          }));
+        }
       }
       else if (item === 'Default OpenVAS Scan Config') {
         const id = all_possible_settings[item];
