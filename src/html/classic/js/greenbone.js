@@ -490,7 +490,7 @@
       var button = $(this);
       if (button.button('option', 'label') !== 'Close') {
         this.label = button.button('option', 'label');
-        if (this.label !== 'OK') {
+        if (this.label === 'Create' || this.label === 'Save') {
           button.button('option', 'label', this.label.substring(
                 0, this.label.length - 1) + 'ing ...');
         }
