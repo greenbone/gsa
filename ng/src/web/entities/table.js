@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -84,6 +85,7 @@ class EntitiesTable extends React.Component {
     const PaginationComponent = is_defined(props.pagination) ?
       props.pagination : Pagination;
     const BodyComponent = is_defined(props.body) ? props.body : TableBody;
+    const doubleRow = is_defined(props.doubleRow) ? props.doubleRow : false;
 
     const other = exclude_object_props(props, exclude_props);
 
@@ -156,7 +158,11 @@ class EntitiesTable extends React.Component {
         grow="1"
         className="entities-table">
         {pagination}
-        <StripedTable header={header} footer={footer}>
+        <StripedTable
+          header={header}
+          footer={footer}
+          doubleRow={doubleRow}
+        >
           {body}
         </StripedTable>
         {footnote ?
@@ -175,6 +181,7 @@ class EntitiesTable extends React.Component {
 
 EntitiesTable.propTypes = {
   body: PropTypes.componentOrFalse,
+  doubleRow: PropTypes.bool,
   emptyTitle: PropTypes.string,
   entities: PropTypes.collection,
   filter: PropTypes.filter,

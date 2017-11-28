@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -43,7 +44,42 @@ const StripedTable = glamorous(Table)({
       background: '#DDDDDD',
     },
   },
-});
+},
+  ({doubleRow}) => {
+    if (doubleRow) {
+      return {
+        // FIXME when details are toggled, coloring is scrambled up, due to
+        // adding just one more tr and messing with the groups of two
+        '@media screen': {
+          // overwrite standard striped coloring
+          ['& > tbody:nth-of-type(even), ' +
+          '& > tbody:only-of-type > tr:nth-of-type(even)']: {
+            background: '#FFFFFF',
+          },
+          // Think in groups of 4 and color every two rows identical
+          ['& > tbody:nth-of-type(even), ' +
+          '& > tbody:only-of-type > tr:nth-of-type(4n), ' +
+          '& > tbody:only-of-type > tr:nth-of-type(4n-1)']: {
+            background: '#EEEEEE',
+          },
+          ['& > tbody:not(:only-of-type):hover, ' +
+          '& > tbody:only-of-type > tr:hover,' +
+          '& > tbody:only-of-type > tr:hover + tr']: {
+            background: '#DDDDDD',
+          },
+          // FIXME hovering groups don't fit when mouse over even rows
+          ['& > tbody:only-of-type > tr:nth-of-type(even):hover,' +
+          // the following does not work of course, but it should show
+          // what is intended. "- tr" can't work, as html works from top to
+          // bottom only
+          '& > tbody:only-of-type > tr:nth-of-type(even):hover - tr']: {
+            background: '#DDDDDD',
+          },
+        },
+      };
+    }
+  }
+);
 
 export default StripedTable;
 
