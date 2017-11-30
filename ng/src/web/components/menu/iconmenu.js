@@ -35,10 +35,13 @@ import withIconSize from '../icon/withIconSize.js';
 
 const Div = glamorous.div({
   position: 'relative',
+
+  // to close gap between icon and menu, which caused problems in Firefox
+  marginTop: '-3px',
   display: 'none',
   '.icon-menu:hover &': {
     display: 'block',
-  }
+  },
 });
 
 const List = glamorous.ul({
