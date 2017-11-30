@@ -46,7 +46,6 @@ import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 import Wrapper from '../../components/layout/wrapper.js';
 
-import AssetLink from '../../components/link/assetlink.js';
 import DetailsLink from '../../components/link/detailslink.js';
 import InnerLink from '../../components/link/innerlink.js';
 import LegacyLink from '../../components/link/legacylink.js';
@@ -196,11 +195,11 @@ const Details = ({
                 {_('Host')}
               </TableData>
               <TableData>
-                <AssetLink
+                <DetailsLink
                   type="host"
                   id={host.id}>
                   {host.name}
-                </AssetLink>
+                </DetailsLink>
               </TableData>
             </TableRow>
             <TableRow>
