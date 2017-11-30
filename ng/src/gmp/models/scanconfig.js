@@ -25,7 +25,6 @@ import {
   for_each,
   is_defined,
   is_empty,
-  shallow_copy,
   map,
 } from '../utils.js';
 
@@ -49,7 +48,7 @@ class ScanConfig extends Model {
   static entity_type = 'config'; // TODO should be scan_config in future
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     // for displaying the selected nvts (1 of 33) an object for accessing the
     // family by name is required
@@ -108,19 +107,19 @@ class ScanConfig extends Model {
       ret.nvts = {};
     }
 
-    let nvt_preferences = [];
-    let scanner_preferences = [];
+    const nvt_preferences = [];
+    const scanner_preferences = [];
 
     if (is_defined(elem.preferences)) {
       for_each(elem.preferences.preference, preference => {
-        let pref = shallow_copy(preference);
+        const pref = {...preference};
         if (is_empty(pref.nvt.name)) {
           delete pref.nvt;
 
           scanner_preferences.push(pref);
         }
         else {
-          let nvt = shallow_copy(pref.nvt);
+          const nvt = {...pref.nvt};
           pref.nvt = nvt;
           pref.nvt.oid = preference.nvt._oid;
           delete pref.nvt._oid;
