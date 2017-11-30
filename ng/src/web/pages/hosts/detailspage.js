@@ -43,7 +43,6 @@ import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
-import InfoLink from '../../components/link/infolink.js';
 import Link from '../../components/link/link.js';
 
 import InfoTable from '../../components/table/infotable.js';
@@ -199,17 +198,17 @@ const Details = ({
               {_('OS')}
             </TableData>
             <TableData>
-              <InfoLink
+              <DetailsLink
                 type="cpe"
                 textOnly={!is_defined(os_cpe)}
-                name={os_cpe}
+                id={os_cpe}
               >
                 <OsIcon
                   displayOsName
                   osCpe={os_cpe}
                   osTxt={os_txt}
                 />
-              </InfoLink>
+              </DetailsLink>
             </TableData>
           </TableRow>
 

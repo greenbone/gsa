@@ -37,7 +37,6 @@ import {render_nvt_name} from '../../utils/render.js';
 import DetailsBlock from '../../entity/block.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
-import InfoLink from '../../components/link/infolink.js';
 
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
@@ -145,15 +144,15 @@ const ResultDetails = ({
                 </TableData>
                 <TableData>
                   {is_oval && (
-                    <InfoLink
-                      type="oval_def"
+                    <DetailsLink
+                      type="ovaldef"
                       id={oid}
                       title={_('View Details of OVAL Definition {{oid}}',
                         {oid})}
                       textOnly={!links}
                     >
                       {oid}
-                    </InfoLink>
+                    </DetailsLink>
                   )}
                   {is_defined(oid) &&
                       oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
@@ -196,13 +195,13 @@ const ResultDetails = ({
                   {_('Product')}
                 </TableData>
                 <TableData>
-                  <InfoLink
+                  <DetailsLink
                     type="cpe"
-                    name={detection_details.product}
+                    id={detection_details.product}
                     textOnly={!links}
                   >
                     {detection_details.product}
-                  </InfoLink>
+                  </DetailsLink>
                 </TableData>
               </TableRow>
               <TableRow>
@@ -210,7 +209,7 @@ const ResultDetails = ({
                   {_('Method')}
                 </TableData>
                 <TableData>
-                  <InfoLink
+                  <DetailsLink
                     id={detection_details.source_oid}
                     type={
                       detection_details.source_oid.startsWith('CVE-') ?
@@ -222,7 +221,7 @@ const ResultDetails = ({
                       detection_details.source_name + ' (OID: ' +
                         detection_details.source_oid + ')'
                     }
-                  </InfoLink>
+                  </DetailsLink>
                 </TableData>
               </TableRow>
               <TableRow>

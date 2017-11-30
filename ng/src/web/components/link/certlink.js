@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import InfoLink from './infolink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 
 const CertLink = ({
     id,
@@ -45,21 +45,21 @@ const CertLink = ({
   let title;
 
   if (type === 'CERT-Bund') {
-    info_type = 'cert_bund_adv';
+    info_type = 'certbundadv';
     title = _('View details fo CERT-Bund Advisory {{name}}', {name: id});
   }
   else if (type === 'DFN-CERT') {
     title = _('View details fo DFN-CERT Advisory {{name}}', {name: id});
-    info_type = 'dfn_cert_adv';
+    info_type = 'dfncertadv';
   }
   return (
-    <InfoLink
+    <DetailsLink
       title={title}
-      name={id}
+      id={id}
       type={info_type}
       textOnly={textOnly}>
       {id}
-    </InfoLink>
+    </DetailsLink>
   );
 };
 
