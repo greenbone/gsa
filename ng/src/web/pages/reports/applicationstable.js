@@ -29,7 +29,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
-import InfoLink from '../../components/link/infolink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 
 import TableData from '../../components/table/data.js';
 import TableHead from '../../components/table/head.js';
@@ -88,14 +88,13 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <InfoLink
-          legacy
+        <DetailsLink
           type="cpe"
-          name={name}
+          id={name}
           textOnly={!links}
         >
           {name}
-        </InfoLink>
+        </DetailsLink>
       </TableData>
       <TableData>
         {hosts.count}

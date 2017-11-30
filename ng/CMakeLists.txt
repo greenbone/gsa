@@ -238,7 +238,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/link/cvelink.js
      ${NG_SRC_DIR}/src/web/components/link/detailslink.js
      ${NG_SRC_DIR}/src/web/components/link/externallink.js
-     ${NG_SRC_DIR}/src/web/components/link/infolink.js
      ${NG_SRC_DIR}/src/web/components/link/innerlink.js
      ${NG_SRC_DIR}/src/web/components/link/legacylink.js
      ${NG_SRC_DIR}/src/web/components/link/link.js
