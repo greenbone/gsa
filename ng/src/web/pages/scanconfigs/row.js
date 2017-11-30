@@ -93,16 +93,17 @@ const Row = ({
     actions,
     entity,
     links = true,
+    onToggleDetailsClick,
     ...props
   }) => {
   return (
     <TableRow>
       <EntityNameTableData
-        legacy
         entity={entity}
         link={links}
-        type="config"
+        type="scanconfig"
         displayName={_('Scan Config')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData flex align="end">
         {na(entity.families.count)}
@@ -138,6 +139,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default withEntityRow(withEntityActions(Actions))(Row);
