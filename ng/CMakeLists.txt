@@ -233,7 +233,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/withLayout.js
      ${NG_SRC_DIR}/src/web/components/layout/wrapper.js
      ${NG_SRC_DIR}/src/web/components/loading/loading.js
-     ${NG_SRC_DIR}/src/web/components/link/assetlink.js
      ${NG_SRC_DIR}/src/web/components/link/certlink.js
      ${NG_SRC_DIR}/src/web/components/link/cvelink.js
      ${NG_SRC_DIR}/src/web/components/link/detailslink.js
