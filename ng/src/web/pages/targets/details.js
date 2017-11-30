@@ -144,7 +144,6 @@ const TargetDetails = ({
               </TableData>
               <TableData>
                 <DetailsLink
-                  legacy
                   id={port_list.id}
                   type="port_list">
                   {port_list.name}
@@ -170,7 +169,6 @@ const TargetDetails = ({
                   </TableData>
                   <TableData>
                     <DetailsLink
-                      legacy
                       id={ssh_credential.id}
                       type="credential">
                       {ssh_credential.name}
@@ -187,7 +185,6 @@ const TargetDetails = ({
                   </TableData>
                   <TableData>
                     <DetailsLink
-                      legacy
                       id={smb_credential.id}
                       type="credential">
                       {smb_credential.name}
@@ -203,7 +200,6 @@ const TargetDetails = ({
                   </TableData>
                   <TableData>
                     <DetailsLink
-                      legacy
                       id={esxi_credential.id}
                       type="credential">
                       {esxi_credential.name}
@@ -219,7 +215,6 @@ const TargetDetails = ({
                   </TableData>
                   <TableData>
                     <DetailsLink
-                      legacy
                       id={snmp_credential.id}
                       type="credential">
                       {snmp_credential.name}

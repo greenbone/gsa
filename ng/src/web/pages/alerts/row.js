@@ -110,7 +110,6 @@ const render_filter = (filter, caps, links = true) => {
 
   return (
     <DetailsLink
-      legacy
       textOnly={!caps.mayAccess('filters') || !links}
       type="filter"
       id={filter.id}>

@@ -106,7 +106,6 @@ const UserDetails = ({
               <Divider>
                 {roles.map(role => (
                   <DetailsLink
-                    legacy
                     textOnly={!links}
                     key={role.id}
                     type="role"
@@ -126,7 +125,6 @@ const UserDetails = ({
               <Divider>
                 {groups.map(group => (
                   <DetailsLink
-                    legacy
                     textOnly={!links}
                     type="group"
                     key={group.id}

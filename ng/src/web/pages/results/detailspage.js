@@ -222,7 +222,6 @@ const Details = ({
           <Divider>
             {user_tags.map(tag => (
               <DetailsLink
-                legacy
                 key={tag.id}
                 id={tag.id}
                 type="tag"

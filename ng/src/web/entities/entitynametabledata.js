@@ -43,7 +43,6 @@ import {RowDetailsToggle} from './row.js';
 
 const EntityNameTableData = ({
   entity,
-  legacy = false,
   links = true,
   displayName,
   userName,
@@ -73,7 +72,6 @@ const EntityNameTableData = ({
               {entity.name}
             </RowDetailsToggle> :
             <DetailsLink
-              legacy={legacy}
               type={type}
               id={entity.id}
               textOnly={!links}>
@@ -98,7 +96,6 @@ const EntityNameTableData = ({
 EntityNameTableData.propTypes = {
   displayName: PropTypes.string.isRequired,
   entity: PropTypes.model.isRequired,
-  legacy: PropTypes.bool,
   links: PropTypes.bool,
   type: PropTypes.string,
   userName: PropTypes.string.isRequired,

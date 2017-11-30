@@ -147,7 +147,6 @@ const Details = ({
               {general_permissions.map(perm => (
                 <TableRow key={perm.id}>
                   <EntityNameTableData
-                    legacy
                     entity={perm}
                     link={links}
                     type="permission"

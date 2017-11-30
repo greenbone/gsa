@@ -987,7 +987,6 @@ class UserSettings extends React.Component {
                         <DetailsLink
                           id={id}
                           type={perm}
-                          legacy
                         >
                           {defaults_settings[name]}
                         </DetailsLink>
@@ -1030,7 +1029,6 @@ class UserSettings extends React.Component {
                           <DetailsLink
                             id={id}
                             type="filter"
-                            legacy
                           >
                             {filter_settings[name]}
                           </DetailsLink>

@@ -362,8 +362,7 @@ const ScannerDetails = ({
                     <DetailsLink
                       key={config.id}
                       id={config.id}
-                      type="config"
-                      legacy
+                      type="scanconfig"
                     >
                       {config.name}
                     </DetailsLink>
