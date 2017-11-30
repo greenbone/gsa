@@ -26,6 +26,7 @@ import {
   is_defined,
   is_empty,
   shallow_copy,
+  map,
 } from '../utils.js';
 
 import {parse_int} from '../parser.js';
@@ -50,12 +51,14 @@ class ScanConfig extends Model {
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
-    let families = {};
+    // for displaying the selected nvts (1 of 33) an object for accessing the
+    // family by name is required
+    const families = {};
 
     if (is_defined(elem.families)) {
-      for_each(elem.families.family, family => {
-        let {name} = family;
-        families[name] = {
+      ret.family_list = map(elem.families.family, family => {
+        const {name} = family;
+        const new_family = {
           name,
           trend: family.growing,
           nvts: {
@@ -63,7 +66,12 @@ class ScanConfig extends Model {
             max: parse_count(family.max_nvt_count),
           },
         };
+        families[name] = new_family;
+        return new_family;
       });
+    }
+    else {
+      ret.family_list = [];
     }
 
     if (is_defined(ret.family_count)) {
