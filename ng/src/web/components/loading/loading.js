@@ -30,7 +30,6 @@ import {css} from 'glamor';
 import Layout from '../../components/layout/layout.js';
 
 const Loader = glamorous.div({
-    margin: 'auto',
     border: '12px solid #c8d3d9',
     borderTop: '12px solid #66c430',
     borderRadius: '50%',
@@ -44,11 +43,14 @@ const Loader = glamorous.div({
 
 const StyledLayout = glamorous(Layout)({
   width: '100%',
+  // height: 100vh minus 4x height of menu
+  height: 'calc(100vh - 140px)',
+  justifyContent: 'center',
 });
 
 const Loading = () => {
   return (
-    <StyledLayout align="center">
+    <StyledLayout>
       <Loader/>
     </StyledLayout>
   );
