@@ -54,14 +54,22 @@ class IconComponent extends React.Component {
   }
 
   render() {
-    const {img, href, alt = '', value, onClick, ...other} = this.props;
+    const {
+      img,
+      to,
+      alt = '',
+      value,
+      onClick,
+      ...other
+    } = this.props;
+
     const img_path = get_img_url(img);
 
-    if (href) {
+    if (to) {
       return (
         <Anchor
           {...other}
-          href={href}
+          href={to}
           onClick={this.handleClick}
         >
           <img src={img_path} alt={alt}/>
@@ -82,8 +90,8 @@ class IconComponent extends React.Component {
 IconComponent.propTypes = {
   alt: PropTypes.string,
   className: PropTypes.string,
-  href: PropTypes.string,
   img: PropTypes.string.isRequired,
+  to: PropTypes.string,
   value: PropTypes.any,
   onClick: PropTypes.func,
 };
