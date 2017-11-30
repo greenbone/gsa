@@ -39,6 +39,7 @@ import TextField from '../../components/form/textfield.js';
 import Layout from '../../components/layout/layout.js';
 
 import LegacyLink from '../../components/link/legacylink.js';
+import DetailsLink from '../../components/link/detailslink.js';
 
 import SimpleTable from '../../components/table/simpletable.js';
 import Table from '../../components/table/table.js';
@@ -83,16 +84,12 @@ class EditDialog extends React.Component {
                 {_('Name')}
               </TableData>
               <TableData>
-                <LegacyLink
-                  target="_blank"
-                  cmd="get_config_nvt"
-                  config_id={config.id}
-                  name={config.name}
-                  family={nvt.family}
-                  oid={nvt.oid}
+                <DetailsLink
+                  id={nvt.oid}
+                  type="nvt"
                 >
                   {nvt.name}
-                </LegacyLink>
+                </DetailsLink>
               </TableData>
             </TableRow>
             <TableRow>
