@@ -40,7 +40,6 @@ const CredentialDownloadIcon = ({
   <IconDivider align={['center', 'center']}>
     {type === 'usk' &&
       <LegacyLink
-        className="icon icon-sm"
         cmd="download_credential"
         credential_id={id}
         package_format="rpm"
@@ -50,7 +49,6 @@ const CredentialDownloadIcon = ({
     }
     {type === 'usk' &&
       <LegacyLink
-        className="icon icon-sm"
         cmd="download_credential"
         credential_id={id}
         package_format="deb"
@@ -60,7 +58,6 @@ const CredentialDownloadIcon = ({
     }
     {type === 'usk' &&
       <LegacyLink
-        className="icon icon-sm"
         cmd="download_credential"
         credential_id={id}
         package_format="key"
@@ -70,7 +67,6 @@ const CredentialDownloadIcon = ({
     }
     {type === 'up' &&
       <LegacyLink
-        className="icon icon-sm"
         cmd="download_credential"
         credential_id={id}
         package_format="exe"
@@ -80,7 +76,6 @@ const CredentialDownloadIcon = ({
     }
     {type === 'cc' &&
       <LegacyLink
-        className="icon icon-sm"
         cmd="download_credential"
         credential_id={id}
         package_format="pem"

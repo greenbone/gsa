@@ -94,7 +94,6 @@ const Actions = ({
     />
     {is_defined(entity.credential) &&
       <LegacyLink
-        className="icon icon-sm"
         cmd="download_credential"
         credential_id={entity.credential.id}
         package_format="pem"
@@ -105,7 +104,6 @@ const Actions = ({
     }
     {is_defined(entity.ca_pub) &&
       <LegacyLink
-        className="icon icon-sm"
         cmd="download_ca_pub"
         scanner_id={entity.id}
         ca_pub={entity.ca_pub}
