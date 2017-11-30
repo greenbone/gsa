@@ -62,7 +62,6 @@ const render_report = (report, links) => {
   const date = datetime(report.timestamp);
   return (
     <DetailsLink
-      legacy
       type="report"
       id={report.id}
       textOnly={!links}

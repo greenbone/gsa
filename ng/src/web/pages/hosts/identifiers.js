@@ -115,7 +115,6 @@ const Source = ({source}) => {
         <span>{_('User')}</span>
         {' '}
         <DetailsLink
-          legacy
           textOnly={deleted !== '0'}
           type="user"
           id={id}

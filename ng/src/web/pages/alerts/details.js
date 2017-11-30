@@ -132,7 +132,6 @@ const AlertDetails = ({
               </TableData>
               <TableData>
                 <DetailsLink
-                  legacy
                   id={filter.id}
                   type="filter"
                 >

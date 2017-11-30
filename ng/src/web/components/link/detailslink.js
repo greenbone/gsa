@@ -25,12 +25,10 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import LegacyLink from './legacylink.js';
 import Link from './link.js';
 
 const DetailsLink = ({
   id,
-  legacy = false,
   type,
   page = type,
   textOnly = false,
@@ -39,16 +37,6 @@ const DetailsLink = ({
 
   textOnly = textOnly || !capabilities.mayAccess(type);
 
-  if (legacy) {
-    props[type + '_id'] = id;
-    return (
-      <LegacyLink
-        {...props}
-        textOnly={textOnly}
-        cmd={'get_' + type}
-      />
-    );
-  }
   return (
     <Link
       {...props}
@@ -64,7 +52,6 @@ DetailsLink.contextTypes = {
 
 DetailsLink.propTypes = {
   id: PropTypes.id.isRequired,
-  legacy: PropTypes.bool,
   page: PropTypes.string,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,

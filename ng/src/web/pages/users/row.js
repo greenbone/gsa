@@ -105,7 +105,6 @@ const Row = ({
 }) => {
   const roles = map(entity.roles, role => (
     <DetailsLink
-      legacy
       textOnly={!links}
       key={role.id}
       type="role"
@@ -116,7 +115,6 @@ const Row = ({
 
   const groups = map(entity.groups, group => (
     <DetailsLink
-      legacy
       textOnly={!links}
       type="group"
       key={group.id}

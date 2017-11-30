@@ -77,7 +77,6 @@ const ScheduleIcon = ({
 
   return (
     <DetailsLink
-      legacy
       type="schedule"
       id={schedule.id}
       title={title}

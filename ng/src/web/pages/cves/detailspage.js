@@ -118,9 +118,7 @@ const Details = ({
             {products.map(product => (
               <DetailsLink
                 key={product}
-                legacy
-                type="info"
-                page="cpe"
+                type="cpe"
                 id={product}
               >
                 {product}

@@ -103,7 +103,6 @@ const TaskDetails = ({
               alerts.map(alert => (
                 <DetailsLink
                   key={alert.id}
-                  legacy
                   textOnly={!links}
                   type="alert"
                   id={alert.id}>
@@ -126,7 +125,6 @@ const TaskDetails = ({
                 </TableData>
                 <TableData>
                   <DetailsLink
-                    legacy
                     textOnly={!links}
                     type="scanner"
                     id={scanner.id}>
@@ -149,9 +147,8 @@ const TaskDetails = ({
                   </TableData>
                   <TableData>
                     <DetailsLink
-                      legacy
                       textOnly={!links}
-                      type="config"
+                      type="scanconfig"
                       id={config.id}>
                       {config.name}
                     </DetailsLink>
@@ -258,7 +255,6 @@ const TaskDetails = ({
                 </TableData>
                 <TableData>
                   <DetailsLink
-                    legacy
                     textOnly={!links}
                     type="schedule"
                     id={schedule.id}
