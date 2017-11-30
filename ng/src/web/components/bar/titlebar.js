@@ -36,7 +36,6 @@ import Divider from '../layout/divider.js';
 import Layout from '../layout/layout.js';
 
 import Link from '../link/link.js';
-import LegacyLink from '../link/legacylink.js';
 
 const LogoutLink = glamorous.a({
   color: '#393637',
@@ -46,7 +45,7 @@ const LogoutLink = glamorous.a({
   },
 });
 
-const UserLink = LogoutLink.withComponent(LegacyLink);
+const UserLink = LogoutLink.withComponent(Link);
 
 const GreenboneIcon = glamorous(GBIcon)({
   width: '40px',
@@ -129,7 +128,7 @@ class Titlebar extends React.Component {
         {gmp.isLoggedIn() ?
           <Divider>
             <span>Logged in as </span>
-            <UserLink cmd="get_my_settings">
+            <UserLink to="usersettings">
               <b>{gmp.username}</b>
             </UserLink>
             <span> | </span>
