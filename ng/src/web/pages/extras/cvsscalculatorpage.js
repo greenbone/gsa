@@ -70,6 +70,7 @@ class CvssCalculator extends React.Component {
 
   constructor(...args) {
     super(...args);
+
     this.state = {
       access_vector: 'LOCAL',
       access_complexity: 'LOW',
@@ -87,6 +88,17 @@ class CvssCalculator extends React.Component {
     this.handleMetricsChange = this.handleMetricsChange.bind(this);
     this.handleVectorChange = this.handleVectorChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
+  componentDidMount() {
+    const {location} = this.props;
+
+    if (is_defined(location) && is_defined(location.query) &&
+      is_defined(location.query.cvssVector)) {
+      const {cvssVector} = location.query;
+      this.setState({cvss_vector: cvssVector, user_vector: cvssVector});
+      this.calculateScore(cvssVector);
+    }
   }
 
   calculateVector() {
