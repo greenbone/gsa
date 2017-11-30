@@ -81,7 +81,6 @@ const Actions = ({
       onClick={onAgentDownloadClick}
     />
     <LegacyLink
-      className="icon icon-sm"
       cmd="download_agent"
       agent_format="installer"
       agent_id={entity.id}
