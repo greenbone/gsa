@@ -107,6 +107,7 @@ import ResultDetailsPage from './pages/results/detailspage.js';
 import RolesPage from './pages/roles/listpage.js';
 import RoleDetailsPage from './pages/roles/detailspage.js';
 import ScanConfigsPage from './pages/scanconfigs/listpage.js';
+import ScanConfigDetailsPage from './pages/scanconfigs/detailspage.js';
 import ScannersPage from './pages/scanners/listpage.js';
 import ScannerDetailsPage from './pages/scanners/detailspage.js';
 import SchedulesPage from './pages/schedules/listpage.js';
@@ -455,6 +456,10 @@ ReactDOM.render(
         <Route
           path="permission/:id"
           component={PermissionDetailsPage}
+        />
+        <Route
+          path="scanconfig/:id"
+          component={ScanConfigDetailsPage}
         />
       </Route>
       <Redirect from="/" to="/ng"/>

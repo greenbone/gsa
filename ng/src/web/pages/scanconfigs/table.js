@@ -24,9 +24,11 @@ import _ from 'gmp/locale.js';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
 import Header from './header.js';
 import Row from './row.js';
+import ScanConfigDetails from './details.js';
 
 export const SORT_FIELDS = [
   ['name', _('Name')],
@@ -40,6 +42,7 @@ const ScanConfigsTable = createEntitiesTable({
   emptyTitle: _('No Scan Configs available'),
   header: Header,
   row: Row,
+  rowDetails: withRowDetails('scanconfig')(ScanConfigDetails),
   footer: createEntitiesFooter({
     download: 'scanconfigs.xml',
     span: 7,
