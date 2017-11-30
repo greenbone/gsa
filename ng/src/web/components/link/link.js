@@ -69,6 +69,7 @@ let Link = ({
   anchor,
   to,
   filter,
+  query,
   ...other
 }) => {
 
@@ -83,7 +84,7 @@ let Link = ({
 
   const location = {
     pathname,
-    query: {},
+    query: is_defined(query) ? {...query} : {},
     hash: is_defined(anchor) ? '#' + anchor : undefined,
   };
 
@@ -96,6 +97,7 @@ let Link = ({
 Link.propTypes = {
   anchor: PropTypes.string,
   filter: PropTypes.string,
+  query: PropTypes.object,
   to: PropTypes.string.isRequired,
 };
 
