@@ -137,6 +137,21 @@ class ScanConfig extends Model {
 
     ret.scan_config_type = parse_int(elem.type);
 
+    if (is_defined(elem.scanner)) {
+      const scanner = {
+        ...elem.scanner,
+        name: elem.scanner.__text,
+      };
+      ret.scanner = new Model(scanner, 'scanner');
+    }
+
+    if (is_defined(elem.tasks)) {
+      ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
+    }
+    else {
+      ret.tasks = [];
+    }
+
     return ret;
   }
 }
