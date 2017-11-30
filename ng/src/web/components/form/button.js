@@ -91,7 +91,7 @@ const Button = glamorous(({
 });
 
 export default compose(
-  withLayout(),
+  withLayout({align: ['center', 'center']}),
   withClickHandler(),
 )(Button);
 
