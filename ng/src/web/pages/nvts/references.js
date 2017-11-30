@@ -124,7 +124,7 @@ const References = ({
                       <ExternalLink
                         key={xref.ref}
                         textOnly={!links || xref.type !== 'URL'}
-                        href={xref.ref}>
+                        to={xref.ref}>
                         {xref.ref}
                       </ExternalLink>
                     ))

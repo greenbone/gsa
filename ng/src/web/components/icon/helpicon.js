@@ -52,7 +52,7 @@ const HelpIcon = ({
   return (
     <Icon
       img="help.svg"
-      href={url}
+      to={url}
       title={title}
       {...other}/>
   );
@@ -68,4 +68,3 @@ HelpIcon.propTypes = {
 export default withGmp(HelpIcon);
 
 // vim: set ts=2 sw=2 tw=80:
-

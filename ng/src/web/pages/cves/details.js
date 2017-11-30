@@ -150,7 +150,7 @@ const CveDetails = ({
                   </TableData>
                   <TableData>
                     <ExternalLink
-                      href={ref.href}>
+                      to={ref.href}>
                       {ref.name}
                     </ExternalLink>
                   </TableData>
