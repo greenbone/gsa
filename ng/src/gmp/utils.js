@@ -197,40 +197,6 @@ export function parse_yesno(value) {
   return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 }
 
-const bind_exclude_methods = [
-  'constructor',
-  'getChildContext',
-  'render',
-  'componentWillMount',
-  'componentDidMount',
-  'componentWillReceiveProps',
-  'shouldComponentUpdate',
-  'componentWillUpdate',
-  'componentDidUpdate',
-  'componentWillUnmount',
-];
-
-export function autobind(instance, options) {
-  if (!is_defined(instance)) {
-    return;
-  }
-
-  const include = is_array(options) ? options : undefined;
-  const startswith = is_string(options) ? options : undefined;
-
-  const proto = Object.getPrototypeOf(instance);
-  const props = include || Object.getOwnPropertyNames(proto);
-
-  for (const key of props) {
-    const func = proto[key];
-    if (!includes(bind_exclude_methods, key) && is_function(func) &&
-      (!is_defined(startswith) || key.startsWith(startswith)) &&
-      proto.hasOwnProperty(key)) {
-      instance[key] = func.bind(instance);
-    }
-  }
-}
-
 export function first(array, non = {}) {
   if (is_empty(array)) {
     return non;
