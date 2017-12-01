@@ -58,6 +58,7 @@ import {goto_details, goto_list} from '../../entity/component.js';
 
 import CredentialDetails from './details.js';
 import CredentialComponent from './component.js';
+import CredentialDownloadIcon from './downloadicon.js';
 
 const ToolBarIcons = ({
   entity,
@@ -66,6 +67,7 @@ const ToolBarIcons = ({
   onCredentialDeleteClick,
   onCredentialDownloadClick,
   onCredentialEditClick,
+  onCredentialInstallerDownloadClick,
 }) => (
   <Divider margin="10px">
     <IconDivider>
@@ -101,6 +103,10 @@ const ToolBarIcons = ({
         onClick={onCredentialDownloadClick}
       />
     </IconDivider>
+    <CredentialDownloadIcon
+      credential={entity}
+      onDownload={onCredentialInstallerDownloadClick}
+    />
   </Divider>
 );
 
@@ -111,6 +117,7 @@ ToolBarIcons.propTypes = {
   onCredentialDeleteClick: PropTypes.func.isRequired,
   onCredentialDownloadClick: PropTypes.func.isRequired,
   onCredentialEditClick: PropTypes.func.isRequired,
+  onCredentialInstallerDownloadClick: PropTypes.func.isRequired,
 };
 
 const Details = ({
@@ -210,6 +217,8 @@ const Page = ({
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
+      onInstallerDownloaded={onDownloaded}
+      onInstallerDownloadError={onError}
       onSaved={onChanged}
     >
       {({
@@ -217,6 +226,7 @@ const Page = ({
         create,
         delete: delete_func,
         download,
+        downloadinstaller,
         edit,
         save,
       }) => (
@@ -231,6 +241,7 @@ const Page = ({
           onCredentialDeleteClick={delete_func}
           onCredentialDownloadClick={download}
           onCredentialEditClick={edit}
+          onCredentialInstallerDownloadClick={downloadinstaller}
           onCredentialSaveClick={save}
           onPermissionChanged={onChanged}
           onPermissionDownloadError={onError}
