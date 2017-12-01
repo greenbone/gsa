@@ -192,10 +192,13 @@ class EntitiesContainer extends React.Component {
     this.load(this.state.filter, {force: true});
   }
 
-  startTimer(refresh) {
+  getRefreshInterval() {
     const {gmp} = this.props;
+    return gmp.autorefresh;
+  }
 
-    refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
+  startTimer(refresh) {
+    refresh = is_defined(refresh) ? refresh : this.getRefreshInterval();
     if (refresh && refresh >= 0) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
       log.debug('Started reload timer with id', this.timer, 'and interval',
