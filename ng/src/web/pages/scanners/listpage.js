@@ -78,8 +78,12 @@ const ScannersPage = ({
   <ScannerComponent
     onCreated={onChanged}
     onSaved={onChanged}
+    onCertificateDownloadError={onError}
+    onCertificateDownloaded={onDownloaded}
     onCloned={onChanged}
     onCloneError={onError}
+    onCredentialDownloaded={onDownloaded}
+    onCredentialDownloadError={onError}
     onDeleted={onChanged}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
@@ -91,6 +95,8 @@ const ScannersPage = ({
     create,
     delete: delete_func,
     download,
+    downloadcertificate,
+    downloadcredential,
     edit,
     save,
     verify,
@@ -105,8 +111,10 @@ const ScannersPage = ({
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
+      onScannerCertificateDownloadClick={downloadcertificate}
       onScannerCloneClick={clone}
       onScannerCreateClick={create}
+      onScannerCredentialDownloadClick={downloadcredential}
       onScannerDeleteClick={delete_func}
       onScannerDownloadClick={download}
       onScannerEditClick={edit}
