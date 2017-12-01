@@ -134,12 +134,10 @@ const MenuBar = (props, {gmp, capabilities}) => {
               to="tasks"
               caps="get_tasks"/>
             <MenuEntry
-              legacy
               title={_('Reports')}
               to="reports"
               caps="get_reports"/>
             <MenuEntry
-              legacy
               title={_('Results')}
               to="results"
               caps="get_results"/>

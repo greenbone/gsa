@@ -38,8 +38,8 @@ import TextField from '../../components/form/textfield.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import LegacyLink from '../../components/link/legacylink.js';
 import DetailsLink from '../../components/link/detailslink.js';
+import Link from '../../components/link/link.js';
 
 import SimpleTable from '../../components/table/simpletable.js';
 import Table from '../../components/table/table.js';
@@ -179,13 +179,12 @@ class EditDialog extends React.Component {
                     {_('CVSS base vector')}
                   </TableData>
                   <TableData>
-                    <LegacyLink
-                      target="_blank"
-                      cmd="cvss_calculator"
-                      cvss_vector={nvt.tags.cvss_base_vector}
+                    <Link
+                      to="cvsscalculator"
+                      query={{cvssVector: nvt.tags.cvss_base_vector}}
                     >
                       {nvt.tags.cvss_base_vector}
-                    </LegacyLink>
+                    </Link>
                   </TableData>
                 </TableRow>
               }

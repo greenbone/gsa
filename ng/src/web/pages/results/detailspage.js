@@ -48,7 +48,6 @@ import Wrapper from '../../components/layout/wrapper.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 import InnerLink from '../../components/link/innerlink.js';
-import LegacyLink from '../../components/link/legacylink.js';
 
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
@@ -66,6 +65,7 @@ let ToolBarIcons = ({
   entity,
   onNoteCreateClick,
   onOverrideCreateClick,
+  onResultDownloadClick,
 }) => (
   <Divider margin="10px">
     <IconDivider>
@@ -77,14 +77,11 @@ let ToolBarIcons = ({
         title={_('Results List')}
         page="results"
       />
-      <LegacyLink
-        cmd="export_result"
-        result_id={entity.id}
-      >
-        <ExportIcon
-          title={_('Export Result as XML')}
-        />
-      </LegacyLink>
+      <ExportIcon
+        value={entity}
+        title={_('Export Result as XML')}
+        onClick={onResultDownloadClick}
+      />
     </IconDivider>
     <IconDivider>
       {capabilities.mayCreate('note') &&
@@ -136,6 +133,7 @@ ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   onNoteCreateClick: PropTypes.func.isRequired,
   onOverrideCreateClick: PropTypes.func.isRequired,
+  onResultDownloadClick: PropTypes.func.isRequired,
 };
 
 ToolBarIcons = withCapabilities(ToolBarIcons);
@@ -291,6 +289,7 @@ class Page extends React.Component {
 
     this.handleSaveNote = this.handleSaveNote.bind(this);
     this.handleSaveOverride = this.handleSaveOverride.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
 
     this.openNoteDialog = this.openNoteDialog.bind(this);
     this.openOverrideDialog = this.openOverrideDialog.bind(this);
@@ -308,6 +307,16 @@ class Page extends React.Component {
     const {onChanged} = this.props;
 
     return gmp.override.create(data).then(onChanged);
+  }
+
+  handleDownload(result) {
+    const {gmp} = this.context;
+
+    const {onError, onDownloaded} = this.props;
+    return gmp.result.export(result).then(response => {
+      const filename = 'result-' + result.id + '.xml';
+      return {filename, data: response.data};
+    }).then(onDownloaded, onError);
   }
 
   openNoteDialog(result) {
@@ -362,6 +371,7 @@ class Page extends React.Component {
           permissionsComponent={false}
           onNoteCreateClick={this.openNoteDialog}
           onOverrideCreateClick={this.openOverrideDialog}
+          onResultDownloadClick={this.handleDownload}
         />
         <NoteDialog
           ref={ref => this.note_dialog = ref}
@@ -378,6 +388,8 @@ class Page extends React.Component {
 
 Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 Page.contextTypes = {
