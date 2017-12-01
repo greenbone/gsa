@@ -54,6 +54,7 @@ const Actions = ({
   onCredentialDownloadClick,
   onCredentialCloneClick,
   onCredentialEditClick,
+  onCredentialInstallerDownloadClick,
 }) => {
   return (
     <IconDivider
@@ -83,8 +84,8 @@ const Actions = ({
         onClick={onCredentialDownloadClick}
       />
       <CredentialDownloadIcon
-        type={entity.credential_type}
-        id={entity.id}
+        credential={entity}
+        onDownload={onCredentialInstallerDownloadClick}
       />
     </IconDivider>
   );
@@ -96,6 +97,7 @@ Actions.propTypes = {
   onCredentialDeleteClick: PropTypes.func.isRequired,
   onCredentialDownloadClick: PropTypes.func.isRequired,
   onCredentialEditClick: PropTypes.func.isRequired,
+  onCredentialInstallerDownloadClick: PropTypes.func.isRequired,
 };
 
 const Row = ({

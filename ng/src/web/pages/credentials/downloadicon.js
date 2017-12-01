@@ -25,70 +25,72 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+} from 'gmp/models/credential.js';
+
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import Icon from '../../components/icon/icon.js';
 
-import LegacyLink from '../../components/link/legacylink.js';
-
 const CredentialDownloadIcon = ({
-  id,
-  type,
-}) => (
-  <IconDivider align={['center', 'center']}>
-    {type === 'usk' &&
-      <LegacyLink
-        cmd="download_credential"
-        credential_id={id}
-        package_format="rpm"
-        title={_('Download RPM (.rpm) Package')}>
-        <Icon img="rpm.svg" />
-      </LegacyLink>
-    }
-    {type === 'usk' &&
-      <LegacyLink
-        cmd="download_credential"
-        credential_id={id}
-        package_format="deb"
-        title={_('Download Debian (.deb) Package')}>
-        <Icon img="deb.svg" />
-      </LegacyLink>
-    }
-    {type === 'usk' &&
-      <LegacyLink
-        cmd="download_credential"
-        credential_id={id}
-        package_format="key"
-        title={_('Download Public Key')}>
-        <Icon img="key.svg" />
-      </LegacyLink>
-    }
-    {type === 'up' &&
-      <LegacyLink
-        cmd="download_credential"
-        credential_id={id}
-        package_format="exe"
-        title={_('Download Windows Executable (.exe)')}>
-        <Icon img="exe.svg" />
-      </LegacyLink>
-    }
-    {type === 'cc' &&
-      <LegacyLink
-        cmd="download_credential"
-        credential_id={id}
-        package_format="pem"
-        title={_('Download Certificate (.pem)')}>
-        <Icon img="key.svg" />
-      </LegacyLink>
-    }
-  </IconDivider>
-);
+  credential,
+  onDownload,
+}) => {
+  const type = credential.credential_type;
+  return (
+    <IconDivider align={['center', 'center']}>
+      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
+        <Icon
+          title={_('Download RPM (.rpm) Package')}
+          img="rpm.svg"
+          value={credential}
+          onClick={cred => onDownload(cred, 'rpm')}
+        />
+      }
+      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
+        <Icon
+          img="deb.svg"
+          title={_('Download Debian (.deb) Package')}
+          value={credential}
+          onClick={cred => onDownload(cred, 'deb')}
+        />
+      }
+      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
+        <Icon
+          title={_('Download Public Key')}
+          img="key.svg"
+          value={credential}
+          onClick={cred => onDownload(cred, 'key')}
+        />
+      }
+      {type === USERNAME_PASSWORD_CREDENTIAL_TYPE &&
+        <Icon
+          title={_('Download Windows Executable (.exe)')}
+          img="exe.svg"
+          value={credential}
+          onClick={cred => onDownload(cred, 'exe')}
+        />
+      }
+      {type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE &&
+        <Icon
+          img="key.svg"
+          title={_('Download Certificate (.pem)')}
+          value={credential}
+          onClick={cred => onDownload(cred, 'pem')}
+        />
+      }
+    </IconDivider>
+  );
+};
 
 CredentialDownloadIcon.propTypes = {
-  id: PropTypes.id.isRequired,
-  type: PropTypes.string.isRequired,
+  credential: PropTypes.model.isRequired,
+  onDownload: PropTypes.func.isRequired,
 };
 
 export default CredentialDownloadIcon;

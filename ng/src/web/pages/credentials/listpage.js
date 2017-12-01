@@ -84,11 +84,14 @@ const CredentialsPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInstallerDownloaded={onDownloaded}
+    onInstallerDownloadError={onError}
   >{({
     clone,
     create,
     delete: delete_func,
     download,
+    downloadinstaller,
     edit,
     save,
   }) => (
@@ -108,6 +111,7 @@ const CredentialsPage = ({
       onCredentialDownloadClick={download}
       onCredentialEditClick={edit}
       onCredentialSaveClick={save}
+      onCredentialInstallerDownloadClick={downloadinstaller}
     />
   )}
   </CredentialComponent>
