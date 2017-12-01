@@ -137,7 +137,7 @@ class EntityContainer extends React.Component {
 
     Promise.all(promises)
       .then(values => values.reduce((sum, cur) => sum || cur, false))
-      .then(refresh => this.startTimer(refresh ? 1 : undefined))
+      .then(refresh => this.startTimer(refresh))
       .catch(err => {
         log.error('Error while loading data', err);
         this.setState({loading: false});
@@ -179,16 +179,16 @@ class EntityContainer extends React.Component {
 
   getRefreshInterval() {
     const {gmp} = this.props;
-    return gmp.autorefresh;
+    return gmp.autorefresh * 1000;
   }
 
-  startTimer(refresh) {
-    refresh = is_defined(refresh) ? refresh : this.getRefreshInterval();
+  startTimer(immediate = false) {
+    const refresh = immediate ? 0 : this.getRefreshInterval();
 
-    if (refresh && refresh >= 0) {
-      this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
-      log.debug('Started reload timer with id', this.timer, 'and interval',
-        refresh);
+    if (refresh >= 0) {
+      this.timer = window.setTimeout(this.handleTimer, refresh);
+      log.debug('Started reload timer with id', this.timer, 'and interval of',
+        refresh, 'milliseconds');
     }
   }
 
