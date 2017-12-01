@@ -47,6 +47,7 @@ class CredentialsComponent extends React.Component {
     super(...args);
 
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
+    this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
   }
 
   openCredentialsDialog(credential) {
@@ -73,6 +74,22 @@ class CredentialsComponent extends React.Component {
         base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
       });
     }
+  }
+
+  handleDownloadInstaller(credential, format) {
+    const {
+      gmp,
+      onInstallerDownloaded,
+      onInstallerDownloadError,
+    } = this.props;
+
+    return gmp.credential.download(credential, format)
+      .then(response => {
+        const {id, name} = credential;
+        const filename = 'credential-' + name + '-' + id + '.' + format;
+        return {filename, data: response.data};
+      })
+      .then(onInstallerDownloaded, onInstallerDownloadError);
   }
 
   render() {
@@ -112,6 +129,7 @@ class CredentialsComponent extends React.Component {
               ...other,
               create: this.openCredentialsDialog,
               edit: this.openCredentialsDialog,
+              downloadinstaller: this.handleDownloadInstaller,
             })}
             <CredentialsDialog
               ref={ref => this.credentials_dialog = ref}
@@ -135,6 +153,8 @@ CredentialsComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInstallerDownloadError: PropTypes.func,
+  onInstallerDownloaded: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
