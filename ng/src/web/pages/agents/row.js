@@ -41,8 +41,6 @@ import Icon from '../../components/icon/icon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
-import LegacyLink from '../../components/link/legacylink.js';
-
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
