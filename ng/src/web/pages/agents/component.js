@@ -41,6 +41,7 @@ class AgentComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
     this.handleVerifyAgent = this.handleVerifyAgent.bind(this);
     this.openAgentDialog = this.openAgentDialog.bind(this);
   }
@@ -49,6 +50,16 @@ class AgentComponent extends React.Component {
     const {gmp, onVerifyError, onVerified} = this.props;
 
     gmp.agent.verify(agent).then(onVerified, onVerifyError);
+  }
+
+  handleDownloadInstaller(agent) {
+    const {gmp, onInstallerDownloadError, onInstallerDownloaded} = this.props;
+    const {id, name} = agent;
+
+    return gmp.agent.downloadInstaller(agent).then(response => {
+      const filename = 'agent-' + name + '-' + id + '-installer';
+      return {filename, data: response.data};
+    }).then(onInstallerDownloaded, onInstallerDownloadError);
   }
 
   openAgentDialog(agent) {
@@ -104,6 +115,7 @@ class AgentComponent extends React.Component {
               create: this.openAgentDialog,
               edit: this.openAgentDialog,
               verify: this.handleVerifyAgent,
+              downloadinstaller: this.handleDownloadInstaller,
             })}
             <AgentDialog
               ref={ref => this.agent_dialog = ref}
@@ -127,6 +139,8 @@ AgentComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInstallerDownloadError: PropTypes.func,
+  onInstallerDownloaded: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onVerified: PropTypes.func,
