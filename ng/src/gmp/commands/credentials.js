@@ -118,6 +118,15 @@ class CredentialCommand extends EntityCommand {
     }).then(this.transformResponse);
   }
 
+  download({id}, format = 'pem') {
+    return this.httpGet({
+      cmd: 'download_credential',
+      package_format: format,
+      credential_id: id,
+    }, {plain: true})
+      .then(response => response.setData(response.data.responseText));
+  }
+
   getElementFromRoot(root) {
     return root.get_credential.get_credentials_response.credential;
   }
