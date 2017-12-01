@@ -37,6 +37,10 @@ const StyledLayout = glamorous(Layout)({
   maxWidth: '1100px',
 });
 
+const DivP = glamorous.div({
+  marginBottom: '10px',
+});
+
 const TextBlock = glamorous.div({
   maxWidth: '600px',
   minWidth: '400px',
@@ -63,22 +67,22 @@ const About = () => (
         <TextBlock>
           <h1>Greenbone Security Assistant</h1>
           <h3>Version 7.1+beta1</h3>
-          <p>The Greenbone Security Assistant (GSA) is the web-based graphical
+          <DivP>The Greenbone Security Assistant (GSA) is the web-based graphical
             user interface of the Open Vulnerability Assessment System
             (OpenVAS). GSA connects to OpenVAS Manager via the OpenVAS
             Management Protocol (OMP). By implementing the full feature set
             of OMP, GSA offers a straight-forward, yet powerful method to
             manage network vulnerability scans.
-          </p>
-          <p>
+          </DivP>
+          <DivP>
             Copyright 2009-2017 by&nbsp;
             <ExternalLink
               to="https://www.greenbone.net"
             >
               Greenbone Networks GmbH
             </ExternalLink>
-          </p>
-          <p>
+          </DivP>
+          <DivP>
             License: GNU General Public License version 2 or any later version
             &nbsp;
             <ExternalLink
@@ -86,8 +90,8 @@ const About = () => (
             >
               (full license text)
             </ExternalLink>
-          </p>
-          <p>Contact: For updates, feature proposals and bug reports contact
+          </DivP>
+          <DivP>Contact: For updates, feature proposals and bug reports contact
             the&nbsp;
             <ExternalLink
               to="http://www.greenbone.net/en/contact/"
@@ -99,14 +103,14 @@ const About = () => (
             >
               OpenVAS homepage.
             </ExternalLink>
-          </p>
-          <p>
+          </DivP>
+          <DivP>
             Cookies: This web application uses cookies to store session
             information. The cookie is not stored on the server-side hard disk
             and not submitted anywhere. It is lost when the session is closed
             or expired. The cookie is also temporarily stored in your browser
             where you can examine the content.
-          </p>
+          </DivP>
         </TextBlock>
         <ImageBlock>
           <Img
