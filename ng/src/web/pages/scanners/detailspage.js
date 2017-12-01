@@ -57,6 +57,7 @@ const ToolBarIcons = ({
   onScannerCertificateDownloadClick,
   onScannerCloneClick,
   onScannerCreateClick,
+  onScannerCredentialDownloadClick,
   onScannerDeleteClick,
   onScannerDownloadClick,
   onScannerEditClick,
@@ -105,6 +106,14 @@ const ToolBarIcons = ({
         />
       </IconDivider>
       <IconDivider>
+        {is_defined(entity.credential) &&
+          <Icon
+            title={_('Download Certificate')}
+            img="key.svg"
+            value={entity}
+            onClick={onScannerCredentialDownloadClick}
+          />
+        }
         {is_defined(entity.ca_pub) &&
           <Icon
             img="key.svg"
@@ -123,6 +132,7 @@ ToolBarIcons.propTypes = {
   onScannerCertificateDownloadClick: PropTypes.func.isRequired,
   onScannerCloneClick: PropTypes.func.isRequired,
   onScannerCreateClick: PropTypes.func.isRequired,
+  onScannerCredentialDownloadClick: PropTypes.func.isRequired,
   onScannerDeleteClick: PropTypes.func.isRequired,
   onScannerDownloadClick: PropTypes.func.isRequired,
   onScannerEditClick: PropTypes.func.isRequired,
@@ -141,6 +151,8 @@ const Page = ({
     onCloned={goto_details('scanner', props)}
     onCloneError={onError}
     onCreated={goto_details('scanner', props)}
+    onCredentialDownloaded={onDownloaded}
+    onCredentialDownloadError={onError}
     onDeleted={goto_list('scanners', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
@@ -155,6 +167,7 @@ const Page = ({
       delete: delete_func,
       download,
       downloadcertificate,
+      downloadcredential,
       edit,
       save,
       verify,
@@ -168,6 +181,7 @@ const Page = ({
         onScannerCertificateDownloadClick={downloadcertificate}
         onScannerCloneClick={clone}
         onScannerCreateClick={create}
+        onScannerCredentialDownloadClick={downloadcredential}
         onScannerDeleteClick={delete_func}
         onScannerDownloadClick={download}
         onScannerEditClick={edit}
