@@ -217,7 +217,7 @@ class ReportDetails extends React.Component {
 
       if (meta.fromcache && (meta.dirty || reload)) {
         log.debug('Forcing reload of report', meta.dirty);
-        this.startTimer(1);
+        this.startTimer(true);
       }
       else {
         this.startTimer();
@@ -268,16 +268,16 @@ class ReportDetails extends React.Component {
 
   getRefreshInterval() {
     const {gmp} = this.props;
-    return gmp.autorefresh;
+    return gmp.autorefresh * 1000;
   }
 
-  startTimer(refresh) {
-    refresh = is_defined(refresh) ? refresh : this.getRefreshInterval();
+  startTimer(immediate = false) {
+    const refresh = immediate ? 0 : this.getRefreshInterval();
 
-    if (refresh && refresh >= 0) {
-      this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
-      log.debug('Started reload timer with id', this.timer, 'and interval',
-        refresh);
+    if (refresh >= 0) {
+      this.timer = window.setTimeout(this.handleTimer, refresh);
+      log.debug('Started reload timer with id', this.timer, 'and interval of',
+        refresh, 'milliseconds');
     }
   }
 
