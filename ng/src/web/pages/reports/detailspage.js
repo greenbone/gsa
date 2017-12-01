@@ -266,10 +266,13 @@ class ReportDetails extends React.Component {
     this.load({force: true});
   }
 
-  startTimer(refresh) {
+  getRefreshInterval() {
     const {gmp} = this.props;
+    return gmp.autorefresh;
+  }
 
-    refresh = is_defined(refresh) ? refresh : gmp.autorefresh;
+  startTimer(refresh) {
+    refresh = is_defined(refresh) ? refresh : this.getRefreshInterval();
 
     if (refresh && refresh >= 0) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
