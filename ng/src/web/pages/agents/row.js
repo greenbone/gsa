@@ -84,7 +84,7 @@ const Actions = ({
     <Icon
       img="agent.svg"
       value={entity}
-      title={_('Download Agent installer package')}
+      title={_('Download Agent Installer Package')}
       onClick={onAgentInstallerDownloadClick}
     />
     <Icon
