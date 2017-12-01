@@ -54,6 +54,7 @@ class ScannerComponent extends React.Component {
     this.openScannerDialog = this.openScannerDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleDownloadCertificate = this.handleDownloadCertificate.bind(this);
+    this.handleDownloadCredential = this.handleDownloadCredential.bind(this);
     this.handleVerifyScanner = this.handleVerifyScanner.bind(this);
   }
 
@@ -139,6 +140,17 @@ class ScannerComponent extends React.Component {
     return onCertificateDownloaded({filename, data: ca_pub.certificate});
   }
 
+  handleDownloadCredential(scanner) {
+    const {onCredentialDownloaded, onCredentialDownloadError, gmp} = this.props;
+    const {credential} = scanner;
+    const {name, id} = credential;
+
+    return gmp.credential.download(credential, 'pem').then(response => {
+      const filename = 'scanner-credential-' + name + '-' + id + '.pem';
+      return {filename, data: response.data};
+    }).then(onCredentialDownloaded, onCredentialDownloadError);
+  }
+
   render() {
     const {
       children,
@@ -178,6 +190,7 @@ class ScannerComponent extends React.Component {
               edit: this.openScannerDialog,
               verify: this.handleVerifyScanner,
               downloadcertificate: this.handleDownloadCertificate,
+              downloadcredential: this.handleDownloadCredential,
             })}
             <ScannerDialog
               ref={ref => this.scanner_dialog = ref}
@@ -204,6 +217,8 @@ ScannerComponent.propTypes = {
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
   onCreated: PropTypes.func,
+  onCredentialDownloadError: PropTypes.func,
+  onCredentialDownloaded: PropTypes.func,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
