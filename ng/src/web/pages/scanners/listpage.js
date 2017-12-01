@@ -82,6 +82,8 @@ const ScannersPage = ({
     onCertificateDownloaded={onDownloaded}
     onCloned={onChanged}
     onCloneError={onError}
+    onCredentialDownloaded={onDownloaded}
+    onCredentialDownloadError={onError}
     onDeleted={onChanged}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
@@ -94,6 +96,7 @@ const ScannersPage = ({
     delete: delete_func,
     download,
     downloadcertificate,
+    downloadcredential,
     edit,
     save,
     verify,
@@ -111,6 +114,7 @@ const ScannersPage = ({
       onScannerCertificateDownloadClick={downloadcertificate}
       onScannerCloneClick={clone}
       onScannerCreateClick={create}
+      onScannerCredentialDownloadClick={downloadcredential}
       onScannerDeleteClick={delete_func}
       onScannerDownloadClick={download}
       onScannerEditClick={edit}

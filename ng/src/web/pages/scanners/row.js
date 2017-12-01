@@ -43,8 +43,6 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import ExportIcon from '../../components/icon/exporticon.js';
 import Icon from '../../components/icon/icon.js';
 
-import LegacyLink from '../../components/link/legacylink.js';
-
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
@@ -55,6 +53,7 @@ const Actions = ({
   entity,
   onScannerCertificateDownloadClick,
   onScannerCloneClick,
+  onScannerCredentialDownloadClick,
   onScannerDeleteClick,
   onScannerDownloadClick,
   onScannerEditClick,
@@ -94,14 +93,12 @@ const Actions = ({
       onClick={onScannerVerifyClick}
     />
     {is_defined(entity.credential) &&
-      <LegacyLink
-        cmd="download_credential"
-        credential_id={entity.credential.id}
-        package_format="pem"
+      <Icon
         title={_('Download Certificate')}
-      >
-        <Icon img="key.svg"/>
-      </LegacyLink>
+        img="key.svg"
+        value={entity}
+        onClick={onScannerCredentialDownloadClick}
+      />
     }
     {is_defined(entity.ca_pub) &&
       <Icon
@@ -118,6 +115,7 @@ Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   onScannerCertificateDownloadClick: PropTypes.func.isRequired,
   onScannerCloneClick: PropTypes.func.isRequired,
+  onScannerCredentialDownloadClick: PropTypes.func.isRequired,
   onScannerDeleteClick: PropTypes.func.isRequired,
   onScannerDownloadClick: PropTypes.func.isRequired,
   onScannerEditClick: PropTypes.func.isRequired,
