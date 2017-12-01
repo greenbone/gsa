@@ -53,6 +53,7 @@ import {scanner_type_name, CVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
 const Actions = ({
   entity,
+  onScannerCertificateDownloadClick,
   onScannerCloneClick,
   onScannerDeleteClick,
   onScannerDownloadClick,
@@ -103,20 +104,19 @@ const Actions = ({
       </LegacyLink>
     }
     {is_defined(entity.ca_pub) &&
-      <LegacyLink
-        cmd="download_ca_pub"
-        scanner_id={entity.id}
-        ca_pub={entity.ca_pub}
+      <Icon
+        img="key.svg"
         title={_('Download CA Certificate')}
-      >
-        <Icon img="key.svg"/>
-      </LegacyLink>
+        value={entity}
+        onClick={onScannerCertificateDownloadClick}
+      />
     }
   </IconDivider>
 );
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
+  onScannerCertificateDownloadClick: PropTypes.func.isRequired,
   onScannerCloneClick: PropTypes.func.isRequired,
   onScannerDeleteClick: PropTypes.func.isRequired,
   onScannerDownloadClick: PropTypes.func.isRequired,
