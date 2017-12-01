@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -53,6 +54,7 @@ import ScannerDetails from './details.js';
 
 const ToolBarIcons = ({
   entity,
+  onScannerCertificateDownloadClick,
   onScannerCloneClick,
   onScannerCreateClick,
   onScannerDeleteClick,
@@ -102,12 +104,23 @@ const ToolBarIcons = ({
           onClick={onScannerVerifyClick}
         />
       </IconDivider>
+      <IconDivider>
+        {is_defined(entity.ca_pub) &&
+          <Icon
+            img="key.svg"
+            title={_('Download CA Certificate')}
+            value={entity}
+            onClick={onScannerCertificateDownloadClick}
+          />
+        }
+      </IconDivider>
     </Divider>
   );
 };
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
+  onScannerCertificateDownloadClick: PropTypes.func.isRequired,
   onScannerCloneClick: PropTypes.func.isRequired,
   onScannerCreateClick: PropTypes.func.isRequired,
   onScannerDeleteClick: PropTypes.func.isRequired,
@@ -123,6 +136,8 @@ const Page = ({
   ...props
 }) => (
   <ScannerComponent
+    onCertificateDownloadError={onError}
+    onCertificateDownloaded={onDownloaded}
     onCloned={goto_details('scanner', props)}
     onCloneError={onError}
     onCreated={goto_details('scanner', props)}
@@ -139,6 +154,7 @@ const Page = ({
       create,
       delete: delete_func,
       download,
+      downloadcertificate,
       edit,
       save,
       verify,
@@ -149,6 +165,7 @@ const Page = ({
         sectionIcon="scanner.svg"
         toolBarIcons={ToolBarIcons}
         title={_('Scanner')}
+        onScannerCertificateDownloadClick={downloadcertificate}
         onScannerCloneClick={clone}
         onScannerCreateClick={create}
         onScannerDeleteClick={delete_func}
