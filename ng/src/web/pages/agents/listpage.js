@@ -84,6 +84,8 @@ const AgentsPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInstallerDownloadError={onError}
+    onInstallerDownloaded={onDownloaded}
     onVerifyError={onError}
     onVerified={onChanged}
   >{({
@@ -91,6 +93,7 @@ const AgentsPage = ({
     create,
     delete: delete_func,
     download,
+    downloadinstaller,
     edit,
     save,
     verify,
@@ -110,6 +113,7 @@ const AgentsPage = ({
       onAgentDeleteClick={delete_func}
       onAgentDownloadClick={download}
       onAgentEditClick={edit}
+      onAgentInstallerDownloadClick={downloadinstaller}
       onAgentSaveClick={save}
       onAgentVerifyClick={verify}
     />
