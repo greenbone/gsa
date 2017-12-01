@@ -35,7 +35,7 @@ import SeverityBar from '../../components/bar/severitybar.js';
 import Layout from '../../components/layout/layout.js';
 
 import ExternalLink from '../../components/link/externallink.js';
-import LegacyLink from '../../components/link/legacylink.js';
+import Link from '../../components/link/link.js';
 
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
@@ -109,13 +109,12 @@ const CveDetails = ({
                   {_('Base Vector')}
                 </TableData>
                 <TableData>
-                  <LegacyLink
-                    target="_blank"
-                    cmd="cvss_calculator"
-                    cvss_vector={cvss_base_vector}
+                  <Link
+                    to="cvsscalculator"
+                    query={{cvssVector: cvss_base_vector}}
                   >
                     {cvss_base_vector}
-                  </LegacyLink>
+                  </Link>
                 </TableData>
               </TableRow>
             }

@@ -35,7 +35,7 @@ import Severitybar from '../../components/bar/severitybar.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import LegacyLink from '../../components/link/legacylink.js';
+import Link from '../../components/link/link.js';
 
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
@@ -93,13 +93,12 @@ const NvtDetails = ({
                   {_('CVSS Base Vector')}
                 </TableData>
                 <TableData>
-                  <LegacyLink
-                    target="_blank"
-                    cmd="cvss_calculator"
-                    cvss_vector={tags.cvss_base_vector}
+                  <Link
+                    to="cvsscalculator"
+                    query={{cvssVector: tags.cvss_base_vector}}
                   >
                     {tags.cvss_base_vector}
-                  </LegacyLink>
+                  </Link>
                 </TableData>
               </TableRow>
             }
