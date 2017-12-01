@@ -71,6 +71,15 @@ export class AgentCommand extends EntityCommand {
     log.debug('Saving agent', data);
     return this.httpPost(data).then(this.transformResponse);
   }
+
+  downloadInstaller({id}) {
+    return this.httpGet({
+      cmd: 'download_agent',
+      agent_format: 'installer',
+      agent_id: id,
+    }, {plain: true})
+      .then(response => response.setData(response.data.responseText));
+  }
 }
 
 export class AgentsCommand extends EntitiesCommand {

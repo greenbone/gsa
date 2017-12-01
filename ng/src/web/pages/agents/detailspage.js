@@ -58,6 +58,7 @@ const ToolBarIcons = withCapabilities(({
   onAgentDeleteClick,
   onAgentDownloadClick,
   onAgentEditClick,
+  onAgentInstallerDownloadClick,
   onAgentVerifyClick,
 }) => (
   <Divider margin="10px">
@@ -101,6 +102,12 @@ const ToolBarIcons = withCapabilities(({
           onClick={onAgentVerifyClick}
         />
       }
+      <Icon
+        img="agent.svg"
+        value={entity}
+        title={_('Download Agent Installer Package')}
+        onClick={onAgentInstallerDownloadClick}
+      />
     </IconDivider>
   </Divider>
 ));
@@ -112,6 +119,7 @@ ToolBarIcons.propTypes = {
   onAgentDeleteClick: PropTypes.func.isRequired,
   onAgentDownloadClick: PropTypes.func.isRequired,
   onAgentEditClick: PropTypes.func.isRequired,
+  onAgentInstallerDownloadClick: PropTypes.func.isRequired,
 };
 
 const Page = ({
@@ -128,6 +136,8 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInstallerDownloaded={onDownloaded}
+    onInstallerDownloadError={onError}
     onSaved={onChanged}
     onVerified={onChanged}
     onVerifyError={onError}
@@ -137,6 +147,7 @@ const Page = ({
       create,
       delete: delete_func,
       download,
+      downloadinstaller,
       edit,
       save,
       verify,
@@ -152,6 +163,7 @@ const Page = ({
         onAgentDeleteClick={delete_func}
         onAgentDownloadClick={download}
         onAgentEditClick={edit}
+        onAgentInstallerDownloadClick={downloadinstaller}
         onAgentSaveClick={save}
         onAgentVerifyClick={verify}
         onPermissionChanged={onChanged}

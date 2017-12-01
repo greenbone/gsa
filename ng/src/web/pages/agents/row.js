@@ -51,6 +51,7 @@ const Actions = ({
   onAgentDeleteClick,
   onAgentDownloadClick,
   onAgentCloneClick,
+  onAgentInstallerDownloadClick,
   onAgentEditClick,
   onAgentVerifyClick,
 }) => (
@@ -80,14 +81,12 @@ const Actions = ({
       title={_('Export Agent')}
       onClick={onAgentDownloadClick}
     />
-    <LegacyLink
-      cmd="download_agent"
-      agent_format="installer"
-      agent_id={entity.id}
-      title={_('Download Agent installer package')}
-      >
-      <Icon img="agent.svg"/>
-    </LegacyLink>
+    <Icon
+      img="agent.svg"
+      value={entity}
+      title={_('Download Agent Installer Package')}
+      onClick={onAgentInstallerDownloadClick}
+    />
     <Icon
       img="verify.svg"
       value={entity}
@@ -103,6 +102,7 @@ Actions.propTypes = {
   onAgentDeleteClick: PropTypes.func.isRequired,
   onAgentDownloadClick: PropTypes.func.isRequired,
   onAgentEditClick: PropTypes.func.isRequired,
+  onAgentInstallerDownloadClick: PropTypes.func.isRequired,
   onAgentVerifyClick: PropTypes.func.isRequired,
 };
 
