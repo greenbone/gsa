@@ -113,10 +113,6 @@ install (FILES src/html/classic/js/gsa_bar_chart.js
                src/html/classic/js/gsa_topology_chart.js
                src/html/classic/js/gsa_polyfill.js
                src/html/classic/js/greenbone.js
-               src/html/classic/js/greenbone-ui.js
-               src/html/classic/js/greenbone-i18n.js
-               src/html/classic/js/greenbone-dialog.js
-               src/html/classic/js/greenbone-init.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
 
 install (FILES src/html/classic/js/lib/d3.tip.js
