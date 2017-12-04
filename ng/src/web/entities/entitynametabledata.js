@@ -49,49 +49,39 @@ const EntityNameTableData = ({
   type = entity.entity_type,
   children,
   onToggleDetailsClick,
-}) => {
-  const linktext = (
-    <Layout flex="column">
-      {entity.isOrphan() &&
-        <b>{_('Orphan')}</b>
-      }
-      {entity.name}
-    </Layout>
-  );
-  return (
-    <TableData flex="column">
-      <Layout flex align="space-between">
-        <Layout flex="column">
-          {entity.isOrphan() &&
-            <b>{_('Orphan')}</b>
-          }
-          {is_defined(onToggleDetailsClick) ?
-            <RowDetailsToggle
-              name={entity.id}
-              onClick={onToggleDetailsClick}>
-              {entity.name}
-            </RowDetailsToggle> :
-            <DetailsLink
-              type={type}
-              id={entity.id}
-              textOnly={!links}>
-              {entity.name}
-            </DetailsLink>
-          }
-        </Layout>
-        <ObserverIcon
-          displayName={displayName}
-          entity={entity}
-          userName={userName}
-        />
+}) => (
+  <TableData flex="column">
+    <Layout flex align="space-between">
+      <Layout flex="column">
+        {entity.isOrphan() &&
+          <b>{_('Orphan')}</b>
+        }
+        {is_defined(onToggleDetailsClick) ?
+          <RowDetailsToggle
+            name={entity.id}
+            onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle> :
+          <DetailsLink
+            type={type}
+            id={entity.id}
+            textOnly={!links}>
+            {entity.name}
+          </DetailsLink>
+        }
       </Layout>
-      {entity.comment &&
-        <Comment>({entity.comment})</Comment>
-      }
-      {children}
-    </TableData>
-  );
-};
+      <ObserverIcon
+        displayName={displayName}
+        entity={entity}
+        userName={userName}
+      />
+    </Layout>
+    {entity.comment &&
+      <Comment>({entity.comment})</Comment>
+    }
+    {children}
+  </TableData>
+);
 
 EntityNameTableData.propTypes = {
   displayName: PropTypes.string.isRequired,
