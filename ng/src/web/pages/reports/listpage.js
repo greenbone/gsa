@@ -81,6 +81,7 @@ class Page extends React.Component {
     this.handleDialogSave = this.handleDialogSave.bind(this);
     this.handleCreateContainerTask = this.handleCreateContainerTask.bind(this);
     this.handleReportDeltaSelect = this.handleReportDeltaSelect.bind(this);
+    this.handleReportDeleteClick = this.handleReportDeleteClick.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
     this.openCreateTaskDialog = this.openCreateTaskDialog.bind(this);
   }
@@ -117,8 +118,9 @@ class Page extends React.Component {
   }
 
   handleDialogSave(data) {
-    const {entityCommand, onChanged} = this.props;
-    return entityCommand.import(data).then(() => onChanged());
+    const {gmp} = this.context;
+    const {onChanged, onError} = this.props;
+    return gmp.report.import(data).then(onChanged, onError);
   }
 
   handleCreateContainerTask(data) {
@@ -144,6 +146,12 @@ class Page extends React.Component {
     }
   }
 
+  handleReportDeleteClick(report) {
+    const {gmp} = this.context;
+    const {onChanged, onError} = this.props;
+    return gmp.report.delete(report).then(onChanged, onError);
+  }
+
   render() {
     return (
       <Wrapper>
@@ -152,6 +160,7 @@ class Page extends React.Component {
           {...this.state}
           onUploadReportClick={this.openImportDialog}
           onReportDeltaSelect={this.handleReportDeltaSelect}
+          onReportDeleteClick={this.handleReportDeleteClick}
         />
         <ImportReportDialog
           ref={ref => this.import_dialog = ref}
@@ -166,10 +175,10 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  entityCommand: PropTypes.entitycommand.isRequired,
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
   onChanged: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 

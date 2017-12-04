@@ -48,7 +48,7 @@ import TableRow from '../../components/table/row.js';
 const IconActions = ({
   entity,
   selectedDeltaReport,
-  onEntityDelete,
+  onReportDeleteClick,
   onReportDeltaSelect,
 }) => {
   const {report} = entity;
@@ -87,7 +87,7 @@ const IconActions = ({
         active={active}
         value={entity}
         title={title}
-        onClick={active ? onEntityDelete : undefined}
+        onClick={active ? onReportDeleteClick : undefined}
       />
     </IconDivider>
   );
@@ -96,7 +96,7 @@ const IconActions = ({
 IconActions.propTypes = {
   entity: PropTypes.model.isRequired,
   selectedDeltaReport: PropTypes.model,
-  onEntityDelete: PropTypes.func.isRequired,
+  onReportDeleteClick: PropTypes.func.isRequired,
   onReportDeltaSelect: PropTypes.func.isRequired,
 };
 
