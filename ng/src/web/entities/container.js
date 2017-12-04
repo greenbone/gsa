@@ -112,7 +112,6 @@ class EntitiesContainer extends React.Component {
 
   componentWillReceiveProps(next) {
     if (is_defined(next.location) && is_defined(next.location.query) &&
-      is_defined(next.location.query.filter) &&
       next.location.query.filter !== this.props.location.query.filter) {
       const {filter} = next.location.query;
       this.updateFilter(filter);
