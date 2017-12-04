@@ -2536,26 +2536,27 @@
    * @return {string} The resource type as used in cmd=get_[...].
    */
   gch.cmd_type = function(type) {
-    var get_type;
-    if (type === 'host' || type === 'os') {
-      get_type = 'asset';
+    switch (type) {
+      case 'allinfo':
+        type = 'secinfo';
+        break;
+      case 'dfn_cert_adv':
+        type = 'dfncertadv';
+        break;
+      case 'cert_bund_adv':
+        type = 'certbundadv';
+        break;
+      case 'os':
+        type = 'operatingsystem';
+        break;
+      default:
+        break;
     }
-    else if (type === 'allinfo' || type === 'nvt' || type === 'cve' ||
-        type === 'cpe' || type === 'ovaldef' || type === 'cert_bund_adv' ||
-        type === 'dfn_cert_adv') {
-      get_type = 'info';
-    }
-    else {
-      get_type = type;
-    }
-    return get_type;
+    return type;
   };
 
-  function is_ng(type) {
-    return type === 'task' || type === 'result';
-  }
   /**
-   * @summary Generates a filtered list page URL
+   * @summary Changes location to a list page
    *
    * @param {string}  type         Resource type or subtype
    * @param {string}  column       Column name
@@ -2565,7 +2566,7 @@
    *
    * @return {string} The page URL.
    */
-  gch.filtered_list_url = function(type, column, value, filter_info, relation) {
+  gch.goto_list_page = function(type, column, value, filter_info, relation) {
     var result;
     var get_type;
     var get_type_plural;
@@ -2577,28 +2578,7 @@
     // Get "real" type and plural
     get_type = gch.cmd_type(type);
 
-    if (get_type === 'info') {
-      get_type_plural = get_type;
-    }
-    else {
-      get_type_plural = get_type + 's';
-    }
-
-    if (is_ng(get_type)) {
-      result = '/ng/' + get_type_plural + '?';
-    }
-    else {
-
-      // Add command and (if needed) subtype
-      result = '/omp?cmd=get_' + get_type_plural + '&';
-
-      if (get_type !== type) {
-        result += get_type + '_type=' + type + '&';
-      }
-    }
-
-    // Add existing extra options from filter
-    result += 'filter=' + filter_info.extra_options_str + ' ';
+    result = '/ng/' + get_type + 's?filter=';
 
     // Create new column filter keyword(s)
     var criteria_addition = '';
@@ -2688,46 +2668,21 @@
 
     result += new_criteria;
 
-    if (!is_ng(get_type)) {
-      // Add token
-      result += '&token=' + gsa.token;
-    }
-
-    return result;
+    gsa.history.push(result);
   };
 
   /**
-   * @summary Generates a details page URL
+   * @summary Changes location to a details page
    *
    * @param {string}  type         Resource type or subtype
    * @param {string}  id           id of the resource to get
-   * @param {Object}  filter_info  filter_info from generator
-   * @param {string}  relation     The relation to use
    *
    * @return {string} the page URL
    */
-  gch.details_page_url = function(type, id, filter_info) {
-    var result = '/omp?';
+  gch.goto_details_page = function(type, id) {
     var get_type = gch.cmd_type(type);
 
-    // Add command and (if needed) subtype
-    result += ('cmd=get_' + get_type);
-
-    if (get_type !== type) {
-      result += ('&' + get_type + '_type=' + type);
-    }
-
-    // Add resource id
-    result += ('&' + get_type + '_id=' + id);
-
-    // Add filter
-    result += ('&filter=' + filter_info.term);
-    result += ('&filt_id=' + filter_info.id);
-
-    // Add token
-    result += ('&token=' + gsa.token);
-
-    return result;
+    gsa.history.push('/ng/' + get_type + '/' + id);
   };
 
   /*

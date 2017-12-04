@@ -252,7 +252,7 @@
       })
       .append('a');
 
-    new_node_a.attr('xlink:href', function(d) {
+    new_node_a.on('click', function(d) {
       if (no_chart_links === true) {
         return null;
       }
