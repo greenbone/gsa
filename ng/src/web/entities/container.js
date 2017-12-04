@@ -98,6 +98,7 @@ class EntitiesContainer extends React.Component {
     this.handleTimer = this.handleTimer.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
+    this.handleFilterReset = this.handleFilterReset.bind(this);
   }
 
   componentDidMount() {
@@ -112,7 +113,6 @@ class EntitiesContainer extends React.Component {
 
   componentWillReceiveProps(next) {
     if (is_defined(next.location) && is_defined(next.location.query) &&
-      is_defined(next.location.query.filter) &&
       next.location.query.filter !== this.props.location.query.filter) {
       const {filter} = next.location.query;
       this.updateFilter(filter);
@@ -349,6 +349,18 @@ class EntitiesContainer extends React.Component {
     this.load(filter);
   }
 
+  handleFilterReset() {
+    const {router, location} = this.props;
+    const query = {...location.query};
+
+    // remove filter param from url
+    delete query.filter;
+
+    router.push({pathname: location.pathname, query});
+
+    this.load();
+  }
+
   render() {
     const {
       entities,
@@ -380,6 +392,7 @@ class EntitiesContainer extends React.Component {
           onDownloaded={onDownload}
           onError={this.handleError}
           onFilterChanged={this.handleFilterChanged}
+          onFilterReset={this.handleFilterReset}
           onSortChange={this.handleSortChange}
           onSelectionTypeChange={this.handleSelectionTypeChange}
           onDownloadBulk={this.handleDownloadBulk}
@@ -412,6 +425,7 @@ EntitiesContainer.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
+  router: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
