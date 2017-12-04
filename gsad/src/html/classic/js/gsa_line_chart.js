@@ -269,7 +269,7 @@
       var type = data.column_info.columns[self.x_field].type;
       var column = data.column_info.columns[self.x_field].column;
       var value;
-      var url;
+      var handler;
 
       if (self.is_timeline) {
         if (self.range_marker_start.getTime() >=
@@ -296,16 +296,10 @@
       }
 
       if (self.range_marker_resize) {
-        url = gch.filtered_list_url(
+        handler = gch.goto_list_page(
             type, column, value, data.filter_info, 'range');
 
-        self.range_marker_elem.attr('xlink:href', url);
-
-        if (d3.event.button === 1 || d3.event.ctrlKey || d3.event.shiftKey) {
-          window.open(url, '_blank');
-        } else {
-          window.location = url;
-        }
+        self.range_marker_elem.on('click', handler);
       }
 
       self.range_marker_resize = false;

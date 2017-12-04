@@ -238,11 +238,11 @@
     this.graph.selectAll('.node').data(this.layout.nodes()).enter()
       .append('a')
         .classed('node', true)
-        .attr('xlink:href', function(d) {
+        .on('click', function(d) {
           if (d.id === null) {
             return null;
           }
-          return gch.details_page_url('host', d.id, data.filter_info);
+          return gch.goto_details_page('host', d.id, data.filter_info);
         })
         .append('circle')
           .classed('node-marker', true)
@@ -339,9 +339,9 @@
     var value = d.value;
 
     if (column === 'uuid') {
-      return gsa.details_page_url(type, value, filter_info);
+      return gsa.goto_details_page(type, value);
     } else {
-      return gsa.filtered_list_url(type, column, value, filter_info);
+      return gsa.goto_list_page(type, column, value, filter_info);
     }
   };
 

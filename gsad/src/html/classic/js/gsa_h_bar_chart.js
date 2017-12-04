@@ -365,7 +365,7 @@
       .attr('x', width / 2)
       .attr('y', height / 2);
 
-    var generateLink = self.createGenerateLinkFunc(
+    var handler = self.createGenerateLinkFunc(
         data.column_info.columns.value.column,
         data.column_info.columns.value.type, data.filter_info);
 
@@ -381,7 +381,7 @@
     this.svg.selectAll('.bar')
       .data(records).enter().insert('a')
         .attr('class', 'bar')
-        .attr('xlink:href', generateLink)
+        .on('click', handler)
         .insert('rect', '.x.axis')
           .attr('class', 'bar-rect')
           .attr('x', this.y_scale(0))

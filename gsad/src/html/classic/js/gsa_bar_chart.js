@@ -234,7 +234,7 @@
         });
     }
 
-    var generateLink = self.createGenerateLinkFunc(
+    var handler = self.createGenerateLinkFunc(
         data.column_info.columns.value.column,
         data.column_info.columns.value.type, data.filter_info);
 
@@ -242,7 +242,6 @@
     this.svg.selectAll('.bar')
       .data(records).enter().insert('a')
         .attr('class', 'bar')
-        .attr('xlink:href', generateLink)
         .insert('rect', '.x.axis')
           .attr('x', function(d) { return self.x_scale(d[self.x_field]); })
           .attr('y', function(d) { return self.y_scale(0); })
@@ -250,6 +249,7 @@
           .attr('height', function(d) {
             return height - self.y_scale(0);
           })
+          .on('click', handler)
           .on('mouseover', this.tip.show)
           .on('mouseout', this.tip.hide);
 
@@ -314,9 +314,9 @@
     var value = d.value;
 
     if (column === 'uuid') {
-      return gsa.charts.details_page_url(type, value, filter_info);
+      return gsa.charts.goto_details_page(type, value);
     } else {
-      return gsa.charts.filtered_list_url(type, column, value, filter_info);
+      return gsa.charts.goto_list_page(type, column, value, filter_info);
     }
   };
 

@@ -213,8 +213,8 @@
     }
 
     var legend_y = 0;
-    for (i = 0; i < slices.length; i++) {
-      var d = slices[i];
+    for (let i = 0; i < slices.length; i++) {
+      let d = slices[i];
       var color = self.scaleColor(d.data[self.x_field]);
       if (!gsa.is_defined(color)) {
         color = self.scaleColor(d.data[self.x_field + '~original']);
@@ -226,7 +226,9 @@
         .on('mouseout', this.tip.hide);
 
       var legend_item = legend_group.insert('a')
-        .attr('xlink:href', generate_link(d, i));
+        .on('click', function() {
+          generate_link(d, i);
+        });
 
       legend_item.insert('rect')
         .attr('height', '15')
@@ -276,7 +278,7 @@
       .enter()
       .insert('a')
         .attr('class', 'slice')
-        .attr('xlink:href', generate_link)
+        .on('click', generate_link)
         .on('mouseover', set_tooltip_title)
         .on('mouseout', this.tip.hide)
         .each(function(d, i) {
@@ -375,7 +377,7 @@
       .data(slices)
       .enter()
       .insert('a')
-        .attr('xlink:href', generate_link)
+        .on('click', generate_link)
         .insert('text')
           .classed('slice_label', true)
           .classed('empty', function(d) {
@@ -547,7 +549,7 @@
       value = d.data[self.x_field];
     }
 
-    return gch.filtered_list_url(type, column, value, filter_info);
+    return gch.goto_list_page(type, column, value, filter_info);
   };
 
   /*

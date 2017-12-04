@@ -126,7 +126,7 @@
 
     this.color_scale.domain(words);
 
-    var generate_link = this.createGenerateLinkFunc(
+    var handler = this.createGenerateLinkFunc(
         data.column_info.group_column,
         data.column_info.columns[self.x_field].type,
         data.filter_info);
@@ -141,7 +141,7 @@
         self.svg.selectAll('text')
           .data(words)
           .enter().append('a')
-            .attr('xlink:href', generate_link)
+            .on('click', handler)
             .append('text')
               .style('font-size', function(d) { return d.size + 'px'; })
               .style('font-family', function(d) { return d.font; })
@@ -181,7 +181,7 @@
   CloudChartGenerator.prototype.generateLink = function(d, i, column, type,
       filter_info) {
     var value = d.text;
-    return gch.filtered_list_url(type, column, value, filter_info, '~');
+    return gch.goto_list_page(type, column, value, filter_info, '~');
   };
 
 })(window, window, window.d3, window.console, window.gsa);

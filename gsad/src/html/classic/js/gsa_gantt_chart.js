@@ -253,15 +253,15 @@
       .attr('x', width / 2)
       .attr('y', height / 2);
 
-    // Function to generate link URLs
-    function generate_link(d, i) {
+    // Function to generate click handler
+    function handler(d, i) {
       if (self.noChartLinks) {
         return null;
       }
       var type = data.column_info.columns.id.type;
       var value = d.id;
 
-      return gch.details_page_url(type, value, data.filter_info);
+      return gch.goto_details_page(type, value);
     }
 
     // Update chart
@@ -282,7 +282,7 @@
       .insert('g')
       .attr('class', 'bar-group')
       .insert('a')
-        .attr('xlink:href', generate_link);
+        .on('click', handler);
 
     this.svg.selectAll('.bar-label-shadow')
       .data(display_records)

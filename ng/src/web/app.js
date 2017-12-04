@@ -154,6 +154,8 @@ if (!is_defined(window.gsa.severity_levels)) {
   window.gsa.severity_levels = get_severity_levels(); // TODO pass type
 }
 
+window.gsa.history = browserHistory;
+
 class AppHttpInterceptor extends HttpInterceptor {
 
   constructor(app) {
