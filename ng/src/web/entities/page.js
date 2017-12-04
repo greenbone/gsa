@@ -159,6 +159,7 @@ class EntitiesPage extends React.Component {
       onError,
       onFilterChanged,
       onFilterCreated,
+      onFilterReset,
     } = this.props;
 
     if (!powerfilter) {
@@ -182,7 +183,7 @@ class EntitiesPage extends React.Component {
           onEditClick={handler}
           onError={onError}
           onFilterCreated={onFilterCreated}
-          onResetClick={onFilterChanged}
+          onResetClick={onFilterReset}
           onUpdate={onFilterChanged}
         />
       </Layout>
@@ -260,6 +261,7 @@ EntitiesPage.propTypes = {
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onFilterCreated: PropTypes.func.isRequired,
+  onFilterReset: PropTypes.func.isRequired,
 };
 
 export const createEntitiesPage = (options = {}) => {
