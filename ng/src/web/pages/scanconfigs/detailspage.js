@@ -150,91 +150,95 @@ const Details = ({
         title={_('Network Vulnerability Test Families ({{count}})',
          {count: family_list.length})}
       >
-        <StripedTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                {_('Family')}
-              </TableHead>
-              <TableHead>
-                {_('NVTs selected')}
-              </TableHead>
-              <TableHead align={['space-between', 'center']}>
-                {_('Trend')}
-                <Trend
-                  trend={families.trend}
-                  titleDynamic={_('The families selection is DYNAMIC. New ' +
-                    'families will automatically be added and considered.')}
-                  titleStatic={_('The families selection is STATIC. New ' +
-                    'families will NOT automatically be added and considered.')}
-                />
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {family_list.map(family => (
-              <TableRow
-                key={family.name}
-              >
-                <TableData>
-                  {family.name}
-                </TableData>
-                <TableData align={['center', 'end']}>
-                  <Layout flex align="end">
-                    {_('{{count}} of {{max}}', family.nvts)}
-                  </Layout>
-                </TableData>
-                <TableData align={['center', 'center']}>
+        {family_list.length > 0 &&
+          <StripedTable>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {_('Family')}
+                </TableHead>
+                <TableHead>
+                  {_('NVTs selected')}
+                </TableHead>
+                <TableHead align={['space-between', 'center']}>
+                  {_('Trend')}
                   <Trend
-                    trend={family.trend}
-                    titleDynamic={_('The NVT selection is DYNAMIC. New ' +
-                      'NVTs will automatically be added and considered.')}
-                    titleStatic={_('The NVT selection is STATIC. New ' +
-                      'NVTs will NOT automatically be added and considered.')}
+                    trend={families.trend}
+                    titleDynamic={_('The families selection is DYNAMIC. New ' +
+                      'families will automatically be added and considered.')}
+                    titleStatic={_('The families selection is STATIC. New ' +
+                      'families will NOT automatically be added and considered.')}
                   />
-                </TableData>
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </StripedTable>
+            </TableHeader>
+            <TableBody>
+              {family_list.map(family => (
+                <TableRow
+                  key={family.name}
+                >
+                  <TableData>
+                    {family.name}
+                  </TableData>
+                  <TableData align={['center', 'end']}>
+                    <Layout flex align="end">
+                      {_('{{count}} of {{max}}', family.nvts)}
+                    </Layout>
+                  </TableData>
+                  <TableData align={['center', 'center']}>
+                    <Trend
+                      trend={family.trend}
+                      titleDynamic={_('The NVT selection is DYNAMIC. New ' +
+                        'NVTs will automatically be added and considered.')}
+                      titleStatic={_('The NVT selection is STATIC. New ' +
+                        'NVTs will NOT automatically be added and considered.')}
+                    />
+                  </TableData>
+                </TableRow>
+              ))}
+            </TableBody>
+          </StripedTable>
+        }
       </Section>
       <Section
         foldable
         title={_('Scanner Preferences ({{count}})',
          {count: preferences.scanner.length})}
       >
-        <StripedTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                {_('Name')}
-              </TableHead>
-              <TableHead>
-                {_('Value')}
-              </TableHead>
-              <TableHead>
-                {_('Default Value')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.scanner.map(pref => (
-              <TableRow
-                key={pref.name}
-              >
-                <TableData>
-                  {pref.name}
-                </TableData>
-                <TableData>
-                  {pref.value}
-                </TableData>
-                <TableData>
-                  {pref.default}
-                </TableData>
+        {preferences.scanner.length > 0 &&
+          <StripedTable>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {_('Name')}
+                </TableHead>
+                <TableHead>
+                  {_('Value')}
+                </TableHead>
+                <TableHead>
+                  {_('Default Value')}
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </StripedTable>
+            </TableHeader>
+            <TableBody>
+              {preferences.scanner.map(pref => (
+                <TableRow
+                  key={pref.name}
+                >
+                  <TableData>
+                    {pref.name}
+                  </TableData>
+                  <TableData>
+                    {pref.value}
+                  </TableData>
+                  <TableData>
+                    {pref.default}
+                  </TableData>
+                </TableRow>
+              ))}
+            </TableBody>
+          </StripedTable>
+        }
       </Section>
       <Section
         foldable
@@ -242,49 +246,51 @@ const Details = ({
         title={_('Network Vulnerability Test Preferences ({{count}})',
          {count: preferences.nvt.length})}
       >
-        <StripedTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                {_('NVT')}
-              </TableHead>
-              <TableHead>
-                {_('Name')}
-              </TableHead>
-              <TableHead>
-                {_('Value')}
-              </TableHead>
-              <TableHead>
-                {_('Default Value')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.nvt.map(pref => (
-              <TableRow
-                key={pref.nvt.oid + pref.nvt.name + pref.name}
-              >
-                <TableData>
-                  <DetailsLink
-                    id={pref.nvt.oid}
-                    type="nvt"
-                  >
-                    {pref.nvt.name}
-                  </DetailsLink>
-                </TableData>
-                <TableData>
-                  {pref.name}
-                </TableData>
-                <TableData>
-                  {pref.value}
-                </TableData>
-                <TableData>
-                  {pref.default}
-                </TableData>
+        {preferences.nvt.length > 0 &&
+          <StripedTable>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {_('NVT')}
+                </TableHead>
+                <TableHead>
+                  {_('Name')}
+                </TableHead>
+                <TableHead>
+                  {_('Value')}
+                </TableHead>
+                <TableHead>
+                  {_('Default Value')}
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </StripedTable>
+            </TableHeader>
+            <TableBody>
+              {preferences.nvt.map(pref => (
+                <TableRow
+                  key={pref.nvt.oid + pref.nvt.name + pref.name}
+                >
+                  <TableData>
+                    <DetailsLink
+                      id={pref.nvt.oid}
+                      type="nvt"
+                    >
+                      {pref.nvt.name}
+                    </DetailsLink>
+                  </TableData>
+                  <TableData>
+                    {pref.name}
+                  </TableData>
+                  <TableData>
+                    {pref.value}
+                  </TableData>
+                  <TableData>
+                    {pref.default}
+                  </TableData>
+                </TableRow>
+              ))}
+            </TableBody>
+          </StripedTable>
+        }
       </Section>
     </Layout>
   );
