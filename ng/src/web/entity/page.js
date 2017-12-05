@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -179,7 +180,11 @@ class EntityPage extends React.Component {
     }
 
     return (
-      <Layout flex="column" grow="1">
+      <Layout
+        flex="column"
+        align="start"
+        grow="1"
+      >
         <Toolbar>
           {this.renderToolbarIcons()}
         </Toolbar>
