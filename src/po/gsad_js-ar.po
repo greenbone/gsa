@@ -3,7 +3,7 @@
 # Description: Arabic user interface translations.
 #
 # Copyright:
-# Copyright (C) 2016 Greenbone Networks GmbH
+# Copyright (C) 2016 - 2017 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 16:12+0200\n"
-"PO-Revision-Date: 2016-12-29 11:26+0200\n"
+"POT-Creation-Date: 2017-11-08 13:41+0100\n"
+"PO-Revision-Date: 2017-11-17 14:22+0200\n"
 "Last-Translator: Tameem <tameem.eissa@greenbone.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ar\n"
@@ -35,421 +35,447 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.1.3\n"
-"X-POOTLE-MTIME: 1483007163.593549\n"
+"X-POOTLE-MTIME: 1510924953.232019\n"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:590
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1276
+#: src/html/classic/js/greenbone.js:623 src/html/classic/js/greenbone.js:1345
 msgid "Save"
 msgstr "حفظ"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1157
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1158
-#, fuzzy
+#: src/html/classic/js/greenbone.js:1197 src/html/classic/js/greenbone.js:1198
 msgid "Unfold {{name}}"
 msgstr "كشف"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1163
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1164
-#, fuzzy
+#: src/html/classic/js/greenbone.js:1203 src/html/classic/js/greenbone.js:1204
 msgid "Fold {{name}}"
 msgstr "طي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1285
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1293
+#: src/html/classic/js/greenbone.js:1354 src/html/classic/js/greenbone.js:1362
 msgid "Create"
 msgstr "إنشاء"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1301
+#: src/html/classic/js/greenbone.js:1370
 msgid "Delete"
 msgstr "حذف"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1391
+#: src/html/classic/js/greenbone.js:1461
 msgid "Please wait..."
 msgstr "انتظر من فضلك..."
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1481
+#: src/html/classic/js/greenbone.js:1557
 msgid "Update Filter"
 msgstr "تحديث المرشح"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1498
+#: src/html/classic/js/greenbone.js:1574
 msgid "Select date"
 msgstr "اختر تاريخا"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1786
+#: src/html/classic/js/greenbone.js:1892
 msgid "Follow link?"
 msgstr "إتبع الوصلة"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1789
+#: src/html/classic/js/greenbone.js:1895
 msgid ""
 "This dialog will open a new window for <a>{{url}}</a> if you click on follow "
 "link. Following this link is on your own responsibility. Greenbone doesn't "
 "endorse the content you will see there."
-msgstr ""
-"هذا الحوار سيفتح نافذة جديدة ل <a>{{url}}</a> إذا ضغطت على الرابط التالي. "
-"إتباع هذا الرابط على مسؤوليتك. غرين بون  لا تجيز المحتوى الذي ستراه هناك. "
+msgstr "انتظر من فضلك..."
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1794
+#: src/html/classic/js/greenbone.js:1900
 msgid "Abort"
 msgstr "ألغي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1795
+#: src/html/classic/js/greenbone.js:1901
 msgid "Follow link"
-msgstr "إتبع الرابط"
+msgstr "ألغي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1868
+#: src/html/classic/js/greenbone.js:1974
 msgid "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
-msgstr ""
+msgstr "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1876
+#: src/html/classic/js/greenbone.js:1982
 msgid "{{subject}} {{subject_id}} {{description}}  {{id}}"
-msgstr ""
+msgstr "{{subject}} {{subject_id}} {{description}}  {{id}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1881
+#: src/html/classic/js/greenbone.js:1987
 msgid "{{subject}} {{subject_id}} {{description}}"
-msgstr ""
+msgstr "{{subject}} {{subject_id}} {{description}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bar_chart.js:68
+#: src/html/classic/js/gsa_bar_chart.js:68
 msgid "Loading bar chart ..."
-msgstr "تحميل شريط الرسم البياني"
+msgstr "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bar_chart.js:68
+#: src/html/classic/js/gsa_bar_chart.js:68
 msgid "Bar Chart"
 msgstr "شريط الرسم البياني"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bubble_chart.js:57
+#: src/html/classic/js/gsa_bubble_chart.js:57
 msgid "Loading bubble chart ..."
 msgstr "تحميل المخطط الفقاعي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bubble_chart.js:57
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_line_chart.js:79
+#: src/html/classic/js/gsa_bubble_chart.js:57
+#: src/html/classic/js/gsa_line_chart.js:79
 msgid "Bubble Chart"
 msgstr "التخطيط الفقاعي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bubble_chart.js:102
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_gantt_chart.js:123
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:152
-msgid "No matching {{resource_type}}"
-msgstr ""
+#: src/html/classic/js/gsa_bubble_chart.js:102
+msgid "No matching {{- resource_type}}"
+msgstr "لا يوجد تطابق {{resource_type}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1424
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1545
+#: src/html/classic/js/gsa_chart_helpers.js:1423
+#: src/html/classic/js/gsa_chart_helpers.js:1545
 msgid "High"
 msgstr "مرتفع"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1427
+#: src/html/classic/js/gsa_chart_helpers.js:1426
 msgid "Medium"
 msgstr "متوسط"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1430
+#: src/html/classic/js/gsa_chart_helpers.js:1429
 msgid "Low"
 msgstr "منخفض"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1433
+#: src/html/classic/js/gsa_chart_helpers.js:1432
 msgid "Log"
-msgstr "سِجل"
+msgstr "متوسط"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1436
+#: src/html/classic/js/gsa_chart_helpers.js:1435
 msgid "False Positive"
 msgstr "إيجابي خاطئ"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1439
+#: src/html/classic/js/gsa_chart_helpers.js:1438
 msgid "Debug"
 msgstr "تنقيح"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1442
+#: src/html/classic/js/gsa_chart_helpers.js:1441
 msgid "Error"
 msgstr "خطأ"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1445
+#: src/html/classic/js/gsa_chart_helpers.js:1444
 msgid "N/A"
 msgstr "غير متوفر"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1459
+#: src/html/classic/js/gsa_chart_helpers.js:1458
 msgid "Operating System"
 msgstr "نظام التشغيل"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1461
+#: src/html/classic/js/gsa_chart_helpers.js:1460
 msgid "OVAL definition"
 msgstr "تعريف OVAL"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1463
+#: src/html/classic/js/gsa_chart_helpers.js:1462
 msgid "CERT-Bund Advisory"
 msgstr "CERT-Bund Advisory"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1465
+#: src/html/classic/js/gsa_chart_helpers.js:1464
 msgid "DFN-CERT Advisory"
 msgstr "DFN-CERT Advisory"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1467
+#: src/html/classic/js/gsa_chart_helpers.js:1466
 msgid "SecInfo Item"
 msgstr "عنصر SecInfo"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1483
+#: src/html/classic/js/gsa_chart_helpers.js:1482
 msgid "DFN-CERT Advisories"
 msgstr "DFN-CERT Advisories"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1485
+#: src/html/classic/js/gsa_chart_helpers.js:1484
 msgid "CERT-Bund Advisories"
 msgstr "CERT-Bund Advisories"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1529
-msgid "total {{resource_type_plural}}"
+#: src/html/classic/js/gsa_chart_helpers.js:1528
+msgid "total {{- resource_type_plural}}"
 msgstr "الكلى"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1537
+#: src/html/classic/js/gsa_chart_helpers.js:1535
 msgid "creation time"
 msgstr "وقت الإنشاء"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1539
+#: src/html/classic/js/gsa_chart_helpers.js:1537
+msgid "duration"
+msgstr "المدّة"
+
+#: src/html/classic/js/gsa_chart_helpers.js:1539
 msgid "modification time"
 msgstr "وقت آخر تعديل"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1541
+#: src/html/classic/js/gsa_chart_helpers.js:1541
 msgid "QoD"
 msgstr "QoD"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1543
+#: src/html/classic/js/gsa_chart_helpers.js:1543
 msgid "QoD type"
 msgstr "نوع QoD"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1547
+#: src/html/classic/js/gsa_chart_helpers.js:1547
 msgid "High / host"
 msgstr "مضيف/عالي "
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2017
+#: src/html/classic/js/gsa_chart_helpers.js:1549
+msgid "Duration / host"
+msgstr "المدة \\ المضيف "
+
+#: src/html/classic/js/gsa_chart_helpers.js:1600
+msgid "min. {{- field_name}}"
+msgstr "الأصغر . {{- field_name}}"
+
+#: src/html/classic/js/gsa_chart_helpers.js:1604
+msgid "max. {{- field_name}}"
+msgstr "الأكبر {{- field_name}}"
+
+#: src/html/classic/js/gsa_chart_helpers.js:1608
+msgid "average {{- field_name}}"
+msgstr "الوسطي {{- field_name}}"
+
+#: src/html/classic/js/gsa_chart_helpers.js:1612
+msgid "summed {{- field_name}}"
+msgstr "الملخص {{- field_name}}"
+
+#: src/html/classic/js/gsa_chart_helpers.js:2027
 msgid "None"
 msgstr "لا شيء"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2020
+#: src/html/classic/js/gsa_chart_helpers.js:2030
 msgid "Exploit"
 msgstr "استغلال (الثغرة)"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2023
+#: src/html/classic/js/gsa_chart_helpers.js:2033
 msgid "Remote vulnerability"
 msgstr "قابلية الاختراق عن بعد"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2026
+#: src/html/classic/js/gsa_chart_helpers.js:2036
 msgid "Package check"
 msgstr "فصح الباكيج"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2029
+#: src/html/classic/js/gsa_chart_helpers.js:2039
 msgid "Registry check"
 msgstr "فحص الريجستري"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2032
+#: src/html/classic/js/gsa_chart_helpers.js:2042
 msgid "Executable version"
 msgstr "نسخة قابلة للتنفيذ"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2035
+#: src/html/classic/js/gsa_chart_helpers.js:2045
 msgid "Remote analysis"
 msgstr "التحليل عن بعد"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2038
+#: src/html/classic/js/gsa_chart_helpers.js:2048
 msgid "Remote probe"
 msgstr "عينة عن بعد"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2041
+#: src/html/classic/js/gsa_chart_helpers.js:2051
 msgid "Unreliable rem. banner"
-msgstr ""
+msgstr "شعار غير موثوق"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2044
+#: src/html/classic/js/gsa_chart_helpers.js:2054
 msgid "Unreliable exec. version"
 msgstr "نسخة تنفيذية غير موثوقة"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2521
+#: src/html/classic/js/gsa_chart_helpers.js:2546
 msgid "{{title}} (Loading...)"
-msgstr ""
+msgstr "{{title}} (تحميل...)"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2528
+#: src/html/classic/js/gsa_chart_helpers.js:2553
 msgid "{{title}} {{filter_text}} (Total: {{count}})"
-msgstr ""
+msgstr "{{title}} {{filter_text}} (الكلي: {{count}})"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2625
+#: src/html/classic/js/gsa_chart_helpers.js:2650
 msgid "Greenbone Security Assistant - Chart data table"
 msgstr "مساعد أمن غرين بون - جدول بيانات المخطط "
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2677
+#: src/html/classic/js/gsa_chart_helpers.js:2702
 msgid "Applied filter: {{filter}}"
-msgstr ""
+msgstr "المرشح المطبق: {{filter}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_cloud_chart.js:54
+#: src/html/classic/js/gsa_cloud_chart.js:54
 msgid "Loading word cloud ..."
 msgstr "تحميل غيمة الكلمات"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_cloud_chart.js:55
+#: src/html/classic/js/gsa_cloud_chart.js:55
 msgid "Word Cloud"
 msgstr "غيمة الكلمات"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:231
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:232
+#: src/html/classic/js/gsa_dashboard.js:231
+#: src/html/classic/js/gsa_dashboard.js:232
 msgid "Edit Dashboard"
 msgstr "تحرير لوحة القيادة"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:245
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:246
+#: src/html/classic/js/gsa_dashboard.js:245
+#: src/html/classic/js/gsa_dashboard.js:246
 msgid "Add new Chart"
 msgstr "أضف مخطط جديد"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:261
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:262
+#: src/html/classic/js/gsa_dashboard.js:261
+#: src/html/classic/js/gsa_dashboard.js:262
 msgid "Reset to defaults"
 msgstr "العودة إلى الإعدادات الأصلية"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:277
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:278
+#: src/html/classic/js/gsa_dashboard.js:277
+#: src/html/classic/js/gsa_dashboard.js:278
 msgid "Cancel Editing"
 msgstr "إلغاء التحرير"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:293
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:294
+#: src/html/classic/js/gsa_dashboard.js:293
+#: src/html/classic/js/gsa_dashboard.js:294
 msgid "Save Changes"
 msgstr "احفظ التغييرات"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1584
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1585
+#: src/html/classic/js/gsa_dashboard.js:1585
+#: src/html/classic/js/gsa_dashboard.js:1586
 msgid "Remove"
 msgstr "إزالة"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1592
+#: src/html/classic/js/gsa_dashboard.js:1593
 msgid "Initializing display for \"{{display}}\"..."
-msgstr ""
+msgstr "تهيئة العرض من أجل \"{{display}}\"..."
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1611
+#: src/html/classic/js/gsa_dashboard.js:1612
 msgid "Loading data ..."
 msgstr "تحميل البيانات..."
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2389
+#: src/html/classic/js/gsa_dashboard.js:2388
 msgid "Could not load chart {{chart}}"
-msgstr ""
+msgstr "لم يتم التمكن من تحميل المخطط {{chart}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2861
+#: src/html/classic/js/gsa_dashboard.js:2860
 msgid "Loading aborted"
 msgstr "تم إلغاء التحميل"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2873
+#: src/html/classic/js/gsa_dashboard.js:2872
 msgid "HTTP error {{error}}"
-msgstr ""
+msgstr "HTTP خطأ {{error}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2874
+#: src/html/classic/js/gsa_dashboard.js:2873
 msgid "Error: HTTP request returned status {{status}} for URL: {{url}}"
-msgstr ""
+msgstr "خطأ: طلب HTTP أعاد حالة {{status}} من أجل العنوان : {{url}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2880
+#: src/html/classic/js/gsa_dashboard.js:2879
 msgid "Error reading XML"
 msgstr "خطأ أثناء قراءة ملف XML"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2881
+#: src/html/classic/js/gsa_dashboard.js:2880
 msgid "Error reading XML from URL {{url}}: {{error}}"
-msgstr ""
+msgstr "خطأ قراءة الـ XML من العنوان {{url}}: {{error}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2889
+#: src/html/classic/js/gsa_dashboard.js:2888
 msgid "Error parsing XML data"
 msgstr "خطأ في تحليل ملف XML"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2890
+#: src/html/classic/js/gsa_dashboard.js:2889
 msgid "Error parsing XML data. Details: {{details}}"
-msgstr ""
+msgstr "خطأ تحليل معطيات XML. التفاصيل: {{details}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2919
+#: src/html/classic/js/gsa_dashboard.js:2918
 msgid "Internal error: Invalid request"
 msgstr "خطأ داخلي: طلب غير صالح"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2920
+#: src/html/classic/js/gsa_dashboard.js:2919
 msgid "Invalid request command: \"{{command}}"
-msgstr ""
+msgstr "تعليمة طلب غير صحيحة \"{{command}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2927
+#: src/html/classic/js/gsa_dashboard.js:2926
 msgid "Error {{omp_status}}: {{omp_status_text}}"
-msgstr ""
+msgstr "خطأ {{omp_status}}: {{omp_status_text}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2929
+#: src/html/classic/js/gsa_dashboard.js:2928
 msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
-msgstr ""
+msgstr "خطأ {{omp_status}}: {{omp_status_text}}"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:3216
+#: src/html/classic/js/gsa_dashboard.js:3217
 msgid "{{title_text}} (Loading...)"
-msgstr ""
+msgstr "{{title_text}} (Loading...)"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:3221
+#: src/html/classic/js/gsa_dashboard.js:3222
 msgid "Unknown chart"
 msgstr "رسم بياني غير معروف"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:64
+#: src/html/classic/js/gsa_donut_chart.js:64
 msgid "Loading donut chart ..."
 msgstr "تحميل الرسم البياني دونات"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:64
+#: src/html/classic/js/gsa_donut_chart.js:64
 msgid "Donut Chart"
 msgstr "الرسم البياني دونات"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:672
+#: src/html/classic/js/gsa_donut_chart.js:686
 msgid "Inactive"
 msgstr "غير نشط"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:675
+#: src/html/classic/js/gsa_donut_chart.js:689
 msgid "Active (unlimited)"
 msgstr "نشط (غير محدود)"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:678
+#: src/html/classic/js/gsa_donut_chart.js:692
 msgid "Active for next {{days}} days"
-msgstr ""
+msgstr "نشط لـ {{days}} التالية"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_gantt_chart.js:77
+#: src/html/classic/js/gsa_gantt_chart.js:79
 msgid "Loading Gantt chart ..."
 msgstr "تحميل مخطط جانت "
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_gantt_chart.js:77
+#: src/html/classic/js/gsa_gantt_chart.js:79
 msgid "Gantt Chart"
 msgstr "مخطط جانت"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:203
+#: src/html/classic/js/gsa_gantt_chart.js:125
+#: src/html/classic/js/gsa_h_bar_chart.js:152
+msgid "No matching {{resource_type}}"
+msgstr "لا يوجد تطابق {{resource_type}}"
+
+#: src/html/classic/js/gsa_graphics_base.js:203
 msgid "Show detached chart window"
 msgstr "إظهار نافذة المخطط المنفصلة"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:220
+#: src/html/classic/js/gsa_graphics_base.js:220
 msgid "Download CSV"
 msgstr "تحميل CSV"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:243
+#: src/html/classic/js/gsa_graphics_base.js:244
 msgid "Show HTML table"
 msgstr "إظهار ملف الـHTML"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:267
+#: src/html/classic/js/gsa_graphics_base.js:268
 msgid "Show copyable SVG"
 msgstr "إظهار الـ SVG القابلة للنسخ"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:275
+#: src/html/classic/js/gsa_graphics_base.js:276
 msgid "Download SVG"
 msgstr "تحميل SVG"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:109
+#: src/html/classic/js/gsa_h_bar_chart.js:109
 msgid "Loading horizontal bar chart ..."
 msgstr "تحميل شريط الرسم البياني الأفقي "
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:110
+#: src/html/classic/js/gsa_h_bar_chart.js:110
 msgid "Horizontal Bar Chart"
 msgstr "شريط الرسم البياني الأفقي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:275
+#: src/html/classic/js/gsa_h_bar_chart.js:275
 msgid "<br/>({{assets}} Host(s) with average severity {{severity}})"
-msgstr ""
+msgstr "<br/>({{assets}} مضيف (مضيفون) بشدة خطورة متوسطة {{severity}})"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_line_chart.js:79
+#: src/html/classic/js/gsa_line_chart.js:79
 msgid "Loading line chart ..."
 msgstr "تحميل المخطط الأفقي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:47
+#: src/html/classic/js/gsa_topology_chart.js:47
 msgid "Loading topology chart ..."
 msgstr "تحميل المخطط الطبولوجي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:47
+#: src/html/classic/js/gsa_topology_chart.js:47
 msgid "Topology Chart"
 msgstr "المخطط الطبولوجي"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:90
+#: src/html/classic/js/gsa_topology_chart.js:90
 msgid "Too many nodes to display"
 msgstr "الكثير من العقد للإظهار"
 
-#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:96
+#: src/html/classic/js/gsa_topology_chart.js:96
 msgid "Please try a filter selecting less hosts"
 msgstr "الرجاء حاول اختيار مرشح يختار مضيفين أقل"
+
+#: src/html/classic/js/gsa_topology_chart.js:143
+msgid "No hosts with topology selected"
+msgstr "لا يوجد مضيفون مع البنية المختارة"
+
+#~ msgid "total {{resource_type_plural}}"
+#~ msgstr "الكلى"
