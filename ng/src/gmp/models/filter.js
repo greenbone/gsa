@@ -33,7 +33,6 @@ import Model from '../model.js';
 
 import convert from './filter/convert.js';
 import FilterTerm from './filter/filterterm.js';
-import FilterTermList from './filter/filtertermlist.js';
 import {EXTRA_KEYWORDS} from './filter/keywords.js';
 
 /**
@@ -117,13 +116,15 @@ class Filter extends Model {
       this.delete('sort');
     }
 
-    if (!is_defined(key) || !this.has(key)) {
-      this._addTermList(new FilterTermList(term, key));
-      return this;
+    const {keyword} = term;
+
+    if (!is_defined(keyword) || !this.has(keyword)) {
+      this._addTerm(term);
     }
-
-    this._getTermList(key).set(term);
-
+    else {
+      const index = this._getIndex(keyword);
+      this.terms[index] = term;
+    }
     return this;
   }
 
@@ -139,59 +140,33 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   _addTerm(term) {
-    const key = term.keyword;
-
-    if (!is_defined(key) || !this.has(key)) {
-      this._addTermList(new FilterTermList(term, key));
-      return this;
-    }
-
-    this._getTermList(key).add(term);
-
+    this.terms.push(term);
     return this;
   }
 
   /**
-   * Add a FilterTermList to this Filter
+   * Set the FilterTerm array of this Filter
    *
    * @private
    *
-   * @param {FilterTermList} list  The FilterTermList
+   * @param {Array} terms  Array of FilterTerms to set.
    *
    * @return {Filter} This filter
    */
-  _addTermList(list) {
-    this.terms.push(list);
+  _setTerms(terms) {
+    this.terms = terms;
     return this;
   }
 
   /**
-   * Returns the FilterTermList for a FilterTerm keyword
+   * Get the first index of the FilterTerm with key as keyword
    *
-   * @private
+   * @param {String} key FilterTerm keyword to search for
    *
-   * @param {String} key  FilterTerm keyword to search for
-   *
-   * @return {FilterTermList} The FilterTermList for the passed keyword or
-   *                          undefined.
+   * @returns {Integer} Index of the key in the FilterTerms array
    */
-  _getTermList(key) {
-    return this.terms.find(list => key === list.keyword);
-  }
-
-  _getTermLists() {
-    const withKeywords = [];
-    const withoutKeywords = [];
-
-    this.forEach(list => {
-      const keywordlist = list.hasKeyword() ? withKeywords : withoutKeywords;
-      keywordlist.push(list);
-    });
-
-    return {
-      withKeywords,
-      withoutKeywords,
-    };
+  _getIndex(key) {
+    return this.terms.findIndex(term => term.keyword === key);
   }
 
   /**
@@ -207,11 +182,11 @@ class Filter extends Model {
    */
   _merge(filter) {
     if (is_defined(filter)) {
-      filter.forEach(list => {
-        const {keyword: key} = list;
+      filter.forEach(term => {
+        const {keyword: key} = term;
         if (is_defined(key) && includes(EXTRA_KEYWORDS, key) &&
           !this.has(key)) {
-          this._addTermList(list.copy());
+          this._addTerm(term);
         }
       });
     }
@@ -219,9 +194,9 @@ class Filter extends Model {
   }
 
   /**
-   * Calls passed function for each FilterTermList in this Filter
+   * Calls passed function for each FilterTerm in this Filter
    *
-   * @param {function} func  Function to call for each FilterTermList.
+   * @param {function} func  Function to call for each FilterTerm.
    */
   forEach(func) {
     this.terms.forEach(func);
@@ -234,8 +209,8 @@ class Filter extends Model {
    */
   toFilterString() {
     let fstring = '';
-    this.forEach(list => {
-      fstring += list.toString() + ' ';
+    this.forEach(term => {
+      fstring += term.toString() + ' ';
     });
     return fstring.trim();
   }
@@ -249,10 +224,10 @@ class Filter extends Model {
    */
   toFilterCriteriaString() {
     let fstring = '';
-    this.forEach(list => {
-      const key = list.keyword;
+    this.forEach(term => {
+      const key = term.keyword;
       if (!is_defined(key) || !includes(EXTRA_KEYWORDS, key)) {
-        fstring += list.toString() + ' ';
+        fstring += term.toString() + ' ';
       }
     });
     return fstring.trim();
@@ -267,10 +242,10 @@ class Filter extends Model {
    */
   toFilterExtraString() {
     let fstring = '';
-    this.forEach(list => {
-      const key = list.keyword;
+    this.forEach(term => {
+      const key = term.keyword;
       if (is_defined(key) && includes(EXTRA_KEYWORDS, key)) {
-        fstring += list.toString() + ' ';
+        fstring += term.toString() + ' ';
       }
     });
     return fstring.trim();
@@ -286,8 +261,19 @@ class Filter extends Model {
    *                  this Filter.
    */
   getTerm(key) {
-    const tlist = this.terms.find(list => key === list.keyword);
-    return is_defined(tlist) ? tlist.get() : undefined;
+    if (!is_defined(key)) {
+      return undefined;
+    }
+    return this.terms.find(term => key === term.keyword);
+  }
+
+  /**
+   * Get all FilterTerms
+   *
+   * @returns {FilterTerm} Returns the array of all FilterTerms in this filter
+   */
+  getTerms() {
+    return this.terms;
   }
 
   /**
@@ -312,8 +298,7 @@ class Filter extends Model {
   /**
    * Creates a new FilterTerm from key, value and relation
    *
-   * Creates a new FilterTerm from key, value and relation and sets it as the
-   * only item in the corresponding FilterTermList for the key.
+   * Creates a new FilterTerm from key, value and relation.
    *
    * @param {String} keyword   FilterTerm keyword
    * @param {String} value     FilterTerm value
@@ -339,7 +324,10 @@ class Filter extends Model {
    *                this Filter.
    */
   has(key) {
-    const index = this.terms.findIndex(term => term.keyword === key);
+    if (!is_defined(key)) {
+      return false;
+    }
+    const index = this._getIndex(key);
     return index !== -1;
   }
 
@@ -351,7 +339,7 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   delete(key) {
-    const index = this.terms.findIndex(term => term.keyword === key);
+    const index = this._getIndex(key);
     if (index !== -1) {
       this.terms.splice(index, 1);
     }
@@ -374,31 +362,14 @@ class Filter extends Model {
       return false;
     }
 
-    const our = this._getTermLists();
-    const other = filter._getTermLists();
+    const ours = this.getTerms();
+    const others = filter.getTerms();
 
-    if (our.withKeywords.length !== other.withKeywords.length ||
-      our.withoutKeywords.length !== other.withoutKeywords.length) {
-      return false;
-    }
+    for (let i = 0; i < ours.length; i++) {
+      const our = ours[i];
+      const other = our.hasKeyword() ? filter.getTerm(our.keyword) : others[i];
 
-    const match = our.withoutKeywords.every((list, index) => {
-      // list without keywords must have same order
-      // this isn't completely correct but required for and, or, ... currently
-      // "abc and def" is the same as "def and abc" but "abc and def" won't be
-      // the same as "and abc def"
-      const otherlist = other.withoutKeywords[index];
-      return list.equals(otherlist);
-    });
-
-    if (!match) {
-      return false;
-    }
-
-    for (const list of our.withKeywords) {
-      // lists with keywords may occur in different order
-      const otherlist = filter._getTermList(list.keyword);
-      if (!list.equals(otherlist)) {
+      if (!our.equals(other)) {
         return false;
       }
     }
@@ -409,10 +380,8 @@ class Filter extends Model {
   /**
    * Creates a copy of this filter
    *
-   * The returned copy is only a shallow copy of this filter. Each
-   * FilterTermList is copied but the containing FilterTerms are copied only by
-   * reference. As a result the FilterTermLists of the copy may be changed
-   * independently of the original one.
+   * The returned copy is only a shallow copy of this filter.
+   * FilterTerms are copied only by reference.
    *
    * @return {Filter} A shallow copy of this filter.
    */
@@ -423,9 +392,7 @@ class Filter extends Model {
     f.id = this.id;
     f.filter_type = this.filter_type;
 
-    this.forEach(list => {
-      f._addTermList(list.copy());
-    });
+    f._setTerms([...this.getTerms()]);
     return f;
   }
 
