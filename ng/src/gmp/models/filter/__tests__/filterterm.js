@@ -96,6 +96,34 @@ describe('FilterTerm equals', () => {
     });
     expect(term1.equals(term2)).toBe(true);
   });
+
+});
+
+describe('Compound statement parsing', () => {
+
+  test('should parse and', () => {
+    const term = FilterTerm.fromString('and');
+
+    expect(term.keyword).toBeUndefined();
+    expect(term.value).toBe('and');
+    expect(term.relation).toBe('');
+  });
+
+  test('should parse or', () => {
+    const term = FilterTerm.fromString('or');
+
+    expect(term.keyword).toBeUndefined();
+    expect(term.value).toBe('or');
+    expect(term.relation).toBe('');
+  });
+
+  test('should parse not', () => {
+    const term = FilterTerm.fromString('not');
+
+    expect(term.keyword).toBeUndefined();
+    expect(term.value).toBe('not');
+    expect(term.relation).toBe('');
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

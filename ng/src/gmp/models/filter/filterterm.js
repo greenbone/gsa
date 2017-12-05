@@ -53,6 +53,33 @@ class FilterTerm {
   }
 
   /**
+   * Checks if this FilterTerm has a keyword
+   *
+   * @returns {bool} True if this FilterTerm has a keyword
+   */
+  hasKeyword() {
+    return is_defined(this.keyword);
+  }
+
+  /**
+   * Checks if this FilterTerm has a relation
+   *
+   * @returns {bool} True if this FilterTerm has a relation
+   */
+  hasRelation() {
+    return is_defined(this.relation);
+  }
+
+  /**
+   * Checks if this FilterTerm has a value
+   *
+   * @returns {bool} True if this FilterTerm has a value
+   */
+  hasValue() {
+    return is_defined(this.value);
+  }
+
+  /**
    * Return the filter term represented as a string
    *
    * The fromat is {keyword}{relation}{value}
@@ -60,9 +87,9 @@ class FilterTerm {
    * @return {String} filter term as a String
    */
   toString() {
-    const relation = is_defined(this.relation) ? this.relation : '';
-    const value = is_defined(this.value) ? this.value : '';
-    const keyword = is_defined(this.keyword) ? this.keyword : '';
+    const relation = this.hasRelation() ? this.relation : '';
+    const value = this.hasValue() ? this.value : '';
+    const keyword = this.hasKeyword() ? this.keyword : '';
 
     return keyword + relation + value;
   }

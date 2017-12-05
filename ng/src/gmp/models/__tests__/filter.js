@@ -65,6 +65,7 @@ describe('Filter parse from string tests', () => {
       'abc and not def',
       '~abc and not ~def',
       'abc and not def rows=10 first=1 sort=name',
+      'apply_overrides=0 min_qod=70 vulnerability~"Reporting" and vulnerability~"SSH" and severity>6.9 first=1 rows=10 sort=name',
     ];
 
     fstrings.forEach(fstring => {
@@ -267,20 +268,6 @@ describe('Filter equal', () => {
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
-  test('filter without keywords should equal', () => {
-    let filter1 = Filter.fromString('abc def');
-    let filter2 = Filter.fromString('abc def');
-    expect(filter1.equals(filter2)).toEqual(true);
-
-    filter1 = Filter.fromString('abc def=1');
-    filter2 = Filter.fromString('abc def=1');
-    expect(filter1.equals(filter2)).toEqual(true);
-
-    filter1 = Filter.fromString('abc def=1');
-    filter2 = Filter.fromString('def=1 abc');
-    expect(filter1.equals(filter2)).toEqual(true);
-  });
-
   test('filter without keywords in other order should not equal', () => {
     // this is not completely correct but currently required for and, or, ...
     const filter1 = Filter.fromString('abc def');
@@ -406,6 +393,18 @@ describe('Filter copy', () => {
     expect(filter2.filter_type).toBe('foo');
   });
 
+  test('should shallow copy terms', () => {
+    const filter1 = Filter.fromString('abc=1 def=2');
+    const filter2 = filter1.copy();
+
+    expect(filter1).not.toBe(filter2);
+    expect(filter1.equals(filter2)).toBe(true);
+
+    filter2.set('foo', 'bar', '=');
+    expect(filter1.equals(filter2)).toBe(false);
+    expect(filter1.toFilterString()).toBe('abc=1 def=2');
+    expect(filter2.toFilterString()).toBe('abc=1 def=2 foo=bar');
+  });
 });
 
 describe('Filter next', () => {
