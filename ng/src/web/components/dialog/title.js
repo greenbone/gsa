@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -34,7 +35,7 @@ import Layout from '../layout/layout.js';
 import Button from './button.js';
 
 const DialogTitleBar = glamorous(Layout)({
-  padding: '.4em .4em .4em 1em',
+  padding: '5px 5px 5px 10px',
   marginBottom: '15px',
   borderRadius: '4px',
   border: '1px solid #519032',
@@ -43,6 +44,7 @@ const DialogTitleBar = glamorous(Layout)({
   background: '#66c430 50% 50% repeat-x',
   alignItems: 'center',
   justifyContent: 'space-between',
+  flexShrink: '0',
   cursor: 'move',
 });
 

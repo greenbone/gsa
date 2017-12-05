@@ -1,7 +1,6 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
@@ -22,48 +21,21 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes.js';
-
-import Layout from '../layout/layout.js';
-
-import Button from './button.js';
-
-const StyledLayout = glamorous(Layout)({
-  borderWidth: '1px 0 0 0',
+const Resizer = glamorous.div({
+  position: 'absolute',
+  bottom: '6px',
+  right: '6px',
+  cursor: 'nwse-resize',
+  width: '0px',
+  height: '0px',
+  transform: 'rotate(360deg)',
   borderStyle: 'solid',
-  borderColor: '#ddd',
-  marginTop: '15px',
-  padding: '10px 20px 10px 15px',
+  borderWidth: '0 0 25px 25px',
+  borderColor: 'transparent transparent #c8d3d9 transparent',
 });
 
-const DialogFooter = ({
-  title,
-  onClick,
-  loading = false,
-}) => (
-  <StyledLayout
-    align={['end', 'center']}
-    shrink="0">
-    <Button
-      onClick={onClick}
-      title={title}
-      loading={loading}
-    >
-      {title}
-    </Button>
-  </StyledLayout>
-);
-
-DialogFooter.propTypes = {
-  loading: PropTypes.bool,
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
-
-export default DialogFooter;
+export default Resizer;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -38,6 +38,8 @@ import Button from '../dialog/button.js';
 
 import Layout from '../../components/layout/layout.js';
 
+const DEFAULT_DIALOG_WIDTH = '400px';
+
 const StyledLayout = glamorous(Layout)({
   justifyContent: 'space-between',
   borderWidth: '1px 0 0 0',
@@ -111,7 +113,7 @@ ConfirmationDialogContent.propTypes = {
 };
 
 const LinkConfirmationDialog = ({
-  width,
+  width = DEFAULT_DIALOG_WIDTH,
   text,
   title,
   visible,
@@ -123,6 +125,7 @@ const LinkConfirmationDialog = ({
       visible={visible}
       width={width}
       onClose={onClose}
+      resizable={false}
     >
       {({
         close,

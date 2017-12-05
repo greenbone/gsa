@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -28,12 +29,17 @@ import {is_defined} from 'gmp/utils.js';
 const DialogContainer = glamorous.div(
   {
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
     margin: '10% auto',
     border: 0,
     outline: '0',
   },
   ({width}) => ({
     width: is_defined(width) ? width : '400px',
+  }),
+  ({height}) => ({
+    height: is_defined(height) ? height : 'auto',
   }),
   ({posX, posY}) => (is_defined(posX) || is_defined(posY) ? {
     position: 'absolute',

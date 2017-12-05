@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -24,6 +25,9 @@
 import glamorous from 'glamorous';
 
 const DialogContent = glamorous.div({
+  display: 'flex',
+  flexDirection: 'column',
+  height: 'inherit',
   padding: '5px 5px 5px 5px',
   background: '#eee',
   border: '1px solid #ddd',

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -29,8 +30,12 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DialogContainer from './container.js';
 import DialogOverlay from './overlay.js';
+import Resizer from './resizer.js';
 
 const DEFAULT_DIALOG_WIDTH = '800px';
+const DEFAULT_DIALOG_HEIGHT = '550px';
+const DEFAULT_DIALOG_MIN_HEIGHT = 250;
+const DEFAULT_DIALOG_MIN_WIDTH = 450;
 
 class Dialog extends React.Component {
 
@@ -42,8 +47,10 @@ class Dialog extends React.Component {
     this.getMoveProps = this.getMoveProps.bind(this);
 
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.onMouseDown = this.onMouseDown.bind(this);
-    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseDownMove = this.onMouseDownMove.bind(this);
+    this.onMouseDownResize = this.onMouseDownResize.bind(this);
+    this.onMouseMoveMove = this.onMouseMoveMove.bind(this);
+    this.onMouseMoveResize = this.onMouseMoveResize.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
     this.onOuterClick = this.onOuterClick.bind(this);
 
@@ -52,6 +59,8 @@ class Dialog extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
+
+    this.setState({width: this.props.width});
   }
 
   componentWillUnmount() {
@@ -62,6 +71,8 @@ class Dialog extends React.Component {
     return {
       posX: undefined,
       posY: undefined,
+      width: DEFAULT_DIALOG_WIDTH,
+      height: DEFAULT_DIALOG_HEIGHT,
     };
   }
 
@@ -89,18 +100,36 @@ class Dialog extends React.Component {
     }
   }
 
-  onMouseDown(event) {
+  onMouseDownMove(event) {
     if ((event.buttons & 1) && has_value(this.dialog)) { // eslint-disable-line no-bitwise
       const box = this.dialog.getBoundingClientRect();
       this.relX = event.pageX - box.left;
       this.relY = event.pageY - box.top;
-      document.addEventListener('mousemove', this.onMouseMove);
+
+      document.addEventListener('mousemove', this.onMouseMoveMove);
       document.addEventListener('mouseup', this.onMouseUp);
       event.preventDefault();
     }
   }
 
-  onMouseMove(event) {
+  onMouseDownResize(event) {
+    if (event.buttons & 1) { // eslint-disable-line no-bitwise
+      const box = this.dialog.getBoundingClientRect();
+
+      this.width = Math.round(box.width);
+      this.height = Math.round(box.height);
+      this.mousePosX = event.pageX;
+      this.mousePosY = event.pageY;
+      this.fixedPosX = box.left;
+      this.fixedPosY = box.top;
+
+      document.addEventListener('mousemove', this.onMouseMoveResize);
+      document.addEventListener('mouseup', this.onMouseUp);
+      event.preventDefault();
+    }
+  }
+
+  onMouseMoveMove(event) {
     this.setState({
       posX: event.pageX - this.relX,
       posY: event.pageY - this.relY,
@@ -108,29 +137,58 @@ class Dialog extends React.Component {
     event.preventDefault();
   }
 
+  onMouseMoveResize(event) {
+    const differenceX = this.mousePosX - event.pageX;
+    const differenceY = this.mousePosY - event.pageY;
+    let newWidth = this.width - differenceX;
+    let newHeight = this.height - differenceY;
+
+    if (newWidth < DEFAULT_DIALOG_MIN_WIDTH) {
+      newWidth = DEFAULT_DIALOG_MIN_WIDTH;
+    }
+    if (newHeight < DEFAULT_DIALOG_MIN_HEIGHT) {
+      newHeight = DEFAULT_DIALOG_MIN_HEIGHT;
+    }
+
+    this.setState({
+      posX: this.fixedPosX,
+      posY: this.fixedPosY,
+      width: newWidth,
+      height: newHeight,
+    });
+    event.preventDefault();
+  }
+
   onMouseUp(event) {
-    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mousemove', this.onMouseMoveMove);
+    document.removeEventListener('mousemove', this.onMouseMoveResize);
     document.removeEventListener('mouseup', this.onMouseUp);
     event.preventDefault();
   }
 
   getMoveProps() {
     return {
-      onMouseDown: this.onMouseDown,
+      onMouseDown: this.onMouseDownMove,
     };
   }
 
   render() {
-    const {
+    let {
       posX,
       posY,
+      height = DEFAULT_DIALOG_HEIGHT,
+      width = DEFAULT_DIALOG_WIDTH,
     } = this.state;
 
     const {
       children,
+      resizable = true,
       visible,
-      width = DEFAULT_DIALOG_WIDTH,
     } = this.props;
+
+    if (!resizable) {
+      height = 'auto';
+    }
 
     if (!visible) {
       return null;
@@ -145,6 +203,7 @@ class Dialog extends React.Component {
           role="dialog"
           tabIndex="1"
           width={width}
+          height={height}
           posX={posX}
           posY={posY}
           innerRef={ref => this.dialog = ref}>
@@ -152,6 +211,9 @@ class Dialog extends React.Component {
             close: this.handleClose,
             getMoveProps: this.getMoveProps,
           })}
+          {resizable &&
+            <Resizer onMouseDown={this.onMouseDownResize}/>
+          }
         </DialogContainer>
       </DialogOverlay>
     );
@@ -159,6 +221,8 @@ class Dialog extends React.Component {
 };
 
 Dialog.propTypes = {
+  height: PropTypes.numberOrNumberString,
+  resizable: PropTypes.bool,
   visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
