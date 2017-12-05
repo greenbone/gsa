@@ -37,12 +37,17 @@ const StyledLayout = glamorous(Layout)({
   borderStyle: 'solid',
   borderColor: '#ddd',
   marginTop: '15px',
-  padding: '10px 15px 10px 15px',
+  padding: '10px 20px 10px 15px',
 });
 
-const DialogFooter = ({title, onClick, loading = false}) => (
+const DialogFooter = ({
+  title,
+  onClick,
+  loading = false,
+}) => (
   <StyledLayout
-    align={['end', 'center']}>
+    align={['end', 'center']}
+    shrink="0">
     <Button
       onClick={onClick}
       title={title}

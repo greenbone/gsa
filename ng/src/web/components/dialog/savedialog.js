@@ -106,7 +106,7 @@ class SaveDialogContent extends React.Component {
           state,
           onValueChange,
         }) => (
-          <DialogContent>
+          <DialogContent flex="column">
             <DialogTitle
               title={title}
               onCloseClick={this.handleClose}

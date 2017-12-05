@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -23,12 +24,13 @@
 
 import glamorous from 'glamorous';
 
-const ScrollableContent = glamorous.div({
-  overflow: 'auto',
-  background: '#eee',
-  padding: '0 15px',
-  maxHeight: '500px',
-});
+const ScrollableContent = glamorous.div(
+  {
+    overflow: 'auto',
+    background: '#eee',
+    padding: '0 15px',
+  },
+);
 
 export default ScrollableContent;
 
