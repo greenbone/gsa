@@ -182,6 +182,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
      ${NG_SRC_DIR}/src/web/components/dialog/linkconfirmationdialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/overlay.js
+     ${NG_SRC_DIR}/src/web/components/dialog/resizer.js
      ${NG_SRC_DIR}/src/web/components/dialog/scrollablecontent.js
      ${NG_SRC_DIR}/src/web/components/dialog/title.js
      ${NG_SRC_DIR}/src/web/components/dialog/savedialog.js
