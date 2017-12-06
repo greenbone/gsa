@@ -38,7 +38,9 @@ import Section from '../../components/section/section.js';
 import {FoldState} from '../../components/folding/folding.js';
 
 import EntityPage from '../../entity/page.js';
-import EntityContainer from '../../entity/container.js';
+import EntityContainer, {
+  permissions_resource_loader,
+} from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
@@ -195,6 +197,9 @@ const PortListPage = props => (
   <EntityContainer
     {...props}
     name="portlist"
+    loaders={[
+      permissions_resource_loader,
+    ]}
   >
     {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>
