@@ -89,8 +89,6 @@ class EntityContainer extends React.Component {
     const {name} = this.props;
     const {gmp} = this.props;
 
-    this.name = name;
-
     this.entity_command = gmp[name];
 
     this.state = {
@@ -215,11 +213,14 @@ class EntityContainer extends React.Component {
   render() {
     const {
       children,
-      resourceType = this.name,
+      name,
+      resourceType = name,
       onDownload,
     } = this.props;
     return (
       <TagsHandler
+        name={name}
+        resourceType={resourceType}
         onChanged={this.handleChanged}
         onError={this.handleError}
       >{({

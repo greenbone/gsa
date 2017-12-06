@@ -146,6 +146,7 @@ const CertBundAdvPage = props => (
   <EntityContainer
     {...props}
     name="certbundadv"
+    resourceType="cert_bund_adv"
   >
     {({
       onChanged,
