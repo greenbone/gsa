@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, for_each} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 import logger from 'gmp/log.js';
 import PromiseFactory from 'gmp/promise.js';
 
@@ -80,13 +80,13 @@ class Dashboard extends React.Component {
     }
 
     PromiseFactory.all(promises).then(([prefresp, filtersresp]) => {
-      const filters = is_defined(filtersresp) ? filtersresp.data : undefined;
+      const filters = is_defined(filtersresp) ? filtersresp.data : [];
       const prefs = prefresp.data;
       const pref = prefs.get(pref_id);
 
-      for_each(filters, filter => {
-        dashboard.addFilter(filter.id, filter.name, filter.term, filter.type);
-      });
+      filters.forEach(filter =>
+        dashboard.addFilter(filter.id, filter.name, filter.term, filter.type)
+      );
 
       if (!is_defined(pref)) {
         log.warn('No dashboard preference config found for id', pref_id);
