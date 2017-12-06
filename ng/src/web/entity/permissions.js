@@ -203,7 +203,7 @@ class EntityPermissions extends React.Component {
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
   foldable: PropTypes.bool,
-  permissions: PropTypes.arrayLike,
+  permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
   onPermissionCloneClick: PropTypes.func.isRequired,
