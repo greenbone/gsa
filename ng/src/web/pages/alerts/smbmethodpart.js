@@ -116,9 +116,9 @@ const SmbMethodPart = ({
 };
 
 SmbMethodPart.propTypes = {
-  credentials: PropTypes.arrayLike,
+  credentials: PropTypes.array,
   prefix: PropTypes.string,
-  reportFormats: PropTypes.arrayLike,
+  reportFormats: PropTypes.array,
   smbCredential: PropTypes.id,
   smbFilePath: PropTypes.string.isRequired,
   smbReportFormat: PropTypes.id,

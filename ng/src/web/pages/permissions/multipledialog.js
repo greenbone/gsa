@@ -199,7 +199,7 @@ MultiplePermissionDialog.propTypes = {
   entity_name: PropTypes.string.isRequired,
   entity_type: PropTypes.string.isRequired,
   group_id: PropTypes.id,
-  groups: PropTypes.arrayLike,
+  groups: PropTypes.array,
   id: PropTypes.id.isRequired,
   include_related: PropTypes.oneOf([
     CURRENT_RESOURCE_ONLY,
@@ -209,12 +209,12 @@ MultiplePermissionDialog.propTypes = {
   permission: PropTypes.oneOf(['read', 'proxy']).isRequired,
   related: PropTypes.array, // array of models
   role_id: PropTypes.id,
-  roles: PropTypes.arrayLike,
+  roles: PropTypes.array,
   subject_type: PropTypes.oneOf([
     'user', 'role', 'group',
   ]).isRequired,
   user_id: PropTypes.id,
-  users: PropTypes.arrayLike,
+  users: PropTypes.array,
   onValueChange: PropTypes.func.isRequired,
 };
 

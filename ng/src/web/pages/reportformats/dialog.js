@@ -81,7 +81,7 @@ const ReportFormatListParam = ({
 };
 
 ReportFormatListParam.propTypes = {
-  formats: PropTypes.arrayLike.isRequired,
+  formats: PropTypes.array.isRequired,
   idList: PropTypes.array.isRequired,
   name: PropTypes.string.isRequired,
   onValueChange: PropTypes.func.isRequired,
@@ -305,7 +305,7 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   active: PropTypes.yesno,
-  formats: PropTypes.arrayLike,
+  formats: PropTypes.array,
   id_lists: PropTypes.object,
   name: PropTypes.string,
   preferences: PropTypes.object,

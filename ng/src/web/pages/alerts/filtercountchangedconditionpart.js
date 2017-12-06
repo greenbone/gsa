@@ -81,7 +81,7 @@ FilterCountChangedConditionPart.propTypes = {
   condition: PropTypes.string.isRequired,
   count: PropTypes.number.isRequired,
   filterId: PropTypes.id,
-  filters: PropTypes.arrayLike.isRequired,
+  filters: PropTypes.array.isRequired,
   prefix: PropTypes.string,
   onChange: PropTypes.func,
 };

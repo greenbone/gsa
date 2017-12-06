@@ -389,7 +389,7 @@ const TargetDialog = ({
 TargetDialog.propTypes = {
   alive_tests: PropTypes.oneOf(ALIVE_TESTS),
   comment: PropTypes.string,
-  credentials: PropTypes.arrayLike,
+  credentials: PropTypes.array,
   esxi_credential_id: PropTypes.idOrZero,
   exclude_hosts: PropTypes.string,
   hosts: PropTypes.string,
@@ -398,7 +398,7 @@ TargetDialog.propTypes = {
   name: PropTypes.string,
   port: PropTypes.numberOrNumberString,
   port_list_id: PropTypes.idOrZero,
-  port_lists: PropTypes.arrayLike,
+  port_lists: PropTypes.array,
   reverse_lookup_only: PropTypes.yesno,
   reverse_lookup_unify: PropTypes.yesno,
   smb_credential_id: PropTypes.idOrZero,

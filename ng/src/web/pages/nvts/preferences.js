@@ -81,7 +81,7 @@ const Preferences = ({
 
 Preferences.propTypes = {
   default_timeout: PropTypes.number,
-  preferences: PropTypes.arrayLike,
+  preferences: PropTypes.array,
 };
 
 export default Preferences;

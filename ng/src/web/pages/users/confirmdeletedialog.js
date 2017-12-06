@@ -86,10 +86,10 @@ const ConfirmDeleteDialog = ({
 };
 
 ConfirmDeleteDialog.propTypes = {
-  deleteUsers: PropTypes.arrayLike,
+  deleteUsers: PropTypes.array,
   inheritor_id: PropTypes.id,
   username: PropTypes.string,
-  users: PropTypes.arrayLike.isRequired,
+  users: PropTypes.array.isRequired,
   onValueChange: PropTypes.func.isRequired,
 };
 

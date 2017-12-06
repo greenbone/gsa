@@ -333,18 +333,18 @@ PermissionDialog.propTypes = {
   comment: PropTypes.string,
   fixedResource: PropTypes.bool,
   group_id: PropTypes.id,
-  groups: PropTypes.arrayLike,
+  groups: PropTypes.array,
   name: PropTypes.string,
   permission: PropTypes.model,
   resource_id: PropTypes.string,
   resource_type: PropTypes.string,
   role_id: PropTypes.id,
-  roles: PropTypes.arrayLike,
+  roles: PropTypes.array,
   subject_type: PropTypes.oneOf([
     'user', 'role', 'group',
   ]),
   user_id: PropTypes.id,
-  users: PropTypes.arrayLike,
+  users: PropTypes.array,
   onValueChange: PropTypes.func,
 };
 

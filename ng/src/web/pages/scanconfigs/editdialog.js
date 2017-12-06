@@ -153,7 +153,7 @@ class NvtPreferences extends React.Component {
 
 NvtPreferences.propTypes = {
   config: PropTypes.model.isRequired,
-  preferences: PropTypes.arrayLike.isRequired,
+  preferences: PropTypes.array.isRequired,
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
@@ -285,7 +285,7 @@ class ScannerPreferences extends React.Component {
 
 
 ScannerPreferences.propTypes = {
-  preferences: PropTypes.arrayLike.isRequired,
+  preferences: PropTypes.array.isRequired,
   values: PropTypes.object.isRequired,
   onValueChange: PropTypes.func,
 };
@@ -477,7 +477,7 @@ class NvtFamilies extends React.Component {
 
 NvtFamilies.propTypes = {
   config: PropTypes.model.isRequired,
-  families: PropTypes.arrayLike.isRequired,
+  families: PropTypes.array.isRequired,
   select: PropTypes.object.isRequired,
   trend: PropTypes.object.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
@@ -575,9 +575,9 @@ class EditDialog extends React.Component {
 EditDialog.propTypes = {
   comment: PropTypes.string,
   config: PropTypes.model.isRequired,
-  families: PropTypes.arrayLike,
+  families: PropTypes.array,
   name: PropTypes.string,
-  scanners: PropTypes.arrayLike,
+  scanners: PropTypes.array,
   scanner_id: PropTypes.id,
   scanner_preference_values: PropTypes.object,
   select: PropTypes.object,

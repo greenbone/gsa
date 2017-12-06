@@ -303,7 +303,7 @@ class PowerFilter extends React.Component {
 PowerFilter.propTypes = {
   createFilterType: PropTypes.string,
   filter: PropTypes.filter,
-  filters: PropTypes.arrayLike,
+  filters: PropTypes.array,
   onEditClick: PropTypes.func,
   onError: PropTypes.func,
   onFilterCreated: PropTypes.func,

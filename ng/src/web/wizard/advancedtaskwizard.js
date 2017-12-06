@@ -270,8 +270,8 @@ const AdvancedTaskWizard = ({
 };
 
 AdvancedTaskWizard.propTypes = {
-  scan_configs: PropTypes.arrayLike,
-  credentials: PropTypes.arrayLike,
+  scan_configs: PropTypes.array,
+  credentials: PropTypes.array,
   date: PropTypes.momentDate,
   task_name: PropTypes.string,
   config_id: PropTypes.idOrZero,

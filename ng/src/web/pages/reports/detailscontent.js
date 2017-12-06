@@ -552,7 +552,7 @@ PageContent.propTypes = {
   activeTab: PropTypes.number,
   entity: PropTypes.model,
   filter: PropTypes.filter,
-  filters: PropTypes.arrayLike,
+  filters: PropTypes.array,
   loading: PropTypes.bool,
   report_format_id: PropTypes.id,
   report_formats: PropTypes.array,
