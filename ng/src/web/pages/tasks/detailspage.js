@@ -92,15 +92,9 @@ const ToolBarIcons = ({
   onTaskResumeClick,
 }, {capabilities}) => {
 
-  let notes_count;
-  if (is_defined(notes)) {
-    notes_count = notes.getCounts().length;
-  }
-
-  let override_count;
-  if (is_defined(overrides)) {
-    override_count = overrides.getCounts().length;
-  }
+  const notes_count = is_defined(notes) ? notes.counts.length : undefined;
+  const override_count = is_defined(overrides) ? overrides.counts.length :
+    undefined;
 
   return (
     <Divider margin="10px">
@@ -265,8 +259,8 @@ const ToolBarIcons = ({
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  notes: PropTypes.collection,
-  overrides: PropTypes.collection,
+  notes: PropTypes.object,
+  overrides: PropTypes.object,
   onContainerTaskCreateClick: PropTypes.func.isRequired,
   onReportImportClick: PropTypes.func.isRequired,
   onTaskCloneClick: PropTypes.func.isRequired,
