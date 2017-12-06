@@ -131,6 +131,7 @@ const DfnCertAdvPage = props => (
   <EntityContainer
     {...props}
     name="dfncertadv"
+    resourceType="dfn_cert_adv"
   >
     {({
       onChanged,

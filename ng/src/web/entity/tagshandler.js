@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils.js';
+
 import PropTypes from '../utils/proptypes.js';
 import withGmp from '../utils/withGmp.js';
 
@@ -51,13 +53,15 @@ class TagsHandler extends React.Component {
   }
 
   openCreateTagDialog(entity, create) {
-    const resourceType = entity.entity_type;
+    const resourceType = is_defined(this.props.resourceType) ?
+      this.props.resourceType : entity.entity_type;
+    const name = is_defined(this.props.name) ? this.props.name : resourceType;
 
     create({
       fixed: true,
       resource_id: entity.id,
       resource_type: resourceType,
-      name: _('{{type}}:unnamed', {type: resourceType}),
+      name: _('{{type}}:unnamed', {type: name}),
     });
   }
 
@@ -104,6 +108,8 @@ class TagsHandler extends React.Component {
 
 TagsHandler.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  name: PropTypes.string,
+  resourceType: PropTypes.string,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
