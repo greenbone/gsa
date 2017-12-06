@@ -53,9 +53,9 @@ class EntitiesCommand extends HttpCommand {
     return rparams;
   }
 
-  getCollectionListFromRoot(root, meta) {
+  getCollectionListFromRoot(root) {
     const response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, {meta});
+    return parse_collection_list(response, this.name, this.clazz);
   }
 
   getEntitiesResponse(root) {
@@ -65,7 +65,9 @@ class EntitiesCommand extends HttpCommand {
 
   get(params, options) {
     return this.httpGet(params, options).then(response => {
-      return this.getCollectionListFromRoot(response.data, response.meta);
+      const {entities, filter, counts} = this.getCollectionListFromRoot(
+        response.data);
+      return response.set(entities, {filter, counts});
     });
   }
 
