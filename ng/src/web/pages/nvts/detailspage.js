@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils.js';
+
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -228,8 +230,8 @@ const Details = ({
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
-  notes: PropTypes.arrayLike,
-  overrides: PropTypes.arrayLike,
+  notes: PropTypes.array,
+  overrides: PropTypes.array,
 };
 
 const open_dialog = (nvt, func) => {
@@ -297,7 +299,18 @@ const NvtPage = props => (
       loader('overrides', nvt_id_filter),
     ]}
   >
-    {cprops => <Page {...props} {...cprops} />}
+    {({
+      notes,
+      overrides,
+      ...cprops
+    }) => (
+      <Page
+        {...props}
+        {...cprops}
+        notes={is_defined(notes) ? notes.entities : undefined}
+        overrides={is_defined(overrides) ? overrides.entities : undefined}
+      />
+    )}
   </EntityContainer>
 );
 
