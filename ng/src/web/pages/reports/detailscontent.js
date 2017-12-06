@@ -96,15 +96,15 @@ const EntityInfoLayout = glamorous(Layout)({
   marginBottom: '-10px',
 });
 
-const TabTitle = ({title, entities}) => (
+const TabTitle = ({title, counts}) => (
   <Divider wrap align={['center', 'center']}>
     <span>{title}</span>
-    <span>(<i>{render_entities_counts(entities)}</i>)</span>
+    <span>(<i>{render_entities_counts(counts)}</i>)</span>
   </Divider>
 );
 
 TabTitle.propTypes = {
-  entities: PropTypes.collection.isRequired,
+  counts: PropTypes.counts.isRequired,
   title: PropTypes.string.isRequired,
 };
 
@@ -204,7 +204,7 @@ ToolBarIcons.propTypes = {
   filter: PropTypes.filter,
   report: PropTypes.model.isRequired,
   report_format_id: PropTypes.id,
-  report_formats: PropTypes.collection,
+  report_formats: PropTypes.array,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -287,14 +287,14 @@ const PageContent = ({
           <Tab>
             <TabTitle
               title={_('Results')}
-              entities={results}
+              counts={results.counts}
             />
           </Tab>
           {!delta &&
             <Tab>
               <TabTitle
                 title={_('Hosts')}
-                entities={hosts}
+                counts={hosts.counts}
               />
             </Tab>
           }
@@ -302,7 +302,7 @@ const PageContent = ({
             <Tab>
               <TabTitle
                 title={_('Ports')}
-                entities={ports}
+                counts={ports.counts}
               />
             </Tab>
           }
@@ -310,7 +310,7 @@ const PageContent = ({
             <Tab>
               <TabTitle
                 title={_('Applications')}
-                entities={applications}
+                counts={applications.counts}
               />
             </Tab>
           }
@@ -318,7 +318,7 @@ const PageContent = ({
             <Tab>
               <TabTitle
                 title={_('Operating Systems')}
-                entities={operatingsystems}
+                counts={operatingsystems.counts}
               />
             </Tab>
           }
@@ -326,7 +326,7 @@ const PageContent = ({
             <Tab>
               <TabTitle
                 title={_('CVEs')}
-                entities={cves}
+                counts={cves.counts}
               />
             </Tab>
           }
@@ -334,7 +334,7 @@ const PageContent = ({
             <Tab>
               <TabTitle
                 title={_('Closed CVEs')}
-                entities={closed_cves}
+                counts={closed_cves.counts}
               />
             </Tab>
           }
@@ -342,7 +342,7 @@ const PageContent = ({
             <Tab>
               <TabTitle
                 title={_('TLS Certificates')}
-                entities={tls_certificates}
+                counts={tls_certificates.counts}
               />
             </Tab>
           }
@@ -350,7 +350,7 @@ const PageContent = ({
             <Tab>
               <TabTitle
                 title={_('Error Messages')}
-                entities={errors}
+                counts={errors.counts}
               />
             </Tab>
           }
@@ -415,7 +415,8 @@ const PageContent = ({
               <ResultsTab
                 delta={delta}
                 filter={filter}
-                results={results}
+                results={results.entities}
+                counts={results.counts}
                 progress={task.progress}
                 onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                 onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -427,7 +428,9 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={hosts}
+                counts={hosts.counts}
+                entities={hosts.entities}
+                filter={filter}
                 sortFunctions={hosts_sort_functions}
               >
                 {props => (
@@ -439,7 +442,9 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={ports}
+                counts={ports.counts}
+                entities={ports.entities}
+                filter={filter}
                 sortFunctions={ports_sort_functions}
               >
                 {props => (
@@ -451,7 +456,9 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={applications}
+                counts={applications.counts}
+                entities={applications.entities}
+                filter={filter}
                 sortFunctions={apps_sort_functions}
               >
                 {props => (
@@ -463,7 +470,10 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={operatingsystems}
+                {...operatingsystems}
+                counts={operatingsystems.counts}
+                entities={operatingsystems.entities}
+                filter={filter}
                 sortFunctions={operatingssystems_sort_functions}
               >
                 {props => (
@@ -475,7 +485,9 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={cves}
+                counts={cves.counts}
+                entities={cves.entities}
+                filter={filter}
                 sortFunctions={cves_sort_functions}
               >
                 {props => (
@@ -487,7 +499,9 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={closed_cves}
+                counts={closed_cves.counts}
+                entities={closed_cves.entities}
+                filter={filter}
                 sortFunctions={closed_cves_sort_functions}
               >
                 {props => (
@@ -499,7 +513,9 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={tls_certificates}
+                counts={tls_certificates.counts}
+                entities={tls_certificates.entities}
+                filter={filter}
                 sortFunctions={tls_certificates_sort_functions}
               >
                 {props => (
@@ -513,7 +529,9 @@ const PageContent = ({
             </TabPanel>
             <TabPanel>
               <ReportEntitiesContainer
-                entities={errors}
+                counts={errors.counts}
+                entities={errors.entities}
+                filter={filter}
                 sortFunctions={errors_sort_functions}
               >
                 {props => (
@@ -537,7 +555,7 @@ PageContent.propTypes = {
   filters: PropTypes.arrayLike,
   loading: PropTypes.bool,
   report_format_id: PropTypes.id,
-  report_formats: PropTypes.collection,
+  report_formats: PropTypes.array,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

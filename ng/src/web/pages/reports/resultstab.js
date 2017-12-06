@@ -34,6 +34,7 @@ import ReportEntitiesContainer from './reportentitiescontainer.js';
 import {results_sort_functions} from './sort.js';
 
 const ResultsTab = ({
+  counts,
   delta = false,
   filter,
   results,
@@ -45,7 +46,6 @@ const ResultsTab = ({
   onFilterResetClick,
   onTargetEditClick,
 }) => {
-  const {counts} = results;
   if (counts.filtered === 0) {
     if (counts.all === 0) {
       return (
@@ -72,6 +72,7 @@ const ResultsTab = ({
   return (
     <ReportEntitiesContainer
       entities={results}
+      counts={counts}
       filter={filter}
       sortFunctions={results_sort_functions}
     >
@@ -86,10 +87,11 @@ const ResultsTab = ({
 };
 
 ResultsTab.propTypes = {
+  counts: PropTypes.counts.isRequired,
   delta: PropTypes.bool,
   filter: PropTypes.filter.isRequired,
   progress: PropTypes.number.isRequired,
-  results: PropTypes.collection.isRequired,
+  results: PropTypes.array.isRequired,
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
