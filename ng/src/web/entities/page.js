@@ -63,9 +63,9 @@ class EntitiesPage extends React.Component {
   }
 
   getSectionTitle() {
-    const {entities, title} = this.props;
+    const {entitiesCounts, title} = this.props;
 
-    return render_section_title(entities, title);
+    return render_section_title(entitiesCounts, title);
   }
 
   handleFilterEditClick() {
@@ -130,6 +130,7 @@ class EntitiesPage extends React.Component {
     const {
       filter,
       entities,
+      entitiesCounts,
       table: TableComponent,
       ...props
     } = this.props;
@@ -145,6 +146,7 @@ class EntitiesPage extends React.Component {
         {...other}
         filter={filter}
         entities={entities}
+        entitiesCounts={entitiesCounts}
       />
     );
   }
@@ -246,10 +248,11 @@ class EntitiesPage extends React.Component {
 EntitiesPage.propTypes = {
   createFilterType: PropTypes.string,
   dashboard: PropTypes.componentOrFalse,
-  entities: PropTypes.collection,
+  entities: PropTypes.array,
+  entitiesCounts: PropTypes.counts,
   filter: PropTypes.filter,
   filterEditDialog: PropTypes.component,
-  filters: PropTypes.arrayLike,
+  filters: PropTypes.array,
   foldable: PropTypes.bool,
   loading: PropTypes.bool,
   powerfilter: PropTypes.componentOrFalse,

@@ -588,19 +588,18 @@ export function simple_permission_description_with_subject(name, subject) {
   }
 }
 
-export const render_entities_counts = entities => {
-  const counts = entities.getCounts();
+export const render_entities_counts = counts => {
   return _('{{filtered}} of {{all}}', counts);
 };
 
-export const render_section_title = (entities, title) => {
-  if (!is_defined(entities)) {
+export const render_section_title = (counts, title) => {
+  if (!is_defined(counts)) {
     return title;
   }
 
-  return _('{{title}} ({{counts}})', {
+  return _('{{title}} {{filtered}} of {{all}}', {
     title,
-    counts: render_entities_counts(entities),
+    ...counts,
   });
 };
 
