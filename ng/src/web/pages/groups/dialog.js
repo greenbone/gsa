@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -44,7 +44,7 @@ const Dialog = ({
     id,
     name,
     users,
-    onValueChange
+    onValueChange,
   }) => {
 
   const is_edit = is_defined(id);
