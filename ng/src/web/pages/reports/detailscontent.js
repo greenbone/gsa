@@ -39,6 +39,7 @@ import Select2 from '../../components/form/select2.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
+import ListIcon from '../../components/icon/listicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 import Divider from '../../components/layout/divider.js';
@@ -127,9 +128,15 @@ const ToolBarIcons = ({
   return (
     <IconSizeProvider size="medium">
       <Divider margin="15px">
-        <HelpIcon
-          page="view_report"
-          title={_('Help: View Report')}/>
+        <IconDivider>
+          <HelpIcon
+            page="view_report"
+            title={_('Help: View Report')}/>
+          <ListIcon
+            title={_('Reports List')}
+            page="reports"
+          />
+        </IconDivider>
         <IconDivider>
           <Select2
             name="report_format_id"
