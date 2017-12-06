@@ -217,8 +217,8 @@ class PerformancePage extends React.Component {
     });
 
     gmp.scanners.getAll({filter: 'type=' + SLAVE_SCANNER_TYPE})
-      .then(scanners => {
-        this.setState({scanners});
+      .then(response => {
+        this.setState({scanners: response.data});
       });
   }
 

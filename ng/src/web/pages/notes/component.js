@@ -89,8 +89,8 @@ class NoteComponent extends React.Component {
   loadTasks() {
     const {gmp} = this.context;
 
-    gmp.tasks.getAll().then(tasks =>
-        this.note_dialog.setValue('tasks', tasks));
+    gmp.tasks.getAll().then(response =>
+        this.note_dialog.setValue('tasks', response.data));
   }
 
   render() {

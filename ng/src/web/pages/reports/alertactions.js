@@ -57,7 +57,8 @@ class AlertActions extends React.Component {
 
   componentDidMount() {
     const {gmp} = this.props;
-    gmp.alerts.getAll().then(alerts => {
+    gmp.alerts.getAll().then(response => {
+      const {data: alerts} = response;
       const alert_id = first(alerts).id;
       this.setState({
         alerts,

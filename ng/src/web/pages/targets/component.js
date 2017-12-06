@@ -104,12 +104,14 @@ class TargetComponent extends React.Component {
   loadData() {
     const {gmp} = this.context;
 
-    gmp.portlists.getAll().then(port_lists => {
+    gmp.portlists.getAll().then(response => {
+      const {data: port_lists} = response;
       this.port_lists = port_lists;
       this.target_dialog.setValues({port_lists});
     });
 
-    gmp.credentials.getAll().then(credentials => {
+    gmp.credentials.getAll().then(response => {
+      const {data: credentials} = response;
       this.credentials = credentials;
       this.target_dialog.setValues({credentials});
     });

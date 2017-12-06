@@ -74,7 +74,8 @@ class ReportFormatComponent extends React.Component {
 
         // only load formats if they are required for the report format list
         // type param
-        const p2 = load_formats ? gmp.reportformats.getAll() :
+        const p2 = load_formats ?
+          gmp.reportformats.getAll().then(resp => resp.data) :
           Promise.resolve(undefined);
 
         p2.then(formats => {

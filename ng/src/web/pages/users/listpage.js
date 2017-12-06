@@ -107,7 +107,8 @@ class UsersPage extends React.Component {
   openConfirmDeleteDialog(user) {
     const {gmp} = this.props;
 
-    gmp.users.getAll().then(users => {
+    gmp.users.getAll().then(response => {
+      let {data: users} = response;
 
       if (is_defined(user)) {
         users = users.filter(luser => luser.id !== user.id);
@@ -135,7 +136,8 @@ class UsersPage extends React.Component {
         }
         else {
           const {filter} = this.props;
-          promise = gmp.users.get({filter: filter.all()});
+          promise = gmp.users.get({filter: filter.all()})
+            .then(resp => resp.data);
         }
 
         promise.then(deleteUsers => {

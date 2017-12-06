@@ -61,12 +61,14 @@ export class TargetDialogContainer extends React.Component {
 
     this.target_dialog.show(state, options);
 
-    gmp.portlists.getAll({cache: false}).then(port_lists => {
+    gmp.portlists.getAll().then(response => {
+      const {data: port_lists} = response;
       this.port_lists = port_lists;
       this.target_dialog.setValue('port_lists', port_lists);
     });
 
-    gmp.credentials.getAll({cache: false}).then(credentials => {
+    gmp.credentials.getAll().then(response => {
+      const {data: credentials} = response;
       this.credentials = credentials;
       this.target_dialog.setValue('credentials', credentials);
     });

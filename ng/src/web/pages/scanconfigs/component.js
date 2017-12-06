@@ -134,8 +134,10 @@ class ScanConfigComponent extends React.Component {
   loadScanners(dialog) {
     const {gmp} = this.props;
 
-    gmp.scanners.getAll({cache: false}).then(scanners => {
-      scanners = scanners.filter(scanner => scanner.type === OSP_SCANNER_TYPE);
+    gmp.scanners.getAll().then(response => {
+      let {data: scanners} = response;
+      scanners = scanners.filter(scanner =>
+        scanner.scanner_type === OSP_SCANNER_TYPE);
       dialog.setValues({
         scanners,
         scanner_id: select_save_id(scanners),

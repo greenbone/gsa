@@ -66,8 +66,8 @@ class GroupComponent extends React.Component {
       this.dialog.show({});
     }
 
-    gmp.users.getAll().then(users => {
-      this.dialog.setValue('all_users', users);
+    gmp.users.getAll().then(response => {
+      this.dialog.setValue('all_users', response.data);
     });
   }
 
