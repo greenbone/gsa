@@ -195,7 +195,13 @@ export class Gmp {
   }
 
   set globals(values) {
-    this.storage.globals = JSON.stringify(values);
+    if (is_defined(values)) {
+      const {globals} = this;
+      this.storage.globals = JSON.stringify({...globals, ...values});
+    }
+    else {
+      this.storage.removeItem('globals');
+    }
   }
 
   get autorefresh() {
