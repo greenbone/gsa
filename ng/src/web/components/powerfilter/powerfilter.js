@@ -40,7 +40,7 @@ import TextField from '../form/textfield.js';
 import DeleteIcon from '../icon/deleteicon.js';
 import EditIcon from '../icon/editicon.js';
 import Icon from '../icon/icon.js';
-import HelpIcon from '../icon/helpicon.js';
+import ManualIcon from '../icon/manualicon.js';
 import NewIcon from '../icon/newicon.js';
 
 import Divider from '../layout/divider.js';
@@ -256,7 +256,11 @@ class PowerFilter extends React.Component {
                 />
               }
 
-              <HelpIcon page="powerfilter" />
+              <ManualIcon
+                title={_('Help: Powerfilter')}
+                page="gui_introduction"
+                anchor="powerfilter"
+              />
 
               {onEditClick &&
                 <EditIcon
