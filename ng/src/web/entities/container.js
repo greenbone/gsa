@@ -31,6 +31,8 @@ import {
 } from 'gmp/utils.js';
 
 import PromiseFactory from 'gmp/promise.js';
+import CancelToken from 'gmp/cancel.js';
+
 import Filter from 'gmp/models/filter.js';
 
 import compose from '../utils/compose.js';
@@ -108,7 +110,7 @@ class EntitiesContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    this.clearTimer();
+    this.cancelLoading();
   }
 
   componentWillReceiveProps(next) {
@@ -132,14 +134,22 @@ class EntitiesContainer extends React.Component {
     const {force = false, reload = false} = options;
     const {cache, extraLoadParams = {}} = this.props;
 
+    this.cancelLoading();
+
     this.setState({loading: true});
 
-    this.clearTimer(); // remove possible running timer
+    const token = new CancelToken(cancel => this.cancel = cancel);
 
-    entities_command.get({filter, ...extraLoadParams}, {cache, force})
+    entities_command.get({filter, ...extraLoadParams}, {
+      cache,
+      cancel_token: token,
+      force,
+    })
       .then(response => {
         const {data: entities, meta} = response;
         const {filter: loaded_filter, counts: entities_counts} = meta;
+
+        this.cancel = undefined;
 
         let refresh = false;
 
@@ -160,6 +170,9 @@ class EntitiesContainer extends React.Component {
 
         this.startTimer(refresh);
       }, error => {
+        if (is_defined(error.isCancel) && error.isCancel()) {
+          return;
+        }
         this.setState({loading: false, entities: undefined});
         this.handleError(error);
         return PromiseFactory.reject(error);
@@ -221,6 +234,17 @@ class EntitiesContainer extends React.Component {
 
     this.timer = undefined;
     this.reload();
+  }
+
+  cancelLastRequest() {
+    if (is_defined(this.cancel)) {
+      this.cancel();
+    }
+  }
+
+  cancelLoading() {
+    this.cancelLastRequest();
+    this.clearTimer(); // remove possible running timer
   }
 
   handleSelectionTypeChange(selection_type) {
