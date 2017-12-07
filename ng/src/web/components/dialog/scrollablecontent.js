@@ -29,7 +29,9 @@ const ScrollableContent = glamorous.div(
     overflow: 'auto',
     background: '#eee',
     padding: '0 15px',
+    width: '100%',
   },
+  ({maxHeight}) => ({maxHeight}),
 );
 
 export default ScrollableContent;

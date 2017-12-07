@@ -30,6 +30,8 @@ import {is_defined, KeyCode, exclude_object_props} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Layout from '../layout/layout.js';
+
 import DialogContainer from './container.js';
 import DialogContent from './content.js';
 import DialogError from './error.js';
@@ -97,7 +99,6 @@ const withDialog = (options = {}) => Component => {
         title,
         footer = _('Save'),
         width = DEFAULT_DIALOG_WIDTH,
-        height = DEFAULT_DIALOG_HEIGHT,
       } = {...options, ...this.props};
       return {
         error: undefined,
@@ -107,7 +108,6 @@ const withDialog = (options = {}) => Component => {
         title,
         visible: false,
         width,
-        height,
         data: defaultState,
       };
     }
@@ -348,7 +348,7 @@ const withDialog = (options = {}) => Component => {
 
       const {
         width = DEFAULT_DIALOG_WIDTH,
-        height = DEFAULT_DIALOG_HEIGHT,
+        height,
       } = {...this.state, ...this.props};
 
       const other = exclude_object_props(this.props, exclude_props);
@@ -383,9 +383,19 @@ const withDialog = (options = {}) => Component => {
 
                 {this.renderError()}
 
-                <ScrollableContent>
-                  {component}
-                </ScrollableContent>
+                <Layout
+                  flex="column"
+                  align={['center', 'start']}
+                  grow="1"
+                >
+                  <ScrollableContent
+                    maxHeight={is_defined(height) ?
+                      undefined : DEFAULT_DIALOG_HEIGHT
+                    }
+                  >
+                    {component}
+                  </ScrollableContent>
+                </Layout>
 
                 {this.renderFooter()}
                 <Resizer
