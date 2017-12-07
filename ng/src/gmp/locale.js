@@ -69,6 +69,8 @@ i18next
      * errors can be debugged here */
   });
 
+export const get_language = () => i18next.language;
+export const set_language = lang => i18next.changeLanguage(lang);
 
 export function translate(key, options) {
   return i18next.t(key, options);
