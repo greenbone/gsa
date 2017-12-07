@@ -77,6 +77,7 @@ export class Gmp {
       server,
       storage = localStorage,
       caches,
+      manualurl,
       ...httpoptions
     } = options;
 
@@ -97,6 +98,8 @@ export class Gmp {
     if (this.storage.token) {
       this.token = this.storage.token;
     }
+
+    this.globals = {manualurl};
 
     if (!is_defined(window.gsa)) {
       window.gsa = {};
