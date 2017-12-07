@@ -361,8 +361,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleLast() {
-    const {loaded_filter: filter, entities} = this.state;
-    const counts = entities.getCounts();
+    const {loaded_filter: filter, entities_counts: counts} = this.state;
 
     const last = Math.floor((counts.filtered - 1) / counts.rows) *
       counts.rows + 1;
