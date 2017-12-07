@@ -216,6 +216,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/icon/helpicon.js
      ${NG_SRC_DIR}/src/web/components/icon/icon.js
      ${NG_SRC_DIR}/src/web/components/icon/listicon.js
+     ${NG_SRC_DIR}/src/web/components/icon/manualicon.js
      ${NG_SRC_DIR}/src/web/components/icon/newicon.js
      ${NG_SRC_DIR}/src/web/components/icon/osicon.js
      ${NG_SRC_DIR}/src/web/components/icon/restoreicon.js

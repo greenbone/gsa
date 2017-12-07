@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import $ from 'jquery';
 import i18next from 'i18next';
 import moment from 'moment';
 import XHRBackend from 'i18next-xhr-backend';
@@ -32,14 +31,10 @@ import logger from './log.js';
 
 const log = logger.getLogger('gmp.locale');
 
-export class LanguageDetector extends BrowserDetector {
+class LanguageDetector extends BrowserDetector {
 
   detect(...options) {
-    let lang = $('html').attr('lang');
-
-    if (!lang) {
-      lang = super.detect(...options);
-    }
+    const lang = super.detect(...options);
 
     log.debug('Detected language', lang);
     moment.locale(lang);
@@ -74,6 +69,8 @@ i18next
      * errors can be debugged here */
   });
 
+export const get_language = () => i18next.language;
+export const set_language = lang => i18next.changeLanguage(lang);
 
 export function translate(key, options) {
   return i18next.t(key, options);
