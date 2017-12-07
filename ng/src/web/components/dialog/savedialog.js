@@ -31,6 +31,8 @@ import {is_defined} from 'gmp/utils.js';
 import State from '../../utils/state.js';
 import PropTypes from '../../utils/proptypes.js';
 
+import Layout from '../layout/layout.js';
+
 import Dialog from '../dialog/dialog.js';
 import DialogContent from '../dialog/content.js';
 import DialogError from '../dialog/error.js';
@@ -118,12 +120,18 @@ class SaveDialogContent extends React.Component {
                 onCloseClick={this.handleErrorClose}
               />
             }
-            <ScrollableContent>
-              {children({
-                data: state,
-                onValueChange,
-              })}
-            </ScrollableContent>
+            <Layout
+              flex="column"
+              align={['center', 'start']}
+              grow="1"
+            >
+              <ScrollableContent>
+                {children({
+                  data: state,
+                  onValueChange,
+                })}
+              </ScrollableContent>
+            </Layout>
             <DialogFooter
               title={_('Save')}
               loading={this.state.loading}

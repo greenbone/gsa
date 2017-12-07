@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import {KeyCode, has_value} from 'gmp/utils.js';
+import {KeyCode, has_value, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -176,7 +176,7 @@ class Dialog extends React.Component {
     let {
       posX,
       posY,
-      height = DEFAULT_DIALOG_HEIGHT,
+      height,
       width = DEFAULT_DIALOG_WIDTH,
     } = this.state;
 
@@ -194,6 +194,9 @@ class Dialog extends React.Component {
       return null;
     }
 
+    const maxHeight = is_defined(height) ?
+      undefined : DEFAULT_DIALOG_HEIGHT;
+
     return (
       <DialogOverlay
         onClick={this.onOuterClick}
@@ -210,6 +213,7 @@ class Dialog extends React.Component {
           {children({
             close: this.handleClose,
             getMoveProps: this.getMoveProps,
+            maxHeight,
           })}
           {resizable &&
             <Resizer onMouseDown={this.onMouseDownResize}/>
