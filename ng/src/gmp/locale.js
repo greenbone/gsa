@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import $ from 'jquery';
 import i18next from 'i18next';
 import moment from 'moment';
 import XHRBackend from 'i18next-xhr-backend';
@@ -35,11 +34,7 @@ const log = logger.getLogger('gmp.locale');
 export class LanguageDetector extends BrowserDetector {
 
   detect(...options) {
-    let lang = $('html').attr('lang');
-
-    if (!lang) {
-      lang = super.detect(...options);
-    }
+    const lang = super.detect(...options);
 
     log.debug('Detected language', lang);
     moment.locale(lang);
