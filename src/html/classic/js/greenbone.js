@@ -1254,7 +1254,30 @@
       };
     }
     else if (this.method === 'POST') {
-      var data = new FormData(this.form);
+      var data = new FormData();
+
+      var elem_i;
+      for (elem_i = 0; elem_i < this.form.length; elem_i++) {
+        var elem = this.form[elem_i];
+
+        if (! elem.matches ('div[style*="display: none"] *')) {
+          if (elem.matches ('select')) {
+            var val_i;
+            for (val_i = 0; val_i < elem.length; val_i++)
+              {
+                if (elem[val_i].selected) {
+                  data.append(elem.name, elem[val_i].value);
+                }
+              }
+          }
+          else if (elem.matches ('input')) {
+            if ((elem.type !== 'checkbox' && elem.type !== 'radio')
+                || elem.checked === true) {
+              data.append (elem.name, elem.value);
+            }
+          }
+        }
+      }
 
       for (var param in this.params) {
         if (this.xml && param === 'no_redirect') {
