@@ -30,7 +30,7 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -40,13 +40,13 @@ import OsTable from './table.js';
 
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-const Dashboard = withDashboard(OsCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: 'e93b51ed-5881-40e0-bc4f-7d3268a36177',
   defaultControllersString: 'os-by-severity-class|os-by-most-vulnerable|' +
     'os-by-cvss',
   defaultControllerString: 'os-by-cvss',
-});
+})(OsCharts);
 
 const ToolbarIcons = props => {
   return (

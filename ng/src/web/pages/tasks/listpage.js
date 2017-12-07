@@ -36,7 +36,7 @@ import Table from './table.js';
 
 import NewIconMenu from './icons/newiconmenu.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -49,13 +49,13 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import TaskComponent from './component.js';
 
-const Dashboard = withDashboard(TaskCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
   defaultControllersString: 'task-by-severity-class|' +
     'task-by-most-high-results|task-by-status',
   defaultControllerString: 'task-by-cvss',
-});
+})(TaskCharts);
 
 const ToolBarIcons = ({
     onAdvancedTaskWizardClick,

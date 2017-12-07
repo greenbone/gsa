@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -44,13 +44,13 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard(OvaldefCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '9563efc0-9f4e-4d1f-8f8d-0205e32b90a4',
   defaultControllersString: 'ovaldef-by-severity-class|ovaldef-by-created|' +
     'ovaldef-by-class',
   defaultControllerString: 'ovaldef-by-cvss',
-});
+})(OvaldefCharts);
 
 export default withEntitiesContainer('ovaldef', {
   dashboard: Dashboard,
