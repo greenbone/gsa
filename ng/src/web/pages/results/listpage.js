@@ -30,7 +30,7 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -41,13 +41,13 @@ import ResultsTable from './table.js';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-const Dashboard = withDashboard(ResultCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e',
   defaultControllersString: 'result-by-severity-class|' +
     'result-by-vuln-words|result-by-cvss',
   defaultControllerString: 'result-by-cvss',
-});
+})(ResultCharts);
 
 const ToolBarIcons = props => {
   return (

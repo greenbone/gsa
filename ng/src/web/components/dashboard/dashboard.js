@@ -147,35 +147,6 @@ Dashboard.contextTypes = {
 
 Dashboard = withCache({usersettingsCache: 'usersettings'})(Dashboard);
 
-export const withDashboard = (Charts, options = {}) => {
-
-  class DashboardWrapper extends React.Component {
-
-    reload() {
-      this.dashboard.reload();
-    }
-
-    render() {
-      const {filter, ...other} = this.props;
-      return (
-        <Dashboard
-          {...options}
-          {...other}
-          ref={ref => this.dashboard = ref}
-        >
-          <Charts filter={filter}/>
-        </Dashboard>
-      );
-    }
-  };
-
-  DashboardWrapper.propTypes = {
-    filter: PropTypes.filter,
-  };
-
-  return DashboardWrapper;
-};
-
 export default Dashboard;
 
 // vim: set ts=2 sw=2 tw=80:
