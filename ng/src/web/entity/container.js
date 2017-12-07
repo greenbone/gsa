@@ -26,6 +26,7 @@ import React from 'react';
 import logger from 'gmp/log.js';
 
 import Promise from 'gmp/promise.js';
+import CancelToken from 'gmp/cancel.js';
 
 import {is_defined} from 'gmp/utils.js';
 
@@ -41,14 +42,15 @@ import TagsHandler from './tagshandler.js';
 
 const log = logger.getLogger('web.entity.container');
 
-export const loader = (type, filter_func, name = type) => function(id) {
+export const loader = (type, filter_func, name = type) =>
+  function(id, cancel_token) {
   const {gmp} = this.props;
 
   log.debug('Loading', name, 'for entity', id);
 
   return gmp[type].getAll({
     filter: filter_func(id),
-  }).then(response => {
+  }, {cancel_token}).then(response => {
 
     log.debug('Loaded', name, response);
 
@@ -68,6 +70,9 @@ export const loader = (type, filter_func, name = type) => function(id) {
 
     return false;
   }).catch(err => {
+    if (is_defined(err.isCancel) && err.isCancel()) {
+      return;
+    }
     // call handleError before setting state. setting state may hide the root
     // error
     const rej = this.handleError(err);
@@ -113,7 +118,7 @@ class EntityContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    this.clearTimer();
+    this.cancelLoading();
   }
 
   componentWillReceiveProps(next) {
@@ -132,14 +137,19 @@ class EntityContainer extends React.Component {
       all_loaders.push(...this.props.loaders);
     }
 
-    const promises = all_loaders.map(loader_func => loader_func.call(this, id));
+    this.cancelLoading();
+
+    const token = new CancelToken(cancel => this.cancel = cancel);
+
+    const promises = all_loaders.map(loader_func => loader_func.call(this, id, token));
 
     this.setState({loading: true});
 
-    this.clearTimer(); // remove possible running timer
-
     Promise.all(promises)
-      .then(values => values.reduce((sum, cur) => sum || cur, false))
+      .then(values => {
+        this.cancel = undefined;
+        return values.reduce((sum, cur) => sum || cur, false);
+      })
       .then(refresh => this.startTimer(refresh))
       .catch(err => {
         log.error('Error while loading data', err);
@@ -152,10 +162,10 @@ class EntityContainer extends React.Component {
     this.load(id);
   }
 
-  loadEntity(id) {
+  loadEntity(id, cancel_token) {
     log.debug('Loading entity', id);
 
-    return this.entity_command.get({id}).then(response => {
+    return this.entity_command.get({id}, {cancel_token}).then(response => {
 
       const {data: entity, meta} = response;
 
@@ -170,6 +180,9 @@ class EntityContainer extends React.Component {
       return false;
     })
     .catch(err => {
+      if (is_defined(err.isCancel) && err.isCancel()) {
+        return;
+      }
       this.handleError(err);
       this.setState({entity: undefined});
       return Promise.reject(err);
@@ -183,6 +196,17 @@ class EntityContainer extends React.Component {
   getRefreshInterval() {
     const {gmp} = this.props;
     return gmp.autorefresh * 1000;
+  }
+
+  cancelLastRequest() {
+    if (is_defined(this.cancel)) {
+      this.cancel();
+    }
+  }
+
+  cancelLoading() {
+    this.cancelLastRequest();
+    this.clearTimer(); // remove possible running timer
   }
 
   startTimer(immediate = false) {
