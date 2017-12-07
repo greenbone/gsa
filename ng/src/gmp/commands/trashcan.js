@@ -24,8 +24,6 @@
 import {HttpCommand, register_command} from '../command.js';
 import {is_defined, map} from '../utils.js';
 
-import CollectionList from '../collection/collectionlist.js';
-
 import Agent from '../models/agent.js';
 import Alert from '../models/alert.js';
 import Scanconfig from '../models/scanconfig.js';
@@ -73,106 +71,78 @@ class Trashcan extends HttpCommand {
       const trash_data = response.data.get_trash;
       const data = {};
       if (is_defined(trash_data.get_agents_response)) {
-        data.agent_list = new CollectionList({
-            entries: map(trash_data.get_agents_response.agent,
-              model => new Agent(model)),
-          });
+        data.agent_list = map(trash_data.get_agents_response.agent,
+          model => new Agent(model));
       }
       if (is_defined(trash_data.get_alerts_response)) {
-        data.alert_list = new CollectionList({
-          entries: map(trash_data.get_alerts_response.alert,
-            model => new Alert(model)),
-        });
+        data.alert_list = map(trash_data.get_alerts_response.alert,
+          model => new Alert(model));
       }
       if (is_defined(trash_data.get_configs_response)) {
-        data.config_list = new CollectionList({
-          entries: map(trash_data.get_configs_response.config,
-            model => new Scanconfig(model)),
-        });
+        data.config_list = map(trash_data.get_configs_response.config,
+          model => new Scanconfig(model));
       }
       if (is_defined(trash_data.get_credentials_response)) {
-        data.credential_list = new CollectionList({
-          entries: map(trash_data.get_credentials_response.credential,
-            model => new Credential(model)),
-        });
+        data.credential_list = map(
+          trash_data.get_credentials_response.credential,
+          model => new Credential(model)
+        );
       }
       if (is_defined(trash_data.get_filters_response)) {
-        data.filter_list = new CollectionList({
-          entries: map(trash_data.get_filters_response.filter,
-            model => new Filter(model)),
-        });
+        data.filter_list = map(trash_data.get_filters_response.filter,
+            model => new Filter(model));
       }
       if (is_defined(trash_data.get_groups_response)) {
-        data.group_list = new CollectionList({
-          entries: map(trash_data.get_groups_response.group,
-            model => new Group(model)),
-        });
+        data.group_list = map(trash_data.get_groups_response.group,
+            model => new Group(model));
       }
       if (is_defined(trash_data.get_notes_response)) {
-        data.note_list = new CollectionList({
-          entries: map(trash_data.get_notes_response.note,
-            model => new Note(model)),
-        });
+        data.note_list = map(trash_data.get_notes_response.note,
+          model => new Note(model));
       }
       if (is_defined(trash_data.get_overrides_response)) {
-        data.override_list = new CollectionList({
-          entries: map(trash_data.get_overrides_response.override,
-            model => new Override(model)),
-        });
+        data.override_list = map(trash_data.get_overrides_response.override,
+          model => new Override(model));
       }
       if (is_defined(trash_data.get_permissions_response)) {
-        data.permission_list = new CollectionList({
-          entries: map(trash_data.get_permissions_response.permission,
-            model => new Permission(model)),
-        });
+        data.permission_list = map(
+          trash_data.get_permissions_response.permission,
+          model => new Permission(model)
+        );
       }
       if (is_defined(trash_data.get_port_lists_response)) {
-        data.port_list_list = new CollectionList({
-          entries: map(trash_data.get_port_lists_response.port_list,
-            model => new PortList(model)),
-        });
+        data.port_list_list = map(trash_data.get_port_lists_response.port_list,
+          model => new PortList(model));
       }
       if (is_defined(trash_data.get_report_formats_response)) {
-        data.report_format_list = new CollectionList({
-          entries: map(trash_data.get_report_formats_response.report_format,
-            model => new ReportFormat(model)),
-        });
+        data.report_format_list = map(
+          trash_data.get_report_formats_response.report_format,
+          model => new ReportFormat(model)
+        );
       }
       if (is_defined(trash_data.get_roles_response)) {
-        data.role_list = new CollectionList({
-          entries: map(trash_data.get_roles_response.role,
-            model => new Role(model)),
-        });
+        data.role_list = map(trash_data.get_roles_response.role,
+          model => new Role(model));
       }
       if (is_defined(trash_data.get_scanners_response)) {
-        data.scanner_list = new CollectionList({
-          entries: map(trash_data.get_scanners_response.scanner,
-            model => new Scanner(model)),
-        });
+        data.scanner_list = map(trash_data.get_scanners_response.scanner,
+          model => new Scanner(model));
       }
       if (is_defined(trash_data.get_schedules_response)) {
-        data.schedule_list = new CollectionList({
-          entries: map(trash_data.get_schedules_response.schedule,
-            model => new Schedule(model)),
-        });
+        data.schedule_list = map(trash_data.get_schedules_response.schedule,
+          model => new Schedule(model));
       }
       if (is_defined(trash_data.get_tags_response)) {
-        data.tag_list = new CollectionList({
-          entries: map(trash_data.get_tags_response.tag,
-            model => new Tag(model)),
-        });
+        data.tag_list = map(trash_data.get_tags_response.tag,
+          model => new Tag(model));
       }
       if (is_defined(trash_data.get_targets_response)) {
-        data.target_list = new CollectionList({
-          entries: map(trash_data.get_targets_response.target,
-            model => new Target(model)),
-        });
+        data.target_list = map(trash_data.get_targets_response.target,
+          model => new Target(model));
       }
       if (is_defined(trash_data.get_tasks_response)) {
-        data.task_list = new CollectionList({
-          entries: map(trash_data.get_tasks_response.task,
-            model => new Task(model)),
-        });
+        data.task_list = map(trash_data.get_tasks_response.task,
+          model => new Task(model));
       }
       return response.setData(data);
     });

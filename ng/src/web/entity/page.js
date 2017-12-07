@@ -159,7 +159,7 @@ class EntityPage extends React.Component {
     return (
       <PermissionsComponent
         entity={entity}
-        permissions={permissions}
+        permissions={is_defined(permissions) ? permissions.entities : undefined}
         onChanged={onPermissionChanged}
         onDownloaded={onPermissionDownloaded}
         onError={onPermissionDownloadError}
@@ -203,7 +203,7 @@ EntityPage.propTypes = {
   foldable: PropTypes.bool,
   infoComponent: PropTypes.componentOrFalse,
   loading: PropTypes.bool,
-  permissions: PropTypes.arrayLike,
+  permissions: PropTypes.object,
   permissionsComponent: PropTypes.componentOrFalse,
   sectionComponent: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,

@@ -116,9 +116,9 @@ const ScpMethodPart = ({
 };
 
 ScpMethodPart.propTypes = {
-  credentials: PropTypes.arrayLike,
+  credentials: PropTypes.array,
   prefix: PropTypes.string,
-  reportFormats: PropTypes.arrayLike,
+  reportFormats: PropTypes.array,
   scpCredential: PropTypes.id,
   scpHost: PropTypes.string.isRequired,
   scpKnownHosts: PropTypes.string.isRequired,

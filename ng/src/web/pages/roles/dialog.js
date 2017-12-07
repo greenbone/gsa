@@ -226,17 +226,17 @@ const Dialog = ({
 };
 
 Dialog.propTypes = {
-  all_groups: PropTypes.arrayLike,
-  all_permissions: PropTypes.arrayLike,
-  all_users: PropTypes.arrayLike,
+  all_groups: PropTypes.array,
+  all_permissions: PropTypes.array,
+  all_users: PropTypes.array,
   comment: PropTypes.string,
   group_id: PropTypes.id,
   id: PropTypes.id,
   in_use: PropTypes.bool,
   name: PropTypes.string,
-  permissions: PropTypes.arrayLike,
+  permissions: PropTypes.array,
   permission_name: PropTypes.string,
-  users: PropTypes.arrayLike,
+  users: PropTypes.array,
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,
   onDeletePermission: PropTypes.func.isRequired,

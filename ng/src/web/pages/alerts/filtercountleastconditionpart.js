@@ -82,7 +82,7 @@ FilterCountLeastConditionPart.propTypes = {
   atLeastCount: PropTypes.number.isRequired,
   atLeastFilterId: PropTypes.id,
   condition: PropTypes.string.isRequired,
-  filters: PropTypes.arrayLike.isRequired,
+  filters: PropTypes.array.isRequired,
   prefix: PropTypes.string,
   onChange: PropTypes.func,
 };

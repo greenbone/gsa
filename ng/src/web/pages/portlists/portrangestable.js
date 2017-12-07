@@ -95,7 +95,7 @@ const PortRangesTable = ({
 
 PortRangesTable.propTypes = {
   actions: PropTypes.bool,
-  portRanges: PropTypes.arrayLike,
+  portRanges: PropTypes.array,
   onDeleteClick: PropTypes.func,
 };
 

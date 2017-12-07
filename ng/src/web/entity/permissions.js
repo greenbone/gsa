@@ -126,19 +126,22 @@ class EntityPermissions extends React.Component {
         });
       });
 
-    gmp.groups.getAll().then(groups => {
+    gmp.groups.getAll().then(response => {
+      const {data: groups} = response;
       this.dialog.setValues({
         groups,
         group_id: select_save_id(groups),
       });
     });
-    gmp.roles.getAll().then(roles => {
+    gmp.roles.getAll().then(response => {
+      const {data: roles} = response;
       this.dialog.setValues({
         roles,
         role_id: select_save_id(roles),
       });
     });
-    gmp.users.getAll().then(users => {
+    gmp.users.getAll().then(response => {
+      const {data: users} = response;
       this.dialog.setValues({
         users,
         user_id: select_save_id(users),
@@ -200,7 +203,7 @@ class EntityPermissions extends React.Component {
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
   foldable: PropTypes.bool,
-  permissions: PropTypes.arrayLike,
+  permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
   onPermissionCloneClick: PropTypes.func.isRequired,

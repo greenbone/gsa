@@ -122,7 +122,7 @@ Dialog.propTypes = {
   comment: PropTypes.string,
   name: PropTypes.string,
   scanner_id: PropTypes.id,
-  scanners: PropTypes.arrayLike,
+  scanners: PropTypes.array,
   onValueChange: PropTypes.func,
 };
 

@@ -308,7 +308,7 @@ Dialog.propTypes = {
   ]).isRequired,
   comment: PropTypes.string,
   group_ids: PropTypes.array,
-  groups: PropTypes.arrayLike,
+  groups: PropTypes.array,
   hosts_allow: PropTypes.oneOf([
     ACCESS_ALLOW_ALL,
     ACCESS_DENY_ALL,
@@ -322,7 +322,7 @@ Dialog.propTypes = {
   old_name: PropTypes.string,
   password: PropTypes.string,
   role_ids: PropTypes.array,
-  roles: PropTypes.arrayLike,
+  roles: PropTypes.array,
   settings: PropTypes.settings.isRequired,
   onValueChange: PropTypes.func.isRequired,
 };

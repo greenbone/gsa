@@ -183,7 +183,7 @@ ModifyTaskWizard.propTypes = {
   start_minute: PropTypes.number,
   start_timezone: PropTypes.string,
   task_id: PropTypes.id,
-  tasks: PropTypes.arrayLike,
+  tasks: PropTypes.array,
   onValueChange: PropTypes.func,
 };
 

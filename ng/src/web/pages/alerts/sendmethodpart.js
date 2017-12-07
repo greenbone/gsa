@@ -84,7 +84,7 @@ const SendMethodPart = ({
 
 SendMethodPart.propTypes = {
   prefix: PropTypes.string,
-  reportFormats: PropTypes.arrayLike,
+  reportFormats: PropTypes.array,
   sendHost: PropTypes.string.isRequired,
   sendPort: PropTypes.string.isRequired,
   sendReportFormat: PropTypes.id,

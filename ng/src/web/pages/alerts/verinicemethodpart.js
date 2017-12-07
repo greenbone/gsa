@@ -98,9 +98,9 @@ const VeriniceMethodPart = ({
 };
 
 VeriniceMethodPart.propTypes = {
-  credentials: PropTypes.arrayLike,
+  credentials: PropTypes.array,
   prefix: PropTypes.string,
-  reportFormats: PropTypes.arrayLike,
+  reportFormats: PropTypes.array,
   veriniceServerCredential: PropTypes.id,
   veriniceServerReportFormat: PropTypes.id,
   veriniceServerUrl: PropTypes.string,

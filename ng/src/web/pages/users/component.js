@@ -72,10 +72,10 @@ class UserComponent extends React.Component {
 
       gmp.groups.getAll({
         filter: 'permission=modify_group', //  list only groups current user may modify
-      }).then(groups =>
-        this.user_dialog.setValue('groups', groups));
+      }).then(resp =>
+        this.user_dialog.setValue('groups', resp.data));
       gmp.roles.getAll()
-        .then(roles => this.user_dialog.setValue('roles', roles));
+        .then(resp => this.user_dialog.setValue('roles', resp.data));
     });
   }
 

@@ -150,7 +150,7 @@ const Footer = ({
 };
 
 Footer.propTypes = {
-  entities: PropTypes.collection.isRequired,
+  entities: PropTypes.array.isRequired,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter.isRequired,
   selectionType: PropTypes.string,

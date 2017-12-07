@@ -33,7 +33,6 @@ import Model from '../model.js';
 
 import Filter from '../models/filter.js';
 
-import CollectionList from './collectionlist.js';
 import CollectionCounts from './collectioncounts.js';
 
 const log = logger.getLogger('gmp.collection.parser');
@@ -168,10 +167,8 @@ export function parse_collection_counts(response, name, plural_name) {
  *                                response. Defaults to parse_filter if
  *                                undefined.
  *
- * @param {Object} options.meta   Meta object. May contain all kind of meta
- *                                information for the entities.
- *
- * @return {CollectionList}  A new CollectionList instance.
+ * @return {Object}  A new object containing the parsed entities, filter and
+ *                   counts.
  */
 export function parse_collection_list(response, name, modelclass,
     options = {}) {
@@ -180,14 +177,12 @@ export function parse_collection_list(response, name, modelclass,
     entities_parse_func = parse_entities,
     collection_count_parse_func = parse_collection_counts,
     filter_parse_func = parse_filter,
-    meta = {},
   } = options;
-  return new CollectionList({
-    meta,
-    entries: entities_parse_func(response, name, modelclass),
+  return {
+    entities: entities_parse_func(response, name, modelclass),
     filter: filter_parse_func(response),
     counts: collection_count_parse_func(response, name, plural_name),
-  });
+  };
 }
 
 // vim: set ts=2 sw=2 tw=80:

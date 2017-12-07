@@ -112,12 +112,12 @@ const Dialog = ({
 };
 
 Dialog.propTypes = {
-  all_users: PropTypes.arrayLike,
+  all_users: PropTypes.array,
   comment: PropTypes.string,
   grant_full: PropTypes.oneOf(['0', '1']),
   id: PropTypes.id,
   name: PropTypes.string,
-  users: PropTypes.arrayLike,
+  users: PropTypes.array,
   onValueChange: PropTypes.func.isRequired,
 };
 

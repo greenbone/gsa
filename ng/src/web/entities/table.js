@@ -71,7 +71,13 @@ class EntitiesTable extends React.Component {
   render() {
     const {props} = this;
     const {details} = this.state;
-    const {filter, entities, emptyTitle, footnote = true} = props;
+    const {
+      emptyTitle,
+      entities,
+      entitiesCounts,
+      filter,
+      footnote = true,
+    } = props;
 
     if (!is_defined(entities)) {
       return null;
@@ -120,7 +126,8 @@ class EntitiesTable extends React.Component {
       pagination = (
         <PaginationComponent
           {...other}
-          counts={entities.getCounts()}/>
+          counts={entitiesCounts}
+        />
       );
     }
 
@@ -176,7 +183,8 @@ class EntitiesTable extends React.Component {
 EntitiesTable.propTypes = {
   body: PropTypes.componentOrFalse,
   emptyTitle: PropTypes.string,
-  entities: PropTypes.collection,
+  entities: PropTypes.array,
+  entitiesCounts: PropTypes.counts,
   filter: PropTypes.filter,
   footer: PropTypes.componentOrFalse,
   footnote: PropTypes.bool,

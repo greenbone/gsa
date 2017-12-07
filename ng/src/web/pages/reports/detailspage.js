@@ -240,7 +240,8 @@ class ReportDetails extends React.Component {
   loadReportFormats() {
     const {gmp} = this.props;
 
-    gmp.reportformats.getAll().then(report_formats => {
+    gmp.reportformats.getAll().then(response => {
+      let {data: report_formats} = response;
       report_formats = report_formats.filter(format => {
         return format.isActive() &&
           (format.isTrusted() || format.isPredefined());
@@ -256,8 +257,8 @@ class ReportDetails extends React.Component {
   loadFilters() {
     const {gmp} = this.props;
 
-    gmp.filters.getAll({filter: RESULTS_FILTER_FILTER}).then(filters => {
-      this.setState({filters});
+    gmp.filters.getAll({filter: RESULTS_FILTER_FILTER}).then(response => {
+      this.setState({filters: response.data});
     });
   }
 

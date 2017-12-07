@@ -126,17 +126,10 @@ class UserSettings extends React.Component {
     const {gmp} = this.props;
     const {option_lists} = this.state;
     const all_settings = Promise.all([
-      gmp.user.currentSettings()
-      .then(response => {
-        return response.data.getEntries();
-      }),
-      gmp.filters.getAll()
-      .then(response => {
-        return response.getEntries();
-      }),
-      gmp.scanconfigs.getAll()
-      .then(response => {
-        const config_list = response.getEntries();
+      gmp.user.currentSettings().then(response => response.data.getEntries()),
+      gmp.filters.getAll().then(response => response.data),
+      gmp.scanconfigs.getAll().then(response => {
+        const config_list = response.data;
         option_lists.scanconfigsList = config_list;
         this.setState({option_lists});
         return config_list;
@@ -149,47 +142,47 @@ class UserSettings extends React.Component {
       }),
       gmp.alerts.getAll()
       .then(response => {
-        option_lists.alertsList = response.getEntries();
+        option_lists.alertsList = response.data;
         this.setState({option_lists});
       }),
       gmp.credentials.getAll()
       .then(response => {
-        option_lists.credentialsList = response.getEntries();
+        option_lists.credentialsList = response.data;
         this.setState({option_lists});
       }),
       gmp.portlists.getAll()
       .then(response => {
-        option_lists.portlistsList = response.getEntries();
+        option_lists.portlistsList = response.data;
         this.setState({option_lists});
       }),
       gmp.reportformats.getAll()
       .then(response => {
-        option_lists.reportformatsList = response.getEntries();
+        option_lists.reportformatsList = response.data;
         this.setState({option_lists});
       }),
       gmp.scanners.getAll()
       .then(response => {
-        option_lists.scannersList = response.getEntries();
+        option_lists.scannersList = response.data;
         this.setState({option_lists});
       }),
       gmp.reportformats.getAll()
       .then(response => {
-        option_lists.reportformatsList = response.getEntries();
+        option_lists.reportformatsList = response.data;
         this.setState({option_lists});
       }),
       gmp.schedules.getAll()
       .then(response => {
-        option_lists.schedulesList = response.getEntries();
+        option_lists.schedulesList = response.data;
         this.setState({option_lists});
       }),
       gmp.targets.getAll()
       .then(response => {
-        option_lists.targetsList = response.getEntries();
+        option_lists.targetsList = response.data;
         this.setState({option_lists});
       }),
       gmp.filters.getAll()
       .then(response => {
-        const filtersList = response.getEntries();
+        const filtersList = response.data;
         const filtersListAgent = filtersList.filter(
           item => {
             return item.filter_type === 'Agent';

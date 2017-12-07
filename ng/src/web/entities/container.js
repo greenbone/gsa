@@ -137,19 +137,21 @@ class EntitiesContainer extends React.Component {
     this.clearTimer(); // remove possible running timer
 
     entities_command.get({filter, ...extraLoadParams}, {cache, force})
-      .then(entities => {
-        const meta = entities.getMeta();
-        const loaded_filter = entities.getFilter();
+      .then(response => {
+        const {data: entities, meta} = response;
+        const {filter: loaded_filter, counts: entities_counts} = meta;
+
         let refresh = false;
 
         this.setState({
           entities,
+          entities_counts,
           filter,
           loaded_filter,
           loading: false,
         });
 
-        log.debug('Loaded entities', entities);
+        log.debug('Loaded entities', response);
 
         if (meta.fromcache && (meta.dirty || reload)) {
           log.debug('Forcing reload of entities', meta.dirty, reload);
@@ -172,14 +174,14 @@ class EntitiesContainer extends React.Component {
     }
 
     gmp.filters.getAll({filter: filtersFilter}, {cache})
-      .then(filters => {
+      .then(response => {
         // display cached filters
-        this.setState({filters});
+        this.setState({filters: response.data});
         // reload all filters from backend
         return gmp.filters.getAll({filter: filtersFilter},
           {cache, force: true});
-      }).then(filters => {
-        this.setState({filters});
+      }).then(response => {
+        this.setState({filters: response.data});
       }, this.handleError);
   }
 
@@ -368,6 +370,7 @@ class EntitiesContainer extends React.Component {
   render() {
     const {
       entities,
+      entities_counts,
       filters,
       loaded_filter,
       loading,
@@ -388,6 +391,7 @@ class EntitiesContainer extends React.Component {
           {...other}
           loading={loading}
           entities={entities}
+          entitiesCounts={entities_counts}
           entitiesSelected={selected}
           filter={loaded_filter}
           filters={filters}
@@ -420,7 +424,7 @@ class EntitiesContainer extends React.Component {
 EntitiesContainer.propTypes = {
   cache: PropTypes.cache.isRequired,
   component: PropTypes.component.isRequired,
-  entities: PropTypes.collection,
+  entities: PropTypes.array,
   extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   filtersFilter: PropTypes.filter,

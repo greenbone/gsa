@@ -57,15 +57,8 @@ const ReportScanInfoTable = ({
 
   const {id, name, comment, progress} = task;
 
-  let hosts_count;
-
-  if (is_defined(hosts)) {
-    const hosts_counts = hosts.getCounts();
-    hosts_count = hosts_counts.all;
-  }
-  else {
-    hosts_count = 0;
-  }
+  const hosts_count = is_defined(hosts) && is_defined(hosts.counts) ?
+    hosts.counts.all : 0;
 
   if (!is_defined(filterString)) {
     filterString = filter.simple().toFilterString();

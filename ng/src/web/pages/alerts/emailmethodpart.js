@@ -170,7 +170,7 @@ EmailMethodPart.propTypes = {
   noticeAttachFormat: PropTypes.id,
   noticeReportFormat: PropTypes.id,
   prefix: PropTypes.string.isRequired,
-  reportFormats: PropTypes.arrayLike,
+  reportFormats: PropTypes.array,
   subject: PropTypes.string.isRequired,
   toAddress: PropTypes.string.isRequired,
   onChange: PropTypes.func,

@@ -27,8 +27,6 @@ import logger from 'gmp/log.js';
 
 import {is_defined} from 'gmp/utils.js';
 
-import CollectionList from 'gmp/collection/collectionlist.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
 const log = logger.getLogger('web.pages.reports.reportentitiescontainer');
@@ -48,35 +46,37 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   componentDidMount() {
-    const {entities, filter} = this.props;
+    const {entities, filter, counts} = this.props;
 
-    this.updateFromEntities(entities, filter);
+    this.updateFromEntities(entities, filter, counts);
   }
 
   componentWillReceiveProps(next) {
-    const {entities, filter} = next;
+    const {entities, filter, counts} = next;
 
     if (entities !== this.props.entities ||
       (is_defined(filter) && !filter.equals(this.props.filter))) {
-      this.updateFromEntities(entities, filter);
+      this.updateFromEntities(entities, filter, counts);
     }
   }
 
-  updateFromEntities(entities, filter) {
+  updateFromEntities(entities, filter, counts) {
     const {
       sort: state_sort,
+      entities: state_entities,
     } = this.state;
 
-    const counts = entities.getCounts();
-    filter = is_defined(filter) ? filter : entities.getFilter();
+    filter = is_defined(filter) ? filter : this.props.filter;
 
     const reverse_field = filter.get('sort-reverse');
     const reverse = is_defined(reverse_field);
     const field = reverse ? reverse_field : filter.get('sort');
 
-    // only goto first page if sorting has changed
+    // goto first page if sorting or entities have changed
     const next = !is_defined(state_sort) || state_sort.reverse !== reverse ||
-      state_sort.field !== field ? counts.first - 1 : undefined;
+      state_sort.field !== field || state_entities !== entities ?
+      counts.first - 1 :
+      undefined;
 
     const sort = {
       reverse,
@@ -85,15 +85,24 @@ class ReportEntitiesContainer extends React.Component {
 
     this.load({
       entities,
+      counts,
       filter,
       next_entity_index: next,
       sort,
     });
   }
 
-  load({entities, filter, rows, sort, next_entity_index} = {}) {
+  load({
+    entities,
+    counts,
+    filter,
+    rows,
+    sort,
+    next_entity_index,
+  } = {}) {
     const {
       entities: state_entities,
+      counts: state_counts,
       current_entity_index,
       sort: state_sort,
       filter: state_filter,
@@ -106,6 +115,10 @@ class ReportEntitiesContainer extends React.Component {
       entities = state_entities;
     }
 
+    if (!is_defined(counts)) {
+      counts = state_counts;
+    }
+
     if (!is_defined(sort)) {
       sort = state_sort;
     }
@@ -113,9 +126,6 @@ class ReportEntitiesContainer extends React.Component {
     if (!is_defined(filter)) {
       filter = state_filter;
     }
-
-    const counts = entities.getCounts();
-    let entries = entities.getEntries();
 
     if (!is_defined(rows)) {
       rows = filter.get('rows');
@@ -125,24 +135,21 @@ class ReportEntitiesContainer extends React.Component {
       }
     }
 
-    entries = entries.slice(index, index + rows);
 
-    const paged = new CollectionList({
-      entries,
-      filter,
-      counts: counts.clone({
-        first: index + 1,
-        length: entries.length,
-        rows,
-      }),
+    const paged_entities = entities.slice(index, index + rows);
+    const paged_counts = counts.clone({
+      first: index + 1,
+      length: paged_entities.length,
+      rows,
     });
-
 
     this.setState({
       current_entity_index: index,
       displayed_entity_rows: rows,
       entities,
-      paged_entities: paged,
+      counts,
+      paged_entities,
+      paged_counts,
       filter,
       sort,
     });
@@ -183,11 +190,10 @@ class ReportEntitiesContainer extends React.Component {
 
   handleLast() {
     const {
-      entities,
       displayed_entity_rows: rows,
+      counts,
     } = this.state;
 
-    const counts = entities.getCounts();
     const {filtered} = counts;
 
     const last = Math.floor((filtered - 1) / rows) * rows + 1;
@@ -219,7 +225,11 @@ class ReportEntitiesContainer extends React.Component {
 
   render() {
     const {children, sortFunctions} = this.props;
-    const {paged_entities: entities, filter} = this.state;
+    const {
+      paged_entities: entities,
+      paged_counts: entitiesCounts,
+      filter,
+    } = this.state;
 
     if (!is_defined(children)) {
       return null;
@@ -227,6 +237,7 @@ class ReportEntitiesContainer extends React.Component {
 
     return children({
       entities,
+      entitiesCounts,
       filter,
       onFirstClick: this.handleFirst,
       onLastClick: this.handleLast,
@@ -240,7 +251,8 @@ class ReportEntitiesContainer extends React.Component {
 
 ReportEntitiesContainer.propTypes = {
   children: PropTypes.func,
-  entities: PropTypes.collection.isRequired,
+  counts: PropTypes.counts.isRequired,
+  entities: PropTypes.array.isRequired,
   filter: PropTypes.filter,
   sortFunctions: PropTypes.object,
 };

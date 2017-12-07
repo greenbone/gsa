@@ -231,7 +231,7 @@ class EditDialogComponent extends React.Component {
 
 EditDialogComponent.propTypes = {
   config: PropTypes.model.isRequired,
-  nvts: PropTypes.arrayLike.isRequired,
+  nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
   onValueChange: PropTypes.func,

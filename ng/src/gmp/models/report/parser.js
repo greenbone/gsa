@@ -41,7 +41,6 @@ import {
   parse_report_result_entities,
 } from '../../collection/parser.js';
 
-import CollectionList from '../../collection/collectionlist.js';
 import CollectionCounts from '../../collection/collectioncounts.js';
 
 import App from './app.js';
@@ -55,7 +54,11 @@ import Vulerability from './vulnerability.js';
 import Result from '../result.js';
 
 const empty_collection_list = filter => {
-  return new CollectionList({filter});
+  return {
+    filter,
+    counts: new CollectionCounts(),
+    entities: [],
+  };
 };
 
 const get_cert = (certs, fingerprint) => {
@@ -171,11 +174,11 @@ export const parse_tls_certificates = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
+  return {
     counts,
-    entries: certs_per_port,
+    entities: certs_per_port,
     filter: is_defined(filter) ? filter : parse_filter(report),
-  });
+  };
 };
 
 export const parse_ports = (report, filter) => {
@@ -219,11 +222,11 @@ export const parse_ports = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
-    entries: ports_array.sort((porta, portb) => porta.number > portb.number),
+  return {
+    entities: ports_array.sort((porta, portb) => porta.number > portb.number),
     filter: is_defined(filter) ? filter : parse_filter(report),
     counts,
-  });
+  };
 };
 
 export const parse_vulnerabilities = (report, filter) => {
@@ -269,11 +272,11 @@ export const parse_vulnerabilities = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
-    entries: vulns_array,
+  return {
+    entities: vulns_array,
     filter: is_defined(filter) ? filter : parse_filter(report),
     counts,
-  });
+  };
 };
 
 export const parse_apps = (report, filter) => {
@@ -364,11 +367,11 @@ export const parse_apps = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
+  return {
     filter: is_defined(filter) ? filter : parse_filter(report),
-    entries: apps_array,
+    entities: apps_array,
     counts,
-  });
+  };
 };
 
 export const parse_host_severities = (results = {}) => {
@@ -453,11 +456,11 @@ export const parse_operatingsystems = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
+  return {
     filter: is_defined(filter) ? filter : parse_filter(report),
-    entries: os_array,
+    entities: os_array,
     counts,
-  });
+  };
 };
 
 export const parse_hosts = (report, filter) => {
@@ -484,11 +487,11 @@ export const parse_hosts = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
+  return {
     counts,
-    entries: hosts_array,
+    entities: hosts_array,
     filter: is_defined(filter) ? filter : parse_filter(report),
-  });
+  };
 };
 
 const parse_report_report_counts = elem => {
@@ -578,11 +581,11 @@ export const parse_errors = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
+  return {
     counts,
-    entries: errors_array,
+    entities: errors_array,
     filter: is_defined(filter) ? filter : parse_filter(report),
-  });
+  };
 };
 
 export const parse_closed_cves = (report, filter) => {
@@ -645,11 +648,11 @@ export const parse_closed_cves = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
+  return {
     counts,
-    entries: cves_array,
+    entities: cves_array,
     filter: is_defined(filter) ? filter : parse_filter(report),
-  });
+  };
 };
 
 export const parse_cves = (report, filter) => {
@@ -697,11 +700,11 @@ export const parse_cves = (report, filter) => {
     rows: filtered_count,
   });
 
-  return new CollectionList({
+  return {
     counts,
-    entries: cves_array,
+    entities: cves_array,
     filter: is_defined(filter) ? filter : parse_filter(report),
-  });
+  };
 };
 
 // vim: set ts=2 sw=2 tw=80:

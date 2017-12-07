@@ -132,21 +132,24 @@ class PermissionsComponent extends React.Component {
 
     this.permission_dialog.show(state, opts);
 
-    users_promise.then(users => {
+    users_promise.then(response => {
+      const {data: users} = response;
       this.permission_dialog.setValues({
         user_id: select_save_id(users, state.user_id),
         users,
       });
     });
 
-    roles_promise.then(roles => {
+    roles_promise.then(response => {
+      const {data: roles} = response;
       this.permission_dialog.setValues({
         role_id: select_save_id(roles, state.role_id),
         roles,
       });
     });
 
-    groups_promise.then(groups => {
+    groups_promise.then(response => {
+      const {data: groups} = response;
       this.permission_dialog.setValues({
         group_id: select_save_id(groups, state.group_id),
         groups,

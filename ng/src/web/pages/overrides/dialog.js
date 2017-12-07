@@ -408,7 +408,7 @@ OverrideDialog.propTypes = {
   task_id: PropTypes.id,
   task_name: PropTypes.string,
   task_uuid: PropTypes.id,
-  tasks: PropTypes.arrayLike,
+  tasks: PropTypes.array,
   text: PropTypes.string,
   onValueChange: PropTypes.func.isRequired,
 };

@@ -34,7 +34,7 @@ import {EntityCommand, EntitiesCommand} from 'gmp/command.js';
 
 import Capabilities from 'gmp/capabilities/capabilities.js';
 
-import CollectionList from 'gmp/collection/collectionlist.js';
+import CollectionCounts from 'gmp/collection/collectioncounts.js';
 
 import Filter from 'gmp/models/filter.js';
 import Settings from 'gmp/models/settings.js';
@@ -83,12 +83,7 @@ export const stringOrFalse = ReactPropTypes.oneOfType([
   ReactPropTypes.oneOf([false]),
 ]);
 
-export const collection = ReactPropTypes.instanceOf(CollectionList);
-
-export const arrayLike = ReactPropTypes.oneOfType([
-  ReactPropTypes.array,
-  collection,
-]);
+export const counts = ReactPropTypes.instanceOf(CollectionCounts);
 
 export const set = ReactPropTypes.instanceOf(Set);
 
@@ -164,11 +159,10 @@ export default {
   symbol: ReactPropTypes.symbol,
   string: ReactPropTypes.string,
 
-  arrayLike,
   cache,
   cachefactory,
   capabilities,
-  collection,
+  counts,
   component,
   componentOrFalse,
   componentOrElement,

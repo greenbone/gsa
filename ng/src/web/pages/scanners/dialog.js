@@ -286,7 +286,7 @@ class ScannerDialog extends React.Component {
 ScannerDialog.propTypes = {
   comment: PropTypes.string,
   credential_id: PropTypes.id,
-  credentials: PropTypes.arrayLike,
+  credentials: PropTypes.array,
   host: PropTypes.string,
   name: PropTypes.string,
   port: PropTypes.string,

@@ -48,13 +48,18 @@ export const loader = (type, filter_func, name = type) => function(id) {
 
   return gmp[type].getAll({
     filter: filter_func(id),
-  }).then(entities => {
+  }).then(response => {
 
-    log.debug('Loaded', name, entities);
+    log.debug('Loaded', name, response);
 
-    this.setState({[name]: entities});
+    const {meta} = response;
 
-    const meta = entities.getMeta();
+    this.setState({
+      [name]: {
+        counts: meta.counts,
+        entities: response.data,
+      },
+    });
 
     if (meta.fromcache && meta.dirty) {
       log.debug('Forcing reload of', name, meta.dirty);

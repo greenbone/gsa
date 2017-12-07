@@ -90,7 +90,7 @@ ImportDialog.propTypes = {
   in_assets: PropTypes.yesno,
   newContainerTask: PropTypes.bool,
   task_id: PropTypes.id,
-  tasks: PropTypes.arrayLike,
+  tasks: PropTypes.array,
   onNewContainerTaskClick: PropTypes.func,
   onValueChange: PropTypes.func,
 };

@@ -85,7 +85,8 @@ class ScannerComponent extends React.Component {
       this.scanner_dialog.show({});
     }
 
-    gmp.credentials.getAll().then(credentials => {
+    gmp.credentials.getAll().then(response => {
+      const {data: credentials} = response;
       this.credentials = credentials;
       const credential_id = is_defined(scanner) &&
         is_defined(scanner.credential) ? scanner.credential.id : undefined;
