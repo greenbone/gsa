@@ -31,7 +31,7 @@ import logger from './log.js';
 
 const log = logger.getLogger('gmp.locale');
 
-export class LanguageDetector extends BrowserDetector {
+class LanguageDetector extends BrowserDetector {
 
   detect(...options) {
     const lang = super.detect(...options);
