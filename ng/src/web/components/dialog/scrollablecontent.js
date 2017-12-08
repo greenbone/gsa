@@ -40,11 +40,15 @@ const ScrollableContent = glamorous.div(
   ({maxHeight}) => ({maxHeight}),
 );
 
+const StyledLayout = glamorous(Layout)({
+  overflow: 'hidden', // fix for adjusting the content while resizing in firefox
+});
+
 const ScrollableContentLayout = ({
   children,
   maxHeight,
 }) => (
-  <Layout
+  <StyledLayout
     flex="column"
     align={['center', 'start']}
     grow="1"
@@ -52,7 +56,7 @@ const ScrollableContentLayout = ({
     <ScrollableContent maxHeight={maxHeight}>
       {children}
     </ScrollableContent>
-  </Layout>
+  </StyledLayout>
 );
 
 ScrollableContentLayout.propTypes = {
