@@ -129,11 +129,11 @@ const LinkConfirmationDialog = ({
     >
       {({
         close,
-        getMoveProps,
+        moveProps,
       }) => (
         <ConfirmationDialogContent
           close={close}
-          moveprops={getMoveProps()}
+          moveprops={moveProps}
           text={text}
           title={title}
           onResumeClick={onResumeClick}

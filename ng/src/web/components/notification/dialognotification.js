@@ -99,14 +99,18 @@ class DialogNotification extends React.Component {
           visible={this.isDialogOpen()}
           onClose={this.handleDialogClose}
         >
-          {({close, getMoveProps}) => (
+          {({
+            close,
+            moveProps,
+            heightProps,
+          }) => (
             <DialogContent>
               <DialogTitle
                 title={title}
                 onCloseClick={close}
-                {...getMoveProps()}
+                {...moveProps}
               />
-              <ScrollableContent>
+              <ScrollableContent {...heightProps}>
                 {message}
               </ScrollableContent>
               <DialogFooter

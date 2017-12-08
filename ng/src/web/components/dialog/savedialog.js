@@ -31,8 +31,6 @@ import {is_defined} from 'gmp/utils.js';
 import State from '../../utils/state.js';
 import PropTypes from '../../utils/proptypes.js';
 
-import Layout from '../layout/layout.js';
-
 import Dialog from '../dialog/dialog.js';
 import DialogContent from '../dialog/content.js';
 import DialogError from '../dialog/error.js';
@@ -96,7 +94,8 @@ class SaveDialogContent extends React.Component {
     const {
       children,
       initialData = {},
-      moveprops,
+      moveProps,
+      heightProps,
       title,
     } = this.props;
     const {
@@ -112,7 +111,7 @@ class SaveDialogContent extends React.Component {
             <DialogTitle
               title={title}
               onCloseClick={this.handleClose}
-              {...moveprops}
+              {...moveProps}
             />
             {error &&
               <DialogError
@@ -120,18 +119,14 @@ class SaveDialogContent extends React.Component {
                 onCloseClick={this.handleErrorClose}
               />
             }
-            <Layout
-              flex="column"
-              align={['center', 'start']}
-              grow="1"
+            <ScrollableContent
+              {...heightProps}
             >
-              <ScrollableContent>
-                {children({
-                  data: state,
-                  onValueChange,
-                })}
-              </ScrollableContent>
-            </Layout>
+              {children({
+                data: state,
+                onValueChange,
+              })}
+            </ScrollableContent>
             <DialogFooter
               title={_('Save')}
               loading={this.state.loading}
@@ -146,8 +141,9 @@ class SaveDialogContent extends React.Component {
 
 SaveDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
+  heightProps: PropTypes.object,
   initialData: PropTypes.object,
-  moveprops: PropTypes.object,
+  moveProps: PropTypes.object,
   title: PropTypes.string.isRequired,
   onSave: PropTypes.func.isRequired,
 };
@@ -169,12 +165,14 @@ const SaveDialog = ({
     >
       {({
         close,
-        getMoveProps,
+        moveProps,
+        heightProps,
       }) => (
         <SaveDialogContent
           close={close}
           initialData={initialData}
-          moveprops={getMoveProps()}
+          moveProps={moveProps}
+          heightProps={heightProps}
           title={title}
           onSave={onSave}
         >

@@ -22,7 +22,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import React from 'react';
+
 import glamorous from 'glamorous';
+
+import PropTypes from '../../utils/proptypes.js';
+
+import Layout from '../layout/layout.js';
 
 const ScrollableContent = glamorous.div(
   {
@@ -34,6 +40,25 @@ const ScrollableContent = glamorous.div(
   ({maxHeight}) => ({maxHeight}),
 );
 
-export default ScrollableContent;
+const ScrollableContentLayout = ({
+  children,
+  maxHeight,
+}) => (
+  <Layout
+    flex="column"
+    align={['center', 'start']}
+    grow="1"
+  >
+    <ScrollableContent maxHeight={maxHeight}>
+      {children}
+    </ScrollableContent>
+  </Layout>
+);
+
+ScrollableContentLayout.propTypes = {
+  maxHeight: PropTypes.string,
+};
+
+export default ScrollableContentLayout;
 
 // vim: set ts=2 sw=2 tw=80:
