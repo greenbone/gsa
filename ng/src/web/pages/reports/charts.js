@@ -23,51 +23,56 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 
-const ReportCharts = ({filter}) => {
-  return (
-    <div>
-      <DataSource
-        name="report-high-results-timeline-source"
-        aggregate-type="report"
-        group-column="date"
-        columns={['high', 'high_per_host']}
-        filter={filter}>
-        <Chart
-          name="report-by-high-results"
-          type="line"
-          y-fields={['high_max']}
-          z-fields={['high_per_host_max']}
-          title={_('Reports: High results timeline')}
-          gen-params={{show_stat_type: 0, is_timeline: 1}}/>
-      </DataSource>
-      <DataSource
-        name="report-severity-count-source"
-        group-column="severity"
-        aggregate-type="report"
-        filter={filter}>
-        <Chart
-          name="report-by-cvss"
-          type="bar"
-          title={_('Reports by CVSS')}
-          title-count="count"
-          template="info_by_cvss"/>
-        <Chart
-          name="report-by-severity-class"
-          type="donut"
-          title={_('Reports by Severity Class')}
-          title-count="count"
-          template="info_by_class"/>
-      </DataSource>
-    </div>
-  );
-};
+const ReportCharts = ({filter}) => (
+  <Wrapper>
+    <DataSource
+      name="report-high-results-timeline-source"
+      aggregateType="report"
+      groupColumn="date"
+      columns={['high', 'high_per_host']}
+      filter={filter}
+    >
+      <Chart
+        name="report-by-high-results"
+        type="line"
+        y-fields={['high_max']}
+        z-fields={['high_per_host_max']}
+        title={_('Reports: High results timeline')}
+        gen-params={{show_stat_type: 0, is_timeline: 1}}
+      />
+    </DataSource>
+    <DataSource
+      name="report-severity-count-source"
+      groupColumn="severity"
+      aggregateType="report"
+      filter={filter}
+    >
+      <Chart
+        name="report-by-cvss"
+        type="bar"
+        title={_('Reports by CVSS')}
+        title-count="count"
+        template="info_by_cvss"
+      />
+      <Chart
+        name="report-by-severity-class"
+        type="donut"
+        title={_('Reports by Severity Class')}
+        title-count="count"
+        template="info_by_class"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 ReportCharts.propTypes = {
   filter: PropTypes.filter,

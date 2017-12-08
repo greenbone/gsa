@@ -25,18 +25,19 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Wrapper from '../../components/layout/wrapper.js';
+
 import CommonCharts from '../../components/dashboard/commoncharts.js';
 
-const DfnCertCharts = ({filter}) => {
-  return (
-    <div>
-      <CommonCharts
-        type="dfn_cert_adv"
-        titleType="DFN-CERT Advisiories"
-        filter={filter}/>
-    </div>
-  );
-};
+const DfnCertCharts = ({filter}) => (
+  <Wrapper>
+    <CommonCharts
+      type="dfn_cert_adv"
+      titleType="DFN-CERT Advisiories"
+      filter={filter}
+    />
+  </Wrapper>
+);
 
 DfnCertCharts.propTypes = {
   filter: PropTypes.filter,

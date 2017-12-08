@@ -23,62 +23,68 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 
-const VulnCharts = ({filter}) => {
-  return (
-    <div>
-      <DataSource
-        filter={filter}
-        name="vuln-severity-count-source"
-        group-column="severity"
-        aggregate-type="vuln">
-        <Chart
-          name="vuln-by-cvss"
-          title={_('Vulnerabilities by CVSS')}
-          title-count="count"
-          type="bar"
-          template="info_by_cvss"/>
-        <Chart
-          name="vuln-by-severity-class"
-          title={_('Vulnerabilities by Severity Class')}
-          title-count="count"
-          type="donut"
-          template="info_by_class"/>
-      </DataSource>
-      <DataSource
-        filter={filter}
-        name="vuln-host-count-source"
-        group-column="hosts"
-        aggregate-type="vuln">
-        <Chart
-          name="vuln-by-hosts"
-          title={_('Vulnerabilities by Hosts - Bar')}
-          title-count="count"
-          type="bar"
-          template="quantile_histogram"/>
-        <Chart
-          name="vuln-by-hosts-area"
-          title={_('Vulnerabilities by Hosts - Area')}
-          title-count="count"
-          type="line"
-          gen-params={{
-            is_timeline: 0,
-            y_area: 1,
-            y2_area: 0,
-            quantile_fill: 1,
-            fill_in_missing: 1
-          }}
-          template="quantile_split"/>
-      </DataSource>
-    </div>
-  );
-};
+const VulnCharts = ({filter}) => (
+  <Wrapper>
+    <DataSource
+      filter={filter}
+      name="vuln-severity-count-source"
+      groupColumn="severity"
+      aggregateType="vuln"
+    >
+      <Chart
+        name="vuln-by-cvss"
+        title={_('Vulnerabilities by CVSS')}
+        title-count="count"
+        type="bar"
+        template="info_by_cvss"
+      />
+      <Chart
+        name="vuln-by-severity-class"
+        title={_('Vulnerabilities by Severity Class')}
+        title-count="count"
+        type="donut"
+        template="info_by_class"
+      />
+    </DataSource>
+    <DataSource
+      filter={filter}
+      name="vuln-host-count-source"
+      groupColumn="hosts"
+      aggregateType="vuln"
+    >
+      <Chart
+        name="vuln-by-hosts"
+        title={_('Vulnerabilities by Hosts - Bar')}
+        title-count="count"
+        type="bar"
+        template="quantile_histogram"
+      />
+      <Chart
+        name="vuln-by-hosts-area"
+        title={_('Vulnerabilities by Hosts - Area')}
+        title-count="count"
+        type="line"
+        gen-params={{
+          is_timeline: 0,
+          y_area: 1,
+          y2_area: 0,
+          quantile_fill: 1,
+          fill_in_missing: 1,
+        }}
+        template="quantile_split"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 VulnCharts.propTypes = {
   filter: PropTypes.filter,
