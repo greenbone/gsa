@@ -27,33 +27,36 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Wrapper from '../../components/layout/wrapper.js';
+
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 import CommonCharts from '../../components/dashboard/commoncharts.js';
 
-const SecinfoCharts = ({filter}) => {
-  return (
-    <div>
-      <CommonCharts
-        type="allinfo"
-        titleType="SecInfo Items"
-        filter={filter}/>
+const SecinfoCharts = ({filter}) => (
+  <Wrapper>
+    <CommonCharts
+      type="allinfo"
+      titleType="SecInfo Items"
+      filter={filter}
+    />
 
-      <DataSource
-        name="allinfo-by-type-source"
-        aggregate-type="allinfo"
-        group-column="type"
-        filter={filter}>
-        <Chart
-          name="allinfo-by-type"
-          template="resource_type_counts"
-          title={_('SecInfo Items by type')}
-          title-count="count"
-          type="donut"/>
-      </DataSource>
-    </div>
-  );
-};
+    <DataSource
+      name="allinfo-by-type-source"
+      aggregateType="allinfo"
+      groupColumn="type"
+      filter={filter}
+    >
+      <Chart
+        name="allinfo-by-type"
+        template="resource_type_counts"
+        title={_('SecInfo Items by type')}
+        title-count="count"
+        type="donut"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 SecinfoCharts.propTypes = {
   filter: PropTypes.filter,

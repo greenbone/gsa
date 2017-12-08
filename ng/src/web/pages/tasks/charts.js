@@ -30,68 +30,86 @@ import PropTypes from '../../utils/proptypes.js';
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 
-const TaskCharts = ({filter}) => {
-  return (
-    <div>
-      <DataSource name="task-severity-count-source"
-        filter={filter}
-        group-column="severity"
-        aggregate-type="task">
-        <Chart name="task-by-cvss"
-          template="info_by_cvss"
-          type="bar"
-          title={_('Tasks by CVSS')}
-          title-count="count"/>
-        <Chart name="task-by-severity-class"
-          type="donut"
-          template="info_by_class"
-          title={_('Tasks by Severity Class')}
-          title-count="count"/>
-      </DataSource>
-      <DataSource name="task-status-count-source"
-        filter={filter}
-        group-column="status"
-        aggregate-type="task">
-        <Chart name="task-by-status"
-          type="donut"
-          title={_('Tasks by status')}
-          title-count="count"/>
-      </DataSource>
-      <DataSource name="task-high-results-source"
-        filter={filter}
-        aggregate-type="task"
-        group-column="uuid"
-        columns={['severity', 'high_per_host']}
-        text-columns={['name', 'modified']}
-        sort-fields={['high_per_host', 'modified']}
-        sort-orders={['descending', 'descending']}
-        sort-stats={['max', 'value']}>
-        <Chart name="task-by-high-results"
-          type="bubbles"
-          title={_('Tasks: High results per host')}
-          x-field="name"
-          y-fields={['high_per_host_max']}
-          z-fields={['severity_max']}
-          gen-params={{empty_text: 'No Tasks with High severity found'}}/>
-        <Chart name="task-by-most-high-results"
-          type="horizontal_bar"
-          title={_('Tasks with most High results per host')}
-          x-field="name"
-          y-fields={['high_per_host_max']}
-          z-fields={['severity_max']}
-          gen-params={{empty_text: 'No Tasks with High severity found'}}/>
-      </DataSource>
-      <DataSource name="task-schedules-source"
-        filter={filter}
-        type="task">
-        <Chart name="task-by-schedules"
-          type="gantt"
-          title={_('Next scheduled tasks')}
-          gen-params={{empty_text: 'No scheduled Tasks found'}}/>
-      </DataSource>
-    </div>
-  );
-};
+import Wrapper from '../../components/layout/wrapper.js';
+
+const TaskCharts = ({filter}) => (
+  <Wrapper>
+    <DataSource
+      name="task-severity-count-source"
+      filter={filter}
+      groupColumn="severity"
+      aggregateType="task"
+    >
+      <Chart
+        name="task-by-cvss"
+        template="info_by_cvss"
+        type="bar"
+        title={_('Tasks by CVSS')}
+        title-count="count"
+      />
+      <Chart
+        name="task-by-severity-class"
+        type="donut"
+        template="info_by_class"
+        title={_('Tasks by Severity Class')}
+        title-count="count"
+      />
+    </DataSource>
+    <DataSource
+      name="task-status-count-source"
+      filter={filter}
+      groupColumn="status"
+      aggregateType="task">
+      <Chart
+        name="task-by-status"
+        type="donut"
+        title={_('Tasks by status')}
+        title-count="count"
+      />
+    </DataSource>
+    <DataSource
+      name="task-high-results-source"
+      filter={filter}
+      aggregateType="task"
+      groupColumn="uuid"
+      columns={['severity', 'high_per_host']}
+      textColumns={['name', 'modified']}
+      sortFields={['high_per_host', 'modified']}
+      sortOrders={['descending', 'descending']}
+      sortStats={['max', 'value']}
+    >
+      <Chart
+        name="task-by-high-results"
+        type="bubbles"
+        title={_('Tasks: High results per host')}
+        x-field="name"
+        y-fields={['high_per_host_max']}
+        z-fields={['severity_max']}
+        gen-params={{empty_text: 'No Tasks with High severity found'}}
+      />
+      <Chart
+        name="task-by-most-high-results"
+        type="horizontal_bar"
+        title={_('Tasks with most High results per host')}
+        x-field="name"
+        y-fields={['high_per_host_max']}
+        z-fields={['severity_max']}
+        gen-params={{empty_text: 'No Tasks with High severity found'}}
+      />
+    </DataSource>
+    <DataSource
+      name="task-schedules-source"
+      filter={filter}
+      type="task">
+      <Chart
+        name="task-by-schedules"
+        type="gantt"
+        title={_('Next scheduled tasks')}
+        gen-params={{empty_text: 'No scheduled Tasks found'}}
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 TaskCharts.propTypes = {
   filter: PropTypes.filter,

@@ -23,58 +23,64 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 
-export const OverrideCharts = ({filter}) => {
-  return (
-    <div>
-      <DataSource
-        name="override-created-count-source"
-        aggregate-type="override"
-        aggregate-mode="count"
-        group-column="created"
-        filter={filter}>
-        <Chart
-          name="override-by-created"
-          title={_('Overrides by creation time')}
-          title-count="count"
-          type="line"
-          gen-params={{is_timeline: 1}}/>
-      </DataSource>
-      <DataSource
-        name="override-text-words-source"
-        aggregate-type="override"
-        group-column="text"
-        aggregate-mode="word_counts"
-        filter={filter}>
-        <Chart
-          name="override-by-text-words"
-          title={_('Overrides text word cloud')}
-          type="cloud"/>
-      </DataSource>
-      <DataSource
-        name="override-status-source"
-        aggregate-type="override"
-        group-column="active_days"
-        sort-stat="count"
-        sort-order="descending"
-        max-groups="250"
-        filter={filter}>
-        <Chart
-          name="override-by-active-days"
-          template="active_status"
-          title={_('Overrides by active days')}
-          title-count="count"
-          type="donut"/>
-      </DataSource>
-    </div>
-  );
-};
+const OverrideCharts = ({filter}) => (
+  <Wrapper>
+    <DataSource
+      name="override-created-count-source"
+      aggregateType="override"
+      aggregateMode="count"
+      groupColumn="created"
+      filter={filter}
+    >
+      <Chart
+        name="override-by-created"
+        title={_('Overrides by creation time')}
+        title-count="count"
+        type="line"
+        gen-params={{is_timeline: 1}}
+      />
+    </DataSource>
+    <DataSource
+      name="override-text-words-source"
+      aggregateType="override"
+      groupColumn="text"
+      aggregateMode="word_counts"
+      filter={filter}
+    >
+      <Chart
+        name="override-by-text-words"
+        title={_('Overrides text word cloud')}
+        type="cloud"
+      />
+    </DataSource>
+    <DataSource
+      name="override-status-source"
+      aggregateType="override"
+      groupColumn="active_days"
+      sortStat="count"
+      sortOrder="descending"
+      maxGroups="250"
+      filter={filter}
+    >
+      <Chart
+        name="override-by-active-days"
+        template="active_status"
+        title={_('Overrides by active days')}
+        title-count="count"
+        type="donut"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 OverrideCharts.propTypes = {
   filter: PropTypes.model,

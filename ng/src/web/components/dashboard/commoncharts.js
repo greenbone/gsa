@@ -23,54 +23,63 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from './datasource.js';
 import Chart from './chart.js';
 
-const CommonCharts = ({filter, type, titleType}) => {
-  return (
-    <div>
-      <DataSource
-        name={type + '-severity-count-source'}
-        aggregate-type={type}
-        group-column="severity"
-        filter={filter}>
-        <Chart
-          name={type + '-by-cvss'}
-          type="bar"
-          title={_('{{title}} by CVSS', {title: titleType})}
-          title-count="count"
-          template="info_by_cvss"/>
-        <Chart
-          name={type + '-by-severity-class'}
-          type="donut"
-          title={_('{{title}} by Severity Class', {title: titleType})}
-          title-count="count"
-          template="info_by_class"/>
-      </DataSource>
-      <DataSource
-        name={type + '-created-count-source'}
-        aggregate-type={type}
-        group-column="created"
-        filter={filter}>
-        <Chart
-          name={type + '-by-created'}
-          title={_('{{title}} by creation time', {title: titleType})}
-          title-count="count"
-          type="line"
-          gen-params={{is_timeline: 1}}/>
-      </DataSource>
-    </div>
-  );
-};
+const CommonCharts = ({
+  filter,
+  type,
+  titleType,
+}) => (
+  <Wrapper>
+    <DataSource
+      name={type + '-severity-count-source'}
+      aggregateType={type}
+      groupColumn="severity"
+      filter={filter}
+    >
+      <Chart
+        name={type + '-by-cvss'}
+        type="bar"
+        title={_('{{title}} by CVSS', {title: titleType})}
+        title-count="count"
+        template="info_by_cvss"
+      />
+      <Chart
+        name={type + '-by-severity-class'}
+        type="donut"
+        title={_('{{title}} by Severity Class', {title: titleType})}
+        title-count="count"
+        template="info_by_class"
+      />
+    </DataSource>
+    <DataSource
+      name={type + '-created-count-source'}
+      aggregateType={type}
+      groupColumn="created"
+      filter={filter}
+    >
+      <Chart
+        name={type + '-by-created'}
+        title={_('{{title}} by creation time', {title: titleType})}
+        title-count="count"
+        type="line"
+        gen-params={{is_timeline: 1}}
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 CommonCharts.propTypes = {
   filter: PropTypes.filter,
-  type: PropTypes.string.isRequired,
   titleType: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default CommonCharts;

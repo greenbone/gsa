@@ -23,85 +23,94 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 
-const HostCharts = ({filter}) => {
-  return (
-    <div>
-      <DataSource
-        name="host-severity-count-source"
-        group-column="severity"
-        aggregate-type="host"
-        filter={filter}>
-        <Chart
-          name="host-by-cvss"
-          type="bar"
-          title={_('Hosts by CVSS')}
-          title-count="count"
-          template="info_by_cvss"/>
-        <Chart
-          name="host-by-severity-class"
-          type="donut"
-          title={_('Hosts by Severity Class')}
-          title-count="count"
-          template="info_by_class"/>
-      </DataSource>
-      <DataSource
-        name="host-most-vulnerable-source"
-        aggregate-type="host"
-        group-column="uuid"
-        columns={['severity']}
-        text-columns={['name', 'modified']}
-        sort-fields={['severity', 'modified']}
-        sort-orders={['descending', 'descending']}
-        sort-stats={['max', 'value']}
-        filter={filter}>
-        <Chart
-          name="host-by-most-vulnerable"
-          type="horizontal_bar"
-          x-field="name"
-          y-fields={['severity_max']}
-          z-fields={['severity_max']}
-          gen-params={{
-            empty_text: _('No vulnerable Hosts found'),
-            extra_tooltip_field_1: "modified",
-            extra_tooltip_label_1: "Updated",
-          }}
-          title={_('Most vulnerable hosts')}/>
-      </DataSource>
-      <DataSource
-        name="host-counts-timeline-source"
-        aggregate-type="host"
-        group-column="modified"
-        subgroup-column="severity_level"
-        filter={filter}>
-        <Chart
-          name="host-by-modification-time"
-          title={_('Hosts by modification time')}
-          title-count="count"
-          y-fields={['c_count', 'c_count[High]']}
-          z-fields={['count', 'count[High]']}
-          type="line"
-          gen-params={{is_timeline: 1}}/>
-      </DataSource>
-      <DataSource
-        name="host-topology-source"
-        aggregate-type="host"
-        type="host"
-        filter={filter}>
-        <Chart
-          name="host-by-topology"
-          title={_('Hosts topology')}
-          type="topology"/>
-      </DataSource>
-    </div>
-  );
-};
+const HostCharts = ({filter}) => (
+  <Wrapper>
+    <DataSource
+      name="host-severity-count-source"
+      groupColumn="severity"
+      aggregateType="host"
+      filter={filter}
+    >
+      <Chart
+        name="host-by-cvss"
+        type="bar"
+        title={_('Hosts by CVSS')}
+        title-count="count"
+        template="info_by_cvss"
+      />
+      <Chart
+        name="host-by-severity-class"
+        type="donut"
+        title={_('Hosts by Severity Class')}
+        title-count="count"
+        template="info_by_class"
+      />
+    </DataSource>
+    <DataSource
+      name="host-most-vulnerable-source"
+      aggregateType="host"
+      groupColumn="uuid"
+      columns={['severity']}
+      textColumns={['name', 'modified']}
+      sortFields={['severity', 'modified']}
+      sortOrders={['descending', 'descending']}
+      sortStats={['max', 'value']}
+      filter={filter}
+    >
+      <Chart
+        name="host-by-most-vulnerable"
+        type="horizontal_bar"
+        x-field="name"
+        y-fields={['severity_max']}
+        z-fields={['severity_max']}
+        gen-params={{
+          empty_text: _('No vulnerable Hosts found'),
+          extra_tooltip_field_1: 'modified',
+          extra_tooltip_label_1: 'Updated',
+        }}
+        title={_('Most vulnerable hosts')}
+      />
+    </DataSource>
+    <DataSource
+      name="host-counts-timeline-source"
+      aggregateType="host"
+      groupColumn="modified"
+      subgroupColumn="severity_level"
+      filter={filter}
+    >
+      <Chart
+        name="host-by-modification-time"
+        title={_('Hosts by modification time')}
+        title-count="count"
+        y-fields={['c_count', 'c_count[High]']}
+        z-fields={['count', 'count[High]']}
+        type="line"
+        gen-params={{is_timeline: 1}}
+      />
+    </DataSource>
+    <DataSource
+      name="host-topology-source"
+      aggregateType="host"
+      type="host"
+      filter={filter}
+    >
+      <Chart
+        name="host-by-topology"
+        title={_('Hosts topology')}
+        type="topology"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 HostCharts.propTypes = {
   filter: PropTypes.filter,

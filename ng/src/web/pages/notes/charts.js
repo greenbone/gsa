@@ -23,58 +23,64 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 
-const NoteCharts = ({filter}) => {
-  return (
-    <div>
-      <DataSource
-        name="note-created-count-source"
-        aggregate-type="note"
-        aggregate-mode="count"
-        group-column="created"
-        filter={filter}>
-        <Chart
-          name="note-by-created"
-          title={_('Notes by creation time')}
-          title-count="count"
-          type="line"
-          gen-params={{is_timeline: 1}}/>
-      </DataSource>
-      <DataSource
-        name="note-text-words-source"
-        aggregate-type="note"
-        group-column="text"
-        aggregate-mode="word_counts"
-        filter={filter}>
-        <Chart
-          name="note-by-text-words"
-          title={_('Notes text word cloud')}
-          type="cloud"/>
-      </DataSource>
-      <DataSource
-        name="note-active-status-source"
-        aggregate-type="note"
-        group-column="active_days"
-        sort-stat="count"
-        sort-order="descending"
-        max-groups="250"
-        filter={filter}>
-        <Chart
-          name="note-by-active-days"
-          template="active_status"
-          title={_('Notes by active days')}
-          title-count="count"
-          type="donut"/>
-      </DataSource>
-    </div>
-  );
-};
+const NoteCharts = ({filter}) => (
+  <Wrapper>
+    <DataSource
+      name="note-created-count-source"
+      aggregateType="note"
+      aggregateMode="count"
+      groupColumn="created"
+      filter={filter}
+    >
+      <Chart
+        name="note-by-created"
+        title={_('Notes by creation time')}
+        title-count="count"
+        type="line"
+        gen-params={{is_timeline: 1}}
+      />
+    </DataSource>
+    <DataSource
+      name="note-text-words-source"
+      aggregateType="note"
+      groupColumn="text"
+      aggregateMode="word_counts"
+      filter={filter}
+    >
+      <Chart
+        name="note-by-text-words"
+        title={_('Notes text word cloud')}
+        type="cloud"
+      />
+    </DataSource>
+    <DataSource
+      name="note-active-status-source"
+      aggregateType="note"
+      groupColumn="active_days"
+      sortStat="count"
+      sortOrder="descending"
+      maxGroups="250"
+      filter={filter}
+    >
+      <Chart
+        name="note-by-active-days"
+        template="active_status"
+        title={_('Notes by active days')}
+        title-count="count"
+        type="donut"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 NoteCharts.propTypes = {
   filter: PropTypes.filter,
