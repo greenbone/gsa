@@ -30,8 +30,6 @@ import {is_defined, KeyCode, exclude_object_props} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Layout from '../layout/layout.js';
-
 import DialogContainer from './container.js';
 import DialogContent from './content.js';
 import DialogError from './error.js';
@@ -383,19 +381,13 @@ const withDialog = (options = {}) => Component => {
 
                 {this.renderError()}
 
-                <Layout
-                  flex="column"
-                  align={['center', 'start']}
-                  grow="1"
+                <ScrollableContent
+                  maxHeight={is_defined(height) ?
+                    undefined : DEFAULT_DIALOG_HEIGHT
+                  }
                 >
-                  <ScrollableContent
-                    maxHeight={is_defined(height) ?
-                      undefined : DEFAULT_DIALOG_HEIGHT
-                    }
-                  >
-                    {component}
-                  </ScrollableContent>
-                </Layout>
+                  {component}
+                </ScrollableContent>
 
                 {this.renderFooter()}
                 <Resizer
