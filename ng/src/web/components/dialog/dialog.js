@@ -57,8 +57,6 @@ class Dialog extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
-
-    this.setState({width: this.props.width});
   }
 
   componentWillUnmount() {
@@ -66,10 +64,11 @@ class Dialog extends React.Component {
   }
 
   defaultState() {
+    const {width} = this.props;
     return {
       posX: undefined,
       posY: undefined,
-      width: DEFAULT_DIALOG_WIDTH,
+      width: is_defined(width) ? width : DEFAULT_DIALOG_WIDTH,
       height: undefined,
     };
   }
@@ -169,7 +168,7 @@ class Dialog extends React.Component {
       posX,
       posY,
       height,
-      width = DEFAULT_DIALOG_WIDTH,
+      width,
     } = this.state;
 
     const {
