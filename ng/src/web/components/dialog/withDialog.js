@@ -42,7 +42,8 @@ import ScrollableContent from './scrollablecontent.js';
 const log = logger.getLogger('web.components.dialog.withDialog');
 
 const DEFAULT_DIALOG_WIDTH = '800px';
-const DEFAULT_DIALOG_HEIGHT = '550px';
+const DEFAULT_DIALOG_HEIGHT = undefined; // use auto height by default
+const DEFAULT_DIALOG_MAX_HEIGHT = '550px';
 const DEFAULT_DIALOG_MIN_HEIGHT = 250;
 const DEFAULT_DIALOG_MIN_WIDTH = 450;
 
@@ -97,6 +98,7 @@ const withDialog = (options = {}) => Component => {
         title,
         footer = _('Save'),
         width = DEFAULT_DIALOG_WIDTH,
+        height = DEFAULT_DIALOG_HEIGHT,
       } = {...options, ...this.props};
       return {
         error: undefined,
@@ -106,6 +108,7 @@ const withDialog = (options = {}) => Component => {
         title,
         visible: false,
         width,
+        height,
         data: defaultState,
       };
     }
@@ -383,7 +386,7 @@ const withDialog = (options = {}) => Component => {
 
                 <ScrollableContent
                   maxHeight={is_defined(height) ?
-                    undefined : DEFAULT_DIALOG_HEIGHT
+                    undefined : DEFAULT_DIALOG_MAX_HEIGHT
                   }
                 >
                   {component}

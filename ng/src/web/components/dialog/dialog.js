@@ -33,7 +33,8 @@ import DialogOverlay from './overlay.js';
 import Resizer from './resizer.js';
 
 const DEFAULT_DIALOG_WIDTH = '800px';
-const DEFAULT_DIALOG_HEIGHT = '550px';
+const DEFAULT_DIALOG_HEIGHT = undefined; // use auto height by default
+const DEFAULT_DIALOG_MAX_HEIGHT = '550px';
 const DEFAULT_DIALOG_MIN_HEIGHT = 250;
 const DEFAULT_DIALOG_MIN_WIDTH = 450;
 
@@ -57,8 +58,6 @@ class Dialog extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
-
-    this.setState({width: this.props.width});
   }
 
   componentWillUnmount() {
@@ -66,11 +65,12 @@ class Dialog extends React.Component {
   }
 
   defaultState() {
+    const {width, height} = this.props;
     return {
       posX: undefined,
       posY: undefined,
-      width: DEFAULT_DIALOG_WIDTH,
-      height: undefined,
+      width: is_defined(width) ? width : DEFAULT_DIALOG_WIDTH,
+      height: is_defined(height) ? height : DEFAULT_DIALOG_HEIGHT,
     };
   }
 
@@ -169,7 +169,7 @@ class Dialog extends React.Component {
       posX,
       posY,
       height,
-      width = DEFAULT_DIALOG_WIDTH,
+      width,
     } = this.state;
 
     const {
@@ -187,7 +187,7 @@ class Dialog extends React.Component {
     }
 
     const maxHeight = is_defined(height) ?
-      undefined : DEFAULT_DIALOG_HEIGHT;
+      undefined : DEFAULT_DIALOG_MAX_HEIGHT;
 
     return (
       <DialogOverlay
