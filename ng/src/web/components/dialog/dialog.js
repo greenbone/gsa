@@ -72,7 +72,7 @@ class Dialog extends React.Component {
       posX: undefined,
       posY: undefined,
       width: DEFAULT_DIALOG_WIDTH,
-      height: DEFAULT_DIALOG_HEIGHT,
+      height: undefined,
     };
   }
 
