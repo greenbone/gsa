@@ -207,7 +207,9 @@ class Dialog extends React.Component {
             moveProps: {
               onMouseDown: this.onMouseDownMove,
             },
-            maxHeight,
+            heightProps: {
+              maxHeight,
+            },
           })}
           {resizable &&
             <Resizer onMouseDown={this.onMouseDownResize}/>

@@ -145,6 +145,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
           {({
             close,
             moveProps,
+            heightProps,
           }) => (
             <DialogContent>
               <DialogTitle
@@ -153,7 +154,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
                 {...moveProps}
               />
 
-              <ScrollableContent>
+              <ScrollableContent {...heightProps}>
                 <FilterDialogComponent
                   {...options}
                   {...this.props}

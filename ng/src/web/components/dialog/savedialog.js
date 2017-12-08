@@ -95,6 +95,7 @@ class SaveDialogContent extends React.Component {
       children,
       initialData = {},
       moveProps,
+      heightProps,
       title,
     } = this.props;
     const {
@@ -118,7 +119,9 @@ class SaveDialogContent extends React.Component {
                 onCloseClick={this.handleErrorClose}
               />
             }
-            <ScrollableContent>
+            <ScrollableContent
+              {...heightProps}
+            >
               {children({
                 data: state,
                 onValueChange,
@@ -138,6 +141,7 @@ class SaveDialogContent extends React.Component {
 
 SaveDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
+  heightProps: PropTypes.object,
   initialData: PropTypes.object,
   moveProps: PropTypes.object,
   title: PropTypes.string.isRequired,
@@ -162,11 +166,13 @@ const SaveDialog = ({
       {({
         close,
         moveProps,
+        heightProps,
       }) => (
         <SaveDialogContent
           close={close}
           initialData={initialData}
           moveProps={moveProps}
+          heightProps={heightProps}
           title={title}
           onSave={onSave}
         >

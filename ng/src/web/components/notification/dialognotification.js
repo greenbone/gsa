@@ -102,6 +102,7 @@ class DialogNotification extends React.Component {
           {({
             close,
             moveProps,
+            heightProps,
           }) => (
             <DialogContent>
               <DialogTitle
@@ -109,7 +110,7 @@ class DialogNotification extends React.Component {
                 onCloseClick={close}
                 {...moveProps}
               />
-              <ScrollableContent>
+              <ScrollableContent {...heightProps}>
                 {message}
               </ScrollableContent>
               <DialogFooter
