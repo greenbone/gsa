@@ -44,8 +44,6 @@ class Dialog extends React.Component {
 
     this.handleClose = this.handleClose.bind(this);
 
-    this.getMoveProps = this.getMoveProps.bind(this);
-
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onMouseDownMove = this.onMouseDownMove.bind(this);
     this.onMouseDownResize = this.onMouseDownResize.bind(this);
@@ -166,12 +164,6 @@ class Dialog extends React.Component {
     event.preventDefault();
   }
 
-  getMoveProps() {
-    return {
-      onMouseDown: this.onMouseDownMove,
-    };
-  }
-
   render() {
     let {
       posX,
@@ -212,7 +204,9 @@ class Dialog extends React.Component {
           innerRef={ref => this.dialog = ref}>
           {children({
             close: this.handleClose,
-            getMoveProps: this.getMoveProps,
+            moveProps: {
+              onMouseDown: this.onMouseDownMove,
+            },
             maxHeight,
           })}
           {resizable &&

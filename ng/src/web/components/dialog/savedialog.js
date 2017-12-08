@@ -96,7 +96,7 @@ class SaveDialogContent extends React.Component {
     const {
       children,
       initialData = {},
-      moveprops,
+      moveProps,
       title,
     } = this.props;
     const {
@@ -112,7 +112,7 @@ class SaveDialogContent extends React.Component {
             <DialogTitle
               title={title}
               onCloseClick={this.handleClose}
-              {...moveprops}
+              {...moveProps}
             />
             {error &&
               <DialogError
@@ -147,7 +147,7 @@ class SaveDialogContent extends React.Component {
 SaveDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
   initialData: PropTypes.object,
-  moveprops: PropTypes.object,
+  moveProps: PropTypes.object,
   title: PropTypes.string.isRequired,
   onSave: PropTypes.func.isRequired,
 };
@@ -169,12 +169,12 @@ const SaveDialog = ({
     >
       {({
         close,
-        getMoveProps,
+        moveProps,
       }) => (
         <SaveDialogContent
           close={close}
           initialData={initialData}
-          moveprops={getMoveProps()}
+          moveProps={moveProps}
           title={title}
           onSave={onSave}
         >
