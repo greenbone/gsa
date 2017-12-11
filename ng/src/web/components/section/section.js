@@ -42,6 +42,7 @@ const FoldableLayout = withFolding(Layout);
 
 const FoldLayout = glamorous(Layout)({
   marginLeft: '3px',
+  marginTop: '-2px',
 });
 
 const Section = ({
