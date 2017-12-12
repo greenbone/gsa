@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -67,6 +68,7 @@ class EntitiesContainer extends React.Component {
 
     this.state = {
       loading: false,
+      updating: false,
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
     };
 
@@ -133,10 +135,19 @@ class EntitiesContainer extends React.Component {
     const {entities_command} = this;
     const {force = false, reload = false} = options;
     const {cache, extraLoadParams = {}} = this.props;
+    const {loaded_filter} = this.state;
 
     this.cancelLoading();
 
-    this.setState({loading: true});
+    if (is_defined(loaded_filter) && !loaded_filter.equals(filter)) {
+      this.setState({
+        loading: true,
+        updating: true,
+      });
+    }
+    else {
+      this.setState({loading: true});
+    }
 
     const token = new CancelToken(cancel => this.cancel = cancel);
 
@@ -159,6 +170,7 @@ class EntitiesContainer extends React.Component {
           filter,
           loaded_filter,
           loading: false,
+          updating: false,
         });
 
         log.debug('Loaded entities', response);
@@ -399,6 +411,7 @@ class EntitiesContainer extends React.Component {
       loading,
       selected,
       selection_type,
+      updating,
     } = this.state;
     const {
       onDownload,
@@ -437,6 +450,7 @@ class EntitiesContainer extends React.Component {
           onPreviousClick={this.handlePrevious}
           showError={showErrorMessage}
           showSuccess={showSuccessMessage}
+          updating={updating}
         />
       </Wrapper>
     );

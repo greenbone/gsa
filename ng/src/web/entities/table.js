@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -22,6 +23,7 @@
  */
 
 import React from 'react';
+import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 import {is_defined, for_each, exclude_object_props} from 'gmp/utils.js';
@@ -47,6 +49,14 @@ const exclude_props = [
   'emptyTitle',
   'children',
 ];
+
+const UpdatingStripedTable = glamorous(StripedTable)(
+  ({updating}) => {
+    return {
+      opacity: updating ? '0.2' : '1.0',
+    };
+  },
+);
 
 class EntitiesTable extends React.Component {
 
@@ -77,6 +87,7 @@ class EntitiesTable extends React.Component {
       entitiesCounts,
       filter,
       footnote = true,
+      updating,
     } = props;
 
     if (!is_defined(entities)) {
@@ -163,9 +174,13 @@ class EntitiesTable extends React.Component {
         grow="1"
         className="entities-table">
         {pagination}
-        <StripedTable header={header} footer={footer}>
+        <UpdatingStripedTable
+          header={header}
+          footer={footer}
+          updating={updating}
+        >
           {body}
-        </StripedTable>
+        </UpdatingStripedTable>
         {footnote ?
           <Layout flex align="space-between">
             <FootNote>
