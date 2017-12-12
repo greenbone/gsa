@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.Waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -36,7 +37,6 @@ import SeverityBar from '../../components/bar/severitybar.js';
 
 import Comment from '../../components/comment/comment.js';
 
-import TableBody from '../../components/table/body.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
@@ -47,49 +47,47 @@ const Row = ({
   onToggleDetailsClick,
   ...other
 }) => {
-  return (
-    <TableBody>
-      <TableRow>
-        <TableData
-          rowSpan="2">
-          <RowDetailsToggle
-            name={entity.id}
-            onClick={onToggleDetailsClick}>
-            {entity.name}
-          </RowDetailsToggle>
-          <div>{shorten(entity.file, 45)}</div>
-          <Comment text={entity.comment}/>
-        </TableData>
-        <TableData>
-          {na(entity.version)}
-        </TableData>
-        <TableData>
-          {na(entity.status)}
-        </TableData>
-        <TableData>
-          {na(entity.class)}
-        </TableData>
-        <TableData>
-          {datetime(entity.creation_time)}
-        </TableData>
-        <TableData>
-          {datetime(entity.modification_time)}
-        </TableData>
-        <TableData>
-          {entity.cve_refs}
-        </TableData>
-        <TableData flex align="center">
-          <SeverityBar severity={entity.severity}/>
-        </TableData>
-        {render_component(actions, {...other, entity})}
-      </TableRow>
-      <TableRow>
-        <TableData colSpan="8">
-          {shorten(entity.title, 250)}
-        </TableData>
-      </TableRow>
-    </TableBody>
-  );
+  return [
+    <TableRow key="firstrow">
+      <TableData
+        rowSpan="2">
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}>
+          {entity.name}
+        </RowDetailsToggle>
+        <div>{shorten(entity.file, 45)}</div>
+        <Comment text={entity.comment}/>
+      </TableData>
+      <TableData>
+        {na(entity.version)}
+      </TableData>
+      <TableData>
+        {na(entity.status)}
+      </TableData>
+      <TableData>
+        {na(entity.class)}
+      </TableData>
+      <TableData>
+        {datetime(entity.creation_time)}
+      </TableData>
+      <TableData>
+        {datetime(entity.modification_time)}
+      </TableData>
+      <TableData>
+        {entity.cve_refs}
+      </TableData>
+      <TableData flex align="center">
+        <SeverityBar severity={entity.severity}/>
+      </TableData>
+      {render_component(actions, {...other, entity})}
+    </TableRow>,
+    <TableRow key="secondrow">
+      <TableData colSpan="8">
+        {shorten(entity.title, 250)}
+      </TableData>
+    </TableRow>,
+  ];
 };
 
 Row.propTypes = {

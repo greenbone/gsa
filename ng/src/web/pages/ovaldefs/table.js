@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greebone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -113,7 +114,7 @@ const OvaldefsFooter = createEntitiesFooter({
 });
 
 export const OvaldefsTable = createEntitiesTable({
-  body: false,
+  doubleRow: true,
   emptyTitle: _('No OVAL Definitions available'),
   row: OvaldefRow,
   rowDetails: withRowDetails('ovaldef', 10)(OvaldefDetails),
