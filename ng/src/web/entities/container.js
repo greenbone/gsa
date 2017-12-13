@@ -127,19 +127,20 @@ class EntitiesContainer extends React.Component {
     const filter = is_defined(filterstring) ? Filter.fromString(filterstring) :
       undefined;
 
-    this.load(filter, {reload});
+    this.load({filter, reload});
   }
 
 
-  load(filter, options = {}) {
+  load(options = {}) {
     const {entities_command} = this;
-    const {force = false, reload = false} = options;
+    const {filter, force = false, reload = false} = options;
     const {cache, extraLoadParams = {}} = this.props;
     const {loaded_filter} = this.state;
 
     this.cancelLoading();
 
-    if (is_defined(loaded_filter) && !loaded_filter.equals(filter)) {
+    if (is_defined(loaded_filter) &&
+      is_defined(filter) && !loaded_filter.equals(filter)) {
       this.setState({
         loading: true,
         updating: true,
@@ -158,7 +159,7 @@ class EntitiesContainer extends React.Component {
     })
       .then(response => {
         const {data: entities, meta} = response;
-        const {filter: loaded_filter, counts: entities_counts} = meta;
+        const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
 
         this.cancel = undefined;
 
@@ -217,7 +218,7 @@ class EntitiesContainer extends React.Component {
       cache.invalidate();
     }
     // reload data from backend
-    this.load(this.state.filter, {force: true});
+    this.load({filter: this.state.loaded_filter, force: true});
   }
 
   getRefreshInterval() {
@@ -345,7 +346,7 @@ class EntitiesContainer extends React.Component {
 
     filter.set(sort, field);
 
-    this.load(filter);
+    this.load({filter});
   }
 
   handleError(error) {
@@ -357,19 +358,19 @@ class EntitiesContainer extends React.Component {
   handleFirst() {
     const {loaded_filter: filter} = this.state;
 
-    this.load(filter.first());
+    this.load({filter: filter.first()});
   }
 
   handleNext() {
     const {loaded_filter: filter} = this.state;
 
-    this.load(filter.next());
+    this.load({filter: filter.next()});
   }
 
   handlePrevious() {
     const {loaded_filter: filter} = this.state;
 
-    this.load(filter.previous());
+    this.load({filter: filter.previous()});
   }
 
   handleLast() {
@@ -378,16 +379,16 @@ class EntitiesContainer extends React.Component {
     const last = Math.floor((counts.filtered - 1) / counts.rows) *
       counts.rows + 1;
 
-    this.load(filter.first(last));
+    this.load({filter: filter.first(last)});
   }
 
   handleFilterCreated(filter) {
     this.loadFilters();
-    this.load(filter);
+    this.load({filter});
   }
 
   handleFilterChanged(filter) {
-    this.load(filter);
+    this.load({filter});
   }
 
   handleFilterReset() {
