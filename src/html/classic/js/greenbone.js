@@ -1270,7 +1270,7 @@
                 }
               }
           }
-          else if (elem.matches ('input')) {
+          else if (elem.matches ('input') || elem.matches ('textarea')) {
             if ((elem.type !== 'checkbox' && elem.type !== 'radio')
                 || elem.checked === true) {
               data.append (elem.name, elem.value);
