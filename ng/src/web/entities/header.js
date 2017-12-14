@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -114,22 +115,27 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
   const Header = ({
     actionsColumn,
     links = true,
+    currentSortBy,
+    currentSortDir,
     sort = true,
     onSortChange,
   }) => {
+
     return (
       <TableHeader>
         <TableRow>
           {
             columns.map(column => {
-              return (
-                <TableHead
-                  key={column[0]}
-                  sortby={sort ? column[0] : false}
-                  onSortChange={onSortChange}>
-                  {column[1]}
-                </TableHead>
-              );
+                return (
+                  <TableHead
+                    key={column[0]}
+                    currentSortBy={currentSortBy}
+                    currentSortDir={currentSortDir}
+                    sortBy={sort ? column[0] : false}
+                    onSortChange={onSortChange}>
+                    {column[1]}
+                  </TableHead>
+                );
             })
           }
           {actionsColumn}
@@ -140,6 +146,8 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
 
   Header.propTypes = {
     actionsColumn: PropTypes.element,
+    currentSortBy: PropTypes.string,
+    currentSortDir: PropTypes.string,
     links: PropTypes.bool,
     sort: PropTypes.bool,
     onSortChange: PropTypes.func,
