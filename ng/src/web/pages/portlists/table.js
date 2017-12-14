@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -43,13 +44,17 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           rowSpan="2"
           onSortChange={onSortChange}>
           {_('Name')}
@@ -65,17 +70,23 @@ const Header = ({
       </TableRow>
       <TableRow>
         <TableHead
-          sortby={sort ? 'total' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'total' : false}
           onSortChange={onSortChange}>
           {_('Total')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'tcp' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'tcp' : false}
           onSortChange={onSortChange}>
           {_('TCP')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'udp' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'udp' : false}
           onSortChange={onSortChange}>
           {_('UDP')}
         </TableHead>
@@ -86,6 +97,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

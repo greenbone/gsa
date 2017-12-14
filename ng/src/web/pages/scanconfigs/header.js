@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -35,14 +35,19 @@ const Header = ({
     actions = true,
     links = true,
     sort = true,
+    currentSortBy,
+    currentSortDir,
     onSortChange,
   }) => {
   return (
     <TableHeader>
 
       <TableRow>
-        <TableHead rowSpan="2"
-          sortby={sort ? 'name' : false}
+        <TableHead
+          rowSpan="2"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
@@ -56,26 +61,34 @@ const Header = ({
       <TableRow>
         <TableHead
           width="6em"
-          sortby={sort ? 'families_total' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'families_total' : false}
           onSortChange={onSortChange}>
           {_('Total')}
         </TableHead>
         <TableHead
           width="6em"
-          sortby={sort ? 'families_trend' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'families_trend' : false}
           onSortChange={onSortChange}>
           {_('Trend')}
         </TableHead>
 
         <TableHead
           width="6em"
-          sortby={sort ? 'nvts_total' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'nvts_total' : false}
           onSortChange={onSortChange}>
           {_('Total')}
         </TableHead>
         <TableHead
           width="6em"
-          sortby={sort ? 'nvts_trend' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'nvts_trend' : false}
           onSortChange={onSortChange}>
           {_('Trend')}
         </TableHead>
@@ -86,6 +99,8 @@ const Header = ({
 
 Header.propTypes = {
   actions: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
