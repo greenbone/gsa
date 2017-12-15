@@ -109,7 +109,10 @@ class Page extends React.Component {
   openImportDialog(task_id) {
     const {gmp} = this.context;
     gmp.tasks.get()
-      .then(tasks => tasks.filter(task => task.isContainer()))
+      .then(response => {
+        const {data: tasks} = response;
+        return tasks.filter(task => task.isContainer());
+      })
       .then(tasks => this.showImportDialog(tasks, task_id));
   }
 
