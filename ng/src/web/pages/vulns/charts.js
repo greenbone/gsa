@@ -74,11 +74,11 @@ const VulnCharts = ({filter}) => (
         title-count="count"
         type="line"
         gen-params={{
-          is_timeline: 0,
-          y_area: 1,
-          y2_area: 0,
-          quantile_fill: 1,
-          fill_in_missing: 1,
+          is_timeline: false,
+          y_area: true,
+          y2_area: false,
+          quantile_fill: true,
+          fill_in_missing: true,
         }}
         template="quantile_split"
       />
