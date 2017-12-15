@@ -8218,7 +8218,10 @@ create_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
   no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  condition = params_value (params, "condition");
+  if (params_given (params, "condition"))
+    condition = params_value (params, "condition");
+  else
+    condition = "Always";
   event = params_value (params, "event");
   method = params_value (params, "method");
   filter_id = params_value (params, "filter_id");
@@ -8228,7 +8231,10 @@ create_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
   CHECK_PARAM_INVALID (condition, "Create Alert", "new_alert");
   CHECK_PARAM_INVALID (event, "Create Alert", "new_alert");
   CHECK_PARAM_INVALID (method, "Create Alert", "new_alert");
-  CHECK_PARAM_INVALID (filter_id, "Create Alert", "new_alert");
+  if (strcmp (event, "Task run status changed") == 0)
+    {
+      CHECK_PARAM_INVALID (filter_id, "Save Alert", "new_alert");
+    }
 
   /* Create the alert. */
 
@@ -8947,7 +8953,10 @@ save_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
   no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  condition = params_value (params, "condition");
+  if (params_given (params, "condition"))
+    condition = params_value (params, "condition");
+  else
+    condition = "Always";
   event = params_value (params, "event");
   method = params_value (params, "method");
   alert_id = params_value (params, "alert_id");
@@ -8959,7 +8968,10 @@ save_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
   CHECK_PARAM_INVALID (condition, "Save Alert", "edit_alert");
   CHECK_PARAM_INVALID (event, "Save Alert", "edit_alert");
   CHECK_PARAM_INVALID (method, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (filter_id, "Save Alert", "edit_alert");
+  if (strcmp (event, "Task run status changed") == 0)
+    {
+      CHECK_PARAM_INVALID (filter_id, "Save Alert", "edit_alert");
+    }
 
   xml = g_string_new ("");
 
@@ -22247,7 +22259,8 @@ save_permission_omp (openvas_connection_t *connection,
   CHECK_PARAM_INVALID (permission_id, "Save Permission", "edit_permission");
   CHECK_PARAM_INVALID (name, "Save Permission", "edit_permission");
   CHECK_PARAM_INVALID (comment, "Save Permission", "edit_permission");
-  CHECK_PARAM_INVALID (resource_id, "Save Permission", "edit_permission");
+  if (params_given (params, "id_or_empty"))
+    CHECK_PARAM_INVALID (resource_id, "Save Permission", "edit_permission");
   CHECK_PARAM_INVALID (subject_type, "Save Permission", "edit_permission");
   if (params_given (params, "optional_resource_type"))
     CHECK_PARAM_INVALID (resource_type, "Save Permission", "edit_permission");
