@@ -205,6 +205,7 @@ module.exports = {
     'no-unneeded-ternary': 'warn', // disallow ternary operators when simpler alternatives exist
     'no-unsafe-negation': 'error', // disallow negating the left operand of relational operators: if (!key in object)
     'no-useless-call': 'error', // disallow unnecessary .call() and .apply()
+    'no-var': 'warn', // disallow usage of var for variables. use let or const instead
     'no-void': 'error',
     'object-curly-newline': [
       'warn', {
