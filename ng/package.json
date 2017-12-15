@@ -20,7 +20,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
+    "core-js": "^2.5.3",
     "d3": "^3.5.17",
     "glamor": "^2.20.40",
     "glamorous": "^4.7.0",
