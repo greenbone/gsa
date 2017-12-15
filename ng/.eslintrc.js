@@ -201,7 +201,7 @@ module.exports = {
     'no-trailing-spaces': 'warn',
     'no-undef-init': 'warn', // disallow initializing to undefined: var foo = undefined;
 
-    'no-unmodified-loop-condition': 'error', // disallow loops where the break condition is never valid
+    'no-unmodified-loop-condition': 'warn', // disallow loops where the break condition is never valid
     'no-unneeded-ternary': 'warn', // disallow ternary operators when simpler alternatives exist
     'no-unsafe-negation': 'error', // disallow negating the left operand of relational operators: if (!key in object)
     'no-useless-call': 'error', // disallow unnecessary .call() and .apply()
