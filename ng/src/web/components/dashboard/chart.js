@@ -23,35 +23,51 @@
 
 import React from 'react';
 
-import {extend} from 'gmp/utils.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
-export class Chart extends React.Component {
+import ChartController from './legacy/controller.js';
+
+import './legacy/chart/bar.js';
+import './legacy/chart/bubble.js';
+import './legacy/chart/cloud.js';
+import './legacy/chart/donut.js';
+import './legacy/chart/gantt.js';
+import './legacy/chart/horizontalbar.js';
+import './legacy/chart/line.js';
+import './legacy/chart/topology.js';
+
+class Chart extends React.Component {
 
   componentDidMount() {
-    let {name, type, template, title} = this.props;
-    let title_count = this.props['title-count'];
-    let init_params = this.props['init-params'];
-    let params = {extra: {}};
+    const {name, type, template, title} = this.props;
+    const title_count = this.props['title-count'];
+    const init_params = this.props['init-params'];
+    const gen_params = {
+      extra: {...this.props['gen-params']},
+    };
 
-    params.extra = extend(params.extra, this.props['gen-params']);
-
-    let ds = this.context.datasource;
+    const {datasource} = this.context;
 
     if (this.props['x-field']) {
-      params.x_field = this.props['x-field'];
+      gen_params.x_field = this.props['x-field'];
     }
     if (this.props['y-fields']) {
-      params.y_fields = this.props['y-fields'];
+      gen_params.y_fields = this.props['y-fields'];
     }
     if (this.props['z-fields']) {
-      params.z_fields = this.props['z-fields'];
+      gen_params.z_fields = this.props['z-fields'];
     }
 
     function chart_factory(for_display) {
-      return new window.gsa.charts.ChartController(name, type, template, title,
-        ds, for_display, title_count, params, init_params);
+      return new ChartController(name, type, {
+        template,
+        title,
+        datasource,
+        display: for_display,
+        count_field: title_count,
+        gen_params,
+        init_params,
+      });
     }
 
     this.context.dashboard.addControllerFactory(name, chart_factory);

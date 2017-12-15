@@ -26,6 +26,9 @@ import React from 'react';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp.js';
+
+import LegacyDataSource from './legacy/datasource.js';
 
 class DataSource extends React.Component {
 
@@ -33,9 +36,11 @@ class DataSource extends React.Component {
     super(...args);
 
     const filter = is_defined(this.props.filter) ?
-     this.props.filter.toFilterString() : undefined;
+      this.props.filter.toFilterString() : undefined;
 
-    const ds = new window.gsa.charts.DataSource(this.props.name, {
+    const {gmp} = this.props;
+
+    const ds = new LegacyDataSource(this.props.name, gmp.token, {
       cache: this.context.cache,
       type: this.props.type,
       group_column: this.props.groupColumn,
@@ -73,7 +78,7 @@ class DataSource extends React.Component {
     // changed in future. This should be changed when the charts a completly
     // converted to react. Until now we compare the filter without first, rows
     // and sort/sort-reverse params.
-    let equals = filter ? filter.equals(newfilter) :
+    const equals = filter ? filter.equals(newfilter) :
       !is_defined(newfilter);
 
     if (!equals) {
@@ -102,6 +107,7 @@ DataSource.propTypes = {
   columns: PropTypes.array,
   filter: PropTypes.filter,
   firstGroup: PropTypes.string,
+  gmp: PropTypes.gmp.isRequired,
   groupColumn: PropTypes.string,
   maxGroups: PropTypes.string,
   name: PropTypes.string.isRequired,
@@ -113,6 +119,6 @@ DataSource.propTypes = {
   type: PropTypes.string,
 };
 
-export default DataSource;
+export default withGmp(DataSource);
 
 // vim: set ts=2 sw=2 tw=80:
