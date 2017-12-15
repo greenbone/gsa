@@ -106,6 +106,10 @@ class EntitiesTable extends React.Component {
 
     const filterstring = is_defined(filter) ? filter.toFilterString() : '';
 
+    const currentSortBy = is_defined(filter) ? filter.getSortBy() : undefined;
+    const currentSortDir =
+      is_defined(filter) ? filter.getSortOrder() : undefined;
+
     if (entities.length === 0) {
       return <div className="entities-table">{emptyTitle}</div>;
     }
@@ -145,7 +149,11 @@ class EntitiesTable extends React.Component {
     let header;
     if (HeaderComponent) {
       header = (
-        <HeaderComponent {...other}/>
+        <HeaderComponent
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          {...other}
+        />
       );
     }
 

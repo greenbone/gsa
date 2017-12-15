@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -43,33 +44,45 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'text' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'text' : false}
           onSortChange={onSortChange}>
           {_('Text')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'nvt' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'nvt' : false}
           onSortChange={onSortChange}>
           {_('NVT')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'hosts' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'port' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'port' : false}
           onSortChange={onSortChange}>
           {_('Location')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'active' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'active' : false}
           onSortChange={onSortChange}>
           {_('Active')}
         </TableHead>
@@ -81,6 +94,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -42,36 +43,48 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'title' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'title' : false}
           onSortChange={onSortChange}>
           {_('Title')}
         </TableHead>
         <TableHead
           width="15em"
-          sortby={sort ? 'modified' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}>
           {_('Modified')}
         </TableHead>
         <TableHead
           width="5em"
-          sortby={sort ? 'cves' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'cves' : false}
           onSortChange={onSortChange}>
           {_('CVEs')}
         </TableHead>
         <TableHead
           width="10em"
-          sortby={sort ? 'severity' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
@@ -83,6 +96,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

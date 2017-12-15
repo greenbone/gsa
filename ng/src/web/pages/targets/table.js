@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -49,6 +50,8 @@ const Header = ({
   filter,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
 
@@ -64,22 +67,30 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'hosts' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'ips' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'ips' : false}
           onSortChange={onSortChange}>
           {_('IPs')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'port_list' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'port_list' : false}
           onSortChange={onSortChange}>
           {_('Port List')}
         </TableHead>
@@ -108,6 +119,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   filter: PropTypes.filter,
   links: PropTypes.bool,
   sort: PropTypes.bool,

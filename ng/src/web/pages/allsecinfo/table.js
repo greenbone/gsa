@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -43,6 +44,8 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
@@ -50,30 +53,40 @@ const Header = ({
       <TableRow>
         <TableHead
           width="20em"
-          sortby={sort ? 'name' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'type' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'type' : false}
           onSortChange={onSortChange}>
           {_('Type')}
         </TableHead>
         <TableHead
           width="15em"
-          sortby={sort ? 'created' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'created' : false}
           onSortChange={onSortChange}>
           {_('Created')}
         </TableHead>
         <TableHead
           width="15em"
-          sortby={sort ? 'modified' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}>
           {_('Modified')}
         </TableHead>
         <TableHead
           width="10em"
-          sortby={sort ? 'severity' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
@@ -85,6 +98,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 Greenbone Networks GmbH
@@ -43,6 +44,8 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
@@ -50,27 +53,35 @@ const Header = ({
       <TableRow>
         <TableHead
           rowSpan="2"
-          sortby={sort ? 'date' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'date' : false}
           onSortChange={onSortChange}>
           {_('Date')}
         </TableHead>
         <TableHead
           rowSpan="2"
           width="10em"
-          sortby={sort ? 'status' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'status' : false}
           onSortChange={onSortChange}>
           {_('Status')}
         </TableHead>
         <TableHead
           rowSpan="2"
-          sortby={sort ? 'task' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'task' : false}
           onSortChange={onSortChange}>
           {_('Task')}
         </TableHead>
         <TableHead
           rowSpan="2"
           width="10em"
-          sortby={sort ? 'severity' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
@@ -83,31 +94,41 @@ const Header = ({
       <TableRow>
         <TableHead
           width="5em"
-          sortby={sort ? 'high' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'high' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.High/>
         </TableHead>
         <TableHead
           width="5em"
-          sortby={sort ? 'medium' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'medium' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Medium/>
         </TableHead>
         <TableHead
           width="5em"
-          sortby={sort ? 'low' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'low' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Low/>
         </TableHead>
         <TableHead
           width="5em"
-          sortby={sort ? 'log' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'log' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Log/>
         </TableHead>
         <TableHead
           width="5em"
-          sortby={sort ? 'false_positive' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'false_positive' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.FalsePositive/>
         </TableHead>
@@ -118,6 +139,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
