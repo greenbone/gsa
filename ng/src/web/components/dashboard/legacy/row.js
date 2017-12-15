@@ -21,6 +21,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/values';
+
 import $ from 'jquery';
 import 'jquery-ui';
 import 'jquery-ui/ui/widgets/resizable.js';
