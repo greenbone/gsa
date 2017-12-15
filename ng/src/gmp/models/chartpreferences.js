@@ -24,16 +24,12 @@
 import {is_defined, for_each} from '../utils.js';
 import logger from '../log.js';
 
-import Model from '../model.js';
-
 const log = logger.getLogger('gmp.models.chartpreferences');
 
-// FIXME should this really be a Model class?
-
-class ChartPreferences extends Model {
+class ChartPreferences {
 
   constructor(element) {
-    super(element);
+    this.updateFromElement(element);
 
     if (!is_defined(this._preferences)) {
       this._preferences = {};
@@ -41,14 +37,11 @@ class ChartPreferences extends Model {
   }
 
   get(id) {
-    let pref = this._preferences[id];
-    return is_defined(pref) ? pref : undefined;
+    return this._preferences[id];
   }
 
-  setProperties() {};
-
   parseProroperties(elem) {
-    let preferences = {};
+    const preferences = {};
 
     for_each(elem, pref => {
       let value;
