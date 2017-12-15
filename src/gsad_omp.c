@@ -5985,11 +5985,13 @@ create_credential_omp (openvas_connection_t *connection,
 
   if (params_value (params, "autogenerate"))
     autogenerate = strcmp (params_value (params, "autogenerate"), "0");
-  else
+  else if (params_given (params, "autogenerate"))
     return message_invalid (connection, credentials, params, response_data,
                             "Given autogenerate was invalid",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Credential", "new_credential");
+  else
+    autogenerate = 0;
 
   CHECK_PARAM_INVALID (name, "Create Credential", "new_credential");
   CHECK_PARAM_INVALID (comment, "Create Credential", "new_credential");
