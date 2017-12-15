@@ -30,6 +30,8 @@ import {is_defined, for_each, exclude_object_props} from 'gmp/utils.js';
 
 import FootNote from '../components/footnote/footnote.js';
 
+import FoldIcon from '../components/icon/foldicon.js';
+
 import Layout from '../components/layout/layout.js';
 
 import Pagination from '../components/pagination/pagination.js';
@@ -58,6 +60,11 @@ const UpdatingStripedTable = glamorous(StripedTable)(
   },
 );
 
+const DetailsIcon = glamorous(FoldIcon)({
+  marginTop: '2px',
+  marginLeft: '2px',
+});
+
 class EntitiesTable extends React.Component {
 
   constructor(...args) {
@@ -65,8 +72,10 @@ class EntitiesTable extends React.Component {
 
     this.state = {
       details: {},
+      allToggled: false,
     };
 
+    this.handleToggleAllDetails = this.handleToggleAllDetails.bind(this);
     this.handleToggleShowDetails = this.handleToggleShowDetails.bind(this);
   }
 
@@ -78,6 +87,21 @@ class EntitiesTable extends React.Component {
     this.setState({details});
   }
 
+  handleToggleAllDetails() {
+    const {entities} = this.props;
+    let {details, allToggled} = this.state;
+
+    allToggled = !allToggled;
+
+    if (allToggled) {
+      for_each(entities, entity => details[entity.id] = true);
+    }
+    else {
+      for_each(entities, entity => details[entity.id] = false);
+    }
+    this.setState({details, allToggled});
+  }
+
   render() {
     const {props} = this;
     const {details} = this.state;
@@ -87,6 +111,7 @@ class EntitiesTable extends React.Component {
       entitiesCounts,
       filter,
       footnote = true,
+      toggleDetailsIcon = true,
       updating,
     } = props;
 
@@ -176,12 +201,27 @@ class EntitiesTable extends React.Component {
       body = rows;
     }
 
+    const foldState = this.state.allToggled ? 'UNFOLDED' : 'FOLDED';
+    const detailsIcon = (
+      <DetailsIcon
+        foldState={foldState}
+        title={_('Toggle All Details')}
+        onClick={this.handleToggleAllDetails}
+      />
+    );
+
     return (
       <Layout
         flex="column"
         grow="1"
         className="entities-table">
-        {pagination}
+        {toggleDetailsIcon ?
+          <Layout align="space-between" grow="1">
+            {detailsIcon}
+            {pagination}
+          </Layout> :
+          pagination
+        }
         <UpdatingStripedTable
           header={header}
           footer={footer}
