@@ -31,7 +31,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -48,13 +48,13 @@ import ReportsTable from './table.js';
 
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-const Dashboard = withDashboard(ReportCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: 'Äe599bb6b-b95a-4bb2-a6bb-fe8ac69bc071',
   defaultControllersString: 'report-by-severity-class|' +
     'report-by-high-results|report-by-cvss',
   defaultControllerString: 'report-by-cvss',
-});
+})(ReportCharts);
 
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>

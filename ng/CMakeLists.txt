@@ -172,6 +172,26 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
      ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/withDashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/controller.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/dashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/datasource.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/eventnode.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/helper.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/row.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/rowtarget.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/aggregate.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/bar.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/base.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/bubble.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/cloud.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/donut.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/gantt.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/horizontalbar.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/line.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/task.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/topology.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js

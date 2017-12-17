@@ -1,6 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
+ * Timo Pollmeier <timo.pollmeier@greenbone.net>
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
@@ -20,49 +21,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {
+  extract_column_info_json,
+  extract_filter_info_json,
+  extract_simple_records_json,
+} from '../helper.js';
 
-import {is_defined, for_each} from '../utils.js';
-import logger from '../log.js';
+import BaseChartGenerator from './base.js';
 
-const log = logger.getLogger('gmp.models.chartpreferences');
+class AggregateChartGenerator extends BaseChartGenerator {
 
-class ChartPreferences {
-
-  constructor(element) {
-    this.updateFromElement(element);
-
-    if (!is_defined(this._preferences)) {
-      this._preferences = {};
-    }
+  constructor(name) {
+    super(name);
+    this.command = 'get_aggregate';
   }
 
-  get(id) {
-    return this._preferences[id];
-  }
-
-  parseProroperties(elem) {
-    const preferences = {};
-
-    for_each(elem, pref => {
-      let value;
-      try {
-        value = JSON.parse(pref.value);
-      }
-      catch (e) {
-        log.warn('Could not parse chart preference value', pref.value);
-        value = pref.value;
-      }
-      preferences[pref._id] = value;
-    });
-
-    return preferences;
-  }
-
-  updateFromElement(elem) {
-    this._preferences = this.parseProroperties(elem);
+  extractData(data, gen_params) {
+    const response = data.get_aggregate.get_aggregates_response;
+    const {aggregate} = response;
+    const column_info = extract_column_info_json(aggregate, gen_params);
+    const records = extract_simple_records_json(aggregate.group);
+    const filter_info = extract_filter_info_json(response.filters);
+    return {
+      records,
+      column_info,
+      filter_info,
+    };
   }
 }
 
-export default ChartPreferences;
+export default AggregateChartGenerator;
 
 // vim: set ts=2 sw=2 tw=80:
