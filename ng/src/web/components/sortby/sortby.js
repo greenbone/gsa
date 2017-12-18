@@ -36,6 +36,9 @@ const Anchor = glamorous.a(
 
 class SortBy extends React.Component {
 
+  static ASC = 'asc';
+  static DESC = 'desc';
+
   constructor(...args) {
     super(...args);
 
