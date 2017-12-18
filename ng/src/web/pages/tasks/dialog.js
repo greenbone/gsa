@@ -30,9 +30,12 @@ import {
   classes,
   is_defined,
   select_save_id,
+} from 'gmp/utils.js';
+
+import {
   NO_VALUE,
   YES_VALUE,
-} from 'gmp/utils.js';
+} from 'gmp/parser.js';
 
 import {
   OPENVAS_SCANNER_TYPE,

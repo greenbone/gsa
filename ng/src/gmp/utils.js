@@ -170,33 +170,6 @@ export function classes(...args) {
   return css.join(' ');
 }
 
-export function parse_int(value) {
-  const val = parseInt(value, 10);
-
-  if (isNaN(val)) {
-    return undefined;
-  }
-
-  return val;
-}
-
-export function parse_float(value) {
-  const val = parseFloat(value);
-
-  if (isNaN(val)) {
-    return undefined;
-  }
-
-  return val;
-}
-
-export const YES_VALUE = 1;
-export const NO_VALUE = 0;
-
-export function parse_yesno(value) {
-  return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
-}
-
 export function first(array, non = {}) {
   if (is_empty(array)) {
     return non;

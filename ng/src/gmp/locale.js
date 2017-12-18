@@ -26,7 +26,8 @@ import moment from 'moment';
 import XHRBackend from 'i18next-xhr-backend';
 import BrowserDetector from 'i18next-browser-languagedetector';
 
-import {is_defined, is_string, is_date, parse_int} from './utils.js';
+import {is_defined, is_string, is_date} from './utils.js';
+import {parse_int} from './parser.js';
 import logger from './log.js';
 
 const log = logger.getLogger('gmp.locale');

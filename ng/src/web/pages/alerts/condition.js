@@ -23,7 +23,9 @@
 
 import _ from 'gmp/locale.js';
 
-import {is_defined, parse_int} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
+
+import {parse_int} from 'gmp/parser.js';
 
 import {
   EVENT_TYPE_UPDATED_SECINFO,
