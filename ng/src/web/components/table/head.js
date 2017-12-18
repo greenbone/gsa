@@ -51,7 +51,7 @@ const TableHead = ({
 
   let sortSymbol;
   if (currentSortBy === sortBy) {
-    if (currentSortDir === 'sort-reverse') {
+    if (currentSortDir === Sort.DESC) {
       sortSymbol = ( // triangle pointing down
         <span
           title={_('Sorted In Descending Order By {{sortBy}}',
@@ -60,7 +60,7 @@ const TableHead = ({
         </span>
       );
     }
-    else if (currentSortDir === 'sort') {
+    else if (currentSortDir === Sort.ASC) {
       sortSymbol = ( // triangle pointing up
         <span
           title={_('Sorted In Ascending Order By {{sortBy}}',
