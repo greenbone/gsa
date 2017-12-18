@@ -48,60 +48,60 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
+  const sortProps = {
+    currentSortBy,
+    currentSortDir,
+    sort,
+    onSortChange,
+  };
   return (
     <TableHeader>
       <TableRow>
         <TableHead
+          {...sortProps}
           rowSpan="2"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}>
+          sortBy="name"
+        >
           {_('Name')}
         </TableHead>
         <TableHead
+          {...sortProps}
           rowSpan="2"
           width="10em"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'status' : false}
-          onSortChange={onSortChange}>
+          sortBy="status"
+        >
           {_('Status')}
         </TableHead>
         <TableHead colSpan="2">{_('Reports')}</TableHead>
         <TableHead
+          {...sortProps}
           rowSpan="2"
           width="10em"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'severity' : false}
-          onSortChange={onSortChange}>
+          sortBy="severity"
+        >
           {_('Severity')}
         </TableHead>
         <TableHead
+          {...sortProps}
           rowSpan="2"
           width="6em"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'trend' : false}
-          onSortChange={onSortChange}>
+          sortBy="trend"
+        >
           {_('Trend')}
         </TableHead>
         {actionsColumn}
       </TableRow>
       <TableRow>
         <TableHead
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'total' : false}
-          onSortChange={onSortChange}>
+          {...sortProps}
+          sortBy="total"
+        >
           {_('Total')}
         </TableHead>
         <TableHead
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'last' : false}
-          onSortChange={onSortChange}>
+          {...sortProps}
+          sortBy="last"
+        >
           {_('Last')}
         </TableHead>
       </TableRow>
