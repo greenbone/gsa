@@ -39,6 +39,7 @@ import TableRow from '../../components/table/row.js';
 import {createEntitiesTable} from '../../entities/table.js';
 
 const Header = ({
+  actions = true,
   currentSortDir,
   currentSortBy,
   sort = true,
@@ -95,18 +96,19 @@ const Header = ({
         onSortChange={onSortChange}>
         {_('Port')}
       </TableHead>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        width="50px"
-        onSortChange={onSortChange}>
-        {_('Actions')}
-      </TableHead>
+      {actions &&
+        <TableHead
+          width="50px"
+         >
+          {_('Actions')}
+        </TableHead>
+      }
     </TableRow>
   </TableHeader>
 );
 
 Header.propTypes = {
+  actions: PropTypes.bool,
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
@@ -114,6 +116,7 @@ Header.propTypes = {
 };
 
 const Row = ({
+  actions = true,
   entity,
   links = true,
   onTlsCertificateDownloadClick,
@@ -149,22 +152,25 @@ const Row = ({
       <TableData>
         {port}
       </TableData>
-      <TableData flex align="center">
-        <Icon
-          img="download.svg"
-          title={_('Download TLS Certificate')}
-          value={entity}
-          onClick={onTlsCertificateDownloadClick}
-        />
-      </TableData>
+      {actions &&
+        <TableData flex align="center">
+          <Icon
+            img="download.svg"
+            title={_('Download TLS Certificate')}
+            value={entity}
+            onClick={onTlsCertificateDownloadClick}
+          />
+        </TableData>
+      }
     </TableRow>
   );
 };
 
 Row.propTypes = {
+  actions: PropTypes.bool,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
-  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
+  onTlsCertificateDownloadClick: PropTypes.func,
 };
 
 export default createEntitiesTable({
