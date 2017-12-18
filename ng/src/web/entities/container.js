@@ -50,6 +50,8 @@ import Wrapper from '../components/layout/wrapper.js';
 
 import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
+import SortBy from '../components/sortby/sortby.js';
+
 const log = logger.getLogger('web.entities.container');
 
 const exclude_props = [
@@ -165,12 +167,18 @@ class EntitiesContainer extends React.Component {
 
         let refresh = false;
 
+        const reverse_field = loaded_filter.get('sort-reverse');
+        const reverse = is_defined(reverse_field);
+        const field = reverse ? reverse_field : loaded_filter.get('sort');
+
         this.setState({
           entities,
           entities_counts,
           filter,
           loaded_filter,
           loading: false,
+          sortBy: field,
+          sortDir: reverse ? SortBy.DESC : SortBy.ASC,
           updating: false,
         });
 
@@ -412,6 +420,8 @@ class EntitiesContainer extends React.Component {
       loading,
       selected,
       selection_type,
+      sortBy,
+      sortDir,
       updating,
     } = this.state;
     const {
@@ -433,6 +443,8 @@ class EntitiesContainer extends React.Component {
           filter={loaded_filter}
           filters={filters}
           selectionType={selection_type}
+          sortBy={sortBy}
+          sortDir={sortDir}
           onChanged={this.reload}
           onDownloaded={onDownload}
           onError={this.handleError}

@@ -38,33 +38,45 @@ import TableRow from '../../components/table/row.js';
 import {createEntitiesTable} from '../../entities/table.js';
 
 const Header = ({
+  currentSortDir,
+  currentSortBy,
   sort = true,
   onSortChange,
 }) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        sortby={sort ? 'error' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'error' : false}
         onSortChange={onSortChange}>
         {_('Error Message')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'host' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'host' : false}
         onSortChange={onSortChange}>
         {_('Host')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'hostname' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'hostname' : false}
         onSortChange={onSortChange}>
         {_('Hostname')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'nvt' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'nvt' : false}
         onSortChange={onSortChange}>
         {_('NVT')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'port' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'port' : false}
         onSortChange={onSortChange}>
         {_('Port')}
       </TableHead>
@@ -73,6 +85,8 @@ const Header = ({
 );
 
 Header.propTypes = {
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };
