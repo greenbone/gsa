@@ -22614,10 +22614,19 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="info/cert_bund_adv">
         <table>
-          <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Version != ''">
+          <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Version != '' or info/cert_bund_adv/raw_data/Advisory/Ref_Num/@update">
             <tr>
               <td valign="top"><xsl:value-of select="gsa:i18n ('Version')"/>:</td>
-              <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Version"/></td>
+              <td valign="top">
+                <xsl:choose>
+                  <xsl:when test="info/cert_bund_adv/raw_data/Advisory/Version != ''">
+                    <xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Version"/>
+                  </xsl:when>
+                  <xsl:when test="info/cert_bund_adv/raw_data/Advisory/Ref_Num/@update">
+                    Update <xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Ref_Num/@update"/>
+                  </xsl:when>
+                </xsl:choose>
+              </td>
             </tr>
           </xsl:if>
           <tr>
@@ -22743,6 +22752,35 @@ should not have received it.
           </xsl:when>
           <xsl:otherwise>
             <!-- hide because the feed is not expected to contain other links -->
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="count(info/cert_bund_adv/raw_data/Advisory/RevisionHistory/Revision) > 0">
+            <h2><xsl:value-of select="gsa:i18n ('Revision history')"/></h2>
+            <table class="gbntable">
+              <tr class="gbntablehead2">
+                <td><xsl:value-of select="gsa:i18n ('Revision')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Date')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Description')"/></td>
+              </tr>
+              <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/RevisionHistory/Revision">
+                <tr>
+                  <td>
+                    <xsl:value-of select="./Number/text()"/>
+                  </td>
+                  <td>
+                    <xsl:value-of select="./Date"/>
+                  </td>
+                  <td>
+                    <xsl:value-of select="./Description"/>
+                  </td>
+                </tr>
+              </xsl:for-each>
+            </table>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- Hide history if it is missing -->
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
