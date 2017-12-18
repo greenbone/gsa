@@ -156,6 +156,7 @@ export default createEntitiesTable({
   header: Header,
   footer: Footer,
   row: ReportRow,
+  toggleDetailsIcon: false,
 });
 
 // vim: set ts=2 sw=2 tw=80:

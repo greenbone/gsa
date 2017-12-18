@@ -135,6 +135,7 @@ export const VulnsTable = createEntitiesTable({
   header: VulnsHeader,
   footer: Footer,
   row: VulnsRow,
+  toggleDetailsIcon: false,
 });
 
 export default VulnsTable;
