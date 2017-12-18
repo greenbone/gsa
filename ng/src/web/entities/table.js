@@ -95,7 +95,11 @@ class EntitiesTable extends React.Component {
     const {entities} = this.props;
     let {details, allToggled} = this.state;
 
-    allToggled = !allToggled && untoggle;
+    allToggled = !allToggled;
+
+    if (untoggle) {
+      allToggled = false;
+    }
 
     if (allToggled) {
       for_each(entities, entity => details[entity.id] = true);
