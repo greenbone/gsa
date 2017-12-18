@@ -143,7 +143,7 @@ const Row = ({
   entity,
   links = true,
 }) => {
-  const {ip, details = {}, result_counts = {}, severity, asset} = entity;
+  const {ip, details = {}, result_counts = {}, severity, asset = {}} = entity;
   const {best_os_cpe, best_os_txt} = details;
   return (
     <TableRow>
