@@ -24,7 +24,7 @@
 import {for_each, is_defined, is_string} from '../utils.js';
 
 import Model from '../model.js';
-import {parse_severity} from '../parser.js';
+import {parse_severity, parse_qod} from '../parser.js';
 
 import Nvt from './nvt.js';
 
@@ -68,6 +68,7 @@ class Result extends Model {
       severity,
       task,
       delta,
+      qod = {},
     } = elem;
 
     if (is_string(host)) {
@@ -125,6 +126,8 @@ class Result extends Model {
     if (is_defined(original_severity)) {
       copy.original_severity = parse_severity(original_severity);
     }
+
+    copy.qod = parse_qod(qod);
 
     copy.notes = parse_notes(notes);
     copy.overrides = parse_overrides(overrides);
