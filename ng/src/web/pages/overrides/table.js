@@ -52,7 +52,9 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'text' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'text' : false}
           onSortChange={onSortChange}>
           {_('Text')}
         </TableHead>

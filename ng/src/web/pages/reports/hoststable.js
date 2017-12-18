@@ -43,65 +43,87 @@ import TableRow from '../../components/table/row.js';
 import {createEntitiesTable} from '../../entities/table.js';
 
 const Header = ({
+  currentSortBy,
+  currentSortDir,
   sort = true,
   onSortChange,
 }) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        sortby={sort ? 'ip' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'ip' : false}
         onSortChange={onSortChange}>
         {_('IP Address')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'hostname' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'hostname' : false}
         onSortChange={onSortChange}>
         {_('Hostname')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'os' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'os' : false}
         width="5em"
         onSortChange={onSortChange}>
         {_('OS')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'high' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'high' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('High')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'medium' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'medium' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('Medium')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'low' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'low' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('Low')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'log' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'log' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('Log')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'false_positive' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'false_positive' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('False Positive')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'total' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'total' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('Total')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'severity' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'severity' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('Severity')}
@@ -111,6 +133,8 @@ const Header = ({
 );
 
 Header.propTypes = {
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };

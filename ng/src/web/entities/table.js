@@ -141,6 +141,8 @@ class EntitiesTable extends React.Component {
       footnote = true,
       toggleDetailsIcon = true,
       updating,
+      sortBy: currentSortBy,
+      sortDir: currentSortDir,
     } = props;
 
     if (!is_defined(entities)) {
@@ -158,10 +160,6 @@ class EntitiesTable extends React.Component {
     const other = exclude_object_props(props, exclude_props);
 
     const filterstring = is_defined(filter) ? filter.toFilterString() : '';
-
-    const currentSortBy = is_defined(filter) ? filter.getSortBy() : undefined;
-    const currentSortDir =
-      is_defined(filter) ? filter.getSortOrder() : undefined;
 
     if (entities.length === 0) {
       return <div className="entities-table">{emptyTitle}</div>;
@@ -286,6 +284,8 @@ EntitiesTable.propTypes = {
   header: PropTypes.componentOrFalse,
   pagination: PropTypes.componentOrFalse,
   row: PropTypes.component.isRequired,
+  sortBy: PropTypes.string,
+  sortDir: PropTypes.string,
   onFirstClick: PropTypes.func,
   onLastClick: PropTypes.func,
   onNextClick: PropTypes.func,
