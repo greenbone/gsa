@@ -79,6 +79,11 @@ export function parse_csv(value) {
   return value.split(',').map(val => val.trim());
 }
 
+export const parse_qod = qod => ({
+  type: qod.type,
+  value: parse_float(qod.value),
+});
+
 export function parse_envelope_meta(envelope) {
   const meta = {};
 
