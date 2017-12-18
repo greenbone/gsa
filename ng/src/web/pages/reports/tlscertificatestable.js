@@ -39,47 +39,65 @@ import TableRow from '../../components/table/row.js';
 import {createEntitiesTable} from '../../entities/table.js';
 
 const Header = ({
+  currentSortDir,
+  currentSortBy,
   sort = true,
   onSortChange,
 }) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        sortby={sort ? 'dn' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'dn' : false}
         onSortChange={onSortChange}>
         {_('DN')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'serial' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'serial' : false}
         onSortChange={onSortChange}>
         {_('Serial')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'notvalidbefore' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'notvalidbefore' : false}
         onSortChange={onSortChange}>
         {_('Not Valid Before')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'notvalidafter' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'notvalidafter' : false}
         onSortChange={onSortChange}>
         {_('Not Valid After')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'ip' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'ip' : false}
         onSortChange={onSortChange}>
         {_('IP')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'hostname' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'hostname' : false}
         onSortChange={onSortChange}>
         {_('Hostname')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'port' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'port' : false}
         onSortChange={onSortChange}>
         {_('Port')}
       </TableHead>
       <TableHead
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
         width="50px"
         onSortChange={onSortChange}>
         {_('Actions')}
@@ -89,6 +107,8 @@ const Header = ({
 );
 
 Header.propTypes = {
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };

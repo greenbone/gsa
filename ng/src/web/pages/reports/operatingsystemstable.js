@@ -43,29 +43,39 @@ import TableRow from '../../components/table/row.js';
 import {createEntitiesTable} from '../../entities/table.js';
 
 const Header = ({
+  currentSortDir,
+  currentSortBy,
   sort = true,
   onSortChange,
 }) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        sortby={sort ? 'name' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'name' : false}
         onSortChange={onSortChange}>
         {_('Operating System')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'cpe' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'cpe' : false}
         onSortChange={onSortChange}>
         {_('Hostname')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'hosts' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'hosts' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('Hosts')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'severity' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'severity' : false}
         width="10%"
         onSortChange={onSortChange}>
         {_('Severity')}
@@ -75,6 +85,8 @@ const Header = ({
 );
 
 Header.propTypes = {
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };

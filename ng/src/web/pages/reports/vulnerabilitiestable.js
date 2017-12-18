@@ -81,6 +81,8 @@ Row.propTypes = {
 };
 
 const Header = ({
+  currentSortDir,
+  currentSortBy,
   links = true,
   sort = true,
   onSortChange,
@@ -89,31 +91,41 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           width="10em"
-          sortby={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
         <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'qod' : false}
           width="6em"
-          sortby={sort ? 'qod' : false}
           onSortChange={onSortChange}>
           {_('QoD')}
         </TableHead>
         <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'results' : false}
           width="6em"
-          sortby={sort ? 'results' : false}
           onSortChange={onSortChange}>
           {_('Results')}
         </TableHead>
         <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hosts' : false}
           width="6em"
-          sortby={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
@@ -124,6 +136,8 @@ const Header = ({
 
 Header.propTypes = {
   actions: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   hideColumns: PropTypes.object,
   links: PropTypes.bool,
   sort: PropTypes.bool,

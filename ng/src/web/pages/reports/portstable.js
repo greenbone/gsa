@@ -37,24 +37,32 @@ import TableRow from '../../components/table/row.js';
 import {createEntitiesTable} from '../../entities/table.js';
 
 const Header = ({
+  currentSortBy,
+  currentSortDir,
   sort = true,
   onSortChange,
 }) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        sortby={sort ? 'name' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'name' : false}
         onSortChange={onSortChange}>
         {_('Port')}
       </TableHead>
       <TableHead
-        sortby={sort ? 'hosts' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'hosts' : false}
         onSortChange={onSortChange}>
         {_('Hosts')}
       </TableHead>
       <TableHead
         width="10%"
-        sortby={sort ? 'severity' : false}
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'severity' : false}
         onSortChange={onSortChange}>
         {_('Severity')}
       </TableHead>
@@ -63,6 +71,8 @@ const Header = ({
 );
 
 Header.propTypes = {
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };
