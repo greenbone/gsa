@@ -42,6 +42,7 @@ const TableHead = ({
     rowSpan,
     currentSortBy,
     currentSortDir,
+    sort = true,
     sortBy,
     width,
     onSortChange,
@@ -76,7 +77,7 @@ const TableHead = ({
       className={className}
       rowSpan={rowSpan}
       colSpan={colSpan}>
-      {sortBy && is_defined(onSortChange) ?
+      {sort && sortBy && is_defined(onSortChange) ?
         <Sort by={sortBy} onClick={onSortChange}>
           <Layout {...other}>
             {children}
@@ -97,6 +98,7 @@ TableHead.propTypes = {
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   rowSpan: PropTypes.numberString,
+  sort: PropTypes.bool,
   sortBy: PropTypes.stringOrFalse,
   width: PropTypes.string,
   onSortChange: PropTypes.func,
