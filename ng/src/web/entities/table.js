@@ -76,6 +76,10 @@ class EntitiesTable extends React.Component {
     };
 
     this.handleToggleAllDetails = this.handleToggleAllDetails.bind(this);
+    this.handleFirst = this.handleFirst.bind(this);
+    this.handleLast = this.handleLast.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handlePrevious = this.handlePrevious.bind(this);
     this.handleToggleShowDetails = this.handleToggleShowDetails.bind(this);
   }
 
@@ -87,11 +91,11 @@ class EntitiesTable extends React.Component {
     this.setState({details});
   }
 
-  handleToggleAllDetails() {
+  handleToggleAllDetails(untoggle = false) {
     const {entities} = this.props;
     let {details, allToggled} = this.state;
 
-    allToggled = !allToggled;
+    allToggled = !allToggled && untoggle;
 
     if (allToggled) {
       for_each(entities, entity => details[entity.id] = true);
@@ -100,6 +104,26 @@ class EntitiesTable extends React.Component {
       for_each(entities, entity => details[entity.id] = false);
     }
     this.setState({details, allToggled});
+  }
+
+  handleFirst(...args) {
+    this.props.onFirstClick(...args);
+    this.handleToggleAllDetails(true);
+  }
+
+  handleLast(...args) {
+    this.props.onLastClick(...args);
+    this.handleToggleAllDetails(true);
+  }
+
+  handleNext(...args) {
+    this.props.onNextClick(...args);
+    this.handleToggleAllDetails(true);
+  }
+
+  handlePrevious(...args) {
+    this.props.onPreviousClick(...args);
+    this.handleToggleAllDetails(true);
   }
 
   render() {
@@ -166,6 +190,10 @@ class EntitiesTable extends React.Component {
       pagination = (
         <PaginationComponent
           {...other}
+          onFirstClick={this.handleFirst}
+          onLastClick={this.handleLast}
+          onNextClick={this.handleNext}
+          onPreviousClick={this.handlePrevious}
           counts={entitiesCounts}
         />
       );
