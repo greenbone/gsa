@@ -1,14 +1,11 @@
 version: 2
 jobs:
-  build:
+  js_test:
     working_directory: ~/gsa
     docker:
       - image: circleci/node:6
         environment:
           ENV: CI
-    branches:
-      ignore:
-        - /gsa-.*/
     steps:
       - checkout
       - restore_cache:
@@ -27,3 +24,42 @@ jobs:
           working_directory: ~/gsa/ng
           name: Run JavaScript tests
           command: yarn test
+  build_gsad:
+    docker:
+      - image: wiegandm/gsa-gsad-debian-stretch
+    steps:
+      - run:
+          working_directory: ~/gvm-libs
+          name: Checkout gvm-libs
+          command: git clone https://github.com/greenbone/gvm-libs.git
+      - run:
+          working_directory: ~/gvm-libs
+          name: Configure and compile gvm-libs
+          command: pushd gvm-libs && mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release .. && make install && popd
+      - checkout
+      - run:
+          name: Configure and compile
+          command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_NG=1 .. && make install
+  build_ng:
+    docker:
+      - image: wiegandm/gsa-ng-debian-stretch
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "./ng/package.json"  }}
+            - v1-deps
+      - run:
+          name: Configure and compile
+          command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_GSAD=1 .. && make install
+      - save_cache:
+          key: v1-deps-{{ checksum "./ng/package.json"  }}
+          paths:
+            - ./ng/node_modules
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_gsad
+      - build_ng
+      - js_test
