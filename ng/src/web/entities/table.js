@@ -166,16 +166,17 @@ class EntitiesTable extends React.Component {
     }
 
     const rows = [];
-    if (RowComponent) {
+    if (is_defined(RowComponent)) {
       for_each(entities, entity => {
         rows.push(
           <RowComponent
             {...other}
             onToggleDetailsClick={this.handleToggleShowDetails}
             key={entity.id}
-            entity={entity}/>
+            entity={entity}
+          />
         );
-        if (RowDetailsComponent && details[entity.id]) {
+        if (is_defined(RowDetailsComponent) && details[entity.id]) {
           rows.push(
             <RowDetailsComponent
               links={props.links}
@@ -187,49 +188,34 @@ class EntitiesTable extends React.Component {
       });
     }
 
-    let pagination;
-    if (PaginationComponent) {
-      pagination = (
-        <PaginationComponent
-          {...other}
-          onFirstClick={this.handleFirst}
-          onLastClick={this.handleLast}
-          onNextClick={this.handleNext}
-          onPreviousClick={this.handlePrevious}
-          counts={entitiesCounts}
-        />
-      );
-    }
+    const pagination = is_defined(PaginationComponent) ? (
+      <PaginationComponent
+        {...other}
+        onFirstClick={this.handleFirst}
+        onLastClick={this.handleLast}
+        onNextClick={this.handleNext}
+        onPreviousClick={this.handlePrevious}
+        counts={entitiesCounts}
+      />
+    ) : undefined;
 
-    let header;
-    if (HeaderComponent) {
-      header = (
-        <HeaderComponent
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          {...other}
-        />
-      );
-    }
+    const header = is_defined(HeaderComponent) ? (
+      <HeaderComponent
+        currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
+        {...other}
+      />
+    ) : undefined;
 
-    let footer;
-    if (FooterComponent) {
-      footer = (
-        <FooterComponent {...other}/>
-      );
-    }
+    const footer = is_defined(FooterComponent) ? (
+      <FooterComponent {...other} />
+    ) : undefined;
 
-    let body;
-    if (BodyComponent) {
-      body = (
-        <BodyComponent>
-          {rows}
-        </BodyComponent>
-      );
-    }
-    else {
-      body = rows;
-    }
+    const body = is_defined(BodyComponent) ? (
+      <BodyComponent>
+        {rows}
+      </BodyComponent>
+    ) : rows;
 
     const foldState = this.state.allToggled ? 'UNFOLDED' : 'FOLDED';
     const detailsIcon = (
