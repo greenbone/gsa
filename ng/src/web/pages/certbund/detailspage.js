@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _, {datetime} from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -39,6 +39,13 @@ import Layout from '../../components/layout/layout.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 import ExternalLink from '../../components/link/externallink.js';
+
+import InfoTable from '../../components/table/infotable.js';
+import TableBody from '../../components/table/body.js';
+import TableData from '../../components/table/data.js';
+import TableHeader from '../../components/table/header.js';
+import TableHead from '../../components/table/head.js';
+import TableRow from '../../components/table/row.js';
 
 import CertBundAdvDetails from './details.js';
 
@@ -63,12 +70,52 @@ const Details = ({
     categories,
     description,
     cves,
+    revision_history = [],
   } = entity;
   return (
     <Layout flex="column">
       <CertBundAdvDetails
         entity={entity}
       />
+
+      <DetailsBlock
+        title={_('Revision History')}
+      >
+        {revision_history.length > 0 &&
+          <InfoTable>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {_('Revision')}
+                </TableHead>
+                <TableHead>
+                  {_('Date')}
+                </TableHead>
+                <TableHead>
+                  {_('Description')}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {revision_history.map(rev => (
+                <TableRow
+                  key={rev.revision}
+                >
+                  <TableData>
+                    {rev.revision}
+                  </TableData>
+                  <TableData>
+                    {datetime(rev.date)}
+                  </TableData>
+                  <TableData>
+                    {rev.description}
+                  </TableData>
+                </TableRow>
+              ))}
+            </TableBody>
+          </InfoTable>
+        }
+      </DetailsBlock>
 
       <DetailsBlock
         title={_('Categories')}
