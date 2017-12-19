@@ -37,6 +37,7 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 import {createEntitiesTable} from '../../entities/table.js';
+import glamorous from 'glamorous';
 
 const Header = ({
   actions = true,
@@ -123,6 +124,10 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
+const StyledSpan = glamorous.span({
+  wordBreak: 'break-all',
+});
+
 const Row = ({
   actions = true,
   entity,
@@ -133,7 +138,9 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        {issuer}
+        <StyledSpan>
+          {issuer}
+        </StyledSpan>
       </TableData>
       <TableData>
         {serial}
