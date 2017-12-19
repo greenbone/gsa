@@ -131,7 +131,6 @@ class EntitiesTable extends React.Component {
   }
 
   render() {
-    const {props} = this;
     const {details} = this.state;
     const {
       emptyTitle,
@@ -143,21 +142,20 @@ class EntitiesTable extends React.Component {
       updating,
       sortBy: currentSortBy,
       sortDir: currentSortDir,
-    } = props;
+      links,
+      row: RowComponent,
+      rowDetails: RowDetailsComponent,
+      header: HeaderComponent,
+      footer: FooterComponent,
+      pagination: PaginationComponent = Pagination,
+      body: BodyComponent = TableBody,
+    } = this.props;
 
     if (!is_defined(entities)) {
       return null;
     }
 
-    const RowComponent = props.row;
-    const RowDetailsComponent = props.rowDetails;
-    const HeaderComponent = props.header;
-    const FooterComponent = props.footer;
-    const PaginationComponent = is_defined(props.pagination) ?
-      props.pagination : Pagination;
-    const BodyComponent = is_defined(props.body) ? props.body : TableBody;
-
-    const other = exclude_object_props(props, exclude_props);
+    const other = exclude_object_props(this.props, exclude_props);
 
     const filterstring = is_defined(filter) ? filter.toFilterString() : '';
 
@@ -179,7 +177,7 @@ class EntitiesTable extends React.Component {
         if (is_defined(RowDetailsComponent) && details[entity.id]) {
           rows.push(
             <RowDetailsComponent
-              links={props.links}
+              links={links}
               key={'details-' + entity.id}
               entity={entity}
             />
@@ -268,10 +266,14 @@ EntitiesTable.propTypes = {
   footer: PropTypes.componentOrFalse,
   footnote: PropTypes.bool,
   header: PropTypes.componentOrFalse,
+  links: PropTypes.bool,
   pagination: PropTypes.componentOrFalse,
   row: PropTypes.component.isRequired,
+  rowDetails: PropTypes.component,
   sortBy: PropTypes.string,
   sortDir: PropTypes.string,
+  toggleDetailsIcon: PropTypes.bool,
+  updating: PropTypes.bool,
   onFirstClick: PropTypes.func,
   onLastClick: PropTypes.func,
   onNextClick: PropTypes.func,
