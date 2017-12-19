@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/greenbone/gsa/tree/master.svg?style=svg)](https://circleci.com/gh/greenbone/gsa/tree/master)
+
 About Greenbone Security Assistant
 ----------------------------------
 
