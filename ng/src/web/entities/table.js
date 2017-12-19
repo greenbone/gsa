@@ -49,6 +49,7 @@ const exclude_props = [
   'footer',
   'pagination',
   'emptyTitle',
+  'extraRowFuncs',
   'children',
 ];
 
@@ -131,33 +132,32 @@ class EntitiesTable extends React.Component {
   }
 
   render() {
-    const {props} = this;
     const {details} = this.state;
     const {
       emptyTitle,
       entities,
       entitiesCounts,
+      extraRowFuncs = [],
       filter,
       footnote = true,
       toggleDetailsIcon = true,
       updating,
       sortBy: currentSortBy,
       sortDir: currentSortDir,
-    } = props;
+      links,
+      row: RowComponent,
+      rowDetails: RowDetailsComponent,
+      header: HeaderComponent,
+      footer: FooterComponent,
+      pagination: PaginationComponent = Pagination,
+      body: BodyComponent = TableBody,
+    } = this.props;
 
     if (!is_defined(entities)) {
       return null;
     }
 
-    const RowComponent = props.row;
-    const RowDetailsComponent = props.rowDetails;
-    const HeaderComponent = props.header;
-    const FooterComponent = props.footer;
-    const PaginationComponent = is_defined(props.pagination) ?
-      props.pagination : Pagination;
-    const BodyComponent = is_defined(props.body) ? props.body : TableBody;
-
-    const other = exclude_object_props(props, exclude_props);
+    const other = exclude_object_props(this.props, exclude_props);
 
     const filterstring = is_defined(filter) ? filter.toFilterString() : '';
 
@@ -166,19 +166,20 @@ class EntitiesTable extends React.Component {
     }
 
     const rows = [];
-    if (RowComponent) {
+    if (is_defined(RowComponent)) {
       for_each(entities, entity => {
         rows.push(
           <RowComponent
             {...other}
             onToggleDetailsClick={this.handleToggleShowDetails}
             key={entity.id}
-            entity={entity}/>
+            entity={entity}
+          />
         );
-        if (RowDetailsComponent && details[entity.id]) {
+        if (is_defined(RowDetailsComponent) && details[entity.id]) {
           rows.push(
             <RowDetailsComponent
-              links={props.links}
+              links={links}
               key={'details-' + entity.id}
               entity={entity}
             />
@@ -187,49 +188,37 @@ class EntitiesTable extends React.Component {
       });
     }
 
-    let pagination;
-    if (PaginationComponent) {
-      pagination = (
-        <PaginationComponent
-          {...other}
-          onFirstClick={this.handleFirst}
-          onLastClick={this.handleLast}
-          onNextClick={this.handleNext}
-          onPreviousClick={this.handlePrevious}
-          counts={entitiesCounts}
-        />
-      );
-    }
+    // allow to render extra rows
+    rows.push(...extraRowFuncs.map(func => func(other)));
 
-    let header;
-    if (HeaderComponent) {
-      header = (
-        <HeaderComponent
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          {...other}
-        />
-      );
-    }
+    const pagination = is_defined(PaginationComponent) ? (
+      <PaginationComponent
+        {...other}
+        onFirstClick={this.handleFirst}
+        onLastClick={this.handleLast}
+        onNextClick={this.handleNext}
+        onPreviousClick={this.handlePrevious}
+        counts={entitiesCounts}
+      />
+    ) : undefined;
 
-    let footer;
-    if (FooterComponent) {
-      footer = (
-        <FooterComponent {...other}/>
-      );
-    }
+    const header = is_defined(HeaderComponent) ? (
+      <HeaderComponent
+        currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
+        {...other}
+      />
+    ) : undefined;
 
-    let body;
-    if (BodyComponent) {
-      body = (
-        <BodyComponent>
-          {rows}
-        </BodyComponent>
-      );
-    }
-    else {
-      body = rows;
-    }
+    const footer = is_defined(FooterComponent) ? (
+      <FooterComponent {...other} />
+    ) : undefined;
+
+    const body = is_defined(BodyComponent) ? (
+      <BodyComponent>
+        {rows}
+      </BodyComponent>
+    ) : rows;
 
     const foldState = this.state.allToggled ? 'UNFOLDED' : 'FOLDED';
     const detailsIcon = (
@@ -278,14 +267,19 @@ EntitiesTable.propTypes = {
   emptyTitle: PropTypes.string,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
+  extraRowFuncs: PropTypes.arrayOf(PropTypes.func),
   filter: PropTypes.filter,
   footer: PropTypes.componentOrFalse,
   footnote: PropTypes.bool,
   header: PropTypes.componentOrFalse,
+  links: PropTypes.bool,
   pagination: PropTypes.componentOrFalse,
   row: PropTypes.component.isRequired,
+  rowDetails: PropTypes.component,
   sortBy: PropTypes.string,
   sortDir: PropTypes.string,
+  toggleDetailsIcon: PropTypes.bool,
+  updating: PropTypes.bool,
   onFirstClick: PropTypes.func,
   onLastClick: PropTypes.func,
   onNextClick: PropTypes.func,
