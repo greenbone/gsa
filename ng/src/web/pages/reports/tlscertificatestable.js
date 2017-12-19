@@ -57,48 +57,55 @@ const Header = ({
         <TableHead
           {...sortProps}
           sortBy="dn"
+          width={actions ? '35%' : '40%'}
         >
           {_('DN')}
         </TableHead>
         <TableHead
           {...sortProps}
           sortBy="serial"
+          width="20%"
         >
           {_('Serial')}
         </TableHead>
         <TableHead
           {...sortProps}
           sortBy="notvalidbefore"
+          width="10%"
         >
           {_('Not Valid Before')}
         </TableHead>
         <TableHead
           {...sortProps}
           sortBy="notvalidafter"
+          width="10%"
         >
           {_('Not Valid After')}
         </TableHead>
         <TableHead
           {...sortProps}
           sortBy="ip"
+          width="10%"
         >
           {_('IP')}
         </TableHead>
         <TableHead
           {...sortProps}
           sortBy="hostname"
+          width="10%"
         >
           {_('Hostname')}
         </TableHead>
         <TableHead
           {...sortProps}
           sortBy="port"
+          width="5%"
         >
           {_('Port')}
         </TableHead>
         {actions &&
           <TableHead
-            width="50px"
+            width="5%"
           >
             {_('Actions')}
           </TableHead>
