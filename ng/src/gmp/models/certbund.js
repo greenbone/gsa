@@ -56,6 +56,10 @@ class CertBundAdv extends Info {
       ret.reference_url = advisory.Reference_URL;
       ret.categories = advisory.CategoryTree;
 
+      if (!is_defined(ret.version) && is_defined(advisory.Ref_Num)) {
+        ret.version = advisory.Ref_Num._update;
+      }
+
       if (is_defined(advisory.Description) &&
         is_defined(advisory.Description.Element)) {
         for_each(advisory.Description.Element, element => {
