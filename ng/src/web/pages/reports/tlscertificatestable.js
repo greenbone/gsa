@@ -44,68 +44,69 @@ const Header = ({
   currentSortBy,
   sort = true,
   onSortChange,
-}) => (
-  <TableHeader>
-    <TableRow>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'dn' : false}
-        onSortChange={onSortChange}>
-        {_('DN')}
-      </TableHead>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'serial' : false}
-        onSortChange={onSortChange}>
-        {_('Serial')}
-      </TableHead>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'notvalidbefore' : false}
-        onSortChange={onSortChange}>
-        {_('Not Valid Before')}
-      </TableHead>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'notvalidafter' : false}
-        onSortChange={onSortChange}>
-        {_('Not Valid After')}
-      </TableHead>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'ip' : false}
-        onSortChange={onSortChange}>
-        {_('IP')}
-      </TableHead>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'hostname' : false}
-        onSortChange={onSortChange}>
-        {_('Hostname')}
-      </TableHead>
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'port' : false}
-        onSortChange={onSortChange}>
-        {_('Port')}
-      </TableHead>
-      {actions &&
+}) => {
+  const sortProps = {
+    currentSortDir,
+    currentSortBy,
+    sort,
+    onSortChange,
+  };
+  return (
+    <TableHeader>
+      <TableRow>
         <TableHead
-          width="50px"
-         >
-          {_('Actions')}
+          {...sortProps}
+          sortBy="dn"
+        >
+          {_('DN')}
         </TableHead>
-      }
-    </TableRow>
-  </TableHeader>
-);
+        <TableHead
+          {...sortProps}
+          sortBy="serial"
+        >
+          {_('Serial')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="notvalidbefore"
+        >
+          {_('Not Valid Before')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="notvalidafter"
+        >
+          {_('Not Valid After')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="ip"
+        >
+          {_('IP')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="hostname"
+        >
+          {_('Hostname')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="port"
+        >
+          {_('Port')}
+        </TableHead>
+        {actions &&
+          <TableHead
+            width="50px"
+          >
+            {_('Actions')}
+          </TableHead>
+        }
+      </TableRow>
+    </TableHeader>
+  );
+};
 
 Header.propTypes = {
   actions: PropTypes.bool,
