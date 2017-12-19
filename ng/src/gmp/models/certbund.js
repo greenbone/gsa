@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'moment';
 
 import {is_defined, for_each, map} from '../utils.js';
 
@@ -75,6 +76,14 @@ class CertBundAdv extends Info {
             );
           }
         });
+      }
+
+      if (is_defined(advisory.RevisionHistory)) {
+        ret.revision_history = map(advisory.RevisionHistory.Revision, rev => ({
+          revision: rev.Number,
+          description: rev.Description,
+          date: moment(rev.Date),
+        }));
       }
 
       if (is_defined(advisory.CVEList && is_defined(advisory.CVEList.CVE))) {
