@@ -25,7 +25,7 @@
 
 include (FindGettext)
 include (FindPythonInterp)
-include (${CMAKE_SOURCE_DIR}/cmake/FindPythonModule.cmake)
+include (FindPythonModule)
 
 find_python_module(polib)
 
