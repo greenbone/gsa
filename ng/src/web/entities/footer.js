@@ -40,8 +40,6 @@ import Select2 from '../components/form/select2.js';
 
 import TableRow from '../components/table/row.js';
 
-import './css/footer.css';
-
 export const EntitiesFooter = ({
     actions = true,
     children,
