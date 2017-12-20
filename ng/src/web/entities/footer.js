@@ -38,9 +38,8 @@ import TrashIcon from '../components/icon/trashicon.js';
 
 import Select2 from '../components/form/select2.js';
 
+import TableFooter from '../components/table/footer.js';
 import TableRow from '../components/table/row.js';
-
-import './css/footer.css';
 
 export const EntitiesFooter = ({
     actions = true,
@@ -58,50 +57,52 @@ export const EntitiesFooter = ({
   }) => {
   const deleteEntities = props.delete;
   return (
-    <TableRow>
-      <td colSpan={span}>
-        {actions ?
-          <Layout flex align={['end', 'center']}>
-            <Divider>
-              {selection &&
-                <Select2
-                  value={selectionType}
-                  onChange={onSelectionTypeChange}>
-                  <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
-                    {_('Apply to page contents')}
-                  </option>
-                  <option value={SelectionType.SELECTION_USER}>
-                    {_('Apply to selection')}
-                  </option>
-                  <option value={SelectionType.SELECTION_FILTER}>
-                    {_('Apply to all filtered')}
-                  </option>
-                </Select2>
-              }
-              <IconDivider>
-                {trash &&
-                  <TrashIcon
-                    onClick={onTrashClick}
-                    selectionType={selectionType}/>
+    <TableFooter>
+      <TableRow>
+        <td colSpan={span}>
+          {actions ?
+            <Layout flex align={['end', 'center']}>
+              <Divider>
+                {selection &&
+                  <Select2
+                    value={selectionType}
+                    onChange={onSelectionTypeChange}>
+                    <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
+                      {_('Apply to page contents')}
+                    </option>
+                    <option value={SelectionType.SELECTION_USER}>
+                      {_('Apply to selection')}
+                    </option>
+                    <option value={SelectionType.SELECTION_FILTER}>
+                      {_('Apply to all filtered')}
+                    </option>
+                  </Select2>
                 }
-                {deleteEntities &&
-                  <DeleteIcon
-                    onClick={onDeleteClick}
-                    selectionType={selectionType}/>
-                }
-                {download &&
-                  <ExportIcon
-                    onClick={onDownloadClick}
-                    selectionType={selectionType}
-                    value={download}/>
-                }
-                {children}
-              </IconDivider>
-            </Divider>
-          </Layout> : children
-        }
-      </td>
-    </TableRow>
+                <IconDivider>
+                  {trash &&
+                    <TrashIcon
+                      onClick={onTrashClick}
+                      selectionType={selectionType}/>
+                  }
+                  {deleteEntities &&
+                    <DeleteIcon
+                      onClick={onDeleteClick}
+                      selectionType={selectionType}/>
+                  }
+                  {download &&
+                    <ExportIcon
+                      onClick={onDownloadClick}
+                      selectionType={selectionType}
+                      value={download}/>
+                  }
+                  {children}
+                </IconDivider>
+              </Divider>
+            </Layout> : children
+          }
+        </td>
+      </TableRow>
+    </TableFooter>
   );
 };
 

@@ -49,7 +49,6 @@ const exclude_props = [
   'footer',
   'pagination',
   'emptyTitle',
-  'extraRowFuncs',
   'children',
 ];
 
@@ -137,7 +136,6 @@ class EntitiesTable extends React.Component {
       emptyTitle,
       entities,
       entitiesCounts,
-      extraRowFuncs = [],
       filter,
       footnote = true,
       toggleDetailsIcon = true,
@@ -187,9 +185,6 @@ class EntitiesTable extends React.Component {
         }
       });
     }
-
-    // allow to render extra rows
-    rows.push(...extraRowFuncs.map(func => func(other)));
 
     const pagination = is_defined(PaginationComponent) ? (
       <PaginationComponent
@@ -267,7 +262,6 @@ EntitiesTable.propTypes = {
   emptyTitle: PropTypes.string,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
-  extraRowFuncs: PropTypes.arrayOf(PropTypes.func),
   filter: PropTypes.filter,
   footer: PropTypes.componentOrFalse,
   footnote: PropTypes.bool,

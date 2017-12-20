@@ -23,59 +23,10 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
-
-import PropTypes from '../../utils/proptypes.js';
-
-const Table = ({
-    children,
-    className,
-    footer,
-    header,
-  }) => {
-  return (
-    <table
-      className={className}>
-      {header}
-      {children}
-      {footer}
-    </table>
-  );
-};
-
-Table.propTypes = {
-  className: PropTypes.string,
-  fixed: PropTypes.bool,
-  footer: PropTypes.element,
-  header: PropTypes.element,
-};
-
-export default glamorous(Table)(
-  'table',
-  {
-    border: 0,
-    borderSpacing: '2px',
-    fontSize: '12px',
-    textAlign: 'left',
-
-    '@media print': {
-      borderCollapse: 'collapse',
-    },
-  },
-  ({fixed}) => ({tableLayout: fixed ? 'fixed' : 'auto'}),
-  ({size = 'full'}) => {
-    if (size === 'auto') {
-      return {};
-    }
-    if (size === 'full') {
-      return {
-        width: '100%',
-      };
-    }
-    return {
-      width: size,
-    };
-  },
+const TableFooter = props => (
+  <tfoot {...props} />
 );
+
+export default TableFooter;
 
 // vim: set ts=2 sw=2 tw=80:
