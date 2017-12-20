@@ -57,7 +57,7 @@ const TableHead = ({
         <span
           title={_('Sorted In Descending Order By {{sortBy}}',
             {sortBy: capitalize_first_letter(sortBy)})}>
-          &nbsp;&#9650;
+          &nbsp;&#9660;
         </span>
       );
     }
@@ -66,7 +66,7 @@ const TableHead = ({
         <span
           title={_('Sorted In Ascending Order By {{sortBy}}',
             {sortBy: capitalize_first_letter(sortBy)})}>
-          &nbsp;&#9660;
+          &nbsp;&#9650;
         </span>
       );
     }
