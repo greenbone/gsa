@@ -224,10 +224,7 @@ class Dashboard {
 
     this.width = this.elem[0].clientWidth;
 
-    $(window).on('load', () => {
-      // Window resize
-      $(window).on('resize', () => this._onWindowResized());
-    });
+    $(window).on('resize', () => this._onWindowResized());
 
     const received = (event, display, position) =>
       this.addToNewRow(display, position);
