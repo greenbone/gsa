@@ -25,7 +25,8 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined, is_empty, parse_float} from 'gmp/utils.js';
+import {is_defined, is_empty} from 'gmp/utils.js';
+import {parse_float} from 'gmp/parser.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';

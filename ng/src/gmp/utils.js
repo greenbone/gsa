@@ -170,33 +170,6 @@ export function classes(...args) {
   return css.join(' ');
 }
 
-export function parse_int(value) {
-  const val = parseInt(value, 10);
-
-  if (isNaN(val)) {
-    return undefined;
-  }
-
-  return val;
-}
-
-export function parse_float(value) {
-  const val = parseFloat(value);
-
-  if (isNaN(val)) {
-    return undefined;
-  }
-
-  return val;
-}
-
-export const YES_VALUE = 1;
-export const NO_VALUE = 0;
-
-export function parse_yesno(value) {
-  return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
-}
-
 export function first(array, non = {}) {
   if (is_empty(array)) {
     return non;
@@ -292,5 +265,34 @@ export function debounce(func, wait, immediate = false) {
     }
   };
 }
+
+/**
+ * Calculate the sum of an Array
+ *
+ * @param {Array}    array  Array to calculate sum from
+ * @param {Function} getter Function for getting a value from array. Optional.
+ *
+ * @returns {Number} Sum of the array
+ */
+export const sum = (array = [], getter) =>
+  array.reduce((total, value) => {
+    const val = is_defined(getter) ? getter(value) : value;
+    return total + (is_defined(val) ? val : 0);
+  }, 0);
+
+/**
+ * Calculate the average of an Array
+ *
+ * @param {Array} array Array to calculate the average from
+ * @param {Function} getter Function for getting a value from array. Optional.
+ *
+ * @returns {Number} Average of the array
+ */
+export const avg = (array = [], getter) => {
+  if (array.length === 0) {
+    return 0;
+  }
+  return sum(array, getter) / array.length;
+};
 
 // vim: set ts=2 sw=2 tw=80:
