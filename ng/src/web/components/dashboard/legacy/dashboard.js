@@ -621,7 +621,6 @@ class Dashboard {
    */
   setConfig(config) {
     this.config = config;
-    this.prev_config = config ? JSON.stringify(config) : '';
     return this;
   }
 
@@ -629,30 +628,28 @@ class Dashboard {
     this.config = this.getConfig();
 
     const json_config = JSON.stringify(this.config);
-    if (json_config !== this.prev_config) {
-      if (this.config_pref_request) {
-        this.config_pref_request.abort();
-      }
 
-      this.config_pref_request = d3.xhr(create_hostname() + '/omp');
-      this.config_pref_request.on('beforesend', request => {
-        request.withCredentials = true;
-      });
+    if (this.config_pref_request) {
+      this.config_pref_request.abort();
+    }
 
-      const form_data = new FormData();
-      form_data.append('chart_preference_id', this.config_pref_id);
-      form_data.append('chart_preference_value', json_config);
-      form_data.append('token', this.token);
-      form_data.append('cmd', 'save_chart_preference');
+    this.config_pref_request = d3.xhr(create_hostname() + '/omp');
+    this.config_pref_request.on('beforesend', request => {
+      request.withCredentials = true;
+    });
 
-      log.debug('saving dashboard config', json_config);
+    const form_data = new FormData();
+    form_data.append('chart_preference_id', this.config_pref_id);
+    form_data.append('chart_preference_value', json_config);
+    form_data.append('token', this.token);
+    form_data.append('cmd', 'save_chart_preference');
 
-      this.config_pref_request.post(form_data);
-      this.prev_config = json_config;
+    log.debug('saving dashboard config', json_config);
 
-      if (this.onConfigSaved) {
-        this.onConfigSaved(this.config);
-      }
+    this.config_pref_request.post(form_data);
+
+    if (this.onConfigSaved) {
+      this.onConfigSaved(this.config);
     }
 
     this._configUnchanged();
@@ -744,9 +741,7 @@ class Dashboard {
   initDisplaysFromConfig() {
     log.debug('Init displays from config', this.config);
 
-    this.config.data.forEach((config, index) =>
-      this.addNewRow({config: config})
-    );
+    this.config.data.forEach(config => this.addNewRow({config}));
     return this;
   }
 
