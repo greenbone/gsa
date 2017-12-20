@@ -7626,7 +7626,7 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has "127.0.0.1" anywhere in the text of
-              any column.  This matches 127.0.0.1 and 127.0.0.13, for
+              any non-numeric column.  This matches 127.0.0.1 and 127.0.0.13, for
               example.
             </li>
           </ul>
@@ -7638,7 +7638,7 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has "127.0.0.1" or "IANA" anywhere in the
-              text of any column.  This will match targets that have the port
+              text of any non-numeric column.  This will match targets that have the port
               list "All IANA assigned TCP 2012-02-10", for example.
             </li>
           </ul>
@@ -7650,8 +7650,8 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has "127.0.0.1" anywhere in the
-              text of any column, and "IANA" anywhere in the text of any
-              column.  This will match targets that have the port
+              text of any non-numeric column, and "IANA" anywhere in the text of any
+              non-numeric column.  This will match targets that have the port
               list "All IANA assigned TCP 2012-02-10" that scan host 127.0.0.1,
               for example.
             </li>
@@ -7664,7 +7664,7 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has the phrase "Darling Street Headquarters"
-              anywhere in the text of any column.  This will match targets that
+              anywhere in the text of any non-numeric column.  This will match targets that
               have this phrase in the comment, for example.
             </li>
           </ul>
@@ -7676,7 +7676,7 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has an IP style string starting "10.128."
-              anywhere in the text of any column.  This matches 10.128.84.1
+              anywhere in the text of any non-numeric column.  This matches 10.128.84.1
               and 10.128.98.2, for example.  This is how to filter with a
               regular expression.
             </li>
@@ -7708,7 +7708,7 @@ Public License instead of this License.
           name:^Local
           <ul>
             <li>
-              Include any item who's name starts with "Local".  This how to
+              Include any item who's name starts with "Local".  This is how to
               filter by column with a regular expression.
             </li>
           </ul>
@@ -7790,7 +7790,7 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has "127.0.0.1" as the exact text of
-              any column.  This matches 127.0.0.1 but not 127.0.0.13, for
+              any non-numeric column.  This matches 127.0.0.1 but not 127.0.0.13, for
               example.
             </li>
           </ul>
@@ -7866,6 +7866,12 @@ Public License instead of this License.
         The value of a column keyword may be empty, like "name=".  This matches
         empty and not available entries.  When a value is not available the
         column contains "N/A".
+      </p>
+      <p>
+        Note that for performance reasons, using a column keyword is the only
+        way to search numeric columns.  For example, to search the "IPs" column
+        in the Targets list, use "ips=123".  A general keyword like "123" will
+        not consider this column, because it is numeric.
       </p>
 
       <h4>Special Keywords</h4>
