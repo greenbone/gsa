@@ -65,7 +65,7 @@ const Header = ({
         <TableHead
           {...sortProps}
           sortBy="serial"
-          width="20%"
+          width="10%"
         >
           {_('Serial')}
         </TableHead>
@@ -93,7 +93,7 @@ const Header = ({
         <TableHead
           {...sortProps}
           sortBy="hostname"
-          width="10%"
+          width="15%"
         >
           {_('Hostname')}
         </TableHead>
