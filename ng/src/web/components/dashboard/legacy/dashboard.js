@@ -441,19 +441,15 @@ class Dashboard {
    *
    * @return The created new row
    */
-  addNewRow(options) {
-    if (!is_defined(options)) {
-      options = {};
-    }
-
-    if (!is_defined(options.config)) {
-      options.config = {
+  addNewRow({config, position} = {}) {
+    if (!is_defined(config)) {
+      config = {
         type: 'row',
         data: [],
       };
     }
 
-    const row = new DashboardRow(this.getNextRowId(), options.config,
+    const row = new DashboardRow(this.getNextRowId(), config,
       this.controller_factories, this.filters, this.width, this.edit_mode,
       this.dashboard_opts);
 
@@ -461,7 +457,7 @@ class Dashboard {
 
     this.registerRow(row);
 
-    if (is_defined(options.position) && options.position === 'top') {
+    if (is_defined(position) && position === 'top') {
       this.elem.prepend(row.elem);
       this.elem.prepend(this.top_target.elem);
     }
@@ -758,7 +754,7 @@ class Dashboard {
       this.default_controllers_string);
 
     const row_filters_string_list = split_rows(this.default_filters_string);
-    const row_heights_list = split_rows(this.heights_string);
+    const row_heights_list = split_rows(this.default_heights_string);
 
     for (const index in row_controllers_string_list) {
       const height = parse_int(row_heights_list[index]);
@@ -767,7 +763,7 @@ class Dashboard {
         height
       );
 
-      this.addNewRow({config: config});
+      this.addNewRow({config});
     }
 
     this.config = this.getConfig(); // create js config to have a always valid config
