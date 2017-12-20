@@ -24,6 +24,7 @@
 import $ from 'jquery';
 import 'jquery-ui';
 import 'jquery-ui/ui/effect';
+import 'jquery-ui/ui/effects/effect-blind';
 import 'jquery-ui/ui/widgets/sortable.js';
 
 import EventNode from './eventnode.js';
