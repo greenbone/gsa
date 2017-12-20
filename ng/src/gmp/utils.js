@@ -266,4 +266,33 @@ export function debounce(func, wait, immediate = false) {
   };
 }
 
+/**
+ * Calculate the sum of an Array
+ *
+ * @param {Array}    array  Array to calculate sum from
+ * @param {Function} getter Function for getting a value from array. Optional.
+ *
+ * @returns {Number} Sum of the array
+ */
+export const sum = (array = [], getter) =>
+  array.reduce((total, value) => {
+    const val = is_defined(getter) ? getter(value) : value;
+    return total + (is_defined(val) ? val : 0);
+  }, 0);
+
+/**
+ * Calculate the average of an Array
+ *
+ * @param {Array} array Array to calculate the average from
+ * @param {Function} getter Function for getting a value from array. Optional.
+ *
+ * @returns {Number} Average of the array
+ */
+export const avg = (array = [], getter) => {
+  if (array.length === 0) {
+    return 0;
+  }
+  return sum(array, getter) / array.length;
+};
+
 // vim: set ts=2 sw=2 tw=80:
