@@ -324,8 +324,6 @@ class DashboardRow extends EventNode {
       display.stopEdit();
     }
     this.edit_mode = false;
-    this.elem.resizable('destroy');
-    this.elem.sortable('destroy');
     return this;
   }
 
