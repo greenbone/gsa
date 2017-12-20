@@ -38,9 +38,7 @@ const Table = ({
       className={className}>
       {header}
       {children}
-      <tfoot>
-        {footer}
-      </tfoot>
+      {footer}
     </table>
   );
 };
