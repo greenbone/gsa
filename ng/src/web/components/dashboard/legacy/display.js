@@ -22,6 +22,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import $ from 'jquery';
+import 'jquery-ui';
+import 'jquery-ui/ui/effect';
+import 'jquery-ui/ui/effects/effect-fade';
 
 import 'select2';
 
@@ -33,19 +36,6 @@ import {is_defined, has_value} from 'gmp/utils.js';
 
 import {EMPTY_FILTER} from './helper.js';
 import EventNode from './eventnode.js';
-
-/*
-* import jquery-ui
-*
-* jquery-ui needs jquery as window.jQuery to work.
-* It hasn't been updated for working with CommonJS or even es6 modules.
-* Therefore it must be loaded after adding the jQuery variable to window,
-* which isn't possible with es6 imports
-*/
-window.jQuery = $;
-
-import('jquery-ui');
-import('jquery-ui/ui/effects/effect-fade');
 
 const log = Logger.getLogger('web.dashboard.legacy.dashboarddisplay');
 
