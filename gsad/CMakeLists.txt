@@ -403,11 +403,4 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/zones.xml
 
 add_subdirectory (src)
 
-## Additional faces
-
-if (INSTALL_FACE_ITS MATCHES "yes")
-  message ("-- Additional face 'its' will be installed.")
-  add_subdirectory (src/html/its)
-endif (INSTALL_FACE_ITS MATCHES "yes")
-
 # vim: set ts=2 sw=2 tw=80:
