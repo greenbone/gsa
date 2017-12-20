@@ -232,11 +232,12 @@ export const parse_ports = (report, filter) => {
 export const parse_vulnerabilities = (report, filter) => {
   const temp_vulns = {};
   const {vulns, results = {}} = report;
-  const {count: full_count} = vulns;
 
   if (!is_defined(vulns)) {
     return empty_collection_list(filter);
   }
+
+  const {count: full_count} = vulns;
 
   for_each(results.result, result => {
     const {nvt = {}, host} = result;
