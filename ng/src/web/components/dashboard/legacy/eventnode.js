@@ -25,8 +25,8 @@ import $ from 'jquery';
 
 class EventNode {
 
-  constructor(event_node) {
-    this.event_node = event_node ? event_node : $('<span/>');
+  constructor() {
+    this.event_node = $('<span/>');
   }
 
   /**
