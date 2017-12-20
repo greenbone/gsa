@@ -43,13 +43,12 @@ class DashboardRow extends EventNode {
 
   constructor(id, config, controller_factories, filters, width, edit_mode,
     dashboard_opts) {
+    super();
 
     const elem = $('<div/>', {
       class: 'dashboard-row',
       id,
     });
-
-    super(elem);
 
     this.elem = elem;
     this.id = id;

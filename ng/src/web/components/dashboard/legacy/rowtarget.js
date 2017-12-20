@@ -32,6 +32,8 @@ import EventNode from './eventnode.js';
 class RowTarget extends EventNode {
 
   constructor(id, position, edit_mode) {
+    super();
+
     id = id + '-' + position + '-add';
 
     const elem = $('<div/>', {
@@ -41,8 +43,6 @@ class RowTarget extends EventNode {
         display: edit_mode ? 'block' : 'none',
       },
     });
-
-    super(elem);
 
     this.id = id;
     this.elem = elem;
