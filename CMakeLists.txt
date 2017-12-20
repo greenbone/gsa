@@ -175,11 +175,19 @@ set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} -Wall -Wformat -Wformat-securi
 set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
 set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
 
-if (NOT SKIP_SRC)
+if (SKIP_SRC)
   # ng has no documentation to build so skip if src should not be build
+  set (SKIP_NG ON)
+  set (SKIP_GSAD ON)
+endif (SKIP_SRC)
+
+if (NOT SKIP_NG)
   add_subdirectory (ng)
+endif (NOT SKIP_NG)
+
+if (NOT SKIP_GSAD)
   add_subdirectory (gsad)
-endif (NOT SKIP_SRC)
+endif (NOT SKIP_GSAD)
 
 ## Documentation
 
