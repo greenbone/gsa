@@ -34,22 +34,9 @@ if (POLICY CMP0005)
   cmake_policy (SET CMP0005 NEW)
 endif (POLICY CMP0005)
 
-# Needed for 'pkg_check_modules' function
-include (FindPkgConfig)
-
-SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-if (NOT PKG_CONFIG_FOUND)
-  message(FATAL_ERROR "pkg-config executable not found. Aborting.")
-endif (NOT PKG_CONFIG_FOUND)
-
 if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Debug)
 endif (NOT CMAKE_BUILD_TYPE)
-
-if (NOT SERVE_STATIC_ASSETS EQUAL 0)
-  set (SERVE_STATIC_ASSETS 1)
-endif (NOT SERVE_STATIC_ASSETS EQUAL 0)
 
 ## Project version
 # The following three variables should be set through the project command once
@@ -164,16 +151,6 @@ message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 ## Version
 
 set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
-
-## Program
-
-set (HARDENING_FLAGS            "-D_FORTIFY_SOURCE=2 -fstack-protector")
-set (LINKER_HARDENING_FLAGS     "-Wl,-z,relro -Wl,-z,now")
-
-set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} -Wall -Wformat -Wformat-security")
-
-set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
-set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
 
 if (SKIP_SRC)
   # ng has no documentation to build so skip if src should not be build

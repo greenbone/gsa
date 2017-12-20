@@ -24,6 +24,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
+# Needed for 'pkg_check_modules' function
+include (FindPkgConfig)
+
+if (NOT PKG_CONFIG_FOUND)
+  message(FATAL_ERROR "pkg-config executable not found. Aborting.")
+endif (NOT PKG_CONFIG_FOUND)
+
 ## Check for existence of required libraries
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
@@ -61,6 +68,20 @@ endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
   LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
 
 ## Config
+
+if (NOT SERVE_STATIC_ASSETS EQUAL 0)
+  set (SERVE_STATIC_ASSETS 1)
+endif (NOT SERVE_STATIC_ASSETS EQUAL 0)
+
+## Program
+
+set (HARDENING_FLAGS            "-D_FORTIFY_SOURCE=2 -fstack-protector")
+set (LINKER_HARDENING_FLAGS     "-Wl,-z,relro -Wl,-z,now")
+
+set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} -Wall -Wformat -Wformat-security")
+
+set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
+set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
 
 include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
                      ${GLIB_INCLUDE_DIRS} ${LIBEXSLT_INCLUDE_DIRS}
