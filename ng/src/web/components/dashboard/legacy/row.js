@@ -35,7 +35,7 @@ import Logger from 'gmp/log.js';
 import EventNode from './eventnode.js';
 import DashboardDisplay from './display.js';
 
-const log = Logger.getLogger('web.dashboard.legacy.');
+const log = Logger.getLogger('web.dashboard.legacy.row');
 
 const MAX_PER_ROW = 4;
 
