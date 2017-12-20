@@ -25,7 +25,9 @@ import 'core-js/fn/object/values';
 
 import $ from 'jquery';
 import 'jquery-ui';
+import 'jquery-ui/ui/effect';
 import 'jquery-ui/ui/widgets/resizable.js';
+import 'jquery-ui/ui/widgets/sortable.js';
 
 import {is_defined, is_object, is_array} from 'gmp/utils.js';
 import Logger from 'gmp/log.js';
