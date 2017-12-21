@@ -929,23 +929,6 @@ handle_index_ng (http_connection_t *connection,
 }
 
 int
-handle_config_ng (http_connection_t *connection,
-                 const char *method, const char *url,
-                 gsad_connection_info_t *con_info,
-                 http_handler_t *handler, void *data)
-{
-  http_response_t *response;
-  cmd_response_data_t *response_data;
-
-  response_data = cmd_response_data_new ();
-
-  response = file_content_response (connection, url,
-                                    "ng/config.js",
-                                    response_data);
-  return handler_send_response (connection, response, response_data, NULL);
-}
-
-int
 handle_static_ng_file (http_connection_t *connection, const char * method,
                        const char *url, gsad_connection_info_t *con_info,
                        http_handler_t *handler, void * data)
@@ -1019,7 +1002,7 @@ init_http_handlers()
                    handle_redirect_to_login_page);
 
   url_handler_add (anon_url_handlers, "^/ng(/.*)?$", handle_index_ng);
-  url_handler_add (anon_url_handlers, "^/config.js$", handle_config_ng);
+  url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
                    handle_static_ng_file);
 
