@@ -27,8 +27,8 @@ import _ from '../locale.js';
 import {is_defined, has_value, is_array} from '../utils.js';
 
 import Promise from '../promise.js';
-import Response from '../response.js';
 
+import Response from './response.js';
 import Rejection from './rejection.js';
 import {build_url_params} from './utils.js';
 
