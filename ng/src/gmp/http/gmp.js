@@ -20,23 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from '../locale.js';
-
-import {is_defined} from '../utils.js';
-
-import xml2json from '../xml2json.js';
-import {parse_envelope_meta} from '../parser.js';
-
 import Http from './http.js';
-import Rejection from './rejection.js';
 import {build_server_url} from './utils.js';
 
+import X2JsTransform from './transform/x2js.js';
 
 class GmpHttp extends Http {
 
   constructor(server, protocol, options) {
     const url = build_server_url(server, 'omp', protocol);
-    super(url, options);
+    super(url, {...options, transform: new X2JsTransform()});
 
     this.params.xml = 1;
   }
@@ -49,48 +42,6 @@ class GmpHttp extends Http {
     this.params.token = token;
   }
 
-  transformXmlData(response, xml) {
-      const {envelope} = xml2json(xml);
-      const meta = parse_envelope_meta(envelope);
-      return response.set(envelope, meta);
-  }
-
-  transformSuccess(xhr, {plain = false, ...options}) {
-    try {
-      const response = super.transformSuccess(xhr, options);
-      return plain ?
-        response :
-        this.transformXmlData(response, xhr.responseXML);
-    }
-    catch (error) {
-      throw new Rejection(xhr, Rejection.REASON_ERROR,
-        _('An error occurred while converting gmp response to js for ' +
-          'url {{- url}}', {url: options.url}),
-        error);
-    }
-  }
-
-  transformRejection(rej, options) {
-    if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
-
-      const root = xml2json(rej.xhr.responseXML).envelope;
-
-      if (is_defined(root)) {
-        rej.root = root;
-
-        if (is_defined(root.gsad_response)) {
-          return rej.setMessage(root.gsad_response.message);
-        }
-
-        if (is_defined(root.action_result)) {
-          return rej.setMessage(root.action_result.message);
-        }
-
-        return rej.setMessage(_('Unknown Error'));
-      }
-    }
-    return rej;
-  }
 }
 
 export default GmpHttp;
