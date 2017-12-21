@@ -721,5 +721,8 @@ install (FILES ${NG_FILES}
 # remove old generated files
 install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
 
-install (DIRECTORY build/static
+install (DIRECTORY
+         build/static
+         build/js
+         build/img
          DESTINATION ${NG_DEST_DIR})
