@@ -41,12 +41,17 @@ const REASON_CANCEL = 'cancel';
 
 class Rejection {
 
-  constructor(xhr, reason = REASON_ERROR, message = '') {
+  constructor(xhr, reason = REASON_ERROR, message = '', error) {
     this.name = 'Rejection';
     this.message = message;
     this.reason = reason;
     this.xhr = xhr;
-    this.stack = (new Error()).stack;
+
+    if (!is_defined(error)) {
+      error = new Error();
+    }
+
+    this.stack = error.stack;
   }
 
   isCancel() {
@@ -336,7 +341,8 @@ export class GmpHttp extends Http {
     }
     catch (error) {
       throw new Rejection(xhr, REASON_ERROR, _('An error occurred while ' +
-        'converting gmp response to js for url {{- url}}', {url: options.url}));
+        'converting gmp response to js for url {{- url}}', {url: options.url}),
+        error);
     }
   }
 
