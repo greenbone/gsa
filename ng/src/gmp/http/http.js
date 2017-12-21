@@ -20,75 +20,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/object/entries';
+import logger from '../log.js';
 
-import logger from './log.js';
+import _ from '../locale.js';
 
-import _ from './locale.js';
+import {is_defined, has_value, is_array} from '../utils.js';
 
-import {is_defined, has_value, is_array} from './utils.js';
+import Promise from '../promise.js';
+import Response from '../response.js';
 
-import Promise from './promise.js';
-import Response from './response.js';
-import xml2json from './xml2json.js';
-import {parse_envelope_meta} from './parser.js';
+import Rejection from './rejection.js';
+import {build_url_params} from './utils.js';
 
 const log = logger.getLogger('gmp.http');
 
-const REASON_ERROR = 'error';
-const REASON_TIMEOUT = 'timeout';
-const REASON_CANCEL = 'cancel';
-
-class Rejection {
-
-  constructor(xhr, reason = REASON_ERROR, message = '', error) {
-    this.name = 'Rejection';
-    this.message = message;
-    this.reason = reason;
-    this.xhr = xhr;
-
-    if (!is_defined(error)) {
-      error = new Error();
-    }
-
-    this.stack = error.stack;
-  }
-
-  isCancel() {
-    return this.reason === REASON_CANCEL;
-  }
-
-  isError() {
-    return this.reason === REASON_ERROR;
-  }
-
-  isTimeout() {
-    return this.reason === REASON_TIMEOUT;
-  }
-
-  setMessage(message) {
-    this.message = message;
-    return this;
-  }
-}
-
 export const DEFAULT_TIMEOUT = 300000; // 5 min
-
-export function build_url_params(params) {
-  let argcount = 0;
-  let uri = '';
-
-  for (const [key, value] of Object.entries(params)) {
-    if (is_defined(value)) {
-      if (argcount++) {
-        uri += '&';
-      }
-      uri += encodeURIComponent(key) + '=' +
-        encodeURIComponent(value);
-    }
-  }
-  return uri;
-}
 
 function formdata_append(formdata, key, value) {
   if (has_value(value)) {
@@ -96,7 +42,7 @@ function formdata_append(formdata, key, value) {
   }
 }
 
-export class Http {
+class Http {
 
   constructor(url, options = {}) {
     const {
@@ -220,7 +166,7 @@ export class Http {
       if (is_defined(cancel_token)) {
         cancel_token.promise.then(reason => {
           xhr.abort();
-          reject(new Rejection(this, REASON_CANCEL, reason));
+          reject(new Rejection(this, Rejection.REASON_CANCEL, reason));
         });
       }
 
@@ -252,7 +198,7 @@ export class Http {
 
     promise.catch(request => {
 
-      const rej = new Rejection(request, REASON_ERROR);
+      const rej = new Rejection(request, Rejection.REASON_ERROR);
       try {
         reject(this.transformRejection(rej, options));
       }
@@ -263,7 +209,7 @@ export class Http {
   }
 
   handleTimeout(resolve, reject, xhr, options) {
-    const rej = new Rejection(xhr, REASON_TIMEOUT,
+    const rej = new Rejection(xhr, Rejection.REASON_TIMEOUT,
       _('A timeout for the request to url {{- url}} occurred.',
         {url: options.url}));
     try {
@@ -288,86 +234,6 @@ export class Http {
   }
 }
 
-export class HttpInterceptor {
+export default Http;
 
-  constructor() {
-    this.responseError = this.responseError.bind(this);
-  }
-
-  responseError(xhr) {
-    return Promise.reject(xhr);
-  }
-}
-
-export function build_server_url(server, path = '', protocol) {
-  if (is_defined(protocol)) {
-    if (!protocol.endsWith(':')) {
-      protocol += ':';
-    }
-  }
-  else {
-    protocol = window.location.protocol;
-  }
-  return protocol + '//' + server + '/' + path;
-}
-
-export class GmpHttp extends Http {
-
-  constructor(server, protocol, options) {
-    const url = build_server_url(server, 'omp', protocol);
-    super(url, options);
-
-    this.params.xml = 1;
-  }
-
-  get token() {
-    return this.params.token;
-  }
-
-  set token(token) {
-    this.params.token = token;
-  }
-
-  transformXmlData(response, xml) {
-      const {envelope} = xml2json(xml);
-      const meta = parse_envelope_meta(envelope);
-      return response.set(envelope, meta);
-  }
-
-  transformSuccess(xhr, {plain = false, ...options}) {
-    try {
-      const response = super.transformSuccess(xhr, options);
-      return plain ?
-        response :
-        this.transformXmlData(response, xhr.responseXML);
-    }
-    catch (error) {
-      throw new Rejection(xhr, REASON_ERROR, _('An error occurred while ' +
-        'converting gmp response to js for url {{- url}}', {url: options.url}),
-        error);
-    }
-  }
-
-  transformRejection(rej, options) {
-    if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
-
-      const root = xml2json(rej.xhr.responseXML).envelope;
-
-      if (is_defined(root)) {
-        rej.root = root;
-
-        if (is_defined(root.gsad_response)) {
-          return rej.setMessage(root.gsad_response.message);
-        }
-
-        if (is_defined(root.action_result)) {
-          return rej.setMessage(root.action_result.message);
-        }
-
-        return rej.setMessage(_('Unknown Error'));
-      }
-    }
-    return rej;
-  }
-}
 // vim: set ts=2 sw=2 tw=80:
