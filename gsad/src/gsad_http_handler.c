@@ -1009,7 +1009,7 @@ init_http_handlers()
 
 #ifdef SERVE_STATIC_ASSETS
   url_handler_add (anon_url_handlers, "^/(img|js|css)/.+$",
-                   handle_static_file);
+                   handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/robots.txt$",
                    handle_static_file);
 #endif
