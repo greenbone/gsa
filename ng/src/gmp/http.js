@@ -328,16 +328,18 @@ export class GmpHttp extends Http {
     this.params.token = token;
   }
 
-  transformSuccess(xhr, {plain = false, ...options}) {
-    if (plain) {
-      return super.transformSuccess(xhr, options);
-    }
-    try {
-      const {envelope} = xml2json(xhr.responseXML);
+  transformXmlData(response, xml) {
+      const {envelope} = xml2json(xml);
       const meta = parse_envelope_meta(envelope);
-      let response = super.transformSuccess(xhr, options);
-      response = response.set(envelope, meta);
-      return response;
+      return response.set(envelope, meta);
+  }
+
+  transformSuccess(xhr, {plain = false, ...options}) {
+    try {
+      const response = super.transformSuccess(xhr, options);
+      return plain ?
+        response :
+        this.transformXmlData(response, xhr.responseXML);
     }
     catch (error) {
       throw new Rejection(xhr, REASON_ERROR, _('An error occurred while ' +
