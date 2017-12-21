@@ -72,11 +72,6 @@ install (FILES src/html/classic/gsad.xsl
                src/html/classic/wizard.xsl
          DESTINATION ${GSA_DATA_DIR}/classic)
 
-install (FILES src/html/classic/help_de.xsl
-               src/html/classic/help_ru.xsl
-               src/html/classic/help_zh_CN.xsl
-         DESTINATION ${GSA_DATA_DIR}/classic)
-
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/language_names.tsv
          DESTINATION ${GSA_DATA_DIR})
 
