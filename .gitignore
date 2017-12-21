@@ -5,3 +5,4 @@ node_modules/
 config.local.js
 .vscode/
 .tern-project
+.directory/
