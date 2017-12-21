@@ -346,7 +346,7 @@ handle_static_file (http_connection_t *connection, const char * method,
   gchar* path;
   http_response_t *response;
   cmd_response_data_t *response_data;
-  char *default_file = "login/login.html";
+  char *default_file = "index.html";
 
   response_data = cmd_response_data_new ();
 
@@ -952,7 +952,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
 {
   gchar* path;
   http_response_t *response;
-  char *default_file = "login/login.html";
+  char *default_file = "index.html";
   cmd_response_data_t *response_data;
 
   /** @todo validation, URL length restriction (allows you to view ANY
