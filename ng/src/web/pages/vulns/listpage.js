@@ -30,7 +30,7 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -40,12 +40,12 @@ import VulnsCharts from './charts.js';
 import VulnsFilterDialog from './filterdialog.js';
 import VulnsTable from './table.js';
 
-const Dashboard = withDashboard(VulnsCharts, {
+const Dashboard = withDashboard({
   configPrefId: '43690dcb-3174-4d84-aa88-58c1936c7f5c',
   defaultControllersString: 'vuln-by-cvss|vuln-by-severity-class',
   defaultControllerString: 'vuln-by-cvss',
   hideFilterSelect: true,
-});
+})(VulnsCharts);
 
 const ToolBarIcons = () => {
   return (

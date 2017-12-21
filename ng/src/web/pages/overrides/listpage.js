@@ -29,7 +29,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -44,13 +44,13 @@ import OverrideComponent from './component.js';
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter.js';
 
 
-const Dashboard = withDashboard(OverridesCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '054862fe-0781-4527-b1aa-2113bcd16ce7',
   defaultControllersString: 'override-by-active-days|' +
     'override-by-created|override-by-text-words',
   defaultControllerString: 'override-by-active-days',
-});
+})(OverridesCharts);
 
 const ToolBarIcons = ({
   onOverrideCreateClick,

@@ -34,7 +34,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {goto_details} from '../../entity/component.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -67,13 +67,13 @@ ToolBarIcons.propTypes = {
   onHostCreateClick: PropTypes.func.isRequired,
 };
 
-const Dashboard = withDashboard(HostsCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: 'd3f5f2de-a85b-43f2-a817-b127457cc8ba',
   defaultControllersString: 'host-by-severity-class|host-by-topology|' +
     'host-by-modification-time',
   defaultControllerString: 'hosts-by-cvss',
-});
+})(HostsCharts);
 
 const Page = ({
   onChanged,

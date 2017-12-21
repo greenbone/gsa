@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -44,13 +44,13 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard(CpeCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '9cff9b4d-b164-43ce-8687-f2360afc7500',
   defaultControllersString: 'cpe-by-severity-class|cpe-by-created|' +
     'cpe-by-cvss',
   defaultControllerString: 'cpe-by-cvss',
-});
+})(CpeCharts);
 
 export default withEntitiesContainer('cpe', {
   dashboard: Dashboard,

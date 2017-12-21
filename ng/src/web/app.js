@@ -39,14 +39,10 @@ import Gmp from 'gmp';
 import {HttpInterceptor} from 'gmp/http.js';
 import PromiseFactory from 'gmp/promise.js';
 
-import {is_defined} from 'gmp/utils.js';
-import _ from 'gmp/locale.js';
-
 import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'; // eslint-disable-line max-len
 
 import PropTypes from './utils/proptypes.js';
 
-import {get_severity_levels} from './utils/render.js';
 import theme from './utils/theme.js';
 
 import AssetsPage from './pages/assetspage.js';
@@ -145,16 +141,6 @@ function is_logged_in(next_state, replace) {
     });
   }
 }
-
-if (!is_defined(window.gsa._)) {
-  window.gsa._ = _;
-}
-
-if (!is_defined(window.gsa.severity_levels)) {
-  window.gsa.severity_levels = get_severity_levels(); // TODO pass type
-}
-
-window.gsa.history = browserHistory;
 
 class AppHttpInterceptor extends HttpInterceptor {
 

@@ -21,48 +21,41 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, for_each} from '../utils.js';
-import logger from '../log.js';
+import React from 'react';
 
-const log = logger.getLogger('gmp.models.chartpreferences');
+import PropTypes from '../../utils/proptypes.js';
 
-class ChartPreferences {
+import Dashboard from './dashboard.js';
 
-  constructor(element) {
-    this.updateFromElement(element);
+const withDashboard = (options = {}) => Charts => {
 
-    if (!is_defined(this._preferences)) {
-      this._preferences = {};
+  class DashboardWrapper extends React.Component {
+
+    reload() {
+      this.dashboard.reload();
     }
-  }
 
-  get(id) {
-    return this._preferences[id];
-  }
+    render() {
+      const {filter, ...other} = this.props;
+      return (
+        <Dashboard
+          {...options}
+          {...other}
+          ref={ref => this.dashboard = ref}
+        >
+          <Charts filter={filter}/>
+        </Dashboard>
+      );
+    }
+  };
 
-  parseProroperties(elem) {
-    const preferences = {};
+  DashboardWrapper.propTypes = {
+    filter: PropTypes.filter,
+  };
 
-    for_each(elem, pref => {
-      let value;
-      try {
-        value = JSON.parse(pref.value);
-      }
-      catch (e) {
-        log.warn('Could not parse chart preference value', pref.value);
-        value = pref.value;
-      }
-      preferences[pref._id] = value;
-    });
+  return DashboardWrapper;
+};
 
-    return preferences;
-  }
-
-  updateFromElement(elem) {
-    this._preferences = this.parseProroperties(elem);
-  }
-}
-
-export default ChartPreferences;
+export default withDashboard;
 
 // vim: set ts=2 sw=2 tw=80:

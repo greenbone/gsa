@@ -25,18 +25,19 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Wrapper from '../../components/layout/wrapper.js';
+
 import CommonCharts from '../../components/dashboard/commoncharts.js';
 
-const CpeCharts = ({filter}) => {
-  return (
-    <div>
-      <CommonCharts
-        type="cpe"
-        titleType="CPEs"
-        filter={filter}/>
-    </div>
-  );
-};
+const CpeCharts = ({filter}) => (
+  <Wrapper>
+    <CommonCharts
+      type="cpe"
+      titleType="CPEs"
+      filter={filter}
+    />
+  </Wrapper>
+);
 
 CpeCharts.propTypes = {
   filter: PropTypes.filter,

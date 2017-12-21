@@ -23,33 +23,38 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 import CommonCharts from '../../components/dashboard/commoncharts.js';
 
-export const OvaldefCharts = ({filter}) => {
-  return (
-    <div>
-      <CommonCharts type="ovaldef" titleType="OVAL Definitions"
-        filter={filter}/>
-      <DataSource
-        name="ovaldef-class-source"
-        aggregate-type="ovaldef"
-        group-column="class"
-        filter={filter}>
-        <Chart
-          name="ovaldef-by-class"
-          title={_('OVAL Definitions by class')}
-          title-count="count"
-          type="donut"/>
-      </DataSource>
-    </div>
-  );
-};
+const OvaldefCharts = ({filter}) => (
+  <Wrapper>
+    <CommonCharts
+      type="ovaldef"
+      titleType="OVAL Definitions"
+      filter={filter}
+    />
+    <DataSource
+      name="ovaldef-class-source"
+      aggregateType="ovaldef"
+      groupColumn="class"
+      filter={filter}
+    >
+      <Chart
+        name="ovaldef-by-class"
+        title={_('OVAL Definitions by class')}
+        title-count="count"
+        type="donut"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 OvaldefCharts.propTypes = {
   filter: PropTypes.filter,

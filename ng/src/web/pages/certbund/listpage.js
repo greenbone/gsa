@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -44,13 +44,13 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard(CertBundCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: 'a6946f44-480f-4f37-8a73-28a4cd5310c4',
   defaultControllersString: 'cert_bund_adv-by-severity-class|' +
     'cert_bund_adv-by-created|cert_bund_adv-by-cvss',
   defaultControllerString: 'cert_bund_adv-by-cvss',
-});
+})(CertBundCharts);
 
 export default withEntitiesContainer('certbundadv', {
   dashboard: Dashboard,

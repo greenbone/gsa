@@ -32,7 +32,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 import NewIcon from '../../components/icon/newicon.js';
@@ -44,13 +44,13 @@ import NoteComponent from './component.js';
 
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter.js';
 
-const Dashboard = withDashboard(NotesCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: 'ce7b121-c609-47b0-ab57-fd020a0336f4',
   defaultControllersString: 'note-by-active-days|note-by-created|' +
     'note-by-text-words',
   defaultControllerString: 'note-by-active-days',
-});
+})(NotesCharts);
 
 const ToolBarIcons = ({onNoteCreateClick}, {capabilities}) => {
   return (
