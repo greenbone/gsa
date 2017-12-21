@@ -47,14 +47,12 @@ endif (MANDATORY_TOOL_MISSING)
 ## Files generated on installation
 
 add_custom_target (cpe-icon-dict
-                   ALL
                    COMMENT "Generating CPE icon dictionary"
                    COMMAND sh
                    "${CMAKE_SOURCE_DIR}/tools/generate-cpe-icon-dict.sh" --src_path "${CMAKE_CURRENT_SOURCE_DIR}/src/html/classic/img/cpe" > ${CMAKE_CURRENT_BINARY_DIR}/cpe-icons.xml
                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tools)
 
 add_custom_target (zone-dict
-                   ALL
                    COMMENT "Generating timezone dictionary"
                    COMMAND sh "${CMAKE_SOURCE_DIR}/tools/generate-zone-dict.sh" > ${CMAKE_CURRENT_BINARY_DIR}/zones.xml
                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tools)
