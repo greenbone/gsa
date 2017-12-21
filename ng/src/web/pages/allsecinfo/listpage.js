@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -44,12 +44,12 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard(SecInfoCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864',
   defaultControllersString: '',
   defaultControllerString: 'allinfo-by-cvss',
-});
+})(SecInfoCharts);
 
 export default withEntitiesContainer('secinfo', {
   dashboard: Dashboard,

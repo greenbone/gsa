@@ -31,7 +31,7 @@ import FilterDialog from '../certbund/filterdialog.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -46,13 +46,13 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard(DfnCertCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '9812ea49-682d-4f99-b3cc-eca051d1ce59',
   defaultControllersString: 'dfn_cert_adv-by-severity-class|' +
     'dfn_cert_adv-by-created|dfn_cert_adv-by-cvss',
   defaultControllerString: 'dfn_cert_adv-by-cvss',
-});
+})(DfnCertCharts);
 
 export default withEntitiesContainer('dfncertadv', {
   dashboard: Dashboard,

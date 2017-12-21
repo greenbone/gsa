@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import HelpIcon from '../../components/icon/helpicon.js';
 
@@ -36,13 +36,13 @@ import NvtsCharts from './charts.js';
 import NvtsFilterDialog from './filterdialog.js';
 import NvtsTable from './table.js';
 
-const Dashboard = withDashboard(NvtsCharts, {
+const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: 'f68d9369-1945-477b-968f-121c6029971b',
   defaultControllersString: 'nvt-by-severity-class|nvt-by-created|' +
     'nvt-by-family',
   defaultControllerString: 'nvt-by-cvss',
-});
+})(NvtsCharts);
 
 const ToolBarIcons = props => {
   return (

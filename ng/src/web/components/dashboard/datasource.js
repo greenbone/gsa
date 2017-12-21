@@ -26,30 +26,35 @@ import React from 'react';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp.js';
 
-export class DataSource extends React.Component {
+import LegacyDataSource from './legacy/datasource.js';
+
+class DataSource extends React.Component {
 
   constructor(...args) {
     super(...args);
 
-    let filter = this.props.filter ? this.props.filter.toFilterString() :
-      undefined;
+    const filter = is_defined(this.props.filter) ?
+      this.props.filter.toFilterString() : undefined;
 
-    let ds = new window.gsa.charts.DataSource(this.props.name, {
+    const {gmp} = this.props;
+
+    const ds = new LegacyDataSource(this.props.name, gmp.token, {
       cache: this.context.cache,
       type: this.props.type,
-      group_column: this.props['group-column'],
-      aggregate_type: this.props['aggregate-type'],
-      subgroup_column: this.props['subgroup-column'],
+      group_column: this.props.groupColumn,
+      aggregate_type: this.props.aggregateType,
+      subgroup_column: this.props.subgroupColumn,
       data_column: this.props.column,
       data_columns: this.props.columns,
-      text_columns: this.props['text-columns'],
-      sort_fields: this.props['sort-fields'],
-      sort_orders: this.props['sort-orders'],
-      sort_stats: this.props['sort-stats'],
-      aggregate_mode: this.props['aggregate-mode'],
-      max_groups: this.props['max-groups'],
-      first_group: this.props['first-group'],
+      text_columns: this.props.textColumns,
+      sort_fields: this.props.sortFields,
+      sort_orders: this.props.sortOrders,
+      sort_stats: this.props.sortStats,
+      aggregate_mode: this.props.aggregateMode,
+      max_groups: this.props.maxGroups,
+      first_group: this.props.firstGroup,
       filter,
     });
 
@@ -65,15 +70,15 @@ export class DataSource extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    let {datasource} = this.state;
-    let filter = this.props.filter ? this.props.filter.simple() : undefined;
-    let newfilter = props.filter ? props.filter.simple() : undefined;
+    const {datasource} = this.state;
+    const filter = this.props.filter ? this.props.filter.simple() : undefined;
+    const newfilter = props.filter ? props.filter.simple() : undefined;
 
     // TODO charts should decide themself if they need to redraw if a filter has
     // changed in future. This should be changed when the charts a completly
     // converted to react. Until now we compare the filter without first, rows
     // and sort/sort-reverse params.
-    let equals = filter ? filter.equals(newfilter) :
+    const equals = filter ? filter.equals(newfilter) :
       !is_defined(newfilter);
 
     if (!equals) {
@@ -96,23 +101,24 @@ DataSource.childContextTypes = {
 };
 
 DataSource.propTypes = {
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string,
+  aggregateMode: PropTypes.string,
+  aggregateType: PropTypes.string,
   column: PropTypes.string,
   columns: PropTypes.array,
   filter: PropTypes.filter,
-  'group-column': PropTypes.string,
-  'aggregate-type': PropTypes.string,
-  'subgroup-column': PropTypes.string,
-  'text-columns': PropTypes.array,
-  'sort-fields': PropTypes.array,
-  'sort-orders': PropTypes.array,
-  'sort-stats': PropTypes.array,
-  'aggregate-mode': PropTypes.string,
-  'max-groups': PropTypes.string,
-  'first-group': PropTypes.string,
+  firstGroup: PropTypes.string,
+  gmp: PropTypes.gmp.isRequired,
+  groupColumn: PropTypes.string,
+  maxGroups: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  sortFields: PropTypes.array,
+  sortOrders: PropTypes.array,
+  sortStats: PropTypes.array,
+  subgroupColumn: PropTypes.string,
+  textColumns: PropTypes.array,
+  type: PropTypes.string,
 };
 
-export default DataSource;
+export default withGmp(DataSource);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -28,7 +28,11 @@ import logger from 'gmp/log.js';
 import PromiseFactory from 'gmp/promise.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import compose from '../../utils/compose.js';
 import withCache from '../../utils/withCache.js';
+import withGmp from '../../utils/withGmp.js';
+
+import DashboardClass from './legacy/dashboard.js';
 
 import './css/dashboard.css';
 
@@ -41,7 +45,7 @@ class Dashboard extends React.Component {
 
     const {id = 'dashboard'} = this.props;
 
-    this.dashboard = new window.gsa.charts.Dashboard(id, undefined, {
+    this.dashboard = new DashboardClass(id, undefined, {
       config_pref_id: this.props.configPrefId,
       default_heights_string: '280',
       default_controllers_string: this.props.defaultControllersString,
@@ -66,10 +70,8 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    const {gmp} = this.context;
+    const {gmp, usersettingsCache: cache, configPrefId: pref_id} = this.props;
     const {dashboard} = this;
-    const cache = this.props.usersettingsCache;
-    const pref_id = this.props.configPrefId;
 
     const promises = [
       gmp.user.currentChartPreferences({cache}),
@@ -81,6 +83,7 @@ class Dashboard extends React.Component {
 
     PromiseFactory.all(promises).then(([prefresp, filtersresp]) => {
       const filters = is_defined(filtersresp) ? filtersresp.data : [];
+
       const prefs = prefresp.data;
       const pref = prefs.get(pref_id);
 
@@ -103,8 +106,7 @@ class Dashboard extends React.Component {
   }
 
   onConfigSaved() {
-    const cache = this.props.usersettingsCache;
-    const {gmp} = this.context;
+    const {gmp, usersettingsCache: cache} = this.props;
     // override cache with current saved config
     // this is a bit "hackish" and should be obsolete when dashboards are
     // completely converted to react and gmp api
@@ -135,47 +137,16 @@ Dashboard.propTypes = {
   defaultControllerString: PropTypes.string,
   defaultControllersString: PropTypes.string,
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   hideFilterSelect: PropTypes.bool,
   id: PropTypes.id,
   maxComponents: PropTypes.numberOrNumberString,
   usersettingsCache: PropTypes.cache.isRequired,
 };
 
-Dashboard.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-Dashboard = withCache({usersettingsCache: 'usersettings'})(Dashboard);
-
-export const withDashboard = (Charts, options = {}) => {
-
-  class DashboardWrapper extends React.Component {
-
-    reload() {
-      this.dashboard.reload();
-    }
-
-    render() {
-      const {filter, ...other} = this.props;
-      return (
-        <Dashboard
-          {...options}
-          {...other}
-          ref={ref => this.dashboard = ref}
-        >
-          <Charts filter={filter}/>
-        </Dashboard>
-      );
-    }
-  };
-
-  DashboardWrapper.propTypes = {
-    filter: PropTypes.filter,
-  };
-
-  return DashboardWrapper;
-};
-
-export default Dashboard;
+export default compose(
+  withCache({usersettingsCache: 'usersettings'}),
+  withGmp,
+)(Dashboard);
 
 // vim: set ts=2 sw=2 tw=80:
