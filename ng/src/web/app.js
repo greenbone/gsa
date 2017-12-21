@@ -36,8 +36,9 @@ import {
 
 import CacheFactory from 'gmp/cache.js';
 import Gmp from 'gmp';
-import {HttpInterceptor} from 'gmp/http.js';
 import PromiseFactory from 'gmp/promise.js';
+
+import HttpInterceptor from 'gmp/http/interceptor.js';
 
 import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'; // eslint-disable-line max-len
 

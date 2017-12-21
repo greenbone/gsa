@@ -62,7 +62,9 @@ import './commands/users.js';
 import './commands/vulns.js';
 import './commands/wizard.js';
 
-import {GmpHttp, build_server_url, build_url_params} from './http.js';
+import GmpHttp from './http/gmp.js';
+import {build_server_url, build_url_params} from './http/utils.js';
+
 import {get_commands} from './command.js';
 import LoginCommand from './commands/login.js';
 
