@@ -28,8 +28,10 @@ import {is_defined, has_value, is_array} from '../utils.js';
 
 import Promise from '../promise.js';
 
-import Response from './response.js';
 import Rejection from './rejection.js';
+
+import Transform from './transform/transform.js';
+
 import {build_url_params} from './utils.js';
 
 const log = logger.getLogger('gmp.http');
@@ -47,6 +49,7 @@ class Http {
   constructor(url, options = {}) {
     const {
       timeout = DEFAULT_TIMEOUT,
+      transform = new Transform(),
     } = options;
 
     this.url = url;
@@ -54,6 +57,8 @@ class Http {
     this.timeout = timeout;
 
     this.interceptors = [];
+
+    this.transform = transform;
 
     log.debug('Using http options', options);
   }
@@ -220,12 +225,12 @@ class Http {
     }
   }
 
-  transformSuccess(xhr, options) {
-    return new Response(xhr, {fromcache: false});
+  transformSuccess(...args) {
+    return this.transform.success(...args);
   }
 
-  transformRejection(rej, options) {
-    return rej;
+  transformRejection(...args) {
+    return this.transform.rejection(...args);
   }
 
   addInterceptor(interceptor) {
