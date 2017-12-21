@@ -60,7 +60,7 @@ const Actions = ({
   onScannerVerifyClick,
 }) => (
   <IconDivider
-    align={['center', 'center']}
+    align={['start', 'center']}
     grow
   >
     <TrashIcon
