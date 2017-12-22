@@ -69,7 +69,6 @@ install (FILES src/html/classic/gsad.xsl
                src/html/classic/rnc.xsl
                src/html/classic/robots.txt
                src/html/classic/os.xml
-               src/html/classic/wizard.xsl
          DESTINATION ${GSA_DATA_DIR}/classic)
 
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/language_names.tsv
