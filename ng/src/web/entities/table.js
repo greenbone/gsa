@@ -186,34 +186,40 @@ class EntitiesTable extends React.Component {
       });
     }
 
-    const pagination = is_defined(PaginationComponent) ? (
-      <PaginationComponent
-        {...other}
-        onFirstClick={this.handleFirst}
-        onLastClick={this.handleLast}
-        onNextClick={this.handleNext}
-        onPreviousClick={this.handlePrevious}
-        counts={entitiesCounts}
-      />
-    ) : undefined;
+    const pagination = PaginationComponent === false ?
+      undefined :
+      (
+        <PaginationComponent
+          {...other}
+          onFirstClick={this.handleFirst}
+          onLastClick={this.handleLast}
+          onNextClick={this.handleNext}
+          onPreviousClick={this.handlePrevious}
+          counts={entitiesCounts}
+        />
+      );
 
-    const header = is_defined(HeaderComponent) ? (
-      <HeaderComponent
-        currentSortBy={currentSortBy}
-        currentSortDir={currentSortDir}
-        {...other}
-      />
-    ) : undefined;
+    const header = HeaderComponent === false ?
+      undefined :
+      (
+        <HeaderComponent
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          {...other}
+        />
+      );
 
-    const footer = is_defined(FooterComponent) ? (
-      <FooterComponent {...other} />
-    ) : undefined;
+    const footer = FooterComponent === false ?
+      undefined :
+      <FooterComponent {...other} />;
 
-    const body = is_defined(BodyComponent) ? (
-      <BodyComponent>
-        {rows}
-      </BodyComponent>
-    ) : rows;
+    const body = BodyComponent === false ?
+      rows :
+      (
+        <BodyComponent>
+          {rows}
+        </BodyComponent>
+      );
 
     const foldState = this.state.allToggled ? 'UNFOLDED' : 'FOLDED';
     const detailsIcon = (
