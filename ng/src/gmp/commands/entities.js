@@ -100,7 +100,7 @@ class EntitiesCommand extends HttpCommand {
       params['bulk_selected:' + id] = 1;
     }
     return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+      .then(response => response.setData(response.xhr.responseText));
   }
 
   exportByFilter(filter) {
@@ -112,7 +112,7 @@ class EntitiesCommand extends HttpCommand {
       filter,
     };
     return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+      .then(response => response.setData(response.xhr.responseText));
   }
 
   delete(entities, extra_params) {
