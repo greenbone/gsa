@@ -38,21 +38,21 @@ export function xml2json(...args) {
 
 class X2JsTransform extends Transform {
 
-  transformXmlData(response, xml) {
-      const {envelope} = xml2json(xml);
-      const meta = parse_envelope_meta(envelope);
-      return response.set(envelope, meta);
+  transformXmlData(response) {
+    const {xhr} = response;
+    const {envelope} = xml2json(xhr.responseXML);
+    const meta = parse_envelope_meta(envelope);
+    return response.set(envelope, meta);
   }
 
-  success(xhr, {plain = false, ...options}) {
+  success(response, {plain = false, ...options}) {
     try {
-      const response = super.success(xhr, options);
       return plain ?
         response :
-        this.transformXmlData(response, xhr.responseXML);
+        this.transformXmlData(response);
     }
     catch (error) {
-      throw new Rejection(xhr, Rejection.REASON_ERROR,
+      throw new Rejection(response.xhr, Rejection.REASON_ERROR,
         _('An error occurred while converting gmp response to js for ' +
           'url {{- url}}', {url: options.url}),
         error);

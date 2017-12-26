@@ -29,6 +29,7 @@ import {is_defined, has_value, is_array} from '../utils.js';
 import Promise from '../promise.js';
 
 import Rejection from './rejection.js';
+import Response from './response.js';
 
 import Transform from './transform/transform.js';
 
@@ -183,7 +184,9 @@ class Http {
 
   handleSuccess(resolve, reject, xhr, options) {
     try {
-      const response = this.transformSuccess(xhr, options);
+      let response = new Response(xhr, xhr.response, {fromcache: false});
+
+      response = this.transformSuccess(response, options);
 
       this._cacheData(response, options);
 
@@ -225,12 +228,12 @@ class Http {
     }
   }
 
-  transformSuccess(...args) {
-    return this.transform.success(...args);
+  transformSuccess(response, options) {
+    return this.transform.success(response, options);
   }
 
-  transformRejection(...args) {
-    return this.transform.rejection(...args);
+  transformRejection(rejection, options) {
+    return this.transform.rejection(rejection, options);
   }
 
   addInterceptor(interceptor) {

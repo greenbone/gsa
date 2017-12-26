@@ -21,16 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Response from '../response.js';
-
 class Transfrom {
 
-  success(xhr, options) {
-    return new Response(xhr, {fromcache: false});
+  success(response, options) {
+    return response;
   }
 
-  rejection(rej, options) {
-    return rej;
+  rejection(rejection, options) {
+    return rejection;
   }
 }
 
