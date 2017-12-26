@@ -22,17 +22,18 @@
  */
 class Response {
 
-  constructor(data, meta = {}) {
+  constructor(xhr, data, meta = {}) {
+    this._xhr = xhr;
     this._data = data;
     this._meta = meta;
   }
 
   set(data, meta) {
-    return new Response(data, {...this._meta, ...meta});
+    return new Response(this._xhr, data, {...this._meta, ...meta});
   }
 
   setMeta(meta) {
-    return new Response(this._data, {...this._meta, ...meta});
+    return new Response(this._xhr, this._data, {...this._meta, ...meta});
   }
 
   getMeta() {
@@ -40,7 +41,7 @@ class Response {
   }
 
   setData(data) {
-    return new Response(data, this._meta);
+    return new Response(this._xhr, data, this._meta);
   }
 
   getData() {
@@ -53,6 +54,10 @@ class Response {
 
   get data() {
     return this.getData();
+  }
+
+  get xhr() {
+    return this._xhr;
   }
 }
 
