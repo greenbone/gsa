@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import X2JS2 from 'x2js';
+
 import _ from '../../locale.js';
 
 import {is_defined} from '../../utils.js';
@@ -30,10 +32,10 @@ import {parse_envelope_meta} from '../../parser.js';
 
 import Rejection from '../rejection.js';
 
-const x2js = is_defined(window.X2JS) ? new window.X2JS() : undefined; // don't crash if X2JS it's not available
+const x2js2 = new X2JS2();
 
 export function xml2json(...args) {
-  return x2js.xml2json(...args);
+  return x2js2.dom2js(...args);
 }
 
 class X2JsTransform extends Transform {
