@@ -24,25 +24,8 @@
 
 ## Check existence required tools
 
-set (MANDATORY_TOOL_MISSING FALSE)
-
-if (NOT USE_LIBXSLT EQUAL 0)
-  set (USE_LIBXSLT 1)
-endif (NOT USE_LIBXSLT EQUAL 0)
-
 find_program (PATH_TO_XSLTPROC xsltproc DOC "xsltproc command line "
               "xslt processor.")
-if (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)
-  set (MANDATORY_TOOL_MISSING TRUE)
-endif (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)
-
-if (MANDATORY_TOOL_MISSING)
-  if (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)
-    message ("The xsltproc tool or libxslt is required.")
-  endif (NOT USE_LIBXSLT AND NOT PATH_TO_XSLTPROC)
-  message (FATAL_ERROR "One or more tools or libraries could not be found on "
-                      "your system. Please check the logs above.")
-endif (MANDATORY_TOOL_MISSING)
 
 ## Files generated on installation
 
