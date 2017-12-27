@@ -134,13 +134,6 @@ else (SERVE_STATIC_ASSETS)
   message (STATUS "Static asset serving not builtin, use an external server")
 endif (SERVE_STATIC_ASSETS)
 
-if (USE_LIBXSLT)
-  message (STATUS "Internal XSL transformations, with libxslt.")
-  add_definitions (-DUSE_LIBXSLT)
-else (USE_LIBXSLT)
-  message (STATUS "External XSL transformations, with xsltproc.")
-endif (USE_LIBXSLT)
-
 if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION="${GSAD_VERSION}")
 endif (GSAD_VERSION)

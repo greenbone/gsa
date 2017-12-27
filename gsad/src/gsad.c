@@ -2814,11 +2814,7 @@ register_signal_handlers ()
       || signal (SIGINT, handle_signal_exit) == SIG_ERR
       || signal (SIGHUP, SIG_IGN) == SIG_ERR
       || signal (SIGPIPE, SIG_IGN) == SIG_ERR
-#ifdef USE_LIBXSLT
       || signal (SIGCHLD, SIG_IGN) == SIG_ERR)
-#else
-      || signal (SIGCHLD, SIG_DFL) == SIG_ERR)
-#endif
     return -1;
   return 0;
 }
