@@ -58,6 +58,10 @@ export function parse_text(text) {
 }
 
 export function parse_int(value) {
+  if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
+    return undefined;
+  }
+
   const val = parseInt(value, 10);
 
   if (isNaN(val)) {
