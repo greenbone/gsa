@@ -36,6 +36,7 @@ import Link from '../link/link.js';
 
 import Menu from '../menu/menu.js';
 import MenuEntry from '../menu/menuentry.js';
+import MenuHelpEntry from '../menu/menuhelpentry.js';
 
 import Sticky from '../sticky/sticky.js';
 
@@ -326,11 +327,9 @@ const MenuBar = (props, {gmp, capabilities}) => {
         <Menu
           title={_('Help')}
         >
-          <MenuEntry
-            legacy
+          <MenuHelpEntry
             title={_('Contents')}
-            path="help/contents.html"
-            caps="help"
+            to="help" // needs to be set, will be overwritten
           />
           <MenuEntry
             title={_('About')}
