@@ -33,7 +33,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer from '../../entity/container.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -54,9 +54,10 @@ import OvaldefDetails from './details.js';
 
 const ToolBarIcons = () => (
   <IconDivider>
-    <HelpIcon
-      page="ovaldef_details"
-      title={_('Help: OVAL Definition Details')}
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="oval"
+      title={_('Help: OVAL Definitions')}
     />
     <ListIcon
       title={_('OVAL Definitions List')}

@@ -36,7 +36,7 @@ import {goto_details} from '../../entity/component.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import HostsCharts from './charts.js';
@@ -50,7 +50,11 @@ const ToolBarIcons = ({
   onHostCreateClick,
 }, {capabilities}) => (
   <IconDivider>
-    <HelpIcon page="hosts"/>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="hosts-view"
+      title={_('Help: Hosts')}
+    />
     {capabilities.mayCreate('host') &&
       <NewIcon
         title={_('New Host')}

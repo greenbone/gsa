@@ -40,7 +40,7 @@ import CreateIcon from '../../entity/icon/createicon.js';
 import EditIcon from '../../entity/icon/editicon.js';
 import DeleteIcon from '../../entity/icon/deleteicon.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -72,8 +72,9 @@ const ToolBarIcons = withCapabilities(({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="report_format_details"
+      <ManualIcon
+        page="reports"
+        anchor="report-plugins"
         title={_('Help: Report Format Details')}
       />
       <ListIcon

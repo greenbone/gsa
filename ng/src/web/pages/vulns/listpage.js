@@ -32,7 +32,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -50,7 +50,10 @@ const Dashboard = withDashboard({
 const ToolBarIcons = () => {
   return (
     <Layout flex box>
-      <HelpIcon page="vulns" title={_('Vulnerabilities')}/>
+      <ManualIcon
+        page="search"
+        anchor="vulnerabilities"
+        title={_('Vulnerabilities')}/>
     </Layout>
   );
 };

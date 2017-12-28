@@ -31,7 +31,7 @@ import withCapabilities from '../../utils/withCapabilities.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
@@ -48,8 +48,9 @@ const ToolBarIcons = withCapabilities(({
   onScanConfigImportClick,
 }) => (
   <IconDivider>
-    <HelpIcon
-      page="configs"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="scan-configuration"
       title={_('Help: Scan Configs')}
      />
     {capabilities.mayCreate('config') &&

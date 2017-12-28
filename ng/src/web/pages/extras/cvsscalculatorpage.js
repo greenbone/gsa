@@ -35,7 +35,7 @@ import {
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Select2 from '../../components/form/select2.js';
@@ -60,8 +60,9 @@ const StyledSelect2 = glamorous(Select2)({
 });
 
 const ToolBarIcons = () => (
-  <HelpIcon
-    page="cvss_calculator"
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="cvss"
     title={_('Help: CVSS Base Score Calculator')}
   />
 );

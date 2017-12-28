@@ -32,7 +32,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import OsCharts from './charts.js';
 import OsFilterDialog from './filterdialog.js';
@@ -51,8 +51,9 @@ const Dashboard = withDashboard({
 const ToolbarIcons = props => {
   return (
     <Layout flex box>
-      <HelpIcon
-        page="oss"
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="operating-systems-view"
         title={_('Help: Operating Systems')}/>
     </Layout>
   );

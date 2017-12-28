@@ -38,7 +38,7 @@ import NewIconMenu from './icons/newiconmenu.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
@@ -66,8 +66,9 @@ const ToolBarIcons = ({
   }, {capabilities}) => {
   return (
     <IconDivider>
-      <HelpIcon
-        page="tasks"
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="creating-a-task"
         title={_('Help: Tasks')}/>
       {capabilities.mayOp('run_wizard') &&
         <IconMenu

@@ -38,7 +38,7 @@ import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -88,9 +88,10 @@ const ToolBarIcons = withCapabilties(({
   return (
     <Divider margin="10px">
       <IconDivider>
-        <HelpIcon
-          page="tag_details"
-          title={_('Help: Tag Details')}
+        <ManualIcon
+          page="gui_introduction"
+          anchor="tags"
+          title={_('Help: Tags')}
         />
         <ListIcon
           title={_('Tag List')}

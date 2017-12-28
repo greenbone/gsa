@@ -30,7 +30,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import CpeCharts from './charts.js';
 import CpeFilterDialog from './filterdialog.js';
@@ -38,8 +38,9 @@ import CpesTable from './table.js';
 
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="cpes"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="cpe"
       title={_('Help: CPEs')}/>
   );
 };

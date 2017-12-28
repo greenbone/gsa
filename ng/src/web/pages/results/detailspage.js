@@ -37,7 +37,7 @@ import EntityContainer from '../../entity/container.js';
 import SeverityBar from '../../components/bar/severitybar.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -69,9 +69,10 @@ let ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="result_details"
-        title={_('Help: Result Details')}
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="results"
+        title={_('Help: Results')}
       />
       <ListIcon
         title={_('Results List')}

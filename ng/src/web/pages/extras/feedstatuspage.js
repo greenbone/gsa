@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -49,8 +49,9 @@ import TableData from '../../components/table/data.js';
 import withGmp from '../../utils/withGmp.js';
 
 const ToolBarIcons = () => (
-  <HelpIcon
-    page="feed_management"
+  <ManualIcon
+    page="search"
+    searchTerm="feed"
     title={_('Help: Feed Status')}
   />
 );

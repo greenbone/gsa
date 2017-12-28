@@ -29,7 +29,7 @@ import _ from 'gmp/locale.js';
 import {parse_yesno, YES_VALUE} from 'gmp/parser.js';
 import {is_defined, is_empty} from 'gmp/utils.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import EditIcon from '../../components/icon/editicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -67,8 +67,9 @@ const Heading = glamorous.h4({marginBottom: '5px'});
 const ToolBarIcons = ({onEditSettingsClick}) => (
   <Layout flex>
     <IconDivider>
-      <HelpIcon
-        page="my_settings"
+      <ManualIcon
+        page="gui_introduction"
+        anchor="my-settings"
         title={_('Help: My Settings')}
       />
       <EditIcon

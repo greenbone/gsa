@@ -41,7 +41,7 @@ import FormGroup from '../../components/form/formgroup.js';
 import Select2 from '../../components/form/select2.js';
 import withClickHandler from '../../components/form/withClickHandler.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
@@ -75,8 +75,9 @@ const ToolBar = ({
 }) => {
   return (
     <IconDivider>
-      <HelpIcon
+      <ManualIcon
         page="performance"
+        anchor="appliance-performance"
         title={_('Help: Performance')}
       />
       <IconMenu

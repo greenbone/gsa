@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -62,8 +62,9 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="port_list_details"
+      <ManualIcon
+        page="search"
+        searchTerm="port list"
         title={_('Help: PortList Details')}
       />
       <ListIcon

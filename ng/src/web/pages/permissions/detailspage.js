@@ -40,7 +40,7 @@ import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import PermissionDetails from './details.js';
@@ -56,9 +56,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="permission_details"
-        title={_('Help: Permission Details')}
+      <ManualIcon
+        page="gui_administration"
+        anchor="permissions"
+        title={_('Help: Permissions')}
       />
       <ListIcon
         title={_('Permission List')}

@@ -42,7 +42,7 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -71,9 +71,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="role_details"
-        title={_('Help: Role Details')}
+      <ManualIcon
+        page="gui_administration"
+        anchor="user-roles"
+        title={_('Help: Roles')}
       />
       <ListIcon
         title={_('Roles List')}

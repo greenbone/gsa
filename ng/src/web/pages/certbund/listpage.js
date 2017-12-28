@@ -30,7 +30,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import CertBundCharts from './charts.js';
 import CertBundFilterDialog from './filterdialog.js';
@@ -38,8 +38,9 @@ import CertBundTable from './table.js';
 
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="cert_bund_advs"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="cert-bund"
       title={_('Help: CERT-Bund Advisories')}/>
   );
 };

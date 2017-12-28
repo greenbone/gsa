@@ -34,7 +34,7 @@ import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import Layout from '../../components/layout/layout.js';
 import Section from '../../components/section/section.js';
@@ -173,9 +173,9 @@ class LdapAuthentication extends React.Component {
 
     return (
       <Layout flex="column">
-        <HelpIcon
-          page="users"
-          anchor="peruserldapauthentication"
+        <ManualIcon
+          page="gui_administration"
+          anchor="ldap"
           title={_('Help: LDAP per-User Authentication')}
         />
         <Section

@@ -32,7 +32,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';
@@ -52,7 +52,11 @@ const Dashboard = withDashboard({
 const ToolBarIcons = props => {
   return (
     <Layout flex box>
-      <HelpIcon page="reports"/>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="results"
+        title={_('Help: Results')}
+      />
     </Layout>
   );
 };

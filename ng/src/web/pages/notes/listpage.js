@@ -34,7 +34,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import NotesCharts from './charts.js';
@@ -55,8 +55,9 @@ const Dashboard = withDashboard({
 const ToolBarIcons = ({onNoteCreateClick}, {capabilities}) => {
   return (
     <IconDivider>
-      <HelpIcon
-        page="notes"
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="notes"
         title={_('Help: Notes')}/>
       {capabilities.mayCreate('note') &&
         <NewIcon

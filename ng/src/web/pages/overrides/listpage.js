@@ -31,7 +31,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -57,8 +57,9 @@ const ToolBarIcons = ({
 }, {capabilities}) => {
   return (
     <IconDivider>
-      <HelpIcon
-        page="overrides"
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="overrides-and-false-positives"
         title={_('Help: Overrides')}/>
 
       {capabilities.mayCreate('override') &&

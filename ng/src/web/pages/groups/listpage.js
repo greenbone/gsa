@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -47,8 +47,9 @@ const ToolBarIcons = ({
 }, {capabilities}) => {
   return (
     <IconDivider>
-      <HelpIcon
-        page="groups"
+      <ManualIcon
+        page="gui_administration"
+        anchor="groups"
         title={_('Help: Groups')}/>
       {capabilities.mayCreate('group') &&
         <NewIcon
