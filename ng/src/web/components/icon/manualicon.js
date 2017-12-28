@@ -50,6 +50,7 @@ const get_language_path = () => {
 const ManualIcon = ({
   anchor,
   page,
+  searchTerm,
   title,
   gmp,
   ...props
@@ -63,9 +64,13 @@ const ManualIcon = ({
 
   url += get_language_path() + '/' + page + '.html';
 
-  if (is_defined(anchor)) {
+  if (page === 'search' && is_defined(searchTerm)) {
+    url += '?q=' + searchTerm;
+  }
+  else if (is_defined(anchor)) {
     url += '#' + anchor;
   }
+
   return (
     <Icon
       {...props}
@@ -81,6 +86,7 @@ ManualIcon.propTypes = {
   anchor: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   page: PropTypes.string.isRequired,
+  searchTerm: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 
