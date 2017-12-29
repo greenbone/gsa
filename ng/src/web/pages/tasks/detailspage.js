@@ -55,7 +55,7 @@ import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -99,9 +99,10 @@ const ToolBarIcons = ({
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
-        <HelpIcon
-          page="task_details"
-          title={_('Help: Task Details')}
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="creating-a-task"
+          title={_('Help: Tasks')}
         />
         <ListIcon
           title={_('Task List')}

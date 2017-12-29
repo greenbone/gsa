@@ -40,7 +40,7 @@ import SeverityBar from '../../components/bar/severitybar.js';
 import CpeIcon from '../../components/icon/cpeicon.js';
 import DeleteIcon from '../../components/icon/deleteicon.js';
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -67,9 +67,10 @@ const ToolBarIcons = ({
   return (
     <Divider margin="10px">
       <IconDivider>
-        <HelpIcon
-          page="os_details"
-          title={_('Help: Operating System Details')}
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="operating-systems-view"
+          title={_('Help: Operating Systems')}
         />
         <ListIcon
           title={_('Operating System List')}

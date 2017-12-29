@@ -30,7 +30,7 @@ import {is_defined, select_save_id} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-import HelpIcon from '../components/icon/helpicon.js';
+import ManualIcon from '../components/icon/manualicon.js';
 import NewIcon from '../components/icon/newicon.js';
 import Icon from '../components/icon/icon.js';
 
@@ -60,9 +60,10 @@ const SectionElements = ({
         title={_('New Permission')}
         onClick={onPermissionCreateClick}
       />
-      <HelpIcon
-        page="resource_permissions"
-        title={_('Help: Resource Permissions')}
+      <ManualIcon
+        page="gui_administration"
+        anchor="permissions"
+        title={_('Help: Permissions')}
       />
     </SectionElementDivider>
   );

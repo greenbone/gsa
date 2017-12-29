@@ -36,7 +36,7 @@ import Override from '../../entity/override.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer, {loader} from '../../entity/container.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -66,9 +66,10 @@ let ToolBarIcons = ({
   return (
     <Divider margin="10px">
       <IconDivider>
-        <HelpIcon
-          page="nvt_details"
-          title={_('Help: NVT Details')}
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="network-vulnerability-tests"
+          title={_('Help: NVTs')}
         />
         <ListIcon
           title={_('NVT List')}

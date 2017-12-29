@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -46,8 +46,9 @@ const ToolBarIcons = ({
   onRoleCreateClick,
 }, {capabilities}) => (
   <IconDivider>
-    <HelpIcon
-      page="roles"
+    <ManualIcon
+      page="gui_administration"
+      anchor="user-roles"
       title={_('Help: Roles')}/>
     {capabilities.mayCreate('role') &&
       <NewIcon

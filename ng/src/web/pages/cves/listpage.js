@@ -30,7 +30,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import CveCharts from './charts.js';
 import CveFilterDialog from './filterdialog.js';
@@ -38,8 +38,9 @@ import CvesTable from './table.js';
 
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="cves"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="cve"
       title={_('Help: CVEs')}/>
   );
 };

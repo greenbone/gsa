@@ -30,7 +30,7 @@ import {render_yesno} from '../../utils/render.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -68,9 +68,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="note_details"
-        title={_('Help: Note Details')}
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="notes"
+        title={_('Help: Notes')}
       />
       <ListIcon
         title={_('Note List')}

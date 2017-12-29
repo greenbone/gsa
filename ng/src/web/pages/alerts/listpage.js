@@ -34,7 +34,7 @@ import withCapabilities from '../../utils/withCapabilities.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
@@ -47,8 +47,9 @@ const ToolBarIcons = withCapabilities(({
   onAlertCreateClick,
 }) => (
   <IconDivider>
-    <HelpIcon
-      page="alerts"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="alerts"
       title={_('Help: Alerts')}/>
     {capabilities.mayCreate('alert') &&
       <NewIcon

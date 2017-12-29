@@ -30,7 +30,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import SecInfoCharts from './charts.js';
 import SecInfoFilterDialog from './filterdialog.js';
@@ -38,8 +38,9 @@ import SecInfosTable from './table.js';
 
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="secinfos"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="secinfo-management"
       title={_('Help: All SecInfo Information')}/>
   );
 };

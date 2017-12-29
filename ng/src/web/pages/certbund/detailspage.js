@@ -31,7 +31,7 @@ import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer from '../../entity/container.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -51,9 +51,10 @@ import CertBundAdvDetails from './details.js';
 
 const ToolBarIcons = () => (
   <IconDivider>
-    <HelpIcon
-      page="cert_bund_adv_details"
-      title={_('Help:  CERT-Bund Advisory Details')}
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="cert-bund"
+      title={_('Help:  CERT-Bund Advisories')}
     />
     <ListIcon
       title={_('CERT-Bund Advisories')}

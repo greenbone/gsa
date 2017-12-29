@@ -39,7 +39,7 @@ import CreateIcon from '../../entity/icon/createicon.js';
 import EditIcon from '../../entity/icon/editicon.js';
 import DeleteIcon from '../../entity/icon/deleteicon.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -58,9 +58,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="schedule_details"
-        title={_('Help: Schedule Details')}
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anhcor="scheduled-scan"
+        title={_('Help: Schedules')}
       />
       <ListIcon
         title={_('Schedules List')}

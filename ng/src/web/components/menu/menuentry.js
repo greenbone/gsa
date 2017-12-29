@@ -75,6 +75,7 @@ const MenuEntry = ({
     capabilities,
     caps,
     legacy,
+    manualLink,
     section,
     title,
     to,
@@ -99,7 +100,10 @@ const MenuEntry = ({
     }
   }
 
-  if (is_defined(to)) {
+  if (manualLink) {
+    entry = <a href={to} target="_blank">{title}</a>;
+  }
+  else if (is_defined(to)) {
     entry = <Link to={to}>{title}</Link>;
   }
   else if (legacy) {
@@ -121,6 +125,7 @@ MenuEntry.propTypes = {
     PropTypes.array,
   ]),
   legacy: PropTypes.bool,
+  manualLink: PropTypes.bool,
   section: PropTypes.bool,
   title: PropTypes.string.isRequired,
   to: PropTypes.string,

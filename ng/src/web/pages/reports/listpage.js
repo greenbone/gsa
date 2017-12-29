@@ -33,7 +33,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -58,7 +58,11 @@ const Dashboard = withDashboard({
 
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
-    <HelpIcon page="reports"/>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="reading-of-the-reports"
+      title={_('Help: Reports')}
+    />
     <Icon
       size="small"
       title={_('Upload report')}

@@ -33,7 +33,7 @@ import PropTypes from '../../utils/proptypes.js';
 import SeverityBar from '../../components/bar/severitybar.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 import OsIcon from '../../components/icon/osicon.js';
@@ -75,8 +75,9 @@ const ToolBarIcons = ({
   return (
     <Divider margin="10px">
       <IconDivider>
-        <HelpIcon
-          page="host_details"
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="host-details"
           title={_('Help: Host Details')}
         />
         <ListIcon

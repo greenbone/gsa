@@ -30,7 +30,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import NvtsCharts from './charts.js';
 import NvtsFilterDialog from './filterdialog.js';
@@ -46,8 +46,9 @@ const Dashboard = withDashboard({
 
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="nvts"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="network-vulnerability-tests"
       title={_('Help: NVTs')}/>
   );
 };

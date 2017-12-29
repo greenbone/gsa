@@ -37,7 +37,7 @@ import ToolBar from '../../components/bar/toolbar.js';
 
 import Select2 from '../../components/form/select2.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -129,9 +129,10 @@ const ToolBarIcons = ({
     <IconSizeProvider size="medium">
       <Divider margin="15px">
         <IconDivider>
-          <HelpIcon
-            page="view_report"
-            title={_('Help: View Report')}/>
+          <ManualIcon
+            page="vulnerabilitymanagement"
+            anchor="reports-and-vulnerability-management"
+            title={_('Help: Reports')}/>
           <ListIcon
             title={_('Reports List')}
             page="reports"

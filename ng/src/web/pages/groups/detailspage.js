@@ -38,7 +38,7 @@ import CreateIcon from '../../entity/icon/createicon.js';
 import EditIcon from '../../entity/icon/editicon.js';
 import TrashIcon from '../../entity/icon/trashicon.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -57,8 +57,9 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="group_details"
+      <ManualIcon
+        page="gui_administration"
+        anchor="groups"
         title={_('Help: Group Details')}
       />
       <ListIcon

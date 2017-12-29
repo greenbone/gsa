@@ -1,10 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import {is_defined} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
 
-import Icon from './icon.js';
+import MenuEntry from './menuentry.js';
 
 const LANGUAGE_MAPPING = {};
 const DEFAULT_LANGUAGE_PATH = 'en';
@@ -47,49 +47,34 @@ const get_language_path = () => {
   return is_defined(path) ? path : DEFAULT_LANGUAGE_PATH;
 };
 
-const ManualIcon = ({
-  anchor,
-  page,
-  searchTerm,
-  title,
-  gmp,
-  ...props
-}) => {
-  const {manualurl} = gmp.globals;
+const MenuHelpEntry = ({
+    gmp,
+    title,
+    ...other
+  }) => {
 
-  let url = manualurl;
-  if (!url.endsWith('/')) {
-    url += '/';
-  }
+    const {manualurl} = gmp.globals;
+    let url = manualurl;
+    if (!url.endsWith('/')) {
+      url += '/';
+    }
 
-  url += get_language_path() + '/' + page + '.html';
+    url += get_language_path() + '/index.html';
 
-  if (page === 'search' && is_defined(searchTerm)) {
-    url += '?q=' + searchTerm;
-  }
-  else if (is_defined(anchor)) {
-    url += '#' + anchor;
-  }
-
-  return (
-    <Icon
-      {...props}
-      img="help.svg"
-      to={url}
-      title={title}
-      target="_blank"
-    />
-  );
+    return (
+      <MenuEntry
+        to={url}
+        title={title}
+        manualLink={true}
+      />
+    );
 };
 
-ManualIcon.propTypes = {
-  anchor: PropTypes.string,
+MenuHelpEntry.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  page: PropTypes.string.isRequired,
-  searchTerm: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 
-export default withGmp(ManualIcon);
+export default withGmp(MenuHelpEntry);
 
 // vim: set ts=2 sw=2 tw=80:

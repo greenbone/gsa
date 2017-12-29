@@ -36,7 +36,7 @@ import SelectionType from '../../utils/selectiontype.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -57,8 +57,9 @@ const ToolBarIcons = withCapabilities(({
 }) => {
   return (
     <IconDivider>
-      <HelpIcon
-        page="users"
+      <ManualIcon
+        page="gui_administration"
+        anchor="user-management"
         title={_('Help: Users')}
       />
       {capabilities.mayCreate('user') &&

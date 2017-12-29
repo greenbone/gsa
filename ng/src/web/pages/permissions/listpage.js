@@ -31,7 +31,7 @@ import withCapabilities from '../../utils/withCapabilities.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -47,8 +47,9 @@ const ToolBarIcons = withCapabilities(({
   onPermissionCreateClick,
 }) => (
   <IconDivider>
-    <HelpIcon
-      page="permissions"
+    <ManualIcon
+      page="gui_administration"
+      anchor="permissions"
       title={_('Help: Permissions')}
     />
     {capabilities.mayCreate('permission') &&

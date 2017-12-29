@@ -34,7 +34,7 @@ import TextField from '../components/form/textfield.js';
 import Select2 from '../components/form/select2.js';
 
 import EditIcon from '../components/icon/editicon.js';
-import HelpIcon from '../components/icon/helpicon.js';
+import ManualIcon from '../components/icon/manualicon.js';
 import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
 import TrashIcon from '../components/icon/trashicon.js';
@@ -183,9 +183,10 @@ const SectionElements = ({
           value={entity}
           onClick={onTagCreateClick}
         />
-        <HelpIcon
-          page="user-tags"
-          title={_('Help: User Tags list')}
+        <ManualIcon
+          page="gui_introduction"
+          anchor="tags"
+          title={_('Help: User Tags')}
         />
       </IconDivider>
     </SectionElementDivider>

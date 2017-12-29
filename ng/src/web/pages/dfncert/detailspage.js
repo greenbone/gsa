@@ -33,7 +33,7 @@ import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer from '../../entity/container.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -46,9 +46,10 @@ import DfnCertAdvDetails from './details.js';
 
 const ToolBarIcons = () => (
   <IconDivider>
-    <HelpIcon
-      page="dfn_cert_adv_details"
-      title={_('Help: DFN-CERT Advisory Details')}
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="id15"
+      title={_('Help: DFN-CERT Advisories')}
     />
     <ListIcon
       title={_('DFN-CERT Advisories')}

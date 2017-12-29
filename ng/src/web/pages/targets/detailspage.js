@@ -37,7 +37,7 @@ import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import InfoTable from '../../components/table/infotable.js';
@@ -71,9 +71,10 @@ const ToolBarIcons = ({
   return (
     <Divider margin="10px">
       <IconDivider>
-        <HelpIcon
-          page="target_details"
-          title={_('Help: Target Details')}
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="creating-a-target"
+          title={_('Help: Targets')}
         />
         <ListIcon
           title={_('Target List')}

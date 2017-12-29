@@ -32,7 +32,7 @@ import EntityPage from '../../entity/page.js';
 import EntityContainer from '../../entity/container.js';
 import {EntityInfoTable} from '../../entity/info.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -52,9 +52,10 @@ import CveDetails from './details.js';
 
 const ToolBarIcons = () => (
   <IconDivider>
-    <HelpIcon
-      page="cve_details"
-      title={_('Help: CVE Details')}
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="cve"
+      title={_('Help: CVEs')}
     />
     <ListIcon
       title={_('CVE List')}
