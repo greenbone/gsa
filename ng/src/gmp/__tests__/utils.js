@@ -23,6 +23,7 @@
 import {
   avg,
   sum,
+  is_defined,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -79,4 +80,17 @@ describe('avg function tests', () => {
     expect(avg(array, entry => entry.value)).toBe(3);
   });
 });
+
+describe('is_defined function test', () => {
+  test('should return false for undefined let variable', () => {
+    let x;
+    expect(is_defined(x)).toBe(false);
+  });
+
+  test('should return true for defined let variable', () => {
+    let x = 1; // eslint-disable-line prefer-const
+    expect(is_defined(x)).toBe(true);
+  });
+});
+
 // vim: set ts=2 sw=2 tw=80:
