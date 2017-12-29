@@ -24,6 +24,7 @@ import {
   avg,
   sum,
   is_defined,
+  has_value,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -90,6 +91,23 @@ describe('is_defined function test', () => {
   test('should return true for defined let variable', () => {
     let x = 1; // eslint-disable-line prefer-const
     expect(is_defined(x)).toBe(true);
+  });
+});
+
+describe('has_value function test', () => {
+  test('should return false for undefined let variable', () => {
+    let x;
+    expect(has_value(x)).toBe(false);
+  });
+
+  test('should return true for defined let variable', () => {
+    let x = 1; // eslint-disable-line prefer-const
+    expect(has_value(x)).toBe(true);
+  });
+
+  test('should return false for null let variable', () => {
+    let x = null; // eslint-disable-line prefer-const
+    expect(has_value(x)).toBe(false);
   });
 });
 
