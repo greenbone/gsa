@@ -69,10 +69,6 @@ export function is_date(value) {
 
 export const is_model_element = elem => is_defined(elem) && !is_empty(elem._id);
 
-export function shallow_copy(source) {
-  return Object.assign({}, source);
-}
-
 export function extend(dest = {}, ...sources) {
   return Object.assign(dest, ...sources);
 }
