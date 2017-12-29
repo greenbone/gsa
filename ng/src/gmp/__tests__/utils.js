@@ -26,6 +26,7 @@ import {
   is_defined,
   has_value,
   is_object,
+  is_string,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -141,6 +142,43 @@ describe('is_object function test', () => {
   test('should return true for empty object', () => {
     const x = {};
     expect(is_object(x)).toBe(true);
+  });
+});
+
+describe('is_string function test', () => {
+  test('should return false for undefined variable', () => {
+    let x;
+    expect(is_string(x)).toBe(false);
+  });
+
+  test('should return false for number variable', () => {
+    const x = 1;
+    expect(is_string(x)).toBe(false);
+  });
+
+  test('should return false for null variable', () => {
+    const x = null;
+    expect(is_string(x)).toBe(false);
+  });
+
+  test('should return false for an array', () => {
+    const x = [];
+    expect(is_string(x)).toBe(false);
+  });
+
+  test('should return false for empty object', () => {
+    const x = {};
+    expect(is_string(x)).toBe(false);
+  });
+
+  test('should return true for an empty string', () => {
+    const x = '';
+    expect(is_string(x)).toBe(true);
+  });
+
+  test('should return true for a string', () => {
+    const x = 'foo';
+    expect(is_string(x)).toBe(true);
   });
 });
 
