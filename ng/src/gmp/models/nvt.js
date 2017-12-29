@@ -26,7 +26,6 @@ import {
   is_empty,
   is_string,
   map,
-  shallow_copy,
 } from '../utils.js';
 
 import {parse_float, parse_severity} from '../parser.js';
@@ -87,7 +86,7 @@ class Nvt extends Info {
 
     if (is_defined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
-        const pref = shallow_copy(preference);
+        const pref = {...preference};
         delete pref.nvt;
         return pref;
       });
