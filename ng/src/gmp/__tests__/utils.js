@@ -27,6 +27,7 @@ import {
   has_value,
   is_object,
   is_string,
+  is_array,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -179,6 +180,38 @@ describe('is_string function test', () => {
   test('should return true for a string', () => {
     const x = 'foo';
     expect(is_string(x)).toBe(true);
+  });
+});
+
+describe('is_array function test', () => {
+  test('should return false for undefined variable', () => {
+    let x;
+    expect(is_array(x)).toBe(false);
+  });
+
+  test('should return false for number variable', () => {
+    const x = 1;
+    expect(is_array(x)).toBe(false);
+  });
+
+  test('should return false for null variable', () => {
+    const x = null;
+    expect(is_array(x)).toBe(false);
+  });
+
+  test('should return false for empty object', () => {
+    const x = {};
+    expect(is_array(x)).toBe(false);
+  });
+
+  test('should return false for a string', () => {
+    const x = 'foo';
+    expect(is_array(x)).toBe(false);
+  });
+
+  test('should return true for an array', () => {
+    const x = [];
+    expect(is_array(x)).toBe(true);
   });
 });
 
