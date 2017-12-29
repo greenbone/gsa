@@ -25,6 +25,7 @@ import {
   sum,
   is_defined,
   has_value,
+  is_object,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -108,6 +109,38 @@ describe('has_value function test', () => {
   test('should return false for null let variable', () => {
     let x = null; // eslint-disable-line prefer-const
     expect(has_value(x)).toBe(false);
+  });
+});
+
+describe('is_object function test', () => {
+  test('should return false for undefined variable', () => {
+    let x;
+    expect(is_object(x)).toBe(false);
+  });
+
+  test('should return false for number variable', () => {
+    const x = 1;
+    expect(is_object(x)).toBe(false);
+  });
+
+  test('should return false for null variable', () => {
+    const x = null;
+    expect(is_object(x)).toBe(false);
+  });
+
+  test('should return false for a string', () => {
+    const x = 'foo';
+    expect(is_object(x)).toBe(false);
+  });
+
+  test('should return true for an array', () => {
+    const x = [];
+    expect(is_object(x)).toBe(true);
+  });
+
+  test('should return true for empty object', () => {
+    const x = {};
+    expect(is_object(x)).toBe(true);
   });
 });
 
