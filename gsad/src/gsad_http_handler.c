@@ -372,14 +372,6 @@ handle_static_file (http_connection_t *connection, const char * method,
 }
 
 int
-handle_login_page (http_connection_t *connection, const char *method,
-                   const char *url, gsad_connection_info_t *con_info,
-                   http_handler_t *handler, void *data)
-{
-  return handler_send_login_page (connection, MHD_HTTP_OK, NULL, NULL);
-}
-
-int
 handle_redirect_to_login_page (http_connection_t *connection,
                                const char *method, const char *url,
                                gsad_connection_info_t *con_info,
