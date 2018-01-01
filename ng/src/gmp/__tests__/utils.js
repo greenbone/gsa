@@ -31,6 +31,7 @@ import {
   is_number,
   is_function,
   is_empty,
+  is_date,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -339,6 +340,44 @@ describe('is_empty function test', () => {
   test('should return false for an array', () => {
     const x = [1, 2];
     expect(is_empty(x)).toBe(false);
+  });
+});
+
+describe('is_date function test', () => {
+  test('should return false for undefined variable', () => {
+    let x;
+    expect(is_date(x)).toBe(false);
+  });
+
+  test('should return false for number variable', () => {
+    const x = 1;
+    expect(is_date(x)).toBe(false);
+  });
+
+  test('should return false for null variable', () => {
+    const x = null;
+    expect(is_date(x)).toBe(false);
+  });
+
+  test('should return false for empty object', () => {
+    const x = {};
+    expect(is_date(x)).toBe(false);
+  });
+
+
+  test('should return false for a string', () => {
+    const x = 'foo';
+    expect(is_date(x)).toBe(false);
+  });
+
+  test('should return false for an array', () => {
+    const x = [];
+    expect(is_date(x)).toBe(false);
+  });
+
+  test('should return true for a date', () => {
+    const x = new Date();
+    expect(is_date(x)).toBe(true);
   });
 });
 
