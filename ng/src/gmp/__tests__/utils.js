@@ -32,6 +32,7 @@ import {
   is_function,
   is_empty,
   is_date,
+  is_model_element,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -378,6 +379,34 @@ describe('is_date function test', () => {
   test('should return true for a date', () => {
     const x = new Date();
     expect(is_date(x)).toBe(true);
+  });
+});
+
+describe('is_model_element function test', () => {
+
+  test('should return false for undefined variable', () => {
+    let x;
+    expect(is_model_element(x)).toBe(false);
+  });
+
+  test('should throw for null variable', () => {
+    const x = null;
+    expect(() => is_model_element(x)).toThrow(TypeError);
+  });
+
+  test('should return false for an empty object', () => {
+    const x = {};
+    expect(is_model_element(x)).toBe(false);
+  });
+
+  test('should return false for an object without _id', () => {
+    const x = {foo: 'bar'};
+    expect(is_model_element(x)).toBe(false);
+  });
+
+  test('should return true for an object with _id', () => {
+    const x = {_id: 1};
+    expect(is_model_element(x)).toBe(true);
   });
 });
 
