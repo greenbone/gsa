@@ -22,7 +22,7 @@
  */
 
 import logger from '../log.js';
-import {extend, for_each, map, is_defined} from '../utils.js';
+import {for_each, map, is_defined} from '../utils.js';
 
 import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
@@ -114,17 +114,17 @@ export class ScanConfigCommand extends EntityCommand {
     select,
     scanner_preference_values,
   }) {
-    const data = extend({
+    const data = {
+      ...convert(trend, 'trend:'),
+      ...convert(scanner_preference_values, 'preference:scanner[scanner]:'),
+      ...convert_select(select, 'select:'),
+
       cmd: 'save_config',
       next: 'get_config',
       id,
       comment,
       name,
-    },
-      convert(trend, 'trend:'),
-      convert(scanner_preference_values, 'preference:scanner[scanner]:'),
-      convert_select(select, 'select:'),
-    );
+    };
     log.debug('Saving scanconfig', data);
     return this.httpPost(data).then(this.transformResponse);
   }
@@ -160,15 +160,14 @@ export class ScanConfigCommand extends EntityCommand {
     id,
     selected,
   }) {
-    const data = extend({
+    const data = {
+      ...convert_select(selected, 'nvt:'),
       cmd: 'save_config_family',
       no_redirect: '1',
       id,
       family: family_name,
       name: config_name,
-    },
-      convert_select(selected, 'nvt:'),
-    );
+    };
     log.debug('Saving scanconfigfamily', data);
     return this.httpPost(data);
   }
@@ -221,7 +220,8 @@ export class ScanConfigCommand extends EntityCommand {
     preference_values,
     timeout,
   }) {
-    let data = extend({
+    const data = {
+      ...convert_preferences(preference_values, nvt_name),
       cmd: 'save_config_nvt',
       no_redirect: '1',
       id,
@@ -229,7 +229,7 @@ export class ScanConfigCommand extends EntityCommand {
       name: config_name,
       family: family_name,
       timeout,
-    }, convert_preferences(preference_values, nvt_name));
+    };
 
     data['preference:scanner[scanner]:timeout.' + oid] = manual_timeout;
 

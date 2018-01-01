@@ -69,10 +69,6 @@ export function is_date(value) {
 
 export const is_model_element = elem => is_defined(elem) && !is_empty(elem._id);
 
-export function extend(dest = {}, ...sources) {
-  return Object.assign(dest, ...sources);
-}
-
 export function includes(array, value) {
   if (!Array.prototype.includes) {
     return array.indexOf(value) !== -1;
@@ -223,9 +219,11 @@ export function shorten(text, length = 60) {
 }
 
 export function exclude(object, func) {
-  return extend({}, ...Object.keys(object)
-    .filter(key => !func(key))
-    .map(key => ({[key]: object[key]})));
+  return {
+    ...Object.keys(object)
+      .filter(key => !func(key))
+      .map(key => ({[key]: object[key]})),
+  };
 }
 
 export const exclude_object_props = (object, exclude_array) =>

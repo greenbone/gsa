@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {extend, is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -51,7 +51,7 @@ const LegacyLink = ({
     }
   }
 
-  let url = gmp.buildUrl(path, extend({}, params, iparams));
+  let url = gmp.buildUrl(path, {...params, ...iparams});
   return (
     <a href={url}
       target={target}

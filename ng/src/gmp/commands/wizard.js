@@ -28,7 +28,7 @@ import Credential from '../models/credential.js';
 import Task from '../models/task.js';
 import Settings from '../models/settings.js';
 
-import {extend, for_each, map} from '../utils.js';
+import {for_each, map} from '../utils.js';
 
 function convert_data(prefix, data, fields) {
   let converted = {};
@@ -150,13 +150,11 @@ export class WizardCommand extends HttpCommand {
   }
 
   runQuickFirstScan(args) {
-    return this.httpPost(extend(
-      {
-        cmd: 'run_wizard',
-        name: 'quick_first_scan',
-      },
-      convert_data('event_data', args, event_data_quick_first_scan_fields),
-    ));
+    return this.httpPost({
+      ...convert_data('event_data', args, event_data_quick_first_scan_fields),
+      cmd: 'run_wizard',
+      name: 'quick_first_scan',
+    });
   }
 
   runQuickTask(args) {
@@ -168,13 +166,11 @@ export class WizardCommand extends HttpCommand {
     event_data['event_data:start_month'] = date.month() + 1;
     event_data['event_data:start_year'] = date.year();
 
-    return this.httpPost(extend(
-      {
-        cmd: 'run_wizard',
-        name: 'quick_task',
-      },
-      event_data,
-    ));
+    return this.httpPost({
+      ...event_data,
+      cmd: 'run_wizard',
+      name: 'quick_task',
+    });
   }
 
   runModifyTask(args) {
@@ -187,13 +183,11 @@ export class WizardCommand extends HttpCommand {
     event_data['event_data:start_month'] = date.month() + 1;
     event_data['event_data:start_year'] = date.year();
 
-    return this.httpPost(extend(
-      {
-        cmd: 'run_wizard',
-        name: 'modify_task',
-      },
-      event_data
-    ));
+    return this.httpPost({
+      ...event_data,
+      cmd: 'run_wizard',
+      name: 'modify_task',
+    });
   }
 }
 
