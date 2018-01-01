@@ -30,6 +30,7 @@ import {
   is_array,
   is_number,
   is_function,
+  is_empty,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -293,6 +294,51 @@ describe('is_function function test', () => {
   test('should return false for an arrow function', () => {
     const x = () => {};
     expect(is_function(x)).toBe(true);
+  });
+});
+
+describe('is_empty function test', () => {
+  test('should return true for undefined variable', () => {
+    let x;
+    expect(is_empty(x)).toBe(true);
+  });
+
+  test('should return false for number variable', () => {
+    const x = 1;
+    expect(is_empty(x)).toBe(false);
+  });
+
+  test('should return true for null variable', () => {
+    const x = null;
+    expect(is_empty(x)).toBe(true);
+  });
+
+  test('should return false for empty object', () => {
+    const x = {};
+    expect(is_empty(x)).toBe(false);
+  });
+
+  test('should return true for an empty string', () => {
+    const x = '';
+    expect(is_empty(x)).toBe(true);
+
+    const y = '                 ';
+    expect(is_empty(y)).toBe(true);
+  });
+
+  test('should return false for a string', () => {
+    const x = 'foo';
+    expect(is_empty(x)).toBe(false);
+  });
+
+  test('should return true for an empty array', () => {
+    const x = [];
+    expect(is_empty(x)).toBe(true);
+  });
+
+  test('should return false for an array', () => {
+    const x = [1, 2];
+    expect(is_empty(x)).toBe(false);
   });
 });
 
