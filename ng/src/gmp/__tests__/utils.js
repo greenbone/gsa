@@ -28,6 +28,7 @@ import {
   is_object,
   is_string,
   is_array,
+  is_number,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -212,6 +213,43 @@ describe('is_array function test', () => {
   test('should return true for an array', () => {
     const x = [];
     expect(is_array(x)).toBe(true);
+  });
+});
+
+describe('is_number function test', () => {
+  test('should return false for undefined variable', () => {
+    let x;
+    expect(is_number(x)).toBe(false);
+  });
+
+  test('should return false for null variable', () => {
+    const x = null;
+    expect(is_number(x)).toBe(false);
+  });
+
+  test('should return false for empty object', () => {
+    const x = {};
+    expect(is_number(x)).toBe(false);
+  });
+
+  test('should return false for a string', () => {
+    const x = 'foo';
+    expect(is_number(x)).toBe(false);
+  });
+
+  test('should return false for an array', () => {
+    const x = [];
+    expect(is_number(x)).toBe(false);
+  });
+
+  test('should return true for int number variable', () => {
+    const x = 1;
+    expect(is_number(x)).toBe(true);
+  });
+
+  test('should return true for float number variable', () => {
+    const x = 1.23456;
+    expect(is_number(x)).toBe(true);
   });
 });
 
