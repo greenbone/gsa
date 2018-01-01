@@ -64,7 +64,7 @@ export function is_empty(value) {
 }
 
 export function is_date(value) {
-  return toString.call(value) === '[object Date]';
+  return Object.prototype.toString.call(value) === '[object Date]';
 }
 
 export const is_model_element = elem => is_defined(elem) && !is_empty(elem._id);
