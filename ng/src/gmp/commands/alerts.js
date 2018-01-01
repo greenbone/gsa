@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {map, extend} from '../utils.js';
+import {map} from '../utils.js';
 import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
@@ -79,7 +79,10 @@ export class AlertCommand extends EntityCommand {
       method,
       ...other
     } = args;
-    const data = extend({
+    const data = {
+      ...convert_data('method_data', other, method_data_fields),
+      ...convert_data('condition_data', other, condition_data_fields),
+      ...convert_data('event_data', other, event_data_fields),
       cmd: 'create_alert',
       next: 'get_alert',
       active,
@@ -89,10 +92,7 @@ export class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-    },
-      convert_data('method_data', other, method_data_fields),
-      convert_data('condition_data', other, condition_data_fields),
-      convert_data('event_data', other, event_data_fields));
+    };
     log.debug('Creating new alert', args, data);
     return this.httpPost(data).then(this.transformResponse);
   }
@@ -109,7 +109,10 @@ export class AlertCommand extends EntityCommand {
       method,
       ...other
     } = args;
-    const data = extend({
+    const data = {
+      ...convert_data('method_data', other, method_data_fields),
+      ...convert_data('condition_data', other, condition_data_fields),
+      ...convert_data('event_data', other, event_data_fields),
       cmd: 'save_alert',
       next: 'get_alert',
       id,
@@ -120,10 +123,7 @@ export class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-    },
-      convert_data('method_data', other, method_data_fields),
-      convert_data('condition_data', other, condition_data_fields),
-      convert_data('event_data', other, event_data_fields));
+    };
     log.debug('Saving alert', args, data);
     return this.httpPost(data).then(this.transformResponse);
   }

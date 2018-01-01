@@ -22,7 +22,7 @@
  */
 
 import _ from '../locale.js';
-import {extend, is_defined} from '../utils.js';
+import {is_defined} from '../utils.js';
 
 import Info from './info.js';
 
@@ -57,8 +57,11 @@ class SecInfo extends Info {
 
     if (elem.allinfo) { // we have an info element
       const {type, ...other} = elem.allinfo; // filter out type
-      extend(ret, other);
-      ret._type = type;
+      ret = {
+        ...ret,
+        ...other,
+        _type: type,
+      };
       delete ret.allinfo;
     }
 

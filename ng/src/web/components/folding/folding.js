@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, extend} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -62,7 +62,7 @@ export const withFolding = (Component, defaults = {}) => {
     let animation;
     let display;
     const window_height = Math.ceil(window.innerHeight * 1.2) + 'px';
-    const new_style = extend({}, style);
+    const new_style = {...style};
 
     switch (foldState) {
       case FoldState.FOLDED:

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, is_model_element, extend, map} from '../utils.js';
+import {is_defined, is_empty, is_model_element, map} from '../utils.js';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -47,7 +47,7 @@ class Note extends Model {
       ret.name = ret.nvt.name;
     }
 
-    ret = extend(ret, parse_text(ret.text));
+    ret = {...ret, ...parse_text(ret.text)};
 
     ret.severity = parse_severity(ret.severity);
 

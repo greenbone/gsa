@@ -26,7 +26,7 @@ import logger from './log.js';
 
 import _ from './locale.js';
 
-import {is_defined, has_value, is_array, extend} from './utils.js';
+import {is_defined, has_value, is_array} from './utils.js';
 
 import Promise from './promise.js';
 import Response from './response.js';
@@ -151,7 +151,7 @@ export class Http {
     method = method.toUpperCase();
 
     if (args) {
-      url += '?' + build_url_params(extend({}, this.params, args));
+      url += '?' + build_url_params({...this.params, ...args});
     }
 
     if (method === 'GET' && is_defined(cache) && cache.has(url) && !force) {
@@ -170,7 +170,7 @@ export class Http {
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
-      formdata = this._createFormData(extend({}, this.params, data));
+      formdata = this._createFormData({...this.params, ...data});
     }
 
     let xhr;

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend, is_defined, is_empty, is_model_element, map} from '../utils.js';
+import {is_defined, is_empty, is_model_element, map} from '../utils.js';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -51,7 +51,7 @@ class Override extends Model {
 
     ret.new_severity = parse_severity(ret.new_severity);
 
-    ret = extend(ret, parse_text(ret.text));
+    ret = {...ret, ...parse_text(ret.text)};
 
     if (is_model_element(ret.task)) {
       ret.task = new Model(ret.task, 'task');
