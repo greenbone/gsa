@@ -20,13 +20,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import Http from './http.js';
+import {build_server_url} from './utils.js';
 
-const x2js = new window.X2JS();
+import X2JsTransform from './transform/x2js.js';
 
-export function xml2json(...args) {
-  return x2js.xml2json(...args);
+class GmpHttp extends Http {
+
+  constructor(server, protocol, options) {
+    const url = build_server_url(server, 'omp', protocol);
+    super(url, {...options, transform: new X2JsTransform()});
+
+    this.params.xml = 1;
+  }
+
+  get token() {
+    return this.params.token;
+  }
+
+  set token(token) {
+    this.params.token = token;
+  }
+
 }
 
-export default xml2json;
+export default GmpHttp;
 
 // vim: set ts=2 sw=2 tw=80:

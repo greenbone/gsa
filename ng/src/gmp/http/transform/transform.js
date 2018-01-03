@@ -20,42 +20,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-export class Response {
 
-  constructor(data, meta = {}) {
-    this._data = data;
-    this._meta = meta;
+import Response from '../response.js';
+
+class Transfrom {
+
+  success(xhr, options) {
+    return new Response(xhr, {fromcache: false});
   }
 
-  set(data, meta) {
-    return new Response(data, {...this._meta, ...meta});
-  }
-
-  setMeta(meta) {
-    return new Response(this._data, {...this._meta, ...meta});
-  }
-
-  getMeta() {
-    return this._meta;
-  }
-
-  setData(data) {
-    return new Response(data, this._meta);
-  }
-
-  getData() {
-    return this._data;
-  }
-
-  get meta() {
-    return this.getMeta();
-  }
-
-  get data() {
-    return this.getData();
+  rejection(rej, options) {
+    return rej;
   }
 }
 
-export default Response;
+export default Transfrom;
 
-// vim: set ts=2 sw=2 tw=80:
+ // vim: set ts=2 sw=2 tw=80:
+

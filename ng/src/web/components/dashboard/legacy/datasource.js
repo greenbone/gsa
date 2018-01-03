@@ -28,7 +28,7 @@ import logger from 'gmp/log.js';
 import {is_defined} from 'gmp/utils.js';
 import {Cache} from 'gmp/cache.js';
 
-import xml2json from 'gmp/xml2json.js';
+import {xml2json} from 'gmp/http/transform/x2js.js';
 
 import {filter_type_name, create_uri} from './helper.js';
 

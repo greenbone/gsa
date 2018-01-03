@@ -98,7 +98,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/users.js
      ${NG_SRC_DIR}/src/gmp/commands/vulns.js
      ${NG_SRC_DIR}/src/gmp/gmp.js
-     ${NG_SRC_DIR}/src/gmp/http.js
+     ${NG_SRC_DIR}/src/gmp/http/gmp.js
+     ${NG_SRC_DIR}/src/gmp/http/http.js
+     ${NG_SRC_DIR}/src/gmp/http/interceptor.js
+     ${NG_SRC_DIR}/src/gmp/http/rejection.js
+     ${NG_SRC_DIR}/src/gmp/http/response.js
+     ${NG_SRC_DIR}/src/gmp/http/transform/transform.js
+     ${NG_SRC_DIR}/src/gmp/http/transform/x2js.js
+     ${NG_SRC_DIR}/src/gmp/http/utils.js
      ${NG_SRC_DIR}/src/gmp/index.js
      ${NG_SRC_DIR}/src/gmp/list.js
      ${NG_SRC_DIR}/src/gmp/locale.js
@@ -155,10 +162,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/vulnerability.js
      ${NG_SRC_DIR}/src/gmp/parser.js
      ${NG_SRC_DIR}/src/gmp/promise.js
-     ${NG_SRC_DIR}/src/gmp/response.js
      ${NG_SRC_DIR}/src/gmp/timezones.js
      ${NG_SRC_DIR}/src/gmp/utils.js
-     ${NG_SRC_DIR}/src/gmp/xml2json.js
      ${NG_SRC_DIR}/src/web/app.js
      ${NG_SRC_DIR}/src/web/components/badge/badge.js
      ${NG_SRC_DIR}/src/web/components/bar/menubar.js
