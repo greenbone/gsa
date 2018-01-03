@@ -219,11 +219,12 @@ export function shorten(text, length = 60) {
 }
 
 export function exclude(object, func) {
-  return {
-    ...Object.keys(object)
-      .filter(key => !func(key))
-      .map(key => ({[key]: object[key]})),
-  };
+  return Object.keys(object)
+    .filter(key => !func(key))
+    .reduce((obj, key) => {
+      obj[key] = object[key];
+      return obj;
+    }, {});
 }
 
 export const exclude_object_props = (object, exclude_array) =>
