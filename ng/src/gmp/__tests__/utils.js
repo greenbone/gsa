@@ -33,6 +33,8 @@ import {
   is_empty,
   is_date,
   is_model_element,
+  exclude,
+  exclude_object_props,
 } from '../utils.js';
 
 describe('sum function tests', () => {
@@ -407,6 +409,34 @@ describe('is_model_element function test', () => {
   test('should return true for an object with _id', () => {
     const x = {_id: 1};
     expect(is_model_element(x)).toBe(true);
+  });
+});
+
+describe('exclude function test', () => {
+  test('exclude object property', () => {
+    const obj = {
+      foo: 1,
+      bar: 2,
+    };
+    const result = exclude(obj, prop => prop === 'foo');
+
+    expect(result.foo).toBeUndefined();
+    expect(result.bar).toBe(2);
+  });
+});
+
+describe('exclude_object_props function test', () => {
+  test('exclude object properties', () => {
+    const obj = {
+      foo: 1,
+      bar: 2,
+      abc: 3,
+    };
+    const result = exclude_object_props(obj, ['foo', 'bar']);
+
+    expect(result.foo).toBeUndefined();
+    expect(result.bar).toBeUndefined();
+    expect(result.abc).toBe(3);
   });
 });
 
