@@ -74,7 +74,6 @@ const Entry = glamorous.li({
 const MenuEntry = ({
     capabilities,
     caps,
-    legacy,
     manualLink,
     section,
     title,
@@ -106,9 +105,6 @@ const MenuEntry = ({
   else if (is_defined(to)) {
     entry = <Link to={to}>{title}</Link>;
   }
-  else if (legacy) {
-    entry = <LegacyLink {...other}>{title}</LegacyLink>;
-  }
   else {
     entry = title;
   }
@@ -124,7 +120,6 @@ MenuEntry.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
-  legacy: PropTypes.bool,
   manualLink: PropTypes.bool,
   section: PropTypes.bool,
   title: PropTypes.string.isRequired,
