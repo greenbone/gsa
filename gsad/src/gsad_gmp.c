@@ -14480,7 +14480,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "Bad Request", __FUNCTION__, __LINE__,
                                "Missing parameter alert_id or report_id. "
                                "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_reports", 1, response_data);
+                               1, response_data);
     }
 
   filter = params_value (params, "filter");
@@ -14509,7 +14509,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+                               1, response_data);
     }
 
   if (read_entity_and_text_c (connection, &entity, &response))
@@ -14521,7 +14521,7 @@ report_alert_gmp (gvm_connection_t *connection,
                            "The report could not be delivered. "
                            "Diagnostics: Failure to receive response from "
                            "manager daemon.",
-                           "/omp?cmd=get_tasks", 1, response_data);
+                           1, response_data);
     }
 
   status = entity_attribute (entity, "status");
@@ -14535,7 +14535,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to parse response from manager daemon.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+                               1, response_data);
     }
   if (strcmp(status, "200"))
     {
@@ -14546,7 +14546,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "Failed", __FUNCTION__, __LINE__,
                                "Running the report alert failed."
                                "The report could not be delivered.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+                               1, response_data);
 
     }
 
@@ -25822,7 +25822,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             xml_flag, response_data);
       case 2:
 
         cmd_response_data_set_status_code (response_data,
@@ -25832,7 +25832,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             xml_flag, response_data);
       default:
 
         cmd_response_data_set_status_code (response_data,
@@ -25842,7 +25842,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             xml_flag, response_data);
     }
 
   if (gmp_success (entity))

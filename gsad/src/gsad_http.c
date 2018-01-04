@@ -467,8 +467,7 @@ create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
   gchar *msg = gsad_message_new (NULL, NOT_FOUND_TITLE, NULL, 0,
-                                 NOT_FOUND_MESSAGE,
-                                 "/login", 0, response_data);
+                                 NOT_FOUND_MESSAGE, 0, response_data);
   len = cmd_response_data_get_content_length (response_data);
   response = MHD_create_response_from_buffer (len, msg,
                                               MHD_RESPMEM_MUST_COPY);
@@ -1134,8 +1133,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
  * @param[in]  function  The function in which the error occurred.
  * @param[in]  line      The line number at which the error occurred.
  * @param[in]  msg       The response message.
- * @param[in]  backurl   The URL offered to get back to a sane situation.
- *                       If NULL, the tasks page is used.
  * @param[in]  xml_flag  Flag to indicate if the returned content should contain
  *                       xml or html.
  * @param[out] response_data   Extra data return for the HTTP response.
@@ -1145,8 +1142,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 char *
 gsad_message_new (credentials_t *credentials, const char *title,
                   const char *function, int line, const char *msg,
-                  const char *backurl, gboolean xml_flag,
-                  cmd_response_data_t *response_data)
+                  gboolean xml_flag, cmd_response_data_t *response_data)
 {
   gchar *xml, *message, *resp;
 
@@ -1155,7 +1151,6 @@ gsad_message_new (credentials_t *credentials, const char *title,
       message = g_strdup_printf ("<gsad_response>"
                                  "<title>%s: %s:%i (GSA %s)</title>"
                                  "<message>%s</message>"
-                                 "<backurl>%s</backurl>"
                                  "<token>%s</token>"
                                  "</gsad_response>",
                                  title,
@@ -1163,7 +1158,6 @@ gsad_message_new (credentials_t *credentials, const char *title,
                                  line,
                                  GSAD_VERSION,
                                  msg,
-                                 backurl ? backurl : "/omp?cmd=get_tasks",
                                  credentials ? credentials->token : "");
     }
   else
@@ -1171,13 +1165,11 @@ gsad_message_new (credentials_t *credentials, const char *title,
       message = g_strdup_printf ("<gsad_response>"
                                  "<title>%s (GSA %s)</title>"
                                  "<message>%s</message>"
-                                 "<backurl>%s</backurl>"
                                  "<token>%s</token>"
                                  "</gsad_response>",
                                  title,
                                  GSAD_VERSION,
                                  msg,
-                                 backurl ? backurl : "/omp?cmd=get_tasks",
                                  credentials ? credentials->token : "");
     }
 
@@ -1280,7 +1272,7 @@ gsad_message (credentials_t *credentials, const char *title,
   if (credentials && credentials->params)
     xml_flag = params_value_bool (credentials->params, "xml");
 
-  return gsad_message_new (credentials, title, function, line, msg, backurl,
+  return gsad_message_new (credentials, title, function, line, msg,
                            xml_flag, response_data);
 
 }

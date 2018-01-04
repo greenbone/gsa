@@ -242,8 +242,7 @@ char * gsad_message (credentials_t *, const char *, const char *, int,
                      const char *, const char *, cmd_response_data_t *);
 
 char * gsad_message_new (credentials_t *, const char *, const char *, int,
-                         const char *, const char *, gboolean,
-                         cmd_response_data_t *);
+                         const char *, gboolean, cmd_response_data_t *);
 gchar *login_xml (const gchar *, const gchar *, const gchar *, const gchar *,
                   const gchar *, const gchar *);
 
