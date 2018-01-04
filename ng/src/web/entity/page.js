@@ -85,6 +85,7 @@ class EntityPage extends React.Component {
         img={sectionIcon}
         foldable={foldable}
       >
+        {this.renderInfo()}
         <Details
           {...other}
           entity={entity}
@@ -106,7 +107,7 @@ class EntityPage extends React.Component {
     }
 
     return (
-      <Layout flex align="end">
+      <Layout flex align="start">
         <InfoComponent
           entity={entity}
         />
@@ -188,7 +189,6 @@ class EntityPage extends React.Component {
         <Toolbar>
           {this.renderToolbarIcons()}
         </Toolbar>
-        {this.renderInfo()}
         {this.renderSection()}
         {this.renderUserTags()}
         {this.renderPermissions()}
