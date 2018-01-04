@@ -271,9 +271,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/link/protocoldoclink.js
      ${NG_SRC_DIR}/src/web/components/link/target.js
      ${NG_SRC_DIR}/src/web/components/menu/iconmenu.js
+     ${NG_SRC_DIR}/src/web/components/menu/menu.js
      ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/components/menu/menuhelpentry.js
-     ${NG_SRC_DIR}/src/web/components/menu/menu.js
+     ${NG_SRC_DIR}/src/web/components/menu/menusection.js
      ${NG_SRC_DIR}/src/web/components/notification/dialognotification.js
      ${NG_SRC_DIR}/src/web/components/notification/withDialogNotifiaction.js
      ${NG_SRC_DIR}/src/web/components/pagination/pagination.js
