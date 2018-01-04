@@ -62,6 +62,7 @@ const Wrapper = glamorous(Sticky, {
   'menubar',
   {
     backgroundColor: '#393637',
+    height: '35px',
 
     '& ul': {
       margin: 0,
