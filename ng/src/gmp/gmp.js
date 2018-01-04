@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,7 @@ export class Gmp {
       storage = localStorage,
       caches,
       manualurl,
+      protocoldocurl,
       ...httpoptions
     } = options;
 
@@ -101,7 +102,7 @@ export class Gmp {
       this.token = this.storage.token;
     }
 
-    this.globals = {manualurl};
+    this.globals = {manualurl, protocoldocurl};
 
     const commands = get_commands();
     for (const name in commands) { // eslint-disable-line guard-for-in
