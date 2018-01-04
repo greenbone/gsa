@@ -267,6 +267,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/link/innerlink.js
      ${NG_SRC_DIR}/src/web/components/link/legacylink.js
      ${NG_SRC_DIR}/src/web/components/link/link.js
+     ${NG_SRC_DIR}/src/web/components/link/manuallink.js
      ${NG_SRC_DIR}/src/web/components/link/protocoldoclink.js
      ${NG_SRC_DIR}/src/web/components/link/target.js
      ${NG_SRC_DIR}/src/web/components/menu/iconmenu.js
