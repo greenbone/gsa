@@ -239,7 +239,7 @@ int params_append_mhd (params_t *params, const char *name, const char *filename,
 
 
 char * gsad_message (credentials_t *, const char *, const char *, int,
-                     const char *, const char *, cmd_response_data_t *);
+                     const char *, cmd_response_data_t *);
 
 char * gsad_message_new (credentials_t *, const char *, const char *, int,
                          const char *, gboolean, cmd_response_data_t *);
