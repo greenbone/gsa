@@ -149,7 +149,9 @@ const ToolBarIcons = ({
 
         <StopIcon task={entity} onClick={onTaskStopClick}/>
 
-        <ResumeIcon task={entity} onClick={onTaskResumeClick}/>
+        {!entity.isContainer() &&
+          <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+        }
       </IconDivider>
 
       <Divider margin="10px">
