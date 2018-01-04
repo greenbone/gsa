@@ -65,12 +65,6 @@ const withRowDetails = (type, colSpan = '10') => Component => {
         colSpan={colSpan}
         flex
         align={['start', 'stretch']}>
-        <Indent/>
-        <Component
-          {...props}
-          links={links}
-          entity={entity}
-        />
         {links &&
           <Layout flex align={['start', 'start']}>
             <DetailsLink
@@ -79,11 +73,17 @@ const withRowDetails = (type, colSpan = '10') => Component => {
               <Icon
                 img="details.svg"
                 size="small"
-                title={_('Show details')}
+                title={_('Open all details')}
               />
             </DetailsLink>
           </Layout>
         }
+        <Indent/>
+        <Component
+          {...props}
+          links={links}
+          entity={entity}
+        />
       </TableData>
     </StyledTableRow>
   );

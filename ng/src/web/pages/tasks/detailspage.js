@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,7 +149,9 @@ const ToolBarIcons = ({
 
         <StopIcon task={entity} onClick={onTaskStopClick}/>
 
-        <ResumeIcon task={entity} onClick={onTaskResumeClick}/>
+        {!entity.isContainer() &&
+          <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+        }
       </IconDivider>
 
       <Divider margin="10px">
@@ -158,7 +160,7 @@ const ToolBarIcons = ({
             <DetailsLink
               type="report"
               id={entity.current_report.id}
-              title={_('Current Report on Task {{name}} from {{- date}}', {
+              title={_('Current Report for Task {{name}} from {{- date}}', {
                 name: entity.name,
                 date: short_date(entity.current_report.scan_start),
               })}
@@ -173,7 +175,7 @@ const ToolBarIcons = ({
             <DetailsLink
               type="report"
               id={entity.last_report.id}
-              title={_('Last Report on Task {{name}} from {{- date}}', {
+              title={_('Last Report for Task {{name}} from {{- date}}', {
                 name: entity.name,
                 date: short_date(entity.last_report.scan_start),
               })}
@@ -189,7 +191,7 @@ const ToolBarIcons = ({
             <Link
               to="reports"
               filter={'task_id=' + entity.id}
-              title={_('Total Reports on Task {{name}}', entity)}
+              title={_('Total Reports for Task {{name}}', entity)}
             >
               <Icon
                 img="report.svg"
@@ -202,7 +204,7 @@ const ToolBarIcons = ({
             <Link
               to="reports"
               filter={'task_id=' + entity.id + ' and status=Done'}
-              title={_('Finished Reports on Task {{name}}', entity)}
+              title={_('Finished Reports for Task {{name}}', entity)}
             >
               <Icon
                 img="report.svg"
@@ -216,7 +218,7 @@ const ToolBarIcons = ({
           <Link
             to="results"
             filter={'task_id=' + entity.id}
-            title={_('Results on Task {{name}}', entity)}
+            title={_('Results for Task {{name}}', entity)}
           >
             <Icon
               img="result.svg"
@@ -230,7 +232,7 @@ const ToolBarIcons = ({
             <Link
               to="notes"
               filter={'task_id=' + entity.id}
-              title={_('Notes on Task {{name}}', entity)}
+              title={_('Notes for Task {{name}}', entity)}
             >
               <Icon
                 img="note.svg"
@@ -243,7 +245,7 @@ const ToolBarIcons = ({
             <Link
               to="overrides"
               filter={'task_id=' + entity.id}
-              title={_('Overrides on Task {{name}}', entity)}
+              title={_('Overrides for Task {{name}}', entity)}
             >
               <Icon
                 img="override.svg"

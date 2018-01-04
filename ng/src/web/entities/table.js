@@ -30,6 +30,8 @@ import {is_defined, for_each, exclude_object_props} from 'gmp/utils.js';
 
 import FootNote from '../components/footnote/footnote.js';
 
+import {FoldState} from '../components/folding/folding.js';
+
 import FoldIcon from '../components/icon/foldicon.js';
 
 import Layout from '../components/layout/layout.js';
@@ -131,7 +133,7 @@ class EntitiesTable extends React.Component {
   }
 
   render() {
-    const {details} = this.state;
+    const {details, allToggled} = this.state;
     const {
       emptyTitle,
       entities,
@@ -221,11 +223,10 @@ class EntitiesTable extends React.Component {
         </BodyComponent>
       );
 
-    const foldState = this.state.allToggled ? 'UNFOLDED' : 'FOLDED';
     const detailsIcon = (
       <DetailsIcon
-        foldState={foldState}
-        title={_('Toggle All Details')}
+        foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
+        title={allToggled ? _('Fold all details') : _('Unfold all details')}
         onClick={this.handleToggleAllDetails}
       />
     );

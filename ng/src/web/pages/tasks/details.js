@@ -71,14 +71,24 @@ const TaskDetails = ({
   } = entity;
   const {max_checks = {}, iface = {}, max_hosts} = preferences;
 
-  let duration = _('Not finished yet');
-  if (is_defined(last_report) && is_defined(last_report.scan_end)) {
-    const diff = last_report.scan_end.diff(last_report.scan_start);
-    duration = moment.duration(diff).humanize();
+  let duration;
+  const has_duration = is_defined(last_report) &&
+    is_defined(last_report.scan_start);
+  if (has_duration) {
+    if (is_defined(last_report.scan_end)) {
+      const diff = last_report.scan_end.diff(last_report.scan_start);
+      duration = moment.duration(diff).humanize();
+    }
+    else {
+      duration = _('Not finished yet');
+    }
+  }
+  else {
+    duration = _('No scans yet');
   }
 
-  const av_duration = is_defined(average_duration) ?
-    average_duration.humanize() : '';
+  const has_av_duration = is_defined(average_duration) && average_duration > 0;
+  const av_duration = has_av_duration ? average_duration.humanize() : '';
   return (
     <Layout
       grow="1"
@@ -289,7 +299,7 @@ const TaskDetails = ({
                 {duration}
               </TableData>
             </TableRow>
-            {is_defined(average_duration) &&
+            {has_av_duration &&
               <TableRow>
                 <TableData>
                   {_('Average Scan duration')}
