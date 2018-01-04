@@ -699,7 +699,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
                              "An internal server error has occurred during XSL"
                              " transformation."
                              "</message>"
-                             "<backurl>/omp?cmd=get_tasks</backurl>"
                              "</gsad_response>");
       html = xsl_transform (res, response_data);
       if (html == NULL)
