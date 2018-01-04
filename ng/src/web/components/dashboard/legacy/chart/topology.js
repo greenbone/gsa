@@ -306,7 +306,7 @@ class TopologyChartGenerator extends BaseChartController {
     const width = svg.attr('width');
 
     if (topology.nodes.length === 0) {
-      return this.renderEmptyText();
+      return this.renderEmptyText(svg);
     }
 
     if (is_defined(this.empty_text)) {
