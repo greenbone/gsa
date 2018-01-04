@@ -28,6 +28,7 @@ const theme = {
   },
   extra: {
     darkGray: '#393637',
+    mediumGray: '#787878',
     lightGray: '#c8d3d9',
     goldYellow: '#fdc300',
     redBrown: '#a54317',
