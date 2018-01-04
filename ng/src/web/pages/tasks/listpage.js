@@ -73,7 +73,6 @@ const ToolBarIcons = ({
       {capabilities.mayOp('run_wizard') &&
         <IconMenu
           img="wizard.svg"
-          size="small"
           onClick={onTaskWizardClick}>
           {capabilities.mayCreate('task') &&
             <MenuEntry
