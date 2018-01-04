@@ -226,7 +226,7 @@ class EntitiesTable extends React.Component {
     const detailsIcon = (
       <DetailsIcon
         foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
-        title={_('Toggle All Details')}
+        title={allToggled ? _('Fold all details') : _('Unfold all details')}
         onClick={this.handleToggleAllDetails}
       />
     );
