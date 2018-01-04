@@ -25,13 +25,19 @@ import React from 'react';
 
 import Layout from '../layout/layout.js';
 
+import IconSizeProvider from '../provider/iconsizeprovider.js';
+
 const Toolbar = props => {
   return (
-    <Layout
-      flex
-      align={['space-between', 'start']}
-      {...props}
-      className="toolbar"/>
+    <IconSizeProvider size="medium">
+      <Layout
+        flex
+        align={['space-between', 'start']}
+        {...props}
+        className="toolbar"
+      >
+      </Layout>
+    </IconSizeProvider>
   );
 };
 
