@@ -87,8 +87,8 @@ const TaskDetails = ({
     duration = _('No scans yet');
   }
 
-  const av_duration = is_defined(average_duration) ?
-    average_duration.humanize() : '';
+  const has_av_duration = is_defined(average_duration) && average_duration > 0;
+  const av_duration = has_av_duration ? average_duration.humanize() : '';
   return (
     <Layout
       grow="1"
@@ -299,7 +299,7 @@ const TaskDetails = ({
                 {duration}
               </TableData>
             </TableRow>
-            {is_defined(average_duration) &&
+            {has_av_duration &&
               <TableRow>
                 <TableData>
                   {_('Average Scan duration')}
