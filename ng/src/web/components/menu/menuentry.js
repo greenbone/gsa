@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import {is_defined, is_array} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -33,58 +31,18 @@ import withCapabilties from '../../utils/withCapabilities.js';
 
 import withClickHandler from '../form/withClickHandler.js';
 
-import Link from '../link/link.js';
-import LegacyLink from '../link/legacylink.js';
+import Layout from '../layout/layout.js';
 
-const Entry = glamorous.li({
-  display: 'flex',
-  alignItems: 'center',
-  textDecoration: 'none',
-  textIndent: '12px',
-  textAlign: 'left',
-  color: '#3A3A3A',
-  height: '22px',
-  lineHeight: '22px',
-  fontSize: '10px',
-  fontWeight: 'bold',
-  width: '100%',
-  backgroundColor: 'white',
-  '& > a': {
-    display: 'flex',
-    flexGrow: 1,
-    background: 'none',
-    textDecoration: 'none',
-    color: '#3A3A3A',
-  },
-  '&:last-child': {
-    borderBottomRightRadius: '8px',
-    borderBottomLeftRadius: '8px',
-  },
-  '&:hover': {
-    background: '#99CE48',
-  },
-  '& > a:hover, & > a:focus, & > a:link': {
-    textDecoration: 'none',
-    color: '#3A3A3A',
-  },
-},
-  ({onClick}) => is_defined(onClick) ? {cursor: 'pointer'} : {},
-);
+import Link from '../link/link.js';
 
 const MenuEntry = ({
-    capabilities,
-    caps,
-    legacy,
-    manualLink,
-    section,
-    title,
-    to,
-    onClick,
-    ...other
-  }) => {
-  let entry;
-  const css = section ? 'menu-entry menu-section' : 'menu-entry';
-
+  capabilities,
+  caps,
+  children,
+  title,
+  to,
+  ...props
+}) => {
   if (is_defined(caps) && is_defined(capabilities)) {
 
     if (!is_array(caps)) {
@@ -100,21 +58,21 @@ const MenuEntry = ({
     }
   }
 
-  if (manualLink) {
-    entry = <a href={to} target="_blank">{title}</a>;
-  }
-  else if (is_defined(to)) {
+  let entry;
+  if (is_defined(to)) {
     entry = <Link to={to}>{title}</Link>;
   }
-  else if (legacy) {
-    entry = <LegacyLink {...other}>{title}</LegacyLink>;
+  else if (is_defined(title)) {
+    entry = title;
   }
   else {
-    entry = title;
+    entry = children;
   }
 
   return (
-    <Entry className={css} onClick={onClick}>{entry}</Entry>
+    <Layout grow="1" align={['start', 'stretch']}>
+      {entry}
+    </Layout>
   );
 };
 
@@ -124,12 +82,8 @@ MenuEntry.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
-  legacy: PropTypes.bool,
-  manualLink: PropTypes.bool,
-  section: PropTypes.bool,
   title: PropTypes.string.isRequired,
   to: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default compose(

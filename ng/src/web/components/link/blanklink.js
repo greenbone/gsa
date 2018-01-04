@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,45 +20,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Icon from './icon.js';
-
-import ManualLink from '../link/manuallink.js';
-
-const ManualIcon = ({
-  anchor,
-  page,
-  searchTerm,
-  title,
+const BlankLink = ({
+  to,
+  children,
   ...props
-}) => {
-  return (
-    <ManualLink
-      anchor={anchor}
-      page={page}
-      searchTerm={searchTerm}
-    >
-      <Icon
-        {...props}
-        img="help.svg"
-        title={title}
-      />
-    </ManualLink>
-  );
+}) => (
+  <a
+    {...props}
+    href={to}
+    target="_blank"
+  >
+    {children}
+  </a>
+);
+
+BlankLink.propTypes = {
+  to: PropTypes.string,
 };
 
-ManualIcon.propTypes = {
-  anchor: PropTypes.string,
-  gmp: PropTypes.gmp.isRequired,
-  page: PropTypes.string.isRequired,
-  searchTerm: PropTypes.string,
-  title: PropTypes.string.isRequired,
-};
-
-export default ManualIcon;
+export default BlankLink;
 
 // vim: set ts=2 sw=2 tw=80:

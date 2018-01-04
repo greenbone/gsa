@@ -25,20 +25,19 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {classes} from 'gmp/utils.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import Icon from '../icon/icon.js';
-import withIconCss from '../icon/withIconCss.js';
-import withIconSize from '../icon/withIconSize.js';
+
+const IconMenu = glamorous.span('icon-menu', {
+  display: 'inline-flex',
+  flexDirection: 'column',
+});
 
 const Div = glamorous.div({
   position: 'relative',
-
-  // to close gap between icon and menu, which caused problems in Firefox
-  marginTop: '-3px',
   display: 'none',
+
   '.icon-menu:hover &': {
     display: 'block',
   },
@@ -49,55 +48,75 @@ const List = glamorous.ul({
   margin: 0,
   padding: 0,
   left: 0,
-  bottom: 0,
+  top: 0,
   zIndex: 5,
   listStyle: 'none',
   fontSize: '10px',
   width: '255px',
-  '& .menu-entry': {
-    height: '22px',
-    width: '255px',
-    borderLeft: '1px solid #3A3A3A',
-    borderRight: '1px solid #3A3A3A',
-  },
-  '& .menu-entry:first-child': {
+});
+
+const Entry = glamorous.li('menu-entry', {
+  height: '22px',
+  width: '255px',
+  borderLeft: '1px solid #3A3A3A',
+  borderRight: '1px solid #3A3A3A',
+  display: 'flex',
+  alignItems: 'stretch',
+  backgroundColor: '#FFFFFF',
+  fontWeight: 'bold',
+  textIndent: '12px',
+  textAlign: 'left',
+
+  '&:first-child': {
     borderTopLeftRadius: '0px',
     borderTopRightRadius: '8px',
     borderTop: '1px solid #3A3A3A',
   },
-  '& .menu-entry:last-child': {
+  '&:last-child': {
     borderBottomRightRadius: '8px',
     borderBottomLeftRadius: '8px',
     borderBottom: '1px solid #3A3A3A',
+  },
+  '&:hover': {
+    background: '#99CE48',
+  },
+
+  '& div': {
+    display: 'flex',
+    alignItems: 'center',
+    flexGrow: 1,
+    cursor: 'pointer',
   },
 });
 
 const IconMenuContainer = ({
   children,
-  className,
   onClick,
   ...other
 }) => {
-  className = classes('icon-menu', className);
-
+  const menuentries = React.Children.map(children, child => (
+    <Entry>
+      {child}
+    </Entry>
+  ));
   return (
-    <span className={className}>
+    <IconMenu>
       <Icon onClick={onClick} {...other}/>
       <Div>
         <List>
-          {children}
+          {menuentries}
         </List>
       </Div>
-    </span>
+    </IconMenu>
   );
 };
 
 IconMenuContainer.propTypes = {
-  img: PropTypes.string.isRequired,
   className: PropTypes.string,
+  img: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };
 
-export default withIconSize(withIconCss(IconMenuContainer));
+export default IconMenuContainer;
 
 // vim: set ts=2 sw=2 tw=80:
