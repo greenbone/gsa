@@ -1256,8 +1256,6 @@ gsad_message_new (credentials_t *credentials, const char *title,
  * @param[in]  function  The function in which the error occurred.
  * @param[in]  line      The line number at which the error occurred.
  * @param[in]  msg       The response message.
- * @param[in]  backurl   The URL offered to get back to a sane situation.
- *                       If NULL, the tasks page is used.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return An HTML document as a newly allocated string.
@@ -1265,7 +1263,7 @@ gsad_message_new (credentials_t *credentials, const char *title,
 char *
 gsad_message (credentials_t *credentials, const char *title,
               const char *function, int line, const char *msg,
-              const char *backurl, cmd_response_data_t *response_data)
+              cmd_response_data_t *response_data)
 {
   gboolean xml_flag = 0;
 
