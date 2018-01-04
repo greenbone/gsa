@@ -74,6 +74,7 @@ const Entry = glamorous.li({
 const MenuEntry = ({
     capabilities,
     caps,
+    children,
     manualLink,
     section,
     title,
@@ -105,8 +106,11 @@ const MenuEntry = ({
   else if (is_defined(to)) {
     entry = <Link to={to}>{title}</Link>;
   }
-  else {
+  else if (is_defined(title)) {
     entry = title;
+  }
+  else {
+    entry = children;
   }
 
   return (
