@@ -30,10 +30,9 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-import InfoTable from '../components/table/infotable.js';
-import TableBody from '../components/table/body.js';
-import TableData from '../components/table/data.js';
-import TableRow from '../components/table/row.js';
+import Layout from '../components/layout/layout.js';
+
+import Theme from '../utils/theme.js';
 
 const OwnerInfo = ({
   owner,
@@ -46,13 +45,18 @@ OwnerInfo.propTypes = {
   owner: PropTypes.object,
 };
 
-export const EntityInfoTable = glamorous(InfoTable)(
+export const InfoLayout = glamorous(Layout)(
   'entity-info',
   {
-    borderSpacing: 0,
+    borderSpacing: '0px',
+    color: Theme.extra.mediumGray,
+    fontSize: '10px',
 
-    '& td': {
-      padding: 0,
+    '& :nth-child(even)': {
+      paddingRight: '30px',
+    },
+    '& :nth-child(odd)': {
+      paddingRight: '3px',
     },
   },
 );
@@ -67,43 +71,16 @@ const EntityInfo = ({
     modification_time,
   } = entity;
   return (
-    <EntityInfoTable>
-      <TableBody>
-        <TableRow>
-          <TableData>
-            {_('ID')}
-          </TableData>
-          <TableData>
-            {id}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Created')}
-          </TableData>
-          <TableData>
-            {long_date(creation_time)}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Modified')}
-          </TableData>
-          <TableData>
-            {long_date(modification_time)}
-          </TableData>
-        </TableRow>
-
-        <TableRow>
-          <TableData>
-            {_('Owner')}
-          </TableData>
-          <TableData>
-            <OwnerInfo owner={owner}/>
-          </TableData>
-        </TableRow>
-      </TableBody>
-    </EntityInfoTable>
+    <InfoLayout>
+      <div>{_('ID:')}</div>
+      <div>{id}</div>
+      <div>{_('Created:')}</div>
+      <div>{long_date(creation_time)}</div>
+      <div>{_('Modified:')}</div>
+      <div>{long_date(modification_time)}</div>
+      <div>{_('Owner:')}</div>
+      <OwnerInfo owner={owner}/>
+    </InfoLayout>
   );
 };
 

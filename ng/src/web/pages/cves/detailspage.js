@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer from '../../entity/container.js';
-import {EntityInfoTable} from '../../entity/info.js';
+import {InfoLayout} from '../../entity/info.js';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
@@ -160,42 +160,16 @@ const EntityInfo = ({
 }) => {
   const {id, published_time, last_modified_time, update_time} = entity;
   return (
-    <EntityInfoTable>
-      <TableBody>
-        <TableRow>
-          <TableData>
-            {_('ID')}
-          </TableData>
-          <TableData>
-            {id}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Published')}
-          </TableData>
-          <TableData>
-            {long_date(published_time)}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Modified')}
-          </TableData>
-          <TableData>
-            {long_date(update_time)}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Last updated')}
-          </TableData>
-          <TableData>
-            {long_date(last_modified_time)}
-          </TableData>
-        </TableRow>
-      </TableBody>
-    </EntityInfoTable>
+    <InfoLayout>
+      <div>{_('ID:')}</div>
+      <div>{id}</div>
+      <div>{_('Published:')}</div>
+      <div>{long_date(published_time)}</div>
+      <div>{_('Modified:')}</div>
+      <div>{long_date(update_time)}</div>
+      <div>{_('Last updated:')}</div>
+      <div>{long_date(last_modified_time)}</div>
+    </InfoLayout>
   );
 };
 
