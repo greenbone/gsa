@@ -690,7 +690,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
      ${NG_SRC_DIR}/src/web/components/form/css/select2.css
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
-     ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
      ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
