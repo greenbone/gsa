@@ -37,6 +37,7 @@ import Link from '../link/link.js';
 import Menu from '../menu/menu.js';
 import MenuEntry from '../menu/menuentry.js';
 import MenuHelpEntry from '../menu/menuhelpentry.js';
+import MenuSection from '../menu/menusection.js';
 
 import Sticky from '../sticky/sticky.js';
 
@@ -70,10 +71,6 @@ const Wrapper = glamorous(Sticky, {
 
     '& .menu > a:hover ~ ul > .menu-entry:nth-child(2) > a': {
       background: '#99CE48',
-    },
-
-    '& .menu-section': {
-      borderTop: '1px solid #b0b0b0',
     },
   },
 );
@@ -129,80 +126,87 @@ const MenuBar = (props, {gmp, capabilities}) => {
         {may_op_scans &&
           <Menu title={_('Scans')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/scans"/>
-            <MenuEntry
-              section
-              title={_('Tasks')}
-              to="tasks"
-              caps="get_tasks"/>
-            <MenuEntry
-              title={_('Reports')}
-              to="reports"
-              caps="get_reports"/>
-            <MenuEntry
-              title={_('Results')}
-              to="results"
-              caps="get_results"/>
-            <MenuEntry
-              title={_('Vulnerabilities')}
-              to="vulnerabilities"
-              caps="get_vulns"/>
-            <MenuEntry
-              section
-              title={_('Notes')}
-              to="notes"
-              caps="get_notes"/>
-            <MenuEntry
-              title={_('Overrides')}
-              to="overrides"
-              caps="get_overrides"
-            />
+            <MenuSection>
+              <MenuEntry
+                title={_('Tasks')}
+                to="tasks"
+                caps="get_tasks"/>
+              <MenuEntry
+                title={_('Reports')}
+                to="reports"
+                caps="get_reports"/>
+              <MenuEntry
+                title={_('Results')}
+                to="results"
+                caps="get_results"/>
+              <MenuEntry
+                title={_('Vulnerabilities')}
+                to="vulnerabilities"
+                caps="get_vulns"/>
+            </MenuSection>
+            <MenuSection>
+              <MenuEntry
+                section
+                title={_('Notes')}
+                to="notes"
+                caps="get_notes"/>
+              <MenuEntry
+                title={_('Overrides')}
+                to="overrides"
+                caps="get_overrides"
+              />
+            </MenuSection>
           </Menu>
         }
         {capabilities.mayOp('get_assets') &&
           <Menu title={_('Assets')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
-            <MenuEntry
-              section
-              title={_('Hosts')}
-              to="hosts"/>
-            <MenuEntry
-              title={_('Operating Systems')}
-              to="operatingsystems"/>
+            <MenuSection>
+              <MenuEntry
+                section
+                title={_('Hosts')}
+                to="hosts"/>
+              <MenuEntry
+                title={_('Operating Systems')}
+                to="operatingsystems"/>
+            </MenuSection>
           </Menu>
         }
         {capabilities.mayOp('get_info') &&
           <Menu title={_('SecInfo')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/secinfo"/>
-            <MenuEntry
-              section
-              title={_('NVTs')}
-              to="nvts"
-            />
-            <MenuEntry
-              title={_('CVEs')}
-              to="cves"
-            />
-            <MenuEntry
-              title={_('CPEs')}
-              to="cpes"
-            />
-            <MenuEntry
-              title={_('OVAL Definitions')}
-              to="ovaldefs"
-            />
-            <MenuEntry
-              title={_('CERT-Bund Advisories')}
-              to="certbundadvs"
-            />
-            <MenuEntry
-              title={_('DFN-CERT Advisories')}
-              to="dfncertadvs"
-            />
-            <MenuEntry
-              section
-              title={_('All SecInfo')}
-              to="secinfos"
-            />
+            <MenuSection>
+              <MenuEntry
+                title={_('NVTs')}
+                to="nvts"
+              />
+              <MenuEntry
+                title={_('CVEs')}
+                to="cves"
+              />
+              <MenuEntry
+                title={_('CPEs')}
+                to="cpes"
+              />
+              <MenuEntry
+                title={_('OVAL Definitions')}
+                to="ovaldefs"
+              />
+              <MenuEntry
+                title={_('CERT-Bund Advisories')}
+                to="certbundadvs"
+              />
+              <MenuEntry
+                title={_('DFN-CERT Advisories')}
+                to="dfncertadvs"
+              />
+            </MenuSection>
+            <MenuSection>
+              <MenuEntry
+                title={_('All SecInfo')}
+                to="secinfos"
+              />
+            </MenuSection>
           </Menu>
         }
         {may_op_configuration &&
@@ -227,47 +231,49 @@ const MenuBar = (props, {gmp, capabilities}) => {
               to="scanconfigs"
               caps="get_configs"
             />
-            <MenuEntry
-              section
-              title={_('Alerts')}
-              to="alerts"
-              caps="get_alerts"
-            />
-            <MenuEntry
-              title={_('Schedules')}
-              to="schedules"
-              caps="get_schedules"
-            />
-            <MenuEntry
-              title={_('Report Formats')}
-              to="reportformats"
-              caps="get_report_formats"
-            />
-            <MenuEntry
-              title={_('Agents')}
-              to="agents"
-              caps="get_agents"
-            />
-            <MenuEntry
-              section
-              title={_('Scanners')}
-              to="scanners"
-              caps="get_scanners"
-            />
-            <MenuEntry
-              title={_('Filters')}
-              to="filters"
-              caps="get_filters"/>
-            <MenuEntry
-              title={_('Tags')}
-              to="tags"
-              caps="get_tags"
-            />
-            <MenuEntry
-              title={_('Permissions')}
-              to="permissions"
-              caps="get_permissions"
-            />
+            <MenuSection>
+              <MenuEntry
+                title={_('Alerts')}
+                to="alerts"
+                caps="get_alerts"
+              />
+              <MenuEntry
+                title={_('Schedules')}
+                to="schedules"
+                caps="get_schedules"
+              />
+              <MenuEntry
+                title={_('Report Formats')}
+                to="reportformats"
+                caps="get_report_formats"
+              />
+              <MenuEntry
+                title={_('Agents')}
+                to="agents"
+                caps="get_agents"
+              />
+            </MenuSection>
+            <MenuSection>
+              <MenuEntry
+                title={_('Scanners')}
+                to="scanners"
+                caps="get_scanners"
+              />
+              <MenuEntry
+                title={_('Filters')}
+                to="filters"
+                caps="get_filters"/>
+              <MenuEntry
+                title={_('Tags')}
+                to="tags"
+                caps="get_tags"
+              />
+              <MenuEntry
+                title={_('Permissions')}
+                to="permissions"
+                caps="get_permissions"
+              />
+            </MenuSection>
           </Menu>
         }
         <Menu title={_('Extras')}>
@@ -311,17 +317,18 @@ const MenuBar = (props, {gmp, capabilities}) => {
               to="roles"
               caps="get_roles"
             />
-            <MenuEntry
-              section
-              title={_('LDAP')}
-              to="ldap"
-              caps={['describe_auth', 'modify_auth']}
-            />
-            <MenuEntry
-              title={_('Radius')}
-              to="radius"
-              caps={['describe_auth', 'modify_auth']}
-            />
+            <MenuSection>
+              <MenuEntry
+                title={_('LDAP')}
+                to="ldap"
+                caps={['describe_auth', 'modify_auth']}
+              />
+              <MenuEntry
+                title={_('Radius')}
+                to="radius"
+                caps={['describe_auth', 'modify_auth']}
+              />
+            </MenuSection>
           </Menu>
         }
         <Menu
