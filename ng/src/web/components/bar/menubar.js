@@ -337,7 +337,6 @@ const MenuBar = (props, {gmp, capabilities}) => {
         >
           <MenuHelpEntry
             title={_('Contents')}
-            to="help" // needs to be set, will be overwritten
           />
           <MenuEntry
             title={_('About')}
