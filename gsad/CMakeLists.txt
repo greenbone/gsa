@@ -46,8 +46,6 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 
 install (FILES src/html/classic/gsad.xsl
                src/html/classic/omp.xsl
-               src/html/classic/omp-doc.xsl
-               src/html/classic/rnc.xsl
                src/html/classic/robots.txt
                src/html/classic/os.xml
          DESTINATION ${GSA_DATA_DIR}/classic)

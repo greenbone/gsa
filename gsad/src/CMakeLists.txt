@@ -203,14 +203,6 @@ if (PATH_TO_XSLTPROC)
                                      COMMENT "Checking syntax of gsad.xsl"
                                      COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl
                                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl)
-  add_custom_target (rnc-xsl-syntax ALL
-                                    COMMENT "Checking syntax of rnc.xsl"
-                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/rnc.xsl
-                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/rnc.xsl)
-  add_custom_target (omp-doc-xsl-syntax ALL
-                                        COMMENT "Checking syntax of omp-doc.xsl"
-                                        COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp-doc.xsl
-                                        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp-doc.xsl)
 else (PATH_TO_XSLTPROC)
   message ("Not performing simple stylesheet tests -- xsltproc not found.")
 endif (PATH_TO_XSLTPROC)
