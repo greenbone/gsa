@@ -73,7 +73,7 @@ const withRowDetails = (type, colSpan = '10') => Component => {
               <Icon
                 img="details.svg"
                 size="small"
-                title={_('Show details')}
+                title={_('Open all details')}
               />
             </DetailsLink>
           </Layout>
