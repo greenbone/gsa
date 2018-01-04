@@ -62,21 +62,21 @@ class X2JsTransform extends Transform {
   rejection(rej, options) {
     if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
 
-      const root = xml2json(rej.xhr.responseXML).envelope;
+      const {envelope} = xml2json(rej.xhr.responseXML);
 
-      if (is_defined(root)) {
-        rej.root = root;
+      if (is_defined(envelope)) {
+        rej.root = envelope;
 
-        if (is_defined(root.gsad_response)) {
-          return rej.setMessage(root.gsad_response.message);
+        if (is_defined(envelope.gsad_response)) {
+          return rej.setMessage(envelope.gsad_response.message);
         }
 
-        if (is_defined(root.action_result)) {
-          return rej.setMessage(root.action_result.message);
+        if (is_defined(envelope.action_result)) {
+          return rej.setMessage(envelope.action_result.message);
         }
-
-        return rej.setMessage(_('Unknown Error'));
       }
+
+      return rej.setMessage(_('Unknown Error'));
     }
     return rej;
   }
