@@ -461,6 +461,7 @@ const PageContent = ({
                 {props => (
                   <HostsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -475,6 +476,7 @@ const PageContent = ({
                 {props => (
                   <PortsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -489,6 +491,7 @@ const PageContent = ({
                 {props => (
                   <ApplicationsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -504,6 +507,7 @@ const PageContent = ({
                 {props => (
                   <OperatingSystemsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -518,6 +522,7 @@ const PageContent = ({
                 {props => (
                   <CvesTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -532,6 +537,7 @@ const PageContent = ({
                 {props => (
                   <ClosedCvesTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -545,9 +551,10 @@ const PageContent = ({
               >
                 {props => (
                   <TLSCertificatesTable
+                    {...props}
                     onTlsCertificateDownloadClick={
                       onTlsCertificateDownloadClick}
-                    {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -562,6 +569,7 @@ const PageContent = ({
                 {props => (
                   <ErrorsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
