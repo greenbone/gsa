@@ -26,6 +26,8 @@ import React from 'react';
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
 
+import BlankLink from './blanklink.js';
+
 const ProtocolDocLink = ({
   gmp,
   title,
@@ -33,11 +35,12 @@ const ProtocolDocLink = ({
   const {protocoldocurl} = gmp.globals;
 
   return (
-    <a
+    <BlankLink
       href={protocoldocurl}
-      target="_blank"
       title={title}
-    >{title}</a>
+    >
+      {title}
+    </BlankLink>
   );
 };
 
