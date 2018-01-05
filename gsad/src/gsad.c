@@ -2085,12 +2085,14 @@ exec_gmp_get (http_connection_t *con,
       case 0:
         break;
       case -1:
-        cmd_response_data_free (response_data);
-        return handler_send_reauthentication (con,
-                                              MHD_HTTP_SERVICE_UNAVAILABLE,
-                                              GMP_SERVICE_DOWN,
-                                              params_value_bool
-                                                (con_info->params, "xml"));
+        res = gsad_message_new (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred. "
+                                "Diagnostics: Could not connect to manager "
+                                "daemon.",
+                                params_value_bool (params, "xml"),
+                                response_data);
+        break;
 
       case -2:
         res = gsad_message_new (credentials,

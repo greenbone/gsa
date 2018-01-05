@@ -194,7 +194,7 @@ class EntitiesContainer extends React.Component {
         if (is_defined(error.isCancel) && error.isCancel()) {
           return;
         }
-        this.setState({loading: false, entities: undefined});
+        this.setState({loading: false});
         this.handleError(error);
         return PromiseFactory.reject(error);
       });
