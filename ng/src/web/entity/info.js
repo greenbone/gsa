@@ -37,7 +37,7 @@ import Theme from '../utils/theme.js';
 const OwnerInfo = ({
   owner,
 }) => is_defined(owner) ?
-  owner.name :
+  <span>{owner.name}</span> :
   <i>{_('(Global Object)')}</i>
 ;
 
