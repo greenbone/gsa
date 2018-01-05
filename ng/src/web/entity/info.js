@@ -37,7 +37,7 @@ import Theme from '../utils/theme.js';
 const OwnerInfo = ({
   owner,
 }) => is_defined(owner) ?
-  owner.name :
+  <span>{owner.name}</span> :
   <i>{_('(Global Object)')}</i>
 ;
 
@@ -53,10 +53,10 @@ export const InfoLayout = glamorous(Layout)(
     fontSize: '10px',
 
     '& :nth-child(even)': {
-      paddingRight: '30px',
+      marginLeft: '3px',
     },
     '& :nth-child(odd)': {
-      paddingRight: '3px',
+      marginLeft: '30px',
     },
   },
 );

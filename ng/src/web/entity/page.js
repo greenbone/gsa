@@ -83,8 +83,8 @@ class EntityPage extends React.Component {
         className="entity-section"
         img={sectionIcon}
         foldable={foldable}
+        extra={this.renderInfo()}
       >
-        {this.renderInfo()}
         <Details
           {...other}
           entity={entity}
