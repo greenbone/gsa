@@ -53,10 +53,10 @@ export const InfoLayout = glamorous(Layout)(
     fontSize: '10px',
 
     '& :nth-child(even)': {
-      paddingRight: '30px',
+      marginLeft: '3px',
     },
     '& :nth-child(odd)': {
-      paddingRight: '3px',
+      marginLeft: '30px',
     },
   },
 );
