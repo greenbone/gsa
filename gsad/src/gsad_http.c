@@ -1258,21 +1258,15 @@ gsad_message_new (credentials_t *credentials, const char *title,
  * @param[in]  msg       The response message.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return An HTML document as a newly allocated string.
+ * @return An XML document as a newly allocated string.
  */
 char *
 gsad_message (credentials_t *credentials, const char *title,
               const char *function, int line, const char *msg,
               cmd_response_data_t *response_data)
 {
-  gboolean xml_flag = 0;
-
-  if (credentials && credentials->params)
-    xml_flag = params_value_bool (credentials->params, "xml");
-
   return gsad_message_new (credentials, title, function, line, msg,
-                           xml_flag, response_data);
-
+                           1, response_data);
 }
 
 /**
