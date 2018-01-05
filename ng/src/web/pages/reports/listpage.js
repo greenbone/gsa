@@ -64,7 +64,6 @@ const ToolBarIcons = ({onUploadReportClick}) => (
       title={_('Help: Reports')}
     />
     <Icon
-      size="small"
       title={_('Upload report')}
       img="upload.svg"
       onClick={onUploadReportClick}/>
