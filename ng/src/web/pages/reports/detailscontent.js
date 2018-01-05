@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,16 +23,18 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import glamorous, {Span} from 'glamorous';
 
-import _ from 'gmp/locale.js';
+import _, {datetime} from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 import {render_entities_counts, render_options} from '../../utils/render.js';
 
 import EntityInfo from '../../entity/info.js';
 
+import StatusBar from '../../components/bar/statusbar.js';
 import ToolBar from '../../components/bar/toolbar.js';
 
 import Select2 from '../../components/form/select2.js';
@@ -51,8 +53,6 @@ import DetailsLink from '../../components/link/detailslink.js';
 import Link from '../../components/link/link.js';
 
 import Powerfilter from '../../components/powerfilter/powerfilter.js';
-
-import IconSizeProvider from '../../components/provider/iconsizeprovider.js';
 
 import Tab from '../../components/tab/tab.js';
 import TabList from '../../components/tab/tablist.js';
@@ -88,20 +88,21 @@ import {
 } from './sort.js';
 
 const TabLayout = glamorous(Layout)({
-  marginLeft: '10px',
-  marginRight: '10px',
+  borderBottom: '1px solid ' + Theme.extra.lightGray,
+  marginTop: '30px',
+  marginBottom: '15px',
+  paddingBottom: '3px',
 });
 
-const EntityInfoLayout = glamorous(Layout)({
-  marginTop: '15px',
-  marginBottom: '-10px',
+const TabTitleCounts = glamorous.span({
+  fontSize: '0.7em',
 });
 
 const TabTitle = ({title, counts}) => (
-  <Divider wrap align={['center', 'center']}>
+  <Layout flex="column" align={['center', 'center']}>
     <span>{title}</span>
-    <span>(<i>{render_entities_counts(counts)}</i>)</span>
-  </Divider>
+    <TabTitleCounts>(<i>{render_entities_counts(counts)}</i>)</TabTitleCounts>
+  </Layout>
 );
 
 TabTitle.propTypes = {
@@ -126,84 +127,82 @@ const ToolBarIcons = ({
   const {task} = report;
   const {id: task_id} = task;
   return (
-    <IconSizeProvider size="medium">
-      <Divider margin="15px">
-        <IconDivider>
-          <ManualIcon
-            page="vulnerabilitymanagement"
-            anchor="reports-and-vulnerability-management"
-            title={_('Help: Reports')}/>
-          <ListIcon
-            title={_('Reports List')}
-            page="reports"
-          />
-        </IconDivider>
-        <IconDivider>
-          <Select2
-            name="report_format_id"
-            value={report_format_id}
-            onChange={onReportFormatChange}
-          >
-            {render_options(report_formats)}
-          </Select2>
+    <Divider margin="15px">
+      <IconDivider>
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="reports-and-vulnerability-management"
+          title={_('Help: Reports')}/>
+        <ListIcon
+          title={_('Reports List')}
+          page="reports"
+        />
+      </IconDivider>
+      <IconDivider>
+        <Select2
+          name="report_format_id"
+          value={report_format_id}
+          onChange={onReportFormatChange}
+        >
+          {render_options(report_formats)}
+        </Select2>
+        <Icon
+          img="download.svg"
+          title={_('Download filtered Report')}
+          onClick={onReportDownloadClick}
+        />
+      </IconDivider>
+      <IconDivider>
+        <Icon
+          img="add_to_assets.svg"
+          title={_('Add to Assets with QoD=>70% and Overrides enabled')}
+          onClick={onAddToAssetsClick}
+        />
+        <Icon
+          img="remove_from_assets.svg"
+          title={_('Remove from Assets')}
+          onClick={onRemoveFromAssetsClick}
+        />
+      </IconDivider>
+      <IconDivider>
+        <DetailsLink
+          type="task"
+          id={task_id}
+          title={_('Corresponding Task')}
+        >
           <Icon
-            img="download.svg"
-            title={_('Download filtered Report')}
-            onClick={onReportDownloadClick}
+            img="task.svg"
           />
-        </IconDivider>
-        <IconDivider>
+        </DetailsLink>
+        <Link
+          to="results"
+          filter={'report_id=' + report.id}
+          title={_('Corresponding Results')}
+        >
           <Icon
-            img="add_to_assets.svg"
-            title={_('Add to Assets with QoD=>70% and Overrides enabled')}
-            onClick={onAddToAssetsClick}
+            img="result.svg"
           />
+        </Link>
+        <Link
+          to="vulnerabilities"
+          filter={'report_id=' + report.id}
+          title={_('Corresponding Vulnerabilities')}
+        >
           <Icon
-            img="remove_from_assets.svg"
-            title={_('Remove from Assets')}
-            onClick={onRemoveFromAssetsClick}
+            img="vulnerability.svg"
           />
-        </IconDivider>
-        <IconDivider>
-          <DetailsLink
-            type="task"
-            id={task_id}
-            title={_('Corresponding Task')}
-          >
-            <Icon
-              img="task.svg"
-            />
-          </DetailsLink>
-          <Link
-            to="results"
-            filter={'report_id=' + report.id}
-            title={_('Corresponding Results')}
-          >
-            <Icon
-              img="result.svg"
-            />
-          </Link>
-          <Link
-            to="vulnerabilities"
-            filter={'report_id=' + report.id}
-            title={_('Corresponding Vulnerabilities')}
-          >
-            <Icon
-              img="vulnerability.svg"
-            />
-          </Link>
-        </IconDivider>
-        {!delta &&
-          <AlertActions
-            filter={filter}
-            report={report}
-            showError={showError}
-            showSuccessMessage={showSuccessMessage}
-            showErrorMessage={showErrorMessage}
-          />
-        }
-      </Divider>
-    </IconSizeProvider>
+        </Link>
+      </IconDivider>
+      {!delta &&
+        <AlertActions
+          filter={filter}
+          report={report}
+          showError={showError}
+          showSuccessMessage={showSuccessMessage}
+          showErrorMessage={showErrorMessage}
+        />
+      }
+    </Divider>
   );
 };
 
@@ -269,101 +268,42 @@ const PageContent = ({
     operatingsystems,
     ports,
     results,
-    task,
+    task = {},
     tls_certificates,
+    timestamp,
+    scan_run_status,
   } = report;
 
   const delta = report.isDeltaReport();
 
+  const status = is_defined(task.isContainer) && task.isContainer() ?
+    _('Container') : scan_run_status;
+
+  const header_title = (
+    <Divider>
+      <span>
+        {_('Report:')}
+      </span>
+      <span>
+        {datetime(timestamp)}
+      </span>
+      <Span marginTop="2px">
+        <StatusBar
+          status={status}
+          progress={task.progress}
+        />
+      </Span>
+    </Divider>
+  );
+
   const header = (
     <SectionHeader
       img="report.svg"
-      title={_('Report:')}
-      align={['space-between', 'stretch']}
+      title={header_title}
     >
-      <TabLayout
-        grow="1"
-        align={['start', 'end']}>
-        <TabList
-          active={activeTab}
-          align={['start', 'stretch']}i
-          onActivateTab={onActivateTab}
-        >
-          <Tab>
-            {_('Summary')}
-          </Tab>
-          <Tab>
-            <TabTitle
-              title={_('Results')}
-              counts={results.counts}
-            />
-          </Tab>
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('Hosts')}
-                counts={hosts.counts}
-              />
-            </Tab>
-          }
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('Ports')}
-                counts={ports.counts}
-              />
-            </Tab>
-          }
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('Applications')}
-                counts={applications.counts}
-              />
-            </Tab>
-          }
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('Operating Systems')}
-                counts={operatingsystems.counts}
-              />
-            </Tab>
-          }
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('CVEs')}
-                counts={cves.counts}
-              />
-            </Tab>
-          }
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('Closed CVEs')}
-                counts={closed_cves.counts}
-              />
-            </Tab>
-          }
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('TLS Certificates')}
-                counts={tls_certificates.counts}
-              />
-            </Tab>
-          }
-          {!delta &&
-            <Tab>
-              <TabTitle
-                title={_('Error Messages')}
-                counts={errors.counts}
-              />
-            </Tab>
-          }
-        </TabList>
-      </TabLayout>
+      <EntityInfo
+        entity={entity}
+      />
     </SectionHeader>
   );
   return (
@@ -401,15 +341,92 @@ const PageContent = ({
         </Layout>
       </ToolBar>
 
-      <EntityInfoLayout align="end">
-        <EntityInfo
-          entity={entity}
-        />
-      </EntityInfoLayout>
-
       <Section
         header={header}
       >
+        <TabLayout
+          grow="1"
+          align={['start', 'end']}>
+          <TabList
+            active={activeTab}
+            align={['start', 'stretch']}i
+            onActivateTab={onActivateTab}
+          >
+            <Tab>
+              {_('Summary')}
+            </Tab>
+            <Tab>
+              <TabTitle
+                title={_('Results')}
+                counts={results.counts}
+              />
+            </Tab>
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('Hosts')}
+                  counts={hosts.counts}
+                />
+              </Tab>
+            }
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('Ports')}
+                  counts={ports.counts}
+                />
+              </Tab>
+            }
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('Applications')}
+                  counts={applications.counts}
+                />
+              </Tab>
+            }
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('Operating Systems')}
+                  counts={operatingsystems.counts}
+                />
+              </Tab>
+            }
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('CVEs')}
+                  counts={cves.counts}
+                />
+              </Tab>
+            }
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('Closed CVEs')}
+                  counts={closed_cves.counts}
+                />
+              </Tab>
+            }
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('TLS Certificates')}
+                  counts={tls_certificates.counts}
+                />
+              </Tab>
+            }
+            {!delta &&
+              <Tab>
+                <TabTitle
+                  title={_('Error Messages')}
+                  counts={errors.counts}
+                />
+              </Tab>
+            }
+          </TabList>
+        </TabLayout>
         <Tabs active={activeTab}>
           <TabPanels>
             <TabPanel>
@@ -444,6 +461,7 @@ const PageContent = ({
                 {props => (
                   <HostsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -458,6 +476,7 @@ const PageContent = ({
                 {props => (
                   <PortsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -472,6 +491,7 @@ const PageContent = ({
                 {props => (
                   <ApplicationsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -487,6 +507,7 @@ const PageContent = ({
                 {props => (
                   <OperatingSystemsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -501,6 +522,7 @@ const PageContent = ({
                 {props => (
                   <CvesTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -515,6 +537,7 @@ const PageContent = ({
                 {props => (
                   <ClosedCvesTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -528,9 +551,10 @@ const PageContent = ({
               >
                 {props => (
                   <TLSCertificatesTable
+                    {...props}
                     onTlsCertificateDownloadClick={
                       onTlsCertificateDownloadClick}
-                    {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
@@ -545,6 +569,7 @@ const PageContent = ({
                 {props => (
                   <ErrorsTable
                     {...props}
+                    toggleDetailsIcon={false}
                   />
                 )}
               </ReportEntitiesContainer>
