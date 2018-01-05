@@ -460,7 +460,6 @@ handle_setup_user (http_connection_t *connection,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "
                               "Diagnostics: Bad token.",
-                              "/omp?cmd=get_tasks",
                               params_value_bool (con_info->params, "xml"),
                               response_data);
       return handler_create_response (connection,
@@ -706,7 +705,6 @@ handle_system_report (http_connection_t *connection,
                                "An internal error occurred. "
                                "Diagnostics: Could not authenticate to manager "
                                "daemon.",
-                               "/omp?cmd=get_tasks",
                                params_value_bool (con_info->params, "xml"),
                                response_data);
         break;
@@ -715,7 +713,6 @@ handle_system_report (http_connection_t *connection,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred. "
                                 "Diagnostics: Failure to connect to manager daemon.",
-                                "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
                                 response_data);
         break;

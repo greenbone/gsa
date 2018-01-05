@@ -1431,7 +1431,6 @@ exec_gmp_post (http_connection_t *con,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred inside GSA daemon. "
                                 "Diagnostics: Token missing.",
-                                "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
                                 response_data);
       else
@@ -1439,7 +1438,6 @@ exec_gmp_post (http_connection_t *con,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred inside GSA daemon. "
                                 "Diagnostics: Token bad.",
-                                "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
                                 response_data);
 
@@ -1456,7 +1454,6 @@ exec_gmp_post (http_connection_t *con,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "
                               "Diagnostics: Bad token.",
-                              "/omp?cmd=get_tasks",
                               params_value_bool (con_info->params, "xml"),
                               response_data);
       return handler_create_response (con, res, response_data, NULL);
@@ -1554,7 +1551,6 @@ exec_gmp_post (http_connection_t *con,
                                 "An internal error occurred. "
                                 "Diagnostics: Could not authenticate to manager "
                                 "daemon.",
-                                "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
                                 response_data);
         break;
@@ -1563,7 +1559,6 @@ exec_gmp_post (http_connection_t *con,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred. "
                                 "Diagnostics: Failure to connect to manager daemon.",
-                                "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
                                 response_data);
         break;
@@ -1587,7 +1582,6 @@ exec_gmp_post (http_connection_t *con,
                               __LINE__,
                               "An internal error occurred inside GSA daemon. "
                               "Diagnostics: Empty command.",
-                              "/omp?cmd=get_tasks",
                               params_value_bool (con_info->params, "xml"),
                               response_data);
     }
@@ -1774,7 +1768,6 @@ exec_gmp_post (http_connection_t *con,
                               __LINE__,
                               "An internal error occurred inside GSA daemon. "
                               "Diagnostics: Unknown command.",
-                              "/omp?cmd=get_tasks",
                               params_value_bool (con_info->params, "xml"),
                               response_data);
     }
@@ -2066,7 +2059,6 @@ exec_gmp_get (http_connection_t *con,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "
                               "Diagnostics: No valid command for gmp.",
-                              "/omp?cmd=get_tasks",
                               params_value_bool (params, "xml"),
                               response_data);
       return handler_create_response (con, res, response_data, NULL);
@@ -2106,7 +2098,6 @@ exec_gmp_get (http_connection_t *con,
                                 "An internal error occurred. "
                                 "Diagnostics: Could not authenticate to manager "
                                 "daemon.",
-                                "/omp?cmd=get_tasks",
                                 params_value_bool (params, "xml"),
                                 response_data);
         break;
@@ -2116,7 +2107,6 @@ exec_gmp_get (http_connection_t *con,
                                 "An internal error occurred. "
                                 "Diagnostics: Failure to connect to manager "
                                 "daemon.",
-                                "/omp?cmd=get_tasks",
                                 params_value_bool (params, "xml"),
                                 response_data);
     }
@@ -2424,7 +2414,6 @@ exec_gmp_get (http_connection_t *con,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "
                               "Diagnostics: Unknown command.",
-                              "/omp?cmd=get_tasks",
                               params_value_bool (params, "xml"),
                               response_data);
     }

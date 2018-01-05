@@ -32,8 +32,6 @@ import logger from 'gmp/log.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import FootNote from '../footnote/footnote.js';
-
 import Select2 from '../form/select2.js';
 import TextField from '../form/textfield.js';
 
@@ -52,12 +50,6 @@ import Filter from 'gmp/models/filter.js';
 const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
-
-const StyledFootNote = glamorous(FootNote)({
-  marginTop: '5px',
-  lineHeight: '1.2em',
-  minHeight: '1.2em',
-});
 
 const FilterSelect = glamorous(Select2)({
   '& .select2-container': {
@@ -214,8 +206,6 @@ class PowerFilter extends React.Component {
     const namedfilterid = is_defined(filter) && is_defined(filter.id) ?
       filter.id : DEFAULT_FILTER_ID;
 
-    const filterstring = is_defined(filter) ? filter.toFilterExtraString() : '';
-
     const filter_opts = render_options(filters, DEFAULT_FILTER_ID);
 
     const can_create = capabilities.mayCreate('filter') &&
@@ -296,9 +286,6 @@ class PowerFilter extends React.Component {
             }
           </Divider>
         </Layout>
-        <StyledFootNote>
-          {filterstring}
-        </StyledFootNote>
       </Layout>
     );
   }

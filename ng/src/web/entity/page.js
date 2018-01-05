@@ -34,8 +34,6 @@ import Layout from '../components/layout/layout.js';
 
 import Loading from '../components/loading/loading.js';
 
-import IconSizeProvider from '../components/provider/iconsizeprovider.js';
-
 import Section from '../components/section/section.js';
 
 import EntityInfo from './info.js';
@@ -45,16 +43,17 @@ import EntityTags from './tags.js';
 class EntityPage extends React.Component {
 
   renderToolbarIcons() {
-    const {toolBarIcons, entity, ...other} = this.props;
+    const {toolBarIcons: ToolBarIconsComponent, entity, ...other} = this.props;
 
-    if (!is_defined(toolBarIcons)) {
+    if (!is_defined(ToolBarIconsComponent)) {
       return null;
     }
 
     return (
-      <IconSizeProvider size="medium">
-        {React.createElement(toolBarIcons, {entity, ...other})}
-      </IconSizeProvider>
+      <ToolBarIconsComponent
+        entity={entity}
+        {...other}
+      />
     );
   }
 

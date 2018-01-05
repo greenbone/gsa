@@ -609,8 +609,7 @@ xsl_transform_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while modifying the"
                                 " autorefresh setting for the settings. "
                                 "Diagnostics: Failure to send command to"
-                                " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                " manager daemon.", response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -618,16 +617,14 @@ xsl_transform_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while modifying the"
                                 " autorefresh setting for the settings. "
                                 "Diagnostics: Failure to receive response from"
-                                " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                " manager daemon.", response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while modifying the"
                                 " autorefresh setting for the settings. "
-                                "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                "Diagnostics: Internal Error.", response_data);
         }
 
       free_entity (entity);
@@ -702,7 +699,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
                              "An internal server error has occurred during XSL"
                              " transformation."
                              "</message>"
-                             "<backurl>/omp?cmd=get_tasks</backurl>"
                              "</gsad_response>");
       html = xsl_transform (res, response_data);
       if (html == NULL)
@@ -802,7 +798,7 @@ check_modify_config (gvm_connection_t *connection,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to read command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   /* Check the response. */
@@ -817,7 +813,7 @@ check_modify_config (gvm_connection_t *connection,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to parse status_text from response.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (strcmp (status_text, "Config is in use") == 0)
@@ -1018,8 +1014,7 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
                          : "performing an operation");
             *response = gsad_message (credentials, "Internal error",
                                       __FUNCTION__, __LINE__,
-                                      message, "/omp?cmd=get_tasks",
-                                      response_data);
+                                      message, response_data);
             g_free (message);
           }
         return 1;
@@ -1039,8 +1034,7 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
                          : "performing an operation");
             *response = gsad_message (credentials, "Internal error",
                                       __FUNCTION__, __LINE__,
-                                      message, "/omp?cmd=get_tasks",
-                                      response_data);
+                                      message, response_data);
             g_free (message);
           }
         return 2;
@@ -1059,8 +1053,7 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
                          : "performing an operation");
             *response = gsad_message (credentials, "Internal error",
                                       __FUNCTION__, __LINE__,
-                                      message, "/omp?cmd=get_tasks",
-                                      response_data);
+                                      message, response_data);
             g_free (message);
           }
         return -1;
@@ -1840,8 +1833,7 @@ get_one (gvm_connection_t *connection, const char *type,
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
-                           "Diagnostics: missing ID.",
-                           "/omp?cmd=get_tasks", response_data);
+                           "Diagnostics: missing ID.", response_data);
     }
 
   xml = g_string_new ("");
@@ -1870,21 +1862,20 @@ get_one (gvm_connection_t *connection, const char *type,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissins. "
-                                 "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 "Diagnostics: Internal Error.", response_data);
         }
 
       g_string_append (xml, response);
@@ -1936,7 +1927,7 @@ get_one (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting resources list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -1948,7 +1939,7 @@ get_one (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting resources list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Get tag names */
@@ -1970,7 +1961,7 @@ get_one (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -1982,7 +1973,7 @@ get_one (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Get permissions */
@@ -2015,7 +2006,7 @@ get_one (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -2027,7 +2018,7 @@ get_one (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</permissions>");
@@ -2353,7 +2344,7 @@ get_many (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a resource list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   g_free(request);
   if (read_string_c (connection, &xml))
@@ -2366,7 +2357,7 @@ get_many (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting resources list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   // TODO: Test response
@@ -2392,7 +2383,7 @@ get_many (gvm_connection_t *connection, const char *type,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -2405,7 +2396,7 @@ get_many (gvm_connection_t *connection, const char *type,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</filters>");
@@ -2430,7 +2421,7 @@ get_many (gvm_connection_t *connection, const char *type,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -2443,7 +2434,7 @@ get_many (gvm_connection_t *connection, const char *type,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -2471,7 +2462,7 @@ get_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -2483,7 +2474,7 @@ get_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to receive response from manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
     }
 
@@ -2529,7 +2520,7 @@ edit_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while editing a resource. "
                            "The resource remains as it was. "
                            "Diagnostics: Required ID parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -2551,7 +2542,7 @@ edit_resource (gvm_connection_t *connection, const char *type,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -2569,7 +2560,7 @@ edit_resource (gvm_connection_t *connection, const char *type,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -2728,7 +2719,7 @@ export_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a resource. "
                            "The resource could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   entity = NULL;
@@ -2742,7 +2733,7 @@ export_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a resource. "
                            "The resource could not be delivered. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!gmp_success (entity))
@@ -2762,7 +2753,7 @@ export_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a resource. "
                            "The resource could not be delivered. "
                            "Diagnostics: Failure to receive resource from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   ret = setting_get_value (connection,
@@ -2784,21 +2775,21 @@ export_resource (gvm_connection_t *connection, const char *type,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Internal error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
     }
 
@@ -2873,7 +2864,7 @@ export_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting a list. "
                               "The list could not be delivered. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
   else if (strcmp (type, "asset") == 0)
@@ -2896,7 +2887,7 @@ export_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting a list. "
                               "The list could not be delivered. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
   else
@@ -2918,7 +2909,7 @@ export_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting a list. "
                               "The list could not be delivered. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
   g_free (filter_escaped);
@@ -2933,7 +2924,7 @@ export_many (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a list. "
                            "The list could not be delivered. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!gmp_success (entity))
@@ -2957,21 +2948,21 @@ export_many (gvm_connection_t *connection, const char *type,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Internal error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
     }
 
@@ -3041,7 +3032,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while deleting a resource. "
                            "The resource was not deleted. "
                            "Diagnostics: Required parameter resource_id was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* This is a hack for assets, because asset_id is the param name used for
@@ -3090,7 +3081,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while deleting a resource. "
                            "The resource is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_free (resource_id);
@@ -3105,7 +3096,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while deleting a resource. "
                            "It is unclear whether the resource has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!gmp_success (entity))
@@ -3172,8 +3163,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       html = gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           message,
-                           "/omp?cmd=get_tasks", response_data);
+                           message, response_data);
       g_free (message);
       return html;
     }
@@ -3199,7 +3189,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while performing an action. "
                              "The resource remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -3207,7 +3197,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while performing an action. "
                              "It is unclear whether the resource has been affected. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -3215,7 +3205,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while performing an action. "
                              "It is unclear whether the resource has been affected. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   if (!gmp_success (entity))
@@ -3310,7 +3300,7 @@ setting_get_value_error (gvm_connection_t *connection,
                             "An internal error occurred while getting a setting. "
                             "The setting could not be delivered. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -3318,7 +3308,7 @@ setting_get_value_error (gvm_connection_t *connection,
                             "An internal error occurred while getting a setting. "
                             "The setting could not be delivered. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -3326,7 +3316,7 @@ setting_get_value_error (gvm_connection_t *connection,
                             "An internal error occurred while getting a setting. "
                             "The setting could not be delivered. "
                             "Diagnostics: Internal error.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
     }
 }
 
@@ -3397,7 +3387,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -3405,7 +3395,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -3413,7 +3403,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Internal error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
     }
 
@@ -3498,7 +3488,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -3510,7 +3500,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Get configs to select in new task UI. */
@@ -3526,7 +3516,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -3538,7 +3528,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_ALERTS"))
@@ -3556,7 +3546,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting alert list. "
                                "The current list of alerts is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -3568,7 +3558,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting alert list. "
                                "The current list of alerts is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3588,7 +3578,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting the schedule list. "
                                "The current list of schedules is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -3600,7 +3590,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting the schedule list. "
                                "The current list of schedules is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3621,7 +3611,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "The current list of scanners is not available. "
                                "Diagnostics: Failure to send command to manager"
                                " daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -3635,7 +3625,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "The current list of scanners is not available. "
                                "Diagnostics: Failure to receive response from"
                                " manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3654,7 +3644,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting group list. "
                                "The current list of groups is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -3666,7 +3656,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting group list. "
                                "The current list of groups is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3686,7 +3676,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting tag list. "
                                "The current list of tags is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -3698,7 +3688,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting tag list. "
                                "The current list of tags is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3975,7 +3965,7 @@ create_report_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a new report. "
                              "No new report was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -3983,7 +3973,7 @@ create_report_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a new report. "
                              "It is unclear whether the report has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -3991,7 +3981,7 @@ create_report_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a new report. "
                              "It is unclear whether the report has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   cmd = params_value (params, "cmd");
@@ -4082,7 +4072,7 @@ create_container_task_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a container task. "
                              "No task was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4090,7 +4080,7 @@ create_container_task_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a container task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4098,7 +4088,7 @@ create_container_task_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a container task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -4344,7 +4334,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while creating a new task. "
                              "No new task was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4352,7 +4342,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while creating a new task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4360,7 +4350,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while creating a new task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -4415,7 +4405,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                     "An internal error occurred while creating a new tag. "
                                     "No new tag was created. "
                                     "Diagnostics: Failure to send command to manager daemon.",
-                                    "/omp?cmd=get_tasks", response_data);
+                                    response_data);
               case 2:
                 free_entity (entity);
                 g_free (response);
@@ -4426,7 +4416,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                     "An internal error occurred while creating a new tag. "
                                     "It is unclear whether the tag has been created or not. "
                                     "Diagnostics: Failure to receive response from manager daemon.",
-                                    "/omp?cmd=get_tasks", response_data);
+                                    response_data);
               default:
                 free_entity (entity);
                 g_free (response);
@@ -4437,7 +4427,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                     "An internal error occurred while creating a new task. "
                                     "It is unclear whether the tag has been created or not. "
                                     "Diagnostics: Internal Error.",
-                                    "/omp?cmd=get_tasks", response_data);
+                                    response_data);
             }
 
           if (entity_attribute (entity, "id"))
@@ -4534,7 +4524,7 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while editing a task. "
                            "The task remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -4575,7 +4565,7 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -4612,7 +4602,7 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -4857,7 +4847,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a task. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4865,7 +4855,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4873,7 +4863,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -4961,7 +4951,7 @@ char * save_container_task_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving a task. "
                              "No new task was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4969,7 +4959,7 @@ char * save_container_task_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4977,7 +4967,7 @@ char * save_container_task_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -5127,7 +5117,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while moving a task. "
                              "The task was not moved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -5135,7 +5125,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while moving a task. "
                              "It is unclear whether the task has been moved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -5143,7 +5133,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while moving a task. "
                              "It is unclear whether the task has been moved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -5185,7 +5175,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an NVT. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -5213,7 +5203,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting nvt details. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
     }
 
   xml = g_string_new ("<get_nvts>");
@@ -5225,7 +5215,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting nvt details. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Append extra_xml */
@@ -5250,7 +5240,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -5262,7 +5252,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</get_nvts>");
@@ -5321,7 +5311,7 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting SecInfo. "
                            "Diagnostics: Invalid info_type parameter value",
-                           "/omp?cmd=get_info", response_data);
+                           response_data);
     }
 
   if (params_value (params, "info_name")
@@ -5332,7 +5322,7 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting SecInfo. "
                            "Diagnostics: Both ID and Name set.",
-                           "/omp?cmd=get_info", response_data);
+                           response_data);
     }
   extra_response = g_string_new (extra_xml ? extra_xml : "");
 
@@ -5650,7 +5640,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting the status. "
                            "No update on the requested task can be retrieved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   commands_xml = g_string_new ("");
@@ -5676,7 +5666,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting the status. "
                            "No update of the status can be retrieved. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   g_string_append (xml, commands_xml->str);
 
@@ -5690,7 +5680,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting the status. "
                            "No update of the status can be retrieved. "
                            "Diagnostics: Failure to parse response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   get_target = command_enabled (credentials, "GET_TARGETS");
@@ -5737,7 +5727,6 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting an alert of a task. "
                                               "Diagnostics: Failure to send command to manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                       if (read_string_c (connection, &xml))
@@ -5752,7 +5741,6 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting an alert of a task. "
                                               "Diagnostics: Failure to receive response from manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                     }
@@ -5781,7 +5769,6 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting the target of a task. "
                                               "Diagnostics: Failure to send command to manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                       if (read_string_c (connection, &xml))
@@ -5796,7 +5783,6 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting the target of a task. "
                                               "Diagnostics: Failure to receive response from manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                     }
@@ -5826,7 +5812,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                               "An internal error occurred while getting slaves list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -5838,7 +5824,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                               "An internal error occurred while getting slaves list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to receive response from manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
 
@@ -5860,7 +5846,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -5872,7 +5858,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Get permissions */
@@ -5894,7 +5880,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -5906,7 +5892,7 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</permissions>");
@@ -6222,7 +6208,7 @@ create_credential_gmp (gvm_connection_t *connection,
                                "An internal error occurred while creating a new credential. "
                                "The credential could not be created. "
                                "Diagnostics: Unrecognized credential type.",
-                               "/omp?cmd=get_credentials", response_data);
+                               response_data);
         }
     }
 
@@ -6239,7 +6225,7 @@ create_credential_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6247,7 +6233,7 @@ create_credential_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6255,7 +6241,7 @@ create_credential_gmp (gvm_connection_t *connection,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -6346,7 +6332,7 @@ download_credential_gmp (gvm_connection_t *connection,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
                             "Diagnostics: Required parameter was NULL.",
-                            "/omp?cmd=get_credentials", response_data);
+                            response_data);
       return 1;
     }
 
@@ -6363,7 +6349,7 @@ download_credential_gmp (gvm_connection_t *connection,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_credentials", response_data);
+                            response_data);
       return 1;
     }
 
@@ -6387,7 +6373,7 @@ download_credential_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while getting a credential. "
                                 "The credential is not available. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_credentials", response_data);
+                                response_data);
           return 1;
         }
 
@@ -6438,7 +6424,7 @@ download_credential_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to receive credential from manager daemon.",
-                                "/omp?cmd=get_credentials", response_data);
+                                response_data);
           return 1;
         }
     }
@@ -6457,7 +6443,7 @@ download_credential_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to receive credential from manager daemon.",
-                                "/omp?cmd=get_credentials", response_data);
+                                response_data);
           return 1;
         }
 
@@ -6489,7 +6475,7 @@ download_credential_gmp (gvm_connection_t *connection,
                             "An internal error occurred while getting a credential. "
                             "The credential could not be delivered. "
                             "Diagnostics: Failure to parse credential from manager daemon.",
-                            "/omp?cmd=get_credentials", response_data);
+                            response_data);
       free_entity (entity);
       return 1;
     }
@@ -6821,7 +6807,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a Credential. "
                              "The Credential was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6829,7 +6815,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6837,7 +6823,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -7005,7 +6991,7 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "An internal error occurred while creating a new agent. "
                             "No new agent was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7013,7 +6999,7 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "An internal error occurred while creating a new agent. "
                             "It is unclear whether the agent has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7021,7 +7007,7 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "An internal error occurred while creating a new agent. "
                             "It is unclear whether the agent has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -7090,7 +7076,7 @@ download_agent_gmp (gvm_connection_t *connection,
                             "An internal error occurred while downloading "
                             "an agent. "
                             "Diagnostics: Required parameter was NULL.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       return 1;
     }
 
@@ -7109,7 +7095,7 @@ download_agent_gmp (gvm_connection_t *connection,
                             "An internal error occurred while getting agent list. "
                             "The current list of agents is not available. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       return 1;
     }
 
@@ -7133,7 +7119,7 @@ download_agent_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while getting a agent. "
                                 "The agent is not available. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_agents", response_data);
+                                response_data);
           return 1;
         }
 
@@ -7187,7 +7173,7 @@ download_agent_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while getting a agent. "
                                 "The agent could not be delivered. "
                                 "Diagnostics: Failure to receive agent from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           return 1;
         }
     }
@@ -7204,7 +7190,7 @@ download_agent_gmp (gvm_connection_t *connection,
                                 "An internal error occurred while getting a agent. "
                                 "The agent could not be delivered. "
                                 "Diagnostics: Failure to receive agent from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           return 1;
         }
 
@@ -7215,7 +7201,7 @@ download_agent_gmp (gvm_connection_t *connection,
                             "An internal error occurred while getting a agent. "
                             "The agent could not be delivered. "
                             "Diagnostics: Failure to parse agent from manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
       return 1;
     }
 }
@@ -7312,7 +7298,7 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "An internal error occurred while saving a agent. "
                              "The agent was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7320,7 +7306,7 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "An internal error occurred while saving a agent. "
                              "It is unclear whether the agent has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7328,7 +7314,7 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "An internal error occurred while saving a agent. "
                              "It is unclear whether the agent has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -7439,7 +7425,7 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying an agent. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_agents", response_data);
+                           response_data);
     }
   response = NULL;
   entity = NULL;
@@ -7462,7 +7448,7 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                              "An internal error occurred while verifying a agent. "
                              "The agent was not verified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7470,7 +7456,7 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                              "An internal error occurred while verifying a agent. "
                              "It is unclear whether the agent was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7478,7 +7464,7 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                              "An internal error occurred while verifying a agent. "
                              "It is unclear whether the agent was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -7495,7 +7481,7 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                                "An internal error occurred while verifying a agent. "
                                "It is unclear whether the agent was verified or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_agents", response_data);
+                               response_data);
         }
     }
   else
@@ -7712,21 +7698,21 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   g_string_append (xml, response);
@@ -7779,7 +7765,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting Report "
                              "Formats for new alert. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7787,7 +7773,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting Report "
                              "Formats for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7796,7 +7782,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Formats for new alert. It is unclear whether"
                              " the alert has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
     }
   g_string_append (xml, response);
   g_free (response);
@@ -7820,7 +7806,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Filters for new alert. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7828,7 +7814,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting Report "
                              "Filters for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7836,7 +7822,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting Report "
                              "Filters for new alert. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
     }
   g_string_append (xml, response);
   g_free (response);
@@ -7862,7 +7848,6 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              " for new alert. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7871,7 +7856,6 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting Tasks"
                              " for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7880,7 +7864,6 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting Tasks"
                              " for new alert. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts",
                              response_data);
     }
   g_string_append (xml, response);
@@ -7906,7 +7889,6 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              " Credentials for new alert. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7915,7 +7897,6 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting"
                              " Credentials for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7924,7 +7905,6 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "An internal error occurred while getting"
                              " Credentials for new alert. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts",
                              response_data);
     }
 
@@ -8281,7 +8261,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "An internal error occurred while creating a new alert. "
                             "No new alert was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -8289,7 +8269,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -8297,7 +8277,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -8372,7 +8352,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting Report "
                                  "Formats for the alert. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8380,7 +8360,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting Report "
                                  "Formats for the alert. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8389,7 +8369,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Formats for the alert. "
                                  "It is unclear whether the task has been saved or not. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8420,7 +8400,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting Tasks "
                                  "for the alert. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8428,7 +8408,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting Tasks "
                                  "for the alert. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8436,7 +8416,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting Tasks "
                                  "for the alert. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8468,7 +8448,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting filters "
                                  "for the alert. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8476,7 +8456,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting filters "
                                  "for the alert. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8484,7 +8464,7 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "An internal error occurred while getting filters "
                                  "for the alert. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8556,7 +8536,6 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the tasks. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_tasks",
                                  response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -8564,7 +8543,6 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the tasks. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_tasks",
                                  response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -8572,7 +8550,6 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the reports. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_tasks",
                                  response_data);
         }
 
@@ -8606,7 +8583,7 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "An internal error occurred while getting filters "
                                  "for the alerts. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_tasks", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8614,7 +8591,7 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "An internal error occurred while getting filters "
                                  "for the alerts. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_tasks", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -8622,7 +8599,7 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "An internal error occurred while getting filters "
                                  "for the alerts. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_tasks", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8688,7 +8665,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while editing an alert. "
                            "The alert remains as it was. "
                            "Diagnostics: Required parameter alert_id was NULL.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -8706,7 +8683,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<edit_alert>");
@@ -8733,7 +8710,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_REPORT_FORMATS"))
@@ -8752,7 +8729,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting report formats. "
                                "The current list of report formats is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -8764,7 +8741,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting report formats. "
                                "The current list of report formats is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
     }
 
@@ -8784,7 +8761,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "of filters. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -8797,7 +8774,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "of filters. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_filters", response_data);
+                               response_data);
         }
     }
 
@@ -8820,7 +8797,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "of tasks. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -8833,7 +8810,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "of tasks. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -8855,7 +8832,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "of credentials. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -8868,7 +8845,7 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                                "of credentials. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -9016,7 +8993,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while saving a new alert. "
                             "No new alert was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -9024,7 +9001,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while saving a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -9032,7 +9009,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while saving a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -9073,7 +9050,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   /* Test the alert. */
@@ -9088,7 +9065,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   entity = NULL;
@@ -9099,7 +9076,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -9253,7 +9230,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -9265,7 +9242,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
     }
 
@@ -9285,7 +9262,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -9297,7 +9274,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -9522,7 +9499,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                             "An internal error occurred while creating a new target. "
                             "No new target was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_targets", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -9530,7 +9507,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                             "An internal error occurred while creating a new target. "
                             "It is unclear whether the target has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_targets", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -9538,7 +9515,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                             "An internal error occurred while creating a new target. "
                             "It is unclear whether the target has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_targets", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -9568,7 +9545,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                            "The resource was not cloned. "                          \
                            "Diagnostics: Required parameter '" G_STRINGIFY (name)   \
                            "' was NULL.",                                           \
-                           "/omp?cmd=get_tasks", response_data);                    \
+                           response_data);                    \
     }
 
 /**
@@ -9618,7 +9595,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while cloning a resource. "
                                "The resource was not cloned. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
   else if (gvm_connection_sendf (connection,
@@ -9636,7 +9613,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while cloning a resource. "
                            "The resource was not cloned. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   entity = NULL;
@@ -9648,7 +9625,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while cloning a resource. "
                            "It is unclear whether the resource has been cloned or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return next page. */
@@ -9674,7 +9651,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                               "An internal error occurred while cloning a resource. "
                               "The resource remains the same. "
                               "Diagnostics: Error getting new resource.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
       next_id_name = g_strdup_printf ("%s_id", type);
       params_add (params, next_id_name, next_id);
@@ -9899,7 +9876,7 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while restoring a resource. "
                            "The resource was not restored. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -9919,7 +9896,7 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while restoring a resource. "
                            "The resource was not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   if (read_entity_and_string_c (connection, &entity, &xml))
@@ -9931,7 +9908,7 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while restoring a resource. "
                            "It is unclear whether the resource has been restored or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return trash page. */
@@ -9982,7 +9959,7 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   if (read_entity_and_string_c (connection, &entity, &xml))
@@ -9993,7 +9970,7 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return trash page. */
@@ -10146,7 +10123,7 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating a new tag. "
                              "No new tag was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -10154,7 +10131,7 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating a new tag. "
                              "It is unclear whether the tag has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -10162,7 +10139,7 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating a new tag. "
                              "It is unclear whether the tag has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -10242,7 +10219,7 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while editing a tag. "
                            "The tag remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tags", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -10257,7 +10234,7 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tags", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -10280,7 +10257,7 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tags", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -10379,7 +10356,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "The tag remains the same. "
                              "Diagnostics: Failure to send command to "
                              "manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -10389,7 +10366,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "or not. "
                              "Diagnostics: Failure to receive response from "
                              "manager daemon.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -10398,7 +10375,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "It is unclear whether the tag has been saved "
                              "or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
@@ -10555,7 +10532,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while modifying a tag. "
                            "The tag was not modified. "
                            "Diagnostics: Required parameter tag_id was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   if (enable == NULL)
     {
@@ -10565,7 +10542,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while modifying a tag. "
                            "The tag was not modified. "
                            "Diagnostics: Required parameter enable was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Delete the resource and get all resources. */
@@ -10585,7 +10562,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "The tag is not modified. "
                            "Diagnostics: Failure to send command to"
                            " manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   entity = NULL;
@@ -10599,7 +10576,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            " or not. "
                            "Diagnostics: Failure to read response from"
                            " manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (! gmp_success (entity))
@@ -10650,7 +10627,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while editing a target. "
                            "The target remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_targets", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -10668,7 +10645,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -10700,7 +10677,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_CREDENTIALS"))
@@ -10719,7 +10696,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -10731,7 +10708,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
     }
 
@@ -10751,7 +10728,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -10763,7 +10740,7 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -10938,7 +10915,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                  "An internal error occurred while saving a target. "
                                  "The target remains the same. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_targets", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -10946,7 +10923,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                  "An internal error occurred while saving a target. "
                                  "It is unclear whether the target has been saved or not. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_targets", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -10954,7 +10931,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                  "An internal error occurred while saving a target. "
                                  "It is unclear whether the target has been saved or not. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_targets", response_data);
+                                 response_data);
         }
 
       html = response_from_entity (connection, credentials, params, entity,
@@ -11102,7 +11079,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while modifying target. "
                              "No target was modified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       }
 
     entity = NULL;
@@ -11114,7 +11091,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while modifying a target. "
                              "It is unclear whether the target has been modified or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       }
 
     html = response_from_entity (connection, credentials, params, entity,
@@ -11209,7 +11186,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while getting scanners"
                              " for new config. Diagnostics: Failure to send"
                              " command to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -11217,7 +11194,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while getting scanners"
                              " for new config. " "Diagnostics: Failure to"
                              " receive response from manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -11226,7 +11203,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
                              "for new config. It is unclear whether the config"
                              " has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
     }
   g_string_append (xml, response);
   g_free (response);
@@ -11354,7 +11331,7 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                             "An internal error occurred while creating a new config. "
                             "No new config was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_configs", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -11362,7 +11339,7 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                             "An internal error occurred while creating a new config. "
                             "It is unclear whether the config has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_configs", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -11370,7 +11347,7 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                             "An internal error occurred while creating a new config. "
                             "It is unclear whether the config has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_configs", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -11429,7 +11406,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "An internal error occurred while importing a config. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -11437,7 +11414,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "An internal error occurred while importing a config. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -11445,7 +11422,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "An internal error occurred while importing a config. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -11544,7 +11521,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -11556,7 +11533,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   /* Get all the families. */
@@ -11570,7 +11547,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -11582,7 +11559,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (edit)
@@ -11598,7 +11575,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                    "An internal error occurred while getting the config. "
                    "The config is not available. "
                    "Diagnostics: Failure to send command to manager daemon.",
-                   "/omp?cmd=get_configs", response_data);
+                   response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -11610,7 +11587,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                    "An internal error occurred while getting the config. "
                    "The config is not available. "
                    "Diagnostics: Failure to receive response from manager daemon.",
-                   "/omp?cmd=get_configs", response_data);
+                   response_data);
         }
 
     }
@@ -11625,7 +11602,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                "An internal error occurred while getting the config. "
                "The config is not available. "
                "Diagnostics: Failure to send command to manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
   if (read_string_c (connection, &xml))
     {
@@ -11636,7 +11613,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                "An internal error occurred while getting the config. "
                "The config is not available. "
                "Diagnostics: Failure to receive response from manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
 
   /* Get the permissions */
@@ -11658,7 +11635,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -11670,7 +11647,7 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</permissions>");
@@ -11764,7 +11741,7 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                "An internal error occurred while synchronizing a config. "
                "The config is not synchronized. "
                "Diagnostics: Failure to send command to manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
 
   xml = g_string_new ("");
@@ -11778,7 +11755,7 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                "An internal error occurred while synchronizing a config. "
                "It is unclear whether the config has been synchronized or not. "
                "Diagnostics: Failure to receive response from manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
 
   next = params_value (params, "next");
@@ -11853,7 +11830,7 @@ save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
                    "An internal error occurred while saving a config. It is"
                    " unclear whether the entire config has been saved. "
                    "Diagnostics: Failure to send command to manager daemon.",
-                   "/omp?cmd=get_configs", response_data);
+                   response_data);
         }
       g_free (value);
 
@@ -11925,7 +11902,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   ret = check_modify_config (connection, credentials, params,
@@ -11974,7 +11951,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while saving a config. "
                                    "It is unclear whether the entire config has been saved. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_configs", response_data);
+                                   response_data);
             }
           g_free (value);
           g_free (ret);
@@ -12009,7 +11986,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while saving a config. "
                                "It is unclear whether the entire config has been saved. "
                                "Diagnostics: save_osp_prefs returned NULL unexpectedly.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
       return ret;
     }
@@ -12037,7 +12014,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                               "An internal error occurred while saving a config. "
                               "It is unclear whether the entire config has been saved. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_configs", response_data);
+                              response_data);
         }
 
       if (selects)
@@ -12065,7 +12042,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                     "An internal error occurred while saving a config. "
                                     "It is unclear whether the entire config has been saved. "
                                     "Diagnostics: Failure to send command to manager daemon.",
-                                    "/omp?cmd=get_configs", response_data);
+                                    response_data);
               }
         }
 
@@ -12096,7 +12073,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                        "An internal error occurred while saving a config. "
                                        "It is unclear whether the entire config has been saved. "
                                        "Diagnostics: Failure to send command to manager daemon.",
-                                       "/omp?cmd=get_configs", response_data);
+                                       response_data);
                 }
             }
         }
@@ -12112,7 +12089,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while saving a config. "
                                "It is unclear whether the entire config has been saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
 
       g_free (ret);
@@ -12153,7 +12130,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config family. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<get_config_family_response>");
@@ -12190,7 +12167,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -12202,7 +12179,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (edit)
@@ -12233,7 +12210,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while getting list of configs. "
                                "The current list of configs is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -12245,7 +12222,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while getting list of configs. "
                                "The current list of configs is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</all>");
@@ -12320,7 +12297,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                            "An internal error occurred while saving getting config family. "
                            "The config has not been saved. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   /* Set the NVT selection. */
@@ -12339,7 +12316,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   nvts = params_values (params, "nvt:");
@@ -12362,7 +12339,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                                  "An internal error occurred while saving a config. "
                                  "It is unclear whether the entire config has been saved. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_configs", response_data);
+                                 response_data);
           }
     }
 
@@ -12377,7 +12354,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   ret = check_modify_config (connection, credentials, params,
@@ -12417,7 +12394,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config family. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<get_config_nvt_response>");
@@ -12452,7 +12429,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -12464,7 +12441,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</get_config_nvt_response>");
@@ -12483,7 +12460,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting list of notes. "
                            "The current list of notes is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -12495,7 +12472,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting list of notes. "
                            "The current list of notes is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -12512,7 +12489,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting list of overrides. "
                            "The current list of overrides is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -12524,7 +12501,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting list of overrides. "
                            "The current list of overrides is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
@@ -12706,7 +12683,7 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
                                        "An internal error occurred while saving a config. "
                                        "It is unclear whether the entire config has been saved. "
                                        "Diagnostics: Required parameter was NULL.",
-                                       "/omp?cmd=get_configs", response_data);
+                                       response_data);
                 }
 
               preference_name_escaped = g_markup_escape_text (preference_name,
@@ -12768,7 +12745,7 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
                                    "An internal error occurred while saving a config. "
                                    "It is unclear whether the entire config has been saved. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_configs", response_data);
+                                   response_data);
             }
           g_free (value);
 
@@ -13006,7 +12983,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       entity = NULL;
@@ -13019,7 +12996,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       preference_entity = entity_child (entity, "preference");
@@ -13048,7 +13025,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive file from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -13291,7 +13268,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send extra commands to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &commands_xml))
@@ -13304,7 +13281,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -13420,7 +13397,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_entity_and_text_c (connection, &entity, &esc_response))
@@ -13435,7 +13412,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
       status = entity_attribute (entity, "status");
       if ((status == NULL)
@@ -13451,7 +13428,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to parse response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
       free_entity (entity);
     }
@@ -13503,7 +13480,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   given_filt_id = params_value (params, "filt_id");
@@ -13659,7 +13636,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
   else
@@ -13743,7 +13720,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_string_free (delta_states, TRUE);
@@ -13766,7 +13743,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
           entity_t report = entity_child (entity, "report");
           if (report == NULL)
@@ -13779,7 +13756,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Response from manager daemon did not contain a report.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
           extension = entity_attribute (report, "extension");
           requested_content_type = entity_attribute (report, "content_type");
@@ -13802,7 +13779,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                             "An internal error occurred while getting a setting. "
                                             "The setting could not be delivered. "
                                             "Diagnostics: Failure to send command to manager daemon.",
-                                            "/omp?cmd=get_tasks",
                                              response_data);
                       case 2:
                         response_data->http_status_code
@@ -13812,7 +13788,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                             "An internal error occurred while getting a setting. "
                                             "The setting could not be delivered. "
                                             "Diagnostics: Failure to receive response from manager daemon.",
-                                            "/omp?cmd=get_tasks",
                                              response_data);
                       default:
                         response_data->http_status_code
@@ -13822,7 +13797,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                             "An internal error occurred while getting a setting. "
                                             "The setting could not be delivered. "
                                             "Diagnostics: Internal error.",
-                                            "/omp?cmd=get_tasks",
                                              response_data);
                     }
                 }
@@ -13884,7 +13858,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           report_entity = entity_child (entity, "report");
@@ -13934,7 +13908,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                                 "An internal error occurred while getting a setting. "
                                                 "The setting could not be delivered. "
                                                 "Diagnostics: Failure to send command to manager daemon.",
-                                                "/omp?cmd=get_tasks",
                                                  response_data);
                           case 2:
                             response_data->http_status_code
@@ -13944,7 +13917,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                                 "An internal error occurred while getting a setting. "
                                                 "The setting could not be delivered. "
                                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                                "/omp?cmd=get_tasks",
                                                  response_data);
                           default:
                             response_data->http_status_code
@@ -13954,7 +13926,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                                 "An internal error occurred while getting a setting. "
                                                 "The setting could not be delivered. "
                                                 "Diagnostics: Internal error.",
-                                                "/omp?cmd=get_tasks",
                                                  response_data);
                         }
                     }
@@ -13999,7 +13970,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive report from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
     }
@@ -14079,7 +14050,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if ((filt_id == NULL) && (params_value (params, "filter") == NULL))
@@ -14119,7 +14090,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
@@ -14132,7 +14103,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
 
@@ -14158,7 +14129,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                        "An internal error occurred while getting the filter list. "
                                        "The current list of filters is not available. "
                                        "Diagnostics: Failure to send command to manager daemon.",
-                                       "/omp?cmd=get_tasks", response_data);
+                                       response_data);
                 }
 
               if (read_string_c (connection, &xml))
@@ -14172,7 +14143,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                        "An internal error occurred while getting the filter list. "
                                        "The current list of filters is not available. "
                                        "Diagnostics: Failure to receive response from manager daemon.",
-                                       "/omp?cmd=get_tasks", response_data);
+                                       response_data);
                 }
 
               g_string_append (xml, "</filters>");
@@ -14235,7 +14206,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
@@ -14249,7 +14220,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           g_free (task_id);
@@ -14299,7 +14270,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
@@ -14312,7 +14283,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
 
@@ -14332,7 +14303,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
@@ -14345,7 +14316,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
 
@@ -14368,7 +14339,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting the filter list. "
                                    "The current list of filters is not available. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
@@ -14381,7 +14352,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                    "An internal error occurred while getting the filter list. "
                                    "The current list of filters is not available. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           g_string_append (xml, "</filters>");
@@ -14405,7 +14376,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -14417,7 +14388,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to receive response from manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
 
       g_string_append (xml, "</get_report>");
@@ -14480,7 +14451,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "Bad Request", __FUNCTION__, __LINE__,
                                "Missing parameter alert_id or report_id. "
                                "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_reports", 1, response_data);
+                               1, response_data);
     }
 
   filter = params_value (params, "filter");
@@ -14509,7 +14480,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+                               1, response_data);
     }
 
   if (read_entity_and_text_c (connection, &entity, &response))
@@ -14521,7 +14492,7 @@ report_alert_gmp (gvm_connection_t *connection,
                            "The report could not be delivered. "
                            "Diagnostics: Failure to receive response from "
                            "manager daemon.",
-                           "/omp?cmd=get_tasks", 1, response_data);
+                           1, response_data);
     }
 
   status = entity_attribute (entity, "status");
@@ -14535,7 +14506,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to parse response from manager daemon.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+                               1, response_data);
     }
   if (strcmp(status, "200"))
     {
@@ -14546,7 +14517,7 @@ report_alert_gmp (gvm_connection_t *connection,
                                "Failed", __FUNCTION__, __LINE__,
                                "Running the report alert failed."
                                "The report could not be delivered.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+                               1, response_data);
 
     }
 
@@ -14638,7 +14609,7 @@ get_report_section (gvm_connection_t *connection,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: report_id was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!strcmp (report_section, "results"))
@@ -14687,7 +14658,7 @@ get_report_section (gvm_connection_t *connection,
                                 "An internal error occurred while getting the "
                                 "result formats list. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
             g_string_free (xml, TRUE);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -14696,7 +14667,7 @@ get_report_section (gvm_connection_t *connection,
                                 "An internal error occurred while getting the "
                                 "result formats list. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
             g_string_free (xml, TRUE);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -14705,7 +14676,7 @@ get_report_section (gvm_connection_t *connection,
                                 "An internal error occurred while getting the "
                                 "result formats list. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
 
       g_string_append (xml, response);
@@ -14762,7 +14733,7 @@ download_ssl_cert (gvm_connection_t *connection,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: ssl_cert was NULL.",
-                           "/omp?cmd=get_reports", response_data);
+                           response_data);
     }
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (ssl_cert, NULL);
@@ -14802,7 +14773,7 @@ download_ca_pub (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: ca_pub was NULL.",
-                           "/omp?cmd=get_reports", response_data);
+                           response_data);
     }
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (ca_pub, NULL);
@@ -14835,7 +14806,7 @@ download_key_pub (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: key_pub was NULL.",
-                           "/omp?cmd=get_reports", response_data);
+                           response_data);
     }
 
   /* The Base64 comes URI escaped as it may contain special characters. */
@@ -15008,7 +14979,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -15019,7 +14990,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Get tag names */
@@ -15040,7 +15011,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -15052,7 +15023,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -15258,7 +15229,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while creating a new note. "
                                "No new note was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_notes", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -15270,7 +15241,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while creating a new note. "
                                "No new note was created. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_notes", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</new_note>");
@@ -15295,7 +15266,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while creating a new note. "
                            "No new note was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -15356,7 +15327,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while creating a new note. "
                            "It is unclear whether the note has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -15587,7 +15558,7 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "An internal error occurred while creating a new note. "
                              "No new note was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -15595,7 +15566,7 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "An internal error occurred while creating a new note. "
                              "It is unclear whether the note has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -15603,7 +15574,7 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "An internal error occurred while creating a new note. "
                              "It is unclear whether the note has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -15688,7 +15659,7 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while editing a note. "
                            "The note remains as it was. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -15707,7 +15678,7 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while editing a note. "
                            "The note remains as it was. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -15816,7 +15787,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a note. "
                              "The note remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -15824,7 +15795,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a note. "
                              "It is unclear whether the note has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -15832,7 +15803,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a note. "
                              "It is unclear whether the note has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
@@ -15990,7 +15961,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while creating a new override. "
                                "No new override was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_overrides", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -16002,7 +15973,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                                "An internal error occurred while creating a new override. "
                                "No new override was created. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_overrides", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</new_override>");
@@ -16029,7 +16000,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while creating a new override. "
                            "No new override was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -16090,7 +16061,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while creating a new override. "
                            "It is unclear whether the override has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -16224,7 +16195,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating a new override. "
                              "No new override was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -16232,7 +16203,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating a new override. "
                              "It is unclear whether the override has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -16240,7 +16211,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating a new override. "
                              "It is unclear whether the override has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -16326,7 +16297,7 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while editing an override. "
                            "The override remains as it was. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -16345,7 +16316,7 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while editing an override. "
                            "The override remains as it was. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -16462,7 +16433,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a override. "
                              "The override remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -16470,7 +16441,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a override. "
                              "It is unclear whether the override has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -16478,7 +16449,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving a override. "
                              "It is unclear whether the override has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
@@ -16633,7 +16604,7 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the credentials list. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<new_scanner>");
@@ -16648,7 +16619,7 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the credentials list. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</new_scanner>");
@@ -16716,7 +16687,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "An internal error occurred while verifying a scanner. "
                              "The scanner was not verified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_scanners", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -16724,7 +16695,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "An internal error occurred while verifying a scanner. "
                              "It is unclear whether the scanner was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_scanners", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -16732,7 +16703,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "An internal error occurred while verifying a scanner. "
                              "It is unclear whether the scanner was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_scanners", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -16748,7 +16719,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                                "An internal error occurred while verifying a scanner. "
                                "It is unclear whether the scanner was verified or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_scanners", response_data);
+                               response_data);
         }
     }
   else
@@ -16833,7 +16804,7 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                  "An internal error occurred while creating a new scanner. "
                  "No new scanner was created. "
                  "Diagnostics: Failure to send command to manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
@@ -16841,7 +16812,7 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                  "An internal error occurred while creating a new scanner. "
                  "It is unclear whether the scanner has been created or not. "
                  "Diagnostics: Failure to receive response from manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
@@ -16849,7 +16820,7 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                  "An internal error occurred while creating a new scanner. "
                  "It is unclear whether the scanner has been created or not. "
                  "Diagnostics: Internal Error.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -16930,7 +16901,7 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while editing a scanner. "
                            "The scanner remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -16949,7 +16920,7 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting scanner info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -16973,7 +16944,7 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting scanner info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -17128,7 +17099,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                  "An internal error occurred while saving a scanner. "
                  "The scanner remains the same. "
                  "Diagnostics: Failure to send command to manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
@@ -17136,7 +17107,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                  "An internal error occurred while saving a scanner. "
                  "It is unclear whether the scanner has been saved or not. "
                  "Diagnostics: Failure to receive response from manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message
@@ -17144,7 +17115,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                  "An internal error occurred while saving a scanner. "
                  "It is unclear whether the scanner has been saved or not. "
                  "Diagnostics: Internal Error.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -17397,7 +17368,7 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "An internal error occurred while creating a new schedule. "
                              "No new schedule was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -17405,7 +17376,7 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "An internal error occurred while creating a new schedule. "
                              "It is unclear whether the schedule has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -17413,7 +17384,7 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "An internal error occurred while creating a new schedule. "
                              "It is unclear whether the schedule has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -17595,7 +17566,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -17607,7 +17578,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_SCANNERS"))
@@ -17626,7 +17597,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting the system reports. "
                                "The current list of system reports is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
@@ -17638,7 +17609,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
                                "An internal error occurred while getting the system reports. "
                                "The current list of system reports is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -18060,7 +18031,7 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "An internal error occurred while importing a report format. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18068,7 +18039,7 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "An internal error occurred while importing a report format. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18076,7 +18047,7 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "An internal error occurred while importing a report format. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -18212,7 +18183,6 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                       "An internal error occurred while saving a Report Format. "
                                       "The Report Format was not saved. "
                                       "Diagnostics: Failure to send command to manager daemon.",
-                                      "/omp?cmd=get_report_formats",
                                       response_data);
               case 2:
                 response_data->http_status_code
@@ -18222,7 +18192,6 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                       "An internal error occurred while saving a Report Format. "
                                       "It is unclear whether the Report Format has been saved or not. "
                                       "Diagnostics: Failure to receive response from manager daemon.",
-                                      "/omp?cmd=get_report_formats",
                                       response_data);
               case -1:
               default:
@@ -18233,7 +18202,6 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                       "An internal error occurred while saving a Report Format. "
                                       "It is unclear whether the Report Format has been saved or not. "
                                       "Diagnostics: Internal Error.",
-                                      "/omp?cmd=get_report_formats",
                                       response_data);
             }
 
@@ -18301,7 +18269,6 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                          "An internal error occurred while saving a Report Format. "
                                          "The Report Format was not saved. "
                                          "Diagnostics: Failure to send command to manager daemon.",
-                                         "/omp?cmd=get_report_formats",
                                          response_data);
                   case 2:
                     response_data->http_status_code
@@ -18311,7 +18278,6 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                          "An internal error occurred while saving a Report Format. "
                                          "It is unclear whether the Report Format has been saved or not. "
                                          "Diagnostics: Failure to receive response from manager daemon.",
-                                         "/omp?cmd=get_report_formats",
                                          response_data);
                   case -1:
                   default:
@@ -18322,7 +18288,6 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                          "An internal error occurred while saving a Report Format. "
                                          "It is unclear whether the Report Format has been saved or not. "
                                          "Diagnostics: Internal Error.",
-                                         "/omp?cmd=get_report_formats",
                                          response_data);
                 }
 
@@ -18361,7 +18326,7 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                              "An internal error occurred while saving a Report Format. "
                              "The Report Format was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18369,7 +18334,7 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                              "An internal error occurred while saving a Report Format. "
                              "It is unclear whether the Report Format has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18377,7 +18342,7 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                              "An internal error occurred while saving a Report Format. "
                              "It is unclear whether the Report Format has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -18417,7 +18382,7 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying a report format. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_report_formats", response_data);
+                           response_data);
     }
 
   /* Verify the report format. */
@@ -18443,7 +18408,7 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "An internal error occurred while verifying a report format. "
                              "The report format was not verified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18451,7 +18416,7 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "An internal error occurred while verifying a report format. "
                              "It is unclear whether the report format was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18459,7 +18424,7 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "An internal error occurred while verifying a report format. "
                              "It is unclear whether the report format was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -18475,7 +18440,7 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                                "An internal error occurred while verifying a report format. "
                                "It is unclear whether the report format was verified or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_report_formats", response_data);
+                               response_data);
         }
     }
   else
@@ -18524,7 +18489,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while trying to start a wizard. "
                            "Diagnostics: Required parameter 'name' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   run = g_string_new ("<run_wizard>");
 
@@ -18565,7 +18530,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                              "An internal error occurred while running a wizard. "
                              "The wizard did not start. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18573,7 +18538,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18581,7 +18546,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -18613,7 +18578,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                      name " list for trash."                                  \
                      "Diagnostics: Failure to send command to"                \
                      " manager daemon.",                                      \
-                     "/omp?cmd=get_trash", response_data);                    \
+                     response_data);                    \
           }                                                                   \
                                                                               \
         if (read_string_c (connection, &xml))                                 \
@@ -18626,7 +18591,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                      "An internal error occurred while getting " name " list."\
                      "Diagnostics: Failure to receive response from"          \
                      " manager daemon.",                                      \
-                     "/omp?cmd=get_tasks", response_data);                    \
+                     response_data);                    \
           }                                                                   \
       }
 
@@ -18752,7 +18717,7 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -18764,7 +18729,7 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   buffer_languages_xml (xml);
@@ -18831,7 +18796,7 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18839,7 +18804,7 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18848,7 +18813,7 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                              "for the settings. "
                              "It is unclear whether the task has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
     }
 
   settings = get_my_settings (connection, credentials, params, response,
@@ -18917,7 +18882,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18925,7 +18890,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while getting resources "
                              "for the alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -18933,7 +18898,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
     }
   free_entity (entity);
 
@@ -18960,7 +18925,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -18972,7 +18937,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
   buffer_languages_xml (xml);
@@ -19159,7 +19124,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                  "An internal error occurred while saving settings. "
                                  "The settings remains the same. "
                                  "Diagnostics: Manager closed connection during authenticate.",
-                                 "/omp?cmd=get_my_settings", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             g_string_append (xml,
@@ -19182,7 +19147,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                  "An internal error occurred while saving settings. "
                                  "The settings remains the same. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_my_settings", response_data);
+                                 response_data);
         }
 
       passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
@@ -19202,7 +19167,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (passwd_64);
 
@@ -19216,7 +19181,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
 
@@ -19256,7 +19221,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19270,7 +19235,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
 
@@ -19321,7 +19286,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (max_64);
 
@@ -19338,7 +19303,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19371,7 +19336,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (fname_64);
 
@@ -19388,7 +19353,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity) != 1)
@@ -19421,7 +19386,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (fname_64);
 
@@ -19438,7 +19403,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity) != 1)
@@ -19471,7 +19436,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (fname_64);
 
@@ -19488,7 +19453,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity) != 1)
@@ -19521,7 +19486,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (lang_64);
 
@@ -19538,7 +19503,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity))
@@ -19577,7 +19542,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                            "An internal error occurred while saving settings. "
                            "It is unclear whether all the settings were saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
   /* Send resources filters */
@@ -19592,7 +19557,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                            "An internal error occurred while saving settings. "
                            "It is unclear whether all the settings were saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
   /* Send Severity Class. */
@@ -19622,7 +19587,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19639,7 +19604,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
 
@@ -19687,7 +19652,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19704,7 +19669,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19740,7 +19705,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                               "An internal error occurred while saving settings. "
                               "It is unclear whether all the settings were saved. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_my_settings", response_data);
+                              response_data);
         }
       g_free (text_64);
 
@@ -19757,7 +19722,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19795,7 +19760,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19813,7 +19778,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19865,7 +19830,7 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the GMP doc. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   help_response = NULL;
@@ -19877,7 +19842,7 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the GMP doc. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   free_entity (help_response);
 
@@ -19926,7 +19891,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
                            "An internal error occurred while getting a list. "
                            "The list could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_protocol_doc", response_data);
+                           response_data);
     }
 
   response = NULL;
@@ -19937,7 +19902,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting GMP doc. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_protocol_doc", response_data);
+                           response_data);
     }
 
   if (strcmp (format, "xml") == 0)
@@ -19955,7 +19920,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting GMP doc. "
                                "Diagnostics: Schema element missing.",
-                               "/omp?cmd=get_protocol_doc", response_data);
+                               response_data);
         }
 
       content_64 = entity_text (entity);
@@ -19967,7 +19932,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting GMP doc. "
                                "Diagnostics: Schema empty.",
-                               "/omp?cmd=get_protocol_doc", response_data);
+                               response_data);
         }
 
       content = (char *) g_base64_decode (content_64, &content_length);
@@ -20214,7 +20179,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
                             "An internal error occurred while creating a new group. "
                             "No new group was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_groups", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -20222,7 +20187,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
                             "An internal error occurred while creating a new group. "
                             "It is unclear whether the group has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_groups", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -20230,7 +20195,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
                             "An internal error occurred while creating a new group. "
                             "It is unclear whether the group has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_groups", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -20378,7 +20343,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "An internal error occurred while saving a group. "
                              "The group was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_groups", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -20386,7 +20351,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "An internal error occurred while saving a group. "
                              "It is unclear whether the group has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_groups", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -20394,7 +20359,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "An internal error occurred while saving a group. "
                              "It is unclear whether the group has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_groups", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -20557,7 +20522,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20565,7 +20530,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20573,7 +20538,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -20602,7 +20567,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20610,7 +20575,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20618,7 +20583,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -20647,7 +20612,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20655,7 +20620,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20663,7 +20628,7 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -20767,7 +20732,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command"
                                 " to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20777,7 +20742,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "The permission was not created. "
                                 "Diagnostics: Failure to receive response"
                                 " from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20786,7 +20751,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " the subject for a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
       subject_entity = entity_child (get_subject_entity, subject_type);
@@ -20894,7 +20859,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while creating a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20902,7 +20867,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20910,7 +20875,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
         if (entity_attribute (entity, "id"))
@@ -20959,7 +20924,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while creating a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20967,7 +20932,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -20975,7 +20940,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
         if (entity_attribute (entity, "id"))
@@ -21004,7 +20969,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                             "An internal error occurred while creating a permission. "       \
                             "The permission was not created. "                               \
                             "Diagnostics: Failure to send command to manager daemon.",       \
-                            "/omp?cmd=get_permissions", response_data);                      \
+                            response_data);                      \
       case 2:                                                                                \
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
         return gsad_message (credentials,                                                    \
@@ -21012,7 +20977,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                             "An internal error occurred while creating a permission. "       \
                             "It is unclear whether the permission has been created or not. " \
                             "Diagnostics: Failure to receive response from manager daemon.", \
-                            "/omp?cmd=get_permissions", response_data);                      \
+                            response_data);                      \
       default:                                                                               \
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
         return gsad_message (credentials,                                                    \
@@ -21020,7 +20985,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                             "An internal error occurred while creating a permission. "       \
                             "It is unclear whether the permission has been created or not. " \
                             "Diagnostics: Internal Error.",                                  \
-                            "/omp?cmd=get_permissions", response_data);                      \
+                            response_data);                      \
     }                                                                         \
   if (gmp_success (entity))                                                   \
     {                                                                         \
@@ -21085,7 +21050,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21093,7 +21058,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21101,7 +21066,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -21130,7 +21095,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21138,7 +21103,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21146,7 +21111,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -21175,7 +21140,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21183,7 +21148,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21191,7 +21156,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -21227,7 +21192,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             g_free (get_command);
             response_data->http_status_code
@@ -21237,7 +21202,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             g_free (get_command);
             response_data->http_status_code
@@ -21247,7 +21212,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
       g_string_append (xml, response);
 
@@ -21291,7 +21256,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             g_free (get_command);
             response_data->http_status_code
@@ -21301,7 +21266,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             g_free (get_command);
             response_data->http_status_code
@@ -21311,7 +21276,7 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
       g_string_append (xml, response);
 
@@ -21418,7 +21383,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command"
                                 " to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21428,7 +21393,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                 "The permission was not created. "
                                 "Diagnostics: Failure to receive response"
                                 " from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21437,7 +21402,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                 " the subject for a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
       subject_entity = entity_child (get_subject_entity, subject_type);
@@ -21900,7 +21865,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21908,7 +21873,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21916,7 +21881,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -21945,7 +21910,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21953,7 +21918,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21961,7 +21926,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -21990,7 +21955,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -21998,7 +21963,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -22006,7 +21971,7 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -22163,7 +22128,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "An internal error occurred while modifying a permission. "
                              "The permission was not modified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_permissions", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22171,7 +22136,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "An internal error occurred while modifying a permission. "
                              "It is unclear whether the permission has been modified or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_permissions", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22179,7 +22144,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "An internal error occurred while modifying a permission. "
                              "It is unclear whether the permission has been modified or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_permissions", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -22318,7 +22283,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while creating a new port list. "
                             "No new port list was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_port_lists", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22326,7 +22291,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while creating a new port list. "
                             "It is unclear whether the port list has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_port_lists", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22334,7 +22299,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while creating a new port list. "
                             "It is unclear whether the port list has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_port_lists", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -22451,7 +22416,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
                              "An internal error occurred while creating a Port Range. "
                              "The Port Range was not created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22459,7 +22424,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
                              "An internal error occurred while creating a Port Range. "
                              "It is unclear whether the Port Range has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22467,7 +22432,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
                              "An internal error occurred while creating a Port Range. "
                              "It is unclear whether the Port Range has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -22661,7 +22626,7 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "An internal error occurred while saving a Port List. "
                              "The Port List was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22669,7 +22634,7 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "An internal error occurred while saving a Port List. "
                              "It is unclear whether the Port List has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22677,7 +22642,7 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "An internal error occurred while saving a Port List. "
                              "It is unclear whether the Port List has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -22787,7 +22752,6 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while importing a port_list. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_port_lists",
                              response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -22796,7 +22760,6 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while importing a port_list. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_port_lists",
                              response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -22805,7 +22768,6 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while importing a port_list. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_port_lists",
                              response_data);
     }
 
@@ -22954,7 +22916,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "An internal error occurred while creating a new role. "
                              "No new role was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22962,7 +22924,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "An internal error occurred while creating a new role. "
                              "It is unclear whether the role has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -22970,7 +22932,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "An internal error occurred while creating a new role. "
                              "It is unclear whether the role has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -23026,21 +22988,21 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -23070,21 +23032,21 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -23284,7 +23246,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
                              "An internal error occurred while saving a role. "
                              "The role was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -23292,7 +23254,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
                              "An internal error occurred while saving a role. "
                              "It is unclear whether the role has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -23300,7 +23262,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
                              "An internal error occurred while saving a role. "
                              "It is unclear whether the role has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -23349,7 +23311,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the feed list. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_entity_and_text_c (connection, &entity, &text))
@@ -23360,7 +23322,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while getting the feed. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   time (&now);
@@ -23428,7 +23390,7 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
                feed_name);
       html = gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           msg, "/omp?cmd=get_tasks", response_data);
+                           msg, response_data);
       g_free (msg);
       return html;
     }
@@ -23444,7 +23406,7 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
                feed_name);
       html = gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           msg, "/omp?cmd=get_tasks", response_data);
+                           msg, response_data);
       g_free (msg);
       return html;
     }
@@ -23668,7 +23630,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
                             "An internal error occurred while creating a new alert. "
                             "No new alert was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -23676,7 +23638,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -23684,7 +23646,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
     }
 
   if (gmp_success (entity))
@@ -23933,7 +23895,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while modifying a filter. "
                              "The filter was not modified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_filters", response_data);
+                             response_data);
       }
 
     entity = NULL;
@@ -23945,7 +23907,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while modifying a filter. "
                              "It is unclear whether the filter has been modified or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_filters", response_data);
+                             response_data);
       }
 
   }
@@ -24147,7 +24109,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "An internal error occurred while saving a schedule. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -24155,7 +24117,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "An internal error occurred while saving a schedule. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -24163,7 +24125,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "An internal error occurred while saving a schedule. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
@@ -24220,7 +24182,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the auth list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24228,7 +24190,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the auth list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24236,7 +24198,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the auth list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -24265,7 +24227,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24273,7 +24235,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24281,7 +24243,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -24310,7 +24272,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24318,7 +24280,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24326,7 +24288,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -24409,21 +24371,21 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
     }
 
@@ -24505,21 +24467,21 @@ get_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24588,21 +24550,21 @@ get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24781,7 +24743,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while creating a new user. "
                              "No new user was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -24789,7 +24751,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while creating a new user. "
                              "It is unclear whether the user has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -24797,7 +24759,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while creating a new user. "
                              "It is unclear whether the user has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -24851,21 +24813,21 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24893,21 +24855,21 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24936,7 +24898,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24944,7 +24906,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -24952,7 +24914,7 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -25059,21 +25021,21 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
 
@@ -25295,7 +25257,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while saving a user. "
                              "The user was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -25303,7 +25265,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while saving a user. "
                              "It is unclear whether the user has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -25311,7 +25273,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while saving a user. "
                              "It is unclear whether the user has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity)
@@ -25520,7 +25482,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                                 "testing SecInfo database availability. "
                                 "Diagnostics: Failure to send command to "
                                 "manager daemon.",
-                                "/omp?cmd=dashboard", response_data);
+                                response_data);
           case 2:
             g_string_free (xml, TRUE);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -25530,7 +25492,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                                 "testing SecInfo database availability. "
                                 "Diagnostics: Failure to receive response from "
                                 "manager daemon.",
-                                "/omp?cmd=dashboard", response_data);
+                                response_data);
           default:
             g_string_free (xml, TRUE);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -25539,7 +25501,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                                 "An internal error occurred while "
                                 "testing SecInfo database availability. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=dashboard", response_data);
+                                response_data);
         }
       g_string_append_printf (xml,
                               "<secinfo_test>%s</secinfo_test>",
@@ -25577,7 +25539,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                             "filters list. "
                             "Diagnostics: Failure to send command to "
                             "manager daemon.",
-                            "/omp?cmd=dashboard", response_data);
+                            response_data);
       case 2:
         g_string_free (xml, TRUE);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -25587,7 +25549,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                             "filters list. "
                             "Diagnostics: Failure to receive response from "
                             "manager daemon.",
-                            "/omp?cmd=dashboard", response_data);
+                            response_data);
       default:
         g_string_free (xml, TRUE);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -25596,7 +25558,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while getting the "
                             "filters list. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=dashboard", response_data);
+                            response_data);
     }
 
   g_string_append (xml, response);
@@ -25720,7 +25682,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                              "An internal error occurred while saving the auth settings. "
                              "The settings were not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -25728,7 +25690,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                              "An internal error occurred while saving the auth settings. "
                              "It is unclear whether the settings have been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -25736,7 +25698,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                              "An internal error occurred while saving the auth settings. "
                              "It is unclear whether the settings have been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
     }
 
   gchar* next_url = g_strdup_printf ("auth_settings&name=%s", name);
@@ -25822,7 +25784,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             xml_flag, response_data);
       case 2:
 
         cmd_response_data_set_status_code (response_data,
@@ -25832,7 +25794,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             xml_flag, response_data);
       default:
 
         cmd_response_data_set_status_code (response_data,
@@ -25842,7 +25804,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             xml_flag, response_data);
     }
 
   if (gmp_success (entity))
@@ -25895,7 +25857,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the wizard. "
                              "Given name was invalid",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   xml = g_string_new ("");
@@ -25919,7 +25881,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -25932,7 +25894,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
                            " wizard."
                            "Diagnostics: Failure to receive response from"
                            " manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Get the setting. */
@@ -25948,7 +25910,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
@@ -25959,7 +25921,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while the wizard. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -26025,7 +25987,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while trying to start a wizard. "
                            "Diagnostics: Required parameter 'get_name' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   run = g_string_new ("<run_wizard read_only=\"1\">");
@@ -26068,7 +26030,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while running a wizard. "
                              "The wizard did not start. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -26076,7 +26038,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -26084,7 +26046,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   wizard_xml = g_strdup_printf ("<wizard><%s/>%s%s</wizard>",
@@ -26142,7 +26104,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while performing a bulk action. "
                            "Diagnostics: Required parameter 'resource_type' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   if (strcmp (type, "info") == 0)
     {
@@ -26154,7 +26116,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while performing a bulk action. "
                                "Diagnostics: Required parameter 'info_type' was NULL.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
   else
@@ -26175,7 +26137,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while performing a bulk action. "
                            "Diagnostics: Could not determine the action.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (strcmp (action, "create") == 0)
@@ -26290,7 +26252,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " resources list. "
                                 "Diagnostics: Failure to send command to"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -26299,7 +26261,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " resources list. "
                                 "Diagnostics: Failure to receive response from"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -26307,7 +26269,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
         }
 
       entities_t entities = entity->entities;
@@ -26372,7 +26334,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " resources list. "
                                 "Diagnostics: Failure to send command to"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           case 2:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -26381,7 +26343,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " resources list. "
                                 "Diagnostics: Failure to receive response from"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -26389,7 +26351,7 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
         }
 
       g_string_append (bulk_string, response);
@@ -26437,7 +26399,7 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while deleting resources. "
                            "The resources were not deleted. "
                            "Diagnostics: Required parameter 'resource_type' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Extra attributes */
@@ -26487,7 +26449,7 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while deleting resources. "
                            "The resources were not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   g_string_free (commands_xml, TRUE);
 
@@ -26500,7 +26462,7 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while deleting resources. "
                            "It is unclear whether the resources have been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
 
@@ -26632,7 +26594,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while creating a new host. "
                             "No new host was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_assets", response_data);
+                            response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -26640,7 +26602,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while creating a new host. "
                             "It is unclear whether the host has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_assets", response_data);
+                            response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -26648,7 +26610,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "An internal error occurred while creating a new host. "
                             "It is unclear whether the host has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_assets", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
@@ -26701,7 +26663,7 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an asset. "
                            "Diagnostics: Invalid asset_type parameter value",
-                           "/omp?cmd=get_asset", response_data);
+                           response_data);
     }
 
   if (params_value (params, "asset_name")
@@ -26712,7 +26674,7 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an asset. "
                            "Diagnostics: Both ID and Name set.",
-                           "/omp?cmd=get_asset", response_data);
+                           response_data);
     }
 
   extra_response = g_string_new (extra_xml ? extra_xml : "");
@@ -26797,7 +26759,7 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting Assets. "
                            "Diagnostics: Invalid asset_type parameter value",
-                           "/omp?cmd=get_assets", response_data);
+                           response_data);
     }
 
   extra_response = g_string_new (extra_xml ? extra_xml : "");
@@ -26888,7 +26850,7 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating an asset. "
                              "No new asset was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -26896,7 +26858,7 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating an asset. "
                              "It is unclear whether the asset has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -26904,7 +26866,7 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "An internal error occurred while creating an asset. "
                              "It is unclear whether the asset has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
@@ -26948,7 +26910,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while deleting an asset. "
                            "The asset was not deleted. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* This is a hack, needed because asset_id is the param name used for
@@ -26980,7 +26942,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while deleting an asset. "
                            "The asset is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_free (resource_id);
@@ -26994,7 +26956,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            "An internal error occurred while deleting an asset. "
                            "It is unclear whether the asset has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -27014,7 +26976,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
               "Internal error", __FUNCTION__, __LINE__,
               "An internal error occurred while deleting an "
               "asset. Diagnostics: Error in parameter next.",
-              "/omp?cmd=get_tasks", response_data);
+              response_data);
         }
     }
   else
@@ -27101,7 +27063,7 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
                            "An internal error occurred while editing a asset. "
                            "The asset remains as it was. "
                            "Diagnostics: Required ID parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -27133,7 +27095,7 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the asset. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         g_string_free (xml, TRUE);
@@ -27141,7 +27103,7 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the asset. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         g_string_free (xml, TRUE);
@@ -27149,7 +27111,7 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the asset. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
     }
 
   g_string_append (xml, response);
@@ -27230,7 +27192,7 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving an asset. "
                              "The asset was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       case 2:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -27238,7 +27200,7 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving an asset. "
                              "It is unclear whether the asset has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -27246,7 +27208,7 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "An internal error occurred while saving an asset. "
                              "It is unclear whether the asset has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
