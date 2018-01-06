@@ -14447,11 +14447,11 @@ report_alert_gmp (gvm_connection_t *connection,
   if ((alert_id == NULL) || (report_id == NULL))
     {
       cmd_response_data_set_status_code(response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message_new (credentials,
-                               "Bad Request", __FUNCTION__, __LINE__,
-                               "Missing parameter alert_id or report_id. "
-                               "Diagnostics: Required parameter was NULL.",
-                               1, response_data);
+      return gsad_message (credentials,
+                           "Bad Request", __FUNCTION__, __LINE__,
+                           "Missing parameter alert_id or report_id. "
+                           "Diagnostics: Required parameter was NULL.",
+                           response_data);
     }
 
   filter = params_value (params, "filter");
@@ -14475,24 +14475,24 @@ report_alert_gmp (gvm_connection_t *connection,
   if (ret == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               1, response_data);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           response_data);
     }
 
   if (read_entity_and_text_c (connection, &entity, &response))
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message_new (credentials,
+      return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to receive response from "
                            "manager daemon.",
-                           1, response_data);
+                           response_data);
     }
 
   status = entity_attribute (entity, "status");
@@ -14501,23 +14501,23 @@ report_alert_gmp (gvm_connection_t *connection,
       free_entity (entity);
       g_free (response);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to parse response from manager daemon.",
-                               1, response_data);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to parse response from manager daemon.",
+                           response_data);
     }
   if (strcmp(status, "200"))
     {
       free_entity (entity);
       g_free (response);
       cmd_response_data_set_status_code(response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message_new (credentials,
-                               "Failed", __FUNCTION__, __LINE__,
-                               "Running the report alert failed."
-                               "The report could not be delivered.",
-                               1, response_data);
+      return gsad_message (credentials,
+                           "Failed", __FUNCTION__, __LINE__,
+                           "Running the report alert failed."
+                           "The report could not be delivered.",
+                           response_data);
 
     }
 
@@ -25737,7 +25737,6 @@ save_chart_preference_gmp (gvm_connection_t *connection,
 
   gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
                                      strlen (*pref_value));
-  gboolean xml_flag = params_value_bool (params, "xml");
   gchar* response = NULL;
   entity_t entity;
   int ret;
@@ -25779,32 +25778,32 @@ save_chart_preference_gmp (gvm_connection_t *connection,
       case 1:
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message_new (credentials,
+        return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             xml_flag, response_data);
+                             response_data);
       case 2:
 
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message_new (credentials,
+        return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             xml_flag, response_data);
+                             response_data);
       default:
 
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message_new (credentials,
+        return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Internal Error.",
-                             xml_flag, response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
