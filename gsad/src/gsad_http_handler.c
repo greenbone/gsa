@@ -456,12 +456,11 @@ handle_setup_user (http_connection_t *connection,
 
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
-      res = gsad_message_new (NULL,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: Bad token.",
-                              params_value_bool (con_info->params, "xml"),
-                              response_data);
+      res = gsad_message (NULL,
+                          "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Bad token.",
+                          response_data);
       return handler_create_response (connection,
                                       res,
                                       response_data,
@@ -700,21 +699,19 @@ handle_system_report (http_connection_t *connection,
 
         break;
       case -2:
-       res = gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred. "
-                               "Diagnostics: Could not authenticate to manager "
-                               "daemon.",
-                               params_value_bool (con_info->params, "xml"),
-                               response_data);
+       res = gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred. "
+                           "Diagnostics: Could not authenticate to manager "
+                           "daemon.",
+                           response_data);
         break;
       default:
-        res = gsad_message_new (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred. "
-                                "Diagnostics: Failure to connect to manager daemon.",
-                                params_value_bool (con_info->params, "xml"),
-                                response_data);
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Failure to connect to manager daemon.",
+                            response_data);
         break;
     }
 
