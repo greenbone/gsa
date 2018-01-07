@@ -451,6 +451,55 @@ handler_create_response (http_connection_t *connection,
 }
 
 /**
+ * @brief Handles fatal errors.
+ *
+ * @todo Make it accept formatted strings.
+ *
+ * @param[in]  title     The title for the message.
+ * @param[in]  msg       The response message.
+ * @param[out] response_data   Extra data return for the HTTP response.
+ *
+ * @return An HTML document as a newly allocated string.
+ */
+char *
+gsad_message_new (const char *title, const char *msg,
+                  cmd_response_data_t *response_data)
+{
+  gchar *xml, *resp;
+
+  xml = g_strdup_printf ("<gsad_response>"
+                         "<title>%s (GSA %s)</title>"
+                         "<message>%s</message>"
+                         "<token>%s</token>"
+                         "</gsad_response>",
+                         title,
+                         GSAD_VERSION,
+                         msg,
+                         "");
+
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_TEXT_HTML);
+
+  resp = xsl_transform (xml, response_data);
+  if (resp == NULL)
+    {
+      resp = g_strdup ("<html>"
+                       "<body>"
+                       "An internal server error has occurred during XSL"
+                       " transformation."
+                       "</body>"
+                       "</html>");
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+  cmd_response_data_set_content_length (response_data, strlen (resp));
+
+  g_free (xml);
+  return resp;
+}
+
+/**
  * @brief Create a default 404 (not found) http response
  *
  * @param[in]   url                 Requested (not found) url
@@ -466,8 +515,7 @@ create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
 
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
-  gchar *msg = gsad_message_new (NULL, NOT_FOUND_TITLE, NULL, 0,
-                                 NOT_FOUND_MESSAGE, 0, response_data);
+  gchar *msg = gsad_message_new (NOT_FOUND_TITLE, NOT_FOUND_MESSAGE, response_data);
   len = cmd_response_data_get_content_length (response_data);
   response = MHD_create_response_from_buffer (len, msg,
                                               MHD_RESPMEM_MUST_COPY);
@@ -1121,129 +1169,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       return MHD_YES;
     }
   return MHD_NO;
-}
-
-/**
- * @brief Handles fatal errors.
- *
- * @todo Make it accept formatted strings.
- *
- * @param[in]  credentials  User authentication information.
- * @param[in]  title     The title for the message.
- * @param[in]  function  The function in which the error occurred.
- * @param[in]  line      The line number at which the error occurred.
- * @param[in]  msg       The response message.
- * @param[in]  xml_flag  Flag to indicate if the returned content should contain
- *                       xml or html.
- * @param[out] response_data   Extra data return for the HTTP response.
- *
- * @return An HTML document as a newly allocated string.
- */
-char *
-gsad_message_new (credentials_t *credentials, const char *title,
-                  const char *function, int line, const char *msg,
-                  gboolean xml_flag, cmd_response_data_t *response_data)
-{
-  gchar *xml, *message, *resp;
-
-  if (function)
-    {
-      message = g_strdup_printf ("<gsad_response>"
-                                 "<title>%s: %s:%i (GSA %s)</title>"
-                                 "<message>%s</message>"
-                                 "<token>%s</token>"
-                                 "</gsad_response>",
-                                 title,
-                                 function,
-                                 line,
-                                 GSAD_VERSION,
-                                 msg,
-                                 credentials ? credentials->token : "");
-    }
-  else
-    {
-      message = g_strdup_printf ("<gsad_response>"
-                                 "<title>%s (GSA %s)</title>"
-                                 "<message>%s</message>"
-                                 "<token>%s</token>"
-                                 "</gsad_response>",
-                                 title,
-                                 GSAD_VERSION,
-                                 msg,
-                                 credentials ? credentials->token : "");
-    }
-
-  if (credentials)
-    {
-      gchar *pre;
-      time_t now;
-      char ctime_now[200];
-
-      now = time (NULL);
-      ctime_r_strip_newline (&now, ctime_now);
-
-      pre = g_markup_printf_escaped
-              ("<envelope>"
-               "<version>%s</version>"
-               "<vendor_version>%s</vendor_version>"
-               "<token>%s</token>"
-               "<time>%s</time>"
-               "<login>%s</login>"
-               "<role>%s</role>"
-               "<i18n>%s</i18n>"
-               "<charts>%i</charts>"
-               "<client_address>%s</client_address>",
-               GSAD_VERSION,
-               vendor_version_get (),
-               credentials->token,
-               ctime_now,
-               credentials->username,
-               credentials->role,
-               credentials->language,
-               credentials->charts,
-               credentials->client_address);
-      xml = g_strdup_printf ("%s%s"
-                              "<capabilities>%s</capabilities>"
-                              "</envelope>",
-                              pre,
-                              message,
-                              credentials->capabilities);
-      g_free (pre);
-    }
-  else
-    {
-      xml = g_strdup (message);
-    }
-  g_free (message);
-
-  if (xml_flag)
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_XML);
-      cmd_response_data_set_content_length (response_data, strlen (xml));
-      return xml;
-    }
-
-  cmd_response_data_set_content_type (response_data,
-                                      GSAD_CONTENT_TYPE_TEXT_HTML);
-
-  resp = xsl_transform (xml, response_data);
-  if (resp == NULL)
-    {
-      resp = g_strdup ("<html>"
-                       "<body>"
-                       "An internal server error has occurred during XSL"
-                       " transformation."
-                       "</body>"
-                       "</html>");
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-    }
-
-  cmd_response_data_set_content_length (response_data, strlen (resp));
-
-  g_free (xml);
-  return resp;
 }
 
 /**
