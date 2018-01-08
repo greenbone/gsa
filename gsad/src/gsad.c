@@ -2077,13 +2077,12 @@ exec_gmp_get (http_connection_t *con,
       case 0:
         break;
       case -1:
-        res = gsad_message_new (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred. "
-                                "Diagnostics: Could not connect to manager "
-                                "daemon.",
-                                params_value_bool (params, "xml"),
-                                response_data);
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Could not connect to manager "
+                            "daemon.",
+                            response_data);
         break;
 
       case -2:
