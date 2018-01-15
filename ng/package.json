@@ -37,7 +37,7 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^3.0.5",
-    "react-scripts": "^1.0.13",
+    "react-scripts": "1.1.0",
     "select2": "^4.0.3"
   },
   "scripts": {
