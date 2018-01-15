@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import 'core-js/fn/object/entries';
+import 'core-js/fn/string/ends-with';
 import 'core-js/fn/string/starts-with';
 
 import {is_defined} from '../utils.js';
