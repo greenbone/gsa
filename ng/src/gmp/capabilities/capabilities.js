@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import 'core-js/fn/set';
+import 'core-js/fn/symbol';
 
 import {is_defined, map, pluralize_type} from '../utils.js';
 

@@ -23,6 +23,7 @@
 import 'core-js/fn/array/includes';
 import 'core-js/fn/object/assign';
 import 'core-js/fn/object/keys';
+import 'core-js/fn/symbol';
 
 export const is_array = Array.isArray;
 
