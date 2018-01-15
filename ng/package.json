@@ -34,8 +34,8 @@
     "moment": "2.20.1",
     "moment-timezone": "0.5.14",
     "prop-types": "^15.5.10",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
     "react-router": "^3.0.5",
     "react-scripts": "1.1.0",
     "select2": "4.0.5"
