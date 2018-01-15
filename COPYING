@@ -9,82 +9,36 @@ or any later version (GNU GPLv2+). Some files have a different, but
 compatible licenses (BSD 3-clause and MIT).
 
 GPLv2: See file COPYING.GPL
-BSD-3: See file COPYING.BSD3
 MIT: See file COPYING.MIT
 
 These are the files that are not licensed GPLv2+, any others
 are licensed under GPLv2+:
 
-src/html/classic/js/lib/d3.v3.js,
-src/html/classic/js/lib/min/d3.v3.js:
-  License: BSD-3
-  Copyright: Michael Bostock
-  Origin: http://d3js.org/
-
-src/html/classic/js/lib/d3.layout.cloud.js:
-  License: BSD-3
-  Copyright: Jason Davies
-  Origin: https://github.com/jasondavies/d3-cloud
-
-src/html/classic/js/lib/d3.tip.js:
-  License: MIT
-  Copyright: Justin Palmer
-  Origin: https://github.com/Caged/d3-tip
-
-src/html/classic/js/lib/jquery-2.1.4.js,
-src/html/classic/js/lib/min/jquery-2.1.4.js,
-src/html/classic/js/lib/min/jquery-2.1.4.js.map:
-  License: MIT
-  Copyright: jQuery Foundation, Inc. and other contributors
-  Origin: http://jquery.com/download/
-
-src/html/classic/css/jquery-ui.structure.css,
-src/html/classic/css/jquery-ui.structure.min.css,
-src/html/classic/css/jquery-ui.theme.css,
-src/html/classic/css/jquery-ui.theme.min.css,
-src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40.png,
-src/html/classic/css/images/ui-bg_diagonals-thick_30_666666_40x40.png,
-src/html/classic/css/images/ui-bg_flat_10_000000_40x100.png,
-src/html/classic/css/images/ui-bg_glass_65_ffffff_1x400.png,
-src/html/classic/css/images/ui-bg_highlight-hard_35_66c430_1x100.png,
-src/html/classic/css/images/ui-bg_highlight-soft_100_519032_1x100.png,
-src/html/classic/css/images/ui-bg_highlight-soft_100_87d050_1x100.png,
-src/html/classic/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png,
-src/html/classic/css/images/ui-bg_highlight-soft_75_fdc300_1x100.png,
-src/html/classic/css/images/ui-icons_222222_256x240.png,
-src/html/classic/css/images/ui-icons_519032_256x240.png,
-src/html/classic/css/images/ui-icons_87d050_256x240.png,
-src/html/classic/css/images/ui-icons_aa0000_256x240.png,
-src/html/classic/css/images/ui-icons_fdc300_256x240.png,
-src/html/classic/css/images/ui-icons_ffffff_256x240.png,
-src/html/classic/js/lib/jquery-ui.js,
-src/html/classic/js/lib/min/jquery-ui.js:
+gsad/src/html/classic/css/jquery-ui.structure.css,
+gsad/src/html/classic/css/jquery-ui.structure.min.css,
+gsad/src/html/classic/css/jquery-ui.theme.css,
+gsad/src/html/classic/css/jquery-ui.theme.min.css,
+gsad/src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40.png,
+gsad/src/html/classic/css/images/ui-bg_diagonals-thick_30_666666_40x40.png,
+gsad/src/html/classic/css/images/ui-bg_flat_10_000000_40x100.png,
+gsad/src/html/classic/css/images/ui-bg_glass_65_ffffff_1x400.png,
+gsad/src/html/classic/css/images/ui-bg_highlight-hard_35_66c430_1x100.png,
+gsad/src/html/classic/css/images/ui-bg_highlight-soft_100_519032_1x100.png,
+gsad/src/html/classic/css/images/ui-bg_highlight-soft_100_87d050_1x100.png,
+gsad/src/html/classic/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png,
+gsad/src/html/classic/css/images/ui-bg_highlight-soft_75_fdc300_1x100.png,
+gsad/src/html/classic/css/images/ui-icons_222222_256x240.png,
+gsad/src/html/classic/css/images/ui-icons_519032_256x240.png,
+gsad/src/html/classic/css/images/ui-icons_87d050_256x240.png,
+gsad/src/html/classic/css/images/ui-icons_aa0000_256x240.png,
+gsad/src/html/classic/css/images/ui-icons_fdc300_256x240.png,
+gsad/src/html/classic/css/images/ui-icons_ffffff_256x240.png,
   License: MIT
   Copyright: jQuery Foundation, Inc. and other contributors
   Origin: http://jqueryui.com/download/
 
-src/html/classic/css/select2.css,
-src/html/classic/css/select2.min.css,
-src/html/classic/js/lib/select2.js,
-src/html/classic/js/lib/min/select2.js:
+gsad/src/html/classic/css/select2.css,
+gsad/src/html/classic/css/select2.min.css,
   License: MIT
   Copyright: Kevin Brown, Igor Vaynberg, and Select2 contributors
   Origin: https://github.com/select2/select2/releases
-
-src/html/classic/js/lib/i18next-2.3.4.js
-src/html/classic/js/lib/min/i18next-2.3.4.js
-src/html/classic/js/lib/i18next-languagedetector-0.2.2.js
-src/html/classic/js/lib/min/i18next-languagedetector-0.2.2.js
-src/html/classic/js/lib/i18next-xhr-0.5.3.js
-src/html/classic/js/lib/min/i18next-xhr-0.5.3.js
-  Licence: MIT
-  Copyright: Copyright (c) 2015 i18next
-  Origin: https://github.com/i18next/i18next
-
-String function polyfills in
-src/html/classic/js/gsa_polyfill
-  License: MIT
-  Copyright: Copyright Mathias Bynens <https://mathiasbynens.be/>
-  Origin: https://github.com/mathiasbynens/String.prototype.endsWith
-          https://github.com/mathiasbynens/String.prototype.includes
-          https://github.com/mathiasbynens/String.prototype.startsWith
