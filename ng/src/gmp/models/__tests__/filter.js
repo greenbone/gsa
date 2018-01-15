@@ -65,6 +65,7 @@ describe('Filter parse from string tests', () => {
       'abc and not def',
       '~abc and not ~def',
       'abc and not def rows=10 first=1 sort=name',
+      'family=FTP severity>4 and severity<9', // severity range
       'apply_overrides=0 min_qod=70 vulnerability~"Reporting" and vulnerability~"SSH" and severity>6.9 first=1 rows=10 sort=name',
     ];
 
