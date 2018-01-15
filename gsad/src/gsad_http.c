@@ -451,23 +451,22 @@ handler_create_response (http_connection_t *connection,
 }
 
 /**
- * @brief Handles fatal errors.
+ * @brief Create a default 404 (not found) http response
  *
- * @todo Make it accept formatted strings.
+ * @param[in]   url                 Requested (not found) url
+ * @param[out]  response_data       Response data to return
  *
- * @param[in]  title     The title for the message.
- * @param[in]  msg       The response message.
- * @param[out] response_data   Extra data return for the HTTP response.
- *
- * @return An HTML document as a newly allocated string.
+ * @return A http response
  */
-char *
-gsad_message_new (const char *title, const char *msg,
-                  cmd_response_data_t *response_data)
+http_response_t *
+create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
 {
-  gchar *html;
+  http_response_t *response;
+  int len;
 
-  html = g_strdup_printf (
+  cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
+
+  gchar *msg = g_strdup_printf (
     "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
     "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"\">"
     "<head>"
@@ -525,37 +524,17 @@ gsad_message_new (const char *title, const char *msg,
     "</div>"
   "</div>"
   "</body></html>",
-                          title,
+                          NOT_FOUND_TITLE,
                           GSAD_VERSION,
-                          title,
+                          NOT_FOUND_TITLE,
                           GSAD_VERSION,
-                          msg);
+                          NOT_FOUND_MESSAGE);
 
   cmd_response_data_set_content_type (response_data,
                                       GSAD_CONTENT_TYPE_TEXT_HTML);
 
-  cmd_response_data_set_content_length (response_data, strlen (html));
+  cmd_response_data_set_content_length (response_data, strlen (msg));
 
-  return html;
-}
-
-/**
- * @brief Create a default 404 (not found) http response
- *
- * @param[in]   url                 Requested (not found) url
- * @param[out]  response_data       Response data to return
- *
- * @return A http response
- */
-http_response_t *
-create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
-{
-  http_response_t *response;
-  int len;
-
-  cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
-
-  gchar *msg = gsad_message_new (NOT_FOUND_TITLE, NOT_FOUND_MESSAGE, response_data);
   len = cmd_response_data_get_content_length (response_data);
   response = MHD_create_response_from_buffer (len, msg,
                                               MHD_RESPMEM_MUST_COPY);
