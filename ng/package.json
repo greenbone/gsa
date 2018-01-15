@@ -25,7 +25,7 @@
     "d3-cloud": "^1.2.4",
     "d3-tip": "^0.7.1",
     "glamor": "^2.20.40",
-    "glamorous": "^4.7.0",
+    "glamorous": "4.11.2",
     "i18next": "^9.0.0",
     "i18next-browser-languagedetector": "^2.0.0",
     "i18next-xhr-backend": "^1.4.2",

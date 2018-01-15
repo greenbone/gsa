@@ -1079,8 +1079,8 @@ braces@^1.8.2:
     repeat-element "^1.1.2"
 
 brcast@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/brcast/-/brcast-3.0.0.tgz#40b80dbb75086f0a32b2c2752dbecbbb34d8b197"
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/brcast/-/brcast-3.0.1.tgz#6256a8349b20de9eed44257a9b24d71493cd48dd"
 
 brorand@^1.0.1:
   version "1.1.0"
@@ -2714,8 +2714,8 @@ fast-levenshtein@~2.0.4:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
 
 fast-memoize@^2.2.7:
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/fast-memoize/-/fast-memoize-2.2.7.tgz#f145c5c22039cedf0a1d4ff6ca592ad0268470ca"
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/fast-memoize/-/fast-memoize-2.2.8.tgz#d7f899f31d037b12d9db4281912f9018575720b1"
 
 fastparse@^1.1.1:
   version "1.1.1"
@@ -3016,9 +3016,9 @@ glamor@^2.20.40:
     prop-types "^15.5.10"
     through "^2.3.8"
 
-glamorous@^4.7.0:
-  version "4.9.7"
-  resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-4.9.7.tgz#78bb008d1404b5bd91ad4d043ec0dc6430ad2653"
+glamorous@4.11.2:
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-4.11.2.tgz#ce144c6a53e247ddf0896ad6faddebf78c49d864"
   dependencies:
     brcast "^3.0.0"
     fast-memoize "^2.2.7"
@@ -3291,8 +3291,8 @@ html-comment-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/html-comment-regex/-/html-comment-regex-1.1.1.tgz#668b93776eaae55ebde8f3ad464b307a4963625e"
 
 html-element-attributes@^1.0.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/html-element-attributes/-/html-element-attributes-1.2.0.tgz#8b1c7aaf94353fd9b455c27ec7ebaf1583e29fd0"
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/html-element-attributes/-/html-element-attributes-1.3.0.tgz#f06ebdfce22de979db82020265cac541fb17d4fc"
 
 html-encoding-sniffer@^1.0.1:
   version "1.0.2"
@@ -3318,8 +3318,8 @@ html-minifier@^3.2.3:
     uglify-js "3.3.x"
 
 html-tag-names@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/html-tag-names/-/html-tag-names-1.1.1.tgz#f8a076113f16e393518937f6b3b5d22296755d4a"
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/html-tag-names/-/html-tag-names-1.1.2.tgz#f65168964c5a9c82675efda882875dcb2a875c22"
 
 html-webpack-plugin@2.29.0:
   version "2.29.0"
@@ -5542,8 +5542,8 @@ react-error-overlay@^4.0.0:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
 
 react-html-attributes@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/react-html-attributes/-/react-html-attributes-1.3.0.tgz#c97896e9cac47ad9c4e6618b835029a826f5d28c"
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/react-html-attributes/-/react-html-attributes-1.4.1.tgz#97b5ec710da68833598c8be6f89ac436216840a5"
   dependencies:
     html-element-attributes "^1.0.0"
 
@@ -6362,8 +6362,8 @@ supports-color@^5.1.0:
     has-flag "^2.0.0"
 
 svg-tag-names@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/svg-tag-names/-/svg-tag-names-1.1.0.tgz#24c04db37f2ee2ee28bc619f4e8a25ee21fc0203"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/svg-tag-names/-/svg-tag-names-1.1.1.tgz#9641b29ef71025ee094c7043f7cdde7d99fbd50a"
 
 svgo@^0.7.0:
   version "0.7.2"
