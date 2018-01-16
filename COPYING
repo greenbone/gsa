@@ -10,7 +10,7 @@ compatible licenses (BSD 3-clause and MIT).
 
 GPLv2: See file COPYING.GPL
 MIT: See file COPYING.MIT
-APACHEv2: See http://www.apache.org/licenses/LICENSE-2.0
+APLv2: See http://www.apache.org/licenses/LICENSE-2.0
 
 These are the files that are not licensed GPLv2+, any others
 are licensed under GPLv2+:
@@ -49,6 +49,6 @@ ng/src/web/components/form/css/select2.css
 
 ng/public/js/lib/xml2json.js,
 ng/public/js/lib/min/xml2json.js
-  License: APACHEv2
+  License: APLv2
   Copyright: Abdulla Abdurakhmanov
   Origin: https://github.com/abdmob/x2js
