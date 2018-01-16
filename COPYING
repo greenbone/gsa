@@ -34,17 +34,20 @@ gsad/src/html/classic/css/images/ui-icons_87d050_256x240.png,
 gsad/src/html/classic/css/images/ui-icons_aa0000_256x240.png,
 gsad/src/html/classic/css/images/ui-icons_fdc300_256x240.png,
 gsad/src/html/classic/css/images/ui-icons_ffffff_256x240.png,
+ng/src/web/css/jquery-ui.theme.css,
+ng/src/web/css/jquery-ui.structure.css
   License: MIT
   Copyright: jQuery Foundation, Inc. and other contributors
   Origin: http://jqueryui.com/download/
 
 gsad/src/html/classic/css/select2.css,
 gsad/src/html/classic/css/select2.min.css,
+ng/src/web/components/form/css/select2.css
   License: MIT
   Copyright: Kevin Brown, Igor Vaynberg, and Select2 contributors
   Origin: https://github.com/select2/select2/releases
 
-ng/public/js/lib/xml2json.js
+ng/public/js/lib/xml2json.js,
 ng/public/js/lib/min/xml2json.js
   License: APACHEv2
   Copyright: Abdulla Abdurakhmanov
