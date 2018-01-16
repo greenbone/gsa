@@ -5,8 +5,8 @@ The effective license of the module as a whole is the GNU General Public
 License Version 2 or any later version (GNU GPLv2+).
 
 Most files, are licensed under GNU General Public License Version 2
-or any later version (GNU GPLv2+). Some files have a different, but
-compatible licenses (BSD 3-clause and MIT).
+or any later version (GNU GPLv2+). Some files have a different licenses
+(Apache Version 2 and MIT).
 
 GPLv2: See file COPYING.GPL
 MIT: See file COPYING.MIT
