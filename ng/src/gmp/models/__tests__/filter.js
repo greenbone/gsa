@@ -331,6 +331,13 @@ describe('Filter equal', () => {
     expect(filter1.equals(filter2)).toEqual(true);
   });
 
+  test('filter with severity range in different order should equal', () => {
+    // this is not completely correct but currently required for and, or, ...
+    const filter1 = Filter.fromString('severity<7 and severity>3.9');
+    const filter2 = Filter.fromString('severity>3.9 and severity<7');
+    expect(filter1.equals(filter2)).toEqual(true);
+  });
+
 });
 
 describe('Filter get', () => {
