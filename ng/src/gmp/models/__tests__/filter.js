@@ -209,8 +209,12 @@ describe('Filter parse from keywords', () => {
     };
 
     const filter = new Filter(elem);
-    const filter2 = Filter.fromString('severity>3.9 and severity<7 first=1 rows=10 sort=name');
-    expect(filter.equals(filter2)).toBe(true);
+    const filterstring = 'severity>3.9 and severity<7 first=1 rows=10 ' +
+      'sort=name';
+    expect(filter.toFilterString()).toEqual(filterstring);
+
+    const filter2 = Filter.fromString(filterstring);
+    expect(filter.equals(filter2)).toEqual(true);
   });
 });
 
