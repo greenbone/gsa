@@ -390,9 +390,22 @@ class Filter extends Model {
 
     for (let i = 0; i < ours.length; i++) {
       const our = ours[i];
-      const other = our.hasKeyword() ? filter.getTerm(our.keyword) : others[i];
+      if (our.hasKeyword()) {
+        const otherterms = filter.getTerms(our.keyword);
+        const ourterms = this.getTerms(our.keyword);
 
-      if (!our.equals(other)) {
+        if (otherterms.length !== ourterms.length) {
+          return false;
+        }
+
+        const equals = otherterms.reduce((prev, term) =>
+          prev || term.equals(our), false);
+
+        if (!equals) { // same term isn't in other terms
+          return false;
+        }
+      }
+      else if (!our.equals(others[i])) {
         return false;
       }
     }
