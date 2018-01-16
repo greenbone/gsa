@@ -269,11 +269,33 @@ class Filter extends Model {
   }
 
   /**
+   * Get all FilterTerms for a keyword
+   *
+   * @param {String} key FilterTerm keyword to search for
+   *
+   * @returns {Array} Returns all FilterTerms in an Array found for
+   *                  the passed keyword or an empty Array if not FilterTerm
+   *                  has been found.
+   */
+  getTerms(key) {
+    if (!is_defined(key)) {
+      return [];
+    }
+
+    return this.terms.reduce((terms, term) => {
+      if (term.keyword === key) {
+        terms.push(term);
+      }
+      return terms;
+    }, []);
+  }
+
+  /**
    * Get all FilterTerms
    *
-   * @returns {FilterTerm} Returns the array of all FilterTerms in this filter
+   * @returns {Array} Returns the array of all FilterTerms in this filter
    */
-  getTerms() {
+  getAllTerms() {
     return this.terms;
   }
 
@@ -363,14 +385,27 @@ class Filter extends Model {
       return false;
     }
 
-    const ours = this.getTerms();
-    const others = filter.getTerms();
+    const ours = this.getAllTerms();
+    const others = filter.getAllTerms();
 
     for (let i = 0; i < ours.length; i++) {
       const our = ours[i];
-      const other = our.hasKeyword() ? filter.getTerm(our.keyword) : others[i];
+      if (our.hasKeyword()) {
+        const otherterms = filter.getTerms(our.keyword);
+        const ourterms = this.getTerms(our.keyword);
 
-      if (!our.equals(other)) {
+        if (otherterms.length !== ourterms.length) {
+          return false;
+        }
+
+        const equals = otherterms.reduce((prev, term) =>
+          prev || term.equals(our), false);
+
+        if (!equals) { // same term isn't in other terms
+          return false;
+        }
+      }
+      else if (!our.equals(others[i])) {
         return false;
       }
     }
@@ -393,7 +428,7 @@ class Filter extends Model {
     f.id = this.id;
     f.filter_type = this.filter_type;
 
-    f._setTerms([...this.getTerms()]);
+    f._setTerms([...this.getAllTerms()]);
     return f;
   }
 

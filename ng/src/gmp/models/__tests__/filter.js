@@ -66,7 +66,8 @@ describe('Filter parse from string tests', () => {
       '~abc and not ~def',
       'abc and not def rows=10 first=1 sort=name',
       'family=FTP severity>4 and severity<9', // severity range
-      'apply_overrides=0 min_qod=70 vulnerability~"Reporting" and vulnerability~"SSH" and severity>6.9 first=1 rows=10 sort=name',
+      'apply_overrides=0 min_qod=70 vulnerability~"Reporting" and ' +
+        'vulnerability~"SSH" and severity>6.9 first=1 rows=10 sort=name',
     ];
 
     fstrings.forEach(fstring => {
@@ -167,6 +168,53 @@ describe('Filter parse from keywords', () => {
     filter = new Filter(elem);
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name');
+  });
+
+  test('should parse keywords with severity range', () => {
+    const elem = {
+      keywords: {
+        keyword: [
+          {
+            column: 'severity',
+            relation: '>',
+            value: '3.9',
+          },
+          {
+            column: '',
+            relation: '',
+            value: 'and',
+          },
+          {
+            column: 'severity',
+            relation: '<',
+            value: '7',
+          },
+          {
+            column: 'first',
+            relation: '=',
+            value: '1',
+          },
+          {
+            column: 'rows',
+            relation: '=',
+            value: '10',
+          },
+          {
+            column: 'sort',
+            relation: '=',
+            value: 'name',
+          },
+        ],
+      },
+    };
+
+    const filter = new Filter(elem);
+    const filterstring = 'severity>3.9 and severity<7 first=1 rows=10 ' +
+      'sort=name';
+    expect(filter.toFilterString()).toEqual(filterstring);
+
+    const filter2 = Filter.fromString(filterstring);
+    expect(filter.equals(filter2)).toEqual(true);
   });
 });
 
@@ -276,6 +324,20 @@ describe('Filter equal', () => {
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
+  test('filter with severity range should equal', () => {
+    // this is not completely correct but currently required for and, or, ...
+    const filter1 = Filter.fromString('severity>3.9 and severity<7');
+    const filter2 = Filter.fromString('severity>3.9 and severity<7');
+    expect(filter1.equals(filter2)).toEqual(true);
+  });
+
+  test('filter with severity range in different order should equal', () => {
+    // this is not completely correct but currently required for and, or, ...
+    const filter1 = Filter.fromString('severity<7 and severity>3.9');
+    const filter2 = Filter.fromString('severity>3.9 and severity<7');
+    expect(filter1.equals(filter2)).toEqual(true);
+  });
+
 });
 
 describe('Filter get', () => {
@@ -347,6 +409,48 @@ describe('Filter getTerm', () => {
     expect(term.keyword).toBe('def');
     expect(term.relation).toBe('~');
     expect(term.value).toBe('2');
+  });
+});
+
+describe('Filter getTerms', () => {
+  test('should return empty array for unkown keyword', () => {
+    const filter = Filter.fromString('abc=1');
+    const terms = filter.getTerms('def');
+
+    expect(terms.length).toBe(0);
+  });
+
+  test('should return empty array for undefined keyword', () => {
+    const filter = Filter.fromString('abc=1');
+    const terms = filter.getTerms();
+
+    expect(terms.length).toBe(0);
+  });
+
+  test('should return single term as array', () => {
+    const filter = Filter.fromString('abc=1');
+    const terms = filter.getTerms('abc');
+
+    expect(terms.length).toBe(1);
+
+    const [term] = terms;
+    expect(term.keyword).toBe('abc');
+  });
+
+  test('should return all terms in an array', () => {
+    const filter = Filter.fromString('abc=1 abc=2');
+    const terms = filter.getTerms('abc');
+
+    expect(terms.length).toBe(2);
+  });
+
+  test('should return only terms with same keyword', () => {
+    const filter = Filter.fromString('abc=1 def=2 abc=3');
+    const terms1 = filter.getTerms('abc');
+    const terms2 = filter.getTerms('def');
+
+    expect(terms1.length).toBe(2);
+    expect(terms2.length).toBe(1);
   });
 });
 
