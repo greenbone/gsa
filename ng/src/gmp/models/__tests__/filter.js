@@ -412,6 +412,48 @@ describe('Filter getTerm', () => {
   });
 });
 
+describe('Filter getTerms', () => {
+  test('should return empty array for unkown keyword', () => {
+    const filter = Filter.fromString('abc=1');
+    const terms = filter.getTerms('def');
+
+    expect(terms.length).toBe(0);
+  });
+
+  test('should return empty array for undefined keyword', () => {
+    const filter = Filter.fromString('abc=1');
+    const terms = filter.getTerms();
+
+    expect(terms.length).toBe(0);
+  });
+
+  test('should return single term as array', () => {
+    const filter = Filter.fromString('abc=1');
+    const terms = filter.getTerms('abc');
+
+    expect(terms.length).toBe(1);
+
+    const [term] = terms;
+    expect(term.keyword).toBe('abc');
+  });
+
+  test('should return all terms in an array', () => {
+    const filter = Filter.fromString('abc=1 abc=2');
+    const terms = filter.getTerms('abc');
+
+    expect(terms.length).toBe(2);
+  });
+
+  test('should return only terms with same keyword', () => {
+    const filter = Filter.fromString('abc=1 def=2 abc=3');
+    const terms1 = filter.getTerms('abc');
+    const terms2 = filter.getTerms('def');
+
+    expect(terms1.length).toBe(2);
+    expect(terms2.length).toBe(1);
+  });
+});
+
 describe('Filter parse elem', () => {
 
   test('Should parse public properties', () => {

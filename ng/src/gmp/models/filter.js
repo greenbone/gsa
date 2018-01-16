@@ -269,6 +269,28 @@ class Filter extends Model {
   }
 
   /**
+   * Get all FilterTerms for a keyword
+   *
+   * @param {String} key FilterTerm keyword to search for
+   *
+   * @returns {Array} Returns all FilterTerms in an Array found for
+   *                  the passed keyword or an empty Array if not FilterTerm
+   *                  has been found.
+   */
+  getTerms(key) {
+    if (!is_defined(key)) {
+      return [];
+    }
+
+    return this.terms.reduce((terms, term) => {
+      if (term.keyword === key) {
+        terms.push(term);
+      }
+      return terms;
+    }, []);
+  }
+
+  /**
    * Get all FilterTerms
    *
    * @returns {Array} Returns the array of all FilterTerms in this filter
