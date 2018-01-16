@@ -106,7 +106,7 @@ describe('Compound statement parsing', () => {
 
     expect(term.keyword).toBeUndefined();
     expect(term.value).toBe('and');
-    expect(term.relation).toBe('');
+    expect(term.relation).toBeUndefined();
   });
 
   test('should parse or', () => {
@@ -114,7 +114,7 @@ describe('Compound statement parsing', () => {
 
     expect(term.keyword).toBeUndefined();
     expect(term.value).toBe('or');
-    expect(term.relation).toBe('');
+    expect(term.relation).toBeUndefined();
   });
 
   test('should parse not', () => {
@@ -122,7 +122,7 @@ describe('Compound statement parsing', () => {
 
     expect(term.keyword).toBeUndefined();
     expect(term.value).toBe('not');
-    expect(term.relation).toBe('');
+    expect(term.relation).toBeUndefined();
   });
 });
 
