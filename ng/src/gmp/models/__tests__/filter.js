@@ -168,6 +168,49 @@ describe('Filter parse from keywords', () => {
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name');
   });
+
+  test('should parse keywords with severity range', () => {
+    const elem = {
+      keywords: {
+        keyword: [
+          {
+            column: 'severity',
+            relation: '>',
+            value: '3.9',
+          },
+          {
+            column: '',
+            relation: '',
+            value: 'and',
+          },
+          {
+            column: 'severity',
+            relation: '<',
+            value: '7',
+          },
+          {
+            column: 'first',
+            relation: '=',
+            value: '1',
+          },
+          {
+            column: 'rows',
+            relation: '=',
+            value: '10',
+          },
+          {
+            column: 'sort',
+            relation: '=',
+            value: 'name',
+          },
+        ],
+      },
+    };
+
+    const filter = new Filter(elem);
+    const filter2 = Filter.fromString('severity>3.9 and severity<7 first=1 rows=10 sort=name');
+    expect(filter.equals(filter2)).toBe(true);
+  });
 });
 
 describe('Filter set', () => {
@@ -273,6 +316,13 @@ describe('Filter equal', () => {
     // this is not completely correct but currently required for and, or, ...
     const filter1 = Filter.fromString('abc def');
     const filter2 = Filter.fromString('def abc');
+    expect(filter1.equals(filter2)).toEqual(false);
+  });
+
+  test('filter with severity range should equal', () => {
+    // this is not completely correct but currently required for and, or, ...
+    const filter1 = Filter.fromString('severity>3.9 and severity<7');
+    const filter2 = Filter.fromString('severity>3.9 and severity<7');
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
