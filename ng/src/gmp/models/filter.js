@@ -271,9 +271,9 @@ class Filter extends Model {
   /**
    * Get all FilterTerms
    *
-   * @returns {FilterTerm} Returns the array of all FilterTerms in this filter
+   * @returns {Array} Returns the array of all FilterTerms in this filter
    */
-  getTerms() {
+  getAllTerms() {
     return this.terms;
   }
 
@@ -363,8 +363,8 @@ class Filter extends Model {
       return false;
     }
 
-    const ours = this.getTerms();
-    const others = filter.getTerms();
+    const ours = this.getAllTerms();
+    const others = filter.getAllTerms();
 
     for (let i = 0; i < ours.length; i++) {
       const our = ours[i];
@@ -393,7 +393,7 @@ class Filter extends Model {
     f.id = this.id;
     f.filter_type = this.filter_type;
 
-    f._setTerms([...this.getTerms()]);
+    f._setTerms([...this.getAllTerms()]);
     return f;
   }
 
