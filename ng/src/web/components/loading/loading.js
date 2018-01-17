@@ -30,7 +30,6 @@ import {css} from 'glamor';
 import Layout from '../../components/layout/layout.js';
 
 const Loader = glamorous.div({
-    margin: 'auto',
     border: '12px solid #c8d3d9',
     borderTop: '12px solid #66c430',
     borderRadius: '50%',
