@@ -30,7 +30,7 @@ import {parse_envelope_meta} from '../../parser.js';
 
 import Rejection from '../rejection.js';
 
-const x2js = new window.X2JS();
+const x2js = is_defined(window.X2JS) ? new window.X2JS() : undefined; // don't crash if X2JS it's not available
 
 export function xml2json(...args) {
   return x2js.xml2json(...args);

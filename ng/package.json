@@ -24,6 +24,7 @@
     "d3": "^3.5.17",
     "d3-cloud": "^1.2.4",
     "d3-tip": "^0.7.1",
+    "downshift": "^1.24.0",
     "glamor": "^2.20.40",
     "glamorous": "4.11.2",
     "i18next": "10.2.2",
@@ -45,6 +46,15 @@
     "lint": "NODE_PATH=src ./node_modules/.bin/eslint src",
     "start": "NODE_PATH=src ./node_modules/.bin/react-scripts start",
     "build": "NODE_PATH=src ./node_modules/.bin/react-scripts build",
-    "eject": "NODE_PATH=src ./node_modules/.bin/react-scripts eject"
+    "eject": "NODE_PATH=src ./node_modules/.bin/react-scripts eject",
+    "storybook": "NODE_PATH=src start-storybook -p 9009 -s public -c src/web/stories",
+    "build-storybook": "NODE_PATH=src build-storybook -s public -c src/web/stories"
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^3.3.9",
+    "@storybook/react": "^3.3.9",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "react-test-renderer": "^16.2.0"
   }
 }
