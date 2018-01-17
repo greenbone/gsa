@@ -31,7 +31,7 @@ import Promise from '../promise.js';
 import Rejection from './rejection.js';
 import Response from './response.js';
 
-import Transform from './transform/transform.js';
+import DefaultTransform from './transform/default.js';
 
 import {build_url_params} from './utils.js';
 
@@ -50,7 +50,7 @@ class Http {
   constructor(url, options = {}) {
     const {
       timeout = DEFAULT_TIMEOUT,
-      transform = Transform,
+      transform = DefaultTransform,
     } = options;
 
     this.url = url;
