@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import {is_defined, is_empty, map} from '../utils.js';
 
