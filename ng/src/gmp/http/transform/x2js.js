@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,68 +20,65 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import X2JS2 from 'x2js';
+
 import _ from '../../locale.js';
 
 import {is_defined} from '../../utils.js';
-
-import Transform from './transform.js';
 
 import {parse_envelope_meta} from '../../parser.js';
 
 import Rejection from '../rejection.js';
 
-const x2js = is_defined(window.X2JS) ? new window.X2JS() : undefined; // don't crash if X2JS it's not available
+const x2js2 = new X2JS2();
 
 export function xml2json(...args) {
-  return x2js.xml2json(...args);
+  return x2js2.dom2js(...args);
 }
 
-class X2JsTransform extends Transform {
+const transform_xml_data = response => {
+  const {envelope} = xml2json(response.plainData('xml'));
+  const meta = parse_envelope_meta(envelope);
+  return response.set(envelope, meta);
+};
 
-  transformXmlData(response, xml) {
-      const {envelope} = xml2json(xml);
-      const meta = parse_envelope_meta(envelope);
-      return response.set(envelope, meta);
+const success = (response, options) => {
+  try {
+    return transform_xml_data(response);
   }
-
-  success(xhr, {plain = false, ...options}) {
-    try {
-      const response = super.success(xhr, options);
-      return plain ?
-        response :
-        this.transformXmlData(response, xhr.responseXML);
-    }
-    catch (error) {
-      throw new Rejection(xhr, Rejection.REASON_ERROR,
-        _('An error occurred while converting gmp response to js for ' +
-          'url {{- url}}', {url: options.url}),
-        error);
-    }
+  catch (error) {
+    throw new Rejection(response.xhr, Rejection.REASON_ERROR,
+      _('An error occurred while converting gmp response to js for ' +
+        'url {{- url}}', {url: options.url}),
+      error);
   }
+};
 
-  rejection(rej, options) {
-    if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
+const rejection = (rej, options) => {
+  if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
 
-      const {envelope} = xml2json(rej.xhr.responseXML);
+    const {envelope} = xml2json(rej.xhr.responseXML);
 
-      if (is_defined(envelope)) {
-        rej.root = envelope;
+    if (is_defined(envelope)) {
+      rej.root = envelope;
 
-        if (is_defined(envelope.gsad_response)) {
-          return rej.setMessage(envelope.gsad_response.message);
-        }
-
-        if (is_defined(envelope.action_result)) {
-          return rej.setMessage(envelope.action_result.message);
-        }
+      if (is_defined(envelope.gsad_response)) {
+        return rej.setMessage(envelope.gsad_response.message);
       }
 
-      return rej.setMessage(_('Unknown Error'));
+      if (is_defined(envelope.action_result)) {
+        return rej.setMessage(envelope.action_result.message);
+      }
     }
-    return rej;
-  }
-}
 
-export default X2JsTransform;
+    return rej.setMessage(_('Unknown Error'));
+  }
+  return rej;
+};
+
+export default {
+  rejection,
+  success,
+};
 
 // vim: set ts=2 sw=2 tw=80:

@@ -29,7 +29,7 @@ class GmpHttp extends Http {
 
   constructor(server, protocol, options) {
     const url = build_server_url(server, 'omp', protocol);
-    super(url, {...options, transform: new X2JsTransform()});
+    super(url, {...options, transform: X2JsTransform});
 
     this.params.xml = 1;
   }

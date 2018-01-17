@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@ import {parse_collection_list} from '../collection/parser.js';
 
 import Filter, {ALL_FILTER} from '../models/filter.js';
 import {filter_string} from '../models/filter/utils.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 import HttpCommand from './http.js';
 
@@ -99,8 +101,7 @@ class EntitiesCommand extends HttpCommand {
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    return this.httpPost(params, {transform: DefaultTransform});
   }
 
   exportByFilter(filter) {
@@ -111,8 +112,7 @@ class EntitiesCommand extends HttpCommand {
       'bulk_export.x': 1,
       filter,
     };
-    return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    return this.httpPost(params, {transform: DefaultTransform});
   }
 
   delete(entities, extra_params) {

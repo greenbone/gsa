@@ -33,6 +33,7 @@ class Rejection {
     this.message = message;
     this.reason = reason;
     this.xhr = xhr;
+    this.error = error;
 
     if (!is_defined(error)) {
       error = new Error();

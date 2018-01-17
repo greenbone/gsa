@@ -21,20 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Response from '../response.js';
+const noop = arg => arg;
 
-class Transfrom {
-
-  success(xhr, options) {
-    return new Response(xhr, {fromcache: false});
-  }
-
-  rejection(rej, options) {
-    return rej;
-  }
-}
-
-export default Transfrom;
+export default {
+  success: noop,
+  rejection: noop,
+};
 
  // vim: set ts=2 sw=2 tw=80:
 

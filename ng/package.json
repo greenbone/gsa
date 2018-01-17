@@ -39,7 +39,8 @@
     "react-dom": "16.2.0",
     "react-router": "^3.0.5",
     "react-scripts": "1.1.0",
-    "select2": "4.0.5"
+    "select2": "4.0.5",
+    "x2js": "^3.1.1"
   },
   "scripts": {
     "test": "NODE_PATH=src react-scripts test --env=jsdom",
