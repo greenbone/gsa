@@ -104,7 +104,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/http/interceptor.js
      ${NG_SRC_DIR}/src/gmp/http/rejection.js
      ${NG_SRC_DIR}/src/gmp/http/response.js
-     ${NG_SRC_DIR}/src/gmp/http/transform/transform.js
+     ${NG_SRC_DIR}/src/gmp/http/transform/default.js
      ${NG_SRC_DIR}/src/gmp/http/transform/x2js.js
      ${NG_SRC_DIR}/src/gmp/http/utils.js
      ${NG_SRC_DIR}/src/gmp/index.js
@@ -733,6 +733,5 @@ install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
 
 install (DIRECTORY
          build/static
-         build/js
          build/img
          DESTINATION ${NG_DEST_DIR})
