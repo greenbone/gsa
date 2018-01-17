@@ -55,10 +55,6 @@ class Response {
   get data() {
     return this._data;
   }
-
-  get xhr() {
-    return this._xhr;
-  }
 }
 
 export default Response;
