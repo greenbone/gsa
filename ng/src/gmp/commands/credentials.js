@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ import logger from '../log.js';
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Credential from '../models/credential.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 const log = logger.getLogger('gmp.commands.credentials');
 
@@ -123,8 +125,7 @@ class CredentialCommand extends EntityCommand {
       cmd: 'download_credential',
       package_format: format,
       credential_id: id,
-    }, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    }, {transform: DefaultTransform});
   }
 
   getElementFromRoot(root) {

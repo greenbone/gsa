@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@ import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 import Report from '../models/report.js';
 
 import {ALL_FILTER} from '../models/filter.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 const log = logger.getLogger('gmp.commands.reports');
 
@@ -69,9 +71,7 @@ class ReportCommand extends EntityCommand {
       report_id: id,
       report_format_id,
       filter: is_defined(filter) ? filter.all() : ALL_FILTER,
-    }, {
-      plain: true,
-    }).then(response => response.setData(response.data.responseText));
+    }, {transform: DefaultTransform});
   }
 
   addAssets({id}, {filter = ''}) {
