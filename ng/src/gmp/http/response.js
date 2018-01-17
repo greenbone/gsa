@@ -36,24 +36,16 @@ class Response {
     return new Response(this._xhr, this._data, {...this._meta, ...meta});
   }
 
-  getMeta() {
-    return this._meta;
-  }
-
   setData(data) {
     return new Response(this._xhr, data, this._meta);
   }
 
-  getData() {
-    return this._data;
-  }
-
   get meta() {
-    return this.getMeta();
+    return this._meta;
   }
 
   get data() {
-    return this.getData();
+    return this._data;
   }
 
   get xhr() {
