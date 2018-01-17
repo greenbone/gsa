@@ -40,6 +40,14 @@ class Response {
     return new Response(this._xhr, data, this._meta);
   }
 
+  plainData(type = '') {
+    if (type === 'xml') {
+      return this._xhr.responseXML;
+    }
+    this._xhr.responseType = type;
+    return this._xhr.response;
+  }
+
   get meta() {
     return this._meta;
   }

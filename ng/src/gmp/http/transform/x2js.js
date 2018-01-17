@@ -37,8 +37,7 @@ export function xml2json(...args) {
 }
 
 const transform_xml_data = response => {
-  const {xhr} = response;
-  const {envelope} = xml2json(xhr.responseXML);
+  const {envelope} = xml2json(response.plainData('xml'));
   const meta = parse_envelope_meta(envelope);
   return response.set(envelope, meta);
 };
