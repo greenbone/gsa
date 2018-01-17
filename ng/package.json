@@ -42,11 +42,11 @@
     "select2": "4.0.5"
   },
   "scripts": {
-    "test": "NODE_PATH=src ./node_modules/.bin/react-scripts test --env=jsdom",
-    "lint": "NODE_PATH=src ./node_modules/.bin/eslint src",
-    "start": "NODE_PATH=src ./node_modules/.bin/react-scripts start",
-    "build": "NODE_PATH=src ./node_modules/.bin/react-scripts build",
-    "eject": "NODE_PATH=src ./node_modules/.bin/react-scripts eject",
+    "test": "NODE_PATH=src react-scripts test --env=jsdom",
+    "lint": "NODE_PATH=src eslint src",
+    "start": "NODE_PATH=src react-scripts start",
+    "build": "NODE_PATH=src react-scripts build",
+    "eject": "NODE_PATH=src react-scripts eject",
     "storybook": "NODE_PATH=src start-storybook -p 9009 -s public -c src/web/stories",
     "build-storybook": "NODE_PATH=src build-storybook -s public -c src/web/stories"
   },
