@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,11 +43,9 @@ const transform_xml_data = response => {
   return response.set(envelope, meta);
 };
 
-const success = (response, {plain = false, ...options}) => {
+const success = (response, options) => {
   try {
-    return plain ?
-      response :
-      transform_xml_data(response);
+    return transform_xml_data(response);
   }
   catch (error) {
     throw new Rejection(response.xhr, Rejection.REASON_ERROR,
