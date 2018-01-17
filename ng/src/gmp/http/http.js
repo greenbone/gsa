@@ -228,12 +228,12 @@ class Http {
     }
   }
 
-  transformSuccess(response, options) {
-    return this.transform.success(response, options);
+  transformSuccess(response, {transform = this.transform, ...options} = {}) {
+    return transform.success(response, options);
   }
 
-  transformRejection(rejection, options) {
-    return this.transform.rejection(rejection, options);
+  transformRejection(rejection, {transform = this.transform, ...options} = {}) {
+    return transform.rejection(rejection, options);
   }
 
   addInterceptor(interceptor) {
