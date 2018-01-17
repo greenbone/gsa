@@ -21,18 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-class Transfrom {
+const noop = arg => arg;
 
-  success(response, options) {
-    return response;
-  }
-
-  rejection(rejection, options) {
-    return rejection;
-  }
-}
-
-export default Transfrom;
+export default {
+  success: noop,
+  rejection: noop,
+};
 
  // vim: set ts=2 sw=2 tw=80:
 

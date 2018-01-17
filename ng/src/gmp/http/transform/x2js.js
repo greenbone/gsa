@@ -26,8 +26,6 @@ import _ from '../../locale.js';
 
 import {is_defined} from '../../utils.js';
 
-import Transform from './transform.js';
-
 import {parse_envelope_meta} from '../../parser.js';
 
 import Rejection from '../rejection.js';
@@ -38,52 +36,52 @@ export function xml2json(...args) {
   return x2js2.dom2js(...args);
 }
 
-class X2JsTransform extends Transform {
+const transform_xml_data = response => {
+  const {xhr} = response;
+  const {envelope} = xml2json(xhr.responseXML);
+  const meta = parse_envelope_meta(envelope);
+  return response.set(envelope, meta);
+};
 
-  transformXmlData(response) {
-    const {xhr} = response;
-    const {envelope} = xml2json(xhr.responseXML);
-    const meta = parse_envelope_meta(envelope);
-    return response.set(envelope, meta);
+const success = (response, {plain = false, ...options}) => {
+  try {
+    return plain ?
+      response :
+      transform_xml_data(response);
   }
-
-  success(response, {plain = false, ...options}) {
-    try {
-      return plain ?
-        response :
-        this.transformXmlData(response);
-    }
-    catch (error) {
-      throw new Rejection(response.xhr, Rejection.REASON_ERROR,
-        _('An error occurred while converting gmp response to js for ' +
-          'url {{- url}}', {url: options.url}),
-        error);
-    }
+  catch (error) {
+    throw new Rejection(response.xhr, Rejection.REASON_ERROR,
+      _('An error occurred while converting gmp response to js for ' +
+        'url {{- url}}', {url: options.url}),
+      error);
   }
+};
 
-  rejection(rej, options) {
-    if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
+const rejection = (rej, options) => {
+  if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
 
-      const {envelope} = xml2json(rej.xhr.responseXML);
+    const {envelope} = xml2json(rej.xhr.responseXML);
 
-      if (is_defined(envelope)) {
-        rej.root = envelope;
+    if (is_defined(envelope)) {
+      rej.root = envelope;
 
-        if (is_defined(envelope.gsad_response)) {
-          return rej.setMessage(envelope.gsad_response.message);
-        }
-
-        if (is_defined(envelope.action_result)) {
-          return rej.setMessage(envelope.action_result.message);
-        }
+      if (is_defined(envelope.gsad_response)) {
+        return rej.setMessage(envelope.gsad_response.message);
       }
 
-      return rej.setMessage(_('Unknown Error'));
+      if (is_defined(envelope.action_result)) {
+        return rej.setMessage(envelope.action_result.message);
+      }
     }
-    return rej;
-  }
-}
 
-export default X2JsTransform;
+    return rej.setMessage(_('Unknown Error'));
+  }
+  return rej;
+};
+
+export default {
+  rejection,
+  success,
+};
 
 // vim: set ts=2 sw=2 tw=80:

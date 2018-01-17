@@ -50,7 +50,7 @@ class Http {
   constructor(url, options = {}) {
     const {
       timeout = DEFAULT_TIMEOUT,
-      transform = new Transform(),
+      transform = Transform,
     } = options;
 
     this.url = url;
