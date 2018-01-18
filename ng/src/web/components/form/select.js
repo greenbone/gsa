@@ -94,6 +94,7 @@ const Menu = glamorous.div({
   left: 0,
   zIndex: 5,
   marginTop: '-1px', // collapse top border
+  boxSizing: 'border-box',
 });
 
 const ItemContainer = glamorous.div({
