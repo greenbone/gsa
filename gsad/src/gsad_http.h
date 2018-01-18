@@ -179,8 +179,7 @@ typedef enum authentication_reason authentication_reason_t;
 
 int handler_send_reauthentication (http_connection_t *connection,
                                    int http_status_code,
-                                   authentication_reason_t reason,
-                                   gboolean xml);
+                                   authentication_reason_t reason);
 
 int send_response (http_connection_t *connection, const char *content,
                    int status_code, const gchar *sid,
