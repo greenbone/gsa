@@ -99,9 +99,15 @@ const Menu = glamorous.div({
     case 'adjust':
       return {width: '100%'};
     case 'right':
-      return {right: 0};
+      return {
+        right: 0,
+        whiteSpace: 'nowrap',
+      };
     default:
-      return {left: 0};
+      return {
+        left: 0,
+        whiteSpace: 'nowrap',
+      };
   }
 });
 
