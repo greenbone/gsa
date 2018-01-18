@@ -83,8 +83,9 @@ const Menu = glamorous.div({
   transition: 'opacity .1s ease',
   boxShadow: '0 2px 3px 0 rgba(34,36,38,.15)',
   borderColor: '#96c8da',
-  borderWidth: '0 1px 1px 1px',
+  borderWidth: '1px 1px 1px 1px',
   borderStyle: 'solid',
+  borderTopColor: '#aaa',
   backgroundColor: 'white',
   display: 'flex',
   flexDirection: 'column',
@@ -92,6 +93,7 @@ const Menu = glamorous.div({
   top: '100%', // move below Box
   left: 0,
   zIndex: 5,
+  marginTop: '-1px', // collapse top border
 });
 
 const ItemContainer = glamorous.div({
