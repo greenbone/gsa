@@ -121,6 +121,9 @@ const SelectedValue = glamorous.div({
   alignItems: 'center',
   flexGrow: 1,
   cursor: 'pointer',
+  wordBreak: 'keep-all',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
 }, ({disabled}) => disabled ? {
   cursor: 'default',
 } : null);
@@ -236,6 +239,7 @@ class Select extends React.Component {
               >
                 <SelectedValue
                   disabled={disabled}
+                  title={label}
                 >
                   {label}
                 </SelectedValue>
