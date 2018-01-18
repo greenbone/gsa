@@ -30,7 +30,7 @@ import {KeyCode, is_defined, is_string} from 'gmp/utils.js';
 import logger from 'gmp/log.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
 import Select from '../form/select.js';
 import TextField from '../form/textfield.js';
@@ -204,7 +204,7 @@ class PowerFilter extends React.Component {
     const namedfilterid = is_defined(filter) && is_defined(filter.id) ?
       filter.id : DEFAULT_FILTER_ID;
 
-    const filter_opts = render_options(filters, DEFAULT_FILTER_ID);
+    const filter_items = render_select_items(filters, DEFAULT_FILTER_ID);
 
     const can_create = capabilities.mayCreate('filter') &&
       filtername.trim().length > 0;
@@ -277,11 +277,11 @@ class PowerFilter extends React.Component {
             }
             {capabilities.mayAccess('filters') &&
               <FilterSelect
+                items={filter_items}
                 value={namedfilterid}
                 menuPosition="right"
-                onChange={this.handleNamedFilterChange}>
-                {filter_opts}
-              </FilterSelect>
+                onChange={this.handleNamedFilterChange}
+              />
             }
           </Divider>
         </Layout>
