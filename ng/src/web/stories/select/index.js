@@ -158,6 +158,20 @@ storiesOf('Select', module)
         <option value="ipsum">Ipsum</option>
       </Select>
     </Sizer>
-  ));
+  ))
+  .add('with items and scrolling', () => {
+    const items = [];
+    for (let i = 1; i < 50; i++) {
+      items.push({label: i, value: i});
+    }
+    return (
+      <Sizer>
+        <Select
+          items={items}
+          onChange={action('select value change')}
+        />
+      </Sizer>
+    );
+  });
 
 // vim: set ts=2 sw=2 tw=80:
