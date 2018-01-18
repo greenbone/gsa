@@ -2051,9 +2051,8 @@ get_many (gvm_connection_t *connection, const char *type,
 {
   GString *xml;
   GString *type_many; /* The plural form of type */
-  gchar *filter_type, *request, *built_filter;
-  int no_filter_history;
-  const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
+  gchar *request, *built_filter;
+  const char *build_filter, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value, *min_qod;
@@ -2061,11 +2060,8 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *level_false_positive;
   const char *details;
 
-  no_filter_history = params_value(params, "no_filter_history")
-                        ? atoi (params_value(params, "no_filter_history"))
-                        : 0;
   build_filter = params_value(params, "build_filter");
-  given_filt_id = params_value (params, "filt_id");
+  filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
   first = params_value (params, "first");
@@ -2088,33 +2084,6 @@ get_many (gvm_connection_t *connection, const char *type,
 
   if (details == NULL || strcmp (details, "") == 0)
     details = "0";
-
-  if (strcasecmp (type, "info") == 0)
-    filter_type = g_strdup (params_value (params, "info_type"));
-  else
-    filter_type = g_strdup (type);
-
-  if (given_filt_id)
-    {
-      if (no_filter_history == 0
-          && strcmp (given_filt_id, FILT_ID_NONE)
-          && strcmp (given_filt_id, FILT_ID_USER_SETTING))
-        g_tree_replace (credentials->last_filt_ids, filter_type,
-                        g_strdup (given_filt_id));
-      else
-        g_free (filter_type);
-
-      filt_id = given_filt_id;
-    }
-  else
-    {
-      if (no_filter_history == 0
-          && (filter == NULL || strcmp (filter, "") == 0))
-        filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
-      else
-        filt_id = NULL;
-      g_free (filter_type);
-    }
 
   /* check if filter still exists */
   switch (filter_exists (connection, filt_id))

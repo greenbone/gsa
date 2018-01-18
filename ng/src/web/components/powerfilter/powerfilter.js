@@ -184,15 +184,26 @@ class PowerFilter extends React.Component {
 
   componentWillReceiveProps(props) {
     const {filter, filters} = props;
+    const {filter: state_filter} = this.state;
 
     this.setState({
       filters,
     });
 
-    if (is_defined(filter) && !filter.equals(this.state.filter)) {
+    if (!is_defined(filter)) {
       this.setState({
         filter,
-        userfilter: filter ? filter.toFilterCriteriaString() : '',
+        userfilter: '',
+      });
+    }
+    else if (
+      !is_defined(state_filter) ||
+      filter.id !== state_filter.id ||
+      !filter.equals(this.state.filter)
+    ) {
+      this.setState({
+        filter,
+        userfilter: filter.toFilterCriteriaString(),
       });
     }
   }

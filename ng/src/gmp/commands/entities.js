@@ -50,6 +50,9 @@ class EntitiesCommand extends HttpCommand {
     const rparams = super.getParams(other, extra_params);
 
     if (is_defined(filter)) {
+      if (is_defined(filter.id)) {
+        rparams.filt_id = filter.id;
+      }
       rparams.filter = filter_string(filter);
     }
     return rparams;
