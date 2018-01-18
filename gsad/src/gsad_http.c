@@ -577,12 +577,8 @@ handler_send_login_page (http_connection_t *connection,
                          int http_status_code, const gchar * message,
                          const gchar *url)
 {
-  const char * xml_flag = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "xml");
   time_t now;
   char ctime_now[200];
-  char *res;
   gsize len;
   http_response_t *response;
   cmd_response_data_t *response_data;
@@ -614,28 +610,17 @@ handler_send_login_page (http_connection_t *connection,
   response_data = cmd_response_data_new ();
   cmd_response_data_set_status_code (response_data, http_status_code);
 
-  if (xml_flag && strcmp (xml_flag, "0"))
-    {
-      res = xml;
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_XML);
-    }
-  else
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_TEXT_HTML);
-      res = xsl_transform (xml, response_data);
-      g_free (xml);
-    }
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_APP_XML);
 
   len = cmd_response_data_get_content_length (response_data);
 
   if (len == 0)
     {
-      len = strlen (res);
+      len = strlen (xml);
     }
 
-  response = MHD_create_response_from_buffer (len, res,
+  response = MHD_create_response_from_buffer (len, xml,
                                               MHD_RESPMEM_MUST_FREE);
   return handler_send_response (connection,
                                 response,
