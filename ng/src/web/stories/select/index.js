@@ -139,13 +139,9 @@ storiesOf('Select', module)
       </Box>
       <Box>
         <StyledSelect
+          items={items}
           onChange={action('select value change')}
-        >
-          <option value="foo">Foo</option>
-          <option value="bar">Bar</option>
-          <option value="lore">Lore</option>
-          <option value="ipsum">Ipsum</option>
-        </StyledSelect>
+        />
       </Box>
     </Divider>
   ))
