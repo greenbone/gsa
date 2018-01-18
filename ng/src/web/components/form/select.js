@@ -88,9 +88,11 @@ const Menu = glamorous.div({
   borderColor: '#96c8da',
   borderWidth: '0 1px 1px 1px',
   borderStyle: 'solid',
+  backgroundColor: 'white',
   position: 'absolute',
   top: '100%', // move below Box
   left: 0,
+  zIndex: 5,
   display: 'flex',
   flexDirection: 'column',
 });
