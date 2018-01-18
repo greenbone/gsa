@@ -25252,7 +25252,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       free_entity (entity);
       g_free (response);
-      html = logout_xml (credentials, params_value_bool (params, "xml"),
+      html = logout_xml (credentials,
                          "Authentication method changed. Please login with "
                          "LDAP password.", response_data);
     }
