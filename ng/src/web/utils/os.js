@@ -804,11 +804,6 @@ const operating_systems = [
     icon: 'os_hp.svg'
   },
   {
-    pattern: 'cpe:/o:hp:hp-ux:11.23',
-    title: 'HP-UX 11i v2',
-    icon: 'os_hp.svg'
-  },
-  {
     pattern: 'cpe:/o:hp:hp-ux',
     title: 'HP-UX',
     icon: 'os_hp.svg'
