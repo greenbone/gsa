@@ -5,7 +5,7 @@
  * Steffen Waterkamp
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ const Header = ({
       <TableRow>
         {delta &&
           <TableHead
-            width="5em"
+            width="4%"
             currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
             sortBy={sort ? 'delta' : false}
@@ -69,13 +69,14 @@ const Header = ({
           </TableHead>
         }
         <TableHead
+          width="57%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'vulnerability' : false}
           onSortChange={onSortChange}>
           {_('Vulnerability')}
         </TableHead>
-        <TableHead width="5em">
+        <TableHead width="2%">
           <Layout flex align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
@@ -86,7 +87,7 @@ const Header = ({
           </Layout>
         </TableHead>
         <TableHead
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
@@ -94,7 +95,7 @@ const Header = ({
           {_('Severity')}
         </TableHead>
         <TableHead
-          width="6em"
+          width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}
@@ -102,7 +103,7 @@ const Header = ({
           {_('QoD')}
         </TableHead>
         <TableHead
-          width="10em"
+          width="7%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'host' : false}
@@ -110,7 +111,7 @@ const Header = ({
           {_('Host')}
         </TableHead>
         <TableHead
-          width="10em"
+          width="13%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'location' : false}
@@ -118,7 +119,7 @@ const Header = ({
           {_('Location')}
         </TableHead>
         <TableHead
-          width="20em"
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}

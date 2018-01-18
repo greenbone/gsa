@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,10 +32,10 @@ import CredentialDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['type', _('Type')],
-  ['allow_insecure', _('Allow insecure use')],
-  ['login', _('Login')],
+  ['name', _('Name'), '36%'],
+  ['type', _('Type'), '31%'],
+  ['allow_insecure', _('Allow insecure use'), '10%'],
+  ['login', _('Login'), '15%'],
 ];
 
 const CredentialsTable = createEntitiesTable({

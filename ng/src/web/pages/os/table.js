@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          width="29%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -58,6 +59,7 @@ const Header = ({
           {_('Name')}
         </TableHead>
         <TableHead
+          width="19%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -65,8 +67,14 @@ const Header = ({
           onSortChange={onSortChange}>
           {_('Title')}
         </TableHead>
-        <TableHead colSpan="3">{_('Severity')}</TableHead>
         <TableHead
+          width="24%"
+          colSpan="3"
+        >
+          {_('Severity')}
+        </TableHead>
+        <TableHead
+          width="5%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -75,6 +83,7 @@ const Header = ({
           {_('Hosts')}
         </TableHead>
         <TableHead
+          width="15%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -89,6 +98,7 @@ const Header = ({
       </TableRow>
       <TableRow>
         <TableHead
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'latest_severity' : false}
@@ -96,6 +106,7 @@ const Header = ({
           {_('Latest')}
         </TableHead>
         <TableHead
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'highest_severity' : false}
@@ -103,6 +114,7 @@ const Header = ({
           {_('Highest')}
         </TableHead>
         <TableHead
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'average_severity' : false}

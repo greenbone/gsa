@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          width="20%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -54,6 +55,7 @@ const Header = ({
           {_('Name')}
         </TableHead>
         <TableHead
+          width="26%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'roles' : false}
@@ -61,6 +63,7 @@ const Header = ({
           {_('Roles')}
         </TableHead>
         <TableHead
+          width="26%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'groups' : false}
@@ -68,6 +71,7 @@ const Header = ({
           {_('Groups')}
         </TableHead>
         <TableHead
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'host_access' : false}
@@ -75,6 +79,7 @@ const Header = ({
           {_('Host Access')}
         </TableHead>
         <TableHead
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'ldap' : false}

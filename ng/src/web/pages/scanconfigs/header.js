@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +45,7 @@ const Header = ({
 
       <TableRow>
         <TableHead
+          width="72%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -51,16 +53,26 @@ const Header = ({
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
-        <TableHead colSpan="2">{_('Familiy')}</TableHead>
-        <TableHead colSpan="2">{_('NVTs')}</TableHead>
+        <TableHead
+          width="10%"
+          colSpan="2"
+        >
+          {_('Familiy')}
+        </TableHead>
+        <TableHead
+          width="10%"
+          colSpan="2"
+        >
+          {_('NVTs')}
+        </TableHead>
         {actions &&
-          <TableHead rowSpan="2" width="6em">{_('Actions')}</TableHead>
+          <TableHead rowSpan="2" width="8%">{_('Actions')}</TableHead>
         }
       </TableRow>
 
       <TableRow>
         <TableHead
-          width="6em"
+          width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'families_total' : false}
@@ -68,7 +80,7 @@ const Header = ({
           {_('Total')}
         </TableHead>
         <TableHead
-          width="6em"
+          width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'families_trend' : false}
@@ -77,7 +89,7 @@ const Header = ({
         </TableHead>
 
         <TableHead
-          width="6em"
+          width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvts_total' : false}
@@ -85,7 +97,7 @@ const Header = ({
           {_('Total')}
         </TableHead>
         <TableHead
-          width="6em"
+          width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvts_trend' : false}

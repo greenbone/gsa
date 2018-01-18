@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="15em"
+          width="15%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -60,6 +60,7 @@ const Header = ({
           {_('Name')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'vector' : false}
@@ -67,6 +68,7 @@ const Header = ({
           {_('Vector')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'complexity' : false}
@@ -74,6 +76,7 @@ const Header = ({
           {_('Complexity')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'authentication' : false}
@@ -81,6 +84,7 @@ const Header = ({
           {_('Authentication')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'confidentiality_impact' : false}
@@ -88,6 +92,7 @@ const Header = ({
           {_('Confidentiality Impact')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'integrity_impact' : false}
@@ -95,6 +100,7 @@ const Header = ({
           {_('Integrity Impact')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'availability_impact' : false}
@@ -102,7 +108,7 @@ const Header = ({
           {_('Availability Impact')}
         </TableHead>
         <TableHead
-          width="15em"
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'published' : false}
@@ -110,7 +116,7 @@ const Header = ({
           {_('Published')}
         </TableHead>
         <TableHead
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}

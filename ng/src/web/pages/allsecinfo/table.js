@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="20em"
+          width="17%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -60,6 +60,7 @@ const Header = ({
           {_('Name')}
         </TableHead>
         <TableHead
+          width="55%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'type' : false}
@@ -67,7 +68,7 @@ const Header = ({
           {_('Type')}
         </TableHead>
         <TableHead
-          width="15em"
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}
@@ -75,7 +76,7 @@ const Header = ({
           {_('Created')}
         </TableHead>
         <TableHead
-          width="15em"
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
@@ -83,7 +84,7 @@ const Header = ({
           {_('Modified')}
         </TableHead>
         <TableHead
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}

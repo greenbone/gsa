@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,12 +32,12 @@ import TagDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['value', _('Value')],
-  ['active', _('Active')],
-  ['resource_type', _('Resource Type')],
-  ['resource_name', _('Resource Name')],
-  ['modified', _('Modified')],
+  ['name', _('Name'), '30%'],
+  ['value', _('Value'), '15%'],
+  ['active', _('Active'), '7%'],
+  ['resource_type', _('Resource Type'), '15%'],
+  ['resource_name', _('Resource Name'), '15%'],
+  ['modified', _('Modified'), '10%'],
 ];
 
 const TagsTable = createEntitiesTable({

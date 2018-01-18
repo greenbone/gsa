@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="30em"
+          width="32%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -66,7 +66,7 @@ const Header = ({
           {_('Name')}
         </TableHead>
         <TableHead
-          width="20em"
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'family' : false}
@@ -74,7 +74,7 @@ const Header = ({
           {_('Family')}
         </TableHead>
         <TableHead
-          width="15em"
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}
@@ -82,7 +82,7 @@ const Header = ({
           {_('Created')}
         </TableHead>
         <TableHead
-          width="15em"
+          width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
@@ -90,7 +90,7 @@ const Header = ({
           {_('Modified')}
         </TableHead>
         <TableHead
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'version' : false}
@@ -98,13 +98,14 @@ const Header = ({
           {_('Version')}
         </TableHead>
         <TableHead
+          width="18%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'cve' : false}
           onSortChange={onSortChange}>
           {_('CVE')}
         </TableHead>
-        <TableHead width="5em">
+        <TableHead width="1%">
           <Layout flex align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
@@ -115,7 +116,7 @@ const Header = ({
           </Layout>
         </TableHead>
         <TableHead
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
@@ -123,7 +124,7 @@ const Header = ({
           {_('Severity')}
         </TableHead>
         <TableHead
-          width="6em"
+          width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}

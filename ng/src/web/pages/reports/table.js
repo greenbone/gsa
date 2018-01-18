@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,7 @@ const Header = ({
       <TableRow>
         <TableHead
           rowSpan="2"
+          width="25%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'date' : false}
@@ -61,7 +62,7 @@ const Header = ({
         </TableHead>
         <TableHead
           rowSpan="2"
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'status' : false}
@@ -69,6 +70,7 @@ const Header = ({
           {_('Status')}
         </TableHead>
         <TableHead
+          width="39%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -78,14 +80,19 @@ const Header = ({
         </TableHead>
         <TableHead
           rowSpan="2"
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
-        <TableHead colSpan="5">{_('Scan Results')}</TableHead>
+        <TableHead
+          width="25%"
+          colSpan="5"
+        >
+          {_('Scan Results')}
+        </TableHead>
         {is_defined(actionsColumn) ?
           actionsColumn :
           <TableHead rowSpan="2" width="5em">{_('Actions')}</TableHead>
@@ -93,7 +100,7 @@ const Header = ({
       </TableRow>
       <TableRow>
         <TableHead
-          width="5em"
+          width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'high' : false}
@@ -101,7 +108,7 @@ const Header = ({
           <SeverityClassLabel.High/>
         </TableHead>
         <TableHead
-          width="5em"
+          width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'medium' : false}
@@ -109,7 +116,7 @@ const Header = ({
           <SeverityClassLabel.Medium/>
         </TableHead>
         <TableHead
-          width="5em"
+          width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'low' : false}
@@ -117,7 +124,7 @@ const Header = ({
           <SeverityClassLabel.Low/>
         </TableHead>
         <TableHead
-          width="5em"
+          width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'log' : false}
@@ -125,7 +132,7 @@ const Header = ({
           <SeverityClassLabel.Log/>
         </TableHead>
         <TableHead
-          width="5em"
+          width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'false_positive' : false}
