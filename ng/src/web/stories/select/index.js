@@ -30,6 +30,8 @@ import {action} from '@storybook/addon-actions';
 import Select from 'web/components/form/select.js';
 import Divider from 'web/components/layout/divider.js';
 
+import os from 'web/utils/os.js';
+
 const Sizer = glamorous.div({
   width: '300px',
 });
@@ -53,6 +55,11 @@ const StyledSelect = glamorous(Select)({
   width: '120px',
   height: '30px',
 });
+
+const items = os.operating_systems.map(o => ({
+  value: o.pattern,
+  label: o.title,
+}));
 
 class ControlledSingleSelect extends React.Component {
 
@@ -159,19 +166,13 @@ storiesOf('Select', module)
       </Select>
     </Sizer>
   ))
-  .add('with items and scrolling', () => {
-    const items = [];
-    for (let i = 1; i < 50; i++) {
-      items.push({label: i, value: i});
-    }
-    return (
-      <Sizer>
-        <Select
-          items={items}
-          onChange={action('select value change')}
-        />
-      </Sizer>
-    );
-  });
+  .add('with items and scrolling', () => (
+    <Sizer>
+      <Select
+        items={items}
+        onChange={action('select value change')}
+      />
+    </Sizer>
+  ));
 
 // vim: set ts=2 sw=2 tw=80:
