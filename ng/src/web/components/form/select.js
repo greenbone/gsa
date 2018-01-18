@@ -32,7 +32,11 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Layout from '../layout/layout.js';
+const SelectContainer = glamorous.div({
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
+});
 
 const ArrowButton = glamorous.span({
   backgroundColor: 'transparent',
@@ -84,6 +88,9 @@ const Menu = glamorous.div({
   borderColor: '#96c8da',
   borderWidth: '0 1px 1px 1px',
   borderStyle: 'solid',
+  position: 'absolute',
+  top: '100%', // move below Box
+  left: 0,
   display: 'flex',
   flexDirection: 'column',
 });
@@ -205,7 +212,7 @@ class Select extends React.Component {
         }) => {
           const label = find_label(items, selectedItem);
           return (
-            <Layout
+            <SelectContainer
               {...getRootProps({refKey: 'innerRef'})}
               className={className}
               flex="column"
@@ -254,7 +261,7 @@ class Select extends React.Component {
                     ))}
                 </Menu>
               }
-            </Layout>
+            </SelectContainer>
           );
         }}
       />
