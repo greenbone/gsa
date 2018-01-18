@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +32,11 @@ import ReportFormatDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['extension', _('Extension')],
-  ['content_type', _('Content Type')],
-  ['trust', _('Trust (Last Verified)')],
-  ['active', _('Active')],
+  ['name', _('Name'), '35%'],
+  ['extension', _('Extension'), '14%'],
+  ['content_type', _('Content Type'), '18%'],
+  ['trust', _('Trust (Last Verified)'), '15%'],
+  ['active', _('Active'), '10%'],
 ];
 
 const ReportFormatsTable = createEntitiesTable({

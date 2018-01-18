@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          width="19%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'text' : false}
@@ -59,6 +60,7 @@ const Header = ({
           {_('Text')}
         </TableHead>
         <TableHead
+          width="30%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvt' : false}
@@ -66,6 +68,7 @@ const Header = ({
           {_('NVT')}
         </TableHead>
         <TableHead
+          width="12%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
@@ -73,6 +76,7 @@ const Header = ({
           {_('Hosts')}
         </TableHead>
         <TableHead
+          width="12%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'port' : false}
@@ -80,6 +84,7 @@ const Header = ({
           {_('Location')}
         </TableHead>
         <TableHead
+          width="9%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
@@ -89,12 +94,13 @@ const Header = ({
         <TableHead
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          width="10em"
+          width="8%"
           sortBy={sort ? 'new_severity' : false}
           onSortChange={onSortChange}>
           {_('To')}
         </TableHead>
         <TableHead
+          width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'active' : false}

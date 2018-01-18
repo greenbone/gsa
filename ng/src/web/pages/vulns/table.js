@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          width="40%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -59,6 +60,7 @@ const Header = ({
         </TableHead>
         {hideColumns.oldest !== true &&
           <TableHead
+            width="15%"
             currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
             sortBy={sort ? 'oldest' : false}
@@ -68,6 +70,7 @@ const Header = ({
         }
         {hideColumns.oldest !== true &&
           <TableHead
+            width="15%"
             currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
             sortBy={sort ? 'newest' : false}
@@ -76,7 +79,7 @@ const Header = ({
           </TableHead>
         }
         <TableHead
-          width="10em"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
@@ -84,7 +87,7 @@ const Header = ({
           {_('Severity')}
         </TableHead>
         <TableHead
-          width="6em"
+          width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}
@@ -92,7 +95,7 @@ const Header = ({
           {_('QoD')}
         </TableHead>
         <TableHead
-          width="6em"
+          width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'results' : false}
@@ -100,7 +103,7 @@ const Header = ({
           {_('Results')}
         </TableHead>
         <TableHead
-          width="6em"
+          width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}

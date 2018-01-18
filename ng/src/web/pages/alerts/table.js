@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,12 +32,12 @@ import AlertDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['event', _('Event')],
-  ['condition', _('Condition')],
-  ['method', _('Method')],
-  ['filter', _('Filter')],
-  ['active', _('Active')],
+  ['name', _('Name'), '25%'],
+  ['event', _('Event'), '21%'],
+  ['condition', _('Condition'), '21%'],
+  ['method', _('Method'), '10%'],
+  ['filter', _('Filter'), '10%'],
+  ['active', _('Active'), '5%'],
 ];
 
 const AlertsTable = createEntitiesTable({
