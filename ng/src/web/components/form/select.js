@@ -78,9 +78,6 @@ const Box = glamorous.div({
 } : null);
 
 const Menu = glamorous.div({
-  maxHeight: '20rem',
-  overflowY: 'auto',
-  overflowX: 'hidden',
   outline: '0',
   borderRadius: '0 0 4px 4px',
   transition: 'opacity .1s ease',
@@ -89,10 +86,18 @@ const Menu = glamorous.div({
   borderWidth: '0 1px 1px 1px',
   borderStyle: 'solid',
   backgroundColor: 'white',
+  display: 'flex',
+  flexDirection: 'column',
   position: 'absolute',
   top: '100%', // move below Box
   left: 0,
   zIndex: 5,
+});
+
+const ItemContainer = glamorous.div({
+  maxHeight: '320px',
+  overflowY: 'auto',
+  overflowX: 'hidden',
   display: 'flex',
   flexDirection: 'column',
 });
@@ -250,17 +255,20 @@ class Select extends React.Component {
                     disabled={disabled}
                     innerRef={ref => this.input = ref}
                   />
-                  {displayedItems
-                    .map(({label: itemLabel, value: itemValue}, i) => (
-                      <Item
-                        {...getItemProps({item: itemValue})}
-                        isSelected={itemValue === selectedItem}
-                        isActive={i === highlightedIndex}
-                        key={itemValue}
-                      >
-                        {itemLabel}
-                      </Item>
-                    ))}
+                  <ItemContainer>
+                    {displayedItems
+                      .map(({label: itemLabel, value: itemValue}, i) => (
+                        <Item
+                          {...getItemProps({item: itemValue})}
+                          isSelected={itemValue === selectedItem}
+                          isActive={i === highlightedIndex}
+                          key={itemValue}
+                        >
+                          {itemLabel}
+                        </Item>
+                      ))
+                    }
+                  </ItemContainer>
                 </Menu>
               }
             </SelectContainer>
