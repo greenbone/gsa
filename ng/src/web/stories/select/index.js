@@ -28,9 +28,30 @@ import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
 
 import Select from 'web/components/form/select.js';
+import Divider from 'web/components/layout/divider.js';
 
 const Sizer = glamorous.div({
   width: '300px',
+});
+
+const Box = glamorous.div({
+  width: '150px',
+  height: '50px',
+  border: '1px solid grey',
+  padding: '5px',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const SelectBox = glamorous.div({
+  width: '100px',
+  border: '1px solid blue',
+  padding: '5px',
+});
+
+const StyledSelect = glamorous(Select)({
+  width: '120px',
+  height: '30px',
 });
 
 class ControlledSingleSelect extends React.Component {
@@ -91,6 +112,35 @@ storiesOf('Select', module)
         <option value="ipsum">Ipsum</option>
       </Select>
     </Sizer>
+  ))
+  .add('with layout', () => (
+    <Divider align={['start', 'center']}>
+      <Box>Foo</Box>
+      <Box>Lorem Ipsum</Box>
+      <Box>Bar</Box>
+      <Box>
+        <SelectBox>
+          <Select
+            onChange={action('select value change')}
+          >
+            <option value="foo">Foo</option>
+            <option value="bar">Bar</option>
+            <option value="lore">Lore</option>
+            <option value="ipsum">Ipsum</option>
+          </Select>
+        </SelectBox>
+      </Box>
+      <Box>
+        <StyledSelect
+          onChange={action('select value change')}
+        >
+          <option value="foo">Foo</option>
+          <option value="bar">Bar</option>
+          <option value="lore">Lore</option>
+          <option value="ipsum">Ipsum</option>
+        </StyledSelect>
+      </Box>
+    </Divider>
   ))
   .add('with controlled input', () => (
     <ControlledSingleSelect/>
