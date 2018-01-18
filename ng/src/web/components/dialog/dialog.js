@@ -23,6 +23,7 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {KeyCode, has_value, is_defined} from 'gmp/utils.js';
 
@@ -38,10 +39,14 @@ const DEFAULT_DIALOG_MAX_HEIGHT = '550px';
 const DEFAULT_DIALOG_MIN_HEIGHT = 250;
 const DEFAULT_DIALOG_MIN_WIDTH = 450;
 
+const portal = document.getElementById('dialog-portal');
+
 class Dialog extends React.Component {
 
   constructor(...args) {
     super(...args);
+
+    this.element = document.createElement('div');
 
     this.handleClose = this.handleClose.bind(this);
 
@@ -57,10 +62,14 @@ class Dialog extends React.Component {
   }
 
   componentDidMount() {
+    portal.appendChild(this.element);
+
     document.addEventListener('keydown', this.onKeyDown);
   }
 
   componentWillUnmount() {
+    portal.removeChild(this.element);
+
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
@@ -189,7 +198,7 @@ class Dialog extends React.Component {
     const maxHeight = is_defined(height) ?
       undefined : DEFAULT_DIALOG_MAX_HEIGHT;
 
-    return (
+    return ReactDOM.createPortal(
       <DialogOverlay
         onClick={this.onOuterClick}
         onKeyDown={this.onKeyDown}
@@ -215,7 +224,8 @@ class Dialog extends React.Component {
             <Resizer onMouseDown={this.onMouseDownResize}/>
           }
         </DialogContainer>
-      </DialogOverlay>
+      </DialogOverlay>,
+      this.element,
     );
   }
 };
