@@ -169,6 +169,28 @@ storiesOf('Select', module)
         onChange={action('select value change')}
       />
     </Sizer>
+  ))
+  .add('with menuPosition', () => (
+    <Divider>
+      <Box>
+        <StyledSelect
+          items={items}
+          menuPosition="left"
+        />
+      </Box>
+      <Box>
+        <StyledSelect
+          items={items}
+          menuPosition="adjust"
+        />
+      </Box>
+      <Box>
+        <StyledSelect
+          items={items}
+          menuPosition="right"
+        />
+      </Box>
+    </Divider>
   ));
 
 // vim: set ts=2 sw=2 tw=80:
