@@ -32,7 +32,11 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Layout from '../layout/layout.js';
+const SelectContainer = glamorous.div({
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
+});
 
 const ArrowButton = glamorous.span({
   backgroundColor: 'transparent',
@@ -74,16 +78,43 @@ const Box = glamorous.div({
 } : null);
 
 const Menu = glamorous.div({
-  maxHeight: '20rem',
-  overflowY: 'auto',
-  overflowX: 'hidden',
   outline: '0',
   borderRadius: '0 0 4px 4px',
   transition: 'opacity .1s ease',
   boxShadow: '0 2px 3px 0 rgba(34,36,38,.15)',
   borderColor: '#96c8da',
-  borderWidth: '0 1px 1px 1px',
+  borderWidth: '1px 1px 1px 1px',
   borderStyle: 'solid',
+  borderTopColor: '#aaa',
+  backgroundColor: 'white',
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'absolute',
+  top: '100%', // move below Box
+  zIndex: 5,
+  marginTop: '-1px', // collapse top border
+  boxSizing: 'border-box',
+}, ({position}) => {
+  switch (position) {
+    case 'adjust':
+      return {width: '100%'};
+    case 'right':
+      return {
+        right: 0,
+        whiteSpace: 'nowrap',
+      };
+    default:
+      return {
+        left: 0,
+        whiteSpace: 'nowrap',
+      };
+  }
+});
+
+const ItemContainer = glamorous.div({
+  maxHeight: '320px',
+  overflowY: 'auto',
+  overflowX: 'hidden',
   display: 'flex',
   flexDirection: 'column',
 });
@@ -107,6 +138,9 @@ const SelectedValue = glamorous.div({
   alignItems: 'center',
   flexGrow: 1,
   cursor: 'pointer',
+  wordBreak: 'keep-all',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
 }, ({disabled}) => disabled ? {
   cursor: 'default',
 } : null);
@@ -128,7 +162,7 @@ const case_insensitive_filter = search => {
     return () => true;
   }
   search = search.toLowerCase();
-  return ({label}) => label.toLowerCase().includes(search);
+  return ({label}) => ('' + label).toLowerCase().includes(search);
 };
 
 const find_label = (items, value) => {
@@ -173,8 +207,10 @@ class Select extends React.Component {
   render() {
     let {
       children,
+      className,
       disabled = false,
       items,
+      menuPosition,
       value,
     } = this.props;
     const {
@@ -204,8 +240,9 @@ class Select extends React.Component {
         }) => {
           const label = find_label(items, selectedItem);
           return (
-            <Layout
+            <SelectContainer
               {...getRootProps({refKey: 'innerRef'})}
+              className={className}
               flex="column"
             >
               <Box
@@ -220,6 +257,7 @@ class Select extends React.Component {
               >
                 <SelectedValue
                   disabled={disabled}
+                  title={label}
                 >
                   {label}
                 </SelectedValue>
@@ -230,7 +268,7 @@ class Select extends React.Component {
                 </ArrowButton>
               </Box>
               {isOpen && items.length > 0 && !disabled &&
-                <Menu>
+                <Menu position={menuPosition}>
                   <Input
                     {...getInputProps({
                       value: search,
@@ -239,20 +277,23 @@ class Select extends React.Component {
                     disabled={disabled}
                     innerRef={ref => this.input = ref}
                   />
-                  {displayedItems
-                    .map(({label: itemLabel, value: itemValue}, i) => (
-                      <Item
-                        {...getItemProps({item: itemValue})}
-                        isSelected={itemValue === selectedItem}
-                        isActive={i === highlightedIndex}
-                        key={itemValue}
-                      >
-                        {itemLabel}
-                      </Item>
-                    ))}
+                  <ItemContainer>
+                    {displayedItems
+                      .map(({label: itemLabel, value: itemValue}, i) => (
+                        <Item
+                          {...getItemProps({item: itemValue})}
+                          isSelected={itemValue === selectedItem}
+                          isActive={i === highlightedIndex}
+                          key={itemValue}
+                        >
+                          {itemLabel}
+                        </Item>
+                      ))
+                    }
+                  </ItemContainer>
                 </Menu>
               }
-            </Layout>
+            </SelectContainer>
           );
         }}
       />
@@ -263,6 +304,7 @@ class Select extends React.Component {
 Select.propTypes = {
   disabled: PropTypes.bool,
   items: PropTypes.arrayOf(PropTypes.object),
+  menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   value: PropTypes.any,
   onChange: PropTypes.func,
