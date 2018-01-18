@@ -1091,6 +1091,7 @@ const operating_systems = [
 ];
 
 export default {
+  operating_systems,
   find: name => operating_systems.find(os => name.includes(os.pattern)),
 };
 
