@@ -32,7 +32,7 @@ import logger from 'gmp/log.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import Select2 from '../form/select2.js';
+import Select from '../form/select.js';
 import TextField from '../form/textfield.js';
 
 import DeleteIcon from '../icon/deleteicon.js';
@@ -51,10 +51,8 @@ const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
 
-const FilterSelect = glamorous(Select2)({
-  '& .select2-container': {
-    minWidth: '100px',
-  },
+const FilterSelect = glamorous(Select)({
+  width: '150px',
 });
 
 const Label = glamorous.label({
@@ -280,6 +278,7 @@ class PowerFilter extends React.Component {
             {capabilities.mayAccess('filters') &&
               <FilterSelect
                 value={namedfilterid}
+                menuPosition="right"
                 onChange={this.handleNamedFilterChange}>
                 {filter_opts}
               </FilterSelect>
