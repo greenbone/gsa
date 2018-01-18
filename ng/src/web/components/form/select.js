@@ -128,7 +128,7 @@ const case_insensitive_filter = search => {
     return () => true;
   }
   search = search.toLowerCase();
-  return ({label}) => label.toLowerCase().includes(search);
+  return ({label}) => ('' + label).toLowerCase().includes(search);
 };
 
 const find_label = (items, value) => {
