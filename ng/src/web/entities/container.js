@@ -155,6 +155,8 @@ class EntitiesContainer extends React.Component {
 
     const token = new CancelToken(cancel => this.cancel = cancel);
 
+    log.debug('Loading', options);
+
     entities_command.get({filter, ...extraLoadParams}, {
       cache,
       cancel_token: token,
@@ -172,6 +174,8 @@ class EntitiesContainer extends React.Component {
         const reverse = is_defined(reverse_field);
         const field = reverse ? reverse_field : loaded_filter.get('sort');
 
+        log.debug('Loaded entities', response);
+
         this.setState({
           entities,
           entities_counts,
@@ -182,8 +186,6 @@ class EntitiesContainer extends React.Component {
           sortDir: reverse ? SortBy.DESC : SortBy.ASC,
           updating: false,
         });
-
-        log.debug('Loaded entities', response);
 
         if (meta.fromcache && (meta.dirty || reload)) {
           log.debug('Forcing reload of entities', meta.dirty, reload);
