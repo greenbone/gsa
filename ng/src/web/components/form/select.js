@@ -91,10 +91,18 @@ const Menu = glamorous.div({
   flexDirection: 'column',
   position: 'absolute',
   top: '100%', // move below Box
-  left: 0,
   zIndex: 5,
   marginTop: '-1px', // collapse top border
   boxSizing: 'border-box',
+}, ({position}) => {
+  switch (position) {
+    case 'adjust':
+      return {width: '100%'};
+    case 'right':
+      return {right: 0};
+    default:
+      return {left: 0};
+  }
 });
 
 const ItemContainer = glamorous.div({
@@ -196,6 +204,7 @@ class Select extends React.Component {
       className,
       disabled = false,
       items,
+      menuPosition,
       value,
     } = this.props;
     const {
@@ -253,7 +262,7 @@ class Select extends React.Component {
                 </ArrowButton>
               </Box>
               {isOpen && items.length > 0 && !disabled &&
-                <Menu>
+                <Menu position={menuPosition}>
                   <Input
                     {...getInputProps({
                       value: search,
@@ -289,6 +298,7 @@ class Select extends React.Component {
 Select.propTypes = {
   disabled: PropTypes.bool,
   items: PropTypes.arrayOf(PropTypes.object),
+  menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   value: PropTypes.any,
   onChange: PropTypes.func,
