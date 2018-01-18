@@ -173,6 +173,7 @@ class Select extends React.Component {
   render() {
     let {
       children,
+      className,
       disabled = false,
       items,
       value,
@@ -206,6 +207,7 @@ class Select extends React.Component {
           return (
             <Layout
               {...getRootProps({refKey: 'innerRef'})}
+              className={className}
               flex="column"
             >
               <Box
