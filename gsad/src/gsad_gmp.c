@@ -7483,7 +7483,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   param_t *param;
 
   const char *data_column, *group_column, *subgroup_column, *type;
-  const char *filter, *filt_id, *xml_param;
+  const char *filter, *filt_id;
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
@@ -7515,13 +7515,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       else
         filter_escaped = NULL;
     }
-  xml_param = params_value (params, "xml");
 
-  if (xml_param == NULL || atoi (xml_param) == 0)
-    {
-      return xsl_transform_gmp (connection, credentials,params,
-                                g_strdup ("<get_aggregate/>"), response_data);
-    }
   xml = g_string_new ("<get_aggregate>");
 
   command = g_string_new ("<get_aggregates");
