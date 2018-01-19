@@ -234,9 +234,11 @@ const Details = ({
                   </DetailsLink>
                 </TableData>
                 <TableData>
-                  <ExternalLink to={ref.url}>
-                    {ref.url}
-                  </ExternalLink>
+                  {is_defined(ref.url) &&
+                    <ExternalLink to={ref.url}>
+                      {ref.url}
+                    </ExternalLink>
+                  }
                 </TableData>
               </TableRow>
             ))}
