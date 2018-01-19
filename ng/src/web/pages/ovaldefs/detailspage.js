@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -310,7 +310,7 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const CvePage = props => (
+const OvaldefPage = props => (
   <EntityContainer
     {...props}
     name="ovaldef"
@@ -337,4 +337,6 @@ const CvePage = props => (
   </EntityContainer>
 );
 
-export default CvePage;
+export default OvaldefPage;
+
+// vim: set ts=2 sw=2 tw=80:
