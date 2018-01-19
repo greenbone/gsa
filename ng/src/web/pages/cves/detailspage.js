@@ -29,12 +29,15 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
+import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
 import {InfoLayout} from '../../entity/info.js';
 
+import ExportIcon from '../../components/icon/exporticon.js';
 import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
@@ -50,19 +53,34 @@ import TableRow from '../../components/table/row.js';
 
 import CveDetails from './details.js';
 
-const ToolBarIcons = () => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cve"
-      title={_('Help: CVEs')}
+const ToolBarIcons = ({
+  entity,
+  onCveDownloadClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="cve"
+        title={_('Help: CVEs')}
+      />
+      <ListIcon
+        title={_('CVE List')}
+        page="cves"
+      />
+    </IconDivider>
+    <ExportIcon
+      value={entity}
+      title={_('Export CVE')}
+      onClick={onCveDownloadClick}
     />
-    <ListIcon
-      title={_('CVE List')}
-      page="cves"
-    />
-  </IconDivider>
+  </Divider>
 );
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onCveDownloadClick: PropTypes.func.isRequired,
+};
 
 const Details = ({
   entity,
@@ -188,19 +206,28 @@ const CvePage = props => (
       onError,
       ...cprops
     }) => (
-      <EntityPage
-        {...props}
-        {...cprops}
-        sectionIcon="cve.svg"
-        title={_('CVE')}
-        detailsComponent={Details}
-        infoComponent={EntityInfo}
-        permissionsComponent={false}
-        toolBarIcons={ToolBarIcons}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
-      />
+      <EntityComponent
+        name="cve"
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+      >
+        {({download}) => (
+          <EntityPage
+            {...props}
+            {...cprops}
+            sectionIcon="cve.svg"
+            title={_('CVE')}
+            detailsComponent={Details}
+            infoComponent={EntityInfo}
+            permissionsComponent={false}
+            toolBarIcons={ToolBarIcons}
+            onCveDownloadClick={download}
+            onPermissionChanged={onChanged}
+            onPermissionDownloaded={onDownloaded}
+            onPermissionDownloadError={onError}
+          />
+        )}
+      </EntityComponent>
     )}
   </EntityContainer>
 );
