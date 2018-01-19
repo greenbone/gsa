@@ -465,6 +465,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/notes/table.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/component.js
      ${NG_SRC_DIR}/src/web/pages/nvts/details.js
      ${NG_SRC_DIR}/src/web/pages/nvts/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/filterdialog.js

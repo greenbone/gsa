@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +31,10 @@ import {is_defined} from 'gmp/utils.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
+import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
 
+import ExportIcon from '../../components/icon/exporticon.js';
 import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -52,19 +54,34 @@ import TableRow from '../../components/table/row.js';
 
 import OvaldefDetails from './details.js';
 
-const ToolBarIcons = () => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="oval"
-      title={_('Help: OVAL Definitions')}
+const ToolBarIcons = ({
+  entity,
+  onOvaldefDownloadClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="oval"
+        title={_('Help: OVAL Definitions')}
+      />
+      <ListIcon
+        title={_('OVAL Definitions List')}
+        page="ovaldefs"
+      />
+    </IconDivider>
+    <ExportIcon
+      value={entity}
+      title={_('Export OVAL Definition')}
+      onClick={onOvaldefDownloadClick}
     />
-    <ListIcon
-      title={_('OVAL Definitions List')}
-      page="ovaldefs"
-    />
-  </IconDivider>
+  </Divider>
 );
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onOvaldefDownloadClick: PropTypes.func.isRequired,
+};
 
 const Criteria = ({criteria}) => {
   const {
@@ -234,9 +251,11 @@ const Details = ({
                   </DetailsLink>
                 </TableData>
                 <TableData>
-                  <ExternalLink to={ref.url}>
-                    {ref.url}
-                  </ExternalLink>
+                  {is_defined(ref.url) &&
+                    <ExternalLink to={ref.url}>
+                      {ref.url}
+                    </ExternalLink>
+                  }
                 </TableData>
               </TableRow>
             ))}
@@ -310,7 +329,7 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const CvePage = props => (
+const OvaldefPage = props => (
   <EntityContainer
     {...props}
     name="ovaldef"
@@ -321,20 +340,31 @@ const CvePage = props => (
       onError,
       ...cprops
     }) => (
-      <EntityPage
-        {...props}
-        {...cprops}
-        sectionIcon="ovaldef.svg"
-        title={_('OVAL Definition')}
-        detailsComponent={Details}
-        permissionsComponent={false}
-        toolBarIcons={ToolBarIcons}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
-      />
+      <EntityComponent
+        name="ovaldef"
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+      >
+        {({download}) => (
+          <EntityPage
+            {...props}
+            {...cprops}
+            sectionIcon="ovaldef.svg"
+            title={_('OVAL Definition')}
+            detailsComponent={Details}
+            permissionsComponent={false}
+            toolBarIcons={ToolBarIcons}
+            onOvaldefDownloadClick={download}
+            onPermissionChanged={onChanged}
+            onPermissionDownloaded={onDownloaded}
+            onPermissionDownloadError={onError}
+          />
+        )}
+      </EntityComponent>
     )}
   </EntityContainer>
 );
 
-export default CvePage;
+export default OvaldefPage;
+
+// vim: set ts=2 sw=2 tw=80:

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,11 +29,14 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
+import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
 
+import ExportIcon from '../../components/icon/exporticon.js';
 import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
@@ -49,19 +52,34 @@ import TableRow from '../../components/table/row.js';
 
 import CertBundAdvDetails from './details.js';
 
-const ToolBarIcons = () => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cert-bund"
-      title={_('Help:  CERT-Bund Advisories')}
+const ToolBarIcons = ({
+  entity,
+  onCertBundAdvDownloadClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="cert-bund"
+        title={_('Help:  CERT-Bund Advisories')}
+      />
+      <ListIcon
+        title={_('CERT-Bund Advisories')}
+        page="certbundadvs"
+      />
+    </IconDivider>
+    <ExportIcon
+      value={entity}
+      title={_('Export CERT-Bund Advisory')}
+      onClick={onCertBundAdvDownloadClick}
     />
-    <ListIcon
-      title={_('CERT-Bund Advisories')}
-      page="certbundadvs"
-    />
-  </IconDivider>
+  </Divider>
 );
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onCertBundAdvDownloadClick: PropTypes.func.isRequired,
+};
 
 const Details = ({
   entity,
@@ -202,15 +220,24 @@ const CertBundAdvPage = props => (
       onError,
       ...cprops
     }) => (
-      <EntityPage
-        {...props}
-        {...cprops}
-        sectionIcon="cert_bund_adv.svg"
-        title={_('CERT-Bund Advisory')}
-        detailsComponent={Details}
-        permissionsComponent={false}
-        toolBarIcons={ToolBarIcons}
-      />
+      <EntityComponent
+        name="certbundadv"
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+      >
+        {({download}) => (
+          <EntityPage
+            {...props}
+            {...cprops}
+            sectionIcon="cert_bund_adv.svg"
+            title={_('CERT-Bund Advisory')}
+            detailsComponent={Details}
+            permissionsComponent={false}
+            toolBarIcons={ToolBarIcons}
+            onCertBundAdvDownloadClick={download}
+          />
+        )}
+      </EntityComponent>
     )}
   </EntityContainer>
 );
