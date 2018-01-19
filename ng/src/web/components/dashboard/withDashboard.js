@@ -29,25 +29,17 @@ import Dashboard from './dashboard.js';
 
 const withDashboard = (options = {}) => Charts => {
 
-  class DashboardWrapper extends React.Component {
-
-    reload() {
-      this.dashboard.reload();
-    }
-
-    render() {
-      const {filter, ...other} = this.props;
-      return (
-        <Dashboard
-          {...options}
-          {...other}
-          ref={ref => this.dashboard = ref}
-        >
-          <Charts filter={filter}/>
-        </Dashboard>
-      );
-    }
-  };
+  const DashboardWrapper = ({
+    filter,
+    ...props,
+  }) => (
+    <Dashboard
+      {...options}
+      {...props}
+    >
+      <Charts filter={filter}/>
+    </Dashboard>
+  );
 
   DashboardWrapper.propTypes = {
     filter: PropTypes.filter,
