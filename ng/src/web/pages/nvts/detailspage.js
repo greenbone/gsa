@@ -36,6 +36,7 @@ import Override from '../../entity/override.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer, {loader} from '../../entity/container.js';
 
+import ExportIcon from '../../components/icon/exporticon.js';
 import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
@@ -51,9 +52,7 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import OverrideComponent from '../overrides/component.js';
-import NoteComponent from '../notes/component.js';
-
+import NvtComponent from './component.js';
 import NvtDetails from './details.js';
 import Preferences from './preferences.js';
 
@@ -61,6 +60,7 @@ let ToolBarIcons = ({
   capabilities,
   entity,
   onNoteCreateClick,
+  onNvtDownloadClick,
   onOverrideCreateClick,
 }) => {
   return (
@@ -76,6 +76,12 @@ let ToolBarIcons = ({
           page="nvts"
         />
       </IconDivider>
+
+      <ExportIcon
+        value={entity}
+        title={_('Export NVT')}
+        onClick={onNvtDownloadClick}
+      />
 
       <IconDivider>
         {capabilities.mayCreate('note') &&
@@ -128,6 +134,7 @@ ToolBarIcons.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   onNoteCreateClick: PropTypes.func.isRequired,
+  onNvtDownloadClick: PropTypes.func.isRequired,
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
@@ -249,38 +256,33 @@ const Page = ({
   onError,
   ...props
 }) => (
-  <NoteComponent
-    onCreated={onChanged}
-    onSaved={onChanged}
+  <NvtComponent
+    onChanged={onChanged}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
   >
     {({
-      create: notecreate,
+      notecreate,
+      overridecreate,
+      download,
     }) => (
-      <OverrideComponent
-        onCreated={onChanged}
-        onSaved={onChanged}
-      >
-        {({
-          create: overridecreate,
-        }) => (
-          <EntityPage
-            {...props}
-            detailsComponent={Details}
-            permissionsComponent={false}
-            toolBarIcons={ToolBarIcons}
-            title={_('NVT')}
-            sectionIcon="nvt.svg"
-            onChanged={onChanged}
-            onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
-            onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
-            onPermissionChanged={onChanged}
-            onPermissionDownloaded={onDownloaded}
-            onPermissionDownloadError={onError}
-          />
-        )}
-      </OverrideComponent>
+      <EntityPage
+        {...props}
+        detailsComponent={Details}
+        permissionsComponent={false}
+        toolBarIcons={ToolBarIcons}
+        title={_('NVT')}
+        sectionIcon="nvt.svg"
+        onChanged={onChanged}
+        onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
+        onNvtDownloadClick={download}
+        onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
+      />
     )}
-  </NoteComponent>
+  </NvtComponent>
 );
 
 Page.propTypes = {

@@ -57,7 +57,7 @@
 #include "gsad_gmp.h"
 #include "gsad_settings.h" /* for vendor_version_get */
 #include "gsad_http.h" /* for gsad_message, logout_xml */
-#include "gsad_base.h" /* for xsl_transform */
+#include "gsad_base.h" /* for set_language_code */
 #include "xslt_i18n.h"
 
 #include <gvm/base/cvss.h>
@@ -499,7 +499,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
   time_t now;
   gchar *res, *name;
   GString *string;
-  char *html;
   char ctime_now[200];
   params_iterator_t iter;
   param_t *param;
@@ -679,38 +678,9 @@ xsl_transform_gmp (gvm_connection_t *connection,
                           xml);
   g_free (xml);
 
-  if (params_value_bool (params, "xml"))
-    {
-      cmd_response_data_set_content_type(response_data,
-                                         GSAD_CONTENT_TYPE_APP_XML);
-      return g_string_free (string, FALSE);
-    }
-
-  html = xsl_transform (string->str, response_data);
   cmd_response_data_set_content_type(response_data,
-                                     GSAD_CONTENT_TYPE_TEXT_HTML);
-  g_string_free (string, TRUE);
-  if (html == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      res = g_strdup_printf ("<gsad_response>"
-                             "<title>Internal Error</title>"
-                             "<message>"
-                             "An internal server error has occurred during XSL"
-                             " transformation."
-                             "</message>"
-                             "</gsad_response>");
-      html = xsl_transform (res, response_data);
-      if (html == NULL)
-        html = g_strdup ("<html>"
-                         "<body>"
-                         "An internal server error has occurred during XSL"
-                         " transformation."
-                         "</body>"
-                         "</html>");
-      g_free (res);
-    }
-  return html;
+                                     GSAD_CONTENT_TYPE_APP_XML);
+  return g_string_free (string, FALSE);
 }
 
 /**
@@ -25252,7 +25222,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       free_entity (entity);
       g_free (response);
-      html = logout_xml (credentials, params_value_bool (params, "xml"),
+      html = logout_xml (credentials,
                          "Authentication method changed. Please login with "
                          "LDAP password.", response_data);
     }

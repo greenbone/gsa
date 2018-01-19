@@ -577,12 +577,8 @@ handler_send_login_page (http_connection_t *connection,
                          int http_status_code, const gchar * message,
                          const gchar *url)
 {
-  const char * xml_flag = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "xml");
   time_t now;
   char ctime_now[200];
-  char *res;
   gsize len;
   http_response_t *response;
   cmd_response_data_t *response_data;
@@ -614,28 +610,17 @@ handler_send_login_page (http_connection_t *connection,
   response_data = cmd_response_data_new ();
   cmd_response_data_set_status_code (response_data, http_status_code);
 
-  if (xml_flag && strcmp (xml_flag, "0"))
-    {
-      res = xml;
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_XML);
-    }
-  else
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_TEXT_HTML);
-      res = xsl_transform (xml, response_data);
-      g_free (xml);
-    }
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_APP_XML);
 
   len = cmd_response_data_get_content_length (response_data);
 
   if (len == 0)
     {
-      len = strlen (res);
+      len = strlen (xml);
     }
 
-  response = MHD_create_response_from_buffer (len, res,
+  response = MHD_create_response_from_buffer (len, xml,
                                               MHD_RESPMEM_MUST_FREE);
   return handler_send_response (connection,
                                 response,
@@ -649,71 +634,48 @@ handler_send_login_page (http_connection_t *connection,
  * @param[in]  connection        Connection handle, e.g. used to send response.
  * @param[in]  http_status_code  HTTP status code for the response.
  * @param[in]  reason            Reason for re-authentication
- * @param[in]  xml               XML is requested
  *
  * @return MHD_YES on success. MHD_NO on errors.
  */
 int
 handler_send_reauthentication (http_connection_t *connection,
                                int http_status_code,
-                               authentication_reason_t reason,
-                               gboolean xml)
+                               authentication_reason_t reason)
 {
 
   const char *msg;
-  const char *type;
 
   switch (reason)
     {
       case LOGIN_FAILED:
         msg = "Login failed.";
-        type = "failed";
         break;
       case LOGIN_ERROR:
         msg = "Login failed. Error during authentication.";
-        type = "error";
         break;
       case GMP_SERVICE_DOWN:
         msg = "Login failed. GMP Service is down.";
-        type = "gmpdown";
         break;
       case SESSION_EXPIRED:
         msg = "Session expired. Please login again.";
-        type = "session";
         break;
       case LOGOUT_ALREADY:
         msg = "Already logged out.";
-        type = "already";
         break;
       case BAD_MISSING_TOKEN:
         msg = "Token missing or bad. Please login again.";
-        type = "token";
         break;
       case BAD_MISSING_COOKIE:
         msg = "Cookie missing or bad. Please login again.";
-        type = "cookie";
         break;
       case LOGOUT:
         msg = "Successfully logged out.";
-        type = "logout";
         break;
       default:
         msg = "";
-        type = "unknown";
     }
 
-  if (xml)
-    return handler_send_login_page (connection, http_status_code, msg,
-                                    NULL);
-  int ret;
-  char *param;
-
-  param = g_strdup_printf ("%s?type=%s", LOGIN_URL, type);
-  ret = send_redirect_to_urn (connection, param, NULL);
-
-  g_free (param);
-
-  return ret;
+  return handler_send_login_page (connection, http_status_code, msg, NULL);
 }
 
 /**
@@ -1347,23 +1309,19 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
 }
 
 /**
- * @brief Removes user token and returns logout page or logout xml in case of
- * xml_flag is set to true
+ * @brief Removes user token and returns logout xml.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  xml_flag     Flag to indicate if the response should be xml
  * @param[in]  message      Login screen message.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Login XML.
  */
 char *
-logout_xml (credentials_t *credentials, gboolean xml_flag,
+logout_xml (credentials_t *credentials,
             const gchar *message, cmd_response_data_t *response_data)
 {
   time_t now;
-  gchar *xml;
-  char *res;
   char ctime_now[200];
 
   logout(credentials);
@@ -1371,12 +1329,5 @@ logout_xml (credentials_t *credentials, gboolean xml_flag,
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 
-  xml = login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
-
-  if (xml_flag)
-    return xml;
-
-  res = xsl_transform (xml, response_data);
-  g_free (xml);
-  return res;
+  return (login_xml (message, NULL, ctime_now, NULL, NULL, NULL));
 }
