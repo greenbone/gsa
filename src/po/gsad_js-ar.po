@@ -71,7 +71,7 @@ msgstr "اختر تاريخا"
 
 #: src/html/classic/js/greenbone.js:1892
 msgid "Follow link?"
-msgstr "إتبع الوصلة"
+msgstr "؟ إتبع الرابط"
 
 #: src/html/classic/js/greenbone.js:1895
 msgid ""
@@ -86,7 +86,7 @@ msgstr "ألغي"
 
 #: src/html/classic/js/greenbone.js:1901
 msgid "Follow link"
-msgstr "ألغي"
+msgstr "إتبع الرابط"
 
 #: src/html/classic/js/greenbone.js:1974
 msgid "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
@@ -115,7 +115,7 @@ msgstr "تحميل المخطط الفقاعي"
 #: src/html/classic/js/gsa_bubble_chart.js:57
 #: src/html/classic/js/gsa_line_chart.js:79
 msgid "Bubble Chart"
-msgstr "التخطيط الفقاعي"
+msgstr "المخطط الفقاعي"
 
 #: src/html/classic/js/gsa_bubble_chart.js:102
 msgid "No matching {{- resource_type}}"
@@ -136,7 +136,7 @@ msgstr "منخفض"
 
 #: src/html/classic/js/gsa_chart_helpers.js:1432
 msgid "Log"
-msgstr "متوسط"
+msgstr "سجل"
 
 #: src/html/classic/js/gsa_chart_helpers.js:1435
 msgid "False Positive"
@@ -244,7 +244,7 @@ msgstr "قابلية الاختراق عن بعد"
 
 #: src/html/classic/js/gsa_chart_helpers.js:2036
 msgid "Package check"
-msgstr "فصح الباكيج"
+msgstr "فحص الباكيج"
 
 #: src/html/classic/js/gsa_chart_helpers.js:2039
 msgid "Registry check"
