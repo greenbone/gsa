@@ -43,7 +43,7 @@
 
 #include "xslt_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h"
-#include "gsad_base.h" /* for xsl_transform, ctime_r_strip_newline */
+#include "gsad_base.h" /* for ctime_r_strip_newline */
 
 #undef G_LOG_DOMAIN
 /**

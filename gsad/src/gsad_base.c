@@ -7,7 +7,7 @@
  * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2009 Greenbone Networks GmbH
+ * Copyright (C) 2009, 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,6 @@
  * @file gsad_base.c
  * @brief Base functionality of GSA.
  */
-
-/**
- * @brief Location of XSL file.
- */
-#define XSL_PATH "gsad.xsl"
 
 #include "gsad_base.h"
 #include "gsad_params.h"
@@ -187,111 +182,6 @@ ctime_r_strip_newline (time_t *time, char *string)
       return string;
     }
   return string;
-}
-
-/**
- * @brief HTML returned when XSL transform fails.
- */
-#define FAIL_HTML                                                       \
- "<html>"                                                               \
- "<body>"                                                               \
- "An internal server error has occurred during XSL transformation."     \
- "</body>"                                                              \
- "</html>"
-
-/**
- * @brief XSL Transformation.
- *
- * Transforms XML by applying a given XSL stylesheet, usually into HTML.
- *
- * @param[in]  xml_text        The XML text to transform.
- * @param[in]  xsl_stylesheet  The file name of the XSL stylesheet to use.
- * @param[out] response_data   Extra data return for the HTTP response.
- *
- * @return HTML output from XSL transformation.
- */
-char *
-xsl_transform_with_stylesheet (const char *xml_text,
-                               const char *xsl_stylesheet,
-                               cmd_response_data_t *response_data)
-{
-  xsltStylesheetPtr cur = NULL;
-  xmlDocPtr doc, res;
-  xmlChar *doc_txt_ptr = NULL;
-  int doc_txt_len;
-
-  g_debug ("xsl stylesheet: [%s]\n", xml_text);
-  g_debug ("text to transform: [%s]\n", xml_text);
-
-  exsltRegisterAll ();
-  register_i18n_ext_module ();
-
-  xmlSubstituteEntitiesDefault (1);
-  xmlLoadExtDtdDefaultValue = 1;
-  cur = xsltParseStylesheetFile ((const xmlChar *) xsl_stylesheet);
-  if (cur == NULL)
-    {
-      g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-
-  doc = xmlParseMemory (xml_text, strlen (xml_text));
-  if (doc == NULL)
-    {
-      g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
-      xsltFreeStylesheet (cur);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-
-  res = xsltApplyStylesheet (cur, doc, NULL);
-  if (res == NULL)
-    {
-      g_warning ("Failed to apply stylesheet %s", xsl_stylesheet);
-      xsltFreeStylesheet (cur);
-      xmlFreeDoc (doc);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-  xmlFreeDoc (doc);
-
-  if (xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur) < 0)
-    {
-      g_warning ("Failed to store transformation result.");
-      xsltFreeStylesheet (cur);
-      xmlFreeDoc (res);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-
-  xsltFreeStylesheet (cur);
-  xmlFreeDoc (res);
-#ifndef __FreeBSD__
-  malloc_trim (0);
-#endif
-
-  return (char *) doc_txt_ptr;
-}
-
-/**
- * @brief XSL Transformation.
- *
- * Does the transformation from XML to HTML applying omp.xsl.
- *
- * @param[in]  xml_text  The XML text to transform.
- * @param[out] response_data   Extra data return for the HTTP response.
- *
- * @return HTML output from XSL transformation.
- */
-char *
-xsl_transform (const char *xml_text, cmd_response_data_t *response_data)
-{
-  return xsl_transform_with_stylesheet (xml_text, XSL_PATH, response_data);
 }
 
 
