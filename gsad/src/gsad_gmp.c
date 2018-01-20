@@ -65,18 +65,6 @@
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
 #include <gvm/gmp/gmp.h>
 
-/*
- * XSLT includes
- */
-#include <libxml2/libxml/xmlmemory.h>
-#include <libxml2/libxml/HTMLtree.h>
-#include <libxml2/libxml/xmlIO.h>
-#include <libxml2/libxml/xinclude.h>
-#include <libxslt/xslt.h>
-#include <libxslt/xsltInternals.h>
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
-
 #undef G_LOG_DOMAIN
 /**
  * @brief GLib log domain.
