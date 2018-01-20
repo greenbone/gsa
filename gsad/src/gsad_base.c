@@ -35,12 +35,7 @@
 #include <glib.h>
 
 #include "xslt_i18n.h"
-#include <libxml/parser.h>
-#include <libexslt/exslt.h>
 #include <string.h> /* for strlen() */
-#include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
-#include <libxslt/transform.h> /* for xsltApplyStylesheet() */
-#include <libxslt/xsltutils.h> /* for xsltSaveResultToString() */
 #include <sys/param.h>
 #ifndef __FreeBSD__
 #include <malloc.h>
