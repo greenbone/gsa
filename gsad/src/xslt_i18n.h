@@ -34,8 +34,6 @@
  */
 #define DEFAULT_GSAD_LANGUAGE "en"
 
-void register_i18n_ext_module ();
-
 int get_ext_gettext_enabled ();
 
 void set_ext_gettext_enabled (int);
