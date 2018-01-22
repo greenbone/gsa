@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,12 +67,12 @@ const AdvancedTaskWizard = ({
     task_name,
     onValueChange,
   }, {capabilities}) => {
-  let config_opts = render_options(scan_configs);
-  let ssh_credential_opts = render_options(
+  const config_opts = render_options(scan_configs);
+  const ssh_credential_opts = render_options(
     credentials.filter(ssh_credential_filter), '');
-  let smb_credential_opts = render_options(
+  const smb_credential_opts = render_options(
     credentials.filter(smb_credential_filter), '');
-  let esxi_credential_opts = render_options(
+  const esxi_credential_opts = render_options(
     credentials.filter(esxi_credential_filter), '');
   return (
     <Layout flex align={['start', 'start']}>
@@ -131,7 +131,8 @@ const AdvancedTaskWizard = ({
         </FormGroup>
 
         <FormGroup title={_('Task Name')} titleSize="3">
-          <TextField name="task_name"
+          <TextField
+            name="task_name"
             grow="1"
             onChange={onValueChange}
             value={task_name}
@@ -149,13 +150,15 @@ const AdvancedTaskWizard = ({
         </FormGroup>
 
         <FormGroup title={_('Target Host(s)')} titleSize="3">
-          <TextField name="target_hosts"
+          <TextField
+            name="target_hosts"
             grow="1"
             onChange={onValueChange}
             value={target_hosts} maxLength="2000"/>
         </FormGroup>
 
-        <FormGroup title={_('Start Time')}
+        <FormGroup
+          title={_('Start Time')}
           titleSize="3"
           flex="column">
           <Radio
@@ -270,23 +273,23 @@ const AdvancedTaskWizard = ({
 };
 
 AdvancedTaskWizard.propTypes = {
-  scan_configs: PropTypes.array,
-  credentials: PropTypes.array,
-  date: PropTypes.momentDate,
-  task_name: PropTypes.string,
-  config_id: PropTypes.idOrZero,
+  alert_email: PropTypes.string,
   auto_start: PropTypes.oneOf([
     '0', '1', '2',
   ]),
-  target_hosts: PropTypes.string,
+  config_id: PropTypes.idOrZero,
+  credentials: PropTypes.array,
+  date: PropTypes.momentDate,
+  esxi_credential: PropTypes.idOrZero,
+  scan_configs: PropTypes.array,
+  smb_credential: PropTypes.idOrZero,
+  ssh_credential: PropTypes.idOrZero,
+  ssh_port: PropTypes.number,
   start_hour: PropTypes.number,
   start_minute: PropTypes.number,
   start_timezone: PropTypes.string,
-  ssh_credential: PropTypes.idOrZero,
-  ssh_port: PropTypes.number,
-  smb_credential: PropTypes.idOrZero,
-  esxi_credential: PropTypes.idOrZero,
-  alert_email: PropTypes.string,
+  target_hosts: PropTypes.string,
+  task_name: PropTypes.string,
   onValueChange: PropTypes.func,
 };
 
