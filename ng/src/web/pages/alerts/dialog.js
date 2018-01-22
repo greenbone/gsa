@@ -609,11 +609,11 @@ AlertDialog.propTypes = {
   result_filters: PropTypes.array,
   secinfo_filters: PropTypes.array,
   tasks: PropTypes.array,
-  onNewScpCredentialClick: PropTypes.func,
-  onNewSmbCredentialClick: PropTypes.func,
-  onNewVeriniceCredentialClick: PropTypes.func,
+  onNewScpCredentialClick: PropTypes.func.isRequired,
+  onNewSmbCredentialClick: PropTypes.func.isRequired,
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,
-  onValueChange: PropTypes.func,
+  onNewVeriniceCredentialClick: PropTypes.func.isRequired,
+  onValueChange: PropTypes.func.isRequired,
 };
 
 AlertDialog.contextTypes = {
