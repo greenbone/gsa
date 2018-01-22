@@ -43,7 +43,7 @@ import withDialog from '../../components/dialog/withDialog.js';
 import FormGroup from '../../components/form/formgroup.js';
 import PasswordField from '../../components/form/passwordfield.js';
 import Radio from '../../components/form/radio.js';
-import Select2 from '../../components/form/select2.js';
+import MultiSelect from '../../components/form/multiselect.js';
 import TextField from '../../components/form/textfield.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -191,8 +191,7 @@ class Dialog extends React.Component {
         {capabilities.mayAccess('roles') &&
           <FormGroup
             title={_('Roles')}>
-            <Select2
-              multiple
+            <MultiSelect
               name="role_ids"
               value={role_ids}
               onChange={onValueChange}
@@ -208,15 +207,14 @@ class Dialog extends React.Component {
                   );
                 })
               }
-            </Select2>
+            </MultiSelect>
           </FormGroup>
         }
 
         {capabilities.mayAccess('groups') &&
           <FormGroup
             title={_('Groups')}>
-            <Select2
-              multiple
+            <MultiSelect
               name="group_ids"
               value={group_ids}
               onChange={onValueChange}
@@ -232,7 +230,7 @@ class Dialog extends React.Component {
                   );
                 })
               }
-            </Select2>
+            </MultiSelect>
           </FormGroup>
         }
 

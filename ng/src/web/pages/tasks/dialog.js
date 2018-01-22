@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,8 @@ import {render_options} from '../../utils/render.js';
 
 import withDialog from '../../components/dialog/withDialog.js';
 
-import Select2 from '../../components/form/select2.js';
+import MultiSelect from '../../components/form/multiselect.js';
+import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Checkbox from '../../components/form/checkbox.js';
@@ -127,13 +128,13 @@ class ScannerSelect extends React.Component {
     } = this.props;
     return (
       <FormGroup title={_('Scanner')}>
-        <Select2
+        <Select
           name="scanner_id"
           value={scannerId}
           disabled={!changeTask}
           onChange={this.handleScannerChange}>
           {render_options(scanners)}
-        </Select2>
+        </Select>
       </FormGroup>
     );
   }
@@ -246,13 +247,13 @@ const TaskDialog = ({
 
       <FormGroup title={_('Scan Targets')}>
         <Divider>
-          <Select2
+          <Select
             name="target_id"
             disabled={!change_task}
             onChange={onValueChange}
             value={target_id}>
             {target_opts}
-          </Select2>
+          </Select>
           {change_task &&
             <Layout flex box>
               <NewIcon
@@ -267,14 +268,14 @@ const TaskDialog = ({
         condition={capabilities.mayOp('get_alerts')}
         title={_('Alerts')}>
         <Divider>
-          <Select2
+          <MultiSelect
             name="alert_ids"
             multiple="multiple"
             id="alert_ids"
             onChange={onValueChange}
             value={alert_ids}>
             {alert_opts}
-          </Select2>
+          </MultiSelect>
           <Layout flex box>
             <NewIcon
               title={_('Create a new alert')}
@@ -287,12 +288,12 @@ const TaskDialog = ({
         condition={capabilities.mayOp('get_schedules')}
         title={_('Schedule')}>
         <Divider>
-          <Select2
+          <Select
             name="schedule_id"
             value={schedule_id}
             onChange={onValueChange}>
             {schedule_opts}
-          </Select2>
+          </Select>
           <Checkbox
             name="schedule_periods"
             checked={schedule_periods === YES_VALUE}
@@ -373,13 +374,13 @@ const TaskDialog = ({
             <FormGroup
               titleSize="4"
               title={_('Scan Config')}>
-              <Select2
+              <Select
                 name="config_id"
                 value={openvas_config_id}
                 disabled={!change_task}
                 onChange={onValueChange}>
                 {openvas_scan_config_opts}
-              </Select2>
+              </Select>
             </FormGroup>
             <FormGroup
               titleSize="4"
@@ -392,7 +393,7 @@ const TaskDialog = ({
             <FormGroup
               titleSize="4"
               title={_('Order for target hosts')}>
-              <Select2
+              <Select
                 name="hosts_ordering"
                 value={hosts_ordering}
                 onChange={onValueChange}>
@@ -405,7 +406,7 @@ const TaskDialog = ({
                 <option value="reverse">
                   {_('Reverse')}
                 </option>
-              </Select2>
+              </Select>
             </FormGroup>
             <FormGroup
               titleSize="4"
@@ -440,12 +441,12 @@ const TaskDialog = ({
           <FormGroup
             titleSize="4"
             title={_('Scan Config')}>
-            <Select2
+            <Select
               name="config_id"
               value={osp_config_id}
               onChange={onValueChange}>
               {osp_scan_config_opts}
-            </Select2>
+            </Select>
           </FormGroup>
         </Layout>
       }
@@ -465,12 +466,12 @@ const TaskDialog = ({
             unCheckedValue={NO_VALUE}
             checked={add_tag === YES_VALUE}
             title={_('Add Tag:')}/>
-          <Select2
+          <Select
             name="tag_name"
             onChange={onValueChange}
             value={tag_name}>
             {tag_opts}
-          </Select2>
+          </Select>
           <Text>
             {_('with Value')}
           </Text>
