@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ import Text from '../../components/form/text.js';
 import TextArea from '../../components/form/textarea.js';
 import TextField from '../../components/form/textfield.js';
 import Radio from '../../components/form/radio.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 
 const NoteDialog = ({
@@ -288,13 +288,13 @@ const NoteDialog = ({
             checked={task_id === '0'}
             onChange={onValueChange}/>
           {!fixed &&
-            <Select2
+            <Select
               name="task_uuid"
               value={task_uuid}
               disabled={task_id !== '0'}
               onChange={onValueChange}>
               {render_options(tasks)}
-            </Select2>
+            </Select>
           }
         </Divider>
       </FormGroup>
