@@ -135,7 +135,8 @@ class Select extends React.Component {
                   disabled,
                   onClick: isOpen ? undefined : event => {
                     event.preventDefault(); // don't call default handler from downshift
-                    openMenu(() => this.input.focus()); // set focus to input field after menu is opened
+                    openMenu(() =>
+                      is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                   },
                 })}
                 isOpen={isOpen}
