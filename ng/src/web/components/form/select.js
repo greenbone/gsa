@@ -49,6 +49,8 @@ const find_label = (items, value) => {
   return is_defined(item) ? item.label : value;
 };
 
+const DEFAULT_WIDTH = '180px';
+
 class Select extends React.Component {
 
   constructor(...args) {
@@ -91,6 +93,7 @@ class Select extends React.Component {
       items,
       menuPosition,
       value,
+      width = DEFAULT_WIDTH,
     } = this.props;
     const {
       search,
@@ -99,6 +102,8 @@ class Select extends React.Component {
     if (!is_defined(items)) {
       items = option_items(children);
     }
+
+    disabled = disabled || items.length === 0;
 
     const displayedItems = items.filter(case_insensitive_filter(search));
     return (
@@ -123,13 +128,15 @@ class Select extends React.Component {
               {...getRootProps({refKey: 'innerRef'})}
               className={className}
               flex="column"
+              width={width}
             >
               <Box
                 {...getButtonProps({
                   disabled,
                   onClick: isOpen ? undefined : event => {
                     event.preventDefault(); // don't call default handler from downshift
-                    openMenu(() => this.input.focus()); // set focus to input field after menu is opened
+                    openMenu(() =>
+                      is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                   },
                 })}
                 isOpen={isOpen}
@@ -146,7 +153,7 @@ class Select extends React.Component {
                   <ArrowIcon down={isOpen}/>
                 </ArrowButton>
               </Box>
-              {isOpen && items.length > 0 && !disabled &&
+              {isOpen && !disabled &&
                 <Menu position={menuPosition}>
                   <Input
                     {...getInputProps({
@@ -186,6 +193,7 @@ Select.propTypes = {
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   value: PropTypes.any,
+  width: PropTypes.string,
   onChange: PropTypes.func,
 };
 
