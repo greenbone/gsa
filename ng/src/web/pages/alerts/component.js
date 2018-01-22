@@ -324,7 +324,8 @@ class AlertComponent extends React.Component {
             report_formats, value(method.data.verinice_server_report_format)),
           method_data_verinice_server_url: value(
             method.data.verinice_server_url),
-          method_data_verinice_server_credential: verinice_credential_id,
+          method_data_verinice_server_credential: select_save_id(credentials,
+            verinice_credential_id),
 
           method_data_URL: value(method.data.URL, ''),
           tasks,
