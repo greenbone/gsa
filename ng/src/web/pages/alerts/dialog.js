@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {select_save_id} from 'gmp/utils.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
 import {
   CONDITION_TYPE_ALWAYS,
@@ -40,6 +41,7 @@ import {
   METHOD_TYPE_HTTP_GET,
   METHOD_TYPE_SOURCEFIRE,
   METHOD_TYPE_VERINICE,
+  METHOD_TYPE_TIPPING_POINT,
 } from 'gmp/models/alert.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -64,6 +66,7 @@ import StartTaskMethodPart from './starttaskmethodpart.js';
 import SmbMethodPart from './smbmethodpart.js';
 import SnmpMethodPart from './snmpmethodpart.js';
 import SourcefireMethodPart from './sourcefiremethodpart.js';
+import TippingPontMethodPart from './tippingpointmethodpart.js';
 import VeriniceMethodPart from './verinicemethodpart.js';
 
 import TaskEventPart from './taskeventpart.js';
@@ -268,6 +271,9 @@ class AlertDialog extends React.Component {
       method_data_snmp_message,
       method_data_defense_center_ip,
       method_data_defense_center_port,
+      method_data_tp_sms_credential,
+      method_data_tp_sms_hostname,
+      method_data_tp_sms_tls_workaround,
       method_data_verinice_server_url,
       method_data_verinice_server_credential,
       method_data_verinice_server_report_format,
@@ -278,6 +284,7 @@ class AlertDialog extends React.Component {
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
+      onNewTippingPointCredentialClick,
       onValueChange,
     } = this.props;
     const {capabilities} = this.context;
@@ -415,6 +422,9 @@ class AlertDialog extends React.Component {
             <option value={METHOD_TYPE_VERINICE}>
               {_('verinice.PRO Connector')}
             </option>
+            <option value={METHOD_TYPE_TIPPING_POINT}>
+              {_('TippingPoint SMS')}
+            </option>
           </Select2>
         </FormGroup>
 
@@ -517,6 +527,18 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         }
 
+        {method === METHOD_TYPE_TIPPING_POINT &&
+          <TippingPontMethodPart
+            prefix="method_data"
+            credentials={credentials}
+            tpSmsCredential={method_data_tp_sms_credential}
+            tpSmsHostname={method_data_tp_sms_hostname}
+            tpSmsTlsWorkaround={method_data_tp_sms_tls_workaround}
+            onNewCredentialClick={onNewTippingPointCredentialClick}
+            onChange={onValueChange}
+          />
+        }
+
         <FormGroup title={_('Active')}>
           <YesNoRadio
             name="active"
@@ -576,6 +598,9 @@ AlertDialog.propTypes = {
   method_data_start_task_task: PropTypes.id,
   method_data_subject: PropTypes.string,
   method_data_to_address: PropTypes.string,
+  method_data_tp_sms_credential: PropTypes.id,
+  method_data_tp_sms_hostname: PropTypes.string,
+  method_data_tp_sms_tls_workaround: PropTypes.yesno,
   method_data_verinice_server_credential: PropTypes.id,
   method_data_verinice_server_report_format: PropTypes.id,
   method_data_verinice_server_url: PropTypes.string,
@@ -584,10 +609,11 @@ AlertDialog.propTypes = {
   result_filters: PropTypes.array,
   secinfo_filters: PropTypes.array,
   tasks: PropTypes.array,
-  onNewScpCredentialClick: PropTypes.func,
-  onNewSmbCredentialClick: PropTypes.func,
-  onNewVeriniceCredentialClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  onNewScpCredentialClick: PropTypes.func.isRequired,
+  onNewSmbCredentialClick: PropTypes.func.isRequired,
+  onNewTippingPointCredentialClick: PropTypes.func.isRequired,
+  onNewVeriniceCredentialClick: PropTypes.func.isRequired,
+  onValueChange: PropTypes.func.isRequired,
 };
 
 AlertDialog.contextTypes = {
@@ -598,7 +624,7 @@ export default withDialog({
   title: _('New Alert'),
   footer: _('Save'),
   defaultState: {
-    active: 1,
+    active: YES_VALUE,
     comment: '',
     condition: CONDITION_TYPE_ALWAYS,
     condition_data_at_least_count: 1,
@@ -636,6 +662,8 @@ export default withDialog({
     method_data_subject: TASK_SUBJECT,
     method_data_submethod: 'syslog',
     method_data_to_address: '',
+    method_data_tp_sms_hostname: '',
+    method_data_tp_sms_tls_workaround: NO_VALUE,
     method_data_URL: '',
     name: _('Unnamed'),
     report_formats: [],

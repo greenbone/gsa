@@ -380,6 +380,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/table.js
      ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/details.js
