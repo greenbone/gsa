@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {select_save_id} from 'gmp/utils.js';
-import {NO_VALUE} from 'gmp/parser.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
 import {
   CONDITION_TYPE_ALWAYS,
@@ -624,7 +624,7 @@ export default withDialog({
   title: _('New Alert'),
   footer: _('Save'),
   defaultState: {
-    active: 1,
+    active: YES_VALUE,
     comment: '',
     condition: CONDITION_TYPE_ALWAYS,
     condition_data_at_least_count: 1,
