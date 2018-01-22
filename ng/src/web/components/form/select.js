@@ -103,6 +103,8 @@ class Select extends React.Component {
       items = option_items(children);
     }
 
+    disabled = disabled || items.length === 0;
+
     const displayedItems = items.filter(case_insensitive_filter(search));
     return (
       <Downshift
@@ -150,7 +152,7 @@ class Select extends React.Component {
                   <ArrowIcon down={isOpen}/>
                 </ArrowButton>
               </Box>
-              {isOpen && items.length > 0 && !disabled &&
+              {isOpen && !disabled &&
                 <Menu position={menuPosition}>
                   <Input
                     {...getInputProps({
