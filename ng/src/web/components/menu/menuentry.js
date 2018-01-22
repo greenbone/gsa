@@ -70,7 +70,11 @@ const MenuEntry = ({
   }
 
   return (
-    <Layout grow="1" align={['start', 'stretch']}>
+    <Layout
+      {...props}
+      grow="1"
+      align={['start', 'stretch']}
+    >
       {entry}
     </Layout>
   );

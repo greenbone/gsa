@@ -1324,7 +1324,6 @@ exec_gmp_post (http_connection_t *con,
   credentials_t *credentials;
   gchar *res = NULL, *new_sid, *url;
   const gchar *cmd, *caller, *language, *password;
-  gboolean xml_flag;
   authentication_reason_t auth_reason;
   gvm_connection_t connection;
   cmd_response_data_t *response_data;
@@ -1332,7 +1331,6 @@ exec_gmp_post (http_connection_t *con,
   params_mhd_validate (con_info->params);
 
   cmd = params_value (con_info->params, "cmd");
-  xml_flag = params_value_bool (con_info->params, "xml");
 
   if (cmd && !strcmp (cmd, "login"))
     {
@@ -1376,7 +1374,7 @@ exec_gmp_post (http_connection_t *con,
                          params_value (con_info->params, "login") ?: "",
                          client_address);
               return handler_send_reauthentication(con, status,
-                                                   auth_reason, xml_flag);
+                                                   auth_reason);
             }
           else
             {
@@ -1413,7 +1411,7 @@ exec_gmp_post (http_connection_t *con,
                      params_value (con_info->params, "login") ?: "",
                      client_address);
           return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                               LOGIN_FAILED, xml_flag);
+                                               LOGIN_FAILED);
         }
     }
 
@@ -1471,7 +1469,7 @@ exec_gmp_post (http_connection_t *con,
       cmd_response_data_free (response_data);
 
       return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                           SESSION_EXPIRED, xml_flag);
+                                           SESSION_EXPIRED);
     }
 
   if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
@@ -1479,7 +1477,7 @@ exec_gmp_post (http_connection_t *con,
       cmd_response_data_free (response_data);
 
       return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                           BAD_MISSING_COOKIE, xml_flag);
+                                           BAD_MISSING_COOKIE);
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_GMP_DOWN ||
@@ -1494,7 +1492,7 @@ exec_gmp_post (http_connection_t *con,
       cmd_response_data_free (response_data);
 
       return handler_send_reauthentication(con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                           auth_reason, xml_flag);
+                                           auth_reason);
     }
 
   /* From here, the user is authenticated. */
@@ -1539,9 +1537,7 @@ exec_gmp_post (http_connection_t *con,
       case -1:
         cmd_response_data_free (response_data);
         return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                              GMP_SERVICE_DOWN,
-                                              params_value_bool
-                                                (con_info->params, "xml"));
+                                              GMP_SERVICE_DOWN);
       case -2:
         res = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
