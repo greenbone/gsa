@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,5 +292,26 @@ export const avg = (array = [], getter) => {
   }
   return sum(array, getter) / array.length;
 };
+
+export function arrays_equal(arr1, arr2) {
+  if (Object.is(arr1, arr2)) {
+    return true;
+  }
+
+  if (!is_array(arr1) || !is_array(arr2)) {
+    return false;
+  }
+
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
 
 // vim: set ts=2 sw=2 tw=80:
