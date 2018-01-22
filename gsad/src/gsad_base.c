@@ -34,7 +34,7 @@
 
 #include <glib.h>
 
-#include "xslt_i18n.h"
+#include <libxml/parser.h> /* for xmlHasFeature() */
 #include <string.h> /* for strlen() */
 #include <sys/param.h>
 #ifndef __FreeBSD__
@@ -80,7 +80,6 @@ gsad_base_init ()
 int
 gsad_base_cleanup ()
 {
-  xsltCleanupGlobals ();
   xmlCleanupParser ();
   return 0;
 }
