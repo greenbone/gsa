@@ -30,7 +30,7 @@ import {render_options} from '../utils/render.js';
 
 import withDialog from '../components/dialog/withDialog.js';
 
-import Select2 from '../components/form/select2.js';
+import Select from '../components/form/select.js';
 import Spinner from '../components/form/spinner.js';
 import FormGroup from '../components/form/formgroup.js';
 import TextField from '../components/form/textfield.js';
@@ -141,12 +141,12 @@ const AdvancedTaskWizard = ({
         </FormGroup>
 
         <FormGroup title={_('Scan Config')} titleSize="3">
-          <Select2
+          <Select
             name="config_id"
             value={config_id}
             onChange={onValueChange}>
             {config_opts}
-          </Select2>
+          </Select>
         </FormGroup>
 
         <FormGroup title={_('Target Host(s)')} titleSize="3">
@@ -220,12 +220,12 @@ const AdvancedTaskWizard = ({
         </FormGroup>
 
         <FormGroup title={_('SSH Credential')} titleSize="3">
-          <Select2
+          <Select
             value={ssh_credential}
             name="ssh_credential"
             onChange={onValueChange}>
             {ssh_credential_opts}
-          </Select2>
+          </Select>
           <Text>
             {_(' on port ')}
           </Text>
@@ -238,21 +238,21 @@ const AdvancedTaskWizard = ({
         </FormGroup>
 
         <FormGroup title={_('SMB Credential')} titleSize="3">
-          <Select2
+          <Select
             value={smb_credential}
             name="smb_credential"
             onChange={onValueChange}>
             {smb_credential_opts}
-          </Select2>
+          </Select>
         </FormGroup>
 
         <FormGroup title={_('ESXi Credential')} titleSize="3">
-          <Select2
+          <Select
             value={esxi_credential}
             name="esxi_credential"
             onChange={onValueChange}>
             {esxi_credential_opts}
-          </Select2>
+          </Select>
         </FormGroup>
 
         {capabilities.mayCreate('alert') &&
