@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Text from '../../components/form/text.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -64,13 +64,13 @@ const MultiplePermissionDialog = ({
     <Layout flex="column">
       <FormGroup
         title={_('Grant')}>
-        <Select2
+        <Select
           name="permission"
           value={permission}
           onChange={onValueChange}>
           <option value="read">{_('read')}</option>
           <option value="proxy">{_('proxy')}</option>
-        </Select2>
+        </Select>
         <Text>{_('Permission')}</Text>
       </FormGroup>
       <FormGroup
@@ -86,7 +86,7 @@ const MultiplePermissionDialog = ({
               value="user"
               onChange={onValueChange}>
             </Radio>
-            <Select2
+            <Select
               name="user_id"
               value={user_id}
               onChange={onValueChange}>
@@ -97,7 +97,7 @@ const MultiplePermissionDialog = ({
                   {user.name}
                 </option>
               ))}
-            </Select2>
+            </Select>
           </Divider>
         }
 
@@ -110,7 +110,7 @@ const MultiplePermissionDialog = ({
               value="role"
               onChange={onValueChange}>
             </Radio>
-            <Select2
+            <Select
               name="role_id"
               value={role_id}
               onChange={onValueChange}>
@@ -123,7 +123,7 @@ const MultiplePermissionDialog = ({
                   </option>
                 );
               })}
-            </Select2>
+            </Select>
           </Divider>
         }
 
@@ -136,7 +136,7 @@ const MultiplePermissionDialog = ({
               value="group"
               onChange={onValueChange}>
             </Radio>
-            <Select2
+            <Select
               name="group_id"
               value={group_id}
               onChange={onValueChange}>
@@ -147,7 +147,7 @@ const MultiplePermissionDialog = ({
                   {group.name}
                 </option>
               ))}
-            </Select2>
+            </Select>
           </Divider>
         }
       </FormGroup>
@@ -157,7 +157,7 @@ const MultiplePermissionDialog = ({
         <Divider>
           <Text>{type_name(entity_type)}</Text>
           <i>{entity_name}</i>
-          <Select2
+          <Select
             name="include_related"
             value={include_related}
             onChange={onValueChange}>
@@ -176,7 +176,7 @@ const MultiplePermissionDialog = ({
                 {_('for related resources only')}
               </option>
             }
-          </Select2>
+          </Select>
         </Divider>
         {has_related &&
           <ul>

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ import {noop_convert} from '../../components/form/form.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
 import TextField from '../../components/form/textfield.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import EditIcon from '../../components/icon/editicon.js';
@@ -67,7 +67,7 @@ class NvtPreferenceDisplay extends React.Component {
   }
 
   render() {
-    let {
+    const {
       config,
       preference,
       onEditNvtDetailsClick,
@@ -104,7 +104,7 @@ NvtPreferenceDisplay.propTypes = {
 class NvtPreferences extends React.Component {
 
   render() {
-    let {
+    const {
       config,
       preferences,
       onEditNvtDetailsClick,
@@ -165,7 +165,7 @@ class ScannerPreference extends React.Component {
   }
 
   render() {
-    let {
+    const {
       preference,
       value,
       onPreferenceChange,
@@ -232,7 +232,7 @@ class ScannerPreferences extends React.Component {
   }
 
   onPreferenceChange(value, name) {
-    let {values, onValueChange} = this.props;
+    const {values, onValueChange} = this.props;
 
     values[name] = value;
 
@@ -240,7 +240,7 @@ class ScannerPreferences extends React.Component {
   }
 
   render() {
-    let  {preferences, values} = this.props;
+    const {preferences, values} = this.props;
     return (
       <Section
         foldable
@@ -300,7 +300,7 @@ class NvtFamily extends React.Component {
   }
 
   render() {
-    let {
+    const {
       config,
       family,
       select,
@@ -309,9 +309,9 @@ class NvtFamily extends React.Component {
       onSelectChange,
       onTrendChange,
     } = this.props;
-    let {name} = family;
-    let config_family = config.families[name];
-    let counts = {
+    const {name} = family;
+    const config_family = config.families[name];
+    const counts = {
       count: 0,
       max: family.max,
     };
@@ -393,7 +393,7 @@ class NvtFamilies extends React.Component {
   }
 
   onSelectChange(value, name) {
-    let {select, onValueChange} = this.props;
+    const {select, onValueChange} = this.props;
 
     select[name] = value;
 
@@ -401,7 +401,7 @@ class NvtFamilies extends React.Component {
   }
 
   onTrendChange(value, name) {
-    let {trend, onValueChange} = this.props;
+    const {trend, onValueChange} = this.props;
 
     trend[name] = value;
 
@@ -409,7 +409,7 @@ class NvtFamilies extends React.Component {
   }
 
   render() {
-    let {
+    const {
       config,
       families,
       trend,
@@ -445,7 +445,7 @@ class NvtFamilies extends React.Component {
           <TableBody>
             {
               map(families, family => {
-                let {name} = family;
+                const {name} = family;
                 return (
                   <NvtFamily
                     key={name}
@@ -487,7 +487,7 @@ NvtFamilies.propTypes = {
 class EditDialog extends React.Component {
 
   render() {
-    let {
+    const {
       comment,
       config,
       families,
@@ -527,13 +527,13 @@ class EditDialog extends React.Component {
         {!config.isInUse() &&
           config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
           <FormGroup title={_('Scanner')}>
-            <Select2
+            <Select
               name="scanner_id"
               value={scanner_id}
               onChange={onValueChange}
             >
               {render_options(scanners)}
-            </Select2>
+            </Select>
           </FormGroup>
         }
 
@@ -577,9 +577,9 @@ EditDialog.propTypes = {
   config: PropTypes.model.isRequired,
   families: PropTypes.array,
   name: PropTypes.string,
-  scanners: PropTypes.array,
   scanner_id: PropTypes.id,
   scanner_preference_values: PropTypes.object,
+  scanners: PropTypes.array,
   select: PropTypes.object,
   trend: PropTypes.object,
   onEditConfigFamilyClick: PropTypes.func,
