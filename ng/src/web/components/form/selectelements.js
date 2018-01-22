@@ -128,7 +128,9 @@ export const SelectContainer = glamorous.div({
   display: 'flex',
   flexDirection: 'column',
   position: 'relative',
-});
+}, ({width}) => ({
+  width,
+}));
 
 export const SelectedValue = glamorous.div({
   display: 'flex',
