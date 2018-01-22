@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,8 @@ const method_data_fields = [
   'start_task_task', 'send_host', 'send_port', 'send_report_format',
   'scp_credential', 'scp_host', 'scp_known_hosts', 'scp_path',
   'scp_report_format', 'smb_credential', 'smb_file_path', 'smb_report_format',
-  'smb_share_path',
+  'smb_share_path', 'tp_sms_hostname', 'tp_sms_credential',
+  'tp_sms_tls_certificate', 'tp_sms_tls_workaround',
 ];
 const condition_data_fields = [
   'severity', 'direction', 'at_least_filter_id',
