@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -194,7 +194,7 @@ const PermissionDialog = ({
     <Layout flex="column">
 
       <FormGroup title={_('Name')}>
-        <Select2
+        <Select
           name="name"
           value={name}
           onChange={onValueChange}>
@@ -202,7 +202,7 @@ const PermissionDialog = ({
             {_('Super (Has super access)')}
           </option>
           {perm_opts}
-        </Select2>
+        </Select>
       </FormGroup>
 
       <FormGroup title={_('Comment')}>
@@ -228,7 +228,7 @@ const PermissionDialog = ({
                 value="user"
                 onChange={onValueChange}>
               </Radio>
-              <Select2
+              <Select
                 name="user_id"
                 value={user_id}
                 onChange={onValueChange}>
@@ -241,7 +241,7 @@ const PermissionDialog = ({
                     </option>
                   );
                 })}
-              </Select2>
+              </Select>
             </Divider>
           }
           {capabilities.mayAccess('roles') &&
@@ -253,7 +253,7 @@ const PermissionDialog = ({
                 value="role"
                 onChange={onValueChange}>
               </Radio>
-              <Select2
+              <Select
                 name="role_id"
                 value={role_id}
                 onChange={onValueChange}>
@@ -266,7 +266,7 @@ const PermissionDialog = ({
                     </option>
                   );
                 })}
-              </Select2>
+              </Select>
             </Divider>
           }
           {capabilities.mayAccess('groups') &&
@@ -278,7 +278,7 @@ const PermissionDialog = ({
                 value="group"
                 onChange={onValueChange}>
               </Radio>
-              <Select2
+              <Select
                 name="group_id"
                 value={group_id}
                 onChange={onValueChange}>
@@ -291,7 +291,7 @@ const PermissionDialog = ({
                     </option>
                   );
                 })}
-              </Select2>
+              </Select>
             </Divider>
           }
         </Divider>
@@ -299,7 +299,7 @@ const PermissionDialog = ({
 
       {name === 'Super' &&
         <FormGroup title={_('Resource Type')}>
-          <Select2
+          <Select
             name="resource_type"
             value={resource_type}
             onChange={onValueChange}>
@@ -307,7 +307,7 @@ const PermissionDialog = ({
             <option value="user">{_('User')}</option>
             <option value="role">{_('Role')}</option>
             <option value="group">{_('Group')}</option>
-          </Select2>
+          </Select>
         </FormGroup>
       }
       {show_resource_id &&

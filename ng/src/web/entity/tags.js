@@ -33,7 +33,7 @@ import {first, is_defined} from 'gmp/utils.js';
 import PropTypes from '../utils/proptypes.js';
 
 import TextField from '../components/form/textfield.js';
-import Select2 from '../components/form/select2.js';
+import Select from '../components/form/select.js';
 
 import EditIcon from '../components/icon/editicon.js';
 import ManualIcon from '../components/icon/manualicon.js';
@@ -132,7 +132,7 @@ class AddTag extends React.Component {
     return (
       <Divider>
         <b>{_('Add Tag')}</b>
-        <Select2
+        <Select
           name="name"
           value={name}
           onChange={this.onValueChange}>
@@ -143,7 +143,7 @@ class AddTag extends React.Component {
               </option>
             );
           })}
-        </Select2>
+        </Select>
         <span>with Value</span>
         <TextField
           name="value"

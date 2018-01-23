@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ import withGmp from '../../utils/withGmp.js';
 import {render_options} from '../../utils/render.js';
 
 import FormGroup from '../../components/form/formgroup.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import withClickHandler from '../../components/form/withClickHandler.js';
 
 import ManualIcon from '../../components/icon/manualicon.js';
@@ -325,13 +325,13 @@ class PerformancePage extends React.Component {
           </FormGroup>
 
           <FormGroup title={_('Report for GMP Scanner')}>
-            <Select2
+            <Select
               name="slave_id"
               value={slave_id}
               onChange={this.handleValueChange}
             >
               {render_options(scanners, 0)}
-            </Select2>
+            </Select>
           </FormGroup>
 
           {reports.map(report => (

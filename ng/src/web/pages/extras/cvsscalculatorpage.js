@@ -38,7 +38,7 @@ import SeverityBar from '../../components/bar/severitybar.js';
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import FormGroup from '../../components/form/formgroup.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 
 import Section from '../../components/section/section.js';
@@ -50,13 +50,7 @@ import withGmp from '../../utils/withGmp.js';
 import PropTypes from '../../utils/proptypes.js';
 
 const StyledTextField = glamorous(TextField)({
-  width: '210px',
-});
-
-const StyledSelect2 = glamorous(Select2)({
-  '& .select2-container': {
-    width: '210px !important',
-  },
+  width: '180px',
 });
 
 const ToolBarIcons = () => (
@@ -197,40 +191,43 @@ class CvssCalculator extends React.Component {
 
         <h3>{_('From Metrics')}:</h3>
         <FormGroup title={_('Access Vector')}>
-          <StyledSelect2
+          <Select
             name="access_vector"
             value={access_vector}
+            menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
             <option value="LOCAL">{_('Local')}</option>
             <option value="ADJACENT_NETWORK">{_('Adjacent')}</option>
             <option value="NETWORK">{_('Network')}</option>
-          </StyledSelect2>
+          </Select>
         </FormGroup>
         <FormGroup title={_('Access Complexity')}>
-          <StyledSelect2
+          <Select
             name="access_complexity"
             value={access_complexity}
+            menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
             <option value="LOW">{_('Low')}</option>
             <option value="MEDIUM">{_('Medium')}</option>
             <option value="HIGH">{_('High')}</option>
-          </StyledSelect2>
+          </Select>
         </FormGroup>
         <FormGroup title={_('Authentication')}>
-          <StyledSelect2
+          <Select
             name="authentication"
             value={authentication}
+            menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
             <option value="NONE">{_('None')}</option>
             <option value="SINGLE_INSTANCES">{_('Single')}</option>
             <option value="MULTIPLE_INSTANCES">{_('Multiple')}</option>
-          </StyledSelect2>
+          </Select>
         </FormGroup>
         <FormGroup title={_('Confidentiality')}>
-          <StyledSelect2
+          <Select
             name="confidentiality_impact"
             value={confidentiality_impact}
             onChange={this.handleMetricsChange}
@@ -238,29 +235,31 @@ class CvssCalculator extends React.Component {
             <option value="NONE">{_('None')}</option>
             <option value="PARTIAL">{_('Partial')}</option>
             <option value="COMPLETE">{_('Complete')}</option>
-          </StyledSelect2>
+          </Select>
         </FormGroup>
         <FormGroup title={_('Integrity')}>
-          <StyledSelect2
+          <Select
             name="integrity_impact"
             value={integrity_impact}
+            menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
             <option value="NONE">{_('None')}</option>
             <option value="PARTIAL">{_('Partial')}</option>
             <option value="COMPLETE">{_('Complete')}</option>
-          </StyledSelect2>
+          </Select>
         </FormGroup>
         <FormGroup title={_('Availability')}>
-          <StyledSelect2
+          <Select
             name="availability_impact"
             value={availability_impact}
+            menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
             <option value="NONE">{_('None')}</option>
             <option value="PARTIAL">{_('Partial')}</option>
             <option value="COMPLETE">{_('Complete')}</option>
-          </StyledSelect2>
+          </Select>
         </FormGroup>
 
         <h3>{_('From Vector')}:</h3>

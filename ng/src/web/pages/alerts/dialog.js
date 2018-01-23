@@ -49,7 +49,7 @@ import {render_options} from '../../utils/render.js';
 
 import withDialog from '../../components/dialog/withDialog.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 import Radio from '../../components/form/radio.js';
@@ -390,17 +390,17 @@ class AlertDialog extends React.Component {
         {capabilities.mayOp('get_filters') &&
           is_task_event &&
           <FormGroup title={_('Report Result Filter')}>
-            <Select2
+            <Select
               value={filter_id}
               name="filter_id"
               onChange={onValueChange}>
               {render_options(result_filters, 0)}
-            </Select2>
+            </Select>
           </FormGroup>
         }
 
         <FormGroup title={_('Method')}>
-          <Select2
+          <Select
             name="method"
             value={method}
             onChange={onValueChange}>
@@ -422,10 +422,7 @@ class AlertDialog extends React.Component {
             <option value={METHOD_TYPE_VERINICE}>
               {_('verinice.PRO Connector')}
             </option>
-            <option value={METHOD_TYPE_TIPPING_POINT}>
-              {_('TippingPoint SMS')}
-            </option>
-          </Select2>
+          </Select>
         </FormGroup>
 
         {method === METHOD_TYPE_EMAIL &&

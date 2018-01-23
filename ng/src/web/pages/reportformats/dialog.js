@@ -35,7 +35,8 @@ import FormGroup from '../../components/form/formgroup.js';
 import Spinner from '../../components/form/spinner.js';
 import TextArea from '../../components/form/textarea.js';
 import TextField from '../../components/form/textfield.js';
-import Select2 from '../../components/form/select2.js';
+import MultiSelect from '../../components/form/multiselect.js';
+import Select from '../../components/form/select.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -59,8 +60,7 @@ const ReportFormatListParam = ({
         {name}
       </TableData>
       <TableData>
-        <Select2
-          multiple
+        <MultiSelect
           name={name}
           value={idList}
           onChange={onValueChange}
@@ -74,7 +74,7 @@ const ReportFormatListParam = ({
               </option>
             );
           })}
-        </Select2>
+        </MultiSelect>
       </TableData>
     </TableRow>
   );
@@ -92,8 +92,8 @@ const Param = ({
     value,
     onPrefChange,
   }) => {
-  let {name, type, min, max} = value;
-  let field_value = data[name];
+  const {name, type, min, max} = value;
+  const field_value = data[name];
 
   let field;
   if (type === 'boolean') {
@@ -129,7 +129,7 @@ const Param = ({
   }
   else if (type === 'selection') {
     field = (
-      <Select2
+      <Select
         name={name}
         value={is_array(field_value) ? field_value : [field_value]}
         onChange={onPrefChange}
@@ -143,7 +143,7 @@ const Param = ({
             </option>
           ))
         }
-      </Select2>
+      </Select>
     );
   }
   else {
@@ -185,7 +185,7 @@ class Dialog extends React.Component {
   }
 
   handlePrefChange(value, name) {
-    let {preferences, onValueChange} = this.props;
+    const {preferences, onValueChange} = this.props;
 
     preferences[name] = value;
 
@@ -195,7 +195,7 @@ class Dialog extends React.Component {
   }
 
   handleIdListsChange(value, name) {
-    let {id_lists, onValueChange} = this.props;
+    const {id_lists, onValueChange} = this.props;
 
     if (!has_value(value)) {
       value = [];

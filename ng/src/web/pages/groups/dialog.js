@@ -34,7 +34,7 @@ import withDialog from '../../components/dialog/withDialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import FormGroup from '../../components/form/formgroup.js';
-import Select2 from '../../components/form/select2.js';
+import MultiSelect from '../../components/form/multiselect.js';
 import TextField from '../../components/form/textfield.js';
 
 const Dialog = ({
@@ -73,8 +73,7 @@ const Dialog = ({
 
       <FormGroup
         title={_('Users')}>
-        <Select2
-          multiple
+        <MultiSelect
           name="users"
           value={users}
           onChange={onValueChange}
@@ -90,7 +89,7 @@ const Dialog = ({
               );
             })
           }
-        </Select2>
+        </MultiSelect>
       </FormGroup>
 
       {!is_edit &&

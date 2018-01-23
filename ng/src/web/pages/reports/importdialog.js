@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ import withDialog from '../../components/dialog/withDialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Text from '../../components/form/text.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
@@ -59,12 +59,12 @@ const ImportDialog = ({
     </FormGroup>
     <FormGroup title={_('Container Task')} flex>
       <Divider>
-        <Select2
+        <Select
           name="task_id"
           value={task_id}
           onChange={onValueChange}>
           {render_options(tasks)}
-        </Select2>
+        </Select>
         {newContainerTask &&
           <NewIcon
             title={_('Create new Container Task')}

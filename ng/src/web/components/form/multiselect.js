@@ -49,6 +49,8 @@ import {
   SelectedValue,
 } from './selectelements.js';
 
+const DEFAULT_WIDTH = '250px';
+
 const MultiSelectedValue = glamorous(SelectedValue)({
   display: 'inline',
   border: '1px solid #aaa',
@@ -162,7 +164,8 @@ class MultiSelect extends React.Component {
       className,
       disabled = false,
       items,
-      menuPosition,
+      menuPosition = 'adjust',
+      width = DEFAULT_WIDTH,
     } = this.props;
     const {
       search,
@@ -194,6 +197,7 @@ class MultiSelect extends React.Component {
               {...getRootProps({refKey: 'innerRef'})}
               className={className}
               flex="column"
+              width={width}
             >
               <Box
                 isOpen={isOpen}

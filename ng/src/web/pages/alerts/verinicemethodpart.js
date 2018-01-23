@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 
@@ -69,12 +69,12 @@ const VeriniceMethodPart = ({
 
       <FormGroup title={_('Credential')}>
         <Divider>
-          <Select2
+          <Select
             name={prefix + 'verinice_server_credential'}
             value={veriniceServerCredential}
             onChange={onChange}>
             {verinice_credential_opts}
-          </Select2>
+          </Select>
           <Layout flex box>
             <NewIcon
               title={_('Create a credential')}
@@ -85,12 +85,12 @@ const VeriniceMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('verinice.PRO Report')}>
-        <Select2
+        <Select
           name={prefix + 'verinice_server_report_format'}
           value={veriniceServerReportFormat}
           onChange={onChange}>
           {verinice_report_format_opts}
-        </Select2>
+        </Select>
       </FormGroup>
 
     </Layout>

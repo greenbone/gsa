@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import withDialog from '../../components/dialog/withDialog.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
@@ -42,12 +42,12 @@ import Layout from '../../components/layout/layout.js';
 
 const TimeUnitSelect = props => {
   return (
-    <Select2 {...props} defaultValue="hour">
+    <Select {...props} defaultValue="hour">
       <option value="hour">{_('hour(s)')}</option>
       <option value="day">{_('day(s)')}</option>
       <option value="week">{_('week(s)')}</option>
       <option value="month">{_('month(s)')}</option>
-    </Select2>
+    </Select>
   );
 };
 

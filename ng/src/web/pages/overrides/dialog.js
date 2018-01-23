@@ -47,7 +47,7 @@ import Spinner from '../../components/form/spinner.js';
 import Text from '../../components/form/text.js';
 import TextArea from '../../components/form/textarea.js';
 import TextField from '../../components/form/textfield.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 
 const OverrideDialog = ({
     active,
@@ -288,7 +288,7 @@ const OverrideDialog = ({
             checked={custom_severity === '0'}
             onChange={onValueChange}>
           </Radio>
-          <Select2
+          <Select
             name="new_severity_from_list"
             value={new_severity_from_list}
             disabled={custom_severity !== '0'}
@@ -302,7 +302,7 @@ const OverrideDialog = ({
             <option value={2.0}>2.0 ({_('Low')}</option>
             <option value={0.0}>{_('Log')}</option>
             <option value={-1.0}>{_('False Positive')}</option>
-          </Select2>
+          </Select>
           <Radio
             name="custom_severity"
             value="1"
@@ -334,13 +334,13 @@ const OverrideDialog = ({
             checked={task_id === '0'}
             onChange={onValueChange}/>
           {!fixed &&
-            <Select2
+            <Select
               name="task_uuid"
               value={task_uuid}
               disabled={task_id !== '0'}
               onChange={onValueChange}>
               {render_options(tasks)}
-            </Select2>
+            </Select>
           }
         </Layout>
       </FormGroup>
