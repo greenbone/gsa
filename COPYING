@@ -15,10 +15,6 @@ APLv2: See http://www.apache.org/licenses/LICENSE-2.0
 These are the files that are not licensed GPLv2+, any others
 are licensed under GPLv2+:
 
-gsad/src/html/classic/css/jquery-ui.structure.css,
-gsad/src/html/classic/css/jquery-ui.structure.min.css,
-gsad/src/html/classic/css/jquery-ui.theme.css,
-gsad/src/html/classic/css/jquery-ui.theme.min.css,
 gsad/src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40.png,
 gsad/src/html/classic/css/images/ui-bg_diagonals-thick_30_666666_40x40.png,
 gsad/src/html/classic/css/images/ui-bg_flat_10_000000_40x100.png,
