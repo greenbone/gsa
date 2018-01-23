@@ -128,6 +128,7 @@ storiesOf('Form/Select', module)
       <Box>
         <SelectBox>
           <Select
+            width="auto"
             onChange={action('select value change')}
           >
             <option value="foo">Foo</option>
