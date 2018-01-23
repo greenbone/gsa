@@ -716,7 +716,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="heading">Error Message</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>
   <xsl:param name="token"></xsl:param>
-  <div class="panel panel-error">
+  <div class="panel panel-error" style="width: 520px; margin: 0 auto;">
     <div class="panel-heading">
       <xsl:value-of select="$heading"/>
     </div>
@@ -732,7 +732,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              style="margin-left:10px; margin-top:10px; text-align:left;"/>
       </span>
 -->
-      <div style="width: 500px; margin: 0 auto;">
+      <div>
         <xsl:copy-of select="$message"/>
       </div>
     </div>

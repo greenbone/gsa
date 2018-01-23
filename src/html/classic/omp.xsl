@@ -39025,7 +39025,39 @@ should not have received it.
 <xsl:template match="get_asset">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_asset_response"/>
+  <xsl:variable name="asset_type" select="gsa:lower-case (/envelope/params/asset_type)"/>
+  <xsl:variable name="asset_id" select="/envelope/params/asset_id"/>
   <xsl:choose>
+    <xsl:when test="get_assets_response/@status = '404'">
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">
+          <xsl:value-of select="gsa:i18n ('Asset not found')"/>
+        </xsl:with-param>
+        <xsl:with-param name="message">
+          <xsl:choose>
+            <xsl:when test="$asset_type = 'host'">
+              <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('The host %1 could not be found or you do not have the permissions to access it.'), $asset_id)"/>
+            </xsl:when>
+            <xsl:when test="$asset_type = 'os'">
+              <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('The OS %1 could not be found or you do not have the permissions to access it.'), $asset_id)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('The asset %1 could not be found or you do not have the permissions to access it.'), $asset_id)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="get_assets_response/@status != '200'">
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">
+          <xsl:value-of select="gsa:i18n ('Error getting asset')"/>
+        </xsl:with-param>
+        <xsl:with-param name="message">
+          <xsl:value-of select="get_assets_response/@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="/envelope/params/asset_type = 'HOST' or /envelope/params/asset_type = 'host'">
       <xsl:apply-templates select="get_assets_response/asset" mode="host-details"/>
     </xsl:when>
