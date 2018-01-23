@@ -25,6 +25,7 @@
 
 #include <string.h> /* for strcmp */
 #include <assert.h> /* for assert */
+#include <stdlib.h> /* for abort */
 
 #include "gsad_http_handler.h"
 #include "gsad_gmp.h" /* for get_system_report_gmp */

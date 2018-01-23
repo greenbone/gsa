@@ -26,7 +26,6 @@
 #ifndef _XSLT_I18N_H
 #define _XSLT_I18N_H
 
-#include <libxslt/extensions.h>
 #include <glib.h>
 
 /**
