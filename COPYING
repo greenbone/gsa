@@ -13,33 +13,26 @@ MIT: See file COPYING.MIT
 These are the files that are not licensed GPLv2+, any others
 are licensed under GPLv2+:
 
-gsad/src/html/classic/css/jquery-ui.structure.css,
-gsad/src/html/classic/css/jquery-ui.structure.min.css,
-gsad/src/html/classic/css/jquery-ui.theme.css,
-gsad/src/html/classic/css/jquery-ui.theme.min.css,
-gsad/src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40.png,
-gsad/src/html/classic/css/images/ui-bg_diagonals-thick_30_666666_40x40.png,
-gsad/src/html/classic/css/images/ui-bg_flat_10_000000_40x100.png,
-gsad/src/html/classic/css/images/ui-bg_glass_65_ffffff_1x400.png,
-gsad/src/html/classic/css/images/ui-bg_highlight-hard_35_66c430_1x100.png,
-gsad/src/html/classic/css/images/ui-bg_highlight-soft_100_519032_1x100.png,
-gsad/src/html/classic/css/images/ui-bg_highlight-soft_100_87d050_1x100.png,
-gsad/src/html/classic/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png,
-gsad/src/html/classic/css/images/ui-bg_highlight-soft_75_fdc300_1x100.png,
-gsad/src/html/classic/css/images/ui-icons_222222_256x240.png,
-gsad/src/html/classic/css/images/ui-icons_519032_256x240.png,
-gsad/src/html/classic/css/images/ui-icons_87d050_256x240.png,
-gsad/src/html/classic/css/images/ui-icons_aa0000_256x240.png,
-gsad/src/html/classic/css/images/ui-icons_fdc300_256x240.png,
-gsad/src/html/classic/css/images/ui-icons_ffffff_256x240.png,
+ng/src/web/css/images/ui-bg_diagonals-thick_18_aa0000_40x40.png,
+ng/src/web/css/images/ui-bg_diagonals-thick_30_666666_40x40.png,
+ng/src/web/css/images/ui-bg_flat_10_000000_40x100.png,
+ng/src/web/css/images/ui-bg_glass_65_ffffff_1x400.png,
+ng/src/web/css/images/ui-bg_highlight-hard_35_66c430_1x100.png,
+ng/src/web/css/images/ui-bg_highlight-soft_100_519032_1x100.png,
+ng/src/web/css/images/ui-bg_highlight-soft_100_87d050_1x100.png,
+ng/src/web/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png,
+ng/src/web/css/images/ui-bg_highlight-soft_75_fdc300_1x100.png,
+ng/src/web/css/images/ui-icons_222222_256x240.png,
+ng/src/web/css/images/ui-icons_519032_256x240.png,
+ng/src/web/css/images/ui-icons_87d050_256x240.png,
+ng/src/web/css/images/ui-icons_aa0000_256x240.png,
+ng/src/web/css/images/ui-icons_fdc300_256x240.png,
+ng/src/web/css/images/ui-icons_ffffff_256x240.png,
 ng/src/web/css/jquery-ui.theme.css,
-ng/src/web/css/jquery-ui.structure.css
   License: MIT
   Copyright: jQuery Foundation, Inc. and other contributors
   Origin: http://jqueryui.com/download/
 
-gsad/src/html/classic/css/select2.css,
-gsad/src/html/classic/css/select2.min.css,
 ng/src/web/components/form/css/select2.css
   License: MIT
   Copyright: Kevin Brown, Igor Vaynberg, and Select2 contributors
