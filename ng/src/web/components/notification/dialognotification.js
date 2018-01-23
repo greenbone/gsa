@@ -34,6 +34,7 @@ import DialogContent from '../dialog/content.js';
 import DialogFooter from '../dialog/footer.js';
 import DialogTitle from '../dialog/title.js';
 import ScrollableContent from '../dialog/scrollablecontent.js';
+import FootNote from '../footnote/footnote.js';
 
 import Wrapper from '../layout/wrapper.js';
 
@@ -52,21 +53,22 @@ class DialogNotification extends React.Component {
   }
 
   handleShowError(error) {
-    this.handleShowErrorMessage(error.message);
+    this.handleShowErrorMessage(error.message, error.details);
   }
 
-  handleShowErrorMessage(message) {
-    this.handleShowMessage(message, _('Error'));
+  handleShowErrorMessage(message, details) {
+    this.handleShowMessage(message, _('Error'), details);
   }
 
-  handleShowSuccessMessage(message) {
-    this.handleShowMessage(message, _('Success'));
+  handleShowSuccessMessage(message, details) {
+    this.handleShowMessage(message, _('Success'), details);
   }
 
-  handleShowMessage(message, subject = _('Message')) {
+  handleShowMessage(message, subject = _('Message'), details) {
     this.setState({
       message,
       title: subject,
+      details,
     });
   }
 
@@ -85,7 +87,7 @@ class DialogNotification extends React.Component {
       return null;
     }
 
-    const {title, message} = this.state;
+    const {title, message, details} = this.state;
     return (
       <Wrapper>
         {children({
@@ -112,6 +114,9 @@ class DialogNotification extends React.Component {
               />
               <ScrollableContent {...heightProps}>
                 {message}
+                {details
+                  ? <FootNote>{details}</FootNote>
+                  : null}
               </ScrollableContent>
               <DialogFooter
                 title={_('Close')}

@@ -328,7 +328,7 @@ static gchar *next_page_url (credentials_t *, params_t *, const char *,
 static gchar *action_result_page (gvm_connection_t *, credentials_t *,
                                   params_t *, cmd_response_data_t *,
                                   const char*, const char*, const char*,
-                                  const char*);
+                                  const char*, const char*);
 
 static gchar* response_from_entity (gvm_connection_t *, credentials_t*,
                                     params_t *, entity_t, int, const char*,
@@ -831,7 +831,7 @@ check_modify_config (gvm_connection_t *connection,
         = action_result_page (connection, credentials, params, response_data,
                               "Save Config",
                               entity_attribute (entity, "status"),
-                              message, next_url);
+                              message, NULL, next_url);
 
       g_free (next_url);
       free_entity (entity);
@@ -850,7 +850,7 @@ check_modify_config (gvm_connection_t *connection,
       response
         = action_result_page (connection, credentials, params, response_data, "Save Config",
                               entity_attribute (entity, "status"),
-                              message, next_url);
+                              message, NULL, next_url);
 
       g_free (next_url);
       free_entity (entity);
@@ -1442,6 +1442,7 @@ next_page_url (credentials_t *credentials, params_t *params,
  * @param[in]  action         Name of the action.
  * @param[in]  status         Status code.
  * @param[in]  message        Status message.
+ * @param[in]  details        Status details.
  * @param[in]  next_url       URL of next page.
  *
  * @return Result of XSL transformation.
@@ -1451,18 +1452,21 @@ action_result_page (gvm_connection_t *connection,
                     credentials_t *credentials, params_t *params,
                     cmd_response_data_t *response_data,
                     const char* action, const char* status,
-                    const char* message, const char* next_url)
+                    const char* message, const char* details,
+                    const char* next_url)
 {
   gchar *xml;
   xml = g_markup_printf_escaped ("<action_result>"
                                  "<action>%s</action>"
                                  "<status>%s</status>"
                                  "<message>%s</message>"
+                                 "<details>%s</details>"
                                  "<next>%s</next>"
                                  "</action_result>",
                                  action ? action : "",
                                  status ? status : "",
                                  message ? message : "",
+                                 details ? details : "",
                                  next_url ? next_url : "");
   return xsl_transform_gmp (connection, credentials, params, xml,
                             response_data);
@@ -1495,7 +1499,7 @@ message_invalid (gvm_connection_t *connection,
                             status, message);
   ret = action_result_page (connection, credentials, params, response_data,
                             op_name, G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            message,
+                            message, NULL,
                             next_url);
   g_free (next_url);
   response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
@@ -1517,6 +1521,8 @@ response_from_entity (gvm_connection_t *connection,
                       const char* action, cmd_response_data_t *response_data)
 {
   gchar *res, *next_url;
+  entity_t status_details_entity;
+  const char *status_details;
   int success;
   success = gmp_success (entity);
 
@@ -1538,12 +1544,22 @@ response_from_entity (gvm_connection_t *connection,
                                 entity_attribute (entity, "status_text"));
     }
 
+  status_details_entity = entity_child (entity, "status_details");
+  if (status_details_entity)
+    {
+      status_details = status_details_entity->text;
+    }
+  else
+    {
+      status_details = NULL;
+    }
+
   if (no_redirect || success == 0)
     {
       res = action_result_page (connection, credentials, params, response_data,
                                 action, entity_attribute (entity, "status"),
                                 entity_attribute (entity, "status_text"),
-                                next_url);
+                                status_details, next_url);
       g_free (next_url);
     }
   else
@@ -21812,6 +21828,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                  "Create Permissions",
                                  G_STRINGIFY (MHD_HTTP_CREATED),
                                  summary_response,
+                                 NULL,
                                  next_url);
       g_free (next_url);
     }

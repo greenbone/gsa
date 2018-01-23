@@ -72,6 +72,10 @@ class X2JsTransform extends Transform {
         }
 
         if (is_defined(envelope.action_result)) {
+          if (is_defined (envelope.action_result.details)
+              && envelope.action_result.details !== '') {
+            rej.setDetails (envelope.action_result.details);
+          }
           return rej.setMessage(envelope.action_result.message);
         }
       }

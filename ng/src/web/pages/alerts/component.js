@@ -366,9 +366,25 @@ class AlertComponent extends React.Component {
       if (is_defined(onTestSuccess)) {
         onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
       }
-    }, () => {
+    }, response => {
       if (is_defined(onTestError)) {
-        onTestError(_('Testing the alert {{name}} failed.', alert));
+        if (is_defined(response) && is_defined(response.message)) {
+          onTestError(_('Testing the alert {{name}} failed: {{message}}',
+                        {
+                          name: alert.name,
+                          message: response.message,
+                          interpolation: { escapeValue: false }
+                        }),
+                      response.details,
+                     );
+        }
+        else {
+          onTestError(_('Testing the alert {{name}} failed.',
+                        {
+                          name: alert.name,
+                          interpolation: { escapeValue: false }
+                        }));
+        }
       }
     });
   }

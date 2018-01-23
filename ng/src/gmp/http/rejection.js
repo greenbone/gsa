@@ -57,6 +57,11 @@ class Rejection {
     this.message = message;
     return this;
   }
+
+  setDetails(details) {
+    this.details = details;
+    return this;
+  }
 }
 
 export default Rejection;
