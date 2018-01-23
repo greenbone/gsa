@@ -7,7 +7,7 @@
 # Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2015 - 2017 Greenbone Networks GmbH
+# Copyright (C) 2015 - 2018 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -43,22 +43,6 @@ macro (MAKE_TRANSLATION _LANG)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
           DESTINATION ${GSA_DATA_DIR}/classic/js/locales)
 
-  # .mo file for XSL
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${_LANG}/gsad_xsl.mo
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po
-                      COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
-                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po -o ${CMAKE_CURRENT_BINARY_DIR}/${_LANG}/gsad_xsl.mo)
-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${_LANG}/gsad_xsl.mo
-           DESTINATION ${GSA_LOCALE_DIR}/${_LANG}/LC_MESSAGES)
-
-  # Merge .po files with .pot
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}-merged.po
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
-                      COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
-                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_xsl-${_LANG}.po
-                      ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
-                      -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}-merged.po)
-
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po
                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
                       COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
@@ -78,17 +62,6 @@ if (GETTEXT_FOUND)
     MAKE_TRANSLATION (zh_CN)
 
     # Installed files
-    add_custom_target (gettext-mo
-                       ALL
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ar/gsad_xsl.mo
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/de/gsad_xsl.mo
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/fr/gsad_xsl.mo
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pt_BR/gsad_xsl.mo
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ru/gsad_xsl.mo
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tr/gsad_xsl.mo
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zh_CN/gsad_xsl.mo
-                       COMMENT "Created translation .mo files")
-
     add_custom_target (gettext-json
                        ALL
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ar.json
@@ -103,7 +76,6 @@ if (GETTEXT_FOUND)
     # Merged .po files
     add_custom_target (gettext-merge
                        DEPENDS gettext-js-merge
-                       DEPENDS gettext-xsl-merge
                        COMMENT "Merged translation .po files")
 
     add_custom_target (gettext-js-merge
@@ -117,22 +89,10 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-zh_CN-merged.po
                        COMMENT "Merged translation .po files for JS")
 
-    add_custom_target (gettext-xsl-merge
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ar-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-fr-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-pt_BR-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ru-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-tr-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh_CN-merged.po
-                       COMMENT "Merged translation .po files for XSL")
-
     # Template (.pot) files
     # All template files
     add_custom_target (gettext-pot
-                       DEPENDS gettext-js-pot
-                       DEPENDS gettext-xsl-pot)
+                       DEPENDS gettext-js-pot)
 
     # JS template files
     add_custom_target (gettext-js-pot
@@ -145,17 +105,6 @@ if (GETTEXT_FOUND)
                                 "${CMAKE_SOURCE_DIR}/ng"
                         DEPENDS ${NG_JS_SRC_FILES}
                         COMMENT "Creating translation template (.pot) file from JS")
-
-    # XSL template files
-    add_custom_target (gettext-xsl-pot
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot)
-
-    add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
-                        COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/xsl2pot"
-                        ARGS    "${CMAKE_SOURCE_DIR}/gsad/src/html/classic"
-                                "${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot"
-                        DEPENDS ${CMAKE_SOURCE_DIR}/gsad/src/html/classic/*.xsl
-                        COMMENT "Creating translation template (.pot) file from XSLT")
 
   else (PY_POLIB_FOUND)
     message (WARNING "Could not build translation files: Python interpreter or polib Python module not found.")
