@@ -192,21 +192,6 @@ add_custom_target (cppcheck COMMENT "Running cppcheck..."
 add_custom_target (check COMMENT "Checking code...")
 add_dependencies (check cppcheck)
 
-## Very superficial check if stylesheets are fine
-
-if (PATH_TO_XSLTPROC)
-  add_custom_target (omp-xsl-syntax ALL
-                                    COMMENT "Checking syntax of omp.xsl"
-                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp.xsl
-                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp.xsl)
-  add_custom_target (gsad-xsl-syntax ALL
-                                     COMMENT "Checking syntax of gsad.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl)
-else (PATH_TO_XSLTPROC)
-  message ("Not performing simple stylesheet tests -- xsltproc not found.")
-endif (PATH_TO_XSLTPROC)
-
 ## Tag files
 
 set (C_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
