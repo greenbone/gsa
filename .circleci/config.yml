@@ -23,7 +23,11 @@ jobs:
       - run:
           working_directory: ~/gsa/ng
           name: Run JavaScript tests
-          command: yarn test
+          command: yarn test --coverage
+      - run:
+          working_directory: ~/gsa/ng
+          name: Submit test coverage to codecov.io
+          command: bash <(curl -s https://codecov.io/bash)
   build_gsad:
     docker:
       - image: wiegandm/gsa-gsad-debian-stretch
