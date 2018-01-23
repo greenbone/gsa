@@ -6,11 +6,10 @@ License Version 2 or any later version (GNU GPLv2+).
 
 Most files, are licensed under GNU General Public License Version 2
 or any later version (GNU GPLv2+). Some files have a different licenses
-(Apache Version 2 and MIT).
+(MIT).
 
-GPLv2: See file COPYING.GPL
-MIT: See file COPYING.MIT
-APLv2: See http://www.apache.org/licenses/LICENSE-2.0
+GPLv2: See file LICENSE
+MIT: See file https://opensource.org/licenses/MIT
 
 These are the files that are not licensed GPLv2+, any others
 are licensed under GPLv2+:
