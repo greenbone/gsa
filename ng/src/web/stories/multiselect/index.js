@@ -51,7 +51,7 @@ const items = os.operating_systems.map(o => ({
 }));
 
 const SelectBox = glamorous.div({
-  width: '100px',
+  width: '120px', // this is the recommended minimum for MultiSelect
   border: '1px solid blue',
   padding: '5px',
 });
@@ -91,8 +91,9 @@ class ControlledMultiSelect extends React.Component {
           <option>Bar</option>
           <option>Fool</option>
           <option>Blubb</option>
-          <option>Blablabadljsdg</option>
-          <option>Ackbar</option>
+          <option>SlightlyLomgerWord</option>
+          <option>VeryLongWordToStretchItAllABit</option>
+          <option>Option</option>
         </MultiSelect>
       </Sizer>
     );
@@ -136,12 +137,14 @@ storiesOf('Form/MultiSelect', module)
       <Box>
         <SelectBox>
           <MultiSelect
+            width="auto"
             onChange={action('select value change')}
           >
             <option value="foo">Foo</option>
             <option value="bar">Bar</option>
             <option value="lore">Lore</option>
             <option value="ipsum">Ipsum</option>
+            <option value="longword">Somewhatlongerwordtotest</option>
           </MultiSelect>
         </SelectBox>
       </Box>
