@@ -91,7 +91,7 @@ const TabLayout = glamorous(Layout)({
   borderBottom: '1px solid ' + Theme.extra.lightGray,
   marginTop: '30px',
   marginBottom: '15px',
-  paddingBottom: '3px',
+  paddingBottom: '0px',
 });
 
 const TabTitleCounts = glamorous.span({
