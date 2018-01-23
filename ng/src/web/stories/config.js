@@ -28,6 +28,7 @@ function loadStories() {
   console.clear();
 
   require('./select');
+  require('./multiselect');
 }
 
 configure(loadStories, module);
