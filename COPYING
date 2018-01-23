@@ -40,8 +40,6 @@ ng/src/web/css/jquery-ui.structure.css
   Copyright: jQuery Foundation, Inc. and other contributors
   Origin: http://jqueryui.com/download/
 
-gsad/src/html/classic/css/select2.css,
-gsad/src/html/classic/css/select2.min.css,
 ng/src/web/components/form/css/select2.css
   License: MIT
   Copyright: Kevin Brown, Igor Vaynberg, and Select2 contributors
