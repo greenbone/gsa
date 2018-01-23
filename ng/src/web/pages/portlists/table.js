@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          width="59%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -60,6 +61,7 @@ const Header = ({
           {_('Name')}
         </TableHead>
         <TableHead
+          width="33%"
           colSpan="3">
           {_('Port Counts')}
         </TableHead>
@@ -70,6 +72,7 @@ const Header = ({
       </TableRow>
       <TableRow>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'total' : false}
@@ -77,6 +80,7 @@ const Header = ({
           {_('Total')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'tcp' : false}
@@ -84,6 +88,7 @@ const Header = ({
           {_('TCP')}
         </TableHead>
         <TableHead
+          width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'udp' : false}

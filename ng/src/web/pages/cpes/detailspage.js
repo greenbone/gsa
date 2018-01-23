@@ -29,14 +29,17 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
+import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
 import {InfoLayout} from '../../entity/info.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
+import ExportIcon from '../../components/icon/exporticon.js';
 import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
@@ -51,19 +54,34 @@ import TableRow from '../../components/table/row.js';
 
 import CpeDetails from './details.js';
 
-const ToolBarIcons = () => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cpe"
-      title={_('Help: CPEs')}
+const ToolBarIcons = ({
+  entity,
+  onCpeDownloadClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="cpe"
+        title={_('Help: CPEs')}
+      />
+      <ListIcon
+        title={_('CPE List')}
+        page="cpes"
+      />
+    </IconDivider>
+    <ExportIcon
+      value={entity}
+      title={_('Export CPE')}
+      onClick={onCpeDownloadClick}
     />
-    <ListIcon
-      title={_('CPE List')}
-      page="cpes"
-    />
-  </IconDivider>
+  </Divider>
 );
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onCpeDownloadClick: PropTypes.func.isRequired,
+};
 
 const EntityInfo = ({
   entity,
@@ -156,16 +174,25 @@ const CpePage = props => (
       onError,
       ...cprops
     }) => (
-      <EntityPage
-        {...props}
-        {...cprops}
-        sectionIcon="cpe.svg"
-        title={_('CPE')}
-        detailsComponent={Details}
-        infoComponent={EntityInfo}
-        permissionsComponent={false}
-        toolBarIcons={ToolBarIcons}
-      />
+      <EntityComponent
+        name="cpe"
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+      >
+        {({download}) => (
+          <EntityPage
+            {...props}
+            {...cprops}
+            sectionIcon="cpe.svg"
+            title={_('CPE')}
+            detailsComponent={Details}
+            infoComponent={EntityInfo}
+            permissionsComponent={false}
+            toolBarIcons={ToolBarIcons}
+            onCpeDownloadClick={download}
+          />
+        )}
+      </EntityComponent>
     )}
   </EntityContainer>
 );

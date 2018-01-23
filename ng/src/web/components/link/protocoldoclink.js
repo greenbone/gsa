@@ -36,7 +36,7 @@ const ProtocolDocLink = ({
 
   return (
     <BlankLink
-      href={protocoldocurl}
+      to={protocoldocurl}
       title={title}
     >
       {title}

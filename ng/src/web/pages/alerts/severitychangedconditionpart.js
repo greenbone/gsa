@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ import Divider from '../../components/layout/divider.js';
 import PropTypes from '../../utils/proptypes.js';
 import withPrefix from '../../utils/withPrefix.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Radio from '../../components/form/radio.js';
 
 const VALUE = 'Severity changed';
@@ -50,14 +50,14 @@ const SeverityChangedConditionPart = ({
         checked={condition === VALUE}
         onChange={onChange}>
       </Radio>
-      <Select2
+      <Select
         value={direction}
         name={prefix + 'direction'}
         onChange={onChange}>
         <option value="changed">{_('changed')}</option>
         <option value="increased">{_('increased')}</option>
         <option value="decreased">{_('decreased')}</option>
-      </Select2>
+      </Select>
     </Divider>
   );
 };

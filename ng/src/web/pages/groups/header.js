@@ -47,6 +47,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          width="92%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}

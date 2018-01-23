@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
 import withRowDetails from '../../entities/withRowDetails.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Text from '../../components/form/text.js';
 
 import Sort from '../../components/sortby/sortby.js';
@@ -67,6 +67,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          width="30%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -74,6 +75,7 @@ const Header = ({
           {_('Name')}
         </TableHead>
         <TableHead
+          width="20%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
@@ -81,6 +83,7 @@ const Header = ({
           {_('Hosts')}
         </TableHead>
         <TableHead
+          width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'ips' : false}
@@ -88,27 +91,28 @@ const Header = ({
           {_('IPs')}
         </TableHead>
         <TableHead
+          width="15%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'port_list' : false}
           onSortChange={onSortChange}>
           {_('Port List')}
         </TableHead>
-        <TableHead flex>
+        <TableHead flex width="22%">
           <Text>
             <Sort by={sort ? select_sort : false} onClick={onSortChange}>
               {_('Credentials')}
             </Sort>
           </Text>
           {sort !== false &&
-            <Select2
+            <Select
               value={select_sort}
               onChange={onSortChange}>
               <option value="ssh_credential">{_('SSH')}</option>
               <option value="smb_credential">{_('SMB')}</option>
               <option value="esxi_credential">{_('ESXi')}</option>
               <option value="snmp_credential">{_('SNMP')}</option>
-            </Select2>
+            </Select>
           }
         </TableHead>
         {actionsColumn}

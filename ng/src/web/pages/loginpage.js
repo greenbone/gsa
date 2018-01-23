@@ -226,38 +226,8 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const {type} = this.props.location.query;
     const {error} = this.state;
     let message;
-
-    switch (type) {
-      case 'failed':
-        message = _('Login failed.');
-        break;
-      case 'error':
-        message = _('Login failed. Error during authentication.');
-        break;
-      case 'gmpdown':
-        message = _('Login failed. GMP Service is down.');
-        break;
-      case 'session':
-        message = _('Session expired. Please login again.');
-        break;
-      case 'already':
-        message = _('Already logged out.');
-        break;
-      case 'token':
-        message = _('Token missing or bad. Please login again.');
-        break;
-      case 'cookie':
-        message = _('Cookie missing or bad. Please login again.');
-        break;
-      case 'logout':
-        message = _('Successfully logged out.');
-        break;
-      default:
-        break;
-    }
 
     if (error) {
       if (is_empty(error.message)) {

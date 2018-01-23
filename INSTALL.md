@@ -23,7 +23,6 @@ Prerequisites:
 * libmicrohttpd >= 0.9.0
 * libexslt
 * pkg-config
-* xsltproc
 
 Prerequisites for using translations:
 * gettext
@@ -35,7 +34,7 @@ Prerequisites for building documentation:
 * Doxygen
 * xmltoman (optional, for building man page)
 
-Prerequisites to work on the translations from C and XSLT based sources and
+Prerequisites to work on the translations from C based sources and
 also to build the JavaScript translations:
 * python-polib
 

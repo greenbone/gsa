@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/set';
 
 import React from 'react';
 
@@ -154,6 +155,8 @@ class EntitiesContainer extends React.Component {
 
     const token = new CancelToken(cancel => this.cancel = cancel);
 
+    log.debug('Loading', options);
+
     entities_command.get({filter, ...extraLoadParams}, {
       cache,
       cancel_token: token,
@@ -171,6 +174,8 @@ class EntitiesContainer extends React.Component {
         const reverse = is_defined(reverse_field);
         const field = reverse ? reverse_field : loaded_filter.get('sort');
 
+        log.debug('Loaded entities', response);
+
         this.setState({
           entities,
           entities_counts,
@@ -181,8 +186,6 @@ class EntitiesContainer extends React.Component {
           sortDir: reverse ? SortBy.DESC : SortBy.ASC,
           updating: false,
         });
-
-        log.debug('Loaded entities', response);
 
         if (meta.fromcache && (meta.dirty || reload)) {
           log.debug('Forcing reload of entities', meta.dirty, reload);

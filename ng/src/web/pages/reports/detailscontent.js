@@ -37,7 +37,7 @@ import EntityInfo from '../../entity/info.js';
 import StatusBar from '../../components/bar/statusbar.js';
 import ToolBar from '../../components/bar/toolbar.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -91,7 +91,7 @@ const TabLayout = glamorous(Layout)({
   borderBottom: '1px solid ' + Theme.extra.lightGray,
   marginTop: '30px',
   marginBottom: '15px',
-  paddingBottom: '3px',
+  paddingBottom: '0px',
 });
 
 const TabTitleCounts = glamorous.span({
@@ -139,13 +139,13 @@ const ToolBarIcons = ({
         />
       </IconDivider>
       <IconDivider>
-        <Select2
+        <Select
           name="report_format_id"
           value={report_format_id}
           onChange={onReportFormatChange}
         >
           {render_options(report_formats)}
-        </Select2>
+        </Select>
         <Icon
           img="download.svg"
           title={_('Download filtered Report')}

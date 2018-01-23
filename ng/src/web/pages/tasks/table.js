@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,22 +61,28 @@ const Header = ({
           {...sortProps}
           rowSpan="2"
           sortBy="name"
+          width="41%"
         >
           {_('Name')}
         </TableHead>
         <TableHead
           {...sortProps}
           rowSpan="2"
-          width="10em"
+          width="8%"
           sortBy="status"
         >
           {_('Status')}
         </TableHead>
-        <TableHead colSpan="2">{_('Reports')}</TableHead>
+        <TableHead
+          width="30%"
+          colSpan="2"
+        >
+          {_('Reports')}
+        </TableHead>
         <TableHead
           {...sortProps}
           rowSpan="2"
-          width="10em"
+          width="8%"
           sortBy="severity"
         >
           {_('Severity')}
@@ -84,7 +90,7 @@ const Header = ({
         <TableHead
           {...sortProps}
           rowSpan="2"
-          width="6em"
+          width="5%"
           sortBy="trend"
         >
           {_('Trend')}
@@ -95,12 +101,14 @@ const Header = ({
         <TableHead
           {...sortProps}
           sortBy="total"
+          width="6%"
         >
           {_('Total')}
         </TableHead>
         <TableHead
           {...sortProps}
           sortBy="last"
+          width="24%"
         >
           {_('Last')}
         </TableHead>

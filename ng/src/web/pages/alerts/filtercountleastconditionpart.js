@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 import Radio from '../../components/form/radio.js';
 
@@ -55,12 +55,12 @@ const FilterCountLeastConditionPart = ({
         checked={condition === VALUE}
         onChange={onChange}>
       </Radio>
-      <Select2
+      <Select
         value={atLeastFilterId}
         name={prefix + 'at_least_filter_id'}
         onChange={onChange}>
         {render_options(filters)}
-      </Select2>
+      </Select>
       <Layout>
         {_('matches at least')}
       </Layout>

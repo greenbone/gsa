@@ -57,25 +57,13 @@
 #include "gsad_gmp.h"
 #include "gsad_settings.h" /* for vendor_version_get */
 #include "gsad_http.h" /* for gsad_message, logout_xml */
-#include "gsad_base.h" /* for xsl_transform */
+#include "gsad_base.h" /* for set_language_code */
 #include "xslt_i18n.h"
 
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
 #include <gvm/gmp/gmp.h>
-
-/*
- * XSLT includes
- */
-#include <libxml2/libxml/xmlmemory.h>
-#include <libxml2/libxml/HTMLtree.h>
-#include <libxml2/libxml/xmlIO.h>
-#include <libxml2/libxml/xinclude.h>
-#include <libxslt/xslt.h>
-#include <libxslt/xsltInternals.h>
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
 
 #undef G_LOG_DOMAIN
 /**
@@ -499,7 +487,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
   time_t now;
   gchar *res, *name;
   GString *string;
-  char *html;
   char ctime_now[200];
   params_iterator_t iter;
   param_t *param;
@@ -679,38 +666,9 @@ xsl_transform_gmp (gvm_connection_t *connection,
                           xml);
   g_free (xml);
 
-  if (params_value_bool (params, "xml"))
-    {
-      cmd_response_data_set_content_type(response_data,
-                                         GSAD_CONTENT_TYPE_APP_XML);
-      return g_string_free (string, FALSE);
-    }
-
-  html = xsl_transform (string->str, response_data);
   cmd_response_data_set_content_type(response_data,
-                                     GSAD_CONTENT_TYPE_TEXT_HTML);
-  g_string_free (string, TRUE);
-  if (html == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      res = g_strdup_printf ("<gsad_response>"
-                             "<title>Internal Error</title>"
-                             "<message>"
-                             "An internal server error has occurred during XSL"
-                             " transformation."
-                             "</message>"
-                             "</gsad_response>");
-      html = xsl_transform (res, response_data);
-      if (html == NULL)
-        html = g_strdup ("<html>"
-                         "<body>"
-                         "An internal server error has occurred during XSL"
-                         " transformation."
-                         "</body>"
-                         "</html>");
-      g_free (res);
-    }
-  return html;
+                                     GSAD_CONTENT_TYPE_APP_XML);
+  return g_string_free (string, FALSE);
 }
 
 /**
@@ -1347,7 +1305,7 @@ next_page_url (credentials_t *credentials, params_t *params,
                const char* action_message)
 {
   GString *url;
-  const char *next_cmd, *xml_param, *next_xml_param;
+  const char *next_cmd;
   params_iterator_t iter;
   gchar *param_name;
   param_t *current_param;
@@ -1370,9 +1328,6 @@ next_page_url (credentials_t *credentials, params_t *params,
   else
     next_cmd = "get_tasks";
 
-  xml_param = params_value (params, "xml");
-  next_xml_param = params_value (params, "next_xml");
-
   g_string_append (url, next_cmd);
 
   params_iterator_init (&iter, params);
@@ -1394,15 +1349,6 @@ next_page_url (credentials_t *credentials, params_t *params,
                                     ? current_param->value
                                     : "");
         }
-    }
-
-  if (next_xml_param)
-    {
-      g_string_append_printf (url, "&xml=%s", next_xml_param);
-    }
-  else if (xml_param)
-    {
-      g_string_append_printf (url, "&xml=%s", xml_param);
     }
 
   if (action_status)
@@ -2067,9 +2013,8 @@ get_many (gvm_connection_t *connection, const char *type,
 {
   GString *xml;
   GString *type_many; /* The plural form of type */
-  gchar *filter_type, *request, *built_filter;
-  int no_filter_history;
-  const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
+  gchar *request, *built_filter;
+  const char *build_filter, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value, *min_qod;
@@ -2077,11 +2022,8 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *level_false_positive;
   const char *details;
 
-  no_filter_history = params_value(params, "no_filter_history")
-                        ? atoi (params_value(params, "no_filter_history"))
-                        : 0;
   build_filter = params_value(params, "build_filter");
-  given_filt_id = params_value (params, "filt_id");
+  filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
   first = params_value (params, "first");
@@ -2104,33 +2046,6 @@ get_many (gvm_connection_t *connection, const char *type,
 
   if (details == NULL || strcmp (details, "") == 0)
     details = "0";
-
-  if (strcasecmp (type, "info") == 0)
-    filter_type = g_strdup (params_value (params, "info_type"));
-  else
-    filter_type = g_strdup (type);
-
-  if (given_filt_id)
-    {
-      if (no_filter_history == 0
-          && strcmp (given_filt_id, FILT_ID_NONE)
-          && strcmp (given_filt_id, FILT_ID_USER_SETTING))
-        g_tree_replace (credentials->last_filt_ids, filter_type,
-                        g_strdup (given_filt_id));
-      else
-        g_free (filter_type);
-
-      filt_id = given_filt_id;
-    }
-  else
-    {
-      if (no_filter_history == 0
-          && (filter == NULL || strcmp (filter, "") == 0))
-        filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
-      else
-        filt_id = NULL;
-      g_free (filter_type);
-    }
 
   /* check if filter still exists */
   switch (filter_exists (connection, filt_id))
@@ -7572,7 +7487,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   param_t *param;
 
   const char *data_column, *group_column, *subgroup_column, *type;
-  const char *filter, *filt_id, *xml_param;
+  const char *filter, *filt_id;
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
@@ -7604,13 +7519,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       else
         filter_escaped = NULL;
     }
-  xml_param = params_value (params, "xml");
 
-  if (xml_param == NULL || atoi (xml_param) == 0)
-    {
-      return xsl_transform_gmp (connection, credentials,params,
-                                g_strdup ("<get_aggregate/>"), response_data);
-    }
   xml = g_string_new ("<get_aggregate>");
 
   command = g_string_new ("<get_aggregates");
@@ -25300,7 +25209,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       free_entity (entity);
       g_free (response);
-      html = logout_xml (credentials, params_value_bool (params, "xml"),
+      html = logout_xml (credentials,
                          "Authentication method changed. Please login with "
                          "LDAP password.", response_data);
     }

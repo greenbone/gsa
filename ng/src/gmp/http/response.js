@@ -22,37 +22,38 @@
  */
 class Response {
 
-  constructor(data, meta = {}) {
+  constructor(xhr, data, meta = {}) {
+    this._xhr = xhr;
     this._data = data;
     this._meta = meta;
   }
 
   set(data, meta) {
-    return new Response(data, {...this._meta, ...meta});
+    return new Response(this._xhr, data, {...this._meta, ...meta});
   }
 
   setMeta(meta) {
-    return new Response(this._data, {...this._meta, ...meta});
-  }
-
-  getMeta() {
-    return this._meta;
+    return new Response(this._xhr, this._data, {...this._meta, ...meta});
   }
 
   setData(data) {
-    return new Response(data, this._meta);
+    return new Response(this._xhr, data, this._meta);
   }
 
-  getData() {
-    return this._data;
+  plainData(type = '') {
+    if (type === 'xml') {
+      return this._xhr.responseXML;
+    }
+    this._xhr.responseType = type;
+    return this._xhr.response;
   }
 
   get meta() {
-    return this.getMeta();
+    return this._meta;
   }
 
   get data() {
-    return this.getData();
+    return this._data;
   }
 }
 

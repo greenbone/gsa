@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
 import PasswordField from '../../components/form/passwordfield.js';
 import Radio from '../../components/form/radio.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
@@ -136,12 +136,12 @@ class CredentialsDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Type')}>
-          <Select2
+          <Select
             onChange={this.handleTypeChange}
             disabled={is_edit}
             value={base}>
             {type_opts}
-          </Select2>
+          </Select>
         </FormGroup>
 
         <FormGroup title={_('Allow insecure use')}>

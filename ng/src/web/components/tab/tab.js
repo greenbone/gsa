@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,18 +32,30 @@ const StyledDiv = glamorous.div(
   {
     fontSize: '16px',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'start',
     flexGrow: '1',
-    paddingLeft: '3px',
-    paddingRight: '3px',
-    paddingBottom: '1px',
-    borderTop: 'white 2px solid',
+    paddingLeft: '8px',
+    paddingRight: '8px',
+    paddingBottom: '2px',
+    paddingTop: '2px',
   },
   ({active, disabled, theme}) => ({
+    borderLeft: active ? '1px solid #eee' : '1px solid white',
+    borderRight: '1px solid ' + theme.extra.lightGray,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    borderTop: active ? '2px solid ' + theme.main.lightGreen : undefined,
+    backgroundColor: active ? '#eee' : undefined,
+    borderBottom: active ? '1px solid #eee' : undefined,
+    marginBottom: active ? '-1px' : undefined,
+    borderTop: active ?
+      '2px solid ' + theme.main.lightGreen :
+      '2px solid white', // + theme.extra.lightGray,
     ':hover': {
-      borderTop: active ? undefined : '2px solid' + theme.extra.lightGray,
+      borderTop: active ?
+        undefined : '2px solid' + theme.extra.lightGray,
+    },
+    ':first-child': {
+      borderLeft: active ?
+        '1px solid' + theme.extra.lightGray : '1px solid white',
     },
   }),
 );

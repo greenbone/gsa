@@ -104,7 +104,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/http/interceptor.js
      ${NG_SRC_DIR}/src/gmp/http/rejection.js
      ${NG_SRC_DIR}/src/gmp/http/response.js
-     ${NG_SRC_DIR}/src/gmp/http/transform/transform.js
+     ${NG_SRC_DIR}/src/gmp/http/transform/default.js
      ${NG_SRC_DIR}/src/gmp/http/transform/x2js.js
      ${NG_SRC_DIR}/src/gmp/http/utils.js
      ${NG_SRC_DIR}/src/gmp/index.js
@@ -221,9 +221,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/filefield.js
      ${NG_SRC_DIR}/src/web/components/form/formgroup.js
      ${NG_SRC_DIR}/src/web/components/form/form.js
+     ${NG_SRC_DIR}/src/web/components/form/multiselect.js
      ${NG_SRC_DIR}/src/web/components/form/passwordfield.js
      ${NG_SRC_DIR}/src/web/components/form/radio.js
+     ${NG_SRC_DIR}/src/web/components/form/select.js
      ${NG_SRC_DIR}/src/web/components/form/select2.js
+     ${NG_SRC_DIR}/src/web/components/form/selectelements.js
      ${NG_SRC_DIR}/src/web/components/form/spinner.js
      ${NG_SRC_DIR}/src/web/components/form/submitbutton.js
      ${NG_SRC_DIR}/src/web/components/form/textarea.js
@@ -377,6 +380,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/table.js
      ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/details.js
@@ -465,6 +469,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/notes/table.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/component.js
      ${NG_SRC_DIR}/src/web/pages/nvts/details.js
      ${NG_SRC_DIR}/src/web/pages/nvts/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/filterdialog.js
@@ -692,7 +697,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
-     ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
      ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
      ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
      )
@@ -733,6 +737,5 @@ install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
 
 install (DIRECTORY
          build/static
-         build/js
          build/img
          DESTINATION ${NG_DEST_DIR})

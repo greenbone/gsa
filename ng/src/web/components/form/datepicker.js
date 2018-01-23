@@ -36,9 +36,11 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
 
-import './css/datepicker.css';
+import 'jquery-ui/themes/base/base.css';
+
 import '../../css/jquery-ui.theme.css';
-import '../../css/jquery-ui.structure.css';
+
+import './css/datepicker.css';
 
 /* FIXME: the datepicker should be replaced with a native react datepicker in future */
 

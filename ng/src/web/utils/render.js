@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/string/starts-with';
 
 import d3 from 'd3';
 import React from 'react';
@@ -58,6 +59,31 @@ export function render_options(list, default_opt_value, default_opt = '--') {
   }
   return options;
 }
+
+/**
+ * Render a entities list as items array
+ *
+ * @param {Array} list               The entities list
+ * @param {*}     default_item_value (optional) Value for the default item
+ * @param {*}     default_item_label (optional. Default is '--') Label to display for the default item
+ *
+ * @returns {Array} An array to be used as items for a Select component
+ */
+export const render_select_items = (
+  list,
+  default_item_value,
+  default_item_label = '--',
+) => {
+  const items = map(list, item => ({label: item.name, value: item.id}));
+
+  if (is_defined(default_item_value)) {
+    items.unshift({
+      value: default_item_value,
+      label: default_item_label,
+    });
+  }
+  return items;
+};
 
 export const cvss_number_format = d3.format('0.1f');
 

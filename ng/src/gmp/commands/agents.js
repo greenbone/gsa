@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ import logger from '../log.js';
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Agent from '../models/agent.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 const log = logger.getLogger('gmp.commands.agents');
 
@@ -77,8 +79,7 @@ export class AgentCommand extends EntityCommand {
       cmd: 'download_agent',
       agent_format: 'installer',
       agent_id: id,
-    }, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    }, {transform: DefaultTransform});
   }
 }
 

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ import {is_defined} from '../utils.js';
 import logger from '../log.js';
 
 import {filter_string} from '../models/filter/utils.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 import HttpCommand from './http.js';
 
@@ -112,8 +114,7 @@ class EntityCommand extends HttpCommand {
       'bulk_export.x': 1,
       ['bulk_selected:' + id]: 1,
     };
-    return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    return this.httpPost(params, {transform: DefaultTransform});
   }
 
   getElementFromRoot(root) {

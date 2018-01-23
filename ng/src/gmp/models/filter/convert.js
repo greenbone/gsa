@@ -46,9 +46,10 @@ function convert_no_relation(keyword, value, relation) {
   return {
     keyword,
     value,
-    relation: '',
   };
 }
+
+const convert_no_relation_and_keyword = (keyword, value, relation) => ({value});
 
 const KEYWORD_CONVERTERS = {
   apply_overrides: convert_boolean_int,
@@ -62,9 +63,9 @@ const KEYWORD_CONVERTERS = {
 };
 
 const VALUE_CONVERTERS = {
-  and: convert_no_relation,
-  or: convert_no_relation,
-  not: convert_no_relation,
+  and: convert_no_relation_and_keyword,
+  or: convert_no_relation_and_keyword,
+  not: convert_no_relation_and_keyword,
   re: convert_no_relation,
   regexp: convert_no_relation,
   '': convert_no_relation,

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,15 +30,15 @@ import PropTypes from '../../utils/proptypes.js';
 
 import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
-import Select2 from '../form/select2.js';
+import Select from '../form/select.js';
 
 class SortByGroup extends React.Component {
 
   renderSortFieldOptions() {
-    let {fields} = this.props;
+    const {fields} = this.props;
     return map(fields, field => {
-      let value = field[0];
-      let title = field[1];
+      const value = field[0];
+      const title = field[1];
       return <option key={value} value={value}>{title}</option>;
     });
   }
@@ -52,12 +52,12 @@ class SortByGroup extends React.Component {
     }
     return (
       <FormGroup title={_('Sort by')}>
-        <Select2
+        <Select
           name="sort_by"
           value={by}
           onChange={onSortByChange}>
           {this.renderSortFieldOptions()}
-        </Select2>
+        </Select>
         <Radio
           name="sort_order"
           value="sort"

@@ -409,7 +409,6 @@ handle_setup_user (http_connection_t *connection,
   const char *cookie;
   char client_address[INET6_ADDRSTRLEN];
   const char *token;
-  gboolean xml = params_value_bool (con_info->params, "xml");
   authentication_reason_t auth_reason;
 
   user_t *user;
@@ -478,7 +477,7 @@ handle_setup_user (http_connection_t *connection,
 
       return handler_send_reauthentication (connection,
                                             MHD_HTTP_SERVICE_UNAVAILABLE,
-                                            auth_reason, xml);
+                                            auth_reason);
     }
 
   if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE)
@@ -504,7 +503,7 @@ handle_setup_user (http_connection_t *connection,
                  : BAD_MISSING_TOKEN);
 
       return handler_send_reauthentication (connection, http_response_code,
-                                            auth_reason, xml);
+                                            auth_reason);
     }
 
   if (ret)
@@ -576,9 +575,7 @@ handle_logout (http_connection_t *connection,
 
   user_remove (user);
 
-  return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT,
-                                        params_value_bool (con_info->params,
-                                                           "xml"));
+  return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT);
 }
 
 int
@@ -694,8 +691,7 @@ handle_system_report (http_connection_t *connection,
         break;
       case -1:
         return handler_send_reauthentication
-          (connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN,
-           params_value_bool (con_info->params, "xml"));
+          (connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN);
 
         break;
       case -2:

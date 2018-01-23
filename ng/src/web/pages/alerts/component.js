@@ -25,6 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {is_defined, select_save_id, first, shorten} from 'gmp/utils.js';
+import {parse_yesno, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -94,6 +95,8 @@ class AlertComponent extends React.Component {
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
       this);
+    this.openTippingPointCredentialDialog =
+      this.openTippingPointCredentialDialog.bind(this);
 
   }
 
@@ -120,6 +123,10 @@ class AlertComponent extends React.Component {
         this.alert_dialog.setValue('method_data_verinice_server_credential',
           credential.id);
       }
+      else if (data.type === 'tippingpoint') {
+        this.alert_dialog.setValue('method_data_tp_sms_credential',
+          credential.id);
+      }
     });
   }
 
@@ -138,6 +145,10 @@ class AlertComponent extends React.Component {
   }
 
   openVeriniceCredentialDialog(types) {
+    this.openCredentialDialog({type: 'verinice', types});
+  }
+
+  openTippingPointCredentialDialog(types) {
     this.openCredentialDialog({type: 'verinice', types});
   }
 
@@ -221,6 +232,9 @@ class AlertComponent extends React.Component {
           is_defined(method.data.verinice_server_credential) ?
             method.data.verinice_server_credential.credential.id : undefined;
 
+        const tp_sms_credential_id = is_defined(method.data.tp_sms_credential) ?
+          method.data.method_data_tp_sms_credential.credential.id : undefined;
+
         this.alert_dialog.show({
           id: alert.id,
           alert,
@@ -300,11 +314,18 @@ class AlertComponent extends React.Component {
           method_data_start_task_task: select_save_id(tasks, value(
             method.data.start_task_task)),
 
+          method_data_tp_sms_credential: select_save_id(credentials,
+            tp_sms_credential_id),
+          method_data_tp_sms_hostname: value(method.data.tp_sms_hostname, ''),
+          method_data_tp_sms_tls_workaround: parse_yesno(
+            value(method.data.tp_sms_hostname, NO_VALUE)),
+
           method_data_verinice_server_report_format: select_verinice_report_id(
             report_formats, value(method.data.verinice_server_report_format)),
           method_data_verinice_server_url: value(
             method.data.verinice_server_url),
-          method_data_verinice_server_credential: verinice_credential_id,
+          method_data_verinice_server_credential: select_save_id(credentials,
+            verinice_credential_id),
 
           method_data_URL: value(method.data.URL, ''),
           tasks,
@@ -435,6 +456,8 @@ class AlertComponent extends React.Component {
               onNewScpCredentialClick={this.openScpCredentialDialog}
               onNewSmbCredentialClick={this.openSmbCredentialDialog}
               onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
+              onNewTippingPointCredentialClick={
+                this.openTippingPointCredentialDialog}
               onSave={save}
             />
             <CredentialsDialog

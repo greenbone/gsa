@@ -179,8 +179,7 @@ typedef enum authentication_reason authentication_reason_t;
 
 int handler_send_reauthentication (http_connection_t *connection,
                                    int http_status_code,
-                                   authentication_reason_t reason,
-                                   gboolean xml);
+                                   authentication_reason_t reason);
 
 int send_response (http_connection_t *connection, const char *content,
                    int status_code, const gchar *sid,
@@ -244,7 +243,7 @@ char * gsad_message (credentials_t *, const char *, const char *, int,
 gchar *login_xml (const gchar *, const gchar *, const gchar *, const gchar *,
                   const gchar *, const gchar *);
 
-gchar * logout_xml (credentials_t *credentials, gboolean xml_flag,
+gchar * logout_xml (credentials_t *credentials,
                     const gchar *message, cmd_response_data_t *response_data);
 
 #endif /* _GSAD_HTTP_H */

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/from';
+import 'core-js/fn/set';
 
 import React from 'react';
 
@@ -31,7 +33,7 @@ import {first, is_defined} from 'gmp/utils.js';
 import PropTypes from '../utils/proptypes.js';
 
 import TextField from '../components/form/textfield.js';
-import Select2 from '../components/form/select2.js';
+import Select from '../components/form/select.js';
 
 import EditIcon from '../components/icon/editicon.js';
 import ManualIcon from '../components/icon/manualicon.js';
@@ -130,7 +132,7 @@ class AddTag extends React.Component {
     return (
       <Divider>
         <b>{_('Add Tag')}</b>
-        <Select2
+        <Select
           name="name"
           value={name}
           onChange={this.onValueChange}>
@@ -141,7 +143,7 @@ class AddTag extends React.Component {
               </option>
             );
           })}
-        </Select2>
+        </Select>
         <span>with Value</span>
         <TextField
           name="value"

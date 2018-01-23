@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,21 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-import Response from '../response.js';
+import {mount} from 'enzyme';
+import Select from '../select.js';
 
-class Transfrom {
+describe('Select component tests', () => {
 
-  success(xhr, options) {
-    return new Response(xhr, {fromcache: false});
-  }
+  test('should render without crashing', () => {
+    mount(<Select/>);
+  });
 
-  rejection(rej, options) {
-    return rej;
-  }
-}
+  test('should render with options', () => {
+    mount(
+      <Select>
+        <option value="foo">Foo</option>
+        <option value="bar">Bar</option>
+      </Select>
+    );
+  });
 
-export default Transfrom;
+  test('should render with items', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+    mount(
+      <Select items={items}/>
+    );
+  });
+});
 
- // vim: set ts=2 sw=2 tw=80:
-
+// vim: set ts=2 sw=2 tw=80:
