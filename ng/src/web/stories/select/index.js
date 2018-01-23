@@ -97,7 +97,7 @@ class ControlledSingleSelect extends React.Component {
 }
 
 
-storiesOf('Select', module)
+storiesOf('Form/Select', module)
   .add('with options', () => (
     <Sizer>
       <Select
@@ -128,6 +128,7 @@ storiesOf('Select', module)
       <Box>
         <SelectBox>
           <Select
+            width="auto"
             onChange={action('select value change')}
           >
             <option value="foo">Foo</option>
