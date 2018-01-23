@@ -97,7 +97,7 @@ class ControlledSingleSelect extends React.Component {
 }
 
 
-storiesOf('Select', module)
+storiesOf('Form/Select', module)
   .add('with options', () => (
     <Sizer>
       <Select

@@ -100,7 +100,7 @@ class ControlledMultiSelect extends React.Component {
 }
 
 
-storiesOf('MultiSelect', module)
+storiesOf('Form/MultiSelect', module)
   .add('with options', () => (
     <Sizer>
       <MultiSelect
