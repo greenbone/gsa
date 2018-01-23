@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import PropTypes from '../utils/proptypes.js';
 
 import withDialog from '../components/dialog/withDialog.js';
 
-import Select2 from '../components/form/select2.js';
+import Select from '../components/form/select.js';
 import Spinner from '../components/form/spinner.js';
 import FormGroup from '../components/form/formgroup.js';
 import Radio from '../components/form/radio.js';
@@ -55,7 +55,7 @@ const ModifyTaskWizard = ({
     tasks,
     onValueChange,
   }, {capabilities}) => {
-  let task_opts = render_options(tasks);
+  const task_opts = render_options(tasks);
   return (
     <Layout flex align={['start', 'start']}>
       <Layout basis="40%">
@@ -90,12 +90,12 @@ const ModifyTaskWizard = ({
         flex="column">
         <h1>{_('Quick edit: Modify a task')}</h1>
         <FormGroup title={_('Task')} titleSize="3">
-          <Select2
+          <Select
             name="task_id"
             value={task_id}
             onChange={onValueChange}>
             {task_opts}
-          </Select2>
+          </Select>
         </FormGroup>
 
         <FormGroup

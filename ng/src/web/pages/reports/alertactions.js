@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 import withGmp from '../../utils/withGmp.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 
 import Icon from '../../components/icon/icon.js';
 
@@ -119,13 +119,13 @@ class AlertActions extends React.Component {
       >
         {({create}) => (
           <IconDivider>
-            <Select2
+            <Select
               name="alert_id"
               value={alert_id}
               onChange={this.handleAlertChange}
             >
               {render_options(alerts)}
-            </Select2>
+            </Select>
             <Icon
               img="start.svg"
               title={_('Run Alert')}

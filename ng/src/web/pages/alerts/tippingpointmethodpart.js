@@ -2,10 +2,9 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,93 +20,94 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import {render_select_items} from '../../utils/render.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
-import Select from '../../components/form/select.js';
+import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
+import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
+import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
-const VeriniceMethodPart = ({
-  prefix,
-  veriniceServerUrl,
-  veriniceServerCredential,
-  veriniceServerReportFormat,
-  reportFormats,
+import Divider from '../../components/layout/divider.js';
+import Layout from '../../components/layout/layout.js';
+
+const TippingPointMethodPart = ({
   credentials,
+  prefix,
+  tpSmsCredential,
+  tpSmsHostname,
+  tpSmsTlsWorkaround,
   onChange,
   onNewCredentialClick,
 }) => {
-  const verinice_credential_opts = render_options(credentials);
-  const verinice_report_format_opts = render_options(
-    reportFormats.filter(format => format.extension === 'vna'));
+  const credential_items = render_select_items(credentials);
   return (
     <Layout
       flex="column"
       grow="1"
-      box>
-      <FormGroup title={_('verinice.PRO URL')}>
+    >
+      <FormGroup title={_('Hostname / IP')}>
         <TextField
           grow="1"
           size="30"
-          maxLength="256"
-          name={prefix + 'verinice_server_url'}
-          value={veriniceServerUrl}
-          onChange={onChange}/>
+          name={prefix + 'tp_sms_hostname'}
+          value={tpSmsHostname}
+          onChange={onChange}
+        />
       </FormGroup>
-
       <FormGroup title={_('Credential')}>
         <Divider>
           <Select
-            name={prefix + 'verinice_server_credential'}
-            value={veriniceServerCredential}
-            onChange={onChange}>
-            {verinice_credential_opts}
-          </Select>
+            items={credential_items}
+            name={prefix + 'tp_sms_credential'}
+            value={tpSmsCredential}
+            onChange={onChange}
+          />
           <Layout flex box>
             <NewIcon
               title={_('Create a credential')}
               value={['up']}
-              onClick={onNewCredentialClick}/>
+              onClick={onNewCredentialClick}
+            />
           </Layout>
         </Divider>
       </FormGroup>
-
-      <FormGroup title={_('verinice.PRO Report')}>
-        <Select
-          name={prefix + 'verinice_server_report_format'}
-          value={veriniceServerReportFormat}
-          onChange={onChange}>
-          {verinice_report_format_opts}
-        </Select>
+      <FormGroup title={_('SSL / TLS Certificate')}>
+        <FileField
+          name={prefix + 'tp_sms_tls_certificate'}
+          onChange={onChange}
+        />
       </FormGroup>
-
+      <FormGroup title={_('Use workaround for default certificate')}>
+        <YesNoRadio
+          name={prefix + 'tp_sms_tls_workaround'}
+          value={tpSmsTlsWorkaround}
+          onChange={onChange}
+        />
+      </FormGroup>
     </Layout>
   );
 };
 
-VeriniceMethodPart.propTypes = {
+TippingPointMethodPart.propTypes = {
   credentials: PropTypes.array,
   prefix: PropTypes.string,
-  reportFormats: PropTypes.array,
-  veriniceServerCredential: PropTypes.id,
-  veriniceServerReportFormat: PropTypes.id,
-  veriniceServerUrl: PropTypes.string,
-  onChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
+  tpSmsCredential: PropTypes.id.isRequired,
+  tpSmsHostname: PropTypes.string,
+  tpSmsTlsWorkaround: PropTypes.yesno.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
-export default withPrefix(VeriniceMethodPart);
+export default withPrefix(TippingPointMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

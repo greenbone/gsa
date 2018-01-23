@@ -55,6 +55,7 @@ export const Box = glamorous.div({
   alignItems: 'stretch',
   flexGrow: 1,
   padding: '1px 5px',
+  backgroundColor: 'white',
 }, ({isOpen}) => isOpen ? {
   borderRadius: '4px 4px 0 0',
 } : null, ({disabled}) => disabled ? {
@@ -127,7 +128,9 @@ export const SelectContainer = glamorous.div({
   display: 'flex',
   flexDirection: 'column',
   position: 'relative',
-});
+}, ({width}) => ({
+  width,
+}));
 
 export const SelectedValue = glamorous.div({
   display: 'flex',

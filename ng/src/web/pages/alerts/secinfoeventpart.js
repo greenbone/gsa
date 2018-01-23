@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ import Divider from '../../components/layout/divider.js';
 import PropTypes from '../../utils/proptypes.js';
 import withPrefix from '../../utils/withPrefix.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Radio from '../../components/form/radio.js';
 
 const VALUE = 'New SecInfo arrived';
@@ -51,14 +51,14 @@ const SecinfoEventPart = ({
         checked={event === VALUE}
         onChange={onEventChange}>
       </Radio>
-      <Select2
+      <Select
         value={feedEvent}
         name={prefix + 'feed_event'}
         onChange={onChange}>
         <option value="new">{_('New')}</option>
         <option value="updated">{_('Updated')}</option>
-      </Select2>
-      <Select2
+      </Select>
+      <Select
         value={secinfoType}
         name={prefix + 'secinfo_type'}
         onChange={onChange}>
@@ -72,7 +72,7 @@ const SecinfoEventPart = ({
           {_('DFN-CERT Advisories')}
         </option>
         <option value="ovaldef">{_('OVAL Definition')}</option>
-      </Select2>
+      </Select>
     </Divider>
   );
 };

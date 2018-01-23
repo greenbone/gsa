@@ -4,7 +4,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ import SaveDialog from '../../components/dialog/savedialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import PasswordField from '../../components/form/passwordfield.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
@@ -179,7 +179,7 @@ const UserSettingsDialog = ({
             </FormGroup>
 
             <FormGroup title={_('User Interface Language')} titleSize="3">
-              <Select2
+              <Select
                 name="userinterfacelanguage"
                 value={userinterfacelanguage}
                 onChange={onValueChange}>
@@ -188,7 +188,7 @@ const UserSettingsDialog = ({
                     {language.name} &#124; {language.native_name}
                   </option>
                 ))}
-              </Select2>
+              </Select>
             </FormGroup>
 
             <FormGroup title={_('Rows Per Page')} titleSize="3">
@@ -230,14 +230,14 @@ const UserSettingsDialog = ({
             <h2>{_('Severity Settings')}</h2>
 
             <FormGroup title={_('Severity Class')} titleSize="3">
-              <Select2
+              <Select
                 name="severityclass"
                 value={severityclass}
                 size="30"
                 maxLength="400"
                 onChange={onValueChange}>
                 {render_options(severitiesList, '')}
-              </Select2>
+              </Select>
             </FormGroup>
 
             <FormGroup title={_('Dynamic Severity')} titleSize="3">
@@ -264,157 +264,157 @@ const UserSettingsDialog = ({
 
             {capabilities.mayAccess('alerts') &&
               <FormGroup title={_('Default Alert')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultalert"
                   value={defaultalert}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(alertsList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('credentials') &&
               <FormGroup title={_('Default ESXi Credential')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultesxicredential"
                   value={defaultesxicredential}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(credentialsList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('configs') &&
               <FormGroup title={_('Default OSP Scan Config')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultospscanconfig"
                   value={defaultospscanconfig}
                   size="30"
                   onChange={onValueChange}>
                   {/* FIXME insert options */}
                   {render_options([], '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('scanners') &&
               <FormGroup title={_('Default OSP Scanner')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultospscanner"
                   value={defaultospscanner}
                   size="30"
                   onChange={onValueChange}>
                   {/* FIXME insert options */}
                   {render_options([], '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('configs') &&
               <FormGroup title={_('Default OpenVAS Scan Config')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultopenvasscanconfig"
                   value={defaultopenvasscanconfig}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(scanconfigsList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('scanners') &&
               <FormGroup title={_('Default OpenVAS Scanner')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultopenvasscanner"
                   value={defaultopenvasscanner}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(scannersList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('port_lists') &&
               <FormGroup title={_('Default Port List')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultportlist"
                   value={defaultportlist}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(portlistsList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('report_formats') &&
               <FormGroup title={_('Default Report Format')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultreportformat"
                   value={defaultreportformat}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(reportformatsList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('credentials') &&
               <div>
                 <FormGroup title={_('Default SMB Credential')} titleSize="3">
-                  <Select2
+                  <Select
                     name="defaultsmbcredential"
                     value={defaultsmbcredential}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(credentialsList, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Default SNMP Credential')} titleSize="3">
-                  <Select2
+                  <Select
                     name="defaultsnmpcredential"
                     value={defaultsnmpcredential}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(credentialsList, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Default SSH Credential')} titleSize="3">
-                  <Select2
+                  <Select
                     name="defaultsshcredential"
                     value={defaultsshcredential}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(credentialsList, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
               </div>
             }
 
             {capabilities.mayAccess('schedules') &&
               <FormGroup title={_('Default Schedule')} titleSize="3">
-                <Select2
+                <Select
                   name="defaultschedule"
                   value={defaultschedule}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(schedulesList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
             {capabilities.mayAccess('targets') &&
               <FormGroup title={_('Default Target')} titleSize="3">
-                <Select2
+                <Select
                   name="defaulttarget"
                   value={defaulttarget}
                   size="30"
                   onChange={onValueChange}>
                   {render_options(targetsList, '')}
-                </Select2>
+                </Select>
               </FormGroup>
             }
 
@@ -424,253 +424,253 @@ const UserSettingsDialog = ({
 
 
                 <FormGroup title={_('Agents Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="agentsfilter"
                     value={agentsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.agent, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Alerts Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="alertsfilter"
                     value={alertsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.alert, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Assets Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="assetsfilter"
                     value={assetsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.asset, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Configs Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="configsfilter"
                     value={configsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.config, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Credentials Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="credentialsfilter"
                     value={credentialsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.credential, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Filters Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="filtersfilter"
                     value={filtersfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.filter, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Notes Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="notesfilter"
                     value={notesfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.note, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Overrides Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="overridesfilter"
                     value={overridesfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.override, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Permissions Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="permissionsfilter"
                     value={permissionsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.permission, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Port List Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="portlistsfilter"
                     value={portlistsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.portlist, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Reports Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="reportsfilter"
                     value={reportsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.report, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Report Formats Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="reportformatsfilter"
                     value={reportformatsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.reportformat, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Results Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="resultsfilter"
                     value={resultsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.result, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Roles Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="rolesfilter"
                     value={rolesfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.role, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Schedules Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="schedulesfilter"
                     value={schedulesfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.schedule, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Tags Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="tagsfilter"
                     value={tagsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.tag, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Targets Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="targetsfilter"
                     value={targetsfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.target, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('Tasks Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="tasksfilter"
                     value={tasksfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.task, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('CPE Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="cpefilter"
                     value={cpefilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('CVE Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="cvefilter"
                     value={cvefilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('NVT Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="nvtfilter"
                     value={nvtfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('OVAL Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="ovalfilter"
                     value={ovalfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('CERT-Bund Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="certbundfilter"
                     value={certbundfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('DFN-CERT Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="dfncertfilter"
                     value={dfncertfilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
 
                 <FormGroup title={_('All SecInfo Filter')} titleSize="3">
-                  <Select2
+                  <Select
                     name="allsecinfofilter"
                     value={allsecinfofilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}
-                  </Select2>
+                  </Select>
                 </FormGroup>
               </div>
             }

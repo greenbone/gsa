@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ import FootNote from '../../components/footnote/footnote.js';
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import Text from '../../components/form/text.js';
 import TextField from '../../components/form/textfield.js';
 
@@ -203,7 +203,7 @@ class ScannerDialog extends React.Component {
         </FormGroup>
 
         <FormGroup title={_('Type')}>
-          <Select2
+          <Select
             name="type"
             value={type}
             disabled={in_use}
@@ -217,7 +217,7 @@ class ScannerDialog extends React.Component {
                 );
               })
             }
-          </Select2>
+          </Select>
         </FormGroup>
 
         <FormGroup title={_('CA Certificate')} flex="column">
@@ -261,12 +261,12 @@ class ScannerDialog extends React.Component {
 
         <FormGroup title={_('Credential')} flex="column">
           <Divider>
-            <Select2
+            <Select
               name="credential_id"
               value={credential_id}
               onChange={onValueChange}>
               {render_options(scanner_credentials)}
-            </Select2>
+            </Select>
             <Layout flex box>
               <NewIcon
                 value={type}

@@ -35,7 +35,7 @@ import withDialog from '../../components/dialog/withDialog.js';
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
@@ -247,13 +247,13 @@ const TargetDialog = ({
       {capabilities.mayOp('get_port_lists') &&
         <FormGroup title={_('Port List')}>
           <Divider>
-            <Select2
+            <Select
               onChange={onValueChange}
               name="port_list_id"
               disabled={in_use}
               value={port_list_id}>
               {render_options(port_lists)}
-            </Select2>
+            </Select>
             {!in_use &&
               <Layout box flex>
                 <NewIcon
@@ -266,7 +266,7 @@ const TargetDialog = ({
       }
 
       <FormGroup title={_('Alive Test')}>
-        <Select2
+        <Select
           name="alive_tests"
           onChange={onValueChange}
           value={alive_tests}>
@@ -276,7 +276,7 @@ const TargetDialog = ({
           {ALIVE_TESTS.map(value =>
             <option key={value} value={value}>{value}</option>)
           }
-        </Select2>
+        </Select>
       </FormGroup>
 
       {capabilities.mayOp('get_credentials') &&
@@ -288,14 +288,14 @@ const TargetDialog = ({
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('SSH')}>
           <Divider>
-            <Select2
+            <Select
               box
               name="ssh_credential_id"
               onChange={onValueChange}
               disabled={in_use}
               value={ssh_credential_id}>
               {render_options(ssh_credentials, 0)}
-            </Select2>
+            </Select>
             <Layout>
               {_('on port')}
             </Layout>
@@ -320,13 +320,13 @@ const TargetDialog = ({
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('SMB')}>
           <Divider>
-            <Select2
+            <Select
               onChange={onValueChange}
               name="smb_credential_id"
               disabled={in_use}
               value={smb_credential_id}>
               {render_options(up_credentials, 0)}
-            </Select2>
+            </Select>
             {!in_use &&
               <Layout box flex>
                 <NewIcon
@@ -342,13 +342,13 @@ const TargetDialog = ({
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('ESXi')}>
           <Divider>
-            <Select2
+            <Select
               disabled={in_use}
               onChange={onValueChange}
               name="esxi_credential_id"
               value={esxi_credential_id}>
               {render_options(up_credentials, 0)}
-            </Select2>
+            </Select>
             {!in_use &&
               <Layout box flex>
                 <NewIcon
@@ -364,13 +364,13 @@ const TargetDialog = ({
       {capabilities.mayOp('get_credentials') &&
         <FormGroup title={_('SNMP')}>
           <Divider>
-            <Select2
+            <Select
               disabled={in_use}
               onChange={onValueChange}
               name="snmp_credential_id"
               value={snmp_credential_id}>
               {render_options(snmp_credentials, 0)}
-            </Select2>
+            </Select>
             {!in_use &&
               <Layout box flex>
                 <NewIcon

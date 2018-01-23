@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@ export const METHOD_TYPE_START_TASK = 'Start Task';
 export const METHOD_TYPE_HTTP_GET = 'HTTP Get';
 export const METHOD_TYPE_SOURCEFIRE = 'Sourcefire Connector';
 export const METHOD_TYPE_VERINICE = 'verinice Connector';
+export const METHOD_TYPE_TIPPING_POINT = 'TippingPoint SMS';
 
 export const EMAIL_NOTICE_INCLUDE = '0';
 export const EMAIL_NOTICE_ATTACH = '2';

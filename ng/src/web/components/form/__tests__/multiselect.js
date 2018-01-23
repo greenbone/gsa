@@ -1,10 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,40 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {map} from 'gmp/utils.js';
-import timezones from 'gmp/timezones.js';
+import {mount} from 'enzyme';
+import MultiSelect from '../multiselect.js';
 
-import PropTypes from '../../utils/proptypes.js';
+describe('MultiSelect component tests', () => {
 
-import withLayout from '../layout/withLayout.js';
-
-import Select from './select.js';
-
-
-const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
-
-  const timezone_opts = map(timezones, zone => {
-    return <option key={zone.name} value={zone.name}>{zone.name}</option>;
+  test('should render without crashing', () => {
+    mount(<MultiSelect/>);
   });
 
-  return (
-    <Select {...props} value={value}>
-      <option value="UTC">
-        {_('Coordinated Universal Time/UTC')}
-      </option>
-      {timezone_opts}
-    </Select>
-  );
-};
+  test('should render with options', () => {
+    mount(
+      <MultiSelect>
+        <option value="foo">Foo</option>
+        <option value="bar">Bar</option>
+      </MultiSelect>
+    );
+  });
 
-TimeZoneSelectComponent.propTypes = {
-  value: PropTypes.string,
-};
-
-export default withLayout()(TimeZoneSelectComponent);
+  test('should render with items', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+    mount(
+      <MultiSelect items={items}/>
+    );
+  });
+});
 
 // vim: set ts=2 sw=2 tw=80:

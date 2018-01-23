@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,8 @@ import withDialog from '../../components/dialog/withDialog.js';
 
 import Button from '../../components/form/button.js';
 import FormGroup from '../../components/form/formgroup.js';
-import Select2 from '../../components/form/select2.js';
+import MultiSelect from '../../components/form/multiselect.js';
+import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 
 import TrashIcon from '../../components/icon/trashicon.js';
@@ -94,8 +95,7 @@ const Dialog = ({
 
       <FormGroup
         title={_('Users')}>
-        <Select2
-          multiple
+        <MultiSelect
           name="users"
           value={users}
           onChange={onValueChange}
@@ -111,7 +111,7 @@ const Dialog = ({
               );
             })
           }
-        </Select2>
+        </MultiSelect>
       </FormGroup>
 
       {is_edit &&
@@ -121,7 +121,7 @@ const Dialog = ({
           <FormGroup
             title={_('Name')}
             flex align={['space-between', 'center']}>
-            <Select2
+            <Select
               name="permission_name"
               value={permission_name}
               onChange={onValueChange}
@@ -129,7 +129,8 @@ const Dialog = ({
               {
                 map(all_permissions, permission => {
                   return (
-                    <option key={permission.name}
+                    <option
+                      key={permission.name}
                       value={permission.name}>
                       {permission.name + ' (' +
                         permission_description(permission.name) + ')'}
@@ -137,7 +138,7 @@ const Dialog = ({
                   );
                 })
               }
-            </Select2>
+            </Select>
             <Button
               title={_('Create Permission')}
               disabled={in_use || !has_permissions}
@@ -151,7 +152,7 @@ const Dialog = ({
           <FormGroup
             title={_('Group')}
             flex align={['space-between', 'center']}>
-            <Select2
+            <Select
               name="group_id"
               value={group_id}
               onChange={onValueChange}
@@ -165,7 +166,7 @@ const Dialog = ({
                   );
                 })
               }
-            </Select2>
+            </Select>
             <Button
               title={_('Create Permission')}
               disabled={!has_groups}
@@ -234,8 +235,8 @@ Dialog.propTypes = {
   id: PropTypes.id,
   in_use: PropTypes.bool,
   name: PropTypes.string,
-  permissions: PropTypes.array,
   permission_name: PropTypes.string,
+  permissions: PropTypes.array,
   users: PropTypes.array,
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,

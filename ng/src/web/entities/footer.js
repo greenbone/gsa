@@ -36,7 +36,7 @@ import DeleteIcon from '../components/icon/deleteicon.js';
 import ExportIcon from '../components/icon/exporticon.js';
 import TrashIcon from '../components/icon/trashicon.js';
 
-import Select2 from '../components/form/select2.js';
+import Select from '../components/form/select.js';
 
 import TableFooter from '../components/table/footer.js';
 import TableRow from '../components/table/row.js';
@@ -64,7 +64,7 @@ export const EntitiesFooter = ({
             <Layout flex align={['end', 'center']}>
               <Divider>
                 {selection &&
-                  <Select2
+                  <Select
                     value={selectionType}
                     onChange={onSelectionTypeChange}>
                     <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
@@ -76,7 +76,7 @@ export const EntitiesFooter = ({
                     <option value={SelectionType.SELECTION_FILTER}>
                       {_('Apply to all filtered')}
                     </option>
-                  </Select2>
+                  </Select>
                 }
                 <IconDivider>
                   {trash &&
