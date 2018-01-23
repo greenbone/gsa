@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,17 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {configure} from '@storybook/react';
+import React from 'react';
 
-/* eslint-disable global-require, no-console */
+import {mount} from 'enzyme';
+import MultiSelect from '../multiselect.js';
 
-function loadStories() {
-  console.clear();
+describe('MultiSelect component tests', () => {
 
-  require('./select');
-  require('./multiselect');
-}
+  test('should render without crashing', () => {
+    mount(<MultiSelect/>);
+  });
 
-configure(loadStories, module);
+  test('should render with options', () => {
+    mount(
+      <MultiSelect>
+        <option value="foo">Foo</option>
+        <option value="bar">Bar</option>
+      </MultiSelect>
+    );
+  });
+
+  test('should render with items', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+    mount(
+      <MultiSelect items={items}/>
+    );
+  });
+});
 
 // vim: set ts=2 sw=2 tw=80:
