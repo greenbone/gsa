@@ -35,11 +35,9 @@ endif (NOT PKG_CONFIG_FOUND)
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
 pkg_check_modules (GLIB REQUIRED glib-2.0>=2.32)
-pkg_check_modules (LIBEXSLT REQUIRED libexslt)
 pkg_check_modules (LIBGVM_BASE REQUIRED libgvm_base>=1.0.0)
 pkg_check_modules (LIBGVM_UTIL REQUIRED libgvm_util>=1.0.0)
 pkg_check_modules (LIBGVM_GMP REQUIRED libgvm_gmp>=1.0.0)
-pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls>=3.2.15)
 
 message (STATUS "Looking for libgcrypt...")
@@ -57,15 +55,15 @@ else (NOT LIBGCRYPT)
 endif (NOT LIBGCRYPT)
 
 if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
-    (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-    LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT
+    (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT
+    LIBGVM_GMP_FOUND OR NOT GNUTLS_FOUND OR NOT
     LIBGCRYPT)
   message (FATAL_ERROR "One or more required libraries was not found "
     "(see message above), please install the missing "
     "libraries and run cmake again.")
 endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
-  (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-  LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
+  (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT
+  LIBGVM_GMP_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
 
 ## Config
 
@@ -84,11 +82,10 @@ set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
 set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
 
 include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
-                     ${GLIB_INCLUDE_DIRS} ${LIBEXSLT_INCLUDE_DIRS}
+                     ${GLIB_INCLUDE_DIRS}
                      ${LIBGVM_BASE_INCLUDE_DIRS}
                      ${LIBGVM_UTIL_INCLUDE_DIRS}
                      ${LIBGVM_GMP_INCLUDE_DIRS}
-                     ${LIBXSLT_INCLUDE_DIRS}
                      ${GNUTLS_INCLUDE_DIRS})
 
 find_package (Threads)
@@ -97,21 +94,18 @@ find_package (Threads)
 
 add_library (gsad_base STATIC gsad_base.c)
 target_link_libraries (gsad_base ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
-                       ${LIBXSLT_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS}
-                       ${GNUTLS_LDFLAGS})
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
+                       ${LIBGVM_UTIL_LDFLAGS} ${GNUTLS_LDFLAGS})
 
 add_library (gsad_gmp STATIC gsad_gmp.c)
 target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
-                       ${LIBXSLT_LDFLAGS} ${LIBGVM_GMP_LDFLAGS}
-                       ${GNUTLS_LDFLAGS})
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
+                       ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
 
 add_library (gsad_xslt_ext STATIC xslt_i18n.c)
 target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
-                       ${LIBXSLT_LDFLAGS} ${LIBGVM_GMP_LDFLAGS}
-                       ${GNUTLS_LDFLAGS})
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
+                       ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
 
 ## Program
 

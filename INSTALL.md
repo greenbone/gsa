@@ -19,9 +19,7 @@ Prerequisites:
 * cmake >= 2.8
 * glib-2.0 >= 2.32
 * libxml
-* libxslt
 * libmicrohttpd >= 0.9.0
-* libexslt
 * pkg-config
 
 Prerequisites for using translations:
@@ -39,7 +37,7 @@ also to build the JavaScript translations:
 * python-polib
 
 Install prerequisites on Debian GNU/Linux:
-# apt-get install libmicrohttpd-dev libxml2-dev libxslt1-dev
+# apt-get install libmicrohttpd-dev libxml2-dev
 
 
 Compiling Greenbone Security Assistant
