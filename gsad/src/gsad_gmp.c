@@ -479,9 +479,9 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
  * @return Enveloped GMP XML object.
  */
 static char *
-xsl_transform_gmp (gvm_connection_t *connection,
-                   credentials_t * credentials, params_t *params, gchar * xml,
-                   cmd_response_data_t *response_data)
+envelope_gmp (gvm_connection_t *connection,
+              credentials_t * credentials, params_t *params, gchar * xml,
+              cmd_response_data_t *response_data)
 {
   time_t now;
   gchar *res, *name;
@@ -1413,8 +1413,8 @@ action_result_page (gvm_connection_t *connection,
                                  message ? message : "",
                                  details ? details : "",
                                  next_url ? next_url : "");
-  return xsl_transform_gmp (connection, credentials, params, xml,
-                            response_data);
+  return envelope_gmp (connection, credentials, params, xml,
+                       response_data);
 }
 
 /**
@@ -1660,9 +1660,9 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
       result = get_report (connection, credentials, params, NULL,
                            response, &error, response_data);
 
-      return error ? result : xsl_transform_gmp (connection, credentials,
-                                                 params, result,
-                                                 response_data);
+      return error ? result : envelope_gmp (connection, credentials,
+                                            params, result,
+                                            response_data);
     }
 
   if (strcmp (next, "get_report_format") == 0)
@@ -1987,8 +1987,8 @@ get_one (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -2411,8 +2411,8 @@ get_many (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   g_string_free (type_many, TRUE);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -2496,8 +2496,8 @@ edit_resource (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</edit_%s>", type);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -2621,8 +2621,8 @@ export_resource (gvm_connection_t *connection, const char *type,
   if (resource_id == NULL)
     {
       g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
-      return xsl_transform_gmp (connection, credentials, params,
-                                g_string_free (xml, FALSE), response_data);
+      return envelope_gmp (connection, credentials, params,
+                           g_string_free (xml, FALSE), response_data);
     }
 
   subtype = params_value (params, "subtype");
@@ -3635,8 +3635,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                           apply_overrides,
                           alerts ? alerts : "1");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -3686,9 +3686,9 @@ new_container_task (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</new_container_task>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -3751,9 +3751,9 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</upload_report>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -4538,9 +4538,9 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_task>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -5187,8 +5187,8 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</get_nvts>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -5481,8 +5481,8 @@ static char *
 get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return xsl_transform_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
+                       response_data);
 }
 
 /**
@@ -5829,9 +5829,9 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</get_task>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -5872,9 +5872,9 @@ new_credential (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_credential>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -6786,8 +6786,8 @@ new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_agent>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -7643,8 +7643,8 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   g_free (response);
   g_string_append (xml, "</get_aggregate>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -7837,8 +7837,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   free_entity (entity);
 
   g_string_append (xml, "</new_alert>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -8776,9 +8776,9 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_alert>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -9211,9 +9211,9 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -9958,9 +9958,9 @@ new_tag (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -10187,9 +10187,9 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_tag>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -10671,9 +10671,9 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_target>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -11134,9 +11134,9 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
   free_entity (entity);
 
   g_string_append (xml, "</new_config>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -11178,8 +11178,8 @@ upload_config (gvm_connection_t *connection, credentials_t *credentials, params_
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_config>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -11579,8 +11579,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -12153,8 +12153,8 @@ get_config_family (gvm_connection_t *connection, credentials_t *
     }
 
   g_string_append (xml, "</get_config_family_response>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -12428,8 +12428,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -12954,9 +12954,9 @@ export_preference_file_gmp (gvm_connection_t *connection,
     }
 
   g_string_append (xml, "</get_preferences_response>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -14340,8 +14340,8 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
   result = get_report (connection, credentials, params, NULL, NULL, &error,
                        response_data);
 
-  return error ? result : xsl_transform_gmp (connection, credentials, params,
-                                             result, response_data);
+  return error ? result : envelope_gmp (connection, credentials, params,
+                                        result, response_data);
 }
 
 /**
@@ -14543,8 +14543,8 @@ get_report_section (gvm_connection_t *connection,
       result = get_report (connection, credentials, params, NULL,
                            extra_xml, &error, response_data);
 
-      return error ? result : xsl_transform_gmp (connection, credentials,
-                                                 params, result, response_data);
+      return error ? result : envelope_gmp (connection, credentials,
+                                            params, result, response_data);
     }
 
   result = get_report (connection, credentials, params, NULL, NULL,
@@ -14609,8 +14609,8 @@ get_report_section (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -14953,8 +14953,8 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_result>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -15169,8 +15169,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
         }
 
       g_string_append (xml, "</new_note>");
-      return xsl_transform_gmp (connection, credentials, params,
-                                g_string_free (xml, FALSE), response_data);
+      return envelope_gmp (connection, credentials, params,
+                           g_string_free (xml, FALSE), response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -15257,8 +15257,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_note>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -15608,8 +15608,8 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_note>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -15901,8 +15901,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
         }
 
       g_string_append (xml, "</new_override>");
-      return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                                response_data);
+      return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -15991,8 +15991,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_override>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -16246,8 +16246,8 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_override>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -16547,9 +16547,9 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   g_string_append (xml, "</new_scanner>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -16874,8 +16874,8 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_scanner>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17170,8 +17170,8 @@ new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17540,8 +17540,8 @@ get_system_reports_gmp (gvm_connection_t *connection,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_system_reports>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17814,8 +17814,8 @@ new_report_format (gvm_connection_t *connection, credentials_t *credentials, par
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_report_format>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -18580,9 +18580,9 @@ get_trash (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 #undef GET_TRASH_RESOURCE
 
@@ -18659,9 +18659,9 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</get_my_settings>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -18867,9 +18867,9 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -19774,9 +19774,9 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_protocol_doc>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -19973,8 +19973,8 @@ new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_group>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -20566,8 +20566,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
 
   g_string_append (xml, "</new_permission>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -21213,8 +21213,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 
   g_string_append (xml, "</new_permissions>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22105,8 +22105,8 @@ new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_list>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22131,8 +22131,8 @@ upload_port_list (gvm_connection_t *connection, credentials_t *credentials, para
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_port_list>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22259,8 +22259,8 @@ new_port_range (gvm_connection_t *connection, credentials_t *credentials, params
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_range>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22731,8 +22731,8 @@ new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_role>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -23271,8 +23271,8 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   g_free (text);
 
-  return xsl_transform_gmp (connection, credentials, params,  response,
-                            response_data);
+  return envelope_gmp (connection, credentials, params,  response,
+                       response_data);
 }
 
 /**
@@ -23497,8 +23497,8 @@ new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_filter>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -24223,8 +24223,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
     }
 
   g_string_append (xml, "</new_user>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -24327,9 +24327,9 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
     g_string_append (xml, extra_xml);
 
   g_string_append (xml, "</delete_user>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -24971,9 +24971,9 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
 
   g_string_append (xml, "</auth_settings>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25341,9 +25341,9 @@ cvss_calculator (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   g_string_append (xml, "</cvss_calculator>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25491,9 +25491,9 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
   free_entity (entity);
 
   g_string_append (xml, "</dashboard>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25851,9 +25851,9 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</wizard>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25978,8 +25978,8 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                                 extra_xml ? extra_xml : "",
                                 response);
 
-  return xsl_transform_gmp (connection, credentials, params, wizard_xml,
-                            response_data);
+  return envelope_gmp (connection, credentials, params, wizard_xml,
+                       response_data);
 }
 
 /**
@@ -26285,8 +26285,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (bulk_string, "</process_bulk>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (bulk_string, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (bulk_string, FALSE), response_data);
 }
 
 /**
@@ -26435,9 +26435,9 @@ new_host (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_host>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -27042,9 +27042,9 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append_printf (xml, "</edit_asset>");
   free_entity (entity);
   g_free (response);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -27161,8 +27161,8 @@ get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, const char *extra_xml,
                   cmd_response_data_t* response_data)
 {
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_strdup ("<get_assets_chart/>"), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_strdup ("<get_assets_chart/>"), response_data);
 }
 
 /**
