@@ -44,7 +44,11 @@ export const DEBUG = _('Debug');
 
 export const N_A = _('N/A');
 
-export function render_options(list, default_opt_value, default_opt = '--') {
+export const UNSET_VALUE = '0';
+export const UNSET_LABEL = '--';
+
+export function render_options(list, default_opt_value,
+  default_opt = UNSET_LABEL) {
   const options = map(list, entry => {
     return (
       <option key={entry.id} value={entry.id}>{entry.name}</option>
@@ -67,22 +71,26 @@ export function render_options(list, default_opt_value, default_opt = '--') {
  * @param {*}     default_item_value (optional) Value for the default item
  * @param {*}     default_item_label (optional. Default is '--') Label to display for the default item
  *
- * @returns {Array} An array to be used as items for a Select component
+ * @returns {Array} An array to be used as items for a Select component or undefined
  */
 export const render_select_items = (
   list,
   default_item_value,
-  default_item_label = '--',
+  default_item_label = UNSET_LABEL,
 ) => {
-  const items = map(list, item => ({label: item.name, value: item.id}));
+  const items = is_defined(list) ?
+    list.map(item => ({label: item.name, value: item.id})) :
+    undefined;
 
-  if (is_defined(default_item_value)) {
-    items.unshift({
-      value: default_item_value,
-      label: default_item_label,
-    });
+  if (!is_defined(default_item_value)) {
+    return items;
   }
-  return items;
+
+  const default_item = {
+    value: default_item_value,
+    label: default_item_label,
+  };
+  return is_defined(items) ? [default_item, ...items] : [default_item];
 };
 
 export const cvss_number_format = d3.format('0.1f');

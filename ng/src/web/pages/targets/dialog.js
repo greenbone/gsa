@@ -25,10 +25,11 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils.js';
 import {NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
 
 import withDialog from '../../components/dialog/withDialog.js';
 
@@ -62,7 +63,13 @@ const ALIVE_TESTS = [
   'ARP Ping', 'ICMP & TCP-ACK Service Ping',
   'ICMP & ARP Ping', 'TCP-ACK Service & ARP Ping',
   'ICMP, TCP-ACK Service & ARP Ping', 'Consider Alive',
-  ALIVE_TESTS_DEFAULT,
+];
+
+const ALIVE_TESTS_ITEMS = [{
+    value: ALIVE_TESTS_DEFAULT,
+    label: _(ALIVE_TESTS_DEFAULT),
+  },
+  ...ALIVE_TESTS.map(value => ({value, label: value})),
 ];
 
 const NEW_SSH = {
@@ -114,11 +121,16 @@ const TargetDialog = ({
   onNewPortListClick,
 }, {capabilities}) => {
 
-  const ssh_credentials = credentials.filter(ssh_credential_filter);
-  const up_credentials = credentials.filter(value =>
-    value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
-  const snmp_credentials = credentials.filter(snmp_credential_filter);
+  let ssh_credentials;
+  let up_credentials;
+  let snmp_credentials;
 
+  if (is_defined(credentials)) {
+    ssh_credentials = credentials.filter(ssh_credential_filter);
+    up_credentials = credentials.filter(value =>
+      value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
+    snmp_credentials = credentials.filter(snmp_credential_filter);
+  }
   return (
     <Layout flex="column">
       <FormGroup title={_('Name')}>
@@ -251,9 +263,9 @@ const TargetDialog = ({
               onChange={onValueChange}
               name="port_list_id"
               disabled={in_use}
-              value={port_list_id}>
-              {render_options(port_lists)}
-            </Select>
+              value={port_list_id}
+              items={render_select_items(port_lists)}
+            />
             {!in_use &&
               <Layout box flex>
                 <NewIcon
@@ -269,14 +281,9 @@ const TargetDialog = ({
         <Select
           name="alive_tests"
           onChange={onValueChange}
-          value={alive_tests}>
-          <option value="Scan Config Default">
-            {_('Scan Config Default')}
-          </option>
-          {ALIVE_TESTS.map(value =>
-            <option key={value} value={value}>{value}</option>)
-          }
-        </Select>
+          value={alive_tests}
+          items={ALIVE_TESTS_ITEMS}
+        />
       </FormGroup>
 
       {capabilities.mayOp('get_credentials') &&
@@ -293,9 +300,9 @@ const TargetDialog = ({
               name="ssh_credential_id"
               onChange={onValueChange}
               disabled={in_use}
-              value={ssh_credential_id}>
-              {render_options(ssh_credentials, 0)}
-            </Select>
+              value={ssh_credential_id}
+              items={render_select_items(ssh_credentials, UNSET_VALUE)}
+            />
             <Layout>
               {_('on port')}
             </Layout>
@@ -324,9 +331,9 @@ const TargetDialog = ({
               onChange={onValueChange}
               name="smb_credential_id"
               disabled={in_use}
-              value={smb_credential_id}>
-              {render_options(up_credentials, 0)}
-            </Select>
+              value={smb_credential_id}
+              items={render_select_items(up_credentials, UNSET_VALUE)}
+            />
             {!in_use &&
               <Layout box flex>
                 <NewIcon
@@ -346,9 +353,9 @@ const TargetDialog = ({
               disabled={in_use}
               onChange={onValueChange}
               name="esxi_credential_id"
-              value={esxi_credential_id}>
-              {render_options(up_credentials, 0)}
-            </Select>
+              value={esxi_credential_id}
+              items={render_select_items(up_credentials, UNSET_VALUE)}
+            />
             {!in_use &&
               <Layout box flex>
                 <NewIcon
@@ -368,9 +375,9 @@ const TargetDialog = ({
               disabled={in_use}
               onChange={onValueChange}
               name="snmp_credential_id"
-              value={snmp_credential_id}>
-              {render_options(snmp_credentials, 0)}
-            </Select>
+              value={snmp_credential_id}
+              items={render_select_items(snmp_credentials, UNSET_VALUE)}
+            />
             {!in_use &&
               <Layout box flex>
                 <NewIcon
@@ -387,7 +394,7 @@ const TargetDialog = ({
 };
 
 TargetDialog.propTypes = {
-  alive_tests: PropTypes.oneOf(ALIVE_TESTS),
+  alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
   comment: PropTypes.string,
   credentials: PropTypes.array,
   esxi_credential_id: PropTypes.idOrZero,
@@ -425,17 +432,15 @@ export default withDialog({
   defaultState: {
     alive_tests: ALIVE_TESTS_DEFAULT,
     comment: '',
-    credentials: [],
-    esxi_credential_id: '0',
+    esxi_credential_id: UNSET_VALUE,
     name: _('Unnamed'),
     port: 22,
     port_list_id: DEFAULT_PORT_LIST_ID,
-    port_lists: [],
     reverse_lookup_only: NO_VALUE,
     reverse_lookup_unify: NO_VALUE,
-    smb_credential_id: '0',
-    snmp_credential_id: '0',
-    ssh_credential_id: '0',
+    smb_credential_id: UNSET_VALUE,
+    snmp_credential_id: UNSET_VALUE,
+    ssh_credential_id: UNSET_VALUE,
     target_source: 'manual',
     target_exclude_source: 'manual',
   },
