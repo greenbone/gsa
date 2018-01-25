@@ -27,6 +27,7 @@ import _ from 'gmp/locale.js';
 import {first, is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import {UNSET_VALUE} from '../../utils/render.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
@@ -39,7 +40,7 @@ import PortListDialog from '../portlists/dialog.js';
 import TargetDialog from './dialog.js';
 
 const id_or__ = value => {
-  return is_defined(value) ? value.id : '0';
+  return is_defined(value) ? value.id : UNSET_VALUE;
 };
 
 class TargetComponent extends React.Component {
