@@ -133,7 +133,8 @@ class MultiSelect extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {value} = nextProps;
-    if (arrays_equal(value, this.state.selectedItems)) {
+
+    if (is_defined(value) && !arrays_equal(value, this.state.selectedItems)) {
       this.setState({selectedItems: value});
     }
   }
