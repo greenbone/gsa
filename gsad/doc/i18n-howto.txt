@@ -49,13 +49,13 @@ To create a new template file simply run
 
   make gettext-pot
 
-which will generate the files "gsad_xsl.pot" and "gsad_js.pot" in the "src/po"
+which will generate the file and "gsad_js.pot" in the "src/po"
  subdirectory of your build directory.
 You can then use this as a template for your new translation or merge it with
  existing translation files.
 
-To only create a template file for the XSL or JavaScript you can also use the
-  make target "gettext-xsl-pot" or "gettext-js-pot".
+To only create a template file for the JavaScript you can also use the
+  make target "gettext-js-pot".
 
 
 2 - Merge the template and existing translations
@@ -75,12 +75,11 @@ If your tool does not have its own functions for merging translation files,
 
   make gettext-merge
 
-This will generate "gsad_xsl-XX-merged.po" and "gsad_js-XX-merged.po"
+This will generate "gsad_js-XX-merged.po"
  files in the "src/po" subdirectory of your build directory,
  with "XX" being a locale code as defined above in the section "General notes".
 
-There are also separate make targets for JS and XSL .po files,
- gettext-js-merge and gettext-xsl-merge.
+There is also a separate make target for JS .po files, gettext-js-merge.
 
 
 3 - Update the translations
@@ -94,7 +93,7 @@ If you want to edit the translations locally you can also copy them as
 4 - Copying the new .po files
 -----------------------------
 The next step is to copy the files for your language back to "src/po" in the
- source directory, naming the files "gsad_xsl-XX.po" and "gsad_js-XX.po",
+ source directory, naming the files "gsad_js-XX.po",
  with "XX" again being the locale code.
 
 As this means overwriting the old source .po file, you should verify the new
@@ -108,8 +107,8 @@ Creating new translations for another locale
 The first step to a new translation is generating new template (.pot) files.
 To do so, follow the first step under "Updating existing translations".
 
-The destination files of the make target "gettext-pot" are "gsad_xsl.pot" and
-"gsad_js.pot" in the "src/po" subdirectory of your GSA build directory.
+The destination file of the make target "gettext-pot" is "gsad_js.pot" in
+the "src/po" subdirectory of your GSA build directory.
 
 
 2 - Preparing the .po files
@@ -117,7 +116,7 @@ The destination files of the make target "gettext-pot" are "gsad_xsl.pot" and
 Next you have to use the generated files as templates for your new translation.
 
 Once you are finished or want to install the in-progress translation for
- testing, copy it to "src/po/gsad_xsl-XX.po" in your source directory with "XX"
+ testing, copy it to "src/po/gsad_js-XX.po" in your source directory with "XX"
  being the locale code as defined above in the section "General notes".
 
 
@@ -132,13 +131,8 @@ near the other MAKE_TRANSLATION (...) lines, with "XX" again being the
  locale code.
 
 Also add your language to the dependencies of the targets
- "gettext-mo", "gettext-json", "gettext-js-merge" and "gettext-xsl-merge"
+ "gettext-mo", "gettext-json" and "gettext-js-merge"
  again replacing XX with the locale code:
-
-    add_custom_target (gettext-mo
-                       [...]
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/XX/gsad_xsl.mo
-                       [...])
 
     add_custom_target (gettext-json
                        [...]
@@ -148,11 +142,6 @@ Also add your language to the dependencies of the targets
     add_custom_target (gettext-js-merge
                        [...]
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-XX-merged.po
-                       [...])
-
-    add_custom_target (gettext-xsl-merge
-                       [...]
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-XX-merged.po
                        [...])
 
 

@@ -60,8 +60,7 @@ const MultiSelectedValue = glamorous(SelectedValue)({
   marginTop: '1px',
   marginBottom: '1px',
   backgroundColor: '#ddd',
-  fontFamily: 'Trebuchet MS, Tahoma, Verdana, Arial, sans-serif',
-  fontSize: '0.8em',
+  width: '80px', // acts similar to minWidth?
 });
 
 const DeleteButton = glamorous.div({
@@ -149,11 +148,14 @@ class MultiSelect extends React.Component {
         title={itemLabel}
         key={value}
       >
-        <DeleteButton
-          onClick={!disabled && (() => this.handleRemoveItem(value))}
-        >
-          × {/* Javascript unicode: \u00D7 */}
-        </DeleteButton> {itemLabel}
+        <Layout>
+          <DeleteButton
+            onClick={!disabled && (() => this.handleRemoveItem(value))}
+          >
+            × {/* Javascript unicode: \u00D7 */}
+          </DeleteButton>
+          {itemLabel}
+        </Layout>
       </MultiSelectedValue>
     );
   }
