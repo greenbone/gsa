@@ -44,7 +44,11 @@ export const DEBUG = _('Debug');
 
 export const N_A = _('N/A');
 
-export function render_options(list, default_opt_value, default_opt = '--') {
+export const UNSET_VALUE = '0';
+export const UNSET_LABEL = '--';
+
+export function render_options(list, default_opt_value,
+  default_opt = UNSET_LABEL) {
   const options = map(list, entry => {
     return (
       <option key={entry.id} value={entry.id}>{entry.name}</option>
@@ -72,7 +76,7 @@ export function render_options(list, default_opt_value, default_opt = '--') {
 export const render_select_items = (
   list,
   default_item_value,
-  default_item_label = '--',
+  default_item_label = UNSET_LABEL,
 ) => {
   const items = map(list, item => ({label: item.name, value: item.id}));
 
