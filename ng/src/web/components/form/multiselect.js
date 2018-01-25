@@ -84,14 +84,13 @@ class MultiSelect extends React.Component {
       selectedItems: is_array(value) ? value : [],
     };
 
-    this.handleChange = this.handleChange.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.renderItem = this.renderItem.bind(this);
   }
 
-  handleChange(value) {
+  notifyChange(value) {
     const {name, onChange} = this.props;
 
     if (is_defined(onChange)) {
@@ -114,21 +113,29 @@ class MultiSelect extends React.Component {
       return;
     }
 
+    const newSelectedItems = [...this.state.selectedItems, selectedItem];
+
     this.setState({
       // add item
-      selectedItems: [...this.state.selectedItems, selectedItem],
+      selectedItems: newSelectedItems,
       // reset search term
       search: '',
     });
+
+    this.notifyChange(newSelectedItems);
   }
 
   handleRemoveItem(item) {
     const copy = [...this.state.selectedItems];
     const index = copy.findIndex(elem => elem === item);
+
     copy.splice(index, 1);
+
     this.setState({
       selectedItems: copy,
     });
+
+    this.notifyChange(copy);
   }
 
   componentWillReceiveProps(nextProps) {
