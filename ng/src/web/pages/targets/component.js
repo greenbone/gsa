@@ -39,7 +39,7 @@ import PortListDialog from '../portlists/dialog.js';
 import TargetDialog from './dialog.js';
 
 const id_or__ = value => {
-  return is_defined(value) ? value.id : 0;
+  return is_defined(value) ? value.id : '0';
 };
 
 class TargetComponent extends React.Component {
