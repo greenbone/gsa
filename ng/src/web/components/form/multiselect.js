@@ -179,7 +179,8 @@ class MultiSelect extends React.Component {
       items = option_items(children);
     }
 
-    const displayedItems = items.filter(case_insensitive_filter(search));
+    const displayedItems = is_defined(items) ?
+      items.filter(case_insensitive_filter(search)) : [];
     return (
       <Downshift
         selectedItem={selectedItems}
