@@ -162,7 +162,7 @@ class MultiSelect extends React.Component {
           >
             × {/* Javascript unicode: \u00D7 */}
           </DeleteButton>
-          {itemLabel}
+          <span>{itemLabel}</span>
         </Layout>
       </MultiSelectedValue>
     );
