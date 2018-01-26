@@ -29,6 +29,7 @@ import logger from 'gmp/log.js';
 import {
   classes,
   is_defined,
+  map,
   select_save_id,
 } from 'gmp/utils.js';
 
@@ -166,16 +167,16 @@ const TaskDialog = ({
     name,
     scan_configs,
     scanner_id,
-    scanners = [],
+    scanners,
     schedule_id,
     schedule_periods,
-    schedules = [],
+    schedules,
     source_iface,
     tag_name,
-    tags = [],
+    tags,
     tag_value,
     target_id,
-    targets = [],
+    targets,
     task,
     onNewAlertClick,
     onNewScheduleClick,
@@ -191,13 +192,13 @@ const TaskDialog = ({
     (scanner.scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner.scanner_type === SLAVE_SCANNER_TYPE);
 
-  const tag_opts = tags.map(tag => {
+  const tag_opts = map(tags, tag => {
     return (
       <option key={tag.name} value={tag.name}>
         {tag.name}
       </option>
     );
-  });
+  }, undefined);
 
   const target_opts = render_options(targets);
 
@@ -550,14 +551,10 @@ export default withDialog({
       [OPENVAS_SCAN_CONFIG_TYPE]: [],
       [OSP_SCAN_CONFIG_TYPE]: [],
     },
-    scanners: [],
     scanner_type: OPENVAS_SCANNER_TYPE,
     schedule_id: UNSET_VALUE,
     schedule_periods: NO_VALUE,
-    schedules: [],
-    tags: [],
     target_id: UNSET_VALUE,
-    targets: [],
   },
 })(TaskDialog);
 
