@@ -52,7 +52,7 @@ import {
 } from 'gmp/models/scanconfig.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options, UNSET_VALUE} from '../../utils/render.js';
+import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
 
 import withDialog from '../../components/dialog/withDialog.js';
 
@@ -133,9 +133,9 @@ class ScannerSelect extends React.Component {
           name="scanner_id"
           value={scannerId}
           disabled={!changeTask}
-          onChange={this.handleScannerChange}>
-          {render_options(scanners)}
-        </Select>
+          items={render_select_items(scanners)}
+          onChange={this.handleScannerChange}
+        />
       </FormGroup>
     );
   }
@@ -192,30 +192,26 @@ const TaskDialog = ({
     (scanner.scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner.scanner_type === SLAVE_SCANNER_TYPE);
 
-  const tag_opts = map(tags, tag => {
-    return (
-      <option key={tag.name} value={tag.name}>
-        {tag.name}
-      </option>
-    );
-  }, undefined);
+  const tag_items = map(tags, tag => ({
+    value: tag.name,
+    label: tag.name,
+  }));
 
-  const target_opts = render_options(targets);
+  const target_items = render_select_items(targets);
 
-  const schedule_opts = render_options(schedules, UNSET_VALUE);
+  const schedule_items = render_select_items(schedules, UNSET_VALUE);
 
-
-  const osp_scan_config_opts = is_osp_scanner && render_options(
+  const osp_scan_config_items = is_osp_scanner && render_select_items(
     scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
-  const openvas_scan_config_opts = use_openvas_scan_config &&
-    render_options(
+  const openvas_scan_config_items = use_openvas_scan_config &&
+    render_select_items(
       scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
         // Skip the "empty" config
         return config.id !== EMPTY_SCAN_CONFIG_ID;
       }));
 
-  const alert_opts = render_options(alerts);
+  const alert_items = render_select_items(alerts);
 
   const change_task = task ? task.isChangeable() : true;
 
@@ -251,10 +247,10 @@ const TaskDialog = ({
           <Select
             name="target_id"
             disabled={!change_task}
+            value={target_id}
+            items={target_items}
             onChange={onValueChange}
-            value={target_id}>
-            {target_opts}
-          </Select>
+          />
           {change_task &&
             <Layout flex box>
               <NewIcon
@@ -273,10 +269,10 @@ const TaskDialog = ({
             name="alert_ids"
             multiple="multiple"
             id="alert_ids"
+            value={alert_ids}
+            items={alert_items}
             onChange={onValueChange}
-            value={alert_ids}>
-            {alert_opts}
-          </MultiSelect>
+          />
           <Layout flex box>
             <NewIcon
               title={_('Create a new alert')}
@@ -292,9 +288,9 @@ const TaskDialog = ({
           <Select
             name="schedule_id"
             value={schedule_id}
-            onChange={onValueChange}>
-            {schedule_opts}
-          </Select>
+            items={schedule_items}
+            onChange={onValueChange}
+          />
           <Checkbox
             name="schedule_periods"
             checked={schedule_periods === YES_VALUE}
@@ -379,9 +375,9 @@ const TaskDialog = ({
                 name="config_id"
                 value={openvas_config_id}
                 disabled={!change_task}
-                onChange={onValueChange}>
-                {openvas_scan_config_opts}
-              </Select>
+                items={openvas_scan_config_items}
+                onChange={onValueChange}
+              />
             </FormGroup>
             <FormGroup
               titleSize="4"
@@ -397,17 +393,19 @@ const TaskDialog = ({
               <Select
                 name="hosts_ordering"
                 value={hosts_ordering}
-                onChange={onValueChange}>
-                <option value="sequential">
-                  {_('Sequential')}
-                </option>
-                <option value="random">
-                  {_('Random')}
-                </option>
-                <option value="reverse">
-                  {_('Reverse')}
-                </option>
-              </Select>
+                items={[{
+                    value: 'sequential',
+                    label: _('Sequential'),
+                  }, {
+                    value: 'random',
+                    label: _('Random'),
+                  }, {
+                    value: 'reverse',
+                    label: _('Reverse'),
+                  },
+                ]}
+                onChange={onValueChange}
+               />
             </FormGroup>
             <FormGroup
               titleSize="4"
@@ -445,9 +443,9 @@ const TaskDialog = ({
             <Select
               name="config_id"
               value={osp_config_id}
-              onChange={onValueChange}>
-              {osp_scan_config_opts}
-            </Select>
+              items={osp_scan_config_items}
+              onChange={onValueChange}
+            />
           </FormGroup>
         </Layout>
       }
@@ -469,10 +467,10 @@ const TaskDialog = ({
             title={_('Add Tag:')}/>
           <Select
             name="tag_name"
+            value={tag_name}
+            items={tag_items}
             onChange={onValueChange}
-            value={tag_name}>
-            {tag_opts}
-          </Select>
+          />
           <Text>
             {_('with Value')}
           </Text>
