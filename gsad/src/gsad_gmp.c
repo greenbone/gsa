@@ -30,8 +30,7 @@
  * @brief GMP communication module of Greenbone Security Assistant daemon.
  *
  * This file implements an API for GMP.  The functions call the Greenbone
- * Vulnerability Manager via GMP properly, and apply XSL-Transforms to
- * deliver HTML results.
+ * Vulnerability Manager via GMP properly.
  */
 
 #include <stdio.h>
@@ -469,7 +468,7 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
 }
 
 /**
- * @brief Wrap some XML in an envelope and XSL transform the envelope.
+ * @brief Wrap some XML in an envelope.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
@@ -477,12 +476,12 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
  * @param[in]  xml            XML string.  Freed before exit.
  * @param[out] response_data  Extra data return for the HTTP response or NULL.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped GMP XML object.
  */
 static char *
-xsl_transform_gmp (gvm_connection_t *connection,
-                   credentials_t * credentials, params_t *params, gchar * xml,
-                   cmd_response_data_t *response_data)
+envelope_gmp (gvm_connection_t *connection,
+              credentials_t * credentials, params_t *params, gchar * xml,
+              cmd_response_data_t *response_data)
 {
   time_t now;
   gchar *res, *name;
@@ -727,7 +726,7 @@ member1 (params_t *params, const char *string)
  * @param[out] success      Whether the command returned a success response.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed error message on failure, NULL on success.
+ * @return Error message on failure, NULL on success.
  */
 static char *
 check_modify_config (gvm_connection_t *connection,
@@ -1379,7 +1378,7 @@ next_page_url (credentials_t *credentials, params_t *params,
 }
 
 /**
- * @brief Generate a page containing a result.
+ * @brief Generate a enveloped GMP XML containing a result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
@@ -1391,7 +1390,7 @@ next_page_url (credentials_t *credentials, params_t *params,
  * @param[in]  details        Status details.
  * @param[in]  next_url       URL of next page.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static gchar *
 action_result_page (gvm_connection_t *connection,
@@ -1414,8 +1413,8 @@ action_result_page (gvm_connection_t *connection,
                                  message ? message : "",
                                  details ? details : "",
                                  next_url ? next_url : "");
-  return xsl_transform_gmp (connection, credentials, params, xml,
-                            response_data);
+  return envelope_gmp (connection, credentials, params, xml,
+                       response_data);
 }
 
 /**
@@ -1430,7 +1429,7 @@ action_result_page (gvm_connection_t *connection,
  * @param[in]  op_name        Operation name.
  * @param[in]  next_cmd       Next command.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 gchar *
 message_invalid (gvm_connection_t *connection,
@@ -1522,11 +1521,11 @@ response_from_entity (gvm_connection_t *connection,
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ * @param[in]  response     Extra XML to insert inside envelope.
  * @param[in]  next         Command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 generate_page (gvm_connection_t *connection, credentials_t *credentials,
@@ -1661,9 +1660,9 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
       result = get_report (connection, credentials, params, NULL,
                            response, &error, response_data);
 
-      return error ? result : xsl_transform_gmp (connection, credentials,
-                                                 params, result,
-                                                 response_data);
+      return error ? result : envelope_gmp (connection, credentials,
+                                            params, result,
+                                            response_data);
     }
 
   if (strcmp (next, "get_report_format") == 0)
@@ -1739,10 +1738,10 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  response       Extra XML to insert inside page element for XSLT.
+ * @param[in]  response       Extra XML to insert inside enveloped XML.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 next_page (gvm_connection_t *connection, credentials_t *credentials,
@@ -1760,7 +1759,7 @@ next_page (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get one resource, XSL transform the result.
+ * @brief Get one resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  type           Type of resource.
@@ -1770,7 +1769,7 @@ next_page (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_attribs  Extra attributes for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_one (gvm_connection_t *connection, const char *type,
@@ -1988,12 +1987,12 @@ get_one (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
- * @brief Get all of a particular type of resource, XSL transform the result.
+ * @brief Get all of a particular type of resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  type           Resource type.
@@ -2003,7 +2002,7 @@ get_one (gvm_connection_t *connection, const char *type,
  * @param[in]  extra_attribs  Extra attributes for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_many (gvm_connection_t *connection, const char *type,
@@ -2412,12 +2411,12 @@ get_many (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   g_string_free (type_many, TRUE);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
- * @brief Setup edit XML, XSL transform the result.
+ * @brief Setup edit XML, envelope the result.
  *
  * @param[in]  connection         Connection to manager
  * @param[in]  type               Type or resource to edit.
@@ -2427,7 +2426,7 @@ get_many (gvm_connection_t *connection, const char *type,
  * @param[in]  extra_xml          Extra XML to insert inside page element.
  * @param[out] response_data      Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_resource (gvm_connection_t *connection, const char *type,
@@ -2497,8 +2496,8 @@ edit_resource (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</edit_%s>", type);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -2597,7 +2596,7 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Resource XML on success.  HTML result of XSL transformation on error.
+ * @return Resource XML on success.  XML error object on error.
  */
 char *
 export_resource (gvm_connection_t *connection, const char *type,
@@ -2622,8 +2621,8 @@ export_resource (gvm_connection_t *connection, const char *type,
   if (resource_id == NULL)
     {
       g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
-      return xsl_transform_gmp (connection, credentials, params,
-                                g_string_free (xml, FALSE), response_data);
+      return envelope_gmp (connection, credentials, params,
+                           g_string_free (xml, FALSE), response_data);
     }
 
   subtype = params_value (params, "subtype");
@@ -2756,7 +2755,7 @@ export_resource (gvm_connection_t *connection, const char *type,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return XML on success.  HTML result of XSL transformation on error.
+ * @return XML on success.  XML error object on error.
  */
 static char *
 export_many (gvm_connection_t *connection, const char *type,
@@ -2928,7 +2927,7 @@ export_many (gvm_connection_t *connection, const char *type,
 }
 
 /**
- * @brief Delete a resource, get all resources, XSL transform the result.
+ * @brief Delete a resource, get all resources, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  type           Type of resource.
@@ -2938,7 +2937,7 @@ export_many (gvm_connection_t *connection, const char *type,
  * @param[in]  get            Next page get command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_resource (gvm_connection_t *connection, const char *type,
@@ -3053,7 +3052,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
 }
 
 /**
- * @brief Perform action on resource, get next page, XSL transform result.
+ * @brief Perform action on resource, get next page, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -3062,7 +3061,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
  * @param[in]  action         Action to perform.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 resource_action (gvm_connection_t *connection, credentials_t *credentials,
@@ -3192,14 +3191,14 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
  * multiple GMP commands.
  *
  * Some, like delete_credential_gmp, simply run the GMP commands inside
- * one GMP COMMANDS and leave it to the XSL to figure out the context.
+ * one GMP COMMANDS.
  *
  * Others, like create_target_gmp, run each command separately and wrap the
- * responses in a unique page tag which gives the XSL the context.
+ * responses in a unique page tag.
  *
  * One handler, delete_target_gmp, runs all the commands in a single COMMANDS
  * and also wraps the response in a unique page tag to convey the context to
- * the XSL.  This is probably the way to go.
+ * the enveloped XML.  This is probably the way to go.
  */
 
 /**
@@ -3284,7 +3283,7 @@ setting_get_value_error (gvm_connection_t *connection,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_task (gvm_connection_t *connection, credentials_t * credentials,
@@ -3636,8 +3635,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                           apply_overrides,
                           alerts ? alerts : "1");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -3648,7 +3647,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -3667,7 +3666,7 @@ new_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_container_task (gvm_connection_t *connection,
@@ -3687,9 +3686,9 @@ new_container_task (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</new_container_task>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -3700,7 +3699,7 @@ new_container_task (gvm_connection_t *connection,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_container_task_gmp (gvm_connection_t *connection,
@@ -3720,7 +3719,7 @@ new_container_task_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 upload_report (gvm_connection_t *connection, credentials_t *credentials,
@@ -3752,9 +3751,9 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</upload_report>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -3765,7 +3764,7 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 upload_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -3775,14 +3774,14 @@ upload_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Create a report, get all tasks, XSL transform the result.
+ * @brief Create a report, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_report_gmp (gvm_connection_t *connection,
@@ -3929,14 +3928,14 @@ create_report_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Import report, get all reports, XSL transform the result.
+ * @brief Import report, get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_report_gmp (gvm_connection_t *connection,
@@ -3957,7 +3956,7 @@ CHECK_PARAM_INVALID (name, "Create Task", "new_task")
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_container_task_gmp (gvm_connection_t *connection,
@@ -4035,14 +4034,14 @@ create_container_task_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Create a task, get all tasks, XSL transform the result.
+ * @brief Create a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4399,14 +4398,14 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
 
 /**
- * @brief Delete a task, get all tasks, XSL transform the result.
+ * @brief Delete a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4417,7 +4416,7 @@ delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_task XML, XSL transform the result.
+ * @brief Setup edit_task XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -4425,7 +4424,7 @@ delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_task (gvm_connection_t *connection, credentials_t * credentials,
@@ -4539,20 +4538,20 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_task>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_task XML, XSL transform the result.
+ * @brief Setup edit_task XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4562,14 +4561,14 @@ edit_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Save task, get next page, XSL transform the result.
+ * @brief Save task, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4810,14 +4809,14 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 #undef CHECK
 
 /**
- * @brief Save container task, get next page, XSL transform the result.
+ * @brief Save container task, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char * save_container_task_gmp (gvm_connection_t *connection,
                                 credentials_t *credentials, params_t *params,
@@ -4919,7 +4918,7 @@ char * save_container_task_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Note XML on success.  HTML result of XSL transformation on error.
+ * @return Note XML on success.  Enveloped XML on error.
  */
 char *
 export_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -4937,7 +4936,7 @@ export_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Tasks XML on success.  HTML result of XSL transformation
+ * @return Tasks XML on success.  Enveloped XML
  *         on error.
  */
 char * export_tasks_gmp (gvm_connection_t *connection,
@@ -4949,14 +4948,14 @@ char * export_tasks_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Stop a task, get all tasks, XSL transform the result.
+ * @brief Stop a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 stop_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4967,14 +4966,14 @@ stop_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Resume a task, get all tasks, XSL transform the result.
+ * @brief Resume a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 resume_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -4985,14 +4984,14 @@ resume_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Start a task, get all tasks, XSL transform the result.
+ * @brief Start a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 start_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5010,7 +5009,7 @@ start_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5088,7 +5087,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed NVT details response or error message.
+ * @return XML enveloped NVT details response or error message.
  */
 static char*
 get_nvts (gvm_connection_t *connection, credentials_t *credentials,
@@ -5188,8 +5187,8 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</get_nvts>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -5201,7 +5200,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed SecInfo response or error message.
+ * @return XML enveloped SecInfo response or error message.
  */
 char *
 get_info (gvm_connection_t *connection, credentials_t *credentials,
@@ -5322,14 +5321,14 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get info, XSL transform the result.
+ * @brief Get info, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_info_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5346,7 +5345,7 @@ get_info_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed NVT details response or error message.
+ * @return XML enveloped NVT details response or error message.
  */
 char*
 get_nvts_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -5408,7 +5407,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
 }
 
 /**
- * @brief Get all tasks, XSL transform the result.
+ * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
@@ -5416,7 +5415,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
  * @param[in]  extra_xml         Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -5451,14 +5450,14 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 }
 
 /**
- * @brief Get all tasks, XSL transform the result.
+ * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -5468,7 +5467,7 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get a tasks chart, XSL transform the result.
+ * @brief Get a tasks chart, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
@@ -5476,25 +5475,25 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  extra_xml         Extra XML to insert inside page element.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return xsl_transform_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
+                       response_data);
 }
 
 /**
- * @brief Get a tasks chart, XSL transform the result.
+ * @brief Get a tasks chart, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -5505,7 +5504,7 @@ get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 
 
 /**
- * @brief Get all tasks, XSL transform the result.
+ * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -5513,7 +5512,7 @@ get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, 
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_task (gvm_connection_t *connection, credentials_t *credentials,
@@ -5830,20 +5829,20 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</get_task>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get a task, XSL transform the result.
+ * @brief Get a task, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5861,7 +5860,7 @@ get_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_credential (gvm_connection_t *connection, credentials_t *credentials,
@@ -5873,20 +5872,20 @@ new_credential (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_credential>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Create a credential, get all credentials, XSL transform result.
+ * @brief Create a credential, get all credentials, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_credential_gmp (gvm_connection_t *connection,
@@ -6189,7 +6188,7 @@ create_credential_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get one credential, XSL transform the result.
+ * @brief Get one credential, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials        Username and password for authentication.
@@ -6197,7 +6196,7 @@ create_credential_gmp (gvm_connection_t *connection,
  * @param[in]   commands           Extra commands to run before the others.
  * @param[out]  response_data      Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_credential (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6208,14 +6207,14 @@ get_credential (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get one credential, XSL transform the result.
+ * @brief Get one credential, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_credential_gmp (gvm_connection_t *connection,
@@ -6420,7 +6419,7 @@ download_credential_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Credential XML on success.  HTML result of XSL transformation
+ * @return Credential XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -6440,7 +6439,7 @@ export_credential_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Credentials XML on success.  HTML result of XSL transformation
+ * @return Credentials XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -6453,7 +6452,7 @@ export_credentials_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get one or all credentials, XSL transform the result.
+ * @brief Get one or all credentials, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -6473,7 +6472,7 @@ get_credentials (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Get one or all credentials, XSL transform the result.
+ * @brief Get one or all credentials, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -6490,14 +6489,14 @@ get_credentials_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete credential, get all credentials, XSL transform result.
+ * @brief Delete credential, get all credentials, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6515,7 +6514,7 @@ delete_credential_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_credential_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -6525,7 +6524,7 @@ new_credential_gmp (gvm_connection_t *connection, credentials_t *credentials, pa
 }
 
 /**
- * @brief Setup edit_credential XML, XSL transform the result.
+ * @brief Setup edit_credential XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
@@ -6533,7 +6532,7 @@ new_credential_gmp (gvm_connection_t *connection, credentials_t *credentials, pa
  * @param[in]  extra_xml         Extra XML to insert inside page element.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_credential (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6544,14 +6543,14 @@ edit_credential (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Setup edit_credential XML, XSL transform the result.
+ * @brief Setup edit_credential XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6561,14 +6560,14 @@ edit_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Save credential, get next page, XSL transform the result.
+ * @brief Save credential, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -6776,7 +6775,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -6787,8 +6786,8 @@ new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_agent>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -6799,7 +6798,7 @@ new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_agent_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -6809,14 +6808,14 @@ new_agent_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Create an agent, get all agents, XSL transform result.
+ * @brief Create an agent, get all agents, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials          Username and password for authentication.
  * @param[in]  params               Request parameters.
  * @param[out] response_data        Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6954,14 +6953,14 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Delete agent, get all agents, XSL transform result.
+ * @brief Delete agent, get all agents, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6972,7 +6971,7 @@ delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get an agent, XSL transform the result.
+ * @brief Get an agent, envelope the result.
  *
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
@@ -7138,7 +7137,7 @@ download_agent_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Setup edit_agent XML, XSL transform the result.
+ * @brief Setup edit_agent XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -7146,7 +7145,7 @@ download_agent_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7157,14 +7156,14 @@ edit_agent (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Setup edit_agent XML, XSL transform the result.
+ * @brief Setup edit_agent XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7174,14 +7173,14 @@ edit_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Modify a agent, get all agents, XSL transform the result.
+ * @brief Modify a agent, get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7259,7 +7258,7 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get one agent, XSL transform the result.
+ * @brief Get one agent, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -7267,7 +7266,7 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7277,14 +7276,14 @@ get_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get one agent, XSL transform the result.
+ * @brief Get one agent, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7294,7 +7293,7 @@ get_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get all agents, XSL transform the result.
+ * @brief Get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -7302,7 +7301,7 @@ get_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agents (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7313,14 +7312,14 @@ get_agents (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Get all agents, XSL transform the result.
+ * @brief Get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agents_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7330,14 +7329,14 @@ get_agents_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Verify agent, get agents, XSL transform the result.
+ * @brief Verify agent, get agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7433,7 +7432,7 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Agent XML on success.  HTML result of XSL transformation on error.
+ * @return Agent XML on success.  Enveloped XML on error.
  */
 char *
 export_agent_gmp (gvm_connection_t *connection,
@@ -7452,7 +7451,7 @@ export_agent_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Agents XML on success.  HTML result of XSL transformation
+ * @return Agents XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -7644,8 +7643,8 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   g_free (response);
   g_string_append (xml, "</get_aggregate>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -7657,7 +7656,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -7838,8 +7837,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   free_entity (entity);
 
   g_string_append (xml, "</new_alert>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -7850,7 +7849,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_alert_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -8072,14 +8071,14 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
 }
 
 /**
- * @brief Create an alert, get all alerts, XSL transform the result.
+ * @brief Create an alert, get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8218,14 +8217,14 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Delete an alert, get all alerts, XSL transform the result.
+ * @brief Delete an alert, get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8236,7 +8235,7 @@ delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get one alert, XSL transform the result.
+ * @brief Get one alert, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -8244,7 +8243,7 @@ delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8405,14 +8404,14 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get one alert, XSL transform the result.
+ * @brief Get one alert, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8422,7 +8421,7 @@ get_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get all alerts, XSL transform the result.
+ * @brief Get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -8430,7 +8429,7 @@ get_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8542,14 +8541,14 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Get all alerts, XSL transform the result.
+ * @brief Get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alerts_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8559,7 +8558,7 @@ get_alerts_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Setup edit_alert XML, XSL transform the result.
+ * @brief Setup edit_alert XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -8567,7 +8566,7 @@ get_alerts_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_alert (gvm_connection_t *connection, credentials_t * credentials,
@@ -8777,20 +8776,20 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_alert>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_alert XML, XSL transform the result.
+ * @brief Setup edit_alert XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -8800,14 +8799,14 @@ edit_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify an alert, get all alerts, XSL transform the result.
+ * @brief Modify an alert, get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -8948,14 +8947,14 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Test an alert, get all alerts XSL transform the result.
+ * @brief Test an alert, get all alerts envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -9025,7 +9024,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Alert XML on success.  HTML result of XSL transformation on error.
+ * @return Alert XML on success.  Enveloped XML on error.
  */
 char *
 export_alert_gmp (gvm_connection_t *connection,
@@ -9044,7 +9043,7 @@ export_alert_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Alerts XML on success.  HTML result of XSL transformation
+ * @return Alerts XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -9065,7 +9064,7 @@ export_alerts_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_target (gvm_connection_t *connection, credentials_t *credentials,
@@ -9212,9 +9211,9 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -9225,7 +9224,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -9235,14 +9234,14 @@ new_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Create a target, get all targets, XSL transform the result.
+ * @brief Create a target, get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_target_gmp (gvm_connection_t *connection, credentials_t *
@@ -9474,14 +9473,14 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
     }
 
 /**
- * @brief Clone a resource, XSL transform the result.
+ * @brief Clone a resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -9608,14 +9607,14 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
 #undef CHECK
 
 /**
- * @brief Delete a target, get all targets, XSL transform the result.
+ * @brief Delete a target, get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_target_gmp (gvm_connection_t *connection, credentials_t *
@@ -9627,14 +9626,14 @@ delete_target_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Delete a trash agent, get all agents, XSL transform the result.
+ * @brief Delete a trash agent, get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9645,14 +9644,14 @@ delete_trash_agent_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Delete a trash config, get all trash, XSL transform the result.
+ * @brief Delete a trash config, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9663,14 +9662,14 @@ delete_trash_config_gmp (gvm_connection_t *connection, credentials_t * credentia
 }
 
 /**
- * @brief Delete a trash alert, get all trash, XSL transform the result.
+ * @brief Delete a trash alert, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9681,14 +9680,14 @@ delete_trash_alert_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Delete a trash credential, get all trash, XSL transform the result.
+ * @brief Delete a trash credential, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9699,14 +9698,14 @@ delete_trash_credential_gmp (gvm_connection_t *connection, credentials_t * crede
 }
 
 /**
- * @brief Delete a trash report format, get all trash, XSL transform the result.
+ * @brief Delete a trash report format, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9717,14 +9716,14 @@ delete_trash_report_format_gmp (gvm_connection_t *connection, credentials_t * cr
 }
 
 /**
- * @brief Delete a trash schedule, get all trash, XSL transform the result.
+ * @brief Delete a trash schedule, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9735,14 +9734,14 @@ delete_trash_schedule_gmp (gvm_connection_t *connection, credentials_t * credent
 }
 
 /**
- * @brief Delete a trash target, get all trash, XSL transform the result.
+ * @brief Delete a trash target, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_target_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9753,14 +9752,14 @@ delete_trash_target_gmp (gvm_connection_t *connection, credentials_t * credentia
 }
 
 /**
- * @brief Delete a trash task, get all trash, XSL transform the result.
+ * @brief Delete a trash task, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9771,7 +9770,7 @@ delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Restore a resource, get all trash, XSL transform the result.
+ * @brief Restore a resource, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  connection     Connection to manager.
@@ -9779,7 +9778,7 @@ delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -9849,14 +9848,14 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Empty the trashcan, get all trash, XSL transform the result.
+ * @brief Empty the trashcan, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
@@ -9919,7 +9918,7 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_tag (gvm_connection_t *connection, credentials_t *credentials,
@@ -9959,9 +9958,9 @@ new_tag (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -9972,7 +9971,7 @@ new_tag (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -9982,14 +9981,14 @@ new_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Create a tag, get report, XSL transform the result.
+ * @brief Create a tag, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -10081,14 +10080,14 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete note, get next page, XSL transform the result.
+ * @brief Delete note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -10098,14 +10097,14 @@ delete_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Delete a note, get all notes, XSL transform the result.
+ * @brief Delete a note, get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -10116,7 +10115,7 @@ delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_tag XML, XSL transform the result.
+ * @brief Setup edit_tag XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -10124,7 +10123,7 @@ delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_tag (gvm_connection_t *connection, credentials_t * credentials,
@@ -10188,20 +10187,20 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_tag>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_tag XML, XSL transform the result.
+ * @brief Setup edit_tag XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10211,14 +10210,14 @@ edit_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify a tag, get all tags, XSL transform the result.
+ * @brief Modify a tag, get all tags, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10323,7 +10322,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Target XML on success.  HTML result of XSL transformation
+ * @return Target XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -10342,7 +10341,7 @@ export_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Targets XML on success.  HTML result of XSL transformation
+ * @return Targets XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -10354,7 +10353,7 @@ export_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one tag, XSL transform the result.
+ * @brief Get one tag, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10362,7 +10361,7 @@ export_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_tag (gvm_connection_t *connection, credentials_t * credentials,
@@ -10374,14 +10373,14 @@ get_tag (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one tag, XSL transform the result.
+ * @brief Get one tag, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10391,7 +10390,7 @@ get_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all tags, XSL transform the result.
+ * @brief Get all tags, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10399,7 +10398,7 @@ get_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_tags (gvm_connection_t *connection, credentials_t * credentials,
@@ -10411,14 +10410,14 @@ get_tags (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all tags, XSL transform the result.
+ * @brief Get all tags, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10435,7 +10434,7 @@ get_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10519,7 +10518,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_target XML, XSL transform the result.
+ * @brief Setup edit_target XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10527,7 +10526,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_target (gvm_connection_t *connection, credentials_t * credentials,
@@ -10672,20 +10671,20 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_target>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_target XML, XSL transform the result.
+ * @brief Setup edit_target XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10695,7 +10694,7 @@ edit_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one target, XSL transform the result.
+ * @brief Get one target, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10703,7 +10702,7 @@ edit_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_target (gvm_connection_t *connection, credentials_t * credentials,
@@ -10715,14 +10714,14 @@ get_target (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one target, XSL transform the result.
+ * @brief Get one target, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10732,7 +10731,7 @@ get_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all targets, XSL transform the result.
+ * @brief Get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10740,7 +10739,7 @@ get_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_targets (gvm_connection_t *connection, credentials_t * credentials,
@@ -10752,14 +10751,14 @@ get_targets (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all targets, XSL transform the result.
+ * @brief Get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_targets_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10769,14 +10768,14 @@ get_targets_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify a target, get all targets, XSL transform the result.
+ * @brief Modify a target, get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -11039,7 +11038,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Target XML on success.  HTML result of XSL transformation
+ * @return Target XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -11059,7 +11058,7 @@ export_target_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Targets XML on success.  HTML result of XSL transformation
+ * @return Targets XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -11080,7 +11079,7 @@ export_targets_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_config (gvm_connection_t *connection, credentials_t *credentials,
@@ -11135,9 +11134,9 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
   free_entity (entity);
 
   g_string_append (xml, "</new_config>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -11148,7 +11147,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -11166,7 +11165,7 @@ new_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 upload_config (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -11179,8 +11178,8 @@ upload_config (gvm_connection_t *connection, credentials_t *credentials, params_
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_config>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -11191,7 +11190,7 @@ upload_config (gvm_connection_t *connection, credentials_t *credentials, params_
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 upload_config_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -11201,14 +11200,14 @@ upload_config_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Create config, get all configs, XSL transform the result.
+ * @brief Create config, get all configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11289,14 +11288,14 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Import config, get all configs, XSL transform the result.
+ * @brief Import config, get all configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11363,7 +11362,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Get all scan configs, XSL transform the result.
+ * @brief Get all scan configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -11371,7 +11370,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_configs (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -11382,14 +11381,14 @@ get_configs (gvm_connection_t *connection, credentials_t *credentials, params_t 
 }
 
 /**
- * @brief Get all scan configs, XSL transform the result.
+ * @brief Get all scan configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_configs_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11399,7 +11398,7 @@ get_configs_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -11408,7 +11407,7 @@ get_configs_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]  edit         0 for config view page, else config edit page.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_config (gvm_connection_t *connection, credentials_t * credentials,
@@ -11580,19 +11579,19 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11602,14 +11601,14 @@ get_config_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_config (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11619,14 +11618,14 @@ edit_config (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11636,14 +11635,14 @@ edit_config_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Sync config, get configs, XSL transform the result.
+ * @brief Sync config, get configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -11707,7 +11706,7 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[out]  success        Whether the last command was successful.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return HTML result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
@@ -12026,7 +12025,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get details of a family for a config, XSL transform the result.
+ * @brief Get details of a family for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -12034,7 +12033,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  edit         0 for config view page, else config edit page.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_config_family (gvm_connection_t *connection, credentials_t *
@@ -12154,19 +12153,19 @@ get_config_family (gvm_connection_t *connection, credentials_t *
     }
 
   g_string_append (xml, "</get_config_family_response>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get details of a family for a config, XSL transform the result.
+ * @brief Get details of a family for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12176,14 +12175,14 @@ get_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Get details of a family for editing a config, XSL transform result.
+ * @brief Get details of a family for editing a config, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12193,14 +12192,14 @@ edit_config_family_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Get details of an NVT for a config, XSL transform the result.
+ * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_config_family_gmp (gvm_connection_t *connection, credentials_t *
@@ -12290,7 +12289,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get details of an NVT for a config, XSL transform the result.
+ * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -12298,7 +12297,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  edit         0 for config view page, else config edit page.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
@@ -12429,19 +12428,19 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get details of an NVT for a config, XSL transform the result.
+ * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12451,14 +12450,14 @@ get_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Edit details of an NVT for a config, XSL transform the result.
+ * @brief Edit details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12468,14 +12467,14 @@ edit_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Save NVT prefs for a config, get NVT details, XSL transform result.
+ * @brief Save NVT prefs for a config, get NVT details, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
@@ -12691,14 +12690,14 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Delete config, get all configs, XSL transform the result.
+ * @brief Delete config, get all configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12716,7 +12715,7 @@ delete_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Config XML on success.  HTML result of XSL transformation on error.
+ * @return Config XML on success.  Enveloped XML on error.
  */
 char *
 export_config_gmp (gvm_connection_t *connection,
@@ -12735,7 +12734,7 @@ export_config_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Scan configs XML on success.  HTML result of XSL transformation
+ * @return Scan configs XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12754,7 +12753,7 @@ export_configs_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Note XML on success.  HTML result of XSL transformation on error.
+ * @return Note XML on success.  Enveloped XML on error.
  */
 char *
 export_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -12772,7 +12771,7 @@ export_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Notes XML on success.  HTML result of XSL transformation
+ * @return Notes XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12791,7 +12790,7 @@ export_notes_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Override XML on success.  HTML result of XSL transformation on error.
+ * @return Override XML on success.  Enveloped XML on error.
  */
 char *
 export_override_gmp (gvm_connection_t *connection,
@@ -12810,7 +12809,7 @@ export_override_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Overrides XML on success.  HTML result of XSL transformation
+ * @return Overrides XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12830,7 +12829,7 @@ export_overrides_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Port List XML on success.  HTML result of XSL transformation on
+ * @return Port List XML on success.  Enveloped XML on
  *         error.
  */
 char *
@@ -12850,7 +12849,7 @@ export_port_list_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Port Lists XML on success.  HTML result of XSL transformation
+ * @return Port Lists XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12870,7 +12869,7 @@ export_port_lists_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Config XML on success.  HTML result of XSL transformation on error.
+ * @return Config XML on success.  Enveloped XML on error.
  */
 char *
 export_preference_file_gmp (gvm_connection_t *connection,
@@ -12955,9 +12954,9 @@ export_preference_file_gmp (gvm_connection_t *connection,
     }
 
   g_string_append (xml, "</get_preferences_response>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -12968,7 +12967,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Report format XML on success.  HTML result of XSL transformation
+ * @return Report format XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12988,7 +12987,7 @@ export_report_format_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Report Formats XML on success.  HTML result of XSL transformation
+ * @return Report Formats XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -13001,14 +13000,14 @@ export_report_formats_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Delete report, get task status, XSL transform the result.
+ * @brief Delete report, get task status, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_report_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -13905,7 +13904,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
       task_id = NULL;
 
-      /* Format is NULL, send XSL transformed XML. */
+      /* Format is NULL, send enveloped XML. */
 
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         xml = g_string_new ("<get_delta_result>");
@@ -14322,7 +14321,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get a report and XSL transform the result.
+ * @brief Get a report and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -14341,8 +14340,8 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
   result = get_report (connection, credentials, params, NULL, NULL, &error,
                        response_data);
 
-  return error ? result : xsl_transform_gmp (connection, credentials, params,
-                                             result, response_data);
+  return error ? result : envelope_gmp (connection, credentials, params,
+                                        result, response_data);
 }
 
 /**
@@ -14353,7 +14352,7 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 report_alert_gmp (gvm_connection_t *connection,
@@ -14457,7 +14456,7 @@ report_alert_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get all reports, XSL transform the result.
+ * @brief Get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -14465,7 +14464,7 @@ report_alert_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_reports (gvm_connection_t *connection, credentials_t * credentials,
@@ -14484,14 +14483,14 @@ get_reports (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all reports, XSL transform the result.
+ * @brief Get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_reports_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -14501,14 +14500,14 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get the hosts for a report, XSL transform the result.
+ * @brief Get the hosts for a report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_report_section (gvm_connection_t *connection,
@@ -14544,8 +14543,8 @@ get_report_section (gvm_connection_t *connection,
       result = get_report (connection, credentials, params, NULL,
                            extra_xml, &error, response_data);
 
-      return error ? result : xsl_transform_gmp (connection, credentials,
-                                                 params, result, response_data);
+      return error ? result : envelope_gmp (connection, credentials,
+                                            params, result, response_data);
     }
 
   result = get_report (connection, credentials, params, NULL, NULL,
@@ -14610,19 +14609,19 @@ get_report_section (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get a report section, XSL transform the result.
+ * @brief Get a report section, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_report_section_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -14748,7 +14747,7 @@ download_key_pub (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Result XML on success.  HTML result of XSL transformation
+ * @return Result XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -14768,7 +14767,7 @@ export_result_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Results XML on success.  HTML result of XSL transformation
+ * @return Results XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -14781,7 +14780,7 @@ export_results_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get all results, XSL transform the result.
+ * @brief Get all results, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -14789,7 +14788,7 @@ export_results_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_results (gvm_connection_t *connection, credentials_t * credentials,
@@ -14808,14 +14807,14 @@ get_results (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all results, XSL transform the result.
+ * @brief Get all results, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -14829,7 +14828,7 @@ get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get one result, XSL transform the result.
+ * @brief Get one result, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials      Username and password for authentication.
@@ -14843,7 +14842,7 @@ get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml        Extra XML to insert inside page element.
  * @param[out] response_data    Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_result (gvm_connection_t *connection, credentials_t *credentials,
@@ -14954,19 +14953,19 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_result>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get one result, XSL transform the result.
+ * @brief Get one result, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_result_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -14993,7 +14992,7 @@ get_result_gmp (gvm_connection_t *connection, credentials_t *credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_result_page (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15013,7 +15012,7 @@ get_result_page (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Get all notes, XSL transform the result.
+ * @brief Get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15021,7 +15020,7 @@ get_result_page (gvm_connection_t *connection, credentials_t *credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_notes (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -15031,14 +15030,14 @@ get_notes (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 }
 
 /**
- * @brief Get all notes, XSL transform the result.
+ * @brief Get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15048,7 +15047,7 @@ get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Get a note, XSL transform the result.
+ * @brief Get a note, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15056,7 +15055,7 @@ get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_note (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -15066,14 +15065,14 @@ get_note (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
 }
 
 /**
- * @brief Get a note, XSL transform the result.
+ * @brief Get a note, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15091,7 +15090,7 @@ get_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_note (gvm_connection_t *connection, credentials_t *credentials,
@@ -15170,8 +15169,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
         }
 
       g_string_append (xml, "</new_note>");
-      return xsl_transform_gmp (connection, credentials, params,
-                                g_string_free (xml, FALSE), response_data);
+      return envelope_gmp (connection, credentials, params,
+                           g_string_free (xml, FALSE), response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -15258,8 +15257,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_note>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -15270,7 +15269,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15406,14 +15405,14 @@ get_result_id_from_params(params_t *params)
 }
 
 /**
- * @brief Create a note, get report, XSL transform the result.
+ * @brief Create a note, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15515,14 +15514,14 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Delete note, get next page, XSL transform the result.
+ * @brief Delete note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -15532,14 +15531,14 @@ delete_note_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Delete a note, get all notes, XSL transform the result.
+ * @brief Delete a note, get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -15550,7 +15549,7 @@ delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Edit note, get next page, XSL transform the result.
+ * @brief Edit note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15558,7 +15557,7 @@ delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_note (gvm_connection_t *connection, credentials_t *credentials,
@@ -15609,19 +15608,19 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_note>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Edit note, get next page, XSL transform the result.
+ * @brief Edit note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15631,14 +15630,14 @@ edit_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Save note, get next page, XSL transform the result.
+ * @brief Save note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -15743,7 +15742,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all overrides, XSL transform the result.
+ * @brief Get all overrides, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15751,7 +15750,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_overrides (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15762,14 +15761,14 @@ get_overrides (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Get all overrides, XSL transform the result.
+ * @brief Get all overrides, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15779,7 +15778,7 @@ get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Get a override, XSL transform the result.
+ * @brief Get a override, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15787,7 +15786,7 @@ get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_override (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15798,14 +15797,14 @@ get_override (gvm_connection_t *connection, credentials_t *credentials, params_t
 }
 
 /**
- * @brief Get an override, XSL transform the result.
+ * @brief Get an override, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15823,7 +15822,7 @@ get_override_gmp (gvm_connection_t *connection, credentials_t *credentials, para
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_override (gvm_connection_t *connection, credentials_t *credentials,
@@ -15902,8 +15901,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
         }
 
       g_string_append (xml, "</new_override>");
-      return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                                response_data);
+      return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -15992,8 +15991,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_override>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -16004,7 +16003,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16014,14 +16013,14 @@ new_override_gmp (gvm_connection_t *connection, credentials_t *credentials, para
 }
 
 /**
- * @brief Create an override, get report, XSL transform the result.
+ * @brief Create an override, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -16152,14 +16151,14 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete override, get next page, XSL transform the result.
+ * @brief Delete override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16170,14 +16169,14 @@ delete_override_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete a override, get all overrides, XSL transform the result.
+ * @brief Delete a override, get all overrides, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16188,7 +16187,7 @@ delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credent
 }
 
 /**
- * @brief Edit override, get next page, XSL transform the result.
+ * @brief Edit override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16196,7 +16195,7 @@ delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credent
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_override (gvm_connection_t *connection, credentials_t *credentials,
@@ -16247,19 +16246,19 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_override>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Edit override, get next page, XSL transform the result.
+ * @brief Edit override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16269,14 +16268,14 @@ edit_override_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Save override, get next page, XSL transform the result.
+ * @brief Save override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -16392,7 +16391,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
 /* Scanners. */
 
 /**
- * @brief Get all scanners, XSL transform the result.
+ * @brief Get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16400,7 +16399,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_scanners (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16411,14 +16410,14 @@ get_scanners (gvm_connection_t *connection, credentials_t *credentials, params_t
 }
 
 /**
- * @brief Get all scanners, XSL transform the result.
+ * @brief Get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_scanners_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16428,7 +16427,7 @@ get_scanners_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get one scanner, XSL transform the result.
+ * @brief Get one scanner, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16436,7 +16435,7 @@ get_scanners_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_scanner (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16447,14 +16446,14 @@ get_scanner (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Get one scanner, XSL transform the result.
+ * @brief Get one scanner, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16471,7 +16470,7 @@ get_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Scanner XML on success.  HTML result of XSL transformation on error.
+ * @return Scanner XML on success.  Enveloped XML on error.
  */
 char *
 export_scanner_gmp (gvm_connection_t *connection,
@@ -16490,7 +16489,7 @@ export_scanner_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Scanners XML on success. HTML result of XSL transformation on error.
+ * @return Scanners XML on success. Enveloped XML on error.
  */
 char *
 export_scanners_gmp (gvm_connection_t *connection,
@@ -16510,7 +16509,7 @@ export_scanners_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_scanner (gvm_connection_t *connection, credentials_t *credentials,
@@ -16548,9 +16547,9 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   g_string_append (xml, "</new_scanner>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -16561,7 +16560,7 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16571,14 +16570,14 @@ new_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Verify scanner, get scanners, XSL transform the result.
+ * @brief Verify scanner, get scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16663,14 +16662,14 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Create a scanner, get all scanners, XSL transform the result.
+ * @brief Create a scanner, get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16761,14 +16760,14 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Delete a scanner, get all scanners, XSL transform the result.
+ * @brief Delete a scanner, get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16779,14 +16778,14 @@ delete_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Delete a trash scanner, get all scanners, XSL transform the result.
+ * @brief Delete a trash scanner, get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16797,7 +16796,7 @@ delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credenti
 }
 
 /**
- * @brief Setup edit_scanner XML, XSL transform the result.
+ * @brief Setup edit_scanner XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16805,7 +16804,7 @@ delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credenti
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
@@ -16875,19 +16874,19 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_scanner>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_scanner XML, XSL transform the result.
+ * @brief Setup edit_scanner XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16897,14 +16896,14 @@ edit_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Save scanner, get next page, XSL transform the result.
+ * @brief Save scanner, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17058,7 +17057,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 /* Schedules. */
 
 /**
- * @brief Get one schedule, XSL transform the result.
+ * @brief Get one schedule, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17066,7 +17065,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_schedule (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17077,14 +17076,14 @@ get_schedule (gvm_connection_t *connection, credentials_t * credentials, params_
 }
 
 /**
- * @brief Get one schedule, XSL transform the result.
+ * @brief Get one schedule, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17094,7 +17093,7 @@ get_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get all schedules, XSL transform the result.
+ * @brief Get all schedules, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17102,7 +17101,7 @@ get_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_schedules (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17113,14 +17112,14 @@ get_schedules (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Get all schedules, XSL transform the result.
+ * @brief Get all schedules, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_schedules_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17138,7 +17137,7 @@ get_schedules_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17171,8 +17170,8 @@ new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17183,7 +17182,7 @@ new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17193,14 +17192,14 @@ new_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials, para
 }
 
 /**
- * @brief Create a schedule, get all schedules, XSL transform the result.
+ * @brief Create a schedule, get all schedules, envelope the result.
  * @param[in]  connection     Connection to manager.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17325,14 +17324,14 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete a schedule, get all schedules, XSL transform the result.
+ * @brief Delete a schedule, get all schedules, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17343,14 +17342,14 @@ delete_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Get all system reports, XSL transform the result.
+ * @brief Get all system reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_system_reports_gmp (gvm_connection_t *connection,
@@ -17541,8 +17540,8 @@ get_system_reports_gmp (gvm_connection_t *connection,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_system_reports>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17723,7 +17722,7 @@ get_system_report_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get one report format, XSL transform the result.
+ * @brief Get one report format, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17731,7 +17730,7 @@ get_system_report_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_report_format (gvm_connection_t *connection, credentials_t *
@@ -17743,14 +17742,14 @@ get_report_format (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get one report format, XSL transform the result.
+ * @brief Get one report format, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17760,7 +17759,7 @@ get_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Get all Report Formats, XSL transform the result.
+ * @brief Get all Report Formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17768,7 +17767,7 @@ get_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_report_formats (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17779,14 +17778,14 @@ get_report_formats (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Get all Report Formats, XSL transform the result.
+ * @brief Get all Report Formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_report_formats_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17804,7 +17803,7 @@ get_report_formats_gmp (gvm_connection_t *connection, credentials_t * credential
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_report_format (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17815,8 +17814,8 @@ new_report_format (gvm_connection_t *connection, credentials_t *credentials, par
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_report_format>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17827,7 +17826,7 @@ new_report_format (gvm_connection_t *connection, credentials_t *credentials, par
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_report_format_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17837,14 +17836,14 @@ new_report_format_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete report format, get report formats, XSL transform the result.
+ * @brief Delete report format, get report formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_report_format_gmp (gvm_connection_t *connection,
@@ -17856,7 +17855,7 @@ delete_report_format_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Setup edit_report_format XML, XSL transform the result.
+ * @brief Setup edit_report_format XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17864,7 +17863,7 @@ delete_report_format_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_report_format (gvm_connection_t *connection,
@@ -17895,14 +17894,14 @@ edit_report_format (gvm_connection_t *connection,
 }
 
 /**
- * @brief Setup edit_report_format XML, XSL transform the result.
+ * @brief Setup edit_report_format XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_report_format_gmp (gvm_connection_t *connection,
@@ -17914,14 +17913,14 @@ edit_report_format_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Import report format, get all report formats, XSL transform result.
+ * @brief Import report format, get all report formats, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17991,14 +17990,14 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
 }
 
 /**
- * @brief Save report_format, get next page, XSL transform the result.
+ * @brief Save report_format, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -18281,14 +18280,14 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Verify report format, get report formats, XSL transform the result.
+ * @brief Verify report format, get report formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -18379,14 +18378,14 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
 }
 
 /**
- * @brief Run a wizard and XSL transform the result.
+ * @brief Run a wizard and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -18521,7 +18520,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
       }
 
 /**
- * @brief Setup trash page XML, XSL transform the result.
+ * @brief Setup trash page XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -18529,7 +18528,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_trash (gvm_connection_t *connection, credentials_t * credentials,
@@ -18581,21 +18580,21 @@ get_trash (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 #undef GET_TRASH_RESOURCE
 
 /**
- * @brief Get all trash, XSL transform the result.
+ * @brief Get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_trash_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -18613,7 +18612,7 @@ get_trash_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
@@ -18660,9 +18659,9 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</get_my_settings>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -18673,7 +18672,7 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
@@ -18756,7 +18755,7 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
@@ -18868,9 +18867,9 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -18881,7 +18880,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_my_settings_gmp (gvm_connection_t *connection, credentials_t *
@@ -18977,7 +18976,7 @@ send_settings_filters (gvm_connection_t *connection, params_t *data,
  * @param[out] language     Language.  Caller must free.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
@@ -19731,7 +19730,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
@@ -19775,9 +19774,9 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_protocol_doc>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -19788,7 +19787,7 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return XML on success.  HTML result of XSL transformation on error.
+ * @return XML on success.  Enveloped XML on error.
  */
 char *
 export_gmp_doc_gmp (gvm_connection_t *connection,
@@ -19881,7 +19880,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
 /* Groups. */
 
 /**
- * @brief Get one group, XSL transform the result.
+ * @brief Get one group, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -19889,7 +19888,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_group (gvm_connection_t *connection, credentials_t * credentials,
@@ -19901,14 +19900,14 @@ get_group (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one group, XSL transform the result.
+ * @brief Get one group, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -19918,7 +19917,7 @@ get_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all groups, XSL transform the result.
+ * @brief Get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -19926,7 +19925,7 @@ get_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_groups (gvm_connection_t *connection, credentials_t * credentials,
@@ -19938,14 +19937,14 @@ get_groups (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all groups, XSL transform the result.
+ * @brief Get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_groups_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -19963,7 +19962,7 @@ get_groups_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -19974,8 +19973,8 @@ new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_group>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -19986,7 +19985,7 @@ new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -19996,14 +19995,14 @@ new_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Delete a group from trash, get all groups, XSL transform the result.
+ * @brief Delete a group from trash, get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20014,14 +20013,14 @@ delete_trash_group_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Delete a group, get all groups, XSL transform the result.
+ * @brief Delete a group, get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20032,14 +20031,14 @@ delete_group_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Create a group, get all groups, XSL transform the result.
+ * @brief Create a group, get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -20136,7 +20135,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
 }
 
 /**
- * @brief Setup edit_group XML, XSL transform the result.
+ * @brief Setup edit_group XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20144,7 +20143,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_group (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20155,14 +20154,14 @@ edit_group (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Setup edit_group XML, XSL transform the result.
+ * @brief Setup edit_group XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20179,7 +20178,7 @@ edit_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Group XML on success.  HTML result of XSL transformation on error.
+ * @return Group XML on success.  Enveloped XML on error.
  */
 char *
 export_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -20197,7 +20196,7 @@ export_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Groups XML on success.  HTML result of XSL transformation
+ * @return Groups XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -20216,7 +20215,7 @@ export_groups_gmp (gvm_connection_t *connection,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20301,7 +20300,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 /* Permissions. */
 
 /**
- * @brief Get one permission, XSL transform the result.
+ * @brief Get one permission, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20309,7 +20308,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20320,14 +20319,14 @@ get_permission (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get one permission, XSL transform the result.
+ * @brief Get one permission, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20337,7 +20336,7 @@ get_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Get all permissions, XSL transform the result.
+ * @brief Get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20345,7 +20344,7 @@ get_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, p
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_permissions (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20356,14 +20355,14 @@ get_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Get all permissions, XSL transform the result.
+ * @brief Get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20373,14 +20372,14 @@ get_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete a permission, get all permissions, XSL transform the result.
+ * @brief Delete a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20391,14 +20390,14 @@ delete_trash_permission_gmp (gvm_connection_t *connection, credentials_t * crede
 }
 
 /**
- * @brief Delete a permission, get all permissions, XSL transform the result.
+ * @brief Delete a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20409,7 +20408,7 @@ delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Setup new_permission XML, XSL transform the result.
+ * @brief Setup new_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20417,7 +20416,7 @@ delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20567,19 +20566,19 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
 
   g_string_append (xml, "</new_permission>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup new_permission XML, XSL transform the result.
+ * @brief Setup new_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20589,14 +20588,14 @@ new_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Create a permission, get all permissions, XSL transform the result.
+ * @brief Create a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -20932,7 +20931,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }                                                                         \
 
 /**
- * @brief Setup new_permissions XML, XSL transform the result.
+ * @brief Setup new_permissions XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20940,7 +20939,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permissions (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -21214,19 +21213,19 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 
   g_string_append (xml, "</new_permissions>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup new_permission XML, XSL transform the result.
+ * @brief Setup new_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -21236,14 +21235,14 @@ new_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Create multiple permission, get next page, XSL transform the result.
+ * @brief Create multiple permission, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -21752,7 +21751,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
 #undef CHECK_GMPF_RET
 
 /**
- * @brief Setup edit_permission XML, XSL transform the result.
+ * @brief Setup edit_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -21760,7 +21759,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -21915,14 +21914,14 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Setup edit_permission XML, XSL transform the result.
+ * @brief Setup edit_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -21939,7 +21938,7 @@ edit_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Permission XML on success.  HTML result of XSL transformation on error.
+ * @return Permission XML on success.  Enveloped XML on error.
  */
 char *
 export_permission_gmp (gvm_connection_t *connection,
@@ -21958,7 +21957,7 @@ export_permission_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Permissions XML on success.  HTML result of XSL transformation
+ * @return Permissions XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -21971,14 +21970,14 @@ export_permissions_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Modify a permission, get all permissions, XSL transform the result.
+ * @brief Modify a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22095,7 +22094,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22106,8 +22105,8 @@ new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_list>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22119,7 +22118,7 @@ new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 upload_port_list (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22132,8 +22131,8 @@ upload_port_list (gvm_connection_t *connection, credentials_t *credentials, para
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_port_list>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22144,7 +22143,7 @@ upload_port_list (gvm_connection_t *connection, credentials_t *credentials, para
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 upload_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22154,14 +22153,14 @@ upload_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, 
 }
 
 /**
- * @brief Create a port list, get all port lists, XSL transform the result.
+ * @brief Create a port list, get all port lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22249,7 +22248,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_port_range (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22260,8 +22259,8 @@ new_port_range (gvm_connection_t *connection, credentials_t *credentials, params
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_range>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22272,7 +22271,7 @@ new_port_range (gvm_connection_t *connection, credentials_t *credentials, params
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22282,14 +22281,14 @@ new_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials, pa
 }
 
 /**
- * @brief Add a range to a port list, XSL transform the result.
+ * @brief Add a range to a port list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22372,7 +22371,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Get one port_list, XSL transform the result.
+ * @brief Get one port_list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22380,7 +22379,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  commands     Extra commands to run before the others.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_port_list (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22391,14 +22390,14 @@ get_port_list (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get one port_list, XSL transform the result.
+ * @brief Get one port_list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22408,7 +22407,7 @@ get_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Get all Port Lists, XSL transform the result.
+ * @brief Get all Port Lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22416,7 +22415,7 @@ get_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_port_lists (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22427,14 +22426,14 @@ get_port_lists (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get all port_lists, XSL transform the result.
+ * @brief Get all port_lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_port_lists_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22451,7 +22450,7 @@ get_port_lists_gmp (gvm_connection_t *connection, credentials_t * credentials, p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22461,7 +22460,7 @@ new_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Setup edit_port_list XML, XSL transform the result.
+ * @brief Setup edit_port_list XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22469,7 +22468,7 @@ new_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_port_list (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22480,14 +22479,14 @@ edit_port_list (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Setup edit_port_list XML, XSL transform the result.
+ * @brief Setup edit_port_list XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22497,14 +22496,14 @@ edit_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Modify a port list, get all port list, XSL transform the result.
+ * @brief Modify a port list, get all port list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22582,14 +22581,14 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Delete a port list, get all port lists, XSL transform the result.
+ * @brief Delete a port list, get all port lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22600,14 +22599,14 @@ delete_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Delete a trash port list, get all trash, XSL transform the result.
+ * @brief Delete a trash port list, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22618,14 +22617,14 @@ delete_trash_port_list_gmp (gvm_connection_t *connection, credentials_t * creden
 }
 
 /**
- * @brief Delete a port range, get the port list, XSL transform the result.
+ * @brief Delete a port range, get the port list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22636,14 +22635,14 @@ delete_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Import port list, get all port_lists, XSL transform the result.
+ * @brief Import port list, get all port_lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22721,7 +22720,7 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -22732,8 +22731,8 @@ new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_role>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22744,7 +22743,7 @@ new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22754,14 +22753,14 @@ new_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t
 }
 
 /**
- * @brief Delete a role from trash, get all roles, XSL transform the result.
+ * @brief Delete a role from trash, get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22772,14 +22771,14 @@ delete_trash_role_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Delete a role, get all roles, XSL transform the result.
+ * @brief Delete a role, get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22790,14 +22789,14 @@ delete_role_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Create a role, get all roles, XSL transform the result.
+ * @brief Create a role, get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22874,7 +22873,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Setup edit_role XML, XSL transform the result.
+ * @brief Setup edit_role XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22882,7 +22881,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22990,14 +22989,14 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Setup edit_role XML, XSL transform the result.
+ * @brief Setup edit_role XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23007,7 +23006,7 @@ edit_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get one role, XSL transform the result.
+ * @brief Get one role, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23015,7 +23014,7 @@ edit_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_role (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23025,14 +23024,14 @@ get_role (gvm_connection_t *connection, credentials_t * credentials, params_t *p
 }
 
 /**
- * @brief Get one role, XSL transform the result.
+ * @brief Get one role, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23042,7 +23041,7 @@ get_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_
 }
 
 /**
- * @brief Get all roles, XSL transform the result.
+ * @brief Get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23050,7 +23049,7 @@ get_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_roles (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23060,14 +23059,14 @@ get_roles (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get all roles, XSL transform the result.
+ * @brief Get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_roles_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23084,7 +23083,7 @@ get_roles_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Role XML on success.  HTML result of XSL transformation on error.
+ * @return Role XML on success.  Enveloped XML on error.
  */
 char *
 export_role_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23102,7 +23101,7 @@ export_role_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Roles XML on success.  HTML result of XSL transformation
+ * @return Roles XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -23120,7 +23119,7 @@ export_roles_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23212,7 +23211,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23272,12 +23271,12 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   g_free (text);
 
-  return xsl_transform_gmp (connection, credentials, params,  response,
-                            response_data);
+  return envelope_gmp (connection, credentials, params,  response,
+                       response_data);
 }
 
 /**
- * @brief Synchronize with a feed and XSL transform the result.
+ * @brief Synchronize with a feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication
@@ -23287,7 +23286,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  feed_name      Name of the feed shown in error messages.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char*
 sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23347,14 +23346,14 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Synchronize with an NVT feed and XSL transform the result.
+ * @brief Synchronize with an NVT feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_feed_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23366,14 +23365,14 @@ sync_feed_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Synchronize with a SCAP feed and XSL transform the result.
+ * @brief Synchronize with a SCAP feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_scap_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23385,14 +23384,14 @@ sync_scap_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Synchronize with a CERT feed and XSL transform the result.
+ * @brief Synchronize with a CERT feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_cert_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23407,7 +23406,7 @@ sync_cert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 /* Filters. */
 
 /**
- * @brief Get one filter, XSL transform the result.
+ * @brief Get one filter, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23415,7 +23414,7 @@ sync_cert_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filter (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23426,14 +23425,14 @@ get_filter (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Get one filter, XSL transform the result.
+ * @brief Get one filter, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23443,7 +23442,7 @@ get_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get all filters, XSL transform the result.
+ * @brief Get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23451,7 +23450,7 @@ get_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filters (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23462,14 +23461,14 @@ get_filters (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Get all filters, XSL transform the result.
+ * @brief Get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filters_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23487,7 +23486,7 @@ get_filters_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -23498,19 +23497,19 @@ new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_filter>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Create a filter, get all filters, XSL transform the result.
+ * @brief Create a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -23602,14 +23601,14 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Delete a filter, get all filters, XSL transform the result.
+ * @brief Delete a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23620,14 +23619,14 @@ delete_trash_filter_gmp (gvm_connection_t *connection, credentials_t * credentia
 }
 
 /**
- * @brief Delete a filter, get all filters, XSL transform the result.
+ * @brief Delete a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23673,7 +23672,7 @@ delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Setup edit_filter XML, XSL transform the result.
+ * @brief Setup edit_filter XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23681,7 +23680,7 @@ delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_filter (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23692,14 +23691,14 @@ edit_filter (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Setup edit_filter XML, XSL transform the result.
+ * @brief Setup edit_filter XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23716,7 +23715,7 @@ edit_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Filter XML on success.  HTML result of XSL transformation on error.
+ * @return Filter XML on success.  Enveloped XML on error.
  */
 char *
 export_filter_gmp (gvm_connection_t *connection,
@@ -23735,7 +23734,7 @@ export_filter_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Filters XML on success.  HTML result of XSL transformation
+ * @return Filters XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -23755,7 +23754,7 @@ export_filters_gmp (gvm_connection_t *connection,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -23765,14 +23764,14 @@ new_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params
 }
 
 /**
- * @brief Modify a filter, get all filters, XSL transform the result.
+ * @brief Modify a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23856,7 +23855,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
 /* Schedules. */
 
 /**
- * @brief Setup edit_schedule XML, XSL transform the result.
+ * @brief Setup edit_schedule XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23864,7 +23863,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_schedule (gvm_connection_t *connection, credentials_t * credentials,
@@ -23876,14 +23875,14 @@ edit_schedule (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_schedule XML, XSL transform the result.
+ * @brief Setup edit_schedule XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_schedule_gmp (gvm_connection_t *connection, credentials_t *
@@ -23901,7 +23900,7 @@ edit_schedule_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Schedule XML on success.  HTML result of XSL transformation on error.
+ * @return Schedule XML on success.  Enveloped XML on error.
  */
 char *
 export_schedule_gmp (gvm_connection_t *connection,
@@ -23920,7 +23919,7 @@ export_schedule_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Schedules XML on success. HTML result of XSL transformation on error.
+ * @return Schedules XML on success. Enveloped XML on error.
  */
 char *
 export_schedules_gmp (gvm_connection_t *connection,
@@ -23932,14 +23931,14 @@ export_schedules_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Save schedule, get next page, XSL transform the result.
+ * @brief Save schedule, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -24076,7 +24075,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -24224,8 +24223,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
     }
 
   g_string_append (xml, "</new_user>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -24236,7 +24235,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -24246,14 +24245,14 @@ new_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete a user, get all users, XSL transform the result.
+ * @brief Delete a user, get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24272,7 +24271,7 @@ delete_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 delete_user_confirm (gvm_connection_t *connection, credentials_t
@@ -24328,20 +24327,20 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
     g_string_append (xml, extra_xml);
 
   g_string_append (xml, "</delete_user>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Show confirmation deleting a user, XSL transform the result.
+ * @brief Show confirmation deleting a user, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_user_confirm_gmp (gvm_connection_t *connection, credentials_t *
@@ -24353,7 +24352,7 @@ delete_user_confirm_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get one user, XSL transform the result.
+ * @brief Get one user, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -24361,7 +24360,7 @@ delete_user_confirm_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_user (gvm_connection_t *connection, credentials_t * credentials,
@@ -24422,14 +24421,14 @@ get_user (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one user, XSL transform the result.
+ * @brief Get one user, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24439,7 +24438,7 @@ get_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all users, XSL transform the result.
+ * @brief Get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -24447,7 +24446,7 @@ get_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -24507,14 +24506,14 @@ get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get all users, XSL transform the result.
+ * @brief Get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_users_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -24524,14 +24523,14 @@ get_users_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Create a user, get all users, XSL transform the result.
+ * @brief Create a user, get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24701,7 +24700,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_user XML, XSL transform the result.
+ * @brief Setup edit_user XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -24709,7 +24708,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_user (gvm_connection_t *connection, credentials_t * credentials,
@@ -24859,14 +24858,14 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_user XML, XSL transform the result.
+ * @brief Setup edit_user XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24876,14 +24875,14 @@ edit_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get multiple vulns, XSL transform the result.
+ * @brief Get multiple vulns, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_vulns_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24893,7 +24892,7 @@ get_vulns_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get multiple vulns, XSL transform the result.
+ * @brief Get multiple vulns, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -24901,7 +24900,7 @@ get_vulns_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_vulns (gvm_connection_t *connection, credentials_t * credentials,
@@ -24972,13 +24971,13 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
 
   g_string_append (xml, "</auth_settings>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Modify a user, get all users, XSL transform the result.
+ * @brief Modify a user, get all users, envelope the result.
  *
  * @param[in]  connection       Connection to manager.
  * @param[in]  credentials      Username and password for authentication.
@@ -24988,7 +24987,7 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
  * @param[out] logout_user      Whether the user should be logged out.
  * @param[out] response_data    Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -25232,7 +25231,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Note XML on success.  HTML result of XSL transformation on error.
+ * @return Note XML on success.  Enveloped XML on error.
  */
 char *
 export_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -25250,7 +25249,7 @@ export_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Users XML on success.  HTML result of XSL transformation
+ * @return Users XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -25342,9 +25341,9 @@ cvss_calculator (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   g_string_append (xml, "</cvss_calculator>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25355,7 +25354,7 @@ cvss_calculator (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed dashboard.
+ * @return Enveloped XML object.
  */
 char *
 dashboard (gvm_connection_t *connection, credentials_t * credentials,
@@ -25492,9 +25491,9 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
   free_entity (entity);
 
   g_string_append (xml, "</dashboard>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25514,7 +25513,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformated list of users and configuration.
+ * @return XML enveloped list of users and configuration.
  */
 char*
 save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
@@ -25765,7 +25764,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard (gvm_connection_t *connection, credentials_t *credentials,
@@ -25852,9 +25851,9 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</wizard>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25865,7 +25864,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -25883,7 +25882,7 @@ wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard_get (gvm_connection_t *connection, credentials_t *credentials,
@@ -25979,8 +25978,8 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                                 extra_xml ? extra_xml : "",
                                 response);
 
-  return xsl_transform_gmp (connection, credentials, params, wizard_xml,
-                            response_data);
+  return envelope_gmp (connection, credentials, params, wizard_xml,
+                       response_data);
 }
 
 /**
@@ -25991,7 +25990,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard_get_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26008,7 +26007,7 @@ wizard_get_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26286,19 +26285,19 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (bulk_string, "</process_bulk>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (bulk_string, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (bulk_string, FALSE), response_data);
 }
 
 /**
- * @brief Delete multiple resources, get next page, XSL transform the result.
+ * @brief Delete multiple resources, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26424,7 +26423,7 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_host (gvm_connection_t *connection, credentials_t *credentials,
@@ -26436,9 +26435,9 @@ new_host (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_host>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -26449,7 +26448,7 @@ new_host (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26466,7 +26465,7 @@ new_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26559,7 +26558,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed asset response or error message.
+ * @return XML enveloped asset response or error message.
  */
 char *
 get_asset (gvm_connection_t *connection, credentials_t *credentials,
@@ -26630,14 +26629,14 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get asset, XSL transform the result.
+ * @brief Get asset, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26655,7 +26654,7 @@ get_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed assets response or error message.
+ * @return XML enveloped assets response or error message.
  */
 char *
 get_assets (gvm_connection_t *connection, credentials_t *credentials,
@@ -26709,14 +26708,14 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get assets, XSL transform the result.
+ * @brief Get assets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_assets_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26726,14 +26725,14 @@ get_assets_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Create an asset, get report, XSL transform the result.
+ * @brief Create an asset, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26812,7 +26811,7 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26928,7 +26927,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Asset XML on success.  HTML result of XSL transformation on error.
+ * @return Asset XML on success.  Enveloped XML on error.
  */
 char *
 export_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26946,7 +26945,7 @@ export_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Assets XML on success.  HTML result of XSL transformation
+ * @return Assets XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -26959,7 +26958,7 @@ export_assets_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Setup edit XML, XSL transform the result.
+ * @brief Setup edit XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -26967,7 +26966,7 @@ export_assets_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_asset (gvm_connection_t *connection, credentials_t *credentials,
@@ -27043,20 +27042,20 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append_printf (xml, "</edit_asset>");
   free_entity (entity);
   g_free (response);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_asset XML, XSL transform the result.
+ * @brief Setup edit_asset XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -27066,14 +27065,14 @@ edit_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify an asset, get all assets, XSL transform the result.
+ * @brief Modify an asset, get all assets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -27147,7 +27146,7 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get an assets chart, XSL transform the result.
+ * @brief Get an assets chart, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -27155,26 +27154,26 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, const char *extra_xml,
                   cmd_response_data_t* response_data)
 {
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_strdup ("<get_assets_chart/>"), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_strdup ("<get_assets_chart/>"), response_data);
 }
 
 /**
- * @brief Get an assets chart, XSL transform the result.
+ * @brief Get an assets chart, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_assets_chart_gmp (gvm_connection_t *connection, credentials_t *
