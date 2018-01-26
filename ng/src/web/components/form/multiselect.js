@@ -271,7 +271,7 @@ MultiSelect.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
-  value: PropTypes.any,
+  value: PropTypes.array,
   width: PropTypes.string,
   onChange: PropTypes.func,
 };
