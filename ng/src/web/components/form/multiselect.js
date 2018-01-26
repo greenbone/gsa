@@ -51,7 +51,7 @@ import {
 
 const DEFAULT_WIDTH = '250px';
 
-const MultiSelectedValue = glamorous(SelectedValue)({
+export const MultiSelectedValue = glamorous(SelectedValue)({
   display: 'inline',
   border: '1px solid #aaa',
   borderRadius: '3px',
