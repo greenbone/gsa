@@ -48,6 +48,7 @@ import {
 } from 'gmp/models/scanner.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import {UNSET_VALUE} from '../../utils/render';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
@@ -229,18 +230,18 @@ class TaskComponent extends React.Component {
           auto_delete: task.auto_delete,
           auto_delete_data: task.auto_delete_data,
           comment: task.comment,
-          config_id: task.isChangeable() ? task.config.id : '0',
+          config_id: task.isChangeable() ? task.config.id : UNSET_VALUE,
           id: task.id,
           in_assets: task.in_assets,
           min_qod: task.min_qod,
           name: task.name,
           scan_configs: sorted_scan_configs,
-          scanner_id: task.isChangeable() ? task.scanner.id : '0',
+          scanner_id: task.isChangeable() ? task.scanner.id : UNSET_VALUE,
           scanner_type: task.scanner.scanner_type,
           scanners,
           schedule_id,
           schedules,
-          target_id: task.isChangeable() ? task.target.id : '0',
+          target_id: task.isChangeable() ? task.target.id : UNSET_VALUE,
           targets,
           task: task,
         }, {
@@ -272,7 +273,7 @@ class TaskComponent extends React.Component {
 
         target_id = select_save_id(targets, target_id);
 
-        schedule_id = select_save_id(schedules, schedule_id, '0');
+        schedule_id = select_save_id(schedules, schedule_id, UNSET_VALUE);
 
         alert_id = includes_id(alerts, alert_id) ? alert_id : undefined;
 

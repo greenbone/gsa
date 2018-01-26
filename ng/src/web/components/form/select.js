@@ -59,7 +59,7 @@ const find_label = (items, value) => {
 
 const check_value = (items, value) => {
   // raise warning in dev mode if items is defined and value is not in items
-  if (is_defined(items)) {
+  if (is_defined(items) && is_defined(value)) {
     warning(!is_defined(find_item(items, value)),
       'No label found for value', value, 'items are', items);
   }

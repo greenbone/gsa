@@ -24,7 +24,7 @@ import React from 'react';
 
 import {mount} from 'enzyme';
 import Select from '../select.js';
-import {Box, SelectedValue, Item} from '../selectelements.js';
+import {Box, SelectedValue, Item, Input} from '../selectelements.js';
 
 describe('Select component tests', () => {
 
@@ -138,6 +138,41 @@ describe('Select component tests', () => {
 
     wrapper.setProps({value: 'foo'});
     expect(wrapper.find(SelectedValue).text()).toEqual('Foo');
+  });
+
+  test('should filter items', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'bat',
+      label: 'Bat',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+
+    const wrapper = mount(
+      <Select
+        items={items}
+        value="bar"
+      />
+    );
+
+    wrapper.find(Box).simulate('click');
+    expect(wrapper.find(Item).length).toBe(3);
+
+    const fake_event = {target: {value: 'ba'}};
+
+    wrapper.find(Input).simulate('change', fake_event);
+
+    expect(wrapper.find(Item).length).toBe(2);
+
+    fake_event.target.value = 'F';
+
+    wrapper.find(Input).simulate('change', fake_event);
+
+    expect(wrapper.find(Item).length).toBe(1);
   });
 });
 

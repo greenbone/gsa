@@ -51,7 +51,7 @@ import {
 
 const DEFAULT_WIDTH = '250px';
 
-const MultiSelectedValue = glamorous(SelectedValue)({
+export const MultiSelectedValue = glamorous(SelectedValue)({
   display: 'inline',
   border: '1px solid #aaa',
   borderRadius: '3px',
@@ -162,7 +162,7 @@ class MultiSelect extends React.Component {
           >
             × {/* Javascript unicode: \u00D7 */}
           </DeleteButton>
-          {itemLabel}
+          <span>{itemLabel}</span>
         </Layout>
       </MultiSelectedValue>
     );
@@ -271,7 +271,7 @@ MultiSelect.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
-  value: PropTypes.any,
+  value: PropTypes.array,
   width: PropTypes.string,
   onChange: PropTypes.func,
 };
