@@ -171,27 +171,3 @@ Typical contexts and rules
 * Some special contexts that may override some of the above:
   - "Pagination" is used for strings on pagination controls like a "Next" page
    button
-
-
-Translating help pages
-======================
-Translations for the help pages are contained in a file called "help_<lc>.xsl",
-where <lc> is the two-letter language code the translation is for.
-
-For the stylesheet to work properly, it must include the default "help.xsl"
-at the beginning.
-
-Next should be the named templates, which must use different names than the
-included default stylesheets. This is to avoid conflicts which would not only
-affect the template, but cause all of the XSL transformation to fail.
-
-For consistency you should use the name of their default stylesheet equivalent
-suffixed with an underscore and the language code.
-For example "availability" becomes "availability_de" if the language code is
-"de".
-
-After this the "Page not found" template should be placed, followed by the
-individual page templates.
-
-The new help file should also be UTF-8 encoded and has to be installed in the
-directory ${GSA_DATA_DIR}/classic.
