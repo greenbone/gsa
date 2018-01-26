@@ -145,48 +145,6 @@ Also add your language to the dependencies of the targets
                        [...])
 
 
-Migrating old XML translations
-==============================
-Translations using the old XML-based format can be partially migrated by
- converting the old XML file to PO.
-
-1 - Convert the XML to PO
--------------------------
-First run the XML to PO conversion script:
-
-  python "${SRC_DIR}/tools/xml2po" "${XML_FILE}" "${PO_FILE}"
-
-with ${SRC_DIR} being the GSA source directory, ${XML_FILE} the XML translation
- file and ${PO_FILE} the destination po file.
-The destination file should be "gsad_xsl-XX.po" in the "src/po" subdirectory of
- your GSA source directory, replacing "XX" with the locale code as defined
- above in the section "General notes".
-
-
-2 - Set up the build file
--------------------------
-Next you should set up the build file for your newly migrated language as
- described in point 3 of the section "Creating new translations".
-
-
-3 - Create and merge the .pot file
-----------------------------------
-Next create a new .pot file and merge it with the .po file you just generated
- as described in the section "Updating existing translations".
-
-Many of the translations will be marked as unfinished / fuzzy as many context
- names were changed as part of switching to the gettext format. You should be
- able to quickly change them with a suitable .po file editor.
-Beware that there are also some cases where the actual message text has changed
- as well, mostly to make messages less fragmented.
-
-After updating the messages, proceed as you would with a regular update of the
- translation.
-Since the migration leaves many unused contexts and text fragments it may be
- a good idea to remove the unused messages to reduce the file size once the
- update is complete.
-
-
 Message Contexts
 ================
 Some messages in GSA use the msgctxt to avoid ambiguity, for example if a
