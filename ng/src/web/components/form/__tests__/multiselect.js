@@ -23,7 +23,8 @@
 import React from 'react';
 
 import {mount} from 'enzyme';
-import MultiSelect from '../multiselect.js';
+import {Box, ArrowButton, Item} from '../selectelements.js';
+import MultiSelect, {MultiSelectedValue} from '../multiselect.js';
 
 describe('MultiSelect component tests', () => {
 
@@ -32,12 +33,17 @@ describe('MultiSelect component tests', () => {
   });
 
   test('should render with options', () => {
-    mount(
+    const wrapper = mount(
       <MultiSelect>
         <option value="foo">Foo</option>
         <option value="bar">Bar</option>
       </MultiSelect>
     );
+    wrapper.find(ArrowButton).simulate('click');
+
+    const elements = wrapper.find(Item);
+
+    expect(elements.length).toBe(2);
   });
 
   test('should render with items', () => {
@@ -48,9 +54,91 @@ describe('MultiSelect component tests', () => {
       value: 'foo',
       label: 'Foo',
     }];
-    mount(
+
+    const wrapper = mount(
       <MultiSelect items={items}/>
     );
+    wrapper.find(ArrowButton).simulate('click');
+
+    const elements = wrapper.find(Item);
+
+    expect(elements.length).toBe(2);
+  });
+
+  test('should call onChange handler', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+
+    const onChange = jest.fn();
+
+    const wrapper = mount(
+      <MultiSelect
+        items={items}
+        onChange={onChange}
+      />
+    );
+
+    wrapper.find(ArrowButton).simulate('click');
+    wrapper.find(Item).at(1).simulate('click');
+
+    expect(onChange).toBeCalled();
+    expect(onChange).toBeCalledWith(['foo'], undefined);
+  });
+
+  test('should call onChange handler with name', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+
+    const onChange = jest.fn();
+
+    const wrapper = mount(
+      <MultiSelect
+        name="abc"
+        items={items}
+        onChange={onChange}
+      />
+    );
+
+    wrapper.find(ArrowButton).simulate('click');
+    wrapper.find(Item).at(0).simulate('click');
+
+    expect(onChange).toBeCalled();
+    expect(onChange).toBeCalledWith(['bar'], 'abc');
+  });
+
+  test('should change displayed values', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+
+    const wrapper = mount(
+      <MultiSelect
+        items={items}
+        value={['bar']}
+      />
+    );
+
+    expect(wrapper.find(MultiSelectedValue).find('span').text()).toEqual('Bar');
+
+    wrapper.setProps({value: ['foo']});
+    expect(wrapper.find(MultiSelectedValue).find('span').text()).toEqual('Foo');
+
+    wrapper.setProps({value: ['bar', 'foo']});
+    expect(wrapper.find(MultiSelectedValue).find('span').length).toBe(2);
   });
 });
 
