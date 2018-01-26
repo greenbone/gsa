@@ -551,7 +551,7 @@ export default withDialog({
       [OSP_SCAN_CONFIG_TYPE]: [],
     },
     scanners: [],
-    scanner_type: 2,
+    scanner_type: OPENVAS_SCANNER_TYPE,
     schedule_id: UNSET_VALUE,
     schedule_periods: NO_VALUE,
     schedules: [],
