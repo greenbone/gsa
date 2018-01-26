@@ -51,7 +51,7 @@ import {
 } from 'gmp/models/scanconfig.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_options, UNSET_VALUE} from '../../utils/render.js';
 
 import withDialog from '../../components/dialog/withDialog.js';
 
@@ -105,10 +105,10 @@ class ScannerSelect extends React.Component {
         FULL_AND_FAST_SCAN_CONFIG_ID);
     }
     else if (scanner_type === OSP_SCANNER_TYPE) {
-      config_id = select_save_id(scanConfigs[OSP_SCAN_CONFIG_TYPE], '0');
+      config_id = select_save_id(scanConfigs[OSP_SCAN_CONFIG_TYPE], UNSET_VALUE);
     }
     else {
-      config_id = 0;
+      config_id = UNSET_VALUE;
     }
 
     log.debug('on scanner change', value, config_id, scanner);
@@ -201,7 +201,7 @@ const TaskDialog = ({
 
   const target_opts = render_options(targets);
 
-  const schedule_opts = render_options(schedules, 0);
+  const schedule_opts = render_options(schedules, UNSET_VALUE);
 
 
   const osp_scan_config_opts = is_osp_scanner && render_options(
@@ -552,11 +552,11 @@ export default withDialog({
     },
     scanners: [],
     scanner_type: 2,
-    schedule_id: '0',
+    schedule_id: UNSET_VALUE,
     schedule_periods: NO_VALUE,
     schedules: [],
     tags: [],
-    target_id: '0',
+    target_id: UNSET_VALUE,
     targets: [],
   },
 })(TaskDialog);
