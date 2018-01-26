@@ -353,7 +353,7 @@ const PageContent = ({
             onActivateTab={onActivateTab}
           >
             <Tab>
-              {_('Summary')}
+              {_('Information')}
             </Tab>
             <Tab>
               <TabTitle
