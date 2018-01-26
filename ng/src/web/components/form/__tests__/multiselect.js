@@ -23,7 +23,7 @@
 import React from 'react';
 
 import {mount} from 'enzyme';
-import {Box, ArrowButton, Item} from '../selectelements.js';
+import {ArrowButton, Item, Input} from '../selectelements.js';
 import MultiSelect, {MultiSelectedValue} from '../multiselect.js';
 
 describe('MultiSelect component tests', () => {
@@ -139,6 +139,41 @@ describe('MultiSelect component tests', () => {
 
     wrapper.setProps({value: ['bar', 'foo']});
     expect(wrapper.find(MultiSelectedValue).find('span').length).toBe(2);
+  });
+
+  test('should filter items', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'bat',
+      label: 'Bat',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+
+    const wrapper = mount(
+      <MultiSelect
+        items={items}
+        value={[]}
+      />
+    );
+
+    wrapper.find(ArrowButton).simulate('click');
+    expect(wrapper.find(Item).length).toBe(3);
+
+    const fake_event = {target: {value: 'ba'}};
+
+    wrapper.find(Input).simulate('change', fake_event);
+
+    expect(wrapper.find(Item).length).toBe(2);
+
+    fake_event.target.value = 'F';
+
+    wrapper.find(Input).simulate('change', fake_event);
+
+    expect(wrapper.find(Item).length).toBe(1);
   });
 });
 
