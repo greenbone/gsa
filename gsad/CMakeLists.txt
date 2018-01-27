@@ -40,7 +40,6 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 ## Install
 
 install (FILES src/html/classic/robots.txt
-               src/html/classic/os.xml
          DESTINATION ${GSA_DATA_DIR}/classic)
 
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/language_names.tsv
