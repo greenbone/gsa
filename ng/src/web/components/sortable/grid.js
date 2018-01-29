@@ -39,12 +39,70 @@ const GridRow = glamorous.div({
   background: isDraggingOver ? 'lightblue' : 'lightgrey',
 }));
 
+const Row = ({
+  children,
+  dropDisabled,
+  id,
+}) => (
+  <Droppable
+    isDropDisabled={dropDisabled}
+    droppableId={'row-' + id}
+    direction="horizontal"
+  >
+    {(provided, snapshot) => (
+      <GridRow
+        innerRef={provided.innerRef}
+        isDraggingOver={snapshot.isDraggingOver}
+      >
+        {children}
+        {provided.placeholder}
+      </GridRow>
+    )}
+  </Droppable>
+);
+
+Row.propTypes = {
+  dropDisabled: PropTypes.bool,
+  id: PropTypes.string.isRequired,
+};
+
 const GridItem = glamorous.div({
   display: 'flex',
   flexGrow: 1,
   userSelect: 'none',
   margin: '5px',
 });
+
+const Item = ({
+  children,
+  index,
+  id,
+}) => (
+  <Draggable
+    draggableId={id}
+    index={index}
+  >
+    {(provided, snapshot) => ( // eslint-disable-line no-shadow
+      <React.Fragment>
+        <GridItem
+          innerRef={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          isDragging={snapshot.isDragging}
+          style={provided.draggableProps.style}
+        >
+          {children}
+        </GridItem>
+        {provided.placeholder}
+      </React.Fragment>
+    )}
+  </Draggable>
+);
+
+Item.propTypes = {
+  index: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
+};
 
 const reorder = (list, startIndex, endIndex) => {
   const result = [...list];
@@ -127,44 +185,22 @@ class Grid extends React.Component {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         {items.map((row, i) => (
-          <Droppable
+          <Row
             key={i}
-            isDropDisabled={is_defined(maxItemsPerRow) &&
+            id={i}
+            dropDisabled={is_defined(maxItemsPerRow) &&
               maxItemsPerRow <= row.length}
-            droppableId={'row-' + i}
-            direction="horizontal"
           >
-            {(provided, snapshot) => (
-              <GridRow
-                innerRef={provided.innerRef}
-                isDraggingOver={snapshot.isDraggingOver}
+            {row.map((item, index) => (
+              <Item
+                key={item.id}
+                id={item.id}
+                index={index}
               >
-                {row.map((item, index) => (
-                  <Draggable
-                    key={item.id}
-                    draggableId={item.id}
-                    index={index}
-                  >
-                    {(provided, snapshot) => ( // eslint-disable-line no-shadow
-                      <React.Fragment>
-                        <GridItem
-                          innerRef={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          isDragging={snapshot.isDragging}
-                          style={provided.draggableProps.style}
-                        >
-                          {item.content}
-                        </GridItem>
-                        {provided.placeholder}
-                      </React.Fragment>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </GridRow>
-            )}
-          </Droppable>
+                {item.content}
+              </Item>
+            ))}
+          </Row>
         ))}
       </DragDropContext>
     );
