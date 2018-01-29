@@ -225,7 +225,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/passwordfield.js
      ${NG_SRC_DIR}/src/web/components/form/radio.js
      ${NG_SRC_DIR}/src/web/components/form/select.js
-     ${NG_SRC_DIR}/src/web/components/form/select2.js
      ${NG_SRC_DIR}/src/web/components/form/selectelements.js
      ${NG_SRC_DIR}/src/web/components/form/spinner.js
      ${NG_SRC_DIR}/src/web/components/form/submitbutton.js
