@@ -101,7 +101,7 @@ const TippingPointMethodPart = ({
 TippingPointMethodPart.propTypes = {
   credentials: PropTypes.array,
   prefix: PropTypes.string,
-  tpSmsCredential: PropTypes.id.isRequired,
+  tpSmsCredential: PropTypes.id,
   tpSmsHostname: PropTypes.string,
   tpSmsTlsWorkaround: PropTypes.yesno.isRequired,
   onChange: PropTypes.func.isRequired,
