@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +23,11 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
+
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -34,8 +39,12 @@ import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
-import Section from '../../components/section/section.js';
-import {FoldState} from '../../components/folding/folding.js';
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityContainer, {
@@ -51,6 +60,22 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import PortListComponent from './component.js';
 import PortListDetails from './details.js';
 import PortRangesTable from './portrangestable.js';
+
+const TabTitleCount = glamorous.span({
+  fontSize: '0.7em',
+});
+
+const TabTitle = ({title, count}) => (
+  <Layout flex="column" align={['center', 'center']}>
+    <span>{title}</span>
+    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
+  </Layout>
+);
+
+TabTitle.propTypes = {
+  count: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 const ToolBarIcons = ({
   entity,
@@ -110,28 +135,13 @@ ToolBarIcons.propTypes = {
 const Details = ({
   entity,
   links = true,
-  ...props
 }) => {
-  const {
-    port_ranges = [],
-  } = entity;
   return (
     <Layout flex="column">
       <PortListDetails
         entity={entity}
         links={links}
       />
-
-      <Section
-        title={_('Port Ranges ({{count}})', {count: port_ranges.length})}
-        foldable
-        initialFoldState={FoldState.FOLDED}
-      >
-        <PortRangesTable
-          actions={false}
-          portRanges={port_ranges}
-        />
-      </Section>
     </Layout>
   );
 };
@@ -139,6 +149,32 @@ const Details = ({
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+};
+
+const PortRanges = ({entity}) => {
+  const {
+    port_ranges = [],
+  } = entity;
+
+  return (
+    <Layout
+      title={_('Port Ranges ({{count}})', {count: port_ranges.length})}
+    >
+      {port_ranges.length === 0 &&
+        _('No port ranges available')
+      }
+      {port_ranges.length > 0 &&
+        <PortRangesTable
+          actions={false}
+          portRanges={port_ranges}
+        />
+      }
+    </Layout>
+  );
+};
+
+PortRanges.propTypes = {
+  entity: PropTypes.model.isRequired,
 };
 
 const Page = ({
@@ -183,7 +219,83 @@ const Page = ({
         onPermissionChanged={onChanged}
         onPermissionDownloaded={onDownloaded}
         onPermissionDownloadError={onError}
-      />
+      >
+        {({
+          activeTab = 0,
+          links = true,
+          permissionsComponent,
+          permissionsTitle,
+          tagsComponent,
+          tagsTitle,
+          onActivateTab,
+          entity,
+          ...other
+        }) => {
+          const {
+            port_ranges = [],
+          } = entity;
+          const portRangesCount = port_ranges.length;
+
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  <Tab>
+                    <TabTitle
+                      title={_('Port Ranges')}
+                      count={portRangesCount}
+                    />
+                  </Tab>
+                  {is_defined(tagsComponent) &&
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
+                  }
+                </TabList>
+              </TabLayout>
+
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <PortListDetails
+                      entity={entity}
+                      links={links}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <PortRanges entity={entity}/>
+                  </TabPanel>
+                  {is_defined(tagsComponent) &&
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
+                  }
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
   </PortListComponent>
 );
