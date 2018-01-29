@@ -20,18 +20,52 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {configure} from '@storybook/react';
+import React from 'react';
 
-/* eslint-disable global-require, no-console */
+import glamorous from 'glamorous';
 
-function loadStories() {
-  console.clear();
+import {storiesOf} from '@storybook/react';
 
-  require('./select');
-  require('./multiselect');
-  require('./sortable');
-}
+import Grid from 'web/components/sortable/grid.js';
 
-configure(loadStories, module);
+const Item = glamorous.span({
+  flexGrow: '1',
+  backgroundColor: 'blue',
+  padding: '5px',
+  color: 'white',
+});
+
+const getItems = (row, count) =>
+  Array.from({length: count}, (v, k) => k).map(k => ({
+    id: `item-${row}-${k}`,
+    content: <Item>{`row ${row} item ${k}`}</Item>,
+  }));
+
+storiesOf('Sortable/Grid', module)
+  .add('default', () => {
+    const items = [
+      [],
+      getItems(1, 10),
+      [],
+    ];
+    return (
+      <Grid
+        items={items}
+      />
+    );
+  })
+  .add('max 5 items per row', () => {
+    const items = [
+      getItems(0, 3),
+      getItems(1, 5),
+      [],
+    ];
+    return (
+      <Grid
+        maxItemsPerRow="5"
+        items={items}
+      />
+    );
+  });
 
 // vim: set ts=2 sw=2 tw=80:

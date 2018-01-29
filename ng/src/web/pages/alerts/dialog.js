@@ -289,6 +289,55 @@ class AlertDialog extends React.Component {
     } = this.props;
     const {capabilities} = this.context;
     const is_task_event = event === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
+
+    const method_types = [{
+      value: METHOD_TYPE_EMAIL,
+      label: _('Email'),
+    }];
+
+    if (is_task_event) {
+      method_types.push({
+        value: METHOD_TYPE_HTTP_GET,
+        label: _('HTTP Get'),
+      });
+    }
+
+    method_types.push({
+      value: METHOD_TYPE_SCP,
+      label: _('SCP'),
+    }, {
+      value: METHOD_TYPE_SEND,
+      label: _('Send to host'),
+    }, {
+
+      value: METHOD_TYPE_SMB,
+      label: _('SMB'),
+    }, {
+      value: METHOD_TYPE_SNMP,
+      label: _('SNMP'),
+    });
+
+    if (is_task_event) {
+      method_types.push({
+        value: METHOD_TYPE_SOURCEFIRE,
+        label: _('Sourcefire Connector'),
+      }, {
+          value: METHOD_TYPE_START_TASK,
+          label: _('Start Task'),
+      });
+    }
+
+    method_types.push({
+      value: METHOD_TYPE_SYSLOG,
+      label: _('System Logger'),
+    }, {
+      value: METHOD_TYPE_VERINICE,
+      label: _('verinice.PRO Connector'),
+    }, {
+      value: METHOD_TYPE_TIPPING_POINT,
+      label: _('TippingPoint SMS'),
+    });
+
     return (
       <Layout flex="column">
 
@@ -403,26 +452,9 @@ class AlertDialog extends React.Component {
           <Select
             name="method"
             value={method}
-            onChange={onValueChange}>
-            <option value={METHOD_TYPE_EMAIL}>{_('Email')}</option>
-            <option value={METHOD_TYPE_HTTP_GET} disabled={!is_task_event}>
-              {_('HTTP Get')}
-            </option>
-            <option value={METHOD_TYPE_SCP}>{_('SCP')}</option>
-            <option value={METHOD_TYPE_SEND}>{_('Send to host')}</option>
-            <option value={METHOD_TYPE_SMB}>{_('SMB')}</option>
-            <option value={METHOD_TYPE_SNMP}>{_('SNMP')}</option>
-            <option value={METHOD_TYPE_SOURCEFIRE} disabled={!is_task_event}>
-              {_('Sourcefire Connector')}
-            </option>
-            <option value={METHOD_TYPE_START_TASK} disabled={!is_task_event}>
-              {_('Start Task')}
-            </option>
-            <option value={METHOD_TYPE_SYSLOG}>{_('System Logger')}</option>
-            <option value={METHOD_TYPE_VERINICE}>
-              {_('verinice.PRO Connector')}
-            </option>
-          </Select>
+            items={method_types}
+            onChange={onValueChange}
+           />
         </FormGroup>
 
         {method === METHOD_TYPE_EMAIL &&

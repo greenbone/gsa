@@ -225,7 +225,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/passwordfield.js
      ${NG_SRC_DIR}/src/web/components/form/radio.js
      ${NG_SRC_DIR}/src/web/components/form/select.js
-     ${NG_SRC_DIR}/src/web/components/form/select2.js
      ${NG_SRC_DIR}/src/web/components/form/selectelements.js
      ${NG_SRC_DIR}/src/web/components/form/spinner.js
      ${NG_SRC_DIR}/src/web/components/form/submitbutton.js
@@ -268,7 +267,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/link/detailslink.js
      ${NG_SRC_DIR}/src/web/components/link/externallink.js
      ${NG_SRC_DIR}/src/web/components/link/innerlink.js
-     ${NG_SRC_DIR}/src/web/components/link/legacylink.js
      ${NG_SRC_DIR}/src/web/components/link/link.js
      ${NG_SRC_DIR}/src/web/components/link/manuallink.js
      ${NG_SRC_DIR}/src/web/components/link/protocoldoclink.js
@@ -689,12 +687,12 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
      ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
      ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css
      ${NG_SRC_DIR}/src/web/components/form/css/datepicker.css
      ${NG_SRC_DIR}/src/web/components/form/css/form.css
      ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
-     ${NG_SRC_DIR}/src/web/components/form/css/select2.css
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
