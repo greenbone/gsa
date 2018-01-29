@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,12 +33,9 @@ import PropTypes from '../utils/proptypes.js';
 
 import ManualIcon from '../components/icon/manualicon.js';
 import NewIcon from '../components/icon/newicon.js';
-import Icon from '../components/icon/icon.js';
 
+import Layout from '../components/layout/layout.js';
 import IconDivider from '../components/layout/icondivider.js';
-import Wrapper from '../components/layout/wrapper.js';
-
-import Section from '../components/section/section.js';
 
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
@@ -55,33 +53,25 @@ const SectionElements = ({
   onPermissionCreateClick,
 }) => {
   return (
-    <SectionElementDivider>
-      <NewIcon
-        title={_('New Permission')}
-        onClick={onPermissionCreateClick}
-      />
-      <ManualIcon
-        page="gui_administration"
-        anchor="permissions"
-        title={_('Help: Permissions')}
-      />
-    </SectionElementDivider>
+    <Layout grow align="end">
+      <SectionElementDivider>
+        <NewIcon
+          title={_('New Permission')}
+          onClick={onPermissionCreateClick}
+        />
+        <ManualIcon
+          page="gui_administration"
+          anchor="permissions"
+          title={_('Help: Permissions')}
+        />
+      </SectionElementDivider>
+    </Layout>
   );
 };
 
 SectionElements.propTypes = {
   entity: PropTypes.model.isRequired,
   onPermissionCreateClick: PropTypes.func.isRequired,
-};
-
-const PermissionIcon = props => {
-  return (
-    <Icon
-      {...props}
-      img="permission.svg"
-      size="small"
-    />
-  );
 };
 
 class EntityPermissions extends React.Component {
@@ -159,7 +149,6 @@ class EntityPermissions extends React.Component {
   render() {
     const {
       entity,
-      foldable = true,
       permissions,
       ...props
     } = this.props;
@@ -170,33 +159,34 @@ class EntityPermissions extends React.Component {
         onPermissionCreateClick={this.openMultiplePermissionDialog}
       />
     );
+
     const has_permissions = is_defined(permissions);
     const count = has_permissions ? permissions.length : 0;
 
     return (
-      <Wrapper>
-        <Section
-          foldable={foldable}
-          extra={extra}
-          img={<PermissionIcon/>}
-          title={_('Permissions ({{count}})', {count})}
-        >
-          {count > 0 &&
-            <PermissionsTable
-              {...props}
-              entities={permissions}
-              pagination={false}
-              footer={false}
-              footnote={false}
-              onPermissionEditClick={this.openPermissionDialog}
-            />
-          }
-          <MultiplePermissionDialog
-            ref={ref => this.dialog = ref}
-            onSave={this.handleMultipleSave}
+      <Layout
+        flex="column"
+        title={_('Permissions ({{count}})', {count})}
+      >
+        {extra}
+        {count === 0 &&
+          _('No permissions available')
+        }
+        {count > 0 &&
+          <PermissionsTable
+            {...props}
+            entities={permissions}
+            pagination={false}
+            footer={false}
+            footnote={false}
+            onPermissionEditClick={this.openPermissionDialog}
           />
-        </Section>
-      </Wrapper>
+        }
+        <MultiplePermissionDialog
+          ref={ref => this.dialog = ref}
+          onSave={this.handleMultipleSave}
+        />
+      </Layout>
     );
   }
 }
