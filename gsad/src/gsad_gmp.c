@@ -489,7 +489,6 @@ envelope_gmp (gvm_connection_t *connection,
   char ctime_now[200];
   params_iterator_t iter;
   param_t *param;
-  const char *refresh_interval;
   struct timeval tv;
 
   assert (credentials);
@@ -559,68 +558,6 @@ envelope_gmp (gvm_connection_t *connection,
                                               credentials->pw_warning);
       g_string_append (string, warning_elem);
       g_free (warning_elem);
-    }
-
-  refresh_interval = params_value (params, "refresh_interval");
-  if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
-    g_string_append_printf (string,
-                            "<autorefresh interval=\"%s\"/>",
-                            credentials->autorefresh);
-  else
-    {
-      int ret;
-      gchar *interval_64, *response;
-      entity_t entity;
-
-      interval_64 = (refresh_interval
-                     ? g_base64_encode ((guchar*) refresh_interval,
-                                        strlen (refresh_interval))
-                     : g_strdup (""));
-      ret = gmpf (connection, credentials, &response, &entity, response_data,
-                  "<modify_setting"
-                  " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\">"
-                  "<value>%s</value>"
-                  "</modify_setting>",
-                  interval_64);
-      g_free (interval_64);
-      switch (ret)
-        {
-          case 0:
-          case -1:
-            break;
-          case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while modifying the"
-                                " autorefresh setting for the settings. "
-                                "Diagnostics: Failure to send command to"
-                                " manager daemon.", response_data);
-          case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while modifying the"
-                                " autorefresh setting for the settings. "
-                                "Diagnostics: Failure to receive response from"
-                                " manager daemon.", response_data);
-          default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while modifying the"
-                                " autorefresh setting for the settings. "
-                                "Diagnostics: Internal Error.", response_data);
-        }
-
-      free_entity (entity);
-      g_free (credentials->autorefresh);
-      credentials->autorefresh = g_strdup (refresh_interval);
-      user_set_autorefresh (credentials->token, refresh_interval);
-
-      g_string_append_printf (string,
-                              "<autorefresh interval=\"%s\"/>",
-                              credentials->autorefresh);
     }
 
   g_string_append (string, "<params>");
@@ -4432,13 +4369,12 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  const char *task_id, *next, *refresh_interval, *sort_field, *sort_order;
+  const char *task_id, *next, *sort_field, *sort_order;
   const char *overrides, *alerts;
   int apply_overrides;
 
   task_id = params_value (params, "task_id");
   next = params_value (params, "next");
-  refresh_interval = params_value (params, "refresh_interval");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   overrides = params_value (params, "overrides");
@@ -4511,7 +4447,6 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                           /* Page that follows. */
                           "<next>%s</next>"
                           /* Passthroughs. */
-                          "<refresh_interval>%s</refresh_interval>"
                           "<sort_field>%s</sort_field>"
                           "<sort_order>%s</sort_order>"
                           "<apply_overrides>%i</apply_overrides>",
@@ -4519,7 +4454,6 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                           credentials->username,
                           alerts ? alerts : "1",
                           next,
-                          refresh_interval ? refresh_interval : "",
                           sort_field,
                           sort_order,
                           apply_overrides);
@@ -27270,7 +27204,6 @@ openvas_connection_open (gvm_connection_t *connection,
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
  * @param[out] chart_prefs   Chart preferences.
- * @param[out] autorefresh   Autorefresh preference.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
@@ -27278,7 +27211,7 @@ int
 authenticate_gmp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
                   gchar **capabilities, gchar **language, gchar **pw_warning,
-                  GTree **chart_prefs, gchar **autorefresh)
+                  GTree **chart_prefs)
 {
   gvm_connection_t connection;
   int auth;
@@ -27444,26 +27377,6 @@ authenticate_gmp (const gchar * username, const gchar * password,
           g_free (response);
           gvm_connection_close (&connection);
           return -1;
-        }
-
-      /* Get autorefresh setting. */
-
-      ret = setting_get_value (&connection,
-                               "578a1c14-e2dc-45ef-a591-89d31391d007",
-                               autorefresh,
-                               NULL);
-
-      switch (ret)
-        {
-          case 0:
-            break;
-          case 1:
-          case 2:
-            gvm_connection_close (&connection);
-            return 2;
-          default:
-            gvm_connection_close (&connection);
-            return -1;
         }
 
       gvm_connection_close (&connection);
