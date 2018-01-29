@@ -687,12 +687,12 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
      ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
      ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css
      ${NG_SRC_DIR}/src/web/components/form/css/datepicker.css
      ${NG_SRC_DIR}/src/web/components/form/css/form.css
      ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
-     ${NG_SRC_DIR}/src/web/components/form/css/select2.css
      ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
      ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css

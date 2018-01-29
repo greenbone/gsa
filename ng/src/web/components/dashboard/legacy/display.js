@@ -30,6 +30,7 @@ import 'jquery-ui/ui/effect';
 import 'jquery-ui/ui/effects/effect-fade';
 
 import 'select2';
+import './select2.css';
 
 import d3 from 'd3';
 
