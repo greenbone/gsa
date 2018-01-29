@@ -30,6 +30,8 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import warning from '../../utils/warning.js';
+
 import {
   ArrowButton,
   ArrowIcon,
@@ -44,9 +46,23 @@ import {
   SelectedValue,
 } from './selectelements.js';
 
+const find_item = (items, value) => is_defined(items) ?
+  items.find(i => i.value === value) : undefined;
+
 const find_label = (items, value) => {
-  const item = items.find(i => i.value === value);
-  return is_defined(item) ? item.label : value;
+  const item = find_item(items, value);
+  if (is_defined(item)) {
+    return item.label;
+  }
+  return value;
+};
+
+const check_value = (items, value) => {
+  // raise warning in dev mode if items is defined and value is not in items
+  if (is_defined(items) && is_defined(value)) {
+    warning(!is_defined(find_item(items, value)),
+      'No label found for value', value, 'items are', items);
+  }
 };
 
 const DEFAULT_WIDTH = '180px';
@@ -103,9 +119,13 @@ class Select extends React.Component {
       items = option_items(children);
     }
 
-    disabled = disabled || items.length === 0;
+    check_value(items, value); // raise warning in dev mode
 
-    const displayedItems = items.filter(case_insensitive_filter(search));
+    disabled = disabled || !is_defined(items) || items.length === 0;
+
+    const displayedItems = is_defined(items) ?
+      items.filter(case_insensitive_filter(search)) : [];
+
     return (
       <Downshift
         selectedItem={value}

@@ -51,7 +51,7 @@ import {
 
 const DEFAULT_WIDTH = '250px';
 
-const MultiSelectedValue = glamorous(SelectedValue)({
+export const MultiSelectedValue = glamorous(SelectedValue)({
   display: 'inline',
   border: '1px solid #aaa',
   borderRadius: '3px',
@@ -84,14 +84,13 @@ class MultiSelect extends React.Component {
       selectedItems: is_array(value) ? value : [],
     };
 
-    this.handleChange = this.handleChange.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.renderItem = this.renderItem.bind(this);
   }
 
-  handleChange(value) {
+  notifyChange(value) {
     const {name, onChange} = this.props;
 
     if (is_defined(onChange)) {
@@ -114,26 +113,35 @@ class MultiSelect extends React.Component {
       return;
     }
 
+    const newSelectedItems = [...this.state.selectedItems, selectedItem];
+
     this.setState({
       // add item
-      selectedItems: [...this.state.selectedItems, selectedItem],
+      selectedItems: newSelectedItems,
       // reset search term
       search: '',
     });
+
+    this.notifyChange(newSelectedItems);
   }
 
   handleRemoveItem(item) {
     const copy = [...this.state.selectedItems];
     const index = copy.findIndex(elem => elem === item);
+
     copy.splice(index, 1);
+
     this.setState({
       selectedItems: copy,
     });
+
+    this.notifyChange(copy);
   }
 
   componentWillReceiveProps(nextProps) {
     const {value} = nextProps;
-    if (arrays_equal(value, this.state.selectedItems)) {
+
+    if (is_defined(value) && !arrays_equal(value, this.state.selectedItems)) {
       this.setState({selectedItems: value});
     }
   }
@@ -154,7 +162,7 @@ class MultiSelect extends React.Component {
           >
             × {/* Javascript unicode: \u00D7 */}
           </DeleteButton>
-          {itemLabel}
+          <span>{itemLabel}</span>
         </Layout>
       </MultiSelectedValue>
     );
@@ -178,7 +186,8 @@ class MultiSelect extends React.Component {
       items = option_items(children);
     }
 
-    const displayedItems = items.filter(case_insensitive_filter(search));
+    const displayedItems = is_defined(items) ?
+      items.filter(case_insensitive_filter(search)) : [];
     return (
       <Downshift
         selectedItem={selectedItems}
@@ -262,7 +271,7 @@ MultiSelect.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
-  value: PropTypes.any,
+  value: PropTypes.array,
   width: PropTypes.string,
   onChange: PropTypes.func,
 };

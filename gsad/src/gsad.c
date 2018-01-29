@@ -1688,20 +1688,20 @@ exec_gmp_post (http_connection_t *con,
                                   &severity, &language,
                                   response_data);
       if (timezone)
-        /* credentials->timezone set in save_my_settings_gmp before XSLT. */
+        /* credentials->timezone set in save_my_settings_gmp. */
         user_set_timezone (credentials->token, timezone);
       if (password)
         {
-          /* credentials->password set in save_my_settings_gmp before XSLT. */
+          /* credentials->password set in save_my_settings_gmp. */
           user_set_password (credentials->token, password);
 
           user_logout_all_sessions (credentials->username, credentials);
         }
       if (severity)
-        /* credentials->severity set in save_my_settings_gmp before XSLT. */
+        /* credentials->severity set in save_my_settings_gmp. */
         user_set_severity (credentials->token, severity);
       if (language)
-        /* credentials->language is set in save_my_settings_omp before XSLT. */
+        /* credentials->language is set in save_my_settings_gmp. */
         user_set_language (credentials->token, language);
 
       g_free (timezone);
@@ -1733,7 +1733,7 @@ exec_gmp_post (http_connection_t *con,
         user_logout_all_sessions (modified_user, credentials);
 
       if (password)
-        /* credentials->password set in save_user_gmp before XSLT. */
+        /* credentials->password set in save_user_gmp. */
         user_set_password (credentials->token, password);
 
       g_free (password);

@@ -153,6 +153,10 @@ export const case_insensitive_filter = search => {
 };
 
 export const option_items = children => {
+  if (!is_defined(children)) {
+    return undefined;
+  }
+
   children = React.Children.toArray(children);
   children = children.filter(child => child.type === 'option');
   return children.map(child => {
