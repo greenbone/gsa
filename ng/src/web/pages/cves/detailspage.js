@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,8 @@ import React from 'react';
 
 import _, {long_date} from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
@@ -43,6 +46,13 @@ import Layout from '../../components/layout/layout.js';
 
 import CertLink from '../../components/link/certlink.js';
 import DetailsLink from '../../components/link/detailslink.js';
+
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import Table from '../../components/table/stripedtable.js';
 import TableHeader from '../../components/table/header.js';
@@ -225,7 +235,67 @@ const CvePage = props => (
             onPermissionChanged={onChanged}
             onPermissionDownloaded={onDownloaded}
             onPermissionDownloadError={onError}
-          />
+          >
+            {({
+              activeTab = 0,
+              permissionsComponent,
+              permissionsTitle,
+              tagsComponent,
+              tagsTitle,
+              onActivateTab,
+              entity,
+              ...other
+            }) => {
+              return (
+                <Layout grow="1" flex="column">
+                  <TabLayout
+                    grow="1"
+                    align={['start', 'end']}
+                  >
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>
+                        {_('Information')}
+                      </Tab>
+                      {is_defined(tagsComponent) &&
+                        <Tab>
+                          {tagsTitle}
+                        </Tab>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <Tab>
+                          {permissionsTitle}
+                        </Tab>
+                      }
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details
+                          entity={entity}
+                        />
+                      </TabPanel>
+                      {is_defined(tagsComponent) &&
+                        <TabPanel>
+                          {tagsComponent}
+                        </TabPanel>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <TabPanel>
+                          {permissionsComponent}
+                        </TabPanel>
+                      }
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              );
+            }}
+          </EntityPage>
         )}
       </EntityComponent>
     )}

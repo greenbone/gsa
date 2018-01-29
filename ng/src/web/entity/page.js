@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,10 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale.js';
+
+import glamorous from 'glamorous';
+
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../utils/proptypes.js';
@@ -40,7 +44,30 @@ import EntityInfo from './info.js';
 import EntityPermissions from './permissions.js';
 import EntityTags from './tags.js';
 
+const TabTitleCounts = glamorous.span({
+  fontSize: '0.7em',
+});
+
+const TabTitle = ({title, count}) => (
+  <Layout flex="column" align={['center', 'center']}>
+    <span>{title}</span>
+    <TabTitleCounts>(<i>{(count)}</i>)</TabTitleCounts>
+  </Layout>
+);
+
+TabTitle.propTypes = {
+  count: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
 class EntityPage extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+    this.state = {activeTab: 0};
+
+    this.handleActivateTab = this.handleActivateTab.bind(this);
+  }
 
   renderToolbarIcons() {
     const {toolBarIcons: ToolBarIconsComponent, entity, ...other} = this.props;
@@ -57,16 +84,26 @@ class EntityPage extends React.Component {
     );
   }
 
+  handleActivateTab(index) {
+    this.setState({activeTab: index});
+  }
+
   renderSection() {
     const {
       detailsComponent: Details,
+      children,
       entity,
       foldable,
       sectionIcon,
+      permissionsComponent: PermissionsComponent = EntityPermissions,
       sectionComponent: SectionComponent = Section,
+      tagsComponent: TagsComponent = EntityTags,
       title,
+      permissions,
       ...other
     } = this.props;
+
+    const {activeTab} = this.state;
 
     if (SectionComponent === false) {
       return null;
@@ -77,6 +114,28 @@ class EntityPage extends React.Component {
       section_title = title + ': ' + entity.name;
     }
 
+    const tags = entity.user_tags;
+    const has_tags = is_defined(tags);
+    const tagsCount = has_tags ? tags.length : 0;
+    const tagsTitle = (
+      <TabTitle
+        title={_('User Tags')}
+        count={tagsCount}
+      />
+    );
+
+    let hasPermissions = false;
+    if (is_defined(permissions)) {
+      hasPermissions = is_defined(permissions.entities);
+    }
+    const permissionsCount = hasPermissions ? permissions.entities.length : 0;
+    const permissionsTitle = (
+      <TabTitle
+        title={_('Permissions')}
+        count={permissionsCount}
+      />
+    );
+
     return (
       <SectionComponent
         title={section_title}
@@ -85,10 +144,17 @@ class EntityPage extends React.Component {
         foldable={foldable}
         extra={this.renderInfo()}
       >
-        <Details
-          {...other}
-          entity={entity}
-        />
+        {children({
+          ...other,
+          activeTab,
+          entity,
+          tagsComponent: TagsComponent ? this.renderUserTags() : undefined,
+          tagsTitle,
+          permissionsComponent: PermissionsComponent ?
+            this.renderPermissions() : undefined,
+          permissionsTitle,
+          onActivateTab: this.handleActivateTab,
+        })}
       </SectionComponent>
     );
   }
@@ -168,7 +234,10 @@ class EntityPage extends React.Component {
   }
 
   render() {
-    const {entity, loading} = this.props;
+    const {
+      entity,
+      loading,
+    } = this.props;
 
     if (!is_defined(entity)) {
       if (loading) {
@@ -189,8 +258,6 @@ class EntityPage extends React.Component {
           {this.renderToolbarIcons()}
         </Toolbar>
         {this.renderSection()}
-        {this.renderUserTags()}
-        {this.renderPermissions()}
       </Layout>
     );
   }

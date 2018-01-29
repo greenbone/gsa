@@ -1,10 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,30 +21,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import ScanInfo from './scaninfo.js';
+const TabLayout = glamorous(Layout)({
+  borderBottom: '1px solid ' + Theme.extra.lightGray,
+  marginTop: '30px',
+  marginBottom: '15px',
+  paddingBottom: '0px',
+});
 
-const Summary = ({
-  report,
-}) => (
-  <Layout flex="column">
-    <ScanInfo
-      report={report}
-    />
-  </Layout>
-);
-
-Summary.propTypes = {
-  report: PropTypes.model.isRequired,
-  onError: PropTypes.func.isRequired,
-  onTagChanged: PropTypes.func.isRequired,
-};
-
-export default Summary;
+export default TabLayout;
 
 // vim: set ts=2 sw=2 tw=80:

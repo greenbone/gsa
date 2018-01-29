@@ -307,6 +307,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/structure/header.js
      ${NG_SRC_DIR}/src/web/components/structure/main.js
      ${NG_SRC_DIR}/src/web/components/tab/tab.js
+     ${NG_SRC_DIR}/src/web/components/tab/tablayout.js
      ${NG_SRC_DIR}/src/web/components/tab/tablist.js
      ${NG_SRC_DIR}/src/web/components/tab/tabpanel.js
      ${NG_SRC_DIR}/src/web/components/tab/tabpanels.js

@@ -29,7 +29,6 @@ import _, {datetime} from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
 import {render_entities_counts, render_options} from '../../utils/render.js';
 
 import EntityInfo from '../../entity/info.js';
@@ -55,6 +54,7 @@ import Link from '../../components/link/link.js';
 import Powerfilter from '../../components/powerfilter/powerfilter.js';
 
 import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
 import TabList from '../../components/tab/tablist.js';
 import TabPanel from '../../components/tab/tabpanel.js';
 import TabPanels from '../../components/tab/tabpanels.js';
@@ -62,6 +62,9 @@ import Tabs from '../../components/tab/tabs.js';
 
 import Section from '../../components/section/section.js';
 import SectionHeader from '../../components/section/header.js';
+
+import EntityTags from '../../entity/tags.js';
+import TagsHandler from '../../entity/tagshandler.js';
 
 import AlertActions from './alertactions.js';
 import ApplicationsTable from './applicationstable.js';
@@ -87,13 +90,6 @@ import {
   tls_certificates_sort_functions,
 } from './sort.js';
 
-const TabLayout = glamorous(Layout)({
-  borderBottom: '1px solid ' + Theme.extra.lightGray,
-  marginTop: '30px',
-  marginBottom: '15px',
-  paddingBottom: '0px',
-});
-
 const TabTitleCounts = glamorous.span({
   fontSize: '0.7em',
 });
@@ -107,6 +103,18 @@ const TabTitle = ({title, counts}) => (
 
 TabTitle.propTypes = {
   counts: PropTypes.counts.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
+const TabTitleForUserTags = ({title, count}) => (
+  <Layout flex="column" align={['center', 'center']}>
+    <span>{title}</span>
+    <TabTitleCounts>(<i>{count}</i>)</TabTitleCounts>
+  </Layout>
+);
+
+TabTitleForUserTags.propTypes = {
+  count: PropTypes.counts.isRequired,
   title: PropTypes.string.isRequired,
 };
 
@@ -221,6 +229,45 @@ ToolBarIcons.propTypes = {
   onReportFormatChange: PropTypes.func.isRequired,
 };
 
+const UserTags = ({
+  report,
+  onError,
+  onTagChanged,
+}) => {
+  return (
+    <TagsHandler
+      onError={onError}
+      onChanged={onTagChanged}
+      resourceType="report"
+    >
+      {({
+        add,
+        create,
+        delete: delete_func,
+        disable,
+        enable,
+        edit,
+      }) => (
+        <EntityTags
+          entity={report}
+          onTagAddClick={add}
+          onTagCreateClick={create}
+          onTagDeleteClick={delete_func}
+          onTagDisableClick={disable}
+          onTagEditClick={edit}
+          onTagEndableClick={enable}
+        />
+      )}
+    </TagsHandler>
+  );
+};
+
+UserTags.propTypes = {
+  report: PropTypes.model.isRequired,
+  onError: PropTypes.func.isRequired,
+  onTagChanged: PropTypes.func.isRequired,
+};
+
 const PageContent = ({
   activeTab,
   entity,
@@ -258,6 +305,8 @@ const PageContent = ({
   const {
     report,
   } = entity;
+
+  const userTagsCount = report.user_tags.length;
 
   const {
     applications,
@@ -353,7 +402,7 @@ const PageContent = ({
             onActivateTab={onActivateTab}
           >
             <Tab>
-              {_('Summary')}
+              {_('Information')}
             </Tab>
             <Tab>
               <TabTitle
@@ -425,6 +474,12 @@ const PageContent = ({
                 />
               </Tab>
             }
+            <Tab>
+              <TabTitleForUserTags
+                title={_('User Tags')}
+                count={userTagsCount}
+              />
+            </Tab>
           </TabList>
         </TabLayout>
         <Tabs active={activeTab}>
@@ -573,6 +628,13 @@ const PageContent = ({
                   />
                 )}
               </ReportEntitiesContainer>
+            </TabPanel>
+            <TabPanel>
+              <UserTags
+                report={report}
+                onError={onError}
+                onTagChanged={onTagSuccess}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>

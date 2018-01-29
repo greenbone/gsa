@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +24,8 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {permission_description} from '../../utils/render.js';
@@ -49,7 +52,12 @@ import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
-import Section from '../../components/section/section.js';
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
@@ -127,49 +135,64 @@ const Details = ({
         entity={entity}
         links={links}
       />
-
-      <Section
-        title={_('General Command Permissions')}
-        foldable={true}
-      >
-        {general_permissions.length > 0 ?
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('Description')}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {general_permissions.map(perm => (
-                <TableRow key={perm.id}>
-                  <EntityNameTableData
-                    entity={perm}
-                    link={links}
-                    type="permission"
-                    displayName={_('Permission')}
-                  />
-                  <TableData>
-                    {permission_description(perm.name, perm.resource)}
-                  </TableData>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table> :
-          _('None')
-        }
-      </Section>
     </Layout>
   );
 };
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
-  general_permissions: PropTypes.collection,
+  general_permissions: PropTypes.object,
+  links: PropTypes.bool,
+};
+
+const GeneralPermissions = ({
+  entity,
+  links,
+}) => {
+  const {
+    general_permissions,
+  } = entity;
+
+  return (
+    <Layout
+      title={_('General Command Permissions')}
+    >
+      {general_permissions.length > 0 ?
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                {_('Name')}
+              </TableHead>
+              <TableHead>
+                {_('Description')}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {general_permissions.map(perm => (
+              <TableRow key={perm.id}>
+                <EntityNameTableData
+                  entity={perm}
+                  links={links}
+                  type="permission"
+                  displayName={_('Permission')}
+                />
+                <TableData>
+                  {permission_description(perm.name, perm.resource)}
+                </TableData>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table> :
+        _('None')
+      }
+    </Layout>
+  );
+};
+
+GeneralPermissions.propTypes = {
+  entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
 
@@ -212,7 +235,75 @@ const Page = ({
         onPermissionChanged={onChanged}
         onPermissionDownloaded={onDownloaded}
         onPermissionDownloadError={onError}
-      />
+      >
+        {({
+          activeTab = 0,
+          links = true,
+          permissionsComponent,
+          permissionsTitle,
+          tagsComponent,
+          tagsTitle,
+          onActivateTab,
+          entity,
+          ...other
+        }) => {
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  <Tab>
+                    {_('General Command Permissions')}
+                  </Tab>
+                  {is_defined(tagsComponent) &&
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
+                  }
+                </TabList>
+              </TabLayout>
+
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Details
+                      entity={entity}
+                      links={links}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <GeneralPermissions entity={entity}/>
+                  </TabPanel>
+                  {is_defined(tagsComponent) &&
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
+                  }
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
   </RoleComponent>
 );
