@@ -24,15 +24,15 @@
 class Login {
 
   constructor(elem) {
-    this.client_address =  elem.client_address;
-    this.guest =  elem.guest;
-    this.i18n =  elem.i18n;
-    this.role =  elem.role;
-    this.severity =  elem.severity;
-    this.timezone =  elem.timezone;
-    this.token =  elem.token;
-    this.vendor_version =  elem.vendor_version;
-    this.version =  elem.version;
+    this.client_address = elem.client_address;
+    this.guest = elem.guest;
+    this.i18n = elem.i18n;
+    this.role = elem.role;
+    this.severity = elem.severity;
+    this.timezone = elem.timezone;
+    this.token = elem.token;
+    this.vendor_version = elem.vendor_version;
+    this.version = elem.version;
   }
 }
 
