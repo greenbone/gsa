@@ -21,12 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parse_int} from '../parser.js';
-
 class Login {
 
   constructor(elem) {
-    this.autorefresh =  parse_int(elem.autorefresh._interval);
     this.client_address =  elem.client_address;
     this.guest =  elem.guest;
     this.i18n =  elem.i18n;
