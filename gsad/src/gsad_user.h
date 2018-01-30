@@ -59,7 +59,6 @@ typedef struct
   char *pw_warning;   ///< Password policy warning message
   char *client_address; ///< Client's address.
   GTree *chart_prefs; ///< Chart preferences.
-  char *autorefresh;  ///< Auto-refresh interval.
   GTree *last_filt_ids; ///< Last filter ids.
   params_t *params;   ///< Request parameters.
   int charts;         ///< Whether to show charts for this user.
@@ -91,7 +90,6 @@ struct user
   time_t time;         ///< Login time.
   int charts;          ///< Whether to show charts for this user.
   GTree *chart_prefs;  ///< Chart preferences.
-  gchar *autorefresh; ///< Auto-Refresh interval
   GTree *last_filt_ids;///< Last used filter ids.
   int guest;           ///< Whether the user is a guest.
 };
@@ -107,7 +105,7 @@ user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, GTree *chart_prefs,
-          const gchar *autorefresh, const char *address);
+          const char *address);
 
 int user_set_timezone (const gchar *token, const gchar *timezone);
 
@@ -120,8 +118,6 @@ int user_set_language (const gchar *token, const gchar *language);
 int user_set_charts (const gchar *token, const int charts);
 
 int user_set_chart_pref (const gchar *token, gchar* pref_id, gchar *pref_value);
-
-int user_set_autorefresh (const gchar *token, const gchar *autorefresh);
 
 int user_logout_all_sessions (const gchar *username,
                               credentials_t *credentials);

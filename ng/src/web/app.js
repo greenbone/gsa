@@ -24,8 +24,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {ThemeProvider} from 'glamorous';
-
 import {
   browserHistory,
   IndexRoute,
@@ -43,8 +41,6 @@ import HttpInterceptor from 'gmp/http/interceptor.js';
 import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'; // eslint-disable-line max-len
 
 import PropTypes from './utils/proptypes.js';
-
-import theme from './utils/theme.js';
 
 import AssetsPage from './pages/assetspage.js';
 import HomePage from './pages/homepage.js';
@@ -184,9 +180,7 @@ class App extends React.Component {
   render() {
     return (
       <CacheFactoryProvider caches={caches}>
-        <ThemeProvider theme={theme}>
-          {this.props.children}
-        </ThemeProvider>
+        {this.props.children}
       </CacheFactoryProvider>
     );
   }

@@ -60,7 +60,6 @@ static GMutex *mutex = NULL;
  * @param[in]  language      User Interface Language (language name or code)
  * @param[in]  pw_warning    Password policy warning.
  * @param[in]  chart_prefs   The chart preferences.
- * @param[in]  autorefresh   The autorefresh preference.
  * @param[in]  address       Client's IP address.
  *
  * @return Added user.
@@ -69,7 +68,7 @@ user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, GTree *chart_prefs,
-          const gchar *autorefresh, const char *address)
+          const char *address)
 {
   user_t *user = NULL;
   int index;
@@ -97,7 +96,6 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   user->capabilities = g_strdup (capabilities);
   user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
   user->chart_prefs = chart_prefs;
-  user->autorefresh = g_strdup (autorefresh);
   user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
                                          NULL, g_free, g_free);
   g_ptr_array_add (users, (gpointer) user);
@@ -145,7 +143,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
     {
       int ret;
       gchar *timezone, *role, *capabilities, *severity, *language;
-      gchar *pw_warning, *autorefresh;
+      gchar *pw_warning;
       GTree *chart_prefs;
 
       if (cookie)
@@ -183,8 +181,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
                               &capabilities,
                               &language,
                               &pw_warning,
-                              &chart_prefs,
-                              &autorefresh);
+                              &chart_prefs);
       if (ret == 1)
         return USER_GUEST_LOGIN_FAILED;
       else if (ret == 2)
@@ -196,7 +193,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
           user_t *user;
           user = user_add (guest_username, guest_password, timezone, severity,
                            role, capabilities, language, pw_warning,
-                           chart_prefs, autorefresh, address);
+                           chart_prefs, address);
           *user_return = user;
           g_free (timezone);
           g_free (severity);
@@ -204,7 +201,6 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
           g_free (language);
           g_free (role);
           g_free (pw_warning);
-          g_free (autorefresh);
           return USER_OK;
         }
     }
@@ -437,36 +433,6 @@ user_set_chart_pref (const gchar *token, gchar* pref_id, gchar *pref_value)
 }
 
 /**
- * @brief Set default autorefresh interval of user.
- *
- * @param[in]   token        User token.
- * @param[in]   autorefresh  Autorefresh interval.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_autorefresh (const gchar *token, const gchar *autorefresh)
-{
-  int index, ret;
-  ret = 1;
-  g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_free (item->autorefresh);
-          item->autorefresh = g_strdup (autorefresh);
-          ret = 0;
-          break;
-        }
-    }
-  g_mutex_unlock (mutex);
-  return ret;
-}
-
-/**
  * @brief Logs out all sessions of a given user, except the current one.
  *
  * @param[in]   username        User name.
@@ -608,8 +574,6 @@ credentials_new (user_t *user, const char *language, const char *client_address)
   credentials->pw_warning = user->pw_warning ? g_strdup (user->pw_warning)
                                              : NULL;
   credentials->language = g_strdup (language);
-  credentials->autorefresh = user->autorefresh
-                              ? g_strdup (user->autorefresh) : NULL;
   credentials->last_filt_ids = user->last_filt_ids;
   credentials->client_address = g_strdup (client_address);
   credentials->guest = user->guest;
@@ -636,7 +600,6 @@ credentials_free (credentials_t *creds)
   g_free (creds->severity);
   g_free (creds->pw_warning);
   g_free (creds->client_address);
-  g_free (creds->autorefresh);
   g_free (creds->sid);
   /* params, chart_prefs and last_filt_ids are not duplicated. */
   g_free (creds);

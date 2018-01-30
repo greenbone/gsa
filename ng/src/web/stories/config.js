@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -30,6 +31,7 @@ function loadStories() {
   require('./select');
   require('./multiselect');
   require('./sortable');
+  require('./tabs');
 }
 
 configure(loadStories, module);
