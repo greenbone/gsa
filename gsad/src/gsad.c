@@ -839,7 +839,6 @@ init_validator ()
   openvas_validator_alias (validator, "include_related",   "number");
   openvas_validator_alias (validator, "inheritor_id",       "id");
   openvas_validator_alias (validator, "ignore_pagination",   "boolean");
-  openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
   openvas_validator_alias (validator, "access_ifaces", "hosts_opt");
@@ -1343,7 +1342,7 @@ exec_gmp_post (http_connection_t *con,
           && password)
         {
           gchar *timezone, *role, *capabilities, *severity, *language;
-          gchar *pw_warning, *autorefresh;
+          gchar *pw_warning;
           GTree *chart_prefs;
           ret = authenticate_gmp (params_value (con_info->params, "login"),
                                   password,
@@ -1353,8 +1352,7 @@ exec_gmp_post (http_connection_t *con,
                                   &capabilities,
                                   &language,
                                   &pw_warning,
-                                  &chart_prefs,
-                                  &autorefresh);
+                                  &chart_prefs);
           if (ret)
             {
               int status;
@@ -1381,8 +1379,7 @@ exec_gmp_post (http_connection_t *con,
               user_t *user;
               user = user_add (params_value (con_info->params, "login"),
                                password, timezone, severity, role, capabilities,
-                               language, pw_warning, chart_prefs, autorefresh,
-                               client_address);
+                               language, pw_warning, chart_prefs, client_address);
               /* Redirect to get_tasks. */
               url = g_strdup_printf ("%s&token=%s",
                                      params_value (con_info->params, "text"),
@@ -1401,7 +1398,6 @@ exec_gmp_post (http_connection_t *con,
               g_free (language);
               g_free (role);
               g_free (pw_warning);
-              g_free (autorefresh);
               return ret;
             }
         }

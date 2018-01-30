@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils.js';
@@ -68,6 +70,22 @@ import TableRow from '../../components/table/row.js';
 
 import RoleComponent from './component.js';
 import RoleDetails from './details.js';
+
+const TabTitleCount = glamorous.span({
+  fontSize: '0.7em',
+});
+
+const TabTitle = ({title, count}) => (
+  <Layout flex="column" align={['center', 'center']}>
+    <span>{title}</span>
+    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
+  </Layout>
+);
+
+TabTitle.propTypes = {
+  count: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 const ToolBarIcons = ({
   entity,
@@ -146,18 +164,14 @@ Details.propTypes = {
 };
 
 const GeneralPermissions = ({
-  entity,
+  permissions = [],
   links,
 }) => {
-  const {
-    general_permissions,
-  } = entity;
-
   return (
     <Layout
       title={_('General Command Permissions')}
     >
-      {general_permissions.length > 0 ?
+      {permissions.length > 0 ?
         <Table>
           <TableHeader>
             <TableRow>
@@ -170,7 +184,7 @@ const GeneralPermissions = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {general_permissions.map(perm => (
+            {permissions.map(perm => (
               <TableRow key={perm.id}>
                 <EntityNameTableData
                   entity={perm}
@@ -192,14 +206,15 @@ const GeneralPermissions = ({
 };
 
 GeneralPermissions.propTypes = {
-  entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  permissions: PropTypes.array,
 };
 
 const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  general_permissions,
   ...props
 }) => (
   <RoleComponent
@@ -247,6 +262,9 @@ const Page = ({
           entity,
           ...other
         }) => {
+          const genPermsCount = is_defined(general_permissions) ?
+            general_permissions.entities.length : 0;
+
           return (
             <Layout grow="1" flex="column">
               <TabLayout
@@ -262,7 +280,10 @@ const Page = ({
                     {_('Information')}
                   </Tab>
                   <Tab>
-                    {_('General Command Permissions')}
+                    <TabTitle
+                      title={_('General Command Permissions')}
+                      count={genPermsCount}
+                    />
                   </Tab>
                   {is_defined(tagsComponent) &&
                     <Tab>
@@ -286,7 +307,10 @@ const Page = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <GeneralPermissions entity={entity}/>
+                    <GeneralPermissions
+                      permissions={is_defined(general_permissions) ?
+                        general_permissions.entities : []}
+                    />
                   </TabPanel>
                   {is_defined(tagsComponent) &&
                     <TabPanel>
@@ -309,6 +333,7 @@ const Page = ({
 );
 
 Page.propTypes = {
+  general_permissions: PropTypes.object,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
