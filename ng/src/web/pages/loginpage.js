@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,14 +49,11 @@ import Main from '../components/structure/main.js';
 const log = logger.getLogger('web.login');
 
 const panelcss = {
-  marginTop: '30px',
-  marginBottom: '30px',
-  padding: '10px',
-  width: '480px',
+  marginTop: '5px',
+  marginBottom: '5px',
+  paddingBottom: '10px',
+  width: '350px',
   fontSize: '9pt',
-  backgroundColor: '#dddddd',
-  borderRadius: '15px',
-  boxShadow: '10px 10px 15px #1a1a1a',
 };
 
 const Panel = glamorous.div(
@@ -71,7 +69,7 @@ const LoginPanel = glamorous(Layout)(
 const Error = glamorous.p(
   'error',
   {
-    color: 'red',
+    color: '#d83636',
     fontWeight: 'bold',
     textAlign: 'center',
     margin: '10px',
@@ -115,11 +113,6 @@ class LoginForm extends React.Component {
     const protocol_insecure = window.location.protocol !== 'https:';
     return (
       <Layout flex="column">
-        {is_defined(error) &&
-          <Panel>
-            <Error>{error}</Error>
-          </Panel>
-        }
         {protocol_insecure &&
           <Panel>
             <Error>{_('Warning: Connection unencrypted')}</Error>
@@ -130,39 +123,48 @@ class LoginForm extends React.Component {
           </Panel>
         }
         <LoginPanel
-          flex
+          flex="column"
           align="space-around">
-          <Icon img="login-label.png" size="default"/>
           <Layout
             flex="column"
             align="space-around"
-            grow="1">
-            <Layout flex="column">
-              <FormGroup title={_('Username')} titleSize="4">
-                <TextField
-                  name="username"
-                  grow="1"
-                  placeholder={_('e.g. johndoe')}
-                  value={username}
-                  autoFocus="autofocus"
-                  tabIndex="1"
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-              <FormGroup title={_('Password')} titleSize="4">
-                <PasswordField
-                  name="password"
-                  grow="1"
-                  placeholder={_('Password')}
-                  value={password}
-                  onKeyDown={this.onKeyDown}
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-            </Layout>
-            <FormGroup size="6" offset="6">
-              <SubmitButton title={_('Login')} onClick={this.onSubmit}/>
+            grow="1"
+            width="350px"
+          >
+            <FormGroup title={_('Username')} titleSize="4">
+              <TextField
+                name="username"
+                grow="1"
+                placeholder={_('e.g. johndoe')}
+                value={username}
+                autoFocus="autofocus"
+                tabIndex="1"
+                onChange={this.onValueChange}/>
+            </FormGroup>
+            <FormGroup title={_('Password')} titleSize="4">
+              <PasswordField
+                name="password"
+                grow="1"
+                placeholder={_('Password')}
+                value={password}
+                onKeyDown={this.onKeyDown}
+                onChange={this.onValueChange}/>
+            </FormGroup>
+            <FormGroup size="4" offset="4">
+              <SubmitButton
+                flex
+                grow
+                title={_('Login')}
+                onClick={this.onSubmit}
+              />
             </FormGroup>
           </Layout>
         </LoginPanel>
+        {is_defined(error) &&
+          <Panel>
+            <Error>{error}</Error>
+          </Panel>
+        }
       </Layout>
     );
   }
@@ -174,11 +176,13 @@ LoginForm.propTypes = {
 };
 
 const GreenboneIcon = glamorous(GBIcon)({
-  width: '400px',
+  minHeight: '60px',
+  maxHeight: '315px',
+  margin: '40px 0px',
 });
 
 const LoginMain = glamorous(Main)({
-  background: '#393637',
+  background: '#fefefe',
 });
 
 const LoginLayout = glamorous(Layout)({
@@ -187,6 +191,23 @@ const LoginLayout = glamorous(Layout)({
 
 const LoginHeader = glamorous(Header)({
   color: '#393637',
+});
+
+const StyledIcon = glamorous(Icon)({
+  position: 'absolute',
+  top: '100px',
+  right: '20px',
+});
+
+const StyledLayout = glamorous(Layout)({
+  margin: '0 auto',
+  height: '1vh',
+});
+
+const MenuSpacer = glamorous.div({
+  minHeight: '35px',
+  background: '#393637',
+  zIndex: '1000',
 });
 
 class LoginPage extends React.Component {
@@ -241,15 +262,17 @@ class LoginPage extends React.Component {
     return (
       <LoginLayout flex="column" className="login">
         <LoginHeader/>
+        <MenuSpacer/>
         <LoginMain>
-          <Layout
-            flex
-            align={['space-around', 'center']}
+          <StyledLayout
+            flex="column"
+            align={['start', 'center']}
             grow="1"
-            wrap>
+            position="relative">
+            <StyledIcon img="login-label.png" size="default"/>
+            <GreenboneIcon width="350px"/>
             <LoginForm onSubmit={this.onSubmit} error={message}/>
-            <GreenboneIcon/>
-          </Layout>
+          </StyledLayout>
         </LoginMain>
         <Footer/>
       </LoginLayout>
