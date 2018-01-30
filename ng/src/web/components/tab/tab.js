@@ -26,6 +26,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
+import Theme from '../../utils/theme.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 const StyledDiv = glamorous.div(
@@ -39,23 +41,23 @@ const StyledDiv = glamorous.div(
     paddingBottom: '2px',
     paddingTop: '2px',
   },
-  ({active, disabled, theme}) => ({
+  ({active, disabled}) => ({
     borderLeft: active ? '1px solid #eee' : '1px solid white',
-    borderRight: '1px solid ' + theme.extra.lightGray,
+    borderRight: '1px solid ' + Theme.extra.lightGray,
     cursor: disabled ? 'not-allowed' : 'pointer',
     backgroundColor: active ? '#eee' : undefined,
     borderBottom: active ? '1px solid #eee' : undefined,
     marginBottom: active ? '-1px' : undefined,
     borderTop: active ?
-      '2px solid ' + theme.main.lightGreen :
+      '2px solid ' + Theme.main.lightGreen :
       '2px solid white', // + theme.extra.lightGray,
     ':hover': {
       borderTop: active ?
-        undefined : '2px solid' + theme.extra.lightGray,
+        undefined : '2px solid' + Theme.extra.lightGray,
     },
     ':first-child': {
       borderLeft: active ?
-        '1px solid' + theme.extra.lightGray : '1px solid white',
+        '1px solid' + Theme.extra.lightGray : '1px solid white',
     },
   }),
 );
