@@ -32,6 +32,7 @@ const theme = {
     lightGray: '#c8d3d9',
     goldYellow: '#fdc300',
     redBrown: '#a54317',
+    darkGreen: '#519032',
   },
 };
 
