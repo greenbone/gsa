@@ -32,6 +32,7 @@ function loadStories() {
   require('./multiselect');
   require('./sortable');
   require('./tabs');
+  require('./datepicker');
 }
 
 configure(loadStories, module);
