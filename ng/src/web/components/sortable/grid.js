@@ -84,58 +84,58 @@ class Grid extends React.Component {
     // we are mutating the items => create copy
     let items = [...this.state.items];
 
-    const {droppableId: destrowid} = result.destination;
-    const {droppableId: sourcerowid} = result.source;
-    const {index: destindex} = result.destination;
-    const {index: sourceindex} = result.source;
+    const {droppableId: destrowId} = result.destination;
+    const {droppableId: sourcerowId} = result.source;
+    const {index: destIndex} = result.destination;
+    const {index: sourceIndex} = result.source;
 
-    const destrowindex = findRowIndex(items, destrowid);
-    const destrow = items[destrowindex];
-    const sourcerowindex = findRowIndex(items, sourcerowid);
-    const sourcerow = items[sourcerowindex];
+    const destrowIndex = findRowIndex(items, destrowId);
+    const destRow = items[destrowIndex];
+    const sourcerowIndex = findRowIndex(items, sourcerowId);
+    const sourceRow = items[sourcerowIndex];
     // we are mutating the row => create copy
-    const sourcerowitems = [...sourcerow.items];
+    const sourceRowItems = [...sourceRow.items];
     // remove from source row
-    const [item] = sourcerowitems.splice(sourceindex, 1);
+    const [item] = sourceRowItems.splice(sourceIndex, 1);
 
-    if (destrowid === 'empty') {
+    if (destrowId === 'empty') {
       // update row
-      items[sourcerowindex] = {
-        id: sourcerowid,
-        items: sourcerowitems,
+      items[sourcerowIndex] = {
+        id: sourcerowId,
+        items: sourceRowItems,
       };
 
       // create new row with the removed item
       items = [...items, createRow([item])];
     }
-    else if (destrowid === sourcerowid) {
+    else if (destrowId === sourcerowId) {
       // add at position destindex
-      sourcerowitems.splice(destindex, 0, item);
+      sourceRowItems.splice(destIndex, 0, item);
 
-      items[sourcerowindex] = {
-        id: sourcerowid,
-        items: sourcerowitems,
+      items[sourcerowIndex] = {
+        id: sourcerowId,
+        items: sourceRowItems,
       };
     }
     else {
-      items[sourcerowindex] = {
-        id: sourcerowid,
-        items: sourcerowitems,
+      items[sourcerowIndex] = {
+        id: sourcerowId,
+        items: sourceRowItems,
       };
 
       // add to destination row
-      const destrowitems = [...destrow.items];
-      destrowitems.splice(destindex, 0, item);
+      const destrowItems = [...destRow.items];
+      destrowItems.splice(destIndex, 0, item);
 
-      items[destrowindex] = {
-        id: destrowid,
-        items: destrowitems,
+      items[destrowIndex] = {
+        id: destrowId,
+        items: destrowItems,
       };
     }
 
     // remove possible empty last row
-    const lastrow = items[items.length - 1];
-    if (lastrow.items.length === 0) {
+    const lastRow = items[items.length - 1];
+    if (lastRow.items.length === 0) {
       items.pop();
     }
 
