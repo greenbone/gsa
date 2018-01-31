@@ -56,13 +56,14 @@ class Grid extends React.Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
     maxItemsPerRow: PropTypes.numberOrNumberString,
+    onChange: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      items: this.props.items,
+      isDragging: false,
     };
 
     this.handleDragEnd = this.handleDragEnd.bind(this);
@@ -81,8 +82,9 @@ class Grid extends React.Component {
       return;
     }
 
+    let {items = []} = this.props;
     // we are mutating the items => create copy
-    let items = [...this.state.items];
+    items = [...items];
 
     const {droppableId: destrowId} = result.destination;
     const {droppableId: sourcerowId} = result.source;
@@ -139,14 +141,16 @@ class Grid extends React.Component {
       items.pop();
     }
 
-    this.setState({
-      items,
-    });
+    const {onChange} = this.props;
+
+    if (is_defined(onChange)) {
+      onChange(items);
+    }
   }
 
   render() {
-    const {items, isDragging} = this.state;
-    const {maxItemsPerRow} = this.props;
+    const {isDragging} = this.state;
+    const {maxItemsPerRow, items} = this.props;
     return (
       <DragDropContext
         onDragEnd={this.handleDragEnd}

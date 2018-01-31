@@ -26,7 +26,40 @@ import glamorous from 'glamorous';
 
 import {storiesOf} from '@storybook/react';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Grid, {createItem, createRow} from 'web/components/sortable/grid.js';
+
+class ItemController extends React.Component {
+
+  static propTypes = {
+    items: PropTypes.array,
+  };
+
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      items: this.props.items,
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(items) {
+    this.setState({items});
+  }
+
+  render() {
+    const {children} = this.props;
+    const {items} = this.state;
+
+    return React.cloneElement(React.Children.only(children), {
+      items,
+      onChange: this.handleChange,
+    });
+  }
+}
 
 const Item = glamorous.span({
   flexGrow: '1',
@@ -48,9 +81,11 @@ storiesOf('Sortable/Grid', module)
       createRow(getItems(2, 5)),
     ];
     return (
-      <Grid
+      <ItemController
         items={items}
-      />
+      >
+        <Grid />
+      </ItemController>
     );
   })
   .add('max 5 items per row', () => {
@@ -59,10 +94,13 @@ storiesOf('Sortable/Grid', module)
       createRow(getItems(1, 5)),
     ];
     return (
-      <Grid
-        maxItemsPerRow="5"
+      <ItemController
         items={items}
-      />
+      >
+        <Grid
+          maxItemsPerRow="5"
+        />
+      </ItemController>
     );
   });
 
