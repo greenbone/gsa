@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,22 +20,47 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-const theme = {
-  main: {
-    green: '#66c430',
-    lightGreen: '#87d050',
-  },
-  extra: {
-    darkGray: '#393637',
-    mediumGray: '#787878',
-    lightGray: '#c8d3d9',
-    goldYellow: '#fdc300',
-    redBrown: '#a54317',
-    darkGreen: '#519032',
-  },
+import glamorous from 'glamorous';
+
+import {Droppable} from 'react-beautiful-dnd';
+
+import PropTypes from '../../utils/proptypes.js';
+
+const EmptyGridRow = glamorous.div({
+  margin: '8px 0px',
+  minHeight: '50px',
+}, ({active}) => active ? {
+  display: 'flex',
+  border: '1px dashed lightgray',
+} : {display: 'none'});
+
+const EmptyRow = ({
+  children,
+  active = false,
+}) => (
+  <Droppable
+    droppableId="empty"
+    direction="horizontal"
+  >
+    {(provided, snapshot) => (
+      <EmptyGridRow
+        active={active}
+        innerRef={provided.innerRef}
+        isDraggingOver={snapshot.isDraggingOver}
+      >
+        {children}
+        {provided.placeholder}
+      </EmptyGridRow>
+    )}
+  </Droppable>
+);
+
+EmptyRow.propTypes = {
+  active: PropTypes.bool,
 };
 
-export default theme;
+export default EmptyRow;
 
 // vim: set ts=2 sw=2 tw=80:
