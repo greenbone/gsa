@@ -32,7 +32,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
 
-import Button from './button.js';
+import DialogCloseButton from './closebutton.js';
 
 const DialogTitleBar = glamorous(Layout)({
   padding: '5px 5px 5px 10px',
@@ -48,15 +48,6 @@ const DialogTitleBar = glamorous(Layout)({
   cursor: 'move',
 });
 
-const DialogCloseButton = glamorous(Button)({
-  background: 'none',
-  opacity: '.7',
-  height: '20px',
-  width: '20px',
-  lineHeight: '0',
-  padding: '0',
-});
-
 const DialogTitle = ({
   showClose = true,
   title,
@@ -70,8 +61,9 @@ const DialogTitle = ({
       <span>{title}</span>
       {showClose &&
         <DialogCloseButton
+          title={_('Close')}
           onClick={onCloseClick}
-          title={_('Close')}>x</DialogCloseButton>
+        />
       }
     </DialogTitleBar>
   );

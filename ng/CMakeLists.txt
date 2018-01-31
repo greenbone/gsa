@@ -201,6 +201,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js
+     ${NG_SRC_DIR}/src/web/components/dialog/closebutton.js
      ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
