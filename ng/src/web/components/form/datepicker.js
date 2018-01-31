@@ -1,10 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,123 +22,97 @@
  */
 
 import React from 'react';
-import $ from 'jquery';
+import {Div} from 'glamorous';
+
 import moment from 'moment';
 
-import 'jquery-ui';
-import 'jquery-ui/ui/widgets/datepicker.js';
-
-import _ from 'gmp/locale.js';
-
+import _, {get_language} from 'gmp/locale';
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Layout from '../layout/layout.js';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-import 'jquery-ui/themes/base/base.css';
+class InputField extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  render() {
+    const {
+      onClick,
+      value,
+      width = 'auto',
+      ...props
+    } = this.props;
 
-import '../../css/jquery-ui.theme.css';
+    return (
+      <Div
+        onClick={onClick}
+        width={width}
+        marginRight="5px"
+        {...props}
+      >
+        {value}
+      </Div>
+    );
+  }
+}
 
-import './css/datepicker.css';
+InputField.propTypes = {
+  value: PropTypes.string,
+  width: PropTypes.string,
+  onClick: PropTypes.func,
+};
 
-/* FIXME: the datepicker should be replaced with a native react datepicker in future */
-
-class DatePicker extends React.Component {
+class DatePickerComponent extends React.Component {
 
   constructor(...args) {
     super(...args);
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount() {
-    this.init();
-  }
+  handleChange(value) {
+    const {name, onChange} = this.props;
 
-  componentWillUnmount() {
-    this.destroy();
-  }
-
-  componentWillReceiveProps(next) {
-    const {value} = this.props;
-    if (!value.isSame(next.value)) {
-      const date = is_defined(next.value) ? next.value.toDate() : undefined;
-
-      const button = $(this.button);
-      button.datepicker('setDate', date);
+    if (is_defined(onChange)) {
+      onChange(value, name);
     }
-  }
-
-  init() {
-    const {
-      value,
-      minDate = value,
-    } = this.props;
-    const date = value.toDate();
-    const mindate = minDate ? minDate.toDate() : null;
-
-    const button = $(this.button);
-    button.datepicker({
-      showOn: 'button',
-      buttonImage: '/img/calendar.svg',
-      buttonImageOnly: true,
-      buttonText: _('Select date'),
-      dateFormat: 'DD, d MM, yy',
-      minDate: mindate,
-      maxDate: '+3Y',
-      onClose: this.handleChange,
-    });
-
-    button.datepicker('setDate', date);
-
-    /* don't allow to change value_field by user */
-    button.prop('readonly', true);
-    button.attr('title', _('Select date') + '');
-  }
-
-  destroy() {
-    $(this.button).datepicker('destroy');
-  }
-
-  handleChange() {
-    const {onChange, name} = this.props;
-    const date = $(this.button).datepicker('getDate');
-    if (date && onChange) {
-      onChange(moment(date), name);
-    }
-  }
-
-  handleClick() {
-    $(this.button).datepicker('show');
   }
 
   render() {
-    const {onChange, name, value, ...other} = this.props; // eslint-disable-line no-unused-vars
+    const {
+      minDate = moment(),
+      name,
+      width,
+      value = moment(),
+      ...props
+    } = this.props;
+
     return (
-      <Layout {...other}>
-        <input
-          className="datepicker-button"
-          size="34"
-          ref={ref => this.button = ref}
-          onClick={this.handleClick}
-        />
-      </Layout>
+      <DatePicker
+        {...props}
+        customInput={<InputField width={width}/>}
+        minDate={minDate === false ? undefined : minDate}
+        maxDate={moment().add(3, 'years')}
+        selected={value}
+        todayButton={_('Today')}
+        locale={get_language()}
+        onChange={this.handleChange}
+      />
     );
   }
 }
 
-DatePicker.propTypes = {
+DatePickerComponent.propTypes = {
   minDate: PropTypes.oneOfType([
     PropTypes.momentDate,
     PropTypes.oneOf([false]),
   ]),
   name: PropTypes.string,
   value: PropTypes.momentDate.isRequired,
+  width: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default DatePicker;
+export default DatePickerComponent;
 
 // vim: set ts=2 sw=2 tw=80:
