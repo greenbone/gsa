@@ -70,12 +70,20 @@ class Grid extends React.Component {
     this.handleDragStart = this.handleDragStart.bind(this);
   }
 
-  handleDragStart() {
-    this.setState({isDragging: true});
+  handleDragStart(drag) {
+    const {droppableId: rowId} = drag.source;
+
+    this.setState({
+      isDragging: true,
+      dragSourceRowId: rowId,
+    });
   }
 
   handleDragEnd(result) {
-    this.setState({isDragging: false});
+    this.setState({
+      isDragging: false,
+      dragSourceRowId: undefined,
+    });
 
     // dropped outside the list or at same position
     if (!result.destination) {
@@ -149,7 +157,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    const {isDragging} = this.state;
+    const {isDragging, dragSourceRowId} = this.state;
     const {maxItemsPerRow, items} = this.props;
     return (
       <DragDropContext
@@ -157,24 +165,28 @@ class Grid extends React.Component {
         onDragStart={this.handleDragStart}
       >
         <Layout flex="column">
-          {items.map((row, i) => (
-            <Row
-              key={row.id}
-              id={row.id}
-              dropDisabled={is_defined(maxItemsPerRow) &&
-                maxItemsPerRow <= row.items.length}
-            >
-              {row.items.map((item, index) => (
-                <Item
-                  key={item.id}
-                  id={item.id}
-                  index={index}
-                >
-                  {item.content}
-                </Item>
-              ))}
-            </Row>
-          ))}
+          {items.map((row, i) => {
+            const rowFull = is_defined(maxItemsPerRow) &&
+              maxItemsPerRow <= row.items.length;
+            const disabled = rowFull && dragSourceRowId !== row.id;
+            return (
+              <Row
+                key={row.id}
+                id={row.id}
+                dropDisabled={disabled}
+              >
+                {row.items.map((item, index) => (
+                  <Item
+                    key={item.id}
+                    id={item.id}
+                    index={index}
+                  >
+                    {item.content}
+                  </Item>
+                ))}
+              </Row>
+            );
+          })}
           <EmptyRow
             active={isDragging}
           />
