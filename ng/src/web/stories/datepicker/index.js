@@ -29,7 +29,7 @@ import {storiesOf} from '@storybook/react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import DatePicker from 'web/components/form/datepicker2.js';
+import DatePicker from 'web/components/form/datepicker.js';
 
 const today = moment();
 const testdate = moment('2018-10-10');
