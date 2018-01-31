@@ -269,6 +269,11 @@ struct MHD_Daemon *gsad_daemon;
 GSList *address_list = NULL;
 
 /**
+ * @brief Host names and IP accepted in the "Host" HTTP header
+ */
+GHashTable *gsad_header_hosts = NULL;
+
+/**
  * @brief Location for redirection server.
  */
 gchar *redirect_location = NULL;
@@ -3829,6 +3834,120 @@ gsad_add_content_type_header (struct MHD_Response *response,
 }
 
 /**
+ * @brief Add all local IP addresses to a GHashTable.
+ *
+ * @param[in] hashtable     The hashtable to add the addresses to.
+ * @param[in] include_ipv6  Whether to include IPv6 addresses.
+ */
+void
+add_local_addresses (GHashTable *hashtable, int include_ipv6)
+{
+  struct ifaddrs *ifaddr, *ifa;
+  int family, ret;
+  char host[NI_MAXHOST];
+
+  if (getifaddrs(&ifaddr) != -1)
+    {
+      for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
+        {
+          if (ifa->ifa_addr == NULL)
+            continue;
+
+          family = ifa->ifa_addr->sa_family;
+
+          if (family == AF_INET || (include_ipv6 && family == AF_INET6))
+            {
+              ret = getnameinfo(ifa->ifa_addr,
+                                (family == AF_INET) 
+                                  ? sizeof(struct sockaddr_in) 
+                                  : sizeof(struct sockaddr_in6),
+                                host, NI_MAXHOST,
+                                NULL, 0, NI_NUMERICHOST);
+              if (ret != 0) {
+                g_warning ("%s: getnameinfo() failed: %s\n",
+                           __FUNCTION__, gai_strerror(ret));
+                return;
+              }
+
+              g_hash_table_insert (hashtable, g_strdup (host), NULL);
+            }
+        }
+      freeifaddrs(ifaddr);
+    }
+}
+
+/**
+ * @brief Verify if a hostname or IP address refers to the gsad.
+ *
+ * @param[in] host  The name or address to check.
+ *
+ * @return 0 valid, 1 invalid.
+ */
+static int
+host_is_gsad (const char *host)
+{
+  if (host == NULL)
+    return 0;
+
+  return host ? g_hash_table_contains (gsad_header_hosts, host) : 0;
+}
+
+/**
+ * Verify a Host HTTP header.
+ *
+ * @param[in] host_header  Host header value.
+ *
+ * @return 0 valid, 1 invalid UTF-8, 2 otherwise invalid, -1 error.
+ */
+static int
+validate_host_header (const char *host_header)
+{
+  int ret;
+  int char_index, colon_index, bracket_index;
+  gchar *host;
+
+  if (host_header == NULL || strlen (host_header) == 0)
+    return 2;
+  else if (g_utf8_validate (host_header, -1, NULL) == FALSE)
+    return 1;
+
+  bracket_index = -1;
+  colon_index = -1;
+  for (char_index = strlen (host_header) - 1;
+       char_index >= 0;
+       char_index --)
+    {
+      if (host_header[char_index] == ']' && bracket_index == -1)
+        bracket_index = char_index;
+      if (host_header[char_index] == ':' && colon_index == -1)
+        colon_index = char_index;
+    }
+
+  if (bracket_index != -1 && host_header[0] == '['
+      && (colon_index == bracket_index + 1 || colon_index < bracket_index))
+    {
+      host = g_strndup (host_header + 1, bracket_index - 1);
+    }
+  else if (colon_index > bracket_index)
+    {
+      host = g_strndup (host_header, colon_index);
+    }
+  else if (colon_index == -1)
+    {
+      host = g_strdup (host_header);
+    }
+  else
+    host = NULL;
+
+  g_debug ("%s: header: '%s' -> host: '%s'", __FUNCTION__, host_header, host);
+
+  ret = host_is_gsad (host) ? 0 : 2;
+  g_free (host);
+
+  return ret;
+}
+
+/**
  * @brief Sends a HTTP response.
  *
  * @param[in]  connection           The connection handle.
@@ -3972,19 +4091,25 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
 
   host = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
                                       MHD_HTTP_HEADER_HOST);
-  if (host && g_utf8_validate (host, -1, NULL) == FALSE)
+
+  switch (validate_host_header (host))
     {
-      send_response (connection,
-                     UTF8_ERROR_PAGE ("'Host' header"),
-                     MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
-    }
-  if (host == NULL)
-    {
-      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
+      case 0:
+        // header is valid
+        break;
+      case 1:
+        // Invalid UTF-8
+        send_response (connection,
+                       UTF8_ERROR_PAGE ("'Host' header"),
+                       MHD_HTTP_BAD_REQUEST, NULL,
+                       GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+        return MHD_YES;
+      case 2:
+      default:
+        // Otherwise invalid
+        send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
+                       NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+        return MHD_YES;
     }
 
   protocol = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
@@ -4068,16 +4193,20 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   host = MHD_lookup_connection_value (connection,
                                       MHD_HEADER_KIND,
                                       "Host");
-  if (host && g_utf8_validate (host, -1, NULL) == FALSE)
+  switch (validate_host_header (host))
     {
-      send_response (connection,
-                     UTF8_ERROR_PAGE ("'Host' header"),
-                     MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
+      case 0:
+        break;
+      case 1:
+        send_response (connection,
+                       UTF8_ERROR_PAGE ("'Host' header"),
+                       MHD_HTTP_BAD_REQUEST, NULL,
+                       GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+        return MHD_YES;
+      case 2:
+      default:
+        return MHD_NO;
     }
-  else if (host == NULL)
-    return MHD_NO;
   /* [IPv6 or IPv4-mapped IPv6]:port */
   if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9a-f:.]]:%*i", name)
       == 1)
@@ -5883,6 +6012,7 @@ gsad_address_init (const char *address_str, int port)
           g_free (address);
           return 1;
         }
+      g_hash_table_add (gsad_header_hosts, g_strdup (address_str));
     }
   else
     {
@@ -5892,6 +6022,7 @@ gsad_address_init (const char *address_str, int port)
         address->ss_family = AF_INET6;
       else
         address->ss_family = AF_INET;
+      add_local_addresses (gsad_header_hosts, address->ss_family == AF_INET6);
     }
   address_list = g_slist_append (address_list, address);
   return 0;
@@ -5935,6 +6066,7 @@ main (int argc, char **argv)
   static gboolean secure_cookie = FALSE;
   static int timeout = SESSION_TIMEOUT;
   static gchar **gsad_address_string = NULL;
+  static gchar **gsad_header_host_strings = NULL;
   static gchar *gsad_manager_address_string = NULL;
   static gchar *gsad_manager_unix_socket_path = NULL;
   static gchar *gsad_port_string = NULL;
@@ -5964,6 +6096,10 @@ main (int argc, char **argv)
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
+    {"allow-header-host", '\0',
+     0, G_OPTION_ARG_STRING_ARRAY, &gsad_header_host_strings,
+     "Allow <host> as hostname/address part of a Host header."
+     "<host>" },
     {"drop-privileges", '\0',
      0, G_OPTION_ARG_STRING, &drop,
      "Drop privileges to <user>.", "<user>" },
@@ -6402,6 +6538,14 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
+  /* Initialize addresses and accepted host headers for HTTP header */
+  gsad_header_hosts = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                             g_free, NULL);
+  g_hash_table_add (gsad_header_hosts, g_strdup ("localhost"));
+  g_hash_table_add (gsad_header_hosts, g_strdup ("127.0.0.1"));
+  if (ipv6_is_enabled ())
+    g_hash_table_add (gsad_header_hosts, g_strdup ("::1"));
+
   if (gsad_address_string)
     while (*gsad_address_string)
       {
@@ -6412,6 +6556,27 @@ main (int argc, char **argv)
   else
     if (gsad_address_init (NULL, gsad_port))
       return 1;
+
+  if (gsad_header_host_strings)
+    while (*gsad_header_host_strings)
+      {
+        g_hash_table_add (gsad_header_hosts,
+                          g_strdup (*gsad_header_host_strings));
+        gsad_header_host_strings ++;
+      }
+
+  g_debug ("Accepting %d host addresses in Host headers",
+          g_hash_table_size (gsad_header_hosts));
+  if (verbose)
+    {
+      GHashTableIter iter;
+      char *hostname;
+      g_hash_table_iter_init (&iter, gsad_header_hosts);
+      while (g_hash_table_iter_next (&iter, (void**)(&hostname), NULL))
+        {
+          g_debug ("- %s\n", hostname);
+        }
+    }
 
   if (!no_redirect)
     {
