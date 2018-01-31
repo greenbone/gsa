@@ -112,7 +112,7 @@ class LoginForm extends React.Component {
     const {username, password} = this.state;
     const protocol_insecure = window.location.protocol !== 'https:';
     return (
-      <Layout flex="column">
+      <Layout flex="column" shrink="0">
         {protocol_insecure &&
           <Panel>
             <Error>{_('Warning: Connection unencrypted')}</Error>
@@ -176,7 +176,10 @@ LoginForm.propTypes = {
 };
 
 const GreenboneIcon = glamorous(GBIcon)({
+  minWidth: '60px',
+  width: '100%',
   minHeight: '60px',
+  height: '100%', // for IE11 fix
   maxHeight: '315px',
   margin: '40px 0px',
 });
@@ -208,7 +211,6 @@ const StyledLayout = glamorous(Layout)({
 const MenuSpacer = glamorous.div({
   minHeight: '35px',
   background: '#393637',
-  zIndex: '1000',
 });
 
 class LoginPage extends React.Component {
@@ -271,7 +273,7 @@ class LoginPage extends React.Component {
             grow="1"
             position="relative">
             <StyledIcon img="login-label.png" size="default"/>
-            <GreenboneIcon width="350px"/>
+            <GreenboneIcon/>
             <LoginForm onSubmit={this.onSubmit} error={message}/>
           </StyledLayout>
         </LoginMain>
