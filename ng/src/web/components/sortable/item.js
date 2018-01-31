@@ -24,46 +24,48 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {storiesOf} from '@storybook/react';
+import {Draggable} from 'react-beautiful-dnd';
 
-import Grid, {createItem, createRow} from 'web/components/sortable/grid.js';
+import PropTypes from '../../utils/proptypes.js';
 
-const Item = glamorous.span({
-  flexGrow: '1',
-  backgroundColor: 'blue',
-  padding: '5px',
-  color: 'white',
+const GridItem = glamorous.div({
+  display: 'flex',
+  flexGrow: 1,
+  userSelect: 'none',
+  margin: '5px',
 });
 
-const getItems = (row, count) =>
-  Array.from({length: count}, (v, k) => k).map(k =>
-    createItem(id => <Item>{`row ${row} item ${k}`}</Item>)
-  );
+const Item = ({
+  children,
+  index,
+  id,
+}) => (
+  <Draggable
+    draggableId={id}
+    index={index}
+  >
+    {(provided, snapshot) => ( // eslint-disable-line no-shadow
+      <React.Fragment>
+        <GridItem
+          innerRef={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          isDragging={snapshot.isDragging}
+          style={provided.draggableProps.style}
+        >
+          {children}
+        </GridItem>
+        {provided.placeholder}
+      </React.Fragment>
+    )}
+  </Draggable>
+);
 
-storiesOf('Sortable/Grid', module)
-  .add('default', () => {
-    const items = [
-      createRow([]),
-      createRow(getItems(1, 10)),
-      createRow(getItems(2, 5)),
-    ];
-    return (
-      <Grid
-        items={items}
-      />
-    );
-  })
-  .add('max 5 items per row', () => {
-    const items = [
-      createRow(getItems(0, 3)),
-      createRow(getItems(1, 5)),
-    ];
-    return (
-      <Grid
-        maxItemsPerRow="5"
-        items={items}
-      />
-    );
-  });
+Item.propTypes = {
+  id: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+};
+
+export default Item;
 
 // vim: set ts=2 sw=2 tw=80:

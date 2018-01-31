@@ -24,46 +24,43 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {storiesOf} from '@storybook/react';
+import {Droppable} from 'react-beautiful-dnd';
 
-import Grid, {createItem, createRow} from 'web/components/sortable/grid.js';
+import PropTypes from '../../utils/proptypes.js';
 
-const Item = glamorous.span({
-  flexGrow: '1',
-  backgroundColor: 'blue',
-  padding: '5px',
-  color: 'white',
-});
+const EmptyGridRow = glamorous.div({
+  margin: '8px 0px',
+  minHeight: '50px',
+}, ({active}) => active ? {
+  display: 'flex',
+  border: '1px dashed lightgray',
+} : {display: 'none'});
 
-const getItems = (row, count) =>
-  Array.from({length: count}, (v, k) => k).map(k =>
-    createItem(id => <Item>{`row ${row} item ${k}`}</Item>)
-  );
+const EmptyRow = ({
+  children,
+  active = false,
+}) => (
+  <Droppable
+    droppableId="empty"
+    direction="horizontal"
+  >
+    {(provided, snapshot) => (
+      <EmptyGridRow
+        active={active}
+        innerRef={provided.innerRef}
+        isDraggingOver={snapshot.isDraggingOver}
+      >
+        {children}
+        {provided.placeholder}
+      </EmptyGridRow>
+    )}
+  </Droppable>
+);
 
-storiesOf('Sortable/Grid', module)
-  .add('default', () => {
-    const items = [
-      createRow([]),
-      createRow(getItems(1, 10)),
-      createRow(getItems(2, 5)),
-    ];
-    return (
-      <Grid
-        items={items}
-      />
-    );
-  })
-  .add('max 5 items per row', () => {
-    const items = [
-      createRow(getItems(0, 3)),
-      createRow(getItems(1, 5)),
-    ];
-    return (
-      <Grid
-        maxItemsPerRow="5"
-        items={items}
-      />
-    );
-  });
+EmptyRow.propTypes = {
+  active: PropTypes.bool,
+};
+
+export default EmptyRow;
 
 // vim: set ts=2 sw=2 tw=80:
