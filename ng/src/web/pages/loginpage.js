@@ -183,6 +183,7 @@ const GreenboneIcon = glamorous(GBIcon)({
 
 const LoginMain = glamorous(Main)({
   background: '#fefefe',
+  height: '100%',
 });
 
 const LoginLayout = glamorous(Layout)({
@@ -201,7 +202,7 @@ const StyledIcon = glamorous(Icon)({
 
 const StyledLayout = glamorous(Layout)({
   margin: '0 auto',
-  height: '1vh',
+  height: '100%',
 });
 
 const MenuSpacer = glamorous.div({
