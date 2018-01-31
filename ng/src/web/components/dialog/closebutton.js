@@ -47,7 +47,7 @@ const CloseButton = ({
     onClick={onClick}
     title={title}
   >
-    x
+    × {/* Javascript unicode: \u00D7 */}
   </StyledCloseButton>
 );
 
