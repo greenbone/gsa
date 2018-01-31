@@ -6113,6 +6113,10 @@ podda@^1.2.2:
     babel-runtime "^6.11.6"
     immutable "^3.8.1"
 
+popper.js@^1.12.5:
+  version "1.12.9"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.9.tgz#0dfbc2dff96c451bb332edcfcfaaf566d331d5b3"
+
 portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
@@ -6687,6 +6691,15 @@ react-beautiful-dnd@^4.0.1:
     redux-thunk "^2.2.0"
     reselect "^3.0.1"
 
+react-datepicker@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-1.1.0.tgz#af3892384fb6d1dcafc30b48e81cc7fb976806f4"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.6.0"
+    react-onclickoutside "^6.7.1"
+    react-popper "^0.7.4"
+
 react-dev-utils@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.0.tgz#425ac7c9c40c2603bc4f7ab8836c1406e96bb473"
@@ -6782,6 +6795,17 @@ react-motion@^0.5.2:
     performance-now "^0.2.0"
     prop-types "^15.5.8"
     raf "^3.1.0"
+
+react-onclickoutside@^6.7.1:
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz#6a5b5b8b4eae6b776259712c89c8a2b36b17be93"
+
+react-popper@^0.7.4:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.5.tgz#71c25946f291db381231281f6b95729e8b801596"
+  dependencies:
+    popper.js "^1.12.5"
+    prop-types "^15.5.10"
 
 react-reconciler@^0.7.0:
   version "0.7.0"
