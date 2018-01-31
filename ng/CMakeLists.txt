@@ -733,7 +733,7 @@ add_custom_target (gsa-ng ALL
                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                            ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp)
 
-install (FILES ${NG_FILES} public/robots.txt
+install (FILES ${NG_FILES}
          DESTINATION ${NG_DEST_DIR})
 
 install (FILES public/robots.txt
