@@ -31,10 +31,11 @@ import PropTypes from '../../utils/proptypes.js';
 const EmptyGridRow = glamorous.div({
   margin: '8px 0px',
   minHeight: '50px',
-}, ({active}) => active ? {
-  display: 'flex',
+}, ({active, isDraggingOver}) => ({
+  display: active ? 'flex' : 'none',
   border: '1px dashed lightgray',
-} : {display: 'none'});
+  background: isDraggingOver ? 'lightblue' : 'none',
+}));
 
 const EmptyRow = ({
   children,

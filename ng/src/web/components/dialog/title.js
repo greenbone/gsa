@@ -29,32 +29,24 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import Layout from '../layout/layout.js';
 
-import Button from './button.js';
+import DialogCloseButton from './closebutton.js';
 
 const DialogTitleBar = glamorous(Layout)({
   padding: '5px 5px 5px 10px',
   marginBottom: '15px',
   borderRadius: '4px',
-  border: '1px solid #519032',
+  border: '1px solid ' + Theme.extra.darkGreen,
   color: '#fff',
   fontWeight: 'bold',
-  background: '#66c430 50% 50% repeat-x',
+  background: Theme.main.green,
   alignItems: 'center',
   justifyContent: 'space-between',
   flexShrink: '0',
   cursor: 'move',
-});
-
-const DialogCloseButton = glamorous(Button)({
-  background: 'none',
-  opacity: '.7',
-  height: '20px',
-  width: '20px',
-  lineHeight: '0',
-  padding: '0',
 });
 
 const DialogTitle = ({
@@ -70,8 +62,9 @@ const DialogTitle = ({
       <span>{title}</span>
       {showClose &&
         <DialogCloseButton
+          title={_('Close')}
           onClick={onCloseClick}
-          title={_('Close')}>x</DialogCloseButton>
+        />
       }
     </DialogTitleBar>
   );
