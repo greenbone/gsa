@@ -20,96 +20,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import 'core-js/library/fn/array/find-index';
+
 import React from 'react';
 
-import glamorous from 'glamorous';
+import uuid from 'uuid/v4';
 
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import {DragDropContext} from 'react-beautiful-dnd';
 
 import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const GridRow = glamorous.div({
-  display: 'flex',
-  flex: 'column',
-  margin: '8px',
-  minHeight: '50px',
-}, ({isDraggingOver}) => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-}));
+import Layout from '../layout/layout';
 
-const Row = ({
-  children,
-  dropDisabled,
-  id,
-}) => (
-  <Droppable
-    isDropDisabled={dropDisabled}
-    droppableId={'row-' + id}
-    direction="horizontal"
-  >
-    {(provided, snapshot) => (
-      <GridRow
-        innerRef={provided.innerRef}
-        isDraggingOver={snapshot.isDraggingOver}
-      >
-        {children}
-        {provided.placeholder}
-      </GridRow>
-    )}
-  </Droppable>
-);
+import EmptyRow from './emptyrow';
+import Item from './item';
+import Row from './row';
 
-Row.propTypes = {
-  dropDisabled: PropTypes.bool,
-  id: PropTypes.string.isRequired,
-};
+const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
-const GridItem = glamorous.div({
-  display: 'flex',
-  flexGrow: 1,
-  userSelect: 'none',
-  margin: '5px',
-});
+export const createRow = items => ({id: uuid(), items});
+export const createItem = callback => {
+  const id = uuid();
 
-const Item = ({
-  children,
-  index,
-  id,
-}) => (
-  <Draggable
-    draggableId={id}
-    index={index}
-  >
-    {(provided, snapshot) => ( // eslint-disable-line no-shadow
-      <React.Fragment>
-        <GridItem
-          innerRef={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          isDragging={snapshot.isDragging}
-          style={provided.draggableProps.style}
-        >
-          {children}
-        </GridItem>
-        {provided.placeholder}
-      </React.Fragment>
-    )}
-  </Draggable>
-);
-
-Item.propTypes = {
-  index: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
-};
-
-const reorder = (list, startIndex, endIndex) => {
-  const result = [...list];
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
+  return {
+    id,
+    content: callback(id),
+  };
 };
 
 class Grid extends React.Component {
@@ -122,57 +61,83 @@ class Grid extends React.Component {
   constructor(props) {
     super(props);
 
-    const {items} = this.props;
-
-    this.rowIndex = items.reduce((all, item, i) => {
-      all[`row-${i}`] = i;
-      return all;
-    }, {});
-
     this.state = {
-      items,
+      items: this.props.items,
     };
 
-    this.onDragEnd = this.onDragEnd.bind(this);
+    this.handleDragEnd = this.handleDragEnd.bind(this);
+    this.handleDragStart = this.handleDragStart.bind(this);
   }
 
-  onDragEnd(result) {
-    // dropped outside the list
+  handleDragStart() {
+    this.setState({isDragging: true});
+  }
+
+  handleDragEnd(result) {
+    this.setState({isDragging: false});
+
+    // dropped outside the list or at same position
     if (!result.destination) {
       return;
     }
 
-    const {items} = this.state;
+    // we are mutating the items => create copy
+    let items = [...this.state.items];
+
     const {droppableId: destrowid} = result.destination;
     const {droppableId: sourcerowid} = result.source;
-    const destrowindex = this.rowIndex[destrowid];
-    let destrow = items[destrowindex];
-    const destindex = result.destination.index;
-    const sourceindex = result.source.index;
+    const {index: destindex} = result.destination;
+    const {index: sourceindex} = result.source;
 
-    if (destrowid === sourcerowid) {
-      destrow = reorder(
-        destrow,
-        sourceindex,
-        destindex,
-      );
+    const destrowindex = findRowIndex(items, destrowid);
+    const destrow = items[destrowindex];
+    const sourcerowindex = findRowIndex(items, sourcerowid);
+    const sourcerow = items[sourcerowindex];
+    // we are mutating the row => create copy
+    const sourcerowitems = [...sourcerow.items];
+    // remove from source row
+    const [item] = sourcerowitems.splice(sourceindex, 1);
+
+    if (destrowid === 'empty') {
+      // update row
+      items[sourcerowindex] = {
+        id: sourcerowid,
+        items: sourcerowitems,
+      };
+
+      // create new row with the removed item
+      items = [...items, createRow([item])];
+    }
+    else if (destrowid === sourcerowid) {
+      // add at position destindex
+      sourcerowitems.splice(destindex, 0, item);
+
+      items[sourcerowindex] = {
+        id: sourcerowid,
+        items: sourcerowitems,
+      };
     }
     else {
-      // remove from source row
-      const sourcerowindex = this.rowIndex[sourcerowid];
-      const sourcerow = [...items[sourcerowindex]];
-
-      const [item] = sourcerow.splice(sourceindex, 1);
-
-      items[sourcerowindex] = sourcerow;
+      items[sourcerowindex] = {
+        id: sourcerowid,
+        items: sourcerowitems,
+      };
 
       // add to destination row
-      destrow = [...items[destrowindex]];
+      const destrowitems = [...destrow.items];
+      destrowitems.splice(destindex, 0, item);
 
-      destrow.splice(destindex, 0, item);
+      items[destrowindex] = {
+        id: destrowid,
+        items: destrowitems,
+      };
     }
 
-    items[destrowindex] = destrow;
+    // remove possible empty last row
+    const lastrow = items[items.length - 1];
+    if (lastrow.items.length === 0) {
+      items.pop();
+    }
 
     this.setState({
       items,
@@ -180,28 +145,36 @@ class Grid extends React.Component {
   }
 
   render() {
-    const {items} = this.state;
+    const {items, isDragging} = this.state;
     const {maxItemsPerRow} = this.props;
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        {items.map((row, i) => (
-          <Row
-            key={i}
-            id={i}
-            dropDisabled={is_defined(maxItemsPerRow) &&
-              maxItemsPerRow <= row.length}
-          >
-            {row.map((item, index) => (
-              <Item
-                key={item.id}
-                id={item.id}
-                index={index}
-              >
-                {item.content}
-              </Item>
-            ))}
-          </Row>
-        ))}
+      <DragDropContext
+        onDragEnd={this.handleDragEnd}
+        onDragStart={this.handleDragStart}
+      >
+        <Layout flex="column">
+          {items.map((row, i) => (
+            <Row
+              key={row.id}
+              id={row.id}
+              dropDisabled={is_defined(maxItemsPerRow) &&
+                maxItemsPerRow <= row.items.length}
+            >
+              {row.items.map((item, index) => (
+                <Item
+                  key={item.id}
+                  id={item.id}
+                  index={index}
+                >
+                  {item.content}
+                </Item>
+              ))}
+            </Row>
+          ))}
+          <EmptyRow
+            active={isDragging}
+          />
+        </Layout>
       </DragDropContext>
     );
   }

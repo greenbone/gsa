@@ -299,6 +299,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/section/header.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
+     ${NG_SRC_DIR}/src/web/components/sortable/emptyrow.js
+     ${NG_SRC_DIR}/src/web/components/sortable/grid.js
+     ${NG_SRC_DIR}/src/web/components/sortable/item.js
+     ${NG_SRC_DIR}/src/web/components/sortable/row.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
      ${NG_SRC_DIR}/src/web/components/sticky/sticky.js
      ${NG_SRC_DIR}/src/web/components/structure/footer.js
