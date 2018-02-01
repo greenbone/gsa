@@ -27,15 +27,27 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 
-import Button from './button.js';
+import Theme from '../../utils/theme.js';
+
 import PropTypes from '../../utils/proptypes';
 import withIconSize from 'web/components/icon/withIconSize';
 
-let StyledCloseButton = glamorous(Button)({
-  background: 'none',
-  opacity: '.7',
-  lineHeight: '0',
+let StyledCloseButton = glamorous.div({
+  display: 'flex',
+  border: '1px solid' + Theme.extra.darkGreen,
+  fontWeight: 'bold',
+  color: Theme.extra.darkGreen,
+  cursor: 'pointer',
+  background: Theme.main.lighGreen,
+  borderRadius: '4px',
   padding: '0',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  ':hover': {
+    color: '#fff',
+    background: Theme.extra.darkGreen,
+  },
 });
 
 StyledCloseButton = withIconSize('medium')(StyledCloseButton);
