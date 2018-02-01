@@ -51,6 +51,13 @@ export const createItem = callback => {
   };
 };
 
+const updateRow = (row, data) => {
+  return {
+    ...row,
+    ...data,
+  };
+};
+
 class Grid extends React.Component {
 
   static propTypes = {
@@ -68,6 +75,25 @@ class Grid extends React.Component {
 
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
+    this.handleRowResize = this.handleRowResize.bind(this);
+  }
+
+  notifyChange(items) {
+    const {onChange} = this.props;
+
+    if (is_defined(onChange)) {
+      onChange(items);
+    }
+  }
+
+  handleRowResize(row, height) {
+    let {items} = this.props;
+    items = [...items];
+
+    const rowIndex = findRowIndex(items, row.id);
+    items[rowIndex] = updateRow(row, {height});
+
+    this.notifyChange(items);
   }
 
   handleDragStart(drag) {
@@ -110,10 +136,8 @@ class Grid extends React.Component {
 
     if (destrowId === 'empty') {
       // update row
-      items[sourcerowIndex] = {
-        id: sourcerowId,
-        items: sourceRowItems,
-      };
+      items[sourcerowIndex] = updateRow(sourceRow,
+        {id: sourcerowId, items: sourceRowItems});
 
       // create new row with the removed item
       items = [...items, createRow([item])];
@@ -122,25 +146,19 @@ class Grid extends React.Component {
       // add at position destindex
       sourceRowItems.splice(destIndex, 0, item);
 
-      items[sourcerowIndex] = {
-        id: sourcerowId,
-        items: sourceRowItems,
-      };
+      items[sourcerowIndex] = updateRow(sourceRow,
+        {id: sourcerowId, items: sourceRowItems});
     }
     else {
-      items[sourcerowIndex] = {
-        id: sourcerowId,
-        items: sourceRowItems,
-      };
+      items[sourcerowIndex] = updateRow(sourceRow,
+        {id: sourcerowId, items: sourceRowItems});
 
       // add to destination row
       const destrowItems = [...destRow.items];
       destrowItems.splice(destIndex, 0, item);
 
-      items[destrowIndex] = {
-        id: destrowId,
-        items: destrowItems,
-      };
+      items[destrowIndex] = updateRow(destRow,
+        {id: destrowId, items: destrowItems});
     }
 
     // remove possible empty last row
@@ -149,11 +167,7 @@ class Grid extends React.Component {
       items.pop();
     }
 
-    const {onChange} = this.props;
-
-    if (is_defined(onChange)) {
-      onChange(items);
-    }
+    this.notifyChange(items);
   }
 
   render() {
@@ -174,6 +188,8 @@ class Grid extends React.Component {
                 key={row.id}
                 id={row.id}
                 dropDisabled={disabled}
+                height={row.height}
+                onResize={height => this.handleRowResize(row, height)}
               >
                 {row.items.map((item, index) => (
                   <Item

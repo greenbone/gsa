@@ -32,7 +32,7 @@ const GridItem = glamorous.div({
   display: 'flex',
   flexGrow: 1,
   userSelect: 'none',
-  margin: '5px',
+  margin: '5px 8px',
 });
 
 const Item = ({

@@ -26,41 +26,81 @@ import glamorous from 'glamorous';
 
 import {Droppable} from 'react-beautiful-dnd';
 
-import PropTypes from '../../utils/proptypes.js';
+import {is_defined} from 'gmp/utils';
 
-const GridRow = glamorous.div({
+import PropTypes from '../../utils/proptypes';
+
+import Resizer from './resizer';
+
+const MIN_HEIGHT = 50;
+
+const GridRow = glamorous.div('grid-row', {
   display: 'flex',
-  margin: '8px 0px',
-  minHeight: '50px',
-}, ({isDraggingOver}) => ({
+  minHeight: `${MIN_HEIGHT}px`,
+}, ({isDraggingOver, height}) => ({
   background: isDraggingOver ? 'lightblue' : 'none',
+  height,
 }));
 
-const Row = ({
-  children,
-  dropDisabled,
-  id,
-}) => (
-  <Droppable
-    isDropDisabled={dropDisabled}
-    droppableId={id}
-    direction="horizontal"
-  >
-    {(provided, snapshot) => (
-      <GridRow
-        innerRef={provided.innerRef}
-        isDraggingOver={snapshot.isDraggingOver}
-      >
-        {children}
-        {provided.placeholder}
-      </GridRow>
-    )}
-  </Droppable>
-);
+class Row extends React.Component {
+  constructor(...args) {
+    super(...args);
+
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  handleResize(diffY) {
+    const {onResize} = this.props;
+
+    if (is_defined(onResize)) {
+      const box = this.row.getBoundingClientRect();
+      const height = box.height + diffY;
+
+      if (height > MIN_HEIGHT) {
+        onResize(height);
+      }
+    }
+  }
+
+  render() {
+    const {
+      children,
+      dropDisabled,
+      id,
+      height,
+    } = this.props;
+    return (
+      <React.Fragment>
+        <Droppable
+          isDropDisabled={dropDisabled}
+          droppableId={id}
+          direction="horizontal"
+        >
+          {(provided, snapshot) => (
+            <GridRow
+              innerRef={ref => {
+                this.row = ref;
+                provided.innerRef(ref);
+              }}
+              isDraggingOver={snapshot.isDraggingOver}
+              height={height}
+            >
+              {children}
+              {provided.placeholder}
+            </GridRow>
+          )}
+        </Droppable>
+        <Resizer onResize={this.handleResize} />
+      </React.Fragment>
+    );
+  }
+}
 
 Row.propTypes = {
   dropDisabled: PropTypes.bool,
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string.isRequired,
+  onResize: PropTypes.func,
 };
 
 export default Row;
