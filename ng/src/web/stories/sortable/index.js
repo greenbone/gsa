@@ -22,13 +22,54 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import glamorous, {Div} from 'glamorous';
 
 import {storiesOf} from '@storybook/react';
 
 import PropTypes from 'web/utils/proptypes';
 
 import Grid, {createItem, createRow} from 'web/components/sortable/grid.js';
+import Resizer from 'web/components/sortable/resizer';
+
+class ResizeContainer extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      height: '100px',
+    };
+
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  handleResize(diffY) {
+    const box = this.div.getBoundingClientRect();
+    const height = box.height + diffY;
+
+    if (height > 20) {
+      this.setState({height});
+    }
+  }
+
+  render() {
+    const {height} = this.state;
+    return (
+      <div>
+        <Div
+          display="flex"
+          width="400px"
+          backgroundColor="blue"
+          height={height}
+          innerRef={ref => this.div = ref}
+        />
+        <Resizer
+          onResize={this.handleResize}
+        />
+      </div>
+    );
+  }
+}
 
 class ItemController extends React.Component {
 
@@ -104,4 +145,8 @@ storiesOf('Sortable/Grid', module)
     );
   });
 
+storiesOf('Sortable/Resizer', module)
+  .add('default', () => (
+    <ResizeContainer />
+  ));
 // vim: set ts=2 sw=2 tw=80:
