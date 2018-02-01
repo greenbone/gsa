@@ -29,29 +29,33 @@ import _ from 'gmp/locale.js';
 
 import Button from './button.js';
 import PropTypes from '../../utils/proptypes';
+import withIconSize from 'web/components/icon/withIconSize';
 
-const StyledCloseButton = glamorous(Button)({
+let StyledCloseButton = glamorous(Button)({
   background: 'none',
   opacity: '.7',
-  height: '20px',
-  width: '20px',
   lineHeight: '0',
   padding: '0',
 });
 
+StyledCloseButton = withIconSize('medium')(StyledCloseButton);
+
 const CloseButton = ({
+  size,
   title = _('Close'),
   onClick,
 }) => (
   <StyledCloseButton
-    onClick={onClick}
+    size={size}
     title={title}
+    onClick={onClick}
   >
     × {/* Javascript unicode: \u00D7 */}
   </StyledCloseButton>
 );
 
 CloseButton.propTypes = {
+  size: PropTypes.iconSize,
   title: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };
