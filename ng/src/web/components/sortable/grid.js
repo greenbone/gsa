@@ -75,6 +75,7 @@ class Grid extends React.Component {
 
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
+    this.handleRowResize = this.handleRowResize.bind(this);
   }
 
   notifyChange(items) {
@@ -83,6 +84,16 @@ class Grid extends React.Component {
     if (is_defined(onChange)) {
       onChange(items);
     }
+  }
+
+  handleRowResize(row, height) {
+    let {items} = this.props;
+    items = [...items];
+
+    const rowIndex = findRowIndex(items, row.id);
+    items[rowIndex] = updateRow(row, {height});
+
+    this.notifyChange(items);
   }
 
   handleDragStart(drag) {
@@ -177,6 +188,8 @@ class Grid extends React.Component {
                 key={row.id}
                 id={row.id}
                 dropDisabled={disabled}
+                height={row.height}
+                onResize={height => this.handleRowResize(row, height)}
               >
                 {row.items.map((item, index) => (
                   <Item
