@@ -245,6 +245,16 @@ export function split(string, seperator, limit) {
   return splits;
 }
 
+/**
+ * Group multiple sequential calls in a single one
+ *
+ * @param {Function} func      Function to call
+ * @param {Number}   wait      Wait time until no more calls to the wrapper
+ *                             function are fired
+ * @param {Boolean}  immediate Call func initially
+ *
+ * @returns {Function} Wrapper function
+ */
 export function debounce(func, wait, immediate = false) {
   let timeout;
   return function(...args) {
