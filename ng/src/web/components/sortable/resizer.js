@@ -78,14 +78,15 @@ class Resizer extends React.Component {
     event.preventDefault();
 
     if (is_defined(onResize)) {
-      const diffY = event.pageY - this.startY;
-      this.startY = event.pageY;
-      this.notifyResize(diffY); // difference since last notification
+      this.notifyResize(event.pageY);
     }
   }
 
-  notifyResize(diffY) {
+  notifyResize(pageY) {
     const {onResize} = this.props;
+
+    const diffY = pageY - this.startY;
+    this.startY = pageY;
     onResize(diffY);
   }
 
