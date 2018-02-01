@@ -275,6 +275,30 @@ export function debounce(func, wait, immediate = false) {
 }
 
 /**
+ * Throttle animation paths by using requestAnimationFrame
+ *
+ * If a animation is scheduled func will not be called. Only
+ * after the animation has been rendered func can will be called again.
+ *
+ * @param {Function} func Function to call
+ *
+ * @returns {Function} Wrapper function
+ */
+export const throttleAnimation = func => {
+  let calling = false;
+  return (...args) => {
+
+    if (!calling) {
+      calling = true;
+      window.requestAnimationFrame(() => {
+        calling = false;
+        func(...args);
+      });
+    }
+  };
+};
+
+/**
  * Calculate the sum of an Array
  *
  * @param {Array}    array  Array to calculate sum from
