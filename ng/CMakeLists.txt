@@ -736,6 +736,9 @@ add_custom_target (gsa-ng ALL
 install (FILES ${NG_FILES}
          DESTINATION ${NG_DEST_DIR})
 
+install (FILES public/robots.txt
+         DESTINATION ${NG_DEST_DIR}/..)
+
 # remove old generated files
 install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
 
