@@ -30,6 +30,8 @@ import {render_options} from '../utils/render.js';
 
 import withDialog from '../components/dialog/withDialog.js';
 
+import Divider from '../components/layout/divider.js';
+
 import Select from '../components/form/select.js';
 import Spinner from '../components/form/spinner.js';
 import FormGroup from '../components/form/formgroup.js';
@@ -161,49 +163,54 @@ const AdvancedTaskWizard = ({
           title={_('Start Time')}
           titleSize="3"
           flex="column">
-          <Radio
-            title={_('Start immediately')}
-            value="2"
-            checked={auto_start === '2'}
-            name="auto_start"
-            onChange={onValueChange}>
-          </Radio>
-
-          <Radio
-            title={_('Create Schedule')}
-            value="1"
-            checked={auto_start === '1'}
-            name="auto_start"
-            onChange={onValueChange}>
-          </Radio>
-          <FormGroup offset="1" box>
+          <FormGroup>
+            <Radio
+              title={_('Start immediately')}
+              value="2"
+              checked={auto_start === '2'}
+              name="auto_start"
+              onChange={onValueChange}>
+            </Radio>
+          </FormGroup>
+          <FormGroup>
+            <Radio
+              title={_('Create Schedule:')}
+              value="1"
+              checked={auto_start === '1'}
+              name="auto_start"
+              onChange={onValueChange}>
+            </Radio>
+          </FormGroup>
+          <FormGroup offset="2" box>
             <Datepicker
               name="date"
               value={date}
               onChange={onValueChange}/>
           </FormGroup>
-          <FormGroup offset="1">
-            <Text>{_('at')}</Text>
-            <Spinner
-              type="int"
-              min="0"
-              max="23"
-              size="2"
-              name="start_hour"
-              value={start_hour}
-              onChange={onValueChange}/>
-            <Text>{_('h')}</Text>
-            <Spinner
-              type="int"
-              min="0"
-              max="59"
-              size="2"
-              name="start_minute"
-              value={start_minute}
-              onChange={onValueChange}/>
-            <Text>{_('m')}</Text>
+          <FormGroup offset="2">
+            <Divider>
+              <Text>{_('at')}</Text>
+              <Spinner
+                type="int"
+                min="0"
+                max="23"
+                size="2"
+                name="start_hour"
+                value={start_hour}
+                onChange={onValueChange}/>
+              <Text>{_('h')}</Text>
+              <Spinner
+                type="int"
+                min="0"
+                max="59"
+                size="2"
+                name="start_minute"
+                value={start_minute}
+                onChange={onValueChange}/>
+              <Text>{_('m')}</Text>
+            </Divider>
           </FormGroup>
-          <FormGroup offset="1">
+          <FormGroup offset="2">
             <TimeZoneSelect
               name="start_timezone"
               value={start_timezone}
@@ -220,21 +227,23 @@ const AdvancedTaskWizard = ({
         </FormGroup>
 
         <FormGroup title={_('SSH Credential')} titleSize="3">
-          <Select
-            value={ssh_credential}
-            name="ssh_credential"
-            onChange={onValueChange}>
-            {ssh_credential_opts}
-          </Select>
-          <Text>
-            {_(' on port ')}
-          </Text>
-          <Spinner
-            min="0"
-            max="65535"
-            size="5"
-            value={ssh_port}
-            onChange={onValueChange}/>
+          <Divider>
+            <Select
+              value={ssh_credential}
+              name="ssh_credential"
+              onChange={onValueChange}>
+              {ssh_credential_opts}
+            </Select>
+            <Text>
+              {_(' on port ')}
+            </Text>
+            <Spinner
+              min="0"
+              max="65535"
+              size="5"
+              value={ssh_port}
+              onChange={onValueChange}/>
+          </Divider>
         </FormGroup>
 
         <FormGroup title={_('SMB Credential')} titleSize="3">
@@ -298,6 +307,7 @@ AdvancedTaskWizard.contextTypes = {
 };
 
 export default withDialog({
+  width: '900px',
   title: _('Advanced Task Wizard'),
   footer: _('Create'),
   defaultState: {

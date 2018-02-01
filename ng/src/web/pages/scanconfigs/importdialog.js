@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -39,7 +39,10 @@ const ImportDialog = ({
   }) => {
   return (
     <Layout flex="column">
-      <FormGroup title={_('Import XML config')}>
+      <FormGroup
+        title={_('Import XML config')}
+        titleSize="3"
+      >
         <FileField
           name="xml_file"
           onChange={onValueChange}/>
