@@ -22,7 +22,7 @@
  */
 
 import React from 'react';
-import {Div} from 'glamorous';
+import glamorous from 'glamorous';
 
 import moment from 'moment';
 
@@ -31,8 +31,24 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Icon from '../icon/icon.js';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
+const StyledIcon = glamorous(Icon)({
+  marginLeft: '5px',
+  ':hover': {
+    cursor: 'pointer',
+  },
+});
+
+const StyledDiv = glamorous.div({
+  display: 'flex',
+  marginRight: '5px',
+},
+  ({width}) => ({width}),
+);
 
 class InputField extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
@@ -44,14 +60,14 @@ class InputField extends React.Component { // eslint-disable-line react/prefer-s
     } = this.props;
 
     return (
-      <Div
+      <StyledDiv
         onClick={onClick}
         width={width}
-        marginRight="5px"
         {...props}
       >
         {value}
-      </Div>
+        <StyledIcon img="calendar.svg"/>
+      </StyledDiv>
     );
   }
 }
