@@ -147,6 +147,7 @@ const CvesFooter = createEntitiesFooter({
 
 export const CvesTable = createEntitiesTable({
   body: false,
+  doubleRow: true,
   emptyTitle: _('No CVEs available'),
   row: CveRow,
   rowDetails: withRowDetails('cve')(CveDetails),
