@@ -130,22 +130,24 @@ const EmailMethodPart = ({
           {capabilities.mayOp('get_report_formats') &&
             <Layout flex="column" box>
               <Layout flex box>
-                <Radio
-                  name={prefix + 'notice'}
-                  title={isTaskEvent ? _('Attach report') :
-                    _('Attach list of resources with message:')}
-                  checked={notice === '2'}
-                  value="2"
-                  onChange={onChange}>
-                </Radio>
-                {isTaskEvent &&
-                  <Select
-                    name={prefix + 'notice_attach_format'}
-                    value={noticeAttachFormat}
+                <Divider>
+                  <Radio
+                    name={prefix + 'notice'}
+                    title={isTaskEvent ? _('Attach report') :
+                      _('Attach list of resources with message:')}
+                    checked={notice === '2'}
+                    value="2"
                     onChange={onChange}>
-                    {render_options(reportFormats)}
-                  </Select>
-                }
+                  </Radio>
+                  {isTaskEvent &&
+                    <Select
+                      name={prefix + 'notice_attach_format'}
+                      value={noticeAttachFormat}
+                      onChange={onChange}>
+                      {render_options(reportFormats)}
+                    </Select>
+                  }
+                </Divider>
               </Layout>
               <TextArea
                 name={prefix + 'message_attach'}

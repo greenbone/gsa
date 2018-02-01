@@ -40,6 +40,7 @@ import Datepicker from '../components/form/datepicker.js';
 
 import Img from '../components/img/img.js';
 
+import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
 import {render_options} from '../utils/render.js';
@@ -102,21 +103,24 @@ const ModifyTaskWizard = ({
           title={_('Start Time')}
           titleSize="3"
           flex="column">
-          <Radio
-            title={_('Do not change')}
-            value="0"
-            checked={reschedule === '0'}
-            name="reschedule"
-            onChange={onValueChange}>
-          </Radio>
-
-          <Radio
-            title={_('Create Schedule')}
-            value="1"
-            checked={reschedule === '1'}
-            name="reschedule"
-            onChange={onValueChange}>
-          </Radio>
+          <FormGroup>
+            <Radio
+              title={_('Do not change')}
+              value="0"
+              checked={reschedule === '0'}
+              name="reschedule"
+              onChange={onValueChange}>
+            </Radio>
+          </FormGroup>
+          <FormGroup>
+            <Radio
+              title={_('Create Schedule')}
+              value="1"
+              checked={reschedule === '1'}
+              name="reschedule"
+              onChange={onValueChange}>
+            </Radio>
+          </FormGroup>
           <FormGroup offset="1">
             <Datepicker
               name="date"
@@ -124,25 +128,27 @@ const ModifyTaskWizard = ({
               onChange={onValueChange}/>
           </FormGroup>
           <FormGroup offset="1">
-            <Text>{_('at')}</Text>
-            <Spinner
-              type="int"
-              min="0"
-              max="23"
-              size="2"
-              name="start_hour"
-              value={start_hour}
-              onChange={onValueChange}/>
-            <Text>{_('h')}</Text>
-            <Spinner
-              type="int"
-              min="0"
-              max="59"
-              size="2"
-              name="start_minute"
-              value={start_minute}
-              onChange={onValueChange}/>
-            <Text>{_('m')}</Text>
+            <Divider>
+              <Text>{_('at')}</Text>
+              <Spinner
+                type="int"
+                min="0"
+                max="23"
+                size="2"
+                name="start_hour"
+                value={start_hour}
+                onChange={onValueChange}/>
+              <Text>{_('h')}</Text>
+              <Spinner
+                type="int"
+                min="0"
+                max="59"
+                size="2"
+                name="start_minute"
+                value={start_minute}
+                onChange={onValueChange}/>
+              <Text>{_('m')}</Text>
+            </Divider>
           </FormGroup>
           <FormGroup offset="1">
             <TimeZoneSelect
@@ -189,6 +195,7 @@ ModifyTaskWizard.propTypes = {
 
 
 export default withDialog({
+  width: '900px',
   title: _('Modify Task Wizard'),
   footer: _('Modify'),
   defaultState: {

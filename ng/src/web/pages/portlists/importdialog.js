@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ const ImportDialog = ({
     <Layout flex="column">
       <FormGroup
         title={_('Import XML Port List')}i
-        titleSize="4">
+        titleSize="3">
         <FileField
           name="xml_file"
           onChange={onValueChange}/>
