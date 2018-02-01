@@ -115,6 +115,13 @@
 #undef G_LOG_FATAL_MASK
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
+/*
+* define MHD_USE_INTERNAL_POLLING_THREAD for libmicrohttp < 0.9.53
+*/
+#if MHD_VERSION < 0x00095300
+#define MHD_USE_INTERNAL_POLLING_THREAD 0
+#endif
+
 /**
  * @brief Fallback GSAD port for HTTPS.
  */
