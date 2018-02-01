@@ -2,7 +2,6 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,23 +20,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {configure} from '@storybook/react';
+import React from 'react';
 
-import 'web/utils/globalcss';
+import {Div} from 'glamorous';
 
-/* eslint-disable global-require, no-console */
+import {storiesOf} from '@storybook/react';
+import {action} from '@storybook/addon-actions';
 
-function loadStories() {
-  console.clear();
+import Display from 'web/components/dashboard/display';
 
-  require('./select');
-  require('./multiselect');
-  require('./sortable');
-  require('./tabs');
-  require('./datepicker');
-  require('./dashboard');
-}
+const removeaction = action('on remove click');
 
-configure(loadStories, module);
+storiesOf('Dashboard/Display', module)
+  .add('default', () => {
+    return (
+      <Div width="500px">
+        <Display
+          title="Foo Bar"
+          onRemoveClick={removeaction}>
+          <Div
+            backgroundColor="blue"
+            width="400px"
+            height="400px"
+          />
+        </Display>
+      </Div>
+    );
+  });
 
 // vim: set ts=2 sw=2 tw=80:
