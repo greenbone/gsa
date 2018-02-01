@@ -60,7 +60,6 @@ const ToolBarIcons = withCapabilities(({
 ));
 
 ToolBarIcons.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   onAlertCreateClick: PropTypes.func.isRequired,
 };
 
@@ -110,6 +109,7 @@ const AlertsPage = ({
       onAlertEditClick={edit}
       onAlertTestClick={test}
       onAlertSaveClick={save}
+      onError={onError}
       onPermissionChanged={onChanged}
       onPermissionDownloaded={onDownloaded}
       onPermissionDownloadError={onError}
