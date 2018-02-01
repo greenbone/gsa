@@ -41,18 +41,21 @@ let StyledCloseButton = glamorous(Button)({
 StyledCloseButton = withIconSize('medium')(StyledCloseButton);
 
 const CloseButton = ({
+  size,
   title = _('Close'),
   onClick,
 }) => (
   <StyledCloseButton
-    onClick={onClick}
+    size={size}
     title={title}
+    onClick={onClick}
   >
     × {/* Javascript unicode: \u00D7 */}
   </StyledCloseButton>
 );
 
 CloseButton.propTypes = {
+  size: PropTypes.iconSize,
   title: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };
