@@ -77,6 +77,14 @@ class Grid extends React.Component {
     this.handleDragStart = this.handleDragStart.bind(this);
   }
 
+  notifyChange(items) {
+    const {onChange} = this.props;
+
+    if (is_defined(onChange)) {
+      onChange(items);
+    }
+  }
+
   handleDragStart(drag) {
     const {droppableId: rowId} = drag.source;
 
@@ -148,11 +156,7 @@ class Grid extends React.Component {
       items.pop();
     }
 
-    const {onChange} = this.props;
-
-    if (is_defined(onChange)) {
-      onChange(items);
-    }
+    this.notifyChange(items);
   }
 
   render() {
