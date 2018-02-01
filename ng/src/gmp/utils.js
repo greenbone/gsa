@@ -245,6 +245,16 @@ export function split(string, seperator, limit) {
   return splits;
 }
 
+/**
+ * Group multiple sequential calls in a single one
+ *
+ * @param {Function} func      Function to call
+ * @param {Number}   wait      Wait time until no more calls to the wrapper
+ *                             function are fired
+ * @param {Boolean}  immediate Call func initially
+ *
+ * @returns {Function} Wrapper function
+ */
 export function debounce(func, wait, immediate = false) {
   let timeout;
   return function(...args) {
@@ -263,6 +273,30 @@ export function debounce(func, wait, immediate = false) {
     }
   };
 }
+
+/**
+ * Throttle animation paths by using requestAnimationFrame
+ *
+ * If a animation is scheduled func will not be called. Only
+ * after the animation has been rendered func can will be called again.
+ *
+ * @param {Function} func Function to call
+ *
+ * @returns {Function} Wrapper function
+ */
+export const throttleAnimation = func => {
+  let calling = false;
+  return (...args) => {
+
+    if (!calling) {
+      calling = true;
+      window.requestAnimationFrame(() => {
+        calling = false;
+        func(...args);
+      });
+    }
+  };
+};
 
 /**
  * Calculate the sum of an Array
