@@ -29,15 +29,16 @@ import _ from 'gmp/locale.js';
 
 import Button from './button.js';
 import PropTypes from '../../utils/proptypes';
+import withIconSize from 'web/components/icon/withIconSize';
 
-const StyledCloseButton = glamorous(Button)({
+let StyledCloseButton = glamorous(Button)({
   background: 'none',
   opacity: '.7',
-  height: '20px',
-  width: '20px',
   lineHeight: '0',
   padding: '0',
 });
+
+StyledCloseButton = withIconSize('medium')(StyledCloseButton);
 
 const CloseButton = ({
   title = _('Close'),
