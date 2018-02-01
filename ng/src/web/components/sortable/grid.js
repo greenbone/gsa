@@ -51,6 +51,13 @@ export const createItem = callback => {
   };
 };
 
+const updateRow = (row, data) => {
+  return {
+    ...row,
+    ...data,
+  };
+};
+
 class Grid extends React.Component {
 
   static propTypes = {
@@ -110,10 +117,8 @@ class Grid extends React.Component {
 
     if (destrowId === 'empty') {
       // update row
-      items[sourcerowIndex] = {
-        id: sourcerowId,
-        items: sourceRowItems,
-      };
+      items[sourcerowIndex] = updateRow(sourceRow,
+        {id: sourcerowId, items: sourceRowItems});
 
       // create new row with the removed item
       items = [...items, createRow([item])];
@@ -122,25 +127,19 @@ class Grid extends React.Component {
       // add at position destindex
       sourceRowItems.splice(destIndex, 0, item);
 
-      items[sourcerowIndex] = {
-        id: sourcerowId,
-        items: sourceRowItems,
-      };
+      items[sourcerowIndex] = updateRow(sourceRow,
+        {id: sourcerowId, items: sourceRowItems});
     }
     else {
-      items[sourcerowIndex] = {
-        id: sourcerowId,
-        items: sourceRowItems,
-      };
+      items[sourcerowIndex] = updateRow(sourceRow,
+        {id: sourcerowId, items: sourceRowItems});
 
       // add to destination row
       const destrowItems = [...destRow.items];
       destrowItems.splice(destIndex, 0, item);
 
-      items[destrowIndex] = {
-        id: destrowId,
-        items: destrowItems,
-      };
+      items[destrowIndex] = updateRow(destRow,
+        {id: destrowId, items: destrowItems});
     }
 
     // remove possible empty last row
