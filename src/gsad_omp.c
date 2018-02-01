@@ -8142,6 +8142,11 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                 && (strcmp (name, "snmp_community") == 0
                     || strcmp (name, "snmp_agent") == 0
                     || strcmp (name, "snmp_message") == 0))
+            || (strcmp (method, "TippingPoint SMS") == 0
+                && (strcmp (name, "tp_sms_credential") == 0
+                    || strcmp (name, "tp_sms_hostname") == 0
+                    || strcmp (name, "tp_sms_tls_certificate") == 0
+                    || strcmp (name, "tp_sms_tls_workaround") == 0))
             || (strcmp (method, "verinice Connector") == 0
                 && (strcmp (name, "verinice_server_credential") == 0
                     || strcmp (name, "verinice_server_url") == 0

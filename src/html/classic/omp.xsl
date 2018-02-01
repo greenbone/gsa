@@ -10161,6 +10161,9 @@ should not have received it.
               <option data-select="syslog" value="Syslog">
                 <xsl:value-of select="gsa:i18n ('System Logger')"/>
               </option>
+              <option data-select="tippingpoint" value="TippingPoint SMS">
+                <xsl:value-of select="gsa:i18n ('TippingPoint SMS')"/>
+              </option>
               <option data-select="verinice" value="verinice Connector"
                 class="form-selection-input-event form-selection-input-event--task">
                 <xsl:value-of select="gsa:i18n ('verinice.PRO Connector')"/>
@@ -10422,6 +10425,68 @@ should not have received it.
           <div class="col-10">
             <div class="form-item">
               <input type="file" name="method_data:pkcs12" size="30"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Method: Tipping Point SMS -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('SMS Host address')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:tp_sms_hostname"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:tp_sms_credential">
+              <xsl:for-each select="$credentials/credential">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+            </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:tp_sms_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('TLS Certificate')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="file" name="method_data:tp_sms_tls_certificate"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('TLS workaround')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
+              <label class="radio-inline">
+                <input type="radio" name="method_data:tp_sms_tls_workaround" value="1"/>
+                <xsl:value-of select="gsa:i18n ('yes')"/>
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="method_data:tp_sms_tls_workaround" value="1" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('no')"/>
+              </label>
+            </div>
+            <div class="footnote">
+              <xsl:value-of select="gsa:i18n ('The workaround should be used if the SMS is configured to use the default TLS certificate with CN &quot;Tippingpoint&quot;.')"/>
             </div>
           </div>
         </div>
@@ -11154,6 +11219,20 @@ should not have received it.
               </xsl:choose>
 
               <xsl:choose>
+                <xsl:when test="$method/text() = 'TippingPoint SMS'">
+                  <option data-select="tippingpoint" value="TippingPoint SMS"
+                          selected="1">
+                    <xsl:value-of select="gsa:i18n ('TippingPoint SMS')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="tippingpoint" value="TippingPoint SMS">
+                    <xsl:value-of select="gsa:i18n ('TippingPoint SMS')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
                 <xsl:when test="$method/text() = 'verinice Connector'">
                   <option data-select="verinice" value="verinice Connector" selected="1"
                     class="form-selection-input-event form-selection-input-event--task">
@@ -11492,6 +11571,84 @@ should not have received it.
           <div class="col-10">
             <div class="form-item">
               <input type="file" name="method_data:pkcs12" size="30"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Method: Tipping Point SMS -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('SMS Host address')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:tp_sms_hostname"
+                value="{$method/data[name='tp_sms_hostname']/text()}"
+                class="form-control" size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:tp_sms_credential">
+              <xsl:for-each select="$credentials/credential">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="@id"/>
+                  <xsl:with-param name="content" select="name"/>
+                  <xsl:with-param name="select-value" select="$method/data[name='tp_sms_credential']/text()"/>
+                </xsl:call-template>
+              </xsl:for-each>
+            </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:tp_sms_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('TLS Certificate')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="file" name="method_data:tp_sms_tls_certificate"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('TLS workaround')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
+              <label class="radio-inline">
+                <xsl:choose>
+                  <xsl:when test="$method/data[name='tp_sms_tls_workaround']/text() = 1">
+                    <input type="radio" name="method_data:tp_sms_tls_workaround" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="method_data:tp_sms_tls_workaround" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('yes')"/>
+              </label>
+              <label class="radio-inline">
+                <xsl:choose>
+                  <xsl:when test="not ($method/data[name='tp_sms_tls_workaround']/text() = 1)">
+                    <input type="radio" name="method_data:tp_sms_tls_workaround" value="0" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="method_data:tp_sms_tls_workaround" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('no')"/>
+              </label>
+            </div>
+            <div class="footnote">
+              <xsl:value-of select="gsa:i18n ('The workaround should be used if the SMS is configured to use the default TLS certificate with CN &quot;Tippingpoint&quot;.')"/>
             </div>
           </div>
         </div>
