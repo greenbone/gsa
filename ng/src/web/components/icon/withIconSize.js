@@ -21,29 +21,55 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_array} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withContext from '../../utils/withContext';
 
-export const withIconSize = Component => {
-  const IconSizeWrapper = ({size, ...props}, {iconSize}) => (
-    <Component
-      size={is_defined(size) ? size : iconSize}
-      {...props}
-    />
-  );
+const withIconSize = (defaultSize = 'small') => Component => {
+
+  const IconSizeWrapper = glamorous(Component, {
+    displayName: 'withIconSize',
+    filterProps: ['size', 'iconSize'],
+  })(({
+    iconSize = defaultSize,
+    size = iconSize,
+  }) => {
+    let width;
+    let height;
+
+    if (size === 'small') {
+      height = width = '16px';
+    }
+    else if (size === 'medium') {
+      height = width = '24px';
+    }
+    else if (size === 'large') {
+      height = width = '50px';
+    }
+    else if (is_array(size)) {
+      width = size[0];
+      height = size[1];
+    }
+
+    return {
+      height,
+      width,
+      '& *': {
+        height: 'inherit',
+        width: 'inherit',
+      },
+    };
+  });
 
   IconSizeWrapper.propTypes = {
+    iconSize: PropTypes.iconSize,
     size: PropTypes.iconSize,
   };
 
-  IconSizeWrapper.contextTypes = {
-    iconSize: PropTypes.iconSize,
-  };
-
-  return IconSizeWrapper;
+  return withContext({iconSize: PropTypes.iconSize})(IconSizeWrapper);
 };
 
 export default withIconSize;

@@ -23,37 +23,9 @@
 
 import glamorous from 'glamorous';
 
-import {is_array, is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
-
-const convert_size = ({size = 'small'}) => {
-  let width;
-  let height;
-
-  if (size === 'small') {
-    height = width = '16px';
-  }
-  else if (size === 'medium') {
-    height = width = '24px';
-  }
-  else if (size === 'large') {
-    height = width = '50px';
-  }
-  else if (is_array(size)) {
-    width = size[0];
-    height = size[1];
-  }
-
-  return {
-    height,
-    width,
-    '& *': {
-      height: 'inherit',
-      width: 'inherit',
-    },
-  };
-};
 
 const icon_button_css = {
   cursor: 'pointer',
@@ -70,11 +42,9 @@ export const withIconCss = Component => {
     },
     ({onClick}) => is_defined(onClick) ? 'icon icon-button' : 'icon',
     ({onClick}) => is_defined(onClick) ? icon_button_css : {},
-    convert_size,
   );
 
   IconCss.propTypes = {
-    size: PropTypes.iconSize,
     onClick: PropTypes.func,
   };
 

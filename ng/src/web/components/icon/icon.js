@@ -97,7 +97,7 @@ IconComponent.propTypes = {
 };
 
 export default compose(
-  withIconSize,
+  withIconSize(),
   withIconCss,
 )(IconComponent);
 

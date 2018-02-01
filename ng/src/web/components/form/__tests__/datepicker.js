@@ -1,11 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,44 +21,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import moment from 'moment';
 
-import glamorous from 'glamorous';
+import {mount} from 'enzyme';
+import DatePicker from '../datepicker.js';
 
-import _ from 'gmp/locale.js';
+describe('DatePicker component tests', () => {
 
-import Button from './button.js';
-import PropTypes from '../../utils/proptypes';
-import withIconSize from 'web/components/icon/withIconSize';
+  test('should render without crashing', () => {
+    mount(<DatePicker value={moment()}/>);
+  });
 
-let StyledCloseButton = glamorous(Button)({
-  background: 'none',
-  opacity: '.7',
-  lineHeight: '0',
-  padding: '0',
 });
-
-StyledCloseButton = withIconSize('medium')(StyledCloseButton);
-
-const CloseButton = ({
-  size,
-  title = _('Close'),
-  onClick,
-}) => (
-  <StyledCloseButton
-    size={size}
-    title={title}
-    onClick={onClick}
-  >
-    × {/* Javascript unicode: \u00D7 */}
-  </StyledCloseButton>
-);
-
-CloseButton.propTypes = {
-  size: PropTypes.iconSize,
-  title: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-};
-
-export default CloseButton;
 
 // vim: set ts=2 sw=2 tw=80:
