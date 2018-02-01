@@ -135,6 +135,7 @@ class EntitiesTable extends React.Component {
   render() {
     const {details, allToggled} = this.state;
     const {
+      doubleRow = false,
       emptyTitle,
       entities,
       entitiesCounts,
@@ -177,13 +178,25 @@ class EntitiesTable extends React.Component {
           />
         );
         if (is_defined(RowDetailsComponent) && details[entity.id]) {
-          rows.push(
-            <RowDetailsComponent
-              links={links}
-              key={'details-' + entity.id}
-              entity={entity}
-            />
-          );
+          if (doubleRow) {
+            rows.push(
+              <TableBody key={'details-' + entity.id}>
+                <RowDetailsComponent
+                  links={links}
+                  entity={entity}
+                />
+              </TableBody>
+            );
+          }
+          else {
+            rows.push(
+              <RowDetailsComponent
+                links={links}
+                key={'details-' + entity.id}
+                entity={entity}
+              />
+            );
+          }
         }
       });
     }
@@ -266,6 +279,7 @@ class EntitiesTable extends React.Component {
 
 EntitiesTable.propTypes = {
   body: PropTypes.componentOrFalse,
+  doubleRow: PropTypes.bool,
   emptyTitle: PropTypes.string,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
