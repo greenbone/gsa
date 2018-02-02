@@ -34,11 +34,11 @@ import withIconSize from 'web/components/icon/withIconSize';
 
 let StyledCloseButton = glamorous.div({
   display: 'flex',
-  border: '1px solid' + Theme.extra.darkGreen,
+  border: '1px solid' + Theme.darkGreen,
   fontWeight: 'bold',
-  color: Theme.extra.darkGreen,
+  color: Theme.darkGreen,
   cursor: 'pointer',
-  background: Theme.main.lighGreen,
+  background: Theme.lighGreen,
   borderRadius: '4px',
   padding: '0',
   alignItems: 'center',
@@ -46,7 +46,7 @@ let StyledCloseButton = glamorous.div({
 
   ':hover': {
     color: '#fff',
-    background: Theme.extra.darkGreen,
+    background: Theme.darkGreen,
   },
 });
 
