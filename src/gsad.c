@@ -3920,6 +3920,9 @@ validate_host_header (const char *host_header)
   else if (g_utf8_validate (host_header, -1, NULL) == FALSE)
     return 1;
 
+  /*
+   * Find brackets and colons for detecting IPv6 addresses and port.
+   */
   bracket_index = -1;
   colon_index = -1;
   for (char_index = strlen (host_header) - 1;
@@ -3935,18 +3938,36 @@ validate_host_header (const char *host_header)
   if (bracket_index != -1 && host_header[0] == '['
       && (colon_index == bracket_index + 1 || colon_index < bracket_index))
     {
+      /*
+       * IPv6 address which starts with a square bracket and
+       *  where the last colon is right after a closing bracket,
+       *  e.g. "[::1]:9392" -> "::1" or inside brackets, e.g. "[::1]" -> "::1".
+       */
       host = g_strndup (host_header + 1, bracket_index - 1);
     }
-  else if (colon_index > bracket_index)
+  else if (colon_index > 0 && bracket_index == -1)
     {
+      /*
+       * Hostname or IPv4 address (no brackets) with a port after the colon,
+       *  e.g. "127.0.0.1:9393" -> "127.0.0.1".
+       */
       host = g_strndup (host_header, colon_index);
     }
-  else if (colon_index == -1)
+  else if (colon_index == -1 && bracket_index == -1)
     {
+      /*
+       * Hostname or IPv4 address (no brackets) without any colon for a port,
+       *  e.g. "127.0.0.1".
+       */
       host = g_strdup (host_header);
     }
   else
-    host = NULL;
+    {
+      /*
+       * Invalid because colon or brackets are in unexpected places.
+       */
+      host = NULL;
+    }
 
   g_debug ("%s: header: '%s' -> host: '%s'", __FUNCTION__, host_header, host);
 
