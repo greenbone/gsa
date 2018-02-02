@@ -361,71 +361,69 @@ class AlertDialog extends React.Component {
             onChange={onValueChange}/>
         </FormGroup>
 
-        <Divider flex="column" margin="10px">
-          <FormGroup title={_('Event')} flex="column">
-            <Divider flex="column">
-              <TaskEventPart
-                prefix="event_data"
-                event={event}
-                status={event_data_status}
-                onEventChange={this.handleEventChange}
-                onChange={onValueChange}/>
+        <FormGroup title={_('Event')} flex="column">
+          <Divider flex="column">
+            <TaskEventPart
+              prefix="event_data"
+              event={event}
+              status={event_data_status}
+              onEventChange={this.handleEventChange}
+              onChange={onValueChange}/>
 
-              <SecInfoEventPart
-                prefix="event_data"
-                event={event}
-                secinfoType={event_data_secinfo_type}
-                feedEvent={event_data_feed_event}
-                onEventChange={this.handleEventChange}
-                onChange={onValueChange}/>
-            </Divider>
-          </FormGroup>
+            <SecInfoEventPart
+              prefix="event_data"
+              event={event}
+              secinfoType={event_data_secinfo_type}
+              feedEvent={event_data_feed_event}
+              onEventChange={this.handleEventChange}
+              onChange={onValueChange}/>
+          </Divider>
+        </FormGroup>
 
-          <FormGroup title={_('Condition')} flex="column">
-            <Divider flex="column">
-              <Radio
-                title={_('Always')}
-                name="condition"
-                value={CONDITION_TYPE_ALWAYS}
-                checked={condition === CONDITION_TYPE_ALWAYS}
-                onChange={onValueChange}/>
+        <FormGroup title={_('Condition')} flex="column">
+          <Divider flex="column">
+            <Radio
+              title={_('Always')}
+              name="condition"
+              value={CONDITION_TYPE_ALWAYS}
+              checked={condition === CONDITION_TYPE_ALWAYS}
+              onChange={onValueChange}/>
 
-              {is_task_event &&
-                <SeverityLeastConditionPart
-                  prefix="condition_data"
-                  condition={condition}
-                  severity={condition_data_severity}
-                  onChange={onValueChange}/>
-              }
-
-              {is_task_event &&
-                <SeverityChangedConditionPart
-                  prefix="condition_data"
-                  condition={condition}
-                  direction={condition_data_direction}
-                  onChange={onValueChange}/>
-              }
-
-              <FilterCountLeastConditionPart
+            {is_task_event &&
+              <SeverityLeastConditionPart
                 prefix="condition_data"
                 condition={condition}
-                atLeastFilterId={condition_data_at_least_filter_id}
-                atLeastCount={condition_data_at_least_count}
+                severity={condition_data_severity}
+                onChange={onValueChange}/>
+            }
+
+            {is_task_event &&
+              <SeverityChangedConditionPart
+                prefix="condition_data"
+                condition={condition}
+                direction={condition_data_direction}
+                onChange={onValueChange}/>
+            }
+
+            <FilterCountLeastConditionPart
+              prefix="condition_data"
+              condition={condition}
+              atLeastFilterId={condition_data_at_least_filter_id}
+              atLeastCount={condition_data_at_least_count}
+              filters={condition_data_filters}
+              onChange={onValueChange}/>
+
+            {is_task_event &&
+              <FilterCountChangedConditionPart
+                prefix="condition_data"
+                condition={condition}
+                filterId={condition_data_filter_id}
+                count={condition_data_count}
                 filters={condition_data_filters}
                 onChange={onValueChange}/>
-
-              {is_task_event &&
-                <FilterCountChangedConditionPart
-                  prefix="condition_data"
-                  condition={condition}
-                  filterId={condition_data_filter_id}
-                  count={condition_data_count}
-                  filters={condition_data_filters}
-                  onChange={onValueChange}/>
-              }
-            </Divider>
-          </FormGroup>
-        </Divider>
+            }
+          </Divider>
+        </FormGroup>
         {!is_task_event &&
           <FormGroup title={_('Details URL')}>
             <TextField
