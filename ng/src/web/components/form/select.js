@@ -32,9 +32,9 @@ import PropTypes from '../../utils/proptypes.js';
 
 import warning from '../../utils/warning.js';
 
+import ArrowIcon from '../icon/arrowicon';
+
 import {
-  ArrowButton,
-  ArrowIcon,
   Box,
   case_insensitive_filter,
   Input,
@@ -167,11 +167,10 @@ class Select extends React.Component {
                 >
                   {label}
                 </SelectedValue>
-                <ArrowButton
+                <ArrowIcon
                   disabled={disabled}
-                >
-                  <ArrowIcon down={isOpen}/>
-                </ArrowButton>
+                  down={!isOpen}
+                />
               </Box>
               {isOpen && !disabled &&
                 <Menu position={menuPosition}>
