@@ -36,6 +36,7 @@ const Styled = glamorous.span({
   justifyContent: 'center',
   outline: 'none',
   margin: '1px',
+  userSelect: 'none',
 }, ({disabled}) => disabled ? {cursor: 'not-allowed'} : null);
 
 const ArrowIcon = ({
