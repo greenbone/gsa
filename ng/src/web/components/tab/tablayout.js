@@ -28,7 +28,7 @@ import Theme from '../../utils/theme.js';
 import Layout from '../../components/layout/layout.js';
 
 const TabLayout = glamorous(Layout)({
-  borderBottom: '1px solid ' + Theme.extra.lightGray,
+  borderBottom: '1px solid ' + Theme.lightGray,
   marginTop: '30px',
   marginBottom: '15px',
   paddingBottom: '0px',
