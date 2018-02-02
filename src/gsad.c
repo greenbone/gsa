@@ -3836,17 +3836,26 @@ gsad_add_content_type_header (struct MHD_Response *response,
 /**
  * @brief Add all local IP addresses to a GHashTable.
  *
- * @param[in] hashtable     The hashtable to add the addresses to.
- * @param[in] include_ipv6  Whether to include IPv6 addresses.
+ * @param[in] hashtable       The hashtable to add the addresses to.
+ * @param[in] include_ipv6    Whether to include IPv6 addresses.
+ * @param[in] localhost_only  Whether to add only localhost, 127.0.0.1 and ::1.
  */
 void
-add_local_addresses (GHashTable *hashtable, int include_ipv6)
+add_local_addresses (GHashTable *hashtable, int include_ipv6,
+                     int localhost_only)
 {
   struct ifaddrs *ifaddr, *ifa;
   int family, ret;
   char host[NI_MAXHOST];
 
-  if (getifaddrs(&ifaddr) != -1)
+  // Basic loopback addresses
+  g_hash_table_add (gsad_header_hosts, g_strdup ("localhost"));
+  g_hash_table_add (gsad_header_hosts, g_strdup ("127.0.0.1"));
+  if (include_ipv6)
+    g_hash_table_add (gsad_header_hosts, g_strdup ("::1"));
+
+  // Other interface addresses
+  if (localhost_only == 0 && getifaddrs(&ifaddr) != -1)
     {
       for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
         {
@@ -5987,6 +5996,8 @@ gsad_address_set_port (struct sockaddr_storage *address, int port)
 /**
  * @brief Initalizes the address to listen on.
  *
+ * If an address is given explicitly, it will also be allowed in a Host header.
+ *
  * @param[in]  address_str      Address to listen on.
  * @param[in]  port             Port to listen on.
  *
@@ -6022,7 +6033,6 @@ gsad_address_init (const char *address_str, int port)
         address->ss_family = AF_INET6;
       else
         address->ss_family = AF_INET;
-      add_local_addresses (gsad_header_hosts, address->ss_family == AF_INET6);
     }
   address_list = g_slist_append (address_list, address);
   return 0;
@@ -6541,21 +6551,27 @@ main (int argc, char **argv)
   /* Initialize addresses and accepted host headers for HTTP header */
   gsad_header_hosts = g_hash_table_new_full (g_str_hash, g_str_equal,
                                              g_free, NULL);
-  g_hash_table_add (gsad_header_hosts, g_strdup ("localhost"));
-  g_hash_table_add (gsad_header_hosts, g_strdup ("127.0.0.1"));
-  if (ipv6_is_enabled ())
-    g_hash_table_add (gsad_header_hosts, g_strdup ("::1"));
 
   if (gsad_address_string)
-    while (*gsad_address_string)
-      {
-        if (gsad_address_init (*gsad_address_string, gsad_port))
-          return 1;
-        gsad_address_string++;
-      }
+    {
+      // Allow basic loopback addresses in Host header
+      add_local_addresses (gsad_header_hosts, ipv6_is_enabled (), 1);
+      // Listen to given addresses and allow them in Host header
+      while (*gsad_address_string)
+        {
+          if (gsad_address_init (*gsad_address_string, gsad_port))
+            return 1;
+          gsad_address_string++;
+        }
+    }
   else
-    if (gsad_address_init (NULL, gsad_port))
-      return 1;
+    {
+      // Allow all local interface addresses in Host Header
+      add_local_addresses (gsad_header_hosts, ipv6_is_enabled (), 0);
+      // Listen on all addresses
+      if (gsad_address_init (NULL, gsad_port))
+        return 1;
+    }
 
   if (gsad_header_host_strings)
     while (*gsad_header_host_strings)
