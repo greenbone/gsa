@@ -26,26 +26,6 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import {is_defined} from 'gmp/utils.js';
-import PropTypes from '../../utils/proptypes.js';
-
-export const ArrowButton = glamorous.span({
-  backgroundColor: 'transparent',
-  border: 'none',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  outline: 'none',
-  margin: '1px',
-}, ({disabled}) => disabled ? {cursor: 'not-allowed'} : null);
-
-export const ArrowIcon = ({down = true}) => (
-  down ? '▲' : '▼'
-);
-
-ArrowIcon.propTypes = {
-  down: PropTypes.bool,
-};
 
 export const Box = glamorous.div({
   border: '1px solid #aaa',

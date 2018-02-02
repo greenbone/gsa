@@ -23,7 +23,10 @@
 import React from 'react';
 
 import {mount} from 'enzyme';
-import {ArrowButton, Item, Input} from '../selectelements.js';
+
+import ArrowIcon from '../../icon/arrowicon';
+
+import {Item, Input} from '../selectelements.js';
 import MultiSelect, {MultiSelectedValue} from '../multiselect.js';
 
 describe('MultiSelect component tests', () => {
@@ -39,7 +42,7 @@ describe('MultiSelect component tests', () => {
         <option value="bar">Bar</option>
       </MultiSelect>
     );
-    wrapper.find(ArrowButton).simulate('click');
+    wrapper.find(ArrowIcon).simulate('click');
 
     const elements = wrapper.find(Item);
 
@@ -58,7 +61,7 @@ describe('MultiSelect component tests', () => {
     const wrapper = mount(
       <MultiSelect items={items}/>
     );
-    wrapper.find(ArrowButton).simulate('click');
+    wrapper.find(ArrowIcon).simulate('click');
 
     const elements = wrapper.find(Item);
 
@@ -83,7 +86,7 @@ describe('MultiSelect component tests', () => {
       />
     );
 
-    wrapper.find(ArrowButton).simulate('click');
+    wrapper.find(ArrowIcon).simulate('click');
     wrapper.find(Item).at(1).simulate('click');
 
     expect(onChange).toBeCalled();
@@ -109,7 +112,7 @@ describe('MultiSelect component tests', () => {
       />
     );
 
-    wrapper.find(ArrowButton).simulate('click');
+    wrapper.find(ArrowIcon).simulate('click');
     wrapper.find(Item).at(0).simulate('click');
 
     expect(onChange).toBeCalled();
@@ -160,7 +163,7 @@ describe('MultiSelect component tests', () => {
       />
     );
 
-    wrapper.find(ArrowButton).simulate('click');
+    wrapper.find(ArrowIcon).simulate('click');
     expect(wrapper.find(Item).length).toBe(3);
 
     const fake_event = {target: {value: 'ba'}};

@@ -31,13 +31,13 @@ import Downshift from 'downshift';
 
 import {arrays_equal, is_array, is_defined, is_empty} from 'gmp/utils.js';
 
+import ArrowIcon from '../icon/arrowicon.js';
+
 import Layout from '../layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import {
-  ArrowButton,
-  ArrowIcon,
   Box,
   case_insensitive_filter,
   Input,
@@ -220,17 +220,16 @@ class MultiSelect extends React.Component {
                     )
                   }
                 </Layout>
-                <ArrowButton
+                <ArrowIcon
                   {...getButtonProps({
                     disabled,
+                    down: !isOpen,
                     onClick: isOpen ? undefined : event => {
                       event.preventDefault(); // don't call default handler from downshift
                       openMenu(() => this.input.focus()); // set focus to input field after menu is opened
                     },
                   })}
-                >
-                  <ArrowIcon down={isOpen}/>
-                </ArrowButton>
+                />
               </Box>
               {isOpen && items.length > 0 && !disabled &&
                 <Menu position={menuPosition}>
