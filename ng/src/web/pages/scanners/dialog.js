@@ -222,37 +222,39 @@ class ScannerDialog extends React.Component {
 
         <FormGroup title={_('CA Certificate')} flex="column">
           <Layout flex box>
-            {is_edit &&
-              <Layout flex box>
-                {is_defined(scanner.ca_pub) &&
+            <Divider>
+              {is_edit &&
+                <Layout flex box>
+                  {is_defined(scanner.ca_pub) &&
+                    <Radio
+                      title={_('Existing')}
+                      name="which_cert"
+                      value="existing"
+                      checked={which_cert === 'existing'}
+                      onChange={onValueChange}
+                    />
+                  }
                   <Radio
-                    title={_('Existing')}
+                    title={_('Default')}
                     name="which_cert"
-                    value="existing"
-                    checked={which_cert === 'existing'}
+                    value="default"
+                    checked={which_cert === 'default'}
                     onChange={onValueChange}
                   />
-                }
-                <Radio
-                  title={_('Default')}
-                  name="which_cert"
-                  value="default"
-                  checked={which_cert === 'default'}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  title={_('New:')}
-                  name="which_cert"
-                  value="new"
-                  checked={which_cert === 'new'}
-                  onChange={onValueChange}
-                />
-              </Layout>
-            }
-            <FileField
-              disabled={is_edit && which_cert !== 'new'}
-              name="ca_pub"
-              onChange={onValueChange}/>
+                  <Radio
+                    title={_('New:')}
+                    name="which_cert"
+                    value="new"
+                    checked={which_cert === 'new'}
+                    onChange={onValueChange}
+                  />
+                </Layout>
+              }
+              <FileField
+                disabled={is_edit && which_cert !== 'new'}
+                name="ca_pub"
+                onChange={onValueChange}/>
+            </Divider>
           </Layout>
           {is_edit && is_defined(scanner.ca_pub) &&
             <CertStatus info={scanner.ca_pub.info}/>

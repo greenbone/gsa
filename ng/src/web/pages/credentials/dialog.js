@@ -37,6 +37,7 @@ import {
   SNMP_PRIVACY_ALGORITHM_DES,
 } from 'gmp/models/credential.js';
 
+import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -197,21 +198,23 @@ class CredentialsDialog extends React.Component {
           title={_('Password')}
           condition={base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
               base === SNMP_CREDENTIAL_TYPE}>
-          {is_edit &&
-            <Checkbox
-              name="change_password"
-              checked={change_password === '1'}
-              checkedValue="1"
-              unCheckedValue="0"
-              title={_('Replace existing password with')}
+          <Divider>
+            {is_edit &&
+              <Checkbox
+                name="change_password"
+                checked={change_password === '1'}
+                checkedValue="1"
+                unCheckedValue="0"
+                title={_('Replace existing password with')}
+                onChange={onValueChange}/>
+            }
+            <PasswordField
+              name="password"
+              value={password}
+              autoComplete="new-password"
+              disabled={autogenerate === 1}
               onChange={onValueChange}/>
-          }
-          <PasswordField
-            name="password"
-            value={password}
-            autoComplete="new-password"
-            disabled={autogenerate === 1}
-            onChange={onValueChange}/>
+          </Divider>
         </FormGroup>
 
         <FormGroup
