@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import PropTypes from '../../utils/proptypes.js';
+
 import Layout from '../../components/layout/layout.js';
 
 import EntitiesPage from '../../entities/page.js';
@@ -37,6 +39,7 @@ import ManualIcon from '../../components/icon/manualicon.js';
 import OsCharts from './charts.js';
 import OsFilterDialog from './filterdialog.js';
 import OsTable from './table.js';
+import OsComponent from './component.js';
 
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -48,7 +51,7 @@ const Dashboard = withDashboard({
   defaultControllerString: 'os-by-cvss',
 })(OsCharts);
 
-const ToolbarIcons = props => {
+const ToolBarIcons = props => {
   return (
     <Layout flex box>
       <ManualIcon
@@ -59,12 +62,54 @@ const ToolbarIcons = props => {
   );
 };
 
+const Page = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  ...props
+}) => (
+  <OsComponent
+    onCloned={onChanged}
+    onCloneError={onError}
+    onCreated={onChanged}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onSaved={onChanged}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+    }) => (
+      <EntitiesPage
+        {...props}
+        dashboard={Dashboard}
+        filterEditDialog={OsFilterDialog}
+        sectionIcon="os.svg"
+        table={OsTable}
+        title={_('Operating Systems')}
+        toolBarIcons={ToolBarIcons}
+        onError={onError}
+        onOsCloneClick={clone}
+        onOsCreateClick={create}
+        onOsDeleteClick={delete_func}
+        onOsDownloadClick={download}
+        onOsEditClick={edit}
+      />
+    )}
+  </OsComponent>
+);
+
+Page.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+};
+
 export default withEntitiesContainer('operatingsystem', {
-  dashboard: Dashboard,
-  filterEditDialog: OsFilterDialog,
   filtersFilter: ASSETS_FILTER_FILTER,
-  sectionIcon: 'os.svg',
-  table: OsTable,
-  title: _('Operating Systems'),
-  toolBarIcons: ToolbarIcons,
-})(EntitiesPage);
+})(Page);
