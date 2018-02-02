@@ -49,7 +49,7 @@ export const InfoLayout = glamorous(Layout)(
   'entity-info',
   {
     borderSpacing: '0px',
-    color: Theme.extra.mediumGray,
+    color: Theme.mediumGray,
     fontSize: '10px',
 
     '& :nth-child(even)': {

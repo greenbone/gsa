@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,21 +21,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-const theme = {
-  main: {
-    green: '#66c430',
-    lightGreen: '#87d050',
-  },
-  extra: {
-    darkGray: '#393637',
-    mediumGray: '#787878',
-    lightGray: '#c8d3d9',
-    goldYellow: '#fdc300',
-    redBrown: '#a54317',
-    darkGreen: '#519032',
-  },
+const Theme = {
+  /* source styleguide */
+  green: '#66c430',
+  lightGreen: '#87d050',
+  darkGray: '#393637',
+  mediumGray: '#787878',
+  lightGray: '#c8d3d9',
+  goldYellow: '#fdc300',
+  redBrown: '#a54317',
+
+  /* source ? */
+  darkGreen: '#519032',
 };
 
-export default theme;
+export default Theme;
 
 // vim: set ts=2 sw=2 tw=80:
