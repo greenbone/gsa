@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,18 +24,17 @@
 
 import React from 'react';
 
-import {classes, is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
+
+import {StyledElement, StyledInput, StyledTitle} from './radio.js';
 
 import Divider from '../layout/divider.js';
 import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
-
-import './css/form.css';
-import './css/checkboxradio.css';
 
 const convert_checked = (value, props) => {
   const {checkedValue, unCheckedValue} = props;
@@ -51,7 +50,6 @@ const convert_checked = (value, props) => {
 
 const CheckboxComponent = ({
     title,
-    className,
     children,
     disabled,
     checkedValue,
@@ -59,28 +57,27 @@ const CheckboxComponent = ({
     ...other
   }) => {
 
-  className = classes(className, 'checkbox', disabled ? 'disabled' : '');
-
   return (
-    <div className={className}>
-      <label>
-        <Divider>
-          <input {...other} type="checkbox" />
-          {is_defined(title) &&
-            <span>
-              {title}
-            </span>
-          }
-        </Divider>
-        {children}
-      </label>
-    </div>
+    <StyledElement>
+      <Divider>
+        <StyledInput
+          {...other}
+          disabled={disabled}
+          type="checkbox"
+        />
+        {is_defined(title) &&
+          <StyledTitle disabled={disabled}>
+            {title}
+          </StyledTitle>
+        }
+      </Divider>
+      {children}
+    </StyledElement>
   );
 };
 
 CheckboxComponent.propTypes = {
   checkedValue: PropTypes.any,
-  className: PropTypes.string,
   disabled: PropTypes.bool,
   name: PropTypes.string,
   title: PropTypes.string,

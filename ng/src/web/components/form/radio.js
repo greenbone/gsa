@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,9 @@
  */
 
 import React from 'react';
+import glamorous from 'glamorous';
 
-import {classes, is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils.js';
 
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
@@ -34,36 +35,55 @@ import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
 
-import './css/form.css';
-import './css/checkboxradio.css';
+export const StyledElement = glamorous.label({
+  display: 'inline-flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  fontWeight: 'normal',
+  cursor: 'pointer',
+});
 
-const RadioComponent = ({title, children, className, disabled, ...other}) => {
+export const StyledInput = glamorous.input({
+  padding: 0,
+  margin: 0,
+  marginLeft: '10px',
+  lineHeight: 'normal',
+  width: 'auto',
+  height: 'auto',
+  '& disabled': {
+    cursor: 'not-allowed',
+    opacity: '0.7',
+  },
+});
 
-  className = classes(className, 'radio', disabled ? 'disabled' : '');
+export const StyledTitle = glamorous.span(
+  ({disabled}) => ({
+    cursor: disabled ? 'not-allowed' : '',
+    opacity: disabled ? '0.5' : '1',
+  }),
+);
 
+const RadioComponent = ({title, children, disabled, ...other}) => {
   return (
-    <div className={className}>
-      <label>
-        <Divider>
-          <input
-            {...other}
-            disabled={disabled}
-            type="radio"
-          />
-          {is_defined(title) &&
-            <span>
-              {title}
-            </span>
-          }
-          {children}
-        </Divider>
-      </label>
-    </div>
+    <StyledElement>
+      <Divider>
+        <StyledInput
+          {...other}
+          disabled={disabled}
+          type="radio"
+        />
+        {is_defined(title) &&
+          <StyledTitle disabled={disabled}>
+            {title}
+          </StyledTitle>
+        }
+        {children}
+      </Divider>
+    </StyledElement>
   );
 };
 
 RadioComponent.propTypes = {
-  className: PropTypes.string,
   disabled: PropTypes.bool,
   name: PropTypes.string,
   title: PropTypes.string,
