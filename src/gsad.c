@@ -258,6 +258,18 @@ char *SERVER_ERROR =
   "<body>The request contained invalid UTF-8 in " location ".</body>" \
   "</html>"
 
+/*
+ * Host HTTP header error page.
+ */
+#define HOST_HEADER_ERROR_PAGE \
+  "<html>"                                                            \
+  "<head><title>Invalid request</title></head>"                       \
+  "<body>The request contained an unknown or invalid Host header."    \
+  " If you are trying to access GSA via its hostname or a proxy,"     \
+  " make sure GSA is set up to allow it."                             \
+  "</body>"                                                           \
+  "</html>"
+
 /**
  * @brief The handle on the embedded HTTP daemon.
  */
@@ -4125,7 +4137,7 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
   switch (validate_host_header (host))
     {
       case 0:
-        // header is valid
+        // Header is valid
         break;
       case 1:
         // Invalid UTF-8
@@ -4137,8 +4149,10 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
       case 2:
       default:
         // Otherwise invalid
-        send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                       NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+        send_response (connection,
+                       HOST_HEADER_ERROR_PAGE,
+                       MHD_HTTP_BAD_REQUEST, NULL,
+                       GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
         return MHD_YES;
     }
 
@@ -4226,8 +4240,10 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   switch (validate_host_header (host))
     {
       case 0:
+        // Header is valid
         break;
       case 1:
+        // Invalid UTF-8
         send_response (connection,
                        UTF8_ERROR_PAGE ("'Host' header"),
                        MHD_HTTP_BAD_REQUEST, NULL,
@@ -4235,7 +4251,12 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
         return MHD_YES;
       case 2:
       default:
-        return MHD_NO;
+        // Otherwise invalid
+        send_response (connection,
+                       HOST_HEADER_ERROR_PAGE,
+                       MHD_HTTP_BAD_REQUEST, NULL,
+                       GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+        return MHD_YES;
     }
   /* [IPv6 or IPv4-mapped IPv6]:port */
   if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9a-f:.]]:%*i", name)
