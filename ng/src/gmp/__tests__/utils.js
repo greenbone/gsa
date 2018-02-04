@@ -38,6 +38,7 @@ import {
   exclude_object_props,
   map,
   for_each,
+  filter,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -604,6 +605,36 @@ describe('for_each function tests', () => {
     expect(callback.mock.calls[0]).toEqual([1, 1, new Set([1, 2, 3])]);
     expect(callback.mock.calls[1]).toEqual([2, 2, new Set([1, 2, 3])]);
     expect(callback.mock.calls[2]).toEqual([3, 3, new Set([1, 2, 3])]);
+  });
+});
+
+describe('filter function tests', () => {
+  test('should return emtpy array', () => {
+    expect(filter(undefined, item => true)).toEqual([]);
+    expect(filter(null, item => true)).toEqual([]);
+    expect(filter([], item => true)).toEqual([]);
+    expect(filter([1, 2, 3])).toEqual([]);
+  });
+
+  test('should return specified empty object', () => {
+    const expected = {foo: 1};
+    expect(filter(undefined, item => true, expected)).toEqual(expected);
+    expect(filter(null, item => true, expected)).toEqual(expected);
+    expect(filter([1, 2, 3], undefined, expected)).toEqual(expected);
+
+  });
+
+  test('should always return empty array for empty array', () => {
+    const expected = {foo: 1};
+    expect(filter([], item => true, expected)).toEqual([]);
+  });
+
+  test('should iterate over single object', () => {
+    expect(filter(1, item => item === 1)).toEqual([1]);
+  });
+
+  test('should filter array', () => {
+    expect(filter([1, 2, 3], i => i > 1)).toEqual([2, 3]);
   });
 });
 
