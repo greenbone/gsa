@@ -21,11 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/includes';
 
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {includes, is_empty, is_defined, map} from 'gmp/utils.js';
+import {is_empty, is_defined, map} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -138,7 +139,7 @@ const PermissionDialog = ({
   onValueChange,
 }, {capabilities}) => {
 
-  const show_resource_id = includes(need_resource_id, name);
+  const show_resource_id = need_resource_id.includes(name);
 
   let resource_id_title;
   if (resource_type === 'user') {
