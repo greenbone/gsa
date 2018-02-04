@@ -20,11 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/includes';
 
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, includes, shorten} from 'gmp/utils.js';
+import {is_defined, is_empty, shorten} from 'gmp/utils.js';
 
 import {ANY, MANUAL} from 'gmp/commands/overrides.js';
 
@@ -61,7 +62,7 @@ class OverrideComponent extends React.Component {
       let new_severity_from_list;
       let new_severity;
 
-      if (includes([10, 5, 2, 0, -1], override.new_severity)) {
+      if ([10, 5, 2, 0, -1].includes(override.new_severity)) {
         new_severity_from_list = override.new_severity;
       }
       else {
