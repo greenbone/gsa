@@ -149,6 +149,8 @@ describe('avg function tests', () => {
   test('should return 0 for empty array', () => {
     expect(avg([])).toBe(0);
     expect(avg([], item => item.value)).toBe(0);
+    expect(avg()).toBe(0);
+    expect(avg(undefined, item => item.value)).toBe(0);
   });
 });
 
