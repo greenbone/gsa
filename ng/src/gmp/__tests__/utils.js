@@ -80,6 +80,11 @@ describe('array_equals function test', () => {
     const array2 = [1, 2, 3, 4];
     expect(arrays_equal(array1, array2)).toBe(false);
   });
+
+  test('array should equals with itself', () => {
+    const array1 = [1, 2, 3];
+    expect(arrays_equal(array1, array1)).toBe(true);
+  });
 });
 
 describe('sum function tests', () => {
