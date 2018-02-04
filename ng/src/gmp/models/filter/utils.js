@@ -26,7 +26,7 @@ import {is_defined} from '../../utils.js';
 export const filter_string = filter =>
   is_defined(filter) && is_defined(filter.toFilterString) ?
     filter.toFilterString() :
-    filter;
+    '' + filter;
 
 
 // vim: set ts=2 sw=2 tw=80:
