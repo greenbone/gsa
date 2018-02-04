@@ -37,6 +37,7 @@ import {
   exclude,
   exclude_object_props,
   map,
+  for_each,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -535,6 +536,57 @@ describe('map function tests', () => {
     const mapped = map(new Set(), item => item * 2, {});
 
     expect(mapped).toEqual({});
+  });
+});
+
+describe('for_each function tests', () => {
+  test('should return undefined for undefined array', () => {
+    const array = for_each(undefined, item => item);
+
+    expect(array).toBeUndefined();
+  });
+
+  test('should return undefined for null array', () => {
+    const array = for_each(null, item => item);
+
+    expect(array).toBeUndefined();
+  });
+
+  test('should return undefined if no function is set', () => {
+    const array = for_each([1, 2, 3]);
+
+    expect(array).toBeUndefined();
+  });
+
+  test('should iterate over array', () => {
+    const callback = jest.fn();
+    for_each([1, 2, 3], callback);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(3);
+    expect(callback.mock.calls[0]).toEqual([1, 0, [1, 2, 3]]);
+    expect(callback.mock.calls[1]).toEqual([2, 1, [1, 2, 3]]);
+    expect(callback.mock.calls[2]).toEqual([3, 2, [1, 2, 3]]);
+  });
+
+  test('should iterate over single item', () => {
+    const callback = jest.fn();
+    for_each(2, callback);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0]).toEqual([2, 0, [2]]);
+  });
+
+  test('should iterate over Set', () => {
+    const callback = jest.fn();
+    for_each(new Set([1, 2, 3]), callback);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(3);
+    expect(callback.mock.calls[0]).toEqual([1, 1, new Set([1, 2, 3])]);
+    expect(callback.mock.calls[1]).toEqual([2, 2, new Set([1, 2, 3])]);
+    expect(callback.mock.calls[2]).toEqual([3, 3, new Set([1, 2, 3])]);
   });
 });
 
