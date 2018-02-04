@@ -140,6 +140,11 @@ describe('avg function tests', () => {
     ];
     expect(avg(array, entry => entry.value)).toBe(3);
   });
+
+  test('should return 0 for empty array', () => {
+    expect(avg([])).toBe(0);
+    expect(avg([], item => item.value)).toBe(0);
+  });
 });
 
 describe('is_defined function test', () => {
