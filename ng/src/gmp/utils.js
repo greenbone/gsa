@@ -73,9 +73,6 @@ export function is_date(value) {
 export const is_model_element = elem => is_defined(elem) && !is_empty(elem._id);
 
 export function includes(array, value) {
-  if (!Array.prototype.includes) {
-    return array.indexOf(value) !== -1;
-  }
   return array.includes(value);
 }
 
