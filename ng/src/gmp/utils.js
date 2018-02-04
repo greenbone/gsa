@@ -72,10 +72,6 @@ export function is_date(value) {
 
 export const is_model_element = elem => is_defined(elem) && !is_empty(elem._id);
 
-export function includes(array, value) {
-  return array.includes(value);
-}
-
 export function for_each(array, func) {
   if (!has_value(array)) {
     return;
@@ -228,7 +224,7 @@ export function exclude(object, func) {
 }
 
 export const exclude_object_props = (object, exclude_array) =>
-  exclude(object, key => includes(exclude_array, key));
+  exclude(object, key => exclude_array.includes(key));
 
 export function split(string, seperator, limit) {
   // split('abc_def_hij', 1) => ['abc', 'def_hij']
