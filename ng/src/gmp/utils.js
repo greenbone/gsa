@@ -73,7 +73,7 @@ export function is_date(value) {
 export const is_model_element = elem => is_defined(elem) && !is_empty(elem._id);
 
 export function for_each(array, func) {
-  if (!has_value(array)) {
+  if (!has_value(array) || !is_defined(func)) {
     return;
   }
 
