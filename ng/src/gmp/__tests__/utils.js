@@ -113,6 +113,11 @@ describe('sum function tests', () => {
     ];
     expect(sum(array, entry => entry.value)).toBe(6);
   });
+
+  test('should sum empty and undefined to zero', () => {
+    expect(sum()).toBe(0);
+    expect(sum([])).toBe(0);
+  });
 });
 
 describe('avg function tests', () => {
