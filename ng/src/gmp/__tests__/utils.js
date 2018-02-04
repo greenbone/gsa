@@ -36,6 +36,7 @@ import {
   is_model_element,
   exclude,
   exclude_object_props,
+  map,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -480,6 +481,60 @@ describe('exclude_object_props function test', () => {
     expect(result.foo).toBeUndefined();
     expect(result.bar).toBeUndefined();
     expect(result.abc).toBe(3);
+  });
+});
+
+describe('map function tests', () => {
+  test('should return empty array for undefined array', () => {
+    let mapped = map(undefined, item => item);
+
+    expect(mapped).toEqual([]);
+
+    mapped = map(undefined, item => item, undefined);
+
+    expect(mapped).toEqual([]);
+  });
+
+  test('should empty array for null', () => {
+    const mapped = map(null, item => item);
+
+    expect(mapped).toEqual([]);
+  });
+
+  test('should empty array if not map function is set', () => {
+    const mapped = map([1, 2, 3]);
+
+    expect(mapped).toEqual([]);
+  });
+
+  test('should return object for undefined array', () => {
+    const mapped = map(undefined, item => item, {});
+
+    expect(mapped).toEqual({});
+  });
+
+  test('should iterate over array', () => {
+    const mapped = map([1, 2, 3], item => item * 2);
+
+    expect(mapped).toEqual([2, 4, 6]);
+  });
+
+  test('should iterate over single item', () => {
+    const mapped = map(2, item => item * 2);
+
+    expect(mapped).toEqual([4]);
+  });
+
+  test('should iterate over Set', () => {
+    const mapped = map(new Set([1, 2, 3]), item => item * 2);
+
+    expect(mapped).toEqual([2, 4, 6]);
+  });
+
+  test('should return empty object for empty Set', () => {
+    const mapped = map(new Set(), item => item * 2, {});
+
+    expect(mapped).toEqual({});
   });
 });
 
