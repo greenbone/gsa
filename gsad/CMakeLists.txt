@@ -6,7 +6,7 @@
 # Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2017 Greenbone Networks GmbH
+# Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,6 +23,10 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 ## Files generated on installation
+
+# generate compile_commands.json file
+# see https://clang.llvm.org/docs/JSONCompilationDatabase.html
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 add_custom_target (cpe-icon-dict
                    COMMENT "Generating CPE icon dictionary"

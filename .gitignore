@@ -6,3 +6,4 @@ config.local.js
 .vscode/
 .tern-project
 .directory/
+coverage/
