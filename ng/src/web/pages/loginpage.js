@@ -52,7 +52,7 @@ const panelcss = {
   marginTop: '5px',
   marginBottom: '5px',
   paddingBottom: '10px',
-  width: '350px',
+  width: '380px',
   fontSize: '9pt',
 };
 
@@ -122,6 +122,7 @@ class LoginForm extends React.Component {
               'or ask your administrator to do so as soon as possible.')}</p>
           </Panel>
         }
+
         <LoginPanel
           flex="column"
           align="space-around">
@@ -129,35 +130,40 @@ class LoginForm extends React.Component {
             flex="column"
             align="space-around"
             grow="1"
-            width="350px"
+            width="380px"
           >
-            <FormGroup title={_('Username')} titleSize="4">
-              <TextField
-                name="username"
-                grow="1"
-                placeholder={_('e.g. johndoe')}
-                value={username}
-                autoFocus="autofocus"
-                tabIndex="1"
-                onChange={this.onValueChange}/>
-            </FormGroup>
-            <FormGroup title={_('Password')} titleSize="4">
-              <PasswordField
-                name="password"
-                grow="1"
-                placeholder={_('Password')}
-                value={password}
-                onKeyDown={this.onKeyDown}
-                onChange={this.onValueChange}/>
-            </FormGroup>
-            <FormGroup size="4" offset="4">
-              <SubmitButton
-                flex
-                grow
-                title={_('Login')}
-                onClick={this.onSubmit}
-              />
-            </FormGroup>
+            <Layout flex="row">
+              <StyledIcon img="login-label.png" size="default"/>
+              <Layout flex="column">
+                <FormGroup title={_('Username')} titleSize="4">
+                  <TextField
+                    name="username"
+                    grow="1"
+                    placeholder={_('e.g. johndoe')}
+                    value={username}
+                    autoFocus="autofocus"
+                    tabIndex="1"
+                    onChange={this.onValueChange}/>
+                </FormGroup>
+                <FormGroup title={_('Password')} titleSize="4">
+                  <PasswordField
+                    name="password"
+                    grow="1"
+                    placeholder={_('Password')}
+                    value={password}
+                    onKeyDown={this.onKeyDown}
+                    onChange={this.onValueChange}/>
+                </FormGroup>
+                <FormGroup size="4" offset="4">
+                  <SubmitButton
+                    flex
+                    grow
+                    title={_('Login')}
+                    onClick={this.onSubmit}
+                  />
+                </FormGroup>
+              </Layout>
+            </Layout>
           </Layout>
         </LoginPanel>
         {is_defined(error) &&
@@ -198,9 +204,8 @@ const LoginHeader = glamorous(Header)({
 });
 
 const StyledIcon = glamorous(Icon)({
-  position: 'absolute',
-  top: '100px',
-  right: '20px',
+  height: '95px',
+  marginTop: '-7px',
 });
 
 const StyledLayout = glamorous(Layout)({
@@ -211,6 +216,11 @@ const StyledLayout = glamorous(Layout)({
 const MenuSpacer = glamorous.div({
   minHeight: '35px',
   background: '#393637',
+});
+
+const Wrapper = glamorous.div({
+    border: '1px solid #ddd',
+    padding: '10px',
 });
 
 class LoginPage extends React.Component {
@@ -272,9 +282,10 @@ class LoginPage extends React.Component {
             align={['start', 'center']}
             grow="1"
             position="relative">
-            <StyledIcon img="login-label.png" size="default"/>
             <GreenboneIcon/>
-            <LoginForm onSubmit={this.onSubmit} error={message}/>
+            <Wrapper>
+              <LoginForm onSubmit={this.onSubmit} error={message}/>
+            </Wrapper>
           </StyledLayout>
         </LoginMain>
         <Footer/>
