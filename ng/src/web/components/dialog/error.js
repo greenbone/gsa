@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +31,8 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Theme from '../../utils/theme.js';
+
 import Layout from '../layout/layout.js';
 
 import Button from './button.js';
@@ -37,10 +40,10 @@ import Button from './button.js';
 const StyledLayout = glamorous(Layout)({
   padding: '15px',
   margin: '20px 1em',
-  border: '1px solid #ebccd1',
+  border: '1px solid ' + Theme.mediumLightRed,
   borderRadius: '4px',
-  color: '#a94442',
-  backgroundColor: '#f2dede',
+  color: Theme.darkRed,
+  backgroundColor: Theme.lightRed,
 });
 
 const DialogCloseButton = glamorous(Button)({
@@ -50,7 +53,7 @@ const DialogCloseButton = glamorous(Button)({
 
   ':hover': {
     background: '0',
-    color: '#000',
+    color: Theme.black,
     opacity: '.5',
   },
 });
