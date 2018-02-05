@@ -36,6 +36,11 @@ import {
   is_model_element,
   exclude,
   exclude_object_props,
+  map,
+  for_each,
+  filter,
+  split,
+  first,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -78,6 +83,11 @@ describe('array_equals function test', () => {
     const array2 = [1, 2, 3, 4];
     expect(arrays_equal(array1, array2)).toBe(false);
   });
+
+  test('array should equals with itself', () => {
+    const array1 = [1, 2, 3];
+    expect(arrays_equal(array1, array1)).toBe(true);
+  });
 });
 
 describe('sum function tests', () => {
@@ -106,6 +116,11 @@ describe('sum function tests', () => {
     ];
     expect(sum(array, entry => entry.value)).toBe(6);
   });
+
+  test('should sum empty and undefined to zero', () => {
+    expect(sum()).toBe(0);
+    expect(sum([])).toBe(0);
+  });
 });
 
 describe('avg function tests', () => {
@@ -132,6 +147,13 @@ describe('avg function tests', () => {
       {value: 4},
     ];
     expect(avg(array, entry => entry.value)).toBe(3);
+  });
+
+  test('should return 0 for empty array', () => {
+    expect(avg([])).toBe(0);
+    expect(avg([], item => item.value)).toBe(0);
+    expect(avg()).toBe(0);
+    expect(avg(undefined, item => item.value)).toBe(0);
   });
 });
 
@@ -481,6 +503,187 @@ describe('exclude_object_props function test', () => {
     expect(result.bar).toBeUndefined();
     expect(result.abc).toBe(3);
   });
+});
+
+describe('map function tests', () => {
+  test('should return empty array for undefined array', () => {
+    let mapped = map(undefined, item => item);
+
+    expect(mapped).toEqual([]);
+
+    mapped = map(undefined, item => item, undefined);
+
+    expect(mapped).toEqual([]);
+  });
+
+  test('should empty array for null', () => {
+    const mapped = map(null, item => item);
+
+    expect(mapped).toEqual([]);
+  });
+
+  test('should empty array if not map function is set', () => {
+    const mapped = map([1, 2, 3]);
+
+    expect(mapped).toEqual([]);
+  });
+
+  test('should return object for undefined array', () => {
+    const mapped = map(undefined, item => item, {});
+
+    expect(mapped).toEqual({});
+  });
+
+  test('should iterate over array', () => {
+    const mapped = map([1, 2, 3], item => item * 2);
+
+    expect(mapped).toEqual([2, 4, 6]);
+  });
+
+  test('should iterate over single item', () => {
+    const mapped = map(2, item => item * 2);
+
+    expect(mapped).toEqual([4]);
+  });
+
+  test('should iterate over Set', () => {
+    const mapped = map(new Set([1, 2, 3]), item => item * 2);
+
+    expect(mapped).toEqual([2, 4, 6]);
+  });
+
+  test('should return empty object for empty Set', () => {
+    const mapped = map(new Set(), item => item * 2, {});
+
+    expect(mapped).toEqual({});
+  });
+});
+
+describe('for_each function tests', () => {
+  test('should return undefined for undefined array', () => {
+    const array = for_each(undefined, item => item);
+
+    expect(array).toBeUndefined();
+  });
+
+  test('should return undefined for null array', () => {
+    const array = for_each(null, item => item);
+
+    expect(array).toBeUndefined();
+  });
+
+  test('should return undefined if no function is set', () => {
+    const array = for_each([1, 2, 3]);
+
+    expect(array).toBeUndefined();
+  });
+
+  test('should iterate over array', () => {
+    const callback = jest.fn();
+    for_each([1, 2, 3], callback);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(3);
+    expect(callback.mock.calls[0]).toEqual([1, 0, [1, 2, 3]]);
+    expect(callback.mock.calls[1]).toEqual([2, 1, [1, 2, 3]]);
+    expect(callback.mock.calls[2]).toEqual([3, 2, [1, 2, 3]]);
+  });
+
+  test('should iterate over single item', () => {
+    const callback = jest.fn();
+    for_each(2, callback);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0]).toEqual([2, 0, [2]]);
+  });
+
+  test('should iterate over Set', () => {
+    const callback = jest.fn();
+    for_each(new Set([1, 2, 3]), callback);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(3);
+    expect(callback.mock.calls[0]).toEqual([1, 1, new Set([1, 2, 3])]);
+    expect(callback.mock.calls[1]).toEqual([2, 2, new Set([1, 2, 3])]);
+    expect(callback.mock.calls[2]).toEqual([3, 3, new Set([1, 2, 3])]);
+  });
+});
+
+describe('filter function tests', () => {
+  test('should return emtpy array', () => {
+    expect(filter(undefined, item => true)).toEqual([]);
+    expect(filter(null, item => true)).toEqual([]);
+    expect(filter([], item => true)).toEqual([]);
+    expect(filter([1, 2, 3])).toEqual([]);
+  });
+
+  test('should return specified empty object', () => {
+    const expected = {foo: 1};
+    expect(filter(undefined, item => true, expected)).toEqual(expected);
+    expect(filter(null, item => true, expected)).toEqual(expected);
+    expect(filter([1, 2, 3], undefined, expected)).toEqual(expected);
+
+  });
+
+  test('should always return empty array for empty array', () => {
+    const expected = {foo: 1};
+    expect(filter([], item => true, expected)).toEqual([]);
+  });
+
+  test('should iterate over single object', () => {
+    expect(filter(1, item => item === 1)).toEqual([1]);
+  });
+
+  test('should filter array', () => {
+    expect(filter([1, 2, 3], i => i > 1)).toEqual([2, 3]);
+  });
+});
+
+describe('split function tests', () => {
+  test('should split a string', () => {
+    expect(split('abc_def_hij', '_')).toEqual(['abc', 'def', 'hij']);
+    expect(split('abc.def.hij', '.')).toEqual(['abc', 'def', 'hij']);
+  });
+
+  test('should split only once', () => {
+    expect(split('abc_def_hij', '_', 1)).toEqual(['abc', 'def_hij']);
+    expect(split('abc.def.hij', '.', 1)).toEqual(['abc', 'def.hij']);
+  });
+
+  test('should return array if separator is not in string', () => {
+    expect(split('foo_bar', '-')).toEqual(['foo_bar']);
+  });
+
+  test('should return array if limit is 0 or less', () => {
+    expect(split('foo_bar', '_', 0)).toEqual(['foo_bar']);
+    expect(split('foo_bar', '_', -1)).toEqual(['foo_bar']);
+  });
+});
+
+describe('first function tests', () => {
+  test('should return first value from array', () => {
+    expect(first(['foo', 'bar'])).toEqual('foo');
+    expect(first([undefined])).toBeUndefined();
+  });
+
+  test('should return first value from Set', () => {
+    expect(first(new Set(['foo', 'bar']))).toEqual('foo');
+    expect(first(new Set([undefined]))).toBeUndefined();
+  });
+
+  test('should return default value if empty', () => {
+    expect(first([])).toEqual({});
+    expect(first(new Set())).toEqual({});
+    expect(first([], {foo: 1})).toEqual({foo: 1});
+  });
+
+  test('should return default value for non iterables', () => {
+    expect(first({foo: 1})).toEqual({});
+    expect(first({foo: 1}, {bar: 2})).toEqual({bar: 2});
+    expect(first('')).toEqual({});
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:

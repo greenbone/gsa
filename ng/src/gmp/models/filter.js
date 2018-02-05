@@ -21,12 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import 'core-js/fn/array/find-index';
+import 'core-js/fn/array/includes';
 
 import {
   for_each,
   is_defined,
   is_string,
-  includes,
   map,
 } from '../utils.js';
 
@@ -185,7 +185,7 @@ class Filter extends Model {
     if (is_defined(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
-        if (is_defined(key) && includes(EXTRA_KEYWORDS, key) &&
+        if (is_defined(key) && EXTRA_KEYWORDS.includes(key) &&
           !this.has(key)) {
           this._addTerm(term);
         }
@@ -227,7 +227,7 @@ class Filter extends Model {
     let fstring = '';
     this.forEach(term => {
       const key = term.keyword;
-      if (!is_defined(key) || !includes(EXTRA_KEYWORDS, key)) {
+      if (!is_defined(key) || !EXTRA_KEYWORDS.includes(key)) {
         fstring += term.toString() + ' ';
       }
     });
@@ -245,7 +245,7 @@ class Filter extends Model {
     let fstring = '';
     this.forEach(term => {
       const key = term.keyword;
-      if (is_defined(key) && includes(EXTRA_KEYWORDS, key)) {
+      if (is_defined(key) && EXTRA_KEYWORDS.includes(key)) {
         fstring += term.toString() + ' ';
       }
     });

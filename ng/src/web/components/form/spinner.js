@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/includes';
 
 import React from 'react';
 
 import {
   classes,
   debounce,
-  includes,
   is_defined,
   KeyCode,
 } from 'gmp/utils.js';
@@ -132,8 +132,8 @@ class SpinnerComponent extends React.Component {
     // '0' == keycode 48 and 96 on numpad
     // umlauts seems to have keycode 0
     if ((key_code <= 0 || (key_code > 57 && key_code < 96) || key_code > 105 ||
-      includes(disallowed, key_code)) &&
-      !includes(allowed, key_code) && !event.ctrlKey) {
+      disallowed.includes(key_code)) &&
+      !allowed.includes(key_code) && !event.ctrlKey) {
         event.preventDefault();
         return;
     }

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,13 +20,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {filter_string} from '../utils';
+import Filter from '../../filter';
 
-import {is_defined} from '../../utils.js';
+describe('filter_string function tests', () => {
+  test('should return string for non Filter objects', () => {
+    expect(filter_string(1)).toEqual('1');
+    expect(filter_string('foo')).toEqual('foo');
+    expect(filter_string()).toEqual('undefined');
+  });
 
-export const filter_string = filter =>
-  is_defined(filter) && is_defined(filter.toFilterString) ?
-    filter.toFilterString() :
-    '' + filter;
+  test('should return the filter string from Filters', () => {
+    let filter = Filter.fromString('foo bar');
+    expect(filter_string(filter)).toEqual('foo bar');
 
+    filter = Filter.fromString('name=foo and severity>1');
+    expect(filter_string(filter)).toEqual('name=foo and severity>1');
+  });
+});
 
 // vim: set ts=2 sw=2 tw=80:

@@ -72,15 +72,8 @@ export function is_date(value) {
 
 export const is_model_element = elem => is_defined(elem) && !is_empty(elem._id);
 
-export function includes(array, value) {
-  if (!Array.prototype.includes) {
-    return array.indexOf(value) !== -1;
-  }
-  return array.includes(value);
-}
-
 export function for_each(array, func) {
-  if (!has_value(array)) {
+  if (!has_value(array) || !is_defined(func)) {
     return;
   }
 
@@ -179,7 +172,8 @@ export function first(array, non = {}) {
     return non;
   }
 
-  return array[Symbol.iterator]().next().value; // returns array[0]
+  const {value, done} = array[Symbol.iterator]().next(); // returns array[0]
+  return done ? non : value; // done is true for empty iterables
 }
 
 export function includes_id(list, id) {
@@ -231,13 +225,27 @@ export function exclude(object, func) {
 }
 
 export const exclude_object_props = (object, exclude_array) =>
-  exclude(object, key => includes(exclude_array, key));
+  exclude(object, key => exclude_array.includes(key));
 
-export function split(string, seperator, limit) {
-  // split('abc_def_hij', 1) => ['abc', 'def_hij']
-  const splits = string.split(seperator, limit);
+/**
+ * Split a string into several terms
+ *
+ * Example usage: split('abc_def_hij', '_', 1) => ['abc', 'def_hij']
+ *
+ * @param {String} string     String to split
+ * @param {String} separator  String to search for splitting
+ * @param {Number} limit      Split only limit times
+ *
+ * @returns {Array} Splitted String as an array
+ */
+export function split(string, separator, limit) {
+  if (is_defined(limit) && limit <= 0) {
+    return [string];
+  }
 
-  const left = string.replace(splits.join(seperator), '');
+  const splits = string.split(separator, limit);
+
+  const left = string.replace(splits.join(separator), '');
   if (left.trim().length > 0) {
     splits.push(left.slice(1));
   }
