@@ -24,6 +24,8 @@
 
 ## Files generated on installation
 
+# generate compile_commands.json file
+# see https://clang.llvm.org/docs/JSONCompilationDatabase.html
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 add_custom_target (cpe-icon-dict
