@@ -692,7 +692,8 @@ check_modify_config (gvm_connection_t *connection,
 
   if (read_entity_c (connection, &entity))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -707,7 +708,8 @@ check_modify_config (gvm_connection_t *connection,
   if (status_text == NULL)
     {
       free_entity (entity);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -726,7 +728,8 @@ check_modify_config (gvm_connection_t *connection,
                                        entity_attribute (entity, "status"),
                                        message);
 
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       response
         = action_result_page (connection, credentials, params, response_data,
                               "Save Config",
@@ -746,7 +749,8 @@ check_modify_config (gvm_connection_t *connection,
                                        entity_attribute (entity, "status"),
                                        message);
 
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       response
         = action_result_page (connection, credentials, params, response_data, "Save Config",
                               entity_attribute (entity, "status"),
@@ -806,15 +810,19 @@ set_http_status_from_entity (entity_t entity,
                              cmd_response_data_t *response_data)
 {
   if (entity == NULL)
-    response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
   else if (strcmp (entity_attribute (entity, "status_text"),
               "Permission denied")
            == 0)
-    response_data->http_status_code = MHD_HTTP_FORBIDDEN;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_FORBIDDEN);
   else if (strcmp (entity_attribute (entity, "status"), "404") == 0)
-    response_data->http_status_code = MHD_HTTP_NOT_FOUND;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_NOT_FOUND);
   else
-    response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_BAD_REQUEST);
 }
 
 /**
@@ -900,7 +908,8 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
         return 4;
       case 1:
         if (response_data)
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
         if (response)
           {
             gchar *message;
@@ -920,7 +929,8 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
         return 1;
       case 2:
         if (response_data)
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
         if (response)
           {
             gchar *message;
@@ -940,7 +950,8 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
         return 2;
       default:
         if (response_data)
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
         if (response)
           {
             gchar *message;
@@ -1099,7 +1110,8 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
       ret_html = ret_func (connection, credentials, params, msg,               \
                           response_data);                                      \
       g_free (msg);                                                            \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
+      cmd_response_data_set_status_code (response_data,                        \
+                                         MHD_HTTP_BAD_REQUEST);                \
       return ret_html;                                                         \
     }
 
@@ -1390,7 +1402,8 @@ message_invalid (gvm_connection_t *connection,
                             message, NULL,
                             next_url);
   g_free (next_url);
-  response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+  cmd_response_data_set_status_code (response_data,
+                                     MHD_HTTP_BAD_REQUEST);
   return ret;
 }
 
@@ -1453,7 +1466,7 @@ response_from_entity (gvm_connection_t *connection,
   else
     {
       res = NULL;
-      response_data->redirect = next_url;
+      cmd_response_data_set_redirect (response_data, next_url);
     }
   return res;
 }
@@ -1733,7 +1746,8 @@ get_one (gvm_connection_t *connection, const char *type,
 
   if (id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -1761,21 +1775,24 @@ get_one (gvm_connection_t *connection, const char *type,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissins. "
@@ -1825,7 +1842,8 @@ get_one (gvm_connection_t *connection, const char *type,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
@@ -1837,7 +1855,8 @@ get_one (gvm_connection_t *connection, const char *type,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
@@ -1859,7 +1878,8 @@ get_one (gvm_connection_t *connection, const char *type,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -1871,7 +1891,8 @@ get_one (gvm_connection_t *connection, const char *type,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -1904,7 +1925,8 @@ get_one (gvm_connection_t *connection, const char *type,
   if (ret == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -1916,7 +1938,8 @@ get_one (gvm_connection_t *connection, const char *type,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -2211,7 +2234,8 @@ get_many (gvm_connection_t *connection, const char *type,
       g_free(request);
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource list. "
@@ -2224,7 +2248,8 @@ get_many (gvm_connection_t *connection, const char *type,
     {
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
@@ -2250,7 +2275,8 @@ get_many (gvm_connection_t *connection, const char *type,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -2263,7 +2289,8 @@ get_many (gvm_connection_t *connection, const char *type,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -2288,7 +2315,8 @@ get_many (gvm_connection_t *connection, const char *type,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -2301,7 +2329,8 @@ get_many (gvm_connection_t *connection, const char *type,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
@@ -2329,7 +2358,8 @@ get_many (gvm_connection_t *connection, const char *type,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -2341,7 +2371,8 @@ get_many (gvm_connection_t *connection, const char *type,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -2387,7 +2418,8 @@ edit_resource (gvm_connection_t *connection, const char *type,
 
   if (resource_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a resource. "
@@ -2410,7 +2442,8 @@ edit_resource (gvm_connection_t *connection, const char *type,
                             resource_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2428,7 +2461,8 @@ edit_resource (gvm_connection_t *connection, const char *type,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2899,7 +2933,8 @@ delete_resource (gvm_connection_t *connection, const char *type,
   else
     {
       g_free (id_name);
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
@@ -2948,7 +2983,8 @@ delete_resource (gvm_connection_t *connection, const char *type,
     {
       g_free (resource_id);
       g_free (extra_attribs);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
@@ -2963,7 +2999,8 @@ delete_resource (gvm_connection_t *connection, const char *type,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
@@ -3033,7 +3070,8 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                   "Diagnostics: Required parameter %s was NULL.",
                   param_name);
       g_free (param_name);
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       html = gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            message, response_data);
@@ -3056,7 +3094,8 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
@@ -3064,7 +3103,8 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
@@ -3072,7 +3112,8 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
@@ -3167,7 +3208,8 @@ setting_get_value_error (gvm_connection_t *connection,
       case 0:
         return NULL;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a setting. "
@@ -3175,7 +3217,8 @@ setting_get_value_error (gvm_connection_t *connection,
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a setting. "
@@ -3183,7 +3226,8 @@ setting_get_value_error (gvm_connection_t *connection,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a setting. "
@@ -3254,7 +3298,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       switch (ret)
         {
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -3262,7 +3307,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -3270,7 +3316,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -3355,7 +3402,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
@@ -3367,7 +3415,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
@@ -3383,7 +3432,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
@@ -3395,7 +3445,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
@@ -3413,7 +3464,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting alert list. "
@@ -3425,7 +3477,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting alert list. "
@@ -3445,7 +3498,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the schedule list. "
@@ -3457,7 +3511,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the schedule list. "
@@ -3476,7 +3531,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the"
@@ -3490,7 +3546,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting"
@@ -3511,7 +3568,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting group list. "
@@ -3523,7 +3581,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting group list. "
@@ -3543,7 +3602,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting tag list. "
@@ -3555,7 +3615,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting tag list. "
@@ -3832,7 +3893,8 @@ create_report_gmp (gvm_connection_t *connection,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
@@ -3840,7 +3902,8 @@ create_report_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
@@ -3848,7 +3911,8 @@ create_report_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
@@ -3939,7 +4003,8 @@ create_container_task_gmp (gvm_connection_t *connection,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a container task. "
@@ -3947,7 +4012,8 @@ create_container_task_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a container task. "
@@ -3955,7 +4021,8 @@ create_container_task_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a container task. "
@@ -4201,7 +4268,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
@@ -4209,7 +4277,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
@@ -4217,7 +4286,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
@@ -4271,8 +4341,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
               case 1:
                 free_entity (entity);
                 g_free (response);
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (
+                  response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new tag. "
@@ -4282,8 +4352,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
               case 2:
                 free_entity (entity);
                 g_free (response);
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (
+                  response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new tag. "
@@ -4293,8 +4363,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
               default:
                 free_entity (entity);
                 g_free (response);
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (
+                  response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new task. "
@@ -4390,7 +4460,8 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
 
   if (task_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a task. "
@@ -4432,7 +4503,8 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                              : "")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
@@ -4467,7 +4539,8 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
@@ -4711,7 +4784,8 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4719,7 +4793,8 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4727,7 +4802,8 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4815,7 +4891,8 @@ char * save_container_task_gmp (gvm_connection_t *connection,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4823,7 +4900,8 @@ char * save_container_task_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4831,7 +4909,8 @@ char * save_container_task_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
@@ -4981,7 +5060,8 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
@@ -4989,7 +5069,8 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
@@ -4997,7 +5078,8 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
@@ -5040,7 +5122,8 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
   oid = params_value (params, "oid");
   if (oid == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an NVT. "
@@ -5068,7 +5151,8 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
                             oid)
         == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting nvt details. "
@@ -5080,7 +5164,8 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting nvt details. "
@@ -5104,7 +5189,8 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -5116,7 +5202,8 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -5176,7 +5263,8 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
       && strcmp (info_type, "DFN_CERT_ADV")
       && strcmp (info_type, "ALLINFO"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting SecInfo. "
@@ -5187,7 +5275,8 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
   if (params_value (params, "info_name")
       && params_value (params, "info_id"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting SecInfo. "
@@ -5504,7 +5593,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
         get_overrides ? "\"/>" : "")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
@@ -5530,7 +5620,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
@@ -5544,7 +5635,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
@@ -5590,8 +5682,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5604,8 +5696,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5632,8 +5724,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5646,8 +5738,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
@@ -5676,7 +5768,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code(response_data,
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting slaves list. "
@@ -5688,7 +5781,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting slaves list. "
@@ -5710,7 +5804,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -5722,7 +5817,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -5744,7 +5840,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -5756,7 +5853,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -6072,7 +6170,8 @@ create_credential_gmp (gvm_connection_t *connection,
         }
       else
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new credential. "
@@ -6089,7 +6188,8 @@ create_credential_gmp (gvm_connection_t *connection,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
@@ -6097,7 +6197,8 @@ create_credential_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
@@ -6105,7 +6206,8 @@ create_credential_gmp (gvm_connection_t *connection,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
@@ -6197,7 +6299,8 @@ download_credential_gmp (gvm_connection_t *connection,
 
   if ((credential_id == NULL) || (format == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
@@ -6214,7 +6317,8 @@ download_credential_gmp (gvm_connection_t *connection,
                             format)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
@@ -6237,7 +6341,8 @@ download_credential_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
@@ -6288,7 +6393,8 @@ download_credential_gmp (gvm_connection_t *connection,
       else
         {
           free_entity (entity);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
@@ -6307,7 +6413,8 @@ download_credential_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
@@ -6339,7 +6446,8 @@ download_credential_gmp (gvm_connection_t *connection,
           free_entity (entity);
           return 0;
         }
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
@@ -6671,7 +6779,8 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
@@ -6679,7 +6788,8 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
@@ -6687,7 +6797,8 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
@@ -6855,7 +6966,8 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new agent. "
@@ -6863,7 +6975,8 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new agent. "
@@ -6871,7 +6984,8 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new agent. "
@@ -6940,7 +7054,8 @@ download_agent_gmp (gvm_connection_t *connection,
 
   if ((agent_id == NULL) || (format == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while downloading "
@@ -6959,7 +7074,8 @@ download_agent_gmp (gvm_connection_t *connection,
                             format)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting agent list. "
@@ -6983,7 +7099,8 @@ download_agent_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
@@ -7037,7 +7154,8 @@ download_agent_gmp (gvm_connection_t *connection,
       else
         {
           free_entity (entity);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
@@ -7054,7 +7172,8 @@ download_agent_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
@@ -7065,7 +7184,8 @@ download_agent_gmp (gvm_connection_t *connection,
         }
 
       free_entity (entity);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a agent. "
@@ -7162,7 +7282,8 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
@@ -7170,7 +7291,8 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
@@ -7178,7 +7300,8 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
@@ -7290,7 +7413,8 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   agent_id = params_value (params, "agent_id");
   if (agent_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying an agent. "
@@ -7312,7 +7436,8 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a agent. "
@@ -7320,7 +7445,8 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a agent. "
@@ -7328,7 +7454,8 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a agent. "
@@ -7345,7 +7472,8 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while verifying a agent. "
@@ -7557,21 +7685,24 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
@@ -7623,7 +7754,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -7631,7 +7763,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -7639,7 +7772,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -7663,7 +7797,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -7672,7 +7807,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -7680,7 +7816,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
@@ -7705,7 +7842,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Tasks"
@@ -7714,7 +7852,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Tasks"
@@ -7722,7 +7861,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Tasks"
@@ -7746,7 +7886,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting"
@@ -7755,7 +7896,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting"
@@ -7763,7 +7905,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting"
@@ -8124,7 +8267,8 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -8132,7 +8276,8 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -8140,7 +8285,8 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -8215,7 +8361,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
@@ -8223,7 +8370,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
@@ -8231,7 +8379,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
@@ -8263,7 +8412,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Tasks "
@@ -8271,7 +8421,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Tasks "
@@ -8279,7 +8430,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Tasks "
@@ -8311,7 +8463,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
@@ -8319,7 +8472,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
@@ -8327,7 +8481,8 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
@@ -8400,21 +8555,24 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the tasks. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the tasks. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the reports. "
@@ -8446,7 +8604,8 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
@@ -8454,7 +8613,8 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
@@ -8462,7 +8622,8 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
@@ -8528,7 +8689,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
 
   if (alert_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an alert. "
@@ -8547,7 +8709,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                             alert_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
@@ -8574,7 +8737,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
@@ -8592,7 +8756,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting report formats. "
@@ -8604,7 +8769,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting report formats. "
@@ -8623,7 +8789,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -8636,7 +8803,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -8659,7 +8827,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -8672,7 +8841,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -8694,7 +8864,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -8707,7 +8878,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
@@ -8856,7 +9028,8 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
@@ -8864,7 +9037,8 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
@@ -8872,7 +9046,8 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
@@ -8914,7 +9089,8 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (alert_id == NULL)
     {
-      response_data->http_status_code = GSAD_STATUS_INVALID_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         GSAD_STATUS_INVALID_REQUEST);
       return gsad_message (credentials,
                            "Invalid request", __FUNCTION__, __LINE__,
                            "Missing parameter alert_id."
@@ -8929,7 +9105,8 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             alert_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
@@ -8940,7 +9117,8 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
@@ -9093,7 +9271,8 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9105,7 +9284,8 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9125,7 +9305,8 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9137,7 +9318,8 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -9362,7 +9544,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
@@ -9370,7 +9553,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
@@ -9378,7 +9562,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
@@ -9407,7 +9592,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
 #define CHECK(name)                                                                 \
   if (name == NULL)                                                                 \
     {                                                                               \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                       \
+      cmd_response_data_set_status_code (response_data,                             \
+                                         MHD_HTTP_BAD_REQUEST);                     \
       return gsad_message (credentials,                                             \
                            "Internal error", __FUNCTION__, __LINE__,                \
                            "An internal error occurred while cloning a resource. "  \
@@ -9458,7 +9644,8 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 type)
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while cloning a resource. "
@@ -9476,7 +9663,8 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                  type)
            == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while cloning a resource. "
@@ -9488,7 +9676,8 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while cloning a resource. "
@@ -9514,7 +9703,8 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while cloning a resource. "
@@ -9739,7 +9929,8 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (target_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
@@ -9759,7 +9950,8 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
@@ -9771,7 +9963,8 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
@@ -9823,7 +10016,8 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
@@ -9834,7 +10028,8 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
   if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
@@ -9986,7 +10181,8 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
@@ -9994,7 +10190,8 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
@@ -10002,7 +10199,8 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
@@ -10082,7 +10280,8 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   tag_id = params_value (params, "tag_id");
   if (tag_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a tag. "
@@ -10098,7 +10297,8 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
                             tag_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag info. "
@@ -10121,7 +10321,8 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
@@ -10218,7 +10419,8 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -10227,7 +10429,8 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -10237,7 +10440,8 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -10395,7 +10599,8 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (tag_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
@@ -10405,7 +10610,8 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
   if (enable == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
@@ -10424,7 +10630,8 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             enable)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
@@ -10437,7 +10644,8 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
@@ -10490,7 +10698,8 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
 
   if (target_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a target. "
@@ -10509,7 +10718,8 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                             target_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
@@ -10541,7 +10751,8 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
@@ -10559,7 +10770,8 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -10571,7 +10783,8 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -10591,7 +10804,8 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -10603,7 +10817,8 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
@@ -10778,7 +10993,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
@@ -10786,7 +11002,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
@@ -10794,7 +11011,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
@@ -10942,7 +11160,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
     if (ret == -1)
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying target. "
@@ -10954,7 +11173,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
     entity = NULL;
     if (read_entity_and_text_c (connection, &entity, &response))
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a target. "
@@ -11049,7 +11269,8 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
@@ -11057,7 +11278,8 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
                              " command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
@@ -11065,7 +11287,8 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
                              " receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
@@ -11194,7 +11417,8 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
@@ -11202,7 +11426,8 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
@@ -11210,7 +11435,8 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
@@ -11269,7 +11495,8 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
@@ -11277,7 +11504,8 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
@@ -11285,7 +11513,8 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
@@ -11384,7 +11613,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -11396,7 +11626,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -11410,7 +11641,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (gvm_connection_sendf (connection, "<get_nvt_families/>") == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -11422,7 +11654,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
@@ -11438,7 +11671,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
                    "An internal error occurred while getting the config. "
@@ -11450,7 +11684,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
                    "An internal error occurred while getting the config. "
@@ -11465,7 +11700,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (gvm_connection_sendf (connection, "<get_credentials/>") == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while getting the config. "
@@ -11476,7 +11712,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while getting the config. "
@@ -11498,7 +11735,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -11510,7 +11748,8 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
@@ -11604,7 +11843,8 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             config_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while synchronizing a config. "
@@ -11618,7 +11858,8 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while synchronizing a config. "
@@ -11693,7 +11934,8 @@ save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_free (value);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
                    "An internal error occurred while saving a config. It is"
@@ -11765,7 +12007,8 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (gmp_ret == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -11814,7 +12057,8 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
               == -1)
             {
               g_free (value);
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
@@ -11849,7 +12093,8 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
     {
       if (osp_ret == NULL)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a config. "
@@ -11877,7 +12122,8 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                 && strcmp (params_value (params, "trend"), "0"))
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while saving a config. "
@@ -11904,8 +12150,8 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                       trends && member1 (trends, family))
                 == -1)
               {
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while saving a config. "
@@ -11936,7 +12182,8 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                         family)
                   == -1)
                 {
-                  response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                  cmd_response_data_set_status_code (
+                    response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while saving a config. "
@@ -11952,7 +12199,8 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                 "</modify_config>")
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a config. "
@@ -11994,7 +12242,8 @@ get_config_family (gvm_connection_t *connection, credentials_t *
 
   if ((config_id == NULL) || (name == NULL) || (family == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config family. "
@@ -12030,7 +12279,8 @@ get_config_family (gvm_connection_t *connection, credentials_t *
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -12042,7 +12292,8 @@ get_config_family (gvm_connection_t *connection, credentials_t *
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -12073,7 +12324,8 @@ get_config_family (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
@@ -12085,7 +12337,8 @@ get_config_family (gvm_connection_t *connection, credentials_t *
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
@@ -12160,7 +12413,8 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
 
   if ((config_id == NULL) || (family == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving getting config family. "
@@ -12179,7 +12433,8 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                             family)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -12202,7 +12457,8 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                                   name)
             == -1)
           {
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a config. "
@@ -12217,7 +12473,8 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                             "</modify_config>")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
@@ -12258,7 +12515,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
 
   if ((config_id == NULL) || (name == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config family. "
@@ -12292,7 +12550,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -12304,7 +12563,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
@@ -12323,7 +12583,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of notes. "
@@ -12335,7 +12596,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of notes. "
@@ -12352,7 +12614,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of overrides. "
@@ -12364,7 +12627,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of overrides. "
@@ -12546,7 +12810,8 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
               if (timeout == NULL)
                 {
                   g_free (value);
-                  response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+                  cmd_response_data_set_status_code (response_data,
+                                                     MHD_HTTP_BAD_REQUEST);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while saving a config. "
@@ -12608,7 +12873,8 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
           if (ret == -1)
             {
               g_free (value);
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
@@ -12846,7 +13112,8 @@ export_preference_file_gmp (gvm_connection_t *connection,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
@@ -12859,7 +13126,8 @@ export_preference_file_gmp (gvm_connection_t *connection,
       if (read_entity_c (connection, &entity))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
@@ -12888,7 +13156,8 @@ export_preference_file_gmp (gvm_connection_t *connection,
         {
           free_entity (entity);
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
@@ -13131,7 +13400,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
         {
           g_string_free (commands_xml, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -13144,7 +13414,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
         {
           g_string_free (commands_xml, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -13260,7 +13531,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -13275,7 +13547,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -13291,7 +13564,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -13343,7 +13617,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -13481,7 +13756,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                   "Given host search_phrase was invalid",
                                   "Get Report");
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_BAD_REQUEST);
           return g_string_free (xml, FALSE);
         }
 
@@ -13499,7 +13775,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -13583,7 +13860,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -13606,7 +13884,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           if (read_entity_c (connection, &entity))
             {
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -13619,7 +13898,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               free_entity (entity);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -13641,8 +13921,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                   switch (ret)
                     {
                       case 1:
-                        response_data->http_status_code
-                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                        cmd_response_data_set_status_code (response_data,
+                                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
@@ -13650,8 +13930,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                             "Diagnostics: Failure to send command to manager daemon.",
                                              response_data);
                       case 2:
-                        response_data->http_status_code
-                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                        cmd_response_data_set_status_code (response_data,
+                                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
@@ -13659,8 +13939,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                             "Diagnostics: Failure to receive response from manager daemon.",
                                              response_data);
                       default:
-                        response_data->http_status_code
-                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                        cmd_response_data_set_status_code (response_data,
+                                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
@@ -13721,7 +14001,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           if (read_entity_c (connection, &entity))
             {
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -13770,8 +14051,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                       switch (ret)
                         {
                           case 1:
-                            response_data->http_status_code
-                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                            cmd_response_data_set_status_code (response_data,
+                                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
@@ -13779,8 +14060,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                                 "Diagnostics: Failure to send command to manager daemon.",
                                                  response_data);
                           case 2:
-                            response_data->http_status_code
-                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                            cmd_response_data_set_status_code (response_data,
+                                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
@@ -13788,8 +14069,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                                 "Diagnostics: Failure to receive response from manager daemon.",
                                                  response_data);
                           default:
-                            response_data->http_status_code
-                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                            cmd_response_data_set_status_code (response_data,
+                                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
@@ -13833,7 +14114,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               free_entity (entity);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -13913,7 +14195,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -13953,7 +14236,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -13966,7 +14250,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -13991,8 +14276,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                 {
                   g_string_free (xml, TRUE);
                   if (error) *error = 1;
-                  response_data->http_status_code
-                    = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                  cmd_response_data_set_status_code (response_data,
+                                                     MHD_HTTP_INTERNAL_SERVER_ERROR);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
@@ -14005,8 +14290,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                 {
                   g_string_free (xml, TRUE);
                   if (error) *error = 1;
-                  response_data->http_status_code
-                    = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                  cmd_response_data_set_status_code (response_data,
+                                                     MHD_HTTP_INTERNAL_SERVER_ERROR);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
@@ -14069,7 +14354,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
               g_free (task_id);
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -14083,7 +14369,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
               g_free (task_id);
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -14133,7 +14420,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -14146,7 +14434,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -14166,7 +14455,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -14179,7 +14469,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -14202,7 +14493,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
@@ -14215,7 +14507,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
@@ -14239,7 +14532,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -14251,7 +14545,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
@@ -14343,7 +14638,8 @@ report_alert_gmp (gvm_connection_t *connection,
                                   alert_id);
   if (ret == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -14354,7 +14650,8 @@ report_alert_gmp (gvm_connection_t *connection,
 
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -14369,7 +14666,8 @@ report_alert_gmp (gvm_connection_t *connection,
     {
       free_entity (entity);
       g_free (response);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -14473,7 +14771,8 @@ get_report_section (gvm_connection_t *connection,
 
   if (report_id == NULL && (type == NULL || strcmp (type, "prognostic")))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
@@ -14521,7 +14820,8 @@ get_report_section (gvm_connection_t *connection,
             break;
           case 1:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
@@ -14530,7 +14830,8 @@ get_report_section (gvm_connection_t *connection,
                                 response_data);
           case 2:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
@@ -14539,7 +14840,8 @@ get_report_section (gvm_connection_t *connection,
                                 response_data);
           default:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
@@ -14597,7 +14899,8 @@ download_ssl_cert (gvm_connection_t *connection,
   ssl_cert = params_value (params, "ssl_cert");
   if (ssl_cert == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
@@ -14637,7 +14940,8 @@ download_ca_pub (gvm_connection_t *connection, credentials_t * credentials,
   ca_pub = params_value (params, "ca_pub");
   if (ca_pub == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
@@ -14670,7 +14974,8 @@ download_key_pub (gvm_connection_t *connection, credentials_t * credentials,
   key_pub = params_value (params, "key_pub");
   if (key_pub == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
@@ -14843,7 +15148,8 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
@@ -14854,7 +15160,8 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
@@ -14874,7 +15181,8 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -14886,7 +15194,8 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
@@ -15092,7 +15401,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                                 " details=\"0\"/>")
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
@@ -15104,7 +15414,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
@@ -15129,7 +15440,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                             task_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code(response_data,
+                                        MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
@@ -15190,7 +15502,8 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code(response_data,
+                                        MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
@@ -15421,7 +15734,8 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
@@ -15429,7 +15743,8 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
@@ -15437,7 +15752,8 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
@@ -15522,7 +15838,8 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
                             note_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
@@ -15541,7 +15858,8 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
@@ -15650,7 +15968,8 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
@@ -15658,7 +15977,8 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
@@ -15666,7 +15986,8 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
@@ -15824,7 +16145,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                                 " details=\"0\"/>")
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
@@ -15836,7 +16158,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
@@ -15863,7 +16186,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                             task_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
@@ -15924,7 +16248,8 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
@@ -16058,7 +16383,8 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
@@ -16066,7 +16392,8 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
@@ -16074,7 +16401,8 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
@@ -16160,7 +16488,8 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
                             override_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
@@ -16179,7 +16508,8 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
@@ -16296,7 +16626,8 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
@@ -16304,7 +16635,8 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
@@ -16312,7 +16644,8 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
@@ -16468,7 +16801,8 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
                             " filter=\"first=1 rows=-1\" />")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the credentials list. "
@@ -16483,7 +16817,8 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the credentials list. "
@@ -16550,7 +16885,8 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a scanner. "
@@ -16558,7 +16894,8 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a scanner. "
@@ -16566,7 +16903,8 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a scanner. "
@@ -16582,7 +16920,8 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while verifying a scanner. "
@@ -16667,7 +17006,8 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
@@ -16675,7 +17015,8 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                  "Diagnostics: Failure to send command to manager daemon.",
                  response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
@@ -16683,7 +17024,8 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                  "Diagnostics: Failure to receive response from manager daemon.",
                  response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
@@ -16764,7 +17106,8 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
 
   if (scanner_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a scanner. "
@@ -16784,7 +17127,8 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
                             scanner_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting scanner info. "
@@ -16808,7 +17152,8 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting scanner info. "
@@ -16962,7 +17307,8 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
@@ -16970,7 +17316,8 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                  "Diagnostics: Failure to send command to manager daemon.",
                  response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
@@ -16978,7 +17325,8 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                  "Diagnostics: Failure to receive response from manager daemon.",
                  response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
@@ -17231,7 +17579,8 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
@@ -17239,7 +17588,8 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
@@ -17247,7 +17597,8 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
@@ -17429,7 +17780,8 @@ get_system_reports_gmp (gvm_connection_t *connection,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
@@ -17441,7 +17793,8 @@ get_system_reports_gmp (gvm_connection_t *connection,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
@@ -17460,7 +17813,8 @@ get_system_reports_gmp (gvm_connection_t *connection,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the system reports. "
@@ -17472,7 +17826,8 @@ get_system_reports_gmp (gvm_connection_t *connection,
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the system reports. "
@@ -17894,7 +18249,8 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
@@ -17902,7 +18258,8 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
@@ -17910,7 +18267,8 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
@@ -18045,8 +18403,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
               case 0:
                 break;
               case 1:
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                       "Internal error", __FUNCTION__, __LINE__,
                                       "An internal error occurred while saving a Report Format. "
@@ -18054,8 +18412,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                       "Diagnostics: Failure to send command to manager daemon.",
                                       response_data);
               case 2:
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                       "Internal error", __FUNCTION__, __LINE__,
                                       "An internal error occurred while saving a Report Format. "
@@ -18064,8 +18422,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                       response_data);
               case -1:
               default:
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                       "Internal error", __FUNCTION__, __LINE__,
                                       "An internal error occurred while saving a Report Format. "
@@ -18131,8 +18489,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                   case 0:
                     break;
                   case 1:
-                    response_data->http_status_code
-                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                    cmd_response_data_set_status_code (response_data,
+                                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
@@ -18140,8 +18498,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                          "Diagnostics: Failure to send command to manager daemon.",
                                          response_data);
                   case 2:
-                    response_data->http_status_code
-                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                    cmd_response_data_set_status_code (response_data,
+                                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
@@ -18150,8 +18508,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                                          response_data);
                   case -1:
                   default:
-                    response_data->http_status_code
-                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                    cmd_response_data_set_status_code (response_data,
+                                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
@@ -18189,7 +18547,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
       case -1:
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
@@ -18197,7 +18556,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
@@ -18205,7 +18565,8 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
@@ -18246,7 +18607,8 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
   report_format_id = params_value (params, "report_format_id");
   if (report_format_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying a report format. "
@@ -18271,7 +18633,8 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
@@ -18279,7 +18642,8 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
@@ -18287,7 +18651,8 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
@@ -18303,7 +18668,8 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while verifying a report format. "
@@ -18353,7 +18719,9 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
   name = params_value (params, "name");
   if (name == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while trying to start a wizard. "
@@ -18393,7 +18761,8 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -18401,7 +18770,8 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -18409,7 +18779,8 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -18439,7 +18810,8 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
             == -1)                                                            \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
+            cmd_response_data_set_status_code (response_data,                 \
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);\
             return gsad_message                                               \
                     (credentials,                                             \
                      "Internal error", __FUNCTION__, __LINE__,                \
@@ -18453,7 +18825,8 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
         if (read_string_c (connection, &xml))                                 \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
+            cmd_response_data_set_status_code (response_data,                 \
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);\
             return gsad_message                                               \
                     (credentials,                                             \
                      "Internal error", __FUNCTION__, __LINE__,                \
@@ -18580,7 +18953,8 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -18592,7 +18966,8 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -18659,7 +19034,8 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -18667,7 +19043,8 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -18675,7 +19052,8 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -18745,7 +19123,8 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -18753,7 +19132,8 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -18761,7 +19141,8 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
@@ -18788,7 +19169,8 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -18800,7 +19182,8 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
@@ -18987,7 +19370,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           case 0:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving settings. "
@@ -18995,7 +19379,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                  "Diagnostics: Manager closed connection during authenticate.",
                                  response_data);
           case 2:
-            response_data->http_status_code = GSAD_STATUS_INVALID_REQUEST;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Invalid Password", __FUNCTION__, __LINE__,
                                  "You tried to change your password, but the old"
@@ -19005,7 +19390,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                  " of your settings.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving settings. "
@@ -19025,7 +19411,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (passwd_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19040,7 +19427,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19079,7 +19467,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19094,7 +19483,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19144,7 +19534,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (max_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19161,7 +19552,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19194,7 +19586,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (fname_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19211,7 +19604,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19244,7 +19638,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (fname_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19261,7 +19656,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19294,7 +19690,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (fname_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19311,7 +19708,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19344,7 +19742,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (lang_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19361,7 +19760,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19400,7 +19800,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
   if (send_settings_filters (connection, defaults, changed, xml,
                              &modify_failed, response_data))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -19415,7 +19816,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
   if (send_settings_filters (connection, filters, changed, xml, &modify_failed,
                              response_data))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
@@ -19445,7 +19847,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19462,7 +19865,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19510,7 +19914,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19527,7 +19932,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19563,7 +19969,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while saving settings. "
@@ -19580,7 +19987,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19618,7 +20026,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
         {
           g_free (text_64);
           gvm_connection_close (connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19636,7 +20045,8 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
         {
           g_string_free (xml, TRUE);
           gvm_connection_close (connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
@@ -19689,7 +20099,8 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the GMP doc. "
@@ -19701,7 +20112,8 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
   if (read_entity_and_string_c (connection, &help_response, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the GMP doc. "
@@ -19749,7 +20161,8 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
                             format)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a list. "
@@ -19761,7 +20174,8 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
   response = NULL;
   if (read_entity_and_text_c (connection, &response, &content))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting GMP doc. "
@@ -19779,7 +20193,8 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
       if (entity == NULL)
         {
           free_entity (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting GMP doc. "
@@ -19791,7 +20206,8 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
       if (strlen (content_64) == 0)
         {
           free_entity (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting GMP doc. "
@@ -20037,7 +20453,8 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
@@ -20045,7 +20462,8 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
@@ -20053,7 +20471,8 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
@@ -20201,7 +20620,8 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
@@ -20209,7 +20629,8 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
@@ -20217,7 +20638,8 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
@@ -20380,7 +20802,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -20388,7 +20811,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -20396,7 +20820,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -20425,7 +20850,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -20433,7 +20859,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -20441,7 +20868,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -20470,7 +20898,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -20478,7 +20907,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -20486,7 +20916,8 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -20588,7 +21019,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -20598,7 +21030,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " to manager daemon.",
                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -20608,7 +21041,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " from manager daemon.",
                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -20717,7 +21151,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -20725,7 +21160,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -20733,7 +21169,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -20782,7 +21219,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -20790,7 +21228,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -20798,7 +21237,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
@@ -20827,7 +21267,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:                                                                \
         break;                                                                \
       case 1:                                                                 \
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;     \
+        cmd_response_data_set_status_code (response_data,                     \
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);  \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
@@ -20835,7 +21276,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                             "Diagnostics: Failure to send command to manager daemon.",       \
                             response_data);                      \
       case 2:                                                                                \
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
+        cmd_response_data_set_status_code (response_data,                     \
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);  \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
@@ -20843,7 +21285,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                             "Diagnostics: Failure to receive response from manager daemon.", \
                             response_data);                      \
       default:                                                                               \
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
+        cmd_response_data_set_status_code (response_data,                     \
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);  \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
@@ -20908,7 +21351,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -20916,7 +21360,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -20924,7 +21369,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -20953,7 +21399,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -20961,7 +21408,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -20969,7 +21417,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -20998,7 +21447,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -21006,7 +21456,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -21014,7 +21465,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -21049,8 +21501,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
             break;
           case 1:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
@@ -21059,8 +21511,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  response_data);
           case 2:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
@@ -21069,8 +21521,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  response_data);
           default:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
@@ -21113,8 +21565,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
             break;
           case 1:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
@@ -21123,8 +21575,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  response_data);
           case 2:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
@@ -21133,8 +21585,8 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
                                  response_data);
           default:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
@@ -21239,7 +21691,8 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -21249,7 +21702,8 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                 " to manager daemon.",
                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -21259,7 +21713,8 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                 " from manager daemon.",
                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -21683,7 +22138,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   else
     {
       html = NULL;
-      response_data->redirect = next_url;
+      cmd_response_data_set_redirect (response_data, next_url);
     }
   return html;
 }
@@ -21724,7 +22179,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -21732,7 +22188,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -21740,7 +22197,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -21769,7 +22227,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -21777,7 +22236,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -21785,7 +22245,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -21814,7 +22275,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -21822,7 +22284,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -21830,7 +22293,8 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -21987,7 +22451,8 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
@@ -21995,7 +22460,8 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
@@ -22003,7 +22469,8 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
@@ -22142,7 +22609,8 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
@@ -22150,7 +22618,8 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
@@ -22158,7 +22627,8 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
@@ -22275,7 +22745,8 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
@@ -22283,7 +22754,8 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
@@ -22291,7 +22763,8 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
@@ -22485,7 +22958,8 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
@@ -22493,7 +22967,8 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
@@ -22501,7 +22976,8 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
@@ -22611,7 +23087,8 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a port_list. "
@@ -22619,7 +23096,8 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a port_list. "
@@ -22627,7 +23105,8 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a port_list. "
@@ -22775,7 +23254,8 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
@@ -22783,7 +23263,8 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
@@ -22791,7 +23272,8 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
@@ -22848,21 +23330,24 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
@@ -22892,21 +23377,24 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -23105,7 +23593,8 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
@@ -23113,7 +23602,8 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
@@ -23121,7 +23611,8 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
@@ -23170,7 +23661,8 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "</commands>")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed list. "
@@ -23181,7 +23673,8 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (read_entity_and_text_c (connection, &entity, &text))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed. "
@@ -23246,7 +23739,8 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
                             sync_cmd)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
 
       msg = g_strdup_printf
               ("An internal error occurred while synchronizing with %s. "
@@ -23262,7 +23756,8 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
 
   if (read_entity_and_text_c (connection, &entity, &text))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
 
       msg = g_strdup_printf
               ("An internal error occurred while synchronizing with %s. "
@@ -23489,7 +23984,8 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -23497,7 +23993,8 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -23505,7 +24002,8 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
@@ -23754,7 +24252,8 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
     if (ret == -1)
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a filter. "
@@ -23766,7 +24265,8 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
     entity = NULL;
     if (read_entity_and_text_c (connection, &entity, &response))
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a filter. "
@@ -23968,7 +24468,8 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
@@ -23976,7 +24477,8 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
@@ -23984,7 +24486,8 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
@@ -24041,7 +24544,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -24049,7 +24553,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -24057,7 +24562,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -24086,7 +24592,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -24094,7 +24601,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -24102,7 +24610,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -24131,7 +24640,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -24139,7 +24649,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -24147,7 +24658,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -24231,21 +24743,24 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
@@ -24327,21 +24842,24 @@ get_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -24410,21 +24928,24 @@ get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -24602,7 +25123,8 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
@@ -24610,7 +25132,8 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
@@ -24618,7 +25141,8 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
@@ -24673,21 +25197,24 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -24715,21 +25242,24 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
@@ -24757,7 +25287,8 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -24765,7 +25296,8 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -24773,7 +25305,8 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
@@ -24881,21 +25414,24 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
@@ -25116,7 +25652,8 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
@@ -25124,7 +25661,8 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
@@ -25132,7 +25670,8 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
@@ -25340,7 +25879,8 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
             break;
           case 1:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while "
@@ -25350,7 +25890,8 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                                 response_data);
           case 2:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while "
@@ -25360,7 +25901,8 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                                 response_data);
           default:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while "
@@ -25397,7 +25939,8 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
         break;
       case 1:
         g_string_free (xml, TRUE);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
@@ -25407,7 +25950,8 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                             response_data);
       case 2:
         g_string_free (xml, TRUE);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
@@ -25417,7 +25961,8 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
                             response_data);
       default:
         g_string_free (xml, TRUE);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
@@ -25541,7 +26086,8 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
@@ -25549,7 +26095,8 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
@@ -25557,7 +26104,8 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
@@ -25716,7 +26264,8 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
 
   if (name == NULL)
     {
-        response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_BAD_REQUEST);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the wizard. "
@@ -25740,7 +26289,8 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
@@ -25751,7 +26301,8 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the"
@@ -25769,7 +26320,8 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
@@ -25780,7 +26332,8 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while the wizard. "
@@ -25846,7 +26399,8 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
   name = params_value (params, "get_name");
   if (name == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while trying to start a wizard. "
@@ -25888,7 +26442,8 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -25896,7 +26451,8 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -25904,7 +26460,8 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
@@ -25963,7 +26520,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
   type = params_value (params, "resource_type");
   if (type == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while performing a bulk action. "
@@ -25975,7 +26533,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
       subtype = params_value (params, "info_type");
       if (subtype == NULL)
         {
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_BAD_REQUEST);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while performing a bulk action. "
@@ -25996,7 +26555,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
     action = "trash";
   else
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while performing a bulk action. "
@@ -26109,7 +26669,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -26118,7 +26679,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " manager daemon.",
                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -26127,7 +26689,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " manager daemon.",
                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -26191,7 +26754,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -26200,7 +26764,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " manager daemon.",
                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -26209,7 +26774,8 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 " manager daemon.",
                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
@@ -26257,7 +26823,8 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
   type = params_value (params, "resource_type");
   if (type == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
@@ -26307,7 +26874,8 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (commands_xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
@@ -26320,7 +26888,8 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
@@ -26452,7 +27021,8 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
@@ -26460,7 +27030,8 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "Diagnostics: Failure to send command to manager daemon.",
                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
@@ -26468,7 +27039,8 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "Diagnostics: Failure to receive response from manager daemon.",
                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
@@ -26522,7 +27094,8 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
   if (strcmp (asset_type, "host")
       && strcmp (asset_type, "os"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an asset. "
@@ -26533,7 +27106,8 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
   if (params_value (params, "asset_name")
       && params_value (params, "asset_id"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an asset. "
@@ -26618,7 +27192,8 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
   if (strcmp (asset_type, "host")
       && strcmp (asset_type, "os"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting Assets. "
@@ -26708,7 +27283,8 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
@@ -26716,7 +27292,8 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
@@ -26724,7 +27301,8 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
@@ -26768,7 +27346,8 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
     resource_id = g_strdup (params_value (params, "report_id"));
   else
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
@@ -26800,7 +27379,8 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_free (resource_id);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
@@ -26814,7 +27394,8 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
@@ -26835,7 +27416,8 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                         response_data);
       if (html == NULL)
         {
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_BAD_REQUEST);
           html = gsad_message (credentials,
               "Internal error", __FUNCTION__, __LINE__,
               "An internal error occurred while deleting an "
@@ -26849,7 +27431,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                 "delete_asset",
                                 entity_attribute (entity, "status"),
                                 entity_attribute (entity, "status_text"));
-      response_data->redirect = next_url;
+      cmd_response_data_set_redirect (response_data, next_url);
 
       html = NULL;
     }
@@ -26921,7 +27503,8 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
   asset_id = params_value (params, "asset_id");
   if (asset_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a asset. "
@@ -26953,7 +27536,8 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         g_string_free (xml, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -26961,7 +27545,8 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         g_string_free (xml, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -26969,7 +27554,8 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         g_string_free (xml, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -27050,7 +27636,8 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving an asset. "
@@ -27058,7 +27645,8 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving an asset. "
@@ -27066,7 +27654,8 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving an asset. "
@@ -27415,7 +28004,8 @@ manager_connect (credentials_t *credentials,
                                manager_address,
                                manager_port))
     {
-      response_data->http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_SERVICE_UNAVAILABLE);
       return -1;
     }
 
