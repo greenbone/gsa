@@ -40,6 +40,7 @@ import {
   for_each,
   filter,
   split,
+  first,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -658,6 +659,31 @@ describe('split function tests', () => {
     expect(split('foo_bar', '_', 0)).toEqual(['foo_bar']);
     expect(split('foo_bar', '_', -1)).toEqual(['foo_bar']);
   });
+});
+
+describe('first function tests', () => {
+  test('should return first value from array', () => {
+    expect(first(['foo', 'bar'])).toEqual('foo');
+    expect(first([undefined])).toBeUndefined();
+  });
+
+  test('should return first value from Set', () => {
+    expect(first(new Set(['foo', 'bar']))).toEqual('foo');
+    expect(first(new Set([undefined]))).toBeUndefined();
+  });
+
+  test('should return default value if empty', () => {
+    expect(first([])).toEqual({});
+    expect(first(new Set())).toEqual({});
+    expect(first([], {foo: 1})).toEqual({foo: 1});
+  });
+
+  test('should return default value for non iterables', () => {
+    expect(first({foo: 1})).toEqual({});
+    expect(first({foo: 1}, {bar: 2})).toEqual({bar: 2});
+    expect(first('')).toEqual({});
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
