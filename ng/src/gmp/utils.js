@@ -238,6 +238,10 @@ export const exclude_object_props = (object, exclude_array) =>
  * @returns {Array} Splitted String as an array
  */
 export function split(string, separator, limit) {
+  if (is_defined(limit) && limit <= 0) {
+    return [string];
+  }
+
   const splits = string.split(separator, limit);
 
   const left = string.replace(splits.join(separator), '');
