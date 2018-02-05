@@ -94,6 +94,12 @@
   "</gsad_msg>"
 
 /**
+ * @brief HTTP status code for expected failure of gmp requests e.g. if some
+ *        parameter was missing or invalid.
+ */
+#define GSAD_STATUS_INVALID_REQUEST MHD_HTTP_UNPROCESSABLE_ENTITY
+
+/**
  * @brief Initial filtered results per page on the report summary.
  */
 #define RESULTS_PER_PAGE 100
