@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +23,7 @@
  */
 
 import React from 'react';
+import glamorous from 'glamorous';
 
 import {classes} from 'gmp/utils.js';
 
@@ -32,10 +34,17 @@ import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
 
+const StyledInput = glamorous.input({
+  // "hack" to overshadow default color in Chrome's autofilled input fields
+  '&:-webkit-autofill': {
+    boxShadow: '0 0 0 1000px white inset',
+  },
+});
+
 const FieldComponent = ({className, value = '', ...props}) => {
   className = classes('form-control', className);
   return (
-    <input
+    <StyledInput
       {...props}
       className={className}
       value={value}
