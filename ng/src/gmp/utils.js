@@ -172,7 +172,8 @@ export function first(array, non = {}) {
     return non;
   }
 
-  return array[Symbol.iterator]().next().value; // returns array[0]
+  const {value, done} = array[Symbol.iterator]().next(); // returns array[0]
+  return done ? non : value; // done is true for empty iterables
 }
 
 export function includes_id(list, id) {
