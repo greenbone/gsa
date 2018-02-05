@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +24,9 @@
 import 'core-js/fn/array/includes';
 
 import React from 'react';
+import glamorous from 'glamorous';
 
 import {
-  classes,
   debounce,
   is_defined,
   KeyCode,
@@ -35,9 +36,85 @@ import {parse_float, parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Theme from '../../utils/theme.js';
+
 import withLayout from '../layout/withLayout.js';
 
-import './css/spinner.css';
+const StyledSpinner = glamorous.span({
+  borderRadius: '4px',
+  border: '1px solid ' + Theme.lightGray,
+  backgroundColor: Theme.white,
+  fontSize: '1.1em',
+  position: 'relative',
+  display: 'inline-block',
+  overflow: 'hidden',
+  padding: 0,
+  verticalAlign: 'middle',
+},
+  ({disabled}) => disabled ? {
+    color: Theme.lightGray,
+    cursor: 'not-allowed',
+  } : undefined,
+);
+
+const StyledInput = glamorous.input({
+  border: 'none',
+  background: 'none',
+  color: 'inherit',
+  padding: 0,
+  margin: '.2em 0',
+  verticalAlign: 'middle',
+  marginLeft: '.4em',
+  marginRight: '22px',
+});
+
+const SpinnerButton = glamorous.span({
+  backgroundColor: Theme.lightGreen,
+  color: Theme.darkGreen,
+  borderLeft: '1px solid ' + Theme.darkGreen,
+  width: '16px',
+  height: '50%',
+  fontSize: '.6em',
+  padding: 0,
+  margin: 0,
+  textAlign: 'center',
+  verticalAlign: 'middle',
+  position: 'absolute',
+  right: 0,
+  cursor: 'default',
+  display: 'block',
+  overflow: 'hidden',
+  textDecoration: 'none',
+  userSelect: 'none', // don't select icon text on double click
+},
+  ({active}) => ({
+    '&:hover': {
+      backgroundColor: active ? Theme.white : Theme.darkGreen,
+      color: active ? Theme.darkGreen : Theme.white,
+      textDecoration: 'none',
+    },
+  }),
+  ({disabled}) => disabled ? {
+    color: Theme.mediumGray,
+    background: Theme.lightGray,
+    cursor: 'not-allowed',
+    '&:hover': {
+      color: Theme.mediumGray,
+      background: Theme.lightGray,
+      cursor: 'not-allowed',
+    },
+  } : undefined,
+);
+
+const SpinnerButtonUp = glamorous(SpinnerButton)({
+  borderTopRightRadius: '3px',
+  top: 0,
+});
+
+const SpinnerButtonDown = glamorous(SpinnerButton)({
+  borderBottomRightRadius: '3px',
+  bottom: 0,
+});
 
 class SpinnerComponent extends React.Component {
 
@@ -282,17 +359,13 @@ class SpinnerComponent extends React.Component {
       disabled,
       maxLength,
       name,
-      className,
     } = this.props;
 
-    const css = classes(disabled ? 'spinner disabled' : 'spinner', className);
-
     return (
-      <span
-        className={css}
+      <StyledSpinner
+        disabled={disabled}
         onWheel={this.handleMouseWheel}>
-        <input
-          className="spinner-input"
+        <StyledInput
           data-type={type}
           min={min}
           max={max}
@@ -305,28 +378,28 @@ class SpinnerComponent extends React.Component {
           size={size}
           maxLength={maxLength}
         >
-        </input>
-        <a
-          className={classes('spinner-button spinner-up',
-          up_active ? ' active' : '')}
+        </StyledInput>
+        <SpinnerButtonUp
+          active={up_active}
+          disabled={disabled}
           onClick={this.handleUp}
           onMouseDown={this.handleUpMouse}
           onMouseUp={this.handleUpMouse}
           onDoubleClick={this.handleDbClick}
         >
           ▲
-        </a>
-        <a
-          className={classes('spinner-button spinner-down',
-          down_active ? ' active' : '')}
+        </SpinnerButtonUp>
+        <SpinnerButtonDown
+          active={down_active}
+          disabled={disabled}
           onClick={this.handleDown}
           onMouseDown={this.handleDownMouse}
           onMouseUp={this.handleDownMouse}
           onDoubleClick={this.handleDbClick}
         >
           ▼
-        </a>
-      </span>
+        </SpinnerButtonDown>
+      </StyledSpinner>
     );
   }
 }
