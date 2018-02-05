@@ -18995,7 +18995,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                  "Diagnostics: Manager closed connection during authenticate.",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            response_data->http_status_code = GSAD_STATUS_INVALID_REQUEST;
             g_string_append (xml,
                              "<gsad_msg"
                              " status_text=\"Password error\""
