@@ -382,7 +382,7 @@ class SpinnerComponent extends React.Component {
         <SpinnerButtonUp
           active={up_active}
           disabled={disabled}
-          onClick={this.handleUp}
+          onClick={disabled ? undefined : this.handleUp}
           onMouseDown={this.handleUpMouse}
           onMouseUp={this.handleUpMouse}
           onDoubleClick={this.handleDbClick}
@@ -392,7 +392,7 @@ class SpinnerComponent extends React.Component {
         <SpinnerButtonDown
           active={down_active}
           disabled={disabled}
-          onClick={this.handleDown}
+          onClick={disabled ? undefined : this.handleDown}
           onMouseDown={this.handleDownMouse}
           onMouseUp={this.handleDownMouse}
           onDoubleClick={this.handleDbClick}
