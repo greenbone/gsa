@@ -55,12 +55,12 @@ StyledCloseButton = withIconSize('medium')(StyledCloseButton);
 const CloseButton = ({
   size,
   title = _('Close'),
-  onClick,
+  ...props
 }) => (
   <StyledCloseButton
+    {...props}
     size={size}
     title={title}
-    onClick={onClick}
   >
     × {/* Javascript unicode: \u00D7 */}
   </StyledCloseButton>
