@@ -226,8 +226,18 @@ export function exclude(object, func) {
 export const exclude_object_props = (object, exclude_array) =>
   exclude(object, key => exclude_array.includes(key));
 
+/**
+ * Split a string into several terms
+ *
+ * Example usage: split('abc_def_hij', '_', 1) => ['abc', 'def_hij']
+ *
+ * @param {String} string     String to split
+ * @param {String} seperator  String to search for splitting
+ * @param {Number} limit      Split only limit times
+ *
+ * @returns {Array} Splitted String as an array
+ */
 export function split(string, seperator, limit) {
-  // split('abc_def_hij', 1) => ['abc', 'def_hij']
   const splits = string.split(seperator, limit);
 
   const left = string.replace(splits.join(seperator), '');
