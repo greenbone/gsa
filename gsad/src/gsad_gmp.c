@@ -8914,10 +8914,10 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (alert_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      response_data->http_status_code = GSAD_STATUS_INVALID_REQUEST;
       return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while testing an alert. "
+                           "Invalid request", __FUNCTION__, __LINE__,
+                           "Missing parameter alert_id."
                            "Diagnostics: Required parameter was NULL.",
                            response_data);
     }
