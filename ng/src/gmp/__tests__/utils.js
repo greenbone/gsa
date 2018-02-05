@@ -39,6 +39,7 @@ import {
   map,
   for_each,
   filter,
+  split,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -635,6 +636,27 @@ describe('filter function tests', () => {
 
   test('should filter array', () => {
     expect(filter([1, 2, 3], i => i > 1)).toEqual([2, 3]);
+  });
+});
+
+describe('split function tests', () => {
+  test('should split a string', () => {
+    expect(split('abc_def_hij', '_')).toEqual(['abc', 'def', 'hij']);
+    expect(split('abc.def.hij', '.')).toEqual(['abc', 'def', 'hij']);
+  });
+
+  test('should split only once', () => {
+    expect(split('abc_def_hij', '_', 1)).toEqual(['abc', 'def_hij']);
+    expect(split('abc.def.hij', '.', 1)).toEqual(['abc', 'def.hij']);
+  });
+
+  test('should return array if separator is not in string', () => {
+    expect(split('foo_bar', '-')).toEqual(['foo_bar']);
+  });
+
+  test('should return array if limit is 0 or less', () => {
+    expect(split('foo_bar', '_', 0)).toEqual(['foo_bar']);
+    expect(split('foo_bar', '_', -1)).toEqual(['foo_bar']);
   });
 });
 
