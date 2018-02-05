@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,27 +31,30 @@ import {is_defined} from 'gmp/utils.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Theme from '../../utils/theme.js';
+
 import Layout from '../layout/layout.js';
 
-import Button from './button.js';
+import CloseButton from './closebutton.js';
 
 const StyledLayout = glamorous(Layout)({
   padding: '15px',
   margin: '20px 1em',
-  border: '1px solid #ebccd1',
+  border: '1px solid ' + Theme.mediumLightRed,
   borderRadius: '4px',
-  color: '#a94442',
-  backgroundColor: '#f2dede',
+  color: Theme.darkRed,
+  backgroundColor: Theme.lightRed,
 });
 
-const DialogCloseButton = glamorous(Button)({
-  border: '0',
+const DialogCloseButton = glamorous(CloseButton)({
+  border: '1px solid ' + Theme.lightRed,
   background: '0',
-  color: 'inherit',
+  color: Theme.darkRed,
 
   ':hover': {
+    border: '1px solid ' + Theme.darkRed,
     background: '0',
-    color: '#000',
+    color: Theme.black,
     opacity: '.5',
   },
 });
@@ -65,7 +69,7 @@ const DialogError = ({error, onCloseClick}) => {
       <span>{error}</span>
       <DialogCloseButton
         onClick={onCloseClick}
-        title={_('Close')}>x</DialogCloseButton>
+        title={_('Close')}/>
     </StyledLayout>
   );
 };
