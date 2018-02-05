@@ -43,6 +43,7 @@ const ScrollableContent = glamorous.div(
 
 const StyledLayout = glamorous(Layout)({
   overflow: 'hidden', // fix for adjusting the content while resizing in firefox
+  height: '100%', // needs to be set for Chrome
 });
 
 const ScrollableContentLayout = ({
