@@ -25,11 +25,18 @@ const Theme = {
   /* source styleguide */
   green: '#66c430',
   lightGreen: '#87d050',
+
   darkGray: '#393637',
   mediumGray: '#787878',
-  lightGray: '#c8d3d9',
+  lightGray: '#c8d3d9', // used by: disabled inputs
+
   goldYellow: '#fdc300',
   redBrown: '#a54317',
+
+  /* source own */
+  black: '#000',
+  white: '#fff',
+  offWhite: '#fefefe', // used by: Login-background
 
   /* source ? */
   darkGreen: '#519032',
