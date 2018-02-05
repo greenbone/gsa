@@ -35,7 +35,7 @@ import Theme from '../../utils/theme.js';
 
 import Layout from '../layout/layout.js';
 
-import Button from './button.js';
+import CloseButton from './closebutton.js';
 
 const StyledLayout = glamorous(Layout)({
   padding: '15px',
@@ -46,12 +46,13 @@ const StyledLayout = glamorous(Layout)({
   backgroundColor: Theme.lightRed,
 });
 
-const DialogCloseButton = glamorous(Button)({
-  border: '0',
+const DialogCloseButton = glamorous(CloseButton)({
+  border: '1px solid ' + Theme.lightRed,
   background: '0',
-  color: 'inherit',
+  color: Theme.darkRed,
 
   ':hover': {
+    border: '1px solid ' + Theme.darkRed,
     background: '0',
     color: Theme.black,
     opacity: '.5',
@@ -68,7 +69,7 @@ const DialogError = ({error, onCloseClick}) => {
       <span>{error}</span>
       <DialogCloseButton
         onClick={onCloseClick}
-        title={_('Close')}>x</DialogCloseButton>
+        title={_('Close')}/>
     </StyledLayout>
   );
 };
