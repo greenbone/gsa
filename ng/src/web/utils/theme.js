@@ -37,6 +37,9 @@ const Theme = {
   black: '#000',
   white: '#fff',
   offWhite: '#fefefe', // used by: Login-background
+  lightRed: '#f2dede', // used by: dialog errors background
+  mediumLightRed: '#ebccd1', // used by: dialog errors border
+  darkRed: '#a94442', // used by: dialog errors font
 
   /* source ? */
   darkGreen: '#519032',
