@@ -18689,7 +18689,7 @@ should not have received it.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></label>
           <div class="col-10">
-            <div class="datepicker form-item">
+            <div class="datepicker form-item" data-limit-type="none">
               <input class="datepicker-button" size="26"/>
               <input class="datepicker-day" name="day_of_month" type="hidden" value="{time/day_of_month}"/>
               <input class="datepicker-month" name="month" type="hidden" value="{time/month}"/>
@@ -18944,7 +18944,7 @@ should not have received it.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></label>
           <div class="col-10">
-            <div class="datepicker form-item">
+            <div class="datepicker form-item" data-limit-type="none">
               <input class="datepicker-button" size="26"/>
               <input class="datepicker-day" name="day_of_month" type="hidden"
                 value="{format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
