@@ -114,7 +114,7 @@ const TabTitleForUserTags = ({title, count}) => (
 );
 
 TabTitleForUserTags.propTypes = {
-  count: PropTypes.counts.isRequired,
+  count: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
 };
 
