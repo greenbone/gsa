@@ -41,6 +41,13 @@ import {
   filter,
   split,
   first,
+  includes_id,
+  select_save_id,
+  capitalize_first_letter,
+  pluralize_type,
+  shorten,
+  debounce,
+  throttleAnimation,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -684,6 +691,152 @@ describe('first function tests', () => {
     expect(first('')).toEqual({});
   });
 
+});
+
+describe('includes_id function tests', () => {
+  test('should return true for found id', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(includes_id(list, 1)).toBe(true);
+    expect(includes_id(list, 2)).toBe(true);
+    expect(includes_id(list, 3)).toBe(true);
+  });
+
+  test('should return false for unkown id', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(includes_id(list, 4)).toBe(false);
+  });
+
+  test('should return false for different type of id', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(includes_id(list, '2')).toBe(false);
+  });
+});
+
+describe('select_save_id function tests', () => {
+  test('should return id if id is in list', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(select_save_id(list, 1)).toEqual(1);
+    expect(select_save_id(list, 2)).toEqual(2);
+    expect(select_save_id(list, 3)).toEqual(3);
+  });
+
+  test('should return first id if id is not in list', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(select_save_id(list, 4)).toBe(1);
+    expect(select_save_id(list, '2')).toBe(1);
+  });
+
+  test('should return default if id is not in list', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(select_save_id(list, 4, 42)).toBe(42);
+    expect(select_save_id(list, '2', 42)).toBe(42);
+  });
+});
+
+describe('capatalize_first_letter function tests', () => {
+  test('should capitalize first letter', () => {
+    expect(capitalize_first_letter('foo')).toEqual('Foo');
+    expect(capitalize_first_letter('Foo')).toEqual('Foo');
+    expect(capitalize_first_letter('bAR')).toEqual('BAR');
+  });
+});
+
+describe('pluralize_type function test', () => {
+  test('info should not be pluralized', () => {
+    expect(pluralize_type('info')).toEqual('info');
+  });
+
+  test('version should not be pluralized', () => {
+    expect(pluralize_type('version')).toEqual('version');
+  });
+
+  test('already pluralized term should not be pluralized', () => {
+    expect(pluralize_type('foos')).toEqual('foos');
+    expect(pluralize_type('tasks')).toEqual('tasks');
+  });
+
+  test('term should be pluralized', () => {
+    expect(pluralize_type('foo')).toEqual('foos');
+    expect(pluralize_type('task')).toEqual('tasks');
+  });
+});
+
+describe('shorten function tests', () => {
+  test('should shorten string', () => {
+    expect(shorten('foo bar', 4)).toEqual('foo ...');
+  });
+
+  test('should return empty string for undefined', () => {
+    expect(shorten()).toEqual('');
+  });
+
+  test('should not shorten string before limit', () => {
+    expect(shorten('foo bar', 10)).toEqual('foo bar');
+  });
+});
+
+describe('debounce function tests', () => {
+
+  jest.useFakeTimers();
+
+  test('should debounce function', () => {
+    const callback = jest.fn();
+    const func = debounce(callback);
+
+    func(1);
+    func(2);
+    func(3);
+
+    jest.runAllTimers();
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0][0]).toBe(3);
+  });
+
+  test('should run callback immediately', () => {
+    const callback = jest.fn();
+    const func = debounce(callback, 10000, true);
+
+    func(1);
+    func(2);
+    func(3);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0][0]).toBe(1);
+
+    jest.runAllTimers();
+
+    expect(callback.mock.calls.length).toBe(2);
+    expect(callback.mock.calls[1][0]).toBe(3);
+  });
+});
+
+describe('throttleAnimation function tests', () => {
+
+  jest.useFakeTimers();
+
+  test('should throttle running callback', () => {
+    const callback = jest.fn();
+    const func = throttleAnimation(callback);
+
+    func(1);
+    func(2);
+    func(3);
+
+    jest.runAllTimers();
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0][0]).toBe(1);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
