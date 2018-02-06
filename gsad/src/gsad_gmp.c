@@ -324,9 +324,8 @@ static gchar *action_result_page (gvm_connection_t *, credentials_t *,
                                   const char*, const char*);
 
 static gchar* response_from_entity (gvm_connection_t *, credentials_t*,
-                                    params_t *, entity_t, int, const char*,
-                                    const char *, const char*, const char*,
-                                    const char *, cmd_response_data_t *);
+                                    params_t *, entity_t,  const char *,
+                                    cmd_response_data_t *);
 
 /* Helpers. */
 
@@ -679,9 +678,7 @@ check_modify_config (gvm_connection_t *connection,
 {
   entity_t entity;
   gchar *response;
-  const char *no_redirect, *status_text;
-
-  no_redirect = params_value (params, "no_redirect");
+  const char  *status_text;
 
   if (success)
     *success = 0;
@@ -767,9 +764,6 @@ check_modify_config (gvm_connection_t *connection,
 
   response
     = response_from_entity (connection, credentials, params, entity,
-                            (no_redirect && strcmp (no_redirect, "0")),
-                            NULL, next,
-                            NULL, fail_next,
                             "Save Config", response_data);
   free_entity (entity);
 
@@ -1361,13 +1355,11 @@ action_result_page (gvm_connection_t *connection,
                                  "<status>%s</status>"
                                  "<message>%s</message>"
                                  "<details>%s</details>"
-                                 "<next>%s</next>"
                                  "</action_result>",
                                  action ? action : "",
                                  status ? status : "",
                                  message ? message : "",
-                                 details ? details : "",
-                                 next_url ? next_url : "");
+                                 details ? details : "");
   return envelope_gmp (connection, credentials, params, xml,
                        response_data);
 }
@@ -1412,37 +1404,21 @@ message_invalid (gvm_connection_t *connection,
  *
  * @param[in]  connection     Connection to manager
  */
-static gchar*
+static gchar *
 response_from_entity (gvm_connection_t *connection,
-                      credentials_t* credentials, params_t *params,
-                      entity_t entity, int no_redirect,
-                      const char* override_next, const char *default_next,
-                      const char* override_fail_next,
-                      const char* default_fail_next,
-                      const char* action, cmd_response_data_t *response_data)
+                      credentials_t *credentials, params_t *params,
+                      entity_t entity, const char *action,
+                      cmd_response_data_t *response_data)
 {
-  gchar *res, *next_url;
+  gchar *res;
   entity_t status_details_entity;
   const char *status_details;
   int success;
   success = gmp_success (entity);
 
-  if (success)
-    {
-      next_url = next_page_url (credentials, params,
-                                override_next, default_next,
-                                action,
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"));
-    }
-  else
+  if (!success)
     {
       set_http_status_from_entity (entity, response_data);
-      next_url = next_page_url (credentials, params,
-                                override_fail_next, default_fail_next,
-                                action,
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"));
     }
 
   status_details_entity = entity_child (entity, "status_details");
@@ -1455,19 +1431,10 @@ response_from_entity (gvm_connection_t *connection,
       status_details = NULL;
     }
 
-  if (no_redirect || success == 0)
-    {
-      res = action_result_page (connection, credentials, params, response_data,
-                                action, entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"),
-                                status_details, next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      res = NULL;
-      cmd_response_data_set_redirect (response_data, next_url);
-    }
+  res = action_result_page (connection, credentials, params, response_data,
+                            action, entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"),
+                            status_details, NULL);
   return res;
 }
 
@@ -2922,11 +2889,10 @@ delete_resource (gvm_connection_t *connection, const char *type,
                  const char *get, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
-  const char *no_redirect, *next_id;
+  const char  *next_id;
   entity_t entity;
   gchar *cap_type, *default_next, *prev_action;
 
-  no_redirect = params_value (params, "no_redirect");
   id_name = g_strdup_printf ("%s_id", type);
   if (params_value (params, id_name))
     resource_id = g_strdup (params_value (params, id_name));
@@ -3017,9 +2983,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
   prev_action = g_strdup_printf ("Delete %s", cap_type);
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, default_next,
-                               NULL, default_next,
                                prev_action, response_data);
 
   g_free (response);
@@ -3049,7 +3012,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                  cmd_response_data_t* response_data)
 {
   gchar *html, *response, *param_name;
-  const char *no_redirect, *resource_id;
+  const char  *resource_id;
   gchar *cap_action, *cap_type, *get_cmd, *prev_action;
 
   int ret;
@@ -3058,7 +3021,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
   assert (type);
 
   param_name = g_strdup_printf ("%s_id", type);
-  no_redirect = params_value (params, "no_redirect");
   resource_id = params_value (params, param_name);
 
   if (resource_id == NULL)
@@ -3130,9 +3092,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
   get_cmd = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("%s %s", cap_action, cap_type);
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, get_cmd,
-                               NULL, get_cmd,
                                prev_action, response_data);
 
   g_free (response);
@@ -3795,10 +3754,9 @@ create_report_gmp (gvm_connection_t *connection,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *no_redirect, *cmd, *task_id, *name, *comment, *xml_file;
+  const char *task_id, *name, *comment, *xml_file;
   const char *in_assets;
 
-  no_redirect = params_value (params, "no_redirect");
   task_id = params_value (params, "task_id");
   xml_file = params_value (params, "xml_file");
   name = params_value (params, "name");
@@ -3921,13 +3879,7 @@ create_report_gmp (gvm_connection_t *connection,
                              response_data);
     }
 
-  cmd = params_value (params, "cmd");
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL,
-                               (cmd && strcmp (cmd, "import_report"))
-                                  ? "new_container_task" : "upload_report",
                                "Import Report", response_data);
   free_entity (entity);
   g_free (response);
@@ -3973,9 +3925,8 @@ create_container_task_gmp (gvm_connection_t *connection,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *no_redirect, *name, *comment;
+  const char  *name, *comment;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   CHECK_PARAM_INVALID (name, "Create Container Task", "new_container_task");
@@ -4034,9 +3985,6 @@ create_container_task_gmp (gvm_connection_t *connection,
   if (entity_attribute (entity, "id"))
     params_add (params, "task_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "new_container_task",
                                "Create Container Task", response_data);
   free_entity (entity);
   g_free (response);
@@ -4061,7 +4009,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   int ret;
   gchar *schedule_element, *command;
   gchar *response, *html;
-  const char *no_redirect;
   const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
@@ -4072,7 +4019,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   params_t *alerts;
   GString *alert_element;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   target_id = params_value (params, "target_id");
@@ -4377,9 +4323,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
             params_add (params, "task_id", entity_attribute (entity, "id"));
           html
             = response_from_entity (connection, credentials, params, tag_entity,
-                                    (no_redirect && strcmp (no_redirect, "0")),
-                                    NULL, "get_tasks",
-                                    NULL, "new_tasks",
                                     "Create Task and Tag", response_data);
           free_entity (tag_entity);
           g_free (tag_response);
@@ -4390,18 +4333,12 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
             params_add (params, "task_id", entity_attribute (entity, "id"));
           html
             = response_from_entity (connection, credentials, params, entity,
-                                    (no_redirect && strcmp (no_redirect, "0")),
-                                    NULL, "get_tasks",
-                                    NULL, "new_task",
                                     "Create Task", response_data);
         }
     }
   else
     {
       html = response_from_entity (connection, credentials, params, entity,
-                                   (no_redirect && strcmp (no_redirect, "0")),
-                                   NULL, "get_tasks",
-                                   NULL, "new_task",
                                    "Create Task", response_data);
     }
   free_entity (entity);
@@ -4588,7 +4525,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *format;
-  const char *no_redirect;
   const char *comment, *name, *schedule_id, *in_assets;
   const char *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
@@ -4599,7 +4535,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   GString *alert_element;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   comment = params_value (params, "comment");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
@@ -4813,9 +4748,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "edit_task",
                                "Save Task", response_data);
   free_entity (entity);
   g_free (response);
@@ -4839,12 +4771,11 @@ char * save_container_task_gmp (gvm_connection_t *connection,
                                 cmd_response_data_t *response_data)
 {
   gchar *format, *response, *html;
-  const char *no_redirect, *comment, *name, *task_id;
+  const char  *comment, *name, *task_id;
   const char *in_assets, *auto_delete, *auto_delete_data;
   int ret;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   comment = params_value (params, "comment");
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
@@ -4920,9 +4851,6 @@ char * save_container_task_gmp (gvm_connection_t *connection,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "edit_task",
                                "Save Container Task", response_data);
   free_entity (entity);
   g_free (response);
@@ -5035,11 +4963,10 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *command, *response, *html;
-  const char *no_redirect, *task_id, *slave_id;
+  const char  *task_id, *slave_id;
   int ret;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   slave_id = params_value (params, "slave_id");
   task_id = params_value (params, "task_id");
 
@@ -5089,9 +5016,6 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "get_tasks",
                                "Move Task", response_data);
 
   free_entity (entity);
@@ -5932,14 +5856,12 @@ create_credential_gmp (gvm_connection_t *connection,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect;
   const char *name, *comment, *login, *type, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   int autogenerate;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
@@ -6219,9 +6141,6 @@ create_credential_gmp (gvm_connection_t *connection,
   if (entity_attribute (entity, "id"))
     params_add (params, "credential_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_credentials",
-                               NULL, "new_credential",
                                "Create Credential",
                                response_data);
   free_entity (entity);
@@ -6624,14 +6543,13 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   int ret, change_password, change_passphrase;
   int change_community, change_privacy_password;
   gchar *html, *response;
-  const char *no_redirect, *credential_id;
+  const char  *credential_id;
   const char *name, *comment, *login, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   GString *command;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   credential_id = params_value (params, "credential_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -6808,9 +6726,6 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_credentials",
-                               NULL, "edit_credential",
                                "Save Credential", response_data);
   free_entity (entity);
   g_free (response);
@@ -6874,7 +6789,6 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 {
   entity_t entity;
   gchar *response, *html;
-  const char *no_redirect;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
@@ -6883,7 +6797,6 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
   gchar *command;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   installer = params_value (params, "installer");
@@ -6997,9 +6910,6 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   if (entity_attribute (entity, "id"))
     params_add (params, "agent_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_agents",
-                               NULL, "new_agent",
                                "Create Agent", response_data);
   free_entity (entity);
   g_free (response);
@@ -7248,10 +7158,9 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *agent_id, *name, *comment;
+  const char  *agent_id, *name, *comment;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   agent_id = params_value (params, "agent_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -7311,9 +7220,6 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_agents",
-                               NULL, "edit_agent",
                                "Save Agent", response_data);
   free_entity (entity);
   g_free (response);
@@ -8174,13 +8080,11 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect;
   const char *name, *comment, *active, *condition, *event, *method, *filter_id;
   params_t *method_data, *event_data, *condition_data;
   entity_t entity;
   GString *xml;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   active = params_value (params, "active");
@@ -8298,9 +8202,6 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   if (entity_attribute (entity, "id"))
     params_add (params, "alert_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_alerts",
-                               NULL, "new_alert",
                                "Create Alert", response_data);
   free_entity (entity);
   g_free (response);
@@ -8932,13 +8833,12 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   GString *xml;
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *alert_id;
+  const char  *name, *comment, *alert_id;
   const char *event, *condition, *method;
   const char *filter_id, *active;
   params_t *event_data, *condition_data, *method_data;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   condition = params_value (params, "condition");
@@ -9057,9 +8957,6 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_alerts",
-                              NULL, "edit_alert",
                               "Save Alert", response_data);
   free_entity (entity);
   g_free (response);
@@ -9081,10 +8978,9 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *alert_id;
+  const char  *alert_id;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   alert_id = params_value (params, "alert_id");
 
   if (alert_id == NULL)
@@ -9129,9 +9025,6 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_alerts",
-                              NULL, "get_alerts",
                               "Test Alert", response_data);
 
   free_entity (entity);
@@ -9377,7 +9270,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
 {
   int ret;
   gchar *html, *response, *command;
-  const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
+  const char  *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential, *target_source;
   const char *target_exclude_source;
@@ -9390,7 +9283,6 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   entity_t entity;
   GString *xml;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
   exclude_hosts = params_value (params, "exclude_hosts");
@@ -9575,9 +9467,6 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   if (entity_attribute (entity, "id"))
     params_add (params, "target_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_targets",
-                              NULL, "new_target",
                               "Create Target", response_data);
   free_entity (entity);
   g_free (response);
@@ -9618,14 +9507,13 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *id, *type, *alterable, *no_redirect, *next_id;
+  const char *id, *type, *alterable,  *next_id;
   gchar *next_id_name, *cap_type, *prev_action;
   entity_t entity;
 
   id = params_value (params, "id");
   type = params_value (params, "resource_type");
   alterable = params_value (params, "alterable");
-  no_redirect = params_value (params, "no_redirect");
 
   CHECK (id);
   CHECK (type);
@@ -9726,9 +9614,6 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
   cap_type = capitalize (type);
   prev_action = g_strdup_printf ("Clone %s", cap_type);
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, NULL,
-                              NULL, NULL,
                               prev_action, response_data);
 
   free_entity (entity);
@@ -9922,10 +9807,9 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
   GString *xml;
   gchar *ret;
   entity_t entity;
-  const char *target_id, *no_redirect;
+  const char *target_id;
 
   target_id = params_value (params, "target_id");
-  no_redirect = params_value (params, "no_redirect");
 
   if (target_id == NULL)
     {
@@ -9976,9 +9860,6 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return trash page. */
 
   ret = response_from_entity (connection, credentials, params, entity,
-                             (no_redirect && strcmp (no_redirect, "0")),
-                             NULL, "get_trash",
-                             NULL, "get_trash",
                              "Restore", response_data);
   free_entity (entity);
   g_string_free (xml, FALSE);
@@ -10001,11 +9882,8 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
                     cmd_response_data_t* response_data)
 {
   GString *xml;
-  const char* no_redirect;
   gchar *ret;
   entity_t entity;
-
-  no_redirect = params_value (params, "no_redirect");
 
   xml = g_string_new ("");
 
@@ -10040,9 +9918,6 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
   /* Cleanup, and return trash page. */
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_trash",
-                              NULL, "get_trash",
                               "Empty Trashcan", response_data);
   free_entity (entity);
   g_string_free (xml, FALSE);
@@ -10135,12 +10010,10 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
-  const char* no_redirect;
   gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
   value = params_value (params, "tag_value");
@@ -10212,9 +10085,6 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (entity_attribute (entity, "id"))
     params_add (params, "tag_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_tags",
-                              NULL, "new_tag",
                               "Create Tag", response_data);
 
   free_entity (entity);
@@ -10371,11 +10241,10 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
-  const char *tag_id, *no_redirect;
+  const char *tag_id;
   entity_t entity;
   char* ret;
 
-  no_redirect = params_value (params, "no_redirect");
   tag_id = params_value (params, "tag_id");
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
@@ -10452,9 +10321,6 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_tags",
-                              NULL, "edit_tag",
                               "Save Tag", response_data);
 
   free_entity (entity);
@@ -10590,10 +10456,9 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *tag_id, *enable;
+  const char  *tag_id, *enable;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   tag_id = params_value (params, "tag_id");
   enable = params_value (params, "enable");
 
@@ -10659,9 +10524,6 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (! gmp_success (entity))
     set_http_status_from_entity (entity, response_data);
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tags",
-                               NULL, "get_tags",
                                "Toggle Tag", response_data);
 
   free_entity (entity);
@@ -10942,7 +10804,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
+  const char  *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential;
   const char *target_source, *target_exclude_source;
@@ -10950,7 +10812,6 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   const char *reverse_lookup_unify, *alive_tests, *in_use;
   GString *command;
 
-  no_redirect = params_value (params, "no_redirect");
   alive_tests = params_value (params, "alive_tests");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -11022,9 +10883,6 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
         }
 
       html = response_from_entity (connection, credentials, params, entity,
-                                   (no_redirect && strcmp (no_redirect, "0")),
-                                   NULL, "get_targets",
-                                   NULL, "edit_target",
                                    "Save Target", response_data);
 
       free_entity (entity);
@@ -11184,9 +11042,6 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
       }
 
     html = response_from_entity (connection, credentials, params, entity,
-                                 (no_redirect && strcmp (no_redirect, "0")),
-                                 NULL, "get_targets",
-                                 NULL, "edit_target",
                                  "Save Target", response_data);
   }
 
@@ -11382,10 +11237,9 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *base, *scanner = NULL;
+  const char  *name, *comment, *base, *scanner = NULL;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   base = params_value (params, "base");
@@ -11448,9 +11302,6 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   if (entity_attribute (entity, "id"))
     params_add (params, "config_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_configs",
-                               NULL, "new_config",
                                "Create Config", response_data);
 
   free_entity (entity);
@@ -11472,12 +11323,9 @@ char *
 import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
-
-  no_redirect = params_value (params, "no_redirect");
 
   /* Create the config. */
 
@@ -11526,9 +11374,6 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   /* Cleanup, and return transformed XML. */
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_configs",
-                               NULL, "new_config",
                                "Import Config", response_data);
   free_entity (entity);
   g_free (response);
@@ -14688,9 +14533,7 @@ report_alert_gmp (gvm_connection_t *connection,
 
     }
 
-  html = response_from_entity (connection, credentials, params, entity, 1,
-                              NULL, "report_alert",
-                              NULL, "report_alert",
+  html = response_from_entity (connection, credentials, params, entity,
                               "Report Alert", response_data);
 
   free_entity (entity);
@@ -15678,13 +15521,12 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 {
   char *ret;
   gchar *response;
-  const char *no_redirect, *oid, *severity, *port, *hosts;
+  const char  *oid, *severity, *port, *hosts;
   const char *text, *task_id, *result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
   CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
 
@@ -15765,9 +15607,6 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
   if (entity_attribute (entity, "id"))
     params_add (params, "note_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_notes",
-                              NULL, "new_note",
                               "Create Note", response_data);
   free_entity (entity);
   g_free (response);
@@ -15908,12 +15747,10 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *response;
   entity_t entity;
-  const char *no_redirect;
   const char *note_id, *text, *hosts, *port, *severity, *task_id;
   const char *result_id, *active, *days, *oid;
   char *ret;
 
-  no_redirect = params_value (params, "no_redirect");
   note_id = params_value (params, "note_id");
 
   oid = params_value (params, "oid");
@@ -15997,9 +15834,6 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_notes",
-                              NULL, "edit_note",
                               "Save Note", response_data);
 
   free_entity (entity);
@@ -16298,14 +16132,12 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   char *ret;
   gchar *response;
-  const char *no_redirect;
   const char *oid, *severity, *custom_severity, *new_severity, *port, *hosts;
   const char *text, *task_id, *result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
   CHECK_PARAM_INVALID (oid, "Create Override", "new_override");
 
@@ -16414,9 +16246,6 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (entity_attribute (entity, "id"))
     params_add (params, "override_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_overrides",
-                              NULL, "new_override",
                               "Create Override", response_data);
   free_entity (entity);
   g_free (response);
@@ -16558,12 +16387,11 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *response;
   entity_t entity;
-  const char *no_redirect, *override_id, *text, *hosts, *port;
+  const char  *override_id, *text, *hosts, *port;
   const char *severity, *custom_severity, *new_severity;
   const char *task_id, *result_id, *active, *days, *oid;
   char *ret;
 
-  no_redirect = params_value (params, "no_redirect");
   override_id = params_value (params, "override_id");
 
   port = get_port_from_params (params);
@@ -16655,9 +16483,6 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_overrides",
-                              NULL, "edit_override",
                               "Save Override", response_data);
 
   free_entity (entity);
@@ -16962,11 +16787,9 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
   int ret;
   char *html;
   gchar *response = NULL;
-  const char *no_redirect;
   const char *name, *comment, *host, *port, *type, *ca_pub, *credential_id;
   entity_t entity = NULL;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   host = params_value (params, "scanner_host");
@@ -17037,9 +16860,6 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
   if (entity_attribute (entity, "id"))
     params_add (params, "scanner_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_scanners",
-                               NULL, "new_scanner",
                                "Create Scanner", response_data);
   free_entity (entity);
   g_free (response);
@@ -17201,13 +17021,11 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 {
   gchar *response = NULL;
   entity_t entity = NULL;
-  const char *no_redirect;
   const char *scanner_id, *name, *comment, *port, *host, *type, *ca_pub;
   const char *credential_id, *which_cert;
   char *html;
   int ret, is_unix_socket, in_use;
 
-  no_redirect = params_value (params, "no_redirect");
   scanner_id = params_value (params, "scanner_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -17336,9 +17154,6 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_scanners",
-                               NULL, "edit_scanner",
                                "Save Scanner", response_data);
 
   free_entity (entity);
@@ -17500,12 +17315,10 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 {
   char *ret;
   gchar *response;
-  const char *no_redirect;
   const char *name, *comment, *hour, *minute, *day_of_month, *month, *year;
   const char *period, *period_unit, *duration, *duration_unit, *timezone;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   hour = params_value (params, "hour");
@@ -17610,9 +17423,6 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
   if (entity_attribute (entity, "id"))
     params_add (params, "schedule_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_schedules",
-                              NULL, "new_schedule",
                               "Create Schedule", response_data);
   free_entity (entity);
   g_free (response);
@@ -18226,12 +18036,9 @@ char *
 import_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
-  const char* no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
-
-  no_redirect = params_value (params, "no_redirect");
 
   /* Create the report format. */
 
@@ -18282,9 +18089,6 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
   if (entity_attribute (entity, "id"))
     params_add (params, "report_format_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_report_formats",
-                               NULL, "new_report_format",
                                "Create Report Format", response_data);
 
   free_entity (entity);
@@ -18309,10 +18113,9 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
   int ret;
   gchar *html, *response;
   params_t *preferences, *id_list_params, *include_id_lists;
-  const char *no_redirect, *report_format_id, *name, *summary, *enable;
+  const char  *report_format_id, *name, *summary, *enable;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   report_format_id = params_value (params, "report_format_id");
   name = params_value (params, "name");
   summary = params_value (params, "summary");
@@ -18576,9 +18379,6 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_report_formats",
-                               NULL, "edit_report_format",
                                "Save Report Format", response_data);
   free_entity (entity);
   g_free (response);
@@ -18702,7 +18502,7 @@ char *
 run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  const char *no_redirect, *name;
+  const char  *name;
   int ret;
   GString *run;
   param_t *param;
@@ -18715,7 +18515,6 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
    * parameters are called "param"s and so are the GMP wizard
    * parameters. */
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   if (name == NULL)
     {
@@ -18790,9 +18589,6 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "wizard",
-                               NULL, "wizard",
                                "Run Wizard", response_data);
   free_entity (entity);
   g_free (response);
@@ -20401,12 +20197,11 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response, *command, *specials_element;
-  const char *no_redirect, *name, *comment, *users, *grant_full;
+  const char  *name, *comment, *users, *grant_full;
   entity_t entity;
   GString *xml;
   int ret;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   grant_full = params_value (params, "grant_full");
@@ -20484,9 +20279,6 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
   if (entity_attribute (entity, "id"))
     params_add (params, "group_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_groups",
-                               NULL, "new_group",
                                "Create Group", response_data);
   free_entity (entity);
   g_free (response);
@@ -20582,10 +20374,9 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *group_id, *name, *comment, *users;
+  const char  *group_id, *name, *comment, *users;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   group_id = params_value (params, "group_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -20649,9 +20440,6 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_groups",
-                               NULL, "edit_group",
                                "Save Group", response_data);
   free_entity (entity);
   g_free (response);
@@ -20974,7 +20762,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *resource_id, *resource_type;
+  const char  *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
   entity_t entity;
 
@@ -20982,7 +20770,6 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity_t get_subject_entity = NULL;
   entity_t subject_entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
@@ -21182,9 +20969,6 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
         if (entity_attribute (entity, "id"))
           params_add (params, "permission_id", entity_attribute (entity, "id"));
         html = response_from_entity (connection, credentials, params, entity,
-                                     (no_redirect && strcmp (no_redirect, "0")),
-                                     NULL, "get_permissions",
-                                     NULL, "new_permission",
                                      "Create Permission", response_data);
     }
   else
@@ -21250,9 +21034,6 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
         if (entity_attribute (entity, "id"))
           params_add (params, "permission_id", entity_attribute (entity, "id"));
         html = response_from_entity (connection, credentials, params, entity,
-                                     (no_redirect && strcmp (no_redirect, "0")),
-                                     NULL, "get_permissions",
-                                     NULL, "new_permission",
                                      "Create Permission", response_data);
     }
   free_entity (entity);
@@ -21303,10 +21084,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   else                                                                        \
     {                                                                         \
       html                                                                    \
-        = response_from_entity (connection, credentials, params, entity,                  \
-                                (no_redirect && strcmp (no_redirect, "0")),   \
-                                NULL, "get_permissions",                      \
-                                NULL, "new_permissions",                      \
+        = response_from_entity (connection, credentials, params, entity,      \
                                 "Create Permissions", response_data);         \
       free_entity (entity);                                                   \
       g_free (response);                                                      \
@@ -21643,7 +21421,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   int ret;
   gchar *html, *response, *summary_response, *next_url;
   int successes;
-  const char *no_redirect, *permission, *comment, *resource_id, *resource_type;
+  const char  *permission, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
   int include_related;
 
@@ -21653,7 +21431,6 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   entity_t get_subject_entity = NULL;
   entity_t subject_entity;
 
-  no_redirect = params_value (params, "no_redirect");
   permission = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "resource_id");
@@ -22125,21 +21902,13 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                             G_STRINGIFY (MHD_HTTP_CREATED),
                             summary_response);
 
-  if (no_redirect)
-    {
-      html = action_result_page (connection, credentials, params, response_data,
-                                 "Create Permissions",
-                                 G_STRINGIFY (MHD_HTTP_CREATED),
-                                 summary_response,
-                                 NULL,
-                                 next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      html = NULL;
-      cmd_response_data_set_redirect (response_data, next_url);
-    }
+  html = action_result_page (connection, credentials, params, response_data,
+                              "Create Permissions",
+                              G_STRINGIFY (MHD_HTTP_CREATED),
+                              summary_response,
+                              NULL,
+                              next_url);
+  g_free (next_url);
   return html;
 }
 
@@ -22388,13 +22157,11 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                      cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect;
   const char *permission_id, *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type;
   entity_t entity;
   int ret;
 
-  no_redirect = params_value (params, "no_redirect");
   permission_id = params_value (params, "permission_id");
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
@@ -22480,9 +22247,6 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_permissions",
-                               NULL, "edit_permission",
                                "Save Permission", response_data);
   free_entity (entity);
   g_free (response);
@@ -22574,10 +22338,9 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
                       cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *port_range, *from_file;
+  const char  *name, *comment, *port_range, *from_file;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   port_range = params_value (params, "port_range");
@@ -22640,9 +22403,6 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (entity_attribute (entity, "id"))
     params_add (params, "port_list_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_port_lists",
-                               NULL, "new_port_list",
                                "Create Port List", response_data);
   free_entity (entity);
   g_free (response);
@@ -22706,10 +22466,9 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *port_list_id, *start, *end, *type;
+  const char  *port_list_id, *start, *end, *type;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   port_list_id = params_value (params, "port_list_id");
   start = params_value (params, "port_range_start");
   end = params_value (params, "port_range_end");
@@ -22774,9 +22533,6 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "edit_port_list",
-                               NULL, "edit_port_list",
                                "Create Port Range", response_data);
   free_entity (entity);
   g_free (response);
@@ -22924,10 +22680,9 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *port_list_id, *name, *comment;
+  const char  *port_list_id, *name, *comment;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   port_list_id = params_value (params, "port_list_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -22987,9 +22742,6 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_port_lists",
-                               NULL, "edit_port_list",
                                "Save Port List", response_data);
   free_entity (entity);
   g_free (response);
@@ -23064,12 +22816,9 @@ char *
 import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
-
-  no_redirect = params_value (params, "no_redirect");
 
   /* Create the port list. */
 
@@ -23118,9 +22867,6 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_port_lists",
-                               NULL, "new_port_list",
                                "Import Port List", response_data);
   free_entity (entity);
   g_free (response);
@@ -23223,10 +22969,9 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 {
   char *ret;
   gchar *response;
-  const char *no_redirect, *name, *comment, *users;
+  const char  *name, *comment, *users;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   users = params_value (params, "users");
@@ -23285,9 +23030,6 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
   if (entity_attribute (entity, "id"))
     params_add (params, "role_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_roles",
-                              NULL, "new_role",
                               "Create Role", response_data);
   free_entity (entity);
   g_free (response);
@@ -23555,10 +23297,9 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *role_id, *name, *comment, *users;
+  const char  *role_id, *name, *comment, *users;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   role_id = params_value (params, "role_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -23622,9 +23363,6 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_roles",
-                               NULL, "edit_role",
                                "Save Role", response_data);
   free_entity (entity);
   g_free (response);
@@ -23727,12 +23465,9 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
            const char *feed_name,
            cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   entity_t entity;
   char *text = NULL;
   gchar *html, *msg;
-
-  no_redirect = params_value (params, "no_redirect");
 
   if (gvm_connection_sendf (connection,
                             "<%s/>",
@@ -23772,9 +23507,6 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_feeds",
-                               NULL, "get_feeds",
                                action, response_data);
 
   return html;
@@ -23951,10 +23683,9 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *term, *type;
+  const char  *name, *comment, *term, *type;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
@@ -24029,9 +23760,6 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
   if (entity_attribute (entity, "id"))
     params_add (params, "filter_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_filters",
-                               NULL, "new_filter",
                                "Create Filter", response_data);
   free_entity (entity);
   g_free (response);
@@ -24217,9 +23945,8 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   entity_t entity;
   gchar *html, *response;
-  const char *no_redirect, *filter_id, *name, *comment, *term, *type;
+  const char  *filter_id, *name, *comment, *term, *type;
 
-  no_redirect = params_value (params, "no_redirect");
   filter_id = params_value (params, "filter_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -24281,9 +24008,6 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
   /* Pass response to handler of following page. */
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_filters",
-                               NULL, "edit_filter",
                                "Save Filter", response_data);
 
   free_entity (entity);
@@ -24386,12 +24110,11 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 {
   gchar *response;
   entity_t entity;
-  const char *no_redirect, *schedule_id, *name, *comment;
+  const char  *schedule_id, *name, *comment;
   const char *hour, *minute, *day_of_month, *month, *year, *timezone;
   const char *period, *period_unit, *duration, *duration_unit;
   char *ret;
 
-  no_redirect = params_value (params, "no_redirect");
   schedule_id = params_value (params, "schedule_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -24497,9 +24220,6 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_schedules",
-                              NULL, "edit_schedule",
                               "Save Schedule", response_data);
   free_entity (entity);
   g_free (response);
@@ -24997,7 +24717,6 @@ char *
 create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   const char *auth_method, *comment;
   int ret;
@@ -25006,7 +24725,6 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
   gchar *buf, *response, *html;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "login");
   password = params_value (params, "password");
   hosts = params_value (params, "access_hosts");
@@ -25154,9 +24872,6 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (entity_attribute (entity, "id"))
     params_add (params, "user_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_users",
-                               NULL, "new_user",
                                "Create User", response_data);
   free_entity (entity);
   g_free (response);
@@ -25472,7 +25187,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   int ret;
   gchar *html, *response, *buf;
-  const char *no_redirect;
   const char *user_id, *login, *old_login, *modify_password, *password;
   const char *hosts, *hosts_allow, *ifaces, *ifaces_allow, *comment;
   entity_t entity;
@@ -25484,7 +25198,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   *modified_user = NULL;
   *logout_user = 0;
 
-  no_redirect = params_value (params, "no_redirect");
   /* List of hosts user has/lacks access rights. */
   hosts = params_value (params, "access_hosts");
   /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
@@ -25693,9 +25406,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
   else
     html = response_from_entity (connection, credentials, params, entity,
-                                 (no_redirect && strcmp (no_redirect, "0")),
-                                 NULL, "get_users",
-                                 NULL, "edit_user",
                                  "Save User", response_data);
   free_entity (entity);
   g_free (response);
@@ -26007,7 +25717,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   int ret;
   entity_t entity = NULL;
   char *html, *response = NULL, *truefalse;
-  const char *no_redirect, *method, *name;
+  const char  *method, *name;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -26015,7 +25725,6 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   else
     truefalse = "false";
 
-  no_redirect = params_value (params, "no_redirect");
   method = params_value (params, "group");
   CHECK_PARAM_INVALID (method, "Save Authentication", "get_users");
   if (!strcmp (method, "method:ldap_connect"))
@@ -26116,9 +25825,6 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
 
   gchar* next_url = g_strdup_printf ("auth_settings&name=%s", name);
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, next_url,
-                              NULL, "modify_auth",
                               "Save Authentication Configuration",
                               response_data);
   free_entity (entity);
@@ -26809,7 +26515,7 @@ char *
 bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
-  const char *no_redirect, *type;
+  const char  *type;
   GString *commands_xml;
   params_t *selected_ids;
   params_iterator_t iter;
@@ -26819,7 +26525,6 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
   entity_t entity;
   gchar *extra_attribs;
 
-  no_redirect = params_value (params, "no_redirect");
   type = params_value (params, "resource_type");
   if (type == NULL)
     {
@@ -26910,9 +26615,6 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, NULL,
-                              NULL, NULL,
                               "Bulk Delete", response_data);
   g_free (response);
   free_entity (entity);
@@ -26982,11 +26684,9 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *name, *comment;
+  const char  *name, *comment;
   entity_t entity;
   GString *xml;
-
-  no_redirect = params_value (params, "no_redirect");
 
   name = params_value (params, "name");
   CHECK_PARAM_INVALID (name, "Create Host", "new_host");
@@ -27052,9 +26752,6 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (entity_attribute (entity, "id"))
     params_add (params, "asset_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_assets",
-                              NULL, "new_host",
                               "Create Host", response_data);
   free_entity (entity);
   g_free (response);
@@ -27255,10 +26952,9 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   char *ret;
   gchar *response;
-  const char *no_redirect, *report_id, *filter;
+  const char  *report_id, *filter;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   report_id = params_value (params, "report_id");
   filter = params_value (params, "filter");
 
@@ -27312,9 +27008,6 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_report_section",
-                              NULL, "get_report_section",
                               "Create Asset", response_data);
   free_entity (entity);
   g_free (response);
@@ -27336,9 +27029,8 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *resource_id;
-  const char *next_id, *no_redirect;
+  const char *next_id;
   entity_t entity;
-  gchar *next_url;
 
   if (params_value (params, "asset_id"))
     resource_id = g_strdup (params_value (params, "asset_id"));
@@ -27409,33 +27101,18 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (params_given (params, "next") == 0)
     params_add (params, "next", "get_asset");
 
-  no_redirect = params_value (params, "no_redirect");
-  if (no_redirect && strcmp (no_redirect, "0"))
+  html = next_page (connection, credentials, params, response,
+                    response_data);
+  if (html == NULL)
     {
-      html = next_page (connection, credentials, params, response,
-                        response_data);
-      if (html == NULL)
-        {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_BAD_REQUEST);
-          html = gsad_message (credentials,
-              "Internal error", __FUNCTION__, __LINE__,
-              "An internal error occurred while deleting an "
-              "asset. Diagnostics: Error in parameter next.",
-              response_data);
-        }
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_BAD_REQUEST);
+      html = gsad_message (credentials,
+          "Internal error", __FUNCTION__, __LINE__,
+          "An internal error occurred while deleting an "
+          "asset. Diagnostics: Error in parameter next.",
+          response_data);
     }
-  else
-    {
-      next_url = next_page_url (credentials, params, NULL, "get_asset",
-                                "delete_asset",
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"));
-      cmd_response_data_set_redirect (response_data, next_url);
-
-      html = NULL;
-    }
-
   g_free (response);
   free_entity (entity);
   return html;
@@ -27606,10 +27283,9 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *asset_id, *comment;
+  const char  *asset_id, *comment;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   asset_id = params_value (params, "asset_id");
   comment = params_value (params, "comment");
 
@@ -27665,9 +27341,6 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_assets",
-                               NULL, "edit_asset",
                                "Save Asset", response_data);
   free_entity (entity);
   g_free (response);
