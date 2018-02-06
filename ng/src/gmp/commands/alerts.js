@@ -95,7 +95,7 @@ export class AlertCommand extends EntityCommand {
       filter_id,
     };
     log.debug('Creating new alert', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   save(args) {
@@ -126,7 +126,7 @@ export class AlertCommand extends EntityCommand {
       filter_id,
     };
     log.debug('Saving alert', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   newAlertSettings() { // should be removed after all corresponding omp commands are implemented
