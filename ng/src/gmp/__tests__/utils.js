@@ -45,6 +45,7 @@ import {
   select_save_id,
   capitalize_first_letter,
   pluralize_type,
+  shorten,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -761,6 +762,20 @@ describe('pluralize_type function test', () => {
   test('term should be pluralized', () => {
     expect(pluralize_type('foo')).toEqual('foos');
     expect(pluralize_type('task')).toEqual('tasks');
+  });
+});
+
+describe('shorten function tests', () => {
+  test('should shorten string', () => {
+    expect(shorten('foo bar', 4)).toEqual('foo ...');
+  });
+
+  test('should return empty string for undefined', () => {
+    expect(shorten()).toEqual('');
+  });
+
+  test('should not shorten string before limit', () => {
+    expect(shorten('foo bar', 10)).toEqual('foo bar');
   });
 });
 
