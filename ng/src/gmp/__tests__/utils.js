@@ -46,6 +46,7 @@ import {
   capitalize_first_letter,
   pluralize_type,
   shorten,
+  debounce,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -776,6 +777,44 @@ describe('shorten function tests', () => {
 
   test('should not shorten string before limit', () => {
     expect(shorten('foo bar', 10)).toEqual('foo bar');
+  });
+});
+
+describe('debounce function tests', () => {
+
+  jest.useFakeTimers();
+
+  test('should debounce function', () => {
+    const callback = jest.fn();
+    const func = debounce(callback);
+
+    func(1);
+    func(2);
+    func(3);
+
+    jest.runAllTimers();
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0][0]).toBe(3);
+  });
+
+  test('should run callback immediately', () => {
+    const callback = jest.fn();
+    const func = debounce(callback, 10000, true);
+
+    func(1);
+    func(2);
+    func(3);
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0][0]).toBe(1);
+
+    jest.runAllTimers();
+
+    expect(callback.mock.calls.length).toBe(2);
+    expect(callback.mock.calls[1][0]).toBe(3);
   });
 });
 
