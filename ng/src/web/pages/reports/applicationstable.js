@@ -29,6 +29,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
+
 import DetailsLink from '../../components/link/detailslink.js';
 
 import TableData from '../../components/table/data.js';
@@ -37,6 +39,7 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 import {createEntitiesTable} from '../../entities/table.js';
+import CpeIcon from 'web/components/icon/cpeicon';
 
 const Header = ({
   currentSortBy,
@@ -106,7 +109,10 @@ const Row = ({
           id={name}
           textOnly={!links}
         >
-          {name}
+          <IconDivider>
+            <CpeIcon name={name}/>
+            <span>{name}</span>
+          </IconDivider>
         </DetailsLink>
       </TableData>
       <TableData>
