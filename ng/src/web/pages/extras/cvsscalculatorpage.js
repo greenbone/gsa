@@ -4,7 +4,7 @@
 * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
 *
 * Copyright:
-* Copyright (C) 2017 Greenbone Networks GmbH
+* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ class CvssCalculator extends React.Component {
     }
   }
 
-  calculateVector() {
+  calculateVector(newVector) {
     const {
       access_vector,
       access_complexity,
@@ -113,9 +113,14 @@ class CvssCalculator extends React.Component {
       availability_impact,
       confidentiality_impact,
       integrity_impact,
+      ...newVector,
     });
 
-    this.setState({cvss_vector, user_vector: cvss_vector});
+    this.setState({
+      ...newVector,
+      cvss_vector,
+      user_vector: cvss_vector,
+    });
     this.calculateScore(cvss_vector);
   }
 
@@ -130,9 +135,7 @@ class CvssCalculator extends React.Component {
   }
 
   handleMetricsChange(value, name) {
-    this.handleInputChange(value, name);
-    this.calculateVector();
-
+    this.calculateVector({[name]: value});
   }
 
   handleInputChange(value, name) {
