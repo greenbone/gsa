@@ -32,6 +32,8 @@ import withGmp from '../../utils/withGmp.js';
 
 import EntityComponent from '../../entity/component.js';
 
+import FootNote from '../../components/footnote/footnote.js';
+
 import Layout from '../../components/layout/layout.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
@@ -383,13 +385,38 @@ class AlertComponent extends React.Component {
     const {gmp} = this.props;
     const {onTestSuccess, onTestError} = this.props;
 
-    gmp.alert.test(alert).then(() => {
-      if (is_defined(onTestSuccess)) {
-        onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
+    gmp.alert.test(alert).then(response => {
+      const {success, details, message} = response.data;
+      if (success) {
+        if (is_defined(onTestSuccess)) {
+          onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
+        }
+      }
+      else if (is_defined(onTestError)) {
+        if (is_defined(details)) {
+          onTestError(
+            <React.Fragment>
+              <p>
+                {_('Testing the alert {{name}} failed. {{message}}.', {
+                  name: alert.name,
+                  message,
+                })}
+              </p>
+              <FootNote>
+                {details}
+              </FootNote>
+            </React.Fragment>
+          );
+        }
+        else {
+          onTestError(_('Testing the alert {{name}} failed. {{message}}.',
+            {name: alert.name, message}));
+        }
       }
     }, () => {
       if (is_defined(onTestError)) {
-        onTestError(_('Testing the alert {{name}} failed.', alert));
+        onTestError(_('An error occured during Testing the alert {{name}}',
+          alert));
       }
     });
   }
