@@ -41,6 +41,7 @@ import {
   filter,
   split,
   first,
+  includes_id,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -684,6 +685,28 @@ describe('first function tests', () => {
     expect(first('')).toEqual({});
   });
 
+});
+
+describe('includes_id function tests', () => {
+  test('should return true for found id', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(includes_id(list, 1)).toBe(true);
+    expect(includes_id(list, 2)).toBe(true);
+    expect(includes_id(list, 3)).toBe(true);
+  });
+
+  test('should return false for unkown id', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(includes_id(list, 4)).toBe(false);
+  });
+
+  test('should return false for different type of id', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(includes_id(list, '2')).toBe(false);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
