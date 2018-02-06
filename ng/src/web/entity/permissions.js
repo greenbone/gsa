@@ -193,7 +193,6 @@ class EntityPermissions extends React.Component {
 
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
-  foldable: PropTypes.bool,
   permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,

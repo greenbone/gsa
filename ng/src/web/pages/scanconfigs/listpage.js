@@ -105,7 +105,6 @@ const ScanConfigsPage = ({
     }) => (
       <EntitiesPage
         {...props}
-        foldable={true}
         filterEditDialog={ScanConfigFilterDialog}
         sectionIcon="config.svg"
         table={Table}
