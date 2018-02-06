@@ -367,7 +367,8 @@
     this.title = options.title;
   }
 
-  Dialog.prototype.error = function(message, title, status_code) {
+  Dialog.prototype.error = function(message, title, status_code,
+                                    status_details) {
     var displayed_title;
     if (!gsa.is_defined(title)) {
       displayed_title = this.title || 'Error:';
@@ -389,6 +390,11 @@
       'class': 'ui-state-error ui-corner-all',
       html: $('<p>' + message + '</p>'),
     }));
+
+    if (gsa.is_defined(status_details) && status_details !== '') {
+      this.dialog.append($('<b>' + gsa._('Details') + ':</b>'));
+      this.dialog.append($('<p class="footnote">' + status_details + '</p>'));
+    }
   };
 
   Dialog.prototype.setErrorFromResponse = function(jqXHR) {
@@ -410,6 +416,7 @@
     var error_title = 'Error:';
     var error = 'Unknown error';
     var error_code = '';
+    var error_details = undefined;
 
     if (gsad_msg.length) {
       error = gsad_msg.attr('status_text');
@@ -454,6 +461,7 @@
         '\' failed';
       error = '<br/>' + action_result.find('message').text();
       error_code = action_result.find('status').text();
+      error_details = action_result.find('details').text();
     }
     else if (internal_error_html.length) {
       error_title = internal_error_html.find('span div').text();
@@ -471,7 +479,7 @@
       error = login_form_html.find('.error_message').text();
     }
 
-    self.error(error, error_title, error_code);
+    self.error(error, error_title, error_code, error_details);
     return self;
   };
 
