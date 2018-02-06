@@ -47,6 +47,7 @@ import {
   pluralize_type,
   shorten,
   debounce,
+  throttleAnimation,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -815,6 +816,26 @@ describe('debounce function tests', () => {
 
     expect(callback.mock.calls.length).toBe(2);
     expect(callback.mock.calls[1][0]).toBe(3);
+  });
+});
+
+describe('throttleAnimation function tests', () => {
+
+  jest.useFakeTimers();
+
+  test('should throttle running callback', () => {
+    const callback = jest.fn();
+    const func = throttleAnimation(callback);
+
+    func(1);
+    func(2);
+    func(3);
+
+    jest.runAllTimers();
+
+    expect(callback).toBeCalled();
+    expect(callback.mock.calls.length).toBe(1);
+    expect(callback.mock.calls[0][0]).toBe(1);
   });
 });
 
