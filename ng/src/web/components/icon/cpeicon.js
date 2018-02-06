@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,22 +31,26 @@ import Cpe from '../../utils/cpe.js';
 
 import Icon from './icon.js';
 
-const CpeIcon = ({name, ...props}) => {
-  let icon;
-  let cpe = Cpe.find(name);
+const CpeIcon = ({
+  name,
+  ...props
+}) => {
+  const cpe = Cpe.find(name);
 
-  if (is_defined(cpe)) {
-    icon = cpe.icon;
-  }
-  else {
-    icon = 'cpe/other.svg';
-  }
-  return <Icon {...props} img={icon}/>;
+  const icon = is_defined(cpe) ? cpe.icon : 'cpe/other.svg';
+
+  return (
+    <Icon
+      {...props}
+      img={icon}
+    />
+  );
 };
 
 CpeIcon.propTypes = {
   name: PropTypes.string,
 };
 
-
 export default CpeIcon;
+
+// vim: set ts=2 sw=2 tw=80:
