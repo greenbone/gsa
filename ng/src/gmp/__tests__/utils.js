@@ -43,6 +43,7 @@ import {
   first,
   includes_id,
   select_save_id,
+  capitalize_first_letter,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -731,6 +732,14 @@ describe('select_save_id function tests', () => {
 
     expect(select_save_id(list, 4, 42)).toBe(42);
     expect(select_save_id(list, '2', 42)).toBe(42);
+  });
+});
+
+describe('capatalize_first_letter function tests', () => {
+  test('should capitalize first letter', () => {
+    expect(capitalize_first_letter('foo')).toEqual('Foo');
+    expect(capitalize_first_letter('Foo')).toEqual('Foo');
+    expect(capitalize_first_letter('bAR')).toEqual('BAR');
   });
 });
 
