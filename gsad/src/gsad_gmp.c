@@ -1412,7 +1412,6 @@ response_from_entity (gvm_connection_t *connection,
 {
   gchar *res;
   entity_t status_details_entity;
-  const char *status_details;
   int success;
   success = gmp_success (entity);
 
@@ -1422,19 +1421,11 @@ response_from_entity (gvm_connection_t *connection,
     }
 
   status_details_entity = entity_child (entity, "status_details");
-  if (status_details_entity)
-    {
-      status_details = status_details_entity->text;
-    }
-  else
-    {
-      status_details = NULL;
-    }
 
   res = action_result_page (connection, credentials, params, response_data,
                             action, entity_attribute (entity, "status"),
                             entity_attribute (entity, "status_text"),
-                            status_details, NULL);
+                            entity_text(status_details_entity), NULL);
   return res;
 }
 
@@ -8979,7 +8970,6 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *html, *response;
   const char  *alert_id;
-  const char *status_details;
   entity_t entity;
   entity_t status_details_entity;
 
@@ -9026,19 +9016,11 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
 
   status_details_entity = entity_child (entity, "status_details");
-  if (status_details_entity)
-    {
-      status_details = status_details_entity->text;
-    }
-  else
-    {
-      status_details = NULL;
-    }
 
   html = action_result_page (connection, credentials, params, response_data,
-                            "Test Alert", entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"),
-                            status_details, NULL);
+                             "Test Alert", entity_attribute (entity, "status"),
+                             entity_attribute (entity, "status_text"),
+                             entity_text(status_details_entity), NULL);
 
   free_entity (entity);
   g_free (response);
