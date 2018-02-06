@@ -42,6 +42,7 @@ import {
   split,
   first,
   includes_id,
+  select_save_id,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -706,6 +707,30 @@ describe('includes_id function tests', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
     expect(includes_id(list, '2')).toBe(false);
+  });
+});
+
+describe('select_save_id function tests', () => {
+  test('should return id if id is in list', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(select_save_id(list, 1)).toEqual(1);
+    expect(select_save_id(list, 2)).toEqual(2);
+    expect(select_save_id(list, 3)).toEqual(3);
+  });
+
+  test('should return first id if id is not in list', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(select_save_id(list, 4)).toBe(1);
+    expect(select_save_id(list, '2')).toBe(1);
+  });
+
+  test('should return default if id is not in list', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(select_save_id(list, 4, 42)).toBe(42);
+    expect(select_save_id(list, '2', 42)).toBe(42);
   });
 });
 
