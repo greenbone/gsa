@@ -205,7 +205,6 @@ SectionElements.propTypes = {
 
 const EntityTags = ({
   entity,
-  foldable = true,
   onTagAddClick,
   onTagDeleteClick,
   onTagDisableClick,
@@ -301,7 +300,6 @@ const EntityTags = ({
 
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
-  foldable: PropTypes.bool,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

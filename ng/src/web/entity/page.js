@@ -93,7 +93,6 @@ class EntityPage extends React.Component {
       detailsComponent: Details,
       children,
       entity,
-      foldable,
       sectionIcon,
       permissionsComponent: PermissionsComponent = EntityPermissions,
       sectionComponent: SectionComponent = Section,
@@ -141,7 +140,6 @@ class EntityPage extends React.Component {
         title={section_title}
         className="entity-section"
         img={sectionIcon}
-        foldable={foldable}
         extra={this.renderInfo()}
       >
         {children({
@@ -266,7 +264,6 @@ class EntityPage extends React.Component {
 EntityPage.propTypes = {
   detailsComponent: PropTypes.component.isRequired,
   entity: PropTypes.model,
-  foldable: PropTypes.bool,
   infoComponent: PropTypes.componentOrFalse,
   loading: PropTypes.bool,
   permissions: PropTypes.object,

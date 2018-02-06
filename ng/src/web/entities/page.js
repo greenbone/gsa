@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,7 +78,6 @@ class EntitiesPage extends React.Component {
     const {
       entities,
       filter,
-      foldable,
       loading,
       sectionIcon,
       dashboard: DashboardComponent,
@@ -101,7 +100,6 @@ class EntitiesPage extends React.Component {
         title={this.getSectionTitle()}
         className="entities-section"
         img={sectionIcon}
-        foldable={foldable}
         extra={DashboardComponent ? <DashboardControls/> : null}>
         <Layout
           flex="column"
@@ -253,7 +251,6 @@ EntitiesPage.propTypes = {
   filter: PropTypes.filter,
   filterEditDialog: PropTypes.component,
   filters: PropTypes.array,
-  foldable: PropTypes.bool,
   loading: PropTypes.bool,
   powerfilter: PropTypes.componentOrFalse,
   section: PropTypes.componentOrFalse,
