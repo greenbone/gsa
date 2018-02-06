@@ -8979,7 +8979,9 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *html, *response;
   const char  *alert_id;
+  const char *status_details;
   entity_t entity;
+  entity_t status_details_entity;
 
   alert_id = params_value (params, "alert_id");
 
@@ -9022,10 +9024,21 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
-  /* Cleanup, and return transformed XML. */
 
-  html = response_from_entity (connection, credentials, params, entity,
-                              "Test Alert", response_data);
+  status_details_entity = entity_child (entity, "status_details");
+  if (status_details_entity)
+    {
+      status_details = status_details_entity->text;
+    }
+  else
+    {
+      status_details = NULL;
+    }
+
+  html = action_result_page (connection, credentials, params, response_data,
+                            "Test Alert", entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"),
+                            status_details, NULL);
 
   free_entity (entity);
   g_free (response);
