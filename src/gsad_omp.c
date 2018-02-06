@@ -19287,20 +19287,15 @@ save_my_settings_omp (openvas_connection_t *connection,
                                  "Diagnostics: Manager closed connection during authenticate.",
                                  "/omp?cmd=get_my_settings", response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            g_string_append (xml,
-                             "<gsad_msg"
-                             " status_text=\"Password error\""
-                             " operation=\"Save My Settings\">"
-                             "You tried to change your password, but the old"
-                             " password was not provided or was incorrect. "
-                             " Please enter the correct old password or remove"
-                             " old and new passwords to apply any other changes"
-                             " of your settings."
-                             "</gsad_msg>");
-            return edit_my_settings (connection, credentials, params,
-                                     g_string_free (xml, FALSE),
-                                     response_data);
+            response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+            return gsad_message (credentials,
+                                 "Invalid Password", __FUNCTION__, __LINE__,
+                                 "You tried to change your password, but the old"
+                                 " password was not provided or was incorrect. "
+                                 " Please enter the correct old password or remove"
+                                 " old and new passwords to apply any other changes"
+                                 " of your settings.",
+                                 "/omp?cmd=get_my_settings", response_data);
           default:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
