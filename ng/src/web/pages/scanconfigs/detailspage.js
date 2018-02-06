@@ -501,6 +501,7 @@ const ScanConfigPage = props => (
   <EntityContainer
     {...props}
     name="scanconfig"
+    resourceType="config"
     loaders={[
       permissions_resource_loader,
     ]}
