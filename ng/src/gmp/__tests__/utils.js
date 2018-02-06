@@ -44,6 +44,7 @@ import {
   includes_id,
   select_save_id,
   capitalize_first_letter,
+  pluralize_type,
 } from '../utils.js';
 
 describe('array_equals function test', () => {
@@ -740,6 +741,26 @@ describe('capatalize_first_letter function tests', () => {
     expect(capitalize_first_letter('foo')).toEqual('Foo');
     expect(capitalize_first_letter('Foo')).toEqual('Foo');
     expect(capitalize_first_letter('bAR')).toEqual('BAR');
+  });
+});
+
+describe('pluralize_type function test', () => {
+  test('info should not be pluralized', () => {
+    expect(pluralize_type('info')).toEqual('info');
+  });
+
+  test('version should not be pluralized', () => {
+    expect(pluralize_type('version')).toEqual('version');
+  });
+
+  test('already pluralized term should not be pluralized', () => {
+    expect(pluralize_type('foos')).toEqual('foos');
+    expect(pluralize_type('tasks')).toEqual('tasks');
+  });
+
+  test('term should be pluralized', () => {
+    expect(pluralize_type('foo')).toEqual('foos');
+    expect(pluralize_type('task')).toEqual('tasks');
   });
 });
 
