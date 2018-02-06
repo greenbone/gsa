@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {map} from '../utils.js';
+import {is_defined, map} from '../utils.js';
 import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
@@ -95,7 +95,7 @@ export class AlertCommand extends EntityCommand {
       filter_id,
     };
     log.debug('Creating new alert', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   save(args) {
@@ -126,7 +126,7 @@ export class AlertCommand extends EntityCommand {
       filter_id,
     };
     log.debug('Saving alert', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   newAlertSettings() { // should be removed after all corresponding omp commands are implemented
@@ -186,6 +186,15 @@ export class AlertCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'test_alert',
       id,
+    }).then(response => {
+      const {action_result} = response.data;
+      const {status, details} = action_result;
+      return response.setData({
+        ...action_result,
+        details: is_defined(details) && details.length > 0 ?
+          details : undefined,
+        success: status[0] === '2',
+      });
     });
   }
 
