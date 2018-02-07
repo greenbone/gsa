@@ -45,6 +45,8 @@ import Layout from '../components/layout/layout.js';
 
 import {render_options} from '../utils/render.js';
 
+import {Wizardess, WizardContent} from './taskwizard';
+
 const ModifyTaskWizard = ({
     alert_email,
     date,
@@ -60,10 +62,10 @@ const ModifyTaskWizard = ({
   return (
     <Layout flex align={['start', 'start']}>
       <Layout basis="40%">
-        <div className="wizardess pull-right">
+        <Wizardess>
           <Img src="enchantress.svg"/>
-        </div>
-        <div className="wizard-content">
+        </Wizardess>
+        <WizardContent>
           <div>
             {_('I will modify an existing task for you. The difference to ' +
               'the Edit Task dialog is that here you can enter values for ' +
@@ -83,7 +85,7 @@ const ModifyTaskWizard = ({
               </li>
             </ul>
           </div>
-        </div>
+        </WizardContent>
       </Layout>
       <Layout
         basis="0"
