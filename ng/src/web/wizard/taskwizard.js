@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +24,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
@@ -37,7 +40,18 @@ import Img from '../components/img/img.js';
 
 import Layout from '../components/layout/layout.js';
 
-import './css/wizard.css';
+export const Wizardess = glamorous.div({
+  '& > img': {
+    height: '300px',
+  },
+});
+
+export const WizardContent = glamorous.div({
+  '& > p img': {
+    marginLeft: '5px',
+    marginRight: '50px',
+  },
+});
 
 const TaskWizard = ({
     hosts,
@@ -46,10 +60,10 @@ const TaskWizard = ({
   }) => {
   return (
     <Layout flex>
-      <div className="wizardess">
+      <Wizardess>
         <Img src="enchantress.svg"/>
-      </div>
-      <div className="wizard-content">
+      </Wizardess>
+      <WizardContent>
         <p>
           <b>{_('Quick start: Immediately scan an IP address')}</b>
         </p>
@@ -95,7 +109,7 @@ const TaskWizard = ({
             onClick={onNewClick}/>
           {_('you can create a new Task yourself.')}
         </p>
-      </div>
+      </WizardContent>
     </Layout>
   );
 };

@@ -706,7 +706,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
      ${NG_SRC_DIR}/src/web/css/app.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
-     ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
      )
 
 set (NG_FILES
