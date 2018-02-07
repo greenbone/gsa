@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,8 @@ import moment from 'moment';
 import XHRBackend from 'i18next-xhr-backend';
 import BrowserDetector from 'i18next-browser-languagedetector';
 
-import {is_defined, is_string, is_date} from './utils.js';
+import {is_defined, is_string, is_date} from './utils/identity';
+
 import {parse_int} from './parser.js';
 import logger from './log.js';
 

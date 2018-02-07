@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined, first} from 'gmp/utils.js';
+import {is_defined, first} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilties from '../../utils/withCapabilities.js';

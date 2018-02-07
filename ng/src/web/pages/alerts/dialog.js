@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {select_save_id} from 'gmp/utils.js';
+import {select_save_id} from 'gmp/utils';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
 import {

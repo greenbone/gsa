@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 
 import logger from 'gmp/log.js';
 import Capabilities from 'gmp/capabilities/capabilities.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 

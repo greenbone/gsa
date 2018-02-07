@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous, {Span} from 'glamorous';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_entities_counts, render_options} from '../../utils/render.js';

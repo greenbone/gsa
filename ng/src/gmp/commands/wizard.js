@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ import Credential from '../models/credential.js';
 import Task from '../models/task.js';
 import Settings from '../models/settings.js';
 
-import {for_each, map} from '../utils.js';
+import {for_each, map} from '../utils/array';
 
 function convert_data(prefix, data, fields) {
   let converted = {};

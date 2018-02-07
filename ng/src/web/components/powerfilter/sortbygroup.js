@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {map, is_defined} from 'gmp/utils.js';
+import {map, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

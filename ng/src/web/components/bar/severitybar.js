@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 import {parse_float} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';

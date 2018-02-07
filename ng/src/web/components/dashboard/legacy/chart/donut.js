@@ -27,7 +27,7 @@ import d3tip from 'd3-tip';
 import $ from 'jquery';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_string, has_value} from 'gmp/utils.js';
+import {is_defined, is_string, has_value} from 'gmp/utils';
 
 import {
   array_sum,

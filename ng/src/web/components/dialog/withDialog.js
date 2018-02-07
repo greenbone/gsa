@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, KeyCode, exclude_object_props} from 'gmp/utils.js';
+import {is_defined, KeyCode, exclude_object_props} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

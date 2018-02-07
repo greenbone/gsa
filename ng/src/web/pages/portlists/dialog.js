@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty, is_model_element, map} from '../utils.js';
+import {is_defined, is_model_element} from '../utils/identity';
+import {map} from '../utils/array';
+import {is_empty} from '../utils/string';
 
 import List from '../list.js';
 import Model from '../model.js';

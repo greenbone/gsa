@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 
 import {Link as RLink} from 'react-router';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

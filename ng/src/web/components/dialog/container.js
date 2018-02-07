@@ -24,7 +24,7 @@
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 const DialogContainer = glamorous.div(
   {

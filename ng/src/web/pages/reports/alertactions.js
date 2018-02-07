@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {first} from 'gmp/utils.js';
+import {first} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';

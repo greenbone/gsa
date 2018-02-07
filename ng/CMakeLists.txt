@@ -164,7 +164,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/parser.js
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/gmp/timezones.js
-     ${NG_SRC_DIR}/src/gmp/utils.js
+     ${NG_SRC_DIR}/src/gmp/utils/array.js
+     ${NG_SRC_DIR}/src/gmp/utils/calc.js
+     ${NG_SRC_DIR}/src/gmp/utils/event.js
+     ${NG_SRC_DIR}/src/gmp/utils/id.js
+     ${NG_SRC_DIR}/src/gmp/utils/identity.js
+     ${NG_SRC_DIR}/src/gmp/utils/index.js
+     ${NG_SRC_DIR}/src/gmp/utils/object.js
+     ${NG_SRC_DIR}/src/gmp/utils/string.js
      ${NG_SRC_DIR}/src/web/app.js
      ${NG_SRC_DIR}/src/web/components/badge/badge.js
      ${NG_SRC_DIR}/src/web/components/bar/menubar.js

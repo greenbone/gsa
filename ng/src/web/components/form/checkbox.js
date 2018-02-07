@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';

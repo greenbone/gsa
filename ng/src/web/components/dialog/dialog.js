@@ -25,7 +25,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {KeyCode, has_value, is_defined} from 'gmp/utils.js';
+import {KeyCode, has_value, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

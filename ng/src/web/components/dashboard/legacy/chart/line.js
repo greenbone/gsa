@@ -28,7 +28,7 @@ import 'core-js/fn/object/entries';
 import d3 from 'd3';
 
 import _ from 'gmp/locale.js';
-import {is_date, is_defined, has_value} from 'gmp/utils.js';
+import {is_date, is_defined, has_value} from 'gmp/utils';
 
 import {
   column_label,

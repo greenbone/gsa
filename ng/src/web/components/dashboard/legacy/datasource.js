@@ -25,7 +25,7 @@ import d3 from 'd3';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 import {Cache} from 'gmp/cache.js';
 
 import {xml2json} from 'gmp/http/transform/x2js.js';

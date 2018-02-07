@@ -27,7 +27,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, is_empty, map, shorten, split} from 'gmp/utils.js';
+import {is_defined, is_empty, map, shorten, split} from 'gmp/utils';
 
 import Wrapper from '../components/layout/wrapper.js';
 

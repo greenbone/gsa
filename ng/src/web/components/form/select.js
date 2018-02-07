@@ -26,7 +26,7 @@ import React from 'react';
 
 import Downshift from 'downshift';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

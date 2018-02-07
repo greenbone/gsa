@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined, KeyCode} from 'gmp/utils.js';
+import {is_defined, KeyCode} from 'gmp/utils';
 
 import {
   parse_cvss_base_vector,

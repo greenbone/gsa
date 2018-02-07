@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
 

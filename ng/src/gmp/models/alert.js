@@ -22,7 +22,9 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, is_empty, is_object, for_each, map} from '../utils.js';
+import {is_defined, is_object} from '../utils/identity';
+import {is_empty} from '../utils/string';
+import {for_each, map} from '../utils/array';
 
 import {parse_yesno, YES_VALUE} from '../parser.js';
 

@@ -24,7 +24,7 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import {is_defined, is_empty} from 'gmp/utils.js';
+import {is_defined, is_empty} from 'gmp/utils';
 
 import glamorous, {Col, Div} from 'glamorous';
 

@@ -27,7 +27,7 @@ import glamorous, {Col} from 'glamorous';
 
 import _ from 'gmp/locale.js';
 import {parse_yesno, YES_VALUE} from 'gmp/parser.js';
-import {is_defined, is_empty} from 'gmp/utils.js';
+import {is_defined, is_empty} from 'gmp/utils';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import EditIcon from '../../components/icon/editicon.js';

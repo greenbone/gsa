@@ -26,7 +26,7 @@ import React from 'react';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {first} from 'gmp/utils.js';
+import {first} from 'gmp/utils';
 
 import CredentialsDialog from '../credentials/dialog.js';
 

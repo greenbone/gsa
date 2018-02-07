@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 -2018 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/promise';
 
-import {is_object} from './utils.js';
+import {is_object} from './utils/identity';
 
 export class PromiseFactory {
 

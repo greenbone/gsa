@@ -29,7 +29,7 @@ import uuid from 'uuid/v4';
 
 import {DragDropContext} from 'react-beautiful-dnd';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

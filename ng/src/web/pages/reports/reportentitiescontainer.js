@@ -25,7 +25,7 @@ import React from 'react';
 
 import logger from 'gmp/log.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

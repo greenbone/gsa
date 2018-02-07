@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,9 @@
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import {for_each, map, is_defined} from '../utils.js';
+import {for_each, map} from '../utils/array';
+import {is_defined} from '../utils/identity';
+
 import logger from '../log.js';
 
 import Capabilities from '../capabilities/capabilities.js';

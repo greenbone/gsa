@@ -26,7 +26,7 @@ import React from 'react';
 import {Col} from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {result_cvss_risk_factor} from '../../utils/render.js';

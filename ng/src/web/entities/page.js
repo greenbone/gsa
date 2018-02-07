@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, exclude_object_props} from 'gmp/utils.js';
+import {is_defined, exclude_object_props} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_section_title} from '../utils/render.js';

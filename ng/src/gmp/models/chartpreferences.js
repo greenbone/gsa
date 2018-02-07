@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {is_defined} from '../utils/identity';
+import {for_each} from '../utils/array';
 
-import {is_defined, for_each} from '../utils.js';
 import logger from '../log.js';
 
 const log = logger.getLogger('gmp.models.chartpreferences');

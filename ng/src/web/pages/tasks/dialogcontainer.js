@@ -27,7 +27,7 @@ import moment from 'moment-timezone';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import Layout from '../../components/layout/layout.js';
 

@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 
 import Downshift from 'downshift';
 
-import {arrays_equal, is_array, is_defined, is_empty} from 'gmp/utils.js';
+import {arrays_equal, is_array, is_defined, is_empty} from 'gmp/utils';
 
 import ArrowIcon from '../icon/arrowicon.js';
 

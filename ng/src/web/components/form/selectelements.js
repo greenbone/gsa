@@ -27,7 +27,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 export const Box = glamorous.div({
   border: '1px solid #aaa',

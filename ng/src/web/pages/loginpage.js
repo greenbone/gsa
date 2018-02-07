@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, KeyCode, is_empty} from 'gmp/utils.js';
+import {is_defined, KeyCode, is_empty} from 'gmp/utils';
 
 import Layout from '../components/layout/layout.js';
 

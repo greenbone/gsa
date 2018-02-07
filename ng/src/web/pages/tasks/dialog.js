@@ -26,12 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {
-  classes,
-  is_defined,
-  map,
-  select_save_id,
-} from 'gmp/utils.js';
+import {classes, is_defined, map, select_save_id} from 'gmp/utils';
 
 import {
   NO_VALUE,

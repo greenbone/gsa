@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,8 @@
 
 import moment from 'moment';
 
-import {is_array, is_defined, is_empty} from 'gmp/utils.js';
+import {is_array, is_defined} from 'gmp/utils/identity';
+import {is_empty} from 'gmp/utils/string';
 
 import {set_properties, parse_int} from 'gmp/parser.js';
 

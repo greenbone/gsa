@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 import logger from 'gmp/log.js';
 import PromiseFactory from 'gmp/promise.js';
 

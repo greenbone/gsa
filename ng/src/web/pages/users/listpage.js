@@ -25,7 +25,7 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose.js';

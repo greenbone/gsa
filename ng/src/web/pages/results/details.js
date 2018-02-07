@@ -27,7 +27,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_empty, is_defined} from 'gmp/utils.js';
+import {is_empty, is_defined} from 'gmp/utils';
 import {TAG_NA} from 'gmp/models/nvt.js';
 
 import Layout from '../../components/layout/layout.js';

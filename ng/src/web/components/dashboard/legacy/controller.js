@@ -22,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import logger from 'gmp/log.js';
-import {has_value, is_defined, is_function, is_object} from 'gmp/utils.js';
+import {has_value, is_defined, is_function, is_object} from 'gmp/utils';
 
 import {create_uri, get_title_generator} from './helper.js';
 

@@ -24,7 +24,7 @@ import X2JS2 from 'x2js';
 
 import _ from '../../locale.js';
 
-import {is_defined} from '../../utils.js';
+import {is_defined} from '../../utils/identity';
 
 import {parse_envelope_meta} from '../../parser.js';
 

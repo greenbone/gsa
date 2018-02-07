@@ -24,7 +24,7 @@
 import moment from 'moment';
 import ReactPropTypes from 'prop-types';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import {CacheFactory, Cache} from 'gmp/cache.js';
 

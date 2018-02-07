@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 import 'core-js/fn/string/ends-with';
 import 'core-js/fn/string/starts-with';
 
-import {is_defined} from '../utils.js';
+import {is_defined} from '../utils/identity';
 
 export function build_url_params(params) {
   let argcount = 0;

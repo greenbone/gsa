@@ -26,7 +26,7 @@ import React from 'react';
 
 import _, {short_date} from 'gmp/locale.js';
 import Promise from 'gmp/promise.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target.js';
 

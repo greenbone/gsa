@@ -29,7 +29,7 @@ import 'jquery-ui/ui/effect';
 import 'jquery-ui/ui/widgets/resizable.js';
 import 'jquery-ui/ui/widgets/sortable.js';
 
-import {is_defined, is_object, is_array} from 'gmp/utils.js';
+import {is_defined, is_object, is_array} from 'gmp/utils';
 import Logger from 'gmp/log.js';
 
 import EventNode from './eventnode.js';

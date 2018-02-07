@@ -25,7 +25,7 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, shorten} from 'gmp/utils.js';
+import {is_defined, is_empty, shorten} from 'gmp/utils';
 
 import {ANY, MANUAL} from 'gmp/commands/overrides.js';
 

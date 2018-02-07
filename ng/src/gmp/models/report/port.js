@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/string/includes';
 
-import {is_defined} from '../../utils.js';
+import {is_defined} from '../../utils/identity';
 
 import {set_properties, parse_int, parse_severity} from '../../parser.js';
 
