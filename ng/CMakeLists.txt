@@ -705,8 +705,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
      ${NG_SRC_DIR}/src/web/components/form/css/form.css
      ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
-     ${NG_SRC_DIR}/src/web/css/app.css
-     ${NG_SRC_DIR}/src/web/css/gsa-base.css
      )
 
 set (NG_FILES
