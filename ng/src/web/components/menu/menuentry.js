@@ -43,7 +43,7 @@ const MenuEntry = ({
   to,
   ...props
 }) => {
-  if (is_defined(caps) && is_defined(capabilities)) {
+  if (is_defined(caps)) {
 
     if (!is_array(caps)) {
       caps = [caps];
