@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {is_defined, is_array} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -34,6 +36,10 @@ import withClickHandler from '../form/withClickHandler.js';
 import Layout from '../layout/layout.js';
 
 import Link from '../link/link.js';
+
+const StyledLink = glamorous(Link)({
+  height: '100%',
+});
 
 const MenuEntry = ({
   capabilities,
@@ -60,7 +66,7 @@ const MenuEntry = ({
 
   let entry;
   if (is_defined(to)) {
-    entry = <Link to={to}>{title}</Link>;
+    entry = <StyledLink to={to}>{title}</StyledLink>;
   }
   else if (is_defined(title)) {
     entry = title;
@@ -73,7 +79,7 @@ const MenuEntry = ({
     <Layout
       {...props}
       grow="1"
-      align={['start', 'stretch']}
+      align={['start', 'center']}
     >
       {entry}
     </Layout>
