@@ -32,27 +32,42 @@ import PropTypes from '../../utils/proptypes';
 
 import CloseButton from '../dialog/closebutton';
 
+/*
+ * Position the Menu relative to this element
+ *
+ * This allows to not consider the padding and border of the Header
+ */
+const HeaderContainer = glamorous.div('display-header-container', {
+  position: 'relative',
+});
+
 const Header = glamorous.div('display-header', {
   display: 'flex',
   flexGrow: 0,
   flexShrink: 0,
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  backgroundColor: Theme.main.green,
-  border: '1px solid ' + Theme.extra.darkGreen,
+  backgroundColor: Theme.green,
+  border: '1px solid ' + Theme.darkGreen,
   color: 'white',
-  overflow: 'hidden',
   textOverflow: 'ellipsis',
-  padding: '1px 5px 1px 10px',
+  padding: '0px 5px',
   fontWeight: 'bold',
   userSelect: 'none',
+});
+
+const HeaderContent = glamorous.div('display-header-content', {
+  display: 'flex',
+  padding: '1px 0',
+  flexGrow: 1,
+  alignItems: 'center',
+  justifyContent: 'space-between',
 });
 
 const DisplayView = glamorous.div('display-view', {
   display: 'flex',
   flexDirection: 'column',
   flexGrow: 1,
-  backgroundColor: '#EEEEEE',
+  backgroundColor: Theme.dialogGray,
+  overflow: 'auto',
 });
 
 const DisplayContent = glamorous.div('display-content', {
@@ -71,21 +86,27 @@ const DisplayTitle = glamorous.div('display-title', {
 
 const Display = ({
   children,
+  menu,
   title,
   onRemoveClick,
 }) => {
   return (
     <DisplayView>
-      <Header>
-        <DisplayTitle>
-          {title}
-        </DisplayTitle>
-        <CloseButton
-          size="small"
-          title={_('Remove')}
-          onClick={onRemoveClick}
-        />
-      </Header>
+      <HeaderContainer>
+        <Header>
+          {menu}
+          <HeaderContent>
+            <DisplayTitle>
+              {title}
+            </DisplayTitle>
+            <CloseButton
+              size="small"
+              title={_('Remove')}
+              onClick={onRemoveClick}
+            />
+          </HeaderContent>
+        </Header>
+      </HeaderContainer>
       <DisplayContent>
         {children}
       </DisplayContent>
@@ -94,6 +115,7 @@ const Display = ({
 };
 
 Display.propTypes = {
+  menu: PropTypes.element,
   title: PropTypes.string,
   onRemoveClick: PropTypes.func.isRequired,
 };
