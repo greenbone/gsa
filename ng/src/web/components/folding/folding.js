@@ -1,10 +1,12 @@
 /* Greenbone Security Assistant
  *
  * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  * Timo Pollmeier <timo.pollmeier@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +25,18 @@
 
 import React from 'react';
 
+import {Div} from 'glamorous';
+
+import {css} from 'glamor';
+
 import {is_defined} from 'gmp/utils';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes';
 
-import './css/folding.css';
+const foldDelay = css.keyframes({
+  '0%': {minWidth: '0px'},
+  '100%': {minWidth: '1px'},
+});
 
 /**
  * State used in foldable components
@@ -62,7 +71,7 @@ export const withFolding = (Component, defaults = {}) => {
     let animation;
     let display;
     const window_height = Math.ceil(window.innerHeight * 1.2) + 'px';
-    const new_style = {...style};
+    const styleProps = {...style};
 
     switch (foldState) {
       case FoldState.FOLDED:
@@ -74,11 +83,11 @@ export const withFolding = (Component, defaults = {}) => {
         break;
       case FoldState.UNFOLDING_START:
         height = '1px';
-        animation = 'fold-delay 0.01s';
+        animation = `${foldDelay} 0.01s`;
         break;
       case FoldState.FOLDING_START:
         height = window_height;
-        animation = 'fold-delay 0.01s';
+        animation = `${foldDelay} 0.01s`;
         break;
       case FoldState.UNFOLDING:
         height = window_height;
@@ -91,28 +100,31 @@ export const withFolding = (Component, defaults = {}) => {
     }
 
     if (is_defined(height)) {
-      new_style.maxHeight = height;
+      styleProps.maxHeight = height;
     }
     if (is_defined(animation)) {
-      new_style.animation = animation;
+      styleProps.animation = animation;
     }
-    if (!is_defined(new_style.overflow)) {
-      new_style.overflow = 'hidden';
+    if (!is_defined(styleProps.overflow)) {
+      styleProps.overflow = 'hidden';
     }
-    if (!is_defined(new_style.transition)) {
-      new_style.transition = '0.4s';
+    if (!is_defined(styleProps.transition)) {
+      styleProps.transition = '0.4s';
     }
     if (is_defined(display)) {
-      new_style.display = display;
+      styleProps.display = display;
     }
 
     return (
-      <Component
-        style={new_style}
-        {...props}
+      <Div
+        {...styleProps}
         onTransitionEnd={onFoldStepEnd}
         onAnimationEnd={onFoldStepEnd}
-      />
+      >
+        <Component
+          {...props}
+        />
+      </Div>
     );
   };
 
