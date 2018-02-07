@@ -675,6 +675,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/cert.js
      ${NG_SRC_DIR}/src/web/utils/compose.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js
+     ${NG_SRC_DIR}/src/web/utils/globalcss.js
      ${NG_SRC_DIR}/src/web/utils/os.js
      ${NG_SRC_DIR}/src/web/utils/proptypes.js
      ${NG_SRC_DIR}/src/web/utils/render.js
