@@ -93,20 +93,28 @@ On Debian Jessie node.js is too old. Follow these steps for a
 sufficiently new version. Be aware that this will remove your
 current installation of node.js, npm and related packages.
 
+```sh
 $ curl --silent --show-error https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 $ echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
+```
+```sh
 $ curl --silent --show-error https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
 $ echo "deb http://deb.nodesource.com/node_6.x jessie main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+```
 
+```sh
 $ sudo apt-get update
+```
 
+```sh
 $ sudo apt-get install nodejs yarn
+```
 
 When using npm you might need to install the additional nodejs legacy symlink.
 
+```sh
 $ sudo apt-get install nodejs-legacy
-
+```
 
 Developing Greenbone Security Assistant Next Generation GUI
 -----------------------------------------------------------
@@ -116,7 +124,9 @@ very time consuming and therefore may be avoided during development. It is
 possible to run GSA NG in a special web development server. The development
 server can be started with:
 
+```sh
 $ cd /path/to/gsa-sources/src/html/classic/ng && yarn run start
+```
 
 Afterwards the development web server is set up and a new browser window is
 opened for the url http://127.0.0.1:8080 containing the GSA NG web application.
@@ -125,7 +135,9 @@ will reload automatically.
 
 Besides the development server gsad needs to be running with CORS enabled.
 
+```sh
 $ gsad --http-cors="http://127.0.0.1:8080"
+```
 
 To be able to communicate with gsad the web application needs to know the server
 url. This can be accomplished by editing the
@@ -133,10 +145,12 @@ url. This can be accomplished by editing the
 The following lines can be used for a local gsad running with https on port
 9392:
 
-  window.config = {
+```javascript
+  config = {
     protocol: 'https',
     server: '127.0.0.1:9392',
   };
+```
 
 For http only the protocol property must be 'http' accordingly.
 
