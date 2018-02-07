@@ -29,7 +29,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import withIconSize from './withIconSize';
 
-const Styled = glamorous.span({
+const Styled = glamorous.span('arrow-icon', {
   backgroundColor: 'transparent',
   border: 'none',
   cursor: 'pointer',
