@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {is_defined} from '../utils.js';
+import {is_defined} from '../utils/identity';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 

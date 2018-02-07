@@ -27,13 +27,13 @@ import 'core-js/fn/string/starts-with';
 
 import moment from 'moment';
 
+import {is_defined} from '../../utils/identity';
+import {is_empty} from '../../utils/string';
 import {
   filter as filter_func,
   for_each,
-  is_defined,
-  is_empty,
   map,
-} from '../../utils.js';
+} from '../../utils/array';
 
 import {parse_severity} from '../../parser.js';
 

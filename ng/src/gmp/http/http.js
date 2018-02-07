@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ import logger from '../log.js';
 
 import _ from '../locale.js';
 
-import {is_defined, has_value, is_array} from '../utils.js';
+import {is_defined, has_value, is_array} from '../utils/identity';
 
 import Promise from '../promise.js';
 

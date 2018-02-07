@@ -23,12 +23,8 @@
 import 'core-js/fn/array/find-index';
 import 'core-js/fn/array/includes';
 
-import {
-  for_each,
-  is_defined,
-  is_string,
-  map,
-} from '../utils.js';
+import {is_defined, is_string} from '../utils/identity';
+import {for_each, map} from '../utils/array';
 
 import Model from '../model.js';
 

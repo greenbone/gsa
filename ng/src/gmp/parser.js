@@ -25,10 +25,8 @@ import 'core-js/fn/string/starts-with';
 
 import moment from 'moment';
 
-import {
-  is_defined,
-  is_empty,
-} from './utils.js';
+import {is_defined} from './utils/identity';
+import {is_empty} from './utils/string';
 
 export function parse_severity(value) {
   return is_empty(value) ? undefined : parse_float(value);

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,8 @@
  */
 
 import logger from '../log.js';
-import {for_each, map, is_defined} from '../utils.js';
+import {for_each, map} from '../utils/array';
+import {is_defined} from '../utils/identity';
 
 import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';

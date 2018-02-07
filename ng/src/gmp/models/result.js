@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {for_each, is_defined, is_string} from '../utils.js';
+import {is_defined, is_string} from '../utils/identity';
+import {for_each} from '../utils/array'
 
 import Model from '../model.js';
 import {parse_severity, parse_qod} from '../parser.js';

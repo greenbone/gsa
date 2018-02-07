@@ -23,7 +23,9 @@
 
 import Model from '../model.js';
 
-import {is_defined, is_empty, map} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {is_empty} from '../utils/string';
+import {map} from '../utils/array';
 
 import {parse_int, parse_yesno, parse_csv} from '../parser.js';
 

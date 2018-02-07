@@ -22,12 +22,9 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {
-  is_defined,
-  is_empty,
-  is_string,
-  map,
-} from '../utils.js';
+import {is_defined, is_string} from '../utils/identity';
+import {is_empty} from '../utils/string';
+import {map} from '../utils/array';
 
 import {parse_float, parse_severity} from '../parser.js';
 

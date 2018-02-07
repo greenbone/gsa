@@ -25,7 +25,8 @@ import 'core-js/fn/set';
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import logger from '../log.js';
-import {is_array, is_defined, map} from '../utils.js';
+import {is_array, is_defined} from '../utils/identity';
+import {map} from '../utils/array';
 
 import Model from '../model.js';
 

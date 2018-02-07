@@ -23,7 +23,9 @@
 import 'core-js/fn/set';
 import 'core-js/fn/symbol';
 
-import {is_defined, map, pluralize_type} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {map} from '../utils/array';
+import {pluralize_type} from '../utils/string';
 
 const types = {
   host: 'asset',
