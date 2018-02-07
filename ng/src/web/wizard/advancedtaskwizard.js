@@ -51,6 +51,8 @@ import {
   ssh_credential_filter,
 } from 'gmp/models/credential.js';
 
+import {Wizardess, WizardContent} from './taskwizard';
+
 const AdvancedTaskWizard = ({
     alert_email,
     auto_start,
@@ -79,10 +81,10 @@ const AdvancedTaskWizard = ({
   return (
     <Layout flex align={['start', 'start']}>
       <Layout basis="40%">
-        <div className="wizardess pull-right">
+        <Wizardess>
           <Img src="enchantress.svg"/>
-        </div>
-        <div className="wizard-content">
+        </Wizardess>
+        <WizardContent>
           <p>
             {_('I can help you by creating a new scan task and ' +
               'automatically starting it.')}
@@ -122,7 +124,7 @@ const AdvancedTaskWizard = ({
             {_('For any other setting I will apply the defaults from ' +
               '"My Settings".')}
           </p>
-        </div>
+        </WizardContent>
       </Layout>
       <Layout
         grow="1"
