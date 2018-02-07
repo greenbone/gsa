@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,12 +24,14 @@
 
 import glamorous from 'glamorous';
 
+import Theme from 'web/utils/theme';
+
 const DialogContent = glamorous.div({
   display: 'flex',
   flexDirection: 'column',
   height: 'inherit',
   padding: '5px 5px 5px 5px',
-  background: '#eee',
+  background: Theme.dialogGray,
   border: '1px solid #ddd',
   borderRadius: '4px',
 });

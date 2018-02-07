@@ -183,6 +183,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
      ${NG_SRC_DIR}/src/web/components/dashboard/dashboard.js
      ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/displaymenu.js
      ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/components/dashboard/withDashboard.js

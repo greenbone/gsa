@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {is_defined, is_array} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -35,15 +37,19 @@ import Layout from '../layout/layout.js';
 
 import Link from '../link/link.js';
 
+const StyledLink = glamorous(Link)({
+  height: '100%',
+});
+
 const MenuEntry = ({
   capabilities,
   caps,
   children,
-  title,
+  title = children,
   to,
   ...props
 }) => {
-  if (is_defined(caps) && is_defined(capabilities)) {
+  if (is_defined(caps)) {
 
     if (!is_array(caps)) {
       caps = [caps];
@@ -58,24 +64,16 @@ const MenuEntry = ({
     }
   }
 
-  let entry;
-  if (is_defined(to)) {
-    entry = <Link to={to}>{title}</Link>;
-  }
-  else if (is_defined(title)) {
-    entry = title;
-  }
-  else {
-    entry = children;
-  }
-
   return (
     <Layout
       {...props}
       grow="1"
-      align={['start', 'stretch']}
+      align={['start', 'center']}
     >
-      {entry}
+      {is_defined(to) ?
+        <StyledLink to={to}>{title}</StyledLink> :
+        title
+      }
     </Layout>
   );
 };

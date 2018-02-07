@@ -25,6 +25,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
+import {is_defined} from 'gmp/utils';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import Icon from '../icon/icon.js';
@@ -91,7 +93,7 @@ const Entry = glamorous.li('menu-entry', {
 
 const IconMenuContainer = ({
   children,
-  onClick,
+  icon,
   ...other
 }) => {
   const menuentries = React.Children.map(children, child => (
@@ -101,7 +103,10 @@ const IconMenuContainer = ({
   ));
   return (
     <IconMenu>
-      <Icon onClick={onClick} {...other}/>
+      {is_defined(icon) ?
+        icon :
+        <Icon {...other}/>
+      }
       <Div>
         <List>
           {menuentries}
@@ -112,9 +117,7 @@ const IconMenuContainer = ({
 };
 
 IconMenuContainer.propTypes = {
-  className: PropTypes.string,
-  img: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
+  icon: PropTypes.element,
 };
 
 export default IconMenuContainer;

@@ -33,7 +33,6 @@ import Layout from '../layout/layout.js';
 const ScrollableContent = glamorous.div(
   {
     overflow: 'auto',
-    background: '#eee',
     padding: '0 15px',
     width: '100%',
     height: '100%',

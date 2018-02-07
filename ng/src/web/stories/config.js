@@ -35,6 +35,7 @@ function loadStories() {
   require('./sortable');
   require('./tabs');
   require('./datepicker');
+  require('./dashboard');
 }
 
 configure(loadStories, module);

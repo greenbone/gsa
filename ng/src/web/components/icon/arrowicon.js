@@ -27,7 +27,9 @@ import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const Styled = glamorous.span({
+import withIconSize from './withIconSize';
+
+const Styled = glamorous.span('arrow-icon', {
   backgroundColor: 'transparent',
   border: 'none',
   cursor: 'pointer',
@@ -52,6 +54,6 @@ ArrowIcon.propTypes = {
   down: PropTypes.bool,
 };
 
-export default ArrowIcon;
+export default withIconSize()(ArrowIcon);
 
 // vim: set ts=2 sw=2 tw=80:
