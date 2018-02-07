@@ -236,20 +236,4 @@ describe('first function tests', () => {
 
 });
 
-describe('is_empty function test', () => {
-  test('should return true for undefined', () => {
-    expect(is_empty()).toBe(true);
-  });
-
-  test('should return true for an empty array', () => {
-    const x = [];
-    expect(is_empty(x)).toBe(true);
-  });
-
-  test('should return false for an array', () => {
-    const x = [1, 2];
-    expect(is_empty(x)).toBe(false);
-  });
-});
-
 // vim: set ts=2 sw=2 tw=80:

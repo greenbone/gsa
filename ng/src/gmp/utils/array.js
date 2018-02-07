@@ -78,8 +78,6 @@ export function filter(array, func, empty = []) {
   return array.filter(func);
 };
 
-export const is_empty = array => !is_defined(array) || array.length === 0;
-
 export function first(array, non = {}) {
   if (is_array(array)) {
 
