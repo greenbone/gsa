@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined, for_each, exclude_object_props} from 'gmp/utils.js';
+import {is_defined, for_each, exclude_object_props} from 'gmp/utils';
 
 import FootNote from '../components/footnote/footnote.js';
 

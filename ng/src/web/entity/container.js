@@ -28,7 +28,7 @@ import logger from 'gmp/log.js';
 import Promise from 'gmp/promise.js';
 import CancelToken from 'gmp/cancel.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';

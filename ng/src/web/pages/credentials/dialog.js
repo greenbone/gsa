@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils.js';
+import {is_defined, map} from 'gmp/utils';
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,

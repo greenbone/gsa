@@ -25,7 +25,7 @@ import $ from 'jquery';
 
 import _ from 'gmp/locale.js';
 import Logger from 'gmp/log.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import {
   data_raw,

@@ -27,13 +27,7 @@ import $ from 'jquery';
 import {browserHistory as history} from 'react-router';
 
 import _ from 'gmp/locale.js';
-import {
-  for_each,
-  has_value,
-  is_array,
-  is_defined,
-  is_string,
-} from 'gmp/utils.js';
+import {for_each, has_value, is_array, is_defined, is_string} from 'gmp/utils';
 
 import {parse_float, parse_int} from 'gmp/parser.js';
 

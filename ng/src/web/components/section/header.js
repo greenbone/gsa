@@ -26,7 +26,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, is_string} from 'gmp/utils.js';
+import {is_defined, is_string} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

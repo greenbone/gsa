@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import {is_defined, debounce} from 'gmp/utils.js';
+import {is_defined, debounce} from 'gmp/utils';
 
 import {parse_int} from 'gmp/parser.js';
 

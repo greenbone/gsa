@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {classes} from 'gmp/utils.js';
+import {classes} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

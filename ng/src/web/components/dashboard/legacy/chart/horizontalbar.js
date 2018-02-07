@@ -27,13 +27,7 @@ import d3 from 'd3';
 import d3tip from 'd3-tip';
 
 import _ from 'gmp/locale.js';
-import {
-  has_value,
-  is_array,
-  is_date,
-  is_defined,
-  is_string,
-} from 'gmp/utils.js';
+import {has_value, is_array, is_date, is_defined, is_string} from 'gmp/utils';
 
 import {get_severity_levels} from '../../../../utils/render.js';
 

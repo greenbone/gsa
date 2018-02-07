@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 
-import {is_function} from 'gmp/utils.js';
+import {is_function} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 

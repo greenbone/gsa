@@ -23,7 +23,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, shorten, select_save_id} from 'gmp/utils.js';
+import {is_defined, shorten, select_save_id} from 'gmp/utils';
 
 import {
   SLAVE_SCANNER_TYPE,

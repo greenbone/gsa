@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
-import {is_empty} from 'gmp/utils.js';
+import {is_empty} from 'gmp/utils';
 
 import Button from '../../components/form/button.js';
 import CheckBox from '../../components/form/checkbox.js';

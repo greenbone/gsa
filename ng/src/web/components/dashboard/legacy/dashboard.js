@@ -29,7 +29,7 @@ import d3 from 'd3';
 
 import _ from 'gmp/locale.js';
 import Logger from 'gmp/log.js';
-import {is_array, is_defined, is_object, is_string} from 'gmp/utils.js';
+import {is_array, is_defined, is_object, is_string} from 'gmp/utils';
 import {parse_int} from 'gmp/parser.js';
 
 import {

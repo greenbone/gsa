@@ -29,7 +29,7 @@ import logger from 'gmp/log.js';
 
 import CancelToken from 'gmp/cancel.js';
 
-import {first, is_defined} from 'gmp/utils.js';
+import {first, is_defined} from 'gmp/utils';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 

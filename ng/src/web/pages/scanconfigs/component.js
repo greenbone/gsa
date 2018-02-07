@@ -25,13 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {
-  for_each,
-  is_defined,
-  is_empty,
-  select_save_id,
-  shorten,
-} from 'gmp/utils.js';
+import {for_each, is_defined, is_empty, select_save_id, shorten} from 'gmp/utils';
 
 import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 

@@ -26,7 +26,7 @@ import React from 'react';
 import moment from 'moment';
 
 import _, {long_date} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 import {YES_VALUE} from 'gmp/parser.js';
 
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig.js';

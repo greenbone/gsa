@@ -26,11 +26,7 @@ import 'core-js/fn/set';
 import React from 'react';
 
 import logger from 'gmp/log.js';
-import {
-  is_defined,
-  is_array,
-  exclude_object_props,
-} from 'gmp/utils.js';
+import {is_defined, is_array, exclude_object_props} from 'gmp/utils';
 
 import PromiseFactory from 'gmp/promise.js';
 import CancelToken from 'gmp/cancel.js';

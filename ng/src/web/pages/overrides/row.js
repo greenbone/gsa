@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {shorten, is_defined} from 'gmp/utils.js';
+import {shorten, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component, result_cvss_risk_factor} from '../../utils/render.js';

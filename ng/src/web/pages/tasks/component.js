@@ -27,15 +27,7 @@ import moment from 'moment-timezone';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {
-  first,
-  for_each,
-  includes_id,
-  is_array,
-  is_defined,
-  map,
-  select_save_id,
-} from 'gmp/utils.js';
+import {first, for_each, includes_id, is_array, is_defined, map, select_save_id} from 'gmp/utils';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,

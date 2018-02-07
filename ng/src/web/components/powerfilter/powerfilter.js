@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {KeyCode, is_defined, is_string} from 'gmp/utils.js';
+import {KeyCode, is_defined, is_string} from 'gmp/utils';
 import logger from 'gmp/log.js';
 
 import PropTypes from '../../utils/proptypes.js';

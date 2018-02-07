@@ -36,7 +36,7 @@ import d3 from 'd3';
 
 import _ from 'gmp/locale.js';
 import Logger from 'gmp/log.js';
-import {is_defined, has_value} from 'gmp/utils.js';
+import {is_defined, has_value} from 'gmp/utils';
 
 import {EMPTY_FILTER} from './helper.js';
 import EventNode from './eventnode.js';

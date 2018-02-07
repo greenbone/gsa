@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined, filter, select_save_id} from 'gmp/utils.js';
+import {is_defined, filter, select_save_id} from 'gmp/utils';
 import {parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';

@@ -24,7 +24,7 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, map} from 'gmp/utils.js';
+import {is_defined, map} from 'gmp/utils';
 
 import {extract_filter_info_json} from '../helper.js';
 

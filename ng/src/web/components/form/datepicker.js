@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 import moment from 'moment';
 
 import _, {get_language} from 'gmp/locale';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
