@@ -41,6 +41,7 @@ const Theme = {
   mediumLightRed: '#ebccd1', // used by: dialog errors border
   darkRed: '#a94442', // used by: dialog errors font
   blue: '#0000ff', // used by: links
+  dialogGray: '#eeeeee', // used by: dialog and dashboard display backgrounds
 
   /* source ? */
   darkGreen: '#519032',
