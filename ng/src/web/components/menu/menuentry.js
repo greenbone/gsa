@@ -45,7 +45,7 @@ const MenuEntry = ({
   capabilities,
   caps,
   children,
-  title,
+  title = children,
   to,
   ...props
 }) => {
@@ -64,24 +64,16 @@ const MenuEntry = ({
     }
   }
 
-  let entry;
-  if (is_defined(to)) {
-    entry = <StyledLink to={to}>{title}</StyledLink>;
-  }
-  else if (is_defined(title)) {
-    entry = title;
-  }
-  else {
-    entry = children;
-  }
-
   return (
     <Layout
       {...props}
       grow="1"
       align={['start', 'center']}
     >
-      {entry}
+      {is_defined(to) ?
+        <StyledLink to={to}>{title}</StyledLink> :
+        title
+      }
     </Layout>
   );
 };
