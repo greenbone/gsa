@@ -675,6 +675,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/cert.js
      ${NG_SRC_DIR}/src/web/utils/compose.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js
+     ${NG_SRC_DIR}/src/web/utils/globalcss.js
      ${NG_SRC_DIR}/src/web/utils/os.js
      ${NG_SRC_DIR}/src/web/utils/proptypes.js
      ${NG_SRC_DIR}/src/web/utils/render.js
@@ -704,8 +705,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
      ${NG_SRC_DIR}/src/web/components/form/css/form.css
      ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
-     ${NG_SRC_DIR}/src/web/css/app.css
-     ${NG_SRC_DIR}/src/web/css/gsa-base.css
      )
 
 set (NG_FILES

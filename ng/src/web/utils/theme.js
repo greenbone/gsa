@@ -40,6 +40,7 @@ const Theme = {
   lightRed: '#f2dede', // used by: dialog errors background
   mediumLightRed: '#ebccd1', // used by: dialog errors border
   darkRed: '#a94442', // used by: dialog errors font
+  blue: '#0000ff', // used by: links
 
   /* source ? */
   darkGreen: '#519032',

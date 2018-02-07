@@ -41,6 +41,7 @@ import HttpInterceptor from 'gmp/http/interceptor.js';
 import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'; // eslint-disable-line max-len
 
 import PropTypes from './utils/proptypes.js';
+import globalcss from './utils/globalcss.js';
 
 import AssetsPage from './pages/assetspage.js';
 import HomePage from './pages/homepage.js';
@@ -117,9 +118,6 @@ import UserSettingsPage from './pages/usersettings/usersettingspage.js';
 import UsersPage from './pages/users/listpage.js';
 import VulnerabilitiesPage from './pages/vulns/listpage.js';
 
-import './css/gsa-base.css';
-import './css/app.css';
-
 const {config = {}} = window;
 
 const caches = new CacheFactory();
@@ -127,6 +125,12 @@ const caches = new CacheFactory();
 const gmp = new Gmp({caches, ...config});
 
 window.gmp = gmp;
+
+globalcss({
+  'html, body, #app, #app > div': {
+    height: '100%',
+  },
+});
 
 function is_logged_in(next_state, replace) {
   if (!gmp.token && !sessionStorage.token) {

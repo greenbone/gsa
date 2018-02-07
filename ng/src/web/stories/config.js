@@ -23,6 +23,8 @@
  */
 import {configure} from '@storybook/react';
 
+import 'web/utils/globalcss';
+
 /* eslint-disable global-require, no-console */
 
 function loadStories() {
