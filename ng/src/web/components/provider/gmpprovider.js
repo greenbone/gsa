@@ -2,7 +2,6 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,24 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {configure} from '@storybook/react';
 
-import 'web/utils/globalcss';
+import React from 'react';
 
-/* eslint-disable global-require, no-console */
+import PropTypes from '../../utils/proptypes.js';
 
-function loadStories() {
-  console.clear();
+import {render_children} from '../../utils/render.js';
 
-  require('./select');
-  require('./multiselect');
-  require('./sortable');
-  require('./tabs');
-  require('./datepicker');
-  require('./powerfilter');
-  require('./dashboard');
+class GmpProvider extends React.Component {
+
+  getChildContext() {
+    const {gmp} = this.props;
+
+    return {
+      gmp,
+    };
+  }
+
+  render() {
+    const {children} = this.props;
+    return render_children(children);
+  }
 }
 
-configure(loadStories, module);
+GmpProvider.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
+GmpProvider.childContextTypes = {
+  gmp: PropTypes.capabilities,
+};
+
+export default GmpProvider;
 
 // vim: set ts=2 sw=2 tw=80:
