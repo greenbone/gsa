@@ -72,6 +72,11 @@ const DeleteButton = glamorous.div({
   },
 });
 
+const Label = glamorous.span({
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+});
+
 class MultiSelect extends React.Component {
 
   constructor(...args) {
@@ -162,7 +167,7 @@ class MultiSelect extends React.Component {
           >
             × {/* Javascript unicode: \u00D7 */}
           </DeleteButton>
-          <span>{itemLabel}</span>
+          <Label>{itemLabel}</Label>
         </Layout>
       </MultiSelectedValue>
     );
