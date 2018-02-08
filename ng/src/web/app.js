@@ -39,6 +39,7 @@ import PromiseFactory from 'gmp/promise.js';
 import HttpInterceptor from 'gmp/http/interceptor.js';
 
 import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'; // eslint-disable-line max-len
+import GmpProvider from './components/provider/gmpprovider.js';
 
 import PropTypes from './utils/proptypes.js';
 import globalcss from './utils/globalcss.js';
@@ -167,10 +168,6 @@ class App extends React.Component {
     gmp.addHttpInterceptor(new AppHttpInterceptor(this));
   }
 
-  getChildContext() {
-    return {gmp};
-  }
-
   toLoginPage() {
     gmp.token = undefined;
     this.context.router.replace({
@@ -183,16 +180,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <CacheFactoryProvider caches={caches}>
-        {this.props.children}
-      </CacheFactoryProvider>
+      <GmpProvider gmp={gmp}>
+        <CacheFactoryProvider caches={caches}>
+          {this.props.children}
+        </CacheFactoryProvider>
+      </GmpProvider>
     );
   }
 }
-
-App.childContextTypes = {
-  gmp: PropTypes.gmp,
-};
 
 App.contextTypes = {
   router: PropTypes.object.isRequired,
