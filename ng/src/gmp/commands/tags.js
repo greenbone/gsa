@@ -40,8 +40,14 @@ class TagCommand extends EntityCommand {
     return root.get_tag.get_tags_response[0].tag;
   }
 
-  create({name, comment = '', active, resource_id = '', resource_type,
-      value = ''}) {
+  create({
+    name,
+    comment = '',
+    active,
+    resource_id = '',
+    resource_type,
+    value = '',
+  }) {
     const data = {
       cmd: 'create_tag',
       tag_name: name,
@@ -56,8 +62,15 @@ class TagCommand extends EntityCommand {
     return this.httpPost(data).then(this.transformResponse);
   }
 
-  save({id, name, comment = '', active, resource_id = '', resource_type,
-      value = ''}) {
+  save({
+    id,
+    name,
+    comment = '',
+    active,
+    resource_id = '',
+    resource_type,
+    value = '',
+  }) {
     const data = {
       cmd: 'save_tag',
       id,

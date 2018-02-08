@@ -38,12 +38,25 @@ class TargetCommand extends EntityCommand {
   }
 
   create(args) {
-    let {name, comment = '', target_source, target_exclude_source, hosts,
+    const {
+      name,
+      comment = '',
+      target_source,
+      target_exclude_source,
+      hosts,
       exclude_hosts,
-      reverse_lookup_only, reverse_lookup_unify, port_list_id, alive_tests,
-      ssh_credential_id = 0, port, smb_credential_id = 0,
-      esxi_credential_id = 0, snmp_credential_id = 0, file, exclude_file,
-      hosts_filter} = args;
+      reverse_lookup_only,
+      reverse_lookup_unify,
+      port_list_id,
+      alive_tests,
+      ssh_credential_id = 0,
+      port, smb_credential_id = 0,
+      esxi_credential_id = 0,
+      snmp_credential_id = 0,
+      file,
+      exclude_file,
+      hosts_filter,
+    } = args;
     log.debug('Creating new target', args);
     return this.httpPost({
       cmd: 'create_target',
@@ -70,12 +83,25 @@ class TargetCommand extends EntityCommand {
   }
 
   save(args) {
-    let {id, name, comment = '', target_source, target_exclude_source, hosts,
+    const {
+      id,
+      name,
+      comment = '',
+      target_source,
+      target_exclude_source,
+      hosts,
       exclude_hosts,
-      reverse_lookup_only, reverse_lookup_unify, port_list_id, alive_tests,
-      ssh_credential_id = 0, port, smb_credential_id = 0,
-      esxi_credential_id = 0, snmp_credential_id = 0, file, exclude_file,
-      in_use} = args;
+      reverse_lookup_only,
+      reverse_lookup_unify,
+      port_list_id, alive_tests,
+      ssh_credential_id = 0,
+      port, smb_credential_id = 0,
+      esxi_credential_id = 0,
+      snmp_credential_id = 0,
+      file,
+      exclude_file,
+      in_use,
+    } = args;
     log.debug('Saving target', args);
     return this.httpPost({
       cmd: 'save_target',

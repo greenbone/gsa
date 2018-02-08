@@ -48,10 +48,23 @@ class NoteCommand extends EntityCommand {
   }
 
   _save(args) {
-    let {cmd, oid, note_id, active = '-1', days = 30, hosts = '',
-      hosts_manual = '', result_id = '', result_uuid = '', port = '',
-      port_manual = '', severity = '', task_id = '', task_uuid = '',
-      text} = args;
+    const {
+      cmd,
+      oid,
+      note_id,
+      active = '-1',
+      days = 30,
+      hosts = '',
+      hosts_manual = '',
+      result_id = '',
+      result_uuid = '',
+      port = '',
+      port_manual = '',
+      severity = '',
+      task_id = '',
+      task_uuid = '',
+      text,
+    } = args;
     log.debug('Saving note', args);
     return this.httpPost({
       cmd,
