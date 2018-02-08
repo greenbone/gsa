@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import Note from '../models/note.js';
 
 const log = logger.getLogger('gmp.commands.notes');
 
-export class NoteCommand extends EntityCommand {
+class NoteCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'note', Note);
@@ -48,10 +48,23 @@ export class NoteCommand extends EntityCommand {
   }
 
   _save(args) {
-    let {cmd, oid, note_id, active = '-1', days = 30, hosts = '',
-      hosts_manual = '', result_id = '', result_uuid = '', port = '',
-      port_manual = '', severity = '', task_id = '', task_uuid = '',
-      text} = args;
+    const {
+      cmd,
+      oid,
+      note_id,
+      active = '-1',
+      days = 30,
+      hosts = '',
+      hosts_manual = '',
+      result_id = '',
+      result_uuid = '',
+      port = '',
+      port_manual = '',
+      severity = '',
+      task_id = '',
+      task_uuid = '',
+      text,
+    } = args;
     log.debug('Saving note', args);
     return this.httpPost({
       cmd,
@@ -70,11 +83,11 @@ export class NoteCommand extends EntityCommand {
       port_manual,
       severity,
       text,
-    }).then(this.transformResponse);
+    });
   }
 }
 
-export class NotesCommand extends EntitiesCommand {
+class NotesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'note', Note);

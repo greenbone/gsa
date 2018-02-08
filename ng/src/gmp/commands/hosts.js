@@ -37,25 +37,25 @@ class HostCommand extends EntityCommand {
   }
 
   create(args) {
-    let {name, comment = ''} = args;
+    const {name, comment = ''} = args;
     log.debug('Creating host', args);
     return this.httpPost({
       cmd: 'create_host',
       next: 'get_asset',
       name,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
-    let {id, comment = ''} = args;
+    const {id, comment = ''} = args;
     log.debug('Saving host', args);
     return this.httpPost({
       cmd: 'save_asset',
       next: 'get_asset',
       asset_id: id,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   deleteIdentifier({id}) {
@@ -64,7 +64,7 @@ class HostCommand extends EntityCommand {
       cmd: 'delete_asset',
       next: 'get_asset',
       asset_id: id,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {

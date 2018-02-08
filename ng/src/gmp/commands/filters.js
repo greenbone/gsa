@@ -34,7 +34,7 @@ import Filter from '../models/filter.js';
 
 const log = logger.getLogger('gmp.commands.filters');
 
-export class FilterCommand extends EntityCommand {
+class FilterCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'filter', Filter);
@@ -51,7 +51,7 @@ export class FilterCommand extends EntityCommand {
       comment,
     };
     log.debug('Creating new filter', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   save(args) {
@@ -102,7 +102,7 @@ const parse_collection_counts = response => {
   return new CollectionCounts(parse_counts(response));
 };
 
-export class FiltersCommand extends EntitiesCommand {
+class FiltersCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'filter', Filter);

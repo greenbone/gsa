@@ -87,7 +87,7 @@ class EntityCommand extends HttpCommand {
       extra_params,
     }).then(response => {
       log.debug('Cloned', this.name, id);
-      return this.transformResponse(response);
+      return response;
     })
     .catch(err => {
       log.error('An error occurred while cloning', this.name, id, err);

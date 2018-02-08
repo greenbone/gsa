@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import Tag from '../models/tag.js';
 
 const log = logger.getLogger('gmp.commands.tags');
 
-export class TagCommand extends EntityCommand {
+class TagCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'tag', Tag);
@@ -40,8 +40,14 @@ export class TagCommand extends EntityCommand {
     return root.get_tag.get_tags_response[0].tag;
   }
 
-  create({name, comment = '', active, resource_id = '', resource_type,
-      value = ''}) {
+  create({
+    name,
+    comment = '',
+    active,
+    resource_id = '',
+    resource_type,
+    value = '',
+  }) {
     const data = {
       cmd: 'create_tag',
       tag_name: name,
@@ -53,11 +59,18 @@ export class TagCommand extends EntityCommand {
       next: 'get_tag',
     };
     log.debug('Creating new tag', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
-  save({id, name, comment = '', active, resource_id = '', resource_type,
-      value = ''}) {
+  save({
+    id,
+    name,
+    comment = '',
+    active,
+    resource_id = '',
+    resource_type,
+    value = '',
+  }) {
     const data = {
       cmd: 'save_tag',
       id,
@@ -70,7 +83,7 @@ export class TagCommand extends EntityCommand {
       next: 'get_tag',
     };
     log.debug('Saving tag', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   enable({id}) {
@@ -81,7 +94,7 @@ export class TagCommand extends EntityCommand {
       next: 'get_tag',
     };
     log.debug('Enabling tag', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   disable({id}) {
@@ -92,11 +105,11 @@ export class TagCommand extends EntityCommand {
       next: 'get_tag',
     };
     log.debug('Disabling tag', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 }
 
-export class TagsCommand extends EntitiesCommand {
+class TagsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'tag', Tag);

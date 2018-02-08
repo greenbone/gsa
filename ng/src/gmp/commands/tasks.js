@@ -203,7 +203,7 @@ class TaskCommand extends EntityCommand {
       target_id,
     };
     log.debug('Creating task', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   createContainer(args) {
@@ -214,7 +214,7 @@ class TaskCommand extends EntityCommand {
       next: 'get_task',
       name,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -265,7 +265,7 @@ class TaskCommand extends EntityCommand {
       task_id: id,
     };
     log.debug('Saving task', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   saveContainer(args) {
@@ -287,7 +287,7 @@ class TaskCommand extends EntityCommand {
       auto_delete,
       auto_delete_data,
       task_id: id,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {
