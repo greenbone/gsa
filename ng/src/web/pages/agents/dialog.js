@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,81 +29,96 @@ import {is_defined} from 'gmp/utils';
 
 import Layout from '../../components/layout/layout.js';
 
-import PropTypes from '../../utils/proptypes.js';
-
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 
+import PropTypes from '../../utils/proptypes.js';
+
 const AgentDialog = ({
     agent,
-    comment,
-    name,
-    onValueChange
+    title = _('New Agent'),
+    visible,
+    onClose,
+    onSave,
   }) => {
 
   const is_edit = is_defined(agent);
 
+  const defaults = {name: _('Unnamed')};
+
   return (
-    <Layout flex="column">
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      initialData={{...defaults, ...agent}}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
 
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          grow="1"
-          value={name}
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+        return (
+          <Layout flex="column">
 
-      <FormGroup title={_('Comment')}>
-        <TextField
-          name="comment"
-          value={comment}
-          grow="1"
-          size="30"
-          maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"/>
+            </FormGroup>
 
-      {!is_edit &&
-        <FormGroup title={_('Installer')}>
-          <FileField
-            name="installer"
-            onChange={onValueChange}/>
-        </FormGroup>
-      }
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-      {!is_edit &&
-        <FormGroup title={_('Installer signature')}>
-          <FileField
-            name="installer_sig"
-            onChange={onValueChange}/>
-        </FormGroup>
-      }
+            {!is_edit &&
+              <FormGroup title={_('Installer')}>
+                <FileField
+                  name="installer"
+                  onChange={onValueChange}
+              />
+              </FormGroup>
+            }
 
-    </Layout>
+            {!is_edit &&
+              <FormGroup title={_('Installer signature')}>
+                <FileField
+                  name="installer_sig"
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            }
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
 AgentDialog.propTypes = {
   agent: PropTypes.model,
-  name: PropTypes.string,
-  comment: PropTypes.string,
-  onValueChange: PropTypes.func,
+  title: PropTypes.string,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 
-export default withDialog({
-  title: _('New Alert'),
-  footer: _('Save'),
-  defaultState: {
-    comment: '',
-    name: _('Unnamed'),
-  },
-})(AgentDialog);
+export default AgentDialog;
 
 // vim: set ts=2 sw=2 tw=80:
