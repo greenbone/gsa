@@ -34,6 +34,8 @@ import warning from '../../utils/warning.js';
 
 import ArrowIcon from '../icon/arrowicon';
 
+import Layout from '../../components/layout/layout';
+
 import {
   Box,
   case_insensitive_filter,
@@ -167,10 +169,13 @@ class Select extends React.Component {
                 >
                   {label}
                 </SelectedValue>
-                <ArrowIcon
-                  disabled={disabled}
-                  down={!isOpen}
-                />
+                <Layout align={['center', 'center']}>
+                  <ArrowIcon
+                    disabled={disabled}
+                    down={!isOpen}
+                    size="small"
+                  />
+                </Layout>
               </Box>
               {isOpen && !disabled &&
                 <Menu position={menuPosition}>

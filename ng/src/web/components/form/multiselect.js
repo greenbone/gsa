@@ -72,6 +72,11 @@ const DeleteButton = glamorous.div({
   },
 });
 
+const Label = glamorous.span({
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+});
+
 class MultiSelect extends React.Component {
 
   constructor(...args) {
@@ -162,7 +167,7 @@ class MultiSelect extends React.Component {
           >
             × {/* Javascript unicode: \u00D7 */}
           </DeleteButton>
-          <span>{itemLabel}</span>
+          <Label>{itemLabel}</Label>
         </Layout>
       </MultiSelectedValue>
     );
@@ -220,16 +225,19 @@ class MultiSelect extends React.Component {
                     )
                   }
                 </Layout>
-                <ArrowIcon
-                  {...getButtonProps({
-                    disabled,
-                    down: !isOpen,
-                    onClick: isOpen ? undefined : event => {
-                      event.preventDefault(); // don't call default handler from downshift
-                      openMenu(() => this.input.focus()); // set focus to input field after menu is opened
-                    },
-                  })}
-                />
+                <Layout align={['center', 'center']}>
+                  <ArrowIcon
+                    {...getButtonProps({
+                      disabled,
+                      down: !isOpen,
+                      onClick: isOpen ? undefined : event => {
+                        event.preventDefault(); // don't call default handler from downshift
+                        openMenu(() => this.input.focus()); // set focus to input field after menu is opened
+                      },
+                    })}
+                    size="small"
+                  />
+                </Layout>
               </Box>
               {isOpen && items.length > 0 && !disabled &&
                 <Menu position={menuPosition}>

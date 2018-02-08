@@ -37,12 +37,13 @@ const Sizer = glamorous.div({
 });
 
 const Box = glamorous.div({
-  width: '150px',
-  height: '50px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '200px',
   border: '1px solid grey',
   padding: '5px',
-  display: 'flex',
-  alignItems: 'center',
 });
 
 const SelectBox = glamorous.div({
@@ -52,7 +53,6 @@ const SelectBox = glamorous.div({
 });
 
 const StyledSelect = glamorous(Select)({
-  width: '120px',
   height: '30px',
 });
 
@@ -126,20 +126,25 @@ storiesOf('Form/Select', module)
       <Box>Lorem Ipsum</Box>
       <Box>Bar</Box>
       <Box>
+        <span>width auto</span>
         <SelectBox>
           <Select
             width="auto"
+            items={items}
             onChange={action('select value change')}
-          >
-            <option value="foo">Foo</option>
-            <option value="bar">Bar</option>
-            <option value="lore">Lore</option>
-            <option value="ipsum">Ipsum</option>
-          </Select>
+          />
         </SelectBox>
       </Box>
       <Box>
+        <span>Styled Select with height 30px</span>
         <StyledSelect
+          items={items}
+          onChange={action('select value change')}
+        />
+      </Box>
+      <Box>
+        <span>Default Select</span>
+        <Select
           items={items}
           onChange={action('select value change')}
         />
@@ -174,19 +179,19 @@ storiesOf('Form/Select', module)
   .add('with menuPosition', () => (
     <Divider>
       <Box>
-        <StyledSelect
+        <Select
           items={items}
           menuPosition="left"
         />
       </Box>
       <Box>
-        <StyledSelect
+        <Select
           items={items}
           menuPosition="adjust"
         />
       </Box>
       <Box>
-        <StyledSelect
+        <Select
           items={items}
           menuPosition="right"
         />
