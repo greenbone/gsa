@@ -220,16 +220,18 @@ class MultiSelect extends React.Component {
                     )
                   }
                 </Layout>
-                <ArrowIcon
-                  {...getButtonProps({
-                    disabled,
-                    down: !isOpen,
-                    onClick: isOpen ? undefined : event => {
-                      event.preventDefault(); // don't call default handler from downshift
-                      openMenu(() => this.input.focus()); // set focus to input field after menu is opened
-                    },
-                  })}
-                />
+                <Layout align={['center', 'center']}>
+                  <ArrowIcon
+                    {...getButtonProps({
+                      disabled,
+                      down: !isOpen,
+                      onClick: isOpen ? undefined : event => {
+                        event.preventDefault(); // don't call default handler from downshift
+                        openMenu(() => this.input.focus()); // set focus to input field after menu is opened
+                      },
+                    })}
+                  />
+                </Layout>
               </Box>
               {isOpen && items.length > 0 && !disabled &&
                 <Menu position={menuPosition}>
