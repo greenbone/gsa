@@ -69,6 +69,6 @@ storiesOf('Dashboard/Display', module)
         />
       </Display>
     </Div>
-  });
+  ));
 
 // vim: set ts=2 sw=2 tw=80:
