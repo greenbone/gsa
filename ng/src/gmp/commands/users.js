@@ -281,7 +281,7 @@ class UserCommand extends EntityCommand {
   }
 }
 
-export class UsersCommand extends EntitiesCommand {
+class UsersCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'user', User);
