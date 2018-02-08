@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ class PortListCommand extends EntityCommand {
       from_file,
       port_range,
       file,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -59,7 +59,7 @@ class PortListCommand extends EntityCommand {
       comment,
       id,
       name,
-    }).then(this.transformResponse);
+    });
   }
 
   createPortRange(args) {
@@ -71,7 +71,7 @@ class PortListCommand extends EntityCommand {
       port_range_start,
       port_range_end,
       port_type,
-    }).then(this.transformResponse);
+    });
   }
 
   deletePortRange({id, port_list_id}) {
@@ -89,7 +89,7 @@ class PortListCommand extends EntityCommand {
       cmd: 'import_port_list',
       next: 'get_port_list',
       xml_file,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {

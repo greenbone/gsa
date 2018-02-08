@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ class PermissionCommand extends EntityCommand {
       subject_type,
     };
     log.debug('Creating new permission', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   save({
@@ -91,7 +91,7 @@ class PermissionCommand extends EntityCommand {
       id_or_empty: resource_id,
     };
     log.debug('Saving permission', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 }
 
@@ -131,7 +131,7 @@ class PermissionsCommand extends EntitiesCommand {
     }
 
     log.debug('Creating new permission', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   getEntitiesResponse(root) {

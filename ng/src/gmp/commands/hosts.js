@@ -44,7 +44,7 @@ class HostCommand extends EntityCommand {
       next: 'get_asset',
       name,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -55,7 +55,7 @@ class HostCommand extends EntityCommand {
       next: 'get_asset',
       asset_id: id,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   deleteIdentifier({id}) {
@@ -64,7 +64,7 @@ class HostCommand extends EntityCommand {
       cmd: 'delete_asset',
       next: 'get_asset',
       asset_id: id,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {

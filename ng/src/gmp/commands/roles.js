@@ -54,7 +54,7 @@ class RoleCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Creating new role', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   save({
@@ -72,7 +72,7 @@ class RoleCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   editRoleSettings({id}) {

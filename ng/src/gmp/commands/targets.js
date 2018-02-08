@@ -79,7 +79,7 @@ class TargetCommand extends EntityCommand {
       file,
       exclude_file,
       hosts_filter,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -125,7 +125,7 @@ class TargetCommand extends EntityCommand {
       ssh_credential_id,
       target_source,
       target_exclude_source,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {
