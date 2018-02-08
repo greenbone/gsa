@@ -14965,6 +14965,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
                             "<commands>"
                             "%s"
                             "<get_results"
+                            " get_counts=\"0\""
                             " result_id=\"%s\""
                             "%s%s%s"
                             " filter=\"autofp=%s"
