@@ -52,7 +52,6 @@ const SelectBox = glamorous.div({
 });
 
 const StyledSelect = glamorous(Select)({
-  width: '120px',
   height: '30px',
 });
 
@@ -144,6 +143,12 @@ storiesOf('Form/Select', module)
           onChange={action('select value change')}
         />
       </Box>
+      <Box>
+        <Select
+          items={items}
+          onChange={action('select value change')}
+        />
+      </Box>
     </Divider>
   ))
   .add('with controlled input', () => (
@@ -174,19 +179,19 @@ storiesOf('Form/Select', module)
   .add('with menuPosition', () => (
     <Divider>
       <Box>
-        <StyledSelect
+        <Select
           items={items}
           menuPosition="left"
         />
       </Box>
       <Box>
-        <StyledSelect
+        <Select
           items={items}
           menuPosition="adjust"
         />
       </Box>
       <Box>
-        <StyledSelect
+        <Select
           items={items}
           menuPosition="right"
         />
