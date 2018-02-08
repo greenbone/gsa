@@ -119,7 +119,8 @@ class UserCommand extends EntityCommand {
     return this.httpGet({
       cmd: 'get_my_settings',
     }).then(response => {
-      return response.setData(response.data.get_my_settings.gsa_languages.language);
+      return response.setData(
+        response.data.get_my_settings.gsa_languages.language);
     });
   }
 
@@ -233,6 +234,7 @@ class UserCommand extends EntityCommand {
       severity_class: data.severityclass,
       dynamic_severity: data.dynamicseverity,
       default_severity: data.defaultseverity,
+      /* eslint-disable max-len */
       'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899': data.defaultalert,
       'settings_default:fe7ea321-e3e3-4cc6-9952-da836aae83ce': data.defaultopenvasscanconfig,
       'settings_default:fb19ac4b-614c-424c-b046-0bc32bf1be73': data.defaultospscanconfig,
@@ -269,6 +271,7 @@ class UserCommand extends EntityCommand {
       'settings_filter:e4cf514a-17e2-4ab9-9c90-336f15e24750': data.certbundfilter,
       'settings_filter:312350ed-bc06-44f3-8b3f-ab9eb828b80b': data.dfncertfilter,
       'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.allsecinfofilter,
+      /* eslint-enable max-len */
       auto_cache_rebuild: data.autocacherebuild,
     });
   }
