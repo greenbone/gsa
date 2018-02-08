@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,8 +42,11 @@ class AgentComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
     this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
     this.handleVerifyAgent = this.handleVerifyAgent.bind(this);
+    this.closeAgentDialog = this.closeAgentDialog.bind(this);
     this.openAgentDialog = this.openAgentDialog.bind(this);
   }
 
@@ -63,20 +67,26 @@ class AgentComponent extends React.Component {
   }
 
   openAgentDialog(agent) {
+    let title = '';
+
     if (is_defined(agent)) {
-      this.agent_dialog.show({
-        id: agent.id,
-        agent,
-        name: agent.name,
-        comment: agent.comment,
-      }, {
-        title: _('Edit agent {{name}}', {name: shorten(agent.name)}),
-      });
+      title = _('Edit Agent {{name}}', {name: shorten(agent.name)});
     }
     else {
-      this.agent_dialog.show({});
-    }
+      title = _('New Agent');
+    };
+
+    this.setState({
+      dialogVisible: true,
+      agent,
+      title,
+    });
   }
+
+  closeAgentDialog() {
+    this.setState({dialogVisible: false});
+  }
+
   render() {
     const {
       children,
@@ -91,6 +101,13 @@ class AgentComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      agent,
+      dialogVisible,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="agent"
@@ -118,7 +135,10 @@ class AgentComponent extends React.Component {
               downloadinstaller: this.handleDownloadInstaller,
             })}
             <AgentDialog
-              ref={ref => this.agent_dialog = ref}
+              agent={agent}
+              title={title}
+              visible={dialogVisible}
+              onClose={this.closeAgentDialog}
               onSave={save}
             />
           </Wrapper>
