@@ -51,10 +51,6 @@ const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
 
-const FilterSelect = glamorous(Select)({
-  width: '150px',
-});
-
 const Label = glamorous.label({
   marginRight: '5px',
 });
@@ -287,7 +283,8 @@ class PowerFilter extends React.Component {
                 title={_('Please insert a filter name')}/>
             }
             {capabilities.mayAccess('filters') &&
-              <FilterSelect
+              <Select
+                width="150px"
                 items={filter_items}
                 value={namedfilterid}
                 menuPosition="right"
