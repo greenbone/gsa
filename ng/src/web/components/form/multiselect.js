@@ -235,6 +235,7 @@ class MultiSelect extends React.Component {
                         openMenu(() => this.input.focus()); // set focus to input field after menu is opened
                       },
                     })}
+                    size="small"
                   />
                 </Layout>
               </Box>

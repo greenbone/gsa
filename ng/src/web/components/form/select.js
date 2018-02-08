@@ -173,6 +173,7 @@ class Select extends React.Component {
                   <ArrowIcon
                     disabled={disabled}
                     down={!isOpen}
+                    size="small"
                   />
                 </Layout>
               </Box>
