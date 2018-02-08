@@ -54,6 +54,7 @@ import TaskStatus from './status.js';
 import Trend from './trend.js';
 
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
+import {is_string} from 'gmp/utils/index.js';
 
 const render_report = (report, links) => {
   if (!is_defined(report)) {
@@ -111,7 +112,22 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner} = entity;
+  const {scanner, observers} = entity;
+
+  const obs = [];
+  if (is_defined(observers)) {
+    if (is_string(observers)) {
+      obs.push(_('User {{name}}', {name: observers}));
+    }
+    else {
+      if (is_defined(observers.role)) {
+        obs.push(_('Role {{name}}', {name: observers.role.name}));
+      }
+      if (is_defined(observers.group)) {
+        obs.push(_('Group {{name}}', {name: observers.role.name}));
+      }
+    }
+  }
   return (
     <TableRow>
       <TableData>
@@ -140,12 +156,12 @@ const Row = ({
               entity={entity}
               userName={userName}
             />
-            {!is_empty(entity.observers) &&
+            {!is_empty(observers) &&
               <Icon
                 size="small"
                 img="provide_view.svg"
-                title={_('Task made visible for: {{user}}',
-                  {user: entity.observers})}/> // TODO observer roles and groups
+                title={_('Task made visible for: {{observers}}',
+                  {observers: obs.join(', ')})}/> // TODO observer roles and groups
             }
           </IconDivider>
         </Layout>

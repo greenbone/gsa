@@ -216,6 +216,7 @@ const TaskDialog = ({
   const openvas_config_id = select_save_id(
     scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id);
 
+  const has_tags = tag_items.length > 0;
   return (
     <Layout flex="column">
 
@@ -447,12 +448,12 @@ const TaskDialog = ({
       }
 
       {capabilities.mayAccess('tags') && capabilities.mayCreate('task') &&
-        tags.length > 0 &&
+        has_tags &&
         <h3>{_('Tag')}</h3>
       }
       <FormGroup
         condition={capabilities.mayAccess('tags') &&
-        capabilities.mayCreate('task') && tags.length > 0}>
+        capabilities.mayCreate('task') && has_tags}>
         <Divider>
           <Checkbox
             name="add_tag"

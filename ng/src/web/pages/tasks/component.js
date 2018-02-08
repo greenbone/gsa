@@ -27,7 +27,9 @@ import moment from 'moment-timezone';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {first, for_each, includes_id, is_array, is_defined, map, select_save_id} from 'gmp/utils';
+import {first, for_each, map} from 'gmp/utils/array';
+import {is_array, is_defined} from 'gmp/utils/identity';
+import {includes_id, select_save_id} from 'gmp/utils/id';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
@@ -211,7 +213,28 @@ class TaskComponent extends React.Component {
           schedule_id = task.schedule.id;
         }
         else {
-          schedule_id = 0;
+          schedule_id = UNSET_VALUE;
+        }
+        const data = {};
+        if (task.isChangeable()) {
+          data.config_id = task.config.id;
+          data.scanner_id = task.scanner.id;
+          data.target_id = task.target.id;
+        }
+        else {
+          data.config_id = UNSET_VALUE;
+          data.scanner_id = UNSET_VALUE;
+          data.target_id = UNSET_VALUE;
+
+          // add UNSET_VALUEs to lists to be displayed with name in selects
+          scanners.push({
+            id: UNSET_VALUE,
+            name: task.scanner.name,
+          });
+          targets.push({
+            id: UNSET_VALUE,
+            name: task.target.name,
+          });
         }
 
         this.task_dialog.show({
@@ -222,20 +245,18 @@ class TaskComponent extends React.Component {
           auto_delete: task.auto_delete,
           auto_delete_data: task.auto_delete_data,
           comment: task.comment,
-          config_id: task.isChangeable() ? task.config.id : UNSET_VALUE,
           id: task.id,
           in_assets: task.in_assets,
           min_qod: task.min_qod,
           name: task.name,
           scan_configs: sorted_scan_configs,
-          scanner_id: task.isChangeable() ? task.scanner.id : UNSET_VALUE,
           scanner_type: task.scanner.scanner_type,
           scanners,
           schedule_id,
           schedules,
-          target_id: task.isChangeable() ? task.target.id : UNSET_VALUE,
           targets,
           task: task,
+          ...data,
         }, {
           title: _('Edit Task {{name}}', task),
         });
