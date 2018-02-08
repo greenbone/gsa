@@ -71,7 +71,7 @@ class CredentialCommand extends EntityCommand {
       privacy_algorithm,
       private_key,
       certificate,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -117,7 +117,7 @@ class CredentialCommand extends EntityCommand {
       privacy_algorithm,
       privacy_password,
       private_key,
-    }).then(this.transformResponse);
+    });
   }
 
   download({id}, format = 'pem') {

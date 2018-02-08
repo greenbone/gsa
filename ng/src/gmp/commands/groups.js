@@ -30,7 +30,7 @@ import Group from '../models/group.js';
 
 const log = logger.getLogger('gmp.commands.groups');
 
-export class GroupCommand extends EntityCommand {
+class GroupCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'group', Group);
@@ -51,7 +51,7 @@ export class GroupCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Creating new group', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   save({
@@ -71,7 +71,7 @@ export class GroupCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Saving group', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   getElementFromRoot(root) {
@@ -79,7 +79,7 @@ export class GroupCommand extends EntityCommand {
   }
 }
 
-export class GroupsCommand extends EntitiesCommand {
+class GroupsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'group', Group);

@@ -93,7 +93,7 @@ class OverrideCommand extends EntityCommand {
       port_manual,
       severity,
       text,
-    }).then(this.transformResponse);
+    });
   }
 }
 

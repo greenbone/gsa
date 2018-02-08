@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import Scanner from '../models/scanner.js';
 
 const log = logger.getLogger('gmp.commands.scanners');
 
-export class ScannersCommand extends EntitiesCommand {
+class ScannersCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'scanner', Scanner);
@@ -41,7 +41,7 @@ export class ScannersCommand extends EntitiesCommand {
 
 }
 
-export class ScannerCommand extends EntityCommand {
+class ScannerCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'scanner', Scanner);
@@ -72,7 +72,7 @@ export class ScannerCommand extends EntityCommand {
       ca_pub,
     };
     log.debug('Creating new scanner', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   save({
@@ -100,7 +100,7 @@ export class ScannerCommand extends EntityCommand {
       which_cert,
     };
     log.debug('Saving scanner', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   verify({id}) {
