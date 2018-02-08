@@ -57,7 +57,7 @@ const event_data_modify_task_fields = [
   'start_day', 'start_hour', 'start_minute', 'start_timezone',
 ];
 
-export class WizardCommand extends HttpCommand {
+class WizardCommand extends HttpCommand {
 
   constructor(http) {
     super(http, {cmd: 'wizard'});

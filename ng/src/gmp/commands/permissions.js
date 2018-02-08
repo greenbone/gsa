@@ -29,7 +29,7 @@ import Permission from '../models/permission.js';
 
 const log = logger.getLogger('gmp.commands.permissions');
 
-export class PermissionCommand extends EntityCommand {
+class PermissionCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'permission', Permission);
@@ -95,7 +95,7 @@ export class PermissionCommand extends EntityCommand {
   }
 }
 
-export class PermissionsCommand extends EntitiesCommand {
+class PermissionsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'permission', Permission);

@@ -73,7 +73,7 @@ const convert_preferences = (values, nvt_name) => {
   return ret;
 };
 
-export class ScanConfigCommand extends EntityCommand {
+class ScanConfigCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'config', ScanConfig);
@@ -272,7 +272,7 @@ export class ScanConfigCommand extends EntityCommand {
 
 }
 
-export class ScanConfigsCommand extends EntitiesCommand {
+class ScanConfigsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'config', ScanConfig);

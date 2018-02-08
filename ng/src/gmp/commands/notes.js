@@ -29,7 +29,7 @@ import Note from '../models/note.js';
 
 const log = logger.getLogger('gmp.commands.notes');
 
-export class NoteCommand extends EntityCommand {
+class NoteCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'note', Note);
@@ -74,7 +74,7 @@ export class NoteCommand extends EntityCommand {
   }
 }
 
-export class NotesCommand extends EntitiesCommand {
+class NotesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'note', Note);

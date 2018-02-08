@@ -29,7 +29,7 @@ import Scanner from '../models/scanner.js';
 
 const log = logger.getLogger('gmp.commands.scanners');
 
-export class ScannersCommand extends EntitiesCommand {
+class ScannersCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'scanner', Scanner);
@@ -41,7 +41,7 @@ export class ScannersCommand extends EntitiesCommand {
 
 }
 
-export class ScannerCommand extends EntityCommand {
+class ScannerCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'scanner', Scanner);

@@ -29,7 +29,7 @@ import Tag from '../models/tag.js';
 
 const log = logger.getLogger('gmp.commands.tags');
 
-export class TagCommand extends EntityCommand {
+class TagCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'tag', Tag);
@@ -96,7 +96,7 @@ export class TagCommand extends EntityCommand {
   }
 }
 
-export class TagsCommand extends EntitiesCommand {
+class TagsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'tag', Tag);

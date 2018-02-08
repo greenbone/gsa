@@ -31,7 +31,7 @@ import Target from '../models/target.js';
 
 const log = logger.getLogger('gmp.commands.targets');
 
-export class TargetCommand extends EntityCommand {
+class TargetCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'target', Target);
@@ -107,7 +107,7 @@ export class TargetCommand extends EntityCommand {
   }
 }
 
-export class TargetsCommand extends EntitiesCommand {
+class TargetsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'target', Target);

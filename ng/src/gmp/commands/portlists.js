@@ -29,7 +29,7 @@ import PortList from '../models/portlist.js';
 
 const log = logger.getLogger('gmp.commands.portlists');
 
-export class PortListCommand extends EntityCommand {
+class PortListCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'port_list', PortList);
@@ -97,7 +97,7 @@ export class PortListCommand extends EntityCommand {
   }
 }
 
-export class PortListsCommand extends EntitiesCommand {
+class PortListsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'port_list', PortList);
