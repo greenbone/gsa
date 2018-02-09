@@ -134,52 +134,65 @@ const MenuBar = ({
           <Menu title={_('Scans')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/scans"/>
             <MenuSection>
-              <MenuEntry
-                title={_('Tasks')}
-                to="tasks"
-                caps="get_tasks"/>
-              <MenuEntry
-                title={_('Reports')}
-                to="reports"
-                caps="get_reports"/>
-              <MenuEntry
-                title={_('Results')}
-                to="results"
-                caps="get_results"/>
-              <MenuEntry
-                title={_('Vulnerabilities')}
-                to="vulnerabilities"
-                caps="get_vulns"/>
+              {capabilities.mayAccess('tasks') &&
+                <MenuEntry
+                  title={_('Tasks')}
+                  to="tasks"
+                />
+              }
+              {capabilities.mayAccess('reports') &&
+                <MenuEntry
+                  title={_('Reports')}
+                  to="reports"
+                />
+              }
+              {capabilities.mayAccess('results') &&
+                <MenuEntry
+                  title={_('Results')}
+                  to="results"
+                />
+              }
+              {capabilities.mayAccess('vulns') &&
+                <MenuEntry
+                  title={_('Vulnerabilities')}
+                  to="vulnerabilities"
+                />
+              }
             </MenuSection>
             <MenuSection>
-              <MenuEntry
-                section
-                title={_('Notes')}
-                to="notes"
-                caps="get_notes"/>
-              <MenuEntry
-                title={_('Overrides')}
-                to="overrides"
-                caps="get_overrides"
-              />
+              {capabilities.mayAccess('notes') &&
+                <MenuEntry
+                  section
+                  title={_('Notes')}
+                  to="notes"
+                />
+              }
+              {capabilities.mayAccess('overrides') &&
+                <MenuEntry
+                  title={_('Overrides')}
+                  to="overrides"
+                />
+              }
             </MenuSection>
           </Menu>
         }
-        {capabilities.mayOp('get_assets') &&
+        {capabilities.mayAccess('assets') &&
           <Menu title={_('Assets')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
             <MenuSection>
               <MenuEntry
                 section
                 title={_('Hosts')}
-                to="hosts"/>
+                to="hosts"
+              />
               <MenuEntry
                 title={_('Operating Systems')}
-                to="operatingsystems"/>
+                to="operatingsystems"
+              />
             </MenuSection>
           </Menu>
         }
-        {capabilities.mayOp('get_info') &&
+        {capabilities.mayAccess('info') &&
           <Menu title={_('SecInfo')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/secinfo"/>
             <MenuSection>
@@ -218,68 +231,81 @@ const MenuBar = ({
         }
         {may_op_configuration &&
           <Menu title={_('Configuration')}>
-            <MenuEntry
-              title={_('Targets')}
-              to="targets"
-              caps="get_targets"
-            />
-            <MenuEntry
-              title={_('Port Lists')}
-              to="portlists"
-              caps="get_port_lists"
-            />
-            <MenuEntry
-              title={_('Credentials')}
-              to="credentials"
-              caps="get_credentials"
-            />
-            <MenuEntry
-              title={_('Scan Configs')}
-              to="scanconfigs"
-              caps="get_configs"
-            />
+            {capabilities.mayAccess('targets') &&
+              <MenuEntry
+                title={_('Targets')}
+                to="targets"
+              />
+            }
+            {capabilities.mayAccess('port_lists') &&
+              <MenuEntry
+                title={_('Port Lists')}
+                to="portlists"
+              />
+            }
+            {capabilities.mayAccess('credentials') &&
+              <MenuEntry
+                title={_('Credentials')}
+                to="credentials"
+              />
+            }
+            {capabilities.mayAccess('configs') &&
+              <MenuEntry
+                title={_('Scan Configs')}
+                to="scanconfigs"
+              />
+            }
             <MenuSection>
-              <MenuEntry
-                title={_('Alerts')}
-                to="alerts"
-                caps="get_alerts"
-              />
-              <MenuEntry
-                title={_('Schedules')}
-                to="schedules"
-                caps="get_schedules"
-              />
-              <MenuEntry
-                title={_('Report Formats')}
-                to="reportformats"
-                caps="get_report_formats"
-              />
-              <MenuEntry
-                title={_('Agents')}
-                to="agents"
-                caps="get_agents"
-              />
+              {capabilities.mayAccess('alerts') &&
+                <MenuEntry
+                  title={_('Alerts')}
+                  to="alerts"
+                />
+              }
+              {capabilities.mayAccess('schedules') &&
+                <MenuEntry
+                  title={_('Schedules')}
+                  to="schedules"
+                />
+              }
+              {capabilities.mayAccess('report_formats') &&
+                <MenuEntry
+                  title={_('Report Formats')}
+                  to="reportformats"
+                />
+              }
+              {capabilities.mayAccess('agents') &&
+                <MenuEntry
+                  title={_('Agents')}
+                  to="agents"
+                />
+              }
             </MenuSection>
             <MenuSection>
-              <MenuEntry
-                title={_('Scanners')}
-                to="scanners"
-                caps="get_scanners"
-              />
-              <MenuEntry
-                title={_('Filters')}
-                to="filters"
-                caps="get_filters"/>
-              <MenuEntry
-                title={_('Tags')}
-                to="tags"
-                caps="get_tags"
-              />
-              <MenuEntry
-                title={_('Permissions')}
-                to="permissions"
-                caps="get_permissions"
-              />
+              {capabilities.mayAccess('scanners') &&
+                <MenuEntry
+                  title={_('Scanners')}
+                  to="scanners"
+                />
+              }
+              {capabilities.mayAccess('filters') &&
+                <MenuEntry
+                  title={_('Filters')}
+                  to="filters"
+                />
+              }
+              {capabilities.mayAccess('tags') &&
+                <MenuEntry
+                  title={_('Tags')}
+                  to="tags"
+                />
+              }
+              {capabilities.mayAccess('permissions') &&
+                <MenuEntry
+                  title={_('Permissions')}
+                  to="permissions"
+                />
+              }
             </MenuSection>
           </Menu>
         }
@@ -292,49 +318,60 @@ const MenuBar = ({
             title={_('My Settings')}
             to="usersettings"
           />
-          <MenuEntry
-            title={_('Performance')}
-            caps="get_system_reports"
-            to="performance"
-          />
+          {capabilities.mayAccess('system_reports') &&
+            <MenuEntry
+              title={_('Performance')}
+              caps="get_system_reports"
+              to="performance"
+            />
+          }
           <MenuEntry
             title={_('CVSS Calculator')}
             to="cvsscalculator"
           />
-          <MenuEntry
-            title={_('Feed Status')}
-            to="feedstatus"
-            caps="get_feeds"
-          />
+          {capabilities.mayAccess('feeds') &&
+            <MenuEntry
+              title={_('Feed Status')}
+              to="feedstatus"
+              caps="get_feeds"
+            />
+          }
         </Menu>
         {may_op_admin &&
           <Menu title={_('Administration')}>
-            <MenuEntry
-              title={_('Users')}
-              to="users"
-              caps="get_users"
-            />
-            <MenuEntry
-              title={_('Groups')}
-              to="groups"
-              caps="get_groups"
-            />
-            <MenuEntry
-              title={_('Roles')}
-              to="roles"
-              caps="get_roles"
-            />
+            {capabilities.mayAccess('users') &&
+              <MenuEntry
+                title={_('Users')}
+                to="users"
+              />
+            }
+            {capabilities.mayAccess('groups') &&
+              <MenuEntry
+                title={_('Groups')}
+                to="groups"
+              />
+            }
+            {capabilities.mayAccess('roles') &&
+              <MenuEntry
+                title={_('Roles')}
+                to="roles"
+              />
+            }
             <MenuSection>
-              <MenuEntry
-                title={_('LDAP')}
-                to="ldap"
-                caps={['describe_auth', 'modify_auth']}
-              />
-              <MenuEntry
-                title={_('Radius')}
-                to="radius"
-                caps={['describe_auth', 'modify_auth']}
-              />
+              {capabilities.mayOp('describe_auth') &&
+                capabilities.mayOp('modify_auth') &&
+                <MenuEntry
+                  title={_('LDAP')}
+                  to="ldap"
+                />
+              }
+              {capabilities.mayOp('describe_auth') &&
+                capabilities.mayOp('modify_auth') &&
+                <MenuEntry
+                  title={_('Radius')}
+                  to="radius"
+                />
+              }
             </MenuSection>
           </Menu>
         }
