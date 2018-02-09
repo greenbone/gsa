@@ -308,7 +308,7 @@ handle_validate (http_connection_t *connection, const char * method,
   if (&url[0] == NULL)
     {
       send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
 
@@ -324,7 +324,7 @@ handle_validate (http_connection_t *connection, const char * method,
       send_response (connection,
                      UTF8_ERROR_PAGE ("URL"),
                      MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
 
@@ -369,7 +369,7 @@ handle_static_file (http_connection_t *connection, const char * method,
 
   g_free (path);
 
-  return handler_send_response (connection, response, response_data, NULL);
+  return handler_send_response (connection, response, response_data, NULL, 1);
 }
 
 int
@@ -391,7 +391,7 @@ handle_invalid_method (http_connection_t *connection,
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
       send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ALLOWED,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
 
@@ -442,7 +442,7 @@ handle_setup_user (http_connection_t *connection,
           send_response (connection,
                          UTF8_ERROR_PAGE ("'X-Real-IP' header"),
                          MHD_HTTP_BAD_REQUEST, NULL,
-                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
           return MHD_YES;
         }
 
@@ -464,7 +464,7 @@ handle_setup_user (http_connection_t *connection,
       return handler_create_response (connection,
                                       res,
                                       response_data,
-                                      REMOVE_SID);
+                                      REMOVE_SID, 0);
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED
@@ -542,7 +542,7 @@ handle_setup_credentials (http_connection_t *connection,
           send_response (connection,
                          UTF8_ERROR_PAGE ("'Accept-Language' header"),
                          MHD_HTTP_BAD_REQUEST, NULL,
-                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
           return MHD_YES;
         }
       language = accept_language_to_env_fmt (accept_language);
@@ -623,7 +623,7 @@ handle_gmp_post (http_connection_t *connection,
       send_response (connection,
                      UTF8_ERROR_PAGE ("'Accept-Language' header"),
                      MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
   con_info->language = accept_language_to_env_fmt (accept_language);
@@ -638,7 +638,7 @@ handle_gmp_post (http_connection_t *connection,
       send_response (connection,
                      UTF8_ERROR_PAGE ("'X-Real-IP' header"),
                      MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
 
@@ -723,7 +723,7 @@ handle_system_report (http_connection_t *connection,
 
   credentials_free (credentials);
 
-  return handler_create_response (connection, res, response_data, NULL);
+  return handler_create_response (connection, res, response_data, NULL, 0);
 }
 
 int
@@ -740,7 +740,7 @@ handle_index_ng (http_connection_t *connection,
   response = file_content_response (connection, url,
                                     "ng/index.html",
                                     response_data);
-  return handler_send_response (connection, response, response_data, NULL);
+  return handler_send_response (connection, response, response_data, NULL, 1);
 }
 
 int
@@ -775,7 +775,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
 
   g_free (path);
 
-  return handler_send_response (connection, response, response_data, NULL);
+  return handler_send_response (connection, response, response_data, NULL, 1);
 }
 
 http_handler_t *
@@ -919,7 +919,7 @@ handle_request(void *cls, http_connection_t *connection,
                * from leading to "Internal application error" in the log. */
               send_response (connection, BAD_REQUEST_PAGE,
                              MHD_HTTP_NOT_ACCEPTABLE, NULL,
-                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
               return MHD_YES;
             }
           con_info->params = params_new ();

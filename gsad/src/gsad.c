@@ -1440,7 +1440,7 @@ exec_gmp_post (http_connection_t *con,
                             "Diagnostics: Token bad.",
                             response_data);
 
-      return handler_create_response (con, res, response_data, NULL);
+      return handler_create_response (con, res, response_data, NULL, 0);
     }
 
   ret = user_find (con_info->cookie, params_value (con_info->params, "token"),
@@ -1454,7 +1454,7 @@ exec_gmp_post (http_connection_t *con,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: Bad token.",
                           response_data);
-      return handler_create_response (con, res, response_data, NULL);
+      return handler_create_response (con, res, response_data, NULL, 0);
     }
 
   if (ret == USER_EXPIRED_TOKEN)
@@ -1560,7 +1560,7 @@ exec_gmp_post (http_connection_t *con,
 
   if (res)
     {
-      return handler_create_response (con, res, response_data, NULL);
+      return handler_create_response (con, res, response_data, NULL, 0);
     }
 
   /* Handle the usual commands. */
@@ -1764,7 +1764,7 @@ exec_gmp_post (http_connection_t *con,
                           response_data);
     }
 
-  ret = handler_create_response (con, res, response_data, new_sid);
+  ret = handler_create_response (con, res, response_data, new_sid, 0);
 
   credentials_free (credentials);
   gvm_connection_close (&connection);
@@ -2052,7 +2052,7 @@ exec_gmp_get (http_connection_t *con,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: No valid command for gmp.",
                           response_data);
-      return handler_create_response (con, res, response_data, NULL);
+      return handler_create_response (con, res, response_data, NULL, 0);
     }
 
 
@@ -2103,7 +2103,7 @@ exec_gmp_get (http_connection_t *con,
 
   if (res)
     {
-      return handler_create_response (con, res, response_data, NULL);
+      return handler_create_response (con, res, response_data, NULL, 0);
     }
 
   /* Set page display settings */
@@ -2443,7 +2443,8 @@ exec_gmp_get (http_connection_t *con,
       gvm_connection_close (&connection);
     }
 
-  return handler_send_response (con, response, response_data, credentials->sid);
+  return handler_send_response (con, response, response_data, credentials->sid,
+                                0);
 }
 
 /**
@@ -2496,7 +2497,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
       send_response (connection, ERROR_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
 
@@ -2509,7 +2510,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
       send_response (connection,
                      UTF8_ERROR_PAGE ("'Host' header"),
                      MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
   else if (host == NULL)
