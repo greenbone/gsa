@@ -82,7 +82,6 @@ class ScanConfigCommand extends EntityCommand {
   import({xml_file}) {
     const data = {
       cmd: 'import_config',
-      next: 'get_config',
       xml_file,
     };
     log.debug('Importing scan config', data);
@@ -97,7 +96,6 @@ class ScanConfigCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_config',
-      next: 'get_config',
       base,
       comment,
       name,
@@ -121,7 +119,6 @@ class ScanConfigCommand extends EntityCommand {
       ...convert_select(select, 'select:'),
 
       cmd: 'save_config',
-      next: 'get_config',
       id,
       comment,
       name,

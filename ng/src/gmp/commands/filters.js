@@ -44,7 +44,6 @@ class FilterCommand extends EntityCommand {
     const {term, name, type, comment = ''} = args;
     const data = {
       cmd: 'create_filter',
-      next: 'get_filter',
       term,
       name,
       optional_resource_type: type,
@@ -58,7 +57,6 @@ class FilterCommand extends EntityCommand {
     const {id, term, name, type, comment = ''} = args;
     const data = {
       cmd: 'save_filter',
-      next: 'get_filter',
       comment,
       id,
       name,

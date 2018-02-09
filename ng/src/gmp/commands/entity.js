@@ -92,7 +92,6 @@ class EntityCommand extends HttpCommand {
     return this.action({
       cmd: 'clone',
       resource_type: this.name,
-      next: 'get_' + this.name,
     }, {
       extra_params,
     }).then(response => {

@@ -147,7 +147,6 @@ class UserCommand extends EntityCommand {
     }
     const data = {
       cmd: 'create_user',
-      next: 'get_user',
       access_hosts,
       access_ifaces,
       auth_method,
@@ -191,7 +190,6 @@ class UserCommand extends EntityCommand {
     }
     const data = {
       cmd: 'save_user',
-      next: 'get_user',
       access_hosts,
       access_ifaces,
       comment,

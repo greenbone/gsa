@@ -62,7 +62,6 @@ class ScannerCommand extends EntityCommand {
     }) {
     const data = {
       cmd: 'create_scanner',
-      next: 'get_scanner',
       name,
       comment,
       credential_id,
@@ -88,7 +87,6 @@ class ScannerCommand extends EntityCommand {
     }) {
     const data = {
       cmd: 'save_scanner',
-      next: 'get_scanner',
       ca_pub,
       comment,
       credential_id,
@@ -106,7 +104,6 @@ class ScannerCommand extends EntityCommand {
   verify({id}) {
     return this.httpPost({
       cmd: 'verify_scanner',
-      next: 'get_scanner',
       id,
     });
   }

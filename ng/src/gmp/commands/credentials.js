@@ -56,7 +56,6 @@ class CredentialCommand extends EntityCommand {
     log.debug('Creating new credential', args);
     return this.action({
       cmd: 'create_credential',
-      next: 'get_credential',
       name,
       comment,
       base,
@@ -98,7 +97,6 @@ class CredentialCommand extends EntityCommand {
     log.debug('Saving credential', args);
     return this.action({
       cmd: 'save_credential',
-      next: 'get_credential',
       allow_insecure,
       auth_algorithm,
       base,

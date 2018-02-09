@@ -41,7 +41,6 @@ class HostCommand extends EntityCommand {
     log.debug('Creating host', args);
     return this.action({
       cmd: 'create_host',
-      next: 'get_asset',
       name,
       comment,
     });
@@ -52,7 +51,6 @@ class HostCommand extends EntityCommand {
     log.debug('Saving host', args);
     return this.action({
       cmd: 'save_asset',
-      next: 'get_asset',
       asset_id: id,
       comment,
     });
@@ -62,7 +60,6 @@ class HostCommand extends EntityCommand {
     log.debug('Deleting Host Identifier with id', id);
     return this.httpPost({
       cmd: 'delete_asset',
-      next: 'get_asset',
       asset_id: id,
     });
   }

@@ -87,7 +87,6 @@ class ReportFormatCommand extends EntityCommand {
     log.debug('Verifying report format', id);
     return this.httpPost({
       cmd: 'verify_report_format',
-      next: 'get_report_format',
       id,
     }).then(this.transformRequest, rej => {
       const {root} = rej;

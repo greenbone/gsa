@@ -75,7 +75,6 @@ class OverrideCommand extends EntityCommand {
     log.debug('Saving override', args);
     return this.action({
       cmd,
-      next: 'get_override',
       oid,
       override_id: id,
       active,

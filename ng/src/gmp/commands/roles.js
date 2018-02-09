@@ -48,7 +48,6 @@ class RoleCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_role',
-      next: 'get_role',
       name,
       comment,
       users: is_array(users) ? users.join(',') : '',
@@ -65,7 +64,6 @@ class RoleCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_role',
-      next: 'get_role',
       id,
       name,
       comment,

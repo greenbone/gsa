@@ -52,7 +52,6 @@ class PermissionCommand extends EntityCommand {
     const data = {
       cmd: 'create_permission',
       comment,
-      next: 'get_permission',
       permission: name,
       permission_group_id: group_id,
       permission_role_id: role_id,
@@ -78,7 +77,6 @@ class PermissionCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_permission',
-      next: 'get_permission',
       id,
       comment,
       permission: name,

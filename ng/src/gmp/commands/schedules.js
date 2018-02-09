@@ -54,7 +54,6 @@ class ScheduleCommand extends EntityCommand {
     log.debug('Creating new schedule', args);
     return this.action({
       cmd: 'create_schedule',
-      next: 'get_schedule',
       name,
       comment,
       day_of_month,
@@ -91,7 +90,6 @@ class ScheduleCommand extends EntityCommand {
 
     const data = {
       cmd: 'save_schedule',
-      next: 'get_schedule',
       comment,
       day_of_month,
       duration,

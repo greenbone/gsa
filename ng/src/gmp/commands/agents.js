@@ -45,7 +45,6 @@ export class AgentCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'verify_agent',
       id,
-      next: 'get_agent',
     });
   }
 
@@ -56,7 +55,6 @@ export class AgentCommand extends EntityCommand {
       comment,
       installer,
       installer_sig,
-      next: 'get_agent',
     };
     log.debug('Creating new agent', data);
     return this.action(data);
@@ -68,7 +66,6 @@ export class AgentCommand extends EntityCommand {
       id,
       name,
       comment,
-      next: 'get_agent',
     };
     log.debug('Saving agent', data);
     return this.action(data);

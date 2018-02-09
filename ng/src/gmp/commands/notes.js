@@ -68,7 +68,6 @@ class NoteCommand extends EntityCommand {
     log.debug('Saving note', args);
     return this.action({
       cmd,
-      next: 'get_note',
       oid,
       note_id,
       active,

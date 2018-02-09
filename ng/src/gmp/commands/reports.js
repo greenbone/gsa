@@ -57,7 +57,6 @@ class ReportCommand extends EntityCommand {
     log.debug('Importing report', args);
     return this.httpPost({
       cmd: 'import_report',
-      next: 'get_report',
       task_id,
       in_assets,
       xml_file,

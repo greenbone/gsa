@@ -44,7 +44,6 @@ class GroupCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_group',
-      next: 'get_group',
       name,
       comment,
       grant_full,
@@ -63,7 +62,6 @@ class GroupCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_group',
-      next: 'get_group',
       id,
       name,
       comment,
