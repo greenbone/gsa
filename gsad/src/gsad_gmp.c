@@ -1476,10 +1476,11 @@ response_from_entity (gvm_connection_t *connection,
 
   status_details_entity = entity_child (entity, "status_details");
 
-  res = action_result_page (connection, credentials, params, response_data,
-                            action, entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"),
-                            entity_text(status_details_entity), NULL);
+  res = action_result (connection, credentials, params, response_data,
+                       action, entity_attribute (entity, "status"),
+                       entity_attribute (entity, "status_text"),
+                       entity_text(status_details_entity),
+                       entity_attribute (entity, "id"));
   return res;
 }
 
@@ -9071,10 +9072,11 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   status_details_entity = entity_child (entity, "status_details");
 
-  html = action_result_page (connection, credentials, params, response_data,
-                             "Test Alert", entity_attribute (entity, "status"),
-                             entity_attribute (entity, "status_text"),
-                             entity_text(status_details_entity), NULL);
+  html = action_result (connection, credentials, params, response_data,
+                        "Test Alert", entity_attribute (entity, "status"),
+                        entity_attribute (entity, "status_text"),
+                        entity_text(status_details_entity),
+                        entity_attribute (entity, "id"));
 
   free_entity (entity);
   g_free (response);
