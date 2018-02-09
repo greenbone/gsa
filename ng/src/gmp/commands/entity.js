@@ -27,6 +27,8 @@ import logger from '../log.js';
 
 import {filter_string} from '../models/filter/utils.js';
 
+import ActionResult from '../models/actionresult';
+
 import DefaultTransform from '../http/transform/default.js';
 
 import HttpCommand from './http.js';
@@ -73,6 +75,14 @@ class EntityCommand extends HttpCommand {
       entity = undefined;
     }
     return response.setData(entity);
+  }
+
+  transformActionResult(response) {
+    return response.setData(new ActionResult(response.data));
+  }
+
+  action(...args) {
+    return this.httpPost(...args).then(this.transformActionResult);
   }
 
   clone({id}) {
