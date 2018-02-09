@@ -112,6 +112,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/locale.js
      ${NG_SRC_DIR}/src/gmp/log.js
      ${NG_SRC_DIR}/src/gmp/model.js
+     ${NG_SRC_DIR}/src/gmp/models/actionresult.js
      ${NG_SRC_DIR}/src/gmp/models/agent.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js
      ${NG_SRC_DIR}/src/gmp/models/asset.js
