@@ -146,12 +146,12 @@ void gsad_add_content_type_header (http_response_t *response,
 int handler_create_response (http_connection_t *connection,
                              gchar *data,
                              cmd_response_data_t *response_data,
-                             const gchar *sid);
+                             const gchar *sid, int allow_caching);
 
 int handler_send_response (http_connection_t *connection,
                            http_response_t *response,
                            cmd_response_data_t *response_data,
-                           const gchar *sid);
+                           const gchar *sid, int allow_caching);
 
 int handler_send_not_found (http_connection_t *connection,
                             const gchar *url);
@@ -185,7 +185,7 @@ int send_response (http_connection_t *connection, const char *content,
                    int status_code, const gchar *sid,
                    content_type_t content_type,
                    const char *content_disposition,
-                   size_t content_length);
+                   size_t content_length, int allow_caching);
 
 int send_redirect_to_urn (http_connection_t *connection, const char *urn,
                           user_t *user);
@@ -199,6 +199,8 @@ void add_security_headers (http_response_t *response);
 void add_guest_chart_content_security_headers (http_response_t *response);
 
 void add_cors_headers (http_response_t *response);
+
+void add_caching_headers (http_response_t *response, int allow_caching);
 
 /* helper functions required in gsad_http */
 http_response_t *

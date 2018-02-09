@@ -200,13 +200,13 @@ send_redirect_to_urn (http_connection_t *connection, const char *urn,
       send_response (connection,
                      UTF8_ERROR_PAGE ("'Host' header"),
                      MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
   if (host == NULL)
     {
       send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
 
@@ -217,7 +217,7 @@ send_redirect_to_urn (http_connection_t *connection, const char *urn,
       send_response (connection,
                      UTF8_ERROR_PAGE ("'X-Forwarded-Protocol' header"),
                      MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
   else if ((protocol == NULL)
@@ -283,9 +283,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
       return MHD_NO;
     }
 
-  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
-  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
-
+  add_caching_headers (response, 0);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
@@ -303,6 +301,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
  * @param[in]  content_type         The content type.
  * @param[in]  content_disposition  The content disposition or NULL.
  * @param[in]  content_length       Content length, 0 for strlen (content).
+ * @param[in]  allow_caching        Whether to allow caching in the headers.
  *
  * @return MHD_YES on success, MHD_NO on error.
  */
@@ -311,7 +310,7 @@ send_response (http_connection_t *connection, const char *content,
                int status_code, const gchar *sid,
                content_type_t content_type,
                const char *content_disposition,
-               size_t content_length)
+               size_t content_length, int allow_caching)
 {
   http_response_t *response;
   size_t size = (content_length ? content_length : strlen (content));
@@ -331,6 +330,7 @@ send_response (http_connection_t *connection, const char *content,
       return MHD_NO;
     }
 
+  add_caching_headers (response, allow_caching);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
@@ -347,14 +347,14 @@ send_response (http_connection_t *connection, const char *content,
  * @param[in]  response       Response.
  * @param[in]  response_data  Response data struct. Response data will be freed.
  * @param[in]  sid            Session ID, or NULL. "0" to remove session.
- *
+ * @param[in]  allow_caching  Whether to allow caching in the headers.
  * @return MHD_YES on success, else MHD_NO.
  */
 int
 handler_send_response (http_connection_t *connection,
                        http_response_t *response,
                        cmd_response_data_t *response_data,
-                       const gchar *sid)
+                       const gchar *sid, int allow_caching)
 {
   int ret;
   const gchar * content_disposition;
@@ -390,6 +390,7 @@ handler_send_response (http_connection_t *connection,
                                content_disposition);
     }
 
+  add_caching_headers (response, allow_caching);
   add_security_headers (response);
   add_cors_headers (response);
 
@@ -403,7 +404,7 @@ handler_send_response (http_connection_t *connection,
       /* Assume this was due to a bad request, to keep the MHD "Internal
        * application error" out of the log. */
       send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       MHD_destroy_response (response);
       return MHD_YES;
     }
@@ -420,6 +421,7 @@ handler_send_response (http_connection_t *connection,
  * @param[in]  data           Data to send in response
  * @param[in]  response_data  Response data struct. Response data will be freed.
  * @param[in]  sid            Session ID, or NULL. "0" to remove session.
+ * @param[in]  allow_caching  Whether to allow caching in the headers.
  *
  * @return MHD_YES on success, else MHD_NO.
  */
@@ -427,7 +429,7 @@ int
 handler_create_response (http_connection_t *connection,
                          gchar *data,
                          cmd_response_data_t *response_data,
-                         const gchar *sid)
+                         const gchar *sid, int allow_caching)
 {
   http_response_t *response;
   gsize len = 0;
@@ -447,7 +449,8 @@ handler_create_response (http_connection_t *connection,
 
   response = MHD_create_response_from_buffer (len, data,
                                               MHD_RESPMEM_MUST_FREE);
-  return handler_send_response (connection, response, response_data, sid);
+  return handler_send_response (connection, response, response_data, sid,
+                                allow_caching);
 }
 
 /**
@@ -545,7 +548,7 @@ handler_send_not_found (http_connection_t *connection, const gchar * url)
   response_data = cmd_response_data_new ();
 
   response = create_not_found_response (url, response_data);
-  return handler_send_response (connection, response, response_data, NULL);
+  return handler_send_response (connection, response, response_data, NULL, 0);
 }
 
 /**
@@ -582,7 +585,7 @@ handler_send_login_page (http_connection_t *connection,
       send_response (connection,
                      UTF8_ERROR_PAGE ("'Accept-Language' header"),
                      MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0, 0);
       return MHD_YES;
     }
 
@@ -611,7 +614,8 @@ handler_send_login_page (http_connection_t *connection,
   return handler_send_response (connection,
                                 response,
                                 response_data,
-                                REMOVE_SID);
+                                REMOVE_SID,
+                                0);
 }
 
 /**
@@ -1033,6 +1037,25 @@ add_cors_headers (http_response_t *response)
     MHD_add_response_header (response, "Access-Control-Allow-Credentials",
                              "true");
   }
+}
+
+/**
+ * @brief Add header to manage caching to a HTTP response.
+ *
+ * @param[in]  response       The HTTP response to add the headers to.
+ * @param[in]  allow_caching  1 to allow caching, 0 to forbid.
+ */
+void
+add_caching_headers (http_response_t *response, int allow_caching)
+{
+  if (allow_caching == FALSE)
+    {
+      MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
+                               "no-cache, no-store");
+      MHD_add_response_header (response, MHD_HTTP_HEADER_PRAGMA,
+                               "no-cache");
+    }
 }
 
 gboolean
