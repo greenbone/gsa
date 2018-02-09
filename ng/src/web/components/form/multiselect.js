@@ -191,6 +191,8 @@ class MultiSelect extends React.Component {
       items = option_items(children);
     }
 
+    disabled = disabled || !is_defined(items) || items.length === 0;
+
     const displayedItems = is_defined(items) ?
       items.filter(case_insensitive_filter(search)) : [];
     return (
@@ -232,14 +234,14 @@ class MultiSelect extends React.Component {
                       down: !isOpen,
                       onClick: isOpen ? undefined : event => {
                         event.preventDefault(); // don't call default handler from downshift
-                        openMenu(() => this.input.focus()); // set focus to input field after menu is opened
+                        openMenu(() => is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                       },
                     })}
                     size="small"
                   />
                 </Layout>
               </Box>
-              {isOpen && items.length > 0 && !disabled &&
+              {isOpen && !disabled &&
                 <Menu position={menuPosition}>
                   <Input
                     {...getInputProps({
