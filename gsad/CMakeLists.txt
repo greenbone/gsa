@@ -28,11 +28,6 @@
 # see https://clang.llvm.org/docs/JSONCompilationDatabase.html
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-add_custom_target (zone-dict
-                   COMMENT "Generating timezone dictionary"
-                   COMMAND sh "${CMAKE_SOURCE_DIR}/tools/generate-zone-dict.sh" > ${CMAKE_CURRENT_BINARY_DIR}/zones.xml
-                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tools)
-
 configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 
 ## Install
