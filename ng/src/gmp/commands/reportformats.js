@@ -80,7 +80,7 @@ class ReportFormatCommand extends EntityCommand {
     data['id_list:'] = id_list;
 
     log.debug('Saving report format', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   verify({id}) {

@@ -203,13 +203,13 @@ class TaskCommand extends EntityCommand {
       target_id,
     };
     log.debug('Creating task', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   createContainer(args) {
     const {name, comment = ''} = args;
     log.debug('Creating container task', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_container_task',
       next: 'get_task',
       name,
@@ -265,7 +265,7 @@ class TaskCommand extends EntityCommand {
       task_id: id,
     };
     log.debug('Saving task', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   saveContainer(args) {
@@ -278,7 +278,7 @@ class TaskCommand extends EntityCommand {
       id,
     } = args;
     log.debug('Saving container task', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_container_task',
       next: 'get_task',
       name,

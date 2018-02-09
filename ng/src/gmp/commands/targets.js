@@ -58,7 +58,7 @@ class TargetCommand extends EntityCommand {
       hosts_filter,
     } = args;
     log.debug('Creating new target', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_target',
       next: 'get_target',
       name,
@@ -103,7 +103,7 @@ class TargetCommand extends EntityCommand {
       in_use,
     } = args;
     log.debug('Saving target', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_target',
       next: 'get_target',
       target_id: id,

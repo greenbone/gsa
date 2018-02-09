@@ -59,7 +59,7 @@ class TagCommand extends EntityCommand {
       next: 'get_tag',
     };
     log.debug('Creating new tag', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -83,7 +83,7 @@ class TagCommand extends EntityCommand {
       next: 'get_tag',
     };
     log.debug('Saving tag', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   enable({id}) {

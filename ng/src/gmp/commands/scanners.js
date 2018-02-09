@@ -72,7 +72,7 @@ class ScannerCommand extends EntityCommand {
       ca_pub,
     };
     log.debug('Creating new scanner', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -100,7 +100,7 @@ class ScannerCommand extends EntityCommand {
       which_cert,
     };
     log.debug('Saving scanner', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   verify({id}) {

@@ -51,7 +51,7 @@ class FilterCommand extends EntityCommand {
       comment,
     };
     log.debug('Creating new filter', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save(args) {
@@ -66,7 +66,7 @@ class FilterCommand extends EntityCommand {
       term,
     };
     log.debug('Saving filter', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {

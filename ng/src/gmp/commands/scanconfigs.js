@@ -104,7 +104,7 @@ class ScanConfigCommand extends EntityCommand {
       scanner_id,
     };
     log.debug('Creating scanconfig', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -127,7 +127,7 @@ class ScanConfigCommand extends EntityCommand {
       name,
     };
     log.debug('Saving scanconfig', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   editScanConfigSettings({id}) { // should be removed in future an splitted into several api calls

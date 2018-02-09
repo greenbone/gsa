@@ -52,7 +52,7 @@ class ScheduleCommand extends EntityCommand {
     const month = date.month() + 1;
     const year = date.year();
     log.debug('Creating new schedule', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_schedule',
       next: 'get_schedule',
       name,
@@ -107,7 +107,7 @@ class ScheduleCommand extends EntityCommand {
       year,
     };
     log.debug('Saving schedule', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {

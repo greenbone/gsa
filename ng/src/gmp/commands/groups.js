@@ -51,7 +51,7 @@ class GroupCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Creating new group', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -71,7 +71,7 @@ class GroupCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Saving group', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {

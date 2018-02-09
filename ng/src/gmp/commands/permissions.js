@@ -62,7 +62,7 @@ class PermissionCommand extends EntityCommand {
       subject_type,
     };
     log.debug('Creating new permission', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -91,7 +91,7 @@ class PermissionCommand extends EntityCommand {
       id_or_empty: resource_id,
     };
     log.debug('Saving permission', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 }
 

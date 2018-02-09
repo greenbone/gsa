@@ -59,7 +59,7 @@ export class AgentCommand extends EntityCommand {
       next: 'get_agent',
     };
     log.debug('Creating new agent', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({id, name, comment = ''}) {
@@ -71,7 +71,7 @@ export class AgentCommand extends EntityCommand {
       next: 'get_agent',
     };
     log.debug('Saving agent', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   downloadInstaller({id}) {

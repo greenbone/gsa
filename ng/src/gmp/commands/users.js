@@ -160,7 +160,7 @@ class UserCommand extends EntityCommand {
       'role_ids:': role_ids,
     };
     log.debug('Creating new user', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save({
@@ -206,7 +206,7 @@ class UserCommand extends EntityCommand {
       'role_ids:': role_ids,
     };
     log.debug('Saving user', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   delete({id, inheritor_id}) {

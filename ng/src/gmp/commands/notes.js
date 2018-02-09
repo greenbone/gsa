@@ -66,7 +66,7 @@ class NoteCommand extends EntityCommand {
       text,
     } = args;
     log.debug('Saving note', args);
-    return this.httpPost({
+    return this.action({
       cmd,
       next: 'get_note',
       oid,

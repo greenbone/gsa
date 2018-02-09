@@ -39,7 +39,7 @@ class HostCommand extends EntityCommand {
   create(args) {
     const {name, comment = ''} = args;
     log.debug('Creating host', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_host',
       next: 'get_asset',
       name,
@@ -50,7 +50,7 @@ class HostCommand extends EntityCommand {
   save(args) {
     const {id, comment = ''} = args;
     log.debug('Saving host', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_asset',
       next: 'get_asset',
       asset_id: id,
