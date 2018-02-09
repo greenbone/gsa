@@ -64,10 +64,6 @@ class EntityCommand extends HttpCommand {
     return new this.clazz(this.getElementFromRoot(response.data));
   }
 
-  get({id}, {filter, ...options} = {}) {
-    return this.httpGet({id, filter}, options).then(this.transformResponse);
-  }
-
   transformResponse(response) {
     let entity = this.getModelFromResponse(response);
     if (!is_defined(entity.id)) {
@@ -83,6 +79,10 @@ class EntityCommand extends HttpCommand {
 
   action(...args) {
     return this.httpPost(...args).then(this.transformActionResult);
+  }
+
+  get({id}, {filter, ...options} = {}) {
+    return this.httpGet({id, filter}, options).then(this.transformResponse);
   }
 
   clone({id}) {
