@@ -31,7 +31,7 @@ import DefaultTransform from '../http/transform/default.js';
 
 const log = logger.getLogger('gmp.commands.agents');
 
-export class AgentCommand extends EntityCommand {
+class AgentCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'agent', Agent);
@@ -80,7 +80,7 @@ export class AgentCommand extends EntityCommand {
   }
 }
 
-export class AgentsCommand extends EntitiesCommand {
+class AgentsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'agent', Agent);

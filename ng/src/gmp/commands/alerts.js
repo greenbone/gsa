@@ -64,7 +64,7 @@ function convert_data(prefix, data, fields) {
   return converted;
 }
 
-export class AlertCommand extends EntityCommand {
+class AlertCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'alert', Alert);
@@ -203,7 +203,7 @@ export class AlertCommand extends EntityCommand {
 
 }
 
-export class AlertsCommand extends EntitiesCommand {
+class AlertsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'alert', Alert);
