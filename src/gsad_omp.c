@@ -15045,6 +15045,7 @@ get_result (openvas_connection_t *connection, credentials_t *credentials,
                                 "%s"
                                 "<get_results"
                                 " result_id=\"%s\""
+                                " get_counts=\"0\""
                                 "%s%s%s"
                                 " filter=\"autofp=%s"
                                 " apply_overrides=%s"
