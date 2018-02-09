@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import {noop_convert} from './withChangeHandler.js';
 
 const props_value = (event, props) => props.value;
 
-export const withClickHandler = (options = {}) => Component => {
+const withClickHandler = (options = {}) => Component => {
   const {
     convert_func = noop_convert,
     value_func = props_value,
