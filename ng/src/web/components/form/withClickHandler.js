@@ -35,7 +35,11 @@ const withClickHandler = (options = {}) => Component => {
     value_func = props_value,
   } = options;
 
-  const ClickHandler = ({onClick, convert = convert_func, ...props}) => {
+  const ClickHandler = ({
+    onClick,
+    convert = convert_func,
+    ...props
+  }) => {
 
     const handleClick = event => {
       if (onClick) {
