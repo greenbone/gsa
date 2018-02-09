@@ -77,6 +77,14 @@ class EntityCommand extends HttpCommand {
     return response.setData(new ActionResult(response.data));
   }
 
+  /**
+   * Creates a HTTP POST Request returning an ActionResult
+   *
+   * @param {*} args  Arguments to be passed to httpPost
+   *
+   * @returns {Promise} A Promise returning a Response with an
+   *                    ActionResult model as data
+   */
   action(...args) {
     return this.httpPost(...args).then(this.transformActionResult);
   }
