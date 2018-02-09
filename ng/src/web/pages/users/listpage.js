@@ -213,7 +213,7 @@ class UsersPage extends React.Component {
 }
 
 UsersPage.propTypes = {
-  entities: PropTypes.collection,
+  entities: PropTypes.array,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,

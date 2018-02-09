@@ -25,11 +25,9 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, is_array} from 'gmp/utils';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import compose from '../../utils/compose.js';
-import withCapabilties from '../../utils/withCapabilities.js';
 
 import withClickHandler from '../form/withClickHandler.js';
 
@@ -42,55 +40,28 @@ const StyledLink = glamorous(Link)({
 });
 
 const MenuEntry = ({
-  capabilities,
-  caps,
   children,
   title = children,
   to,
   ...props
-}) => {
-  if (is_defined(caps)) {
-
-    if (!is_array(caps)) {
-      caps = [caps];
+}) => (
+  <Layout
+    {...props}
+    grow="1"
+    align={['start', 'center']}
+  >
+    {is_defined(to) ?
+      <StyledLink to={to}>{title}</StyledLink> :
+      title
     }
-
-    const may_op = caps.reduce((a, b) => {
-      return capabilities.mayOp(b) && a;
-    }, true);
-
-    if (!may_op) {
-      return null;
-    }
-  }
-
-  return (
-    <Layout
-      {...props}
-      grow="1"
-      align={['start', 'center']}
-    >
-      {is_defined(to) ?
-        <StyledLink to={to}>{title}</StyledLink> :
-        title
-      }
-    </Layout>
-  );
-};
+  </Layout>
+);
 
 MenuEntry.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  caps: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ]),
   title: PropTypes.string,
   to: PropTypes.string,
 };
 
-export default compose(
-  withCapabilties,
-  withClickHandler(),
-)(MenuEntry);
+export default withClickHandler()(MenuEntry);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -56,18 +56,21 @@ class UserCommand extends EntityCommand {
       const settings = new Settings();
       const {data} = response;
 
-      for_each(data.auth_settings.describe_auth_response.group, group => {
-        const values = {};
+      if (is_defined(data.auth_settings) &&
+       is_defined(data.auth_settings.describe_auth_response)) {
+        for_each(data.auth_settings.describe_auth_response.group, group => {
+          const values = {};
 
-        for_each(group.auth_conf_setting, setting => {
-          values[setting.key] = setting.value;
-          if (is_defined(setting.certificate_info)) {
-            values.certificate_info = setting.certificate_info;
-          }
+          for_each(group.auth_conf_setting, setting => {
+            values[setting.key] = setting.value;
+            if (is_defined(setting.certificate_info)) {
+              values.certificate_info = setting.certificate_info;
+            }
+          });
+
+          settings.set(group._name, values);
         });
-
-        settings.set(group._name, values);
-      });
+      }
 
       return response.setData(settings);
     });
