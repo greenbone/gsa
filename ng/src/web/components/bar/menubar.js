@@ -29,6 +29,9 @@ import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp.js';
+import withCapabilities from '../../utils/withCapabilities.js';
+import compose from '../../utils/compose.js';
 
 import GBIcon from '../icon/greenboneicon.js';
 
@@ -76,7 +79,10 @@ const Wrapper = glamorous(Sticky, {
   },
 );
 
-const MenuBar = (props, {gmp, capabilities}) => {
+const MenuBar = ({
+  gmp,
+  capabilities,
+}) => {
   if (!gmp.isLoggedIn() || !is_defined(capabilities)) {
     return null;
   }
@@ -348,11 +354,14 @@ const MenuBar = (props, {gmp, capabilities}) => {
   );
 };
 
-MenuBar.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
+MenuBar.propTypes = {
   capabilities: PropTypes.capabilities,
+  gmp: PropTypes.gmp.isRequired,
 };
 
-export default MenuBar;
+export default compose(
+  withCapabilities,
+  withGmp,
+)(MenuBar);
 
 // vim: set ts=2 sw=2 tw=80:
