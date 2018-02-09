@@ -48,7 +48,7 @@ GmpProvider.propTypes = {
 };
 
 GmpProvider.childContextTypes = {
-  gmp: PropTypes.capabilities,
+  gmp: PropTypes.gmp,
 };
 
 export default GmpProvider;
