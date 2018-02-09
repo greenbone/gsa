@@ -89,7 +89,7 @@ class EntityCommand extends HttpCommand {
     const extra_params = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
-    return this.httpPost({
+    return this.action({
       cmd: 'clone',
       resource_type: this.name,
       next: 'get_' + this.name,
