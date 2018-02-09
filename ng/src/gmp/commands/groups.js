@@ -44,14 +44,13 @@ class GroupCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_group',
-      next: 'get_group',
       name,
       comment,
       grant_full,
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Creating new group', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -63,7 +62,6 @@ class GroupCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_group',
-      next: 'get_group',
       id,
       name,
       comment,
@@ -71,7 +69,7 @@ class GroupCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Saving group', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {

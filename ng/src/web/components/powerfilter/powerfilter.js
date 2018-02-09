@@ -161,6 +161,10 @@ class PowerFilter extends React.Component {
       type: createFilterType,
       name: filtername,
     }).then(response => {
+      const {data: result} = response;
+      // load new filter
+      return gmp.filter.get(result);
+    }).then(response => {
       const {data: f} = response;
       this.updateFilter(f);
       this.setState({filtername: ''});
@@ -168,7 +172,7 @@ class PowerFilter extends React.Component {
       if (onFilterCreated) {
         onFilterCreated(f);
       }
-    }, err => {
+    }).catch(err => {
       if (is_defined(onError)) {
         onError(err);
       }

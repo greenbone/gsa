@@ -62,7 +62,6 @@ class ScannerCommand extends EntityCommand {
     }) {
     const data = {
       cmd: 'create_scanner',
-      next: 'get_scanner',
       name,
       comment,
       credential_id,
@@ -72,7 +71,7 @@ class ScannerCommand extends EntityCommand {
       ca_pub,
     };
     log.debug('Creating new scanner', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -88,7 +87,6 @@ class ScannerCommand extends EntityCommand {
     }) {
     const data = {
       cmd: 'save_scanner',
-      next: 'get_scanner',
       ca_pub,
       comment,
       credential_id,
@@ -100,13 +98,12 @@ class ScannerCommand extends EntityCommand {
       which_cert,
     };
     log.debug('Saving scanner', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   verify({id}) {
     return this.httpPost({
       cmd: 'verify_scanner',
-      next: 'get_scanner',
       id,
     });
   }

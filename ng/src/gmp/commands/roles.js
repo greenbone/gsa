@@ -48,13 +48,12 @@ class RoleCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_role',
-      next: 'get_role',
       name,
       comment,
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Creating new role', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -65,14 +64,13 @@ class RoleCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_role',
-      next: 'get_role',
       id,
       name,
       comment,
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   editRoleSettings({id}) {

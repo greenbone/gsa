@@ -38,9 +38,8 @@ class PortListCommand extends EntityCommand {
   create(args) {
     const {name, comment = '', from_file, port_range, file} = args;
     log.debug('Creating new port list', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_port_list',
-      next: 'get_port_list',
       name,
       comment,
       from_file,
@@ -53,9 +52,8 @@ class PortListCommand extends EntityCommand {
     const {id, name, comment = ''} = args;
 
     log.debug('Saving port list', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_port_list',
-      next: 'get_port_list',
       comment,
       id,
       name,
@@ -66,7 +64,6 @@ class PortListCommand extends EntityCommand {
     const {id, port_range_start, port_range_end, port_type} = args;
     return this.httpPost({
       cmd: 'create_port_range',
-      next: 'get_port_list',
       id,
       port_range_start,
       port_range_end,
@@ -87,7 +84,6 @@ class PortListCommand extends EntityCommand {
     log.debug('Importing port list', args);
     return this.httpPost({
       cmd: 'import_port_list',
-      next: 'get_port_list',
       xml_file,
     });
   }

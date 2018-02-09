@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import {HttpCommand} from '../command.js';
 
 import Login from '../models/login.js';
 
-export class LoginCommand extends HttpCommand {
+class LoginCommand extends HttpCommand {
 
   constructor(http) {
     super(http, {
@@ -40,8 +40,8 @@ export class LoginCommand extends HttpCommand {
   login(username, password) {
     return this.httpPost({
       login: username,
-      password
-    }).then(responsedata => new Login(responsedata.data), rej => {
+      password,
+    }).then(response => new Login(response.data), rej => {
       if (rej.isError && rej.isError() && rej.xhr) {
         if (rej.xhr.status === 401) {
           rej.setMessage(_('Bad login information'));

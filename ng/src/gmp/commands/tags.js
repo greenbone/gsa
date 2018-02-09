@@ -56,10 +56,9 @@ class TagCommand extends EntityCommand {
       comment,
       resource_id,
       resource_type,
-      next: 'get_tag',
     };
     log.debug('Creating new tag', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -80,10 +79,9 @@ class TagCommand extends EntityCommand {
       active,
       resource_id,
       resource_type,
-      next: 'get_tag',
     };
     log.debug('Saving tag', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   enable({id}) {
@@ -91,7 +89,6 @@ class TagCommand extends EntityCommand {
       cmd: 'toggle_tag',
       enable: '1',
       id,
-      next: 'get_tag',
     };
     log.debug('Enabling tag', data);
     return this.httpPost(data);
@@ -102,7 +99,6 @@ class TagCommand extends EntityCommand {
       cmd: 'toggle_tag',
       enable: '0',
       id,
-      next: 'get_tag',
     };
     log.debug('Disabling tag', data);
     return this.httpPost(data);

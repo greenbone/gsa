@@ -52,7 +52,6 @@ class PermissionCommand extends EntityCommand {
     const data = {
       cmd: 'create_permission',
       comment,
-      next: 'get_permission',
       permission: name,
       permission_group_id: group_id,
       permission_role_id: role_id,
@@ -62,7 +61,7 @@ class PermissionCommand extends EntityCommand {
       subject_type,
     };
     log.debug('Creating new permission', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -78,7 +77,6 @@ class PermissionCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_permission',
-      next: 'get_permission',
       id,
       comment,
       permission: name,
@@ -91,7 +89,7 @@ class PermissionCommand extends EntityCommand {
       id_or_empty: resource_id,
     };
     log.debug('Saving permission', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 }
 

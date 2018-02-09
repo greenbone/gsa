@@ -64,7 +64,7 @@ function convert_data(prefix, data, fields) {
   return converted;
 }
 
-export class AlertCommand extends EntityCommand {
+class AlertCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'alert', Alert);
@@ -86,7 +86,6 @@ export class AlertCommand extends EntityCommand {
       ...convert_data('condition_data', other, condition_data_fields),
       ...convert_data('event_data', other, event_data_fields),
       cmd: 'create_alert',
-      next: 'get_alert',
       active,
       name,
       comment,
@@ -96,7 +95,7 @@ export class AlertCommand extends EntityCommand {
       filter_id,
     };
     log.debug('Creating new alert', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save(args) {
@@ -116,7 +115,6 @@ export class AlertCommand extends EntityCommand {
       ...convert_data('condition_data', other, condition_data_fields),
       ...convert_data('event_data', other, event_data_fields),
       cmd: 'save_alert',
-      next: 'get_alert',
       id,
       active,
       name,
@@ -127,7 +125,7 @@ export class AlertCommand extends EntityCommand {
       filter_id,
     };
     log.debug('Saving alert', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   newAlertSettings() { // should be removed after all corresponding omp commands are implemented
@@ -205,7 +203,7 @@ export class AlertCommand extends EntityCommand {
 
 }
 
-export class AlertsCommand extends EntitiesCommand {
+class AlertsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'alert', Alert);

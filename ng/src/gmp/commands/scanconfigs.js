@@ -82,7 +82,6 @@ class ScanConfigCommand extends EntityCommand {
   import({xml_file}) {
     const data = {
       cmd: 'import_config',
-      next: 'get_config',
       xml_file,
     };
     log.debug('Importing scan config', data);
@@ -97,14 +96,13 @@ class ScanConfigCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_config',
-      next: 'get_config',
       base,
       comment,
       name,
       scanner_id,
     };
     log.debug('Creating scanconfig', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save({
@@ -121,13 +119,12 @@ class ScanConfigCommand extends EntityCommand {
       ...convert_select(select, 'select:'),
 
       cmd: 'save_config',
-      next: 'get_config',
       id,
       comment,
       name,
     };
     log.debug('Saving scanconfig', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   editScanConfigSettings({id}) { // should be removed in future an splitted into several api calls

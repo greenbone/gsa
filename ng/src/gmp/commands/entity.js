@@ -27,6 +27,8 @@ import logger from '../log.js';
 
 import {filter_string} from '../models/filter/utils.js';
 
+import ActionResult from '../models/actionresult';
+
 import DefaultTransform from '../http/transform/default.js';
 
 import HttpCommand from './http.js';
@@ -62,10 +64,6 @@ class EntityCommand extends HttpCommand {
     return new this.clazz(this.getElementFromRoot(response.data));
   }
 
-  get({id}, {filter, ...options} = {}) {
-    return this.httpGet({id, filter}, options).then(this.transformResponse);
-  }
-
   transformResponse(response) {
     let entity = this.getModelFromResponse(response);
     if (!is_defined(entity.id)) {
@@ -75,14 +73,33 @@ class EntityCommand extends HttpCommand {
     return response.setData(entity);
   }
 
+  transformActionResult(response) {
+    return response.setData(new ActionResult(response.data));
+  }
+
+  /**
+   * Creates a HTTP POST Request returning an ActionResult
+   *
+   * @param {*} args  Arguments to be passed to httpPost
+   *
+   * @returns {Promise} A Promise returning a Response with an
+   *                    ActionResult model as data
+   */
+  action(...args) {
+    return this.httpPost(...args).then(this.transformActionResult);
+  }
+
+  get({id}, {filter, ...options} = {}) {
+    return this.httpGet({id, filter}, options).then(this.transformResponse);
+  }
+
   clone({id}) {
     const extra_params = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
-    return this.httpPost({
+    return this.action({
       cmd: 'clone',
       resource_type: this.name,
-      next: 'get_' + this.name,
     }, {
       extra_params,
     }).then(response => {

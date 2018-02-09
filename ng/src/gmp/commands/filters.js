@@ -44,21 +44,19 @@ class FilterCommand extends EntityCommand {
     const {term, name, type, comment = ''} = args;
     const data = {
       cmd: 'create_filter',
-      next: 'get_filter',
       term,
       name,
       optional_resource_type: type,
       comment,
     };
     log.debug('Creating new filter', args, data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save(args) {
     const {id, term, name, type, comment = ''} = args;
     const data = {
       cmd: 'save_filter',
-      next: 'get_filter',
       comment,
       id,
       name,
@@ -66,7 +64,7 @@ class FilterCommand extends EntityCommand {
       term,
     };
     log.debug('Saving filter', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {

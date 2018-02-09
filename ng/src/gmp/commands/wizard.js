@@ -47,7 +47,7 @@ const event_data_quick_first_scan_fields = [
 
 const event_data_quick_task_fields = [
   'config_id', 'alert_email', 'scanner_id', 'auto_start',
-  'start_year', 'start_month', 'start_day',  'start_hour', 'start_minute',
+  'start_year', 'start_month', 'start_day', 'start_hour', 'start_minute',
   'start_timezone', 'smb_credential', 'ssh_credential', 'ssh_port',
   'esxi_credential', 'task_name', 'target_hosts', 'port_list_id',
 ];
@@ -174,9 +174,9 @@ class WizardCommand extends HttpCommand {
   }
 
   runModifyTask(args) {
-    let {date, ...other} = args;
+    const {date, ...other} = args;
 
-    let event_data = convert_data('event_data', other,
+    const event_data = convert_data('event_data', other,
       event_data_modify_task_fields);
 
     event_data['event_data:start_day'] = date.day();
