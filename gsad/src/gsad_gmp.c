@@ -1365,6 +1365,60 @@ action_result_page (gvm_connection_t *connection,
 }
 
 /**
+ * @brief Generate a enveloped GMP XML containing an action result.
+ *
+ * Should replace action_result_page function completely in future
+ *
+ * @param[in]  connection     Connection to manager
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         HTTP request params
+ * @param[out] response_data  Extra data return for the HTTP response.
+ * @param[in]  action         Name of the action.
+ * @param[in]  status         Status code.
+ * @param[in]  message        Status message.
+ * @param[in]  details        Status details (optional).
+ * @param[in]  id             ID of the handled entity (optional).
+ *
+ * @return Enveloped XML object.
+ */
+static gchar *
+action_result (gvm_connection_t *connection,
+               credentials_t *credentials,
+               params_t *params,
+               cmd_response_data_t *response_data,
+               const char *action,
+               const char *status,
+               const char *message,
+               const char *details,
+               const char *id)
+{
+
+  GString *xml;
+
+  xml = g_string_new ("");
+  xml_string_append(xml,
+                    "<action_result>"
+                    "<action>%s</action>"
+                    "<status>%s</status>"
+                    "<message>%s</message>",
+                    action ? action : "",
+                    status ? status : "",
+                    message ? message : "");
+
+  if (details)
+    xml_string_append(xml, "<details>%s</details>", details);
+
+  if (id)
+    xml_string_append(xml, "<id>%s</id>", id);
+
+  g_string_append (xml, "</action_result>");
+
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
+}
+
+/**
  * @brief Check a param using the direct response method.
  *
  * @param[in]  connection     Connection to manager
