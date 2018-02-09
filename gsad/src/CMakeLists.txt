@@ -196,7 +196,4 @@ add_custom_target (ctags COMMENT "Building tags..."
 add_custom_target (tags COMMENT "Building tags files...")
 add_dependencies (tags etags ctags)
 
-## gettext translations
-add_subdirectory (po)
-
 ## End
