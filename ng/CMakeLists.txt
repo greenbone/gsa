@@ -752,3 +752,7 @@ install (DIRECTORY
          build/static
          build/img
          DESTINATION ${NG_DEST_DIR})
+
+## Translations
+add_subdirectory (po)
+
