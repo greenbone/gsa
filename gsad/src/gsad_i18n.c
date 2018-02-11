@@ -45,10 +45,6 @@
  */
 #define G_LOG_DOMAIN "gsad i18n"
 
-#ifndef GETTEXT_CONTEXT_GLUE
-#define GETTEXT_CONTEXT_GLUE "\004"
-#endif /* not GETTEXT_CONTEXT_GLUE */
-
 /**
  * @brief
  */
