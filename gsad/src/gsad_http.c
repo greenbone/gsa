@@ -41,7 +41,7 @@
 #include <gvm/base/networking.h> /* for sockaddr_as_str */
 #include <gvm/util/xmlutils.h>   /* for xml_string_append */
 
-#include "xslt_i18n.h" /* for accept_language_to_env_fmt */
+#include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h"
 #include "gsad_base.h" /* for ctime_r_strip_newline */
 
