@@ -57,7 +57,7 @@
 #include "gsad_settings.h" /* for vendor_version_get */
 #include "gsad_http.h" /* for gsad_message, logout_xml */
 #include "gsad_base.h" /* for set_language_code */
-#include "xslt_i18n.h"
+#include "gsad_i18n.h"
 
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>

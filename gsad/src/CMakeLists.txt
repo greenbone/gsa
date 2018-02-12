@@ -102,7 +102,7 @@ target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
                        ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
 
-add_library (gsad_xslt_ext STATIC xslt_i18n.c)
+add_library (gsad_i18n_ext STATIC gsad_i18n.c)
 target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
                        ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
@@ -118,7 +118,7 @@ add_executable (gsad
                 gsad_http_handler.c
                 validator.c)
 
-target_link_libraries (gsad gsad_gmp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
+target_link_libraries (gsad gsad_gmp gsad_base gsad_i18n_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (SERVE_STATIC_ASSETS)
