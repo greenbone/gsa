@@ -1,6 +1,6 @@
 /* Greenbone Security Assistant
  * $Id$
- * Description: Translation libxslt extension of Greenbone Security Assistant.
+ * Description: I18n support for Greenbone Security Assistant.
  *
  * Authors:
  * Timo Pollmeier <timo.pollmeier@greenbone.net>
@@ -23,8 +23,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _XSLT_I18N_H
-#define _XSLT_I18N_H
+#ifndef _GSAD_I18N_H
+#define _GSAD_I18N_H
 
 #include <glib.h>
 
@@ -43,4 +43,4 @@ void buffer_languages_xml (GString *);
 
 gchar* accept_language_to_env_fmt (const char*);
 
-#endif /* not _XSLT_I18N_H */
+#endif /* not _GSAD_I18N_H */

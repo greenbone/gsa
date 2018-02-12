@@ -104,7 +104,7 @@
 #include "gsad_settings.h"
 #include "gsad_user.h"
 #include "validator.h"
-#include "xslt_i18n.h"
+#include "gsad_i18n.h"
 
 #undef G_LOG_DOMAIN
 /**

@@ -22,15 +22,17 @@
  */
 import React from 'react';
 
+import {has_value} from 'gmp/utils/identity';
+
 const MenuSection = ({
   children,
 }) => (
   <ul className="menu-section">
-    {React.Children.map(children, (child, i) => (
+    {React.Children.map(children, child => has_value(child) ? (
       <li className="menu-entry">
         {child}
       </li>
-    ))}
+    ) : child)}
   </ul>
 );
 
