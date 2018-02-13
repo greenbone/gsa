@@ -55,6 +55,12 @@ const ReportFormatListParam = ({
     name,
     onValueChange,
   }) => {
+
+  const formatOptions = map(formats, format => ({
+    label: format.name,
+    value: format.id,
+  }));
+
   return (
     <TableRow>
       <TableData>
@@ -63,19 +69,10 @@ const ReportFormatListParam = ({
       <TableData>
         <MultiSelect
           name={name}
+          items={formatOptions}
           value={idList}
           onChange={onValueChange}
-        >
-          {map(formats, format => {
-            return (
-              <option
-                key={format.id}
-                value={format.id}>
-                {format.name}
-              </option>
-            );
-          })}
-        </MultiSelect>
+        />
       </TableData>
     </TableRow>
   );
@@ -129,22 +126,19 @@ const Param = ({
     );
   }
   else if (type === 'selection') {
+
+    const typeOptions = map(value.options, opt => ({
+      label: opt.name,
+      value: opt.value,
+    }));
+
     field = (
       <Select
         name={name}
+        items={typeOptions}
         value={is_array(field_value) ? field_value : [field_value]}
         onChange={onPrefChange}
-      >
-        {
-          value.options.map(opt => (
-            <option
-              key={opt.value}
-              value={opt.value}>
-              {opt.name}
-            </option>
-          ))
-        }
-      </Select>
+      />
     );
   }
   else {
