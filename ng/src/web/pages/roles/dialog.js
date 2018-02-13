@@ -72,6 +72,26 @@ const Dialog = ({
   const has_groups = is_defined(all_groups) && all_groups.length > 0;
   const has_permissions = is_defined(all_permissions) &&
     all_permissions.length > 0;
+
+  const groupOptions = map(all_groups, group => ({
+    label: group.name,
+    value: group.id,
+  }));
+
+  const permissionsOptions = map(all_permissions, permission => {
+    const labelString = permission.name + ' (' +
+      permission_description(permission.name) + ')';
+    return {
+      label: labelString,
+      value: permission.name,
+    };
+  });
+
+  const usersOptions = map(all_users, user => ({
+    label: user.name,
+    value: user.name,
+  }));
+
   return (
     <SaveDialog
       visible={visible}
@@ -112,21 +132,10 @@ const Dialog = ({
               title={_('Users')}>
               <MultiSelect
                 name="users"
+                items={usersOptions}
                 value={state.users}
                 onChange={onValueChange}
-              >
-                {
-                  map(all_users, user => {
-                    return (
-                      <option
-                        key={user.id}
-                        value={user.name}>
-                        {user.name}
-                      </option>
-                    );
-                  })
-                }
-              </MultiSelect>
+              />
             </FormGroup>
 
             {is_edit &&
@@ -138,26 +147,14 @@ const Dialog = ({
                   flex align={['space-between', 'center']}>
                   <Select
                     name="permission_name"
-                    value={permission_name}
+                    items={permissionsOptions}
+                    value={state.permission_name}
                     onChange={onValueChange}
-                  >
-                    {
-                      map(all_permissions, permission => {
-                        return (
-                          <option
-                            key={permission.name}
-                            value={permission.name}>
-                            {permission.name + ' (' +
-                              permission_description(permission.name) + ')'}
-                          </option>
-                        );
-                      })
-                    }
-                  </Select>
+                  />
                   <Button
                     title={_('Create Permission')}
                     disabled={state.in_use || !has_permissions}
-                    value={{role_id: state.id, name: permission_name}}
+                    value={{role_id: state.id, name: state.permission_name}}
                     onClick={onCreatePermission}
                   />
                 </FormGroup>
@@ -169,23 +166,14 @@ const Dialog = ({
                   flex align={['space-between', 'center']}>
                   <Select
                     name="group_id"
-                    value={group_id}
+                    items={groupOptions}
+                    value={state.group_id}
                     onChange={onValueChange}
-                  >
-                    {
-                      map(all_groups, group => {
-                        return (
-                          <option key={group.id} value={group.id}>
-                            {group.name}
-                          </option>
-                        );
-                      })
-                    }
-                  </Select>
+                  />
                   <Button
                     title={_('Create Permission')}
                     disabled={!has_groups}
-                    value={{role_id: state.id, group_id}}
+                    value={{role_id: state.id, group_id: state.group_id}}
                     onClick={onCreateSuperPermission}
                   />
                 </FormGroup>
