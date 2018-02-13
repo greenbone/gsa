@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +42,9 @@ class ReportFormatComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeReportFormatDialog = this.closeReportFormatDialog.bind(this);
     this.handleVerify = this.handleVerify.bind(this);
     this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
   }
@@ -79,24 +83,28 @@ class ReportFormatComponent extends React.Component {
           Promise.resolve(undefined);
 
         p2.then(formats => {
-          this.reportformat_dialog.show({
-            active: format.active,
+          this.setState({
+            dialogVisible: true,
             formats,
-            id: format.id,
             id_lists,
-            name: format.name,
             preferences,
             reportformat: format,
-            summary: format.summary,
-          }, {
             title: _('Edit Report Format {{name}}', {name: format.name}),
           });
         });
       });
     }
     else {
-      this.reportformat_dialog.show({});
+      this.setState({
+        dialogVisible: true,
+        reportformat: undefined,
+        title: _('New Report Format'),
+      });
     }
+  }
+
+  closeReportFormatDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -113,6 +121,13 @@ class ReportFormatComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      dialogVisible,
+      reportformat,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="reportformat"
@@ -139,7 +154,10 @@ class ReportFormatComponent extends React.Component {
               verify: this.handleVerify,
             })}
             <ReportFormatDialog
-              ref={ref => this.reportformat_dialog = ref}
+              reportformat={reportformat}
+              title={title}
+              visible={dialogVisible}
+              onClose={this.closeReportFormatDialog}
               onSave={save}
             />
           </Wrapper>
