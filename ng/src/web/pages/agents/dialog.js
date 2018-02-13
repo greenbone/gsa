@@ -37,6 +37,8 @@ import TextField from '../../components/form/textfield.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+const DEFAULTS = {name: _('Unnamed')};
+
 const AgentDialog = ({
     agent,
     title = _('New Agent'),
@@ -47,15 +49,13 @@ const AgentDialog = ({
 
   const is_edit = is_defined(agent);
 
-  const defaults = {name: _('Unnamed')};
-
   return (
     <SaveDialog
       visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{...defaults, ...agent}}
+      initialData={{...DEFAULTS, ...agent}}
     >
       {({
         data: state,
