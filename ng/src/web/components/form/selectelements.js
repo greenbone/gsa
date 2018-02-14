@@ -85,14 +85,16 @@ export const Menu = glamorous.div({
   display: 'flex',
   flexDirection: 'column',
   position: 'absolute',
-  top: '100%', // move below Box
   zIndex: 5,
   marginTop: '-1px', // collapse top border
   boxSizing: 'border-box',
-}, ({position}) => {
+}, ({position, width}) => {
   switch (position) {
     case 'adjust':
-      return {width: '100%'};
+      return {
+        left: 0,
+        width,
+      };
     case 'right':
       return {
         right: 0,
@@ -109,7 +111,6 @@ export const Menu = glamorous.div({
 export const SelectContainer = glamorous.div({
   display: 'flex',
   flexDirection: 'column',
-  position: 'relative',
 }, ({width}) => ({
   width,
 }));

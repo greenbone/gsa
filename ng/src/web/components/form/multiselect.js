@@ -29,6 +29,8 @@ import glamorous from 'glamorous';
 
 import Downshift from 'downshift';
 
+import {Manager, Target, Popper} from 'react-popper';
+
 import {arrays_equal, is_array, is_defined, is_empty} from 'gmp/utils';
 
 import ArrowIcon from '../icon/arrowicon.js';
@@ -191,6 +193,11 @@ class MultiSelect extends React.Component {
       items = option_items(children);
     }
 
+    let popperPlacement = 'bottom-start';
+    if (is_defined(menuPosition) && menuPosition === 'right') {
+      popperPlacement = 'bottom-end';
+    }
+
     disabled = disabled || !is_defined(items) || items.length === 0;
 
     const displayedItems = is_defined(items) ?
@@ -217,56 +224,63 @@ class MultiSelect extends React.Component {
               flex="column"
               width={width}
             >
-              <Box
-                isOpen={isOpen}
-                disabled={disabled}
-              >
-                <Layout grow="1" wrap>
-                  {!is_empty(selectedItems) && selectedItems.map(
-                      item => this.renderItem(item, items)
-                    )
-                  }
-                </Layout>
-                <Layout align={['center', 'center']}>
-                  <ArrowIcon
-                    {...getButtonProps({
-                      disabled,
-                      down: !isOpen,
-                      onClick: isOpen ? undefined : event => {
-                        event.preventDefault(); // don't call default handler from downshift
-                        openMenu(() => is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
-                      },
-                    })}
-                    size="small"
-                  />
-                </Layout>
-              </Box>
-              {isOpen && !disabled &&
-                <Menu position={menuPosition}>
-                  <Input
-                    {...getInputProps({
-                      value: search,
-                      onChange: this.handleSearch,
-                    })}
+              <Manager>
+                <Target>
+                  <Box
+                    isOpen={isOpen}
                     disabled={disabled}
-                    innerRef={ref => this.input = ref}
-                  />
-                  <ItemContainer>
-                    {displayedItems
-                      .map(({label: itemLabel, value: itemValue}, i) => (
-                        <Item
-                          {...getItemProps({item: itemValue})}
-                          isSelected={selectedItems.includes(itemValue)}
-                          isActive={i === highlightedIndex}
-                          key={itemValue}
-                        >
-                          {itemLabel}
-                        </Item>
-                      ))
-                    }
-                  </ItemContainer>
-                </Menu>
-              }
+                  >
+                    <Layout grow="1" wrap>
+                      {!is_empty(selectedItems) && selectedItems.map(
+                          item => this.renderItem(item, items)
+                        )
+                      }
+                    </Layout>
+                    <Layout align={['center', 'center']}>
+                      <ArrowIcon
+                        {...getButtonProps({
+                          disabled,
+                          down: !isOpen,
+                          onClick: isOpen ? undefined : event => {
+                            event.preventDefault(); // don't call default handler from downshift
+                            openMenu(() => is_defined(this.input) &&
+                              this.input.focus()); // set focus to input field after menu is opened
+                          },
+                        })}
+                        size="small"
+                      />
+                    </Layout>
+                  </Box>
+                </Target>
+                {isOpen && !disabled &&
+                  <Popper placement={popperPlacement}>
+                    <Menu position={menuPosition} width={width}>
+                      <Input
+                        {...getInputProps({
+                          value: search,
+                          onChange: this.handleSearch,
+                        })}
+                        disabled={disabled}
+                        innerRef={ref => this.input = ref}
+                      />
+                      <ItemContainer>
+                        {displayedItems
+                          .map(({label: itemLabel, value: itemValue}, i) => (
+                            <Item
+                              {...getItemProps({item: itemValue})}
+                              isSelected={selectedItems.includes(itemValue)}
+                              isActive={i === highlightedIndex}
+                              key={itemValue}
+                            >
+                              {itemLabel}
+                            </Item>
+                          ))
+                        }
+                      </ItemContainer>
+                    </Menu>
+                  </Popper>
+                }
+              </Manager>
             </SelectContainer>
           );
         }}
