@@ -110,18 +110,22 @@ const ToolBarIcons = withCapabilities(({
     </IconDivider>
     <IconDivider>
       <CreateIcon
+        displayName={_('Report Format')}
         entity={entity}
         onClick={onReportFormatCreateClick}
       />
       <CloneIcon
+        displayName={_('Report Format')}
         entity={entity}
         onClick={onReportFormatCloneClick}
       />
       <EditIcon
+        displayName={_('Report Format')}
         entity={entity}
         onClick={onReportFormatEditClick}
       />
       <DeleteIcon
+        displayName={_('Report Format')}
         entity={entity}
         onClick={onReportFormatDeleteClick}
       />
