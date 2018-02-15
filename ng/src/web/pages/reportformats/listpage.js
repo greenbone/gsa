@@ -55,7 +55,7 @@ const ToolBarIcons = withCapabilities(({
     />
     {capabilities.mayCreate('report_format') &&
       <NewIcon
-        title={_('New Report Format')}
+        title={_('Import Report Format')}
         onClick={onReportFormatCreateClick}
       />
     }
