@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined, first} from 'gmp/utils';
+import {is_defined, first, shorten} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilties from '../../utils/withCapabilities.js';
@@ -78,26 +79,38 @@ class FilterComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      dialogVisible: false,
+      types: [],
+    };
+
+    this.closeFilterDialog = this.closeFilterDialog.bind(this);
     this.openFilterDialog = this.openFilterDialog.bind(this);
   }
 
   openFilterDialog(filter) {
     const {capabilities} = this.props;
 
-    const types = FILTER_OPTIONS.filter(option =>
+    let types = FILTER_OPTIONS.filter(option =>
       filter_types(capabilities, option[0]));
+
+    if (!is_defined(types)) {
+      types = [];
+    };
 
     if (is_defined(filter)) {
       let {filter_type} = filter;
       if (!includes_type(types, filter_type)) {
         filter_type = first(types, [])[1];
       }
-      this.filter_dialog.show({
-        comment: filter.comment,
+
+      const title = _('Edit Filter {{name}}', {name: shorten(filter.name)});
+
+      this.setState({
+        dialogVisible: true,
         filter,
-        id: filter.id,
-        name: filter.name,
         term: filter.toFilterString(),
+        title,
         type: filter_type,
         types,
       });
@@ -105,11 +118,18 @@ class FilterComponent extends React.Component {
     else {
       const type = first(types, [])[1]; // eslint-disable-line prefer-destructuring
 
-      this.filter_dialog.show({
+      this.setState({
+        dialogVisible: true,
+        filter,
+        term: '',
         type,
         types,
       });
     }
+  }
+
+  closeFilterDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -126,6 +146,16 @@ class FilterComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      filter,
+      dialogVisible,
+      term,
+      title,
+      type,
+      types,
+    } = this.state;
+
     return (
       <EntityComponent
         name="filter"
@@ -151,7 +181,13 @@ class FilterComponent extends React.Component {
               edit: this.openFilterDialog,
             })}
             <FilterDialog
-              ref={ref => this.filter_dialog = ref}
+              filter={filter}
+              term={term}
+              title={title}
+              type={type}
+              types={types}
+              visible={dialogVisible}
+              onClose={this.closeFilterDialog}
               onSave={save}
             />
           </Wrapper>
