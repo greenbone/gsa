@@ -34,6 +34,8 @@ import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
+import Pre from './preformatted';
+
 const Solution = ({
   solution,
   solutionType,
@@ -53,9 +55,9 @@ const Solution = ({
           displayTitleText
           type={solutionType}/>
       </IconDivider>
-      <p>
+      <Pre>
         {solution}
-      </p>
+      </Pre>
     </DetailsBlock>
   );
 };
