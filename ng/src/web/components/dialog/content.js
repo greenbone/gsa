@@ -24,7 +24,7 @@
 
 import glamorous from 'glamorous';
 
-import Theme from 'web/utils/theme';
+import Theme from '../../utils/theme';
 
 const DialogContent = glamorous.div({
   display: 'flex',
