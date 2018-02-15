@@ -46,6 +46,7 @@ class ReportFormatComponent extends React.Component {
 
     this.closeReportFormatDialog = this.closeReportFormatDialog.bind(this);
     this.handleVerify = this.handleVerify.bind(this);
+    this.handleSave = this.handleSave.bind(this);
     this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
   }
 
@@ -107,19 +108,26 @@ class ReportFormatComponent extends React.Component {
     this.setState({dialogVisible: false});
   }
 
+  handleSave(data) {
+    const {gmp} = this.props;
+    if (is_defined(data.id)) {
+      const {onSaved, onSaveError} = this.props;
+      return gmp.reportformat.save(data).then(onSaved, onSaveError);
+    }
+
+    const {onImported, onImportError} = this.props;
+    return gmp.reportformat.import(data).then(onImported, onImportError);
+  }
+
   render() {
     const {
       children,
       onCloned,
       onCloneError,
-      onCreated,
-      onCreateError,
       onDeleted,
       onDeleteError,
       onDownloaded,
       onDownloadError,
-      onSaved,
-      onSaveError,
     } = this.props;
 
     const {
@@ -131,21 +139,14 @@ class ReportFormatComponent extends React.Component {
     return (
       <EntityComponent
         name="reportformat"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
         onCloned={onCloned}
         onCloneError={onCloneError}
         onDeleted={onDeleted}
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
-        onSaved={onSaved}
-        onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {other => (
           <Wrapper>
             {children({
               ...other,
@@ -158,7 +159,7 @@ class ReportFormatComponent extends React.Component {
               title={title}
               visible={dialogVisible}
               onClose={this.closeReportFormatDialog}
-              onSave={save}
+              onSave={this.handleSave}
             />
           </Wrapper>
         )}
@@ -172,12 +173,12 @@ ReportFormatComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onImportError: PropTypes.func,
+  onImported: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onVerified: PropTypes.func,
