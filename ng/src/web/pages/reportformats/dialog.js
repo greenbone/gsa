@@ -209,7 +209,7 @@ class Dialog extends React.Component {
       id_lists,
       preferences,
       reportformat,
-      title = _('New Report Format'),
+      title = _('Import Report Format'),
       visible,
       onClose,
       onSave,
