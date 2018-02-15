@@ -90,7 +90,7 @@ const ToolBarIcons = withCapabilities(({
   capabilities,
   entity,
   onReportFormatCloneClick,
-  onReportFormatCreateClick,
+  onReportFormatImportClick,
   onReportFormatDeleteClick,
   onReportFormatDownloadClick,
   onReportFormatEditClick,
@@ -112,7 +112,7 @@ const ToolBarIcons = withCapabilities(({
       <CreateIcon
         displayName={_('Report Format')}
         entity={entity}
-        onClick={onReportFormatCreateClick}
+        onClick={onReportFormatImportClick}
       />
       <CloneIcon
         displayName={_('Report Format')}
@@ -153,10 +153,10 @@ const ToolBarIcons = withCapabilities(({
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   onReportFormatCloneClick: PropTypes.func.isRequired,
-  onReportFormatCreateClick: PropTypes.func.isRequired,
   onReportFormatDeleteClick: PropTypes.func.isRequired,
   onReportFormatDownloadClick: PropTypes.func.isRequired,
   onReportFormatEditClick: PropTypes.func.isRequired,
+  onReportFormatImportClick: PropTypes.func.isRequired,
 };
 
 const Details = ({
@@ -233,21 +233,21 @@ const Page = ({
   <ReportFormatComponent
     onCloned={goto_details('reportformat', props)}
     onCloneError={onError}
-    onCreated={goto_details('reportformat', props)}
     onDeleted={goto_list('reportformats', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onImported={goto_details('reportformat', props)}
     onSaved={onChanged}
     onVerify={onChanged}
     onVerifyError={onError}
   >
     {({
       clone,
-      create,
       delete: delete_func,
       download,
       edit,
+      import: import_func,
       save,
       verify,
     }) => (
@@ -258,7 +258,7 @@ const Page = ({
         detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onReportFormatCloneClick={clone}
-        onReportFormatCreateClick={create}
+        onReportFormatImportClick={import_func}
         onReportFormatDeleteClick={delete_func}
         onReportFormatDownloadClick={download}
         onReportFormatEditClick={edit}

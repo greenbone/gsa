@@ -150,7 +150,7 @@ class ReportFormatComponent extends React.Component {
           <Wrapper>
             {children({
               ...other,
-              create: this.openReportFormatDialog,
+              import: this.openReportFormatDialog,
               edit: this.openReportFormatDialog,
               verify: this.handleVerify,
             })}
