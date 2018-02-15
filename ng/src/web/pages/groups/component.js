@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 -2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,36 +40,43 @@ class GroupComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeGroupDialog = this.closeGroupDialog.bind(this);
     this.openGroupDialog = this.openGroupDialog.bind(this);
   }
 
   openGroupDialog(group) {
     const {gmp} = this.props;
 
-    if (is_defined(group)) {
-      const {
-        id,
-        name,
-        comment,
-        users,
-      } = group;
+    let allUsers = [];
+    gmp.users.getAll().then(response => {
+      allUsers = response.data;
+      this.setState({allUsers});
+    });
 
-      this.dialog.show({
-        id,
-        name,
-        comment,
-        users,
-      }, {
-        title: _('Edit Group {{name}}', group),
+    if (is_defined(group)) {
+
+      const title = _('Edit Group {{name}}', group);
+
+      this.setState({
+        allUsers,
+        dialogVisible: true,
+        group,
+        title,
       });
     }
     else {
-      this.dialog.show({});
+      this.setState({
+        allUsers,
+        dialogVisible: true,
+        group,
+      });
     }
+  }
 
-    gmp.users.getAll().then(response => {
-      this.dialog.setValue('all_users', response.data);
-    });
+  closeGroupDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -85,6 +93,14 @@ class GroupComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      allUsers,
+      dialogVisible,
+      group,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="group"
@@ -110,7 +126,11 @@ class GroupComponent extends React.Component {
               edit: this.openGroupDialog,
             })}
             <GroupDialog
-              ref={ref => this.dialog = ref}
+              allUsers={allUsers}
+              group={group}
+              title={title}
+              visible={dialogVisible}
+              onClose={this.closeGroupDialog}
               onSave={save}
             />
           </Wrapper>

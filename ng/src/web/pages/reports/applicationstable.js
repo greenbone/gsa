@@ -39,7 +39,7 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 import {createEntitiesTable} from '../../entities/table.js';
-import CpeIcon from 'web/components/icon/cpeicon';
+import CpeIcon from '../../components/icon/cpeicon';
 
 const Header = ({
   currentSortBy,

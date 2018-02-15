@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -23,13 +24,13 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {permission_description} from '../../utils/render.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import Button from '../../components/form/button.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -48,181 +49,188 @@ import TableHeader from '../../components/table/header.js';
 import TableHead from '../../components/table/head.js';
 import TableRow from '../../components/table/row.js';
 
+const DEFAULTS = {name: _('Unnamed')};
+
 const Dialog = ({
     all_groups,
     all_permissions,
     all_users,
-    comment,
     group_id,
-    id,
-    in_use,
-    name,
-    users,
     permissions,
     permission_name,
+    role,
+    title = _('New Role'),
+    visible,
+    onClose,
     onCreatePermission,
     onCreateSuperPermission,
     onDeletePermission,
-    onValueChange,
+    onSave,
   }) => {
 
-  const is_edit = is_defined(id);
+  const is_edit = is_defined(role);
   const has_groups = is_defined(all_groups) && all_groups.length > 0;
   const has_permissions = is_defined(all_permissions) &&
     all_permissions.length > 0;
+
+  const groupOptions = map(all_groups, group => ({
+    label: group.name,
+    value: group.id,
+  }));
+
+  const permissionsOptions = map(all_permissions, permission => {
+    const labelString = permission.name + ' (' +
+      permission_description(permission.name) + ')';
+    return {
+      label: labelString,
+      value: permission.name,
+    };
+  });
+
+  const usersOptions = map(all_users, user => ({
+    label: user.name,
+    value: user.name,
+  }));
+
   return (
-    <Layout flex="column">
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          grow="1"
-          value={name}
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      initialData={{...DEFAULTS, ...role}}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
 
-      <FormGroup
-        title={_('Comment')}
-        flex="column">
-        <TextField
-          name="comment"
-          value={comment}
-          size="30"
-          maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
+        return (
+          <Layout flex="column">
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"/>
+            </FormGroup>
 
-      <FormGroup
-        title={_('Users')}>
-        <MultiSelect
-          name="users"
-          value={users}
-          onChange={onValueChange}
-        >
-          {
-            map(all_users, user => {
-              return (
-                <option
-                  key={user.id}
-                  value={user.name}>
-                  {user.name}
-                </option>
-              );
-            })
-          }
-        </MultiSelect>
-      </FormGroup>
+            <FormGroup
+              title={_('Comment')}
+              flex="column">
+              <TextField
+                name="comment"
+                value={state.comment}
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}/>
+            </FormGroup>
 
-      {is_edit &&
-        <Layout flex="column">
-          <h2>{_('New Permission')}</h2>
+            <FormGroup
+              title={_('Users')}>
+              <MultiSelect
+                name="users"
+                items={usersOptions}
+                value={state.users}
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-          <FormGroup
-            title={_('Name')}
-            flex align={['space-between', 'center']}>
-            <Select
-              name="permission_name"
-              value={permission_name}
-              onChange={onValueChange}
-            >
-              {
-                map(all_permissions, permission => {
-                  return (
-                    <option
-                      key={permission.name}
-                      value={permission.name}>
-                      {permission.name + ' (' +
-                        permission_description(permission.name) + ')'}
-                    </option>
-                  );
-                })
-              }
-            </Select>
-            <Button
-              title={_('Create Permission')}
-              disabled={in_use || !has_permissions}
-              value={{role_id: id, name: permission_name}}
-              onClick={onCreatePermission}
-            />
-          </FormGroup>
+            {is_edit &&
+              <Layout flex="column">
+                <h2>{_('New Permission')}</h2>
 
-          <h2>{_('New Super Permission')}</h2>
+                <FormGroup
+                  title={_('Name')}
+                  flex align={['space-between', 'center']}>
+                  <Select
+                    name="permission_name"
+                    items={permissionsOptions}
+                    value={state.permission_name}
+                    onChange={onValueChange}
+                  />
+                  <Button
+                    title={_('Create Permission')}
+                    disabled={state.in_use || !has_permissions}
+                    value={{role_id: state.id, name: state.permission_name}}
+                    onClick={onCreatePermission}
+                  />
+                </FormGroup>
 
-          <FormGroup
-            title={_('Group')}
-            flex align={['space-between', 'center']}>
-            <Select
-              name="group_id"
-              value={group_id}
-              onChange={onValueChange}
-            >
-              {
-                map(all_groups, group => {
-                  return (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
-                  );
-                })
-              }
-            </Select>
-            <Button
-              title={_('Create Permission')}
-              disabled={!has_groups}
-              value={{role_id: id, group_id}}
-              onClick={onCreateSuperPermission}
-            />
-          </FormGroup>
+                <h2>{_('New Super Permission')}</h2>
 
-          <h2>{_('General Command Permissions')}</h2>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('Description')}
-                </TableHead>
-                <TableHead width="2em">
-                  {_('Actions')}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {
-                map(permissions, permission => {
-                  return (
-                    <TableRow key={permission.id}>
-                      <TableData>
-                        {permission.name}
-                      </TableData>
-                      <TableData>
-                        {
-                          permission_description(permission.name,
-                            permission.resource)
-                        }
-                      </TableData>
-                      <TableData flex align="center">
-                        {!permission.isInUse() &&
-                          <TrashIcon
-                            title={_('Move permission to trashcan')}
-                            value={{role_id: id, permission_id: permission.id}}
-                            onClick={onDeletePermission}
-                          />
-                        }
-                      </TableData>
+                <FormGroup
+                  title={_('Group')}
+                  flex align={['space-between', 'center']}>
+                  <Select
+                    name="group_id"
+                    items={groupOptions}
+                    value={state.group_id}
+                    onChange={onValueChange}
+                  />
+                  <Button
+                    title={_('Create Permission')}
+                    disabled={!has_groups}
+                    value={{role_id: state.id, group_id: state.group_id}}
+                    onClick={onCreateSuperPermission}
+                  />
+                </FormGroup>
+
+                <h2>{_('General Command Permissions')}</h2>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>
+                        {_('Name')}
+                      </TableHead>
+                      <TableHead>
+                        {_('Description')}
+                      </TableHead>
+                      <TableHead width="2em">
+                        {_('Actions')}
+                      </TableHead>
                     </TableRow>
-                  );
-                })
-              }
-            </TableBody>
-          </Table>
-        </Layout>
-      }
-
-    </Layout>
+                  </TableHeader>
+                  <TableBody>
+                    {
+                      map(permissions, permission => {
+                        return (
+                          <TableRow key={permission.id}>
+                            <TableData>
+                              {permission.name}
+                            </TableData>
+                            <TableData>
+                              {
+                                permission_description(permission.name,
+                                  permission.resource)
+                              }
+                            </TableData>
+                            <TableData flex align="center">
+                              {!permission.isInUse() &&
+                                <TrashIcon
+                                  title={_('Move permission to trashcan')}
+                                  value={{
+                                    role_id: state.id,
+                                    permission_id: permission.id,
+                                  }}
+                                  onClick={onDeletePermission}
+                                />
+                              }
+                            </TableData>
+                          </TableRow>
+                        );
+                      })
+                    }
+                  </TableBody>
+                </Table>
+              </Layout>
+            }
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -230,27 +238,21 @@ Dialog.propTypes = {
   all_groups: PropTypes.array,
   all_permissions: PropTypes.array,
   all_users: PropTypes.array,
-  comment: PropTypes.string,
   group_id: PropTypes.id,
-  id: PropTypes.id,
-  in_use: PropTypes.bool,
-  name: PropTypes.string,
   permission_name: PropTypes.string,
   permissions: PropTypes.array,
+  role: PropTypes.model,
+  title: PropTypes.string,
   users: PropTypes.array,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,
   onDeletePermission: PropTypes.func.isRequired,
-  onValueChange: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 
-export default withDialog({
-  title: _('New Role'),
-  footer: _('Save'),
-  defaultState: {
-    name: _('Unnamed'),
-  },
-})(Dialog);
+export default Dialog;
 
 // vim: set ts=2 sw=2 tw=80:
