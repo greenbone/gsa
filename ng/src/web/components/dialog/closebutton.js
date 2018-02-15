@@ -30,7 +30,7 @@ import _ from 'gmp/locale.js';
 import Theme from '../../utils/theme.js';
 
 import PropTypes from '../../utils/proptypes';
-import withIconSize from 'web/components/icon/withIconSize';
+import withIconSize from '../icon/withIconSize';
 
 let StyledCloseButton = glamorous.div({
   display: 'flex',
