@@ -111,7 +111,6 @@ const ReportFormatsPage = ({
       onReportFormatDeleteClick={delete_func}
       onReportFormatDownloadClick={download}
       onReportFormatEditClick={edit}
-      onReportFormatSaveClick={save}
       onReportFormatVerifyClick={verify}
     />
   )}
