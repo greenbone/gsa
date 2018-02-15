@@ -45,7 +45,7 @@ class ReportFormatCommand extends EntityCommand {
       xml_file,
     };
     log.debug('Importing report format', data);
-    return this.httpPost(data);
+    return this.action(data);
   }
 
   save(args) {

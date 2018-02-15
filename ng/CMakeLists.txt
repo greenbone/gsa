@@ -492,6 +492,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/nvts/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/nvts/listpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/preferences.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/preformatted.js
      ${NG_SRC_DIR}/src/web/pages/nvts/references.js
      ${NG_SRC_DIR}/src/web/pages/nvts/row.js
      ${NG_SRC_DIR}/src/web/pages/nvts/solution.js

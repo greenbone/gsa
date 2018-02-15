@@ -44,6 +44,7 @@ import TableRow from '../../components/table/row.js';
 
 import References from './references.js';
 import Solution from './solution.js';
+import Pre from './preformatted';
 
 const NvtDetails = ({
   entity,
@@ -58,18 +59,18 @@ const NvtDetails = ({
       {is_defined(tags.summary) &&
         <DetailsBlock
           title={_('Summary')}>
-          <p>
+          <Pre>
             {tags.summary}
-          </p>
+          </Pre>
         </DetailsBlock>
       }
 
       {is_defined(tags.affected) && tags.affected !== TAG_NA &&
         <DetailsBlock
           title={_('Affected Software/OS')}>
-          <p>
+          <Pre>
             {tags.affected}
-          </p>
+          </Pre>
         </DetailsBlock>
       }
 
@@ -109,9 +110,9 @@ const NvtDetails = ({
       {is_defined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
           title={_('Vulnerability Insight')}>
-          <p>
+          <Pre>
             {tags.insight}
-          </p>
+          </Pre>
         </DetailsBlock>
       }
 
@@ -120,12 +121,12 @@ const NvtDetails = ({
         <DetailsBlock
           title={_('Vulnerability Detection Method')}>
           {is_defined(tags.vuldetect) && tags.vuldetect !== TAG_NA &&
-            <p>
+            <Pre>
               {tags.vuldetect}
-            </p>
+            </Pre>
           }
           {is_defined(qod) &&
-            <p>
+            <Pre>
               <b>{_('Quality of Detection')}: </b>
 
               {is_defined(qod.type) ?
@@ -135,7 +136,7 @@ const NvtDetails = ({
               {is_defined(qod.value) &&
                 ' (' + qod.value + '%)'
               }
-            </p>
+            </Pre>
           }
         </DetailsBlock>
       }
@@ -143,9 +144,9 @@ const NvtDetails = ({
       {is_defined(tags.impact) && tags.impact !== TAG_NA &&
         <DetailsBlock
           title={_('Impact')}>
-          <p>
+          <Pre>
             {tags.impact}
-          </p>
+          </Pre>
         </DetailsBlock>
       }
 
