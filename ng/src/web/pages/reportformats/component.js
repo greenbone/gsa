@@ -99,7 +99,7 @@ class ReportFormatComponent extends React.Component {
       this.setState({
         dialogVisible: true,
         reportformat: undefined,
-        title: _('New Report Format'),
+        title: _('Import Report Format'),
       });
     }
   }
