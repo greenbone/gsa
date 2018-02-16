@@ -72,7 +72,11 @@ i18next
   });
 
 export const get_language = () => i18next.language;
-export const set_language = lang => i18next.changeLanguage(lang);
+export const set_language = lang => i18next.changeLanguage(lang, err => {
+  if (is_defined(err)) {
+    log.error('Could not set language to', lang, err);
+  }
+});
 
 export function translate(key, options) {
   return i18next.t(key, options);
