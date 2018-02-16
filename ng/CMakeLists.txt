@@ -750,8 +750,8 @@ install (FILES public/robots.txt
 install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
 
 install (DIRECTORY
-         build/static
-         build/img
+         ${NG_BUILD_DIR}/static
+         ${NG_BUILD_DIR}/img
          DESTINATION ${NG_DEST_DIR})
 
 ## Translations

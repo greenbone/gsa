@@ -8,3 +8,4 @@ config.local.js
 # directory files for image previews
 .directory
 coverage/
+/ng/public/locales/

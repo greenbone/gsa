@@ -29,19 +29,17 @@ include (FindPythonModule)
 
 find_python_module(polib)
 
+set (NG_LOCALE_DIR ${NG_SRC_DIR}/public/locales)
+
 # Create targets for a language _LANG
 macro (MAKE_TRANSLATION _LANG)
-  file (MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${_LANG})
-
   # Files for installation
   # .json for JS
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
+  add_custom_command (OUTPUT ${NG_LOCALE_DIR}/gsad-${_LANG}.json
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
                       COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
                       ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
-                      ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json)
-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
-          DESTINATION ${GSA_DATA_DIR}/classic/js/locales)
+                      ${NG_LOCALE_DIR}/gsad-${_LANG}.json)
 
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po
                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
@@ -53,6 +51,9 @@ endmacro ()
 
 if (GETTEXT_FOUND)
   if (PY_POLIB_FOUND)
+
+    file (MAKE_DIRECTORY ${NG_LOCALE_DIR})
+
     MAKE_TRANSLATION (ar)
     MAKE_TRANSLATION (de)
     MAKE_TRANSLATION (fr)
@@ -64,13 +65,13 @@ if (GETTEXT_FOUND)
     # Installed files
     add_custom_target (gettext-json
                        ALL
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ar.json
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-de.json
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-fr.json
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-pt_BR.json
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ru.json
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-tr.json
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-zh_CN.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsad-ar.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsad-de.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsad-fr.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsad-pt_BR.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsad-ru.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsad-tr.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsad-zh_CN.json
                        COMMENT "Created translation .json files")
 
     # Merged .po files
@@ -105,6 +106,10 @@ if (GETTEXT_FOUND)
                                 "${CMAKE_SOURCE_DIR}/ng"
                         DEPENDS ${NG_JS_SRC_FILES}
                         COMMENT "Creating translation template (.pot) file from JS")
+
+    install (DIRECTORY
+             ${NG_BUILD_DIR}/locales
+             DESTINATION ${NG_DEST_DIR})
 
   else (PY_POLIB_FOUND)
     message (WARNING "Could not build translation files: Python interpreter or polib Python module not found.")

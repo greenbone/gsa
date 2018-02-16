@@ -57,7 +57,7 @@ i18next
     defaultNS: 'gsad',
     fallbackNS: 'gsad',
     backend: {
-      loadPath: '/js/locales/{{ns}}-{{lng}}.json', // e.g. /js/locales/gsad-en.json
+      loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsad-en.json
     },
     detection: {
       // only use url querystring and browser settings for language detection
@@ -72,7 +72,11 @@ i18next
   });
 
 export const get_language = () => i18next.language;
-export const set_language = lang => i18next.changeLanguage(lang);
+export const set_language = lang => i18next.changeLanguage(lang, err => {
+  if (is_defined(err)) {
+    log.error('Could not set language to', lang, err);
+  }
+});
 
 export function translate(key, options) {
   return i18next.t(key, options);
