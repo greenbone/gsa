@@ -118,15 +118,6 @@ class UserCommand extends EntityCommand {
     });
   }
 
-  currentLanguages() {
-    return this.httpGet({
-      cmd: 'get_my_settings',
-    }).then(response => {
-      return response.setData(
-        response.data.get_my_settings.gsa_languages.language);
-    });
-  }
-
   create({
     access_hosts,
     access_ifaces,
@@ -222,6 +213,7 @@ class UserCommand extends EntityCommand {
   }
 
   saveSettings(data) {
+    log.debug('Saving settings', data);
     return this.httpPost({
       cmd: 'save_my_settings',
       text: data.timezone,
