@@ -2,9 +2,10 @@
 *
 * Authors:
 * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+* Björn Ricks <bjoern.ricks@greenbone.net>
 *
 * Copyright:
-* Copyright (C) 2017 Greenbone Networks GmbH
+* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -47,6 +48,7 @@ import TableRow from '../../components/table/row.js';
 
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
+import Languages from '../../utils/languages';
 
 import withCapabilities from '../../utils/withCapabilities.js';
 import withGmp from '../../utils/withGmp.js';
@@ -97,7 +99,11 @@ class UserSettings extends React.Component {
       filter_settings: [],
       misc_settings: [],
       initial_data: {},
-      option_lists: {severitiesList: SEVERITY_CLASSES},
+      option_lists: {
+        severitiesList: SEVERITY_CLASSES,
+        languagesList: Object.entries(Languages).map(
+          ([code, language]) => [code, language.name, language.native_name]),
+      },
     };
     this.set_filters = [];
     this.set_settings = [];
@@ -135,12 +141,6 @@ class UserSettings extends React.Component {
         option_lists.scanconfigsList = config_list;
         this.setState({option_lists});
         return config_list;
-      }),
-      gmp.user.currentLanguages()
-      .then(response => {
-        option_lists.languagesList = response.data;
-        this.setState({option_lists});
-        return option_lists.languagesList;
       }),
       gmp.alerts.getAll()
       .then(response => {
@@ -358,7 +358,6 @@ class UserSettings extends React.Component {
     this.set_settings = settings[0];// eslint-disable-line prefer-destructuring
     this.set_filters = settings[1]; // eslint-disable-line prefer-destructuring
     this.scanconfigs = settings[2]; // eslint-disable-line prefer-destructuring
-    this.languages = settings[3];
 
     for (const [key, item] of this.set_settings) {
         all_possible_settings[key] = item.value;
@@ -820,13 +819,8 @@ class UserSettings extends React.Component {
   }
 
   getLanguageNameByCode(code) {
-    const language = this.languages.find(
-      item => {
-        return item.code === code;
-      });
-    if (is_defined(language)) {
-      return language.name;
-    };
+    const language = Languages[code];
+    return is_defined(language) ? language.name : undefined;
   }
 
   getValueBySettingId(id) {
