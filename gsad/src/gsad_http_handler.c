@@ -810,6 +810,8 @@ init_http_handlers()
                    handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/robots.txt$",
                    handle_static_file);
+  url_handler_add (anon_url_handlers, "^/locales/.+$",
+                   handle_static_file);
 #endif
 
   url_handler_add (anon_url_handlers, "^/login/?$", handle_index_ng);

@@ -57,7 +57,7 @@ i18next
     defaultNS: 'gsad',
     fallbackNS: 'gsad',
     backend: {
-      loadPath: '/js/locales/{{ns}}-{{lng}}.json', // e.g. /js/locales/gsad-en.json
+      loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsad-en.json
     },
     detection: {
       // only use url querystring and browser settings for language detection
