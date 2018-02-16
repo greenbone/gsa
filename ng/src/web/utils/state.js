@@ -30,8 +30,10 @@ class State extends React.Component {
   constructor(...args) {
     super(...args);
 
+    const {children, ...props} = this.props;
+
     this.state = {
-      ...this.props,
+      ...props,
     };
 
     this.handleValueChange = this.handleValueChange.bind(this);
