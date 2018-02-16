@@ -54,6 +54,20 @@ const UserSettingsDialog = ({
   optionLists,
   capabilities,
 }) => {
+  const {
+    alertsList,
+    credentialsList,
+    filtersList,
+    languagesList,
+    portlistsList,
+    reportformatsList,
+    scanconfigsList,
+    scannersList,
+    schedulesList,
+    severitiesList,
+    targetsList,
+  } = optionLists;
+
   return (
     <SaveDialog
       visible={visible}
@@ -118,21 +132,6 @@ const UserSettingsDialog = ({
           allsecinfofilter,
           autocacherebuild,
         } = state;
-
-        const {
-          alertsList,
-          credentialsList,
-          filtersList,
-          languagesList,
-          portlistsList,
-          reportformatsList,
-          scanconfigsList,
-          scannersList,
-          schedulesList,
-          severitiesList,
-          targetsList,
-        } = optionLists;
-
         return (
           <Layout flex="column">
             <h2>{_('General Settings')}</h2>
