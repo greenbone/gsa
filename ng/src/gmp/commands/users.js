@@ -118,15 +118,6 @@ class UserCommand extends EntityCommand {
     });
   }
 
-  currentLanguages() {
-    return this.httpGet({
-      cmd: 'get_my_settings',
-    }).then(response => {
-      return response.setData(
-        response.data.get_my_settings.gsa_languages.language);
-    });
-  }
-
   create({
     access_hosts,
     access_ifaces,
