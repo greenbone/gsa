@@ -213,6 +213,7 @@ class UserCommand extends EntityCommand {
   }
 
   saveSettings(data) {
+    log.debug('Saving settings', data);
     return this.httpPost({
       cmd: 'save_my_settings',
       text: data.timezone,
