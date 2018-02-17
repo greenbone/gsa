@@ -18824,8 +18824,6 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
-  buffer_languages_xml (xml);
-
   g_string_append (xml, "</get_my_settings>");
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE),
@@ -19039,8 +19037,6 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            response_data);
     }
-
-  buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
   return envelope_gmp (connection, credentials, params,
