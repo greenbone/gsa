@@ -218,56 +218,7 @@ init_language_lists ()
     }
   closedir (locale_dir);
 
-  GString *test = g_string_new ("");
-  buffer_languages_xml (test);
-  g_debug ("%s: Initialized language lists", __FUNCTION__);
-  g_string_free (test, TRUE);
-
   return 0;
-}
-
-/**
- * @brief Write the list of installed languages to a buffer as XML.
- *
- * @param[in] buffer  A GString buffer to write to.
- */
-void
-buffer_languages_xml (GString *buffer)
-{
-  GList *langs_list;
-  assert (buffer);
-
-  langs_list = g_list_first (installed_languages);
-
-  g_string_append (buffer, "<gsa_languages>");
-  while (langs_list)
-    {
-      gchar *lang_code, *lang_name, *native_name, *language_escaped;
-
-      lang_code = (gchar*) langs_list->data;
-
-      lang_name = g_hash_table_lookup (language_names, lang_code);
-      if (lang_name == NULL)
-        lang_name = lang_code;
-
-      native_name = g_hash_table_lookup (native_language_names, lang_code);
-      if (native_name == NULL)
-        native_name = lang_name;
-
-      language_escaped
-        = g_markup_printf_escaped ("<language>"
-                                   "<code>%s</code>"
-                                   "<name>%s</name>"
-                                   "<native_name>%s</native_name>"
-                                   "</language>",
-                                   lang_code,
-                                   lang_name,
-                                   native_name);
-      g_string_append (buffer, language_escaped);
-      g_free (language_escaped);
-      langs_list = g_list_nth (langs_list, 1);
-    }
-  g_string_append (buffer, "</gsa_languages>");
 }
 
 /**
