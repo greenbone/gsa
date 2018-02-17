@@ -68,8 +68,6 @@
 #include <gcrypt.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
-#include <langinfo.h>
-#include <locale.h>
 #include <netinet/in.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
@@ -2994,8 +2992,6 @@ int
 main (int argc, char **argv)
 {
   gchar *rc_name;
-  gchar *old_locale;
-  char *locale;
   int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
   int gsad_manager_port = DEFAULT_GVM_PORT;
@@ -3342,49 +3338,6 @@ main (int argc, char **argv)
           exit (EXIT_FAILURE);
         }
     }
-
-  /* Set and test the base locale for XSLt gettext */
-  old_locale = g_strdup (setlocale (LC_ALL, NULL));
-
-  locale = setlocale (LC_ALL, "");
-  if (locale == NULL)
-    {
-      g_warning ("%s: "
-                 "Failed to set locale according to environment variables,"
-                 " gettext translations are disabled.",
-                 __FUNCTION__);
-      set_ext_gettext_enabled (0);
-    }
-  else if (strcmp (locale, "C") == 0)
-    {
-      g_message ("%s: Locale for gettext extensions set to \"C\","
-                 " gettext translations are disabled.",
-                 __FUNCTION__);
-      set_ext_gettext_enabled (0);
-    }
-  else
-    {
-      if (strcasestr (locale, "en_") != locale)
-          {
-            g_warning ("%s: Locale defined by environment variables"
-                       " is not an \"en_...\" one.",
-                      __FUNCTION__);
-            set_ext_gettext_enabled (0);
-          }
-
-      if (strcasecmp (nl_langinfo (CODESET), "UTF-8"))
-        g_warning ("%s: Locale defined by environment variables"
-                   " does not use UTF-8 encoding.",
-                   __FUNCTION__);
-
-      g_debug ("%s: gettext translation extensions are enabled"
-               " (using locale \"%s\").",
-               __FUNCTION__, locale);
-      set_ext_gettext_enabled (1);
-    }
-
-  setlocale (LC_ALL, old_locale);
-  g_free (old_locale);
 
   if (gsad_redirect_port_string)
     {

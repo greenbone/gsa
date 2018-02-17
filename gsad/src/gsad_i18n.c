@@ -46,33 +46,6 @@
 #define G_LOG_DOMAIN "gsad i18n"
 
 /**
- * @brief Whether gettext functions are enabled
- */
-static int ext_gettext_enabled = 0;
-
-/**
- * @brief Get whether gettext functions for extensions are enabled.
- *
- * @return  0 gettext is disabled, 1 gettext is enabled.
- */
-int
-get_ext_gettext_enabled ()
-{
-  return ext_gettext_enabled;
-}
-
-/**
- * @brief Enable or disable gettext functions for extensions.
- *
- * @param enabled  0 to disable, any other to enable.
- */
-void
-set_ext_gettext_enabled (int enabled)
-{
-  ext_gettext_enabled = (enabled != 0);
-}
-
-/**
  * @brief Convert an Accept-Language string to the LANGUAGE env variable form.
  *
  * Converts the language preferences as defined in a HTTP Accept-Language
