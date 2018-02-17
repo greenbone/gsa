@@ -3386,8 +3386,6 @@ main (int argc, char **argv)
   setlocale (LC_ALL, old_locale);
   g_free (old_locale);
 
-  init_language_lists ();
-
   if (gsad_redirect_port_string)
     {
       gsad_redirect_port = atoi (gsad_redirect_port_string);

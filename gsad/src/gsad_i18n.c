@@ -46,25 +46,9 @@
 #define G_LOG_DOMAIN "gsad i18n"
 
 /**
- * @brief
- */
-#define GSA_XSL_TEXTDOMAIN "gsad_xsl"
-
-/**
  * @brief Whether gettext functions are enabled
  */
 static int ext_gettext_enabled = 0;
-
-/**
- * @brief Installed languages.
- */
-static GList *installed_languages = NULL;
-
-/**
- * @brief Known language names
- */
-static GHashTable *language_names = NULL;
-static GHashTable *native_language_names = NULL;
 
 /**
  * @brief Get whether gettext functions for extensions are enabled.
@@ -86,139 +70,6 @@ void
 set_ext_gettext_enabled (int enabled)
 {
   ext_gettext_enabled = (enabled != 0);
-}
-
-/**
- * @brief Initialize the list of available languages.
- *
- * @return 0: success, -1: error
- */
-int
-init_language_lists ()
-{
-  FILE *lang_names_file;
-  const char *locale_dir_name;
-  DIR *locale_dir;
-  struct dirent *entry;
-
-  if (installed_languages != NULL)
-    {
-      g_warning ("%s: Language lists already initialized.", __FUNCTION__);
-      return -1;
-    }
-
-  /* Init data structures */
-  language_names = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                          g_free, g_free);
-
-  native_language_names = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                 g_free, g_free);
-
-  // installed_languages starts initialized as NULL
-
-  /* Add presets "Browser Language" and "English" */
-  installed_languages = g_list_append (installed_languages,
-                                       g_strdup ("Browser Language"));
-  installed_languages = g_list_append (installed_languages,
-                                       g_strdup ("en"));
-  g_hash_table_insert (language_names,
-                       g_strdup ("Browser Language"),
-                       g_strdup ("Browser Language"));
-  g_hash_table_insert (native_language_names,
-                       g_strdup ("Browser Language"),
-                       g_strdup ("Browser Language"));
-  g_hash_table_insert (language_names,
-                       g_strdup ("en"), g_strdup ("English"));
-  g_hash_table_insert (native_language_names,
-                       g_strdup ("en"), g_strdup ("English"));
-
-  /* Get language names */
-  lang_names_file = fopen (GSA_DATA_DIR "/language_names.tsv", "r");
-  if (lang_names_file)
-    {
-      size_t len;
-      char *line = NULL;
-      while (getline (&line, &len, lang_names_file) != -1)
-        {
-          g_strstrip (line);
-          if (line [0] != '\0' && line [0] != '#')
-            {
-              gchar **columns;
-              gchar *code, *name, *native_name;
-              columns = g_strsplit (line, "\t", 3);
-              code = columns [0];
-              name = code ? columns [1] : NULL;
-              native_name = name ? columns [2] : NULL;
-              if (code && name)
-                g_hash_table_insert (language_names,
-                                     g_strdup (code),
-                                     g_strdup (name));
-              if (code && native_name)
-                g_hash_table_insert (native_language_names,
-                                     g_strdup (code),
-                                     g_strdup (native_name));
-              g_strfreev (columns);
-            }
-          g_free (line);
-          line = NULL;
-        }
-      fclose (lang_names_file);
-    }
-  else
-    {
-      g_warning ("%s: Failed to open language names file: %s",
-                 __FUNCTION__, strerror (errno));
-    }
-
-  /* Get installed translations */
-  locale_dir_name = get_chroot_state () ? GSA_CHROOT_LOCALE_DIR 
-                                        : GSA_LOCALE_DIR;
-  locale_dir = opendir (locale_dir_name);
-
-  if (locale_dir == NULL)
-    {
-      g_warning ("%s: Failed to open locale directory \"%s\": %s",
-                 __FUNCTION__, GSA_LOCALE_DIR, strerror (errno));
-      return -1;
-    }
-
-  while ((entry = readdir (locale_dir)) != 0)
-    {
-      if (entry->d_name[0] != '.'
-          && strlen (entry->d_name) >= 2
-          && entry->d_type == DT_DIR
-          && strcmp (entry->d_name, "en")
-          && strcmp (entry->d_name, "Browser Language"))
-        {
-          FILE *mo_file;
-          gchar *lang_mo_path;
-          lang_mo_path = g_build_filename (locale_dir_name,
-                                           entry->d_name,
-                                           "LC_MESSAGES",
-                                           GSA_XSL_TEXTDOMAIN ".mo",
-                                           NULL);
-
-          mo_file = fopen (lang_mo_path, "r");
-          if (mo_file)
-            {
-              fclose (mo_file);
-              installed_languages
-                = g_list_insert_sorted (installed_languages,
-                                        g_strdup (entry->d_name),
-                                        (GCompareFunc) strcmp);
-            }
-          else
-            {
-              if (errno != ENOENT)
-                g_warning ("%s: Failed to open %s: %s",
-                           __FUNCTION__, lang_mo_path, strerror (errno));
-            }
-          g_free (lang_mo_path);
-        }
-    }
-  closedir (locale_dir);
-
-  return 0;
 }
 
 /**
