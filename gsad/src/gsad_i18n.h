@@ -33,14 +33,6 @@
  */
 #define DEFAULT_GSAD_LANGUAGE "en"
 
-int get_ext_gettext_enabled ();
-
-void set_ext_gettext_enabled (int);
-
-int init_language_lists ();
-
-void buffer_languages_xml (GString *);
-
 gchar* accept_language_to_env_fmt (const char*);
 
 #endif /* not _GSAD_I18N_H */
