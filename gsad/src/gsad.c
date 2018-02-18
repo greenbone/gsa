@@ -2135,8 +2135,6 @@ exec_gmp_get (http_connection_t *con,
       watcher_data = NULL;
     }
 
-  /** @todo Ensure that XSL passes on sort_order and sort_field. */
-
   /* Check cmd and precondition, start respective GMP command(s). */
 
   if (!strcmp (cmd, "cvss_calculator"))
