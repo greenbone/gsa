@@ -26,7 +26,7 @@ import 'core-js/fn/object/entries';
 import React from 'react';
 import glamorous, {Col} from 'glamorous';
 
-import _ from 'gmp/locale.js';
+import _, {set_language} from 'gmp/locale.js';
 import {parse_yesno, YES_VALUE} from 'gmp/parser.js';
 import {is_defined, is_empty} from 'gmp/utils';
 
@@ -48,7 +48,7 @@ import TableRow from '../../components/table/row.js';
 
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
-import Languages from '../../utils/languages';
+import Languages, {BROWSER_LANGUAGE} from '../../utils/languages';
 
 import withCapabilities from '../../utils/withCapabilities.js';
 import withGmp from '../../utils/withGmp.js';
@@ -375,9 +375,9 @@ class UserSettings extends React.Component {
       }
       else if (item === 'User Interface Language') {
         const code = all_possible_settings[item];
-        const set_language = this.getLanguageNameByCode(code);
+        const current_language = this.getLanguageNameByCode(code);
         general_settings.push({
-          'User Interface Language': set_language,
+          'User Interface Language': current_language,
         });
         initial_data.userinterfacelanguage = code;
       }
@@ -836,7 +836,17 @@ class UserSettings extends React.Component {
   handleSaveSettings(data) {
     const {gmp} = this.props;
     return gmp.user.saveSettings(data)
-      .then(() => this.load());
+      .then(() => {
+        this.load();
+        const {userinterfacelanguage: lang} = data;
+
+        if (lang === BROWSER_LANGUAGE) {
+          set_language();
+        }
+        else {
+          set_language(lang);
+        }
+      });
   }
 
   openSettingsDialog() {
