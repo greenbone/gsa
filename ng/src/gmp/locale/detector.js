@@ -30,9 +30,10 @@ const log = logger.getLogger('gmp.locale.detector');
 
 const DEFAULT_OPTIONS = {
     // use url querystring and browser settings for language detection
-    order: ['querystring', 'navigator'],
+    order: ['querystring', 'localStorage', 'navigator'],
     // use url?lang=de as querystring
     lookupQuerystring: 'lang',
+    lookupLocalStorage: 'lang',
 };
 
 class LanguageDetector extends BrowserDetector {
