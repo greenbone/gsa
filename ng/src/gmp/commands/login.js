@@ -41,12 +41,22 @@ class LoginCommand extends HttpCommand {
       password,
     }).then(response => new Login(response.data), rej => {
       if (rej.isError && rej.isError() && rej.xhr) {
-        if (rej.xhr.status === 401) {
-          rej.setMessage(_('Bad login information'));
-        }
-        else if (rej.xhr.status === 404) {
-          // likely the config is wrong for the server address
-          rej.setMessage(_('Could not connect to server'));
+        switch (rej.xhr.status) {
+          case 401:
+            rej.setMessage(_('Bad login information'));
+            break;
+          case 404:
+            // likely the config is wrong for the server address
+            rej.setMessage(_('Could not connect to server'));
+            break;
+          case 500:
+            rej.setMessage(_('GMP error during authentication'));
+            break;
+          case 503:
+            rej.setMessage(_('GMP Service is down'));
+            break;
+          default:
+            break;
         }
       }
       throw rej;
