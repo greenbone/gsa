@@ -50,6 +50,21 @@ i18next
      * errors can be debugged here */
   });
 
+let listeners = [];
+
+/**
+ * Subscribe to get notified about language changes
+ *
+ * @param {Function} listener Function to get called when language changes
+ *
+ * @returns {Function} Unsubscribe function
+ */
+export const subscribe = listener => {
+  listeners.push(listener);
+
+  return () => listeners = listeners.filter(l => l !== listener);
+};
+
 export const get_language = () => i18next.language;
 export const set_language = lang => i18next.changeLanguage(lang, err => {
   if (is_defined(err)) {
@@ -57,6 +72,10 @@ export const set_language = lang => i18next.changeLanguage(lang, err => {
   }
   else {
     log.debug('Language changed to', get_language());
+
+    for (const listener of listeners) {
+      listener(lang);
+    }
   }
 });
 
