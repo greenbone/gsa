@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,11 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {translate} from './locale/lang';
 
-export * from './locale/date';
-export * from './locale/lang';
+export const LANGUAGE_KEY = 'lang';
 
-export default translate;
+export default {
+  set: value => window.localStorage.setItem(LANGUAGE_KEY, value),
+  delete: () => window.localStorage.removeItem(LANGUAGE_KEY),
+};
 
 // vim: set ts=2 sw=2 tw=80:

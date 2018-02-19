@@ -25,7 +25,7 @@ import _ from 'gmp/locale';
 /* TODO should be changed to use a better value.
    Requires changes in gsad and gvmd.
 */
-const BROWSER_LANGUAGE = 'Browser Language';
+export const BROWSER_LANGUAGE = 'Browser Language';
 
 const Languages = {
   ar: {
