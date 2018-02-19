@@ -65,7 +65,20 @@ export const subscribe = listener => {
   return () => listeners = listeners.filter(l => l !== listener);
 };
 
+/**
+ * Get the current used language
+ *
+ * @returns {String} Language code of the current used language
+ */
 export const get_language = () => i18next.language;
+
+/**
+ * Change the current used language
+ *
+ * @param {String} lang Language (code) to be set. Pass undefined
+ *                      to start automatic detection.
+ * @returns undefined
+ */
 export const set_language = lang => i18next.changeLanguage(lang, err => {
   if (is_defined(err)) {
     log.error('Could not set language to', lang, err);
