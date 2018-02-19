@@ -28,6 +28,7 @@ import logger from '../log';
 import {is_defined} from '../utils/identity';
 
 import Detector from './detector';
+import LanguageStore from './store';
 
 const log = logger.getLogger('gmp.locale.lang');
 
@@ -85,6 +86,15 @@ export const set_language = lang => i18next.changeLanguage(lang, err => {
   }
   else {
     log.debug('Language changed to', get_language());
+
+    if (is_defined(lang)) {
+      // store set language
+      LanguageStore.set(lang);
+    }
+    else {
+      // auto detection case. delete previous value from store
+      LanguageStore.delete();
+    }
 
     for (const listener of listeners) {
       listener(lang);
