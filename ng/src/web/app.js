@@ -35,6 +35,8 @@ import {
 import CacheFactory from 'gmp/cache.js';
 import Gmp from 'gmp';
 import PromiseFactory from 'gmp/promise.js';
+import {subscribe} from 'gmp/locale/lang';
+import {is_defined} from 'gmp/utils/identity';
 
 import HttpInterceptor from 'gmp/http/interceptor.js';
 
@@ -166,6 +168,23 @@ class App extends React.Component {
     super(props);
 
     gmp.addHttpInterceptor(new AppHttpInterceptor(this));
+
+    this.renderOnLanguageChange = this.renderOnLanguageChange.bind(this);
+
+  }
+
+  componentDidMount() {
+    this.unsubscribe = subscribe(this.renderOnLanguageChange);
+  }
+
+  componentWillUnmount() {
+    if (is_defined(this.unsubscribe)) {
+      this.unsubscribe();
+    }
+  }
+
+  renderOnLanguageChange() {
+    this.forceUpdate();
   }
 
   toLoginPage() {
