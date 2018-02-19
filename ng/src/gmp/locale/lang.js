@@ -56,7 +56,7 @@ export const set_language = lang => i18next.changeLanguage(lang, err => {
     log.error('Could not set language to', lang, err);
   }
   else {
-    log.debug('Language changed to', lang);
+    log.debug('Language changed to', get_language());
   }
 });
 
