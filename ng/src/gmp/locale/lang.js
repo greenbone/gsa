@@ -36,8 +36,8 @@ i18next
   .use(XHRBackend) // use ajax backend
   .use(Detector) // use own detector for language detection
   .init({
-    nsSeparator: false, // don't use a namespace seperator in keys
-    keySeperator: false, // don't use a key spererator in keys
+    nsSeparator: false, // don't use a namespace separator in keys
+    keySeparator: false, // don't use a key separator in keys
     fallbackLng: 'en',
     ns: ['gsad'], // use gsad as namespace
     defaultNS: 'gsad',
