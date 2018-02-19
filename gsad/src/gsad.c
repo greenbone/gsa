@@ -1326,8 +1326,8 @@ exec_gmp_post (http_connection_t *con,
   int ret;
   user_t *user;
   credentials_t *credentials;
-  gchar *res = NULL, *new_sid, *url;
-  const gchar *cmd, *caller, *language, *password;
+  gchar *res = NULL, *new_sid;
+  const gchar *cmd, *caller, *language;
   authentication_reason_t auth_reason;
   gvm_connection_t connection;
   cmd_response_data_t *response_data;
@@ -1336,89 +1336,14 @@ exec_gmp_post (http_connection_t *con,
 
   cmd = params_value (con_info->params, "cmd");
 
+  response_data = cmd_response_data_new ();
+
   if (cmd && !strcmp (cmd, "login"))
     {
-      password = params_value (con_info->params, "password");
-      if ((password == NULL)
-          && (params_original_value (con_info->params, "password") == NULL))
-        password = "";
-
-      if (params_value (con_info->params, "login")
-          && password)
-        {
-          gchar *timezone, *role, *capabilities, *severity, *language;
-          gchar *pw_warning;
-          GTree *chart_prefs;
-          ret = authenticate_gmp (params_value (con_info->params, "login"),
-                                  password,
-                                  &role,
-                                  &timezone,
-                                  &severity,
-                                  &capabilities,
-                                  &language,
-                                  &pw_warning,
-                                  &chart_prefs);
-          if (ret)
-            {
-              int status;
-              if (ret == -1 || ret == 2)
-                status = MHD_HTTP_SERVICE_UNAVAILABLE;
-              else
-                status = MHD_HTTP_UNAUTHORIZED;
-
-              auth_reason =
-                     ret == 2
-                       ? GMP_SERVICE_DOWN
-                       : (ret == -1
-                           ? LOGIN_ERROR
-                           : LOGIN_FAILED);
-
-              g_warning ("Authentication failure for '%s' from %s",
-                         params_value (con_info->params, "login") ?: "",
-                         client_address);
-              return handler_send_reauthentication(con, status,
-                                                   auth_reason);
-            }
-          else
-            {
-              user_t *user;
-              user = user_add (params_value (con_info->params, "login"),
-                               password, timezone, severity, role, capabilities,
-                               language, pw_warning, chart_prefs, client_address);
-              /* Redirect to get_tasks. */
-              url = g_strdup_printf ("%s&token=%s",
-                                     params_value (con_info->params, "text"),
-                                     user->token);
-              ret = send_redirect_to_urn (con, url, user);
-              user_release (user);
-
-              g_message ("Authentication success for '%s' from %s",
-                         params_value (con_info->params, "login") ?: "",
-                         client_address);
-
-              g_free (url);
-              g_free (timezone);
-              g_free (severity);
-              g_free (capabilities);
-              g_free (language);
-              g_free (role);
-              g_free (pw_warning);
-              return ret;
-            }
-        }
-      else
-        {
-          g_warning ("Authentication failure for '%s' from %s",
-                     params_value (con_info->params, "login") ?: "",
-                     client_address);
-          return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                               LOGIN_FAILED);
-        }
+      return login (con, con_info->params, response_data, client_address);
     }
 
   /* Check the session. */
-
-  response_data = cmd_response_data_new ();
 
   if (params_value (con_info->params, "token") == NULL)
     {
