@@ -60,8 +60,6 @@ export const set_language = lang => i18next.changeLanguage(lang, err => {
   }
 });
 
-export function translate(key, options) {
-  return i18next.t(key, options);
-}
+export const translate = (key, options) => i18next.t(key, options);
 
 // vim: set ts=2 sw=2 tw=80:
