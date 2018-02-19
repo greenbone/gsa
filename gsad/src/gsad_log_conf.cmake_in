@@ -21,6 +21,12 @@ prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
 file=${GVM_LOG_DIR}/gsad.log
 level=127
 
+[gsad http]
+prepend=%t %p
+prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
+file=${GVM_LOG_DIR}/gsad.log
+level=127
+
 [*]
 prepend=%t %p
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
