@@ -6237,7 +6237,7 @@ get_credential_gmp (gvm_connection_t *connection,
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  html           Result. Required.
  * @param[out]  login          Login name return.  NULL to skip.  Only set on
  *                             success with credential_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
@@ -6986,7 +6986,7 @@ delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  html           Result.  Required.
  * @param[out]  filename       Agent filename return.  NULL to skip.  Only set
  *                             on success with agent_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
