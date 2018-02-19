@@ -24,31 +24,19 @@
 import i18next from 'i18next';
 import moment from 'moment';
 import XHRBackend from 'i18next-xhr-backend';
-import BrowserDetector from 'i18next-browser-languagedetector';
 
 import {is_defined, is_string, is_date} from './utils/identity';
 
 import {parse_int} from './parser.js';
 import logger from './log.js';
 
+import Detector from './locale/detector';
+
 const log = logger.getLogger('gmp.locale');
-
-class LanguageDetector extends BrowserDetector {
-
-  detect(...options) {
-    const lang = super.detect(...options);
-
-    log.debug('Detected language', lang);
-    moment.locale(lang);
-    return lang;
-  }
-}
-
-LanguageDetector.type = 'languageDetector';
 
 i18next
   .use(XHRBackend) // use ajax backend
-  .use(LanguageDetector) // use own detector for language detection
+  .use(Detector) // use own detector for language detection
   .init({
     nsSeparator: false, // don't use a namespace seperator in keys
     keySeperator: false, // don't use a key spererator in keys
@@ -58,12 +46,6 @@ i18next
     fallbackNS: 'gsad',
     backend: {
       loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsad-en.json
-    },
-    detection: {
-      // only use url querystring and browser settings for language detection
-      order: ['querystring', 'navigator'],
-      // use url?lang=de as querystring
-      lookupQuerystring: 'lang',
     },
   }, function(err, t) { // eslint-disable-line
 
