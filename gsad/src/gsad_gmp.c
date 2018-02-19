@@ -27753,7 +27753,9 @@ login (http_connection_t *con,
       if (ret)
         {
           int status;
-          if (ret == -1 || ret == 2)
+          if (ret == -1)
+            status = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          if (ret == 2)
             status = MHD_HTTP_SERVICE_UNAVAILABLE;
           else
             status = MHD_HTTP_UNAUTHORIZED;
