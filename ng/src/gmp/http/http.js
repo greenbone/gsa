@@ -153,12 +153,12 @@ class Http {
           self.handleSuccess(resolve, reject, this, options);
         }
         else {
-          self.handleError(resolve, reject, this, options);
+          self.handleResponseError(resolve, reject, this, options);
         }
       };
 
       xhr.onerror = function() {
-        self.handleError(resolve, reject, this, options);
+        self.handleRequestError(resolve, reject, this, options);
       };
 
       xhr.ontimeout = function() {
@@ -197,7 +197,7 @@ class Http {
     }
   }
 
-  handleError(resolve, reject, xhr, options) {
+  handleResponseError(resolve, reject, xhr, options) {
     let promise = Promise.resolve(xhr);
 
     for (const interceptor of this.interceptors) {
@@ -214,6 +214,18 @@ class Http {
         reject(error);
       }
     });
+  }
+
+  handleRequestError(resolve, reject, xhr, options) {
+    const rej = new Rejection(xhr, Rejection.REASON_ERROR,
+      _('An error occured during making the request. Most likely the web ' +
+        'server does not respond.'));
+    try {
+      reject(this.transformRejection(rej, options));
+    }
+    catch (error) {
+      reject(rej);
+    }
   }
 
   handleTimeout(resolve, reject, xhr, options) {

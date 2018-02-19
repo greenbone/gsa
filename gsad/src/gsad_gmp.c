@@ -27706,6 +27706,116 @@ authenticate_gmp (const gchar * username, const gchar * password,
 }
 
 /**
+ * @brief Login and create a session
+ *
+ * @param[in]   con             HTTP Connection
+ * @param[in]   params          Request paramters
+ * @param[out]  response_data   Extra data return for the HTTP response
+ * @param[in]   client_address  Client address
+ *
+ * @return MHD_YES on success. MHD_NO on errors.
+ */
+int
+login (http_connection_t *con,
+       params_t *params,
+       cmd_response_data_t *response_data,
+       const char *client_address)
+{
+  int ret;
+  authentication_reason_t auth_reason;
+  credentials_t *credentials;
+  gchar *timezone;
+  gchar *role;
+  gchar *capabilities;
+  gchar *severity;
+  gchar *language;
+  gchar *pw_warning;
+  GTree *chart_prefs;
+
+  const char *password = params_value (params, "password");
+  const char *login = params_value(params, "login");
+
+  if ((password == NULL)
+      && (params_original_value (params, "password") == NULL))
+    password = "";
+
+  if (login && password)
+    {
+      ret = authenticate_gmp (login,
+                              password,
+                              &role,
+                              &timezone,
+                              &severity,
+                              &capabilities,
+                              &language,
+                              &pw_warning,
+                              &chart_prefs);
+      if (ret)
+        {
+          int status;
+          if (ret == -1)
+            status = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          if (ret == 2)
+            status = MHD_HTTP_SERVICE_UNAVAILABLE;
+          else
+            status = MHD_HTTP_UNAUTHORIZED;
+
+          auth_reason =
+                  ret == 2
+                    ? GMP_SERVICE_DOWN
+                    : (ret == -1
+                        ? LOGIN_ERROR
+                        : LOGIN_FAILED);
+
+          g_warning ("Authentication failure for '%s' from %s",
+                     login ?: "",
+                     client_address);
+          return handler_send_reauthentication(con, status,
+                                               auth_reason);
+        }
+      else
+        {
+          user_t *user;
+          user = user_add (login, password, timezone, severity, role,
+                           capabilities, language, pw_warning, chart_prefs,
+                           client_address);
+
+          g_message ("Authentication success for '%s' from %s",
+                     login ?: "",
+                     client_address);
+
+          credentials = credentials_new (user, language, client_address);
+
+          char *data = envelope_gmp (NULL, credentials, params, g_strdup(""), response_data);
+
+          ret = handler_create_response (con, data, response_data, user->cookie);
+
+          user_release (user);
+
+          credentials_free (credentials);
+
+          g_free (timezone);
+          g_free (severity);
+          g_free (capabilities);
+          g_free (language);
+          g_free (role);
+          g_free (pw_warning);
+
+          return ret;
+        }
+    }
+  else
+    {
+      g_warning ("Authentication failure for '%s' from %s",
+                 login ?: "",
+                 client_address);
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
+    }
+}
+
+
+/**
  * @brief Connect to Greenbone Vulnerability Manager daemon.
  *
  * @param[in]   credentials  Username and password for authentication.
