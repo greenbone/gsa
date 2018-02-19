@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -105,11 +106,10 @@ class CredentialsDialog extends React.Component {
       onValueChange,
     } = this.props;
 
-    const type_opts = map(types, type => {
-      return (
-        <option value={type} key={type}>{type_names[type]}</option>
-      );
-    });
+    const typeOptions = map(types, type => ({
+      label: type_names[type],
+      value: type,
+    }));
 
     const is_edit = is_defined(credential);
 
@@ -140,9 +140,8 @@ class CredentialsDialog extends React.Component {
           <Select
             onChange={this.handleTypeChange}
             disabled={is_edit}
-            value={base}>
-            {type_opts}
-          </Select>
+            items={typeOptions}
+            value={base}/>
         </FormGroup>
 
         <FormGroup title={_('Allow insecure use')}>
