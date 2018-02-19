@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined, filter, select_save_id} from 'gmp/utils';
+import {is_defined, filter, map, select_save_id} from 'gmp/utils';
 import {parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -65,6 +65,11 @@ const scanner_types = [
   SLAVE_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
 ];
+
+const scannerTypesOptions = map(scanner_types, scannerType => ({
+  label: scanner_type_name(scannerType),
+  value: scannerType,
+}));
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -207,17 +212,8 @@ class ScannerDialog extends React.Component {
             name="type"
             value={type}
             disabled={in_use}
-            onChange={this.handleTypeChange}>
-            {
-              scanner_types.map(stype => {
-                return (
-                  <option key={stype} value={stype}>
-                    {scanner_type_name(stype)}
-                  </option>
-                );
-              })
-            }
-          </Select>
+            items={scannerTypesOptions}
+            onChange={this.handleTypeChange}/>
         </FormGroup>
 
         <FormGroup title={_('CA Certificate')} flex="column">
