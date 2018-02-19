@@ -58,6 +58,9 @@ export const set_language = lang => i18next.changeLanguage(lang, err => {
   if (is_defined(err)) {
     log.error('Could not set language to', lang, err);
   }
+  else {
+    log.debug('Language changed to', lang);
+  }
 });
 
 export function translate(key, options) {
