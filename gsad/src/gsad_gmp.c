@@ -27705,6 +27705,16 @@ authenticate_gmp (const gchar * username, const gchar * password,
     }
 }
 
+/**
+ * @brief Login and create a session
+ *
+ * @param[in]   con             HTTP Connection
+ * @param[in]   params          Request paramters
+ * @param[out]  response_data   Extra data return for the HTTP response
+ * @param[in]   client_address  Client address
+ *
+ * @return MHD_YES on success. MHD_NO on errors.
+ */
 int
 login (http_connection_t *con,
        params_t *params,
