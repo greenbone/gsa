@@ -32,8 +32,6 @@ class LoginCommand extends HttpCommand {
   constructor(http) {
     super(http, {
       cmd: 'login',
-      text: '/omp?xml=1',
-      no_redirect: '1', // TODO fix in gsad
     });
   }
 
