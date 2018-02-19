@@ -39,11 +39,11 @@ i18next
     nsSeparator: false, // don't use a namespace separator in keys
     keySeparator: false, // don't use a key separator in keys
     fallbackLng: 'en',
-    ns: ['gsad'], // use gsad as namespace
-    defaultNS: 'gsad',
-    fallbackNS: 'gsad',
+    ns: ['gsa'], // use gsa as namespace
+    defaultNS: 'gsa',
+    fallbackNS: 'gsa',
     backend: {
-      loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsad-en.json
+      loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsa-en.json
     },
   }, function(err, t) { // eslint-disable-line
 

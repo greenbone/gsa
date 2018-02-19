@@ -35,18 +35,18 @@ set (NG_LOCALE_DIR ${NG_SRC_DIR}/public/locales)
 macro (MAKE_TRANSLATION _LANG)
   # Files for installation
   # .json for JS
-  add_custom_command (OUTPUT ${NG_LOCALE_DIR}/gsad-${_LANG}.json
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
+  add_custom_command (OUTPUT ${NG_LOCALE_DIR}/gsa-${_LANG}.json
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsa-${_LANG}.po
                       COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
-                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
-                      ${NG_LOCALE_DIR}/gsad-${_LANG}.json)
+                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsa-${_LANG}.po
+                      ${NG_LOCALE_DIR}/gsa-${_LANG}.json)
 
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
+  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsa-${_LANG}-merged.po
+                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa.pot
                       COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
-                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
-                      ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
-                      -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po)
+                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsa-${_LANG}.po
+                      ${CMAKE_CURRENT_BINARY_DIR}/gsa.pot
+                      -o ${CMAKE_CURRENT_BINARY_DIR}/gsa-${_LANG}-merged.po)
 endmacro ()
 
 if (GETTEXT_FOUND)
@@ -65,13 +65,13 @@ if (GETTEXT_FOUND)
     # Installed files
     add_custom_target (gettext-json
                        ALL
-                       DEPENDS ${NG_LOCALE_DIR}/gsad-ar.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsad-de.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsad-fr.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsad-pt_BR.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsad-ru.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsad-tr.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsad-zh_CN.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsa-ar.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsa-de.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsa-fr.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsa-pt_BR.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsa-ru.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsa-tr.json
+                       DEPENDS ${NG_LOCALE_DIR}/gsa-zh_CN.json
                        COMMENT "Created translation .json files")
 
     # Merged .po files
@@ -80,14 +80,14 @@ if (GETTEXT_FOUND)
                        COMMENT "Merged translation .po files")
 
     add_custom_target (gettext-js-merge
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ar-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-de-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-fr-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-pt_BR-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ru-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-tr-merged.po
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-zh_CN-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa.pot
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-ar-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-de-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-fr-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-pt_BR-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-ru-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-tr-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-zh_CN-merged.po
                        COMMENT "Merged translation .po files for JS")
 
     # Template (.pot) files
@@ -97,12 +97,12 @@ if (GETTEXT_FOUND)
 
     # JS template files
     add_custom_target (gettext-js-pot
-                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot)
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa.pot)
 
-    add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
+    add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsa.pot
                         COMMAND "${CMAKE_SOURCE_DIR}/tools/js2pot"
                         ARGS    "${CMAKE_SOURCE_DIR}"
-                                "${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot"
+                                "${CMAKE_CURRENT_BINARY_DIR}/gsa.pot"
                                 "${CMAKE_SOURCE_DIR}/ng"
                         DEPENDS ${NG_JS_SRC_FILES}
                         COMMENT "Creating translation template (.pot) file from JS")
