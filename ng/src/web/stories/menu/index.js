@@ -2,7 +2,6 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,25 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {configure} from '@storybook/react';
+import React from 'react';
 
-import 'web/utils/globalcss';
+import {storiesOf} from '@storybook/react';
+import {action} from '@storybook/addon-actions';
 
-/* eslint-disable global-require, no-console */
+import IconMenu from 'web/components/menu/iconmenu';
+import ArrowIcon from 'web/components/icon/arrowicon';
 
-function loadStories() {
-  console.clear();
+const menuaction = action('icon menu click');
+const entryaction = action('icon menu entry click');
 
-  require('./select');
-  require('./multiselect');
-  require('./sortable');
-  require('./tabs');
-  require('./datepicker');
-  require('./powerfilter');
-  require('./dashboard');
-  require('./menu');
-}
-
-configure(loadStories, module);
+storiesOf('Menu/IconMenu', module)
+  .add('default', () => (
+    <IconMenu
+      img="new.svg"
+      onClick={menuaction}
+    >
+      <div onClick={entryaction}>foo</div>
+      <div onClick={entryaction}>bar</div>
+    </IconMenu>
+  ))
+  .add('with icon prop', () => (
+    <IconMenu
+      icon={
+        <ArrowIcon
+          down={true}
+          onClick={menuaction}
+        />
+      }
+    >
+      <div onClick={entryaction}>blub</div>
+    </IconMenu>
+  ));
 
 // vim: set ts=2 sw=2 tw=80:
