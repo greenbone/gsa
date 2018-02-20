@@ -103,7 +103,7 @@ if (GETTEXT_FOUND)
                         COMMAND "${CMAKE_SOURCE_DIR}/tools/js2pot"
                         ARGS    "${CMAKE_SOURCE_DIR}"
                                 "${CMAKE_CURRENT_BINARY_DIR}/gsa.pot"
-                                "${CMAKE_SOURCE_DIR}/ng"
+                                "${CMAKE_SOURCE_DIR}/ng/src"
                         DEPENDS ${NG_JS_SRC_FILES}
                         COMMENT "Creating translation template (.pot) file from JS")
 
