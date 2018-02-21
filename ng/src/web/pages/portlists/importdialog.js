@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -27,7 +28,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -35,27 +36,44 @@ import FormGroup from '../../components/form/formgroup.js';
 import Layout from '../../components/layout/layout.js';
 
 const ImportDialog = ({
-    onValueChange,
-  }) => {
+  visible,
+  onClose,
+  onSave,
+}) => {
   return (
-    <Layout flex="column">
-      <FormGroup
-        title={_('Import XML Port List')}i
-        titleSize="3">
-        <FileField
-          name="xml_file"
-          onChange={onValueChange}/>
-      </FormGroup>
-    </Layout>
+    <SaveDialog
+      buttonTitle={_('Import')}
+      visible={visible}
+      title={_('Import Port List')}
+      onClose={onClose}
+      onSave={onSave}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
+            <FormGroup
+              title={_('Import XML Port List')}
+              titleSize="3">
+              <FileField
+                name="xml_file"
+                onChange={onValueChange}/>
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
 ImportDialog.propTypes = {
-  onValueChange: PropTypes.func,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
+export default ImportDialog;
 
-export default withDialog({
-  title: _('Import Port List'),
-  footer: _('Import'),
-})(ImportDialog);
+// vim: set ts=2 sw=2 tw=80:
