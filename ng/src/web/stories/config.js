@@ -38,6 +38,7 @@ function loadStories() {
   require('./powerfilter');
   require('./dashboard');
   require('./menu');
+  require('./chart');
 }
 
 configure(loadStories, module);
