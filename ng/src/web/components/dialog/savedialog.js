@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,6 +92,7 @@ class SaveDialogContent extends React.Component {
 
   render() {
     const {
+      buttonTitle,
       children,
       initialData = {},
       moveProps,
@@ -128,7 +129,7 @@ class SaveDialogContent extends React.Component {
               })}
             </ScrollableContent>
             <DialogFooter
-              title={_('Save')}
+              title={buttonTitle}
               loading={this.state.loading}
               onClick={() => this.handleSaveClick(state)}
             />
@@ -140,6 +141,7 @@ class SaveDialogContent extends React.Component {
 }
 
 SaveDialogContent.propTypes = {
+  buttonTitle: PropTypes.string,
   close: PropTypes.func.isRequired,
   heightProps: PropTypes.object,
   initialData: PropTypes.object,
@@ -149,6 +151,7 @@ SaveDialogContent.propTypes = {
 };
 
 const SaveDialog = ({
+  buttonTitle = _('Save'),
   children,
   width,
   title,
@@ -169,6 +172,7 @@ const SaveDialog = ({
         heightProps,
       }) => (
         <SaveDialogContent
+          buttonTitle={buttonTitle}
           close={close}
           initialData={initialData}
           moveProps={moveProps}
@@ -184,6 +188,7 @@ const SaveDialog = ({
 };
 
 SaveDialog.propTypes = {
+  buttonTitle: PropTypes.string,
   initialData: PropTypes.object,
   title: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
