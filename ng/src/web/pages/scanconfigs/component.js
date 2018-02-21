@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,12 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {for_each, is_defined, is_empty, select_save_id, shorten} from 'gmp/utils';
+import {
+  for_each,
+  is_defined,
+  is_empty,
+  select_save_id,
+  shorten} from 'gmp/utils';
 
 import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
