@@ -2,7 +2,6 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,26 +20,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {configure} from '@storybook/react';
+import React from 'react';
 
-import 'web/utils/globalcss';
+import {Div} from 'glamorous';
 
-/* eslint-disable global-require, no-console */
+import {storiesOf} from '@storybook/react';
 
-function loadStories() {
-  console.clear();
+import Legend from 'web/components/chart/legend';
 
-  require('./select');
-  require('./multiselect');
-  require('./sortable');
-  require('./tabs');
-  require('./datepicker');
-  require('./powerfilter');
-  require('./dashboard');
-  require('./menu');
-  require('./chart');
-}
-
-configure(loadStories, module);
+const data = [{
+  label: 'Foo',
+  value: '3',
+  color: 'blue',
+}, {
+  label: 'Bar',
+  value: '10',
+  color: 'green',
+}, {
+  label: 'Lol',
+  value: '5',
+  color: 'red',
+}];
+storiesOf('Chart/Legend', module)
+  .add('default', () => {
+    return (
+      <Div width="400px">
+        <Legend data={data}/>
+      </Div>
+    );
+  });
 
 // vim: set ts=2 sw=2 tw=80:
