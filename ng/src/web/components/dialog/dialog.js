@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,12 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import {KeyCode, has_value, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Portal from '../portal/portal';
 
 import DialogContainer from './container.js';
 import DialogOverlay from './overlay.js';
@@ -39,14 +40,10 @@ const DEFAULT_DIALOG_MAX_HEIGHT = '550px';
 const DEFAULT_DIALOG_MIN_HEIGHT = 250;
 const DEFAULT_DIALOG_MIN_WIDTH = 450;
 
-const portal = document.getElementById('dialog-portal');
-
 class Dialog extends React.Component {
 
   constructor(...args) {
     super(...args);
-
-    this.element = document.createElement('div');
 
     this.handleClose = this.handleClose.bind(this);
 
@@ -62,14 +59,10 @@ class Dialog extends React.Component {
   }
 
   componentDidMount() {
-    portal.appendChild(this.element);
-
     document.addEventListener('keydown', this.onKeyDown);
   }
 
   componentWillUnmount() {
-    portal.removeChild(this.element);
-
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
@@ -198,34 +191,35 @@ class Dialog extends React.Component {
     const maxHeight = is_defined(height) ?
       undefined : DEFAULT_DIALOG_MAX_HEIGHT;
 
-    return ReactDOM.createPortal(
-      <DialogOverlay
-        onClick={this.onOuterClick}
-        onKeyDown={this.onKeyDown}
-      >
-        <DialogContainer
-          role="dialog"
-          tabIndex="1"
-          width={width}
-          height={height}
-          posX={posX}
-          posY={posY}
-          innerRef={ref => this.dialog = ref}>
-          {children({
-            close: this.handleClose,
-            moveProps: {
-              onMouseDown: this.onMouseDownMove,
-            },
-            heightProps: {
-              maxHeight,
-            },
-          })}
-          {resizable &&
-            <Resizer onMouseDown={this.onMouseDownResize}/>
-          }
-        </DialogContainer>
-      </DialogOverlay>,
-      this.element,
+    return (
+      <Portal>
+        <DialogOverlay
+          onClick={this.onOuterClick}
+          onKeyDown={this.onKeyDown}
+        >
+          <DialogContainer
+            role="dialog"
+            tabIndex="1"
+            width={width}
+            height={height}
+            posX={posX}
+            posY={posY}
+            innerRef={ref => this.dialog = ref}>
+            {children({
+              close: this.handleClose,
+              moveProps: {
+                onMouseDown: this.onMouseDownMove,
+              },
+              heightProps: {
+                maxHeight,
+              },
+            })}
+            {resizable &&
+              <Resizer onMouseDown={this.onMouseDownResize}/>
+            }
+          </DialogContainer>
+        </DialogOverlay>
+      </Portal>
     );
   }
 };
