@@ -28,6 +28,7 @@ import {storiesOf} from '@storybook/react';
 
 import Legend from 'web/components/chart/legend';
 import BarChart from 'web/components/chart/bar';
+import DonutChart from 'web/components/chart/donut';
 
 const data = [{
   label: 'Foo',
@@ -73,6 +74,17 @@ storiesOf('Chart/Bar', module)
         width={500}
         height={300}
         data={bardata}
+      />
+    );
+  });
+
+storiesOf('Chart/Donut', module)
+  .add('default', () => {
+    return (
+      <DonutChart
+        width={500}
+        height={300}
+        data={data}
       />
     );
   });
