@@ -31,7 +31,8 @@ import {
   is_defined,
   is_empty,
   select_save_id,
-  shorten} from 'gmp/utils';
+  shorten,
+} from 'gmp/utils';
 
 import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
@@ -55,6 +56,10 @@ class ScanConfigComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      importDialogVisible: false,
+    };
+
     this.handleImportConfig = this.handleImportConfig.bind(this);
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
@@ -64,6 +69,7 @@ class ScanConfigComponent extends React.Component {
       this.openEditConfigFamilyDialog.bind(this);
     this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
+    this.closeImportDialog = this.closeImportDialog.bind(this);
   }
 
   openEditConfigDialog(config) {
@@ -82,7 +88,11 @@ class ScanConfigComponent extends React.Component {
   }
 
   openImportDialog() {
-    this.import_dialog.show({});
+    this.setState({importDialogVisible: true});
+  }
+
+  closeImportDialog() {
+    this.setState({importDialogVisible: false});
   }
 
   openEditConfigFamilyDialog({config, name}) {
@@ -273,6 +283,11 @@ class ScanConfigComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      importDialogVisible,
+    } = this.state;
+
     return (
       <Wrapper>
         <EntityComponent
@@ -313,7 +328,8 @@ class ScanConfigComponent extends React.Component {
           )}
         </EntityComponent>
         <ImportDialog
-          ref={ref => this.import_dialog = ref}
+          visible={importDialogVisible}
+          onClose={this.closeImportDialog}
           onSave={this.handleImportConfig}
         />
         <EditConfigFamilyDialog
