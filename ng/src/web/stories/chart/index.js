@@ -27,6 +27,7 @@ import {Div} from 'glamorous';
 import {storiesOf} from '@storybook/react';
 
 import Legend from 'web/components/chart/legend';
+import BarChart from 'web/components/chart/bar';
 
 const data = [{
   label: 'Foo',
@@ -41,12 +42,38 @@ const data = [{
   value: '5',
   color: 'red',
 }];
+
+const bardata = [{
+  label: 'Foo',
+  x: 3,
+  y: 3,
+  toolTip: <Div color="red">Foo</Div>,
+  color: 'red',
+}, {
+  label: 'Bar',
+  x: 10,
+  y: 1,
+  toolTip: <Div color="Green" margin="5px">Bar</Div>,
+  color: 'green',
+}];
+
 storiesOf('Chart/Legend', module)
   .add('default', () => {
     return (
       <Div width="400px">
         <Legend data={data}/>
       </Div>
+    );
+  });
+
+storiesOf('Chart/Bar', module)
+  .add('default', () => {
+    return (
+      <BarChart
+        width={500}
+        height={300}
+        data={bardata}
+      />
     );
   });
 
