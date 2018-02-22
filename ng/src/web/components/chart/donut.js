@@ -22,21 +22,22 @@
  */
 import React from 'react';
 
-import {Pie} from '@vx/shape';
-
 import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 
 import Legend from './legend';
+import Pie from './pie';
+import ToolTip from './tooltip';
 
 const Label = ({
   x,
   y,
-  title,
+  innerRef,
   children,
 }) => (
   <text
+    ref={innerRef}
     fill="white"
     textAnchor="middle"
     x={x}
@@ -50,7 +51,54 @@ const Label = ({
 );
 
 Label.propTypes = {
-  title: PropTypes.string.isRequired,
+  innerRef: PropTypes.func,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+};
+
+const Arc = ({
+  path,
+  color,
+  startAngle,
+  endAngle,
+  label,
+  x,
+  y,
+  toolTip,
+}) => (
+  <ToolTip
+    content={toolTip}
+  >
+    {({targetRef, hide, show}) => (
+      <g
+        onMouseOver={show}
+        onMouseOut={hide}
+      >
+        <path
+          d={path}
+          fill={color}
+        />
+        {endAngle - startAngle > 0.1 &&
+          <Label
+            innerRef={targetRef}
+            x={x}
+            y={y}
+          >
+            {label}
+          </Label>
+        }
+      </g>
+    )}
+  </ToolTip>
+);
+
+Arc.propTypes = {
+  color: PropTypes.string,
+  endAngle: PropTypes.number.isRequired,
+  label: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
+  startAngle: PropTypes.number.isRequired,
+  toolTip: PropTypes.elementOrString,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
 };
@@ -80,26 +128,23 @@ const DonutChart = ({
           pieValue={d => d.value}
           outerRadius={radius}
           innerRadius={radius - DONUT_WIDTH}
-          fill={d => d.data.color}
           cornerRadius={3}
           padAngle={0.01}
-          centroid={(centroid, arc) => {
-            const [x, y] = centroid;
-            const {startAngle, endAngle, data} = arc; // eslint-disable-line no-shadow
-
-            if (endAngle - startAngle < 0.1) {
-              return null;
-            }
-            return (
-              <Label
-                x={x}
-                y={y}
-              >
-                {data.value}
-              </Label>
-            );
-          }}
-        />
+        >
+          {({
+            index,
+            data: arcData,
+            ...props
+          }) => (
+            <Arc
+              key={`pie-arc-${index}`}
+              color={arcData.color}
+              label={arcData.value}
+              toolTip={arcData.toolTip}
+              {...props}
+            />
+          )}
+        </Pie>
       </svg>
       <Legend data={data}/>
     </Layout>

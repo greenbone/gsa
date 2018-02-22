@@ -75,7 +75,7 @@ class ToolTip extends React.Component {
 
   static propTypes = {
     children: PropTypes.func.isRequired,
-    content: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+    content: PropTypes.elementOrString,
   };
 
   constructor(...args) {

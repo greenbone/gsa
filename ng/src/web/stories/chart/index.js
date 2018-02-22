@@ -34,14 +34,17 @@ const data = [{
   label: 'Foo',
   value: '3',
   color: 'blue',
+  toolTip: 'Foo',
 }, {
   label: 'Bar',
   value: '10',
   color: 'green',
+  toolTip: 'Bar',
 }, {
   label: 'Lol',
   value: '5',
   color: 'red',
+  toolTip: 'LOL',
 }];
 
 const bardata = [{
