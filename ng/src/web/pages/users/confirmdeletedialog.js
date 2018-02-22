@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018  Greenbone Networks GmbH
@@ -28,7 +29,7 @@ import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Select from '../../components/form/select.js';
@@ -37,10 +38,14 @@ import Layout from '../../components/layout/layout.js';
 
 const ConfirmDeleteDialog = ({
     deleteUsers,
+    id,
+    inheritor_id,
+    title,
     username,
     users,
-    inheritor_id,
-    onValueChange,
+    visible,
+    onClose,
+    onSave,
   }) => {
 
   let headline = '';
@@ -55,44 +60,72 @@ const ConfirmDeleteDialog = ({
   else {
     headline = _('1 user will be deleted');
   }
+
+  const data = {
+    deleteUsers,
+    id,
+    inheritor_id,
+    username,
+  };
+
   return (
-    <Layout flex="column">
-      <h2>{headline}</h2>
-      <p>
-        {_('If no inheriting user is selected, all owned resources will ' +
-            'be deleted as well.')}
-      </p>
-      <FormGroup
-        title={_('Inheriting user')}>
-        <Select
-          name="inheritor_id"
-          value={inheritor_id}
-          onChange={onValueChange}>
-          <option value="--">--</option>
-          <option value="self">{_('(Current User)')}</option>
-          {
-            users.map(user => {
-              return (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
-              );
-            })
-          }
-        </Select>
-      </FormGroup>
-    </Layout>
+    <SaveDialog
+      buttonTitle={_('Delete')}
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      initialData={data}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
+            <h2>{headline}</h2>
+            <p>
+              {_('If no inheriting user is selected, all owned resources will' +
+                  ' be deleted as well.')}
+            </p>
+            <FormGroup
+              title={_('Inheriting user')}>
+              <Select
+                name="inheritor_id"
+                value={state.inheritor_id}
+                onChange={onValueChange}>
+                <option value="--">--</option>
+                <option value="self">{_('(Current User)')}</option>
+                {
+                  users.map(user => {
+                    return (
+                      <option key={user.id} value={user.id}>
+                        {user.name}
+                      </option>
+                    );
+                  })
+                }
+              </Select>
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
 ConfirmDeleteDialog.propTypes = {
   deleteUsers: PropTypes.array,
+  id: PropTypes.string,
   inheritor_id: PropTypes.id,
+  title: PropTypes.string.isRequired,
   username: PropTypes.string,
   users: PropTypes.array.isRequired,
-  onValueChange: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
-export default withDialog({
-  footer: _('Delete'),
-})(ConfirmDeleteDialog);
+export default ConfirmDeleteDialog;
+
+// vim: set ts=2 sw=2 tw=80:
