@@ -55,6 +55,11 @@ export const componentOrElement = ReactPropTypes.oneOfType([
   ReactPropTypes.element,
 ]);
 
+export const elementOrString = ReactPropTypes.oneOfType([
+  ReactPropTypes.element,
+  ReactPropTypes.string,
+]);
+
 export const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
 
 export const numberOrNumberString = ReactPropTypes.oneOfType([
@@ -166,6 +171,7 @@ export default {
   component,
   componentOrFalse,
   componentOrElement,
+  elementOrString,
   entitycommand,
   entitiescommand,
   filter,
