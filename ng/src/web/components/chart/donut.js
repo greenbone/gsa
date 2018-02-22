@@ -28,13 +28,16 @@ import PropTypes from '../../utils/proptypes';
 
 import Legend from './legend';
 import Pie from './pie';
+import ToolTip from './tooltip';
 
 const Label = ({
   x,
   y,
+  innerRef,
   children,
 }) => (
   <text
+    ref={innerRef}
     fill="white"
     textAnchor="middle"
     x={x}
@@ -48,6 +51,7 @@ const Label = ({
 );
 
 Label.propTypes = {
+  innerRef: PropTypes.func,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
 };
@@ -60,21 +64,32 @@ const Arc = ({
   label,
   x,
   y,
+  toolTip,
 }) => (
-  <g>
-    <path
-      d={path}
-      fill={color}
-    />
-    {endAngle - startAngle > 0.1 &&
-      <Label
-        x={x}
-        y={y}
+  <ToolTip
+    content={toolTip}
+  >
+    {({targetRef, hide, show}) => (
+      <g
+        onMouseOver={show}
+        onMouseOut={hide}
       >
-        {label}
-      </Label>
-    }
-  </g>
+        <path
+          d={path}
+          fill={color}
+        />
+        {endAngle - startAngle > 0.1 &&
+          <Label
+            innerRef={targetRef}
+            x={x}
+            y={y}
+          >
+            {label}
+          </Label>
+        }
+      </g>
+    )}
+  </ToolTip>
 );
 
 Arc.propTypes = {
@@ -83,6 +98,7 @@ Arc.propTypes = {
   label: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   startAngle: PropTypes.number.isRequired,
+  toolTip: PropTypes.elementOrString,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
 };
@@ -124,6 +140,7 @@ const DonutChart = ({
               key={`pie-arc-${index}`}
               color={arcData.color}
               label={arcData.value}
+              toolTip={arcData.toolTip}
               {...props}
             />
           )}
