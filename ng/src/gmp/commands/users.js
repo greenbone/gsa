@@ -167,7 +167,7 @@ class UserCommand extends EntityCommand {
     ifaces_allow,
     name,
     old_name,
-    password,
+    password = '', // needs to be included in httpPost, should be optional in gsad
     role_ids,
   }) {
     if (auth_method === AUTH_METHOD_LDAP) {
