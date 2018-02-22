@@ -26,6 +26,8 @@ import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes';
 
+import ToolTip from './tooltip';
+
 const StyledLegend = glamorous.div({
   padding: '5px 10px',
   border: '1px solid rgba(0, 0, 0, 0.3)',
@@ -64,10 +66,21 @@ const Legend = ({
 }) => (
   <StyledLegend>
     {data.map((d, i) => (
-      <Item key={i}>
-        <Shape color={d.color}/>
-        <Label>{d.label}</Label>
-      </Item>
+      <ToolTip
+        key={i}
+        content={d.toolTip}
+      >
+        {({targetRef, hide, show}) => (
+          <Item
+            innerRef={targetRef}
+            onMouseOver={show}
+            onMouseOut={hide}
+          >
+            <Shape color={d.color}/>
+            <Label>{d.label}</Label>
+          </Item>
+        )}
+      </ToolTip>
     ))}
   </StyledLegend>
 );
