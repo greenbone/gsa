@@ -107,6 +107,16 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
     const {capabilities} = this.context;
     const is_edit = is_defined(user);
 
+    const rolesOptions = map(roles, role => ({
+      label: role.name,
+      value: role.id,
+    }));
+
+    const groupsOptions = map(groups, group => ({
+      label: group.name,
+      value: group.id,
+    }));
+
     return (
       <SaveDialog
         visible={visible}
@@ -240,21 +250,10 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                   title={_('Roles')}>
                   <MultiSelect
                     name="role_ids"
+                    items={rolesOptions}
                     value={state.role_ids}
                     onChange={onValueChange}
-                  >
-                    {
-                      map(roles, role => {
-                        return (
-                          <option
-                            key={role.id}
-                            value={role.id}>
-                            {role.name}
-                          </option>
-                        );
-                      })
-                    }
-                  </MultiSelect>
+                  />
                 </FormGroup>
               }
 
@@ -263,21 +262,10 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                   title={_('Groups')}>
                   <MultiSelect
                     name="group_ids"
+                    items={groupsOptions}
                     value={state.group_ids}
                     onChange={onValueChange}
-                  >
-                    {
-                      map(groups, group => {
-                        return (
-                          <option
-                            key={group.id}
-                            value={group.id}>
-                            {group.name}
-                          </option>
-                        );
-                      })
-                    }
-                  </MultiSelect>
+                  />
                 </FormGroup>
               }
 
