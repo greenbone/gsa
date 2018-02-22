@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import {is_defined, map} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -68,6 +68,18 @@ const ConfirmDeleteDialog = ({
     username,
   };
 
+  const inheritingUserOptions = map(users, user => ({
+    label: user.name,
+    value: user.id,
+  }));
+  inheritingUserOptions.unshift({
+    label: '--',
+    value: '--',
+    }, {
+    label: _('Current User'),
+    value: 'self,',
+  });
+
   return (
     <SaveDialog
       buttonTitle={_('Delete')}
@@ -92,20 +104,10 @@ const ConfirmDeleteDialog = ({
               title={_('Inheriting user')}>
               <Select
                 name="inheritor_id"
+                items={inheritingUserOptions}
                 value={state.inheritor_id}
-                onChange={onValueChange}>
-                <option value="--">--</option>
-                <option value="self">{_('(Current User)')}</option>
-                {
-                  users.map(user => {
-                    return (
-                      <option key={user.id} value={user.id}>
-                        {user.name}
-                      </option>
-                    );
-                  })
-                }
-              </Select>
+                onChange={onValueChange}
+              />
             </FormGroup>
           </Layout>
         );
