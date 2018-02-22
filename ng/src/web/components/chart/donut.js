@@ -32,7 +32,6 @@ import Pie from './pie';
 const Label = ({
   x,
   y,
-  title,
   children,
 }) => (
   <text
@@ -49,7 +48,6 @@ const Label = ({
 );
 
 Label.propTypes = {
-  title: PropTypes.string.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
 };
