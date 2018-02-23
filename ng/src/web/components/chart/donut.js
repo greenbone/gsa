@@ -29,32 +29,7 @@ import PropTypes from '../../utils/proptypes';
 import Legend from './legend';
 import Pie from './pie';
 import ToolTip from './tooltip';
-
-const Label = ({
-  x,
-  y,
-  innerRef,
-  children,
-}) => (
-  <text
-    ref={innerRef}
-    fill="white"
-    textAnchor="middle"
-    x={x}
-    y={y}
-    dy=".33em"
-    fontSize="12px"
-    fontWeight="bold"
-  >
-    {children}
-  </text>
-);
-
-Label.propTypes = {
-  innerRef: PropTypes.func,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-};
+import Label from './label';
 
 const Arc = ({
   path,
