@@ -93,10 +93,10 @@ const Arc = ({
 );
 
 Arc.propTypes = {
-  color: PropTypes.string,
+  color: PropTypes.toString,
   endAngle: PropTypes.number.isRequired,
-  label: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
+  label: PropTypes.toString.isRequired,
+  path: PropTypes.toString.isRequired,
   startAngle: PropTypes.number.isRequired,
   toolTip: PropTypes.elementOrString,
   x: PropTypes.number.isRequired,
