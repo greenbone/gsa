@@ -146,6 +146,17 @@ export const iconSize = ReactPropTypes.oneOfType([
   ]),
 ]);
 
+const toStringValidator = (props, prop_name, component_name) => {
+  const value = props[prop_name];
+  if (!is_defined(value.toString)) {
+    return new Error('Invalid prop `' + prop_name + '` supplied to' +
+      ' `' + component_name + '`. Prop ' + prop_name + ' can not be ' +
+      'converted to String. Value is ' + value);
+  }
+};
+
+export const toString = mayRequire(toStringValidator);
+
 export default {
   bool: ReactPropTypes.bool,
   any: ReactPropTypes.any,
@@ -188,6 +199,7 @@ export default {
   settings,
   stringOrFalse,
   timeunit,
+  toString,
   yesno,
 };
 
