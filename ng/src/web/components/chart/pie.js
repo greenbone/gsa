@@ -44,6 +44,7 @@ const Pie = ({
   padRadius,
   pieSort,
   pieValue,
+  arcsSort,
   children,
 }) => {
   const path = d3arc();
@@ -76,6 +77,10 @@ const Pie = ({
   }
 
   const arcs = pie(data);
+
+  if (is_defined(arcsSort)) {
+    arcs.sort(arcsSort);
+  }
   return (
     <Group
       className={className}
@@ -100,6 +105,7 @@ const Pie = ({
 };
 
 Pie.propTypes = {
+  arcsSort: PropTypes.func,
   children: PropTypes.func.isRequired,
   className: PropTypes.string,
   cornerRadius: PropTypes.number,
