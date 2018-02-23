@@ -103,8 +103,6 @@ Arc.propTypes = {
   y: PropTypes.number.isRequired,
 };
 
-const DONUT_WIDTH = 60;
-
 const margin = {
   top: 20,
   right: 20,
@@ -127,7 +125,7 @@ const DonutChart = ({
           left={width / 2}
           pieValue={d => d.value}
           outerRadius={radius}
-          innerRadius={radius - DONUT_WIDTH}
+          innerRadius={radius * 0.5}
           cornerRadius={3}
           padAngle={0.01}
         >
