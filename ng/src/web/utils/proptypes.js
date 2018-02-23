@@ -128,7 +128,7 @@ const momentDateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   if (is_defined(value) && !moment.isMoment(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '`. Note a valid moment date. Value is ' + value);
+      ' `' + component_name + '`. Not a valid moment date. Value is ' + value);
   }
   return undefined;
 };
