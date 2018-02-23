@@ -152,7 +152,12 @@ const DonutChart = ({
 };
 
 DonutChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    toolTip: PropTypes.any,
+    value: PropTypes.numberOrNumberString.isRequired,
+    color: PropTypes.toString.isRequired,
+    label: PropTypes.any.isRequired,
+  })).isRequired,
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
 };
