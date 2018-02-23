@@ -24,21 +24,20 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils';
-import {parse_float} from 'gmp/parser.js';
+import _, {datetime} from 'gmp/locale';
+import {is_defined, is_empty, map} from 'gmp/utils';
+import {parse_float} from 'gmp/parser';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import SaveDialog from '../../components/dialog/savedialog';
 
-import PropTypes from '../../utils/proptypes.js';
+import Divider from '../../components/layout/divider';
+import Layout from '../../components/layout/layout';
+
+import PropTypes from '../../utils/proptypes';
 import {
   render_nvt_name,
-  render_options,
   result_cvss_risk_factor,
 } from '../../utils/render.js';
-
-import withDialog from '../../components/dialog/withDialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Text from '../../components/form/text.js';
@@ -48,12 +47,31 @@ import Radio from '../../components/form/radio.js';
 import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 
+const DEFAULTS = {
+  active: '-1',
+  days: 30,
+  fixed: false,
+  oid: '1.3.6.1.4.1.25623.1.0.',
+  hosts: '',
+  hosts_manual: [],
+  note_severity: 0,
+  result_id: '',
+  result_uuid: '',
+  task_id: '',
+  task_uuid: '',
+  port: '',
+  port_manual: '',
+  text: '',
+  tasks: [],
+};
+
 const NoteDialog = ({
     active,
     days,
     fixed,
     hosts,
     hosts_manual,
+    id,
     note,
     note_severity,
     nvt,
@@ -69,274 +87,363 @@ const NoteDialog = ({
     tasks,
     task_uuid,
     text,
-    onValueChange,
+    title = _('New Note'),
+    visible,
+    onClose,
+    onSave,
+    ...initial
   }) => {
 
   const is_edit = is_defined(note);
 
+  const data = {
+    ...DEFAULTS,
+    ...initial,
+    nvt,
+    severity,
+  };
+  if (is_defined(active)) {
+    data.active = active;
+  };
+  if (is_defined(days)) {
+    data.days = days;
+  };
+  if (is_defined(fixed)) {
+    data.fixed = fixed;
+  };
+  if (is_defined(hosts)) {
+    data.hosts = hosts;
+  };
+  if (is_defined(hosts_manual) && hosts_manual.length > 0) {
+    data.hosts_manual = hosts_manual;
+  };
+  if (is_defined(id)) {
+    data.id = id;
+  };
+  if (is_defined(note_severity)) {
+    data.note_severity = note_severity;
+  };
+  if (is_defined(oid)) {
+    data.oid = oid;
+  };
+  if (is_defined(port)) {
+    data.port = port;
+  };
+  if (is_defined(port_manual)) {
+    data.port_manual = port_manual;
+  };
+  if (is_defined(result_id)) {
+    data.result_id = result_id;
+  };
+  if (is_defined(result_uuid) && result_uuid.length > 0) {
+    data.result_uuid = result_uuid;
+  };
+  if (is_defined(result_name)) {
+    data.result_name = result_name;
+  };
+  if (is_defined(task_id)) {
+    data.task_id = task_id;
+  };
+  if (is_defined(task_uuid) && task_uuid.length > 0) {
+    data.task_uuid = task_uuid;
+  };
+  if (is_defined(task_name)) {
+    data.task_name = task_name;
+  };
+  if (is_defined(tasks)) {
+    data.tasks = tasks;
+  };
+  if (is_defined(text)) {
+    data.text = text;
+  };
+  const tasksOptions = map(tasks, task => ({
+    label: task.name,
+    value: task.id,
+  }));
+
   return (
-    <Layout flex="column">
-      {fixed &&
-        <FormGroup title={_('NVT')} flex="column">
-          <Text>{render_nvt_name(nvt)}</Text>
-        </FormGroup>
-      }
-      {is_edit && !fixed &&
-        <FormGroup title={_('NVT')} flex="column">
-          <Radio
-            name="oid"
-            value={nvt.oid}
-            title={render_nvt_name(nvt)}
-            checked={oid === nvt.oid}
-            onChange={onValueChange}/>
-          <Layout flex box>
-            <Radio
-              name="oid"
-              value="1.3.6.1.4.1.25623.1.0."
-              checked={oid !== nvt.oid}
-              onChange={onValueChange}/>
-            <TextField
-              name="oid"
-              value={oid}
-              disabled={oid === nvt.oid}
-              onChange={onValueChange}/>
-          </Layout>
-        </FormGroup>
-      }
-      {!is_edit && !fixed &&
-        <FormGroup title={_('NVT OID')}>
-          <TextField
-            name="oid"
-            value={oid}
-            onChange={onValueChange}/>
-        </FormGroup>
-      }
-      <FormGroup title={_('Active')} flex="column">
-        <Radio
-          name="active"
-          value="-1"
-          checked={active === '-1'}
-          title={_('yes, always')}
-          onChange={onValueChange}/>
-        {is_edit && note.isActive() && !is_empty(note.end_time) &&
-          <Divider>
-            <Radio
-              name="active"
-              value="-2"
-              checked={active === '-2'}
-              title={_('yes, until')}
-              onChange={onValueChange}/>
-            <Text>{datetime(note.end_time)}</Text>
-          </Divider>
-        }
-        <Divider>
-          <Radio
-            name="active"
-            value="1"
-            checked={active === '1'}
-            title={_('yes, for the next')}
-            onChange={onValueChange}>
-          </Radio>
-          <Spinner
-            name="days"
-            value={days}
-            size="4"
-            type="int"
-            min="1"
-            onChange={onValueChange}
-            disabled={active !== '1'}/>
-          <Text>{_('days')}</Text>
-        </Divider>
-        <Radio
-          name="active"
-          value="0"
-          checked={active === '0'}
-          title={_('no')}
-          onChange={onValueChange}/>
-      </FormGroup>
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      initialData={data}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
 
-      <FormGroup title={_('Hosts')}>
-        <Radio
-          name="hosts"
-          value=""
-          title={_('Any')}
-          checked={hosts === ''}
-          onChange={onValueChange}>
-        </Radio>
-        <Divider>
-          <Radio
-            name="hosts"
-            value="--"
-            title={fixed ? hosts_manual : ''}
-            checked={hosts === '--'}
-            onChange={onValueChange}>
-          </Radio>
-          {!fixed &&
-            <TextField
-              name="hosts_manual"
-              disabled={hosts !== '--'}
-              value={hosts_manual}
-              onChange={onValueChange}/>
-          }
-        </Divider>
-      </FormGroup>
-
-      <FormGroup title={_('Location')}>
-        <Radio
-          name="port"
-          value=""
-          title={_('Any')}
-          checked={port === ''}
-          onChange={onValueChange}>
-        </Radio>
-        <Divider>
-          <Radio
-            name="port"
-            value="--"
-            title={fixed ? port_manual : ''}
-            checked={port === '--'}
-            onChange={onValueChange}>
-          </Radio>
-          {!fixed &&
-            <TextField
-              name="port_manual"
-              value={port_manual}
-              disabled={port !== '--'}
-              onChange={onValueChange}/>
-          }
-        </Divider>
-      </FormGroup>
-
-      <FormGroup title={_('Severity')}>
-        <Radio
-          name="severity"
-          value=""
-          title={_('Any')}
-          checked={is_empty(severity)}
-          onChange={onValueChange}>
-        </Radio>
-        {is_edit && !fixed &&
-          <Divider>
-            <Radio
-              name="severity"
-              value={0.1}
-              title={_('> 0.0')}
-              checked={!is_empty(severity) && severity > 0.0}
-              convert={parse_float}
-              onChange={onValueChange}>
-            </Radio>
-            <Radio
-              name="severity"
-              value={note_severity}
-              title={result_cvss_risk_factor(note_severity)}
-              checked={!is_empty(severity) && severity <= 0.0}
-              convert={parse_float}
-              onChange={onValueChange}>
-            </Radio>
-          </Divider>
-        }
-        {!is_edit && !fixed &&
-          <Divider>
-            <Radio
-              name="severity"
-              value={0.1}
-              title={_('> 0.0')}
-              convert={parse_float}
-              checked={severity === 0.1}
-              onChange={onValueChange}>
-            </Radio>
-            <Radio
-              name="severity"
-              value={0.0}
-              title={_('Log')}
-              checked={severity === 0.0}
-              convert={parse_float}
-              onChange={onValueChange}>
-            </Radio>
-          </Divider>
-        }
-        {fixed &&
-          <Divider>
-            <Radio
-              name="severity"
-              value={severity}
-              title={
-                severity > 0 ?
-                  _('> 0.0') :
-                  result_cvss_risk_factor(note_severity)
-              }
-              checked={!is_empty(severity) && severity > 0.0}
-              convert={parse_float}
-              onChange={onValueChange}>
-            </Radio>
-          </Divider>
-        }
-      </FormGroup>
-
-      <FormGroup title={_('Task')}>
-        <Radio
-          name="task_id"
-          value=""
-          title={_('Any')}
-          checked={task_id === ''}
-          onChange={onValueChange}/>
-        <Divider>
-          <Radio
-            name="task_id"
-            value="0"
-            title={fixed ? task_name : ''}
-            checked={task_id === '0'}
-            onChange={onValueChange}/>
-          {!fixed &&
-            <Select
-              name="task_uuid"
-              value={task_uuid}
-              disabled={task_id !== '0'}
-              onChange={onValueChange}>
-              {render_options(tasks)}
-            </Select>
-          }
-        </Divider>
-      </FormGroup>
-
-      <FormGroup title={_('Result')}>
-        <Radio
-          name="result_id"
-          value=""
-          title={_('Any')}
-          checked={result_id === ''}
-          onChange={onValueChange}/>
-        <Divider>
-          <Radio
-            name="result_id"
-            value="0"
-            title={
-              fixed ?
-                _('Only selected result ({{- name}})', {name: result_name}) :
-                _('UUID')
+        return (
+          <Layout flex="column">
+            {state.fixed &&
+              <FormGroup title={_('NVT')} flex="column">
+                <Text>{render_nvt_name(nvt)}</Text>
+              </FormGroup>
             }
-            checked={result_id === '0'}
-            onChange={onValueChange}/>
-          {!fixed &&
-            <TextField
-              name="result_uuid"
-              value={result_uuid}
-              size="34"
-              disabled={result_id !== '0'}
-              onChange={onValueChange}/>
-          }
-        </Divider>
-      </FormGroup>
+            {is_edit && !state.fixed &&
+              <FormGroup title={_('NVT')} flex="column">
+                <Radio
+                  name="oid"
+                  value={state.nvt.oid}
+                  title={render_nvt_name(nvt)}
+                  checked={state.oid === state.nvt.oid}
+                  onChange={onValueChange}/>
+                <Layout flex box>
+                  <Radio
+                    name="oid"
+                    value="1.3.6.1.4.1.25623.1.0."
+                    checked={state.oid !== state.nvt.oid}
+                    onChange={onValueChange}/>
+                  <TextField
+                    name="oid"
+                    value={state.oid}
+                    disabled={state.oid === state.nvt.oid}
+                    onChange={onValueChange}/>
+                </Layout>
+              </FormGroup>
+            }
+            {!is_edit && !state.fixed &&
+              <FormGroup title={_('NVT OID')}>
+                <TextField
+                  name="oid"
+                  value={state.oid}
+                  onChange={onValueChange}/>
+              </FormGroup>
+            }
+            <FormGroup title={_('Active')} flex="column">
+              <Divider flex="column">
+                <Radio
+                  name="active"
+                  value="-1"
+                  checked={state.active === '-1'}
+                  title={_('yes, always')}
+                  onChange={onValueChange}/>
+                {is_edit && note.isActive() &&
+                  !is_empty(note.end_time) &&
+                  <Divider>
+                    <Radio
+                      name="active"
+                      value="-2"
+                      checked={state.active === '-2'}
+                      title={_('yes, until')}
+                      onChange={onValueChange}/>
+                    <Text>{datetime(note.end_time)}</Text>
+                  </Divider>
+                }
+              </Divider>
+              <Divider>
+                <Radio
+                  name="active"
+                  value="1"
+                  checked={state.active === '1'}
+                  title={_('yes, for the next')}
+                  onChange={onValueChange}>
+                </Radio>
+                <Spinner
+                  name="days"
+                  value={state.days}
+                  size="4"
+                  type="int"
+                  min="1"
+                  onChange={onValueChange}
+                  disabled={state.active !== '1'}/>
+                <Text>{_('days')}</Text>
+              </Divider>
+              <Radio
+                name="active"
+                value="0"
+                checked={state.active === '0'}
+                title={_('no')}
+                onChange={onValueChange}/>
+            </FormGroup>
 
-      <FormGroup title={_('Text')}>
-        <TextArea
-          name="text"
-          grow="1"
-          rows="10" cols="60"
-          value={text}
-          onChange={onValueChange}/>
-      </FormGroup>
-    </Layout>
+            <FormGroup title={_('Hosts')}>
+              <Radio
+                name="hosts"
+                value=""
+                title={_('Any')}
+                checked={state.hosts === ''}
+                onChange={onValueChange}>
+              </Radio>
+              <Divider>
+                <Radio
+                  name="hosts"
+                  value="--"
+                  title={state.fixed ? state.hosts_manual : ''}
+                  checked={state.hosts === '--'}
+                  onChange={onValueChange}>
+                </Radio>
+                {!state.fixed &&
+                  <TextField
+                    name="hosts_manual"
+                    disabled={state.hosts !== '--'}
+                    value={state.hosts_manual}
+                    onChange={onValueChange}/>
+                }
+              </Divider>
+            </FormGroup>
+
+            <FormGroup title={_('Location')}>
+              <Radio
+                name="port"
+                value=""
+                title={_('Any')}
+                checked={state.port === ''}
+                onChange={onValueChange}>
+              </Radio>
+              <Divider>
+                <Radio
+                  name="port"
+                  value="--"
+                  title={state.fixed ? state.port_manual : ''}
+                  checked={state.port === '--'}
+                  onChange={onValueChange}>
+                </Radio>
+                {!state.fixed &&
+                  <TextField
+                    name="port_manual"
+                    value={state.port_manual}
+                    disabled={state.port !== '--'}
+                    onChange={onValueChange}/>
+                }
+              </Divider>
+            </FormGroup>
+
+            <FormGroup title={_('Severity')}>
+              <Radio
+                name="severity"
+                value=""
+                title={_('Any')}
+                checked={is_empty(state.severity)}
+                onChange={onValueChange}>
+              </Radio>
+              {is_edit && !state.fixed &&
+                <Divider>
+                  <Radio
+                    name="severity"
+                    value={0.1}
+                    title={_('> 0.0')}
+                    checked={!is_empty(state.severity) && state.severity > 0.0}
+                    convert={parse_float}
+                    onChange={onValueChange}>
+                  </Radio>
+                  <Radio
+                    name="severity"
+                    value={state.note_severity}
+                    title={result_cvss_risk_factor(state.note_severity)}
+                    checked={!is_empty(state.severity) && state.severity <= 0.0}
+                    convert={parse_float}
+                    onChange={onValueChange}>
+                  </Radio>
+                </Divider>
+              }
+              {!is_edit && !state.fixed &&
+                <Divider>
+                  <Radio
+                    name="severity"
+                    value={0.1}
+                    title={_('> 0.0')}
+                    convert={parse_float}
+                    checked={state.severity === 0.1}
+                    onChange={onValueChange}>
+                  </Radio>
+                  <Radio
+                    name="severity"
+                    value={0.0}
+                    title={_('Log')}
+                    checked={state.severity === 0.0}
+                    convert={parse_float}
+                    onChange={onValueChange}>
+                  </Radio>
+                </Divider>
+              }
+              {state.fixed &&
+                <Divider>
+                  <Radio
+                    name="severity"
+                    value={state.severity}
+                    title={
+                      state.severity > 0 ?
+                        _('> 0.0') :
+                        result_cvss_risk_factor(state.note_severity)
+                    }
+                    checked={!is_empty(state.severity) && state.severity > 0.0}
+                    convert={parse_float}
+                    onChange={onValueChange}>
+                  </Radio>
+                </Divider>
+              }
+            </FormGroup>
+
+            <FormGroup title={_('Task')}>
+              <Radio
+                name="task_id"
+                value=""
+                title={_('Any')}
+                checked={state.task_id === ''}
+                onChange={onValueChange}/>
+              <Divider>
+                <Radio
+                  name="task_id"
+                  value="0"
+                  title={state.fixed ? state.task_name : ''}
+                  checked={state.task_id === '0'}
+                  onChange={onValueChange}/>
+                {!state.fixed &&
+                  <Select
+                    name="task_uuid"
+                    value={state.task_uuid}
+                    items={tasksOptions}
+                    disabled={state.task_id !== '0'}
+                    onChange={onValueChange}
+                  />
+                }
+              </Divider>
+            </FormGroup>
+
+            <FormGroup title={_('Result')}>
+              <Radio
+                name="result_id"
+                value=""
+                title={_('Any')}
+                checked={state.result_id === ''}
+                onChange={onValueChange}/>
+              <Divider>
+                <Radio
+                  name="result_id"
+                  value="0"
+                  title={
+                    state.fixed ?
+                      _('Only selected result ({{- name}})',
+                        {name: state.result_name}) :
+                      _('UUID')
+                  }
+                  checked={state.result_id === '0'}
+                  onChange={onValueChange}/>
+                {!fixed &&
+                  <TextField
+                    name="result_uuid"
+                    value={state.result_uuid}
+                    size="34"
+                    disabled={state.result_id !== '0'}
+                    onChange={onValueChange}/>
+                }
+              </Divider>
+            </FormGroup>
+
+            <FormGroup title={_('Text')}>
+              <TextArea
+                name="text"
+                grow="1"
+                rows="10" cols="60"
+                value={state.text}
+                onChange={onValueChange}/>
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -345,7 +452,8 @@ NoteDialog.propTypes = {
   days: PropTypes.number,
   fixed: PropTypes.bool,
   hosts: PropTypes.string,
-  hosts_manual: PropTypes.string,
+  hosts_manual: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  id: PropTypes.string,
   note: PropTypes.model,
   note_id: PropTypes.id,
   note_severity: PropTypes.number,
@@ -362,29 +470,12 @@ NoteDialog.propTypes = {
   task_uuid: PropTypes.id,
   tasks: PropTypes.array,
   text: PropTypes.string,
-  onValueChange: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
-export default withDialog({
-  title: _('New Note'),
-  footer: _('Save'),
-  defaultState: {
-    active: '-1',
-    days: 30,
-    fixed: false,
-    oid: '1.3.6.1.4.1.25623.1.0.',
-    hosts: '',
-    hosts_manual: '',
-    note_severity: 0,
-    result_id: '',
-    result_uuid: '',
-    task_id: '',
-    task_uuid: '',
-    port: '',
-    port_manual: '',
-    text: '',
-    tasks: [],
-  },
-})(NoteDialog);
+export default NoteDialog;
 
 // vim: set ts=2 sw=2 tw=80:
