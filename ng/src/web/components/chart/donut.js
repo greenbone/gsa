@@ -29,32 +29,7 @@ import PropTypes from '../../utils/proptypes';
 import Legend from './legend';
 import Pie from './pie';
 import ToolTip from './tooltip';
-
-const Label = ({
-  x,
-  y,
-  innerRef,
-  children,
-}) => (
-  <text
-    ref={innerRef}
-    fill="white"
-    textAnchor="middle"
-    x={x}
-    y={y}
-    dy=".33em"
-    fontSize="12px"
-    fontWeight="bold"
-  >
-    {children}
-  </text>
-);
-
-Label.propTypes = {
-  innerRef: PropTypes.func,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-};
+import Label from './label';
 
 const Arc = ({
   path,
@@ -93,17 +68,15 @@ const Arc = ({
 );
 
 Arc.propTypes = {
-  color: PropTypes.string,
+  color: PropTypes.toString,
   endAngle: PropTypes.number.isRequired,
-  label: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
+  label: PropTypes.toString.isRequired,
+  path: PropTypes.toString.isRequired,
   startAngle: PropTypes.number.isRequired,
   toolTip: PropTypes.elementOrString,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
 };
-
-const DONUT_WIDTH = 60;
 
 const margin = {
   top: 20,
@@ -127,7 +100,7 @@ const DonutChart = ({
           left={width / 2}
           pieValue={d => d.value}
           outerRadius={radius}
-          innerRadius={radius - DONUT_WIDTH}
+          innerRadius={radius * 0.5}
           cornerRadius={3}
           padAngle={0.01}
         >
@@ -152,7 +125,12 @@ const DonutChart = ({
 };
 
 DonutChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    toolTip: PropTypes.any,
+    value: PropTypes.numberOrNumberString.isRequired,
+    color: PropTypes.toString.isRequired,
+    label: PropTypes.any.isRequired,
+  })).isRequired,
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
 };

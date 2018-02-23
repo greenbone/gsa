@@ -29,23 +29,37 @@ import {storiesOf} from '@storybook/react';
 import Legend from 'web/components/chart/legend';
 import BarChart from 'web/components/chart/bar';
 import DonutChart from 'web/components/chart/donut';
+import Donut3DChart from 'web/components/chart/donut3d';
 
-const data = [{
+const data = [
+{
+  label: 'G',
+  value: 1,
+  color: 'silver',
+  toolTip: 'Foo',
+}, {
   label: 'Foo',
-  value: '3',
+  value: 40,
   color: 'blue',
   toolTip: 'Foo',
 }, {
   label: 'Bar',
-  value: '10',
+  value: 10,
   color: 'green',
   toolTip: 'Bar',
 }, {
   label: 'Lol',
-  value: '5',
+  value: 5,
   color: 'red',
   toolTip: 'LOL',
-}];
+},
+{
+  label: 'F',
+  value: 1,
+  color: 'yellow',
+  toolTip: 'Foo',
+},
+];
 
 const bardata = [{
   label: 'Foo',
@@ -88,6 +102,40 @@ storiesOf('Chart/Donut', module)
         width={500}
         height={300}
         data={data}
+      />
+    );
+  });
+
+storiesOf('Chart/Donut3D', module)
+  .add('default', () => {
+    return (
+      <Donut3DChart
+        width={500}
+        height={300}
+        data={data}
+      />
+    );
+  })
+  .add('Single Data', () => {
+    const singledata = [{
+      label: 'Foo',
+      value: '3',
+      color: 'blue',
+      toolTip: 'Foo',
+    }];
+    return (
+      <Donut3DChart
+        width={500}
+        height={300}
+        data={singledata}
+      />
+    );
+  })
+  .add('No Data', () => {
+    return (
+      <Donut3DChart
+        width={500}
+        height={300}
       />
     );
   });

@@ -94,7 +94,10 @@ Legend.propTypes = {
       label: ...,
     }]
   */
-  data: PropTypes.arrayOf(PropTypes.object),
+  data: PropTypes.arrayOf(PropTypes.shape({
+    color: PropTypes.toString.isRequired,
+    label: PropTypes.any.isRequired,
+  })),
 };
 
 export default Legend;
