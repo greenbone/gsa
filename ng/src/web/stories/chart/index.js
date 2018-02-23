@@ -106,4 +106,38 @@ storiesOf('Chart/Donut', module)
     );
   });
 
+storiesOf('Chart/Donut3D', module)
+  .add('default', () => {
+    return (
+      <Donut3DChart
+        width={500}
+        height={300}
+        data={data}
+      />
+    );
+  })
+  .add('Single Data', () => {
+    const singledata = [{
+      label: 'Foo',
+      value: '3',
+      color: 'blue',
+      toolTip: 'Foo',
+    }];
+    return (
+      <Donut3DChart
+        width={500}
+        height={300}
+        data={singledata}
+      />
+    );
+  })
+  .add('No Data', () => {
+    return (
+      <Donut3DChart
+        width={500}
+        height={300}
+      />
+    );
+  });
+
 // vim: set ts=2 sw=2 tw=80:
