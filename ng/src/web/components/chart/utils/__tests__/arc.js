@@ -79,6 +79,27 @@ describe('arc class tests', () => {
     path = a.path(tarc).toString();
     expect(path).toMatchSnapshot();
   });
+
+  test('should draw empty path for no angle', () => {
+    const a = arc()
+      .outerRadiusX(100);
+    const tarc = {startAngle: 1, endAngle: 1};
+
+    let path = a.path(tarc).toString();
+    expect(path).toEqual('M 0 0');
+
+    a.innerRadiusX(50);
+    path = a.path(tarc).toString();
+    expect(path).toEqual('M 0 0');
+
+    a.outerRadiusY(120);
+    path = a.path(tarc).toString();
+    expect(path).toEqual('M 0 0');
+
+    a.innerRadiusY(120);
+    path = a.path(tarc).toString();
+    expect(path).toEqual('M 0 0');
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
