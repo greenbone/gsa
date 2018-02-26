@@ -35,6 +35,7 @@ import PropTypes from '../../utils/proptypes';
 
 import Legend from './legend';
 import ToolTip from './tooltip';
+import {shorten} from 'gmp/utils/index';
 
 const lineCss = css({
   shapeRendering: 'crispEdges',
@@ -47,6 +48,15 @@ const margin = {
   left: 60,
 };
 
+const MAX_LABEL_LENGTH = 25;
+
+const tickFormat = val => {
+  if (val.toString().length > MAX_LABEL_LENGTH) {
+    return shorten(val.toString(), MAX_LABEL_LENGTH);
+  }
+  return val;
+};
+
 const BarChart = ({
   data,
   height,
@@ -55,12 +65,19 @@ const BarChart = ({
   yLabel,
   horizontal = false,
 }) => {
-  const maxWidth = width - margin.left - margin.right;
-  const maxHeight = height - margin.top - margin.bottom;
-
   const xValues = data.map(d => d.x);
   const yValues = data.map(d => d.y);
   const yMax = Math.max(...yValues);
+
+  const maxLabelLength = Math.max(...xValues.map(val => val.toString().length));
+
+  // adjust left margin for label length on horizontal bars
+  // 4px for each letter is just a randomly choosen value
+  const marginLeft = horizontal ? margin.left +
+    Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
+
+  const maxWidth = width - marginLeft - margin.right;
+  const maxHeight = height - margin.top - margin.bottom;
 
   const xScale = scaleBand({
     rangeRound: horizontal ? [0, maxHeight] : [0, maxWidth],
@@ -83,7 +100,7 @@ const BarChart = ({
   return (
     <Layout align={['start', 'start']}>
       <svg width={width} height={height}>
-        <Group top={margin.top} left={margin.left}>
+        <Group top={margin.top} left={marginLeft}>
           <AxisLeft
             axisLineClassName={`${lineCss}`}
             tickClassName={`${lineCss}`}
@@ -93,6 +110,7 @@ const BarChart = ({
             label={horizontal ? xLabel : yLabel}
             numTicks={10}
             rangePadding={-8} // - tickLength
+            tickFormat={horizontal ? tickFormat : undefined}
           />
           <AxisBottom
             axisLineClassName={`${lineCss}`}
@@ -149,7 +167,7 @@ BarChart.propTypes = {
     }]
   */
   data: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number.isRequired,
+    x: PropTypes.toString.isRequired,
     y: PropTypes.number.isRequired,
     label: PropTypes.any.isRequired,
     color: PropTypes.toString.isRequired,
