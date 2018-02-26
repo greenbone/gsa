@@ -63,17 +63,24 @@ const data = [
 
 const bardata = [{
   label: 'Foo',
-  x: 3,
+  x: 'foo',
   y: 3,
   toolTip: <Div color="red">Foo</Div>,
   color: 'red',
 }, {
   label: 'Bar',
-  x: 10,
+  x: 'bar',
   y: 1,
   toolTip: <Div color="Green" margin="5px">Bar</Div>,
   color: 'green',
-}];
+}, {
+  label: 'Lorem',
+  x: 'Lorem ipsum dolor sit amet',
+  y: 5,
+  toolTip: <Div color="blue" margin="5px">Lorem Ipsum</Div>,
+  color: 'blue',
+},
+];
 
 storiesOf('Chart/Legend', module)
   .add('default', () => {
@@ -91,7 +98,7 @@ storiesOf('Chart/Bar', module)
         width={500}
         height={300}
         data={bardata}
-        xLabel="count"
+        xLabel="product"
         yLabel="kg"
       />
     );
@@ -103,7 +110,7 @@ storiesOf('Chart/Bar', module)
         width={500}
         height={300}
         data={bardata}
-        xLabel="count"
+        xLabel="product"
         yLabel="kg"
       />
     );
