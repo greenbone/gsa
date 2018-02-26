@@ -148,7 +148,13 @@ BarChart.propTypes = {
       label: ...,
     }]
   */
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    label: PropTypes.any.isRequired,
+    color: PropTypes.toString.isRequired,
+    toolTip: PropTypes.elementOrString,
+  })).isRequired,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
   width: PropTypes.number.isRequired,
