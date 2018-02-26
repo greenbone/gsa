@@ -30,18 +30,22 @@ class Arc {
 
   innerRadiusX(radius) {
     this._innerRadiusX = radius;
+    return this;
   }
 
   outerRadiusX(radius) {
     this._outerRadiusX = radius;
+    return this;
   }
 
   innerRadiusY(radius) {
     this._innerRadiusY = radius;
+    return this;
   }
 
   outerRadiusY(radius) {
     this._outerRadiusY = radius;
+    return this;
   }
 
   centroid({
