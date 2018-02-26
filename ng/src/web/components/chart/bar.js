@@ -149,7 +149,7 @@ BarChart.propTypes = {
     }]
   */
   data: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number.isRequired,
+    x: PropTypes.toString.isRequired,
     y: PropTypes.number.isRequired,
     label: PropTypes.any.isRequired,
     color: PropTypes.toString.isRequired,
