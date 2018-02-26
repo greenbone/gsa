@@ -28,33 +28,43 @@ const PI2 = Math.PI * 2;
 
 class Arc {
 
+  constructor() {
+    this._innerRadiusX = 0;
+  }
+
   innerRadiusX(radius) {
     this._innerRadiusX = radius;
+    return this;
   }
 
   outerRadiusX(radius) {
     this._outerRadiusX = radius;
+    return this;
   }
 
   innerRadiusY(radius) {
     this._innerRadiusY = radius;
+    return this;
   }
 
   outerRadiusY(radius) {
     this._outerRadiusY = radius;
+    return this;
   }
 
   centroid({
     startAngle = 0,
     endAngle = PI2,
   } = {}) {
-    const innerRadiusX = this._innerRadiusX;
-    const innerRadiusY = is_defined(this._innerRadiusY) ?
-      this._innerRadiusY : innerRadiusX;
+    this._checkRadius();
 
     const outerRadiusX = this._outerRadiusX;
     const outerRadiusY = is_defined(this._outerRadiusY) ?
       this._outerRadiusY : outerRadiusX;
+
+    const innerRadiusX = this._innerRadiusX;
+    const innerRadiusY = is_defined(this._innerRadiusY) ?
+      this._innerRadiusY : innerRadiusX;
 
     const rx = (innerRadiusX + outerRadiusX) / 2;
     const ry = is_defined(innerRadiusY) && is_defined(outerRadiusY) ?
@@ -67,7 +77,7 @@ class Arc {
     };
   };
 
-  arc({
+  path({
     startAngle = 0,
     endAngle = PI2,
   } = {}) {
@@ -77,13 +87,15 @@ class Arc {
       return path.move(0, 0);
     }
 
-    const innerRadiusX = this._innerRadiusX;
-    const innerRadiusY = is_defined(this._innerRadiusY) ?
-      this._innerRadiusY : innerRadiusX;
+    this._checkRadius();
 
     const outerRadiusX = this._outerRadiusX;
     const outerRadiusY = is_defined(this._outerRadiusY) ?
       this._outerRadiusY : outerRadiusX;
+
+    const innerRadiusX = this._innerRadiusX;
+    const innerRadiusY = is_defined(this._innerRadiusY) ?
+      this._innerRadiusY : innerRadiusX;
 
     const sx = outerRadiusX * Math.cos(startAngle);
     const sy = outerRadiusY * Math.sin(startAngle);
@@ -104,6 +116,12 @@ class Arc {
 
     return paths;
   };
+
+  _checkRadius() {
+    if (!is_defined(this._outerRadiusX)) {
+      throw new Error('outerRadiusX must be set');
+    }
+  }
 };
 
 export default () => new Arc();

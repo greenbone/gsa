@@ -51,19 +51,19 @@ const Pie = ({
   arcsSort,
   children,
 }) => {
-  const path = arc();
-  path.innerRadiusX(innerRadiusX);
+  const arcPath = arc();
+  arcPath.outerRadiusX(outerRadiusX);
 
-  if (is_defined(outerRadiusX)) {
-    path.outerRadiusX(outerRadiusX);
+  if (is_defined(innerRadiusX)) {
+    arcPath.innerRadiusX(innerRadiusX);
   }
 
   if (is_defined(innerRadiusY)) {
-    path.innerRadiusY(outerRadiusY);
+    arcPath.innerRadiusY(innerRadiusY);
   }
 
   if (is_defined(outerRadiusY)) {
-    path.outerRadiusY(outerRadiusY);
+    arcPath.outerRadiusY(outerRadiusY);
   }
 
   // if (is_defined(cornerRadius)) {
@@ -100,12 +100,12 @@ const Pie = ({
       left={left}
     >
       {arcs.map((currentArc, i) => {
-        const {x, y} = path.centroid(currentArc);
+        const {x, y} = arcPath.centroid(currentArc);
         return children({
           index: i,
           x,
           y,
-          path: path.arc(currentArc),
+          path: arcPath.path(currentArc),
           startAngle: currentArc.startAngle,
           endAngle: currentArc.endAngle,
           padAngle: currentArc.padAngle,
@@ -126,7 +126,7 @@ Pie.propTypes = {
   innerRadiusX: PropTypes.number,
   innerRadiusY: PropTypes.number,
   left: PropTypes.number,
-  outerRadiusX: PropTypes.number,
+  outerRadiusX: PropTypes.number.isRequired,
   outerRadiusY: PropTypes.number,
   padAngle: PropTypes.number,
   padRadius: PropTypes.number,
