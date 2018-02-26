@@ -42,6 +42,7 @@ const ImportDialog = ({
 }) => {
   return (
     <SaveDialog
+      buttonTitle={_('Import')}
       visible={visible}
       title={_('Import Scan Config')}
       onClose={onClose}
