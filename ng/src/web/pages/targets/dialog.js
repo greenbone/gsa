@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ import {NO_VALUE} from 'gmp/parser.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -96,6 +96,22 @@ const NEW_SNMP = {
   types: SNMP_CREDENTIAL_TYPES,
 };
 
+const DEFAULTS = {
+  alive_tests: ALIVE_TESTS_DEFAULT,
+  comment: '',
+  esxi_credential_id: UNSET_VALUE,
+  name: _('Unnamed'),
+  port: 22,
+  port_list_id: DEFAULT_PORT_LIST_ID,
+  reverse_lookup_only: NO_VALUE,
+  reverse_lookup_unify: NO_VALUE,
+  smb_credential_id: UNSET_VALUE,
+  snmp_credential_id: UNSET_VALUE,
+  ssh_credential_id: UNSET_VALUE,
+  target_source: 'manual',
+  target_exclude_source: 'manual',
+};
+
 const TargetDialog = ({
   alive_tests,
   comment = '',
@@ -116,9 +132,13 @@ const TargetDialog = ({
   ssh_credential_id,
   target_source,
   target_exclude_source,
-  onValueChange,
+  title = _('New Note'),
+  visible,
+  onClose,
   onNewCredentialsClick,
   onNewPortListClick,
+  onSave,
+  ...initial
 }, {capabilities}) => {
 
   let ssh_credentials;
@@ -131,265 +151,347 @@ const TargetDialog = ({
       value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
     snmp_credentials = credentials.filter(snmp_credential_filter);
   }
+
+  const data = {
+    ...DEFAULTS,
+    ...initial,
+  };
+
+  if (is_defined(alive_tests)) {
+    data.alive_tests = alive_tests;
+  };
+  if (is_defined(comment)) {
+    data.comment = comment;
+  };
+  if (is_defined(credentials)) {
+    data.credentials = credentials;
+  };
+  if (is_defined(esxi_credential_id)) {
+    data.esxi_credential_id = esxi_credential_id;
+  };
+  if (is_defined(exclude_hosts)) {
+    data.exclude_hosts = exclude_hosts;
+  };
+  if (is_defined(hosts)) {
+    data.hosts = hosts;
+  };
+  if (is_defined(hosts_count)) {
+    data.hosts_count = hosts_count;
+  };
+  if (is_defined(in_use)) {
+    data.in_use = in_use;
+  };
+  if (is_defined(name)) {
+    data.name = name;
+  };
+  if (is_defined(port)) {
+    data.port = port;
+  };
+  if (is_defined(port_list_id)) {
+    data.port_list_id = port_list_id;
+  };
+  if (is_defined(port_lists)) {
+    data.port_lists = port_lists;
+  };
+  if (is_defined(reverse_lookup_only)) {
+    data.reverse_lookup_only = reverse_lookup_only;
+  };
+  if (is_defined(reverse_lookup_unify)) {
+    data.reverse_lookup_unify = reverse_lookup_unify;
+  };
+  if (is_defined(smb_credential_id)) {
+    data.smb_credential_id = smb_credential_id;
+  };
+  if (is_defined(snmp_credential_id)) {
+    data.snmp_credential_id = snmp_credential_id;
+  };
+  if (is_defined(ssh_credential_id)) {
+    data.ssh_credential_id = ssh_credential_id;
+  };
+  if (is_defined(target_source)) {
+    data.target_source = target_source;
+  };
+  if (is_defined(target_exclude_source)) {
+    data.target_exclude_source = target_exclude_source;
+  };
+
   return (
-    <Layout flex="column">
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          grow="1"
-          value={name}
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      initialData={data}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"/>
+            </FormGroup>
 
-      <FormGroup
-        title={_('Comment')}
-        flex="column">
-        <TextField
-          name="comment"
-          value={comment}
-          size="30"
-          maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
+            <FormGroup
+              title={_('Comment')}
+              flex="column">
+              <TextField
+                name="comment"
+                value={state.comment}
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}/>
+            </FormGroup>
 
-      <FormGroup
-        title={_('Hosts')}
-        flex="column">
-        <Divider flex="column">
-          <Divider>
-            <Radio
-              value="manual"
-              title={_('Manual')}
-              name="target_source"
-              disabled={in_use}
-              onChange={onValueChange}
-              checked={target_source === 'manual'}/>
-            <TextField
-              grow="1"
-              disabled={in_use || target_source !== 'manual'}
-              value={hosts}
-              name="hosts"
-              onChange={onValueChange}/>
-          </Divider>
+            <FormGroup
+              title={_('Hosts')}
+              flex="column">
+              <Divider flex="column">
+                <Divider>
+                  <Radio
+                    value="manual"
+                    title={_('Manual')}
+                    name="target_source"
+                    disabled={state.in_use}
+                    onChange={onValueChange}
+                    checked={state.target_source === 'manual'}/>
+                  <TextField
+                    grow="1"
+                    disabled={state.in_use || state.target_source !== 'manual'}
+                    value={state.hosts}
+                    name="hosts"
+                    onChange={onValueChange}/>
+                </Divider>
 
-          <Divider>
-            <Radio
-              title={_('From file')}
-              name="target_source"
-              value="file"
-              disabled={in_use}
-              onChange={onValueChange}
-              checked={target_source === 'file'}/>
-            <FileField
-              name="file"
-              disabled={in_use}
-              onChange={onValueChange}/>
-          </Divider>
-        </Divider>
+                <Divider>
+                  <Radio
+                    title={_('From file')}
+                    name="target_source"
+                    value="file"
+                    disabled={state.in_use}
+                    onChange={onValueChange}
+                    checked={state.target_source === 'file'}/>
+                  <FileField
+                    name="file"
+                    disabled={state.in_use}
+                    onChange={onValueChange}/>
+                </Divider>
+              </Divider>
 
-        {hosts_count &&
-          <Layout flex box>
-            <Radio
-              title={_('From host assets ({{count}} hosts)',
-                {count: hosts_count})}
-              name="target_source"
-              value="asset_hosts"
-              disabled={in_use}
-              onChange={onValueChange}
-              checked={target_source === 'asset_hosts'}/>
+              {state.hosts_count &&
+                <Layout flex box>
+                  <Radio
+                    title={_('From host assets ({{count}} hosts)',
+                      {count: state.hosts_count})}
+                    name="target_source"
+                    value="asset_hosts"
+                    disabled={state.in_use}
+                    onChange={onValueChange}
+                    checked={state.target_source === 'asset_hosts'}/>
+                </Layout>
+              }
+
+            </FormGroup>
+
+            <FormGroup
+              title={_('Exclude Hosts')}
+              flex="column">
+              <Divider flex="column">
+                <Divider>
+                  <Radio
+                    value="manual"
+                    title={_('Manual')}
+                    name="target_exclude_source"
+                    disabled={state.in_use}
+                    onChange={onValueChange}
+                    checked={state.target_exclude_source === 'manual'}/>
+                  <TextField
+                    grow="1"
+                    disabled=
+                      {state.in_use || state.target_exclude_source !== 'manual'}
+                    value={exclude_hosts}
+                    name="exclude_hosts"
+                    onChange={onValueChange}/>
+                </Divider>
+
+                <Divider>
+                  <Radio
+                    title={_('From file')}
+                    name="target_exclude_source"
+                    value="file"
+                    disabled={state.in_use}
+                    onChange={onValueChange}
+                    checked={state.target_exclude_source === 'file'}/>
+                  <FileField
+                    name="exclude_file"
+                    disabled={state.in_use}
+                    onChange={onValueChange}/>
+                </Divider>
+              </Divider>
+            </FormGroup>
+
+            <FormGroup title={_('Reverse Lookup Only')}>
+              <YesNoRadio
+                name="reverse_lookup_only"
+                value={state.reverse_lookup_only}
+                disabled={state.in_use}
+                onChange={onValueChange}/>
+            </FormGroup>
+
+            <FormGroup title={_('Reverse Lookup Unify')}>
+              <YesNoRadio
+                name="reverse_lookup_unify"
+                value={state.reverse_lookup_unify}
+                disabled={state.in_use}
+                onChange={onValueChange}/>
+            </FormGroup>
+
+            {capabilities.mayOp('get_port_lists') &&
+              <FormGroup title={_('Port List')}>
+                <Divider>
+                  <Select
+                    onChange={onValueChange}
+                    name="port_list_id"
+                    disabled={state.in_use}
+                    value={state.port_list_id}
+                    items={render_select_items(state.port_lists)}
+                  />
+                  {!state.in_use &&
+                    <Layout box flex>
+                      <NewIcon
+                        title={_('Create a new port list')}
+                        onClick={onNewPortListClick}/>
+                    </Layout>
+                  }
+                </Divider>
+              </FormGroup>
+            }
+
+            <FormGroup title={_('Alive Test')}>
+              <Select
+                name="alive_tests"
+                onChange={onValueChange}
+                value={state.alive_tests}
+                items={ALIVE_TESTS_ITEMS}
+              />
+            </FormGroup>
+
+            {capabilities.mayOp('get_credentials') &&
+              <h4>
+                {_('Credentials for authenticated checks')}
+              </h4>
+            }
+
+            {capabilities.mayOp('get_credentials') &&
+              <FormGroup title={_('SSH')}>
+                <Divider>
+                  <Select
+                    box
+                    name="ssh_credential_id"
+                    onChange={onValueChange}
+                    disabled={state.in_use}
+                    value={state.ssh_credential_id}
+                    items=
+                      {render_select_items(ssh_credentials, UNSET_VALUE)}
+                  />
+                  <Layout>
+                    {_('on port')}
+                  </Layout>
+                  <TextField
+                    size="6"
+                    name="port"
+                    value={state.port}
+                    disabled={state.in_use}
+                    onChange={onValueChange}/>
+                  {!state.in_use &&
+                    <Layout>
+                      <NewIcon
+                        value={NEW_SSH}
+                        onClick={onNewCredentialsClick}
+                        title={_('Create a new credential')}/>
+                    </Layout>
+                  }
+                </Divider>
+              </FormGroup>
+            }
+
+            {capabilities.mayOp('get_credentials') &&
+              <FormGroup title={_('SMB')}>
+                <Divider>
+                  <Select
+                    onChange={onValueChange}
+                    name="smb_credential_id"
+                    disabled={state.in_use}
+                    value={state.smb_credential_id}
+                    items={render_select_items(up_credentials, UNSET_VALUE)}
+                  />
+                  {!in_use &&
+                    <Layout box flex>
+                      <NewIcon
+                        value={NEW_SMB}
+                        onClick={onNewCredentialsClick}
+                        title={_('Create a new credential')}/>
+                    </Layout>
+                  }
+                </Divider>
+              </FormGroup>
+            }
+
+            {capabilities.mayOp('get_credentials') &&
+              <FormGroup title={_('ESXi')}>
+                <Divider>
+                  <Select
+                    disabled={state.in_use}
+                    onChange={onValueChange}
+                    name="esxi_credential_id"
+                    value={state.esxi_credential_id}
+                    items={render_select_items(up_credentials, UNSET_VALUE)}
+                  />
+                  {!state.in_use &&
+                    <Layout box flex>
+                      <NewIcon
+                        value={NEW_ESXI}
+                        onClick={onNewCredentialsClick}
+                        title={_('Create a new credential')}/>
+                    </Layout>
+                  }
+                </Divider>
+              </FormGroup>
+            }
+
+            {capabilities.mayOp('get_credentials') &&
+              <FormGroup title={_('SNMP')}>
+                <Divider>
+                  <Select
+                    disabled={state.in_use}
+                    onChange={onValueChange}
+                    name="snmp_credential_id"
+                    value={state.snmp_credential_id}
+                    items=
+                      {render_select_items(snmp_credentials, UNSET_VALUE)}
+                  />
+                  {!in_use &&
+                    <Layout box flex>
+                      <NewIcon
+                        value={NEW_SNMP}
+                        onClick={onNewCredentialsClick}
+                        title={_('Create a new credential')}/>
+                    </Layout>
+                  }
+                </Divider>
+              </FormGroup>
+            }
           </Layout>
-        }
-
-      </FormGroup>
-
-      <FormGroup
-        title={_('Exclude Hosts')}
-        flex="column">
-        <Divider flex="column">
-          <Divider>
-            <Radio
-              value="manual"
-              title={_('Manual')}
-              name="target_exclude_source"
-              disabled={in_use}
-              onChange={onValueChange}
-              checked={target_exclude_source === 'manual'}/>
-            <TextField
-              grow="1"
-              disabled={in_use || target_exclude_source !== 'manual'}
-              value={exclude_hosts}
-              name="exclude_hosts"
-              onChange={onValueChange}/>
-          </Divider>
-
-          <Divider>
-            <Radio
-              title={_('From file')}
-              name="target_exclude_source"
-              value="file"
-              disabled={in_use}
-              onChange={onValueChange}
-              checked={target_exclude_source === 'file'}/>
-            <FileField
-              name="exclude_file"
-              disabled={in_use}
-              onChange={onValueChange}/>
-          </Divider>
-        </Divider>
-      </FormGroup>
-
-      <FormGroup title={_('Reverse Lookup Only')}>
-        <YesNoRadio
-          name="reverse_lookup_only"
-          value={reverse_lookup_only}
-          disabled={in_use}
-          onChange={onValueChange}/>
-      </FormGroup>
-
-      <FormGroup title={_('Reverse Lookup Unify')}>
-        <YesNoRadio
-          name="reverse_lookup_unify"
-          value={reverse_lookup_unify}
-          disabled={in_use}
-          onChange={onValueChange}/>
-      </FormGroup>
-
-      {capabilities.mayOp('get_port_lists') &&
-        <FormGroup title={_('Port List')}>
-          <Divider>
-            <Select
-              onChange={onValueChange}
-              name="port_list_id"
-              disabled={in_use}
-              value={port_list_id}
-              items={render_select_items(port_lists)}
-            />
-            {!in_use &&
-              <Layout box flex>
-                <NewIcon
-                  title={_('Create a new port list')}
-                  onClick={onNewPortListClick}/>
-              </Layout>
-            }
-          </Divider>
-        </FormGroup>
-      }
-
-      <FormGroup title={_('Alive Test')}>
-        <Select
-          name="alive_tests"
-          onChange={onValueChange}
-          value={alive_tests}
-          items={ALIVE_TESTS_ITEMS}
-        />
-      </FormGroup>
-
-      {capabilities.mayOp('get_credentials') &&
-        <h4>
-          {_('Credentials for authenticated checks')}
-        </h4>
-      }
-
-      {capabilities.mayOp('get_credentials') &&
-        <FormGroup title={_('SSH')}>
-          <Divider>
-            <Select
-              box
-              name="ssh_credential_id"
-              onChange={onValueChange}
-              disabled={in_use}
-              value={ssh_credential_id}
-              items={render_select_items(ssh_credentials, UNSET_VALUE)}
-            />
-            <Layout>
-              {_('on port')}
-            </Layout>
-            <TextField
-              size="6"
-              name="port"
-              value={port}
-              disabled={in_use}
-              onChange={onValueChange}/>
-            {!in_use &&
-              <Layout>
-                <NewIcon
-                  value={NEW_SSH}
-                  onClick={onNewCredentialsClick}
-                  title={_('Create a new credential')}/>
-              </Layout>
-            }
-          </Divider>
-        </FormGroup>
-      }
-
-      {capabilities.mayOp('get_credentials') &&
-        <FormGroup title={_('SMB')}>
-          <Divider>
-            <Select
-              onChange={onValueChange}
-              name="smb_credential_id"
-              disabled={in_use}
-              value={smb_credential_id}
-              items={render_select_items(up_credentials, UNSET_VALUE)}
-            />
-            {!in_use &&
-              <Layout box flex>
-                <NewIcon
-                  value={NEW_SMB}
-                  onClick={onNewCredentialsClick}
-                  title={_('Create a new credential')}/>
-              </Layout>
-            }
-          </Divider>
-        </FormGroup>
-      }
-
-      {capabilities.mayOp('get_credentials') &&
-        <FormGroup title={_('ESXi')}>
-          <Divider>
-            <Select
-              disabled={in_use}
-              onChange={onValueChange}
-              name="esxi_credential_id"
-              value={esxi_credential_id}
-              items={render_select_items(up_credentials, UNSET_VALUE)}
-            />
-            {!in_use &&
-              <Layout box flex>
-                <NewIcon
-                  value={NEW_ESXI}
-                  onClick={onNewCredentialsClick}
-                  title={_('Create a new credential')}/>
-              </Layout>
-            }
-          </Divider>
-        </FormGroup>
-      }
-
-      {capabilities.mayOp('get_credentials') &&
-        <FormGroup title={_('SNMP')}>
-          <Divider>
-            <Select
-              disabled={in_use}
-              onChange={onValueChange}
-              name="snmp_credential_id"
-              value={snmp_credential_id}
-              items={render_select_items(snmp_credentials, UNSET_VALUE)}
-            />
-            {!in_use &&
-              <Layout box flex>
-                <NewIcon
-                  value={NEW_SNMP}
-                  onClick={onNewCredentialsClick}
-                  title={_('Create a new credential')}/>
-              </Layout>
-            }
-          </Divider>
-        </FormGroup>
-      }
-    </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -417,33 +519,18 @@ TargetDialog.propTypes = {
   target_source: PropTypes.oneOf([
     'manual', 'file', 'asset_hosts',
   ]),
+  title: PropTypes.string,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
   onNewCredentialsClick: PropTypes.func,
   onNewPortListClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
 };
 
 TargetDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog({
-  title: _('New Target'),
-  footer: _('Save'),
-  defaultState: {
-    alive_tests: ALIVE_TESTS_DEFAULT,
-    comment: '',
-    esxi_credential_id: UNSET_VALUE,
-    name: _('Unnamed'),
-    port: 22,
-    port_list_id: DEFAULT_PORT_LIST_ID,
-    reverse_lookup_only: NO_VALUE,
-    reverse_lookup_unify: NO_VALUE,
-    smb_credential_id: UNSET_VALUE,
-    snmp_credential_id: UNSET_VALUE,
-    ssh_credential_id: UNSET_VALUE,
-    target_source: 'manual',
-    target_exclude_source: 'manual',
-  },
-})(TargetDialog);
+export default TargetDialog;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -51,12 +51,14 @@ class TargetComponent extends React.Component {
 
     this.state = {
       credentialsDialogVisible: false,
+      targetDialogVisible: false,
     };
 
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
+    this.closeTargetDialog = this.closeTargetDialog.bind(this);
     this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
@@ -76,9 +78,10 @@ class TargetComponent extends React.Component {
     this.setState({credentialsDialogVisible: false});
   }
 
-  openTargetDialog(entity) {
+  openTargetDialog(entity, initial = {}) {
     if (is_defined(entity)) {
-      this.target_dialog.show({
+      this.setState({
+        targetDialogVisible: true,
         id: entity.id,
         alive_tests: entity.alive_tests,
         comment: entity.comment,
@@ -98,18 +101,41 @@ class TargetComponent extends React.Component {
         ssh_credential_id: id_or__(entity.ssh_credential),
         target_source: 'manual',
         target_exclude_source: 'manual',
-      }, {
         title: _('Edit Target {{name}}', entity),
       });
-
       this.loadData();
+    }
+    else {
+      this.setState({
+        targetDialogVisible: true,
+        alive_tests: undefined,
+        comment: undefined,
+        esxi_credential_id: undefined,
+        hosts: undefined,
+        id: undefined,
+        in_use: undefined,
+        name: undefined,
+        port: undefined,
+        port_list_id: undefined,
+        reverse_lookup_only: undefined,
+        reverse_lookup_unify: undefined,
+        smb_credential_id: undefined,
+        snmp_credential_id: undefined,
+        ssh_credential_id: undefined,
+        target_source: undefined,
+        target_exclude_source: undefined,
+        title: _('New Target'),
+        ...initial,
+      });
     }
   }
 
   openCreateTargetDialog(initial = {}) {
-    this.target_dialog.show(initial);
+    this.openTargetDialog(undefined, initial);
+  }
 
-    this.loadData();
+  closeTargetDialog() {
+    this.setState({targetDialogVisible: false});
   }
 
   loadData() {
@@ -118,13 +144,13 @@ class TargetComponent extends React.Component {
     gmp.portlists.getAll().then(response => {
       const {data: port_lists} = response;
       this.port_lists = port_lists;
-      this.target_dialog.setValues({port_lists});
+      this.setState({port_lists});
     });
 
     gmp.credentials.getAll().then(response => {
       const {data: credentials} = response;
       this.credentials = credentials;
-      this.target_dialog.setValues({credentials});
+      this.setState({credentials});
     });
   }
 
@@ -139,7 +165,7 @@ class TargetComponent extends React.Component {
       const {credentials = []} = this;
       credentials.push(credential);
 
-      this.target_dialog.setValues({
+      this.setState({
         credentials,
         [data.id_field]: credential.id,
       });
@@ -152,7 +178,7 @@ class TargetComponent extends React.Component {
       const portlist = response.data;
       const {port_lists = []} = this;
       port_lists.push(portlist);
-      this.target_dialog.setValues({
+      this.setState({
         port_lists,
         port_list_id: portlist.id,
       });
@@ -175,8 +201,29 @@ class TargetComponent extends React.Component {
     } = this.props;
 
     const {
+      targetDialogVisible,
       credentialsDialogVisible,
+      alive_tests,
+      comment,
+      esxi_credential_id,
+      exclude_hosts,
+      credential,
+      credentials,
+      hosts,
+      id,
       id_field,
+      in_use,
+      name,
+      port,
+      port_lists,
+      port_list_id,
+      reverse_lookup_only,
+      reverse_lookup_unify,
+      smb_credential_id,
+      snmp_credential_id,
+      ssh_credential_id,
+      target_source,
+      target_exclude_source,
       title,
       types = [],
     } = this.state;
@@ -208,7 +255,30 @@ class TargetComponent extends React.Component {
               edit: this.openTargetDialog,
             })}
             <TargetDialog
-              ref={ref => this.target_dialog = ref}
+              alive_tests={alive_tests}
+              comment={comment}
+              credential={credential}
+              credentials={credentials}
+              esxi_credential_id={esxi_credential_id}
+              exclude_hosts={exclude_hosts}
+              hosts={hosts}
+              id={id}
+              in_use={in_use}
+              name={name}
+              port={port}
+              port_lists={port_lists}
+              port_list_id={port_list_id}
+              reverse_lookup_only={reverse_lookup_only}
+              reverse_lookup_unify={reverse_lookup_unify}
+              smb_credential_id={smb_credential_id}
+              snmp_credential_id={snmp_credential_id}
+              ssh_credential_id={ssh_credential_id}
+              target_source={target_source}
+              target_exclude_source={target_exclude_source}
+              title={title}
+              types={types}
+              visible={targetDialogVisible}
+              onClose={this.closeTargetDialog}
               onNewCredentialsClick={this.openCredentialsDialog}
               onNewPortListClick={this.openPortListDialog}
               onSave={save}
