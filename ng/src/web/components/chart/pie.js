@@ -59,7 +59,7 @@ const Pie = ({
   }
 
   if (is_defined(innerRadiusY)) {
-    path.innerRadiusY(outerRadiusY);
+    path.innerRadiusY(innerRadiusY);
   }
 
   if (is_defined(outerRadiusY)) {
