@@ -28,6 +28,10 @@ const PI2 = Math.PI * 2;
 
 class Arc {
 
+  constructor() {
+    this._innerRadiusX = 0;
+  }
+
   innerRadiusX(radius) {
     this._innerRadiusX = radius;
     return this;
