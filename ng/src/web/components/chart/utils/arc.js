@@ -71,7 +71,7 @@ class Arc {
     };
   };
 
-  arc({
+  path({
     startAngle = 0,
     endAngle = PI2,
   } = {}) {
