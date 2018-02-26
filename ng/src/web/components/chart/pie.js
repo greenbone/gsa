@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {arc as d3arc, pie as d3pie} from 'd3-shape';
+import {pie as d3pie} from 'd3-shape';
 
 import {Group} from '@vx/group';
 
@@ -30,13 +30,17 @@ import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
+import arc from './utils/arc';
+
 const Pie = ({
   className,
   top = 0,
   left = 0,
   data,
-  innerRadius = 0,
-  outerRadius,
+  innerRadiusX = 0,
+  outerRadiusX,
+  innerRadiusY,
+  outerRadiusY,
   cornerRadius,
   startAngle = 0,
   endAngle,
@@ -47,20 +51,28 @@ const Pie = ({
   arcsSort,
   children,
 }) => {
-  const path = d3arc();
-  path.innerRadius(innerRadius);
+  const path = arc();
+  path.innerRadiusX(innerRadiusX);
 
-  if (is_defined(outerRadius)) {
-    path.outerRadius(outerRadius);
+  if (is_defined(outerRadiusX)) {
+    path.outerRadiusX(outerRadiusX);
   }
 
-  if (is_defined(cornerRadius)) {
-    path.cornerRadius(cornerRadius);
+  if (is_defined(innerRadiusY)) {
+    path.innerRadiusY(outerRadiusY);
   }
 
-  if (is_defined(padRadius)) {
-    path.padRadius(padRadius);
+  if (is_defined(outerRadiusY)) {
+    path.outerRadiusY(outerRadiusY);
   }
+
+  // if (is_defined(cornerRadius)) {
+  //   path.cornerRadius(cornerRadius);
+  // }
+
+  // if (is_defined(padRadius)) {
+  //   path.padRadius(padRadius);
+  // }
 
   const pie = d3pie();
 
@@ -87,17 +99,17 @@ const Pie = ({
       top={top}
       left={left}
     >
-      {arcs.map((arc, i) => {
-        const [x, y] = path.centroid(arc);
+      {arcs.map((currentArc, i) => {
+        const {x, y} = path.centroid(currentArc);
         return children({
           index: i,
           x,
           y,
-          path: path(arc),
-          startAngle: arc.startAngle,
-          endAngle: arc.endAngle,
-          padAngle: arc.padAngle,
-          data: arc.data,
+          path: path.arc(currentArc),
+          startAngle: currentArc.startAngle,
+          endAngle: currentArc.endAngle,
+          padAngle: currentArc.padAngle,
+          data: currentArc.data,
         });
       })}
     </Group>
@@ -111,9 +123,11 @@ Pie.propTypes = {
   cornerRadius: PropTypes.number,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   endAngle: PropTypes.number,
-  innerRadius: PropTypes.number,
+  innerRadiusX: PropTypes.number,
+  innerRadiusY: PropTypes.number,
   left: PropTypes.number,
-  outerRadius: PropTypes.number,
+  outerRadiusX: PropTypes.number,
+  outerRadiusY: PropTypes.number,
   padAngle: PropTypes.number,
   padRadius: PropTypes.number,
   pieSort: PropTypes.func,
