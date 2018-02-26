@@ -52,10 +52,10 @@ const Pie = ({
   children,
 }) => {
   const arcPath = arc();
-  arcPath.innerRadiusX(innerRadiusX);
+  arcPath.outerRadiusX(outerRadiusX);
 
-  if (is_defined(outerRadiusX)) {
-    arcPath.outerRadiusX(outerRadiusX);
+  if (is_defined(innerRadiusX)) {
+    arcPath.innerRadiusX(innerRadiusX);
   }
 
   if (is_defined(innerRadiusY)) {
@@ -126,7 +126,7 @@ Pie.propTypes = {
   innerRadiusX: PropTypes.number,
   innerRadiusY: PropTypes.number,
   left: PropTypes.number,
-  outerRadiusX: PropTypes.number,
+  outerRadiusX: PropTypes.number.isRequired,
   outerRadiusY: PropTypes.number,
   padAngle: PropTypes.number,
   padRadius: PropTypes.number,
