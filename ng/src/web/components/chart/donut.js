@@ -99,8 +99,8 @@ const DonutChart = ({
           top={height / 2}
           left={width / 2}
           pieValue={d => d.value}
-          outerRadius={radius}
-          innerRadius={radius * 0.5}
+          outerRadiusX={radius}
+          innerRadiusX={radius * 0.5}
           cornerRadius={3}
           padAngle={0.01}
         >

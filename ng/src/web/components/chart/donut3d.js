@@ -29,6 +29,7 @@ import {Group} from '@vx/group';
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
 
+import path from './utils/path';
 import Layout from '../layout/layout';
 import Pie from './pie';
 
@@ -45,21 +46,6 @@ const darkEmptyColor = d3color(emptyColor).darker();
 
 const sortArcsByStartAngle = (a, b) => a.startAngle > b.startAngle ? -1 : 1;
 
-class Paths {
-
-  constructor() {
-    this.paths = [];
-  }
-
-  push(command, ...paths) {
-    this.paths.push(command, ...paths);
-  }
-
-  toString() {
-    return this.paths.join(' ');
-  }
-}
-
 const pieTopPath = (startAngle, endAngle, rx, ry, ir) => {
   if (endAngle - startAngle === 0) {
     return 'M 0 0';
@@ -71,13 +57,13 @@ const pieTopPath = (startAngle, endAngle, rx, ry, ir) => {
   const ey = ry * Math.sin(endAngle);
 
   const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-  const paths = new Paths();
+  const paths = path();
 
-  paths.push('M', sx, sy);
-  paths.push('A', rx, ry, 0, largeArc, 1, ex, ey);
-  paths.push('L', ir * ex, ir * ey);
-  paths.push('A', ir * rx, ir * ry, 0, largeArc, 0, ir * sx, ir * sy);
-  paths.push('z');
+  paths.move(sx, sy);
+  paths.arc(rx, ry, ex, ey, {largeArc, sweep: 1});
+  paths.line(ir * ex, ir * ey);
+  paths.arc(rx * ir, ry * ir, sx * ir, sy * ir, {largeArc, sweep: 0});
+  paths.close();
 
   return paths;
 };
@@ -121,13 +107,13 @@ const pieInnerPath = (sa, ea, rx, ry, h, ir) => {
   const ex = ir * rx * Math.cos(endAngle);
   const ey = ir * ry * Math.sin(endAngle);
 
-  const paths = new Paths();
+  const paths = path();
 
-  paths.push('M', sx, sy);
-  paths.push('A', ir * rx, ir * ry, '0 0 1', ex, ey);
-  paths.push('L', ex, h + ey);
-  paths.push('A', ir * rx, ir * ry, '0 0 0', sx, h + sy);
-  paths.push('Z');
+  paths.move(sx, sy);
+  paths.arc(rx * ir, ry * ir, ex, ey, {sweep: 1});
+  paths.line(ex, h + ey);
+  paths.arc(rx * ir, ry * ir, sx, sy + h, {sweep: 0});
+  paths.close();
 
   return paths;
 };
@@ -173,13 +159,13 @@ const pieOuterPath = (sa, ea, rx, ry, h) => {
   const ex = rx * Math.cos(endAngle);
   const ey = ry * Math.sin(endAngle);
 
-  const paths = new Paths();
+  const paths = path();
 
-  paths.push('M', sx, h + sy);
-  paths.push('A', rx, ry, '0 0 1', ex, h + ey);
-  paths.push('L', ex, ey);
-  paths.push('A', rx, ry, '0 0 0', sx, sy);
-  paths.push('z');
+  paths.move(sx, h + sy);
+  paths.arc(rx, ry, ex, ey + h, {sweep: 1});
+  paths.line(ex, ey);
+  paths.arc(rx, ry, sx, sy, {sweep: 0});
+  paths.close();
 
   return paths;
 };
