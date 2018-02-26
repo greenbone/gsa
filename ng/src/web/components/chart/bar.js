@@ -53,6 +53,7 @@ const BarChart = ({
   width,
   xLabel,
   yLabel,
+  horizontal = false,
 }) => {
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
@@ -62,13 +63,13 @@ const BarChart = ({
   const yMax = Math.max(...yValues);
 
   const xScale = scaleBand({
-    rangeRound: [0, maxWidth],
+    rangeRound: horizontal ? [0, maxHeight] : [0, maxWidth],
     domain: xValues,
     padding: 0.125,
   });
 
   const yScale = scaleLinear({
-    range: [maxHeight, 0],
+    range: horizontal ? [0, maxWidth] : [maxHeight, 0],
     domain: [0, yMax],
 
     /*
@@ -86,19 +87,19 @@ const BarChart = ({
           <AxisLeft
             axisLineClassName={`${lineCss}`}
             tickClassName={`${lineCss}`}
-            scale={yScale}
+            scale={horizontal ? xScale : yScale}
             top={0}
             left={0}
-            label={yLabel}
+            label={horizontal ? xLabel : yLabel}
             numTicks={10}
             rangePadding={-8} // - tickLength
           />
           <AxisBottom
             axisLineClassName={`${lineCss}`}
             tickClassName={`${lineCss}`}
-            scale={xScale}
+            scale={horizontal ? yScale : xScale}
             top={maxHeight}
-            label={xLabel}
+            label={horizontal ? yLabel : xLabel}
             rangePadding={8} // tickLength
           />
           {data.map((d, i) => (
@@ -110,10 +111,18 @@ const BarChart = ({
                 <Bar
                   innerRef={targetRef}
                   fill={d.color}
-                  x={xScale(d.x)}
-                  y={yScale(d.y)}
-                  width={xScale.bandwidth()}
-                  height={maxHeight - yScale(d.y)}
+                  x={horizontal ? 1 : xScale(d.x)}
+                  y={horizontal ? xScale(d.x) : yScale(d.y)}
+                  height={
+                    horizontal ?
+                      xScale.bandwidth() :
+                      maxHeight - yScale(d.y)
+                  }
+                  width={
+                    horizontal ?
+                      yScale(d.y) :
+                      xScale.bandwidth()
+                  }
                   onMouseOver={() => show}
                   onMouseOut={() => hide}
                 />
@@ -139,8 +148,15 @@ BarChart.propTypes = {
       label: ...,
     }]
   */
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    label: PropTypes.any.isRequired,
+    color: PropTypes.toString.isRequired,
+    toolTip: PropTypes.elementOrString,
+  })).isRequired,
   height: PropTypes.number.isRequired,
+  horizontal: PropTypes.bool,
   width: PropTypes.number.isRequired,
   xLabel: PropTypes.string,
   yLabel: PropTypes.string,
