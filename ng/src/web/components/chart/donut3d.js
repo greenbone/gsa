@@ -33,6 +33,7 @@ import path from './utils/path';
 import arc from './utils/arc';
 import Layout from '../layout/layout';
 import Pie from './pie';
+import Label from './label';
 
 const margin = {
   top: 20,
@@ -255,6 +256,8 @@ const Donut3DChart = ({
               startAngle,
               endAngle,
               path: arcPath,
+              x,
+              y,
             }) => {
               const {color} = arcData;
               const darker = d3color(color).darker();
@@ -278,6 +281,12 @@ const Donut3DChart = ({
                     color={darker}
                     {...props}
                   />
+                  <Label
+                    x={x}
+                    y={y}
+                  >
+                    {arcData.value}
+                  </Label>
                 </Group>
               );
             }}
