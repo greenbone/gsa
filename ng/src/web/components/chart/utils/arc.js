@@ -84,7 +84,7 @@ class Arc {
     const paths = path();
 
     if (endAngle - startAngle === 0) {
-      return path.move(0, 0);
+      return paths.move(0, 0);
     }
 
     this._checkRadius();
