@@ -91,6 +91,8 @@ storiesOf('Chart/Bar', module)
         width={500}
         height={300}
         data={bardata}
+        xLabel="count"
+        yLabel="kg"
       />
     );
   });
