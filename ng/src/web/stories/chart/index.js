@@ -95,6 +95,18 @@ storiesOf('Chart/Bar', module)
         yLabel="kg"
       />
     );
+  })
+  .add('horizontal', () => {
+    return (
+      <BarChart
+        horizontal
+        width={500}
+        height={300}
+        data={bardata}
+        xLabel="count"
+        yLabel="kg"
+      />
+    );
   });
 
 storiesOf('Chart/Donut', module)
