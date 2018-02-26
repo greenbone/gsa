@@ -34,6 +34,7 @@ import arc from './utils/arc';
 import Layout from '../layout/layout';
 import Pie from './pie';
 import Label from './label';
+import ToolTip from './tooltip';
 
 const margin = {
   top: 20,
@@ -259,35 +260,44 @@ const Donut3DChart = ({
               x,
               y,
             }) => {
-              const {color} = arcData;
+              const {color, toolTip} = arcData;
               const darker = d3color(color).darker();
               return (
-                <Group
-                  key={index}
+                <ToolTip
+                  content={toolTip}
                 >
-                  <PieInnerPath
-                    startAngle={startAngle}
-                    endAngle={endAngle}
-                    color={darker}
-                    {...props}
-                  />
-                  <PieTopPath
-                    color={color}
-                    path={arcPath}
-                  />
-                  <PieOuterPath
-                    startAngle={startAngle}
-                    endAngle={endAngle}
-                    color={darker}
-                    {...props}
-                  />
-                  <Label
-                    x={x}
-                    y={y}
-                  >
-                    {arcData.value}
-                  </Label>
-                </Group>
+                  {({targetRef, hide, show}) => (
+                    <Group
+                      key={index}
+                      onMouseOver={show}
+                      onMouseOut={hide}
+                    >
+                      <PieInnerPath
+                        startAngle={startAngle}
+                        endAngle={endAngle}
+                        color={darker}
+                        {...props}
+                      />
+                      <PieTopPath
+                        color={color}
+                        path={arcPath}
+                      />
+                      <PieOuterPath
+                        startAngle={startAngle}
+                        endAngle={endAngle}
+                        color={darker}
+                        {...props}
+                      />
+                      <Label
+                        x={x}
+                        y={y}
+                        innerRef={targetRef}
+                      >
+                        {arcData.value}
+                      </Label>
+                    </Group>
+                  )}
+                </ToolTip>
               );
             }}
           </Pie> :
