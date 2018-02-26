@@ -265,11 +265,11 @@ const Donut3DChart = ({
               const darker = d3color(color).darker();
               return (
                 <ToolTip
+                  key={index}
                   content={toolTip}
                 >
                   {({targetRef, hide, show}) => (
                     <Group
-                      key={index}
                       onMouseOver={show}
                       onMouseOut={hide}
                     >
