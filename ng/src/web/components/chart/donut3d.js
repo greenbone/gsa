@@ -30,6 +30,7 @@ import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
 
 import path from './utils/path';
+import arc from './utils/arc';
 import Layout from '../layout/layout';
 import Pie from './pie';
 
@@ -46,73 +47,36 @@ const darkEmptyColor = d3color(emptyColor).darker();
 
 const sortArcsByStartAngle = (a, b) => a.startAngle > b.startAngle ? -1 : 1;
 
-const pieTopPath = (startAngle, endAngle, rx, ry, ir) => {
-  if (endAngle - startAngle === 0) {
-    return 'M 0 0';
-  }
-
-  const sx = rx * Math.cos(startAngle);
-  const sy = ry * Math.sin(startAngle);
-  const ex = rx * Math.cos(endAngle);
-  const ey = ry * Math.sin(endAngle);
-
-  const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-  const paths = path();
-
-  paths.move(sx, sy);
-  paths.arc(rx, ry, ex, ey, {largeArc, sweep: 1});
-  paths.line(ir * ex, ir * ey);
-  paths.arc(rx * ir, ry * ir, sx * ir, sy * ir, {largeArc, sweep: 0});
-  paths.close();
-
-  return paths;
-};
-
 const PieTopPath = ({
-  startAngle = 0,
-  endAngle = PI2,
   color,
-  radiusX,
-  radiusY,
-  innerRadius,
+  path, // eslint-disable-line no-shadow
 }) => (
   <path
     fill={color}
     stroke={color}
-    d={pieTopPath(
-      startAngle,
-      endAngle,
-      radiusX,
-      radiusY,
-      innerRadius,
-    )}
+    d={path}
   />
 );
 
 PieTopPath.propTypes = {
   color: PropTypes.toString.isRequired,
-  endAngle: PropTypes.number,
-  innerRadius: PropTypes.number.isRequired,
-  radiusX: PropTypes.number.isRequired,
-  radiusY: PropTypes.number.isRequired,
-  startAngle: PropTypes.number,
+  path: PropTypes.toString.isRequired,
 };
 
-const pieInnerPath = (sa, ea, rx, ry, h, ir) => {
+const pieInnerPath = (sa, ea, irx, iry, h) => {
   const startAngle = sa < Math.PI ? Math.PI : sa;
   const endAngle = ea < Math.PI ? Math.PI : ea;
-
-  const sx = ir * rx * Math.cos(startAngle);
-  const sy = ir * ry * Math.sin(startAngle);
-  const ex = ir * rx * Math.cos(endAngle);
-  const ey = ir * ry * Math.sin(endAngle);
+  const sx = irx * Math.cos(startAngle);
+  const sy = iry * Math.sin(startAngle);
+  const ex = irx * Math.cos(endAngle);
+  const ey = iry * Math.sin(endAngle);
 
   const paths = path();
 
   paths.move(sx, sy);
-  paths.arc(rx * ir, ry * ir, ex, ey, {sweep: 1});
+  paths.arc(irx, iry, ex, ey, {sweep: 1});
   paths.line(ex, h + ey);
-  paths.arc(rx * ir, ry * ir, sx, sy + h, {sweep: 0});
+  paths.arc(irx, iry, sx, sy + h, {sweep: 0});
   paths.close();
 
   return paths;
@@ -122,19 +86,17 @@ const PieInnerPath = ({
   startAngle = 0,
   endAngle = PI2,
   color,
-  radiusX,
-  radiusY,
   donutHeight,
-  innerRadius,
+  innerRadiusX,
+  innerRadiusY,
 }) => (
   <path
     d={pieInnerPath(
       startAngle,
       endAngle,
-      radiusX,
-      radiusY,
+      innerRadiusX,
+      innerRadiusY,
       donutHeight,
-      innerRadius,
     )}
     fill={color}
   />
@@ -144,9 +106,8 @@ PieInnerPath.propTypes = {
   color: PropTypes.toString.isRequired,
   donutHeight: PropTypes.number.isRequired,
   endAngle: PropTypes.number,
-  innerRadius: PropTypes.number.isRequired,
-  radiusX: PropTypes.number.isRequired,
-  radiusY: PropTypes.number.isRequired,
+  innerRadiusX: PropTypes.number.isRequired,
+  innerRadiusY: PropTypes.number.isRequired,
   startAngle: PropTypes.number,
 };
 
@@ -173,17 +134,17 @@ const pieOuterPath = (sa, ea, rx, ry, h) => {
 const PieOuterPath = ({
   startAngle = 0,
   endAngle = PI2,
-  radiusX,
-  radiusY,
   donutHeight,
   color,
+  outerRadiusX,
+  outerRadiusY,
 }) => (
   <path
     d={pieOuterPath(
       startAngle,
       endAngle,
-      radiusX,
-      radiusY,
+      outerRadiusX,
+      outerRadiusY,
       donutHeight,
     )}
     fill={color}
@@ -194,38 +155,58 @@ PieOuterPath.propTypes = {
   color: PropTypes.toString.isRequired,
   donutHeight: PropTypes.number.isRequired,
   endAngle: PropTypes.number,
-  radiusX: PropTypes.number.isRequired,
-  radiusY: PropTypes.number.isRequired,
+  outerRadiusX: PropTypes.number.isRequired,
+  outerRadiusY: PropTypes.number.isRequired,
   startAngle: PropTypes.number,
 };
 
 const EmptyDonut = ({
   left,
   top,
-  ...props
-}) => (
-  <Group
-    top={top}
-    left={left}
-  >
-    <PieInnerPath
-      {...props}
-      color={darkEmptyColor}
-    />
-    <PieTopPath
-      {...props}
-      color={emptyColor}
-    />
-    <PieOuterPath
-      {...props}
-      color={darkEmptyColor}
-    />
-  </Group>
-);
+  innerRadiusX,
+  innerRadiusY,
+  outerRadiusX,
+  outerRadiusY,
+  donutHeight,
+}) => {
+  const donutarc = arc()
+    .innerRadiusX(innerRadiusX)
+    .innerRadiusY(innerRadiusY)
+    .outerRadiusX(outerRadiusX)
+    .outerRadiusY(outerRadiusY);
+  return (
+    <Group
+      top={top}
+      left={left}
+    >
+      <PieInnerPath
+        color={darkEmptyColor}
+        donutHeight={donutHeight}
+        innerRadiusX={innerRadiusX}
+        innerRadiusY={innerRadiusY}
+      />
+      <PieTopPath
+        color={emptyColor}
+        path={donutarc.path()}
+      />
+      <PieOuterPath
+        color={darkEmptyColor}
+        donutHeight={donutHeight}
+        outerRadiusX={outerRadiusX}
+        outerRadiusY={outerRadiusY}
+      />
+    </Group>
+  );
+};
 
 EmptyDonut.propTypes = {
-  left: PropTypes.number,
-  top: PropTypes.number,
+  donutHeight: PropTypes.number.isRequired,
+  innerRadiusX: PropTypes.number.isRequired,
+  innerRadiusY: PropTypes.number.isRequired,
+  left: PropTypes.number.isRequired,
+  outerRadiusX: PropTypes.number.isRequired,
+  outerRadiusY: PropTypes.number.isRequired,
+  top: PropTypes.number.isRequired,
 };
 
 const Donut3DChart = ({
@@ -238,36 +219,42 @@ const Donut3DChart = ({
 
   const donutHeight = Math.min(height, width) / 8;
 
-  const centerX = width / 2;
-  const centerY = height / 2 - donutHeight / 2;
-  const radiusX = width / 2 - horizontalMargin;
-  const radiusY = (Math.min(height / 2, width / 2) - donutHeight / 2) -
-    verticalMargin;
   const innerRadius = 0.5;
 
+  const centerX = width / 2;
+  const centerY = height / 2 - donutHeight / 2;
+  const outerRadiusX = width / 2 - horizontalMargin;
+  const outerRadiusY = (Math.min(height / 2, width / 2) - donutHeight / 2) -
+    verticalMargin;
+  const innerRadiusX = outerRadiusX * innerRadius;
+  const innerRadiusY = outerRadiusY * innerRadius;
+
   const props = {
-    radiusX,
-    radiusY,
+    outerRadiusX,
+    outerRadiusY,
     donutHeight,
-    innerRadius,
+    innerRadiusX,
+    innerRadiusY,
   };
   return (
     <Layout align={['start', 'start']}>
       <svg width={width} height={height}>
         {data.length > 0 ?
           <Pie
+            data={data}
             pieSort={null}
             pieValue={d => d.value}
             arcsSort={sortArcsByStartAngle}
-            data={data}
             top={centerY}
             left={centerX}
+            {...props}
           >
             {({
               data: arcData,
               index,
               startAngle,
               endAngle,
+              path: arcPath,
             }) => {
               const {color} = arcData;
               const darker = d3color(color).darker();
@@ -282,10 +269,8 @@ const Donut3DChart = ({
                     {...props}
                   />
                   <PieTopPath
-                    startAngle={startAngle}
-                    endAngle={endAngle}
                     color={color}
-                    {...props}
+                    path={arcPath}
                   />
                   <PieOuterPath
                     startAngle={startAngle}
