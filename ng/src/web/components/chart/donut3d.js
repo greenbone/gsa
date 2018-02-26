@@ -35,6 +35,7 @@ import Layout from '../layout/layout';
 import Pie from './pie';
 import Label from './label';
 import ToolTip from './tooltip';
+import Legend from './legend';
 
 const margin = {
   top: 20,
@@ -308,6 +309,7 @@ const Donut3DChart = ({
           />
         }
       </svg>
+      <Legend data={data}/>
     </Layout>
   );
 };
