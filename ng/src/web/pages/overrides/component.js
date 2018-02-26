@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,11 +43,14 @@ class OverrideComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeOverrideDialog = this.closeOverrideDialog.bind(this);
     this.openCreateOverrideDialog = this.openCreateOverrideDialog.bind(this);
     this.openOverrideDialog = this.openOverrideDialog.bind(this);
   }
 
-  openOverrideDialog(override) {
+  openOverrideDialog(override, initial) {
     if (is_defined(override)) {
       let active = '0';
       if (override.isActive()) {
@@ -69,7 +73,8 @@ class OverrideComponent extends React.Component {
         custom_severity = '1';
         new_severity = override.new_severity;
       }
-      this.override_dialog.show({
+      this.setState({
+        dialogVisible: true,
         id: override.id,
         active,
         custom_severity,
@@ -89,27 +94,45 @@ class OverrideComponent extends React.Component {
         task_id: is_defined(override.task) ? '' : '0',
         task_uuid: is_defined(override.task) ? override.task.id : '',
         text: override.text,
-        visible: true,
-      }, {
         title: _('Edit Override {{- name}}',
           {name: shorten(override.text, 20)}),
       });
-
-      this.loadTasks();
     }
+    else {
+      this.setState({
+        dialogVisible: true,
+        active: undefined,
+        hosts: undefined,
+        hosts_manual: [],
+        new_severity: undefined,
+        override: undefined,
+        port: undefined,
+        result_id: undefined,
+        result_uuid: undefined,
+        severity: undefined,
+        task_id: undefined,
+        task_uuid: undefined,
+        text: undefined,
+        title: undefined,
+        ...initial,
+      });
+    }
+    this.loadTasks();
+  }
+
+  closeOverrideDialog() {
+    this.setState({dialogVisible: false});
   }
 
   openCreateOverrideDialog(initial = {}) {
-    this.override_dialog.show(initial);
-
-    this.loadTasks();
+    this.openOverrideDialog(undefined, initial);
   }
 
   loadTasks() {
     const {gmp} = this.context;
 
     gmp.tasks.getAll().then(tasks =>
-      this.override_dialog.setValue('tasks', tasks));
+      this.setState({tasks: tasks}));
   }
 
   render() {
@@ -126,6 +149,33 @@ class OverrideComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      dialogVisible,
+      active,
+      custom_severity,
+      hosts,
+      hosts_manual,
+      id,
+      new_severity,
+      new_severity_from_list,
+      nvt,
+      oid,
+      override,
+      override_severity,
+      port,
+      port_manual,
+      result_id,
+      result_uuid,
+      severity,
+      task_id,
+      task_uuid,
+      tasks,
+      text,
+      title,
+      ...initial
+    } = this.state;
+
     return (
       <EntityComponent
         name="override"
@@ -151,8 +201,31 @@ class OverrideComponent extends React.Component {
               edit: this.openOverrideDialog,
             })}
             <OverrideDialog
-              ref={ref => this.override_dialog = ref}
-              onSave={save}/>
+              visible={dialogVisible}
+              active={active}
+              custom_severity={custom_severity}
+              hosts={hosts}
+              hosts_manual={hosts_manual}
+              id={id}
+              new_severity={new_severity}
+              new_severity_from_list={new_severity_from_list}
+              nvt={nvt}
+              oid={oid}
+              override={override}
+              override_severity={override_severity}
+              port={port}
+              port_manual={port_manual}
+              result_id={result_id}
+              result_uuid={result_uuid}
+              severity={severity}
+              task_id={task_id}
+              task_uuid={task_uuid}
+              tasks={tasks}
+              title={title}
+              onClose={this.closeOverrideDialog}
+              onSave={save}
+              {...initial}
+            />
           </Wrapper>
         )}
       </EntityComponent>
