@@ -129,7 +129,7 @@ const NoteDialog = ({
   if (is_defined(port)) {
     data.port = port;
   };
-  if (is_defined(port_manual)) {
+  if (is_defined(port_manual) && port_manual.length > 0) {
     data.port_manual = port_manual;
   };
   if (is_defined(result_id)) {
