@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +49,12 @@ class TargetComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      credentialsDialogVisible: false,
+    };
+
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
+    this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
     this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
@@ -57,13 +63,17 @@ class TargetComponent extends React.Component {
   }
 
   openCredentialsDialog(data) {
-    this.credentials_dialog.show({
+    this.setState({
+      credentialsDialogVisible: true,
       types: data.types,
       base: first(data.types),
       id_field: data.id_field,
-    }, {
       title: data.title,
     });
+  }
+
+  closeCredentialsDialog() {
+    this.setState({credentialsDialogVisible: false});
   }
 
   openTargetDialog(entity) {
@@ -163,6 +173,16 @@ class TargetComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      credentialsDialogVisible,
+      id_field,
+      title,
+      types = [],
+    } = this.state;
+
+    const base = first(types);
+
     return (
       <EntityComponent
         name="target"
@@ -194,7 +214,12 @@ class TargetComponent extends React.Component {
               onSave={save}
             />
             <CredentialsDialog
-              ref={ref => this.credentials_dialog = ref}
+              types={types}
+              base={base}
+              id_field={id_field}
+              title={title}
+              visible={credentialsDialogVisible}
+              onClose={this.closeCredentialsDialog}
               onSave={this.handleCreateCredential}
             />
             <PortListDialog
