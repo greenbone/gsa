@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,14 +55,14 @@ import AlertDialog, {
 
 export function select_verinice_report_id(report_formats, report_id) {
   if (is_defined(report_id)) {
-    for (let format of report_formats) {
+    for (const format of report_formats) {
       if (format.id === report_id) {
         return format.id;
       }
     }
   }
   else {
-    for (let format of report_formats) {
+    for (const format of report_formats) {
       if (format.name === 'Verinice ISM') {
         return format.id;
       }
@@ -71,7 +72,7 @@ export function select_verinice_report_id(report_formats, report_id) {
 }
 
 const value = (data, def = undefined) => {
-  let val = is_defined(data) ? data.value : def;
+  const val = is_defined(data) ? data.value : def;
   if (is_defined(val)) {
     return val;
   }
@@ -94,8 +95,8 @@ export class AlertDialogContainer extends React.Component {
   }
 
   handleSaveAlert(data) {
-    let {gmp} = this.context;
-    let {onSave} = this.props;
+    const {gmp} = this.context;
+    const {onSave} = this.props;
     let promise;
 
     if (is_defined(data.alert)) {
@@ -106,7 +107,7 @@ export class AlertDialogContainer extends React.Component {
     }
 
     return promise.then(response => {
-      let alert = response.data;
+      const alert = response.data;
       if (onSave) {
         return onSave(alert);
       }
@@ -115,13 +116,13 @@ export class AlertDialogContainer extends React.Component {
   }
 
   handleCreateCredential(data) {
-    let {gmp} = this.context;
-    let promise = gmp.credential.create(data);
+    const {gmp} = this.context;
+    const promise = gmp.credential.create(data);
 
-    let {credentials} = this;
+    const {credentials} = this;
 
     promise.then(response => {
-      let credential = response.data;
+      const credential = response.data;
 
       credentials.push(credential);
 
@@ -159,15 +160,15 @@ export class AlertDialogContainer extends React.Component {
   }
 
   show(state, options) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
 
     this.credentials = is_defined(state) && is_defined(state.credentials) ?
       state.credentials : [];
 
     if (is_defined(state.alert)) {
       gmp.alert.editAlertSettings(state.alert).then(response => {
-        let settings = response.data;
-        let {
+        const settings = response.data;
+        const {
           credentials = [],
           filters = [],
           report_formats = [],
@@ -175,20 +176,21 @@ export class AlertDialogContainer extends React.Component {
           alert,
         } = settings;
 
-        let {method, condition, event} = alert;
+        const {method, condition, event} = alert;
 
         this.credentials = credentials;
 
-        let result_filters = filters.filter(filter => filter.type === 'Result');
-        let secinfo_filters = filters.filter(
+        const result_filters =
+          filters.filter(filter => filter.type === 'Result');
+        const secinfo_filters = filters.filter(
           filter => filter.type === 'SecInfo');
 
         let condition_data_filters;
-        let condition_data_filter_id = value(condition.data.filter_id);
+        const condition_data_filter_id = value(condition.data.filter_id);
 
         let method_data_message;
         let method_data_message_attach;
-        let method_data_notice = value(method.data.notice,
+        const method_data_notice = value(method.data.notice,
           DEFAULT_NOTICE);
 
         let method_data_subject;
@@ -235,10 +237,10 @@ export class AlertDialogContainer extends React.Component {
           feed_event = 'new';
         }
 
-        let scp_credential_id = is_defined(method.data.scp_credential) ?
+        const scp_credential_id = is_defined(method.data.scp_credential) ?
           method.data.scp_credential.credential.id : undefined;
 
-        let verinice_credential_id =
+        const verinice_credential_id =
           is_defined(method.data.verinice_server_credential) ?
             method.data.verinice_server_credential.credential.id : undefined;
 
@@ -338,8 +340,8 @@ export class AlertDialogContainer extends React.Component {
       this.alert_dialog.show(state, options);
 
       gmp.alert.newAlertSettings().then(response => {
-        let settings = response.data;
-        let {
+        const settings = response.data;
+        const {
           credentials = [],
           filters = [],
           report_formats = [],
@@ -348,12 +350,13 @@ export class AlertDialogContainer extends React.Component {
 
         this.credentials = credentials;
 
-        let result_filters = filters.filter(filter => filter.type === 'Result');
-        let secinfo_filters = filters.filter(
+        const result_filters =
+          filters.filter(filter => filter.type === 'Result');
+        const secinfo_filters = filters.filter(
           filter => filter.type === 'SecInfo');
 
-        let result_filter_id = select_save_id(result_filters);
-        let report_format_id = select_save_id(report_formats);
+        const result_filter_id = select_save_id(result_filters);
+        const report_format_id = select_save_id(report_formats);
 
         this.alert_dialog.setValues({
           filters,
