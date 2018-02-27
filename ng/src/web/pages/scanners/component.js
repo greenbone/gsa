@@ -78,7 +78,7 @@ class ScannerComponent extends React.Component {
         this.setState({
           ca_pub: is_defined(scanner.ca_pub) ?
             scanner.ca_pub.certificate : undefined,
-            scannerDialogVisible: true,
+          scannerDialogVisible: true,
           scanner,
           title,
           type: scanner.scanner_type,
