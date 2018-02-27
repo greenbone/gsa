@@ -40,7 +40,12 @@ export class TargetDialogContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      credentialsDialogVisible: false,
+    };
+
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
+    this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
@@ -48,19 +53,23 @@ export class TargetDialogContainer extends React.Component {
   }
 
   openCredentialsDialog(data) {
-    this.credentials_dialog.show({
+    this.setState({
+      credentialsDialogVisible: true,
       types: data.types,
       base: first(data.types),
       id_field: data.id_field,
-    }, {
       title: data.title,
     });
+  }
+
+  closeCredentialsDialog() {
+    this.setState({credentialsDialogVisible: false});
   }
 
   show(state, options) {
     const {gmp} = this.context;
 
-    this.target_dialog.show(state, options);
+    this.setState(state, options);
 
     gmp.portlists.getAll().then(response => {
       const {data: port_lists} = response;
@@ -71,7 +80,7 @@ export class TargetDialogContainer extends React.Component {
     gmp.credentials.getAll().then(response => {
       const {data: credentials} = response;
       this.credentials = credentials;
-      this.target_dialog.setValue('credentials', credentials);
+      this.setState({credentials});
     });
   }
 
@@ -106,8 +115,11 @@ export class TargetDialogContainer extends React.Component {
       const {credentials = []} = this;
       credentials.push(credential);
 
-      this.target_dialog.setValue('credentials', credentials);
-      this.target_dialog.setValue(data.id_field, credential.id);
+      this.setState({
+        credentials,
+        id_field: data.id_field,
+        credential_id: credential.id,
+      });
     });
   }
 
@@ -128,17 +140,32 @@ export class TargetDialogContainer extends React.Component {
       ...props
     } = this.props;
 
+    const {
+      credentialsDialogVisible,
+      types,
+      base,
+      id_field,
+      title,
+      ...other
+    } = this.state;
+
     return (
       <Layout>
         <TargetDialog
           {...props}
+          {...other}
           onNewCredentialsClick={this.openCredentialsDialog}
           onNewPortListClick={this.openPortListDialog}
           onClose={onClose}
           onSave={this.handleSaveTarget}
         />
         <CredentialsDialog
-          ref={ref => this.credentials_dialog = ref}
+          visible={credentialsDialogVisible}
+          types={types}
+          base={base}
+          id_field={id_field}
+          title={title}
+          onClose={this.closeCredentialsDialog}
           onSave={this.handleCreateCredential}
         />
         <PortListDialog
