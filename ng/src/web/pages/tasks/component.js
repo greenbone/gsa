@@ -83,6 +83,7 @@ class TaskComponent extends React.Component {
 
     this.state = {
       containerTaskDialogVisible: false,
+      reportImportDialogVisible: false,
       taskDialogVisible: false,
     };
 
@@ -106,6 +107,7 @@ class TaskComponent extends React.Component {
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
     this.closeContainerTaskDialog = this.closeContainerTaskDialog.bind(this);
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
+    this.closeReportImportDialog = this.closeReportImportDialog.bind(this);
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
@@ -329,10 +331,15 @@ class TaskComponent extends React.Component {
   }
 
   openReportImportDialog(task) {
-    this.import_report_dialog.show({
+    this.setState({
+      reportImportDialogVisible: true,
       task_id: task.id,
       tasks: [task],
     });
+  }
+
+  closeReportImportDialog() {
+    this.setState({reportImportDialogVisible: false});
   }
 
   openTaskWizard() {
@@ -445,13 +452,16 @@ class TaskComponent extends React.Component {
       in_assets,
       min_qod,
       name,
+      reportImportDialogVisible,
       scan_configs,
       scanner_type,
       scanners,
       schedule_id,
       schedules,
       targets,
+      task_id,
       task,
+      tasks,
       taskDialogVisible,
       title = _('Edit Task {{name}}', task),
       ...data
@@ -544,8 +554,11 @@ class TaskComponent extends React.Component {
           onSave={this.handleSaveModifyTaskWizard}/>
 
         <ImportReportDialog
-          ref={ref => this.import_report_dialog = ref}
+          visible={reportImportDialogVisible}
           newContainerTask={false}
+          task_id={task_id}
+          tasks={tasks}
+          onClose={this.closeReportImportDialog}
           onSave={this.handleReportImport}/>
       </Wrapper>
     );
