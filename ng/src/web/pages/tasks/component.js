@@ -82,6 +82,7 @@ class TaskComponent extends React.Component {
     super(...args);
 
     this.state = {
+      advancedTaskWizardVisible: false,
       containerTaskDialogVisible: false,
       reportImportDialogVisible: false,
       taskDialogVisible: false,
@@ -105,6 +106,7 @@ class TaskComponent extends React.Component {
     this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
 
     this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
+    this.closeAdvancedTaskWizard = this.closeAdvancedTaskWizard.bind(this);
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
     this.closeContainerTaskDialog = this.closeContainerTaskDialog.bind(this);
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
@@ -389,7 +391,8 @@ class TaskComponent extends React.Component {
 
       const now = moment().tz(settings.timezone);
 
-      this.advanced_task_wizard.show({
+      this.setState({
+        advancedTaskWizardVisible: true,
         credentials,
         scan_configs: settings.scan_configs,
         date: now,
@@ -408,6 +411,10 @@ class TaskComponent extends React.Component {
         start_timezone: settings.timezone,
       });
     });
+  }
+
+  closeAdvancedTaskWizard() {
+    this.setState({advancedTaskWizardVisible: false});
   }
 
   openModifyTaskWizard() {
@@ -445,6 +452,7 @@ class TaskComponent extends React.Component {
     } = this.props;
 
     const {
+      advancedTaskWizardVisible,
       alert_id,
       alert_ids,
       alerts,
@@ -455,6 +463,8 @@ class TaskComponent extends React.Component {
       config_id,
       containerTaskDialogVisible,
       comment,
+      credentials,
+      date,
       esxi_credential,
       hosts,
       id,
@@ -469,10 +479,16 @@ class TaskComponent extends React.Component {
       scanners,
       schedule_id,
       schedules,
+      slave_id,
       ssh_credential,
       smb_credential,
+      start_minute,
+      start_hour,
+      start_timezone,
+      target_hosts,
       targets,
       task_id,
+      task_name,
       task,
       tasks,
       taskDialogVisible,
@@ -570,7 +586,24 @@ class TaskComponent extends React.Component {
           onSave={this.handleSaveTaskWizard}
           onNewClick={this.handleTaskWizardNewClick}/>
         <AdvancedTaskWizard
-          ref={ref => this.advanced_task_wizard = ref}
+          visible={advancedTaskWizardVisible}
+          credentials={credentials}
+          scan_configs={scan_configs}
+          date={date}
+          task_name={task_name}
+          target_hosts={target_hosts}
+          port_list_id={port_list_id}
+          alert_id={alert_id}
+          config_id={config_id}
+          ssh_credential={ssh_credential}
+          smb_credential={smb_credential}
+          esxi_credential={esxi_credential}
+          scanner_id={scanner_id}
+          slave_id={slave_id}
+          start_minute={start_minute}
+          start_hour={start_hour}
+          start_timezone={start_timezone}
+          onClose={this.closeAdvancedTaskWizard}
           onSave={this.handleSaveAdvancedTaskWizard}/>
         <ModifyTaskWizard
           ref={ref => this.modify_task_wizard = ref}
