@@ -129,11 +129,11 @@ class TaskDialogContainer extends React.Component {
   }
 
   render() {
-    const {onSave} = this.props;
+    const {onSave, ...props} = this.props;
     return (
       <Layout>
         <TaskDialog
-          ref={ref => this.task_dialog = ref}
+          {...props}
           onNewAlertClick={this.openAlertDialog}
           onNewTargetClick={this.openTargetDialog}
           onNewScheduleClick={this.openScheduleDialog}

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +55,7 @@ import AdvancedTaskWizard from '../../wizard/advancedtaskwizard.js';
 import ModifyTaskWizard from '../../wizard/modifytaskwizard.js';
 import TaskWizard from '../../wizard/taskwizard.js';
 
-import TaskDialog from './dialogcontainer.js';
+import TaskDialogContainer from './dialogcontainer.js';
 import ContainerTaskDialog from './containerdialog.js';
 
 const log = logger.getLogger('web.tasks.component');
@@ -80,6 +81,10 @@ class TaskComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      taskDialogVisible: false,
+    };
+
     const {gmp} = this.context;
 
     this.cmd = gmp.task;
@@ -102,6 +107,7 @@ class TaskComponent extends React.Component {
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
+    this.closeTaskDialog = this.closeTaskDialog.bind(this);
     this.openTaskWizard = this.openTaskWizard.bind(this);
   }
 
@@ -195,6 +201,10 @@ class TaskComponent extends React.Component {
     }
   }
 
+  closeTaskDialog() {
+    this.setState({taskDialogVisible: false});
+  }
+
   openStandardTaskDialog(task) {
     const {capabilities, gmp} = this.context;
 
@@ -237,7 +247,8 @@ class TaskComponent extends React.Component {
           });
         }
 
-        this.task_dialog.show({
+        this.setState({
+          taskDialogVisible: true,
           alert_ids: map(task.alerts, alert => alert.id),
           alerts,
           alterable: task.alterable,
@@ -257,7 +268,6 @@ class TaskComponent extends React.Component {
           targets,
           task: task,
           ...data,
-        }, {
           title: _('Edit Task {{name}}', task),
         });
       });
@@ -292,7 +302,8 @@ class TaskComponent extends React.Component {
 
         const alert_ids = is_defined(alert_id) ? [alert_id] : [];
 
-        this.task_dialog.show({
+        this.setState({
+          taskDialogVisible: true,
           alert_ids,
           alerts,
           config_id,
@@ -305,7 +316,6 @@ class TaskComponent extends React.Component {
           tags,
           target_id,
           targets,
-        }, {
           title: _('New Task'),
         });
       });
@@ -415,6 +425,31 @@ class TaskComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      alert_ids,
+      alerts,
+      alterable,
+      apply_overrides,
+      auto_delete,
+      auto_delete_data,
+      comment,
+      id,
+      in_assets,
+      min_qod,
+      name,
+      scan_configs,
+      scanner_type,
+      scanners,
+      schedule_id,
+      schedules,
+      targets,
+      task,
+      taskDialogVisible,
+      title = _('Edit Task {{name}}', task),
+      ...data
+    } = this.state;
+
     return (
       <Wrapper>
         <EntityComponent
@@ -448,8 +483,29 @@ class TaskComponent extends React.Component {
                 modifytaskwizard: this.openModifyTaskWizard,
                 taskwizard: this.openTaskWizard,
               })}
-              <TaskDialog
-                ref={ref => this.task_dialog = ref}
+              <TaskDialogContainer
+                alert_ids={alert_ids}
+                alerts={alerts}
+                alterable={alterable}
+                apply_overrides={apply_overrides}
+                auto_delete={auto_delete}
+                auto_delete_data={auto_delete_data}
+                comment={comment}
+                id={id}
+                in_assets={in_assets}
+                min_qod={min_qod}
+                name={name}
+                scan_configs={scan_configs}
+                scanner_type={scanner_type}
+                scanners={scanners}
+                schedule_id={schedule_id}
+                schedules={schedules}
+                targets={targets}
+                task={task}
+                title={title}
+                visible={taskDialogVisible}
+                {...data}
+                onClose={this.closeTaskDialog}
                 onSave={save}
               />
             </Wrapper>
