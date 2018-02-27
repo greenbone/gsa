@@ -42,11 +42,13 @@ export class TargetDialogContainer extends React.Component {
 
     this.state = {
       credentialsDialogVisible: false,
+      portListDialogVisible: false,
     };
 
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
+    this.closePortListDialog = this.closePortListDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
     this.handleSaveTarget = this.handleSaveTarget.bind(this);
@@ -74,7 +76,7 @@ export class TargetDialogContainer extends React.Component {
     gmp.portlists.getAll().then(response => {
       const {data: port_lists} = response;
       this.port_lists = port_lists;
-      this.target_dialog.setValue('port_lists', port_lists);
+      this.setState({port_lists});
     });
 
     gmp.credentials.getAll().then(response => {
@@ -85,7 +87,11 @@ export class TargetDialogContainer extends React.Component {
   }
 
   openPortListDialog() {
-    this.port_list_dialog.show({});
+    this.setState({portListDialogVisible: true});
+  }
+
+  closePortListDialog() {
+    this.setState({portListDialogVisible: false});
   }
 
   handleSaveTarget(data) {
@@ -129,8 +135,11 @@ export class TargetDialogContainer extends React.Component {
       const portlist = response.data;
       const {port_lists = []} = this;
       port_lists.push(portlist);
-      this.target_dialog.setValue('port_lists', port_lists);
-      this.target_dialog.setValue('port_list_id', portlist.id);
+
+      this.setState({
+        port_lists,
+        port_list_id: portlist.id,
+      });
     });
   }
 
@@ -141,11 +150,12 @@ export class TargetDialogContainer extends React.Component {
     } = this.props;
 
     const {
-      credentialsDialogVisible,
-      types,
       base,
+      credentialsDialogVisible,
       id_field,
+      portListDialogVisible,
       title,
+      types,
       ...other
     } = this.state;
 
@@ -169,7 +179,8 @@ export class TargetDialogContainer extends React.Component {
           onSave={this.handleCreateCredential}
         />
         <PortListDialog
-          ref={ref => this.port_list_dialog = ref}
+          visible={portListDialogVisible}
+          onClose={this.closePortListDialog}
           onSave={this.handleCreatePortList}
         />
       </Layout>
