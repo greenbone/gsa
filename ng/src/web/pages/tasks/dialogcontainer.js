@@ -47,6 +47,10 @@ class TaskDialogContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      targetDialogVisible: false,
+    };
+
     this.targets = [];
     this.alerts = [];
 
@@ -56,6 +60,7 @@ class TaskDialogContainer extends React.Component {
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
+    this.closeTargetDialog = this.closeTargetDialog.bind(this);
   }
 
   handleCreateTarget(target) {
@@ -65,8 +70,10 @@ class TaskDialogContainer extends React.Component {
 
     log.debug('adding target to task dialog', target, targets);
 
-    this.task_dialog.setValue('targets', targets);
-    this.task_dialog.setValue('target_id', target.id);
+    this.setState({
+      targets,
+      target_id: target.id,
+    });
   }
 
   handleCreateSchedule(data) {
@@ -95,7 +102,13 @@ class TaskDialogContainer extends React.Component {
   }
 
   openTargetDialog() {
-    this.target_dialog.show({});
+    this.setState({
+      targetDialogVisible: true,
+    });
+  }
+
+  closeTargetDialog() {
+    this.setState({targetDialogVisible: false});
   }
 
   openAlertDialog() {
@@ -130,6 +143,11 @@ class TaskDialogContainer extends React.Component {
 
   render() {
     const {onSave, ...props} = this.props;
+    const {
+      target_id,
+      targetDialogVisible,
+      targets,
+    } = this.state;
     return (
       <Layout>
         <TaskDialog
@@ -143,7 +161,11 @@ class TaskDialogContainer extends React.Component {
           ref={ref => this.schedule_dialog = ref}
           onSave={this.handleCreateSchedule}/>
         <TargetDialogContainer
-          ref={ref => this.target_dialog = ref}
+          targets={targets}
+          target_id={target_id}
+          title={_('Create new Target')}
+          visible={targetDialogVisible}
+          onClose={this.closeTargetDialog}
           onSave={this.handleCreateTarget}/>
         <AlertDialogContainer
           ref={ref => this.alert_dialog = ref}
