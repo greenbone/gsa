@@ -55,7 +55,7 @@ export const WizardContent = glamorous.div({
 
 const TaskWizard = ({
     hosts,
-    title,
+    title = _('Task Wizard'),
     visible,
     onClose,
     onNewClick,
