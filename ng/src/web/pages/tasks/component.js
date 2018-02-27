@@ -85,6 +85,7 @@ class TaskComponent extends React.Component {
       containerTaskDialogVisible: false,
       reportImportDialogVisible: false,
       taskDialogVisible: false,
+      taskWizardVisible: false,
     };
 
     const {gmp} = this.context;
@@ -113,6 +114,7 @@ class TaskComponent extends React.Component {
     this.openTaskDialog = this.openTaskDialog.bind(this);
     this.closeTaskDialog = this.closeTaskDialog.bind(this);
     this.openTaskWizard = this.openTaskWizard.bind(this);
+    this.closeTaskWizard = this.closeTaskWizard.bind(this);
   }
 
   handleSaveContainerTask(data) {
@@ -178,7 +180,7 @@ class TaskComponent extends React.Component {
 
   handleTaskWizardNewClick() {
     this.openTaskDialog();
-    this.task_wizard.close();
+    this.closeTaskWizard();
   }
 
   openContainerTaskDialog(task) {
@@ -345,11 +347,10 @@ class TaskComponent extends React.Component {
   openTaskWizard() {
     const {gmp} = this.context;
 
-    this.task_wizard.show({});
-
     gmp.wizard.task().then(response => {
       const settings = response.data;
-      this.task_wizard.setValues({
+      this.setState({
+        taskWizardVisible: true,
         hosts: settings.client_address,
         port_list_id: settings.get('Default Port List').value,
         alert_id: settings.get('Default Alert').value,
@@ -360,6 +361,10 @@ class TaskComponent extends React.Component {
         scanner_id: settings.get('Default OpenVAS Scanner').value,
       });
     });
+  }
+
+  closeTaskWizard() {
+    this.setState({taskWizardVisible: false});
   }
 
   openAdvancedTaskWizard() {
@@ -440,29 +445,38 @@ class TaskComponent extends React.Component {
     } = this.props;
 
     const {
+      alert_id,
       alert_ids,
       alerts,
       alterable,
       apply_overrides,
       auto_delete,
       auto_delete_data,
+      config_id,
       containerTaskDialogVisible,
       comment,
+      esxi_credential,
+      hosts,
       id,
       in_assets,
       min_qod,
       name,
+      port_list_id,
       reportImportDialogVisible,
       scan_configs,
+      scanner_id,
       scanner_type,
       scanners,
       schedule_id,
       schedules,
+      ssh_credential,
+      smb_credential,
       targets,
       task_id,
       task,
       tasks,
       taskDialogVisible,
+      taskWizardVisible,
       title = _('Edit Task {{name}}', task),
       ...data
     } = this.state;
@@ -543,7 +557,16 @@ class TaskComponent extends React.Component {
           onSave={this.handleSaveContainerTask}/>
 
         <TaskWizard
-          ref={ref => this.task_wizard = ref}
+          hosts={hosts}
+          port_list_id={port_list_id}
+          alert_id={alert_id}
+          config_id={config_id}
+          ssh_credential={ssh_credential}
+          smb_credential={smb_credential}
+          esxi_credential={esxi_credential}
+          scanner_id={scanner_id}
+          visible={taskWizardVisible}
+          onClose={this.closeTaskWizard}
           onSave={this.handleSaveTaskWizard}
           onNewClick={this.handleTaskWizardNewClick}/>
         <AdvancedTaskWizard
