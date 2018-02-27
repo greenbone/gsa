@@ -82,6 +82,7 @@ class TaskComponent extends React.Component {
     super(...args);
 
     this.state = {
+      containerTaskDialogVisible: false,
       taskDialogVisible: false,
     };
 
@@ -103,6 +104,7 @@ class TaskComponent extends React.Component {
 
     this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
+    this.closeContainerTaskDialog = this.closeContainerTaskDialog.bind(this);
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
@@ -178,18 +180,22 @@ class TaskComponent extends React.Component {
   }
 
   openContainerTaskDialog(task) {
-    this.container_dialog.show({
+    this.setState({
+      containerTaskDialogVisible: true,
       task,
-      name: task ? task.name : _('unnamed'),
+      name: task ? task.name : _('Unnamed'),
       comment: task ? task.comment : '',
       id: task ? task.id : undefined,
       in_assets: task ? task.in_assets : undefined,
       auto_delete: task ? task.auto_delete : undefined,
       auto_delete_data: task ? task.auto_delete_data : undefined,
-    }, {
       title: task ? _('Edit Container Task {{name}}', task) :
         _('New Container Task'),
     });
+  }
+
+  closeContainerTaskDialog() {
+    this.setState({containerTaskDialogVisible: false});
   }
 
   openTaskDialog(task) {
@@ -433,6 +439,7 @@ class TaskComponent extends React.Component {
       apply_overrides,
       auto_delete,
       auto_delete_data,
+      containerTaskDialogVisible,
       comment,
       id,
       in_assets,
@@ -513,7 +520,16 @@ class TaskComponent extends React.Component {
         </EntityComponent>
 
         <ContainerTaskDialog
-          ref={ref => this.container_dialog = ref}
+          visible={containerTaskDialogVisible}
+          task={task}
+          name={name}
+          comment={comment}
+          id={id}
+          in_assets={in_assets}
+          auto_delete={auto_delete}
+          auto_delete_data={auto_delete_data}
+          title={title}
+          onClose={this.closeContainerTaskDialog}
           onSave={this.handleSaveContainerTask}/>
 
         <TaskWizard
