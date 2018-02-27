@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +59,7 @@ class TaskDialogContainer extends React.Component {
   }
 
   handleCreateTarget(target) {
-    let {targets} = this;
+    const {targets} = this;
 
     targets.push(target);
 
@@ -69,10 +70,10 @@ class TaskDialogContainer extends React.Component {
   }
 
   handleCreateSchedule(data) {
-    let {schedules} = this;
-    let {gmp} = this.context;
+    const {schedules} = this;
+    const {gmp} = this.context;
     return gmp.schedule.create(data).then(response => {
-      let schedule = response.data;
+      const schedule = response.data;
 
       schedules.push(schedule);
 
@@ -82,7 +83,7 @@ class TaskDialogContainer extends React.Component {
   }
 
   handleCreateAlert(alert) {
-    let {alerts = [], alert_ids = []} = this;
+    const {alerts = [], alert_ids = []} = this;
 
     alerts.push(alert);
     alert_ids.push(alert.id);
@@ -102,9 +103,9 @@ class TaskDialogContainer extends React.Component {
   }
 
   openScheduleDialog() {
-    let {gmp} = this.context;
-    let timezone = gmp.globals.timezone;
-    let now = moment().tz(timezone);
+    const {gmp} = this.context;
+    const {timezone} = gmp.globals;
+    const now = moment().tz(timezone);
 
     this.schedule_dialog.show({
       timezone,
