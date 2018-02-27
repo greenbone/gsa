@@ -123,12 +123,18 @@ export class TargetDialogContainer extends React.Component {
   }
 
   render() {
+    const {
+      onClose,
+      ...props
+    } = this.props;
+
     return (
       <Layout>
         <TargetDialog
-          ref={ref => this.target_dialog = ref}
+          {...props}
           onNewCredentialsClick={this.openCredentialsDialog}
           onNewPortListClick={this.openPortListDialog}
+          onClose={onClose}
           onSave={this.handleSaveTarget}
         />
         <CredentialsDialog
@@ -145,6 +151,7 @@ export class TargetDialogContainer extends React.Component {
 };
 
 TargetDialogContainer.propTypes = {
+  onClose: PropTypes.func,
   onSave: PropTypes.func,
 };
 
