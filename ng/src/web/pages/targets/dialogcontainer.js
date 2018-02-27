@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +58,7 @@ export class TargetDialogContainer extends React.Component {
   }
 
   show(state, options) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
 
     this.target_dialog.show(state, options);
 
@@ -79,8 +80,8 @@ export class TargetDialogContainer extends React.Component {
   }
 
   handleSaveTarget(data) {
-    let {gmp} = this.context;
-    let {onSave} = this.props;
+    const {gmp} = this.context;
+    const {onSave} = this.props;
 
     let promise;
     if (data && data.id) {
@@ -90,7 +91,7 @@ export class TargetDialogContainer extends React.Component {
       promise = gmp.target.create(data);
     }
     return promise.then(response => {
-      let target = response.data;
+      const target = response.data;
       if (onSave) {
         return onSave(target);
       }
@@ -99,10 +100,10 @@ export class TargetDialogContainer extends React.Component {
   }
 
   handleCreateCredential(data) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     return gmp.credential.create(data).then(response => {
-      let credential = response.data;
-      let {credentials = []} = this;
+      const credential = response.data;
+      const {credentials = []} = this;
       credentials.push(credential);
 
       this.target_dialog.setValue('credentials', credentials);
@@ -111,10 +112,10 @@ export class TargetDialogContainer extends React.Component {
   }
 
   handleCreatePortList(data) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     return gmp.portlist.create(data).then(response => {
-      let portlist = response.data;
-      let {port_lists = []} = this;
+      const portlist = response.data;
+      const {port_lists = []} = this;
       port_lists.push(portlist);
       this.target_dialog.setValue('port_lists', port_lists);
       this.target_dialog.setValue('port_list_id', portlist.id);
