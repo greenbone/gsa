@@ -149,7 +149,9 @@ const BarChart = ({
           ))}
         </Group>
       </svg>
-      <Legend data={data}/>
+      {data.length > 0 &&
+        <Legend data={data} />
+      }
     </Layout>
   );
 };

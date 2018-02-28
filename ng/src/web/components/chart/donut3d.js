@@ -309,7 +309,9 @@ const Donut3DChart = ({
           />
         }
       </svg>
-      <Legend data={data}/>
+      {data.length > 0 &&
+        <Legend data={data}/>
+      }
     </Layout>
   );
 };
