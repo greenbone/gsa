@@ -30,6 +30,7 @@ import Legend from './legend';
 import Pie from './pie';
 import ToolTip from './tooltip';
 import Label from './label';
+import Svg from './svg';
 
 const Arc = ({
   path,
@@ -93,7 +94,7 @@ const DonutChart = ({
   const radius = (height - margin.top) / 2;
   return (
     <Layout align={['start', 'start']}>
-      <svg width={width} height={height}>
+      <Svg width={width} height={height}>
         <Pie
           data={data}
           top={height / 2}
@@ -118,7 +119,7 @@ const DonutChart = ({
             />
           )}
         </Pie>
-      </svg>
+      </Svg>
       {data.length > 0 &&
         <Legend data={data} />
       }

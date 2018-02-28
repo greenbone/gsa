@@ -36,9 +36,10 @@ import {is_defined} from 'gmp/utils/identity';
 import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
+import Theme from '../../utils/theme';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
-import Theme from '../../utils/theme';
+import Svg from './svg';
 
 const margin = {
   top: 55,
@@ -61,13 +62,6 @@ const EMPTY_LINE_DATA = {
 const Text = glamorous.text({
   fontSize: '13px',
   fill: Theme.white,
-});
-
-const Svg = glamorous.svg({
-  overflow: 'visible',
-  '& text': {
-    userSelect: 'none',
-  },
 });
 
 const lineDataPropType = PropTypes.arrayOf(PropTypes.shape({

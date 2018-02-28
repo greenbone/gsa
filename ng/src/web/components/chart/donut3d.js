@@ -31,11 +31,14 @@ import Theme from '../../utils/theme';
 
 import path from './utils/path';
 import arc from './utils/arc';
+
 import Layout from '../layout/layout';
+
 import Pie from './pie';
 import Label from './label';
 import ToolTip from './tooltip';
 import Legend from './legend';
+import Svg from './svg';
 
 const margin = {
   top: 20,
@@ -241,7 +244,7 @@ const Donut3DChart = ({
   };
   return (
     <Layout align={['start', 'start']}>
-      <svg width={width} height={height}>
+      <Svg width={width} height={height}>
         {data.length > 0 ?
           <Pie
             data={data}
@@ -308,7 +311,7 @@ const Donut3DChart = ({
             {...props}
           />
         }
-      </svg>
+      </Svg>
       {data.length > 0 &&
         <Legend data={data}/>
       }
