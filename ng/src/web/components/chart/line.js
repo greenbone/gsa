@@ -27,7 +27,6 @@ import {css} from 'glamor';
 import glamorous from 'glamorous';
 
 import {Group} from '@vx/group';
-import {AxisLeft, AxisBottom, AxisRight} from '@vx/axis';
 import {scaleLinear} from '@vx/scale';
 import {Line, LinePath} from '@vx/shape';
 
@@ -39,6 +38,7 @@ import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
+import Axis from './axis';
 import Svg from './svg';
 
 const margin = {
@@ -462,35 +462,29 @@ class LineChart extends React.Component {
             left={margin.left}
           >
             {lineData.y.length > 0 &&
-              <AxisLeft
-                axisLineClassName={`${lineCss}`}
-                tickClassName={`${lineCss}`}
+              <Axis
+                orientation="left"
                 scale={yScale}
                 top={0}
                 left={0}
                 label={yAxisLabel}
                 numTicks={10}
-                rangePadding={-8} // - tickLength
               />
             }
-            <AxisBottom
-              axisLineClassName={`${lineCss}`}
-              tickClassName={`${lineCss}`}
+            <Axis
+              orientation="bottom"
               scale={xScale}
               top={maxHeight}
               label={xAxisLabel}
-              rangePadding={8} // tickLength
             />
             {lineData.y2.length > 0 &&
-              <AxisRight
-                axisLineClassName={`${lineCss}`}
-                tickClassName={`${lineCss}`}
+              <Axis
+                orientation="right"
                 scale={y2Scale}
                 top={0}
                 left={maxWidth}
                 label={y2AxisLabel}
                 numTicks={10}
-                rangePadding={-8} // - tickLength
               />
             }
             {hasValues &&
