@@ -22,7 +22,9 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import glamorous, {Div} from 'glamorous';
+
+import {Line as VxLine} from '@vx/shape';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -66,6 +68,41 @@ export const Rect = glamorous.div('legend-rect', {
 }, ({color}) => ({
   backgroundColor: color,
 }));
+
+export const Line = ({
+  width = DEFAULT_SHAPE_SIZE + 5,
+  height = DEFAULT_SHAPE_SIZE,
+  color,
+  lineWidth = 1,
+  dashArray,
+}) => {
+  const y = height / 2;
+  return (
+    <Div
+      height={height}
+      backgroundColor={Theme.white}
+      padding="0 2px"
+     >
+      <svg width={width} height={height}>
+        <VxLine
+          from={{x: 0, y}}
+          to={{x: width, y}}
+          strokeDasharray={dashArray}
+          stroke={color}
+          strokeWidth={lineWidth}
+        />
+      </svg>
+    </Div>
+  );
+};
+
+Line.propTypes = {
+  color: PropTypes.toString.isRequired,
+  dashArray: PropTypes.toString,
+  height: PropTypes.number,
+  lineWidth: PropTypes.number,
+  width: PropTypes.number,
+};
 
 const Legend = ({
   data,
