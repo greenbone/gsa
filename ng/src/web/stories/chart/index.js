@@ -26,7 +26,7 @@ import {Div} from 'glamorous';
 
 import {storiesOf} from '@storybook/react';
 
-import Legend from 'web/components/chart/legend';
+import Legend, {Label, Item, Line} from 'web/components/chart/legend';
 import BarChart from 'web/components/chart/bar';
 import DonutChart from 'web/components/chart/donut';
 import Donut3DChart from 'web/components/chart/donut3d';
@@ -85,8 +85,40 @@ const bardata = [{
 storiesOf('Chart/Legend', module)
   .add('default', () => {
     return (
-      <Div width="400px">
+      <Div display="flex">
         <Legend data={data}/>
+      </Div>
+    );
+  })
+  .add('line', () => {
+    return (
+      <Div display="flex" margin="50">
+        <Legend
+          data={[{
+            color: 'red',
+            name: 'Foo',
+            toolTip: 'Foo Foo Foo',
+            width: 1,
+            dashes: '1, 2',
+          }, {
+            color: 'green',
+            name: 'Bar',
+            toolTip: 'Bar Bar Bar',
+            width: 2,
+            dashes: '3, 2',
+          }]}
+        >
+          {({d, toolTipProps}) => (
+            <Item {...toolTipProps}>
+              <Line
+                color={d.color}
+                lineWidth={d.width}
+                dashArray={d.dashes}
+              />
+              <Label>{d.name}</Label>
+            </Item>
+          )}
+        </Legend>
       </Div>
     );
   });
