@@ -40,6 +40,7 @@ const StyledLegend = glamorous.div({
   margin: '10px 5px',
   display: 'flex',
   flexDirection: 'column',
+  userSelect: 'none',
   backgroundColor: Theme.mediumGray,
   color: Theme.white,
   opacity: 0.75,
