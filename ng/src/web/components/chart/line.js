@@ -37,7 +37,7 @@ import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 
-import Legend from './legend';
+import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Theme from '../../utils/theme';
 
 const margin = {
@@ -53,7 +53,10 @@ const lineCss = css({
 
 const LINE_HEIGHT = 15;
 
-const DASH_ARRAY = '4, 1';
+const EMPTY_LINE_DATA = {
+  y: [],
+  y2: [],
+};
 
 const Text = glamorous.text({
   fontSize: '13px',
@@ -67,25 +70,63 @@ const Svg = glamorous.svg({
   },
 });
 
+const lineDataPropType = PropTypes.arrayOf(PropTypes.shape({
+  label: PropTypes.any.isRequired,
+  color: PropTypes.toString.isRequired,
+  width: PropTypes.number,
+  dashArray: PropTypes.string,
+}));
+
+const Cross = ({
+  x,
+  y,
+  color,
+  dashArray,
+  lineWidth = 1,
+}) => (
+  <Group>
+    <Line
+      from={{x: x - 5, y: y - 5}}
+      to={{x: x + 5, y: y + 5}}
+      stroke={color}
+      strokeDasharray={dashArray}
+      strokeWidth={lineWidth}
+    />
+    <Line
+      from={{x: x + 5, y: y - 5}}
+      to={{x: x - 5, y: y + 5}}
+      stroke={color}
+      strokeDasharray={dashArray}
+      strokeWidth={lineWidth}
+    />
+  </Group>
+);
+
+Cross.propTypes = {
+  color: PropTypes.toString.isRequired,
+  dashArray: PropTypes.toString,
+  lineWidth: PropTypes.number,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+};
+
 class LineChart extends React.Component {
 
    static propTypes = {
-    color: PropTypes.toString.isRequired,
-    color2: PropTypes.toString.isRequired,
     data: PropTypes.arrayOf(PropTypes.shape({
       x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-      y2: PropTypes.number.isRequired,
+      y: PropTypes.arrayOf(PropTypes.number).isRequired,
+      y2: PropTypes.arrayOf(PropTypes.number).isRequired,
     })),
     height: PropTypes.number.isRequired,
-    legendData: PropTypes.arrayOf(PropTypes.shape({
-      color: PropTypes.toString.isRequired,
-      label: PropTypes.any.isRequired,
-    })),
+    lineData: PropTypes.shape({
+      y: lineDataPropType,
+      y2: lineDataPropType,
+    }).isRequired,
     width: PropTypes.number.isRequired,
-    xLabel: PropTypes.string,
-    y2Label: PropTypes.string,
-    yLabel: PropTypes.string,
+    xAxisLabel: PropTypes.string,
+    y2AxisLabel: PropTypes.string,
+    yAxisLabel: PropTypes.string,
     onRangeSelected: PropTypes.func,
   };
 
@@ -195,8 +236,8 @@ class LineChart extends React.Component {
     const maxHeight = height - margin.top - margin.bottom;
 
     const xValues = data.map(d => d.x);
-    const yValues = data.map(d => d.y);
-    const y2Values = data.map(d => d.y2);
+    const yValues = [].concat(...data.map(d => d.y));
+    const y2Values = [].concat(...data.map(d => d.y2));
     const yMax = Math.max(...yValues);
     const y2Max = Math.max(...y2Values);
     const xMin = Math.min(...xValues);
@@ -214,9 +255,11 @@ class LineChart extends React.Component {
       nice: true,
     });
 
+    // change y2Domain only to not overlap single data points for y and y2
+    const y2Domain = data.length > 1 ? [0, y2Max] : [0, y2Max * 2];
     const y2Scale = scaleLinear({
       range: [maxHeight, 0],
-      domain: [0, y2Max],
+      domain: y2Domain,
       nice: true,
     });
 
@@ -235,8 +278,7 @@ class LineChart extends React.Component {
 
   renderInfo() {
     const {
-      color,
-      color2,
+      lineData = EMPTY_LINE_DATA,
     } = this.props;
     const {
       data,
@@ -247,18 +289,20 @@ class LineChart extends React.Component {
       xScale,
     } = this.state;
 
-    if (!displayInfo || !is_defined(infoX)) {
+    const lines = lineData.y.length + lineData.y2.length;
+
+    if (!displayInfo || !is_defined(infoX) || lines === 0) {
       return null;
     }
 
     const value = data.find(d => d.x === infoX);
     const x = xScale(infoX);
-    const lines = 2;
     const infoWidth = 100;
     const infoHeight = LINE_HEIGHT + lines * LINE_HEIGHT;
-    const infoMargin = 5;
+    const itemMargin = 5;
     const lineY = LINE_HEIGHT / 2;
     const lineLength = 15;
+    const infoMargin = 20;
     return (
       <Group>
         <Line
@@ -267,28 +311,28 @@ class LineChart extends React.Component {
           className={`${lineCss}`}
         />
         <Group
-          left={x + 20}
+          left={x + infoMargin}
           top={mouseY}
         >
           <rect
             x={0}
             y={0}
-            width={infoWidth + 3 * infoMargin}
-            height={infoHeight + 2 * infoMargin}
+            width={infoWidth + 3 * itemMargin}
+            height={infoHeight + 2 * itemMargin}
             fill={Theme.mediumGray}
             opacity="0.75"
           >
           </rect>
           <rect
-            x={infoMargin}
+            x={itemMargin}
             y={0}
-            width={15 + 2 * infoMargin}
-            height={infoHeight + 2 * infoMargin}
+            width={15 + 2 * itemMargin}
+            height={infoHeight + 2 * itemMargin}
             fill={Theme.white}
           />
           <Group
             top={LINE_HEIGHT}
-            left={2 * infoMargin}
+            left={2 * itemMargin}
             textAnchor="end"
           >
             <Text
@@ -298,29 +342,50 @@ class LineChart extends React.Component {
             >
               {value.label}
             </Text>
-            <Text
-              x={infoWidth}
-              y={LINE_HEIGHT - 1}
+            {lineData.y.map((line, i) => (
+              <Group
+                top={i * LINE_HEIGHT}
+                key={i}
+              >
+                <Line
+                  from={{x: 0, y: lineY}}
+                  to={{x: lineLength, y: lineY}}
+                  stroke={line.color}
+                  strokeDasharray={line.dashArray}
+                  strokeWidth={line.lineWidth}
+                />
+                <Text
+                  x={infoWidth}
+                  y={LINE_HEIGHT - 1}
+                >
+                  {value.y[i]}
+                </Text>
+              </Group>
+            ))}
+            <Group
+              top={LINE_HEIGHT * lineData.y.length}
             >
-              {value.y}
-            </Text>
-            <Text
-              x={infoWidth}
-              y={2 * LINE_HEIGHT - 1}
-            >
-              {value.y2}
-            </Text>
-            <Line
-              from={{x: 0, y: lineY}}
-              to={{x: lineLength, y: lineY}}
-              stroke={color}
-            />
-            <Line
-              from={{x: 0, y: LINE_HEIGHT + lineY}}
-              to={{x: lineLength, y: LINE_HEIGHT + lineY}}
-              stroke={color2}
-              strokeDasharray={DASH_ARRAY}
-            />
+              {lineData.y2.map((line, i) => (
+                <Group
+                  top={i * LINE_HEIGHT}
+                  key={i}
+                >
+                  <Line
+                    from={{x: 0, y: lineY}}
+                    to={{x: lineLength, y: lineY}}
+                    stroke={line.color}
+                    strokeDasharray={line.dashArray}
+                    strokeWidth={line.lineWidth}
+                  />
+                  <Text
+                    x={infoWidth}
+                    y={LINE_HEIGHT - 1}
+                  >
+                    {value.y2[i]}
+                  </Text>
+                </Group>
+              ))}
+            </Group>
           </Group>
         </Group>
       </Group>
@@ -376,15 +441,14 @@ class LineChart extends React.Component {
     const {
       height,
       width,
-      xLabel,
-      yLabel,
-      y2Label,
-      color,
-      color2,
-      legendData,
+      xAxisLabel,
+      yAxisLabel,
+      y2AxisLabel,
+      lineData = EMPTY_LINE_DATA,
     } = this.props;
     const hasValues = data.length > 1;
     const hasOneValue = data.length === 1;
+    const lines = lineData.y.length + lineData.y2.length;
     return (
       <Layout align={['start', 'start']}>
         <Svg
@@ -407,7 +471,7 @@ class LineChart extends React.Component {
               scale={yScale}
               top={0}
               left={0}
-              label={yLabel}
+              label={yAxisLabel}
               numTicks={10}
               rangePadding={-8} // - tickLength
             />
@@ -416,7 +480,7 @@ class LineChart extends React.Component {
               tickClassName={`${lineCss}`}
               scale={xScale}
               top={maxHeight}
-              label={xLabel}
+              label={xAxisLabel}
               rangePadding={8} // tickLength
             />
             <AxisRight
@@ -425,61 +489,100 @@ class LineChart extends React.Component {
               scale={y2Scale}
               top={0}
               left={maxWidth}
-              label={y2Label}
+              label={y2AxisLabel}
               numTicks={10}
               rangePadding={-8} // - tickLength
             />
             {hasValues &&
               <Group>
-                <LinePath
-                  data={data}
-                  x={d => d.x}
-                  y={d => d.y}
-                  stroke={color}
-                  strokeWidth={1}
-                  xScale={xScale}
-                  yScale={yScale}
-                />
-                <LinePath
-                  data={data}
-                  x={d => d.x}
-                  y={d => d.y2}
-                  stroke={color2}
-                  strokeWidth={1}
-                  strokeDasharray={DASH_ARRAY}
-                  xScale={xScale}
-                  yScale={y2Scale}
-                />
+                {lineData.y.map((line, i) => (
+                  <LinePath
+                    key={i}
+                    data={data}
+                    x={d => d.x}
+                    y={d => d.y[i]}
+                    stroke={line.color}
+                    strokeWidth={
+                      is_defined(line.lineWidth) ?
+                        line.lineWidth : 1
+                    }
+                    strokeDasharray={line.dashArray}
+                    xScale={xScale}
+                    yScale={yScale}
+                  />
+                ))}
+                {lineData.y2.map((line, i) => (
+                  <LinePath
+                    key={i}
+                    data={data}
+                    x={d => d.x}
+                    y={d => d.y2[i]}
+                    stroke={line.color}
+                    strokeWidth={
+                      is_defined(line.lineWidth) ?
+                        line.lineWidth : 1
+                    }
+                    strokeDasharray={line.dashArray}
+                    xScale={xScale}
+                    yScale={y2Scale}
+                  />
+                ))}
               </Group>
             }
             {hasOneValue &&
               <Group>
-                <circle
-                  cx={xScale(data[0].x)}
-                  cy={yScale(data[0].y)}
-                  fill={color}
-                  r={5}
-                />
-                <circle
-                  cx={xScale(data[0].x)}
-                  cy={y2Scale(data[0].y2)}
-                  fill={color2}
-                  r={5}
-                />
+                {lineData.y.map((line, i) => {
+                  const x = xScale(data[0].x);
+                  const y = yScale(data[0].y[i]);
+                  return (
+                    <Cross
+                      key={i}
+                      x={x}
+                      y={y}
+                      color={line.color}
+                      dashArray={line.dashArray}
+                      lineWidth={line.lineWidth}
+                    />
+                  );
+                })}
+                {lineData.y2.map((line, i) => {
+                  const x = xScale(data[0].x);
+                  const y = y2Scale(data[0].y2[i]);
+                  return (
+                    <Cross
+                      key={i}
+                      x={x}
+                      y={y}
+                      color={line.color}
+                      dashArray={line.dashArray}
+                      lineWidth={line.lineWidth}
+                    />
+                  );
+                })}
               </Group>
             }
             {this.renderInfo()}
             {this.renderRange()}
           </Group>
         </Svg>
-        {is_defined(legendData) &&
-          <Legend data={legendData}/>
+        {lines > 0 &&
+          <Legend data={[...lineData.y, ...lineData.y2]}>
+            {({d, toolTipProps}) => (
+              <Item {...toolTipProps}>
+                <LegendLine
+                  color={d.color}
+                  lineWidth={d.width}
+                  dashArray={d.dashArray}
+                />
+                <Label>{d.label}</Label>
+              </Item>
+            )}
+          </Legend>
         }
       </Layout>
     );
   }
 }
-
 
 export default LineChart;
 
