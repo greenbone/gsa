@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +90,10 @@ class AlertComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      credentialDialogVisible: false,
+    };
+
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
 
@@ -99,6 +104,7 @@ class AlertComponent extends React.Component {
       this);
     this.openTippingPointCredentialDialog =
       this.openTippingPointCredentialDialog.bind(this);
+    this.closeCredentialDialog = this.closeCredentialDialog.bind(this);
 
   }
 
@@ -113,29 +119,33 @@ class AlertComponent extends React.Component {
 
       credentials.push(credential);
 
-      this.alert_dialog.setValue('credentials', credentials);
+      this.setState({credentials});
 
       if (data.type === 'scp') {
-        this.alert_dialog.setValue('method_data_scp_credential', credential.id);
+        this.setState({method_data_scp_credential: credential.id});
       }
       else if (data.type === 'smb') {
-        this.alert_dialog.setValue('method_data_smb_credential', credential.id);
+        this.setSate({method_data_smb_credential: credential.id});
       }
       else if (data.type === 'verinice') {
-        this.alert_dialog.setValue('method_data_verinice_server_credential',
-          credential.id);
+        this.setSatte({method_data_verinice_server_credential: credential.id});
       }
       else if (data.type === 'tippingpoint') {
-        this.alert_dialog.setValue('method_data_tp_sms_credential',
-          credential.id);
+        this.setState({method_data_tp_sms_credential: credential.id});
       }
     });
   }
 
   openCredentialDialog(data) {
-    this.credentials_dialog.show(data, {
+    this.setState({
+      credentialDialogVisible: true,
+      data,
       title: _('Create new Credential'),
     });
+  }
+
+  closeCredentialDialog() {
+    this.setState({credentialDialogVisible: false});
   }
 
   openScpCredentialDialog(types) {
@@ -151,7 +161,7 @@ class AlertComponent extends React.Component {
   }
 
   openTippingPointCredentialDialog(types) {
-    this.openCredentialDialog({type: 'verinice', types});
+    this.openCredentialDialog({type: 'tippingpoint', types});
   }
 
   openAlertDialog(alert) {
@@ -437,6 +447,13 @@ class AlertComponent extends React.Component {
       onSaveError = onError,
     } = this.props;
 
+    const {
+      credentialDialogVisible,
+      data,
+      title,
+      type,
+    } = this.state;
+
     return (
       <EntityComponent
         name="alert"
@@ -472,7 +489,12 @@ class AlertComponent extends React.Component {
               onSave={save}
             />
             <CredentialsDialog
-              ref={ref => this.credentials_dialog = ref}
+              credentialDialogVisible={credentialDialogVisible}
+              data={data}
+              title={title}
+              type={type}
+              visible={credentialDialogVisible}
+              onClose={this.closeCredentialDialog}
               onSave={this.handleCreateCredential}
             />
           </Layout>
