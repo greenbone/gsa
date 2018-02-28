@@ -24,6 +24,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../utils/proptypes';
 
 import ToolTip from './tooltip';
@@ -37,21 +39,21 @@ const StyledLegend = glamorous.div({
   flexDirection: 'column',
 });
 
-const Item = glamorous.div('legend-item', {
+export const Item = glamorous.div('legend-item', {
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   margin: '5px 0',
 });
 
-const Label = glamorous.div('legend-label', {
+export const Label = glamorous.div('legend-label', {
   display: 'flex',
   justifyContent: 'start',
   alignItems: 'center',
   flexGrow: 1,
 });
 
-const Shape = glamorous.div('legend-shape', {
+export const Rect = glamorous.div('legend-rect', {
   display: 'flex',
   alignItems: 'center',
   width: '15px',
@@ -63,6 +65,7 @@ const Shape = glamorous.div('legend-shape', {
 
 const Legend = ({
   data,
+  children,
 }) => (
   <StyledLegend>
     {data.map((d, i) => (
@@ -70,34 +73,37 @@ const Legend = ({
         key={i}
         content={d.toolTip}
       >
-        {({targetRef, hide, show}) => (
-          <Item
-            innerRef={targetRef}
-            onMouseOver={show}
-            onMouseOut={hide}
-          >
-            <Shape color={d.color}/>
-            <Label>{d.label}</Label>
-          </Item>
-        )}
+        {({targetRef, hide, show}) =>
+          is_defined(children) ?
+            children({
+              d,
+              toolTipProps: {
+                innerRef: targetRef,
+                onMouseOut: hide,
+                onMouseOver: show,
+              },
+            }) :
+            <Item
+              innerRef={targetRef}
+              onMouseOver={show}
+              onMouseOut={hide}
+            >
+              <Rect color={d.color}/>
+              <Label>{d.label}</Label>
+            </Item>
+        }
       </ToolTip>
     ))}
   </StyledLegend>
 );
 
 Legend.propTypes = {
-  /*
-    Required array structure for data:
-
-    [{
-      color: ...,
-      label: ...,
-    }]
-  */
+  children: PropTypes.func,
   data: PropTypes.arrayOf(PropTypes.shape({
-    color: PropTypes.toString.isRequired,
-    label: PropTypes.any.isRequired,
-  })),
+    color: PropTypes.toString,
+    label: PropTypes.any,
+    toolTip: PropTypes.elementOrString,
+  })).isRequired,
 };
 
 export default Legend;
