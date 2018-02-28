@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@reenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -27,7 +28,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-import withDialog from '../components/dialog/withDialog.js';
+import SaveDialog from '../components/dialog/savedialog.js';
 
 import Select from '../components/form/select.js';
 import Spinner from '../components/form/spinner.js';
@@ -55,125 +56,158 @@ const ModifyTaskWizard = ({
     start_minute,
     start_timezone,
     task_id,
-    tasks,
-    onValueChange,
+    tasks = [],
+    title,
+    visible,
+    onClose,
+    onSave,
   }, {capabilities}) => {
   const task_opts = render_options(tasks);
+
+  const data = {
+    alert_email,
+    date,
+    reschedule,
+    start_hour,
+    start_minute,
+    start_timezone,
+    task_id,
+    tasks,
+  };
+
   return (
-    <Layout flex align={['start', 'start']}>
-      <Layout basis="40%">
-        <Wizardess>
-          <Img src="enchantress.svg"/>
-        </Wizardess>
-        <WizardContent>
-          <div>
-            {_('I will modify an existing task for you. The difference to ' +
-              'the Edit Task dialog is that here you can enter values for ' +
-              'associated objects directly. I will then create them for ' +
-              'you automatically and assign them to the selected task.')}
-          </div>
-          <div>
-            {_('Please be aware that')}
-            <ul>
-              <li>
-                {_('setting a start time overwrites a possibly already ' +
-                  'existing one,')}
-              </li>
-              <li>
-                {_('setting an Email Address means adding an additional ' +
-                  'Alert, not replacing an existing one.')}
-              </li>
-            </ul>
-          </div>
-        </WizardContent>
-      </Layout>
-      <Layout
-        basis="0"
-        grow="1"
-        flex="column">
-        <h1>{_('Quick edit: Modify a task')}</h1>
-        <FormGroup title={_('Task')} titleSize="3">
-          <Select
-            name="task_id"
-            value={task_id}
-            onChange={onValueChange}>
-            {task_opts}
-          </Select>
-        </FormGroup>
-
-        <FormGroup
-          title={_('Start Time')}
-          titleSize="3"
-          flex="column">
-          <FormGroup>
-            <Radio
-              title={_('Do not change')}
-              value="0"
-              checked={reschedule === '0'}
-              name="reschedule"
-              onChange={onValueChange}>
-            </Radio>
-          </FormGroup>
-          <FormGroup>
-            <Radio
-              title={_('Create Schedule')}
-              value="1"
-              checked={reschedule === '1'}
-              name="reschedule"
-              onChange={onValueChange}>
-            </Radio>
-          </FormGroup>
-          <FormGroup offset="1">
-            <Datepicker
-              name="date"
-              value={date}
-              onChange={onValueChange}/>
-          </FormGroup>
-          <FormGroup offset="1">
-            <Divider>
-              <Text>{_('at')}</Text>
-              <Spinner
-                type="int"
-                min="0"
-                max="23"
-                size="2"
-                name="start_hour"
-                value={start_hour}
-                onChange={onValueChange}/>
-              <Text>{_('h')}</Text>
-              <Spinner
-                type="int"
-                min="0"
-                max="59"
-                size="2"
-                name="start_minute"
-                value={start_minute}
-                onChange={onValueChange}/>
-              <Text>{_('m')}</Text>
-            </Divider>
-          </FormGroup>
-          <FormGroup offset="1">
-            <TimeZoneSelect
-              name="start_timezone"
-              value={start_timezone}
-              onChange={onValueChange}/>
-          </FormGroup>
-        </FormGroup>
-
-        {capabilities.mayCreate('alert') &&
-          capabilities.mayAccess('alerts') &&
-          <FormGroup title={_('Email report to')} titleSize="3">
-            <TextField
+    <SaveDialog
+      buttonTitle={_('Modify')}
+      initialData={data}
+      title={_('Modify Task Wizard')}
+      visible={visible}
+      width="900px"
+      onClose={onClose}
+      onSave={onSave}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex align={['start', 'start']}>
+            <Layout basis="40%">
+              <Wizardess>
+                <Img src="enchantress.svg"/>
+              </Wizardess>
+              <WizardContent>
+                <div>
+                  {_('I will modify an existing task for you. The difference ' +
+                    ' to the Edit Task dialog is that here you can enter ' +
+                    'values for associated objects directly. I will then ' +
+                    'create them for you automatically and assign them to the' +
+                    ' selected task.')}
+                </div>
+                <div>
+                  {_('Please be aware that')}
+                  <ul>
+                    <li>
+                      {_('setting a start time overwrites a possibly already ' +
+                        'existing one,')}
+                    </li>
+                    <li>
+                      {_('setting an Email Address means adding an additional' +
+                        ' Alert, not replacing an existing one.')}
+                    </li>
+                  </ul>
+                </div>
+              </WizardContent>
+            </Layout>
+            <Layout
+              basis="0"
               grow="1"
-              name="alert_email"
-              value={alert_email}
-              size="30"
-              maxLength="80"
-              onChange={onValueChange}/>
-          </FormGroup>
-        }
-      </Layout>
-    </Layout>
+              flex="column">
+              <h1>{_('Quick edit: Modify a task')}</h1>
+              <FormGroup title={_('Task')} titleSize="3">
+                <Select
+                  name="task_id"
+                  value={state.task_id}
+                  onChange={onValueChange}>
+                  {task_opts}
+                </Select>
+              </FormGroup>
+
+              <FormGroup
+                title={_('Start Time')}
+                titleSize="3"
+                flex="column">
+                <FormGroup>
+                  <Radio
+                    title={_('Do not change')}
+                    value="0"
+                    checked={state.reschedule === '0'}
+                    name="reschedule"
+                    onChange={onValueChange}>
+                  </Radio>
+                </FormGroup>
+                <FormGroup>
+                  <Radio
+                    title={_('Create Schedule')}
+                    value="1"
+                    checked={state.reschedule === '1'}
+                    name="reschedule"
+                    onChange={onValueChange}>
+                  </Radio>
+                </FormGroup>
+                <FormGroup offset="1">
+                  <Datepicker
+                    name="date"
+                    value={state.date}
+                    onChange={onValueChange}/>
+                </FormGroup>
+                <FormGroup offset="1">
+                  <Divider>
+                    <Text>{_('at')}</Text>
+                    <Spinner
+                      type="int"
+                      min="0"
+                      max="23"
+                      size="2"
+                      name="start_hour"
+                      value={state.start_hour}
+                      onChange={onValueChange}/>
+                    <Text>{_('h')}</Text>
+                    <Spinner
+                      type="int"
+                      min="0"
+                      max="59"
+                      size="2"
+                      name="start_minute"
+                      value={state.start_minute}
+                      onChange={onValueChange}/>
+                    <Text>{_('m')}</Text>
+                  </Divider>
+                </FormGroup>
+                <FormGroup offset="1">
+                  <TimeZoneSelect
+                    name="start_timezone"
+                    value={state.start_timezone}
+                    onChange={onValueChange}/>
+                </FormGroup>
+              </FormGroup>
+
+              {capabilities.mayCreate('alert') &&
+                capabilities.mayAccess('alerts') &&
+                <FormGroup title={_('Email report to')} titleSize="3">
+                  <TextField
+                    grow="1"
+                    name="alert_email"
+                    value={state.alert_email}
+                    size="30"
+                    maxLength="80"
+                    onChange={onValueChange}/>
+                </FormGroup>
+              }
+            </Layout>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -192,17 +226,14 @@ ModifyTaskWizard.propTypes = {
   start_timezone: PropTypes.string,
   task_id: PropTypes.id,
   tasks: PropTypes.array,
-  onValueChange: PropTypes.func,
+  title: PropTypes.string,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onNewClick: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
 };
 
 
-export default withDialog({
-  width: '900px',
-  title: _('Modify Task Wizard'),
-  footer: _('Modify'),
-  defaultState: {
-    tasks: [],
-  },
-})(ModifyTaskWizard);
+export default ModifyTaskWizard;
 
 // vim: set ts=2 sw=2 tw=80:

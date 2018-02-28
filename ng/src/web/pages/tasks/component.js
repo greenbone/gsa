@@ -84,6 +84,7 @@ class TaskComponent extends React.Component {
     this.state = {
       advancedTaskWizardVisible: false,
       containerTaskDialogVisible: false,
+      modifyTaskWizardVisible: false,
       reportImportDialogVisible: false,
       taskDialogVisible: false,
       taskWizardVisible: false,
@@ -112,6 +113,7 @@ class TaskComponent extends React.Component {
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
     this.closeReportImportDialog = this.closeReportImportDialog.bind(this);
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
+    this.closeModifyTaskWizard = this.closeModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
     this.closeTaskDialog = this.closeTaskDialog.bind(this);
@@ -424,7 +426,8 @@ class TaskComponent extends React.Component {
       const settings = response.data;
       const now = moment().tz(settings.timezone);
 
-      this.modify_task_wizard.show({
+      this.setState({
+        modifyTaskWizardVisible: true,
         date: now,
         tasks: settings.tasks,
         reschedule: '0',
@@ -434,6 +437,10 @@ class TaskComponent extends React.Component {
         start_timezone: settings.timezone,
       });
     });
+  }
+
+  closeModifyTaskWizard() {
+    this.setState({modifyTaskWizardVisible: false});
   }
 
   render() {
@@ -470,9 +477,11 @@ class TaskComponent extends React.Component {
       id,
       in_assets,
       min_qod,
+      modifyTaskWizardVisible,
       name,
       port_list_id,
       reportImportDialogVisible,
+      reschedule,
       scan_configs,
       scanner_id,
       scanner_type,
@@ -606,7 +615,15 @@ class TaskComponent extends React.Component {
           onClose={this.closeAdvancedTaskWizard}
           onSave={this.handleSaveAdvancedTaskWizard}/>
         <ModifyTaskWizard
-          ref={ref => this.modify_task_wizard = ref}
+          date={date}
+          tasks={tasks}
+          reschedule={reschedule}
+          task_id={task_id}
+          start_minute={start_minute}
+          start_hour={start_hour}
+          start_timezone={start_timezone}
+          visible={modifyTaskWizardVisible}
+          onClose={this.closeModifyTaskWizard}
           onSave={this.handleSaveModifyTaskWizard}/>
 
         <ImportReportDialog
