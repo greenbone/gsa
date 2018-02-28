@@ -446,18 +446,20 @@ class LineChart extends React.Component {
       y2AxisLabel,
       lineData = EMPTY_LINE_DATA,
     } = this.props;
+    const hasValue = data.length > 0;
     const hasValues = data.length > 1;
     const hasOneValue = data.length === 1;
     const lines = lineData.y.length + lineData.y2.length;
+    const hasLines = lines > 0;
     return (
       <Layout align={['start', 'start']}>
         <Svg
           width={width}
           height={height}
           innerRef={ref => this.svg = ref}
-          onMouseLeave={this.hideInfo}
-          onMouseEnter={this.showInfo}
-          onMouseMove={this.handleMouseMove}
+          onMouseLeave={hasValue ? this.hideInfo : undefined}
+          onMouseEnter={hasValue ? this.showInfo : undefined}
+          onMouseMove={hasValue ? this.handleMouseMove : undefined}
           onMouseDown={hasValues ? this.startRangeSelection : undefined}
           onMouseUp={hasValues ? this.endRangeSelection : undefined}
         >
@@ -465,16 +467,18 @@ class LineChart extends React.Component {
             top={margin.top}
             left={margin.left}
           >
-            <AxisLeft
-              axisLineClassName={`${lineCss}`}
-              tickClassName={`${lineCss}`}
-              scale={yScale}
-              top={0}
-              left={0}
-              label={yAxisLabel}
-              numTicks={10}
-              rangePadding={-8} // - tickLength
-            />
+            {lineData.y.length > 0 &&
+              <AxisLeft
+                axisLineClassName={`${lineCss}`}
+                tickClassName={`${lineCss}`}
+                scale={yScale}
+                top={0}
+                left={0}
+                label={yAxisLabel}
+                numTicks={10}
+                rangePadding={-8} // - tickLength
+              />
+            }
             <AxisBottom
               axisLineClassName={`${lineCss}`}
               tickClassName={`${lineCss}`}
@@ -483,16 +487,18 @@ class LineChart extends React.Component {
               label={xAxisLabel}
               rangePadding={8} // tickLength
             />
-            <AxisRight
-              axisLineClassName={`${lineCss}`}
-              tickClassName={`${lineCss}`}
-              scale={y2Scale}
-              top={0}
-              left={maxWidth}
-              label={y2AxisLabel}
-              numTicks={10}
-              rangePadding={-8} // - tickLength
-            />
+            {lineData.y2.length > 0 &&
+              <AxisRight
+                axisLineClassName={`${lineCss}`}
+                tickClassName={`${lineCss}`}
+                scale={y2Scale}
+                top={0}
+                left={maxWidth}
+                label={y2AxisLabel}
+                numTicks={10}
+                rangePadding={-8} // - tickLength
+              />
+            }
             {hasValues &&
               <Group>
                 {lineData.y.map((line, i) => (
@@ -565,7 +571,7 @@ class LineChart extends React.Component {
             {this.renderRange()}
           </Group>
         </Svg>
-        {lines > 0 &&
+        {hasLines &&
           <Legend data={[...lineData.y, ...lineData.y2]}>
             {({d, toolTipProps}) => (
               <Item {...toolTipProps}>
