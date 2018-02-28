@@ -29,13 +29,15 @@ import {Group} from '@vx/group';
 import {AxisLeft, AxisBottom} from '@vx/axis';
 import {scaleBand, scaleLinear} from '@vx/scale';
 
+import {shorten} from 'gmp/utils/index';
+
 import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 
 import Legend from './legend';
 import ToolTip from './tooltip';
-import {shorten} from 'gmp/utils/index';
+import Svg from './svg';
 
 const lineCss = css({
   shapeRendering: 'crispEdges',
@@ -99,7 +101,7 @@ const BarChart = ({
 
   return (
     <Layout align={['start', 'start']}>
-      <svg width={width} height={height}>
+      <Svg width={width} height={height}>
         <Group top={margin.top} left={marginLeft}>
           <AxisLeft
             axisLineClassName={`${lineCss}`}
@@ -148,7 +150,7 @@ const BarChart = ({
             </ToolTip>
           ))}
         </Group>
-      </svg>
+      </Svg>
       {data.length > 0 &&
         <Legend data={data} />
       }
