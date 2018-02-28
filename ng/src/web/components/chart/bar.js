@@ -22,11 +22,8 @@
  */
 import React from 'react';
 
-import {css} from 'glamor';
-
 import {Bar} from '@vx/shape';
 import {Group} from '@vx/group';
-import {AxisLeft, AxisBottom} from '@vx/axis';
 import {scaleBand, scaleLinear} from '@vx/scale';
 
 import {shorten} from 'gmp/utils/index';
@@ -35,13 +32,10 @@ import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 
+import Axis from './axis';
 import Legend from './legend';
 import ToolTip from './tooltip';
 import Svg from './svg';
-
-const lineCss = css({
-  shapeRendering: 'crispEdges',
-});
 
 const margin = {
   top: 40,
@@ -103,24 +97,20 @@ const BarChart = ({
     <Layout align={['start', 'start']}>
       <Svg width={width} height={height}>
         <Group top={margin.top} left={marginLeft}>
-          <AxisLeft
-            axisLineClassName={`${lineCss}`}
-            tickClassName={`${lineCss}`}
+          <Axis
+            orientation="left"
             scale={horizontal ? xScale : yScale}
             top={0}
             left={0}
             label={horizontal ? xLabel : yLabel}
             numTicks={10}
-            rangePadding={-8} // - tickLength
             tickFormat={horizontal ? tickFormat : undefined}
           />
-          <AxisBottom
-            axisLineClassName={`${lineCss}`}
-            tickClassName={`${lineCss}`}
+          <Axis
+            orientation="bottom"
             scale={horizontal ? yScale : xScale}
             top={maxHeight}
             label={horizontal ? yLabel : xLabel}
-            rangePadding={8} // tickLength
           />
           {data.map((d, i) => (
             <ToolTip
