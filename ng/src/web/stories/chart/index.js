@@ -85,7 +85,7 @@ const bardata = [{
 storiesOf('Chart/Legend', module)
   .add('default', () => {
     return (
-      <Div width="400px">
+      <Div display="flex">
         <Legend data={data}/>
       </Div>
     );
