@@ -279,6 +279,32 @@ storiesOf('Chart/Line', module)
         onRangeSelected={action('range selected')}
       />
     );
+  })
+  .add('empty', () => {
+    return (
+      <LineChart
+        width={500}
+        height={300}
+        data={[]}
+        lineData={{
+          y: [{
+            color: 'red',
+            label: 'Tomatoes',
+          }, {
+            color: 'blue',
+            label: 'Bananas',
+          }],
+          y2: [{
+            color: 'green',
+            label: 'Apples',
+            dashArray: '3,1',
+          }],
+        }}
+        yAxisLabel="Tomatoes"
+        y2AxisLabel="Apples"
+        onRangeSelected={action('range selected')}
+      />
+    );
   });
 
 // vim: set ts=2 sw=2 tw=80:
