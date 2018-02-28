@@ -29,14 +29,18 @@ import {is_defined} from 'gmp/utils/identity';
 import PropTypes from '../../utils/proptypes';
 
 import ToolTip from './tooltip';
+import Theme from '../../utils/theme';
+
+const DEFAULT_SHAPE_SIZE = 15;
 
 const StyledLegend = glamorous.div({
   padding: '5px 10px',
-  border: '1px solid rgba(0, 0, 0, 0.3)',
-  borderRadius: '8px',
   margin: '10px 5px',
   display: 'flex',
   flexDirection: 'column',
+  backgroundColor: Theme.mediumGray,
+  color: Theme.white,
+  opacity: 0.75,
 });
 
 export const Item = glamorous.div('legend-item', {
@@ -51,14 +55,14 @@ export const Label = glamorous.div('legend-label', {
   justifyContent: 'start',
   alignItems: 'center',
   flexGrow: 1,
+  marginLeft: 10,
 });
 
 export const Rect = glamorous.div('legend-rect', {
   display: 'flex',
   alignItems: 'center',
-  width: '15px',
-  height: '15px',
-  marginRight: '5px',
+  width: DEFAULT_SHAPE_SIZE,
+  height: 10,
 }, ({color}) => ({
   backgroundColor: color,
 }));
