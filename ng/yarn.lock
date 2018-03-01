@@ -207,6 +207,13 @@
   dependencies:
     d3-shape "^1.0.6"
 
+"@vx/gradient@^0.0.153":
+  version "0.0.153"
+  resolved "https://registry.yarnpkg.com/@vx/gradient/-/gradient-0.0.153.tgz#029b192638b5f165dab0a26d1811f2b54ed6590e"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.5.7"
+
 "@vx/group@0.0.153", "@vx/group@^0.0.153":
   version "0.0.153"
   resolved "https://registry.yarnpkg.com/@vx/group/-/group-0.0.153.tgz#4ec2ce37cf31b0f0b3d46dd8ee6b0eaf7e763bc6"
@@ -6550,6 +6557,14 @@ prop-types@^15.5.6:
   dependencies:
     fbjs "^0.8.9"
     loose-envify "^1.3.1"
+
+prop-types@^15.5.7:
+  version "15.6.1"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
 
 proxy-addr@~2.0.2:
   version "2.0.2"
