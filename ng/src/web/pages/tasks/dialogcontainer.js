@@ -48,6 +48,7 @@ class TaskDialogContainer extends React.Component {
     super(...args);
 
     this.state = {
+      scheduleDialogVisible: false,
       targetDialogVisible: false,
     };
 
@@ -59,6 +60,7 @@ class TaskDialogContainer extends React.Component {
     this.handleCreateTarget = this.handleCreateTarget.bind(this);
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
+    this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
     this.closeTargetDialog = this.closeTargetDialog.bind(this);
   }
@@ -84,8 +86,10 @@ class TaskDialogContainer extends React.Component {
 
       schedules.push(schedule);
 
-      this.task_dialog.setValue('schedules', schedules);
-      this.task_dialog.setValue('schedule_id', schedule.id);
+      this.setState({
+        schedules,
+        schedule_id: schedule.id,
+      });
     });
   }
 
@@ -120,12 +124,17 @@ class TaskDialogContainer extends React.Component {
     const {timezone} = gmp.globals;
     const now = moment().tz(timezone);
 
-    this.schedule_dialog.show({
+    this.setState({
+      scheduleDialogVisible: true,
       timezone,
       minute: now.minutes(),
       hour: now.hours(),
       date: now,
     });
+  }
+
+  closeScheduleDialog() {
+    this.setState({scheduleDialogVisible: false});
   }
 
   show(state, options) {
@@ -144,9 +153,15 @@ class TaskDialogContainer extends React.Component {
   render() {
     const {onSave, ...props} = this.props;
     const {
+      minute,
+      hour,
+      date,
+      scheduleDialogVisible,
+      schedules = [],
       target_id,
       targetDialogVisible,
       targets,
+      timezone,
     } = this.state;
     return (
       <Layout>
@@ -157,8 +172,14 @@ class TaskDialogContainer extends React.Component {
           onNewScheduleClick={this.openScheduleDialog}
           onSave={onSave}/>
         <ScheduleDialog
+          schedules={schedules}
+          visible={scheduleDialogVisible}
+          timezone={timezone}
+          minute={minute}
+          hour={hour}
+          date={date}
           title={_('Create new Schedule')}
-          ref={ref => this.schedule_dialog = ref}
+          onClose={this.closeScheduleDialog}
           onSave={this.handleCreateSchedule}/>
         <TargetDialogContainer
           targets={targets}
