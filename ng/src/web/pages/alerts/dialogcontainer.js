@@ -86,6 +86,7 @@ export class AlertDialogContainer extends React.Component {
 
     this.state = {
       alertDialogVisible: false,
+      credentialsDialogVisible: false,
     };
 
     this.handleSaveAlert = this.handleSaveAlert.bind(this);
@@ -93,6 +94,7 @@ export class AlertDialogContainer extends React.Component {
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.closeAlertDialog = this.closeAlertDialog.bind(this);
+    this.openCredentialDialog = this.openCredentialDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
@@ -132,25 +134,29 @@ export class AlertDialogContainer extends React.Component {
 
       credentials.push(credential);
 
-      this.alert_dialog.setValue('credentials', credentials);
+      this.setState('credentials', credentials);
 
       if (data.type === 'scp') {
-        this.alert_dialog.setValue('method_data_scp_credential', credential.id);
+        this.setState({method_data_scp_credential: credential.id});
       }
       else if (data.type === 'smb') {
-        this.alert_dialog.setValue('method_data_smb_credential', credential.id);
+        this.setState({method_data_smb_credential: credential.id});
       }
       else if (data.type === 'verinice') {
-        this.alert_dialog.setValue('method_data_verinice_server_credential',
-          credential.id);
+        this.setState({method_data_verinice_server_credential: credential.id});
       }
     });
   }
 
   openCredentialDialog(data) {
-    this.credentials_dialog.show(data, {
+    this.setState({
+      data,
       title: _('Create new Credential'),
     });
+  }
+
+  closeCredentialDialog() {
+    this.setState({credentialDialogVisible: false});
   }
 
   openScpCredentialDialog(types) {
@@ -414,6 +420,7 @@ export class AlertDialogContainer extends React.Component {
       ...props
     } = this.props;
     const {
+      credentialDialogVisible,
       data,
       title,
       type,
@@ -559,7 +566,8 @@ export class AlertDialogContainer extends React.Component {
           onSave={this.handleSaveAlert}
         />
         <CredentialsDialog
-          ref={ref => this.credentials_dialog = ref}
+          visible={credentialDialogVisible}
+          onClose={this.closeCredentialDialog}
           onSave={this.handleCreateCredential}
         />
       </Layout>
