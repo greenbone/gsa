@@ -48,6 +48,7 @@ class TaskDialogContainer extends React.Component {
     super(...args);
 
     this.state = {
+      alertDialogVisible: false,
       scheduleDialogVisible: false,
       targetDialogVisible: false,
     };
@@ -59,6 +60,7 @@ class TaskDialogContainer extends React.Component {
     this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
     this.handleCreateTarget = this.handleCreateTarget.bind(this);
     this.openAlertDialog = this.openAlertDialog.bind(this);
+    this.closeAlertDialog = this.closeAlertDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
     this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
@@ -101,8 +103,8 @@ class TaskDialogContainer extends React.Component {
 
     log.debug('adding alert to task dialog', alert, alerts);
 
-    this.task_dialog.setValue('alerts', alerts);
-    this.task_dialog.setValue('alert_ids', alert_ids);
+    this.setState({alerts: alerts});
+    this.setState({alert_ids: alert_ids});
   }
 
   openTargetDialog() {
@@ -116,7 +118,11 @@ class TaskDialogContainer extends React.Component {
   }
 
   openAlertDialog() {
-    this.alert_dialog.show({});
+    this.setState({alertDialogVisible: true});
+  }
+
+  closeAlertDialog() {
+    this.setState({alertDialogVisible: false});
   }
 
   openScheduleDialog() {
@@ -153,6 +159,8 @@ class TaskDialogContainer extends React.Component {
   render() {
     const {onSave, ...props} = this.props;
     const {
+      alertDialogVisible,
+      alerts = [],
       minute,
       hour,
       date,
@@ -189,7 +197,9 @@ class TaskDialogContainer extends React.Component {
           onClose={this.closeTargetDialog}
           onSave={this.handleCreateTarget}/>
         <AlertDialogContainer
-          ref={ref => this.alert_dialog = ref}
+          title={_('Create new Alert')}
+          visible={alertDialogVisible}
+          onClose={this.closeAlertDialog}
           onSave={this.handleCreateAlert}/>
       </Layout>
     );
