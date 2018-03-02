@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,48 +40,63 @@ export class TargetDialogContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      credentialsDialogVisible: false,
+      portListDialogVisible: false,
+    };
+
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
+    this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
+    this.closePortListDialog = this.closePortListDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
     this.handleSaveTarget = this.handleSaveTarget.bind(this);
   }
 
   openCredentialsDialog(data) {
-    this.credentials_dialog.show({
+    this.setState({
+      credentialsDialogVisible: true,
       types: data.types,
       base: first(data.types),
       id_field: data.id_field,
-    }, {
       title: data.title,
     });
   }
 
-  show(state, options) {
-    let {gmp} = this.context;
+  closeCredentialsDialog() {
+    this.setState({credentialsDialogVisible: false});
+  }
 
-    this.target_dialog.show(state, options);
+  show(state, options) {
+    const {gmp} = this.context;
+
+    this.setState(state, options);
 
     gmp.portlists.getAll().then(response => {
       const {data: port_lists} = response;
       this.port_lists = port_lists;
-      this.target_dialog.setValue('port_lists', port_lists);
+      this.setState({port_lists});
     });
 
     gmp.credentials.getAll().then(response => {
       const {data: credentials} = response;
       this.credentials = credentials;
-      this.target_dialog.setValue('credentials', credentials);
+      this.setState({credentials});
     });
   }
 
   openPortListDialog() {
-    this.port_list_dialog.show({});
+    this.setState({portListDialogVisible: true});
+  }
+
+  closePortListDialog() {
+    this.setState({portListDialogVisible: false});
   }
 
   handleSaveTarget(data) {
-    let {gmp} = this.context;
-    let {onSave} = this.props;
+    const {gmp} = this.context;
+    const {onSave} = this.props;
 
     let promise;
     if (data && data.id) {
@@ -90,7 +106,7 @@ export class TargetDialogContainer extends React.Component {
       promise = gmp.target.create(data);
     }
     return promise.then(response => {
-      let target = response.data;
+      const target = response.data;
       if (onSave) {
         return onSave(target);
       }
@@ -99,43 +115,72 @@ export class TargetDialogContainer extends React.Component {
   }
 
   handleCreateCredential(data) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     return gmp.credential.create(data).then(response => {
-      let credential = response.data;
-      let {credentials = []} = this;
+      const credential = response.data;
+      const {credentials = []} = this;
       credentials.push(credential);
 
-      this.target_dialog.setValue('credentials', credentials);
-      this.target_dialog.setValue(data.id_field, credential.id);
+      this.setState({
+        credentials,
+        id_field: data.id_field,
+        credential_id: credential.id,
+      });
     });
   }
 
   handleCreatePortList(data) {
-    let {gmp} = this.context;
+    const {gmp} = this.context;
     return gmp.portlist.create(data).then(response => {
-      let portlist = response.data;
-      let {port_lists = []} = this;
+      const portlist = response.data;
+      const {port_lists = []} = this;
       port_lists.push(portlist);
-      this.target_dialog.setValue('port_lists', port_lists);
-      this.target_dialog.setValue('port_list_id', portlist.id);
+
+      this.setState({
+        port_lists,
+        port_list_id: portlist.id,
+      });
     });
   }
 
   render() {
+    const {
+      onClose,
+      ...props
+    } = this.props;
+
+    const {
+      base,
+      credentialsDialogVisible,
+      id_field,
+      portListDialogVisible,
+      title,
+      types,
+      ...other
+    } = this.state;
+
     return (
       <Layout>
         <TargetDialog
-          ref={ref => this.target_dialog = ref}
+          {...props}
+          {...other}
           onNewCredentialsClick={this.openCredentialsDialog}
           onNewPortListClick={this.openPortListDialog}
+          onClose={onClose}
           onSave={this.handleSaveTarget}
         />
         <CredentialsDialog
-          ref={ref => this.credentials_dialog = ref}
+          visible={credentialsDialogVisible}
+          types={types}
+          base={base}
+          id_field={id_field}
+          title={title}
+          onClose={this.closeCredentialsDialog}
           onSave={this.handleCreateCredential}
         />
         <PortListDialog
-          ref={ref => this.port_list_dialog = ref}
+          visible={portListDialogVisible}
+          onClose={this.closePortListDialog}
           onSave={this.handleCreatePortList}
         />
       </Layout>
@@ -144,6 +189,7 @@ export class TargetDialogContainer extends React.Component {
 };
 
 TargetDialogContainer.propTypes = {
+  onClose: PropTypes.func,
   onSave: PropTypes.func,
 };
 

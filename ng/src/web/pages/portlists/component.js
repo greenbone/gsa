@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +43,15 @@ class PortListComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      importDialogVisible: false,
+      portListDialogVisible: false,
+      portRangeDialogVisible: false,
+    };
+
+    this.closeImportDialog = this.closeImportDialog.bind(this);
+    this.closePortListDialog = this.closePortListDialog.bind(this);
+    this.closeNewPortRangeDialog = this.closeNewPortRangeDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
     this.openNewPortRangeDialog = this.openNewPortRangeDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
@@ -56,38 +66,51 @@ class PortListComponent extends React.Component {
     if (entity) {
       gmp.portlist.get(entity).then(response => {
         const port_list = response.data;
-        this.port_list_dialog.show({
-          id: port_list.id,
+        this.setState({
           port_list,
-          name: port_list.name,
-          comment: port_list.comment,
-        }, {
+          portListDialogVisible: true,
           title: _('Edit Port List {{name}}', {name: shorten(port_list.name)}),
         });
       });
     }
     else {
-      this.port_list_dialog.show({}, {
-          title: _('New Port List'),
+      this.setState({
+        port_list: undefined,
+        portListDialogVisible: true,
+        title: _('New Port List'),
       });
     }
   }
 
+  closePortListDialog() {
+    this.setState({portListDialogVisible: false});
+  }
+
   openImportDialog() {
-    this.import_dialog.show();
+    this.setState({importDialogVisible: true});
+  }
+
+  closeImportDialog() {
+    this.setState({importDialogVisible: false});
   }
 
   openNewPortRangeDialog(port_list) {
-    this.port_range_dialog.show({
+    this.setState({
+      portRangeDialogVisible: true,
       id: port_list.id,
     });
+  }
+
+  closeNewPortRangeDialog() {
+    this.setState({portRangeDialogVisible: false});
   }
 
   handleDeletePortRange(range) {
     const {gmp} = this.props;
 
     gmp.portlist.deletePortRange(range).then(response => {
-      this.port_list_dialog.setValue('port_list', response.data);
+      const {data} = response;
+      this.setState({port_list: data});
     });
   }
 
@@ -95,7 +118,18 @@ class PortListComponent extends React.Component {
     const {gmp} = this.props;
 
     return gmp.portlist.createPortRange(data).then(response => {
-      this.port_list_dialog.setValue('port_list', response.data);
+      const range = response.data.params;
+      const newRange = {
+        end: range.port_range_end,
+        entity_type: 'port_range',
+        id: range.token,
+        port_list_id: range.port_list_id,
+        protocol_type: range.port_type,
+        start: range.port_range_start,
+      };
+      const {port_list} = this.state;
+      port_list.port_ranges.push(newRange);
+      this.setState({port_list});
     });
   }
 
@@ -122,6 +156,15 @@ class PortListComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      importDialogVisible,
+      port_list,
+      portListDialogVisible,
+      portRangeDialogVisible,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="portlist"
@@ -148,17 +191,23 @@ class PortListComponent extends React.Component {
               import: this.openImportDialog,
             })}
             <PortListDialog
-              ref={ref => this.port_list_dialog = ref}
+              port_list={port_list}
+              title={title}
+              visible={portListDialogVisible}
+              onClose={this.closePortListDialog}
               onDeletePortRangeClick={this.handleDeletePortRange}
               onNewPortRangeClick={this.openNewPortRangeDialog}
               onSave={save}
             />
             <ImportPortListDialog
-              ref={ref => this.import_dialog = ref}
+              visible={importDialogVisible}
+              onClose={this.closeImportDialog}
               onSave={this.handleImportPortList}
             />
             <PortRangeDialog
-              ref={ref => this.port_range_dialog = ref}
+              port_list={port_list}
+              visible={portRangeDialogVisible}
+              onClose={this.closeNewPortRangeDialog}
               onSave={this.handleSavePortRange}
             />
           </Wrapper>

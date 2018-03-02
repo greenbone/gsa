@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,9 +96,8 @@ class Nvt extends React.Component {
               _('default') :
               timeout
           }
-          {!(is_empty(default_timeout)) ?
-              ' (' + default_timeout + ')' :
-              ''
+          {is_empty(default_timeout) ?
+            '' : ' (' + default_timeout + ')'
           }
         </TableData>
         <TableData>
@@ -208,7 +208,7 @@ class EditDialogComponent extends React.Component {
             <TableBody>
               {
                 map(nvts, nvt => {
-                  let {oid} = nvt;
+                  const {oid} = nvt;
                   return (
                     <Nvt
                       key={oid}

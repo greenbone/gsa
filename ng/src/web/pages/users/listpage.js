@@ -86,8 +86,11 @@ class UsersPage extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {confirmDeleteDialogVisible: false};
+
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
 
+    this.closeConfirmDeleteDialog = this.closeConfirmDeleteDialog.bind(this);
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
   }
 
@@ -115,11 +118,11 @@ class UsersPage extends React.Component {
       if (is_defined(user)) {
         users = users.filter(luser => luser.id !== user.id);
 
-        this.confirm_delete_dialog.show({
+        this.setState({
+          confirmDeleteDialogVisible: true,
           id: user.id,
           username: user.name,
           users,
-        }, {
           title: _('Confirm deletion of user {{name}}', user),
         });
 
@@ -147,15 +150,19 @@ class UsersPage extends React.Component {
 
           users = users.filter(luser => !ids.includes(luser.id));
 
-          this.confirm_delete_dialog.show({
+          this.setState({
+            confirmDeleteDialogVisible: true,
             users,
             deleteUsers,
-          }, {
             title: _('Confirm deletion of users'),
           });
         });
       }
     });
+  }
+
+  closeConfirmDeleteDialog() {
+    this.setState({confirmDeleteDialogVisible: false});
   }
 
   render() {
@@ -165,6 +172,16 @@ class UsersPage extends React.Component {
       onError,
       ...props
     } = this.props;
+
+    const {
+      id,
+      confirmDeleteDialogVisible,
+      deleteUsers = {},
+      title,
+      username,
+      users,
+    } = this.state;
+
     return (
       <Wrapper>
         <UserComponent
@@ -204,7 +221,13 @@ class UsersPage extends React.Component {
         )}
         </UserComponent>
         <ConfirmDeleteDialog
-          ref={ref => this.confirm_delete_dialog = ref}
+          deleteUsers={deleteUsers}
+          id={id}
+          title={title}
+          username={username}
+          users={users}
+          visible={confirmDeleteDialogVisible}
+          onClose={this.closeConfirmDeleteDialog}
           onSave={this.handleDeleteUser}
         />
       </Wrapper>

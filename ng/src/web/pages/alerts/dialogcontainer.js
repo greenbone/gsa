@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,14 +55,14 @@ import AlertDialog, {
 
 export function select_verinice_report_id(report_formats, report_id) {
   if (is_defined(report_id)) {
-    for (let format of report_formats) {
+    for (const format of report_formats) {
       if (format.id === report_id) {
         return format.id;
       }
     }
   }
   else {
-    for (let format of report_formats) {
+    for (const format of report_formats) {
       if (format.name === 'Verinice ISM') {
         return format.id;
       }
@@ -71,7 +72,7 @@ export function select_verinice_report_id(report_formats, report_id) {
 }
 
 const value = (data, def = undefined) => {
-  let val = is_defined(data) ? data.value : def;
+  const val = is_defined(data) ? data.value : def;
   if (is_defined(val)) {
     return val;
   }
@@ -83,9 +84,17 @@ export class AlertDialogContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      alertDialogVisible: false,
+      credentialsDialogVisible: false,
+    };
+
     this.handleSaveAlert = this.handleSaveAlert.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
 
+    this.openAlertDialog = this.openAlertDialog.bind(this);
+    this.closeAlertDialog = this.closeAlertDialog.bind(this);
+    this.openCredentialDialog = this.openCredentialDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
@@ -94,8 +103,8 @@ export class AlertDialogContainer extends React.Component {
   }
 
   handleSaveAlert(data) {
-    let {gmp} = this.context;
-    let {onSave} = this.props;
+    const {gmp} = this.context;
+    const {onSave} = this.props;
     let promise;
 
     if (is_defined(data.alert)) {
@@ -106,7 +115,7 @@ export class AlertDialogContainer extends React.Component {
     }
 
     return promise.then(response => {
-      let alert = response.data;
+      const alert = response.data;
       if (onSave) {
         return onSave(alert);
       }
@@ -115,35 +124,39 @@ export class AlertDialogContainer extends React.Component {
   }
 
   handleCreateCredential(data) {
-    let {gmp} = this.context;
-    let promise = gmp.credential.create(data);
+    const {gmp} = this.context;
+    const promise = gmp.credential.create(data);
 
-    let {credentials} = this;
+    const {credentials} = this;
 
     promise.then(response => {
-      let credential = response.data;
+      const credential = response.data;
 
       credentials.push(credential);
 
-      this.alert_dialog.setValue('credentials', credentials);
+      this.setState('credentials', credentials);
 
       if (data.type === 'scp') {
-        this.alert_dialog.setValue('method_data_scp_credential', credential.id);
+        this.setState({method_data_scp_credential: credential.id});
       }
       else if (data.type === 'smb') {
-        this.alert_dialog.setValue('method_data_smb_credential', credential.id);
+        this.setState({method_data_smb_credential: credential.id});
       }
       else if (data.type === 'verinice') {
-        this.alert_dialog.setValue('method_data_verinice_server_credential',
-          credential.id);
+        this.setState({method_data_verinice_server_credential: credential.id});
       }
     });
   }
 
   openCredentialDialog(data) {
-    this.credentials_dialog.show(data, {
+    this.setState({
+      data,
       title: _('Create new Credential'),
     });
+  }
+
+  closeCredentialDialog() {
+    this.setState({credentialDialogVisible: false});
   }
 
   openScpCredentialDialog(types) {
@@ -158,16 +171,16 @@ export class AlertDialogContainer extends React.Component {
     this.openCredentialDialog({type: 'verinice', types});
   }
 
-  show(state, options) {
-    let {gmp} = this.context;
+  openAlertDialog(state, options) {
+    const {gmp} = this.context;
 
     this.credentials = is_defined(state) && is_defined(state.credentials) ?
       state.credentials : [];
 
     if (is_defined(state.alert)) {
       gmp.alert.editAlertSettings(state.alert).then(response => {
-        let settings = response.data;
-        let {
+        const settings = response.data;
+        const {
           credentials = [],
           filters = [],
           report_formats = [],
@@ -175,20 +188,21 @@ export class AlertDialogContainer extends React.Component {
           alert,
         } = settings;
 
-        let {method, condition, event} = alert;
+        const {method, condition, event} = alert;
 
         this.credentials = credentials;
 
-        let result_filters = filters.filter(filter => filter.type === 'Result');
-        let secinfo_filters = filters.filter(
+        const result_filters =
+          filters.filter(filter => filter.type === 'Result');
+        const secinfo_filters = filters.filter(
           filter => filter.type === 'SecInfo');
 
         let condition_data_filters;
-        let condition_data_filter_id = value(condition.data.filter_id);
+        const condition_data_filter_id = value(condition.data.filter_id);
 
         let method_data_message;
         let method_data_message_attach;
-        let method_data_notice = value(method.data.notice,
+        const method_data_notice = value(method.data.notice,
           DEFAULT_NOTICE);
 
         let method_data_subject;
@@ -235,14 +249,15 @@ export class AlertDialogContainer extends React.Component {
           feed_event = 'new';
         }
 
-        let scp_credential_id = is_defined(method.data.scp_credential) ?
+        const scp_credential_id = is_defined(method.data.scp_credential) ?
           method.data.scp_credential.credential.id : undefined;
 
-        let verinice_credential_id =
+        const verinice_credential_id =
           is_defined(method.data.verinice_server_credential) ?
             method.data.verinice_server_credential.credential.id : undefined;
 
-        this.alert_dialog.show({
+        this.setState({
+          alertDialogVisible: true,
           id: alert.id,
           alert,
           active: alert.active,
@@ -329,17 +344,14 @@ export class AlertDialogContainer extends React.Component {
 
           method_data_URL: value(method.data.URL, ''),
           tasks,
-        }, {
           title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
         });
       });
     }
     else {
-      this.alert_dialog.show(state, options);
-
       gmp.alert.newAlertSettings().then(response => {
-        let settings = response.data;
-        let {
+        const settings = response.data;
+        const {
           credentials = [],
           filters = [],
           report_formats = [],
@@ -348,14 +360,32 @@ export class AlertDialogContainer extends React.Component {
 
         this.credentials = credentials;
 
-        let result_filters = filters.filter(filter => filter.type === 'Result');
-        let secinfo_filters = filters.filter(
+        const result_filters =
+          filters.filter(filter => filter.type === 'Result');
+        const secinfo_filters = filters.filter(
           filter => filter.type === 'SecInfo');
 
-        let result_filter_id = select_save_id(result_filters);
-        let report_format_id = select_save_id(report_formats);
+        const result_filter_id = select_save_id(result_filters);
+        const report_format_id = select_save_id(report_formats);
 
-        this.alert_dialog.setValues({
+        this.setState({
+          id: undefined,
+          alert: undefined,
+          active: undefined,
+          name: undefined,
+          comment: undefined,
+          filter_id: undefined,
+          condition: undefined,
+          condition_data_count: undefined,
+          condition_data_direction: undefined,
+          condition_data_at_least_count: undefined,
+          condition_data_severity: undefined,
+          event: undefined,
+          event_data_status: DEFAULT_EVENT_STATUS,
+          event_data_feed_event: undefined,
+          event_data_secinfo_type: undefined,
+          method: undefined,
+          alertDialogVisible: true,
           filters,
           credentials,
           result_filters,
@@ -380,18 +410,164 @@ export class AlertDialogContainer extends React.Component {
     }
   }
 
+  closeAlertDialog() {
+    this.setState({alertDialogVisible: false});
+  }
+
   render() {
+    const {
+      onClose,
+      ...props
+    } = this.props;
+    const {
+      credentialDialogVisible,
+      data,
+      title,
+      type,
+      id,
+      alert,
+      active,
+      name,
+      comment,
+      filters,
+      filter_id,
+      credentials,
+      result_filters,
+      secinfo_filters,
+      condition,
+      condition_data_count,
+      condition_data_direction,
+      condition_data_filters,
+      condition_data_filter_id,
+      condition_data_at_least_filter_id,
+      condition_data_at_least_count,
+      condition_data_severity,
+      event,
+      event_data_status,
+      event_data_feed_event,
+      event_data_secinfo_type,
+      method,
+      method_data_defense_center_ip,
+      method_data_defense_center_port,
+      method_data_details_url,
+      method_data_to_address,
+      method_data_from_address,
+      method_data_subject,
+      method_data_message,
+      method_data_message_attach,
+      method_data_notice,
+      method_data_notice_report_format,
+      method_data_notice_attach_format,
+      method_data_scp_credential,
+      method_data_scp_report_format,
+      method_data_scp_path,
+      method_data_scp_host,
+      method_data_scp_known_hosts,
+      method_data_send_port,
+      method_data_send_host,
+      method_data_send_report_format,
+      method_data_smb_credential,
+      method_data_smb_file_path,
+      method_data_smb_report_format,
+      method_data_smb_share_path,
+      method_data_snmp_agent,
+      method_data_snmp_community,
+      method_data_snmp_message,
+      method_data_start_task_task,
+      method_data_tp_sms_credential,
+      method_data_tp_sms_hostname,
+      method_data_tp_sms_tls_workaround,
+      method_data_verinice_server_report_format,
+      method_data_verinice_server_url,
+      method_data_verinice_server_credential,
+      method_data_URL,
+      report_formats,
+      tasks,
+    } = this.state;
+
     return (
       <Layout>
         <AlertDialog
-          ref={ref => this.alert_dialog = ref}
+          {...props}
+          data={data}
+          title={title}
+          type={type}
+          id={id}
+          alert={alert}
+          active={active}
+          name={name}
+          comment={comment}
+          filters={filters}
+          filter_id={filter_id}
+          credentials={credentials}
+          result_filters={result_filters}
+          secinfo_filters={secinfo_filters}
+          condition={condition}
+          condition_data_count={condition_data_count}
+          condition_data_direction={condition_data_direction}
+          condition_data_filters={condition_data_filters}
+          condition_data_filter_id={condition_data_filter_id}
+          condition_data_at_least_filter_id=
+            {condition_data_at_least_filter_id}
+          condition_data_at_least_count={condition_data_at_least_count}
+          condition_data_severity={condition_data_severity}
+          event={event}
+          event_data_status={event_data_status}
+          event_data_feed_event={event_data_feed_event}
+          event_data_secinfo_type={event_data_secinfo_type}
+          method={method}
+          method_data_defense_center_ip={method_data_defense_center_ip}
+          method_data_defense_center_port={method_data_defense_center_port}
+          method_data_details_url={method_data_details_url}
+          report_formats={report_formats}
+          method_data_to_address={method_data_to_address}
+          method_data_from_address={method_data_from_address}
+          method_data_subject={method_data_subject}
+          method_data_message={method_data_message}
+          method_data_message_attach={method_data_message_attach}
+          method_data_notice={method_data_notice}
+          method_data_notice_report_format=
+            {method_data_notice_report_format}
+          method_data_notice_attach_format=
+            {method_data_notice_attach_format}
+          method_data_scp_credential={method_data_scp_credential}
+          method_data_scp_report_format={method_data_scp_report_format}
+          method_data_scp_path={method_data_scp_path}
+          method_data_scp_host={method_data_scp_host}
+          method_data_scp_known_hosts={method_data_scp_known_hosts}
+          method_data_send_port={method_data_send_port}
+          method_data_send_host={method_data_send_host}
+          method_data_send_report_format={method_data_send_report_format}
+          method_data_smb_credential={method_data_smb_credential}
+          method_data_smb_file_path={method_data_smb_file_path}
+          method_data_smb_report_format={method_data_smb_report_format}
+          method_data_smb_share_path={method_data_smb_share_path}
+          method_data_snmp_agent={method_data_snmp_agent}
+          method_data_snmp_community={method_data_snmp_community}
+          method_data_snmp_message={method_data_snmp_message}
+          method_data_start_task_task={method_data_start_task_task}
+          method_data_tp_sms_credential={method_data_tp_sms_credential}
+          method_data_tp_sms_hostname={method_data_tp_sms_hostname}
+          method_data_tp_sms_tls_workaround=
+            {method_data_tp_sms_tls_workaround}
+          method_data_verinice_server_report_format=
+            {method_data_verinice_server_report_format}
+          method_data_verinice_server_url={method_data_verinice_server_url}
+          method_data_verinice_server_credential=
+            {method_data_verinice_server_credential}
+          method_data_URL={method_data_URL}
+          tasks={tasks}
+          onClose={onClose}
           onNewScpCredentialClick={this.openScpCredentialDialog}
           onNewSmbCredentialClick={this.openSmbCredentialDialog}
           onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
+          onNewTippingPointCredentialClick={
+            this.openTippingPointCredentialDialog}
           onSave={this.handleSaveAlert}
         />
         <CredentialsDialog
-          ref={ref => this.credentials_dialog = ref}
+          visible={credentialDialogVisible}
+          onClose={this.closeCredentialDialog}
           onSave={this.handleCreateCredential}
         />
       </Layout>
@@ -400,6 +576,7 @@ export class AlertDialogContainer extends React.Component {
 };
 
 AlertDialogContainer.propTypes = {
+  onClose: PropTypes.func,
   onSave: PropTypes.func,
 };
 

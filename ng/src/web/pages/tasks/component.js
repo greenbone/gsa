@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,7 @@ import moment from 'moment-timezone';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
+import {NO_VALUE} from 'gmp/parser';
 import {first, for_each, map} from 'gmp/utils/array';
 import {is_array, is_defined} from 'gmp/utils/identity';
 import {includes_id, select_save_id} from 'gmp/utils/id';
@@ -54,7 +56,7 @@ import AdvancedTaskWizard from '../../wizard/advancedtaskwizard.js';
 import ModifyTaskWizard from '../../wizard/modifytaskwizard.js';
 import TaskWizard from '../../wizard/taskwizard.js';
 
-import TaskDialog from './dialogcontainer.js';
+import TaskDialogContainer from './dialogcontainer.js';
 import ContainerTaskDialog from './containerdialog.js';
 
 const log = logger.getLogger('web.tasks.component');
@@ -80,6 +82,15 @@ class TaskComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      advancedTaskWizardVisible: false,
+      containerTaskDialogVisible: false,
+      modifyTaskWizardVisible: false,
+      reportImportDialogVisible: false,
+      taskDialogVisible: false,
+      taskWizardVisible: false,
+    };
+
     const {gmp} = this.context;
 
     this.cmd = gmp.task;
@@ -97,12 +108,18 @@ class TaskComponent extends React.Component {
     this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
 
     this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
+    this.closeAdvancedTaskWizard = this.closeAdvancedTaskWizard.bind(this);
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
+    this.closeContainerTaskDialog = this.closeContainerTaskDialog.bind(this);
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
+    this.closeReportImportDialog = this.closeReportImportDialog.bind(this);
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
+    this.closeModifyTaskWizard = this.closeModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
+    this.closeTaskDialog = this.closeTaskDialog.bind(this);
     this.openTaskWizard = this.openTaskWizard.bind(this);
+    this.closeTaskWizard = this.closeTaskWizard.bind(this);
   }
 
   handleSaveContainerTask(data) {
@@ -168,22 +185,26 @@ class TaskComponent extends React.Component {
 
   handleTaskWizardNewClick() {
     this.openTaskDialog();
-    this.task_wizard.close();
+    this.closeTaskWizard();
   }
 
   openContainerTaskDialog(task) {
-    this.container_dialog.show({
+    this.setState({
+      containerTaskDialogVisible: true,
       task,
-      name: task ? task.name : _('unnamed'),
+      name: task ? task.name : _('Unnamed'),
       comment: task ? task.comment : '',
       id: task ? task.id : undefined,
       in_assets: task ? task.in_assets : undefined,
       auto_delete: task ? task.auto_delete : undefined,
       auto_delete_data: task ? task.auto_delete_data : undefined,
-    }, {
       title: task ? _('Edit Container Task {{name}}', task) :
         _('New Container Task'),
     });
+  }
+
+  closeContainerTaskDialog() {
+    this.setState({containerTaskDialogVisible: false});
   }
 
   openTaskDialog(task) {
@@ -193,6 +214,10 @@ class TaskComponent extends React.Component {
     else {
       this.openStandardTaskDialog(task);
     }
+  }
+
+  closeTaskDialog() {
+    this.setState({taskDialogVisible: false});
   }
 
   openStandardTaskDialog(task) {
@@ -237,7 +262,8 @@ class TaskComponent extends React.Component {
           });
         }
 
-        this.task_dialog.show({
+        this.setState({
+          taskDialogVisible: true,
           alert_ids: map(task.alerts, alert => alert.id),
           alerts,
           alterable: task.alterable,
@@ -257,7 +283,6 @@ class TaskComponent extends React.Component {
           targets,
           task: task,
           ...data,
-        }, {
           title: _('Edit Task {{name}}', task),
         });
       });
@@ -292,7 +317,8 @@ class TaskComponent extends React.Component {
 
         const alert_ids = is_defined(alert_id) ? [alert_id] : [];
 
-        this.task_dialog.show({
+        this.setState({
+          taskDialogVisible: true,
           alert_ids,
           alerts,
           config_id,
@@ -305,7 +331,6 @@ class TaskComponent extends React.Component {
           tags,
           target_id,
           targets,
-        }, {
           title: _('New Task'),
         });
       });
@@ -313,20 +338,24 @@ class TaskComponent extends React.Component {
   }
 
   openReportImportDialog(task) {
-    this.import_report_dialog.show({
+    this.setState({
+      reportImportDialogVisible: true,
       task_id: task.id,
       tasks: [task],
     });
   }
 
+  closeReportImportDialog() {
+    this.setState({reportImportDialogVisible: false});
+  }
+
   openTaskWizard() {
     const {gmp} = this.context;
 
-    this.task_wizard.show({});
-
     gmp.wizard.task().then(response => {
       const settings = response.data;
-      this.task_wizard.setValues({
+      this.setState({
+        taskWizardVisible: true,
         hosts: settings.client_address,
         port_list_id: settings.get('Default Port List').value,
         alert_id: settings.get('Default Alert').value,
@@ -337,6 +366,10 @@ class TaskComponent extends React.Component {
         scanner_id: settings.get('Default OpenVAS Scanner').value,
       });
     });
+  }
+
+  closeTaskWizard() {
+    this.setState({taskWizardVisible: false});
   }
 
   openAdvancedTaskWizard() {
@@ -361,7 +394,8 @@ class TaskComponent extends React.Component {
 
       const now = moment().tz(settings.timezone);
 
-      this.advanced_task_wizard.show({
+      this.setState({
+        advancedTaskWizardVisible: true,
         credentials,
         scan_configs: settings.scan_configs,
         date: now,
@@ -382,6 +416,10 @@ class TaskComponent extends React.Component {
     });
   }
 
+  closeAdvancedTaskWizard() {
+    this.setState({advancedTaskWizardVisible: false});
+  }
+
   openModifyTaskWizard() {
     const {gmp} = this.context;
 
@@ -389,16 +427,21 @@ class TaskComponent extends React.Component {
       const settings = response.data;
       const now = moment().tz(settings.timezone);
 
-      this.modify_task_wizard.show({
+      this.setState({
+        modifyTaskWizardVisible: true,
         date: now,
         tasks: settings.tasks,
-        reschedule: '0',
+        reschedule: NO_VALUE,
         task_id: select_save_id(settings.tasks),
         start_minute: now.minutes(),
         start_hour: now.hours(),
         start_timezone: settings.timezone,
       });
     });
+  }
+
+  closeModifyTaskWizard() {
+    this.setState({modifyTaskWizardVisible: false});
   }
 
   render() {
@@ -415,6 +458,55 @@ class TaskComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      advancedTaskWizardVisible,
+      alert_id,
+      alert_ids,
+      alerts,
+      alterable,
+      apply_overrides,
+      auto_delete,
+      auto_delete_data,
+      config_id,
+      containerTaskDialogVisible,
+      comment,
+      credentials,
+      date,
+      esxi_credential,
+      hosts,
+      id,
+      in_assets,
+      min_qod,
+      modifyTaskWizardVisible,
+      name,
+      port_list_id,
+      reportImportDialogVisible,
+      reschedule,
+      scan_configs,
+      scanner_id,
+      scanner_type,
+      scanners,
+      schedule_id,
+      schedules,
+      slave_id,
+      ssh_credential,
+      smb_credential,
+      start_minute,
+      start_hour,
+      start_timezone,
+      target_hosts,
+      targets,
+      task_id,
+      task_name,
+      task,
+      tasks,
+      taskDialogVisible,
+      taskWizardVisible,
+      title = _('Edit Task {{name}}', task),
+      ...data
+    } = this.state;
+
     return (
       <Wrapper>
         <EntityComponent
@@ -448,8 +540,29 @@ class TaskComponent extends React.Component {
                 modifytaskwizard: this.openModifyTaskWizard,
                 taskwizard: this.openTaskWizard,
               })}
-              <TaskDialog
-                ref={ref => this.task_dialog = ref}
+              <TaskDialogContainer
+                alert_ids={alert_ids}
+                alerts={alerts}
+                alterable={alterable}
+                apply_overrides={apply_overrides}
+                auto_delete={auto_delete}
+                auto_delete_data={auto_delete_data}
+                comment={comment}
+                id={id}
+                in_assets={in_assets}
+                min_qod={min_qod}
+                name={name}
+                scan_configs={scan_configs}
+                scanner_type={scanner_type}
+                scanners={scanners}
+                schedule_id={schedule_id}
+                schedules={schedules}
+                targets={targets}
+                task={task}
+                title={title}
+                visible={taskDialogVisible}
+                {...data}
+                onClose={this.closeTaskDialog}
                 onSave={save}
               />
             </Wrapper>
@@ -457,23 +570,69 @@ class TaskComponent extends React.Component {
         </EntityComponent>
 
         <ContainerTaskDialog
-          ref={ref => this.container_dialog = ref}
+          visible={containerTaskDialogVisible}
+          task={task}
+          name={name}
+          comment={comment}
+          id={id}
+          in_assets={in_assets}
+          auto_delete={auto_delete}
+          auto_delete_data={auto_delete_data}
+          title={title}
+          onClose={this.closeContainerTaskDialog}
           onSave={this.handleSaveContainerTask}/>
 
         <TaskWizard
-          ref={ref => this.task_wizard = ref}
+          hosts={hosts}
+          port_list_id={port_list_id}
+          alert_id={alert_id}
+          config_id={config_id}
+          ssh_credential={ssh_credential}
+          smb_credential={smb_credential}
+          esxi_credential={esxi_credential}
+          scanner_id={scanner_id}
+          visible={taskWizardVisible}
+          onClose={this.closeTaskWizard}
           onSave={this.handleSaveTaskWizard}
           onNewClick={this.handleTaskWizardNewClick}/>
         <AdvancedTaskWizard
-          ref={ref => this.advanced_task_wizard = ref}
+          visible={advancedTaskWizardVisible}
+          credentials={credentials}
+          scan_configs={scan_configs}
+          date={date}
+          task_name={task_name}
+          target_hosts={target_hosts}
+          port_list_id={port_list_id}
+          alert_id={alert_id}
+          config_id={config_id}
+          ssh_credential={ssh_credential}
+          smb_credential={smb_credential}
+          esxi_credential={esxi_credential}
+          scanner_id={scanner_id}
+          slave_id={slave_id}
+          start_minute={start_minute}
+          start_hour={start_hour}
+          start_timezone={start_timezone}
+          onClose={this.closeAdvancedTaskWizard}
           onSave={this.handleSaveAdvancedTaskWizard}/>
         <ModifyTaskWizard
-          ref={ref => this.modify_task_wizard = ref}
+          date={date}
+          tasks={tasks}
+          reschedule={reschedule}
+          task_id={task_id}
+          start_minute={start_minute}
+          start_hour={start_hour}
+          start_timezone={start_timezone}
+          visible={modifyTaskWizardVisible}
+          onClose={this.closeModifyTaskWizard}
           onSave={this.handleSaveModifyTaskWizard}/>
 
         <ImportReportDialog
-          ref={ref => this.import_report_dialog = ref}
+          visible={reportImportDialogVisible}
           newContainerTask={false}
+          task_id={task_id}
+          tasks={tasks}
+          onClose={this.closeReportImportDialog}
           onSave={this.handleReportImport}/>
       </Wrapper>
     );

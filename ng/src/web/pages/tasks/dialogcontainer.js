@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +47,12 @@ class TaskDialogContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      alertDialogVisible: false,
+      scheduleDialogVisible: false,
+      targetDialogVisible: false,
+    };
+
     this.targets = [];
     this.alerts = [];
 
@@ -53,65 +60,87 @@ class TaskDialogContainer extends React.Component {
     this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
     this.handleCreateTarget = this.handleCreateTarget.bind(this);
     this.openAlertDialog = this.openAlertDialog.bind(this);
+    this.closeAlertDialog = this.closeAlertDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
+    this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
+    this.closeTargetDialog = this.closeTargetDialog.bind(this);
   }
 
   handleCreateTarget(target) {
-    let {targets} = this;
+    const {targets} = this;
 
     targets.push(target);
 
     log.debug('adding target to task dialog', target, targets);
 
-    this.task_dialog.setValue('targets', targets);
-    this.task_dialog.setValue('target_id', target.id);
+    this.setState({
+      targets,
+      target_id: target.id,
+    });
   }
 
   handleCreateSchedule(data) {
-    let {schedules} = this;
-    let {gmp} = this.context;
+    const {schedules} = this;
+    const {gmp} = this.context;
     return gmp.schedule.create(data).then(response => {
-      let schedule = response.data;
+      const schedule = response.data;
 
       schedules.push(schedule);
 
-      this.task_dialog.setValue('schedules', schedules);
-      this.task_dialog.setValue('schedule_id', schedule.id);
+      this.setState({
+        schedules,
+        schedule_id: schedule.id,
+      });
     });
   }
 
   handleCreateAlert(alert) {
-    let {alerts = [], alert_ids = []} = this;
+    const {alerts = [], alert_ids = []} = this;
 
     alerts.push(alert);
     alert_ids.push(alert.id);
 
     log.debug('adding alert to task dialog', alert, alerts);
 
-    this.task_dialog.setValue('alerts', alerts);
-    this.task_dialog.setValue('alert_ids', alert_ids);
+    this.setState({alerts: alerts});
+    this.setState({alert_ids: alert_ids});
   }
 
   openTargetDialog() {
-    this.target_dialog.show({});
+    this.setState({
+      targetDialogVisible: true,
+    });
+  }
+
+  closeTargetDialog() {
+    this.setState({targetDialogVisible: false});
   }
 
   openAlertDialog() {
-    this.alert_dialog.show({});
+    this.setState({alertDialogVisible: true});
+  }
+
+  closeAlertDialog() {
+    this.setState({alertDialogVisible: false});
   }
 
   openScheduleDialog() {
-    let {gmp} = this.context;
-    let timezone = gmp.globals.timezone;
-    let now = moment().tz(timezone);
+    const {gmp} = this.context;
+    const {timezone} = gmp.globals;
+    const now = moment().tz(timezone);
 
-    this.schedule_dialog.show({
+    this.setState({
+      scheduleDialogVisible: true,
       timezone,
       minute: now.minutes(),
       hour: now.hours(),
       date: now,
     });
+  }
+
+  closeScheduleDialog() {
+    this.setState({scheduleDialogVisible: false});
   }
 
   show(state, options) {
@@ -128,24 +157,48 @@ class TaskDialogContainer extends React.Component {
   }
 
   render() {
-    const {onSave} = this.props;
+    const {onSave, ...props} = this.props;
+    const {
+      alertDialogVisible,
+      minute,
+      hour,
+      date,
+      scheduleDialogVisible,
+      schedules = [],
+      target_id,
+      targetDialogVisible,
+      targets,
+      timezone,
+    } = this.state;
     return (
       <Layout>
         <TaskDialog
-          ref={ref => this.task_dialog = ref}
+          {...props}
           onNewAlertClick={this.openAlertDialog}
           onNewTargetClick={this.openTargetDialog}
           onNewScheduleClick={this.openScheduleDialog}
           onSave={onSave}/>
         <ScheduleDialog
+          schedules={schedules}
+          visible={scheduleDialogVisible}
+          timezone={timezone}
+          minute={minute}
+          hour={hour}
+          date={date}
           title={_('Create new Schedule')}
-          ref={ref => this.schedule_dialog = ref}
+          onClose={this.closeScheduleDialog}
           onSave={this.handleCreateSchedule}/>
         <TargetDialogContainer
-          ref={ref => this.target_dialog = ref}
+          targets={targets}
+          target_id={target_id}
+          title={_('Create new Target')}
+          visible={targetDialogVisible}
+          onClose={this.closeTargetDialog}
           onSave={this.handleCreateTarget}/>
         <AlertDialogContainer
-          ref={ref => this.alert_dialog = ref}
+          title={_('Create new Alert')}
+          visible={alertDialogVisible}
+          onClose={this.closeAlertDialog}
           onSave={this.handleCreateAlert}/>
       </Layout>
     );

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,13 +80,14 @@ class Page extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {};
+    this.state = {importDialogVisible: false};
 
     this.handleDialogSave = this.handleDialogSave.bind(this);
     this.handleCreateContainerTask = this.handleCreateContainerTask.bind(this);
     this.handleReportDeltaSelect = this.handleReportDeltaSelect.bind(this);
     this.handleReportDeleteClick = this.handleReportDeleteClick.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
+    this.closeImportDialog = this.closeImportDialog.bind(this);
     this.openCreateTaskDialog = this.openCreateTaskDialog.bind(this);
   }
 
@@ -102,7 +104,8 @@ class Page extends React.Component {
   }
 
   showImportDialog(tasks, task_id) {
-    this.import_dialog.show({
+    this.setState({
+      importDialogVisible: true,
       tasks,
       in_assets: 1,
       task_id: select_save_id(tasks, task_id),
@@ -121,6 +124,10 @@ class Page extends React.Component {
 
   openCreateTaskDialog() {
     this.container_task_dialog.show();
+  }
+
+  closeImportDialog() {
+    this.setState({importDialogVisible: false});
   }
 
   handleDialogSave(data) {
@@ -159,6 +166,14 @@ class Page extends React.Component {
   }
 
   render() {
+
+    const {
+      importDialogVisible,
+      in_assets,
+      task_id,
+      tasks,
+    } = this.state;
+
     return (
       <Wrapper>
         <EntitiesPage
@@ -169,8 +184,12 @@ class Page extends React.Component {
           onReportDeleteClick={this.handleReportDeleteClick}
         />
         <ImportReportDialog
-          ref={ref => this.import_dialog = ref}
+          in_assets={in_assets}
+          task_id={task_id}
+          tasks={tasks}
+          visible={importDialogVisible}
           onNewContainerTaskClick={this.openCreateTaskDialog}
+          onClose={this.closeImportDialog}
           onSave={this.handleDialogSave}/>
         <ContainerTaskDialog
           ref={ref => this.container_task_dialog = ref}
