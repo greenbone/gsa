@@ -38,6 +38,11 @@ import EntityComponent from '../../entity/component.js';
 
 import OverrideDialog from './dialog.js';
 
+export const ACTIVE_NO_VALUE = '0';
+export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
+export const ACTIVE_YES_ALWAYS_VALUE = '-1';
+export const ACTIVE_YES_UNTIL_VALUE = '-2';
+
 class OverrideComponent extends React.Component {
 
   constructor(...args) {
@@ -52,13 +57,13 @@ class OverrideComponent extends React.Component {
 
   openOverrideDialog(override, initial) {
     if (is_defined(override)) {
-      let active = '0';
+      let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
         if (is_empty(override.end_time)) {
-          active = '-1';
+          active = ACTIVE_YES_ALWAYS_VALUE;
         }
         else {
-          active = '-2';
+          active = ACTIVE_YES_UNTIL_VALUE;
         }
       }
 

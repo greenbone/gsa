@@ -49,8 +49,15 @@ import TextArea from '../../components/form/textarea.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
+import {
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_FOR_NEXT_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+} from './component';
+
 const DEFAULTS = {
-  active: '-1',
+  active: ACTIVE_YES_ALWAYS_VALUE,
   days: 30,
   fixed: false,
   oid: '1.3.6.1.4.1.25623.1.0.',
@@ -219,8 +226,8 @@ const OverrideDialog = ({
             <FormGroup title={_('Active')} flex="column">
               <Radio
                 name="active"
-                value="-1"
-                checked={state.active === '-1'}
+                value={ACTIVE_YES_ALWAYS_VALUE}
+                checked={state.active === ACTIVE_YES_ALWAYS_VALUE}
                 title={_('yes, always')}
                 onChange={onValueChange}/>
               {is_edit && override.isActive() && !is_empty(override.end_time) &&
@@ -228,8 +235,8 @@ const OverrideDialog = ({
                   <Divider>
                     <Radio
                       name="active"
-                      value="-2"
-                      checked={state.active === '-2'}
+                      value={ACTIVE_YES_UNTIL_VALUE}
+                      checked={state.active === ACTIVE_YES_UNTIL_VALUE}
                       title={_('yes, until')}
                       onChange={onValueChange}/>
                     <Text>{datetime(override.end_time)}</Text>
@@ -239,8 +246,8 @@ const OverrideDialog = ({
               <Divider>
                 <Radio
                   name="active"
-                  value="1"
-                  checked={state.active === '1'}
+                  value={ACTIVE_YES_FOR_NEXT_VALUE}
+                  checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
                   title={_('yes, for the next')}
                   onChange={onValueChange}>
                 </Radio>
@@ -249,15 +256,15 @@ const OverrideDialog = ({
                   value={state.days}
                   size="4"
                   onChange={onValueChange}
-                  disabled={state.active !== '1'}
+                  disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
                   type="int"
                   min="1"/>
                 <Text>{_('days')}</Text>
               </Divider>
               <Radio
                 name="active"
-                value="0"
-                checked={state.active === '0'}
+                value={ACTIVE_NO_VALUE}
+                checked={state.active === ACTIVE_NO_VALUE}
                 title={_('no')}
                 onChange={onValueChange}/>
             </FormGroup>
@@ -490,7 +497,12 @@ const OverrideDialog = ({
 };
 
 OverrideDialog.propTypes = {
-  active: PropTypes.oneOf(['0', '1', '-1', '-2']),
+  active: PropTypes.oneOf([
+    ACTIVE_NO_VALUE,
+    ACTIVE_YES_FOR_NEXT_VALUE,
+    ACTIVE_YES_ALWAYS_VALUE,
+    ACTIVE_YES_UNTIL_VALUE,
+  ]),
   custom_severity: PropTypes.oneOf(['0', '1']),
   days: PropTypes.number,
   fixed: PropTypes.bool,
