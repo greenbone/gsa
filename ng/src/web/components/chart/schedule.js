@@ -28,7 +28,7 @@ import {Group} from '@vx/group';
 import {LinearGradient} from '@vx/gradient';
 import {scaleBand, scaleUtc} from '@vx/scale';
 
-import _ from 'gmp/locale';
+import _, {datetime} from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
@@ -60,6 +60,13 @@ const getFutureRunLabel = runs => {
   }
   return _('{{num}} more runs not shown', {num: runs});
 };
+
+const cloneSchedule = (d, start = d.start) => ({
+  ...d,
+  start,
+  toolTip: _('{{name}} Start: {{date}}',
+    {name: d.label, date: datetime(start)}),
+});
 
 const StrokeGradient = () => (
   <LinearGradient
@@ -201,7 +208,7 @@ const ScheduleChart = ({
 
     // check if start date is in this week
     if (start.isSameOrBefore(end)) {
-      starts.push(d);
+      starts.push(cloneSchedule(d));
 
       futureRun = 0;
 
@@ -213,15 +220,15 @@ const ScheduleChart = ({
           futureRun = Number.POSITIVE_INFINITY;
 
           while (newStart.isSameOrBefore(end)) {
-            starts.push({...d, start: newStart});
+            starts.push(cloneSchedule(d, newStart));
             newStart = newStart.clone();
             newStart.add(period, 'seconds');
           }
         }
         else {
           for (let j = 0; j < periods; j++) {
-            if (newStart.isSameOrBefore(sevendays)) {
-              starts.push({...d, start: newStart});
+            if (newStart.isSameOrBefore(end)) {
+              starts.push(cloneSchedule(d, newStart));
             }
             else {
               futureRun++;
@@ -299,23 +306,33 @@ const ScheduleChart = ({
             const endX = xScale(endDate.toDate());
             const rwidth = endX - startX;
             return (
-              <rect
+              <ToolTip
                 key={i}
-                y={yScale(label)}
-                x={startX}
-                height={bandwidth}
-                width={rwidth}
-                fill={
-                  hasDuration ?
-                    Theme.lightGreen :
-                    fillGradientUrl
-                }
-                stroke={
-                  hasDuration ?
-                    Theme.darkGreen :
-                    strokeGradientUrl
-                }
-              />
+                content={d.toolTip}
+              >
+                {({targetRef, show, hide}) => (
+                  <rect
+                    ref={targetRef}
+                    y={yScale(label)}
+                    x={startX}
+                    height={bandwidth}
+                    width={rwidth}
+                    fill={
+                      hasDuration ?
+                        Theme.lightGreen :
+                        fillGradientUrl
+                    }
+                    stroke={
+                      hasDuration ?
+                        Theme.darkGreen :
+                        strokeGradientUrl
+                    }
+                    onMouseEnter={show}
+                    onMouseLeave={hide}
+                  />
+                )}
+              </ToolTip>
+
             );
           })}
         </Group>
