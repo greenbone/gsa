@@ -54,6 +54,10 @@ import {
 
 import {Wizardess, WizardContent} from './taskwizard';
 
+const IMMEDIATELY_START_VALUE = '2';
+const SCHEDULE_START_VALUE = '1';
+const DONT_START_VALUE = '0';
+
 const DEFAULTS = {
   scan_configs: [],
   credentials: [],
@@ -216,8 +220,8 @@ const AdvancedTaskWizard = ({
                 <FormGroup>
                   <Radio
                     title={_('Start immediately')}
-                    value="2"
-                    checked={state.auto_start === '2'}
+                    value={IMMEDIATELY_START_VALUE}
+                    checked={state.auto_start === IMMEDIATELY_START_VALUE}
                     name="auto_start"
                     onChange={onValueChange}>
                   </Radio>
@@ -225,8 +229,8 @@ const AdvancedTaskWizard = ({
                 <FormGroup>
                   <Radio
                     title={_('Create Schedule:')}
-                    value="1"
-                    checked={state.auto_start === '1'}
+                    value={SCHEDULE_START_VALUE}
+                    checked={state.auto_start === SCHEDULE_START_VALUE}
                     name="auto_start"
                     onChange={onValueChange}>
                   </Radio>
@@ -269,8 +273,8 @@ const AdvancedTaskWizard = ({
 
                 <Radio
                   title={_('Do not start automatically')}
-                  value="0"
-                  checked={state.auto_start === '0'}
+                  value={DONT_START_VALUE}
+                  checked={state.auto_start === DONT_START_VALUE}
                   name="auto_start"
                   onChange={onValueChange}>
                 </Radio>
@@ -337,7 +341,9 @@ const AdvancedTaskWizard = ({
 AdvancedTaskWizard.propTypes = {
   alert_email: PropTypes.string,
   auto_start: PropTypes.oneOf([
-    '0', '1', '2',
+    IMMEDIATELY_START_VALUE,
+    SCHEDULE_START_VALUE,
+    DONT_START_VALUE,
   ]),
   config_id: PropTypes.idOrZero,
   credentials: PropTypes.array,
