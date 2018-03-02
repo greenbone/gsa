@@ -96,7 +96,8 @@ const StrokeGradient = () => (
 
 const strokeGradientUrl = `url(#${STROKE_GRADIENT_ID})`;
 
-const FILL_GRADIENT_ID = 'green_fill_gradien';
+const FILL_GRADIENT_ID = 'green_fill_gradient';
+
 const FillGradient = () => (
   <LinearGradient
     id={FILL_GRADIENT_ID}
