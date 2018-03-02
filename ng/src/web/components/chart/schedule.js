@@ -28,7 +28,7 @@ import {Group} from '@vx/group';
 import {LinearGradient} from '@vx/gradient';
 import {scaleBand, scaleUtc} from '@vx/scale';
 
-import _ from 'gmp/locale';
+import _, {datetime} from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
@@ -61,6 +61,22 @@ const getFutureRunLabel = runs => {
   return _('{{num}} more runs not shown', {num: runs});
 };
 
+const cloneSchedule = (d, start = d.start) => {
+  const {duration = 0} = d;
+  const toolTip = duration === 0 ?
+    _('{{name}} Start: {{date}}', {name: d.label, date: datetime(start)}) :
+    _('{{name}} Start: {{startdate}} End: {{enddate}}', {
+      name: d.label,
+      startdate: datetime(start),
+      enddate: datetime(start.clone().add(duration, 'seconds')),
+    });
+  return {
+    ...d,
+    start,
+    toolTip,
+  };
+};
+
 const StrokeGradient = () => (
   <LinearGradient
     id={STROKE_GRADIENT_ID}
@@ -89,7 +105,8 @@ const StrokeGradient = () => (
 
 const strokeGradientUrl = `url(#${STROKE_GRADIENT_ID})`;
 
-const FILL_GRADIENT_ID = 'green_fill_gradien';
+const FILL_GRADIENT_ID = 'green_fill_gradient';
+
 const FillGradient = () => (
   <LinearGradient
     id={FILL_GRADIENT_ID}
@@ -170,13 +187,13 @@ const ScheduleChart = ({
   const maxHeight = height - margin.top - margin.bottom;
 
   const today = moment();
-  const sevendays = today.clone().add(7, 'days');
+  const end = today.clone().add(7, 'days');
 
   const yValues = data.map(d => d.label);
 
   const xScale = scaleUtc({
     range: [0, maxWidth],
-    domain: [today.toDate(), sevendays.toDate()],
+    domain: [today.toDate(), end.toDate()],
   });
 
   const yScale = scaleBand({
@@ -200,8 +217,8 @@ const ScheduleChart = ({
     let futureRun = 1;
 
     // check if start date is in this week
-    if (start.isSameOrBefore(sevendays)) {
-      starts.push(d);
+    if (start.isSameOrBefore(end)) {
+      starts.push(cloneSchedule(d));
 
       futureRun = 0;
 
@@ -212,16 +229,16 @@ const ScheduleChart = ({
         if (periods === 0) {
           futureRun = Number.POSITIVE_INFINITY;
 
-          while (newStart.isSameOrBefore(sevendays)) {
-            starts.push({...d, start: newStart});
+          while (newStart.isSameOrBefore(end)) {
+            starts.push(cloneSchedule(d, newStart));
             newStart = newStart.clone();
             newStart.add(period, 'seconds');
           }
         }
         else {
           for (let j = 0; j < periods; j++) {
-            if (newStart.isSameOrBefore(sevendays)) {
-              starts.push({...d, start: newStart});
+            if (newStart.isSameOrBefore(end)) {
+              starts.push(cloneSchedule(d, newStart));
             }
             else {
               futureRun++;
@@ -292,30 +309,40 @@ const ScheduleChart = ({
               endDate.add(1, 'day');
             }
 
-            if (endDate.isAfter(sevendays)) {
-              endDate = sevendays;
+            if (endDate.isAfter(end)) {
+              endDate = end;
             }
 
             const endX = xScale(endDate.toDate());
             const rwidth = endX - startX;
             return (
-              <rect
+              <ToolTip
                 key={i}
-                y={yScale(label)}
-                x={startX}
-                height={bandwidth}
-                width={rwidth}
-                fill={
-                  hasDuration ?
-                    Theme.lightGreen :
-                    fillGradientUrl
-                }
-                stroke={
-                  hasDuration ?
-                    Theme.darkGreen :
-                    strokeGradientUrl
-                }
-              />
+                content={d.toolTip}
+              >
+                {({targetRef, show, hide}) => (
+                  <rect
+                    ref={targetRef}
+                    y={yScale(label)}
+                    x={startX}
+                    height={bandwidth}
+                    width={rwidth}
+                    fill={
+                      hasDuration ?
+                        Theme.lightGreen :
+                        fillGradientUrl
+                    }
+                    stroke={
+                      hasDuration ?
+                        Theme.darkGreen :
+                        strokeGradientUrl
+                    }
+                    onMouseEnter={show}
+                    onMouseLeave={hide}
+                  />
+                )}
+              </ToolTip>
+
             );
           })}
         </Group>
