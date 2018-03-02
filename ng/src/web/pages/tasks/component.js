@@ -28,6 +28,7 @@ import moment from 'moment-timezone';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {first, for_each, map} from 'gmp/utils/array';
 import {is_array, is_defined} from 'gmp/utils/identity';
 import {includes_id, select_save_id} from 'gmp/utils/id';
@@ -430,7 +431,7 @@ class TaskComponent extends React.Component {
         modifyTaskWizardVisible: true,
         date: now,
         tasks: settings.tasks,
-        reschedule: '0',
+        reschedule: NO_VALUE,
         task_id: select_save_id(settings.tasks),
         start_minute: now.minutes(),
         start_hour: now.hours(),

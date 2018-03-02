@@ -25,6 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -139,8 +140,8 @@ const ModifyTaskWizard = ({
                 <FormGroup>
                   <Radio
                     title={_('Do not change')}
-                    value="0"
-                    checked={state.reschedule === '0'}
+                    value={NO_VALUE}
+                    checked={state.reschedule === NO_VALUE}
                     name="reschedule"
                     onChange={onValueChange}>
                   </Radio>
@@ -148,8 +149,8 @@ const ModifyTaskWizard = ({
                 <FormGroup>
                   <Radio
                     title={_('Create Schedule')}
-                    value="1"
-                    checked={state.reschedule === '1'}
+                    value={YES_VALUE}
+                    checked={state.reschedule === YES_VALUE}
                     name="reschedule"
                     onChange={onValueChange}>
                   </Radio>
@@ -219,7 +220,7 @@ ModifyTaskWizard.propTypes = {
   alert_email: PropTypes.string,
   date: PropTypes.momentDate,
   reschedule: PropTypes.oneOf([
-    '0', '1',
+    NO_VALUE, YES_VALUE,
   ]),
   start_hour: PropTypes.number,
   start_minute: PropTypes.number,
