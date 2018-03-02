@@ -61,12 +61,21 @@ const getFutureRunLabel = runs => {
   return _('{{num}} more runs not shown', {num: runs});
 };
 
-const cloneSchedule = (d, start = d.start) => ({
-  ...d,
-  start,
-  toolTip: _('{{name}} Start: {{date}}',
-    {name: d.label, date: datetime(start)}),
-});
+const cloneSchedule = (d, start = d.start) => {
+  const {duration = 0} = d;
+  const toolTip = duration === 0 ?
+    _('{{name}} Start: {{date}}', {name: d.label, date: datetime(start)}) :
+    _('{{name}} Start: {{startdate}} End: {{enddate}}', {
+      name: d.label,
+      startdate: datetime(start),
+      enddate: datetime(start.clone().add(duration, 'seconds')),
+    });
+  return {
+    ...d,
+    start,
+    toolTip,
+  };
+};
 
 const StrokeGradient = () => (
   <LinearGradient
