@@ -47,8 +47,15 @@ import Radio from '../../components/form/radio.js';
 import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 
+import {
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_FOR_NEXT_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+} from './component';
+
 const DEFAULTS = {
-  active: '-1',
+  active: ACTIVE_YES_ALWAYS_VALUE,
   days: 30,
   fixed: false,
   oid: '1.3.6.1.4.1.25623.1.0.',
@@ -215,8 +222,8 @@ const NoteDialog = ({
               <Divider flex="column">
                 <Radio
                   name="active"
-                  value="-1"
-                  checked={state.active === '-1'}
+                  value={ACTIVE_YES_ALWAYS_VALUE}
+                  checked={state.active === ACTIVE_YES_ALWAYS_VALUE}
                   title={_('yes, always')}
                   onChange={onValueChange}/>
                 {is_edit && note.isActive() &&
@@ -224,8 +231,8 @@ const NoteDialog = ({
                   <Divider>
                     <Radio
                       name="active"
-                      value="-2"
-                      checked={state.active === '-2'}
+                      value={ACTIVE_YES_UNTIL_VALUE}
+                      checked={state.active === ACTIVE_YES_UNTIL_VALUE}
                       title={_('yes, until')}
                       onChange={onValueChange}/>
                     <Text>{datetime(note.end_time)}</Text>
@@ -235,8 +242,8 @@ const NoteDialog = ({
               <Divider>
                 <Radio
                   name="active"
-                  value="1"
-                  checked={state.active === '1'}
+                  value={ACTIVE_YES_FOR_NEXT_VALUE}
+                  checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
                   title={_('yes, for the next')}
                   onChange={onValueChange}>
                 </Radio>
@@ -247,13 +254,13 @@ const NoteDialog = ({
                   type="int"
                   min="1"
                   onChange={onValueChange}
-                  disabled={state.active !== '1'}/>
+                  disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}/>
                 <Text>{_('days')}</Text>
               </Divider>
               <Radio
                 name="active"
-                value="0"
-                checked={state.active === '0'}
+                value={ACTIVE_NO_VALUE}
+                checked={state.active === ACTIVE_NO_VALUE}
                 title={_('no')}
                 onChange={onValueChange}/>
             </FormGroup>
@@ -448,7 +455,12 @@ const NoteDialog = ({
 };
 
 NoteDialog.propTypes = {
-  active: PropTypes.oneOf(['0', '1', '-1', '-2']),
+  active: PropTypes.oneOf([
+    ACTIVE_NO_VALUE,
+    ACTIVE_YES_FOR_NEXT_VALUE,
+    ACTIVE_YES_ALWAYS_VALUE,
+    ACTIVE_YES_UNTIL_VALUE,
+  ]),
   days: PropTypes.number,
   fixed: PropTypes.bool,
   hosts: PropTypes.string,

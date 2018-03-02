@@ -40,6 +40,11 @@ import EntityComponent from '../../entity/component';
 
 import NoteDialog from './dialog';
 
+export const ACTIVE_NO_VALUE = '0';
+export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
+export const ACTIVE_YES_ALWAYS_VALUE = '-1';
+export const ACTIVE_YES_UNTIL_VALUE = '-2';
+
 class NoteComponent extends React.Component {
 
   constructor(...args) {
@@ -54,13 +59,13 @@ class NoteComponent extends React.Component {
 
   openNoteDialog(note, initial) {
     if (is_defined(note)) {
-      let active = '0';
+      let active = ACTIVE_NO_VALUE;
       if (note.isActive()) {
         if (is_empty(note.end_time)) {
-          active = '-1';
+          active = ACTIVE_YES_ALWAYS_VALUE;
         }
         else {
-          active = '-2';
+          active = ACTIVE_YES_UNTIL_VALUE;
         }
       }
       this.setState({
