@@ -46,6 +46,7 @@ const data = [{
   start: moment().add(4, 'hours'),
   period: TWO_DAYS,
   periods: 4,
+  duration: ONE_DAY,
 }, {
   label: 'Ipsum',
   start: moment().add(2, 'day').add(4, 'hours'),
