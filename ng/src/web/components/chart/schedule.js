@@ -170,13 +170,13 @@ const ScheduleChart = ({
   const maxHeight = height - margin.top - margin.bottom;
 
   const today = moment();
-  const sevendays = today.clone().add(7, 'days');
+  const end = today.clone().add(7, 'days');
 
   const yValues = data.map(d => d.label);
 
   const xScale = scaleUtc({
     range: [0, maxWidth],
-    domain: [today.toDate(), sevendays.toDate()],
+    domain: [today.toDate(), end.toDate()],
   });
 
   const yScale = scaleBand({
@@ -200,7 +200,7 @@ const ScheduleChart = ({
     let futureRun = 1;
 
     // check if start date is in this week
-    if (start.isSameOrBefore(sevendays)) {
+    if (start.isSameOrBefore(end)) {
       starts.push(d);
 
       futureRun = 0;
@@ -212,7 +212,7 @@ const ScheduleChart = ({
         if (periods === 0) {
           futureRun = Number.POSITIVE_INFINITY;
 
-          while (newStart.isSameOrBefore(sevendays)) {
+          while (newStart.isSameOrBefore(end)) {
             starts.push({...d, start: newStart});
             newStart = newStart.clone();
             newStart.add(period, 'seconds');
@@ -292,8 +292,8 @@ const ScheduleChart = ({
               endDate.add(1, 'day');
             }
 
-            if (endDate.isAfter(sevendays)) {
-              endDate = sevendays;
+            if (endDate.isAfter(end)) {
+              endDate = end;
             }
 
             const endX = xScale(endDate.toDate());
