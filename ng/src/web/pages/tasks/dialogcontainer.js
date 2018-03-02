@@ -160,7 +160,6 @@ class TaskDialogContainer extends React.Component {
     const {onSave, ...props} = this.props;
     const {
       alertDialogVisible,
-      alerts = [],
       minute,
       hour,
       date,
