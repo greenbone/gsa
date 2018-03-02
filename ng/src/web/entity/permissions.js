@@ -79,10 +79,14 @@ class EntityPermissions extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {};
+    this.state = {
+      multiplePermissionDialogVisible: false,
+    };
 
     this.handleMultipleSave = this.handleMultipleSave.bind(this);
     this.openMultiplePermissionDialog = this.openMultiplePermissionDialog
+      .bind(this);
+    this.closeMultiplePermissionDialog = this.closeMultiplePermissionDialog
       .bind(this);
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
@@ -99,12 +103,14 @@ class EntityPermissions extends React.Component {
     const {relatedResourcesLoaders = [], entity} = this.props;
     const {gmp} = this.context;
 
-    this.dialog.show({
+    this.setState({
+      multiplePermissionDialogVisible: true,
       entity_type: entity.entity_type,
       entity_name: entity.name,
       id: entity.id,
       include_related: relatedResourcesLoaders.length === 0 ?
         CURRENT_RESOURCE_ONLY : INCLUDE_RELATED_RESOURCES,
+      title: _('Create Multiple Permissions'),
     });
 
     Promise
@@ -112,32 +118,36 @@ class EntityPermissions extends React.Component {
       .then(loaded => {
         const related = loaded.reduce((sum, cur) => sum.concat(cur), []);
 
-        this.dialog.setValues({
+        this.setState({
           related,
         });
       });
 
     gmp.groups.getAll().then(response => {
       const {data: groups} = response;
-      this.dialog.setValues({
+      this.setState({
         groups,
         group_id: select_save_id(groups),
       });
     });
     gmp.roles.getAll().then(response => {
       const {data: roles} = response;
-      this.dialog.setValues({
+      this.setState({
         roles,
         role_id: select_save_id(roles),
       });
     });
     gmp.users.getAll().then(response => {
       const {data: users} = response;
-      this.dialog.setValues({
+      this.setState({
         users,
         user_id: select_save_id(users),
       });
     });
+  }
+
+  closeMultiplePermissionDialog() {
+    this.setState({multiplePermissionDialogVisible: false});
   }
 
   handleMultipleSave(data) {
@@ -152,6 +162,21 @@ class EntityPermissions extends React.Component {
       permissions,
       ...props
     } = this.props;
+
+    const {
+      multiplePermissionDialogVisible,
+      entity_type,
+      entity_name,
+      group_id,
+      groups,
+      id,
+      include_related,
+      role_id,
+      roles,
+      title,
+      user_id,
+      users,
+    } = this.state;
 
     const extra = (
       <SectionElements
@@ -183,7 +208,19 @@ class EntityPermissions extends React.Component {
           />
         }
         <MultiplePermissionDialog
-          ref={ref => this.dialog = ref}
+          visible={multiplePermissionDialogVisible}
+          entity_type={entity_type}
+          entity_name={entity_name}
+          group_id={group_id}
+          groups={groups}
+          id={id}
+          include_related={include_related}
+          role_id={role_id}
+          roles={roles}
+          title={title}
+          user_id={user_id}
+          users={users}
+          onClose={this.closeMultiplePermissionDialog}
           onSave={this.handleMultipleSave}
         />
       </Layout>
