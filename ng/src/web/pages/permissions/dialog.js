@@ -30,7 +30,7 @@ import {is_empty, is_defined, map} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
@@ -41,6 +41,12 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {permission_description} from '../../utils/render.js';
+
+const DEFAULTS = {
+  name: 'Super',
+  comment: '',
+  resource_type: '',
+};
 
 const need_resource_id = [
   'Super',
@@ -127,6 +133,7 @@ const PermissionDialog = ({
   fixedResource = false,
   group_id,
   groups = [],
+  id,
   name,
   permission,
   resource_id,
@@ -134,9 +141,12 @@ const PermissionDialog = ({
   role_id,
   roles = [],
   subject_type,
+  title = _('New Permission'),
   user_id,
   users = [],
-  onValueChange,
+  visible,
+  onClose,
+  onSave,
 }, {capabilities}) => {
 
   const show_resource_id = need_resource_id.includes(name);
@@ -191,142 +201,200 @@ const PermissionDialog = ({
     );
   });
 
+  const data = {
+    ...DEFAULTS,
+    permission,
+  };
+
+  if (is_defined(comment)) {
+    data.comment = comment;
+  };
+  if (is_defined(name)) {
+    data.name = name;
+  };
+  if (is_defined(group_id)) {
+    data.group_id = group_id;
+  };
+  if (is_defined(resource)) {
+    data.resource = resource;
+  };
+  if (is_defined(resource_id)) {
+    data.resource_id = resource_id;
+  };
+  if (is_defined(resource_id_title)) {
+    data.resource_id_title = resource_id_title;
+  };
+  if (is_defined(resource_type)) {
+    data.resource_type = resource_type;
+  };
+  if (is_defined(role_id)) {
+    data.role_id = role_id;
+  };
+  if (is_defined(subject)) {
+    data.subject = subject;
+  };
+  if (is_defined(subject_obj)) {
+    data.subject_obj = subject_obj;
+  };
+  if (is_defined(subject_type)) {
+    data.subject_type = subject_type;
+  };
+  if (is_defined(user_id)) {
+    data.user_id = user_id;
+  };
+
   return (
-    <Layout flex="column">
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      initialData={data}
+    >
+      {({
+        data: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
 
-      <FormGroup title={_('Name')}>
-        <Select
-          name="name"
-          value={name}
-          onChange={onValueChange}>
-          <option value="Super">
-            {_('Super (Has super access)')}
-          </option>
-          {perm_opts}
-        </Select>
-      </FormGroup>
-
-      <FormGroup title={_('Comment')}>
-        <TextField
-          name="comment"
-          value={comment}
-          grow="1"
-          size="30"
-          maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
-
-      <FormGroup
-        title={_('Subject')}
-        flex="column">
-        <Divider flex="column">
-          {capabilities.mayAccess('users') &&
-            <Divider>
-              <Radio
-                name="subject_type"
-                checked={subject_type === 'user'}
-                title={_('User')}
-                value="user"
-                onChange={onValueChange}>
-              </Radio>
+            <FormGroup title={_('Name')}>
               <Select
-                name="user_id"
-                value={user_id}
+                name="name"
+                value={state.name}
                 onChange={onValueChange}>
-                {map(users, user => {
-                  return (
-                    <option
-                      key={user.id}
-                      value={user.id}>
-                      {user.name}
-                    </option>
-                  );
-                })}
+                <option value="Super">
+                  {_('Super (Has super access)')}
+                </option>
+                {perm_opts}
               </Select>
-            </Divider>
-          }
-          {capabilities.mayAccess('roles') &&
-            <Divider>
-              <Radio
-                name="subject_type"
-                checked={subject_type === 'role'}
-                title={_('Role')}
-                value="role"
-                onChange={onValueChange}>
-              </Radio>
-              <Select
-                name="role_id"
-                value={role_id}
-                onChange={onValueChange}>
-                {map(roles, role => {
-                  return (
-                    <option
-                      key={role.id}
-                      value={role.id}>
-                      {role.name}
-                    </option>
-                  );
-                })}
-              </Select>
-            </Divider>
-          }
-          {capabilities.mayAccess('groups') &&
-            <Divider>
-              <Radio
-                name="subject_type"
-                checked={subject_type === 'group'}
-                title={_('Group')}
-                value="group"
-                onChange={onValueChange}>
-              </Radio>
-              <Select
-                name="group_id"
-                value={group_id}
-                onChange={onValueChange}>
-                {map(groups, group => {
-                  return (
-                    <option
-                      key={group.id}
-                      value={group.id}>
-                      {group.name}
-                    </option>
-                  );
-                })}
-              </Select>
-            </Divider>
-          }
-        </Divider>
-      </FormGroup>
+            </FormGroup>
 
-      {name === 'Super' &&
-        <FormGroup title={_('Resource Type')}>
-          <Select
-            name="resource_type"
-            value={resource_type}
-            onChange={onValueChange}>
-            <option value="">--</option>
-            <option value="user">{_('User')}</option>
-            <option value="role">{_('Role')}</option>
-            <option value="group">{_('Group')}</option>
-          </Select>
-        </FormGroup>
-      }
-      {show_resource_id &&
-        <FormGroup title={resource_id_title}>
-          <TextField
-            name="resource_id"
-            value={resource_id}
-            disabled={fixedResource}
-            size="50"
-            maxLength="100"
-            onChange={onValueChange}/>
-        </FormGroup>
-      }
-      <FormGroup title={_('Description')}>
-        {permission_description(name, resource, subject)}
-      </FormGroup>
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}/>
+            </FormGroup>
 
-    </Layout>
+            <FormGroup
+              title={_('Subject')}
+              flex="column">
+              <Divider flex="column">
+                {capabilities.mayAccess('users') &&
+                  <Divider>
+                    <Radio
+                      name="subject_type"
+                      checked={state.subject_type === 'user'}
+                      title={_('User')}
+                      value="user"
+                      onChange={onValueChange}>
+                    </Radio>
+                    <Select
+                      name="user_id"
+                      value={state.user_id}
+                      onChange={onValueChange}>
+                      {map(users, user => {
+                        return (
+                          <option
+                            key={user.id}
+                            value={user.id}>
+                            {user.name}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  </Divider>
+                }
+                {capabilities.mayAccess('roles') &&
+                  <Divider>
+                    <Radio
+                      name="subject_type"
+                      checked={state.subject_type === 'role'}
+                      title={_('Role')}
+                      value="role"
+                      onChange={onValueChange}>
+                    </Radio>
+                    <Select
+                      name="role_id"
+                      value={state.role_id}
+                      onChange={onValueChange}>
+                      {map(roles, role => {
+                        return (
+                          <option
+                            key={role.id}
+                            value={role.id}>
+                            {role.name}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  </Divider>
+                }
+                {capabilities.mayAccess('groups') &&
+                  <Divider>
+                    <Radio
+                      name="subject_type"
+                      checked={state.subject_type === 'group'}
+                      title={_('Group')}
+                      value="group"
+                      onChange={onValueChange}>
+                    </Radio>
+                    <Select
+                      name="group_id"
+                      value={state.group_id}
+                      onChange={onValueChange}>
+                      {map(groups, group => {
+                        return (
+                          <option
+                            key={group.id}
+                            value={group.id}>
+                            {group.name}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  </Divider>
+                }
+              </Divider>
+            </FormGroup>
+
+            {state.name === 'Super' &&
+              <FormGroup title={_('Resource Type')}>
+                <Select
+                  name="resource_type"
+                  value={state.resource_type}
+                  onChange={onValueChange}>
+                  <option value="">--</option>
+                  <option value="user">{_('User')}</option>
+                  <option value="role">{_('Role')}</option>
+                  <option value="group">{_('Group')}</option>
+                </Select>
+              </FormGroup>
+            }
+            {show_resource_id &&
+              <FormGroup title={state.resource_id_title}>
+                <TextField
+                  name="resource_id"
+                  value={state.resource_id}
+                  disabled={fixedResource}
+                  size="50"
+                  maxLength="100"
+                  onChange={onValueChange}/>
+              </FormGroup>
+            }
+            <FormGroup title={_('Description')}>
+              {permission_description(
+                state.name, state.resource, state.subject)}
+            </FormGroup>
+
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -335,6 +403,7 @@ PermissionDialog.propTypes = {
   fixedResource: PropTypes.bool,
   group_id: PropTypes.id,
   groups: PropTypes.array,
+  id: PropTypes.string,
   name: PropTypes.string,
   permission: PropTypes.model,
   resource_id: PropTypes.string,
@@ -344,23 +413,18 @@ PermissionDialog.propTypes = {
   subject_type: PropTypes.oneOf([
     'user', 'role', 'group',
   ]),
+  title: PropTypes.string,
   user_id: PropTypes.id,
   users: PropTypes.array,
-  onValueChange: PropTypes.func,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 PermissionDialog.contextTypes = {
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default withDialog({
-  title: _('New Permission'),
-  footer: _('Save'),
-  defaultState: {
-    name: 'Super',
-    comment: '',
-    resource_type: '',
-  },
-})(PermissionDialog);
+export default PermissionDialog;
 
 // vim: set ts=2 sw=2 tw=80:
