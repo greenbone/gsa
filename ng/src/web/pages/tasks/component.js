@@ -557,6 +557,7 @@ class TaskComponent extends React.Component {
                   scan_configs={scan_configs}
                   scanner_type={scanner_type}
                   scanners={scanners}
+                  scanner_id={scanner_id}
                   schedule_id={schedule_id}
                   schedules={schedules}
                   targets={targets}
