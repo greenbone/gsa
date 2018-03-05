@@ -230,7 +230,6 @@ ModifyTaskWizard.propTypes = {
   title: PropTypes.string,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  onNewClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 
