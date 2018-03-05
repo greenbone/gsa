@@ -106,7 +106,7 @@ class CredentialsDialog extends React.Component {
       credential,
       title = _('New Credential'),
       types,
-      visible,
+      visible = true,
       onClose,
       onSave,
     } = this.props;
@@ -398,7 +398,7 @@ CredentialsDialog.propTypes = {
   types: PropTypes.arrayOf(
     pwtypes
   ),
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

@@ -35,7 +35,7 @@ import PortListDialog from '../portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
-export class TargetDialogContainer extends React.Component {
+class TargetDialogContainer extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -169,20 +169,22 @@ export class TargetDialogContainer extends React.Component {
           onClose={onClose}
           onSave={this.handleSaveTarget}
         />
-        <CredentialsDialog
-          visible={credentialsDialogVisible}
-          types={types}
-          base={base}
-          id_field={id_field}
-          title={title}
-          onClose={this.closeCredentialsDialog}
-          onSave={this.handleCreateCredential}
-        />
-        <PortListDialog
-          visible={portListDialogVisible}
-          onClose={this.closePortListDialog}
-          onSave={this.handleCreatePortList}
-        />
+        {credentialsDialogVisible &&
+          <CredentialsDialog
+            types={types}
+            base={base}
+            id_field={id_field}
+            title={title}
+            onClose={this.closeCredentialsDialog}
+            onSave={this.handleCreateCredential}
+          />
+        }
+        {portListDialogVisible &&
+          <PortListDialog
+            onClose={this.closePortListDialog}
+            onSave={this.handleCreatePortList}
+          />
+        }
       </Layout>
     );
   }

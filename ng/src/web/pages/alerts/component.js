@@ -140,8 +140,8 @@ class AlertComponent extends React.Component {
 
   openCredentialDialog(data) {
     this.setState({
+      ...data,
       credentialDialogVisible: true,
-      data,
       title: _('Create new Credential'),
     });
   }
@@ -246,8 +246,8 @@ class AlertComponent extends React.Component {
           is_defined(method.data.verinice_server_credential) ?
             method.data.verinice_server_credential.credential.id : undefined;
 
-        const tp_sms_credential_id = is_defined(method.data.tp_sms_credential) ?
-          method.data.method_data_tp_sms_credential.credential.id : undefined;
+        const tp_sms_credential_id = value(
+          method.data.tp_sms_credential.credential);
 
         this.setState({
           alertDialogVisible: true,
@@ -471,9 +471,8 @@ class AlertComponent extends React.Component {
     const {
       alertDialogVisible,
       credentialDialogVisible,
-      data,
       title,
-      type,
+      types,
       id,
       alert,
       active,
@@ -560,94 +559,93 @@ class AlertComponent extends React.Component {
               edit: this.openAlertDialog,
               test: this.handleTestAlert,
             })}
-            <AlertDialog
-              visible={alertDialogVisible}
-              credentialDialogVisible={credentialDialogVisible}
-              data={data}
-              title={title}
-              type={type}
-              id={id}
-              alert={alert}
-              active={active}
-              name={name}
-              comment={comment}
-              filters={filters}
-              filter_id={filter_id}
-              credentials={credentials}
-              result_filters={result_filters}
-              secinfo_filters={secinfo_filters}
-              condition={condition}
-              condition_data_count={condition_data_count}
-              condition_data_direction={condition_data_direction}
-              condition_data_filters={condition_data_filters}
-              condition_data_filter_id={condition_data_filter_id}
-              condition_data_at_least_filter_id=
-                {condition_data_at_least_filter_id}
-              condition_data_at_least_count={condition_data_at_least_count}
-              condition_data_severity={condition_data_severity}
-              event={event}
-              event_data_status={event_data_status}
-              event_data_feed_event={event_data_feed_event}
-              event_data_secinfo_type={event_data_secinfo_type}
-              method={method}
-              method_data_defense_center_ip={method_data_defense_center_ip}
-              method_data_defense_center_port={method_data_defense_center_port}
-              method_data_details_url={method_data_details_url}
-              report_formats={report_formats}
-              method_data_to_address={method_data_to_address}
-              method_data_from_address={method_data_from_address}
-              method_data_subject={method_data_subject}
-              method_data_message={method_data_message}
-              method_data_message_attach={method_data_message_attach}
-              method_data_notice={method_data_notice}
-              method_data_notice_report_format=
-                {method_data_notice_report_format}
-              method_data_notice_attach_format=
-                {method_data_notice_attach_format}
-              method_data_scp_credential={method_data_scp_credential}
-              method_data_scp_report_format={method_data_scp_report_format}
-              method_data_scp_path={method_data_scp_path}
-              method_data_scp_host={method_data_scp_host}
-              method_data_scp_known_hosts={method_data_scp_known_hosts}
-              method_data_send_port={method_data_send_port}
-              method_data_send_host={method_data_send_host}
-              method_data_send_report_format={method_data_send_report_format}
-              method_data_smb_credential={method_data_smb_credential}
-              method_data_smb_file_path={method_data_smb_file_path}
-              method_data_smb_report_format={method_data_smb_report_format}
-              method_data_smb_share_path={method_data_smb_share_path}
-              method_data_snmp_agent={method_data_snmp_agent}
-              method_data_snmp_community={method_data_snmp_community}
-              method_data_snmp_message={method_data_snmp_message}
-              method_data_start_task_task={method_data_start_task_task}
-              method_data_tp_sms_credential={method_data_tp_sms_credential}
-              method_data_tp_sms_hostname={method_data_tp_sms_hostname}
-              method_data_tp_sms_tls_workaround=
-                {method_data_tp_sms_tls_workaround}
-              method_data_verinice_server_report_format=
-                {method_data_verinice_server_report_format}
-              method_data_verinice_server_url={method_data_verinice_server_url}
-              method_data_verinice_server_credential=
-                {method_data_verinice_server_credential}
-              method_data_URL={method_data_URL}
-              tasks={tasks}
-              onClose={this.closeAlertDialog}
-              onNewScpCredentialClick={this.openScpCredentialDialog}
-              onNewSmbCredentialClick={this.openSmbCredentialDialog}
-              onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
-              onNewTippingPointCredentialClick={
-                this.openTippingPointCredentialDialog}
-              onSave={save}
-            />
-            <CredentialsDialog
-              credentialDialogVisible={credentialDialogVisible}
-              data={data}
-              title={title}
-              type={type}
-              visible={credentialDialogVisible}
-              onClose={this.closeCredentialDialog}
-              onSave={this.handleCreateCredential}
-            />
+            {alertDialogVisible &&
+              <AlertDialog
+                title={title}
+                id={id}
+                alert={alert}
+                active={active}
+                name={name}
+                comment={comment}
+                filters={filters}
+                filter_id={filter_id}
+                credentials={credentials}
+                result_filters={result_filters}
+                secinfo_filters={secinfo_filters}
+                condition={condition}
+                condition_data_count={condition_data_count}
+                condition_data_direction={condition_data_direction}
+                condition_data_filters={condition_data_filters}
+                condition_data_filter_id={condition_data_filter_id}
+                condition_data_at_least_filter_id=
+                  {condition_data_at_least_filter_id}
+                condition_data_at_least_count={condition_data_at_least_count}
+                condition_data_severity={condition_data_severity}
+                event={event}
+                event_data_status={event_data_status}
+                event_data_feed_event={event_data_feed_event}
+                event_data_secinfo_type={event_data_secinfo_type}
+                method={method}
+                method_data_defense_center_ip={method_data_defense_center_ip}
+                method_data_defense_center_port={
+                  method_data_defense_center_port}
+                method_data_details_url={method_data_details_url}
+                report_formats={report_formats}
+                method_data_to_address={method_data_to_address}
+                method_data_from_address={method_data_from_address}
+                method_data_subject={method_data_subject}
+                method_data_message={method_data_message}
+                method_data_message_attach={method_data_message_attach}
+                method_data_notice={method_data_notice}
+                method_data_notice_report_format=
+                  {method_data_notice_report_format}
+                method_data_notice_attach_format=
+                  {method_data_notice_attach_format}
+                method_data_scp_credential={method_data_scp_credential}
+                method_data_scp_report_format={method_data_scp_report_format}
+                method_data_scp_path={method_data_scp_path}
+                method_data_scp_host={method_data_scp_host}
+                method_data_scp_known_hosts={method_data_scp_known_hosts}
+                method_data_send_port={method_data_send_port}
+                method_data_send_host={method_data_send_host}
+                method_data_send_report_format={method_data_send_report_format}
+                method_data_smb_credential={method_data_smb_credential}
+                method_data_smb_file_path={method_data_smb_file_path}
+                method_data_smb_report_format={method_data_smb_report_format}
+                method_data_smb_share_path={method_data_smb_share_path}
+                method_data_snmp_agent={method_data_snmp_agent}
+                method_data_snmp_community={method_data_snmp_community}
+                method_data_snmp_message={method_data_snmp_message}
+                method_data_start_task_task={method_data_start_task_task}
+                method_data_tp_sms_credential={method_data_tp_sms_credential}
+                method_data_tp_sms_hostname={method_data_tp_sms_hostname}
+                method_data_tp_sms_tls_workaround=
+                  {method_data_tp_sms_tls_workaround}
+                method_data_verinice_server_report_format=
+                  {method_data_verinice_server_report_format}
+                method_data_verinice_server_url={
+                  method_data_verinice_server_url}
+                method_data_verinice_server_credential=
+                  {method_data_verinice_server_credential}
+                method_data_URL={method_data_URL}
+                tasks={tasks}
+                onClose={this.closeAlertDialog}
+                onNewScpCredentialClick={this.openScpCredentialDialog}
+                onNewSmbCredentialClick={this.openSmbCredentialDialog}
+                onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
+                onNewTippingPointCredentialClick={
+                  this.openTippingPointCredentialDialog}
+                onSave={save}
+              />
+            }
+            {credentialDialogVisible &&
+              <CredentialsDialog
+                title={title}
+                types={types}
+                onClose={this.closeCredentialDialog}
+                onSave={this.handleCreateCredential}
+              />
+            }
           </Layout>
         )}
       </EntityComponent>

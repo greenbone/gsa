@@ -37,6 +37,8 @@ import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+  CVE_SCANNER_TYPE,
 } from 'gmp/models/scanner.js';
 
 import {
@@ -91,7 +93,7 @@ const DEFAULTS = {
   scanner_type: OPENVAS_SCANNER_TYPE,
   schedule_id: UNSET_VALUE,
   schedule_periods: NO_VALUE,
-  target_id: UNSET_VALUE,
+  scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
 };
 
 const get_scanner = (scanners, scanner_id) => {
@@ -202,7 +204,7 @@ const TaskDialog = ({
     targets,
     task,
     title = _('New Task'),
-    visible,
+    visible = true,
     onClose,
     onNewAlertClick,
     onNewScheduleClick,
@@ -553,7 +555,11 @@ TaskDialog.propTypes = {
   max_hosts: PropTypes.number,
   min_qod: PropTypes.number,
   name: PropTypes.string,
-  scan_configs: PropTypes.object,
+  scan_configs: PropTypes.shape({
+    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
+    [CVE_SCANNER_TYPE]: PropTypes.array,
+    [OSP_SCANNER_TYPE]: PropTypes.array,
+  }),
   scanner_id: PropTypes.idOrZero,
   scanners: PropTypes.array,
   schedule_id: PropTypes.idOrZero,
@@ -567,7 +573,7 @@ TaskDialog.propTypes = {
   targets: PropTypes.array,
   task: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onNewAlertClick: PropTypes.func,
   onNewScheduleClick: PropTypes.func,

@@ -47,6 +47,7 @@ import {
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -279,19 +280,22 @@ class AlertDialog extends React.Component {
 
   render() {
     const {
+      capabilities,
+      credentials,
       title = _('New Alert'),
-      visible,
+      visible = true,
+      report_formats,
       onClose,
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
       onNewTippingPointCredentialClick,
       onSave,
+      ...props
     } = this.props;
 
     const {stateEvent: event} = this.state;
 
-    const {capabilities} = this.context;
     const is_task_event = event === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
 
     const method_types = [{
@@ -347,7 +351,7 @@ class AlertDialog extends React.Component {
       ...alert,
     };
 
-    for (const [key, value] of Object.entries(this.props)) {
+    for (const [key, value] of Object.entries(props)) {
       if (is_defined(value)) {
         data[key] = value;
       }
@@ -494,7 +498,7 @@ class AlertDialog extends React.Component {
                   noticeReportFormat={state.method_data_notice_report_format}
                   subject={state.method_data_subject}
                   toAddress={state.method_data_to_address}
-                  reportFormats={state.report_formats}
+                  reportFormats={report_formats}
                   isTaskEvent={is_task_event}
                   onChange={onValueChange}/>
               }
@@ -509,8 +513,8 @@ class AlertDialog extends React.Component {
               {state.method === METHOD_TYPE_SCP &&
                 <ScpMethodPart
                   prefix="method_data"
-                  credentials={state.credentials}
-                  reportFormats={state.report_formats}
+                  credentials={credentials}
+                  reportFormats={report_formats}
                   onChange={onValueChange}
                   scpCredential={state.method_data_scp_credential}
                   scpHost={state.method_data_scp_host}
@@ -527,7 +531,7 @@ class AlertDialog extends React.Component {
                   sendHost={state.method_data_send_host}
                   sendPort={state.method_data_send_port}
                   sendReportFormat={state.method_data_send_report_format}
-                  reportFormats={state.report_formats}
+                  reportFormats={report_formats}
                   onChange={onValueChange}/>
               }
 
@@ -542,8 +546,8 @@ class AlertDialog extends React.Component {
               {state.method === METHOD_TYPE_SMB &&
                 <SmbMethodPart
                   prefix="method_data"
-                  credentials={state.credentials}
-                  reportFormats={state.report_formats}
+                  credentials={credentials}
+                  reportFormats={report_formats}
                   onChange={onValueChange}
                   smbCredential={state.method_data_smb_credential}
                   smbFilePath={state.method_data_smb_file_path}
@@ -572,8 +576,8 @@ class AlertDialog extends React.Component {
               {state.method === METHOD_TYPE_VERINICE &&
                 <VeriniceMethodPart
                   prefix="method_data"
-                  credentials={state.credentials}
-                  reportFormats={state.report_formats}
+                  credentials={credentials}
+                  reportFormats={report_formats}
                   veriniceServerUrl={state.method_data_verinice_server_url}
                   veriniceServerCredential=
                     {state.method_data_verinice_server_credential}
@@ -586,7 +590,7 @@ class AlertDialog extends React.Component {
               {state.method === METHOD_TYPE_TIPPING_POINT &&
                 <TippingPontMethodPart
                   prefix="method_data"
-                  credentials={state.credentials}
+                  credentials={credentials}
                   tpSmsCredential={state.method_data_tp_sms_credential}
                   tpSmsHostname={state.method_data_tp_sms_hostname}
                   tpSmsTlsWorkaround={state.method_data_tp_sms_tls_workaround}
@@ -613,6 +617,7 @@ class AlertDialog extends React.Component {
 
 AlertDialog.propTypes = {
   active: PropTypes.yesno,
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   condition: PropTypes.string,
   condition_data_at_least_count: PropTypes.number,
@@ -623,10 +628,10 @@ AlertDialog.propTypes = {
   condition_data_filters: PropTypes.array,
   condition_data_severity: PropTypes.number,
   credentials: PropTypes.array,
-  event: PropTypes.string.isRequired,
-  event_data_feed_event: PropTypes.string.isRequired,
-  event_data_secinfo_type: PropTypes.string.isRequired,
-  event_data_status: PropTypes.string.isRequired,
+  event: PropTypes.string,
+  event_data_feed_event: PropTypes.string,
+  event_data_secinfo_type: PropTypes.string,
+  event_data_status: PropTypes.string,
   filter_id: PropTypes.idOrZero,
   method: PropTypes.string,
   method_data_URL: PropTypes.string,
@@ -669,7 +674,7 @@ AlertDialog.propTypes = {
   secinfo_filters: PropTypes.array,
   tasks: PropTypes.array,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onNewScpCredentialClick: PropTypes.func.isRequired,
   onNewSmbCredentialClick: PropTypes.func.isRequired,
@@ -678,10 +683,6 @@ AlertDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-AlertDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default AlertDialog;
+export default withCapabilities(AlertDialog);
 
 // vim: set ts=2 sw=2 tw=80:

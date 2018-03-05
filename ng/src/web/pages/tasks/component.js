@@ -540,100 +540,115 @@ class TaskComponent extends React.Component {
                 modifytaskwizard: this.openModifyTaskWizard,
                 taskwizard: this.openTaskWizard,
               })}
-              <TaskDialogContainer
-                alert_ids={alert_ids}
-                alerts={alerts}
-                alterable={alterable}
-                apply_overrides={apply_overrides}
-                auto_delete={auto_delete}
-                auto_delete_data={auto_delete_data}
-                comment={comment}
-                id={id}
-                in_assets={in_assets}
-                min_qod={min_qod}
-                name={name}
-                scan_configs={scan_configs}
-                scanner_type={scanner_type}
-                scanners={scanners}
-                schedule_id={schedule_id}
-                schedules={schedules}
-                targets={targets}
-                task={task}
-                title={title}
-                visible={taskDialogVisible}
-                {...data}
-                onClose={this.closeTaskDialog}
-                onSave={save}
-              />
+
+              {taskDialogVisible &&
+                <TaskDialogContainer
+                  alert_ids={alert_ids}
+                  alerts={alerts}
+                  alterable={alterable}
+                  apply_overrides={apply_overrides}
+                  auto_delete={auto_delete}
+                  auto_delete_data={auto_delete_data}
+                  comment={comment}
+                  id={id}
+                  in_assets={in_assets}
+                  min_qod={min_qod}
+                  name={name}
+                  scan_configs={scan_configs}
+                  scanner_type={scanner_type}
+                  scanners={scanners}
+                  scanner_id={scanner_id}
+                  schedule_id={schedule_id}
+                  schedules={schedules}
+                  targets={targets}
+                  task={task}
+                  title={title}
+                  {...data}
+                  onClose={this.closeTaskDialog}
+                  onSave={save}
+                />
+              }
             </Wrapper>
           )}
         </EntityComponent>
 
-        <ContainerTaskDialog
-          visible={containerTaskDialogVisible}
-          task={task}
-          name={name}
-          comment={comment}
-          id={id}
-          in_assets={in_assets}
-          auto_delete={auto_delete}
-          auto_delete_data={auto_delete_data}
-          title={title}
-          onClose={this.closeContainerTaskDialog}
-          onSave={this.handleSaveContainerTask}/>
+        {containerTaskDialogVisible &&
+          <ContainerTaskDialog
+            task={task}
+            name={name}
+            comment={comment}
+            id={id}
+            in_assets={in_assets}
+            auto_delete={auto_delete}
+            auto_delete_data={auto_delete_data}
+            title={title}
+            onClose={this.closeContainerTaskDialog}
+            onSave={this.handleSaveContainerTask}
+          />
+        }
 
-        <TaskWizard
-          hosts={hosts}
-          port_list_id={port_list_id}
-          alert_id={alert_id}
-          config_id={config_id}
-          ssh_credential={ssh_credential}
-          smb_credential={smb_credential}
-          esxi_credential={esxi_credential}
-          scanner_id={scanner_id}
-          visible={taskWizardVisible}
-          onClose={this.closeTaskWizard}
-          onSave={this.handleSaveTaskWizard}
-          onNewClick={this.handleTaskWizardNewClick}/>
-        <AdvancedTaskWizard
-          visible={advancedTaskWizardVisible}
-          credentials={credentials}
-          scan_configs={scan_configs}
-          date={date}
-          task_name={task_name}
-          target_hosts={target_hosts}
-          port_list_id={port_list_id}
-          alert_id={alert_id}
-          config_id={config_id}
-          ssh_credential={ssh_credential}
-          smb_credential={smb_credential}
-          esxi_credential={esxi_credential}
-          scanner_id={scanner_id}
-          slave_id={slave_id}
-          start_minute={start_minute}
-          start_hour={start_hour}
-          start_timezone={start_timezone}
-          onClose={this.closeAdvancedTaskWizard}
-          onSave={this.handleSaveAdvancedTaskWizard}/>
-        <ModifyTaskWizard
-          date={date}
-          tasks={tasks}
-          reschedule={reschedule}
-          task_id={task_id}
-          start_minute={start_minute}
-          start_hour={start_hour}
-          start_timezone={start_timezone}
-          visible={modifyTaskWizardVisible}
-          onClose={this.closeModifyTaskWizard}
-          onSave={this.handleSaveModifyTaskWizard}/>
+        {taskWizardVisible &&
+          <TaskWizard
+            hosts={hosts}
+            port_list_id={port_list_id}
+            alert_id={alert_id}
+            config_id={config_id}
+            ssh_credential={ssh_credential}
+            smb_credential={smb_credential}
+            esxi_credential={esxi_credential}
+            scanner_id={scanner_id}
+            onClose={this.closeTaskWizard}
+            onSave={this.handleSaveTaskWizard}
+            onNewClick={this.handleTaskWizardNewClick}
+          />
+        }
 
-        <ImportReportDialog
-          visible={reportImportDialogVisible}
-          newContainerTask={false}
-          task_id={task_id}
-          tasks={tasks}
-          onClose={this.closeReportImportDialog}
-          onSave={this.handleReportImport}/>
+        {advancedTaskWizardVisible &&
+          <AdvancedTaskWizard
+            credentials={credentials}
+            scan_configs={scan_configs}
+            date={date}
+            task_name={task_name}
+            target_hosts={target_hosts}
+            port_list_id={port_list_id}
+            alert_id={alert_id}
+            config_id={config_id}
+            ssh_credential={ssh_credential}
+            smb_credential={smb_credential}
+            esxi_credential={esxi_credential}
+            scanner_id={scanner_id}
+            slave_id={slave_id}
+            start_minute={start_minute}
+            start_hour={start_hour}
+            start_timezone={start_timezone}
+            onClose={this.closeAdvancedTaskWizard}
+            onSave={this.handleSaveAdvancedTaskWizard}
+          />
+        }
+
+        {modifyTaskWizardVisible &&
+          <ModifyTaskWizard
+            date={date}
+            tasks={tasks}
+            reschedule={reschedule}
+            task_id={task_id}
+            start_minute={start_minute}
+            start_hour={start_hour}
+            start_timezone={start_timezone}
+            onClose={this.closeModifyTaskWizard}
+            onSave={this.handleSaveModifyTaskWizard}
+          />
+        }
+
+        {reportImportDialogVisible &&
+          <ImportReportDialog
+            newContainerTask={false}
+            task_id={task_id}
+            tasks={tasks}
+            onClose={this.closeReportImportDialog}
+            onSave={this.handleReportImport}
+          />
+        }
       </Wrapper>
     );
   }
