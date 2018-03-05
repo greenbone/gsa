@@ -28,7 +28,6 @@ import moment from 'moment-timezone';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined} from 'gmp/utils';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -36,7 +35,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import ScheduleDialog from '../schedules/dialog.js';
 import TargetDialogContainer from '../targets/dialogcontainer.js';
-import AlertDialogContainer from '../alerts/dialogcontainer.js';
+import AlertComponent from '../alerts/component.js';
 
 import TaskDialog from './dialog.js';
 
@@ -47,20 +46,20 @@ class TaskDialogContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
+    const {alerts, alert_ids} = this.props;
+
     this.state = {
-      alertDialogVisible: false,
       scheduleDialogVisible: false,
       targetDialogVisible: false,
+      alerts,
+      alert_ids,
     };
 
     this.targets = [];
-    this.alerts = [];
 
-    this.handleCreateAlert = this.handleCreateAlert.bind(this);
+    this.handleAlertCreated = this.handleAlertCreated.bind(this);
     this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
     this.handleCreateTarget = this.handleCreateTarget.bind(this);
-    this.openAlertDialog = this.openAlertDialog.bind(this);
-    this.closeAlertDialog = this.closeAlertDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
     this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
@@ -95,16 +94,18 @@ class TaskDialogContainer extends React.Component {
     });
   }
 
-  handleCreateAlert(alert) {
-    const {alerts = [], alert_ids = []} = this;
+  handleAlertCreated(resp) {
+    const {data} = resp;
+    const {alert_ids} = this.state;
 
-    alerts.push(alert);
-    alert_ids.push(alert.id);
+    const {gmp} = this.context;
+    gmp.alerts.getAll().then(response => {
+      const {data: alerts} = response;
 
-    log.debug('adding alert to task dialog', alert, alerts);
+      log.debug('adding alert to task dialog', data.id, alerts);
 
-    this.setState({alerts: alerts});
-    this.setState({alert_ids: alert_ids});
+      this.setState({alerts, alert_ids: [...alert_ids, data.id]});
+    });
   }
 
   openTargetDialog() {
@@ -115,14 +116,6 @@ class TaskDialogContainer extends React.Component {
 
   closeTargetDialog() {
     this.setState({targetDialogVisible: false});
-  }
-
-  openAlertDialog() {
-    this.setState({alertDialogVisible: true});
-  }
-
-  closeAlertDialog() {
-    this.setState({alertDialogVisible: false});
   }
 
   openScheduleDialog() {
@@ -143,23 +136,11 @@ class TaskDialogContainer extends React.Component {
     this.setState({scheduleDialogVisible: false});
   }
 
-  show(state, options) {
-    this.schedules = is_defined(state) && is_defined(state.schedules) ?
-      state.schedules : [];
-    this.targets = is_defined(state) && is_defined(state.targets) ?
-      state.targets : [];
-    this.alerts = is_defined(state) && is_defined(state.alerts) ?
-      state.alerts : [];
-    this.alert_ids = is_defined(state) && is_defined(state.alert_ids) ?
-      state.alert_ids : [];
-
-    this.task_dialog.show(state, options);
-  }
-
   render() {
     const {onSave, ...props} = this.props;
     const {
-      alertDialogVisible,
+      alerts,
+      alert_ids,
       minute,
       hour,
       date,
@@ -172,40 +153,52 @@ class TaskDialogContainer extends React.Component {
     } = this.state;
     return (
       <Layout>
-        <TaskDialog
-          {...props}
-          onNewAlertClick={this.openAlertDialog}
-          onNewTargetClick={this.openTargetDialog}
-          onNewScheduleClick={this.openScheduleDialog}
-          onSave={onSave}/>
-        <ScheduleDialog
-          schedules={schedules}
-          visible={scheduleDialogVisible}
-          timezone={timezone}
-          minute={minute}
-          hour={hour}
-          date={date}
-          title={_('Create new Schedule')}
-          onClose={this.closeScheduleDialog}
-          onSave={this.handleCreateSchedule}/>
-        <TargetDialogContainer
-          targets={targets}
-          target_id={target_id}
-          title={_('Create new Target')}
-          visible={targetDialogVisible}
-          onClose={this.closeTargetDialog}
-          onSave={this.handleCreateTarget}/>
-        <AlertDialogContainer
-          title={_('Create new Alert')}
-          visible={alertDialogVisible}
-          onClose={this.closeAlertDialog}
-          onSave={this.handleCreateAlert}/>
+        <AlertComponent
+          onCreated={this.handleAlertCreated}
+        >
+          {({
+            create: createalert,
+          }) => (
+            <TaskDialog
+              {...props}
+              alerts={alerts}
+              alert_ids={alert_ids}
+              onNewAlertClick={createalert}
+              onNewTargetClick={this.openTargetDialog}
+              onNewScheduleClick={this.openScheduleDialog}
+              onSave={onSave}
+            />
+          )}
+        </AlertComponent>
+        {scheduleDialogVisible &&
+          <ScheduleDialog
+            schedules={schedules}
+            timezone={timezone}
+            minute={minute}
+            hour={hour}
+            date={date}
+            title={_('Create new Schedule')}
+            onClose={this.closeScheduleDialog}
+            onSave={this.handleCreateSchedule}
+          />
+        }
+        {targetDialogVisible &&
+          <TargetDialogContainer
+            targets={targets}
+            target_id={target_id}
+            title={_('Create new Target')}
+            onClose={this.closeTargetDialog}
+            onSave={this.handleCreateTarget}
+          />
+        }
       </Layout>
     );
   }
 }
 
 TaskDialogContainer.propTypes = {
+  alert_ids: PropTypes.array,
+  alerts: PropTypes.array,
   onSave: PropTypes.func,
 };
 
