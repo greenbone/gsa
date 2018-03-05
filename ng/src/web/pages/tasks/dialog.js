@@ -37,6 +37,7 @@ import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
   CVE_SCANNER_TYPE,
 } from 'gmp/models/scanner.js';
 
@@ -93,6 +94,7 @@ const DEFAULTS = {
   schedule_id: UNSET_VALUE,
   schedule_periods: NO_VALUE,
   target_id: UNSET_VALUE,
+  scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
 };
 
 const get_scanner = (scanners, scanner_id) => {
