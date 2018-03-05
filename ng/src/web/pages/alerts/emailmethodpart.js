@@ -48,7 +48,7 @@ const EmailMethodPart = ({
     noticeAttachFormat,
     noticeReportFormat,
     prefix,
-    reportFormats,
+    reportFormats = [],
     subject,
     toAddress,
     onChange,
