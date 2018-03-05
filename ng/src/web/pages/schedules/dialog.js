@@ -80,7 +80,7 @@ const ScheduleDialog = ({
     schedule,
     timezone,
     title = _('New Schedule'),
-    visible,
+    visible = true,
     onClose,
     onSave,
   }) => {
@@ -236,7 +236,7 @@ ScheduleDialog.propTypes = {
   schedule: PropTypes.model,
   timezone: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
