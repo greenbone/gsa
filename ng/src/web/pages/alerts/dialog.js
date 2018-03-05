@@ -291,6 +291,7 @@ class AlertDialog extends React.Component {
       onNewVeriniceCredentialClick,
       onNewTippingPointCredentialClick,
       onSave,
+      ...props
     } = this.props;
 
     const {stateEvent: event} = this.state;
@@ -350,7 +351,7 @@ class AlertDialog extends React.Component {
       ...alert,
     };
 
-    for (const [key, value] of Object.entries(this.props)) {
+    for (const [key, value] of Object.entries(props)) {
       if (is_defined(value)) {
         data[key] = value;
       }
