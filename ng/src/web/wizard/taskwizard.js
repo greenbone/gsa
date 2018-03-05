@@ -68,7 +68,7 @@ const TaskWizard = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={hosts}
+      initialData={{hosts}}
     >
       {({
         data: state,
