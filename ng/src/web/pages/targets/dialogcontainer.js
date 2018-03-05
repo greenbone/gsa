@@ -35,7 +35,7 @@ import PortListDialog from '../portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
-export class TargetDialogContainer extends React.Component {
+class TargetDialogContainer extends React.Component {
 
   constructor(...args) {
     super(...args);
