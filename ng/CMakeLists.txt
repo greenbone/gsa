@@ -378,7 +378,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/condition.js
      ${NG_SRC_DIR}/src/web/pages/alerts/details.js
      ${NG_SRC_DIR}/src/web/pages/alerts/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/pages/alerts/emailmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/event.js
