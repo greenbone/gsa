@@ -47,6 +47,7 @@ import {
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -279,6 +280,7 @@ class AlertDialog extends React.Component {
 
   render() {
     const {
+      capabilities,
       title = _('New Alert'),
       visible,
       onClose,
@@ -291,7 +293,6 @@ class AlertDialog extends React.Component {
 
     const {stateEvent: event} = this.state;
 
-    const {capabilities} = this.context;
     const is_task_event = event === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
 
     const method_types = [{
@@ -613,6 +614,7 @@ class AlertDialog extends React.Component {
 
 AlertDialog.propTypes = {
   active: PropTypes.yesno,
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   condition: PropTypes.string,
   condition_data_at_least_count: PropTypes.number,
@@ -678,10 +680,6 @@ AlertDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-AlertDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default AlertDialog;
+export default withCapabilities(AlertDialog);
 
 // vim: set ts=2 sw=2 tw=80:
