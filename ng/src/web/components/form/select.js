@@ -26,6 +26,8 @@ import React from 'react';
 
 import Downshift from 'downshift';
 
+import {Manager, Target, Popper} from 'react-popper';
+
 import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -121,6 +123,11 @@ class Select extends React.Component {
       items = option_items(children);
     }
 
+    let popperPlacement = 'bottom-start';
+    if (is_defined(menuPosition) && menuPosition === 'right') {
+      popperPlacement = 'bottom-end';
+    }
+
     check_value(items, value); // raise warning in dev mode
 
     disabled = disabled || !is_defined(items) || items.length === 0;
@@ -152,57 +159,63 @@ class Select extends React.Component {
               flex="column"
               width={width}
             >
-              <Box
-                {...getButtonProps({
-                  disabled,
-                  onClick: isOpen ? undefined : event => {
-                    event.preventDefault(); // don't call default handler from downshift
-                    openMenu(() =>
-                      is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
-                  },
-                })}
-                isOpen={isOpen}
-              >
-                <SelectedValue
-                  disabled={disabled}
-                  title={label}
-                >
-                  {label}
-                </SelectedValue>
-                <Layout align={['center', 'center']}>
-                  <ArrowIcon
-                    disabled={disabled}
-                    down={!isOpen}
-                    size="small"
-                  />
-                </Layout>
-              </Box>
-              {isOpen && !disabled &&
-                <Menu position={menuPosition}>
-                  <Input
-                    {...getInputProps({
-                      value: search,
-                      onChange: this.handleSearch,
+              <Manager>
+                <Target>
+                  <Box
+                    {...getButtonProps({
+                      disabled,
+                      onClick: isOpen ? undefined : event => {
+                        event.preventDefault(); // don't call default handler from downshift
+                        openMenu(() =>
+                          is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
+                      },
                     })}
-                    disabled={disabled}
-                    innerRef={ref => this.input = ref}
-                  />
-                  <ItemContainer>
-                    {displayedItems
-                      .map(({label: itemLabel, value: itemValue}, i) => (
-                        <Item
-                          {...getItemProps({item: itemValue})}
-                          isSelected={itemValue === selectedItem}
-                          isActive={i === highlightedIndex}
-                          key={itemValue}
-                        >
-                          {itemLabel}
-                        </Item>
-                      ))
-                    }
-                  </ItemContainer>
-                </Menu>
-              }
+                    isOpen={isOpen}
+                  >
+                    <SelectedValue
+                      disabled={disabled}
+                      title={label}
+                    >
+                      {label}
+                    </SelectedValue>
+                    <Layout align={['center', 'center']}>
+                      <ArrowIcon
+                        disabled={disabled}
+                        down={!isOpen}
+                        size="small"
+                      />
+                    </Layout>
+                  </Box>
+                </Target>
+                {isOpen && !disabled &&
+                  <Popper placement={popperPlacement}>
+                    <Menu position={menuPosition} width={width}>
+                      <Input
+                        {...getInputProps({
+                          value: search,
+                          onChange: this.handleSearch,
+                        })}
+                        disabled={disabled}
+                        innerRef={ref => this.input = ref}
+                      />
+                      <ItemContainer>
+                        {displayedItems
+                          .map(({label: itemLabel, value: itemValue}, i) => (
+                            <Item
+                              {...getItemProps({item: itemValue})}
+                              isSelected={itemValue === selectedItem}
+                              isActive={i === highlightedIndex}
+                              key={itemValue}
+                            >
+                              {itemLabel}
+                            </Item>
+                          ))
+                        }
+                      </ItemContainer>
+                    </Menu>
+                  </Popper>
+                }
+              </Manager>
             </SelectContainer>
           );
         }}
