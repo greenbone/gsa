@@ -93,7 +93,6 @@ const DEFAULTS = {
   scanner_type: OPENVAS_SCANNER_TYPE,
   schedule_id: UNSET_VALUE,
   schedule_periods: NO_VALUE,
-  target_id: UNSET_VALUE,
   scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
 };
 
