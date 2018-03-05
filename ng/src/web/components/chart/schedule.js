@@ -227,8 +227,6 @@ const ScheduleChart = ({
         let newStart = start.clone().add(period, 'seconds');
 
         if (periods === 0) {
-          futureRun = Number.POSITIVE_INFINITY;
-
           while (newStart.isSameOrBefore(end)) {
             starts.push(cloneSchedule(d, newStart));
             newStart = newStart.clone();
@@ -248,11 +246,12 @@ const ScheduleChart = ({
           }
         }
       }
+      /* eslint-enable max-depth */
     }
-    else if (periods === 0 && (periods > 0 || periodMonth > 0)) {
+
+    if (periods === 0 && (period > 0 || periodMonth > 0)) {
       futureRun = Number.POSITIVE_INFINITY;
     }
-    /* eslint-enable max-depth */
 
     if (futureRun > 0) {
       futureRuns.push({
