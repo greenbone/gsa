@@ -56,6 +56,12 @@ const data = [{
   start: moment().add(3, 'day').add(4, 'hours'),
   period: ONE_WEEK,
   periods: 2,
+}, {
+  label: 'Sit',
+  start: moment().add(1, 'day').add(4, 'hours'),
+  period: 0,
+  periods: 0,
+  periodMonth: 2,
 }];
 
 storiesOf('Chart/Schedule', module)
