@@ -37,6 +37,7 @@ import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
+  CVE_SCANNER_TYPE,
 } from 'gmp/models/scanner.js';
 
 import {
@@ -553,7 +554,11 @@ TaskDialog.propTypes = {
   max_hosts: PropTypes.number,
   min_qod: PropTypes.number,
   name: PropTypes.string,
-  scan_configs: PropTypes.object,
+  scan_configs: PropTypes.shape({
+    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
+    [CVE_SCANNER_TYPE]: PropTypes.array,
+    [OSP_SCANNER_TYPE]: PropTypes.array,
+  }),
   scanner_id: PropTypes.idOrZero,
   scanners: PropTypes.array,
   schedule_id: PropTypes.idOrZero,
