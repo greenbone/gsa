@@ -81,7 +81,7 @@ const AdvancedTaskWizard = ({
     start_timezone,
     target_hosts,
     task_name,
-    visible,
+    visible = true,
     onClose,
     onSave,
   }, {capabilities}) => {
@@ -359,7 +359,7 @@ AdvancedTaskWizard.propTypes = {
   target_hosts: PropTypes.string,
   task_name: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

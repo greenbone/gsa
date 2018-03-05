@@ -59,7 +59,7 @@ const ModifyTaskWizard = ({
     task_id,
     tasks = [],
     title,
-    visible,
+    visible = true,
     onClose,
     onSave,
   }, {capabilities}) => {
@@ -228,7 +228,7 @@ ModifyTaskWizard.propTypes = {
   task_id: PropTypes.id,
   tasks: PropTypes.array,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onNewClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,

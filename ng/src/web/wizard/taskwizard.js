@@ -56,7 +56,7 @@ export const WizardContent = glamorous.div({
 const TaskWizard = ({
     hosts,
     title = _('Task Wizard'),
-    visible,
+    visible = true,
     onClose,
     onNewClick,
     onSave,
@@ -136,7 +136,7 @@ const TaskWizard = ({
 TaskWizard.propTypes = {
   hosts: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onNewClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
