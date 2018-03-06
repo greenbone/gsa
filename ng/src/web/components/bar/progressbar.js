@@ -85,6 +85,9 @@ const Progress = glamorous.div(
       background = 'gray';
     }
 
+    if (progress > 100) {
+      progress = 100;
+    }
     return {
       width: progress + '%',
       background,

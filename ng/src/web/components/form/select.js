@@ -29,9 +29,7 @@ import Downshift from 'downshift';
 
 import {is_defined} from 'gmp/utils';
 
-import PropTypes from '../../utils/proptypes.js';
-
-import warning from '../../utils/warning.js';
+import PropTypes, {mayRequire} from '../../utils/proptypes.js';
 
 import ArrowIcon from '../icon/arrowicon';
 
@@ -50,6 +48,24 @@ import {
   SelectedValue,
 } from './selectelements.js';
 
+const SelectValueValidator = (props, prop_name, component_name) => {
+  const value = props[prop_name];
+  const {items} = props;
+  const item = find_item(items, value);
+
+  if (is_defined(items) && is_defined(value) && !is_defined(item)) {
+    if (items.length === 0) {
+      return new Error('Invalid prop ' + prop_name + ' `' + value + '` for ' +
+        component_name + ' component. items prop is empty.');
+    }
+    return new Error('Invalid prop ' + prop_name + ' `' + value + '` for ' +
+      component_name + ' component. Prop ' + prop_name + ' can not be ' +
+      'found in items `' + items + '`.');
+  }
+};
+
+const selectValue = mayRequire(SelectValueValidator);
+
 const find_item = (items, value) => is_defined(items) ?
   items.find(i => i.value === value) : undefined;
 
@@ -59,14 +75,6 @@ const find_label = (items, value) => {
     return item.label;
   }
   return value;
-};
-
-const check_value = (items, value) => {
-  // raise warning in dev mode if items is defined and value is not in items
-  if (is_defined(items) && is_defined(value)) {
-    warning(!is_defined(find_item(items, value)),
-      'No label found for value', value, 'items are', items);
-  }
 };
 
 const DEFAULT_WIDTH = '180px';
@@ -139,8 +147,6 @@ class Select extends React.Component {
     if (!is_defined(items)) {
       items = option_items(children);
     }
-
-    check_value(items, value); // raise warning in dev mode
 
     disabled = disabled || !is_defined(items) || items.length === 0;
 
@@ -247,7 +253,7 @@ Select.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
-  value: PropTypes.any,
+  value: selectValue,
   width: PropTypes.string,
   onChange: PropTypes.func,
 };
