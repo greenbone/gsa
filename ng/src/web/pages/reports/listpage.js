@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import {is_defined, select_save_id} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -80,15 +80,22 @@ class Page extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {importDialogVisible: false};
+    this.state = {
+      importDialogVisible: false,
+      containerTaskDialogVisible: false,
+    };
 
     this.handleDialogSave = this.handleDialogSave.bind(this);
     this.handleCreateContainerTask = this.handleCreateContainerTask.bind(this);
+    this.handleCloseContainerTask = this.handleCloseContainerTask.bind(this);
     this.handleReportDeltaSelect = this.handleReportDeltaSelect.bind(this);
     this.handleReportDeleteClick = this.handleReportDeleteClick.bind(this);
+    this.handleTaskChange = this.handleTaskChange.bind(this);
+
     this.openImportDialog = this.openImportDialog.bind(this);
     this.closeImportDialog = this.closeImportDialog.bind(this);
     this.openCreateTaskDialog = this.openCreateTaskDialog.bind(this);
+    this.loadTasks = this.loadTasks.bind(this);
   }
 
   componentWillReceiveProps(next) {
@@ -103,27 +110,26 @@ class Page extends React.Component {
     }
   }
 
-  showImportDialog(tasks, task_id) {
-    this.setState({
-      importDialogVisible: true,
-      tasks,
-      in_assets: 1,
-      task_id: select_save_id(tasks, task_id),
-    });
-  }
-
-  openImportDialog(task_id) {
+  loadTasks() {
     const {gmp} = this.context;
-    gmp.tasks.get()
+    return gmp.tasks.get()
       .then(response => {
         const {data: tasks} = response;
         return tasks.filter(task => task.isContainer());
-      })
-      .then(tasks => this.showImportDialog(tasks, task_id));
+      });
+  }
+
+  openImportDialog(task_id) {
+    this.loadTasks().then(
+      tasks => this.setState({
+        tasks,
+        task_id: select_save_id(tasks),
+        importDialogVisible: true,
+      }));
   }
 
   openCreateTaskDialog() {
-    this.container_task_dialog.show();
+    this.setState({containerTaskDialogVisible: true});
   }
 
   closeImportDialog() {
@@ -138,10 +144,18 @@ class Page extends React.Component {
 
   handleCreateContainerTask(data) {
     const {gmp} = this.context;
-    return gmp.task.createContainer(data).then(response => {
-      const task = response.data;
-      this.openImportDialog(task.id);
-    });
+    let task_id;
+    return gmp.task.createContainer(data)
+      .then(response => {
+        const {data: task} = response;
+        task_id = task.id;
+      })
+      .then(this.loadTasks)
+      .then(tasks => this.setState({tasks, task_id}));
+  }
+
+  handleCloseContainerTask() {
+    this.setState({containerTaskDialogVisible: false});
   }
 
   handleReportDeltaSelect(report) {
@@ -165,11 +179,14 @@ class Page extends React.Component {
     return gmp.report.delete(report).then(onChanged, onError);
   }
 
-  render() {
+  handleTaskChange(task_id) {
+    this.setState({task_id});
+  }
 
+  render() {
     const {
+      containerTaskDialogVisible,
       importDialogVisible,
-      in_assets,
       task_id,
       tasks,
     } = this.state;
@@ -183,17 +200,23 @@ class Page extends React.Component {
           onReportDeltaSelect={this.handleReportDeltaSelect}
           onReportDeleteClick={this.handleReportDeleteClick}
         />
-        <ImportReportDialog
-          in_assets={in_assets}
-          task_id={task_id}
-          tasks={tasks}
-          visible={importDialogVisible}
-          onNewContainerTaskClick={this.openCreateTaskDialog}
-          onClose={this.closeImportDialog}
-          onSave={this.handleDialogSave}/>
-        <ContainerTaskDialog
-          ref={ref => this.container_task_dialog = ref}
-          onSave={this.handleCreateContainerTask}/>
+        {importDialogVisible &&
+          <ImportReportDialog
+            task_id={task_id}
+            tasks={tasks}
+            visible={importDialogVisible}
+            onNewContainerTaskClick={this.openCreateTaskDialog}
+            onClose={this.closeImportDialog}
+            onSave={this.handleDialogSave}
+            onTaskChange={this.handleTaskChange}
+          />
+        }
+        {containerTaskDialogVisible &&
+          <ContainerTaskDialog
+            onClose={this.handleCloseContainerTask}
+            onSave={this.handleCreateContainerTask}
+          />
+        }
       </Wrapper>
     );
   }
