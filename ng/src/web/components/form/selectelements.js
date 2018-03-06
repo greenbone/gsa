@@ -90,31 +90,28 @@ export const Menu = glamorous.div({
   boxSizing: 'border-box',
 }, ({
   position,
-  boxHeight,
-  boxRightSide,
-  boxWidth,
-  boxX,
-  boxY,
-  windowRightSide,
+  right,
+  width,
+  x,
+  y,
 }) => {
-  const yCoord = boxY + boxHeight;
   switch (position) {
     case 'adjust':
       return {
-        top: yCoord,
-        left: boxX,
-        width: boxWidth,
+        top: y,
+        left: x,
+        width,
       };
     case 'right':
       return {
-        top: yCoord,
-        right: windowRightSide - boxRightSide,
+        top: y,
+        right,
         whiteSpace: 'nowrap',
       };
     default:
       return {
-        top: yCoord,
-        left: boxX,
+        top: y,
+        left: x,
         whiteSpace: 'nowrap',
       };
   }

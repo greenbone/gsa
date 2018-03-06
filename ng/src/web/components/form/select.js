@@ -203,12 +203,10 @@ class Select extends React.Component {
                 <Portal>
                   <Menu
                     position={menuPosition}
-                    boxHeight={boxHeight}
-                    boxRightSide={boxRightSide}
-                    boxWidth={boxWidth}
-                    boxX={boxX}
-                    boxY={boxY}
-                    windowRightSide={document.documentElement.clientWidth}
+                    right={window.innerWidth - boxRightSide}
+                    width={boxWidth}
+                    x={boxX}
+                    y={boxY + boxHeight}
                   >
                     <Input
                       {...getInputProps({
