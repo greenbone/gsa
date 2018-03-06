@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {YES_VALUE} from 'gmp/parser.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -42,10 +44,10 @@ const ContainerTaskDialog = ({
     auto_delete,
     auto_delete_data = 5,
     comment,
-    in_assets,
+    in_assets = YES_VALUE,
     name,
     task,
-    title,
+    title = _('New Container Task'),
     visible = true,
     onClose,
     onSave,
