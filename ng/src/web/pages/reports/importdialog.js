@@ -28,14 +28,13 @@ import _ from 'gmp/locale.js';
 import {YES_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Select from '../../components/form/select.js';
-import Text from '../../components/form/text.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import NewIcon from '../../components/icon/newicon.js';
@@ -52,13 +51,8 @@ const ImportDialog = ({
   onClose,
   onNewContainerTaskClick,
   onSave,
+  onTaskChange,
 }) => {
-
-  const data = {
-    in_assets,
-    task_id,
-  };
-
   return (
     <SaveDialog
       buttonTitle={_('Import')}
@@ -66,48 +60,50 @@ const ImportDialog = ({
       title={_('Import Report')}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
+      values={{task_id}}
+      defaultValues={{in_assets}}
     >
       {({
-        data: state,
+        values,
         onValueChange,
-      }) => {
-        return (
-          <Layout flex="column">
-            <FormGroup title={_('Report')}>
-              <FileField
-                name="xml_file"
-                onChange={onValueChange}/>
-            </FormGroup>
-            <FormGroup title={_('Container Task')} flex>
-              <Divider>
-                <Select
-                  name="task_id"
-                  value={state.task_id}
-                  onChange={onValueChange}>
-                  {render_options(tasks)}
-                </Select>
-                {newContainerTask &&
-                  <NewIcon
-                    title={_('Create new Container Task')}
-                    onClick={onNewContainerTaskClick}/>
-                }
-              </Divider>
-            </FormGroup>
-            <FormGroup title={_('Add to Assets')}>
-              <Divider flex="column">
-                <Text>
-                  {_('Add to Assets with QoD >= 70% and Overrides enabled')}
-                </Text>
-                <YesNoRadio
-                  value={state.in_assets}
-                  name="in_assets"
-                  onChange={onValueChange}/>
-              </Divider>
-            </FormGroup>
-          </Layout>
-        );
-      }}
+      }) => (
+        <Layout flex="column">
+          <FormGroup title={_('Report')}>
+            <FileField
+              name="xml_file"
+              onChange={onValueChange}
+            />
+          </FormGroup>
+          <FormGroup title={_('Container Task')} flex>
+            <Divider>
+              <Select
+                name="task_id"
+                value={values.task_id}
+                items={render_select_items(tasks)}
+                onChange={onTaskChange}
+              />
+              {newContainerTask &&
+                <NewIcon
+                  title={_('Create new Container Task')}
+                  onClick={onNewContainerTaskClick}
+                />
+              }
+            </Divider>
+          </FormGroup>
+          <FormGroup title={_('Add to Assets')}>
+            <Divider flex="column">
+              <span>
+                {_('Add to Assets with QoD >= 70% and Overrides enabled')}
+              </span>
+              <YesNoRadio
+                value={values.in_assets}
+                name="in_assets"
+                onChange={onValueChange}
+              />
+            </Divider>
+          </FormGroup>
+        </Layout>
+      )}
     </SaveDialog>
   );
 };
@@ -122,6 +118,7 @@ ImportDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onNewContainerTaskClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
+  onTaskChange: PropTypes.func,
 };
 
 
