@@ -41,6 +41,9 @@ import Report from './report.js';
 import Schedule from './schedule.js';
 import Scanner from './scanner.js';
 
+export const AUTO_DELETE_KEEP = 'keep';
+export const AUTO_DELETE_NO = 'no';
+
 function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
@@ -164,7 +167,8 @@ class Task extends Model {
             elem.min_qod = parse_int(pref.value);
             break;
           case 'auto_delete':
-            elem.auto_delete = pref.value === 'keep' ? 'keep' : 'no';
+            elem.auto_delete = pref.value === AUTO_DELETE_KEEP ?
+              AUTO_DELETE_KEEP : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
             elem.auto_delete_data = pref.value === '0' ?

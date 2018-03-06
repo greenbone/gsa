@@ -94,47 +94,52 @@ class SaveDialogContent extends React.Component {
     const {
       buttonTitle,
       children,
-      initialData = {},
+      defaultValues,
       moveProps,
       heightProps,
       title,
+      values,
     } = this.props;
     const {
       error,
     } = this.state;
     return (
-      <State {...initialData}>
+      <State {...defaultValues}>
         {({
           state,
           onValueChange,
-        }) => (
-          <DialogContent>
-            <DialogTitle
-              title={title}
-              onCloseClick={this.handleClose}
-              {...moveProps}
-            />
-            {error &&
-              <DialogError
-                error={error}
-                onCloseClick={this.handleErrorClose}
+        }) => {
+          const childValues = {...state, ...values};
+          return (
+            <DialogContent>
+              <DialogTitle
+                title={title}
+                onCloseClick={this.handleClose}
+                {...moveProps}
               />
-            }
-            <ScrollableContent
-              {...heightProps}
-            >
-              {children({
-                data: state,
-                onValueChange,
-              })}
-            </ScrollableContent>
-            <DialogFooter
-              title={buttonTitle}
-              loading={this.state.loading}
-              onClick={() => this.handleSaveClick(state)}
-            />
-          </DialogContent>
-        )}
+              {error &&
+                <DialogError
+                  error={error}
+                  onCloseClick={this.handleErrorClose}
+                />
+              }
+              <ScrollableContent
+                {...heightProps}
+              >
+                {children({
+                  data: state, // TODO should be removed in future. savedialogs should switch to use values
+                  values: childValues,
+                  onValueChange,
+                })}
+              </ScrollableContent>
+              <DialogFooter
+                title={buttonTitle}
+                loading={this.state.loading}
+                onClick={() => this.handleSaveClick(childValues)}
+              />
+            </DialogContent>
+          );
+         }}
       </State>
     );
   }
@@ -143,11 +148,13 @@ class SaveDialogContent extends React.Component {
 SaveDialogContent.propTypes = {
   buttonTitle: PropTypes.string,
   close: PropTypes.func.isRequired,
+  defaultValues: PropTypes.object,
   heightProps: PropTypes.object,
-  initialData: PropTypes.object,
   moveProps: PropTypes.object,
   title: PropTypes.string.isRequired,
+  values: PropTypes.object,
   onSave: PropTypes.func.isRequired,
+  onValueChange: PropTypes.func,
 };
 
 const SaveDialog = ({
@@ -157,6 +164,8 @@ const SaveDialog = ({
   title,
   visible,
   initialData,
+  defaultValues = initialData,
+  values,
   onClose,
   onSave,
 }) => {
@@ -174,10 +183,11 @@ const SaveDialog = ({
         <SaveDialogContent
           buttonTitle={buttonTitle}
           close={close}
-          initialData={initialData}
+          defaultValues={defaultValues}
           moveProps={moveProps}
           heightProps={heightProps}
           title={title}
+          values={values}
           onSave={onSave}
         >
           {children}
@@ -189,8 +199,10 @@ const SaveDialog = ({
 
 SaveDialog.propTypes = {
   buttonTitle: PropTypes.string,
-  initialData: PropTypes.object,
+  defaultValues: PropTypes.object, // default values for uncontrolled values
+  initialData: PropTypes.object, // should not be used anymore. use defaultValues instead.
   title: PropTypes.string.isRequired,
+  values: PropTypes.object, // should be used for controlled values
   visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
