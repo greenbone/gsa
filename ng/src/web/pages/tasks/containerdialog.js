@@ -26,7 +26,11 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils/index.js';
+
 import {YES_VALUE} from 'gmp/parser.js';
+
+import {AUTO_DELETE_KEEP} from 'gmp/models/task.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -41,17 +45,18 @@ import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const ContainerTaskDialog = ({
-    auto_delete,
-    auto_delete_data = 5,
-    comment,
-    in_assets = YES_VALUE,
-    name,
-    task,
-    title = _('New Container Task'),
-    visible = true,
-    onClose,
-    onSave,
-  }) => {
+  auto_delete = AUTO_DELETE_KEEP,
+  auto_delete_data = 5,
+  comment,
+  in_assets = YES_VALUE,
+  name,
+  task,
+  title = _('New Container Task'),
+  visible = true,
+  onClose,
+  onSave,
+}) => {
+  const isEdit = is_defined(task);
 
   const data = {
     auto_delete,
@@ -59,20 +64,16 @@ const ContainerTaskDialog = ({
     comment,
     in_assets,
     name,
-    task,
-    title,
-    visible,
-    onClose,
-    onSave,
+    id: isEdit ? task.id : undefined,
   };
 
   return (
     <SaveDialog
       visible={visible}
       title={title}
+      defaultValues={data}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
     >
       {({
         data: state,
@@ -87,7 +88,8 @@ const ContainerTaskDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
             <FormGroup title={_('Comment')}>
               <TextField
@@ -96,18 +98,22 @@ const ContainerTaskDialog = ({
                 grow="1"
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
-            {state.task &&
-              <AddResultsToAssetsGroup
-                inAssets={state.in_assets}
-                onChange={onValueChange}/>
-            }
-            {state.task &&
-              <AutoDeleteReportsGroup
-                autoDelete={state.auto_delete}
-                autoDeleteData={state.auto_delete_data}
-                onChange={onValueChange}/>
+
+            {isEdit &&
+              <React.Fragment>
+                <AddResultsToAssetsGroup
+                  inAssets={state.in_assets}
+                  onChange={onValueChange}
+                />
+                <AutoDeleteReportsGroup
+                  autoDelete={state.auto_delete}
+                  autoDeleteData={state.auto_delete_data}
+                  onChange={onValueChange}
+                />
+              </React.Fragment>
             }
           </Layout>
         );
