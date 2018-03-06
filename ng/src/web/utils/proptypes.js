@@ -108,7 +108,7 @@ export const settings = ReactPropTypes.instanceOf(Settings);
 export const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
 export const cache = ReactPropTypes.instanceOf(Cache);
 
-const mayRequire = validator => {
+export const mayRequire = validator => {
   const wrapper = (...props) => {
     return validator(...props);
   };
