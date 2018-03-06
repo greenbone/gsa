@@ -85,22 +85,36 @@ export const Menu = glamorous.div({
   display: 'flex',
   flexDirection: 'column',
   position: 'absolute',
-  top: '100%', // move below Box
-  zIndex: 5,
+  zIndex: 100,
   marginTop: '-1px', // collapse top border
   boxSizing: 'border-box',
-}, ({position}) => {
+}, ({
+  position,
+  boxHeight,
+  boxRightSide,
+  boxWidth,
+  boxX,
+  boxY,
+  windowRightSide,
+}) => {
+  const yCoord = boxY + boxHeight;
   switch (position) {
     case 'adjust':
-      return {width: '100%'};
+      return {
+        top: yCoord,
+        left: boxX,
+        width: boxWidth,
+      };
     case 'right':
       return {
-        right: 0,
+        top: yCoord,
+        right: windowRightSide - boxRightSide,
         whiteSpace: 'nowrap',
       };
     default:
       return {
-        left: 0,
+        top: yCoord,
+        left: boxX,
         whiteSpace: 'nowrap',
       };
   }

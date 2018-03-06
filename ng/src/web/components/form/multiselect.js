@@ -34,6 +34,7 @@ import {arrays_equal, is_array, is_defined, is_empty} from 'gmp/utils';
 import ArrowIcon from '../icon/arrowicon.js';
 
 import Layout from '../layout/layout.js';
+import Portal from '../portal/portal';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -101,6 +102,17 @@ class MultiSelect extends React.Component {
     if (is_defined(onChange)) {
       onChange(value, name);
     }
+  }
+
+  handleGetBox() {
+    const rect = this.box.getBoundingClientRect();
+    this.setState({
+      boxRightSide: rect.right,
+      boxHeight: rect.height,
+      boxWidth: rect.width,
+      boxX: rect.x,
+      boxY: rect.y,
+    });
   }
 
   handleSearch(event) {
@@ -182,7 +194,13 @@ class MultiSelect extends React.Component {
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
     } = this.props;
+
     const {
+      boxRightSide,
+      boxHeight,
+      boxWidth,
+      boxX,
+      boxY,
       search,
       selectedItems,
     } = this.state;
@@ -195,6 +213,7 @@ class MultiSelect extends React.Component {
 
     const displayedItems = is_defined(items) ?
       items.filter(case_insensitive_filter(search)) : [];
+
     return (
       <Downshift
         selectedItem={selectedItems}
@@ -209,6 +228,7 @@ class MultiSelect extends React.Component {
           inputValue,
           isOpen,
           openMenu,
+          selectItem,
         }) => {
           return (
             <SelectContainer
@@ -220,6 +240,7 @@ class MultiSelect extends React.Component {
               <Box
                 isOpen={isOpen}
                 disabled={disabled}
+                innerRef={ref => this.box = ref}
               >
                 <Layout grow="1" wrap>
                   {!is_empty(selectedItems) && selectedItems.map(
@@ -234,7 +255,9 @@ class MultiSelect extends React.Component {
                       down: !isOpen,
                       onClick: isOpen ? undefined : event => {
                         event.preventDefault(); // don't call default handler from downshift
-                        openMenu(() => is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
+                        this.handleGetBox();
+                        openMenu(() =>
+                          is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                       },
                     })}
                     size="small"
@@ -242,30 +265,41 @@ class MultiSelect extends React.Component {
                 </Layout>
               </Box>
               {isOpen && !disabled &&
-                <Menu position={menuPosition}>
-                  <Input
-                    {...getInputProps({
-                      value: search,
-                      onChange: this.handleSearch,
-                    })}
-                    disabled={disabled}
-                    innerRef={ref => this.input = ref}
-                  />
-                  <ItemContainer>
-                    {displayedItems
-                      .map(({label: itemLabel, value: itemValue}, i) => (
-                        <Item
-                          {...getItemProps({item: itemValue})}
-                          isSelected={selectedItems.includes(itemValue)}
-                          isActive={i === highlightedIndex}
-                          key={itemValue}
-                        >
-                          {itemLabel}
-                        </Item>
-                      ))
-                    }
-                  </ItemContainer>
-                </Menu>
+                <Portal>
+                  <Menu
+                    position={menuPosition}
+                    boxHeight={boxHeight}
+                    boxRightSide={boxRightSide}
+                    boxWidth={boxWidth}
+                    boxX={boxX}
+                    boxY={boxY}
+                    windowRightSide={document.documentElement.clientWidth}
+                  >
+                    <Input
+                      {...getInputProps({
+                        value: search,
+                        onChange: this.handleSearch,
+                      })}
+                      disabled={disabled}
+                      innerRef={ref => this.input = ref}
+                    />
+                    <ItemContainer>
+                      {displayedItems
+                        .map(({label: itemLabel, value: itemValue}, i) => (
+                          <Item
+                            {...getItemProps({item: itemValue})}
+                            isSelected={selectedItems.includes(itemValue)}
+                            isActive={i === highlightedIndex}
+                            key={itemValue}
+                            onMouseDown={() => selectItem(itemValue)}
+                          >
+                            {itemLabel}
+                          </Item>
+                        ))
+                      }
+                    </ItemContainer>
+                  </Menu>
+                </Portal>
               }
             </SelectContainer>
           );

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -35,6 +36,7 @@ import warning from '../../utils/warning.js';
 import ArrowIcon from '../icon/arrowicon';
 
 import Layout from '../../components/layout/layout';
+import Portal from '../../components/portal/portal';
 
 import {
   Box,
@@ -83,6 +85,17 @@ class Select extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
+  handleGetBox() {
+    const rect = this.box.getBoundingClientRect();
+    this.setState({
+      boxRightSide: rect.right,
+      boxHeight: rect.height,
+      boxWidth: rect.width,
+      boxX: rect.x,
+      boxY: rect.y,
+    });
+  }
+
   handleChange(value) {
     const {name, onChange} = this.props;
 
@@ -113,7 +126,13 @@ class Select extends React.Component {
       value,
       width = DEFAULT_WIDTH,
     } = this.props;
+
     const {
+      boxRightSide,
+      boxHeight,
+      boxWidth,
+      boxX,
+      boxY,
       search,
     } = this.state;
 
@@ -142,6 +161,7 @@ class Select extends React.Component {
           inputValue,
           isOpen,
           openMenu,
+          selectItem,
           selectedItem,
         }) => {
           const label = find_label(items, selectedItem);
@@ -157,11 +177,13 @@ class Select extends React.Component {
                   disabled,
                   onClick: isOpen ? undefined : event => {
                     event.preventDefault(); // don't call default handler from downshift
+                    this.handleGetBox();
                     openMenu(() =>
                       is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                   },
                 })}
                 isOpen={isOpen}
+                innerRef={ref => this.box = ref}
               >
                 <SelectedValue
                   disabled={disabled}
@@ -178,30 +200,41 @@ class Select extends React.Component {
                 </Layout>
               </Box>
               {isOpen && !disabled &&
-                <Menu position={menuPosition}>
-                  <Input
-                    {...getInputProps({
-                      value: search,
-                      onChange: this.handleSearch,
-                    })}
-                    disabled={disabled}
-                    innerRef={ref => this.input = ref}
-                  />
-                  <ItemContainer>
-                    {displayedItems
-                      .map(({label: itemLabel, value: itemValue}, i) => (
-                        <Item
-                          {...getItemProps({item: itemValue})}
-                          isSelected={itemValue === selectedItem}
-                          isActive={i === highlightedIndex}
-                          key={itemValue}
-                        >
-                          {itemLabel}
-                        </Item>
-                      ))
-                    }
-                  </ItemContainer>
-                </Menu>
+                <Portal>
+                  <Menu
+                    position={menuPosition}
+                    boxHeight={boxHeight}
+                    boxRightSide={boxRightSide}
+                    boxWidth={boxWidth}
+                    boxX={boxX}
+                    boxY={boxY}
+                    windowRightSide={document.documentElement.clientWidth}
+                  >
+                    <Input
+                      {...getInputProps({
+                        value: search,
+                        onChange: this.handleSearch,
+                      })}
+                      disabled={disabled}
+                      innerRef={ref => this.input = ref}
+                    />
+                    <ItemContainer>
+                      {displayedItems
+                        .map(({label: itemLabel, value: itemValue}, i) => (
+                          <Item
+                            {...getItemProps({item: itemValue})}
+                            isSelected={itemValue === selectedItem}
+                            isActive={i === highlightedIndex}
+                            key={itemValue}
+                            onMouseDown={() => selectItem(itemValue)}
+                          >
+                            {itemLabel}
+                          </Item>
+                        ))
+                      }
+                    </ItemContainer>
+                  </Menu>
+                </Portal>
               }
             </SelectContainer>
           );
