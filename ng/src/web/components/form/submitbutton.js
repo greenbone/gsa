@@ -23,14 +23,12 @@
 
 import React from 'react';
 
-import {classes} from 'gmp/utils';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import Button from './button.js';
 
 const SubmitButton = ({className, ...other}) => {
-  className = classes('button-block', className);
+  className = className + ' button-block';
   return (
     <Button
       {...other}
