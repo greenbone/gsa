@@ -42,18 +42,18 @@ import TextArea from '../../components/form/textarea.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 const ScpMethodPart = ({
-    prefix,
-    credentials,
-    reportFormats,
-    scpCredential,
-    scpHost,
-    scpKnownHosts,
-    scpPath,
-    scpReportFormat,
-    onChange,
-    onCredentialChange,
-    onNewCredentialClick,
-  }) => {
+  prefix,
+  credentials,
+  reportFormats,
+  scpCredential,
+  scpHost,
+  scpKnownHosts,
+  scpPath,
+  scpReportFormat,
+  onChange,
+  onCredentialChange,
+  onNewCredentialClick,
+}) => {
   return (
     <Layout
       flex="column"
