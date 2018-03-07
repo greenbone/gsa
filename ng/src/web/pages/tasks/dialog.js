@@ -207,6 +207,7 @@ const TaskDialog = ({
   task,
   title = _('New Task'),
   visible = true,
+  onAlertsChange,
   onClose,
   onNewAlertClick,
   onNewScheduleClick,
@@ -261,6 +262,7 @@ const TaskDialog = ({
 
   const controlledData = {
     target_id,
+    alert_ids,
   };
 
   return (
@@ -328,11 +330,9 @@ const TaskDialog = ({
               <Divider>
                 <MultiSelect
                   name="alert_ids"
-                  multiple="multiple"
-                  id="alert_ids"
-                  value={state.alert_ids}
                   items={alert_items}
-                  onChange={onValueChange}
+                  value={state.alert_ids}
+                  onChange={onAlertsChange}
                 />
                 <Layout flex>
                   <NewIcon
@@ -617,6 +617,7 @@ TaskDialog.propTypes = {
   task: PropTypes.model,
   title: PropTypes.string,
   visible: PropTypes.bool,
+  onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onNewAlertClick: PropTypes.func.isRequired,
   onNewScheduleClick: PropTypes.func.isRequired,
