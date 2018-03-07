@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import 'core-js/fn/array/includes';
+
 import _ from 'gmp/locale.js';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {is_defined, map} from 'gmp/utils';
@@ -43,6 +45,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -54,6 +57,7 @@ import Radio from '../../components/form/radio.js';
 import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
+import {first} from 'gmp/utils/array.js';
 
 const type_names = {
   up: _('Username + Password'),
@@ -61,25 +65,6 @@ const type_names = {
   cc: _('Client Cerficate'),
   snmp: _('SNMP'),
 };
-
-const DEFAULTS = {
-    allow_insecure: NO_VALUE,
-    auth_algorithm: SNMP_AUTH_ALGORITHM_SHA1,
-    autogenerate: NO_VALUE,
-    base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
-    change_community: NO_VALUE,
-    change_passphrase: NO_VALUE,
-    change_password: NO_VALUE,
-    change_privacy_password: NO_VALUE,
-    comment: '',
-    community: '',
-    credential_login: '',
-    name: _('Unnamed'),
-    passphrase: '',
-    password: '',
-    privacy_algorithm: SNMP_PRIVACY_ALGORITHM_AES,
-    privacy_password: '',
-  };
 
 class CredentialsDialog extends React.Component {
 
@@ -102,11 +87,30 @@ class CredentialsDialog extends React.Component {
   }
 
   render() {
+    let {
+      base,
+    } = this.props;
+
     const {
       credential,
       title = _('New Credential'),
-      types,
+      types = [],
       visible = true,
+      allow_insecure = NO_VALUE,
+      auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
+      autogenerate = NO_VALUE,
+      change_community = NO_VALUE,
+      change_passphrase = NO_VALUE,
+      change_password = NO_VALUE,
+      change_privacy_password = NO_VALUE,
+      comment = '',
+      community = '',
+      credential_login = '',
+      name = _('Unnamed'),
+      passphrase = '',
+      password = '',
+      privacy_algorithm = SNMP_PRIVACY_ALGORITHM_AES,
+      privacy_password = '',
       onClose,
       onSave,
     } = this.props;
@@ -118,16 +122,45 @@ class CredentialsDialog extends React.Component {
 
     const is_edit = is_defined(credential);
 
+    if (!is_defined(base)) {
+      if (types.includes(USERNAME_PASSWORD_CREDENTIAL_TYPE)) {
+        base = USERNAME_PASSWORD_CREDENTIAL_TYPE;
+      }
+      else {
+        base = first(types);
+      }
+    }
+
+    const data = {
+      allow_insecure,
+      auth_algorithm,
+      autogenerate,
+      base,
+      change_community,
+      change_passphrase,
+      change_password,
+      change_privacy_password,
+      comment,
+      community,
+      credential_login,
+      name,
+      passphrase,
+      password,
+      privacy_algorithm,
+      privacy_password,
+      id: is_defined(credential) ? credential.id : undefined,
+    };
+
     return (
       <SaveDialog
         visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={{...DEFAULTS, ...credential}}
+        defaultValues={data}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
           return (
@@ -137,10 +170,10 @@ class CredentialsDialog extends React.Component {
                 <TextField
                   name="name"
                   grow="1"
-                  value={state.name}
                   size="30"
-                  onChange={onValueChange}
                   maxLength="80"
+                  value={state.name}
+                  onChange={onValueChange}
                 />
               </FormGroup>
 
@@ -148,20 +181,20 @@ class CredentialsDialog extends React.Component {
                 <TextField
                   name="comment"
                   grow="1"
-                  value={state.comment}
                   size="30"
                   maxLength="400"
+                  value={state.comment}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup title={_('Type')}>
                 <Select
-                  onChange={value => this.handleTypeChange(
-                    value, state.autogenerate, onValueChange)}
                   disabled={is_edit}
                   items={typeOptions}
                   value={state.base}
+                  onChange={value => this.handleTypeChange(
+                    value, state.autogenerate, onValueChange)}
                 />
               </FormGroup>
 
@@ -169,13 +202,15 @@ class CredentialsDialog extends React.Component {
                 <YesNoRadio
                   name="allow_insecure"
                   value={state.allow_insecure}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup
                 title={_('Auto-generate')}
                 condition={(state.base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-                  state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE) && !is_edit}>
+                  state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE) && !is_edit}
+              >
                 <YesNoRadio
                   name="autogenerate"
                   value={state.autogenerate}
@@ -185,7 +220,8 @@ class CredentialsDialog extends React.Component {
 
               <FormGroup
                 title={_('SNMP Community')}
-                condition={state.base === SNMP_CREDENTIAL_TYPE}>
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
                 {is_edit &&
                   <Checkbox
                     name="change_community"
@@ -210,7 +246,8 @@ class CredentialsDialog extends React.Component {
                   state.base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
                   state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
                   state.base === SNMP_CREDENTIAL_TYPE
-                }>
+                }
+              >
                 <TextField
                   name="credential_login"
                   value={state.credential_login}
@@ -221,7 +258,8 @@ class CredentialsDialog extends React.Component {
               <FormGroup
                 title={_('Password')}
                 condition={state.base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-                    state.base === SNMP_CREDENTIAL_TYPE}>
+                    state.base === SNMP_CREDENTIAL_TYPE}
+              >
                 <Divider>
                   {is_edit &&
                     <Checkbox
@@ -235,9 +273,9 @@ class CredentialsDialog extends React.Component {
                   }
                   <PasswordField
                     name="password"
-                    value={state.password}
                     autoComplete="new-password"
                     disabled={state.autogenerate === YES_VALUE}
+                    value={state.password}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -245,7 +283,8 @@ class CredentialsDialog extends React.Component {
 
               <FormGroup
                 title={_('Passphrase')}
-                condition={state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE}>
+                condition={state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE}
+              >
                 {is_edit &&
                   <Checkbox
                     name="change_passphrase"
@@ -258,16 +297,17 @@ class CredentialsDialog extends React.Component {
                 }
                 <PasswordField
                   name="passphrase"
-                  value={state.passphrase}
                   autoComplete="new-password"
                   disabled={state.autogenerate === YES_VALUE}
+                  value={state.passphrase}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup
                 title={_('Privacy Password')}
-                condition={state.base === SNMP_CREDENTIAL_TYPE}>
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
                 {is_edit &&
                   <Checkbox
                     name="change_privacy_password"
@@ -288,7 +328,8 @@ class CredentialsDialog extends React.Component {
 
               <FormGroup
                 title={_('Certificate')}
-                condition={state.base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE}>
+                condition={state.base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE}
+              >
                 <FileField
                   name="certificate"
                   onChange={onValueChange}
@@ -300,7 +341,8 @@ class CredentialsDialog extends React.Component {
                 condition={
                   state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
                   state.base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE
-                }>
+                }
+              >
                 <FileField
                   name="private_key"
                   onChange={onValueChange}
@@ -309,48 +351,50 @@ class CredentialsDialog extends React.Component {
 
               <FormGroup
                 title={_('Auth Algorithm')}
-                condition={state.base === SNMP_CREDENTIAL_TYPE}>
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
                 <Radio
-                  value={SNMP_AUTH_ALGORITHM_MD5}
                   title="MD5"
                   checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
                   name="auth_algorithm"
+                  value={SNMP_AUTH_ALGORITHM_MD5}
                   onChange={onValueChange}
                 />
                 <Radio
-                  value={SNMP_AUTH_ALGORITHM_SHA1}
                   title="SHA1"
                   checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_SHA1}
                   name="auth_algorithm"
+                  value={SNMP_AUTH_ALGORITHM_SHA1}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup
                 title={_('Privacy Algorithm')}
-                condition={state.base === SNMP_CREDENTIAL_TYPE}>
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
                 <Radio
-                  value={SNMP_PRIVACY_ALGORITHM_AES}
                   title="AES"
                   checked={
                     state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_AES}
                   name="privacy_algorithm"
+                  value={SNMP_PRIVACY_ALGORITHM_AES}
                   onChange={onValueChange}
                 />
                 <Radio
-                  value={SNMP_PRIVACY_ALGORITHM_DES}
                   title="DES"
                   checked={
                     state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_DES}
                   name="privacy_algorithm"
+                  value={SNMP_PRIVACY_ALGORITHM_DES}
                   onChange={onValueChange}
                 />
                 <Radio
-                  value={SNMP_PRIVACY_ALOGRITHM_NONE}
                   title={_('None')}
                   checked={
                     state.privacy_algorithm === SNMP_PRIVACY_ALOGRITHM_NONE}
                   name="privacy_algorithm"
+                  value={SNMP_PRIVACY_ALOGRITHM_NONE}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -377,6 +421,7 @@ CredentialsDialog.propTypes = {
   ]),
   autogenerate: PropTypes.yesno,
   base: pwtypes,
+  capabilities: PropTypes.capabilities.isRequired,
   change_community: PropTypes.yesno,
   change_passphrase: PropTypes.yesno,
   change_password: PropTypes.yesno,
@@ -403,10 +448,6 @@ CredentialsDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-CredentialsDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default CredentialsDialog;
+export default withCapabilities(CredentialsDialog);
 
 // vim: set ts=2 sw=2 tw=80:

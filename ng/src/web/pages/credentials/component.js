@@ -30,7 +30,6 @@ import {is_defined, shorten} from 'gmp/utils';
 
 import {
   ALL_CREDENTIAL_TYPES,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -55,12 +54,17 @@ class CredentialsComponent extends React.Component {
   }
 
   openCredentialsDialog(credential) {
-    if (credential) {
+    if (is_defined(credential)) {
       const title = _('Edit Credential {{name}}',
         {name: shorten(credential.name)});
+
       this.setState({
-        base: credential.credential_type,
+        allow_insecure: credential.allow_insecure,
+        comment: credential.comment,
         credential,
+        base: credential.credential_type,
+        auth_algorithm: credential.auth_algorithm,
+        name: credential.name,
         credential_login: credential.login,
         privacy_algorithm: is_defined(credential.privacy) ?
           credential.privacy.algorithm : undefined,
@@ -70,11 +74,19 @@ class CredentialsComponent extends React.Component {
       });
     }
     else {
+      // reset all values in state to not show values from last edit
       this.setState({
-        base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+        allow_insecure: undefined,
+        comment: undefined,
         credential: undefined,
+        base: undefined,
+        auth_algorithm: undefined,
+        name: undefined,
+        credential_login: undefined,
+        privacy_algorithm: undefined,
         types: ALL_CREDENTIAL_TYPES,
         dialogVisible: true,
+        title: _('New Credential'),
       });
     }
   }
@@ -115,10 +127,8 @@ class CredentialsComponent extends React.Component {
     } = this.props;
 
     const {
-      credential,
       dialogVisible,
-      title,
-      types,
+      ...dialogProps
     } = this.state;
 
     return (
@@ -146,14 +156,15 @@ class CredentialsComponent extends React.Component {
               edit: this.openCredentialsDialog,
               downloadinstaller: this.handleDownloadInstaller,
             })}
-            <CredentialsDialog
-              credential={credential}
-              title={title}
-              types={types}
-              visible={dialogVisible}
-              onClose={this.closeCredentialDialog}
-              onSave={save}
-            />
+
+            {dialogVisible &&
+              <CredentialsDialog
+                {...dialogProps}
+                visible={dialogVisible}
+                onClose={this.closeCredentialDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
