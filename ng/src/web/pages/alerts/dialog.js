@@ -362,7 +362,7 @@ class AlertDialog extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={data}
+        defaultValues={data}
       >
         {({
           data: state,
