@@ -104,8 +104,8 @@ VeriniceMethodPart.propTypes = {
   veriniceServerCredential: PropTypes.id,
   veriniceServerReportFormat: PropTypes.id,
   veriniceServerUrl: PropTypes.string,
-  onChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
 export default withPrefix(VeriniceMethodPart);
