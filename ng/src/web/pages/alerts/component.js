@@ -99,6 +99,8 @@ class AlertComponent extends React.Component {
     this.handleTestAlert = this.handleTestAlert.bind(this);
     this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
+    this.handleVeriniceCredentialChange = this.handleVeriniceCredentialChange
+      .bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.closeAlertDialog = this.closeAlertDialog.bind(this);
@@ -469,6 +471,10 @@ class AlertComponent extends React.Component {
     this.setState({method_data_smb_credential: credential});
   }
 
+  handleVeriniceCredentialChange(credential) {
+    this.setState({method_data_verinice_server_credential: credential});
+  }
+
   render() {
     const {
       children,
@@ -655,6 +661,7 @@ class AlertComponent extends React.Component {
                 onSave={save}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
+                onVerinceCredentialChange={this.handleVeriniceCredentialChange}
               />
             }
             {credentialDialogVisible &&
