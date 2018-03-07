@@ -93,8 +93,6 @@ class TargetComponent extends React.Component {
   }
 
   openTargetDialog(entity, initial = {}) {
-    this.loadAll();
-
     if (is_defined(entity)) {
       this.setState({
         targetDialogVisible: true,
@@ -107,20 +105,28 @@ class TargetComponent extends React.Component {
         hosts: entity.hosts.join(', '),
         in_use: entity.isInUse(),
         name: entity.name,
-        port_list_id: id_or__(entity.port_list),
         port: is_defined(entity.ssh_credential) ?
           entity.ssh_credential.port : '22',
         reverse_lookup_only: entity.reverse_lookup_only,
         reverse_lookup_unify: entity.reverse_lookup_unify,
-        smb_credential_id: id_or__(entity.smb_credential),
-        snmp_credential_id: id_or__(entity.snmp_credential),
-        ssh_credential_id: id_or__(entity.ssh_credential),
         target_source: 'manual',
         target_exclude_source: 'manual',
         target_title: _('Edit Target {{name}}', entity),
       });
+
+      // set credential and port list ids after credentials and port lists have been loaded
+      this.loadAll().then(() => {
+        this.setState({
+          port_list_id: id_or__(entity.port_list),
+          smb_credential_id: id_or__(entity.smb_credential),
+          snmp_credential_id: id_or__(entity.snmp_credential),
+          ssh_credential_id: id_or__(entity.ssh_credential),
+        });
+      });
     }
     else {
+      this.loadAll();
+
       this.setState({
         targetDialogVisible: true,
         alive_tests: undefined,
