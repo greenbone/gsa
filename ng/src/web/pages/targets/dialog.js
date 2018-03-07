@@ -542,8 +542,8 @@ TargetDialog.propTypes = {
   title: PropTypes.string,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  onNewCredentialsClick: PropTypes.func,
-  onNewPortListClick: PropTypes.func,
+  onNewCredentialsClick: PropTypes.func.isRequired,
+  onNewPortListClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
