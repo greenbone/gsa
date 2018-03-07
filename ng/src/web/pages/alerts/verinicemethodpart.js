@@ -56,7 +56,7 @@ const VeriniceMethodPart = ({
     <Layout
       flex="column"
       grow="1"
-      box>
+    >
       <FormGroup title={_('verinice.PRO URL')}>
         <TextField
           grow="1"
@@ -64,7 +64,8 @@ const VeriniceMethodPart = ({
           maxLength="256"
           name={prefix + 'verinice_server_url'}
           value={veriniceServerUrl}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Credential')}>
@@ -72,14 +73,16 @@ const VeriniceMethodPart = ({
           <Select
             name={prefix + 'verinice_server_credential'}
             value={veriniceServerCredential}
-            onChange={onChange}>
+            onChange={onChange}
+          >
             {verinice_credential_opts}
           </Select>
           <Layout flex box>
             <NewIcon
               title={_('Create a credential')}
               value={['up']}
-              onClick={onNewCredentialClick}/>
+              onClick={onNewCredentialClick}
+          />
           </Layout>
         </Divider>
       </FormGroup>
@@ -88,7 +91,8 @@ const VeriniceMethodPart = ({
         <Select
           name={prefix + 'verinice_server_report_format'}
           value={veriniceServerReportFormat}
-          onChange={onChange}>
+          onChange={onChange}
+        >
           {verinice_report_format_opts}
         </Select>
       </FormGroup>
