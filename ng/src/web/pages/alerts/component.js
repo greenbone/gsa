@@ -101,6 +101,8 @@ class AlertComponent extends React.Component {
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
     this.handleVeriniceCredentialChange = this.handleVeriniceCredentialChange
       .bind(this);
+    this.handleTippingPointCredentialChange =
+      this.handleTippingPointCredentialChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.closeAlertDialog = this.closeAlertDialog.bind(this);
@@ -471,6 +473,10 @@ class AlertComponent extends React.Component {
     this.setState({method_data_smb_credential: credential});
   }
 
+  handleTippingPointCredentialChange(credential) {
+    this.setState({method_data_tp_sms_credential: credential});
+  }
+
   handleVeriniceCredentialChange(credential) {
     this.setState({method_data_verinice_server_credential: credential});
   }
@@ -662,6 +668,8 @@ class AlertComponent extends React.Component {
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
                 onVerinceCredentialChange={this.handleVeriniceCredentialChange}
+                onTippingPointCredentialChange={
+                  this.handleTippingPointCredentialChange}
               />
             }
             {credentialDialogVisible &&
