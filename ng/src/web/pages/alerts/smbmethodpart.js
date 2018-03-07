@@ -48,7 +48,7 @@ import NewIcon from '../../components/icon/newicon.js';
 
 const SmbMethodPart = ({
   prefix,
-  credentials,
+  credentials = [],
   reportFormats,
   smbCredential,
   smbFilePath,
