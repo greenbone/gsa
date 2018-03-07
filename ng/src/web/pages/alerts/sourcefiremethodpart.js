@@ -77,7 +77,7 @@ const SourcefireMethodPart = ({
 SourcefireMethodPart.propTypes = {
   prefix: PropTypes.string,
   defenseCenterIp: PropTypes.string.isRequired,
-  defenseCenterPort: PropTypes.number.isRequired,
+  defenseCenterPort: PropTypes.numberOrNumberString.isRequired,
   onChange: PropTypes.func,
 };
 

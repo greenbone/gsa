@@ -668,7 +668,7 @@ AlertDialog.propTypes = {
   method: PropTypes.string,
   method_data_URL: PropTypes.string,
   method_data_defense_center_ip: PropTypes.string,
-  method_data_defense_center_port: PropTypes.string,
+  method_data_defense_center_port: PropTypes.numberOrNumberString,
   method_data_details_url: PropTypes.string,
   method_data_from_address: PropTypes.string,
   method_data_message: PropTypes.string,
