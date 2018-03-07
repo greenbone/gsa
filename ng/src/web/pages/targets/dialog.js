@@ -25,7 +25,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
 import {NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -55,7 +54,16 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential.js';
 
+const DEFAULT_PORT = 22;
+
 const DEFAULT_PORT_LIST_ID = 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5';
+const DEFAULT_PORT_LIST_NAME = 'OpenVAS Default';
+
+const DEFAULT_PORT_LISTS = [{
+  id: DEFAULT_PORT_LIST_ID,
+  name: DEFAULT_PORT_LIST_NAME,
+}];
+
 const ALIVE_TESTS_DEFAULT = 'Scan Config Default';
 
 const ALIVE_TESTS = [
@@ -96,135 +104,79 @@ const NEW_SNMP = {
   types: SNMP_CREDENTIAL_TYPES,
 };
 
-const DEFAULTS = {
-  alive_tests: ALIVE_TESTS_DEFAULT,
-  comment: '',
-  esxi_credential_id: UNSET_VALUE,
-  name: _('Unnamed'),
-  port: 22,
-  port_list_id: DEFAULT_PORT_LIST_ID,
-  reverse_lookup_only: NO_VALUE,
-  reverse_lookup_unify: NO_VALUE,
-  smb_credential_id: UNSET_VALUE,
-  snmp_credential_id: UNSET_VALUE,
-  ssh_credential_id: UNSET_VALUE,
-  target_source: 'manual',
-  target_exclude_source: 'manual',
-};
-
 const TargetDialog = ({
-  alive_tests,
+  alive_tests = ALIVE_TESTS_DEFAULT,
   comment = '',
-  credentials,
-  esxi_credential_id,
+  credentials = [],
+  esxi_credential_id = UNSET_VALUE,
   exclude_hosts,
   hosts,
   hosts_count,
   in_use = false,
-  name,
-  port,
-  port_list_id,
-  port_lists,
-  reverse_lookup_only,
-  reverse_lookup_unify,
-  smb_credential_id,
-  snmp_credential_id,
-  ssh_credential_id,
-  target_source,
-  target_exclude_source,
-  title = _('New Note'),
+  name = _('Unnamed'),
+  port = DEFAULT_PORT,
+  port_list_id = DEFAULT_PORT_LIST_ID,
+  port_lists = DEFAULT_PORT_LISTS,
+  reverse_lookup_only = NO_VALUE,
+  reverse_lookup_unify = NO_VALUE,
+  smb_credential_id = UNSET_VALUE,
+  snmp_credential_id = UNSET_VALUE,
+  ssh_credential_id = UNSET_VALUE,
+  target_source = 'manual',
+  target_exclude_source = 'manual',
+  title = _('New Target'),
   visible = true,
   onClose,
   onNewCredentialsClick,
   onNewPortListClick,
   onSave,
+  onPortListChange,
+  onSshCredentialChange,
+  onSmbCredentialChange,
+  onEsxiCredentialChange,
+  onSnmpCredentialChange,
   ...initial
 }, {capabilities}) => {
+  const ssh_credentials = credentials.filter(ssh_credential_filter);
+  const up_credentials = credentials.filter(value =>
+    value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
+  const snmp_credentials = credentials.filter(snmp_credential_filter);
 
-  let ssh_credentials;
-  let up_credentials;
-  let snmp_credentials;
-
-  if (is_defined(credentials)) {
-    ssh_credentials = credentials.filter(ssh_credential_filter);
-    up_credentials = credentials.filter(value =>
-      value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
-    snmp_credentials = credentials.filter(snmp_credential_filter);
-  }
-
-  const data = {
-    ...DEFAULTS,
+  const uncontrolledValues = {
     ...initial,
+    alive_tests,
+    comment,
+    name,
+    port,
+    exclude_hosts,
+    hosts,
+    hosts_count,
+    in_use,
+    reverse_lookup_only,
+    reverse_lookup_unify,
+    target_source,
+    target_exclude_source,
   };
 
-  if (is_defined(alive_tests)) {
-    data.alive_tests = alive_tests;
-  };
-  if (is_defined(comment)) {
-    data.comment = comment;
-  };
-  if (is_defined(credentials)) {
-    data.credentials = credentials;
-  };
-  if (is_defined(esxi_credential_id)) {
-    data.esxi_credential_id = esxi_credential_id;
-  };
-  if (is_defined(exclude_hosts)) {
-    data.exclude_hosts = exclude_hosts;
-  };
-  if (is_defined(hosts)) {
-    data.hosts = hosts;
-  };
-  if (is_defined(hosts_count)) {
-    data.hosts_count = hosts_count;
-  };
-  if (is_defined(in_use)) {
-    data.in_use = in_use;
-  };
-  if (is_defined(name)) {
-    data.name = name;
-  };
-  if (is_defined(port)) {
-    data.port = port;
-  };
-  if (is_defined(port_list_id)) {
-    data.port_list_id = port_list_id;
-  };
-  if (is_defined(port_lists)) {
-    data.port_lists = port_lists;
-  };
-  if (is_defined(reverse_lookup_only)) {
-    data.reverse_lookup_only = reverse_lookup_only;
-  };
-  if (is_defined(reverse_lookup_unify)) {
-    data.reverse_lookup_unify = reverse_lookup_unify;
-  };
-  if (is_defined(smb_credential_id)) {
-    data.smb_credential_id = smb_credential_id;
-  };
-  if (is_defined(snmp_credential_id)) {
-    data.snmp_credential_id = snmp_credential_id;
-  };
-  if (is_defined(ssh_credential_id)) {
-    data.ssh_credential_id = ssh_credential_id;
-  };
-  if (is_defined(target_source)) {
-    data.target_source = target_source;
-  };
-  if (is_defined(target_exclude_source)) {
-    data.target_exclude_source = target_exclude_source;
+  const controlledValues = {
+    port_list_id,
+    esxi_credential_id,
+    smb_credential_id,
+    snmp_credential_id,
+    ssh_credential_id,
   };
 
   return (
     <SaveDialog
       visible={visible}
       title={title}
+      defaultValues={uncontrolledValues}
+      values={controlledValues}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -328,7 +280,7 @@ const TargetDialog = ({
                     disabled=
                       {state.in_use || state.target_exclude_source !== 'manual'}
                     name="exclude_hosts"
-                    value={exclude_hosts}
+                    value={state.exclude_hosts}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -377,7 +329,7 @@ const TargetDialog = ({
                     disabled={state.in_use}
                     items={render_select_items(port_lists)}
                     value={state.port_list_id}
-                    onChange={onValueChange}
+                    onChange={onPortListChange}
                   />
                   {!state.in_use &&
                     <Layout box flex>
@@ -415,7 +367,7 @@ const TargetDialog = ({
                     disabled={state.in_use}
                     items={render_select_items(ssh_credentials, UNSET_VALUE)}
                     value={state.ssh_credential_id}
-                    onChange={onValueChange}
+                    onChange={onSshCredentialChange}
                   />
                   <Layout>
                     {_('on port')}
@@ -448,7 +400,7 @@ const TargetDialog = ({
                     disabled={state.in_use}
                     items={render_select_items(up_credentials, UNSET_VALUE)}
                     value={state.smb_credential_id}
-                    onChange={onValueChange}
+                    onChange={onSmbCredentialChange}
                   />
                   {!in_use &&
                     <Layout box flex>
@@ -471,7 +423,7 @@ const TargetDialog = ({
                     name="esxi_credential_id"
                     items={render_select_items(up_credentials, UNSET_VALUE)}
                     value={state.esxi_credential_id}
-                    onChange={onValueChange}
+                    onChange={onEsxiCredentialChange}
                   />
                   {!state.in_use &&
                     <Layout box flex>
@@ -494,7 +446,7 @@ const TargetDialog = ({
                     name="snmp_credential_id"
                     items={render_select_items(snmp_credentials, UNSET_VALUE)}
                     value={state.snmp_credential_id}
-                    onChange={onValueChange}
+                    onChange={onSnmpCredentialChange}
                   />
                   {!in_use &&
                     <Layout box flex>
@@ -542,9 +494,14 @@ TargetDialog.propTypes = {
   title: PropTypes.string,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
+  onEsxiCredentialChange: PropTypes.func.isRequired,
   onNewCredentialsClick: PropTypes.func.isRequired,
   onNewPortListClick: PropTypes.func.isRequired,
+  onPortListChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onSmbCredentialChange: PropTypes.func.isRequired,
+  onSnmpCredentialChange: PropTypes.func.isRequired,
+  onSshCredentialChange: PropTypes.func.isRequired,
 };
 
 TargetDialog.contextTypes = {
