@@ -24,14 +24,13 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {classes} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import Icon from './icon.js';
 
 const GreenboneIcon = ({className, size = 'default', ...props}) => {
-  className = classes(className, 'greenbone-icon');
+  className = className + ' greenbone-icon';
   return (
     <Icon
       {...props}
@@ -45,7 +44,6 @@ const GreenboneIcon = ({className, size = 'default', ...props}) => {
 
 GreenboneIcon.propTypes = {
   size: PropTypes.iconSize,
-  className: PropTypes.string,
 };
 
 export default GreenboneIcon;
