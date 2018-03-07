@@ -63,6 +63,7 @@ class TaskDialogContainer extends React.Component {
     };
 
     this.handleAlertCreated = this.handleAlertCreated.bind(this);
+    this.handleAlertsChange = this.handleAlertsChange.bind(this);
     this.handleTargetCreated = this.handleTargetCreated.bind(this);
     this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
     this.handleTargetChange = this.handleTargetChange.bind(this);
@@ -135,6 +136,10 @@ class TaskDialogContainer extends React.Component {
     this.setState({target_id});
   }
 
+  handleAlertsChange(alert_ids) {
+    this.setState({alert_ids});
+  }
+
   render() {
     const {onSave, ...props} = this.props;
     const {
@@ -172,6 +177,7 @@ class TaskDialogContainer extends React.Component {
                   onNewScheduleClick={this.openScheduleDialog}
                   onSave={onSave}
                   onTargetChange={this.handleTargetChange}
+                  onAlertsChange={this.handleAlertsChange}
                 />
               )}
             </AlertComponent>
