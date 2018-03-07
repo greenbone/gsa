@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import 'core-js/fn/array/includes';
+
 import _ from 'gmp/locale.js';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {is_defined, map} from 'gmp/utils';
@@ -55,31 +57,13 @@ import Radio from '../../components/form/radio.js';
 import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
+import {first} from 'gmp/utils/array.js';
 
 const type_names = {
   up: _('Username + Password'),
   usk: _('Username + SSH Key'),
   cc: _('Client Cerficate'),
   snmp: _('SNMP'),
-};
-
-const DEFAULTS = {
-  allow_insecure: NO_VALUE,
-  auth_algorithm: SNMP_AUTH_ALGORITHM_SHA1,
-  autogenerate: NO_VALUE,
-  base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  change_community: NO_VALUE,
-  change_passphrase: NO_VALUE,
-  change_password: NO_VALUE,
-  change_privacy_password: NO_VALUE,
-  comment: '',
-  community: '',
-  credential_login: '',
-  name: _('Unnamed'),
-  passphrase: '',
-  password: '',
-  privacy_algorithm: SNMP_PRIVACY_ALGORITHM_AES,
-  privacy_password: '',
 };
 
 class CredentialsDialog extends React.Component {
@@ -103,11 +87,30 @@ class CredentialsDialog extends React.Component {
   }
 
   render() {
+    let {
+      base,
+    } = this.props;
+
     const {
       credential,
       title = _('New Credential'),
-      types,
+      types = [],
       visible = true,
+      allow_insecure = NO_VALUE,
+      auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
+      autogenerate = NO_VALUE,
+      change_community = NO_VALUE,
+      change_passphrase = NO_VALUE,
+      change_password = NO_VALUE,
+      change_privacy_password = NO_VALUE,
+      comment = '',
+      community = '',
+      credential_login = '',
+      name = _('Unnamed'),
+      passphrase = '',
+      password = '',
+      privacy_algorithm = SNMP_PRIVACY_ALGORITHM_AES,
+      privacy_password = '',
       onClose,
       onSave,
     } = this.props;
@@ -119,13 +122,42 @@ class CredentialsDialog extends React.Component {
 
     const is_edit = is_defined(credential);
 
+    if (!is_defined(base)) {
+      if (types.includes(USERNAME_PASSWORD_CREDENTIAL_TYPE)) {
+        base = USERNAME_PASSWORD_CREDENTIAL_TYPE;
+      }
+      else {
+        base = first(types);
+      }
+    }
+
+    const data = {
+      allow_insecure,
+      auth_algorithm,
+      autogenerate,
+      base,
+      change_community,
+      change_passphrase,
+      change_password,
+      change_privacy_password,
+      comment,
+      community,
+      credential_login,
+      name,
+      passphrase,
+      password,
+      privacy_algorithm,
+      privacy_password,
+      id: is_defined(credential) ? credential.id : undefined,
+    };
+
     return (
       <SaveDialog
         visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
-        defaultValues={{...DEFAULTS, ...credential}}
+        defaultValues={data}
       >
         {({
           values: state,
