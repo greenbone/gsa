@@ -378,7 +378,8 @@ class AlertDialog extends React.Component {
                   value={state.name}
                   size="30"
                   onChange={onValueChange}
-                  maxLength="80"/>
+                  maxLength="80"
+                />
               </FormGroup>
 
               <FormGroup title={_('Comment')}>
@@ -388,7 +389,8 @@ class AlertDialog extends React.Component {
                   grow="1"
                   size="30"
                   maxLength="400"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('Event')} flex="column">
@@ -399,7 +401,8 @@ class AlertDialog extends React.Component {
                     status={state.event_data_status}
                     onEventChange={
                       value => this.handleEventChange(value, onValueChange)}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
 
                   <SecInfoEventPart
                     prefix="event_data"
@@ -408,7 +411,8 @@ class AlertDialog extends React.Component {
                     feedEvent={state.event_data_feed_event}
                     onEventChange={
                       value => this.handleEventChange(value, onValueChange)}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
                 </Divider>
               </FormGroup>
 
@@ -419,14 +423,16 @@ class AlertDialog extends React.Component {
                     name="condition"
                     value={CONDITION_TYPE_ALWAYS}
                     checked={state.condition === CONDITION_TYPE_ALWAYS}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
 
                   {is_task_event &&
                     <SeverityLeastConditionPart
                       prefix="condition_data"
                       condition={state.condition}
                       severity={state.condition_data_severity}
-                      onChange={onValueChange}/>
+                      onChange={onValueChange}
+                    />
                   }
 
                   {is_task_event &&
@@ -434,7 +440,8 @@ class AlertDialog extends React.Component {
                       prefix="condition_data"
                       condition={state.condition}
                       direction={state.condition_data_direction}
-                      onChange={onValueChange}/>
+                      onChange={onValueChange}
+                    />
                   }
 
                   <FilterCountLeastConditionPart
@@ -443,7 +450,8 @@ class AlertDialog extends React.Component {
                     atLeastFilterId={state.condition_data_at_least_filter_id}
                     atLeastCount={state.condition_data_at_least_count}
                     filters={state.condition_data_filters}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
 
                   {is_task_event &&
                     <FilterCountChangedConditionPart
@@ -452,17 +460,20 @@ class AlertDialog extends React.Component {
                       filterId={state.condition_data_filter_id}
                       count={state.condition_data_count}
                       filters={state.condition_data_filters}
-                      onChange={onValueChange}/>
+                      onChange={onValueChange}
+                    />
                   }
                 </Divider>
               </FormGroup>
+
               {!is_task_event &&
                 <FormGroup title={_('Details URL')}>
                   <TextField
                     grow="1"
                     name="method_data_details_url"
                     value={state.method_data_details_url}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
                 </FormGroup>
               }
 
@@ -472,7 +483,8 @@ class AlertDialog extends React.Component {
                   <Select
                     value={state.filter_id}
                     name="filter_id"
-                    onChange={onValueChange}>
+                    onChange={onValueChange}
+                   >
                     {render_options(state.result_filters, 0)}
                   </Select>
                 </FormGroup>
@@ -500,14 +512,16 @@ class AlertDialog extends React.Component {
                   toAddress={state.method_data_to_address}
                   reportFormats={report_formats}
                   isTaskEvent={is_task_event}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
               {state.method === METHOD_TYPE_HTTP_GET &&
                 <HttpMethodPart
                   prefix="method_data"
                   URL={state.method_data_URL}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
               {state.method === METHOD_TYPE_SCP &&
@@ -522,7 +536,7 @@ class AlertDialog extends React.Component {
                   scpPath={state.method_data_scp_path}
                   scpReportFormat={state.method_data_scp_report_format}
                   onNewCredentialClick={onNewScpCredentialClick}
-                  />
+                />
               }
 
               {state.method === METHOD_TYPE_SEND &&
@@ -532,7 +546,8 @@ class AlertDialog extends React.Component {
                   sendPort={state.method_data_send_port}
                   sendReportFormat={state.method_data_send_report_format}
                   reportFormats={report_formats}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
               {state.method === METHOD_TYPE_START_TASK &&
@@ -540,7 +555,8 @@ class AlertDialog extends React.Component {
                   prefix="method_data"
                   tasks={state.tasks}
                   startTaskTask={state.method_data_start_task_task}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
               {state.method === METHOD_TYPE_SMB &&
@@ -553,7 +569,8 @@ class AlertDialog extends React.Component {
                   smbFilePath={state.method_data_smb_file_path}
                   smbSharePath={state.method_data_smb_share_path}
                   smbReportFormat={state.method_data_smb_report_format}
-                  onNewCredentialClick={onNewSmbCredentialClick}/>
+                  onNewCredentialClick={onNewSmbCredentialClick}
+                />
               }
 
               {state.method === METHOD_TYPE_SNMP &&
@@ -562,7 +579,8 @@ class AlertDialog extends React.Component {
                   snmpAgent={state.method_data_snmp_agent}
                   snmpCommunity={state.method_data_snmp_community}
                   snmpMessage={state.method_data_snmp_message}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
               {state.method === METHOD_TYPE_SOURCEFIRE &&
@@ -570,7 +588,8 @@ class AlertDialog extends React.Component {
                   prefix="method_data"
                   defenseCenterIp={state.method_data_defense_center_ip}
                   defenseCenterPort={state.method_data_defense_center_port}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
               {state.method === METHOD_TYPE_VERINICE &&
@@ -584,7 +603,8 @@ class AlertDialog extends React.Component {
                   veriniceServerReportFormat=
                     {state.method_data_verinice_server_report_format}
                   onNewCredentialClick={onNewVeriniceCredentialClick}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
               {state.method === METHOD_TYPE_TIPPING_POINT &&
