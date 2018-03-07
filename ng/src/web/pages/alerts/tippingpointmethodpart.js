@@ -24,6 +24,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential.js';
+
 import {render_select_items} from '../../utils/render.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -40,16 +42,20 @@ import NewIcon from '../../components/icon/newicon.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
+const TIPPINGPOINT_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+
 const TippingPointMethodPart = ({
-  credentials,
+  credentials = [],
   prefix,
   tpSmsCredential,
   tpSmsHostname,
   tpSmsTlsWorkaround,
   onChange,
+  onCredentialChange,
   onNewCredentialClick,
 }) => {
-  const credential_items = render_select_items(credentials);
+  credentials = credentials.filter(
+    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
   return (
     <Layout
       flex="column"
@@ -67,15 +73,15 @@ const TippingPointMethodPart = ({
       <FormGroup title={_('Credential')}>
         <Divider>
           <Select
-            items={credential_items}
+            items={render_select_items(credentials)}
             name={prefix + 'tp_sms_credential'}
             value={tpSmsCredential}
-            onChange={onChange}
+            onChange={onCredentialChange}
           />
           <Layout flex box>
             <NewIcon
               title={_('Create a credential')}
-              value={['up']}
+              value={TIPPINGPOINT_CREDENTIAL_TYPES}
               onClick={onNewCredentialClick}
             />
           </Layout>
@@ -105,6 +111,7 @@ TippingPointMethodPart.propTypes = {
   tpSmsHostname: PropTypes.string,
   tpSmsTlsWorkaround: PropTypes.yesno.isRequired,
   onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 

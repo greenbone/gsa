@@ -26,11 +26,13 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential.js';
+
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -39,24 +41,27 @@ import TextField from '../../components/form/textfield.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
+const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+
 const VeriniceMethodPart = ({
   prefix,
   veriniceServerUrl,
   veriniceServerCredential,
   veriniceServerReportFormat,
-  reportFormats,
-  credentials,
+  reportFormats = [],
+  credentials = [],
   onChange,
+  onCredentialChange,
   onNewCredentialClick,
 }) => {
-  const verinice_credential_opts = render_options(credentials);
-  const verinice_report_format_opts = render_options(
-    reportFormats.filter(format => format.extension === 'vna'));
+  reportFormats = reportFormats.filter(format => format.extension === 'vna');
+  credentials = credentials.filter(
+    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
   return (
     <Layout
       flex="column"
       grow="1"
-      box>
+    >
       <FormGroup title={_('verinice.PRO URL')}>
         <TextField
           grow="1"
@@ -64,22 +69,24 @@ const VeriniceMethodPart = ({
           maxLength="256"
           name={prefix + 'verinice_server_url'}
           value={veriniceServerUrl}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Credential')}>
         <Divider>
           <Select
             name={prefix + 'verinice_server_credential'}
+            items={render_select_items(credentials)}
             value={veriniceServerCredential}
-            onChange={onChange}>
-            {verinice_credential_opts}
-          </Select>
+            onChange={onCredentialChange}
+          />
           <Layout flex box>
             <NewIcon
               title={_('Create a credential')}
-              value={['up']}
-              onClick={onNewCredentialClick}/>
+              value={VERINICE_CREDENTIAL_TYPES}
+              onClick={onNewCredentialClick}
+          />
           </Layout>
         </Divider>
       </FormGroup>
@@ -87,10 +94,10 @@ const VeriniceMethodPart = ({
       <FormGroup title={_('verinice.PRO Report')}>
         <Select
           name={prefix + 'verinice_server_report_format'}
+          items={render_select_items(reportFormats)}
           value={veriniceServerReportFormat}
-          onChange={onChange}>
-          {verinice_report_format_opts}
-        </Select>
+          onChange={onChange}
+        />
       </FormGroup>
 
     </Layout>
@@ -104,8 +111,9 @@ VeriniceMethodPart.propTypes = {
   veriniceServerCredential: PropTypes.id,
   veriniceServerReportFormat: PropTypes.id,
   veriniceServerUrl: PropTypes.string,
-  onChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
 export default withPrefix(VeriniceMethodPart);

@@ -46,7 +46,7 @@ import {
 } from 'gmp/models/alert.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -285,12 +285,20 @@ class AlertDialog extends React.Component {
       title = _('New Alert'),
       visible = true,
       report_formats,
+      method_data_scp_credential,
+      method_data_smb_credential,
+      method_data_tp_sms_credential,
+      method_data_verinice_server_credential,
       onClose,
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
       onNewTippingPointCredentialClick,
       onSave,
+      onScpCredentialChange,
+      onSmbCredentialChange,
+      onTippingPointCredentialChange,
+      onVerinceCredentialChange,
       ...props
     } = this.props;
 
@@ -356,16 +364,25 @@ class AlertDialog extends React.Component {
         data[key] = value;
       }
     }
+
+    const controlledValues = {
+      method_data_scp_credential,
+      method_data_smb_credential,
+      method_data_tp_sms_credential,
+      method_data_verinice_server_credential,
+    };
+
     return (
       <SaveDialog
         visible={visible}
         title={title}
+        defaultValues={data}
+        values={controlledValues}
         onClose={onClose}
         onSave={onSave}
-        initialData={data}
       >
         {({
-          data: state,
+          values,
           onValueChange,
         }) => {
           return (
@@ -375,40 +392,44 @@ class AlertDialog extends React.Component {
                 <TextField
                   name="name"
                   grow="1"
-                  value={state.name}
+                  value={values.name}
                   size="30"
                   onChange={onValueChange}
-                  maxLength="80"/>
+                  maxLength="80"
+                />
               </FormGroup>
 
               <FormGroup title={_('Comment')}>
                 <TextField
                   name="comment"
-                  value={state.comment}
+                  value={values.comment}
                   grow="1"
                   size="30"
                   maxLength="400"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('Event')} flex="column">
                 <Divider flex="column">
                   <TaskEventPart
                     prefix="event_data"
-                    event={state.event}
-                    status={state.event_data_status}
+                    event={values.event}
+                    status={values.event_data_status}
                     onEventChange={
                       value => this.handleEventChange(value, onValueChange)}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
 
                   <SecInfoEventPart
                     prefix="event_data"
-                    event={state.event}
-                    secinfoType={state.event_data_secinfo_type}
-                    feedEvent={state.event_data_feed_event}
+                    event={values.event}
+                    secinfoType={values.event_data_secinfo_type}
+                    feedEvent={values.event_data_feed_event}
                     onEventChange={
                       value => this.handleEventChange(value, onValueChange)}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
                 </Divider>
               </FormGroup>
 
@@ -418,51 +439,58 @@ class AlertDialog extends React.Component {
                     title={_('Always')}
                     name="condition"
                     value={CONDITION_TYPE_ALWAYS}
-                    checked={state.condition === CONDITION_TYPE_ALWAYS}
-                    onChange={onValueChange}/>
+                    checked={values.condition === CONDITION_TYPE_ALWAYS}
+                    onChange={onValueChange}
+                  />
 
                   {is_task_event &&
                     <SeverityLeastConditionPart
                       prefix="condition_data"
-                      condition={state.condition}
-                      severity={state.condition_data_severity}
-                      onChange={onValueChange}/>
+                      condition={values.condition}
+                      severity={values.condition_data_severity}
+                      onChange={onValueChange}
+                    />
                   }
 
                   {is_task_event &&
                     <SeverityChangedConditionPart
                       prefix="condition_data"
-                      condition={state.condition}
-                      direction={state.condition_data_direction}
-                      onChange={onValueChange}/>
+                      condition={values.condition}
+                      direction={values.condition_data_direction}
+                      onChange={onValueChange}
+                    />
                   }
 
                   <FilterCountLeastConditionPart
                     prefix="condition_data"
-                    condition={state.condition}
-                    atLeastFilterId={state.condition_data_at_least_filter_id}
-                    atLeastCount={state.condition_data_at_least_count}
-                    filters={state.condition_data_filters}
-                    onChange={onValueChange}/>
+                    condition={values.condition}
+                    atLeastFilterId={values.condition_data_at_least_filter_id}
+                    atLeastCount={values.condition_data_at_least_count}
+                    filters={values.condition_data_filters}
+                    onChange={onValueChange}
+                  />
 
                   {is_task_event &&
                     <FilterCountChangedConditionPart
                       prefix="condition_data"
-                      condition={state.condition}
-                      filterId={state.condition_data_filter_id}
-                      count={state.condition_data_count}
-                      filters={state.condition_data_filters}
-                      onChange={onValueChange}/>
+                      condition={values.condition}
+                      filterId={values.condition_data_filter_id}
+                      count={values.condition_data_count}
+                      filters={values.condition_data_filters}
+                      onChange={onValueChange}
+                    />
                   }
                 </Divider>
               </FormGroup>
+
               {!is_task_event &&
                 <FormGroup title={_('Details URL')}>
                   <TextField
                     grow="1"
                     name="method_data_details_url"
-                    value={state.method_data_details_url}
-                    onChange={onValueChange}/>
+                    value={values.method_data_details_url}
+                    onChange={onValueChange}
+                  />
                 </FormGroup>
               }
 
@@ -470,139 +498,151 @@ class AlertDialog extends React.Component {
                 is_task_event &&
                 <FormGroup title={_('Report Result Filter')}>
                   <Select
-                    value={state.filter_id}
+                    value={values.filter_id}
                     name="filter_id"
-                    onChange={onValueChange}>
-                    {render_options(state.result_filters, 0)}
-                  </Select>
+                    items={render_select_items(values.result_filters, 0)}
+                    onChange={onValueChange}
+                  />
                 </FormGroup>
               }
 
               <FormGroup title={_('Method')}>
                 <Select
                   name="method"
-                  value={state.method}
+                  value={values.method}
                   items={method_types}
                   onChange={onValueChange}
                  />
               </FormGroup>
 
-              {state.method === METHOD_TYPE_EMAIL &&
+              {values.method === METHOD_TYPE_EMAIL &&
                 <EmailMethodPart
                   prefix="method_data"
-                  fromAddress={state.method_data_from_address}
-                  message={state.method_data_message}
-                  messageAttach={state.method_data_message_attach}
-                  notice={state.method_data_notice}
-                  noticeAttachFormat={state.method_data_notice_attach_format}
-                  noticeReportFormat={state.method_data_notice_report_format}
-                  subject={state.method_data_subject}
-                  toAddress={state.method_data_to_address}
+                  fromAddress={values.method_data_from_address}
+                  message={values.method_data_message}
+                  messageAttach={values.method_data_message_attach}
+                  notice={values.method_data_notice}
+                  noticeAttachFormat={values.method_data_notice_attach_format}
+                  noticeReportFormat={values.method_data_notice_report_format}
+                  subject={values.method_data_subject}
+                  toAddress={values.method_data_to_address}
                   reportFormats={report_formats}
                   isTaskEvent={is_task_event}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_HTTP_GET &&
+              {values.method === METHOD_TYPE_HTTP_GET &&
                 <HttpMethodPart
                   prefix="method_data"
-                  URL={state.method_data_URL}
-                  onChange={onValueChange}/>
+                  URL={values.method_data_URL}
+                  onChange={onValueChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_SCP &&
+              {values.method === METHOD_TYPE_SCP &&
                 <ScpMethodPart
                   prefix="method_data"
                   credentials={credentials}
                   reportFormats={report_formats}
-                  onChange={onValueChange}
-                  scpCredential={state.method_data_scp_credential}
-                  scpHost={state.method_data_scp_host}
-                  scpKnownHosts={state.method_data_scp_known_hosts}
-                  scpPath={state.method_data_scp_path}
-                  scpReportFormat={state.method_data_scp_report_format}
+                  scpCredential={values.method_data_scp_credential}
+                  scpHost={values.method_data_scp_host}
+                  scpKnownHosts={values.method_data_scp_known_hosts}
+                  scpPath={values.method_data_scp_path}
+                  scpReportFormat={values.method_data_scp_report_format}
                   onNewCredentialClick={onNewScpCredentialClick}
-                  />
+                  onCredentialChange={onScpCredentialChange}
+                  onChange={onValueChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_SEND &&
+              {values.method === METHOD_TYPE_SEND &&
                 <SendMethodPart
                   prefix="method_data"
-                  sendHost={state.method_data_send_host}
-                  sendPort={state.method_data_send_port}
-                  sendReportFormat={state.method_data_send_report_format}
+                  sendHost={values.method_data_send_host}
+                  sendPort={values.method_data_send_port}
+                  sendReportFormat={values.method_data_send_report_format}
                   reportFormats={report_formats}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_START_TASK &&
+              {values.method === METHOD_TYPE_START_TASK &&
                 <StartTaskMethodPart
                   prefix="method_data"
-                  tasks={state.tasks}
-                  startTaskTask={state.method_data_start_task_task}
-                  onChange={onValueChange}/>
+                  tasks={values.tasks}
+                  startTaskTask={values.method_data_start_task_task}
+                  onChange={onValueChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_SMB &&
+              {values.method === METHOD_TYPE_SMB &&
                 <SmbMethodPart
                   prefix="method_data"
                   credentials={credentials}
                   reportFormats={report_formats}
+                  smbCredential={values.method_data_smb_credential}
+                  smbFilePath={values.method_data_smb_file_path}
+                  smbSharePath={values.method_data_smb_share_path}
+                  smbReportFormat={values.method_data_smb_report_format}
+                  onNewCredentialClick={onNewSmbCredentialClick}
                   onChange={onValueChange}
-                  smbCredential={state.method_data_smb_credential}
-                  smbFilePath={state.method_data_smb_file_path}
-                  smbSharePath={state.method_data_smb_share_path}
-                  smbReportFormat={state.method_data_smb_report_format}
-                  onNewCredentialClick={onNewSmbCredentialClick}/>
+                  onCredentialChange={onSmbCredentialChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_SNMP &&
+              {values.method === METHOD_TYPE_SNMP &&
                 <SnmpMethodPart
                   prefix="method_data"
-                  snmpAgent={state.method_data_snmp_agent}
-                  snmpCommunity={state.method_data_snmp_community}
-                  snmpMessage={state.method_data_snmp_message}
-                  onChange={onValueChange}/>
+                  snmpAgent={values.method_data_snmp_agent}
+                  snmpCommunity={values.method_data_snmp_community}
+                  snmpMessage={values.method_data_snmp_message}
+                  onChange={onValueChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_SOURCEFIRE &&
+              {values.method === METHOD_TYPE_SOURCEFIRE &&
                 <SourcefireMethodPart
                   prefix="method_data"
-                  defenseCenterIp={state.method_data_defense_center_ip}
-                  defenseCenterPort={state.method_data_defense_center_port}
-                  onChange={onValueChange}/>
+                  defenseCenterIp={values.method_data_defense_center_ip}
+                  defenseCenterPort={values.method_data_defense_center_port}
+                  onChange={onValueChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_VERINICE &&
+              {values.method === METHOD_TYPE_VERINICE &&
                 <VeriniceMethodPart
                   prefix="method_data"
                   credentials={credentials}
                   reportFormats={report_formats}
-                  veriniceServerUrl={state.method_data_verinice_server_url}
+                  veriniceServerUrl={values.method_data_verinice_server_url}
                   veriniceServerCredential=
-                    {state.method_data_verinice_server_credential}
+                    {values.method_data_verinice_server_credential}
                   veriniceServerReportFormat=
-                    {state.method_data_verinice_server_report_format}
+                    {values.method_data_verinice_server_report_format}
                   onNewCredentialClick={onNewVeriniceCredentialClick}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                  onCredentialChange={onVerinceCredentialChange}
+                />
               }
 
-              {state.method === METHOD_TYPE_TIPPING_POINT &&
+              {values.method === METHOD_TYPE_TIPPING_POINT &&
                 <TippingPontMethodPart
                   prefix="method_data"
                   credentials={credentials}
-                  tpSmsCredential={state.method_data_tp_sms_credential}
-                  tpSmsHostname={state.method_data_tp_sms_hostname}
-                  tpSmsTlsWorkaround={state.method_data_tp_sms_tls_workaround}
+                  tpSmsCredential={values.method_data_tp_sms_credential}
+                  tpSmsHostname={values.method_data_tp_sms_hostname}
+                  tpSmsTlsWorkaround={values.method_data_tp_sms_tls_workaround}
                   onNewCredentialClick={onNewTippingPointCredentialClick}
                   onChange={onValueChange}
+                  onCredentialChange={onTippingPointCredentialChange}
                 />
               }
 
               <FormGroup title={_('Active')}>
                 <YesNoRadio
                   name="active"
-                  value={state.active}
+                  value={values.active}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -636,7 +676,7 @@ AlertDialog.propTypes = {
   method: PropTypes.string,
   method_data_URL: PropTypes.string,
   method_data_defense_center_ip: PropTypes.string,
-  method_data_defense_center_port: PropTypes.string,
+  method_data_defense_center_port: PropTypes.numberOrNumberString,
   method_data_details_url: PropTypes.string,
   method_data_from_address: PropTypes.string,
   method_data_message: PropTypes.string,
@@ -681,6 +721,10 @@ AlertDialog.propTypes = {
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,
   onNewVeriniceCredentialClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onScpCredentialChange: PropTypes.func.isRequired,
+  onSmbCredentialChange: PropTypes.func.isRequired,
+  onTippingPointCredentialChange: PropTypes.func.isRequired,
+  onVerinceCredentialChange: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(AlertDialog);

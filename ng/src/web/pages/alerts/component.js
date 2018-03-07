@@ -97,6 +97,12 @@ class AlertComponent extends React.Component {
 
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
+    this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
+    this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
+    this.handleVeriniceCredentialChange = this.handleVeriniceCredentialChange
+      .bind(this);
+    this.handleTippingPointCredentialChange =
+      this.handleTippingPointCredentialChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.closeAlertDialog = this.closeAlertDialog.bind(this);
@@ -110,39 +116,51 @@ class AlertComponent extends React.Component {
 
   }
 
-  handleCreateCredential(data) {
+  handleCreateCredential(credentialdata) {
     const {gmp} = this.props;
-    const promise = gmp.credential.create(data);
 
-    const {credentials} = this;
-
-    promise.then(response => {
-      const credential = response.data;
-
-      credentials.push(credential);
-
-      this.setState({credentials});
-
-      if (data.type === 'scp') {
-        this.setState({method_data_scp_credential: credential.id});
-      }
-      else if (data.type === 'smb') {
-        this.setSate({method_data_smb_credential: credential.id});
-      }
-      else if (data.type === 'verinice') {
-        this.setSatte({method_data_verinice_server_credential: credential.id});
-      }
-      else if (data.type === 'tippingpoint') {
-        this.setState({method_data_tp_sms_credential: credential.id});
-      }
-    });
+    let credential_id;
+    gmp.credential.create(credentialdata)
+      .then(response => {
+        credential_id = response.data.id;
+      })
+      .then(() => gmp.credentials.getAll())
+      .then(response => {
+        const {data: credentials} = response;
+        if (this.credentialType === 'scp') {
+          this.setState({
+            method_data_scp_credential: credential_id,
+            credentials,
+          });
+        }
+        else if (this.credentialType === 'smb') {
+          this.setState({
+            method_data_smb_credential: credential_id,
+            credentials,
+          });
+        }
+        else if (this.credentialType === 'verinice') {
+          this.setState({
+            method_data_verinice_server_credential: credential_id,
+            credentials,
+          });
+        }
+        else if (this.credentialType === 'tippingpoint') {
+          this.setState({
+            method_data_tp_sms_credential: credential_id,
+            credentials,
+          });
+        }
+      });
   }
 
-  openCredentialDialog(data) {
+  openCredentialDialog({type, types}) {
+    this.credentialType = type;
+
     this.setState({
-      ...data,
       credentialDialogVisible: true,
-      title: _('Create new Credential'),
+      credentialDialogTitle: _('New Credential'),
+      credentialTypes: types,
     });
   }
 
@@ -181,8 +199,6 @@ class AlertComponent extends React.Component {
         } = settings;
 
         const {method, condition, event} = lalert;
-
-        this.credentials = credentials;
 
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
@@ -358,8 +374,6 @@ class AlertComponent extends React.Component {
           tasks = [],
         } = settings;
 
-        this.credentials = credentials;
-
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
 
@@ -397,7 +411,6 @@ class AlertComponent extends React.Component {
             DEFAULT_NOTICE_ATTACH_FORMAT),
           method_data_start_task_task: select_save_id(tasks),
           report_formats,
-          method_data_scp_credential: select_save_id(credentials),
           method_data_scp_report_format: report_format_id,
           method_data_send_report_format: report_format_id,
           method_data_verinice_server_report_format: select_verinice_report_id(
@@ -452,6 +465,22 @@ class AlertComponent extends React.Component {
     });
   }
 
+  handleScpCredentialChange(credential) {
+    this.setState({method_data_scp_credential: credential});
+  }
+
+  handleSmbCredentialChange(credential) {
+    this.setState({method_data_smb_credential: credential});
+  }
+
+  handleTippingPointCredentialChange(credential) {
+    this.setState({method_data_tp_sms_credential: credential});
+  }
+
+  handleVeriniceCredentialChange(credential) {
+    this.setState({method_data_verinice_server_credential: credential});
+  }
+
   render() {
     const {
       children,
@@ -471,8 +500,9 @@ class AlertComponent extends React.Component {
     const {
       alertDialogVisible,
       credentialDialogVisible,
+      credentialDialogTitle,
+      credentialTypes,
       title,
-      types,
       id,
       alert,
       active,
@@ -533,7 +563,6 @@ class AlertComponent extends React.Component {
       report_formats,
       tasks,
     } = this.state;
-
     return (
       <EntityComponent
         name="alert"
@@ -636,12 +665,17 @@ class AlertComponent extends React.Component {
                 onNewTippingPointCredentialClick={
                   this.openTippingPointCredentialDialog}
                 onSave={save}
+                onScpCredentialChange={this.handleScpCredentialChange}
+                onSmbCredentialChange={this.handleSmbCredentialChange}
+                onVerinceCredentialChange={this.handleVeriniceCredentialChange}
+                onTippingPointCredentialChange={
+                  this.handleTippingPointCredentialChange}
               />
             }
             {credentialDialogVisible &&
               <CredentialsDialog
-                title={title}
-                types={types}
+                title={credentialDialogTitle}
+                types={credentialTypes}
                 onClose={this.closeCredentialDialog}
                 onSave={this.handleCreateCredential}
               />
