@@ -212,6 +212,7 @@ const TaskDialog = ({
   onNewScheduleClick,
   onNewTargetClick,
   onSave,
+  onTargetChange,
   ...data
 }) => {
   const scanner = get_scanner(scanners, scanner_id);
@@ -253,9 +254,13 @@ const TaskDialog = ({
 
   const has_tags = tag_items.length > 0;
 
-  const initialData = {
+  const uncontrolledData = {
     ...DEFAULTS,
     ...data,
+  };
+
+  const controlledData = {
+    target_id,
   };
 
   return (
@@ -264,10 +269,11 @@ const TaskDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={initialData}
+      defaultValues={uncontrolledData}
+      values={controlledData}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -302,7 +308,7 @@ const TaskDialog = ({
                   disabled={!change_task}
                   items={target_items}
                   value={state.target_id}
-                  onChange={onValueChange}
+                  onChange={onTargetChange}
                 />
                 {change_task &&
                   <Layout flex>
@@ -616,6 +622,7 @@ TaskDialog.propTypes = {
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onTargetChange: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(TaskDialog);
