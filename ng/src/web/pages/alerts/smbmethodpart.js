@@ -26,6 +26,11 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {
+  SMB_CREDENTIAL_TYPES,
+  smb_credential_filter,
+} from 'gmp/models/credential.js';
+
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
@@ -53,6 +58,7 @@ const SmbMethodPart = ({
   onNewCredentialClick,
   onCredentialChange,
 }) => {
+  credentials.filter(smb_credential_filter);
   return (
     <Layout
       flex="column"
@@ -76,7 +82,7 @@ const SmbMethodPart = ({
           />
           <Layout>
             <NewIcon
-              value={['up']}
+              value={SMB_CREDENTIAL_TYPES}
               title={_('Create a credential')}
               onClick={onNewCredentialClick}
             />
