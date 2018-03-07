@@ -43,6 +43,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -388,6 +389,7 @@ CredentialsDialog.propTypes = {
   ]),
   autogenerate: PropTypes.yesno,
   base: pwtypes,
+  capabilities: PropTypes.capabilities.isRequired,
   change_community: PropTypes.yesno,
   change_passphrase: PropTypes.yesno,
   change_password: PropTypes.yesno,
@@ -414,10 +416,6 @@ CredentialsDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-CredentialsDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default CredentialsDialog;
+export default withCapabilities(CredentialsDialog);
 
 // vim: set ts=2 sw=2 tw=80:
