@@ -98,6 +98,7 @@ class AlertComponent extends React.Component {
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
     this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
+    this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.closeAlertDialog = this.closeAlertDialog.bind(this);
@@ -464,6 +465,10 @@ class AlertComponent extends React.Component {
     this.setState({method_data_scp_credential: credential});
   }
 
+  handleSmbCredentialChange(credential) {
+    this.setState({method_data_smb_credential: credential});
+  }
+
   render() {
     const {
       children,
@@ -649,6 +654,7 @@ class AlertComponent extends React.Component {
                   this.openTippingPointCredentialDialog}
                 onSave={save}
                 onScpCredentialChange={this.handleScpCredentialChange}
+                onSmbCredentialChange={this.handleSmbCredentialChange}
               />
             }
             {credentialDialogVisible &&
