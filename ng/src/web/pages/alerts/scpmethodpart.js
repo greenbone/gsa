@@ -51,6 +51,7 @@ const ScpMethodPart = ({
     scpPath,
     scpReportFormat,
     onChange,
+    onCredentialChange,
     onNewCredentialClick,
   }) => {
   return (
@@ -64,7 +65,7 @@ const ScpMethodPart = ({
             name={prefix + 'scp_credential'}
             value={scpCredential}
             items={render_select_items(credentials)}
-            onChange={onChange}
+            onChange={onCredentialChange}
           />
           <Layout>
             <NewIcon
@@ -126,8 +127,9 @@ ScpMethodPart.propTypes = {
   scpKnownHosts: PropTypes.string.isRequired,
   scpPath: PropTypes.string.isRequired,
   scpReportFormat: PropTypes.id,
-  onChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
 export default withPrefix(ScpMethodPart);
