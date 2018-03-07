@@ -51,6 +51,7 @@ const SmbMethodPart = ({
   smbSharePath,
   onChange,
   onNewCredentialClick,
+  onCredentialChange,
 }) => {
   return (
     <Layout
@@ -71,7 +72,7 @@ const SmbMethodPart = ({
             name={prefix + 'smb_credential'}
             items={render_select_items(credentials)}
             value={smbCredential}
-            onChange={onChange}
+            onChange={onCredentialChange}
           />
           <Layout>
             <NewIcon
@@ -123,8 +124,9 @@ SmbMethodPart.propTypes = {
   smbFilePath: PropTypes.string.isRequired,
   smbReportFormat: PropTypes.id,
   smbSharePath: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
 export default withPrefix(SmbMethodPart);
