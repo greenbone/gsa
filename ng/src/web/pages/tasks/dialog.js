@@ -49,6 +49,7 @@ import {
 } from 'gmp/models/scanconfig.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -179,6 +180,7 @@ const TaskDialog = ({
     apply_overrides,
     auto_delete,
     auto_delete_data,
+    capabilities,
     comment,
     config_id,
     hosts_ordering,
@@ -211,7 +213,7 @@ const TaskDialog = ({
     onNewTargetClick,
     onSave,
     ...data
-  }, {capabilities}) => {
+  }) => {
   const scanner = get_scanner(scanners, scanner_id);
 
   const is_osp_scanner = is_defined(scanner) &&
@@ -545,6 +547,7 @@ TaskDialog.propTypes = {
     'keep', 'no',
   ]),
   auto_delete_data: PropTypes.number,
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   config_id: PropTypes.idOrZero,
   hosts_ordering: PropTypes.oneOf([
@@ -581,10 +584,6 @@ TaskDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-TaskDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default TaskDialog;
+export default withCapabilities(TaskDialog);
 
 // vim: set ts=2 sw=2 tw=80:
