@@ -31,7 +31,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -53,9 +53,6 @@ const ScpMethodPart = ({
     onChange,
     onNewCredentialClick,
   }) => {
-  const scp_credential_opts = render_options(credentials);
-  const scp_report_format_opts = render_options(reportFormats);
-
   return (
     <Layout
       flex="column"
@@ -66,9 +63,9 @@ const ScpMethodPart = ({
           <Select
             name={prefix + 'scp_credential'}
             value={scpCredential}
-            onChange={onChange}>
-            {scp_credential_opts}
-          </Select>
+            items={render_select_items(credentials)}
+            onChange={onChange}
+          />
           <Layout>
             <NewIcon
               value={['up']}
@@ -107,9 +104,9 @@ const ScpMethodPart = ({
         <Select
           name={prefix + 'scp_report_format'}
           value={scpReportFormat}
-          onChange={onChange}>
-          {scp_report_format_opts}
-        </Select>
+          items={render_select_items(reportFormats)}
+          onChange={onChange}
+        />
       </FormGroup>
     </Layout>
   );
