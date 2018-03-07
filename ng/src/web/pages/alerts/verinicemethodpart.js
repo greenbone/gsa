@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential.js';
+
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
@@ -39,6 +41,8 @@ import TextField from '../../components/form/textfield.js';
 
 import NewIcon from '../../components/icon/newicon.js';
 
+const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+
 const VeriniceMethodPart = ({
   prefix,
   veriniceServerUrl,
@@ -51,6 +55,8 @@ const VeriniceMethodPart = ({
   onNewCredentialClick,
 }) => {
   reportFormats = reportFormats.filter(format => format.extension === 'vna');
+  credentials = credentials.filter(
+    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
   return (
     <Layout
       flex="column"
@@ -78,7 +84,7 @@ const VeriniceMethodPart = ({
           <Layout flex box>
             <NewIcon
               title={_('Create a credential')}
-              value={['up']}
+              value={VERINICE_CREDENTIAL_TYPES}
               onClick={onNewCredentialClick}
           />
           </Layout>
