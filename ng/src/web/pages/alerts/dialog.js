@@ -285,12 +285,14 @@ class AlertDialog extends React.Component {
       title = _('New Alert'),
       visible = true,
       report_formats,
+      method_data_scp_credential,
       onClose,
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
       onNewTippingPointCredentialClick,
       onSave,
+      onScpCredentialChange,
       ...props
     } = this.props;
 
@@ -356,16 +358,22 @@ class AlertDialog extends React.Component {
         data[key] = value;
       }
     }
+
+    const controlledValues = {
+      method_data_scp_credential,
+    };
+
     return (
       <SaveDialog
         visible={visible}
         title={title}
+        defaultValues={data}
+        values={controlledValues}
         onClose={onClose}
         onSave={onSave}
-        defaultValues={data}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
           return (
@@ -700,6 +708,7 @@ AlertDialog.propTypes = {
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,
   onNewVeriniceCredentialClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onScpCredentialChange: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(AlertDialog);
