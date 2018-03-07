@@ -125,10 +125,10 @@ class CredentialsDialog extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={{...DEFAULTS, ...credential}}
+        defaultValues={{...DEFAULTS, ...credential}}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
           return (
