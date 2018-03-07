@@ -154,7 +154,7 @@ class AlertComponent extends React.Component {
 
     this.setState({
       credentialDialogVisible: true,
-      title: _('Create new Credential'),
+      credentialDialogTitle: _('New Credential'),
       credentialTypes: types,
     });
   }
@@ -484,6 +484,7 @@ class AlertComponent extends React.Component {
     const {
       alertDialogVisible,
       credentialDialogVisible,
+      credentialDialogTitle,
       credentialTypes,
       title,
       id,
@@ -653,7 +654,7 @@ class AlertComponent extends React.Component {
             }
             {credentialDialogVisible &&
               <CredentialsDialog
-                title={title}
+                title={credentialDialogTitle}
                 types={credentialTypes}
                 onClose={this.closeCredentialDialog}
                 onSave={this.handleCreateCredential}
