@@ -632,7 +632,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/targets/component.js
      ${NG_SRC_DIR}/src/web/pages/targets/details.js
      ${NG_SRC_DIR}/src/web/pages/targets/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/targets/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/targets/dialog.js
      ${NG_SRC_DIR}/src/web/pages/targets/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/targets/listpage.js
