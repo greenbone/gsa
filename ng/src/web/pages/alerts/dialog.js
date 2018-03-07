@@ -286,6 +286,7 @@ class AlertDialog extends React.Component {
       visible = true,
       report_formats,
       method_data_scp_credential,
+      method_data_smb_credential,
       onClose,
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
@@ -293,6 +294,7 @@ class AlertDialog extends React.Component {
       onNewTippingPointCredentialClick,
       onSave,
       onScpCredentialChange,
+      onSmbCredentialChange,
       ...props
     } = this.props;
 
@@ -361,6 +363,7 @@ class AlertDialog extends React.Component {
 
     const controlledValues = {
       method_data_scp_credential,
+      method_data_smb_credential,
     };
 
     return (
@@ -578,6 +581,7 @@ class AlertDialog extends React.Component {
                   smbReportFormat={values.method_data_smb_report_format}
                   onNewCredentialClick={onNewSmbCredentialClick}
                   onChange={onValueChange}
+                  onCredentialChange={onSmbCredentialChange}
                 />
               }
 
@@ -710,6 +714,7 @@ AlertDialog.propTypes = {
   onNewVeriniceCredentialClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onScpCredentialChange: PropTypes.func.isRequired,
+  onSmbCredentialChange: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(AlertDialog);
