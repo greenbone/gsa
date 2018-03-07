@@ -56,8 +56,8 @@ const ScpMethodPart = ({
   return (
     <Layout
       flex="column"
-      box
-      grow="1">
+      grow="1"
+    >
       <FormGroup title={_('Credential')}>
         <Divider>
           <Select
@@ -70,7 +70,8 @@ const ScpMethodPart = ({
             <NewIcon
               value={['up']}
               title={_('Create a credential')}
-              onClick={onNewCredentialClick}/>
+              onClick={onNewCredentialClick}
+            />
           </Layout>
         </Divider>
       </FormGroup>
@@ -80,24 +81,28 @@ const ScpMethodPart = ({
           grow="1"
           name={prefix + 'scp_host'}
           value={scpHost}
+          maxLength="256"
           onChange={onChange}
-          maxLength="256"/>
+        />
       </FormGroup>
 
       <FormGroup title={_('Known Hosts')}>
         <TextArea
-          rows="3" cols="50"
+          grow="1"
+          rows="3"
+          cols="50"
           name={prefix + 'scp_known_hosts'}
           value={scpKnownHosts}
           onChange={onChange}
-          grow="1"/>
+        />
       </FormGroup>
 
       <FormGroup title={_('Path')}>
         <TextField
           name={prefix + 'scp_path'}
           value={scpPath}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Report')}>
