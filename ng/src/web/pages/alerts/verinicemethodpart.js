@@ -47,6 +47,7 @@ const VeriniceMethodPart = ({
   reportFormats,
   credentials,
   onChange,
+  onCredentialChange,
   onNewCredentialClick,
 }) => {
   reportFormats = reportFormats.filter(format => format.extension === 'vna');
@@ -72,7 +73,7 @@ const VeriniceMethodPart = ({
             name={prefix + 'verinice_server_credential'}
             items={render_select_items(credentials)}
             value={veriniceServerCredential}
-            onChange={onChange}
+            onChange={onCredentialChange}
           />
           <Layout flex box>
             <NewIcon
@@ -105,6 +106,7 @@ VeriniceMethodPart.propTypes = {
   veriniceServerReportFormat: PropTypes.id,
   veriniceServerUrl: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
