@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {classes, is_defined, map, select_save_id} from 'gmp/utils';
+import {is_defined, map, select_save_id} from 'gmp/utils';
 
 import {
   NO_VALUE,
@@ -380,9 +380,8 @@ const TaskDialog = ({
             <Layout
               flex="column"
               offset="2"
-              className={classes('offset-container',
-                state.in_assets === YES_VALUE ? '' : 'disabled')}
-            >
+              className={'offset-container ' +
+                state.in_assets === YES_VALUE ? '' : 'disabled'}>
               <FormGroup title={_('Apply Overrides')}>
                 <YesNoRadio
                   name="apply_overrides"
