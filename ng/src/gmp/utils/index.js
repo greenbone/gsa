@@ -21,7 +21,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_array, is_string, is_number} from './identity';
 
 export * from './identity';
 export * from './id';
@@ -30,18 +29,5 @@ export * from './event';
 export * from './string';
 export * from './calc';
 export * from './object';
-
-export function classes(...args) {
-  const css = [];
-  for (const arg of args) {
-    if (is_array(arg)) {
-      css.push(classes(...arg));
-    }
-    else if (is_string(arg) || is_number(arg)) {
-      css.push(arg);
-    }
-  }
-  return css.join(' ');
-}
 
 // vim: set ts=2 sw=2 tw=80:
