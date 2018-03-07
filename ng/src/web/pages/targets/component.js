@@ -28,6 +28,7 @@ import _ from 'gmp/locale.js';
 import {first, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp';
 import {UNSET_VALUE} from '../../utils/render.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
@@ -141,7 +142,7 @@ class TargetComponent extends React.Component {
   }
 
   loadData() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.portlists.getAll().then(response => {
       const {data: port_lists} = response;
@@ -168,7 +169,7 @@ class TargetComponent extends React.Component {
   }
 
   handleCreateCredential(data) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     return gmp.credential.create(data).then(response => {
       const credential = response.data;
       const {credentials = []} = this;
@@ -182,7 +183,7 @@ class TargetComponent extends React.Component {
   }
 
   handleCreatePortList(data) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     return gmp.portlist.create(data).then(response => {
       const portlist = response.data;
       const {port_lists = []} = this;
@@ -319,6 +320,7 @@ class TargetComponent extends React.Component {
 
 TargetComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -331,10 +333,6 @@ TargetComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-TargetComponent.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default TargetComponent;
+export default withGmp(TargetComponent);
 
 // vim: set ts=2 sw=2 tw=80:
