@@ -612,9 +612,9 @@ TaskDialog.propTypes = {
   title: PropTypes.string,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  onNewAlertClick: PropTypes.func,
-  onNewScheduleClick: PropTypes.func,
-  onNewTargetClick: PropTypes.func,
+  onNewAlertClick: PropTypes.func.isRequired,
+  onNewScheduleClick: PropTypes.func.isRequired,
+  onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
