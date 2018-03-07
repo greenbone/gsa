@@ -233,55 +233,63 @@ const TargetDialog = ({
               <TextField
                 name="name"
                 grow="1"
-                value={state.name}
                 size="30"
+                maxLength="80"
+                value={state.name}
                 onChange={onValueChange}
-                maxLength="80"/>
+              />
             </FormGroup>
 
             <FormGroup
               title={_('Comment')}
-              flex="column">
+              flex="column"
+            >
               <TextField
                 name="comment"
-                value={state.comment}
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                value={state.comment}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup
               title={_('Hosts')}
-              flex="column">
+              flex="column"
+            >
               <Divider flex="column">
                 <Divider>
                   <Radio
-                    value="manual"
                     title={_('Manual')}
                     name="target_source"
                     disabled={state.in_use}
+                    checked={state.target_source === 'manual'}
+                    value="manual"
                     onChange={onValueChange}
-                    checked={state.target_source === 'manual'}/>
+                  />
                   <TextField
                     grow="1"
                     disabled={state.in_use || state.target_source !== 'manual'}
-                    value={state.hosts}
                     name="hosts"
-                    onChange={onValueChange}/>
+                    value={state.hosts}
+                    onChange={onValueChange}
+                  />
                 </Divider>
 
                 <Divider>
                   <Radio
                     title={_('From file')}
                     name="target_source"
-                    value="file"
                     disabled={state.in_use}
+                    checked={state.target_source === 'file'}
+                    value="file"
                     onChange={onValueChange}
-                    checked={state.target_source === 'file'}/>
+                  />
                   <FileField
                     name="file"
                     disabled={state.in_use}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
                 </Divider>
               </Divider>
 
@@ -291,10 +299,11 @@ const TargetDialog = ({
                     title={_('From host assets ({{count}} hosts)',
                       {count: state.hosts_count})}
                     name="target_source"
-                    value="asset_hosts"
                     disabled={state.in_use}
+                    checked={state.target_source === 'asset_hosts'}
+                    value="asset_hosts"
                     onChange={onValueChange}
-                    checked={state.target_source === 'asset_hosts'}/>
+                  />
                 </Layout>
               }
 
@@ -302,37 +311,42 @@ const TargetDialog = ({
 
             <FormGroup
               title={_('Exclude Hosts')}
-              flex="column">
+              flex="column"
+            >
               <Divider flex="column">
                 <Divider>
                   <Radio
-                    value="manual"
                     title={_('Manual')}
                     name="target_exclude_source"
                     disabled={state.in_use}
+                    checked={state.target_exclude_source === 'manual'}
+                    value="manual"
                     onChange={onValueChange}
-                    checked={state.target_exclude_source === 'manual'}/>
+                  />
                   <TextField
                     grow="1"
                     disabled=
                       {state.in_use || state.target_exclude_source !== 'manual'}
-                    value={exclude_hosts}
                     name="exclude_hosts"
-                    onChange={onValueChange}/>
+                    value={exclude_hosts}
+                    onChange={onValueChange}
+                  />
                 </Divider>
 
                 <Divider>
                   <Radio
                     title={_('From file')}
                     name="target_exclude_source"
-                    value="file"
                     disabled={state.in_use}
+                    checked={state.target_exclude_source === 'file'}
+                    value="file"
                     onChange={onValueChange}
-                    checked={state.target_exclude_source === 'file'}/>
+                  />
                   <FileField
                     name="exclude_file"
                     disabled={state.in_use}
-                    onChange={onValueChange}/>
+                    onChange={onValueChange}
+                  />
                 </Divider>
               </Divider>
             </FormGroup>
@@ -340,34 +354,37 @@ const TargetDialog = ({
             <FormGroup title={_('Reverse Lookup Only')}>
               <YesNoRadio
                 name="reverse_lookup_only"
-                value={state.reverse_lookup_only}
                 disabled={state.in_use}
-                onChange={onValueChange}/>
+                value={state.reverse_lookup_only}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Reverse Lookup Unify')}>
               <YesNoRadio
                 name="reverse_lookup_unify"
-                value={state.reverse_lookup_unify}
                 disabled={state.in_use}
-                onChange={onValueChange}/>
+                value={state.reverse_lookup_unify}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             {capabilities.mayOp('get_port_lists') &&
               <FormGroup title={_('Port List')}>
                 <Divider>
                   <Select
-                    onChange={onValueChange}
                     name="port_list_id"
                     disabled={state.in_use}
+                    items={render_select_items(port_lists)}
                     value={state.port_list_id}
-                    items={render_select_items(state.port_lists)}
+                    onChange={onValueChange}
                   />
                   {!state.in_use &&
                     <Layout box flex>
                       <NewIcon
                         title={_('Create a new port list')}
-                        onClick={onNewPortListClick}/>
+                        onClick={onNewPortListClick}
+                      />
                     </Layout>
                   }
                 </Divider>
@@ -377,9 +394,9 @@ const TargetDialog = ({
             <FormGroup title={_('Alive Test')}>
               <Select
                 name="alive_tests"
-                onChange={onValueChange}
-                value={state.alive_tests}
                 items={ALIVE_TESTS_ITEMS}
+                value={state.alive_tests}
+                onChange={onValueChange}
               />
             </FormGroup>
 
@@ -395,11 +412,10 @@ const TargetDialog = ({
                   <Select
                     box
                     name="ssh_credential_id"
-                    onChange={onValueChange}
                     disabled={state.in_use}
+                    items={render_select_items(ssh_credentials, UNSET_VALUE)}
                     value={state.ssh_credential_id}
-                    items=
-                      {render_select_items(ssh_credentials, UNSET_VALUE)}
+                    onChange={onValueChange}
                   />
                   <Layout>
                     {_('on port')}
@@ -407,15 +423,17 @@ const TargetDialog = ({
                   <TextField
                     size="6"
                     name="port"
-                    value={state.port}
                     disabled={state.in_use}
-                    onChange={onValueChange}/>
+                    value={state.port}
+                    onChange={onValueChange}
+                  />
                   {!state.in_use &&
                     <Layout>
                       <NewIcon
+                        title={_('Create a new credential')}
                         value={NEW_SSH}
                         onClick={onNewCredentialsClick}
-                        title={_('Create a new credential')}/>
+                      />
                     </Layout>
                   }
                 </Divider>
@@ -426,18 +444,19 @@ const TargetDialog = ({
               <FormGroup title={_('SMB')}>
                 <Divider>
                   <Select
-                    onChange={onValueChange}
                     name="smb_credential_id"
                     disabled={state.in_use}
-                    value={state.smb_credential_id}
                     items={render_select_items(up_credentials, UNSET_VALUE)}
+                    value={state.smb_credential_id}
+                    onChange={onValueChange}
                   />
                   {!in_use &&
                     <Layout box flex>
                       <NewIcon
+                        title={_('Create a new credential')}
                         value={NEW_SMB}
                         onClick={onNewCredentialsClick}
-                        title={_('Create a new credential')}/>
+                      />
                     </Layout>
                   }
                 </Divider>
@@ -449,17 +468,18 @@ const TargetDialog = ({
                 <Divider>
                   <Select
                     disabled={state.in_use}
-                    onChange={onValueChange}
                     name="esxi_credential_id"
-                    value={state.esxi_credential_id}
                     items={render_select_items(up_credentials, UNSET_VALUE)}
+                    value={state.esxi_credential_id}
+                    onChange={onValueChange}
                   />
                   {!state.in_use &&
                     <Layout box flex>
                       <NewIcon
+                        title={_('Create a new credential')}
                         value={NEW_ESXI}
                         onClick={onNewCredentialsClick}
-                        title={_('Create a new credential')}/>
+                      />
                     </Layout>
                   }
                 </Divider>
@@ -471,18 +491,18 @@ const TargetDialog = ({
                 <Divider>
                   <Select
                     disabled={state.in_use}
-                    onChange={onValueChange}
                     name="snmp_credential_id"
+                    items={render_select_items(snmp_credentials, UNSET_VALUE)}
                     value={state.snmp_credential_id}
-                    items=
-                      {render_select_items(snmp_credentials, UNSET_VALUE)}
+                    onChange={onValueChange}
                   />
                   {!in_use &&
                     <Layout box flex>
                       <NewIcon
+                        title={_('Create a new credential')}
                         value={NEW_SNMP}
                         onClick={onNewCredentialsClick}
-                        title={_('Create a new credential')}/>
+                      />
                     </Layout>
                   }
                 </Divider>
