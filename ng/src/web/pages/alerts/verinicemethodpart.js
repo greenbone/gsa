@@ -30,7 +30,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -49,9 +49,7 @@ const VeriniceMethodPart = ({
   onChange,
   onNewCredentialClick,
 }) => {
-  const verinice_credential_opts = render_options(credentials);
-  const verinice_report_format_opts = render_options(
-    reportFormats.filter(format => format.extension === 'vna'));
+  reportFormats = reportFormats.filter(format => format.extension === 'vna');
   return (
     <Layout
       flex="column"
@@ -72,11 +70,10 @@ const VeriniceMethodPart = ({
         <Divider>
           <Select
             name={prefix + 'verinice_server_credential'}
+            items={render_select_items(credentials)}
             value={veriniceServerCredential}
             onChange={onChange}
-          >
-            {verinice_credential_opts}
-          </Select>
+          />
           <Layout flex box>
             <NewIcon
               title={_('Create a credential')}
@@ -90,11 +87,10 @@ const VeriniceMethodPart = ({
       <FormGroup title={_('verinice.PRO Report')}>
         <Select
           name={prefix + 'verinice_server_report_format'}
+          items={render_select_items(reportFormats)}
           value={veriniceServerReportFormat}
           onChange={onChange}
-        >
-          {verinice_report_format_opts}
-        </Select>
+        />
       </FormGroup>
 
     </Layout>
