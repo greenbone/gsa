@@ -406,7 +406,6 @@ class AlertComponent extends React.Component {
             DEFAULT_NOTICE_ATTACH_FORMAT),
           method_data_start_task_task: select_save_id(tasks),
           report_formats,
-          method_data_scp_credential: select_save_id(credentials),
           method_data_scp_report_format: report_format_id,
           method_data_send_report_format: report_format_id,
           method_data_verinice_server_report_format: select_verinice_report_id(
