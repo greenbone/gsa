@@ -36,49 +36,52 @@ import TextField from '../../components/form/textfield.js';
 import FileField from '../../components/form/filefield.js';
 
 const SourcefireMethodPart = ({
-    prefix,
-    defenseCenterIp,
-    defenseCenterPort,
-    onChange,
-  }) => {
+  prefix,
+  defenseCenterIp,
+  defenseCenterPort,
+  onChange,
+}) => {
   return (
     <Layout
       flex="column"
-      box
-      grow="1">
+      grow="1"
+    >
       <FormGroup title={_('Defense Center IP')}>
         <TextField
           size="30"
           maxLength="40"
           name={prefix + 'defense_center_ip'}
           value={defenseCenterIp}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Defense Center Port')}>
         <Spinner
           name={prefix + 'defense_center_port'}
           value={defenseCenterPort}
-          onChange={onChange}
           type="int"
           max="65535"
-          min="0"/>
+          min="0"
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('PKCS12 file')}>
         <FileField
           name={prefix + 'pkcs12'}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
     </Layout>
   );
 };
 
 SourcefireMethodPart.propTypes = {
-  prefix: PropTypes.string,
   defenseCenterIp: PropTypes.string.isRequired,
   defenseCenterPort: PropTypes.numberOrNumberString.isRequired,
-  onChange: PropTypes.func,
+  prefix: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default withPrefix(SourcefireMethodPart);
