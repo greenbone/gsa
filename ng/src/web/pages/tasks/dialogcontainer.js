@@ -32,6 +32,7 @@ import logger from 'gmp/log.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp';
 
 import ScheduleDialog from '../schedules/dialog.js';
 import TargetDialogContainer from '../targets/dialogcontainer.js';
@@ -81,7 +82,7 @@ class TaskDialogContainer extends React.Component {
 
   handleCreateSchedule(data) {
     const {schedules} = this;
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     return gmp.schedule.create(data).then(response => {
       const schedule = response.data;
 
@@ -98,7 +99,7 @@ class TaskDialogContainer extends React.Component {
     const {data} = resp;
     const {alert_ids} = this.state;
 
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     gmp.alerts.getAll().then(response => {
       const {data: alerts} = response;
 
@@ -119,7 +120,7 @@ class TaskDialogContainer extends React.Component {
   }
 
   openScheduleDialog() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     const {timezone} = gmp.globals;
     const now = moment().tz(timezone);
 
@@ -199,13 +200,10 @@ class TaskDialogContainer extends React.Component {
 TaskDialogContainer.propTypes = {
   alert_ids: PropTypes.array,
   alerts: PropTypes.array,
+  gmp: PropTypes.gmp.isRequired,
   onSave: PropTypes.func,
 };
 
-TaskDialogContainer.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default TaskDialogContainer;
+export default withGmp(TaskDialogContainer);
 
 // vim: set ts=2 sw=2 tw=80:
