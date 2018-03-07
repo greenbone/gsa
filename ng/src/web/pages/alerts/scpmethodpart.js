@@ -26,6 +26,11 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {
+  SSH_CREDENTIAL_TYPES,
+  ssh_credential_filter,
+} from 'gmp/models/credential.js';
+
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
@@ -43,7 +48,7 @@ import NewIcon from '../../components/icon/newicon.js';
 
 const ScpMethodPart = ({
   prefix,
-  credentials,
+  credentials = [],
   reportFormats,
   scpCredential,
   scpHost,
@@ -54,6 +59,7 @@ const ScpMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  credentials = credentials.filter(ssh_credential_filter);
   return (
     <Layout
       flex="column"
@@ -69,7 +75,7 @@ const ScpMethodPart = ({
           />
           <Layout>
             <NewIcon
-              value={['up']}
+              value={SSH_CREDENTIAL_TYPES}
               title={_('Create a credential')}
               onClick={onNewCredentialClick}
             />
