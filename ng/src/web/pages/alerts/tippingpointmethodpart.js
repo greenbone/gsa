@@ -51,6 +51,7 @@ const TippingPointMethodPart = ({
   tpSmsHostname,
   tpSmsTlsWorkaround,
   onChange,
+  onCredentialChange,
   onNewCredentialClick,
 }) => {
   credentials = credentials.filter(
@@ -75,7 +76,7 @@ const TippingPointMethodPart = ({
             items={render_select_items(credentials)}
             name={prefix + 'tp_sms_credential'}
             value={tpSmsCredential}
-            onChange={onChange}
+            onChange={onCredentialChange}
           />
           <Layout flex box>
             <NewIcon
@@ -110,6 +111,7 @@ TippingPointMethodPart.propTypes = {
   tpSmsHostname: PropTypes.string,
   tpSmsTlsWorkaround: PropTypes.yesno.isRequired,
   onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
