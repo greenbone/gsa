@@ -287,6 +287,7 @@ class AlertDialog extends React.Component {
       report_formats,
       method_data_scp_credential,
       method_data_smb_credential,
+      method_data_tp_sms_credential,
       method_data_verinice_server_credential,
       onClose,
       onNewScpCredentialClick,
@@ -296,6 +297,7 @@ class AlertDialog extends React.Component {
       onSave,
       onScpCredentialChange,
       onSmbCredentialChange,
+      onTippingPointCredentialChange,
       onVerinceCredentialChange,
       ...props
     } = this.props;
@@ -366,6 +368,7 @@ class AlertDialog extends React.Component {
     const controlledValues = {
       method_data_scp_credential,
       method_data_smb_credential,
+      method_data_tp_sms_credential,
       method_data_verinice_server_credential,
     };
 
@@ -632,6 +635,7 @@ class AlertDialog extends React.Component {
                   tpSmsTlsWorkaround={values.method_data_tp_sms_tls_workaround}
                   onNewCredentialClick={onNewTippingPointCredentialClick}
                   onChange={onValueChange}
+                  onCredentialChange={onTippingPointCredentialChange}
                 />
               }
 
@@ -719,6 +723,7 @@ AlertDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
   onScpCredentialChange: PropTypes.func.isRequired,
   onSmbCredentialChange: PropTypes.func.isRequired,
+  onTippingPointCredentialChange: PropTypes.func.isRequired,
   onVerinceCredentialChange: PropTypes.func.isRequired,
 };
 
