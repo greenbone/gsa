@@ -70,7 +70,7 @@ class ReportCommand extends EntityCommand {
       report_id: id,
       report_format_id,
       filter: is_defined(filter) ? filter.all() : ALL_FILTER,
-    }, {transform: DefaultTransform});
+    }, {transform: DefaultTransform, responseType: 'arraybuffer'});
   }
 
   addAssets({id}, {filter = ''}) {
