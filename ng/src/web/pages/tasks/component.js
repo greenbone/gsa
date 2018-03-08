@@ -44,6 +44,9 @@ import {
 } from 'gmp/models/scanner.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
+import withGmp from '../../utils/withGmp';
+import compose from '../../utils/compose';
 import {UNSET_VALUE} from '../../utils/render';
 
 import Wrapper from '../../components/layout/wrapper.js';
@@ -91,7 +94,7 @@ class TaskComponent extends React.Component {
       taskWizardVisible: false,
     };
 
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     this.cmd = gmp.task;
 
@@ -135,8 +138,7 @@ class TaskComponent extends React.Component {
   }
 
   handleReportImport(data) {
-    const {gmp} = this.context;
-    const {onReportImported, onReportImportError} = this.props;
+    const {onReportImported, onReportImportError, gmp} = this.props;
 
     return gmp.report.import(data).then(onReportImported, onReportImportError);
   }
@@ -160,24 +162,25 @@ class TaskComponent extends React.Component {
   }
 
   handleSaveTaskWizard(data) {
-    const {gmp} = this.context;
-    const {onTaskWizardSaved, onTaskWizardError} = this.props;
+    const {onTaskWizardSaved, onTaskWizardError, gmp} = this.props;
 
     return gmp.wizard.runQuickFirstScan(data).then(onTaskWizardSaved,
       onTaskWizardError);
   }
 
   handleSaveAdvancedTaskWizard(data) {
-    const {gmp} = this.context;
-    const {onAdvancedTaskWizardSaved, onAdvancedTaskWizardError} = this.props;
+    const {
+      gmp,
+      onAdvancedTaskWizardSaved,
+      onAdvancedTaskWizardError,
+    } = this.props;
 
     return gmp.wizard.runQuickTask(data).then(onAdvancedTaskWizardSaved,
       onAdvancedTaskWizardError);
   }
 
   handleSaveModifyTaskWizard(data) {
-    const {gmp} = this.context;
-    const {onModifyTaskWizardSaved, onModifyTaskWizardError} = this.props;
+    const {onModifyTaskWizardSaved, onModifyTaskWizardError, gmp} = this.props;
 
     return gmp.wizard.runModifyTask(data).then(onModifyTaskWizardSaved,
       onModifyTaskWizardError);
@@ -221,7 +224,7 @@ class TaskComponent extends React.Component {
   }
 
   openStandardTaskDialog(task) {
-    const {capabilities, gmp} = this.context;
+    const {capabilities, gmp} = this.props;
 
     if (task) {
       gmp.task.editTaskSettings(task).then(response => {
@@ -350,7 +353,7 @@ class TaskComponent extends React.Component {
   }
 
   openTaskWizard() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.wizard.task().then(response => {
       const settings = response.data;
@@ -373,7 +376,7 @@ class TaskComponent extends React.Component {
   }
 
   openAdvancedTaskWizard() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
@@ -421,7 +424,7 @@ class TaskComponent extends React.Component {
   }
 
   openModifyTaskWizard() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.wizard.modifyTask().then(response => {
       const settings = response.data;
@@ -655,7 +658,9 @@ class TaskComponent extends React.Component {
 }
 
 TaskComponent.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
   onAdvancedTaskWizardSaved: PropTypes.func,
   onCloneError: PropTypes.func,
@@ -686,9 +691,7 @@ TaskComponent.propTypes = {
   onTaskWizardSaved: PropTypes.func,
 };
 
-TaskComponent.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default TaskComponent;
+export default compose(
+  withGmp,
+  withCapabilities,
+)(TaskComponent);

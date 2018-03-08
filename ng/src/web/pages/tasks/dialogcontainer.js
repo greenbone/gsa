@@ -32,10 +32,11 @@ import logger from 'gmp/log.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp';
 
 import ScheduleDialog from '../schedules/dialog.js';
-import TargetDialogContainer from '../targets/dialogcontainer.js';
 import AlertComponent from '../alerts/component.js';
+import TargetComponent from '../targets/component';
 
 import TaskDialog from './dialog.js';
 
@@ -46,42 +47,34 @@ class TaskDialogContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const {alerts, alert_ids} = this.props;
+    const {
+      alerts,
+      alert_ids,
+      targets,
+      target_id,
+    } = this.props;
 
     this.state = {
       scheduleDialogVisible: false,
-      targetDialogVisible: false,
       alerts,
       alert_ids,
+      targets,
+      target_id,
     };
 
-    this.targets = [];
-
     this.handleAlertCreated = this.handleAlertCreated.bind(this);
+    this.handleAlertsChange = this.handleAlertsChange.bind(this);
+    this.handleTargetCreated = this.handleTargetCreated.bind(this);
     this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
-    this.handleCreateTarget = this.handleCreateTarget.bind(this);
+    this.handleTargetChange = this.handleTargetChange.bind(this);
+
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
     this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
-    this.openTargetDialog = this.openTargetDialog.bind(this);
-    this.closeTargetDialog = this.closeTargetDialog.bind(this);
-  }
-
-  handleCreateTarget(target) {
-    const {targets} = this;
-
-    targets.push(target);
-
-    log.debug('adding target to task dialog', target, targets);
-
-    this.setState({
-      targets,
-      target_id: target.id,
-    });
   }
 
   handleCreateSchedule(data) {
     const {schedules} = this;
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     return gmp.schedule.create(data).then(response => {
       const schedule = response.data;
 
@@ -98,7 +91,7 @@ class TaskDialogContainer extends React.Component {
     const {data} = resp;
     const {alert_ids} = this.state;
 
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     gmp.alerts.getAll().then(response => {
       const {data: alerts} = response;
 
@@ -108,18 +101,21 @@ class TaskDialogContainer extends React.Component {
     });
   }
 
-  openTargetDialog() {
-    this.setState({
-      targetDialogVisible: true,
+  handleTargetCreated(resp) {
+    const {data} = resp;
+    const {gmp} = this.props;
+
+    gmp.targets.getAll().then(reponse => {
+      const {data: alltargets} = reponse;
+
+      log.debug('adding target to task dialog', alltargets, data.id);
+
+      this.setState({targets: alltargets, target_id: data.id});
     });
   }
 
-  closeTargetDialog() {
-    this.setState({targetDialogVisible: false});
-  }
-
   openScheduleDialog() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     const {timezone} = gmp.globals;
     const now = moment().tz(timezone);
 
@@ -136,6 +132,14 @@ class TaskDialogContainer extends React.Component {
     this.setState({scheduleDialogVisible: false});
   }
 
+  handleTargetChange(target_id) {
+    this.setState({target_id});
+  }
+
+  handleAlertsChange(alert_ids) {
+    this.setState({alert_ids});
+  }
+
   render() {
     const {onSave, ...props} = this.props;
     const {
@@ -147,29 +151,39 @@ class TaskDialogContainer extends React.Component {
       scheduleDialogVisible,
       schedules = [],
       target_id,
-      targetDialogVisible,
       targets,
       timezone,
     } = this.state;
     return (
       <Layout>
-        <AlertComponent
-          onCreated={this.handleAlertCreated}
+        <TargetComponent
+          onCreated={this.handleTargetCreated}
         >
-          {({
-            create: createalert,
-          }) => (
-            <TaskDialog
-              {...props}
-              alerts={alerts}
-              alert_ids={alert_ids}
-              onNewAlertClick={createalert}
-              onNewTargetClick={this.openTargetDialog}
-              onNewScheduleClick={this.openScheduleDialog}
-              onSave={onSave}
-            />
+          {({create: createtarget}) => (
+            <AlertComponent
+              onCreated={this.handleAlertCreated}
+            >
+              {({
+                create: createalert,
+              }) => (
+                <TaskDialog
+                  {...props}
+                  alerts={alerts}
+                  alert_ids={alert_ids}
+                  target_id={target_id}
+                  targets={targets}
+                  onNewAlertClick={createalert}
+                  onNewTargetClick={createtarget}
+                  onNewScheduleClick={this.openScheduleDialog}
+                  onSave={onSave}
+                  onTargetChange={this.handleTargetChange}
+                  onAlertsChange={this.handleAlertsChange}
+                />
+              )}
+            </AlertComponent>
           )}
-        </AlertComponent>
+        </TargetComponent>
+
         {scheduleDialogVisible &&
           <ScheduleDialog
             schedules={schedules}
@@ -177,18 +191,9 @@ class TaskDialogContainer extends React.Component {
             minute={minute}
             hour={hour}
             date={date}
-            title={_('Create new Schedule')}
+            title={_('New Schedule')}
             onClose={this.closeScheduleDialog}
             onSave={this.handleCreateSchedule}
-          />
-        }
-        {targetDialogVisible &&
-          <TargetDialogContainer
-            targets={targets}
-            target_id={target_id}
-            title={_('Create new Target')}
-            onClose={this.closeTargetDialog}
-            onSave={this.handleCreateTarget}
           />
         }
       </Layout>
@@ -199,13 +204,12 @@ class TaskDialogContainer extends React.Component {
 TaskDialogContainer.propTypes = {
   alert_ids: PropTypes.array,
   alerts: PropTypes.array,
+  gmp: PropTypes.gmp.isRequired,
+  target_id: PropTypes.idOrZero,
+  targets: PropTypes.array,
   onSave: PropTypes.func,
 };
 
-TaskDialogContainer.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default TaskDialogContainer;
+export default withGmp(TaskDialogContainer);
 
 // vim: set ts=2 sw=2 tw=80:

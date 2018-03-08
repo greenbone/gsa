@@ -49,6 +49,7 @@ import {
 } from 'gmp/models/scanconfig.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -172,46 +173,49 @@ ScannerSelect.propTypes = {
 };
 
 const TaskDialog = ({
-    add_tag,
-    alert_ids,
-    alerts,
-    alterable,
-    apply_overrides,
-    auto_delete,
-    auto_delete_data,
-    comment,
-    config_id,
-    hosts_ordering,
-    in_assets,
-    max_checks,
-    max_hosts,
-    min_qod,
-    name,
-    scan_configs = {
-      [OPENVAS_SCAN_CONFIG_TYPE]: [],
-      [OSP_SCAN_CONFIG_TYPE]: [],
-    },
-    scanner_id,
-    scanners,
-    schedule_id,
-    schedule_periods,
-    schedules,
-    source_iface,
-    tag_name,
-    tags,
-    tag_value,
-    target_id,
-    targets,
-    task,
-    title = _('New Task'),
-    visible = true,
-    onClose,
-    onNewAlertClick,
-    onNewScheduleClick,
-    onNewTargetClick,
-    onSave,
-    ...data
-  }, {capabilities}) => {
+  add_tag,
+  alert_ids,
+  alerts,
+  alterable,
+  apply_overrides,
+  auto_delete,
+  auto_delete_data,
+  capabilities,
+  comment,
+  config_id,
+  hosts_ordering,
+  in_assets,
+  max_checks,
+  max_hosts,
+  min_qod,
+  name,
+  scan_configs = {
+    [OPENVAS_SCAN_CONFIG_TYPE]: [],
+    [OSP_SCAN_CONFIG_TYPE]: [],
+  },
+  scanner_id,
+  scanners,
+  schedule_id,
+  schedule_periods,
+  schedules,
+  source_iface,
+  tag_name,
+  tags,
+  tag_value,
+  target_id,
+  targets,
+  task,
+  title = _('New Task'),
+  visible = true,
+  onAlertsChange,
+  onClose,
+  onNewAlertClick,
+  onNewScheduleClick,
+  onNewTargetClick,
+  onSave,
+  onTargetChange,
+  ...data
+}) => {
   const scanner = get_scanner(scanners, scanner_id);
 
   const is_osp_scanner = is_defined(scanner) &&
@@ -251,9 +255,14 @@ const TaskDialog = ({
 
   const has_tags = tag_items.length > 0;
 
-  const initialData = {
+  const uncontrolledData = {
     ...DEFAULTS,
     ...data,
+  };
+
+  const controlledData = {
+    target_id,
+    alert_ids,
   };
 
   return (
@@ -262,10 +271,11 @@ const TaskDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={initialData}
+      defaultValues={uncontrolledData}
+      values={controlledData}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -275,19 +285,22 @@ const TaskDialog = ({
               <TextField
                 name="name"
                 grow="1"
-                value={state.name}
                 size="30"
+                maxLength="80"
+                value={state.name}
                 onChange={onValueChange}
-                maxLength="80"/>
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
               <TextField
                 name="comment"
-                value={state.comment}
                 grow="1"
-                size="30" maxLength="400"
-                onChange={onValueChange}/>
+                size="30"
+                maxLength="400"
+                value={state.comment}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Scan Targets')}>
@@ -295,15 +308,16 @@ const TaskDialog = ({
                 <Select
                   name="target_id"
                   disabled={!change_task}
-                  value={state.target_id}
                   items={target_items}
-                  onChange={onValueChange}
+                  value={state.target_id}
+                  onChange={onTargetChange}
                 />
                 {change_task &&
-                  <Layout flex box>
+                  <Layout flex>
                     <NewIcon
+                      title={_('Create a new target')}
                       onClick={onNewTargetClick}
-                      title={_('Create a new target')}/>
+                    />
                   </Layout>
                 }
               </Divider>
@@ -311,27 +325,28 @@ const TaskDialog = ({
 
             <FormGroup
               condition={capabilities.mayOp('get_alerts')}
-              title={_('Alerts')}>
+              title={_('Alerts')}
+            >
               <Divider>
                 <MultiSelect
                   name="alert_ids"
-                  multiple="multiple"
-                  id="alert_ids"
-                  value={state.alert_ids}
                   items={alert_items}
-                  onChange={onValueChange}
+                  value={state.alert_ids}
+                  onChange={onAlertsChange}
                 />
-                <Layout flex box>
+                <Layout flex>
                   <NewIcon
                     title={_('Create a new alert')}
-                    onClick={onNewAlertClick}/>
+                    onClick={onNewAlertClick}
+                  />
                 </Layout>
               </Divider>
             </FormGroup>
 
             <FormGroup
               condition={capabilities.mayOp('get_schedules')}
-              title={_('Schedule')}>
+              title={_('Schedule')}
+            >
               <Divider>
                 <Select
                   name="schedule_id"
@@ -344,12 +359,14 @@ const TaskDialog = ({
                   checked={state.schedule_periods === YES_VALUE}
                   checkedValue={YES_VALUE}
                   unCheckedValue={NO_VALUE}
+                  title={_('Once')}
                   onChange={onValueChange}
-                  title={_('Once')}/>
-                <Layout flex box>
+                />
+                <Layout flex>
                   <NewIcon
                     title={_('Create a new schedule')}
-                    onClick={onNewScheduleClick}/>
+                    onClick={onNewScheduleClick}
+                  />
                 </Layout>
               </Divider>
             </FormGroup>
@@ -357,49 +374,58 @@ const TaskDialog = ({
 
             <AddResultsToAssetsGroup
               inAssets={state.in_assets}
-              onChange={onValueChange}/>
+              onChange={onValueChange}
+            />
 
             <Layout
               flex="column"
               offset="2"
               className={classes('offset-container',
-                state.in_assets === YES_VALUE ? '' : 'disabled')}>
+                state.in_assets === YES_VALUE ? '' : 'disabled')}
+            >
               <FormGroup title={_('Apply Overrides')}>
                 <YesNoRadio
                   name="apply_overrides"
-                  value={state.apply_overrides}
                   disabled={state.in_assets !== YES_VALUE}
-                  onChange={onValueChange}/>
+                  value={state.apply_overrides}
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup
-                title={_('Min QoD')}>
+                title={_('Min QoD')}
+              >
                 <Spinner
                   name="min_qod"
-                  value={state.min_qod}
                   size="4"
-                  onChange={onValueChange}
                   disabled={state.in_assets !== YES_VALUE}
                   type="int"
-                  min="0" max="100"/>
+                  min="0"
+                  max="100"
+                  value={state.min_qod}
+                  onChange={onValueChange}
+                />
                 <Layout box>%</Layout>
               </FormGroup>
             </Layout>
 
             <FormGroup
               title={_('Alterable Task')}
-              condition={change_task}>
+              condition={change_task}
+            >
               <YesNoRadio
                 name="alterable"
-                value={state.alterable}
                 disabled={task && !task.isNew()}
-                onChange={onValueChange}/>
+                value={state.alterable}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <AutoDeleteReportsGroup
               autoDelete={state.auto_delete}
               autoDeleteData={state.auto_delete_data}
-              onChange={onValueChange}/>
+              onChange={onValueChange}
+            />
 
             <ScannerSelect
               scanConfigs={scan_configs}
@@ -412,35 +438,40 @@ const TaskDialog = ({
             {use_openvas_scan_config &&
               <Layout
                 offset="2"
-                className="offset-container">
+                className="offset-container"
+              >
                 <Layout
                   flex="column"
-                  grow="1">
+                  grow="1"
+                >
                   <FormGroup
                     titleSize="4"
-                    title={_('Scan Config')}>
+                    title={_('Scan Config')}
+                  >
                     <Select
                       name="config_id"
-                      value={openvas_config_id}
                       disabled={!change_task}
                       items={openvas_scan_config_items}
+                      value={openvas_config_id}
                       onChange={onValueChange}
                     />
                   </FormGroup>
                   <FormGroup
                     titleSize="4"
-                    title={_('Network Source Interface')}>
+                    title={_('Network Source Interface')}
+                  >
                     <TextField
                       name="source_iface"
                       value={state.source_iface}
-                      onChange={onValueChange}/>
+                      onChange={onValueChange}
+                    />
                   </FormGroup>
                   <FormGroup
                     titleSize="4"
-                    title={_('Order for target hosts')}>
+                    title={_('Order for target hosts')}
+                  >
                     <Select
                       name="hosts_ordering"
-                      value={state.hosts_ordering}
                       items={[{
                           value: 'sequential',
                           label: _('Sequential'),
@@ -452,29 +483,36 @@ const TaskDialog = ({
                           label: _('Reverse'),
                         },
                       ]}
+                      value={state.hosts_ordering}
                       onChange={onValueChange}
                      />
                   </FormGroup>
                   <FormGroup
                     titleSize="4"
-                    title={_('Maximum concurrently executed NVTs per host')}>
+                    title={_('Maximum concurrently executed NVTs per host')}
+                  >
                     <Spinner
                       name="max_checks"
-                      value={state.max_checks}
-                      min="0" size="10"
+                      size="10"
+                      min="0"
                       maxLength="10"
-                      onChange={onValueChange}/>
+                      value={state.max_checks}
+                      onChange={onValueChange}
+                    />
                   </FormGroup>
                   <FormGroup
                     titleSize="4"
-                    title={_('Maximum concurrently scanned hosts')}>
+                    title={_('Maximum concurrently scanned hosts')}
+                  >
                     <Spinner
                       name="max_hosts"
-                      value={state.max_hosts}
-                      type="int" min="0"
+                      type="int"
+                      min="0"
                       size="10"
                       maxLength="10"
-                      onChange={onValueChange}/>
+                      value={state.max_hosts}
+                      onChange={onValueChange}
+                    />
                   </FormGroup>
                 </Layout>
               </Layout>
@@ -482,16 +520,17 @@ const TaskDialog = ({
 
             {is_osp_scanner &&
               <Layout
-                float
                 offset="2"
-                className="offset-container">
+                className="offset-container"
+              >
                 <FormGroup
                   titleSize="4"
-                  title={_('Scan Config')}>
+                  title={_('Scan Config')}
+                >
                   <Select
                     name="config_id"
-                    value={osp_config_id}
                     items={osp_scan_config_items}
+                    value={osp_config_id}
                     onChange={onValueChange}
                   />
                 </FormGroup>
@@ -504,19 +543,21 @@ const TaskDialog = ({
             }
             <FormGroup
               condition={capabilities.mayAccess('tags') &&
-              capabilities.mayCreate('task') && has_tags}>
+              capabilities.mayCreate('task') && has_tags}
+            >
               <Divider>
                 <Checkbox
+                  title={_('Add Tag:')}
                   name="add_tag"
-                  onChange={onValueChange}
                   checkedValue={YES_VALUE}
                   unCheckedValue={NO_VALUE}
                   checked={state.add_tag === YES_VALUE}
-                  title={_('Add Tag:')}/>
+                  onChange={onValueChange}
+                />
                 <Select
                   name="tag_name"
-                  value={state.tag_name}
                   items={tag_items}
+                  value={state.tag_name}
                   onChange={onValueChange}
                 />
                 <Text>
@@ -525,7 +566,8 @@ const TaskDialog = ({
                 <TextField
                   name="tag_value"
                   value={state.tag_value}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
           </Layout>
@@ -545,6 +587,7 @@ TaskDialog.propTypes = {
     'keep', 'no',
   ]),
   auto_delete_data: PropTypes.number,
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   config_id: PropTypes.idOrZero,
   hosts_ordering: PropTypes.oneOf([
@@ -574,17 +617,15 @@ TaskDialog.propTypes = {
   task: PropTypes.model,
   title: PropTypes.string,
   visible: PropTypes.bool,
+  onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  onNewAlertClick: PropTypes.func,
-  onNewScheduleClick: PropTypes.func,
-  onNewTargetClick: PropTypes.func,
+  onNewAlertClick: PropTypes.func.isRequired,
+  onNewScheduleClick: PropTypes.func.isRequired,
+  onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onTargetChange: PropTypes.func.isRequired,
 };
 
-TaskDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default TaskDialog;
+export default withCapabilities(TaskDialog);
 
 // vim: set ts=2 sw=2 tw=80:
