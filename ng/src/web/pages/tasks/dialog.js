@@ -377,36 +377,30 @@ const TaskDialog = ({
               onChange={onValueChange}
             />
 
-            <Layout
-              flex="column"
-              offset="2"
-              className={'offset-container ' +
-                state.in_assets === YES_VALUE ? '' : 'disabled'}>
-              <FormGroup title={_('Apply Overrides')}>
-                <YesNoRadio
-                  name="apply_overrides"
-                  disabled={state.in_assets !== YES_VALUE}
-                  value={state.apply_overrides}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+            <FormGroup title={_('Apply Overrides')}>
+              <YesNoRadio
+                name="apply_overrides"
+                disabled={state.in_assets !== YES_VALUE}
+                value={state.apply_overrides}
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-              <FormGroup
-                title={_('Min QoD')}
-              >
-                <Spinner
-                  name="min_qod"
-                  size="4"
-                  disabled={state.in_assets !== YES_VALUE}
-                  type="int"
-                  min="0"
-                  max="100"
-                  value={state.min_qod}
-                  onChange={onValueChange}
-                />
-                <Layout box>%</Layout>
-              </FormGroup>
-            </Layout>
+            <FormGroup
+              title={_('Min QoD')}
+            >
+              <Spinner
+                name="min_qod"
+                size="4"
+                disabled={state.in_assets !== YES_VALUE}
+                type="int"
+                min="0"
+                max="100"
+                value={state.min_qod}
+                onChange={onValueChange}
+              />
+              <Layout box>%</Layout>
+            </FormGroup>
 
             <FormGroup
               title={_('Alterable Task')}
@@ -436,104 +430,94 @@ const TaskDialog = ({
 
             {use_openvas_scan_config &&
               <Layout
-                offset="2"
-                className="offset-container"
-              >
-                <Layout
-                  flex="column"
-                  grow="1"
-                >
-                  <FormGroup
-                    titleSize="4"
-                    title={_('Scan Config')}
-                  >
-                    <Select
-                      name="config_id"
-                      disabled={!change_task}
-                      items={openvas_scan_config_items}
-                      value={openvas_config_id}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup
-                    titleSize="4"
-                    title={_('Network Source Interface')}
-                  >
-                    <TextField
-                      name="source_iface"
-                      value={state.source_iface}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup
-                    titleSize="4"
-                    title={_('Order for target hosts')}
-                  >
-                    <Select
-                      name="hosts_ordering"
-                      items={[{
-                          value: 'sequential',
-                          label: _('Sequential'),
-                        }, {
-                          value: 'random',
-                          label: _('Random'),
-                        }, {
-                          value: 'reverse',
-                          label: _('Reverse'),
-                        },
-                      ]}
-                      value={state.hosts_ordering}
-                      onChange={onValueChange}
-                     />
-                  </FormGroup>
-                  <FormGroup
-                    titleSize="4"
-                    title={_('Maximum concurrently executed NVTs per host')}
-                  >
-                    <Spinner
-                      name="max_checks"
-                      size="10"
-                      min="0"
-                      maxLength="10"
-                      value={state.max_checks}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup
-                    titleSize="4"
-                    title={_('Maximum concurrently scanned hosts')}
-                  >
-                    <Spinner
-                      name="max_hosts"
-                      type="int"
-                      min="0"
-                      size="10"
-                      maxLength="10"
-                      value={state.max_hosts}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-                </Layout>
-              </Layout>
-            }
-
-            {is_osp_scanner &&
-              <Layout
-                offset="2"
-                className="offset-container"
+                flex="column"
+                grow="1"
               >
                 <FormGroup
-                  titleSize="4"
+                  titleSize="2"
                   title={_('Scan Config')}
                 >
                   <Select
                     name="config_id"
-                    items={osp_scan_config_items}
-                    value={osp_config_id}
+                    disabled={!change_task}
+                    items={openvas_scan_config_items}
+                    value={openvas_config_id}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Network Source Interface')}
+                >
+                  <TextField
+                    name="source_iface"
+                    value={state.source_iface}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Order for target hosts')}
+                >
+                  <Select
+                    name="hosts_ordering"
+                    items={[{
+                        value: 'sequential',
+                        label: _('Sequential'),
+                      }, {
+                        value: 'random',
+                        label: _('Random'),
+                      }, {
+                        value: 'reverse',
+                        label: _('Reverse'),
+                      },
+                    ]}
+                    value={state.hosts_ordering}
+                    onChange={onValueChange}
+                   />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Maximum concurrently executed NVTs per host')}
+                >
+                  <Spinner
+                    name="max_checks"
+                    size="10"
+                    min="0"
+                    maxLength="10"
+                    value={state.max_checks}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Maximum concurrently scanned hosts')}
+                >
+                  <Spinner
+                    name="max_hosts"
+                    type="int"
+                    min="0"
+                    size="10"
+                    maxLength="10"
+                    value={state.max_hosts}
                     onChange={onValueChange}
                   />
                 </FormGroup>
               </Layout>
+            }
+
+            {is_osp_scanner &&
+              <FormGroup
+                titleSize="2"
+                title={_('Scan Config')}
+              >
+                <Select
+                  name="config_id"
+                  items={osp_scan_config_items}
+                  value={osp_config_id}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
             }
 
             {capabilities.mayAccess('tags') && capabilities.mayCreate('task') &&
