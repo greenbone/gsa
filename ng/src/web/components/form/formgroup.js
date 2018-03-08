@@ -64,27 +64,27 @@ const Title = glamorous.label({
 
 const FormGroupContent = glamorous(Layout)(
   ({size}) => is_defined(size) ? {
-  width: COLUMNS[parse_int(size) - 1],
-  paddingLeft: '10px',
-  paddingRight: '10px',
-} : null,
+    width: COLUMNS[parse_int(size) - 1],
+    paddingLeft: '10px',
+    paddingRight: '10px',
+  } : null,
   ({offset}) => is_defined(offset) ? {
     marginLeft: COLUMNS[parse_int(offset) - 1],
   } : null,
 );
 
 const FormGroup = ({
-    children,
-    className,
-    condition,
-    flex = 'row',
-    offset,
-    size,
-    title,
-    titleOffset = 0,
-    titleSize = 2,
-    ...other
-  }) => {
+  children,
+  className,
+  condition,
+  flex = 'row',
+  offset,
+  size,
+  title,
+  titleOffset = 0,
+  titleSize = 2,
+  ...other
+}) => {
 
   if (is_defined(condition) && !condition) {
     return null;
@@ -99,7 +99,7 @@ const FormGroup = ({
       flex
       align={['start', 'center']}
       className={className}
-      >
+    >
       {is_defined(title) &&
         <Title
           titleOffset={titleOffset}
@@ -113,7 +113,7 @@ const FormGroup = ({
         flex={flex}
         offset={offset}
         size={size}
-        >
+      >
         {children}
       </FormGroupContent>
     </FormGroupLayout>
