@@ -244,6 +244,25 @@ const TaskDialog = ({
 
   const uncontrolledData = {
     ...data,
+    add_tag,
+    alterable,
+    apply_overrides,
+    auto_delete,
+    auto_delete_data,
+    comment,
+    config_id,
+    hosts_ordering,
+    in_assets,
+    max_checks,
+    max_hosts,
+    min_qod,
+    name,
+    scanner_type,
+    scanner_id,
+    source_iface,
+    tag_name,
+    tags,
+    tag_value,
   };
 
   const controlledData = {
