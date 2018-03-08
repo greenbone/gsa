@@ -553,6 +553,7 @@ class TaskComponent extends React.Component {
                   auto_delete={auto_delete}
                   auto_delete_data={auto_delete_data}
                   comment={comment}
+                  config_id={config_id}
                   id={id}
                   in_assets={in_assets}
                   min_qod={min_qod}
