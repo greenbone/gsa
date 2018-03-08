@@ -33,6 +33,8 @@ import {
   YES_VALUE,
 } from 'gmp/parser.js';
 
+import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task.js';
+
 import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
@@ -72,30 +74,6 @@ import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const log = logger.getLogger('web.tasks.dialog');
-
-const DEFAULTS = {
-  add_tag: NO_VALUE,
-  alert_ids: [],
-  alerts: [],
-  alterable: NO_VALUE,
-  apply_overrides: YES_VALUE,
-  auto_delete_data: 5,
-  auto_delete: 'keep',
-  hosts_ordering: 'sequential',
-  in_assets: YES_VALUE,
-  max_checks: 4,
-  max_hosts: 20,
-  min_qod: 70,
-  name: _('Unnamed'),
-  scan_configs: {
-    [OPENVAS_SCAN_CONFIG_TYPE]: [],
-    [OSP_SCAN_CONFIG_TYPE]: [],
-  },
-  scanner_type: OPENVAS_SCANNER_TYPE,
-  schedule_id: UNSET_VALUE,
-  schedule_periods: NO_VALUE,
-  scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-};
 
 const get_scanner = (scanners, scanner_id) => {
   if (!is_defined(scanners)) {
@@ -172,35 +150,43 @@ ScannerSelect.propTypes = {
   onChange: PropTypes.func,
 };
 
+const DEFAULT_MAX_CHECKS = 4;
+const DEFAULT_MAX_HOSTS = 20;
+const DEFAULT_MIN_QOD = 70;
+const DEFAULT_HOSTS_ORDERING = 'sequential';
+
 const TaskDialog = ({
-  add_tag,
-  alert_ids,
-  alerts,
-  alterable,
-  apply_overrides,
-  auto_delete,
-  auto_delete_data,
+  add_tag = NO_VALUE,
+  alert_ids = [],
+  alerts = [],
+  alterable = NO_VALUE,
+  apply_overrides = YES_VALUE,
+  auto_delete = AUTO_DELETE_KEEP,
+  auto_delete_data = AUTO_DELETE_DEFAULT_VALUE,
   capabilities,
-  comment,
-  config_id,
-  hosts_ordering,
-  in_assets,
-  max_checks,
-  max_hosts,
-  min_qod,
-  name,
+  comment = '',
+  config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
+  hosts_ordering = DEFAULT_HOSTS_ORDERING,
+  in_assets = YES_VALUE,
+  max_checks = DEFAULT_MAX_CHECKS,
+  max_hosts = DEFAULT_MAX_HOSTS,
+  min_qod = DEFAULT_MIN_QOD,
+  name = _('Unnamed'),
   scan_configs = {
     [OPENVAS_SCAN_CONFIG_TYPE]: [],
     [OSP_SCAN_CONFIG_TYPE]: [],
   },
-  scanner_id,
-  scanners,
-  schedule_id,
-  schedule_periods,
-  schedules,
-  source_iface,
+  scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
+  scanners = [{
+    id: OPENVAS_DEFAULT_SCANNER_ID,
+    scanner_type: OPENVAS_SCANNER_TYPE,
+  }],
+  schedule_id = UNSET_VALUE,
+  schedule_periods = NO_VALUE,
+  schedules = [],
+  source_iface = '',
   tag_name,
-  tags,
+  tags = [],
   tag_value,
   target_id,
   targets,
@@ -257,7 +243,6 @@ const TaskDialog = ({
   const has_tags = tag_items.length > 0;
 
   const uncontrolledData = {
-    ...DEFAULTS,
     ...data,
   };
 
