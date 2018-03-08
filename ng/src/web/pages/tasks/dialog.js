@@ -204,13 +204,7 @@ const TaskDialog = ({
   ...data
 }) => {
   const scanner = get_scanner(scanners, scanner_id);
-
-  const is_osp_scanner = is_defined(scanner) &&
-    scanner.scanner_type === OSP_SCANNER_TYPE;
-
-  const use_openvas_scan_config = is_defined(scanner) &&
-    (scanner.scanner_type === OPENVAS_SCANNER_TYPE ||
-      scanner.scanner_type === SLAVE_SCANNER_TYPE);
+  const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
 
   const tag_items = map(tags, tag => ({
     value: tag.name,
@@ -221,24 +215,18 @@ const TaskDialog = ({
 
   const schedule_items = render_select_items(schedules, UNSET_VALUE);
 
-  const osp_scan_config_items = is_osp_scanner && render_select_items(
+  const osp_scan_config_items = render_select_items(
     scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
-  const openvas_scan_config_items = use_openvas_scan_config &&
-    render_select_items(
-      scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
-        // Skip the "empty" config
-        return config.id !== EMPTY_SCAN_CONFIG_ID;
-      }));
+  const openvas_scan_config_items = render_select_items(
+    scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
+      // Skip the "empty" config
+      return config.id !== EMPTY_SCAN_CONFIG_ID;
+    }));
 
   const alert_items = render_select_items(alerts);
 
   const change_task = task ? task.isChangeable() : true;
-
-  const osp_config_id = select_save_id(scan_configs[OSP_SCAN_CONFIG_TYPE],
-    config_id);
-  const openvas_config_id = select_save_id(
-    scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id);
 
   const has_tags = tag_items.length > 0;
 
@@ -284,6 +272,16 @@ const TaskDialog = ({
         values: state,
         onValueChange,
       }) => {
+        const osp_config_id = select_save_id(
+          scan_configs[OSP_SCAN_CONFIG_TYPE], state.config_id);
+        const openvas_config_id = select_save_id(
+          scan_configs[OPENVAS_SCAN_CONFIG_TYPE], state.config_id);
+
+        const is_osp_scanner = state.scanner_type === OSP_SCANNER_TYPE;
+
+        const use_openvas_scan_config =
+          state.scanner_type === OPENVAS_SCANNER_TYPE ||
+          state.scanner_type === SLAVE_SCANNER_TYPE;
         return (
           <Layout flex="column">
 
