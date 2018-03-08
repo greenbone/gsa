@@ -213,6 +213,7 @@ const TaskDialog = ({
   onNewScheduleClick,
   onNewTargetClick,
   onSave,
+  onScheduleChange,
   onTargetChange,
   ...data
 }) => {
@@ -263,6 +264,7 @@ const TaskDialog = ({
   const controlledData = {
     target_id,
     alert_ids,
+    schedule_id,
   };
 
   return (
@@ -352,7 +354,7 @@ const TaskDialog = ({
                   name="schedule_id"
                   value={state.schedule_id}
                   items={schedule_items}
-                  onChange={onValueChange}
+                  onChange={onScheduleChange}
                 />
                 <Checkbox
                   name="schedule_periods"
@@ -606,6 +608,7 @@ TaskDialog.propTypes = {
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onScheduleChange: PropTypes.func.isRequired,
   onTargetChange: PropTypes.func.isRequired,
 };
 
