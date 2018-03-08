@@ -410,7 +410,7 @@ const TaskDialog = ({
             <ScannerSelect
               scanConfigs={scan_configs}
               scanners={scanners}
-              scannerId={scanner_id}
+              scannerId={state.scanner_id}
               changeTask={change_task}
               onChange={onValueChange}
             />
