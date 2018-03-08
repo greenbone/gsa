@@ -23,25 +23,15 @@
 
 import React from 'react';
 
-import {classes} from 'gmp/utils';
-
-import PropTypes from '../../utils/proptypes.js';
-
 import Button from './button.js';
 
-const SubmitButton = ({className, ...other}) => {
-  className = classes('button-block', className);
+const SubmitButton = ({...other}) => {
   return (
     <Button
       {...other}
       type="submit"
-      className={className}
     />
   );
-};
-
-SubmitButton.propTypes = {
-  className: PropTypes.string,
 };
 
 export default SubmitButton;

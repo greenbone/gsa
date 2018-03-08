@@ -28,20 +28,21 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import {is_defined} from 'gmp/utils';
+import Theme from '../../utils/theme';
 
 export const Box = glamorous.div({
-  border: '1px solid #aaa',
+  border: '1px solid ' + Theme.inputBorderGray,
   borderRadius: '4px',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'stretch',
   flexGrow: 1,
   padding: '1px 5px',
-  backgroundColor: 'white',
+  backgroundColor: Theme.white,
 }, ({isOpen}) => isOpen ? {
   borderRadius: '4px 4px 0 0',
 } : null, ({disabled}) => disabled ? {
-  backgroundColor: '#eee',
+  backgroundColor: Theme.dialogGray,
 } : null);
 
 export const Input = glamorous.input({
@@ -54,14 +55,14 @@ export const Item = glamorous.span({
   padding: '1px 5px',
   cursor: 'pointer',
   '&:hover': {
-    backgroundColor: '#5897fb',
+    backgroundColor: Theme.mediumBlue,
     color: 'white',
   },
 }, ({isSelected}) => isSelected ? {
-  backgroundColor: '#ddd',
+  backgroundColor: Theme.lightGray,
 } : null, ({isActive}) => isActive ? {
-  backgroundColor: '#5897fb',
-  color: 'white',
+  backgroundColor: Theme.mediumBlue,
+  color: Theme.white,
 } : null);
 
 export const ItemContainer = glamorous.div({
@@ -77,10 +78,9 @@ export const Menu = glamorous.div({
   borderRadius: '0 0 4px 4px',
   transition: 'opacity .1s ease',
   boxShadow: '0 2px 3px 0 rgba(34,36,38,.15)',
-  borderColor: '#96c8da',
+  borderColor: Theme.inputBorderGray,
   borderWidth: '1px 1px 1px 1px',
   borderStyle: 'solid',
-  borderTopColor: '#aaa',
   backgroundColor: 'white',
   display: 'flex',
   flexDirection: 'column',

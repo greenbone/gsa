@@ -706,8 +706,6 @@ set (NG_JS_SRC_FILES
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
-     ${NG_SRC_DIR}/src/web/components/form/css/form.css
-     ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
      )
 
 set (NG_FILES
@@ -754,4 +752,3 @@ install (DIRECTORY
 
 ## Translations
 add_subdirectory (po)
-
