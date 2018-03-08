@@ -100,6 +100,7 @@ class Http {
     cache,
     cancel_token,
     force = false,
+    responseType,
     ...other
   }) {
     const self = this;
@@ -142,6 +143,10 @@ class Http {
 
     const promise = Promise.create(function(resolve, reject) {
       xhr = new XMLHttpRequest();
+
+      if (is_defined(responseType)) {
+        xhr.responseType = responseType;
+      }
 
       xhr.open(method, url, true);
 
