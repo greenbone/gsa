@@ -24,9 +24,6 @@
 
 import React from 'react';
 
-import moment from 'moment-timezone';
-
-import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -34,7 +31,7 @@ import Layout from '../../components/layout/layout.js';
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
 
-import ScheduleDialog from '../schedules/dialog.js';
+import ScheduleComponent from '../schedules/component.js';
 import AlertComponent from '../alerts/component.js';
 import TargetComponent from '../targets/component';
 
@@ -52,37 +49,37 @@ class TaskDialogContainer extends React.Component {
       alert_ids,
       targets,
       target_id,
+      schedule_id,
+      schedules,
     } = this.props;
 
     this.state = {
-      scheduleDialogVisible: false,
       alerts,
       alert_ids,
       targets,
       target_id,
+      schedule_id,
+      schedules,
     };
 
     this.handleAlertCreated = this.handleAlertCreated.bind(this);
     this.handleAlertsChange = this.handleAlertsChange.bind(this);
     this.handleTargetCreated = this.handleTargetCreated.bind(this);
-    this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
     this.handleTargetChange = this.handleTargetChange.bind(this);
-
-    this.openScheduleDialog = this.openScheduleDialog.bind(this);
-    this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
+    this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
+    this.handleScheduleChange = this.handleScheduleChange.bind(this);
   }
 
-  handleCreateSchedule(data) {
-    const {schedules} = this;
+  handleScheduleCreated(resp) {
+    const {data} = resp;
     const {gmp} = this.props;
-    return gmp.schedule.create(data).then(response => {
-      const schedule = response.data;
 
-      schedules.push(schedule);
+    return gmp.schedules.getAll().then(response => {
+      const {data: schedules} = response;
 
       this.setState({
         schedules,
-        schedule_id: schedule.id,
+        schedule_id: data.id,
       });
     });
   }
@@ -114,24 +111,6 @@ class TaskDialogContainer extends React.Component {
     });
   }
 
-  openScheduleDialog() {
-    const {gmp} = this.props;
-    const {timezone} = gmp.globals;
-    const now = moment().tz(timezone);
-
-    this.setState({
-      scheduleDialogVisible: true,
-      timezone,
-      minute: now.minutes(),
-      hour: now.hours(),
-      date: now,
-    });
-  }
-
-  closeScheduleDialog() {
-    this.setState({scheduleDialogVisible: false});
-  }
-
   handleTargetChange(target_id) {
     this.setState({target_id});
   }
@@ -140,19 +119,19 @@ class TaskDialogContainer extends React.Component {
     this.setState({alert_ids});
   }
 
+  handleScheduleChange(schedule_id) {
+    this.setState({schedule_id});
+  }
+
   render() {
     const {onSave, ...props} = this.props;
     const {
       alerts,
       alert_ids,
-      minute,
-      hour,
-      date,
-      scheduleDialogVisible,
-      schedules = [],
+      schedules,
+      schedule_id,
       target_id,
       targets,
-      timezone,
     } = this.state;
     return (
       <Layout>
@@ -166,36 +145,34 @@ class TaskDialogContainer extends React.Component {
               {({
                 create: createalert,
               }) => (
-                <TaskDialog
-                  {...props}
-                  alerts={alerts}
-                  alert_ids={alert_ids}
-                  target_id={target_id}
-                  targets={targets}
-                  onNewAlertClick={createalert}
-                  onNewTargetClick={createtarget}
-                  onNewScheduleClick={this.openScheduleDialog}
-                  onSave={onSave}
-                  onTargetChange={this.handleTargetChange}
-                  onAlertsChange={this.handleAlertsChange}
-                />
+                <ScheduleComponent
+                  onCreated={this.handleScheduleCreated}
+                >
+                  {({
+                    create: createschedule,
+                  }) => (
+                    <TaskDialog
+                      {...props}
+                      alerts={alerts}
+                      alert_ids={alert_ids}
+                      target_id={target_id}
+                      targets={targets}
+                      schedule_id={schedule_id}
+                      schedules={schedules}
+                      onNewAlertClick={createalert}
+                      onNewTargetClick={createtarget}
+                      onNewScheduleClick={createschedule}
+                      onSave={onSave}
+                      onTargetChange={this.handleTargetChange}
+                      onAlertsChange={this.handleAlertsChange}
+                      onScheduleChange={this.handleScheduleChange}
+                    />
+                  )}
+                </ScheduleComponent>
               )}
             </AlertComponent>
           )}
         </TargetComponent>
-
-        {scheduleDialogVisible &&
-          <ScheduleDialog
-            schedules={schedules}
-            timezone={timezone}
-            minute={minute}
-            hour={hour}
-            date={date}
-            title={_('New Schedule')}
-            onClose={this.closeScheduleDialog}
-            onSave={this.handleCreateSchedule}
-          />
-        }
       </Layout>
     );
   }
@@ -205,6 +182,8 @@ TaskDialogContainer.propTypes = {
   alert_ids: PropTypes.array,
   alerts: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
+  schedule_id: PropTypes.idOrZero,
+  schedules: PropTypes.array,
   target_id: PropTypes.idOrZero,
   targets: PropTypes.array,
   onSave: PropTypes.func,

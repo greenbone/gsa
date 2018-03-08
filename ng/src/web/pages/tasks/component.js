@@ -226,26 +226,22 @@ class TaskComponent extends React.Component {
   openStandardTaskDialog(task) {
     const {capabilities, gmp} = this.props;
 
-    if (task) {
+    if (is_defined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
         const {targets, scan_configs, alerts, scanners, schedules} = settings;
 
-        log.debug('Loaded edit task dialog settings', settings);
+        log.debug('Loaded edit task dialog settings', task, settings);
 
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
-        let schedule_id;
-        if (capabilities.mayAccess('schedules') &&
-          is_defined(task.schedule)) {
-          schedule_id = task.schedule.id;
-        }
-        else {
-          schedule_id = UNSET_VALUE;
-        }
+        const schedule_id = capabilities.mayAccess('schedules') &&
+          is_defined(task.schedule) ?
+            task.schedule.id : UNSET_VALUE;
+
         const data = {};
         if (task.isChangeable()) {
-          data.config_id = task.config.id;
+          data.config_id = is_defined(task.config) ? task.config.id : undefined;
           data.scanner_id = task.scanner.id;
           data.target_id = task.target.id;
         }
@@ -274,17 +270,20 @@ class TaskComponent extends React.Component {
           auto_delete: task.auto_delete,
           auto_delete_data: task.auto_delete_data,
           comment: task.comment,
+          hosts_ordering: task.hosts_ordering,
           id: task.id,
           in_assets: task.in_assets,
+          max_checks: task.max_checks,
+          max_hosts: task.max_hosts,
           min_qod: task.min_qod,
           name: task.name,
           scan_configs: sorted_scan_configs,
-          scanner_type: task.scanner.scanner_type,
           scanners,
           schedule_id,
           schedules,
+          source_iface: task.source_iface,
           targets,
-          task: task,
+          task,
           ...data,
           title: _('Edit Task {{name}}', task),
         });
@@ -324,16 +323,30 @@ class TaskComponent extends React.Component {
           taskDialogVisible: true,
           alert_ids,
           alerts,
+          alterable: undefined,
+          apply_overrides: undefined,
+          auto_delete: undefined,
+          auto_delete_data: undefined,
+          comment: undefined,
           config_id,
+          hosts_ordering: undefined,
+          id: undefined,
+          in_assets: undefined,
+          max_checks: undefined,
+          max_hosts: undefined,
+          min_qod: undefined,
+          name: undefined,
+          scan_configs: sorted_scan_configs,
           scanners,
           scanner_id,
-          scan_configs: sorted_scan_configs,
           schedule_id,
           schedules,
+          source_iface: undefined,
           tag_name: first(tags).name,
           tags,
           target_id,
           targets,
+          task: undefined,
           title: _('New Task'),
         });
       });
@@ -553,6 +566,7 @@ class TaskComponent extends React.Component {
                   auto_delete={auto_delete}
                   auto_delete_data={auto_delete_data}
                   comment={comment}
+                  config_id={config_id}
                   id={id}
                   in_assets={in_assets}
                   min_qod={min_qod}

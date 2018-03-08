@@ -33,6 +33,8 @@ import {
   YES_VALUE,
 } from 'gmp/parser.js';
 
+import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task.js';
+
 import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
@@ -72,30 +74,6 @@ import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const log = logger.getLogger('web.tasks.dialog');
-
-const DEFAULTS = {
-  add_tag: NO_VALUE,
-  alert_ids: [],
-  alerts: [],
-  alterable: NO_VALUE,
-  apply_overrides: YES_VALUE,
-  auto_delete_data: 5,
-  auto_delete: 'keep',
-  hosts_ordering: 'sequential',
-  in_assets: YES_VALUE,
-  max_checks: 4,
-  max_hosts: 20,
-  min_qod: 70,
-  name: _('Unnamed'),
-  scan_configs: {
-    [OPENVAS_SCAN_CONFIG_TYPE]: [],
-    [OSP_SCAN_CONFIG_TYPE]: [],
-  },
-  scanner_type: OPENVAS_SCANNER_TYPE,
-  schedule_id: UNSET_VALUE,
-  schedule_periods: NO_VALUE,
-  scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-};
 
 const get_scanner = (scanners, scanner_id) => {
   if (!is_defined(scanners)) {
@@ -172,35 +150,43 @@ ScannerSelect.propTypes = {
   onChange: PropTypes.func,
 };
 
+const DEFAULT_MAX_CHECKS = 4;
+const DEFAULT_MAX_HOSTS = 20;
+const DEFAULT_MIN_QOD = 70;
+const DEFAULT_HOSTS_ORDERING = 'sequential';
+
 const TaskDialog = ({
-  add_tag,
-  alert_ids,
-  alerts,
-  alterable,
-  apply_overrides,
-  auto_delete,
-  auto_delete_data,
+  add_tag = NO_VALUE,
+  alert_ids = [],
+  alerts = [],
+  alterable = NO_VALUE,
+  apply_overrides = YES_VALUE,
+  auto_delete = AUTO_DELETE_KEEP,
+  auto_delete_data = AUTO_DELETE_DEFAULT_VALUE,
   capabilities,
-  comment,
-  config_id,
-  hosts_ordering,
-  in_assets,
-  max_checks,
-  max_hosts,
-  min_qod,
-  name,
+  comment = '',
+  config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
+  hosts_ordering = DEFAULT_HOSTS_ORDERING,
+  in_assets = YES_VALUE,
+  max_checks = DEFAULT_MAX_CHECKS,
+  max_hosts = DEFAULT_MAX_HOSTS,
+  min_qod = DEFAULT_MIN_QOD,
+  name = _('Unnamed'),
   scan_configs = {
     [OPENVAS_SCAN_CONFIG_TYPE]: [],
     [OSP_SCAN_CONFIG_TYPE]: [],
   },
-  scanner_id,
-  scanners,
-  schedule_id,
-  schedule_periods,
-  schedules,
-  source_iface,
+  scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
+  scanners = [{
+    id: OPENVAS_DEFAULT_SCANNER_ID,
+    scanner_type: OPENVAS_SCANNER_TYPE,
+  }],
+  schedule_id = UNSET_VALUE,
+  schedule_periods = NO_VALUE,
+  schedules = [],
+  source_iface = '',
   tag_name,
-  tags,
+  tags = [],
   tag_value,
   target_id,
   targets,
@@ -213,17 +199,12 @@ const TaskDialog = ({
   onNewScheduleClick,
   onNewTargetClick,
   onSave,
+  onScheduleChange,
   onTargetChange,
   ...data
 }) => {
   const scanner = get_scanner(scanners, scanner_id);
-
-  const is_osp_scanner = is_defined(scanner) &&
-    scanner.scanner_type === OSP_SCANNER_TYPE;
-
-  const use_openvas_scan_config = is_defined(scanner) &&
-    (scanner.scanner_type === OPENVAS_SCANNER_TYPE ||
-      scanner.scanner_type === SLAVE_SCANNER_TYPE);
+  const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
 
   const tag_items = map(tags, tag => ({
     value: tag.name,
@@ -234,35 +215,48 @@ const TaskDialog = ({
 
   const schedule_items = render_select_items(schedules, UNSET_VALUE);
 
-  const osp_scan_config_items = is_osp_scanner && render_select_items(
+  const osp_scan_config_items = render_select_items(
     scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
-  const openvas_scan_config_items = use_openvas_scan_config &&
-    render_select_items(
-      scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
-        // Skip the "empty" config
-        return config.id !== EMPTY_SCAN_CONFIG_ID;
-      }));
+  const openvas_scan_config_items = render_select_items(
+    scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
+      // Skip the "empty" config
+      return config.id !== EMPTY_SCAN_CONFIG_ID;
+    }));
 
   const alert_items = render_select_items(alerts);
 
   const change_task = task ? task.isChangeable() : true;
 
-  const osp_config_id = select_save_id(scan_configs[OSP_SCAN_CONFIG_TYPE],
-    config_id);
-  const openvas_config_id = select_save_id(
-    scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id);
-
   const has_tags = tag_items.length > 0;
 
   const uncontrolledData = {
-    ...DEFAULTS,
     ...data,
+    add_tag,
+    alterable,
+    apply_overrides,
+    auto_delete,
+    auto_delete_data,
+    comment,
+    config_id,
+    hosts_ordering,
+    in_assets,
+    max_checks,
+    max_hosts,
+    min_qod,
+    name,
+    scanner_type,
+    scanner_id,
+    source_iface,
+    tag_name,
+    tags,
+    tag_value,
   };
 
   const controlledData = {
     target_id,
     alert_ids,
+    schedule_id,
   };
 
   return (
@@ -278,6 +272,16 @@ const TaskDialog = ({
         values: state,
         onValueChange,
       }) => {
+        const osp_config_id = select_save_id(
+          scan_configs[OSP_SCAN_CONFIG_TYPE], state.config_id);
+        const openvas_config_id = select_save_id(
+          scan_configs[OPENVAS_SCAN_CONFIG_TYPE], state.config_id);
+
+        const is_osp_scanner = state.scanner_type === OSP_SCANNER_TYPE;
+
+        const use_openvas_scan_config =
+          state.scanner_type === OPENVAS_SCANNER_TYPE ||
+          state.scanner_type === SLAVE_SCANNER_TYPE;
         return (
           <Layout flex="column">
 
@@ -352,7 +356,7 @@ const TaskDialog = ({
                   name="schedule_id"
                   value={state.schedule_id}
                   items={schedule_items}
-                  onChange={onValueChange}
+                  onChange={onScheduleChange}
                 />
                 <Checkbox
                   name="schedule_periods"
@@ -423,7 +427,7 @@ const TaskDialog = ({
             <ScannerSelect
               scanConfigs={scan_configs}
               scanners={scanners}
-              scannerId={scanner_id}
+              scannerId={state.scanner_id}
               changeTask={change_task}
               onChange={onValueChange}
             />
@@ -606,6 +610,7 @@ TaskDialog.propTypes = {
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onScheduleChange: PropTypes.func.isRequired,
   onTargetChange: PropTypes.func.isRequired,
 };
 

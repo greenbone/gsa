@@ -43,6 +43,7 @@ import Scanner from './scanner.js';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
+export const AUTO_DELETE_DEFAULT_VALUE = 5;
 
 function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
@@ -172,7 +173,14 @@ class Task extends Model {
             break;
           case 'auto_delete_data':
             elem.auto_delete_data = pref.value === '0' ?
-              5 : parse_int(pref.value);
+              AUTO_DELETE_DEFAULT_VALUE : parse_int(pref.value);
+            break;
+          case 'max_hosts':
+          case 'max_checks':
+            elem[pref.scanner_name] = parse_int(pref.value);
+            break;
+          case 'source_iface':
+            elem.source_iface = pref.value;
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
