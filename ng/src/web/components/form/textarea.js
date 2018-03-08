@@ -22,11 +22,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
 import glamorous from 'glamorous';
 
 import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
 import Theme from '../../utils/theme.js';
 
 import withLayout from '../layout/withLayout.js';
@@ -34,11 +32,6 @@ import withLayout from '../layout/withLayout.js';
 import withChangeHandler from './withChangeHandler.js';
 
 const StyledTextArea = glamorous.textarea({
-  /* use font and line settings from parents not from browser default */
-  fontFamily: 'inherit',
-  fontSize: 'inherit',
-  lineHeight: 'inherit',
-
   display: 'block',
   height: 'auto',
   color: Theme.darkGray,
@@ -47,32 +40,17 @@ const StyledTextArea = glamorous.textarea({
   border: '1px solid' + Theme.inputBorderGray,
   borderRadius: '4px',
   padding: '1px 8px',
-}, ({disabled}) =>
-    disabled ? {cursor: 'not-allowed'} : null,
-    ({disabled, readonly}) => readonly || disabled ? {
-      backgroundColor: Theme.dialogGray,
-      opacity: 1,
-    } : null,
-  );
-
-const TextAreaComponent = ({className, value = '', ...props}) => {
-  return (
-    <StyledTextArea
-      {...props}
-      value={value}
-      className={className}
-    />
-  );
-};
-
-TextAreaComponent.propTypes = {
-  className: PropTypes.string,
-  value: PropTypes.any,
-};
+},
+  ({disabled}) => disabled ? {cursor: 'not-allowed'} : null,
+  ({disabled, readonly}) => readonly || disabled ? {
+    backgroundColor: Theme.dialogGray,
+    opacity: 1,
+  } : null,
+);
 
 export default compose(
   withLayout(),
   withChangeHandler(),
-)(TextAreaComponent);
+)(StyledTextArea);
 
 // vim: set ts=2 sw=2 tw=80:

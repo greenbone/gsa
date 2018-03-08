@@ -23,23 +23,15 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
-
 import Button from './button.js';
 
-const SubmitButton = ({className, ...other}) => {
-  className = className + ' button-block';
+const SubmitButton = ({...other}) => {
   return (
     <Button
       {...other}
       type="submit"
-      className={className}
     />
   );
-};
-
-SubmitButton.propTypes = {
-  className: PropTypes.string,
 };
 
 export default SubmitButton;

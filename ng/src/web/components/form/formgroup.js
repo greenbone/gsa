@@ -98,7 +98,6 @@ const FormGroup = ({
     <FormGroupLayout
       flex
       align={['start', 'center']}
-      className={className}
     >
       {is_defined(title) &&
         <Title
