@@ -284,7 +284,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <span id="gsa-token" style="display: none;"><xsl:value-of select="/envelope/token"/></span>
     </div>
-    Greenbone Security Assistant (GSA) Copyright 2009-2017 by Greenbone Networks
+    Greenbone Security Assistant (GSA) Copyright 2009 - 2018 by Greenbone Networks
     GmbH, <a href="http://www.greenbone.net" target="_blank">www.greenbone.net</a>
   </div>
   <xsl:choose>
