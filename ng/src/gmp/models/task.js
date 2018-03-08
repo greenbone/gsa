@@ -175,6 +175,13 @@ class Task extends Model {
             elem.auto_delete_data = pref.value === '0' ?
               AUTO_DELETE_DEFAULT_VALUE : parse_int(pref.value);
             break;
+          case 'max_hosts':
+          case 'max_checks':
+            elem[pref.scanner_name] = parse_int(pref.value);
+            break;
+          case 'source_iface':
+            elem.source_iface = pref.value;
+            break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
             break;
