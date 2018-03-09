@@ -67,20 +67,23 @@ class NoteComponent extends React.Component {
           active = ACTIVE_YES_UNTIL_VALUE;
         }
       }
+
       this.setState({
         dialogVisible: true,
         id: note.id,
         active,
-        hosts: is_defined(note.hosts) && note.hosts.length > 0 ? '--' : '',
-        hosts_manual: is_array(note.hosts) ? note.hosts.join(', ') : '',
-        port: note.port,
+        hosts: is_defined(note.hosts) && note.hosts.length > 0 ?
+          '--' : undefined,
+        hosts_manual: is_array(note.hosts) ? note.hosts.join(', ') : undefined,
+        port: is_defined(note.port) ? '--' : undefined,
+        port_manual: note.port,
         oid: is_defined(note.nvt) ? note.nvt.oid : undefined,
         note,
-        note_id: note.id,
         nvt: note.nvt,
         note_severity: note.severity,
         task_id: is_defined(note.task) && note.task.id.length > 0 ? '0' : '',
-        task_uuid: is_defined(note.task) ? note.task.id : '',
+        task_uuid: is_defined(note.task) && note.task.id.length > 0 ?
+          note.task.id : undefined,
         result_id: is_defined(note.result) && note.result.id.length > 0 ?
           '0' : '',
         result_uuid: is_defined(note.result) ? note.result.id : '',
@@ -94,9 +97,13 @@ class NoteComponent extends React.Component {
         dialogVisible: true,
         active: undefined,
         hosts: undefined,
-        hosts_manual: [],
-        port: undefined,
+        hosts_manual: undefined,
+        id: undefined,
         note: undefined,
+        note_severity: undefined,
+        oid: undefined,
+        port: undefined,
+        port_manual: undefined,
         result_id: undefined,
         result_uuid: undefined,
         severity: undefined,
@@ -108,6 +115,7 @@ class NoteComponent extends React.Component {
         ...initial,
       });
     }
+
     this.loadTasks();
   }
 
