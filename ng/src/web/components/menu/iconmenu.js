@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ import glamorous from 'glamorous';
 import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import Icon from '../icon/icon.js';
 
@@ -51,7 +52,7 @@ const List = glamorous.ul({
   padding: 0,
   left: 0,
   top: 0,
-  zIndex: 5,
+  zIndex: Theme.Layers.menuEntry,
   listStyle: 'none',
   fontSize: '10px',
   width: '255px',
