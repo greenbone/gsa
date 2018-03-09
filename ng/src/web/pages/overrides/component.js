@@ -136,8 +136,8 @@ class OverrideComponent extends React.Component {
   loadTasks() {
     const {gmp} = this.context;
 
-    gmp.tasks.getAll().then(tasks =>
-      this.setState({tasks: tasks}));
+    gmp.tasks.getAll().then(response =>
+      this.setState({tasks: response.data}));
   }
 
   render() {
