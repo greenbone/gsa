@@ -52,46 +52,30 @@ export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
 export const ACTIVE_YES_ALWAYS_VALUE = '-1';
 export const ACTIVE_YES_UNTIL_VALUE = '-2';
 
-const DEFAULTS = {
-  active: ACTIVE_YES_ALWAYS_VALUE,
-  days: 30,
-  fixed: false,
-  oid: '1.3.6.1.4.1.25623.1.0.',
-  hosts: '',
-  hosts_manual: [],
-  note_severity: 0,
-  result_id: '',
-  result_uuid: '',
-  task_id: '',
-  task_uuid: '',
-  port: '',
-  port_manual: '',
-  text: '',
-  tasks: [],
-};
+const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
 
 const NoteDialog = ({
-    active,
-    days,
-    fixed,
-    hosts,
-    hosts_manual,
+    active = ACTIVE_YES_ALWAYS_VALUE,
+    days = 30,
+    fixed = false,
     id,
+    hosts = '',
+    hosts_manual = '',
     note,
-    note_severity,
+    note_severity = 0,
     nvt,
-    oid,
-    port,
-    port_manual,
+    oid = DEFAULT_OID_VALUE,
+    port = '',
+    port_manual = '',
     result_id,
     result_name,
     result_uuid,
     severity,
-    task_id,
+    task_id = '0',
     task_name,
     tasks,
     task_uuid,
-    text,
+    text = '',
     title = _('New Note'),
     visible,
     onClose,
@@ -102,64 +86,25 @@ const NoteDialog = ({
   const is_edit = is_defined(note);
 
   const data = {
-    ...DEFAULTS,
     ...initial,
-    nvt,
     severity,
-  };
-  if (is_defined(active)) {
-    data.active = active;
-  };
-  if (is_defined(days)) {
-    data.days = days;
-  };
-  if (is_defined(fixed)) {
-    data.fixed = fixed;
-  };
-  if (is_defined(hosts)) {
-    data.hosts = hosts;
-  };
-  if (is_defined(hosts_manual) && hosts_manual.length > 0) {
-    data.hosts_manual = hosts_manual;
-  };
-  if (is_defined(id)) {
-    data.id = id;
-  };
-  if (is_defined(note_severity)) {
-    data.note_severity = note_severity;
-  };
-  if (is_defined(oid)) {
-    data.oid = oid;
-  };
-  if (is_defined(port)) {
-    data.port = port;
-  };
-  if (is_defined(port_manual) && port_manual.length > 0) {
-    data.port_manual = port_manual;
-  };
-  if (is_defined(result_id)) {
-    data.result_id = result_id;
-  };
-  if (is_defined(result_uuid) && result_uuid.length > 0) {
-    data.result_uuid = result_uuid;
-  };
-  if (is_defined(result_name)) {
-    data.result_name = result_name;
-  };
-  if (is_defined(task_id)) {
-    data.task_id = task_id;
-  };
-  if (is_defined(task_uuid) && task_uuid.length > 0) {
-    data.task_uuid = task_uuid;
-  };
-  if (is_defined(task_name)) {
-    data.task_name = task_name;
-  };
-  if (is_defined(tasks)) {
-    data.tasks = tasks;
-  };
-  if (is_defined(text)) {
-    data.text = text;
+    active,
+    days,
+    fixed,
+    hosts,
+    hosts_manual,
+    id,
+    note_severity,
+    oid,
+    port,
+    port_manual,
+    result_id,
+    result_uuid,
+    result_name,
+    task_id,
+    task_uuid,
+    task_name,
+    text,
   };
   const tasksOptions = map(tasks, task => ({
     label: task.name,
