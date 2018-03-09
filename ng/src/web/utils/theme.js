@@ -52,7 +52,6 @@ const Theme = {
     aboveAll: 500,
     onTop: 100,
     belowAll: -100,
-    menuEntry: 5,
     higher: 1,
     default: 0,
   },
