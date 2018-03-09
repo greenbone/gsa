@@ -94,7 +94,7 @@ const MenuContainer = glamorous.div({
   display: 'flex',
   flexDirection: 'column',
   position: 'absolute',
-  zIndex: 100,
+  zIndex: Theme.Layers.onTop,
   marginTop: '-1px', // collapse top border
   boxSizing: 'border-box',
 }, ({

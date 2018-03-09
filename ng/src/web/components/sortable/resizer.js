@@ -27,12 +27,13 @@ import glamorous from 'glamorous';
 import {is_defined, throttleAnimation} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes';
+import Theme from '../../utils/theme';
 
 const ResizeContainer = glamorous.div({
   cursor: 'row-resize',
   height: '10px',
   width: '100%',
-  zIndex: '1',
+  zIndex: Theme.Layers.higher,
   display: 'flex',
   flexGrow: 1,
   justifyContent: 'center',

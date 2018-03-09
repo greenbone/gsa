@@ -47,6 +47,14 @@ const Theme = {
 
   /* source ? */
   darkGreen: '#519032',
+
+  Layers: {
+    aboveAll: 500,
+    onTop: 100,
+    belowAll: -100,
+    higher: 1,
+    default: 0,
+  },
 };
 
 export default Theme;
