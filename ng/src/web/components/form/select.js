@@ -27,7 +27,7 @@ import React from 'react';
 
 import Downshift from 'downshift';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined, is_array} from 'gmp/utils';
 
 import PropTypes, {mayRequire} from '../../utils/proptypes.js';
 
@@ -52,14 +52,14 @@ const SelectValueValidator = (props, prop_name, component_name) => {
   const {items} = props;
   const item = find_item(items, value);
 
-  if (is_defined(items) && is_defined(value) && !is_defined(item)) {
+  if (is_array(items) && is_defined(value) && !is_defined(item)) {
     if (items.length === 0) {
       return new Error('Invalid prop ' + prop_name + ' `' + value + '` for ' +
         component_name + ' component. items prop is empty.');
     }
     return new Error('Invalid prop ' + prop_name + ' `' + value + '` for ' +
       component_name + ' component. Prop ' + prop_name + ' can not be ' +
-      'found in items `' + items + '`.');
+      'found in items `' + items.map(i => i.value) + '`.');
   }
 };
 
