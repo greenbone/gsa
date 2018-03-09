@@ -42,22 +42,23 @@ const StyledDiv = glamorous.div(
     paddingTop: '2px',
   },
   ({active, disabled}) => ({
-    borderLeft: active ? '1px solid #eee' : '1px solid white',
+    borderLeft: active ?
+      '1px solid ' + Theme.dialogGray : '1px solid ' + Theme.white,
     borderRight: '1px solid ' + Theme.lightGray,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    backgroundColor: active ? '#eee' : undefined,
-    borderBottom: active ? '1px solid #eee' : undefined,
+    backgroundColor: active ? Theme.dialogGray : undefined,
+    borderBottom: active ? '1px solid ' + Theme.dialogGray : undefined,
     marginBottom: active ? '-1px' : undefined,
     borderTop: active ?
       '2px solid ' + Theme.lightGreen :
-      '2px solid white', // + theme.lightGray,
+      '2px solid ' + Theme.white,
     ':hover': {
       borderTop: active ?
-        undefined : '2px solid' + Theme.lightGray,
+        undefined : '2px solid ' + Theme.lightGray,
     },
     ':first-child': {
       borderLeft: active ?
-        '1px solid' + Theme.lightGray : '1px solid white',
+        '1px solid ' + Theme.lightGray : '1px solid ' + Theme.white,
     },
   }),
 );

@@ -36,13 +36,12 @@ const StyledInput = glamorous.input({
   fontamily: 'inherit',
   fontSize: 'inherit',
   lineHeight: 'inherit',
-
   display: 'block',
   height: '22px',
   color: Theme.darkGray,
   backgroundColor: Theme.white,
   backgroundImage: 'none',
-  border: '1px solid' + Theme.inputBorderGray,
+  border: '1px solid ' + Theme.inputBorderGray,
   borderRadius: '4px',
   padding: '1px 8px',
   // "hack" to overshadow default color in Chrome's autofilled input fields

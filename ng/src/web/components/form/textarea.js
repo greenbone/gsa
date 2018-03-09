@@ -37,7 +37,7 @@ const StyledTextArea = glamorous.textarea({
   color: Theme.darkGray,
   backgroundColor: Theme.white,
   backgroundImage: 'none',
-  border: '1px solid' + Theme.inputBorderGray,
+  border: '1px solid ' + Theme.inputBorderGray,
   borderRadius: '4px',
   padding: '1px 8px',
 },

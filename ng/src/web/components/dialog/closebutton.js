@@ -34,7 +34,7 @@ import withIconSize from '../icon/withIconSize';
 
 let StyledCloseButton = glamorous.div({
   display: 'flex',
-  border: '1px solid' + Theme.darkGreen,
+  border: '1px solid ' + Theme.darkGreen,
   fontWeight: 'bold',
   color: Theme.darkGreen,
   cursor: 'pointer',
