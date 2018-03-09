@@ -82,6 +82,7 @@ const SmbMethodPart = ({
           />
           <Layout>
             <NewIcon
+              size="small"
               value={SMB_CREDENTIAL_TYPES}
               title={_('Create a credential')}
               onClick={onNewCredentialClick}
