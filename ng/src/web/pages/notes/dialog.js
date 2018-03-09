@@ -95,7 +95,6 @@ const NoteDialog = ({
     hosts,
     hosts_manual,
     id,
-    note_severity,
     oid,
     port,
     port_manual,
@@ -278,8 +277,8 @@ const NoteDialog = ({
                   </Radio>
                   <Radio
                     name="severity"
-                    value={state.note_severity}
-                    title={result_cvss_risk_factor(state.note_severity)}
+                    value={note_severity}
+                    title={result_cvss_risk_factor(note_severity)}
                     checked={!is_empty(state.severity) && state.severity <= 0.0}
                     convert={parse_float}
                     onChange={onValueChange}>
@@ -314,7 +313,7 @@ const NoteDialog = ({
                     title={
                       state.severity > 0 ?
                         _('> 0.0') :
-                        result_cvss_risk_factor(state.note_severity)
+                        result_cvss_risk_factor(note_severity)
                     }
                     checked={!is_empty(state.severity) && state.severity > 0.0}
                     convert={parse_float}
