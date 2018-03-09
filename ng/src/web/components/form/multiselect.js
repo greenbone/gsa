@@ -34,7 +34,6 @@ import {arrays_equal, is_array, is_defined, is_empty} from 'gmp/utils';
 import ArrowIcon from '../icon/arrowicon.js';
 
 import Layout from '../layout/layout.js';
-import Portal from '../portal/portal';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -102,17 +101,6 @@ class MultiSelect extends React.Component {
     if (is_defined(onChange)) {
       onChange(value, name);
     }
-  }
-
-  handleGetBox() {
-    const rect = this.box.getBoundingClientRect();
-    this.setState({
-      boxRightSide: rect.right,
-      boxHeight: rect.height,
-      boxWidth: rect.width,
-      boxX: rect.x,
-      boxY: rect.y,
-    });
   }
 
   handleSearch(event) {
@@ -196,11 +184,6 @@ class MultiSelect extends React.Component {
     } = this.props;
 
     const {
-      boxRightSide,
-      boxHeight,
-      boxWidth,
-      boxX,
-      boxY,
       search,
       selectedItems,
     } = this.state;
@@ -255,7 +238,6 @@ class MultiSelect extends React.Component {
                       down: !isOpen,
                       onClick: isOpen ? undefined : event => {
                         event.preventDefault(); // don't call default handler from downshift
-                        this.handleGetBox();
                         openMenu(() =>
                           is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                       },
@@ -265,39 +247,34 @@ class MultiSelect extends React.Component {
                 </Layout>
               </Box>
               {isOpen && !disabled &&
-                <Portal>
-                  <Menu
-                    position={menuPosition}
-                    right={window.innerWidth - boxRightSide}
-                    width={boxWidth}
-                    x={boxX}
-                    y={boxY + boxHeight}
-                  >
-                    <Input
-                      {...getInputProps({
-                        value: search,
-                        onChange: this.handleSearch,
-                      })}
-                      disabled={disabled}
-                      innerRef={ref => this.input = ref}
-                    />
-                    <ItemContainer>
-                      {displayedItems
-                        .map(({label: itemLabel, value: itemValue}, i) => (
-                          <Item
-                            {...getItemProps({item: itemValue})}
-                            isSelected={selectedItems.includes(itemValue)}
-                            isActive={i === highlightedIndex}
-                            key={itemValue}
-                            onMouseDown={() => selectItem(itemValue)}
-                          >
-                            {itemLabel}
-                          </Item>
-                        ))
-                      }
-                    </ItemContainer>
-                  </Menu>
-                </Portal>
+                <Menu
+                  position={menuPosition}
+                  target={this.box}
+                >
+                  <Input
+                    {...getInputProps({
+                      value: search,
+                      onChange: this.handleSearch,
+                    })}
+                    disabled={disabled}
+                    innerRef={ref => this.input = ref}
+                  />
+                  <ItemContainer>
+                    {displayedItems
+                      .map(({label: itemLabel, value: itemValue}, i) => (
+                        <Item
+                          {...getItemProps({item: itemValue})}
+                          isSelected={selectedItems.includes(itemValue)}
+                          isActive={i === highlightedIndex}
+                          key={itemValue}
+                          onMouseDown={() => selectItem(itemValue)}
+                        >
+                          {itemLabel}
+                        </Item>
+                      ))
+                    }
+                  </ItemContainer>
+                </Menu>
               }
             </SelectContainer>
           );
