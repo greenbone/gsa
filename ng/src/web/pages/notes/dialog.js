@@ -405,7 +405,7 @@ NoteDialog.propTypes = {
   days: PropTypes.number,
   fixed: PropTypes.bool,
   hosts: PropTypes.string,
-  hosts_manual: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  hosts_manual: PropTypes.string,
   id: PropTypes.string,
   note: PropTypes.model,
   note_id: PropTypes.id,
