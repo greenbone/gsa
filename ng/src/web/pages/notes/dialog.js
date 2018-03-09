@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale';
-import {is_defined, is_empty, map} from 'gmp/utils';
+import {is_defined, is_empty} from 'gmp/utils';
 import {parse_float} from 'gmp/parser';
 
 import SaveDialog from '../../components/dialog/savedialog';
@@ -37,6 +37,7 @@ import PropTypes from '../../utils/proptypes';
 import {
   render_nvt_name,
   result_cvss_risk_factor,
+  render_select_items,
 } from '../../utils/render.js';
 
 import FormGroup from '../../components/form/formgroup.js';
@@ -106,10 +107,6 @@ const NoteDialog = ({
     task_name,
     text,
   };
-  const tasksOptions = map(tasks, task => ({
-    label: task.name,
-    value: task.id,
-  }));
 
   return (
     <SaveDialog
@@ -344,7 +341,7 @@ const NoteDialog = ({
                   <Select
                     name="task_uuid"
                     value={state.task_uuid}
-                    items={tasksOptions}
+                    items={render_select_items(tasks)}
                     disabled={state.task_id !== '0'}
                     onChange={onValueChange}
                   />
