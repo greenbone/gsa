@@ -22,6 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import 'core-js/fn/array/includes';
+import 'core-js/fn/object/is';
 import 'core-js/fn/symbol';
 
 import {has_value, is_defined, is_array} from './identity';
