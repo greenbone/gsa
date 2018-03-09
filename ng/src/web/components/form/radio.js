@@ -44,6 +44,10 @@ export const StyledElement = glamorous.label({
 });
 
 export const StyledInput = glamorous.input({
+  /* use font and line settings from parents not from browser default */
+  fontamily: 'inherit',
+  fontSize: 'inherit',
+
   padding: 0,
   margin: 0,
   marginLeft: '10px',
