@@ -49,7 +49,7 @@ export const Wizardess = glamorous.div({
 export const WizardContent = glamorous.div({
   '& > p img': {
     marginLeft: '5px',
-    marginRight: '50px',
+    marginRight: '5px',
   },
 });
 
