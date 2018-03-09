@@ -196,7 +196,7 @@ const NoteDialog = ({
                   title={render_nvt_name(nvt)}
                   checked={state.oid === state.nvt.oid}
                   onChange={onValueChange}/>
-                <Layout flex box>
+                <Divider>
                   <Radio
                     name="oid"
                     value="1.3.6.1.4.1.25623.1.0."
@@ -207,7 +207,7 @@ const NoteDialog = ({
                     value={state.oid}
                     disabled={state.oid === state.nvt.oid}
                     onChange={onValueChange}/>
-                </Layout>
+                </Divider>
               </FormGroup>
             }
             {!is_edit && !state.fixed &&
