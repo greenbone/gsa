@@ -38,12 +38,11 @@ import Wrapper from '../../components/layout/wrapper';
 
 import EntityComponent from '../../entity/component';
 
-import NoteDialog from './dialog';
-
-export const ACTIVE_NO_VALUE = '0';
-export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
-export const ACTIVE_YES_ALWAYS_VALUE = '-1';
-export const ACTIVE_YES_UNTIL_VALUE = '-2';
+import NoteDialog, {
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+} from './dialog';
 
 class NoteComponent extends React.Component {
 
