@@ -35,8 +35,8 @@ import Layout from '../../components/layout/layout.js';
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_nvt_name,
-  render_options,
   result_cvss_risk_factor,
+  render_select_items,
 } from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -458,11 +458,10 @@ const OverrideDialog = ({
                   <Select
                     name="task_uuid"
                     disabled={state.task_id !== '0'}
+                    items={render_select_items(tasks)}
                     value={state.task_uuid}
                     onChange={onValueChange}
-                  >
-                    {render_options(tasks)}
-                  </Select>
+                  />
                 }
               </Layout>
             </FormGroup>
