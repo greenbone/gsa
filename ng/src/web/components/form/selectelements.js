@@ -27,8 +27,12 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined, has_value} from 'gmp/utils';
+
 import Theme from '../../utils/theme';
+import PropTypes from '../../utils/proptypes';
+
+import Portal from '../../components/portal/portal';
 
 export const Box = glamorous.div({
   border: '1px solid ' + Theme.inputBorderGray,
@@ -78,7 +82,7 @@ export const ItemContainer = glamorous.div({
   flexDirection: 'column',
 });
 
-export const Menu = glamorous.div({
+const MenuContainer = glamorous.div({
   outline: '0',
   borderRadius: '0 0 4px 4px',
   transition: 'opacity .1s ease',
@@ -121,6 +125,97 @@ export const Menu = glamorous.div({
       };
   }
 });
+
+const getParentNode = element => {
+  if (element.nodeName === 'HTML') {
+    return element;
+  }
+  return element.parentNode;
+};
+
+const getStyleComputedProperty = (element, property) => {
+  if (element.nodeType !== Node.ELEMENT_NODE) {
+    return [];
+  }
+  const css = getComputedStyle(element);
+  return property ? css[property] : css;
+};
+
+const getScrollParent = element => {
+  if (!has_value(element)) {
+    return document.body;
+  }
+
+  if (element.nodeName === 'HTML' || element.nodeName === 'BODY') {
+    return element.ownerDocument.body;
+  }
+
+  if (element.nodeName === '#document') {
+    return element.body;
+  }
+
+  const {overflow, overflowX, overflowY} = getStyleComputedProperty(element);
+  if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
+    return element;
+  }
+
+  return getScrollParent(getParentNode(element));
+};
+
+export class Menu extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.handleScroll = this.handleScroll.bind(this);
+  }
+
+  handleScroll() {
+    this.forceUpdate();
+  }
+
+  componentDidMount() {
+    const {target} = this.props;
+
+    this.eventTarget = getScrollParent(target);
+    this.eventTarget.addEventListener('scroll', this.handleScroll,
+      {passive: true});
+  }
+
+  componentWillUnmount() {
+    this.eventTarget.removeEventListener('scroll', this.handleScroll);
+  }
+
+  render() {
+    const {
+      target,
+      ...props
+    } = this.props;
+
+    if (!is_defined(target)) {
+      return null;
+    }
+
+    const rect = target.getBoundingClientRect();
+    const {height, width, right, left, top} = rect;
+
+    return (
+      <Portal>
+        <MenuContainer
+          {...props}
+          right={document.body.clientWidth - right}
+          width={width}
+          x={left + window.scrollX}
+          y={top + window.scrollY + height}
+        />
+      </Portal>
+    );
+  }
+}
+
+Menu.propTypes = {
+  target: PropTypes.object.isRequired,
+};
 
 export const SelectContainer = glamorous.div({
   display: 'flex',
