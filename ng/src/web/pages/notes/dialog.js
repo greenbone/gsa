@@ -407,7 +407,6 @@ NoteDialog.propTypes = {
   hosts_manual: PropTypes.string,
   id: PropTypes.string,
   note: PropTypes.model,
-  note_id: PropTypes.id,
   note_severity: PropTypes.number,
   nvt: PropTypes.model,
   oid: PropTypes.string,
