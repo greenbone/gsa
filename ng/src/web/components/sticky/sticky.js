@@ -27,6 +27,7 @@ import ReactDOM from 'react-dom';
 import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import Wrapper from '../layout/wrapper.js';
 
@@ -48,7 +49,7 @@ const StickyWrapper = glamorous.div(
     left: left,
     width: width,
     transform: 'translateZ(0)',
-    zIndex: 20,
+    zIndex: Theme.Layers.aboveAll,
   } : {},
 );
 
