@@ -49,6 +49,11 @@ export const Input = glamorous.input({
   flexGrow: 1,
   padding: '1px',
   margin: '5px',
+
+  /* use font and line settings from parents not from browser default */
+ fontFamily: 'inherit',
+ fontSize: 'inherit',
+ lineHeight: 'inherit',
 });
 
 export const Item = glamorous.span({
