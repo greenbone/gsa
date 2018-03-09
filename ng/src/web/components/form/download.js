@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-export class Download extends React.Component {
+class Download extends React.Component {
 
   setFileName(name) {
     this.anchor.download = name;
@@ -46,7 +46,7 @@ export class Download extends React.Component {
   }
 
   setData(data) {
-    let blob =  new Blob([data], {type: 'application/octet-stream'});
+    const blob = new Blob([data], {type: 'application/octet-stream'});
 
     this.release();
 
@@ -60,7 +60,7 @@ export class Download extends React.Component {
   }
 
   render() {
-    let {filename} = this.props;
+    const {filename} = this.props;
     return (
       <a
         download={filename}
