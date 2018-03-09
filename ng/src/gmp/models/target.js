@@ -40,10 +40,10 @@ export const TARGET_CREDENTIAL_NAMES = [
 
 class Target extends Model {
 
-  static entity_type = "target";
+  static entity_type = 'target';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (is_defined(elem.port_list) && !is_empty(elem.port_list._id)) {
       ret.port_list = new PortList(ret.port_list);
