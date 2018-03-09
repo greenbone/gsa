@@ -32,6 +32,11 @@ import withLayout from '../layout/withLayout.js';
 import withChangeHandler from './withChangeHandler.js';
 
 const StyledInput = glamorous.input({
+  /* use font and line settings from parents not from browser default */
+  fontamily: 'inherit',
+  fontSize: 'inherit',
+  lineHeight: 'inherit',
+
   display: 'block',
   height: '22px',
   color: Theme.darkGray,
