@@ -31,6 +31,7 @@ import {is_defined, is_empty, shorten} from 'gmp/utils';
 import {ANY, MANUAL} from 'gmp/commands/overrides.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
@@ -134,7 +135,7 @@ class OverrideComponent extends React.Component {
   }
 
   loadTasks() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.tasks.getAll().then(response =>
       this.setState({tasks: response.data}));
@@ -240,6 +241,7 @@ class OverrideComponent extends React.Component {
 
 OverrideComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -252,10 +254,6 @@ OverrideComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-OverrideComponent.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default OverrideComponent;
+export default withGmp(OverrideComponent);
 
 // vim: set ts=2 sw=2 tw=80:
