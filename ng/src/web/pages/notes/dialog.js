@@ -132,20 +132,21 @@ const NoteDialog = ({
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
                   name="oid"
-                  value={state.nvt.oid}
+                  value={nvt.oid}
                   title={render_nvt_name(nvt)}
-                  checked={state.oid === state.nvt.oid}
+                  checked={state.oid === nvt.oid}
                   onChange={onValueChange}/>
                 <Divider>
                   <Radio
                     name="oid"
-                    value="1.3.6.1.4.1.25623.1.0."
-                    checked={state.oid !== state.nvt.oid}
+                    value={DEFAULT_OID_VALUE}
+                    checked={state.oid !== nvt.oid}
                     onChange={onValueChange}/>
                   <TextField
                     name="oid"
-                    value={state.oid}
-                    disabled={state.oid === state.nvt.oid}
+                    value={state.oid === nvt.oid ? DEFAULT_OID_VALUE :
+                      state.oid}
+                    disabled={state.oid === nvt.oid}
                     onChange={onValueChange}/>
                 </Divider>
               </FormGroup>
