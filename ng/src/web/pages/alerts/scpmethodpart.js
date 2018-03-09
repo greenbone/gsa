@@ -75,6 +75,7 @@ const ScpMethodPart = ({
           />
           <Layout>
             <NewIcon
+              size="small"
               value={SSH_CREDENTIAL_TYPES}
               title={_('Create a credential')}
               onClick={onNewCredentialClick}

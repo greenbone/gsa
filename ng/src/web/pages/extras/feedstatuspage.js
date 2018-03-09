@@ -4,7 +4,7 @@
 * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
 *
 * Copyright:
-* Copyright (C) 2017 Greenbone Networks GmbH
+* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -52,6 +52,7 @@ const ToolBarIcons = () => (
   <ManualIcon
     page="search"
     searchTerm="feed"
+    size="medium"
     title={_('Help: Feed Status')}
   />
 );
