@@ -58,7 +58,7 @@ const List = glamorous.ul('display-menu-list', {
   left: 0,
   top: '100%',
   marginTop: '-1px',
-  zIndex: Theme.Layers.menuEntry,
+  zIndex: Theme.Layers.onTop,
   listStyle: 'none',
   fontSize: '10px',
   width: '255px',

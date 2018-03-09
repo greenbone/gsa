@@ -83,7 +83,7 @@ const StyledMenuEntry = glamorous.li('menu-entry', {
 
 const MenuList = glamorous.ul('menu-list', {
   width: '255px',
-  zIndex: Theme.Layers.menuEntry,
+  zIndex: Theme.Layers.onTop,
   position: 'absolute',
   display: 'none',
   background: '#FAFAFA',

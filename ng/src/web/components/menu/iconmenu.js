@@ -52,7 +52,7 @@ const List = glamorous.ul({
   padding: 0,
   left: 0,
   top: 0,
-  zIndex: Theme.Layers.menuEntry,
+  zIndex: Theme.Layers.onTop,
   listStyle: 'none',
   fontSize: '10px',
   width: '255px',
