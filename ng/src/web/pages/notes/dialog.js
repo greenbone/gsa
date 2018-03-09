@@ -111,12 +111,12 @@ const NoteDialog = ({
     <SaveDialog
       visible={visible}
       title={title}
+      defaultValues={data}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
