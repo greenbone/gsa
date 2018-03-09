@@ -162,6 +162,12 @@ const getScrollParent = element => {
   return getScrollParent(getParentNode(element));
 };
 
+const getScrollX = () => is_defined(window.scrollX) ?
+  window.scrollX : window.pageXOffset;
+
+const getScrollY = () => is_defined(window.scrollY) ?
+  window.scrollY : window.pageYOffset;
+
 export class Menu extends React.Component {
 
   constructor(...args) {
@@ -215,8 +221,8 @@ export class Menu extends React.Component {
           {...props}
           right={document.body.clientWidth - right}
           width={width}
-          x={left + window.scrollX}
-          y={top + window.scrollY + height}
+          x={left + getScrollX()}
+          y={top + getScrollY() + height}
         />
       </Portal>
     );
