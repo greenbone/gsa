@@ -85,6 +85,8 @@ export class Gmp {
       ...httpoptions
     } = options;
 
+    log.debug('Using gmp options', options);
+
     this._commands = {};
 
     this.caches = caches;
