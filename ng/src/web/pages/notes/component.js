@@ -33,6 +33,7 @@ import {
 } from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes';
+import withGmp from '../../utils/withGmp';
 
 import Wrapper from '../../components/layout/wrapper';
 
@@ -128,7 +129,7 @@ class NoteComponent extends React.Component {
   }
 
   loadTasks() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.tasks.getAll().then(response => {
       this.setState({tasks: response.data});
@@ -230,6 +231,7 @@ class NoteComponent extends React.Component {
 
 NoteComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -242,10 +244,6 @@ NoteComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-NoteComponent.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default NoteComponent;
+export default withGmp(NoteComponent);
 
 // vim: set ts=2 sw=2 tw=80:
