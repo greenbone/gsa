@@ -98,7 +98,7 @@ export const parse_notes = notes => {
       return n;
     });
   }
-  let list = new List(entries);
+  const list = new List(entries);
   list.active = active;
   return list;
 };
