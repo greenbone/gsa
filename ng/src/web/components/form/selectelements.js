@@ -178,12 +178,22 @@ export class Menu extends React.Component {
     const {target} = this.props;
 
     this.eventTarget = getScrollParent(target);
+
     this.eventTarget.addEventListener('scroll', this.handleScroll,
       {passive: true});
+
+    if (this.eventTarget !== window) {
+      window.addEventListener('scroll', this.handleScroll, {passive: true});
+    }
+
   }
 
   componentWillUnmount() {
     this.eventTarget.removeEventListener('scroll', this.handleScroll);
+
+    if (this.eventTarget !== window) {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
   }
 
   render() {
