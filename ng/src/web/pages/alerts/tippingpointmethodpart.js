@@ -80,6 +80,7 @@ const TippingPointMethodPart = ({
           />
           <Layout flex box>
             <NewIcon
+              size="small"
               title={_('Create a credential')}
               value={TIPPINGPOINT_CREDENTIAL_TYPES}
               onClick={onNewCredentialClick}
