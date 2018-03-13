@@ -147,21 +147,22 @@ class ScheduleComponent extends React.Component {
               create: this.openScheduleDialog,
               edit: this.openScheduleDialog,
             })}
-            <ScheduleDialog
-              date={date}
-              duration={duration}
-              duration_unit={duration_unit}
-              hour={hour}
-              minute={minute}
-              period={period}
-              period_unit={period_unit}
-              schedule={schedule}
-              timezone={timezone}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeScheduleDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <ScheduleDialog
+                date={date}
+                duration={duration}
+                duration_unit={duration_unit}
+                hour={hour}
+                minute={minute}
+                period={period}
+                period_unit={period_unit}
+                schedule={schedule}
+                timezone={timezone}
+                title={title}
+                onClose={this.closeScheduleDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
