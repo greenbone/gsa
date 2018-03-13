@@ -45,13 +45,11 @@ const DEFAULTS = {
   fixed: false,
   name: _('default:unnamed'),
   value: '',
-  resource_type: 'agent',
-  resource_id: '',
 };
 
 const TagDialog = ({
-  resource_id,
-  resource_type,
+  resource_id = '',
+  resource_type = 'agent',
   resource_types = [],
   tag,
   title = _('New Tag'),
