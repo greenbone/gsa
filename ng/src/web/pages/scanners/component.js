@@ -87,7 +87,16 @@ class ScannerComponent extends React.Component {
       });
     }
     else {
-      this.setState({scannerDialogVisible: true});
+      this.setState({
+        ca_pub: undefined,
+        host: undefined,
+        scanner: undefined,
+        port: undefined,
+        scannerDialogVisible: true,
+        title: undefined,
+        type: undefined,
+        which_cert: undefined,
+      });
     }
 
     gmp.credentials.getAll().then(response => {
