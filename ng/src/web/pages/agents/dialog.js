@@ -55,10 +55,10 @@ const AgentDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{...DEFAULTS, ...agent}}
+      defaultValues={{...DEFAULTS, ...agent}}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
