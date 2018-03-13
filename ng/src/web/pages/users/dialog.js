@@ -49,33 +49,24 @@ import TextField from '../../components/form/textfield.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
-const DEFAULTS = {
-  access_hosts: '',
-  access_ifaces: '',
-  auth_method: AUTH_METHOD_PASSWORD,
-  comment: '',
-  group_ids: [],
-  hosts_allow: ACCESS_ALLOW_ALL,
-  ifaces_allow: ACCESS_ALLOW_ALL,
-  name: _('Unnamed'),
-  role_ids: [],
-};
-
 class Dialog extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
 
     const {
-      access_ifaces = '',
       access_hosts = '',
+      access_ifaces = '',
+      auth_method = AUTH_METHOD_PASSWORD,
+      comment = '',
       groups,
-      group_ids,
-      hosts_allow,
-      ifaces_allow,
+      group_ids = [],
+      hosts_allow = ACCESS_ALLOW_ALL,
+      ifaces_allow = ACCESS_ALLOW_ALL,
+      name = _('Unnamed'),
       old_name,
       password,
       roles,
-      role_ids,
+      role_ids = [],
       settings,
       title = _('New User'),
       user,
@@ -85,24 +76,21 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
     } = this.props;
 
     const data = {
-      ...DEFAULTS,
       ...user,
       access_hosts,
       access_ifaces,
+      auth_method,
+      comment,
       group_ids,
       groups,
+      hosts_allow,
+      ifaces_allow,
+      name,
       old_name,
       password,
       role_ids,
       roles,
     };
-
-    if (is_defined(hosts_allow)) {
-      data.hosts_allow = hosts_allow;
-    }
-    if (is_defined(ifaces_allow)) {
-      data.ifaces_allow = ifaces_allow;
-    }
 
     const {capabilities} = this.context;
     const is_edit = is_defined(user);
@@ -341,19 +329,19 @@ Dialog.propTypes = {
     AUTH_METHOD_NEW_PASSWORD,
     AUTH_METHOD_PASSWORD,
     AUTH_METHOD_RADIUS,
-  ]).isRequired,
+  ]),
   comment: PropTypes.string,
   group_ids: PropTypes.array,
   groups: PropTypes.array,
   hosts_allow: PropTypes.oneOf([
     ACCESS_ALLOW_ALL,
     ACCESS_DENY_ALL,
-  ]).isRequired,
+  ]),
   id: PropTypes.id,
   ifaces_allow: PropTypes.oneOf([
     ACCESS_ALLOW_ALL,
     ACCESS_DENY_ALL,
-  ]).isRequired,
+  ]),
   name: PropTypes.string,
   old_name: PropTypes.string,
   password: PropTypes.string,
