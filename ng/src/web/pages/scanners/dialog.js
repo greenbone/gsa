@@ -179,10 +179,10 @@ class ScannerDialog extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={{...DEFAULTS, ...scanner}}
+        defaultValues={{...DEFAULTS, ...scanner}}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
           return (
