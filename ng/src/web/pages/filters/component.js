@@ -180,16 +180,17 @@ class FilterComponent extends React.Component {
               create: this.openFilterDialog,
               edit: this.openFilterDialog,
             })}
-            <FilterDialog
-              filter={filter}
-              term={term}
-              title={title}
-              type={type}
-              types={types}
-              visible={dialogVisible}
-              onClose={this.closeFilterDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <FilterDialog
+                filter={filter}
+                term={term}
+                title={title}
+                type={type}
+                types={types}
+                onClose={this.closeFilterDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
