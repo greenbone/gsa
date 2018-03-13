@@ -194,22 +194,23 @@ class RoleComponent extends React.Component {
               create: this.openRoleDialog,
               edit: this.openRoleDialog,
             })}
-            <RoleDialog
-              all_users={allUsers}
-              all_groups={allGroups}
-              all_permissions={allPermissions}
-              group_id={groupId}
-              permission_name={permissionName}
-              permissions={permissions}
-              role={role}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeRoleDialog}
-              onSave={save}
-              onCreatePermission={this.handleCreatePermission}
-              onCreateSuperPermission={this.handleCreateSuperPermission}
-              onDeletePermission={this.handleDeletePermission}
-            />
+            {dialogVisible &&
+              <RoleDialog
+                all_users={allUsers}
+                all_groups={allGroups}
+                all_permissions={allPermissions}
+                group_id={groupId}
+                permission_name={permissionName}
+                permissions={permissions}
+                role={role}
+                title={title}
+                onClose={this.closeRoleDialog}
+                onSave={save}
+                onCreatePermission={this.handleCreatePermission}
+                onCreateSuperPermission={this.handleCreateSuperPermission}
+                onDeletePermission={this.handleDeletePermission}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
