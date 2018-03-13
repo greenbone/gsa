@@ -157,7 +157,7 @@ class ScannerDialog extends React.Component {
       credentials,
       title = _('New Scanner'),
       type,
-      visible,
+      visible = true,
       onClose,
       onNewCredentialClick,
       onSave,
@@ -312,7 +312,7 @@ ScannerDialog.propTypes = {
   scanner: PropTypes.model,
   title: PropTypes.string,
   type: PropTypes.oneOf(scanner_types).isRequired,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),
