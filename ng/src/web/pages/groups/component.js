@@ -125,14 +125,15 @@ class GroupComponent extends React.Component {
               create: this.openGroupDialog,
               edit: this.openGroupDialog,
             })}
-            <GroupDialog
-              allUsers={allUsers}
-              group={group}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeGroupDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <GroupDialog
+                allUsers={allUsers}
+                group={group}
+                title={title}
+                onClose={this.closeGroupDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

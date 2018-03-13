@@ -45,7 +45,7 @@ const Dialog = ({
     grant_full,
     group,
     title = _('New Group'),
-    visible,
+    visible = true,
     onClose,
     onSave,
   }) => {
@@ -131,7 +131,7 @@ Dialog.propTypes = {
   grant_full: PropTypes.oneOf(['0', '1']),
   group: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
