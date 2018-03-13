@@ -60,7 +60,7 @@ const FilterDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{
+      defaultValues={{
         ...DEFAULTS,
         ...filter,
         term,
@@ -68,7 +68,7 @@ const FilterDialog = ({
       }}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
