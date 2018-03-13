@@ -113,7 +113,8 @@ const ScheduleDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -123,14 +124,16 @@ const ScheduleDialog = ({
                 grow="1"
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('First Time')}>
               <DatePicker
                 name="date"
                 value={state.date}
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
               <Divider>
                 <Spinner
                   name="hour"
@@ -139,7 +142,8 @@ const ScheduleDialog = ({
                   max="23"
                   size="2"
                   value={state.hour}
-                  onChange={onValueChange}/> h
+                  onChange={onValueChange}
+                /> h
                 <Spinner
                   name="minute"
                   type="int"
@@ -147,7 +151,8 @@ const ScheduleDialog = ({
                   max="59"
                   size="2"
                   value={state.minute}
-                  onChange={onValueChange}/> m
+                  onChange={onValueChange}
+                /> m
               </Divider>
             </FormGroup>
 
@@ -155,7 +160,8 @@ const ScheduleDialog = ({
               <TimeZoneSelect
                 name="timezone"
                 value={state.timezone}
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Period')}>
@@ -166,11 +172,13 @@ const ScheduleDialog = ({
                   min="0"
                   size="3"
                   value={state.period}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
                 <TimeUnitSelect
                   name="period_unit"
                   value={state.period_unit}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
 
@@ -182,11 +190,13 @@ const ScheduleDialog = ({
                   min="0"
                   size="3"
                   value={state.duration}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
                 <TimeUnitSelect
                   name="duration_unit"
                   value={state.duration_unit}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
           </Layout>
@@ -217,7 +227,6 @@ ScheduleDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
-
 
 export default ScheduleDialog;
 
