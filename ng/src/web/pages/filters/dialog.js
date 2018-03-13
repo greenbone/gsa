@@ -36,11 +36,11 @@ import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
-const DEFAULTS = {name: _('Unnamed'), term: ''};
+const DEFAULTS = {name: _('Unnamed')};
 
 const FilterDialog = ({
   filter,
-  term,
+  term = '',
   title = _('New Filter'),
   type,
   types,
