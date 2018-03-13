@@ -127,7 +127,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                   value={state.name}
                   size="30"
                   onChange={onValueChange}
-                  maxLength="80"/>
+                  maxLength="80"
+                />
               </FormGroup>
 
               <FormGroup title={_('Comment')}>
@@ -135,14 +136,17 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                   name="comment"
                   value={state.comment}
                   grow="1"
-                  size="30" maxLength="400"
-                  onChange={onValueChange}/>
+                  size="30"
+                  maxLength="400"
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               {!is_edit &&
                 <FormGroup
                   title={_('Authentication')}
-                  flex="column">
+                  flex="column"
+                >
                   <Divider>
                     <Radio
                       title={_('Password')}
@@ -184,7 +188,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
               {is_edit &&
                 <FormGroup
                   title={_('Authentication')}
-                  flex="column">
+                  flex="column"
+                >
                   <Divider>
                     <Radio
                       title={_('Password: Use existing Password')}
@@ -235,7 +240,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
 
               {capabilities.mayAccess('roles') &&
                 <FormGroup
-                  title={_('Roles')}>
+                  title={_('Roles')}
+                >
                   <MultiSelect
                     name="role_ids"
                     items={rolesOptions}
@@ -247,7 +253,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
 
               {capabilities.mayAccess('groups') &&
                 <FormGroup
-                  title={_('Groups')}>
+                  title={_('Groups')}
+                >
                   <MultiSelect
                     name="group_ids"
                     items={groupsOptions}
