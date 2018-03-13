@@ -154,13 +154,14 @@ class ReportFormatComponent extends React.Component {
               edit: this.openReportFormatDialog,
               verify: this.handleVerify,
             })}
-            <ReportFormatDialog
-              reportformat={reportformat}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeReportFormatDialog}
-              onSave={this.handleSave}
-            />
+            {dialogVisible &&
+              <ReportFormatDialog
+                reportformat={reportformat}
+                title={title}
+                onClose={this.closeReportFormatDialog}
+                onSave={this.handleSave}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
