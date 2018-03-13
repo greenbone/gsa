@@ -27,7 +27,6 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import {NO_VALUE} from 'gmp/parser';
-import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -45,13 +44,7 @@ import Layout from '../../components/layout/layout.js';
 
 const DEFAULTS = {
   comment: '',
-  duration: NO_VALUE,
-  duration_unit: 'hour',
   name: _('Unnamed'),
-  period: NO_VALUE,
-  period_unit: 'hour',
-  timezone: 'UTC',
-  title: _('New Schedule'),
 };
 
 const TimeUnitSelect = props => {
@@ -70,6 +63,24 @@ const TimeUnitSelect = props => {
 };
 
 const ScheduleDialog = ({
+  date,
+  duration = NO_VALUE,
+  duration_unit = 'hour',
+  hour,
+  minute,
+  period = NO_VALUE,
+  period_unit = 'hour',
+  schedule,
+  timezone = 'UTC',
+  title = _('New Schedule'),
+  visible = true,
+  onClose,
+  onSave,
+}) => {
+
+  const data = {
+    ...DEFAULTS,
+    ...schedule,
     date,
     duration,
     duration_unit,
@@ -77,41 +88,7 @@ const ScheduleDialog = ({
     minute,
     period,
     period_unit,
-    schedule,
     timezone,
-    title = _('New Schedule'),
-    visible = true,
-    onClose,
-    onSave,
-  }) => {
-
-  const data = {
-    ...DEFAULTS,
-    ...schedule,
-  };
-  if (is_defined(date)) {
-    data.date = date;
-  };
-  if (is_defined(duration)) {
-    data.duration = duration;
-  };
-  if (is_defined(duration_unit)) {
-    data.duration_unit = duration_unit;
-  };
-  if (is_defined(hour)) {
-    data.hour = hour;
-  };
-  if (is_defined(minute)) {
-    data.minute = minute;
-  };
-  if (is_defined(period)) {
-    data.period = period;
-  };
-  if (is_defined(period_unit)) {
-    data.period_unit = period_unit;
-  };
-  if (is_defined(timezone)) {
-    data.timezone = timezone;
   };
 
   return (
