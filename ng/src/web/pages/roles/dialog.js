@@ -98,10 +98,10 @@ const Dialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{...DEFAULTS, ...role}}
+      defaultValues={{...DEFAULTS, ...role}}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
