@@ -251,17 +251,18 @@ class TagComponent extends React.Component {
               enable: this.handleEnableTag,
               disable: this.handleDisableTag,
             })}
-            <TagDialog
-              resource_id={resource_id}
-              resource_type={resource_type}
-              resource_types={resource_types}
-              tag={tag}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeTagDialog}
-              onSave={save}
-              {...options}
-            />
+            {dialogVisible &&
+              <TagDialog
+                resource_id={resource_id}
+                resource_type={resource_type}
+                resource_types={resource_types}
+                tag={tag}
+                title={title}
+                onClose={this.closeTagDialog}
+                onSave={save}
+                {...options}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

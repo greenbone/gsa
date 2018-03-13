@@ -53,7 +53,7 @@ const TagDialog = ({
   resource_types = [],
   tag,
   title = _('New Tag'),
-  visible,
+  visible = true,
   onClose,
   onSave,
   ...options
@@ -164,7 +164,7 @@ TagDialog.propTypes = {
   tag: PropTypes.model,
   title: PropTypes.string,
   value: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
