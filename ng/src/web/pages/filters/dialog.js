@@ -39,15 +39,15 @@ import Select from '../../components/form/select.js';
 const DEFAULTS = {name: _('Unnamed'), term: ''};
 
 const FilterDialog = ({
-    filter,
-    term,
-    title = _('New Filter'),
-    type,
-    types,
-    visible,
-    onClose,
-    onSave,
-  }) => {
+  filter,
+  term,
+  title = _('New Filter'),
+  type,
+  types,
+  visible,
+  onClose,
+  onSave,
+}) => {
 
   const filterOptions = types.map(option => ({
     value: option[1],
@@ -81,7 +81,8 @@ const FilterDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -91,7 +92,8 @@ const FilterDialog = ({
                 value={state.comment}
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Term')}>
@@ -100,7 +102,8 @@ const FilterDialog = ({
                 grow="1"
                 value={state.term}
                 size="30"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Type')}>
@@ -108,7 +111,8 @@ const FilterDialog = ({
                 name="type"
                 items={filterOptions}
                 onChange={onValueChange}
-                value={state.type}/>
+                value={state.type}
+              />
             </FormGroup>
           </Layout>
         );
