@@ -147,23 +147,24 @@ class UserComponent extends React.Component {
               create: this.openUserDialog,
               edit: this.openUserDialog,
             })}
-            <UserDialog
-              access_hosts={access_hosts}
-              access_ifaces={access_ifaces}
-              group_ids={group_ids}
-              groups={groups}
-              hosts_allow={hosts_allow}
-              ifaces_allow={ifaces_allow}
-              old_name={old_name}
-              role_ids={role_ids}
-              roles={roles}
-              settings={settings}
-              title={title}
-              user={user}
-              visible={dialogVisible}
-              onClose={this.closeUserDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <UserDialog
+                access_hosts={access_hosts}
+                access_ifaces={access_ifaces}
+                group_ids={group_ids}
+                groups={groups}
+                hosts_allow={hosts_allow}
+                ifaces_allow={ifaces_allow}
+                old_name={old_name}
+                role_ids={role_ids}
+                roles={roles}
+                settings={settings}
+                title={title}
+                user={user}
+                onClose={this.closeUserDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

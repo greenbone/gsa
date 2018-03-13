@@ -79,7 +79,7 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
       settings,
       title = _('New User'),
       user,
-      visible,
+      visible = true,
       onClose,
       onSave,
     } = this.props;
@@ -362,7 +362,7 @@ Dialog.propTypes = {
   settings: PropTypes.settings.isRequired,
   title: PropTypes.string,
   user: PropTypes.model,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
