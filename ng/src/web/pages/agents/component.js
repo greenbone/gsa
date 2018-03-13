@@ -134,13 +134,14 @@ class AgentComponent extends React.Component {
               verify: this.handleVerifyAgent,
               downloadinstaller: this.handleDownloadInstaller,
             })}
-            <AgentDialog
-              agent={agent}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeAgentDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <AgentDialog
+                agent={agent}
+                title={title}
+                onClose={this.closeAgentDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

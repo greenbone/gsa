@@ -42,7 +42,7 @@ const DEFAULTS = {name: _('Unnamed')};
 const AgentDialog = ({
     agent,
     title = _('New Agent'),
-    visible,
+    visible = true,
     onClose,
     onSave,
   }) => {
