@@ -222,10 +222,10 @@ class Dialog extends React.Component {
           title={title}
           onClose={onClose}
           onSave={onSave}
-          initialData={reportformat}
+          defaultValues={reportformat}
         >
           {({
-            data: state,
+            values: state,
             onValueChange,
           }) => {
             return (
