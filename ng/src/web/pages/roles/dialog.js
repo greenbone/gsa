@@ -98,7 +98,10 @@ const Dialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={{...DEFAULTS, ...role}}
+      defaultValues={{
+        ...DEFAULTS,
+        ...role,
+      }}
     >
       {({
         values: state,
@@ -114,7 +117,8 @@ const Dialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup
@@ -125,7 +129,8 @@ const Dialog = ({
                 value={state.comment}
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup
