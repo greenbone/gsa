@@ -62,13 +62,13 @@ const Dialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{
+      defaultValues={{
         ...DEFAULTS,
         ...group,
       }}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
