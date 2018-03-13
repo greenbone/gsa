@@ -72,7 +72,8 @@ const AgentDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -91,7 +92,7 @@ const AgentDialog = ({
                 <FileField
                   name="installer"
                   onChange={onValueChange}
-              />
+                />
               </FormGroup>
             }
 
