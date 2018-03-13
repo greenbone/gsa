@@ -79,6 +79,7 @@ class UserComponent extends React.Component {
       }
       else {
         this.setState({
+          comment: undefined,
           dialogVisible: true,
           settings: response.data,
           title: undefined,
