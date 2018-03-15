@@ -42,11 +42,6 @@ import TimeZoneSelect from '../../components/form/timezoneselect.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
-const DEFAULTS = {
-  comment: '',
-  name: _('Unnamed'),
-};
-
 const TimeUnitSelect = props => {
   const unitOptions = [
     {value: 'hour', label: _('hour(s)')},
@@ -63,11 +58,13 @@ const TimeUnitSelect = props => {
 };
 
 const ScheduleDialog = ({
+  comment = '',
   date,
   duration = NO_VALUE,
   duration_unit = 'hour',
   hour,
   minute,
+  name = _('Unnamed'),
   period = NO_VALUE,
   period_unit = 'hour',
   schedule,
@@ -79,13 +76,14 @@ const ScheduleDialog = ({
 }) => {
 
   const data = {
-    ...DEFAULTS,
     ...schedule,
+    comment,
     date,
     duration,
     duration_unit,
     hour,
     minute,
+    name,
     period,
     period_unit,
     timezone,

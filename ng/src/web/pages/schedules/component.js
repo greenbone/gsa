@@ -57,6 +57,7 @@ class ScheduleComponent extends React.Component {
       const date = schedule.first_time;
 
       this.setState({
+        comment: schedule.comment,
         date,
         dialogVisible: true,
         duration: schedule.simple_duration.value,
@@ -64,6 +65,7 @@ class ScheduleComponent extends React.Component {
           schedule.simple_duration.unit : 'hour',
         hour: date.hours(),
         minute: date.minutes(),
+        name: schedule.name,
         period: schedule.simple_period.value,
         period_unit: is_defined(schedule.simple_period.unit) ?
           schedule.simple_period.unit : 'hour',
@@ -75,9 +77,11 @@ class ScheduleComponent extends React.Component {
       const {timezone} = gmp.globals;
       const now = moment().tz(timezone);
       this.setState({
+        comment: undefined,
         dialogVisible: true,
         duration: undefined,
         duration_unit: undefined,
+        name: undefined,
         period: undefined,
         period_unit: undefined,
         schedule: undefined,
@@ -110,12 +114,14 @@ class ScheduleComponent extends React.Component {
     } = this.props;
 
     const {
+      comment,
       date,
       hour,
       dialogVisible,
       duration,
       duration_unit,
       minute,
+      name,
       period,
       period_unit,
       schedule,
@@ -149,11 +155,13 @@ class ScheduleComponent extends React.Component {
             })}
             {dialogVisible &&
               <ScheduleDialog
+                comment={comment}
                 date={date}
                 duration={duration}
                 duration_unit={duration_unit}
                 hour={hour}
                 minute={minute}
+                name={name}
                 period={period}
                 period_unit={period_unit}
                 schedule={schedule}
