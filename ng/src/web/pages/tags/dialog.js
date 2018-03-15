@@ -39,20 +39,17 @@ import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import Layout from '../../components/layout/layout.js';
 
-const DEFAULTS = {
-  active: YES_VALUE,
-  comment: '',
-  fixed: false,
-  name: _('default:unnamed'),
-  value: '',
-};
-
 const TagDialog = ({
+  active = YES_VALUE,
+  comment = '',
+  fixed = false,
+  name = _('default:unnamed'),
   resource_id = '',
   resource_type = 'agent',
   resource_types = [],
   tag,
   title = _('New Tag'),
+  value = '',
   visible = true,
   onClose,
   onSave,
@@ -65,9 +62,12 @@ const TagDialog = ({
   }));
 
   const data = {
-    ...DEFAULTS,
     ...options,
     ...tag,
+    active,
+    comment,
+    name,
+    value,
   };
   if (is_defined(resource_id)) {
     data.resource_id = resource_id;
@@ -124,7 +124,7 @@ const TagDialog = ({
                 name="resource_type"
                 items={resourceTypesOptions}
                 value={state.resource_type}
-                disabled={state.fixed}
+                disabled={fixed}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -134,7 +134,7 @@ const TagDialog = ({
                 name="resource_id"
                 value={state.resource_id}
                 grow="1"
-                disabled={state.fixed}
+                disabled={fixed}
                 onChange={onValueChange}/>
             </FormGroup>
 
