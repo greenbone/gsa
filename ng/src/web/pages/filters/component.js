@@ -108,6 +108,7 @@ class FilterComponent extends React.Component {
 
       this.setState({
         dialogVisible: true,
+        name: filter.name,
         filter,
         term: filter.toFilterString(),
         title,
@@ -121,6 +122,7 @@ class FilterComponent extends React.Component {
       this.setState({
         dialogVisible: true,
         filter,
+        name: undefined,
         term: '',
         type,
         types,
@@ -150,6 +152,7 @@ class FilterComponent extends React.Component {
     const {
       filter,
       dialogVisible,
+      name,
       term,
       title,
       type,
@@ -183,6 +186,7 @@ class FilterComponent extends React.Component {
             {dialogVisible &&
               <FilterDialog
                 filter={filter}
+                name={name}
                 term={term}
                 title={title}
                 type={type}

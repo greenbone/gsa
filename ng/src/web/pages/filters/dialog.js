@@ -36,10 +36,9 @@ import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
-const DEFAULTS = {name: _('Unnamed')};
-
 const FilterDialog = ({
   filter,
+  name = _('Unnamed'),
   term = '',
   title = _('New Filter'),
   type,
@@ -61,8 +60,8 @@ const FilterDialog = ({
       onClose={onClose}
       onSave={onSave}
       defaultValues={{
-        ...DEFAULTS,
         ...filter,
+        name,
         term,
         type,
       }}
@@ -124,6 +123,7 @@ const FilterDialog = ({
 FilterDialog.propTypes = {
   comment: PropTypes.string,
   filter: PropTypes.model,
+  name: PropTypes.string,
   term: PropTypes.string,
   title: PropTypes.string,
   type: PropTypes.string,
