@@ -26,7 +26,9 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, shorten} from 'gmp/utils';
+
+import {is_defined, shorten} from 'gmp/utils';
+import {has_id} from 'gmp/utils/id.js';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
@@ -84,26 +86,28 @@ class OverrideComponent extends React.Component {
         custom_severity = YES_VALUE;
         new_severity = override.new_severity;
       }
+
+      const {result, task, nvt, hosts} = override;
+
       this.setState({
         dialogVisible: true,
         id: override.id,
         active,
         custom_severity,
-        hosts: override.hosts.length > 0 ? MANUAL : ANY,
-        hosts_manual: override.hosts.join(' '),
+        hosts: hosts.length > 0 ? MANUAL : ANY,
+        hosts_manual: hosts.join(' '),
         new_severity,
         new_severity_from_list,
-        nvt: override.nvt,
-        oid: override.nvt ? override.nvt.oid : undefined,
+        nvt,
+        oid: is_defined(nvt) ? nvt.oid : undefined,
         override,
         port: is_defined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
-        result_id: is_defined(override.result) ? RESULT_UUID : RESULT_ANY,
-        result_uuid: is_defined(override.result) ?
-            override.result.id : '',
+        result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
+        result_uuid: has_id(result) ? result.id : undefined,
         severity: override.severity,
-        task_id: is_defined(override.task) ? TASK_SELECTED : TASK_ANY,
-        task_uuid: is_defined(override.task) ? task.id : '',
+        task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: has_id(task) ? task.id : undefined,
         text: override.text,
         title: _('Edit Override {{- name}}',
           {name: shorten(override.text, 20)}),
