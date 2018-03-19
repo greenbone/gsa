@@ -227,6 +227,7 @@ class OverrideComponent extends React.Component {
               task_id={task_id}
               task_uuid={task_uuid}
               tasks={tasks}
+              text={text}
               title={title}
               onClose={this.closeOverrideDialog}
               onSave={save}
