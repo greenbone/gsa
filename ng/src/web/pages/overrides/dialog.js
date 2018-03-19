@@ -376,13 +376,14 @@ const OverrideDialog = ({
               <Divider>
                 <Radio
                   name="custom_severity"
-                  checked={state.custom_severity === '0'}
-                  value="0"
+                  checked={state.custom_severity === NO_VALUE}
+                  convert={parse_yesno}
+                  value={NO_VALUE}
                   onChange={onValueChange}
                 />
                 <Select
                   name="new_severity_from_list"
-                  disabled={state.custom_severity !== '0'}
+                  disabled={state.custom_severity === YES_VALUE}
                   convert={parse_float}
                   items={severity_from_list_items}
                   value={state.new_severity_from_list}
@@ -391,13 +392,14 @@ const OverrideDialog = ({
                 <Radio
                   name="custom_severity"
                   title={_('Other')}
-                  checked={state.custom_severity === '1'}
-                  value="1"
+                  checked={state.custom_severity === YES_VALUE}
+                  convert={parse_yesno}
+                  value={YES_VALUE}
                   onChange={onValueChange}
                 />
                 <TextField
                   name="new_severity"
-                  disabled={state.custom_severity !== '1'}
+                  disabled={state.custom_severity === NO_VALUE}
                   convert={parse_float}
                   value={state.new_severity}
                   onChange={onValueChange}
@@ -409,22 +411,22 @@ const OverrideDialog = ({
               <Radio
                 name="task_id"
                 title={_('Any')}
-                checked={state.task_id === ''}
-                value=""
+                checked={state.task_id === TASK_ANY}
+                value={TASK_ANY}
                 onChange={onValueChange}
               />
               <Layout flex box>
                 <Radio
                   name="task_id"
                   title={fixed ? state.task_name : ''}
-                  checked={state.task_id === '0'}
-                  value="0"
+                  checked={state.task_id === TASK_SELECTED}
+                  value={TASK_SELECTED}
                   onChange={onValueChange}
                 />
                 {!fixed &&
                   <Select
                     name="task_uuid"
-                    disabled={state.task_id !== '0'}
+                    disabled={state.task_id !== TASK_SELECTED}
                     items={render_select_items(tasks)}
                     value={state.task_uuid}
                     onChange={onValueChange}
@@ -437,27 +439,27 @@ const OverrideDialog = ({
               <Radio
                 name="result_id"
                 title={_('Any')}
-                checked={state.result_id === ''}
-                value=""
+                checked={state.result_id === RESULT_ANY}
+                value={RESULT_ANY}
                 onChange={onValueChange}
               />
               <Divider>
                 <Radio
                   name="result_id"
                   title={
-                    fixed ?
+                    is_defined(result_name) ?
                       _('Only selected result ({{- name}})',
-                        {name: state.result_name}) : _('UUID')
+                        {name: result_name}) : _('UUID')
                   }
-                  checked={state.result_id === '0'}
-                  value="0"
+                  checked={state.result_id === RESULT_UUID}
+                  value={RESULT_UUID}
                   onChange={onValueChange}
                 />
-                {!fixed &&
+                {(result_id === RESULT_ANY || result_id === RESULT_UUID) &&
                   <TextField
                     name="result_uuid"
                     size="34"
-                    disabled={state.result_id !== '0'}
+                    disabled={state.result_id !== RESULT_UUID}
                     value={state.result_uuid}
                     onChange={onValueChange}
                   />
