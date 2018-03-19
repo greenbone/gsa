@@ -91,7 +91,6 @@ class OverrideComponent extends React.Component {
         nvt: override.nvt,
         oid: override.nvt ? override.nvt.oid : undefined,
         override,
-        override_severity: override.severity,
         port: is_defined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
         result_id: is_defined(override.result) ? '' : '0',
@@ -168,7 +167,6 @@ class OverrideComponent extends React.Component {
       nvt,
       oid,
       override,
-      override_severity,
       port,
       port_manual,
       result_id,
@@ -218,7 +216,6 @@ class OverrideComponent extends React.Component {
               nvt={nvt}
               oid={oid}
               override={override}
-              override_severity={override_severity}
               port={port}
               port_manual={port_manual}
               result_id={result_id}
