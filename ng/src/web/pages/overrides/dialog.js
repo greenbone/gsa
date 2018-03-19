@@ -37,6 +37,7 @@ import {
   render_nvt_name,
   result_cvss_risk_factor,
   render_select_items,
+  cvss_number_format,
 } from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -314,27 +315,30 @@ const OverrideDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              {is_edit && !fixed &&
-                <Layout flex box>
-                  <Radio
-                    name="severity"
-                    title={_('> 0.0')}
-                    checked={!is_empty(state.severity) && state.severity > 0.0}
-                    convert={parse_float}
-                    value={0.1}
-                    onChange={onValueChange}
-                  />
-                  <Radio
-                    name="severity"
-                    title={result_cvss_risk_factor(state.override_severity)}
-                    checked={!is_empty(state.severity) && state.severity <= 0.0}
-                    convert={parse_float}
-                    value={state.override_severity}
-                    onChange={onValueChange}
-                  />
+              {is_defined(severity) &&
+                <Layout flex>
+                  {severity > 0 ?
+                    <Radio
+                      name="severity"
+                      title={' > ' +
+                        cvss_number_format(severity - 0.1)}
+                      checked={true}
+                      convert={parse_float}
+                      value={severity}
+                      onChange={onValueChange}
+                    /> :
+                    <Radio
+                      name="severity"
+                      title={result_cvss_risk_factor(severity)}
+                      checked={state.severity === severity}
+                      convert={parse_float}
+                      value={severity}
+                      onChange={onValueChange}
+                    />
+                  }
                 </Layout>
               }
-              {!is_edit && !fixed &&
+              {!is_defined(severity) &&
                 <Layout flex box>
                   <Radio
                     name="severity"
@@ -350,22 +354,6 @@ const OverrideDialog = ({
                     title={_('Log')}
                     checked={state.severity === 0.0}
                     convert={parse_float}
-                    onChange={onValueChange}
-                  />
-                </Layout>
-              }
-              {fixed &&
-                <Layout flex box>
-                  <Radio
-                    name="severity"
-                    title={
-                      state.severity > 0 ?
-                        _('> 0.0') :
-                        result_cvss_risk_factor(state.override_severity)
-                    }
-                    checked={!is_empty(state.severity) && state.severity > 0.0}
-                    convert={parse_float}
-                    value={state.severity}
                     onChange={onValueChange}
                   />
                 </Layout>
