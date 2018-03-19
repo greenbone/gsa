@@ -64,12 +64,12 @@ class ScheduleComponent extends React.Component {
         duration_unit: is_defined(schedule.simple_duration.unit) ?
           schedule.simple_duration.unit : 'hour',
         hour: date.hours(),
+        id: schedule.id,
         minute: date.minutes(),
         name: schedule.name,
         period: schedule.simple_period.value,
         period_unit: is_defined(schedule.simple_period.unit) ?
           schedule.simple_period.unit : 'hour',
-        schedule,
         title: _('Edit Schedule {{name}}', {name: schedule.name}),
       });
     }
@@ -81,6 +81,7 @@ class ScheduleComponent extends React.Component {
         dialogVisible: true,
         duration: undefined,
         duration_unit: undefined,
+        id: undefined,
         name: undefined,
         period: undefined,
         period_unit: undefined,
@@ -120,6 +121,7 @@ class ScheduleComponent extends React.Component {
       dialogVisible,
       duration,
       duration_unit,
+      id,
       minute,
       name,
       period,
@@ -160,6 +162,7 @@ class ScheduleComponent extends React.Component {
                 duration={duration}
                 duration_unit={duration_unit}
                 hour={hour}
+                id={id}
                 minute={minute}
                 name={name}
                 period={period}
