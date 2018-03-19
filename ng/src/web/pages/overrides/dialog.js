@@ -444,6 +444,7 @@ const OverrideDialog = ({
                   onChange={onValueChange}
                 />
                 {(result_id === RESULT_ANY || result_id === RESULT_UUID) &&
+                  !fixed &&
                   <TextField
                     name="result_uuid"
                     size="34"
