@@ -49,12 +49,10 @@ import TextArea from '../../components/form/textarea.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
-import {
-  ACTIVE_NO_VALUE,
-  ACTIVE_YES_FOR_NEXT_VALUE,
-  ACTIVE_YES_ALWAYS_VALUE,
-  ACTIVE_YES_UNTIL_VALUE,
-} from './component';
+export const ACTIVE_NO_VALUE = '0';
+export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
+export const ACTIVE_YES_ALWAYS_VALUE = '-1';
+export const ACTIVE_YES_UNTIL_VALUE = '-2';
 
 const DEFAULTS = {
   active: ACTIVE_YES_ALWAYS_VALUE,
