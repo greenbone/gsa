@@ -310,7 +310,7 @@ const OverrideDialog = ({
               <Radio
                 name="severity"
                 title={_('Any')}
-                checked={is_empty(state.severity)}
+                checked={state.severity === ''}
                 value=""
                 onChange={onValueChange}
               />
