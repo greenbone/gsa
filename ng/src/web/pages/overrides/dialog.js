@@ -170,21 +170,22 @@ const OverrideDialog = ({
                 <Radio
                   name="oid"
                   title={render_nvt_name(nvt)}
-                  checked={state.oid === state.nvt.oid}
-                  value={state.nvt.oid}
+                  checked={state.oid === nvt.oid}
+                  value={nvt.oid}
                   onChange={onValueChange}
                 />
                 <Divider>
                   <Radio
                     name="oid"
-                    checked={state.oid !== state.nvt.oid}
-                    value="1.3.6.1.4.1.25623.1.0."
+                    checked={state.oid !== nvt.oid}
+                    value={DEFAULT_OID_VALUE}
                     onChange={onValueChange}
                   />
                   <TextField
                     name="oid"
-                    disabled={state.oid === state.nvt.oid}
-                    value={state.oid}
+                    disabled={state.oid === nvt.oid}
+                    value={state.oid === nvt.oid ?
+                      DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
                 </Divider>
