@@ -209,7 +209,8 @@ const OverrideDialog = ({
                 title={_('yes, always')}
                 onChange={onValueChange}
               />
-              {is_edit && override.isActive() && !is_empty(override.end_time) &&
+              {is_edit && override.isActive() &&
+                is_defined(override.end_time) &&
                 <Layout flex box>
                   <Divider>
                     <Radio
