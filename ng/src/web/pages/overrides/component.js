@@ -38,6 +38,10 @@ import Wrapper from '../../components/layout/wrapper.js';
 import EntityComponent from '../../entity/component.js';
 
 import OverrideDialog, {
+  TASK_ANY,
+  TASK_SELECTED,
+  RESULT_ANY,
+  RESULT_UUID,
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
@@ -92,11 +96,12 @@ class OverrideComponent extends React.Component {
         override,
         port: is_defined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
-        result_id: is_defined(override.result) ? '' : '0',
-        result_uuid: is_defined(override.result) ? override.result.id : '',
+        result_id: is_defined(override.result) ? RESULT_UUID : RESULT_ANY,
+        result_uuid: is_defined(override.result) ?
+            override.result.id : '',
         severity: override.severity,
-        task_id: is_defined(override.task) ? '' : '0',
-        task_uuid: is_defined(override.task) ? override.task.id : '',
+        task_id: is_defined(override.task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: is_defined(override.task) ? task.id : '',
         text: override.text,
         title: _('Edit Override {{- name}}',
           {name: shorten(override.text, 20)}),

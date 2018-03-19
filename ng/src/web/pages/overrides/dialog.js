@@ -73,6 +73,12 @@ const DEFAULTS = {
   text: '',
 };
 
+export const TASK_ANY = '';
+export const TASK_SELECTED = '0';
+
+export const RESULT_ANY = '';
+export const RESULT_UUID = '0';
+
 const OverrideDialog = ({
   active,
   custom_severity,
