@@ -25,8 +25,8 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils';
-import {parse_float} from 'gmp/parser.js';
+import {is_defined} from 'gmp/utils';
+import {parse_float, parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 import {ANY, MANUAL} from 'gmp/commands/overrides.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -54,24 +54,10 @@ export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
 export const ACTIVE_YES_ALWAYS_VALUE = '-1';
 export const ACTIVE_YES_UNTIL_VALUE = '-2';
 
-const DEFAULTS = {
-  active: ACTIVE_YES_ALWAYS_VALUE,
-  days: 30,
-  fixed: false,
-  oid: '1.3.6.1.4.1.25623.1.0.',
-  hosts: ANY,
-  hosts_manual: '',
-  port: ANY,
-  port_manual: '',
-  custom_severity: '0',
-  new_severity_from_list: -1,
-  result_id: '',
-  result_uuid: '',
-  task_id: '',
-  task_uuid: '',
-  tasks: [],
-  text: '',
-};
+const DEFAULT_DAYS = 30;
+const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
+
+const SEVERITY_FALSE_POSITIVE = -1;
 
 export const TASK_ANY = '';
 export const TASK_SELECTED = '0';
@@ -80,30 +66,29 @@ export const RESULT_ANY = '';
 export const RESULT_UUID = '0';
 
 const OverrideDialog = ({
-  active,
-  custom_severity,
-  days,
-  fixed,
-  hosts,
-  hosts_manual,
+  active = ACTIVE_YES_ALWAYS_VALUE,
+  custom_severity = NO_VALUE,
+  days = DEFAULT_DAYS,
+  fixed = false,
+  hosts = ANY,
+  hosts_manual = '',
   id,
   new_severity,
-  new_severity_from_list,
+  new_severity_from_list = SEVERITY_FALSE_POSITIVE,
   nvt,
-  oid,
+  oid = DEFAULT_OID_VALUE,
   override,
-  override_severity,
-  port,
-  port_manual,
-  result_id,
+  port = ANY,
+  port_manual = '',
+  result_id = RESULT_ANY,
   result_name,
-  result_uuid,
+  result_uuid = '',
   severity,
-  task_id,
+  task_id = TASK_ANY,
   task_name,
   tasks,
   task_uuid,
-  text,
+  text = '',
   title = _('New Override'),
   visible,
   onClose,
@@ -114,68 +99,30 @@ const OverrideDialog = ({
   const is_edit = is_defined(override);
 
   const data = {
-    ...DEFAULTS,
     ...initial,
+    active,
+    custom_severity,
+    days,
+    hosts,
+    hosts_manual,
+    id,
+    new_severity,
+    new_severity_from_list,
     nvt,
+    oid,
+    override,
+    port,
+    port_manual,
+    result_id,
+    result_uuid,
+    severity: is_defined(severity) ? severity : '',
+    task_id,
+    task_name,
+    tasks,
+    task_uuid,
+    text,
   };
 
-  if (is_defined(active)) {
-    data.active = active;
-  };
-  if (is_defined(custom_severity)) {
-    data.custom_severity = custom_severity;
-  };
-  if (is_defined(days)) {
-    data.days = days;
-  };
-  if (is_defined(fixed)) {
-    data.fixed = fixed;
-  };
-  if (is_defined(hosts)) {
-    data.hosts = hosts;
-  };
-  if (is_defined(hosts_manual) && hosts_manual.length > 0) {
-    data.hosts_manual = hosts_manual;
-  };
-  if (is_defined(id)) {
-    data.id = id;
-  };
-  if (is_defined(override_severity)) {
-    data.override_severity = override_severity;
-  };
-  if (is_defined(oid)) {
-    data.oid = oid;
-  };
-  if (is_defined(port)) {
-    data.port = port;
-  };
-  if (is_defined(port_manual) && port_manual.length > 0) {
-    data.port_manual = port_manual;
-  };
-  if (is_defined(result_id)) {
-    data.result_id = result_id;
-  };
-  if (is_defined(result_uuid) && result_uuid.length > 0) {
-    data.result_uuid = result_uuid;
-  };
-  if (is_defined(result_name)) {
-    data.result_name = result_name;
-  };
-  if (is_defined(task_id)) {
-    data.task_id = task_id;
-  };
-  if (is_defined(task_uuid) && task_uuid.length > 0) {
-    data.task_uuid = task_uuid;
-  };
-  if (is_defined(task_name)) {
-    data.task_name = task_name;
-  };
-  if (is_defined(tasks)) {
-    data.tasks = tasks;
-  };
-  if (is_defined(text)) {
-    data.text = text;
-  };
 
   return (
     <SaveDialog
