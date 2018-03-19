@@ -37,7 +37,8 @@ import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
 const FilterDialog = ({
-  filter,
+  comment = '',
+  id,
   name = _('Unnamed'),
   term = '',
   title = _('New Filter'),
@@ -60,7 +61,8 @@ const FilterDialog = ({
       onClose={onClose}
       onSave={onSave}
       defaultValues={{
-        ...filter,
+        comment,
+        id,
         name,
         term,
         type,
@@ -123,6 +125,7 @@ const FilterDialog = ({
 FilterDialog.propTypes = {
   comment: PropTypes.string,
   filter: PropTypes.model,
+  id: PropTypes.string,
   name: PropTypes.string,
   term: PropTypes.string,
   title: PropTypes.string,
