@@ -123,7 +123,29 @@ const OverrideDialog = ({
     text,
   };
 
+  let severity_from_list_items = [{
+    label: _('High'),
+    value: 10.0,
+  }, {
+    value: 5.0,
+    label: _('Medium'),
+  }, {
+    value: 2.0,
+    label: _('Low'),
+  }, {
+    value: 0.0,
+    label: _('Log'),
+  }, {
+    value: SEVERITY_FALSE_POSITIVE,
+    label: _('False Positive'),
+  }];
 
+  if (is_edit) {
+    severity_from_list_items = [{
+      label: '--',
+      value: '',
+    }, ...severity_from_list_items];
+  }
   return (
     <SaveDialog
       visible={visible}
@@ -360,18 +382,10 @@ const OverrideDialog = ({
                   name="new_severity_from_list"
                   disabled={state.custom_severity !== '0'}
                   convert={parse_float}
+                  items={severity_from_list_items}
                   value={state.new_severity_from_list}
                   onChange={onValueChange}
-                >
-                  {is_edit &&
-                    <option value="">--</option>
-                  }
-                  <option value={10.0}>10.0 ({_('High')})</option>
-                  <option value={5.0}>5.0 ({_('Medium')}</option>
-                  <option value={2.0}>2.0 ({_('Low')}</option>
-                  <option value={0.0}>{_('Log')}</option>
-                  <option value={-1.0}>{_('False Positive')}</option>
-                </Select>
+                />
                 <Radio
                   name="custom_severity"
                   title={_('Other')}
