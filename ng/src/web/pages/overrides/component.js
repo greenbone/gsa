@@ -26,22 +26,30 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty, shorten} from 'gmp/utils';
+
+import {is_defined, shorten} from 'gmp/utils';
+import {has_id} from 'gmp/utils/id.js';
+
+import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
 import {ANY, MANUAL} from 'gmp/commands/overrides.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
 import EntityComponent from '../../entity/component.js';
 
-import OverrideDialog from './dialog.js';
-
-export const ACTIVE_NO_VALUE = '0';
-export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
-export const ACTIVE_YES_ALWAYS_VALUE = '-1';
-export const ACTIVE_YES_UNTIL_VALUE = '-2';
+import OverrideDialog, {
+  TASK_ANY,
+  TASK_SELECTED,
+  RESULT_ANY,
+  RESULT_UUID,
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+} from './dialog.js';
 
 class OverrideComponent extends React.Component {
 
@@ -59,15 +67,15 @@ class OverrideComponent extends React.Component {
     if (is_defined(override)) {
       let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
-        if (is_empty(override.end_time)) {
-          active = ACTIVE_YES_ALWAYS_VALUE;
+        if (is_defined(override.end_time)) {
+          active = ACTIVE_YES_UNTIL_VALUE;
         }
         else {
-          active = ACTIVE_YES_UNTIL_VALUE;
+          active = ACTIVE_YES_ALWAYS_VALUE;
         }
       }
 
-      let custom_severity = '0';
+      let custom_severity = NO_VALUE;
       let new_severity_from_list;
       let new_severity;
 
@@ -75,29 +83,31 @@ class OverrideComponent extends React.Component {
         new_severity_from_list = override.new_severity;
       }
       else {
-        custom_severity = '1';
+        custom_severity = YES_VALUE;
         new_severity = override.new_severity;
       }
+
+      const {result, task, nvt, hosts} = override;
+
       this.setState({
         dialogVisible: true,
         id: override.id,
         active,
         custom_severity,
-        hosts: override.hosts.length > 0 ? MANUAL : ANY,
-        hosts_manual: override.hosts.join(' '),
+        hosts: hosts.length > 0 ? MANUAL : ANY,
+        hosts_manual: hosts.join(' '),
         new_severity,
         new_severity_from_list,
-        nvt: override.nvt,
-        oid: override.nvt ? override.nvt.oid : undefined,
+        nvt,
+        oid: is_defined(nvt) ? nvt.oid : undefined,
         override,
-        override_severity: override.severity,
         port: is_defined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
-        result_id: is_defined(override.result) ? '' : '0',
-        result_uuid: is_defined(override.result) ? override.result.id : '',
+        result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
+        result_uuid: has_id(result) ? result.id : undefined,
         severity: override.severity,
-        task_id: is_defined(override.task) ? '' : '0',
-        task_uuid: is_defined(override.task) ? override.task.id : '',
+        task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: has_id(task) ? task.id : undefined,
         text: override.text,
         title: _('Edit Override {{- name}}',
           {name: shorten(override.text, 20)}),
@@ -107,11 +117,15 @@ class OverrideComponent extends React.Component {
       this.setState({
         dialogVisible: true,
         active: undefined,
+        custom_severity: undefined,
         hosts: undefined,
-        hosts_manual: [],
+        hosts_manual: undefined,
+        id: undefined,
         new_severity: undefined,
+        oid: undefined,
         override: undefined,
         port: undefined,
+        port_manual: undefined,
         result_id: undefined,
         result_uuid: undefined,
         severity: undefined,
@@ -134,10 +148,10 @@ class OverrideComponent extends React.Component {
   }
 
   loadTasks() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
-    gmp.tasks.getAll().then(tasks =>
-      this.setState({tasks: tasks}));
+    gmp.tasks.getAll().then(response =>
+      this.setState({tasks: response.data}));
   }
 
   render() {
@@ -167,7 +181,6 @@ class OverrideComponent extends React.Component {
       nvt,
       oid,
       override,
-      override_severity,
       port,
       port_manual,
       result_id,
@@ -217,7 +230,6 @@ class OverrideComponent extends React.Component {
               nvt={nvt}
               oid={oid}
               override={override}
-              override_severity={override_severity}
               port={port}
               port_manual={port_manual}
               result_id={result_id}
@@ -226,6 +238,7 @@ class OverrideComponent extends React.Component {
               task_id={task_id}
               task_uuid={task_uuid}
               tasks={tasks}
+              text={text}
               title={title}
               onClose={this.closeOverrideDialog}
               onSave={save}
@@ -240,6 +253,7 @@ class OverrideComponent extends React.Component {
 
 OverrideComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -252,10 +266,6 @@ OverrideComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-OverrideComponent.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default OverrideComponent;
+export default withGmp(OverrideComponent);
 
 // vim: set ts=2 sw=2 tw=80:
