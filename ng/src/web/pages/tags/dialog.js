@@ -39,23 +39,18 @@ import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import Layout from '../../components/layout/layout.js';
 
-const DEFAULTS = {
-  active: YES_VALUE,
-  comment: '',
-  fixed: false,
-  name: _('default:unnamed'),
-  value: '',
-  resource_type: 'agent',
-  resource_id: '',
-};
-
 const TagDialog = ({
-  resource_id,
-  resource_type,
+  active = YES_VALUE,
+  comment = '',
+  fixed = false,
+  name = _('default:unnamed'),
+  resource_id = '',
+  resource_type = 'agent',
   resource_types = [],
   tag,
   title = _('New Tag'),
-  visible,
+  value = '',
+  visible = true,
   onClose,
   onSave,
   ...options
@@ -67,9 +62,12 @@ const TagDialog = ({
   }));
 
   const data = {
-    ...DEFAULTS,
     ...options,
     ...tag,
+    active,
+    comment,
+    name,
+    value,
   };
   if (is_defined(resource_id)) {
     data.resource_id = resource_id;
@@ -84,10 +82,10 @@ const TagDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
+      defaultValues={data}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -126,7 +124,7 @@ const TagDialog = ({
                 name="resource_type"
                 items={resourceTypesOptions}
                 value={state.resource_type}
-                disabled={state.fixed}
+                disabled={fixed}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -136,7 +134,7 @@ const TagDialog = ({
                 name="resource_id"
                 value={state.resource_id}
                 grow="1"
-                disabled={state.fixed}
+                disabled={fixed}
                 onChange={onValueChange}/>
             </FormGroup>
 
@@ -166,7 +164,7 @@ TagDialog.propTypes = {
   tag: PropTypes.model,
   title: PropTypes.string,
   value: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,

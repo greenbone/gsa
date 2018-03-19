@@ -167,7 +167,10 @@ class TagComponent extends React.Component {
     if (is_defined(tag)) {
       const {resource = {}} = tag;
       this.setState({
+        active: tag.active,
+        comment: tag.comment,
         dialogVisible: true,
+        name: tag.name,
         tag,
         resource_id: resource.id,
         resource_type: is_defined(resource.entity_type) ?
@@ -175,17 +178,22 @@ class TagComponent extends React.Component {
           first(resource_types, [])[0],
         resource_types,
         title: _('Edit Tag {{name}}', {name: shorten(tag.name)}),
+        value: tag.value,
         ...options,
       });
     }
     else {
       this.setState({
+        active: undefined,
+        comment: undefined,
+        name: undefined,
         resource_id: undefined,
         resource_type: undefined,
         resource_types,
         tag: undefined,
         dialogVisible: true,
         title: undefined,
+        value: undefined,
         ...options,
       });
     }
@@ -215,12 +223,16 @@ class TagComponent extends React.Component {
     } = this.props;
 
     const {
+      active,
+      comment,
+      name,
       resource_id,
       resource_type,
       resource_types = [],
       tag,
       dialogVisible,
       title,
+      value,
       ...options
     } = this.state;
 
@@ -251,17 +263,22 @@ class TagComponent extends React.Component {
               enable: this.handleEnableTag,
               disable: this.handleDisableTag,
             })}
-            <TagDialog
-              resource_id={resource_id}
-              resource_type={resource_type}
-              resource_types={resource_types}
-              tag={tag}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeTagDialog}
-              onSave={save}
-              {...options}
-            />
+            {dialogVisible &&
+              <TagDialog
+                active={active}
+                comment={comment}
+                name={name}
+                resource_id={resource_id}
+                resource_type={resource_type}
+                resource_types={resource_types}
+                tag={tag}
+                title={title}
+                value={value}
+                onClose={this.closeTagDialog}
+                onSave={save}
+                {...options}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

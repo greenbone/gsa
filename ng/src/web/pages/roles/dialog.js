@@ -60,7 +60,7 @@ const Dialog = ({
     permission_name,
     role,
     title = _('New Role'),
-    visible,
+    visible = true,
     onClose,
     onCreatePermission,
     onCreateSuperPermission,
@@ -98,10 +98,13 @@ const Dialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{...DEFAULTS, ...role}}
+      defaultValues={{
+        ...DEFAULTS,
+        ...role,
+      }}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
@@ -114,7 +117,8 @@ const Dialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup
@@ -125,7 +129,8 @@ const Dialog = ({
                 value={state.comment}
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup
@@ -244,7 +249,7 @@ Dialog.propTypes = {
   role: PropTypes.model,
   title: PropTypes.string,
   users: PropTypes.array,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,

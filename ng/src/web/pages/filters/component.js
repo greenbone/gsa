@@ -107,8 +107,10 @@ class FilterComponent extends React.Component {
       const title = _('Edit Filter {{name}}', {name: shorten(filter.name)});
 
       this.setState({
+        comment: filter.comment,
         dialogVisible: true,
-        filter,
+        id: filter.id,
+        name: filter.name,
         term: filter.toFilterString(),
         title,
         type: filter_type,
@@ -119,8 +121,10 @@ class FilterComponent extends React.Component {
       const type = first(types, [])[1]; // eslint-disable-line prefer-destructuring
 
       this.setState({
+        comment: undefined,
         dialogVisible: true,
-        filter,
+        id: undefined,
+        name: undefined,
         term: '',
         type,
         types,
@@ -148,8 +152,10 @@ class FilterComponent extends React.Component {
     } = this.props;
 
     const {
-      filter,
+      comment,
       dialogVisible,
+      id,
+      name,
       term,
       title,
       type,
@@ -180,16 +186,19 @@ class FilterComponent extends React.Component {
               create: this.openFilterDialog,
               edit: this.openFilterDialog,
             })}
-            <FilterDialog
-              filter={filter}
-              term={term}
-              title={title}
-              type={type}
-              types={types}
-              visible={dialogVisible}
-              onClose={this.closeFilterDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <FilterDialog
+                comment={comment}
+                id={id}
+                name={name}
+                term={term}
+                title={title}
+                type={type}
+                types={types}
+                onClose={this.closeFilterDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

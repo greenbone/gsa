@@ -75,7 +75,6 @@ const DEFAULTS = {
   comment: '',
   host: 'localhost',
   port: '9391',
-  type: OPENVAS_SCANNER_TYPE,
 };
 
 const client_cert_credentials_filter = credential => {
@@ -156,8 +155,8 @@ class ScannerDialog extends React.Component {
       scanner,
       credentials,
       title = _('New Scanner'),
-      type,
-      visible,
+      type = OPENVAS_SCANNER_TYPE,
+      visible = true,
       onClose,
       onNewCredentialClick,
       onSave,
@@ -180,10 +179,10 @@ class ScannerDialog extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={{...DEFAULTS, ...scanner}}
+        defaultValues={{...DEFAULTS, ...scanner}}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
           return (
@@ -312,7 +311,7 @@ ScannerDialog.propTypes = {
   scanner: PropTypes.model,
   title: PropTypes.string,
   type: PropTypes.oneOf(scanner_types).isRequired,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),

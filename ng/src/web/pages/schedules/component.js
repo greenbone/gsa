@@ -57,17 +57,19 @@ class ScheduleComponent extends React.Component {
       const date = schedule.first_time;
 
       this.setState({
+        comment: schedule.comment,
         date,
         dialogVisible: true,
         duration: schedule.simple_duration.value,
         duration_unit: is_defined(schedule.simple_duration.unit) ?
           schedule.simple_duration.unit : 'hour',
         hour: date.hours(),
+        id: schedule.id,
         minute: date.minutes(),
+        name: schedule.name,
         period: schedule.simple_period.value,
         period_unit: is_defined(schedule.simple_period.unit) ?
           schedule.simple_period.unit : 'hour',
-        schedule,
         title: _('Edit Schedule {{name}}', {name: schedule.name}),
       });
     }
@@ -75,9 +77,12 @@ class ScheduleComponent extends React.Component {
       const {timezone} = gmp.globals;
       const now = moment().tz(timezone);
       this.setState({
+        comment: undefined,
         dialogVisible: true,
         duration: undefined,
         duration_unit: undefined,
+        id: undefined,
+        name: undefined,
         period: undefined,
         period_unit: undefined,
         schedule: undefined,
@@ -110,12 +115,15 @@ class ScheduleComponent extends React.Component {
     } = this.props;
 
     const {
+      comment,
       date,
       hour,
       dialogVisible,
       duration,
       duration_unit,
+      id,
       minute,
+      name,
       period,
       period_unit,
       schedule,
@@ -147,21 +155,25 @@ class ScheduleComponent extends React.Component {
               create: this.openScheduleDialog,
               edit: this.openScheduleDialog,
             })}
-            <ScheduleDialog
-              date={date}
-              duration={duration}
-              duration_unit={duration_unit}
-              hour={hour}
-              minute={minute}
-              period={period}
-              period_unit={period_unit}
-              schedule={schedule}
-              timezone={timezone}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeScheduleDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <ScheduleDialog
+                comment={comment}
+                date={date}
+                duration={duration}
+                duration_unit={duration_unit}
+                hour={hour}
+                id={id}
+                minute={minute}
+                name={name}
+                period={period}
+                period_unit={period_unit}
+                schedule={schedule}
+                timezone={timezone}
+                title={title}
+                onClose={this.closeScheduleDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

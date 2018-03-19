@@ -36,18 +36,18 @@ import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
-const DEFAULTS = {name: _('Unnamed'), term: ''};
-
 const FilterDialog = ({
-    filter,
-    term,
-    title = _('New Filter'),
-    type,
-    types,
-    visible,
-    onClose,
-    onSave,
-  }) => {
+  comment = '',
+  id,
+  name = _('Unnamed'),
+  term = '',
+  title = _('New Filter'),
+  type,
+  types,
+  visible = true,
+  onClose,
+  onSave,
+}) => {
 
   const filterOptions = types.map(option => ({
     value: option[1],
@@ -60,15 +60,16 @@ const FilterDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{
-        ...DEFAULTS,
-        ...filter,
+      defaultValues={{
+        comment,
+        id,
+        name,
         term,
         type,
       }}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
@@ -81,7 +82,8 @@ const FilterDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -91,7 +93,8 @@ const FilterDialog = ({
                 value={state.comment}
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Term')}>
@@ -100,7 +103,8 @@ const FilterDialog = ({
                 grow="1"
                 value={state.term}
                 size="30"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Type')}>
@@ -108,7 +112,8 @@ const FilterDialog = ({
                 name="type"
                 items={filterOptions}
                 onChange={onValueChange}
-                value={state.type}/>
+                value={state.type}
+              />
             </FormGroup>
           </Layout>
         );
@@ -120,11 +125,13 @@ const FilterDialog = ({
 FilterDialog.propTypes = {
   comment: PropTypes.string,
   filter: PropTypes.model,
+  id: PropTypes.string,
+  name: PropTypes.string,
   term: PropTypes.string,
   title: PropTypes.string,
   type: PropTypes.string,
   types: PropTypes.array.isRequired,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

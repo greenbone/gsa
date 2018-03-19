@@ -87,7 +87,16 @@ class ScannerComponent extends React.Component {
       });
     }
     else {
-      this.setState({scannerDialogVisible: true});
+      this.setState({
+        ca_pub: undefined,
+        host: undefined,
+        scanner: undefined,
+        port: undefined,
+        scannerDialogVisible: true,
+        title: undefined,
+        type: undefined,
+        which_cert: undefined,
+      });
     }
 
     gmp.credentials.getAll().then(response => {
@@ -223,24 +232,26 @@ class ScannerComponent extends React.Component {
               downloadcertificate: this.handleDownloadCertificate,
               downloadcredential: this.handleDownloadCredential,
             })}
-            <ScannerDialog
-              ca_pub={ca_pub}
-              credentials={credentials}
-              credential_id={credential_id}
-              visible={scannerDialogVisible}
-              scanner={scanner}
-              title={title}
-              type={type}
-              which_cert={which_cert}
-              onClose={this.closeScannerDialog}
-              onNewCredentialClick={this.openCredentialDialog}
-              onSave={save}
-            />
-            <CredentialDialog
-              visible={credentialDialogVisible}
-              onClose={this.closeCredentialDialog}
-              onSave={this.handleCreateCredential}
-            />
+            {scannerDialogVisible &&
+              <ScannerDialog
+                ca_pub={ca_pub}
+                credentials={credentials}
+                credential_id={credential_id}
+                scanner={scanner}
+                title={title}
+                type={type}
+                which_cert={which_cert}
+                onClose={this.closeScannerDialog}
+                onNewCredentialClick={this.openCredentialDialog}
+                onSave={save}
+              />
+            }
+            {credentialDialogVisible &&
+              <CredentialDialog
+                onClose={this.closeCredentialDialog}
+                onSave={this.handleCreateCredential}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

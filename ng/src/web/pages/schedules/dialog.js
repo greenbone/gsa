@@ -27,7 +27,6 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import {NO_VALUE} from 'gmp/parser';
-import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -42,17 +41,6 @@ import TimeZoneSelect from '../../components/form/timezoneselect.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
-
-const DEFAULTS = {
-  comment: '',
-  duration: NO_VALUE,
-  duration_unit: 'hour',
-  name: _('Unnamed'),
-  period: NO_VALUE,
-  period_unit: 'hour',
-  timezone: 'UTC',
-  title: _('New Schedule'),
-};
 
 const TimeUnitSelect = props => {
   const unitOptions = [
@@ -70,48 +58,35 @@ const TimeUnitSelect = props => {
 };
 
 const ScheduleDialog = ({
+  comment = '',
+  date,
+  duration = NO_VALUE,
+  duration_unit = 'hour',
+  hour,
+  id,
+  minute,
+  name = _('Unnamed'),
+  period = NO_VALUE,
+  period_unit = 'hour',
+  timezone = 'UTC',
+  title = _('New Schedule'),
+  visible = true,
+  onClose,
+  onSave,
+}) => {
+
+  const data = {
+    comment,
     date,
     duration,
     duration_unit,
     hour,
+    id,
     minute,
+    name,
     period,
     period_unit,
-    schedule,
     timezone,
-    title = _('New Schedule'),
-    visible = true,
-    onClose,
-    onSave,
-  }) => {
-
-  const data = {
-    ...DEFAULTS,
-    ...schedule,
-  };
-  if (is_defined(date)) {
-    data.date = date;
-  };
-  if (is_defined(duration)) {
-    data.duration = duration;
-  };
-  if (is_defined(duration_unit)) {
-    data.duration_unit = duration_unit;
-  };
-  if (is_defined(hour)) {
-    data.hour = hour;
-  };
-  if (is_defined(minute)) {
-    data.minute = minute;
-  };
-  if (is_defined(period)) {
-    data.period = period;
-  };
-  if (is_defined(period_unit)) {
-    data.period_unit = period_unit;
-  };
-  if (is_defined(timezone)) {
-    data.timezone = timezone;
   };
 
   return (
@@ -120,10 +95,10 @@ const ScheduleDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
+      defaultValues={data}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -136,7 +111,8 @@ const ScheduleDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -146,14 +122,16 @@ const ScheduleDialog = ({
                 grow="1"
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('First Time')}>
               <DatePicker
                 name="date"
                 value={state.date}
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
               <Divider>
                 <Spinner
                   name="hour"
@@ -162,7 +140,8 @@ const ScheduleDialog = ({
                   max="23"
                   size="2"
                   value={state.hour}
-                  onChange={onValueChange}/> h
+                  onChange={onValueChange}
+                /> h
                 <Spinner
                   name="minute"
                   type="int"
@@ -170,7 +149,8 @@ const ScheduleDialog = ({
                   max="59"
                   size="2"
                   value={state.minute}
-                  onChange={onValueChange}/> m
+                  onChange={onValueChange}
+                /> m
               </Divider>
             </FormGroup>
 
@@ -178,7 +158,8 @@ const ScheduleDialog = ({
               <TimeZoneSelect
                 name="timezone"
                 value={state.timezone}
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Period')}>
@@ -189,11 +170,13 @@ const ScheduleDialog = ({
                   min="0"
                   size="3"
                   value={state.period}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
                 <TimeUnitSelect
                   name="period_unit"
                   value={state.period_unit}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
 
@@ -205,11 +188,13 @@ const ScheduleDialog = ({
                   min="0"
                   size="3"
                   value={state.duration}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
                 <TimeUnitSelect
                   name="duration_unit"
                   value={state.duration_unit}
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
           </Layout>
@@ -229,6 +214,7 @@ ScheduleDialog.propTypes = {
   duration: PropTypes.number,
   duration_unit: PropTypes.timeunit,
   hour: PropTypes.number,
+  id: PropTypes.string,
   minute: PropTypes.number,
   name: PropTypes.string,
   period: PropTypes.number,
@@ -240,7 +226,6 @@ ScheduleDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
-
 
 export default ScheduleDialog;
 

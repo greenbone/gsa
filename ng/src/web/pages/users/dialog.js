@@ -49,60 +49,48 @@ import TextField from '../../components/form/textfield.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
-const DEFAULTS = {
-  access_hosts: '',
-  access_ifaces: '',
-  auth_method: AUTH_METHOD_PASSWORD,
-  comment: '',
-  group_ids: [],
-  hosts_allow: ACCESS_ALLOW_ALL,
-  ifaces_allow: ACCESS_ALLOW_ALL,
-  name: _('Unnamed'),
-  role_ids: [],
-};
-
 class Dialog extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
 
     const {
-      access_ifaces = '',
       access_hosts = '',
+      access_ifaces = '',
+      auth_method = AUTH_METHOD_PASSWORD,
+      comment = '',
       groups,
-      group_ids,
-      hosts_allow,
-      ifaces_allow,
+      group_ids = [],
+      hosts_allow = ACCESS_ALLOW_ALL,
+      ifaces_allow = ACCESS_ALLOW_ALL,
+      name = _('Unnamed'),
       old_name,
       password,
       roles,
-      role_ids,
+      role_ids = [],
       settings,
       title = _('New User'),
       user,
-      visible,
+      visible = true,
       onClose,
       onSave,
     } = this.props;
 
     const data = {
-      ...DEFAULTS,
       ...user,
       access_hosts,
       access_ifaces,
+      auth_method,
+      comment,
       group_ids,
       groups,
+      hosts_allow,
+      ifaces_allow,
+      name,
       old_name,
       password,
       role_ids,
       roles,
     };
-
-    if (is_defined(hosts_allow)) {
-      data.hosts_allow = hosts_allow;
-    }
-    if (is_defined(ifaces_allow)) {
-      data.ifaces_allow = ifaces_allow;
-    }
 
     const {capabilities} = this.context;
     const is_edit = is_defined(user);
@@ -123,10 +111,10 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={data}
+        defaultValues={data}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
           return (
@@ -139,7 +127,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                   value={state.name}
                   size="30"
                   onChange={onValueChange}
-                  maxLength="80"/>
+                  maxLength="80"
+                />
               </FormGroup>
 
               <FormGroup title={_('Comment')}>
@@ -147,14 +136,17 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                   name="comment"
                   value={state.comment}
                   grow="1"
-                  size="30" maxLength="400"
-                  onChange={onValueChange}/>
+                  size="30"
+                  maxLength="400"
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               {!is_edit &&
                 <FormGroup
                   title={_('Authentication')}
-                  flex="column">
+                  flex="column"
+                >
                   <Divider>
                     <Radio
                       title={_('Password')}
@@ -196,7 +188,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
               {is_edit &&
                 <FormGroup
                   title={_('Authentication')}
-                  flex="column">
+                  flex="column"
+                >
                   <Divider>
                     <Radio
                       title={_('Password: Use existing Password')}
@@ -247,7 +240,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
 
               {capabilities.mayAccess('roles') &&
                 <FormGroup
-                  title={_('Roles')}>
+                  title={_('Roles')}
+                >
                   <MultiSelect
                     name="role_ids"
                     items={rolesOptions}
@@ -259,7 +253,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
 
               {capabilities.mayAccess('groups') &&
                 <FormGroup
-                  title={_('Groups')}>
+                  title={_('Groups')}
+                >
                   <MultiSelect
                     name="group_ids"
                     items={groupsOptions}
@@ -341,19 +336,19 @@ Dialog.propTypes = {
     AUTH_METHOD_NEW_PASSWORD,
     AUTH_METHOD_PASSWORD,
     AUTH_METHOD_RADIUS,
-  ]).isRequired,
+  ]),
   comment: PropTypes.string,
   group_ids: PropTypes.array,
   groups: PropTypes.array,
   hosts_allow: PropTypes.oneOf([
     ACCESS_ALLOW_ALL,
     ACCESS_DENY_ALL,
-  ]).isRequired,
+  ]),
   id: PropTypes.id,
   ifaces_allow: PropTypes.oneOf([
     ACCESS_ALLOW_ALL,
     ACCESS_DENY_ALL,
-  ]).isRequired,
+  ]),
   name: PropTypes.string,
   old_name: PropTypes.string,
   password: PropTypes.string,
@@ -362,7 +357,7 @@ Dialog.propTypes = {
   settings: PropTypes.settings.isRequired,
   title: PropTypes.string,
   user: PropTypes.model,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
