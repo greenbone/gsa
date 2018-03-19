@@ -21,8 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import moment from 'moment';
-
 import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 
@@ -34,7 +32,6 @@ class Tag extends Model {
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
-    ret.modified = moment(elem.modified);
 
     if (is_defined(elem.resource) && !is_empty(elem.resource._id)) {
       ret.resource = new Model(elem.resource, elem.resource.type);
