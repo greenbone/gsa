@@ -28,6 +28,8 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined, is_empty, shorten} from 'gmp/utils';
 
+import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
+
 import {ANY, MANUAL} from 'gmp/commands/overrides.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -71,7 +73,7 @@ class OverrideComponent extends React.Component {
         }
       }
 
-      let custom_severity = '0';
+      let custom_severity = NO_VALUE;
       let new_severity_from_list;
       let new_severity;
 
@@ -79,7 +81,7 @@ class OverrideComponent extends React.Component {
         new_severity_from_list = override.new_severity;
       }
       else {
-        custom_severity = '1';
+        custom_severity = YES_VALUE;
         new_severity = override.new_severity;
       }
       this.setState({
