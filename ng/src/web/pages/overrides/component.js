@@ -104,6 +104,7 @@ class OverrideComponent extends React.Component {
         port: is_defined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
         result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
+        result_name: has_id(result) ? result.name : undefined,
         result_uuid: has_id(result) ? result.id : undefined,
         severity: override.severity,
         task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
@@ -127,6 +128,7 @@ class OverrideComponent extends React.Component {
         port: undefined,
         port_manual: undefined,
         result_id: undefined,
+        result_name: undefined,
         result_uuid: undefined,
         severity: undefined,
         task_id: undefined,
@@ -184,6 +186,7 @@ class OverrideComponent extends React.Component {
       port,
       port_manual,
       result_id,
+      result_name,
       result_uuid,
       severity,
       task_id,
@@ -233,6 +236,7 @@ class OverrideComponent extends React.Component {
               port={port}
               port_manual={port_manual}
               result_id={result_id}
+              result_name={result_name}
               result_uuid={result_uuid}
               severity={severity}
               task_id={task_id}
