@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils';
 
-import {MANUAL} from 'gmp/commands/overrides.js';
+import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
@@ -71,7 +71,6 @@ import NoteDialog from '../notes/dialog.js';
 import OverrideComponent from '../overrides/component.js';
 
 import ResultDetails from './details.js';
-import {TASK_SELECTED, RESULT_UUID} from '../overrides/dialog.js';
 
 let ToolBarIcons = ({
   capabilities,
