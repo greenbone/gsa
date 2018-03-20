@@ -175,7 +175,7 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
                 {is_edit && note.isActive() &&
-                  !is_empty(note.end_time) &&
+                  is_defined(note.end_time) &&
                   <Divider>
                     <Radio
                       name="active"
