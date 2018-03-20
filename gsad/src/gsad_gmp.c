@@ -15210,7 +15210,8 @@ static char *
 get_note (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
-  return get_one (connection, "note", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "note", credentials, params, extra_xml,
+                  "result=\"1\"", response_data);
 }
 
 /**
@@ -15944,8 +15945,8 @@ static char *
 get_override (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one (connection, "override", credentials, params, extra_xml, NULL,
-                  response_data);
+  return get_one (connection, "override", credentials, params, extra_xml,
+                  "result=\"1\"", response_data);
 }
 
 /**

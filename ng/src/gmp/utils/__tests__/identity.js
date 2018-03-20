@@ -301,8 +301,11 @@ describe('is_model_element function test', () => {
     expect(is_model_element(x)).toBe(false);
   });
 
+  test('should return false for empty id', () => {
+    expect(is_model_element({_id: ''})).toBe(false);
+  });
+
   test('should return true for an object with _id', () => {
-    expect(is_model_element({_id: 1})).toBe(true);
     expect(is_model_element({_id: '1'})).toBe(true);
   });
 });
