@@ -102,7 +102,6 @@ const OverrideDialog = ({
     days,
     hosts,
     hosts_manual,
-    id,
     new_severity,
     new_severity_from_list,
     nvt,
@@ -147,9 +146,10 @@ const OverrideDialog = ({
     <SaveDialog
       visible={visible}
       title={title}
+      defaultValues={data}
+      values={{id}}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
     >
       {({
         values: state,
