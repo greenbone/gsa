@@ -114,6 +114,7 @@ const NoteDialog = ({
       visible={visible}
       title={title}
       defaultValues={data}
+      values={{id}}
       onClose={onClose}
       onSave={onSave}
     >
