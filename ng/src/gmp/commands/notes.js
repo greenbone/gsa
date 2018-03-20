@@ -30,6 +30,7 @@ import {
   DEFAULT_DAYS,
   ACTIVE_YES_ALWAYS_VALUE,
   ANY,
+  MANUAL,
 } from '../models/override.js';
 
 const log = logger.getLogger('gmp.commands.notes');
@@ -77,13 +78,13 @@ class NoteCommand extends EntityCommand {
       id,
       active,
       days,
-      hosts,
+      hosts: hosts === MANUAL ? '--' : '',
       hosts_manual,
       result_id,
       result_uuid,
       task_id,
       task_uuid,
-      port,
+      port: port === MANUAL ? '--' : '',
       port_manual,
       severity,
       text,
