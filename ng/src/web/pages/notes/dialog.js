@@ -86,13 +86,10 @@ const NoteDialog = ({
   visible,
   onClose,
   onSave,
-  ...initial
 }) => {
-
   const is_edit = is_defined(note);
 
   const data = {
-    ...initial,
     severity,
     active,
     days,
