@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils/index.js';
+
 import PropTypes from '../utils/proptypes.js';
 import {result_cvss_risk_factor} from '../utils/render.js';
 
@@ -42,7 +44,7 @@ const OverrideBox = ({
 }) => {
   let severity;
   let new_severity = '';
-  if (override.severity === 0) {
+  if (!is_defined(override.severity)) {
     severity = _('Any');
   }
   else if (override.severity > 0.0) {
