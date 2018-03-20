@@ -32,6 +32,18 @@ import {
   shorten,
 } from 'gmp/utils';
 
+import {
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+  TASK_SELECTED,
+  TASK_ANY,
+  RESULT_UUID,
+  RESULT_ANY,
+  MANUAL,
+  ANY,
+} from 'gmp/models/override';
+
 import PropTypes from '../../utils/proptypes';
 import withGmp from '../../utils/withGmp';
 
@@ -39,11 +51,8 @@ import Wrapper from '../../components/layout/wrapper';
 
 import EntityComponent from '../../entity/component';
 
-import NoteDialog, {
-  ACTIVE_NO_VALUE,
-  ACTIVE_YES_ALWAYS_VALUE,
-  ACTIVE_YES_UNTIL_VALUE,
-} from './dialog';
+import NoteDialog from './dialog';
+import {has_id} from 'gmp/utils/id';
 
 class NoteComponent extends React.Component {
 
@@ -69,25 +78,23 @@ class NoteComponent extends React.Component {
         }
       }
 
+      const {hosts, nvt, task, result, port} = note;
+
       this.setState({
         dialogVisible: true,
         id: note.id,
         active,
-        hosts: is_defined(note.hosts) && note.hosts.length > 0 ?
-          '--' : undefined,
-        hosts_manual: is_array(note.hosts) ? note.hosts.join(', ') : undefined,
-        port: is_defined(note.port) ? '--' : undefined,
-        port_manual: note.port,
-        oid: is_defined(note.nvt) ? note.nvt.oid : undefined,
+        hosts: is_defined(hosts) && hosts.length > 0 ? MANUAL : ANY,
+        hosts_manual: is_array(hosts) ? hosts.join(', ') : undefined,
+        port: is_defined(port) ? MANUAL : ANY,
+        port_manual: port,
+        oid: is_defined(nvt) ? nvt.oid : undefined,
         note,
-        nvt: note.nvt,
-        note_severity: note.severity,
-        task_id: is_defined(note.task) && note.task.id.length > 0 ? '0' : '',
-        task_uuid: is_defined(note.task) && note.task.id.length > 0 ?
-          note.task.id : undefined,
-        result_id: is_defined(note.result) && note.result.id.length > 0 ?
-          '0' : '',
-        result_uuid: is_defined(note.result) ? note.result.id : '',
+        nvt_name: is_defined(nvt) ? nvt.name : undefined,
+        task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: has_id(task) ? task.id : undefined,
+        result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
+        result_uuid: has_id(result) ? result.id : undefined,
         severity: note.severity,
         text: note.text,
         title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
@@ -101,7 +108,7 @@ class NoteComponent extends React.Component {
         hosts_manual: undefined,
         id: undefined,
         note: undefined,
-        note_severity: undefined,
+        nvt_name: undefined,
         oid: undefined,
         port: undefined,
         port_manual: undefined,
@@ -159,9 +166,7 @@ class NoteComponent extends React.Component {
       id,
       oid,
       note,
-      note_id,
-      note_severity,
-      nvt,
+      nvt_name,
       port,
       result_id,
       result_uuid,
@@ -206,9 +211,7 @@ class NoteComponent extends React.Component {
               id={id}
               oid={oid}
               note={note}
-              note_id={note_id}
-              note_severity={note_severity}
-              nvt={nvt}
+              nvt_name={nvt_name}
               port={port}
               result_id={result_id}
               result_uuid={result_uuid}

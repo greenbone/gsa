@@ -190,18 +190,18 @@ export function get_severity_levels(type) {
   };
 }
 
-export function render_nvt_name(nvt, length = 70) {
-  if (!is_defined(nvt) || !is_defined(nvt.name)) {
+export function render_nvt_name(oid, name, length = 70) {
+  if (!is_defined(name)) {
     return '';
   }
 
-  if (nvt.name.length < length) {
-    return nvt.name;
+  if (name.length < length) {
+    return name;
   }
 
   return (
-    <abbr title={nvt.name + ' (' + nvt.oid + ')'}>
-      {shorten(nvt.name, length)}
+    <abbr title={name + ' (' + oid + ')'}>
+      {shorten(name, length)}
     </abbr>
   );
 }
