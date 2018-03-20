@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 import withCapabilties from '../utils/withCapabilities.js';
@@ -38,7 +38,7 @@ const EntityLink = ({
   textOnly,
   ...props
 }) => {
-  const {id, name, permissions, deleted} = entity;
+  const {id, name, user_capabilities, deleted} = entity;
   let type = entity.entity_type;
 
   if (entity.isInTrash()) {
@@ -62,7 +62,7 @@ const EntityLink = ({
     );
   }
 
-  if ((is_defined(permissions) && is_empty(permissions)) ||
+  if ((user_capabilities.areDefined() && !user_capabilities.mayAccess(type)) ||
     !capabilities.mayAccess(type)) {
     return (
       <span>

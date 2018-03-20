@@ -52,6 +52,6 @@ export function is_date(value) {
 }
 
 export const is_model_element = elem => is_defined(elem) &&
-  is_defined(elem._id);
+  is_string(elem._id) && elem._id.length > 0;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -28,6 +28,7 @@ import _ from 'gmp/locale.js';
 import {NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -106,6 +107,7 @@ const NEW_SNMP = {
 
 const TargetDialog = ({
   alive_tests = ALIVE_TESTS_DEFAULT,
+  capabilities,
   comment = '',
   credentials = [],
   esxi_credential_id = UNSET_VALUE,
@@ -136,7 +138,7 @@ const TargetDialog = ({
   onEsxiCredentialChange,
   onSnmpCredentialChange,
   ...initial
-}, {capabilities}) => {
+}) => {
   const ssh_credentials = credentials.filter(ssh_credential_filter);
   const up_credentials = credentials.filter(value =>
     value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
@@ -469,6 +471,7 @@ const TargetDialog = ({
 
 TargetDialog.propTypes = {
   alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   credentials: PropTypes.array,
   esxi_credential_id: PropTypes.idOrZero,
@@ -504,10 +507,6 @@ TargetDialog.propTypes = {
   onSshCredentialChange: PropTypes.func.isRequired,
 };
 
-TargetDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default TargetDialog;
+export default withCapabilities(TargetDialog);
 
 // vim: set ts=2 sw=2 tw=80:

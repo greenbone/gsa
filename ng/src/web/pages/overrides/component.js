@@ -32,7 +32,17 @@ import {has_id} from 'gmp/utils/id.js';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
-import {ANY, MANUAL} from 'gmp/commands/overrides.js';
+import {
+  ANY,
+  MANUAL,
+  TASK_ANY,
+  TASK_SELECTED,
+  RESULT_ANY,
+  RESULT_UUID,
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+} from 'gmp/models/override';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
@@ -41,15 +51,7 @@ import Wrapper from '../../components/layout/wrapper.js';
 
 import EntityComponent from '../../entity/component.js';
 
-import OverrideDialog, {
-  TASK_ANY,
-  TASK_SELECTED,
-  RESULT_ANY,
-  RESULT_UUID,
-  ACTIVE_NO_VALUE,
-  ACTIVE_YES_ALWAYS_VALUE,
-  ACTIVE_YES_UNTIL_VALUE,
-} from './dialog.js';
+import OverrideDialog from './dialog.js';
 
 class OverrideComponent extends React.Component {
 
@@ -98,12 +100,13 @@ class OverrideComponent extends React.Component {
         hosts_manual: hosts.join(' '),
         new_severity,
         new_severity_from_list,
-        nvt,
+        nvt_name: is_defined(nvt) ? nvt.name : undefined,
         oid: is_defined(nvt) ? nvt.oid : undefined,
         override,
         port: is_defined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
         result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
+        result_name: has_id(result) ? result.name : undefined,
         result_uuid: has_id(result) ? result.id : undefined,
         severity: override.severity,
         task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
@@ -122,11 +125,13 @@ class OverrideComponent extends React.Component {
         hosts_manual: undefined,
         id: undefined,
         new_severity: undefined,
+        nvt_name: undefined,
         oid: undefined,
         override: undefined,
         port: undefined,
         port_manual: undefined,
         result_id: undefined,
+        result_name: undefined,
         result_uuid: undefined,
         severity: undefined,
         task_id: undefined,
@@ -178,12 +183,13 @@ class OverrideComponent extends React.Component {
       id,
       new_severity,
       new_severity_from_list,
-      nvt,
+      nvt_name,
       oid,
       override,
       port,
       port_manual,
       result_id,
+      result_name,
       result_uuid,
       severity,
       task_id,
@@ -227,12 +233,13 @@ class OverrideComponent extends React.Component {
               id={id}
               new_severity={new_severity}
               new_severity_from_list={new_severity_from_list}
-              nvt={nvt}
+              nvt_name={nvt_name}
               oid={oid}
               override={override}
               port={port}
               port_manual={port_manual}
               result_id={result_id}
+              result_name={result_name}
               result_uuid={result_uuid}
               severity={severity}
               task_id={task_id}

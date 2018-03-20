@@ -27,7 +27,22 @@ import React from 'react';
 import _, {datetime} from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils';
 import {parse_float, parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
-import {ANY, MANUAL} from 'gmp/commands/overrides.js';
+
+import {
+  ANY,
+  MANUAL,
+  ACTIVE_YES_ALWAYS_VALUE,
+  DEFAULT_DAYS,
+  DEFAULT_OID_VALUE,
+  RESULT_ANY,
+  TASK_ANY,
+  SEVERITY_FALSE_POSITIVE,
+  ACTIVE_YES_UNTIL_VALUE,
+  ACTIVE_YES_FOR_NEXT_VALUE,
+  ACTIVE_NO_VALUE,
+  TASK_SELECTED,
+  RESULT_UUID,
+} from 'gmp/models/override';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -50,22 +65,6 @@ import TextArea from '../../components/form/textarea.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
-export const ACTIVE_NO_VALUE = '0';
-export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
-export const ACTIVE_YES_ALWAYS_VALUE = '-1';
-export const ACTIVE_YES_UNTIL_VALUE = '-2';
-
-const DEFAULT_DAYS = 30;
-const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
-
-const SEVERITY_FALSE_POSITIVE = -1;
-
-export const TASK_ANY = '';
-export const TASK_SELECTED = '0';
-
-export const RESULT_ANY = '';
-export const RESULT_UUID = '0';
-
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
   custom_severity = NO_VALUE,
@@ -76,8 +75,8 @@ const OverrideDialog = ({
   id,
   new_severity,
   new_severity_from_list = SEVERITY_FALSE_POSITIVE,
-  nvt,
-  oid = DEFAULT_OID_VALUE,
+  nvt_name,
+  oid,
   override,
   port = ANY,
   port_manual = '',
@@ -94,23 +93,18 @@ const OverrideDialog = ({
   visible,
   onClose,
   onSave,
-  ...initial
 }) => {
-
   const is_edit = is_defined(override);
 
   const data = {
-    ...initial,
     active,
     custom_severity,
     days,
     hosts,
     hosts_manual,
-    id,
     new_severity,
     new_severity_from_list,
-    nvt,
-    oid,
+    oid: is_defined(oid) ? oid : DEFAULT_OID_VALUE,
     override,
     port,
     port_manual,
@@ -151,9 +145,10 @@ const OverrideDialog = ({
     <SaveDialog
       visible={visible}
       title={title}
+      defaultValues={data}
+      values={{id}}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
     >
       {({
         values: state,
@@ -163,29 +158,29 @@ const OverrideDialog = ({
           <Layout flex="column">
             {fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{render_nvt_name(nvt)}</Text>
+                <Text>{render_nvt_name(oid, nvt_name)}</Text>
               </FormGroup>
             }
             {is_edit && !fixed &&
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
                   name="oid"
-                  title={render_nvt_name(nvt)}
-                  checked={state.oid === nvt.oid}
-                  value={nvt.oid}
+                  title={render_nvt_name(oid, nvt_name)}
+                  checked={state.oid === oid}
+                  value={oid}
                   onChange={onValueChange}
                 />
                 <Divider>
                   <Radio
                     name="oid"
-                    checked={state.oid !== nvt.oid}
+                    checked={state.oid !== oid}
                     value={DEFAULT_OID_VALUE}
                     onChange={onValueChange}
                   />
                   <TextField
                     name="oid"
-                    disabled={state.oid === nvt.oid}
-                    value={state.oid === nvt.oid ?
+                    disabled={state.oid === oid}
+                    value={state.oid === oid ?
                       DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
@@ -444,6 +439,7 @@ const OverrideDialog = ({
                   onChange={onValueChange}
                 />
                 {(result_id === RESULT_ANY || result_id === RESULT_UUID) &&
+                  !fixed &&
                   <TextField
                     name="result_uuid"
                     size="34"
@@ -487,7 +483,7 @@ OverrideDialog.propTypes = {
   id: PropTypes.string,
   new_severity: PropTypes.number,
   new_severity_from_list: PropTypes.number,
-  nvt: PropTypes.model,
+  nvt_name: PropTypes.string,
   oid: PropTypes.string,
   override: PropTypes.model,
   port: PropTypes.string,
