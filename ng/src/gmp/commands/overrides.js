@@ -81,7 +81,7 @@ class OverrideCommand extends EntityCommand {
     return this.action({
       cmd,
       oid,
-      override_id: id,
+      id,
       active,
       custom_severity,
       new_severity,

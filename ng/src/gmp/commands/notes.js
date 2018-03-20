@@ -56,7 +56,7 @@ class NoteCommand extends EntityCommand {
     const {
       cmd,
       oid,
-      note_id,
+      id,
       active = ACTIVE_YES_ALWAYS_VALUE,
       days = DEFAULT_DAYS,
       hosts = ANY,
@@ -74,7 +74,7 @@ class NoteCommand extends EntityCommand {
     return this.action({
       cmd,
       oid,
-      note_id,
+      id,
       active,
       days,
       hosts,
