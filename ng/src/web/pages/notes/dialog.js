@@ -28,6 +28,19 @@ import _, {datetime} from 'gmp/locale';
 import {is_defined, is_empty} from 'gmp/utils';
 import {parse_float} from 'gmp/parser';
 
+import {
+  ANY,
+  MANUAL,
+  TASK_ANY,
+  DEFAULT_DAYS,
+  ACTIVE_YES_ALWAYS_VALUE,
+  DEFAULT_OID_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+  ACTIVE_YES_FOR_NEXT_VALUE,
+  ACTIVE_NO_VALUE,
+  RESULT_ANY,
+} from 'gmp/models/override';
+
 import SaveDialog from '../../components/dialog/savedialog';
 
 import Divider from '../../components/layout/divider';
@@ -48,31 +61,23 @@ import Radio from '../../components/form/radio.js';
 import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
 
-export const ACTIVE_NO_VALUE = '0';
-export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
-export const ACTIVE_YES_ALWAYS_VALUE = '-1';
-export const ACTIVE_YES_UNTIL_VALUE = '-2';
-
-const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
-
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
-  days = 30,
+  days = DEFAULT_DAYS,
   fixed = false,
   id,
-  hosts = '',
+  hosts = ANY,
   hosts_manual = '',
   note,
-  note_severity = 0,
   nvt,
   oid = DEFAULT_OID_VALUE,
-  port = '',
+  port = ANY,
   port_manual = '',
-  result_id,
+  result_id = RESULT_ANY,
   result_name,
   result_uuid,
   severity,
-  task_id = '0',
+  task_id = TASK_ANY,
   task_name,
   tasks,
   task_uuid,
@@ -217,22 +222,22 @@ const NoteDialog = ({
               <Radio
                 name="hosts"
                 title={_('Any')}
-                checked={state.hosts === ''}
-                value=""
+                checked={state.hosts === ANY}
+                value={ANY}
                 onChange={onValueChange}
               />
               <Divider>
                 <Radio
                   name="hosts"
                   title={state.fixed ? state.hosts_manual : ''}
-                  checked={state.hosts === '--'}
-                  value="--"
+                  checked={state.hosts === MANUAL}
+                  value={MANUAL}
                   onChange={onValueChange}
                 />
                 {!state.fixed &&
                   <TextField
                     name="hosts_manual"
-                    disabled={state.hosts !== '--'}
+                    disabled={state.hosts !== MANUAL}
                     value={state.hosts_manual}
                     onChange={onValueChange}
                   />
@@ -244,22 +249,22 @@ const NoteDialog = ({
               <Radio
                 name="port"
                 title={_('Any')}
-                checked={state.port === ''}
-                value=""
+                checked={state.port === ANY}
+                value={ANY}
                 onChange={onValueChange}
               />
               <Divider>
                 <Radio
                   name="port"
                   title={state.fixed ? state.port_manual : ''}
-                  checked={state.port === '--'}
-                  value="--"
+                  checked={state.port === MANUAL}
+                  value={MANUAL}
                   onChange={onValueChange}
                 />
                 {!state.fixed &&
                   <TextField
                     name="port_manual"
-                    disabled={state.port !== '--'}
+                    disabled={state.port !== MANUAL}
                     value={state.port_manual}
                     onChange={onValueChange}
                   />
