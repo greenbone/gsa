@@ -34,8 +34,6 @@ import {result_cvss_risk_factor} from '../../utils/render.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
-import DetailsLink from '../../components/link/detailslink.js';
-
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
@@ -135,9 +133,8 @@ const NoteDetails = ({
                 {entity.isOrphan() ?
                   <b>{_('Orphan')}</b> : (
                   is_defined(result) ?
-                    <DetailsLink
-                      type="result"
-                      id={result.id}
+                    <EntityLink
+                      entity={result}
                     /> :
                     _('Any')
                   )

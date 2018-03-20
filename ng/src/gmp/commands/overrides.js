@@ -25,12 +25,17 @@ import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import Override from '../models/override.js';
+import {NO_VALUE} from '../parser.js';
+
+import Override, {
+  ANY,
+  MANUAL,
+  ACTIVE_YES_ALWAYS_VALUE,
+  DEFAULT_DAYS,
+  SEVERITY_FALSE_POSITIVE,
+} from '../models/override.js';
 
 const log = logger.getLogger('gmp.commands.overrides');
-
-export const MANUAL = '1';
-export const ANY = '0';
 
 class OverrideCommand extends EntityCommand {
 
@@ -55,8 +60,8 @@ class OverrideCommand extends EntityCommand {
       cmd,
       oid,
       id,
-      active = '-1',
-      days = 30,
+      active = ACTIVE_YES_ALWAYS_VALUE,
+      days = DEFAULT_DAYS,
       hosts = ANY,
       hosts_manual = '',
       result_id = '',
@@ -67,16 +72,16 @@ class OverrideCommand extends EntityCommand {
       task_id = '',
       task_uuid = '',
       text,
-      custom_severity = '0',
+      custom_severity = NO_VALUE,
       new_severity = '',
-      new_severity_from_list = '-1.0',
+      new_severity_from_list = SEVERITY_FALSE_POSITIVE,
     } = args;
 
     log.debug('Saving override', args);
     return this.action({
       cmd,
       oid,
-      override_id: id,
+      id,
       active,
       custom_severity,
       new_severity,

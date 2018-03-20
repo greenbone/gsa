@@ -165,7 +165,7 @@ const ResultDetails = ({
                           id={oid}
                           textOnly={!links}
                         >
-                          {render_nvt_name(nvt)}
+                          {render_nvt_name(oid, nvt.name)}
                           {' OID: ' + oid}
                         </DetailsLink>
                       )}
