@@ -27,7 +27,22 @@ import React from 'react';
 import _, {datetime} from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils';
 import {parse_float, parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
-import {ANY, MANUAL} from 'gmp/commands/overrides.js';
+
+import {
+  ANY,
+  MANUAL,
+  ACTIVE_YES_ALWAYS_VALUE,
+  DEFAULT_DAYS,
+  DEFAULT_OID_VALUE,
+  RESULT_ANY,
+  TASK_ANY,
+  SEVERITY_FALSE_POSITIVE,
+  ACTIVE_YES_UNTIL_VALUE,
+  ACTIVE_YES_FOR_NEXT_VALUE,
+  ACTIVE_NO_VALUE,
+  TASK_SELECTED,
+  RESULT_UUID,
+} from 'gmp/models/override';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -49,22 +64,6 @@ import Text from '../../components/form/text.js';
 import TextArea from '../../components/form/textarea.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
-
-export const ACTIVE_NO_VALUE = '0';
-export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
-export const ACTIVE_YES_ALWAYS_VALUE = '-1';
-export const ACTIVE_YES_UNTIL_VALUE = '-2';
-
-const DEFAULT_DAYS = 30;
-const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
-
-const SEVERITY_FALSE_POSITIVE = -1;
-
-export const TASK_ANY = '';
-export const TASK_SELECTED = '0';
-
-export const RESULT_ANY = '';
-export const RESULT_UUID = '0';
 
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,

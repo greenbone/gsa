@@ -25,12 +25,13 @@ import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import Override from '../models/override.js';
+
+import Override, {
+  ANY,
+  MANUAL,
+} from '../models/override.js';
 
 const log = logger.getLogger('gmp.commands.overrides');
-
-export const MANUAL = '1';
-export const ANY = '0';
 
 class OverrideCommand extends EntityCommand {
 

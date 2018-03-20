@@ -32,7 +32,17 @@ import {has_id} from 'gmp/utils/id.js';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
-import {ANY, MANUAL} from 'gmp/commands/overrides.js';
+import {
+  ANY,
+  MANUAL,
+  TASK_ANY,
+  TASK_SELECTED,
+  RESULT_ANY,
+  RESULT_UUID,
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
+} from 'gmp/models/override';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
@@ -41,15 +51,7 @@ import Wrapper from '../../components/layout/wrapper.js';
 
 import EntityComponent from '../../entity/component.js';
 
-import OverrideDialog, {
-  TASK_ANY,
-  TASK_SELECTED,
-  RESULT_ANY,
-  RESULT_UUID,
-  ACTIVE_NO_VALUE,
-  ACTIVE_YES_ALWAYS_VALUE,
-  ACTIVE_YES_UNTIL_VALUE,
-} from './dialog.js';
+import OverrideDialog from './dialog.js';
 
 class OverrideComponent extends React.Component {
 
