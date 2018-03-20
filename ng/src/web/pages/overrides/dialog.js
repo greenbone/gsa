@@ -93,13 +93,10 @@ const OverrideDialog = ({
   visible,
   onClose,
   onSave,
-  ...initial
 }) => {
-
   const is_edit = is_defined(override);
 
   const data = {
-    ...initial,
     active,
     custom_severity,
     days,
