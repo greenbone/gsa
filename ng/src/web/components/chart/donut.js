@@ -47,8 +47,8 @@ const Arc = ({
   >
     {({targetRef, hide, show}) => (
       <g
-        onMouseOver={show}
-        onMouseOut={hide}
+        onMouseEnter={show}
+        onMouseLeave={hide}
       >
         <path
           d={path}
