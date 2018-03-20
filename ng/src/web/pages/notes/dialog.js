@@ -25,7 +25,10 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale';
-import {is_defined, is_empty} from 'gmp/utils';
+
+import {is_defined} from 'gmp/utils/identity';
+import {is_empty} from 'gmp/utils/string';
+
 import {parse_float} from 'gmp/parser';
 
 import {
