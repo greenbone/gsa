@@ -76,7 +76,7 @@ const OverrideDialog = ({
   new_severity,
   new_severity_from_list = SEVERITY_FALSE_POSITIVE,
   nvt,
-  oid = DEFAULT_OID_VALUE,
+  oid,
   override,
   port = ANY,
   port_manual = '',
@@ -105,7 +105,7 @@ const OverrideDialog = ({
     new_severity,
     new_severity_from_list,
     nvt,
-    oid,
+    oid: is_defined(oid) ? oid : DEFAULT_OID_VALUE,
     override,
     port,
     port_manual,
@@ -167,21 +167,21 @@ const OverrideDialog = ({
                 <Radio
                   name="oid"
                   title={render_nvt_name(nvt)}
-                  checked={state.oid === nvt.oid}
-                  value={nvt.oid}
+                  checked={state.oid === oid}
+                  value={oid}
                   onChange={onValueChange}
                 />
                 <Divider>
                   <Radio
                     name="oid"
-                    checked={state.oid !== nvt.oid}
+                    checked={state.oid !== oid}
                     value={DEFAULT_OID_VALUE}
                     onChange={onValueChange}
                   />
                   <TextField
                     name="oid"
-                    disabled={state.oid === nvt.oid}
-                    value={state.oid === nvt.oid ?
+                    disabled={state.oid === oid}
+                    value={state.oid === oid ?
                       DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />

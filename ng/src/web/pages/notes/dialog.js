@@ -70,7 +70,7 @@ const NoteDialog = ({
   hosts_manual = '',
   note,
   nvt,
-  oid = DEFAULT_OID_VALUE,
+  oid,
   port = ANY,
   port_manual = '',
   result_id = RESULT_ANY,
@@ -97,7 +97,7 @@ const NoteDialog = ({
     hosts,
     hosts_manual,
     id,
-    oid,
+    oid: is_defined(oid) ? oid : DEFAULT_OID_VALUE,
     port,
     port_manual,
     result_id,
@@ -135,21 +135,21 @@ const NoteDialog = ({
                 <Radio
                   title={render_nvt_name(nvt)}
                   name="oid"
-                  checked={state.oid === nvt.oid}
-                  value={nvt.oid}
+                  checked={state.oid === oid}
+                  value={oid}
                   onChange={onValueChange}
                 />
                 <Divider>
                   <Radio
                     name="oid"
-                    checked={state.oid !== nvt.oid}
+                    checked={state.oid !== oid}
                     value={DEFAULT_OID_VALUE}
                     onChange={onValueChange}
                   />
                   <TextField
                     name="oid"
-                    disabled={state.oid === nvt.oid}
-                    value={state.oid === nvt.oid ? DEFAULT_OID_VALUE :
+                    disabled={state.oid === oid}
+                    value={state.oid === oid ? DEFAULT_OID_VALUE :
                       state.oid}
                     onChange={onValueChange}
                   />
