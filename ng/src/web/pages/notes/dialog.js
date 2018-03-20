@@ -290,10 +290,10 @@ const NoteDialog = ({
                   />
                   <Radio
                     name="severity"
-                    title={result_cvss_risk_factor(note_severity)}
+                    title={result_cvss_risk_factor(severity)}
                     checked={!is_empty(state.severity) && state.severity <= 0.0}
                     convert={parse_float}
-                    value={note_severity}
+                    value={severity}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -325,7 +325,7 @@ const NoteDialog = ({
                     title={
                       state.severity > 0 ?
                         _('> 0.0') :
-                        result_cvss_risk_factor(note_severity)
+                        result_cvss_risk_factor(severity)
                     }
                     checked={!is_empty(state.severity) && state.severity > 0.0}
                     convert={parse_float}
@@ -426,7 +426,6 @@ NoteDialog.propTypes = {
   hosts_manual: PropTypes.string,
   id: PropTypes.string,
   note: PropTypes.model,
-  note_severity: PropTypes.number,
   nvt: PropTypes.model,
   oid: PropTypes.string,
   port: PropTypes.string,
