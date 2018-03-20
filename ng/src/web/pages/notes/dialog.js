@@ -54,6 +54,7 @@ import {
   render_nvt_name,
   result_cvss_risk_factor,
   render_select_items,
+  cvss_number_format,
 } from '../../utils/render.js';
 
 import FormGroup from '../../components/form/formgroup.js';
@@ -281,61 +282,48 @@ const NoteDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              {is_edit && !state.fixed &&
-                <Divider>
-                  <Radio
-                    name="severity"
-                    title={_('> 0.0')}
-                    checked={!is_empty(state.severity) && state.severity > 0.0}
-                    convert={parse_float}
-                    value={0.1}
-                    onChange={onValueChange}
-                  />
-                  <Radio
-                    name="severity"
-                    title={result_cvss_risk_factor(severity)}
-                    checked={!is_empty(state.severity) && state.severity <= 0.0}
-                    convert={parse_float}
-                    value={severity}
-                    onChange={onValueChange}
-                  />
-                </Divider>
+              {is_defined(severity) &&
+                <Layout flex>
+                  {severity > 0 ?
+                    <Radio
+                      name="severity"
+                      title={' > ' +
+                        cvss_number_format(severity - 0.1)}
+                      checked={true}
+                      convert={parse_float}
+                      value={severity}
+                      onChange={onValueChange}
+                    /> :
+                    <Radio
+                      name="severity"
+                      title={result_cvss_risk_factor(severity)}
+                      checked={state.severity === severity}
+                      convert={parse_float}
+                      value={severity}
+                      onChange={onValueChange}
+                    />
+                  }
+                </Layout>
               }
-              {!is_edit && !state.fixed &&
-                <Divider>
+              {!is_defined(severity) &&
+                <Layout flex>
                   <Radio
                     name="severity"
                     title={_('> 0.0')}
-                    convert={parse_float}
                     checked={state.severity === 0.1}
-                    value={0.1}
+                    convert={parse_float}
+                    value="0.1"
                     onChange={onValueChange}
                   />
                   <Radio
                     name="severity"
+                    value="0.0"
                     title={_('Log')}
                     checked={state.severity === 0.0}
                     convert={parse_float}
-                    value={0.0}
                     onChange={onValueChange}
                   />
-                </Divider>
-              }
-              {state.fixed &&
-                <Divider>
-                  <Radio
-                    name="severity"
-                    title={
-                      state.severity > 0 ?
-                        _('> 0.0') :
-                        result_cvss_risk_factor(severity)
-                    }
-                    checked={!is_empty(state.severity) && state.severity > 0.0}
-                    convert={parse_float}
-                    value={state.severity}
-                    onChange={onValueChange}
-                  />
-                </Divider>
+                </Layout>
               }
             </FormGroup>
 
