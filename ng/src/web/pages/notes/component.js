@@ -90,7 +90,7 @@ class NoteComponent extends React.Component {
         port_manual: port,
         oid: is_defined(nvt) ? nvt.oid : undefined,
         note,
-        nvt,
+        nvt_name: is_defined(nvt) ? nvt.name : undefined,
         task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
         task_uuid: has_id(task) ? task.id : undefined,
         result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
@@ -108,6 +108,7 @@ class NoteComponent extends React.Component {
         hosts_manual: undefined,
         id: undefined,
         note: undefined,
+        nvt_name: undefined,
         oid: undefined,
         port: undefined,
         port_manual: undefined,
@@ -165,7 +166,7 @@ class NoteComponent extends React.Component {
       id,
       oid,
       note,
-      nvt,
+      nvt_name,
       port,
       result_id,
       result_uuid,
@@ -210,7 +211,7 @@ class NoteComponent extends React.Component {
               id={id}
               oid={oid}
               note={note}
-              nvt={nvt}
+              nvt_name={nvt_name}
               port={port}
               result_id={result_id}
               result_uuid={result_uuid}

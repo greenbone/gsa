@@ -100,7 +100,7 @@ class OverrideComponent extends React.Component {
         hosts_manual: hosts.join(' '),
         new_severity,
         new_severity_from_list,
-        nvt,
+        nvt_name: is_defined(nvt) ? nvt.name : undefined,
         oid: is_defined(nvt) ? nvt.oid : undefined,
         override,
         port: is_defined(override.port) ? MANUAL : ANY,
@@ -125,6 +125,7 @@ class OverrideComponent extends React.Component {
         hosts_manual: undefined,
         id: undefined,
         new_severity: undefined,
+        nvt_name: undefined,
         oid: undefined,
         override: undefined,
         port: undefined,
@@ -182,7 +183,7 @@ class OverrideComponent extends React.Component {
       id,
       new_severity,
       new_severity_from_list,
-      nvt,
+      nvt_name,
       oid,
       override,
       port,
@@ -232,7 +233,7 @@ class OverrideComponent extends React.Component {
               id={id}
               new_severity={new_severity}
               new_severity_from_list={new_severity_from_list}
-              nvt={nvt}
+              nvt_name={nvt_name}
               oid={oid}
               override={override}
               port={port}

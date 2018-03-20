@@ -69,7 +69,7 @@ const NoteDialog = ({
   hosts = ANY,
   hosts_manual = '',
   note,
-  nvt,
+  nvt_name,
   oid,
   port = ANY,
   port_manual = '',
@@ -127,13 +127,13 @@ const NoteDialog = ({
           <Layout flex="column">
             {state.fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{render_nvt_name(nvt)}</Text>
+                <Text>{render_nvt_name(oid, nvt_name)}</Text>
               </FormGroup>
             }
             {is_edit && !state.fixed &&
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
-                  title={render_nvt_name(nvt)}
+                  title={render_nvt_name(oid, nvt_name)}
                   name="oid"
                   checked={state.oid === oid}
                   value={oid}
@@ -426,7 +426,7 @@ NoteDialog.propTypes = {
   hosts_manual: PropTypes.string,
   id: PropTypes.string,
   note: PropTypes.model,
-  nvt: PropTypes.model,
+  nvt_name: PropTypes.string,
   oid: PropTypes.string,
   port: PropTypes.string,
   port_manual: PropTypes.string,

@@ -75,7 +75,7 @@ const OverrideDialog = ({
   id,
   new_severity,
   new_severity_from_list = SEVERITY_FALSE_POSITIVE,
-  nvt,
+  nvt_name,
   oid,
   override,
   port = ANY,
@@ -104,7 +104,6 @@ const OverrideDialog = ({
     hosts_manual,
     new_severity,
     new_severity_from_list,
-    nvt,
     oid: is_defined(oid) ? oid : DEFAULT_OID_VALUE,
     override,
     port,
@@ -159,14 +158,14 @@ const OverrideDialog = ({
           <Layout flex="column">
             {fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{render_nvt_name(nvt)}</Text>
+                <Text>{render_nvt_name(oid, nvt_name)}</Text>
               </FormGroup>
             }
             {is_edit && !fixed &&
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
                   name="oid"
-                  title={render_nvt_name(nvt)}
+                  title={render_nvt_name(oid, nvt_name)}
                   checked={state.oid === oid}
                   value={oid}
                   onChange={onValueChange}
@@ -484,7 +483,7 @@ OverrideDialog.propTypes = {
   id: PropTypes.string,
   new_severity: PropTypes.number,
   new_severity_from_list: PropTypes.number,
-  nvt: PropTypes.model,
+  nvt_name: PropTypes.string,
   oid: PropTypes.string,
   override: PropTypes.model,
   port: PropTypes.string,
