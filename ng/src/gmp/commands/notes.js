@@ -26,6 +26,11 @@ import logger from '../log.js';
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Note from '../models/note.js';
+import {
+  DEFAULT_DAYS,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ANY,
+} from '../models/override.js';
 
 const log = logger.getLogger('gmp.commands.notes');
 
@@ -52,13 +57,13 @@ class NoteCommand extends EntityCommand {
       cmd,
       oid,
       note_id,
-      active = '-1',
-      days = 30,
-      hosts = '',
+      active = ACTIVE_YES_ALWAYS_VALUE,
+      days = DEFAULT_DAYS,
+      hosts = ANY,
       hosts_manual = '',
       result_id = '',
       result_uuid = '',
-      port = '',
+      port = ANY,
       port_manual = '',
       severity = '',
       task_id = '',
