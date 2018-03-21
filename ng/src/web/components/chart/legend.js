@@ -121,14 +121,14 @@ const Legend = ({
               d,
               toolTipProps: {
                 innerRef: targetRef,
-                onMouseOut: hide,
-                onMouseOver: show,
+                onMouseEnter: show,
+                onMouseLeave: hide,
               },
             }) :
             <Item
               innerRef={targetRef}
-              onMouseOver={show}
-              onMouseOut={hide}
+              onMouseEnter={show}
+              onMouseLeave={hide}
             >
               <Rect color={d.color}/>
               <Label>{d.label}</Label>

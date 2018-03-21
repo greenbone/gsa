@@ -273,8 +273,8 @@ const Donut3DChart = ({
                 >
                   {({targetRef, hide, show}) => (
                     <Group
-                      onMouseOver={show}
-                      onMouseOut={hide}
+                      onMouseEnter={show}
+                      onMouseLeave={hide}
                     >
                       <PieInnerPath
                         startAngle={startAngle}

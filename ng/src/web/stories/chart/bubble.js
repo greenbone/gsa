@@ -20,11 +20,46 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import './bar';
-import './donut';
-import './legend';
-import './line';
-import './schedule';
-import './bubble.js';
+import React from 'react';
 
-// vim: set ts=2 sw=2 tw=80:
+import {storiesOf} from '@storybook/react';
+
+import BubbleChart from 'web/components/chart/bubble';
+
+const data = [{
+  value: 10,
+  color: 'blue',
+  label: 'Foo',
+  toolTip: 'Foo is good',
+}, {
+  value: 5,
+  color: 'green',
+  label: 'Bar',
+  toolTip: 'Bar is great',
+}, {
+  value: 2,
+  color: 'red',
+  label: 'Lorem',
+  toolTip: 'Lorem is great',
+}, {
+  value: 11,
+  color: 'yellow',
+  label: 'Ipsum',
+  toolTip: 'Ipsum is great',
+}, {
+  value: 1,
+  color: 'gray',
+  label: 'Sit Sit Sit Sit Sit Sit Sit Sit',
+  toolTip: 'Sit',
+}];
+
+storiesOf('Chart/Bubble', module)
+  .add('default', () => {
+    return (
+      <BubbleChart
+        width={500}
+        height={300}
+        data={data}
+      />
+    );
+  });

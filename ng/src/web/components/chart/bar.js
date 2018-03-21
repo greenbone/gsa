@@ -133,8 +133,8 @@ const BarChart = ({
                       yScale(d.y) :
                       xScale.bandwidth()
                   }
-                  onMouseOver={() => show}
-                  onMouseOut={() => hide}
+                  onMouseEnter={() => show}
+                  onMouseLeave={() => hide}
                 />
               )}
             </ToolTip>
