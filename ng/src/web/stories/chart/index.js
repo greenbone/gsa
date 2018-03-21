@@ -26,5 +26,6 @@ import './legend';
 import './line';
 import './schedule';
 import './bubble.js';
+import './wordcloud.js';
 
 // vim: set ts=2 sw=2 tw=80:
