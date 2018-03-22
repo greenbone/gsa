@@ -29,6 +29,7 @@ import {is_defined, filter, map, select_save_id} from 'gmp/utils';
 import {parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import {render_select_items} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -69,13 +70,6 @@ const scannerTypesOptions = map(scanner_types, scannerType => ({
   label: scanner_type_name(scannerType),
   value: scannerType,
 }));
-
-const DEFAULTS = {
-  name: _('Unnamed'),
-  comment: '',
-  host: 'localhost',
-  port: '9391',
-};
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -138,35 +132,50 @@ class ScannerDialog extends React.Component {
   }
 
   handleTypeChange(value, name) {
-    const {onValueChange, credentials, credential_id} = this.props;
+    const {credentials, credential_id, onScannerTypeChange} = this.props;
 
-    if (onValueChange) {
+    if (onScannerTypeChange) {
       value = parse_int(value);
       const scan_credentials = filter_credentials(credentials, value);
 
-      onValueChange(value, name);
-      onValueChange(select_save_id(scan_credentials, credential_id),
+      onScannerTypeChange(value, name);
+      onScannerTypeChange(select_save_id(scan_credentials, credential_id),
         'credential_id');
     }
   }
 
   render() {
     const {
+      ca_pub,
+      comment = '',
       scanner,
+      credential_id,
       credentials,
+      host = 'localhost',
+      id,
+      name = _('Unnamed'),
+      port = '9391',
       title = _('New Scanner'),
       type = OPENVAS_SCANNER_TYPE,
       visible = true,
+      which_cert,
       onClose,
+      onCredentialChange,
       onNewCredentialClick,
       onSave,
     } = this.props;
 
+    const data = {
+      ca_pub,
+      comment,
+      host,
+      id,
+      name,
+      port,
+      which_cert,
+    };
+
     const scanner_credentials = filter_credentials(credentials, type);
-    const scannerCredentialsOptions = map(scanner_credentials, sCred => ({
-      value: sCred.id,
-      label: sCred.name,
-    }));
     const is_edit = is_defined(scanner);
     const in_use = is_defined(scanner) && scanner.isInUse();
     const show_cred_info = is_defined(scanner) &&
@@ -179,7 +188,11 @@ class ScannerDialog extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        defaultValues={{...DEFAULTS, ...scanner}}
+        defaultValues={data}
+        values={{
+          credential_id,
+          type,
+        }}
       >
         {({
           values: state,
@@ -229,11 +242,11 @@ class ScannerDialog extends React.Component {
               <FormGroup title={_('Type')}>
                 <Select
                   name="type"
-                  value={type}
+                  value={state.type}
                   items={scannerTypesOptions}
-                  disabled={state.in_use}
-                  onChange={this.handleTypeChange}>
-                </Select>
+                  disabled={in_use}
+                  onChange={this.handleTypeChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('CA Certificate')} flex="column">
@@ -281,9 +294,9 @@ class ScannerDialog extends React.Component {
                 <Divider>
                   <Select
                     name="credential_id"
-                    items={scannerCredentialsOptions}
-                    value={state.credential_id}
-                    onChange={onValueChange}/>
+                    items={render_select_items(scanner_credentials)}
+                    value={credential_id}
+                    onChange={onCredentialChange}/>
                   <Layout flex box>
                     <NewIcon
                       value={type}
@@ -305,19 +318,26 @@ class ScannerDialog extends React.Component {
 }
 
 ScannerDialog.propTypes = {
+  ca_pub: PropTypes.string,
+  comment: PropTypes.string,
   credential_id: PropTypes.id,
   credentials: PropTypes.array,
   host: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  port: PropTypes.string,
   scanner: PropTypes.model,
   title: PropTypes.string,
-  type: PropTypes.oneOf(scanner_types).isRequired,
+  type: PropTypes.oneOf(scanner_types),
   visible: PropTypes.bool,
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),
   onClose: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
+  onScannerTypeChange: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
 
