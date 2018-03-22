@@ -49,7 +49,6 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {
-  OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
   scanner_type_name,
@@ -61,7 +60,6 @@ import {
 } from 'gmp/models/credential.js';
 
 const scanner_types = [
-  OPENVAS_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
 ];
@@ -156,7 +154,7 @@ class ScannerDialog extends React.Component {
       name = _('Unnamed'),
       port = '9391',
       title = _('New Scanner'),
-      type = OPENVAS_SCANNER_TYPE,
+      type = OSP_SCANNER_TYPE,
       visible = true,
       which_cert,
       onClose,
