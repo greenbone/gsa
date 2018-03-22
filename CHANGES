@@ -1,3 +1,33 @@
+SUMMARY OF RELEASE CHANGES FOR GSA-6.0
+====================================================
+
+For detailed code changes, please visit
+ https://github.com/greenbone/gsa/commits/gsa-6.0
+ or get the entire source code repository and view log history:
+ $ git clone https://github.com/greenbone/gsa.git
+ $ cd gsa && git checkout gsa-6.0 && git log
+
+gsa 6.0.13 (2018-03-27)
+
+This is the thirteenth maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release incorporates several improvements from the development branch of
+OpenVAS. Please see below for a comprehensive list of changes.
+
+Many thanks to everyone who contributed to this release:
+Steffen Waterkamp, Matthew Mundell, Timo Pollmeier and Michael Wiegand.
+
+Main changes compared to 6.0.12:
+* An issue which caused an inconsistent behaviour importing a target list has been
+  addressed.
+* An issue which impacted on the performance when deleting overrides has been
+  addressed.
+* An issue which caused GSA to partly crash when using special characters on
+  target has been addressed.
+* The years 2018 to 2020 has been added in New/Edit Schedule page.
+
+
 gsa 6.0.12 (2017-05-05)
 
 This is the twelfth maintenance release of the Greenbone Security Assistant (GSA)
