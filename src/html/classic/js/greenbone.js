@@ -1279,7 +1279,7 @@
               }
             }
             else if (elem.matches('input') || elem.matches('textarea')) {
-              if (elem.type === 'file') {
+              if (elem.type === 'file' && gsa.is_defined (elem.files[0])) {
                 data.append(elem.name, elem.files[0]);
               }
               else if ((elem.type !== 'checkbox' && elem.type !== 'radio') ||
