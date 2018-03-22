@@ -70,13 +70,12 @@ class ScannerComponent extends React.Component {
 
   openScannerDialog(scanner) {
     const {gmp} = this.props;
-    let credentials = [];
     const credPromise = gmp.credentials.getAll().then(response => {
-      credentials = response.data;
+      return response.data;
     });
     if (is_defined(scanner)) {
-      credPromise.then(() => gmp.scanner.get(scanner))
-      .then(response => {
+      Promise.all([credPromise, gmp.scanner.get(scanner)])
+      .then(([credentials, response]) => {
         scanner = response.data;
 
         const title = _('Edit Scanner {{name}}', {name: shorten(scanner.name)});
@@ -99,7 +98,7 @@ class ScannerComponent extends React.Component {
       });
     }
     else {
-      credPromise.then(() =>
+      credPromise.then(credentials =>
       this.setState({
         ca_pub: undefined,
         comment: undefined,

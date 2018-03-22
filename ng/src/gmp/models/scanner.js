@@ -152,6 +152,16 @@ class Scanner extends Model {
     return ret;
   }
 
+  isClonable() {
+    return this.scanner_type !== CVE_SCANNER_TYPE &&
+      this.scanner_type !== OPENVAS_SCANNER_TYPE;
+  }
+
+  isWritable() {
+    return super.isWritable() && this.scanner_type !== CVE_SCANNER_TYPE &&
+      this.scanner_type !== OPENVAS_SCANNER_TYPE;
+  }
+
   hasUnixSocket() {
     return is_string(this.host) && this.host[0] === '/';
   }
