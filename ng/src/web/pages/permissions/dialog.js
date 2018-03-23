@@ -42,12 +42,6 @@ import Layout from '../../components/layout/layout.js';
 
 import {permission_description} from '../../utils/render.js';
 
-const DEFAULTS = {
-  name: 'Super',
-  comment: '',
-  resource_type: '',
-};
-
 const need_resource_id = [
   'Super',
   'delete_agent',
@@ -129,15 +123,15 @@ const need_resource_id = [
 ];
 
 const PermissionDialog = ({
-  comment,
+  comment = '',
   fixedResource = false,
   group_id,
   groups = [],
   id,
-  name,
+  name = 'Super',
   permission,
   resource_id,
-  resource_type,
+  resource_type = '',
   role_id,
   roles = [],
   subject_type,
@@ -202,45 +196,25 @@ const PermissionDialog = ({
   });
 
   const data = {
-    ...DEFAULTS,
+    comment,
+    fixedResource,
+    group_id,
+    groups,
+    id,
+    name,
     permission,
-  };
-
-  if (is_defined(comment)) {
-    data.comment = comment;
-  };
-  if (is_defined(name)) {
-    data.name = name;
-  };
-  if (is_defined(group_id)) {
-    data.group_id = group_id;
-  };
-  if (is_defined(resource)) {
-    data.resource = resource;
-  };
-  if (is_defined(resource_id)) {
-    data.resource_id = resource_id;
-  };
-  if (is_defined(resource_id_title)) {
-    data.resource_id_title = resource_id_title;
-  };
-  if (is_defined(resource_type)) {
-    data.resource_type = resource_type;
-  };
-  if (is_defined(role_id)) {
-    data.role_id = role_id;
-  };
-  if (is_defined(subject)) {
-    data.subject = subject;
-  };
-  if (is_defined(subject_obj)) {
-    data.subject_obj = subject_obj;
-  };
-  if (is_defined(subject_type)) {
-    data.subject_type = subject_type;
-  };
-  if (is_defined(user_id)) {
-    data.user_id = user_id;
+    resource,
+    resource_id,
+    resource_id_title,
+    resource_type,
+    role_id,
+    roles,
+    subject,
+    subject_obj,
+    subject_type,
+    title,
+    user_id,
+    users,
   };
 
   return (
