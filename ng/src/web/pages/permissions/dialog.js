@@ -26,9 +26,14 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_empty, is_defined, map} from 'gmp/utils';
+import {is_empty, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import {
+  permission_description,
+  render_select_items,
+} from '../../utils/render.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -39,14 +44,6 @@ import TextField from '../../components/form/textfield.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
-
-import {permission_description} from '../../utils/render.js';
-
-const DEFAULTS = {
-  name: 'Super',
-  comment: '',
-  resource_type: '',
-};
 
 const need_resource_id = [
   'Super',
@@ -129,15 +126,16 @@ const need_resource_id = [
 ];
 
 const PermissionDialog = ({
-  comment,
+  capabilities,
+  comment = '',
   fixedResource = false,
   group_id,
   groups = [],
   id,
-  name,
+  name = 'Super',
   permission,
   resource_id,
-  resource_type,
+  resource_type = '',
   role_id,
   roles = [],
   subject_type,
@@ -147,47 +145,7 @@ const PermissionDialog = ({
   visible,
   onClose,
   onSave,
-}, {capabilities}) => {
-
-  const show_resource_id = need_resource_id.includes(name);
-
-  let resource_id_title;
-  if (resource_type === 'user') {
-    resource_id_title = _('User ID');
-  }
-  else if (resource_type === 'role') {
-    resource_id_title = _('Role ID');
-  }
-  else if (resource_type === 'group') {
-    resource_id_title = _('Group ID');
-  }
-  else {
-    resource_id_title = _('Resource ID');
-  }
-
-  const resource = is_empty(resource_type) ? undefined : {
-    type: resource_type,
-    name: resource_id,
-  };
-
-  let subject_obj;
-  if (subject_type === 'user') {
-    subject_obj = users.find(user => user.id === user_id);
-  }
-  else if (subject_type === 'role') {
-    subject_obj = roles.find(role => role.id === role_id);
-  }
-  else {
-    subject_obj = groups.find(group => group.id === group_id);
-  }
-
-  const subject = {
-  };
-
-  if (is_defined(subject_obj)) {
-    subject.type = subject_type;
-    subject.name = subject_obj.name;
-  }
+}) => {
 
   const perm_opts = [];
 
@@ -202,45 +160,17 @@ const PermissionDialog = ({
   });
 
   const data = {
-    ...DEFAULTS,
+    comment,
+    group_id,
+    id,
+    name,
     permission,
-  };
-
-  if (is_defined(comment)) {
-    data.comment = comment;
-  };
-  if (is_defined(name)) {
-    data.name = name;
-  };
-  if (is_defined(group_id)) {
-    data.group_id = group_id;
-  };
-  if (is_defined(resource)) {
-    data.resource = resource;
-  };
-  if (is_defined(resource_id)) {
-    data.resource_id = resource_id;
-  };
-  if (is_defined(resource_id_title)) {
-    data.resource_id_title = resource_id_title;
-  };
-  if (is_defined(resource_type)) {
-    data.resource_type = resource_type;
-  };
-  if (is_defined(role_id)) {
-    data.role_id = role_id;
-  };
-  if (is_defined(subject)) {
-    data.subject = subject;
-  };
-  if (is_defined(subject_obj)) {
-    data.subject_obj = subject_obj;
-  };
-  if (is_defined(subject_type)) {
-    data.subject_type = subject_type;
-  };
-  if (is_defined(user_id)) {
-    data.user_id = user_id;
+    resource_id,
+    resource_type,
+    role_id,
+    subject_type,
+    title,
+    user_id,
   };
 
   return (
@@ -249,12 +179,49 @@ const PermissionDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
+      defaultValues={data}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
+        const show_resource_id = need_resource_id.includes(state.name);
+
+        const resource = is_empty(state.resource_type) ? undefined : {
+          type: state.resource_type,
+          name: state.resource_id,
+        };
+
+        let subject_obj;
+        if (state.subject_type === 'user') {
+          subject_obj = users.find(user => user.id === state.user_id);
+        }
+        else if (state.subject_type === 'role') {
+          subject_obj = roles.find(role => role.id === state.role_id);
+        }
+        else {
+          subject_obj = groups.find(group => group.id === state.group_id);
+        }
+
+        const subject = is_defined(subject_obj) ? {
+          type: state.subject_type,
+          name: subject_obj.name,
+        } : {};
+
+        let resource_id_title;
+        if (state.resource_type === 'user') {
+          resource_id_title = _('User ID');
+        }
+        else if (state.resource_type === 'role') {
+          resource_id_title = _('Role ID');
+        }
+        else if (state.resource_type === 'group') {
+          resource_id_title = _('Group ID');
+        }
+        else {
+          resource_id_title = _('Resource ID');
+        }
+
         return (
           <Layout flex="column">
 
@@ -262,6 +229,7 @@ const PermissionDialog = ({
               <Select
                 name="name"
                 value={state.name}
+                width="300"
                 onChange={onValueChange}>
                 <option value="Super">
                   {_('Super (Has super access)')}
@@ -277,7 +245,8 @@ const PermissionDialog = ({
                 grow="1"
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup
@@ -295,18 +264,10 @@ const PermissionDialog = ({
                     </Radio>
                     <Select
                       name="user_id"
+                      items={render_select_items(users)}
                       value={state.user_id}
-                      onChange={onValueChange}>
-                      {map(users, user => {
-                        return (
-                          <option
-                            key={user.id}
-                            value={user.id}>
-                            {user.name}
-                          </option>
-                        );
-                      })}
-                    </Select>
+                      onChange={onValueChange}
+                    />
                   </Divider>
                 }
                 {capabilities.mayAccess('roles') &&
@@ -320,18 +281,10 @@ const PermissionDialog = ({
                     </Radio>
                     <Select
                       name="role_id"
+                      items={render_select_items(roles)}
                       value={state.role_id}
-                      onChange={onValueChange}>
-                      {map(roles, role => {
-                        return (
-                          <option
-                            key={role.id}
-                            value={role.id}>
-                            {role.name}
-                          </option>
-                        );
-                      })}
-                    </Select>
+                      onChange={onValueChange}
+                    />
                   </Divider>
                 }
                 {capabilities.mayAccess('groups') &&
@@ -345,18 +298,10 @@ const PermissionDialog = ({
                     </Radio>
                     <Select
                       name="group_id"
+                      items={render_select_items(groups)}
                       value={state.group_id}
-                      onChange={onValueChange}>
-                      {map(groups, group => {
-                        return (
-                          <option
-                            key={group.id}
-                            value={group.id}>
-                            {group.name}
-                          </option>
-                        );
-                      })}
-                    </Select>
+                      onChange={onValueChange}
+                    />
                   </Divider>
                 }
               </Divider>
@@ -376,19 +321,20 @@ const PermissionDialog = ({
               </FormGroup>
             }
             {show_resource_id &&
-              <FormGroup title={state.resource_id_title}>
+              <FormGroup title={resource_id_title}>
                 <TextField
                   name="resource_id"
                   value={state.resource_id}
                   disabled={fixedResource}
                   size="50"
                   maxLength="100"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
             }
             <FormGroup title={_('Description')}>
               {permission_description(
-                state.name, state.resource, state.subject)}
+                state.name, resource, subject)}
             </FormGroup>
 
           </Layout>
@@ -399,6 +345,7 @@ const PermissionDialog = ({
 };
 
 PermissionDialog.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   fixedResource: PropTypes.bool,
   group_id: PropTypes.id,
@@ -421,10 +368,6 @@ PermissionDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-PermissionDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default PermissionDialog;
+export default withCapabilities(PermissionDialog);
 
 // vim: set ts=2 sw=2 tw=80:
