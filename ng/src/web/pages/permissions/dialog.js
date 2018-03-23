@@ -165,20 +165,6 @@ class PermissionDialog extends React.Component {
 
     const show_resource_id = need_resource_id.includes(name);
 
-    let resource_id_title;
-    if (resource_type === 'user') {
-      resource_id_title = _('User ID');
-    }
-    else if (resource_type === 'role') {
-      resource_id_title = _('Role ID');
-    }
-    else if (resource_type === 'group') {
-      resource_id_title = _('Group ID');
-    }
-    else {
-      resource_id_title = _('Resource ID');
-    }
-
     const resource = is_empty(resource_type) ? undefined : {
       type: resource_type,
       name: resource_id,
@@ -217,23 +203,18 @@ class PermissionDialog extends React.Component {
 
     const data = {
       comment,
-      fixedResource,
       group_id,
-      groups,
       id,
       permission,
       resource,
       resource_id,
-      resource_id_title,
       resource_type,
       role_id,
-      roles,
       subject,
       subject_obj,
       subject_type,
       title,
       user_id,
-      users,
     };
 
     return (
@@ -249,6 +230,19 @@ class PermissionDialog extends React.Component {
           values: state,
           onValueChange,
         }) => {
+          let resource_id_title;
+          if (state.resource_type === 'user') {
+            resource_id_title = _('User ID');
+          }
+          else if (state.resource_type === 'role') {
+            resource_id_title = _('Role ID');
+          }
+          else if (state.resource_type === 'group') {
+            resource_id_title = _('Group ID');
+          }
+          else {
+            resource_id_title = _('Resource ID');
+          }
           return (
             <Layout flex="column">
 
@@ -348,7 +342,7 @@ class PermissionDialog extends React.Component {
                 </FormGroup>
               }
               {show_resource_id &&
-                <FormGroup title={state.resource_id_title}>
+                <FormGroup title={resource_id_title}>
                   <TextField
                     name="resource_id"
                     value={state.resource_id}
