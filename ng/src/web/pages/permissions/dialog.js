@@ -29,6 +29,7 @@ import _ from 'gmp/locale.js';
 import {is_empty, is_defined, map} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -123,6 +124,7 @@ const need_resource_id = [
 ];
 
 const PermissionDialog = ({
+  capabilities,
   comment = '',
   fixedResource = false,
   group_id,
@@ -141,7 +143,7 @@ const PermissionDialog = ({
   visible,
   onClose,
   onSave,
-}, {capabilities}) => {
+}) => {
 
   const show_resource_id = need_resource_id.includes(name);
 
@@ -376,6 +378,7 @@ const PermissionDialog = ({
 };
 
 PermissionDialog.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   fixedResource: PropTypes.bool,
   group_id: PropTypes.id,
@@ -398,10 +401,6 @@ PermissionDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-PermissionDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default PermissionDialog;
+export default withCapabilities(PermissionDialog);
 
 // vim: set ts=2 sw=2 tw=80:
