@@ -26,9 +26,13 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_empty, is_defined, map} from 'gmp/utils';
+import {is_empty, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import {
+  permission_description,
+  render_select_items,
+} from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -40,8 +44,6 @@ import TextField from '../../components/form/textfield.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
-
-import {permission_description} from '../../utils/render.js';
 
 const need_resource_id = [
   'Super',
@@ -289,18 +291,10 @@ class PermissionDialog extends React.Component {
                       </Radio>
                       <Select
                         name="user_id"
+                        items={render_select_items(users)}
                         value={state.user_id}
-                        onChange={onValueChange}>
-                        {map(users, user => {
-                          return (
-                            <option
-                              key={user.id}
-                              value={user.id}>
-                              {user.name}
-                            </option>
-                          );
-                        })}
-                      </Select>
+                        onChange={onValueChange}
+                      />
                     </Divider>
                   }
                   {capabilities.mayAccess('roles') &&
@@ -314,18 +308,10 @@ class PermissionDialog extends React.Component {
                       </Radio>
                       <Select
                         name="role_id"
+                        items={render_select_items(roles)}
                         value={state.role_id}
-                        onChange={onValueChange}>
-                        {map(roles, role => {
-                          return (
-                            <option
-                              key={role.id}
-                              value={role.id}>
-                              {role.name}
-                            </option>
-                          );
-                        })}
-                      </Select>
+                        onChange={onValueChange}
+                      />
                     </Divider>
                   }
                   {capabilities.mayAccess('groups') &&
@@ -339,18 +325,10 @@ class PermissionDialog extends React.Component {
                       </Radio>
                       <Select
                         name="group_id"
+                        items={render_select_items(groups)}
                         value={state.group_id}
-                        onChange={onValueChange}>
-                        {map(groups, group => {
-                          return (
-                            <option
-                              key={group.id}
-                              value={group.id}>
-                              {group.name}
-                            </option>
-                          );
-                        })}
-                      </Select>
+                        onChange={onValueChange}
+                      />
                     </Divider>
                   }
                 </Divider>
