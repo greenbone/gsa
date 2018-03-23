@@ -27,5 +27,6 @@ import './line';
 import './schedule';
 import './bubble.js';
 import './wordcloud.js';
+import './topology.js';
 
 // vim: set ts=2 sw=2 tw=80:
