@@ -96,9 +96,9 @@ class PermissionsComponent extends React.Component {
     }
     else {
       state = {
-        name: 'Super',
         comment: undefined,
         id: undefined,
+        name: undefined,
         resource_type: undefined,
         resource_id: undefined,
         resource_id_title: undefined,
