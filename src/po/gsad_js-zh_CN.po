@@ -24,289 +24,459 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 13:22+0000\n"
-"PO-Revision-Date: 2016-03-14 13:45+0000\n"
-"Last-Translator:  <openvas-devel@wald.intevation.org>\n"
+"POT-Creation-Date: 2018-02-06 15:37+0100\n"
+"PO-Revision-Date: 2018-02-26 09:36+0200\n"
+"Last-Translator: Zheng <Lurker@vip.qq.com>\n"
 "Language-Team: Chinese (simplified) <openvas-devel@wald.intevation.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.5.1.3\n"
+"X-POOTLE-MTIME: 1519634174.487428\n"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:766
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:767
-msgid "Unfold {{name}}"
-msgstr ""
+#: src/html/classic/js/greenbone.js:395
+msgid "Details"
+msgstr "详情"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:772
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:773
-msgid "Fold {{name}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:832
+#: src/html/classic/js/greenbone.js:631 src/html/classic/js/greenbone.js:1380
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:836
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:843
+#: src/html/classic/js/greenbone.js:1205 src/html/classic/js/greenbone.js:1206
+msgid "Unfold {{name}}"
+msgstr "展开 {{name}}"
+
+#: src/html/classic/js/greenbone.js:1211 src/html/classic/js/greenbone.js:1212
+msgid "Fold {{name}}"
+msgstr "折叠 {{name}}"
+
+#: src/html/classic/js/greenbone.js:1389 src/html/classic/js/greenbone.js:1397
 msgid "Create"
-msgstr ""
+msgstr "创建"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:851
+#: src/html/classic/js/greenbone.js:1405
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:929
+#: src/html/classic/js/greenbone.js:1496
+msgid "Please wait..."
+msgstr "请稍候..."
+
+#: src/html/classic/js/greenbone.js:1592
 msgid "Update Filter"
-msgstr ""
+msgstr "更新过滤器"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:975
+#: src/html/classic/js/greenbone.js:1609
 msgid "Select date"
+msgstr "选择日期"
+
+#: src/html/classic/js/greenbone.js:1925
+msgid "Follow link?"
+msgstr "跟踪链接..."
+
+#: src/html/classic/js/greenbone.js:1928
+msgid ""
+"This dialog will open a new window for <a>{{url}}</a> if you click on follow "
+"link. Following this link is on your own responsibility. Greenbone doesn't "
+"endorse the content you will see there."
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:265
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:266
-msgid "Edit Dashboard"
+#: src/html/classic/js/greenbone.js:1933
+msgid "Abort"
+msgstr "中止"
+
+#: src/html/classic/js/greenbone.js:1934
+msgid "Follow link"
+msgstr "跟踪连接"
+
+#: src/html/classic/js/greenbone.js:2007
+msgid "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
+msgstr "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
+
+#: src/html/classic/js/greenbone.js:2015
+msgid "{{subject}} {{subject_id}} {{description}}  {{id}}"
+msgstr "{{subject}} {{subject_id}} {{description}}  {{id}}"
+
+#: src/html/classic/js/greenbone.js:2020
+msgid "{{subject}} {{subject_id}} {{description}}"
+msgstr "{{subject}} {{subject_id}} {{description}}"
+
+#: src/html/classic/js/gsa_bar_chart.js:68
+msgid "Loading bar chart ..."
+msgstr "正在加载条形图 ..."
+
+#: src/html/classic/js/gsa_bar_chart.js:68
+msgid "Bar Chart"
+msgstr "条形图"
+
+#: src/html/classic/js/gsa_bubble_chart.js:57
+msgid "Loading bubble chart ..."
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:278
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:279
-msgid "Add new Component"
+#: src/html/classic/js/gsa_bubble_chart.js:57
+#: src/html/classic/js/gsa_line_chart.js:79
+msgid "Bubble Chart"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:293
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:294
-msgid "Stop Editing"
+#: src/html/classic/js/gsa_bubble_chart.js:102
+msgid "No matching {{- resource_type}}"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1215
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1216
-msgid "Remove"
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1423
+#: src/html/classic/js/gsa_chart_helpers.js:1545
+msgid "High"
+msgstr "高危"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1223
-msgid "Initializing component \"{{component}}\"..."
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1426
+msgid "Medium"
+msgstr "中危"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1705
-msgid "Unnamed chart"
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1429
+msgid "Low"
+msgstr "低危"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2121
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2274
-msgid "Internal error: Invalid request"
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1432
+msgid "Log"
+msgstr "日志"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2122
-msgid "Invalid request command: \"{{command}}\""
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1435
+msgid "False Positive"
+msgstr "错误的测试结果"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2147
-msgid "Loading aborted"
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1438
+msgid "Debug"
+msgstr "调试"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2160
-msgid "HTTP error {{error}}"
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1441
+msgid "Error"
+msgstr "错误"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2162
-msgid "Error: HTTP request returned status {{status}} for URL: {{url}}"
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1444
+msgid "N/A"
+msgstr "N/A"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2172
-msgid "Error reading XML"
-msgstr ""
+#: src/html/classic/js/gsa_chart_helpers.js:1458
+msgid "Operating System"
+msgstr "操作系统"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2173
-msgid "Error reading XML from URL {{url}}: {{error}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2184
-msgid "Error parsing XML data"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2185
-msgid "Error parsing XML data. Details: {{details}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2204
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2246
-msgid "Error {{omp_status}}: {{omp_status_text}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2207
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2249
-msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2275
-msgid "Invalid request command: \"{{command}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2649
+#: src/html/classic/js/gsa_chart_helpers.js:1460
 msgid "OVAL definition"
-msgstr ""
+msgstr "OVAL 定义"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2651
+#: src/html/classic/js/gsa_chart_helpers.js:1462
 msgid "CERT-Bund Advisory"
-msgstr ""
+msgstr "CERT-Bund 公告"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2653
+#: src/html/classic/js/gsa_chart_helpers.js:1464
 msgid "DFN-CERT Advisory"
-msgstr ""
+msgstr "DFN-CERT 公告"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2655
+#: src/html/classic/js/gsa_chart_helpers.js:1466
 msgid "SecInfo Item"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2669
+#: src/html/classic/js/gsa_chart_helpers.js:1482
 msgid "DFN-CERT Advisories"
-msgstr ""
+msgstr "DFN-CERT 公告"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2671
+#: src/html/classic/js/gsa_chart_helpers.js:1484
 msgid "CERT-Bund Advisories"
+msgstr "CERT-Bund 公告"
+
+#: src/html/classic/js/gsa_chart_helpers.js:1528
+msgid "total {{- resource_type_plural}}"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2685
-msgid "total {{resource_type_plural}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2693
+#: src/html/classic/js/gsa_chart_helpers.js:1535
 msgid "creation time"
-msgstr ""
+msgstr "创建时间"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2695
+#: src/html/classic/js/gsa_chart_helpers.js:1537
+msgid "duration"
+msgstr "时期"
+
+#: src/html/classic/js/gsa_chart_helpers.js:1539
 msgid "modification time"
-msgstr ""
+msgstr "修改时间"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2697
+#: src/html/classic/js/gsa_chart_helpers.js:1541
 msgid "QoD"
-msgstr ""
+msgstr "相似度"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2699
+#: src/html/classic/js/gsa_chart_helpers.js:1543
 msgid "QoD type"
-msgstr ""
+msgstr "相似度类型"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2701
-msgid "High"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2703
+#: src/html/classic/js/gsa_chart_helpers.js:1547
 msgid "High / host"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3118
+#: src/html/classic/js/gsa_chart_helpers.js:1549
+msgid "Duration / host"
+msgstr ""
+
+#: src/html/classic/js/gsa_chart_helpers.js:1600
+msgid "min. {{- field_name}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_chart_helpers.js:1604
+msgid "max. {{- field_name}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_chart_helpers.js:1608
+msgid "average {{- field_name}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_chart_helpers.js:1612
+msgid "summed {{- field_name}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_chart_helpers.js:2027
 msgid "None"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3121
+#: src/html/classic/js/gsa_chart_helpers.js:2030
 msgid "Exploit"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3124
+#: src/html/classic/js/gsa_chart_helpers.js:2033
 msgid "Remote vulnerability"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3127
+#: src/html/classic/js/gsa_chart_helpers.js:2036
 msgid "Package check"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3130
+#: src/html/classic/js/gsa_chart_helpers.js:2039
 msgid "Registry check"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3133
+#: src/html/classic/js/gsa_chart_helpers.js:2042
 msgid "Executable version"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3136
+#: src/html/classic/js/gsa_chart_helpers.js:2045
 msgid "Remote analysis"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3139
+#: src/html/classic/js/gsa_chart_helpers.js:2048
 msgid "Remote probe"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3142
+#: src/html/classic/js/gsa_chart_helpers.js:2051
 msgid "Unreliable rem. banner"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3145
+#: src/html/classic/js/gsa_chart_helpers.js:2054
 msgid "Unreliable exec. version"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3415
+#: src/html/classic/js/gsa_chart_helpers.js:2546
 msgid "{{title}} (Loading...)"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3422
+#: src/html/classic/js/gsa_chart_helpers.js:2553
 msgid "{{title}} {{filter_text}} (Total: {{count}})"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3502
+#: src/html/classic/js/gsa_chart_helpers.js:2650
 msgid "Greenbone Security Assistant - Chart data table"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3549
+#: src/html/classic/js/gsa_chart_helpers.js:2702
 msgid "Applied filter: {{filter}}"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3659
-msgid "Next scheduled tasks"
+#: src/html/classic/js/gsa_cloud_chart.js:54
+msgid "Loading word cloud ..."
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3664
-msgid "{{resource_type_plural}} by Severity Class"
+#: src/html/classic/js/gsa_cloud_chart.js:55
+msgid "Word Cloud"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3673
-msgid "{{resource_type_plural}} by CVSS"
+#: src/html/classic/js/gsa_dashboard.js:231
+#: src/html/classic/js/gsa_dashboard.js:232
+msgid "Edit Dashboard"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3681
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3731
-msgid "{{resource_type_plural}} {{field_name}} word cloud"
+#: src/html/classic/js/gsa_dashboard.js:245
+#: src/html/classic/js/gsa_dashboard.js:246
+#, fuzzy
+msgid "Add new Chart"
+msgstr "添加新图"
+
+#: src/html/classic/js/gsa_dashboard.js:261
+#: src/html/classic/js/gsa_dashboard.js:262
+msgid "Reset to defaults"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3689
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3712
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3721
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3744
-msgid "{{resource_type_plural}} by {{field_name}}"
+#: src/html/classic/js/gsa_dashboard.js:277
+#: src/html/classic/js/gsa_dashboard.js:278
+msgid "Cancel Editing"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3701
+#: src/html/classic/js/gsa_dashboard.js:293
+#: src/html/classic/js/gsa_dashboard.js:294
+msgid "Save Changes"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:1585
+#: src/html/classic/js/gsa_dashboard.js:1586
+msgid "Remove"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:1593
+msgid "Initializing display for \"{{display}}\"..."
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:1612
+msgid "Loading data ..."
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2388
+msgid "Could not load chart {{chart}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2860
+msgid "Loading aborted"
+msgstr "已中止载入"
+
+#: src/html/classic/js/gsa_dashboard.js:2872
+msgid "HTTP error {{error}}"
+msgstr "网页错误 {{error}}"
+
+#: src/html/classic/js/gsa_dashboard.js:2873
+msgid "Error: HTTP request returned status {{status}} for URL: {{url}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2879
+msgid "Error reading XML"
+msgstr "XML读取错误"
+
+#: src/html/classic/js/gsa_dashboard.js:2880
+msgid "Error reading XML from URL {{url}}: {{error}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2888
+msgid "Error parsing XML data"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2889
+msgid "Error parsing XML data. Details: {{details}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2918
+msgid "Internal error: Invalid request"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2919
+msgid "Invalid request command: \"{{command}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2926
+msgid "Error {{omp_status}}: {{omp_status_text}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:2928
+msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_dashboard.js:3217
 msgid "{{title_text}} (Loading...)"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3706
-msgid "Next scheduled tasks (Loading...)"
+#: src/html/classic/js/gsa_dashboard.js:3222
+msgid "Unknown chart"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3707
-msgid "Next scheduled Tasks"
+#: src/html/classic/js/gsa_donut_chart.js:64
+msgid "Loading donut chart ..."
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3735
-msgid "{{resource_type_plural}} {{field_name}} word cloud (Loading...)"
+#: src/html/classic/js/gsa_donut_chart.js:64
+msgid "Donut Chart"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3843
+#: src/html/classic/js/gsa_donut_chart.js:686
+msgid "Inactive"
+msgstr ""
+
+#: src/html/classic/js/gsa_donut_chart.js:689
+msgid "Active (unlimited)"
+msgstr ""
+
+#: src/html/classic/js/gsa_donut_chart.js:692
+msgid "Active for next {{days}} days"
+msgstr ""
+
+#: src/html/classic/js/gsa_gantt_chart.js:79
+msgid "Loading Gantt chart ..."
+msgstr ""
+
+#: src/html/classic/js/gsa_gantt_chart.js:79
+msgid "Gantt Chart"
+msgstr ""
+
+#: src/html/classic/js/gsa_gantt_chart.js:125
+#: src/html/classic/js/gsa_h_bar_chart.js:152
+msgid "No matching {{resource_type}}"
+msgstr ""
+
+#: src/html/classic/js/gsa_graphics_base.js:203
 msgid "Show detached chart window"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3860
+#: src/html/classic/js/gsa_graphics_base.js:220
 msgid "Download CSV"
-msgstr ""
+msgstr "下载 CSV"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3883
+#: src/html/classic/js/gsa_graphics_base.js:244
 msgid "Show HTML table"
-msgstr ""
+msgstr "显示 HTML 目录"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3907
+#: src/html/classic/js/gsa_graphics_base.js:268
 msgid "Show copyable SVG"
+msgstr "显示可复制 SVG"
+
+#: src/html/classic/js/gsa_graphics_base.js:276
+msgid "Download SVG"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3915
-msgid "Download SVG"
+#: src/html/classic/js/gsa_h_bar_chart.js:109
+msgid "Loading horizontal bar chart ..."
+msgstr ""
+
+#: src/html/classic/js/gsa_h_bar_chart.js:110
+msgid "Horizontal Bar Chart"
+msgstr ""
+
+#: src/html/classic/js/gsa_h_bar_chart.js:275
+msgid "<br/>({{assets}} Host(s) with average severity {{severity}})"
+msgstr ""
+
+#: src/html/classic/js/gsa_line_chart.js:79
+msgid "Loading line chart ..."
+msgstr ""
+
+#: src/html/classic/js/gsa_topology_chart.js:47
+msgid "Loading topology chart ..."
+msgstr ""
+
+#: src/html/classic/js/gsa_topology_chart.js:47
+msgid "Topology Chart"
+msgstr ""
+
+#: src/html/classic/js/gsa_topology_chart.js:90
+msgid "Too many nodes to display"
+msgstr ""
+
+#: src/html/classic/js/gsa_topology_chart.js:96
+msgid "Please try a filter selecting less hosts"
+msgstr ""
+
+#: src/html/classic/js/gsa_topology_chart.js:143
+msgid "No hosts with topology selected"
 msgstr ""
