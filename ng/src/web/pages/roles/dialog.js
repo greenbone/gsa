@@ -55,6 +55,7 @@ const Dialog = ({
     all_groups,
     all_permissions,
     all_users,
+    externalError,
     group_id,
     permissions,
     permission_name,
@@ -65,6 +66,7 @@ const Dialog = ({
     onCreatePermission,
     onCreateSuperPermission,
     onDeletePermission,
+    onExternalErrorSet,
     onSave,
   }) => {
 
@@ -94,9 +96,11 @@ const Dialog = ({
 
   return (
     <SaveDialog
+      externalError={externalError}
       visible={visible}
       title={title}
       onClose={onClose}
+      onExternalErrorSet={onExternalErrorSet}
       onSave={onSave}
       defaultValues={{
         ...DEFAULTS,
@@ -243,6 +247,7 @@ Dialog.propTypes = {
   all_groups: PropTypes.array,
   all_permissions: PropTypes.array,
   all_users: PropTypes.array,
+  externalError: PropTypes.object,
   group_id: PropTypes.id,
   permission_name: PropTypes.string,
   permissions: PropTypes.array,
@@ -254,6 +259,7 @@ Dialog.propTypes = {
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,
   onDeletePermission: PropTypes.func.isRequired,
+  onExternalErrorSet: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 

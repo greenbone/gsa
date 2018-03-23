@@ -40,12 +40,16 @@ class RoleComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {dialogVisible: false};
+    this.state = {
+      dialogVisible: false,
+      error: undefined,
+    };
 
     this.handleCreatePermission = this.handleCreatePermission.bind(this);
     this.handleCreateSuperPermission =
       this.handleCreateSuperPermission.bind(this);
     this.handleDeletePermission = this.handleDeletePermission.bind(this);
+    this.handleErrorWasSent = this.handleErrorWasSent.bind(this);
 
     this.closeRoleDialog = this.closeRoleDialog.bind(this);
     this.openRoleDialog = this.openRoleDialog.bind(this);
@@ -106,7 +110,7 @@ class RoleComponent extends React.Component {
       subject_type: 'role',
     });
 
-    this.loadSettings(promise, role_id);
+    return this.loadSettings(promise, role_id);
   }
 
   handleCreatePermission({role_id, name}) {
@@ -118,29 +122,35 @@ class RoleComponent extends React.Component {
       subject_type: 'role',
     });
 
-    this.loadSettings(promise, role_id);
+    return this.loadSettings(promise, role_id);
   }
 
   handleDeletePermission({role_id, permission_id}) {
     const {gmp} = this.props;
 
-    this.loadSettings(gmp.permission.delete({id: permission_id}), role_id);
+    return this.loadSettings(gmp.permission
+      .delete({id: permission_id}), role_id);
+  }
+
+  handleErrorWasSent() {
+    this.setState({error: undefined});
   }
 
   loadSettings(promise, role_id) {
     const {gmp} = this.props;
 
-    promise
+    return promise
       .then(() => gmp.role.editRoleSettings({id: role_id}))
       .then(response => {
         const settings = response.data;
-
-        this.dialog.setValues({
+        this.setState({
           permissions: settings.permissions,
           all_permissions: settings.all_permissions,
           permission_name: first(settings.all_permissions).name,
         });
-      }).catch(error => this.dialog.setError(error));
+      }).catch(error => {
+        this.setState({error});
+      });
   }
 
   render() {
@@ -163,6 +173,7 @@ class RoleComponent extends React.Component {
       allGroups,
       allPermissions,
       dialogVisible,
+      error,
       groupId,
       permissionName,
       permissions,
@@ -199,6 +210,7 @@ class RoleComponent extends React.Component {
                 all_users={allUsers}
                 all_groups={allGroups}
                 all_permissions={allPermissions}
+                externalError={error}
                 group_id={groupId}
                 permission_name={permissionName}
                 permissions={permissions}
@@ -209,6 +221,7 @@ class RoleComponent extends React.Component {
                 onCreatePermission={this.handleCreatePermission}
                 onCreateSuperPermission={this.handleCreateSuperPermission}
                 onDeletePermission={this.handleDeletePermission}
+                onExternalErrorSet={this.handleErrorWasSent}
               />
             }
           </Wrapper>
