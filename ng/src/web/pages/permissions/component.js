@@ -66,15 +66,18 @@ class PermissionsComponent extends React.Component {
 
       state = {
         id: permission.id,
-        permission,
         name: permission.name,
         comment: permission.comment,
-        subject_type,
+        group_id: undefined,
+        permission,
         resource_id: is_defined(permission.resource) ?
           permission.resource.id : '',
         resource_type: is_defined(permission.resource) ?
           permission.resource.entity_type : '',
+        role_id: undefined,
+        subject_type,
         title: _('Edit Permission {{name}}', {name: permission.name}),
+        user_id: undefined,
       };
 
       switch (subject_type) {
@@ -101,7 +104,7 @@ class PermissionsComponent extends React.Component {
         name: undefined,
         resource_type: undefined,
         resource_id: undefined,
-        resource_id_title: undefined,
+        subject_type: undefined,
         user_id: undefined,
         group_id: undefined,
         role_id: undefined,

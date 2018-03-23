@@ -147,25 +147,6 @@ const PermissionDialog = ({
   onSave,
 }) => {
 
-  let subject_obj;
-  if (subject_type === 'user') {
-    subject_obj = users.find(user => user.id === user_id);
-  }
-  else if (subject_type === 'role') {
-    subject_obj = roles.find(role => role.id === role_id);
-  }
-  else {
-    subject_obj = groups.find(group => group.id === group_id);
-  }
-
-  const subject = {
-  };
-
-  if (is_defined(subject_obj)) {
-    subject.type = subject_type;
-    subject.name = subject_obj.name;
-  }
-
   const perm_opts = [];
 
   capabilities.forEach(cap => {
@@ -187,8 +168,6 @@ const PermissionDialog = ({
     resource_id,
     resource_type,
     role_id,
-    subject,
-    subject_obj,
     subject_type,
     title,
     user_id,
@@ -208,10 +187,26 @@ const PermissionDialog = ({
       }) => {
         const show_resource_id = need_resource_id.includes(state.name);
 
-        state.resource = is_empty(state.resource_type) ? undefined : {
+        const resource = is_empty(state.resource_type) ? undefined : {
           type: state.resource_type,
           name: state.resource_id,
         };
+
+        let subject_obj;
+        if (state.subject_type === 'user') {
+          subject_obj = users.find(user => user.id === state.user_id);
+        }
+        else if (state.subject_type === 'role') {
+          subject_obj = roles.find(role => role.id === state.role_id);
+        }
+        else {
+          subject_obj = groups.find(group => group.id === state.group_id);
+        }
+
+        const subject = is_defined(subject_obj) ? {
+          type: state.subject_type,
+          name: subject_obj.name,
+        } : {};
 
         let resource_id_title;
         if (state.resource_type === 'user') {
@@ -226,6 +221,7 @@ const PermissionDialog = ({
         else {
           resource_id_title = _('Resource ID');
         }
+
         return (
           <Layout flex="column">
 
@@ -338,7 +334,7 @@ const PermissionDialog = ({
             }
             <FormGroup title={_('Description')}>
               {permission_description(
-                state.name, state.resource, state.subject)}
+                state.name, resource, subject)}
             </FormGroup>
 
           </Layout>
