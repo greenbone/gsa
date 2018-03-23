@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, shorten, select_save_id} from 'gmp/utils';
+import {is_defined, shorten, has_id} from 'gmp/utils';
 
 import {
   SLAVE_SCANNER_TYPE,
@@ -42,7 +42,7 @@ import Wrapper from '../../components/layout/wrapper.js';
 
 import EntityComponent from '../../entity/component.js';
 
-import CredentialDialog from '../credentials/dialog.js';
+import CredentialsDialog from '../credentials/dialog.js';
 
 import ScannerDialog from './dialog.js';
 
@@ -56,28 +56,39 @@ class ScannerComponent extends React.Component {
       scannerDialogVisible: false,
     };
 
-    this.closeCredentialDialog = this.closeCredentialDialog.bind(this);
+    this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
     this.closeScannerDialog = this.closeScannerDialog.bind(this);
-    this.openCredentialDialog = this.openCredentialDialog.bind(this);
+    this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.openScannerDialog = this.openScannerDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
+    this.handleCredentialChange = this.handleCredentialChange.bind(this);
     this.handleDownloadCertificate = this.handleDownloadCertificate.bind(this);
     this.handleDownloadCredential = this.handleDownloadCredential.bind(this);
+    this.handleScannerTypeChange = this.handleScannerTypeChange.bind(this);
     this.handleVerifyScanner = this.handleVerifyScanner.bind(this);
   }
 
   openScannerDialog(scanner) {
     const {gmp} = this.props;
-
+    const credPromise = gmp.credentials.getAll().then(response => {
+      return response.data;
+    });
     if (is_defined(scanner)) {
-      gmp.scanner.get(scanner).then(response => {
+      Promise.all([credPromise, gmp.scanner.get(scanner)])
+      .then(([credentials, response]) => {
         scanner = response.data;
 
-        const title = _('Edit scanner {{name}}', {name: shorten(scanner.name)});
-
+        const title = _('Edit Scanner {{name}}', {name: shorten(scanner.name)});
         this.setState({
           ca_pub: is_defined(scanner.ca_pub) ?
             scanner.ca_pub.certificate : undefined,
+          comment: scanner.comment,
+          credentials,
+          credential_id: has_id(scanner.credential) ?
+            scanner.credential.id : undefined,
+          host: scanner.host,
+          id: scanner.id,
+          name: scanner.name,
           scannerDialogVisible: true,
           scanner,
           title,
@@ -87,46 +98,41 @@ class ScannerComponent extends React.Component {
       });
     }
     else {
+      credPromise.then(credentials =>
       this.setState({
         ca_pub: undefined,
+        comment: undefined,
+        credential_id: undefined,
+        credentials,
         host: undefined,
-        scanner: undefined,
+        id: undefined,
+        name: undefined,
         port: undefined,
+        scanner: undefined,
         scannerDialogVisible: true,
         title: undefined,
-        type: undefined,
+        type: SLAVE_SCANNER_TYPE,
         which_cert: undefined,
-      });
+      }));
     }
-
-    gmp.credentials.getAll().then(response => {
-      const {data: credentials} = response;
-      this.credentials = credentials;
-      const credential_id = is_defined(scanner) &&
-        is_defined(scanner.credential) ? scanner.credential.id : undefined;
-      this.setState({
-        credentials,
-        credential_id: select_save_id(credentials, credential_id),
-      });
-    });
   }
 
   closeScannerDialog() {
     this.setState({scannerDialogVisible: false});
   }
 
-  openCredentialDialog(type) {
+  openCredentialsDialog(type) {
     const base = type === SLAVE_SCANNER_TYPE ?
       USERNAME_PASSWORD_CREDENTIAL_TYPE :
       CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
     this.setState({
       base,
       credentialDialogVisible: true,
-      types: [base],
+      credentialTypes: [base],
     });
   }
 
-  closeCredentialDialog() {
+  closeCredentialsDialog() {
     this.setState({credentialDialogVisible: false});
   }
 
@@ -148,15 +154,21 @@ class ScannerComponent extends React.Component {
 
   handleCreateCredential(data) {
     const {gmp} = this.props;
+    let credential;
     return gmp.credential.create(data).then(response => {
-      const {credentials} = this;
-      const credential = response.data;
-      credentials.push(credential);
-      this.setState({
-        credentials,
-        credential_id: credential.id,
-      });
-    });
+        credential = response.data;
+      })
+      .then(() => gmp.credentials.getAll())
+      .then(response =>
+        this.setState({
+          credentials: response.data,
+          credential_id: credential.id,
+        })
+      );
+  }
+
+  handleCredentialChange(credential_id) {
+    this.setState({credential_id});
   }
 
   handleDownloadCertificate(scanner) {
@@ -178,6 +190,10 @@ class ScannerComponent extends React.Component {
     }).then(onCredentialDownloaded, onCredentialDownloadError);
   }
 
+  handleScannerTypeChange(value, name) {
+    this.setState({[name]: value});
+  }
+
   render() {
     const {
       children,
@@ -195,9 +211,13 @@ class ScannerComponent extends React.Component {
 
     const {
       ca_pub,
-      credentials,
-      credentialDialogVisible,
+      comment,
       credential_id,
+      credentialDialogVisible,
+      credentials,
+      credentialTypes,
+      id,
+      name,
       scannerDialogVisible,
       scanner,
       title,
@@ -235,20 +255,26 @@ class ScannerComponent extends React.Component {
             {scannerDialogVisible &&
               <ScannerDialog
                 ca_pub={ca_pub}
+                comment={comment}
                 credentials={credentials}
                 credential_id={credential_id}
+                id={id}
+                name={name}
                 scanner={scanner}
                 title={title}
                 type={type}
                 which_cert={which_cert}
                 onClose={this.closeScannerDialog}
-                onNewCredentialClick={this.openCredentialDialog}
+                onCredentialChange={this.handleCredentialChange}
+                onNewCredentialClick={this.openCredentialsDialog}
                 onSave={save}
+                onScannerTypeChange={this.handleScannerTypeChange}
               />
             }
             {credentialDialogVisible &&
-              <CredentialDialog
-                onClose={this.closeCredentialDialog}
+              <CredentialsDialog
+                types={credentialTypes}
+                onClose={this.closeCredentialsDialog}
                 onSave={this.handleCreateCredential}
               />
             }
