@@ -221,7 +221,7 @@ class RoleComponent extends React.Component {
                 onCreatePermission={this.handleCreatePermission}
                 onCreateSuperPermission={this.handleCreateSuperPermission}
                 onDeletePermission={this.handleDeletePermission}
-                onErrorSent={this.handleErrorWasSent}
+                onExternalErrorSet={this.handleErrorWasSent}
               />
             }
           </Wrapper>
