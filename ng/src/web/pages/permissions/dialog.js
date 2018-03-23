@@ -262,6 +262,7 @@ const PermissionDialog = ({
               <Select
                 name="name"
                 value={state.name}
+                width="300"
                 onChange={onValueChange}>
                 <option value="Super">
                   {_('Super (Has super access)')}
@@ -277,7 +278,8 @@ const PermissionDialog = ({
                 grow="1"
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup
@@ -383,7 +385,8 @@ const PermissionDialog = ({
                   disabled={fixedResource}
                   size="50"
                   maxLength="100"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
             }
             <FormGroup title={_('Description')}>
