@@ -20,13 +20,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import './bar';
-import './donut';
-import './legend';
-import './line';
-import './schedule';
-import './bubble.js';
-import './wordcloud.js';
-import './topology.js';
+import React from 'react';
+
+import PropTypes from '../../utils/proptypes';
+
+const Group = ({
+  left = 0,
+  top = 0,
+  scale = 1,
+  ...props
+}) => (
+  <g
+    transform={`translate(${left}, ${top}),scale(${scale})`}
+    {...props}
+  />
+);
+
+Group.propTypes = {
+  left: PropTypes.number,
+  scale: PropTypes.number,
+  top: PropTypes.number,
+};
+
+export default Group;
 
 // vim: set ts=2 sw=2 tw=80:
