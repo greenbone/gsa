@@ -40,6 +40,18 @@ if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Debug)
 endif (NOT CMAKE_BUILD_TYPE)
 
+## Retrieve git revision (at configure time)
+include (GetGit)
+
+if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
+  if (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
+    if (GIT_FOUND)
+      Git_GET_REVISION(. ProjectRevision)
+      set (GIT_REVISION "~git-${ProjectRevision}")
+    endif (GIT_FOUND)
+  endif (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
+endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
+
 ## Project version
 # The following three variables should be set through the project command once
 # we require CMake >= 3.0
@@ -50,6 +62,12 @@ set (PROJECT_VERSION_PATCH 0)
 # Set beta version if this is a beta release series,
 # unset if this is a stable release series.
 set (PROJECT_BETA_RELEASE 1)
+
+if (GIT_REVISION)
+  set (PROJECT_VERSION_GIT "${GIT_REVISION}")
+else (GIT_REVISION)
+  set (PROJECT_VERSION_GIT "~git")
+endif (GIT_REVISION)
 
 # If PROJECT_BETA_RELEASE is set, the version string will be set to:
 #   "major.minor+beta${PROJECT_BETA_RELEASE}"
@@ -79,7 +97,7 @@ set (CPACK_SOURCE_TOPLEVEL_TAG "")
 set (CPACK_SYSTEM_NAME "")
 set (CPACK_TOPLEVEL_TAG "")
 
-set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION_STRING}${PROJECT_VERSION_SVN}")
+set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION_STRING}${PROJECT_VERSION_GIT}")
 
 set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")

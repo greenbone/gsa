@@ -132,6 +132,27 @@ if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION="${GSAD_VERSION}")
 endif (GSAD_VERSION)
 
+if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
+  # If we got GIT_REVISION at configure time,
+  # assume we can get it at build time as well
+  if (GIT_REVISION)
+    # a custom target that is always built
+    add_custom_target (revisiontag ALL)
+
+    # creates gitrevision.h using cmake script
+    add_custom_command (TARGET revisiontag COMMAND ${CMAKE_COMMAND}
+                        -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+                        -P ${CMAKE_SOURCE_DIR}/cmake/GetGit.cmake)
+
+    # explicitly say that the executable depends on custom target
+    add_dependencies (gsad revisiontag)
+
+    # include the output directory, where the gitrevision.h file is generated
+    include_directories (${CMAKE_CURRENT_BINARY_DIR})
+    add_definitions (-DGIT_REV_AVAILABLE)
+  endif (GIT_REVISION)
+endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
+
 if (GVM_SERVER_CERTIFICATE)
   add_definitions (-DGVM_SERVER_CERTIFICATE="${GVM_SERVER_CERTIFICATE}")
 endif (GVM_SERVER_CERTIFICATE)

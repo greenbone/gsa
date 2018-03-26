@@ -104,6 +104,10 @@
 #include "validator.h"
 #include "gsad_i18n.h"
 
+#ifdef GIT_REV_AVAILABLE
+#include "gitrevision.h"
+#endif
+
 #undef G_LOG_DOMAIN
 /**
  * @brief GLib log domain.
@@ -3128,8 +3132,8 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
-#ifdef GSAD_SVN_REVISION
-      printf ("SVN revision %i\n", GSAD_SVN_REVISION);
+#ifdef GSAD_GIT_REVISION
+      printf ("GIT revision %s\n", GSAD_GIT_REVISION);
 #endif
       if (debug_tls)
         {
@@ -3205,10 +3209,10 @@ main (int argc, char **argv)
       }
   }
 
-#ifdef GSAD_SVN_REVISION
-  g_message ("Starting GSAD version %s (SVN revision %i)\n",
+#ifdef GSAD_GIT_REVISION
+  g_message ("Starting GSAD version %s (GIT revision %s)\n",
              GSAD_VERSION,
-             GSAD_SVN_REVISION);
+             GSAD_GIT_REVISION);
 #else
   g_message ("Starting GSAD version %s\n",
              GSAD_VERSION);
