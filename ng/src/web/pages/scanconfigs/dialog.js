@@ -116,23 +116,23 @@ const Dialog = ({
                   title={_('Full and fast')}
                   onChange={onValueChange}
                 />
+                {!is_empty(scanners) &&
+                  <Divider>
+                    <Radio
+                      name="base"
+                      value="0"
+                      checked={state.base === '0'}
+                      onChange={onValueChange}
+                    />
+                    <Select
+                      value={state.scanner_id}
+                      name="scanner_id"
+                      items={render_select_items(scanners)}
+                      onChange={onValueChange}
+                    />
+                  </Divider>
+                }
               </Divider>
-              {!is_empty(scanners) &&
-                <Divider>
-                  <Radio
-                    name="base"
-                    value="0"
-                    checked={state.base === '0'}
-                    onChange={onValueChange}
-                  />
-                  <Select
-                    value={state.scanner_id}
-                    name="scanner_id"
-                    items={render_select_items(scanners)}
-                    onChange={onValueChange}
-                  />
-                </Divider>
-              }
             </FormGroup>
           </Layout>
         );
