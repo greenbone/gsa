@@ -23,7 +23,6 @@
 import React from 'react';
 
 import {Bar} from '@vx/shape';
-import {Group} from '@vx/group';
 import {scaleBand, scaleLinear} from '@vx/scale';
 
 import {shorten} from 'gmp/utils/index';
@@ -33,6 +32,7 @@ import Layout from '../layout/layout';
 import PropTypes from '../../utils/proptypes';
 
 import Axis from './axis';
+import Group from './group';
 import Legend from './legend';
 import ToolTip from './tooltip';
 import Svg from './svg';

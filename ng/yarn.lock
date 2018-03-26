@@ -214,7 +214,7 @@
     classnames "^2.2.5"
     prop-types "^15.5.7"
 
-"@vx/group@0.0.153", "@vx/group@^0.0.153":
+"@vx/group@0.0.153":
   version "0.0.153"
   resolved "https://registry.yarnpkg.com/@vx/group/-/group-0.0.153.tgz#4ec2ce37cf31b0f0b3d46dd8ee6b0eaf7e763bc6"
   dependencies:
