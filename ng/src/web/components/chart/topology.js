@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -29,6 +30,8 @@ import {
   forceLink,
   forceManyBody,
   forceCenter,
+  forceX,
+  forceY,
 } from 'd3-force';
 
 import {color} from 'd3-color';
@@ -325,12 +328,18 @@ class HostsTopologyChart extends React.Component {
     }
 
     const linkForce = forceLink(links)
-      .id(l => l.id);
+      .id(l => l.id)
+      .strength(0.2);
+
+    const gravityXForce = forceX().strength(0.03);
+    const gravityYForce = forceY().strength(0.03);
 
     this.simulation = forceSimulation(hosts)
       .force('link', linkForce)
-      .force('charge', forceManyBody())
+      .force('charge', forceManyBody().strength(-10))
       .force('center', forceCenter(width / 2, height / 2))
+      .force('gravityX', gravityXForce)
+      .force('gravityY', gravityYForce)
       .on('tick', () => {
         this.setState({hosts, links});
       });
