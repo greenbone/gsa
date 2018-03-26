@@ -126,7 +126,7 @@ const Dialog = ({
                     onChange={onValueChange}
                   />
                   <Select
-                    value={scanner_id}
+                    value={state.scanner_id}
                     name="scanner_id"
                     items={render_select_items(scanners)}
                     onChange={onValueChange}
