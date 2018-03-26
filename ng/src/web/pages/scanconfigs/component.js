@@ -158,7 +158,7 @@ class ScanConfigComponent extends React.Component {
       let {data: scanners} = response;
       scanners = scanners.filter(scanner =>
         scanner.scanner_type === OSP_SCANNER_TYPE);
-      dialog.setValues({
+      this.setState({
         scanners,
         scanner_id: select_save_id(scanners),
       });
@@ -303,6 +303,8 @@ class ScanConfigComponent extends React.Component {
       id,
       importDialogVisible,
       nvts,
+      scanner_id,
+      scanners,
       selected,
     } = this.state;
 
@@ -334,10 +336,14 @@ class ScanConfigComponent extends React.Component {
               })}
               <ScanConfigDialog
                 ref={ref => this.scanconfig_dialog = ref}
+                scanner_id={scanner_id}
+                scanners={scanners}
                 onSave={save}
               />
               <EditScanConfigDialog
                 ref={ref => this.edit_dialog = ref}
+                scanner_id={scanner_id}
+                scanners={scanners}
                 onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
                 onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
                 onSave={save}
