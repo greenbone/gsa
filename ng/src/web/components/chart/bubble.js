@@ -24,10 +24,9 @@ import React from 'react';
 
 import {pack, hierarchy} from 'd3-hierarchy';
 
-import {Group} from '@vx/group';
-
 import PropTypes from '../../utils/proptypes';
 
+import Group from './group';
 import Svg from './svg';
 import ToolTip from './tooltip';
 

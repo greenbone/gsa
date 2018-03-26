@@ -24,8 +24,6 @@ import React from 'react';
 
 import {color as d3color} from 'd3-color';
 
-import {Group} from '@vx/group';
-
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
 
@@ -39,6 +37,7 @@ import Label from './label';
 import ToolTip from './tooltip';
 import Legend from './legend';
 import Svg from './svg';
+import Group from './group';
 
 const margin = {
   top: 20,

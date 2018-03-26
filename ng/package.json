@@ -22,7 +22,6 @@
   "dependencies": {
     "@vx/axis": "^0.0.158",
     "@vx/gradient": "^0.0.153",
-    "@vx/group": "^0.0.153",
     "@vx/scale": "^0.0.153",
     "@vx/shape": "^0.0.158",
     "core-js": "^2.5.3",

@@ -22,7 +22,6 @@
  */
 import React from 'react';
 
-import {Group} from '@vx/group';
 import {scaleLinear} from '@vx/scale';
 
 import d3cloud from 'd3-cloud';
@@ -31,6 +30,7 @@ import {arrays_equal} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes';
 
+import Group from './group';
 import Svg from './svg';
 
 const margin = {

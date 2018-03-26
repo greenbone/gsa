@@ -24,13 +24,13 @@ import React from 'react';
 
 import {pie as d3pie} from 'd3-shape';
 
-import {Group} from '@vx/group';
-
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
 import arc from './utils/arc';
+
+import Group from './group';
 
 const Pie = ({
   className,

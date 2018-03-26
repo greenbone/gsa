@@ -26,7 +26,6 @@ import {css} from 'glamor';
 
 import glamorous from 'glamorous';
 
-import {Group} from '@vx/group';
 import {scaleLinear} from '@vx/scale';
 import {Line, LinePath} from '@vx/shape';
 
@@ -40,6 +39,7 @@ import Theme from '../../utils/theme';
 import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Axis from './axis';
 import Svg from './svg';
+import Group from './group';
 
 const margin = {
   top: 55,

@@ -24,7 +24,6 @@ import React from 'react';
 
 import moment from 'moment';
 
-import {Group} from '@vx/group';
 import {LinearGradient} from '@vx/gradient';
 import {scaleBand, scaleUtc} from '@vx/scale';
 
@@ -39,6 +38,7 @@ import path from './utils/path';
 import Axis from './axis';
 import Svg from './svg';
 import ToolTip from './tooltip';
+import Group from './group';
 
 const ONE_DAY = 60 * 60 * 24;
 
