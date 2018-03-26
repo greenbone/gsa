@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import {is_empty} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -126,9 +126,9 @@ const Dialog = ({
                   <Select
                     value={scanner_id}
                     name="scanner_id"
-                    onChange={onValueChange}>
-                    {render_options(scanners)}
-                  </Select>
+                    items={render_select_items(scanners)}
+                    onChange={onValueChange}
+                  />
                 </Divider>
               }
             </FormGroup>
