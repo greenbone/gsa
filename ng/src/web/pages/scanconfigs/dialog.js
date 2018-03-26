@@ -46,11 +46,12 @@ import {
 } from 'gmp/models/scanconfig.js';
 
 const Dialog = ({
-    base,
-    comment,
-    name,
+    base = EMPTY_SCAN_CONFIG_ID,
+    comment = '',
+    name = _('Unnamed'),
     scanner_id,
     scanners,
+    title = _('New Scan Config'),
     onValueChange,
   }) => {
   return (
@@ -123,17 +124,12 @@ Dialog.propTypes = {
   name: PropTypes.string,
   scanner_id: PropTypes.id,
   scanners: PropTypes.array,
+  title: PropTypes.string,
   onValueChange: PropTypes.func,
 };
 
 export default withDialog({
-  title: _('New Scan Config'),
   footer: _('Save'),
-  defaultState: {
-    base: EMPTY_SCAN_CONFIG_ID,
-    comment: '',
-    name: _('Unnamed'),
-  },
 })(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:
