@@ -57,6 +57,7 @@ class ScanConfigComponent extends React.Component {
     super(...args);
 
     this.state = {
+      createConfigDialogVisible: false,
       editConfigFamilyDialogVisible: false,
       importDialogVisible: false,
     };
@@ -65,6 +66,7 @@ class ScanConfigComponent extends React.Component {
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
     this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
+    this.closeCreateConfigDialog = this.closeCreateConfigDialog.bind(this);
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
     this.openEditConfigFamilyDialog =
       this.openEditConfigFamilyDialog.bind(this);
@@ -86,8 +88,12 @@ class ScanConfigComponent extends React.Component {
   }
 
   openCreateConfigDialog() {
-    this.scanconfig_dialog.show({});
-    this.loadScanners(this.scanconfig_dialog);
+    this.setState({createConfigDialogVisible: true});
+    this.loadScanners();
+  }
+
+  closeCreateConfigDialog() {
+    this.setState({createConfigDialogVisible: false});
   }
 
   openImportDialog() {
@@ -297,6 +303,7 @@ class ScanConfigComponent extends React.Component {
     const {
       config,
       config_name,
+      createConfigDialogVisible,
       editConfigFamilyDialogVisible,
       editConfigFamilyDialogTitle,
       family_name,
@@ -334,12 +341,14 @@ class ScanConfigComponent extends React.Component {
                 edit: this.openEditConfigDialog,
                 import: this.openImportDialog,
               })}
-              <ScanConfigDialog
-                ref={ref => this.scanconfig_dialog = ref}
-                scanner_id={scanner_id}
-                scanners={scanners}
-                onSave={save}
-              />
+              {createConfigDialogVisible &&
+                <ScanConfigDialog
+                  scanner_id={scanner_id}
+                  scanners={scanners}
+                  onClose={this.closeCreateConfigDialog}
+                  onSave={save}
+                />
+              }
               <EditScanConfigDialog
                 ref={ref => this.edit_dialog = ref}
                 scanner_id={scanner_id}
