@@ -393,19 +393,20 @@ class ScanConfigComponent extends React.Component {
           onClose={this.closeImportDialog}
           onSave={this.handleImportConfig}
         />
-        <EditConfigFamilyDialog
-          config={config}
-          config_name={config_name}
-          family_name={family_name}
-          id={id}
-          nvts={nvts}
-          selected={selected}
-          title={editConfigFamilyDialogTitle}
-          visible={editConfigFamilyDialogVisible}
-          onClose={this.closeEditConfigFamilyDialog}
-          onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-          onSave={this.handleSaveConfigFamily}
-        />
+        {editConfigFamilyDialogVisible &&
+          <EditConfigFamilyDialog
+            config={config}
+            config_name={config_name}
+            family_name={family_name}
+            id={id}
+            nvts={nvts}
+            selected={selected}
+            title={editConfigFamilyDialogTitle}
+            onClose={this.closeEditConfigFamilyDialog}
+            onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
+            onSave={this.handleSaveConfigFamily}
+          />
+        }
         <EditNvtDetailsDialog
           ref={ref => this.edit_nvt_details_dialog = ref}
           onSave={this.handleSaveConfigNvt}
