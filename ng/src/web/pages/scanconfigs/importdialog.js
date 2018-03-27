@@ -36,7 +36,7 @@ import FormGroup from '../../components/form/formgroup.js';
 import Layout from '../../components/layout/layout.js';
 
 const ImportDialog = ({
-    visible,
+    visible = true,
     onClose,
     onSave,
 }) => {
@@ -70,7 +70,7 @@ const ImportDialog = ({
 };
 
 ImportDialog.propTypes = {
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

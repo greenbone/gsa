@@ -403,11 +403,12 @@ class ScanConfigComponent extends React.Component {
             </Wrapper>
           )}
         </EntityComponent>
-        <ImportDialog
-          visible={importDialogVisible}
-          onClose={this.closeImportDialog}
-          onSave={this.handleImportConfig}
-        />
+        {importDialogVisible &&
+          <ImportDialog
+            onClose={this.closeImportDialog}
+            onSave={this.handleImportConfig}
+          />
+        }
         {editConfigFamilyDialogVisible &&
           <EditConfigFamilyDialog
             config={config}
