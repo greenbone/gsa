@@ -60,6 +60,7 @@ class ScanConfigComponent extends React.Component {
       createConfigDialogVisible: false,
       editConfigDialogVisible: false,
       editConfigFamilyDialogVisible: false,
+      editNvtDetailsDialogVisible: false,
       importDialogVisible: false,
     };
 
@@ -75,6 +76,7 @@ class ScanConfigComponent extends React.Component {
     this.closeEditConfigFamilyDialog =
       this.closeEditConfigFamilyDialog.bind(this);
     this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
+    this.closeEditNvtDetailsDialog = this.closeEditNvtDetailsDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
     this.closeImportDialog = this.closeImportDialog.bind(this);
   }
@@ -115,11 +117,11 @@ class ScanConfigComponent extends React.Component {
   openEditConfigFamilyDialog({config, name}) {
     this.loadEditScanConfigFamilySettings(config, name).then(state => {
       this.setState({
+        ...state,
         config,
         editConfigFamilyDialogVisible: true,
         editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}',
           {name: shorten(name)}),
-        ...state,
       });
     });
   }
@@ -130,10 +132,18 @@ class ScanConfigComponent extends React.Component {
 
   openEditNvtDetailsDialog({config, nvt}) {
     this.loadEditScanConfigNvtSettings(config, nvt).then(state => {
-      this.edit_nvt_details_dialog.show(state, {
-        title: _('Edit Scan Config NVT {{name}}', {name: shorten(nvt.name)}),
+      this.setState({
+        ...state,
+        config,
+        editNvtDetailsDialogVisible: true,
+        editNvtDetailsDialogTitle:
+          _('Edit Scan Config NVT {{name}}', {name: shorten(nvt.name)}),
       });
     });
+  }
+
+  closeEditNvtDetailsDialog() {
+    this.setState({editNvtDetailsDialogVisible: false});
   }
 
   handleImportConfig(data) {
@@ -148,19 +158,19 @@ class ScanConfigComponent extends React.Component {
     }).then(state => this.setState({state}));
   }
 
-  handleSaveConfigNvt(data) {
+  handleSaveConfigNvt(values) {
     const {gmp} = this.props;
-    return gmp.scanconfig.saveScanConfigNvt(data).then(response => {
+    return gmp.scanconfig.saveScanConfigNvt(values).then(response => {
 
       // update nvt timeouts in nvt family dialog
       this.loadEditScanConfigFamilySettings(
-        data.config, data.family_name).then(state => {
-          this.edit_config_family_dialog.setValues(state);
+        values.config, values.family_name).then(state => {
+          this.setState({state});
         });
 
       // update nvt preference values in edit dialog
-      this.loadEditScanConfigSettings(data.config).then(state => {
-        this.edit_dialog.setValues(state);
+      this.loadEditScanConfigSettings(values.config).then(state => {
+        this.setState({state});
       });
     });
   }
@@ -317,17 +327,22 @@ class ScanConfigComponent extends React.Component {
       editConfigDialogVisible,
       editConfigFamilyDialogVisible,
       editConfigFamilyDialogTitle,
+      editNvtDetailsDialogVisible,
+      editNvtDetailsDialogTitle,
       families,
       family_name,
       id,
       importDialogVisible,
+      manual_timeout,
       name,
+      nvt,
       nvts,
       scanner_id,
       scanner_preference_values,
       scanners,
       select,
       selected,
+      timeout,
       title,
       trend,
     } = this.state;
@@ -407,10 +422,20 @@ class ScanConfigComponent extends React.Component {
             onSave={this.handleSaveConfigFamily}
           />
         }
-        <EditNvtDetailsDialog
-          ref={ref => this.edit_nvt_details_dialog = ref}
-          onSave={this.handleSaveConfigNvt}
-        />
+        {editNvtDetailsDialogVisible &&
+          <EditNvtDetailsDialog
+            config={config}
+            config_name={config_name}
+            family_name={family_name}
+            manual_timeout={manual_timeout}
+            nvt={nvt}
+            preference_values={scanner_preference_values}
+            timeout={timeout}
+            title={editNvtDetailsDialogTitle}
+            onClose={this.closeEditNvtDetailsDialog}
+            onSave={this.handleSaveConfigNvt}
+          />
+        }
       </Wrapper>
     );
   }
