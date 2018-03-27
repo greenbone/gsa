@@ -168,8 +168,6 @@ class EditDialogComponent extends React.Component {
       config_name,
       family_name,
       id,
-      nvts,
-      selected,
     };
 
     return (
@@ -178,7 +176,8 @@ class EditDialogComponent extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        defaultData={data}
+        defaultValues={{selected}}
+        values={data}
       >
         {({
           values: state,
@@ -194,7 +193,7 @@ class EditDialogComponent extends React.Component {
                       {_('Config')}
                     </TableData>
                     <TableData>
-                      {state.name}
+                      {config_name}
                     </TableData>
                   </TableRow>
                   <TableRow>
@@ -202,7 +201,7 @@ class EditDialogComponent extends React.Component {
                       {_('Family')}
                     </TableData>
                     <TableData>
-                      {state.family}
+                      {family_name}
                     </TableData>
                   </TableRow>
                 </TableBody>
