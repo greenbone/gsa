@@ -178,10 +178,10 @@ class EditDialogComponent extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={data}
+        defaultData={data}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
 
