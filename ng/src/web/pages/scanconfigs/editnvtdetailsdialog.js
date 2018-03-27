@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +61,7 @@ class EditDialog extends React.Component {
   }
 
   onPreferenceChange(value, name) {
-    let {preference_values, onValueChange} = this.props;
+    const {preference_values, onValueChange} = this.props;
     preference_values[name] = value;
 
     onValueChange(preference_values, 'preference_values');
@@ -225,7 +226,7 @@ class EditDialog extends React.Component {
                   <Text>
                     {_('Apply default timeout')}
                     {
-                      is_defined (nvt.default_timeout) ?
+                      is_defined(nvt.default_timeout) ?
                           ' (' + nvt.default_timeout + ')' :
                           ''
                     }
@@ -249,7 +250,7 @@ class EditDialog extends React.Component {
               </TableData>
               <TableData>
                 {
-                  is_defined (nvt.default_timeout) ?
+                  is_defined(nvt.default_timeout) ?
                       nvt.default_timeout :
                       ''
                 }
@@ -280,10 +281,10 @@ class EditDialog extends React.Component {
 
 EditDialog.propTypes = {
   config: PropTypes.model.isRequired,
-  nvt: PropTypes.object.isRequired,
-  timeout: PropTypes.string.isRequired,
   manual_timeout: PropTypes.string.isRequired,
+  nvt: PropTypes.object.isRequired,
   preference_values: PropTypes.object.isRequired,
+  timeout: PropTypes.string.isRequired,
   onValueChange: PropTypes.func.isRequired,
 };
 
