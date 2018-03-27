@@ -58,6 +58,7 @@ class ScanConfigComponent extends React.Component {
 
     this.state = {
       createConfigDialogVisible: false,
+      editConfigDialogVisible: false,
       editConfigFamilyDialogVisible: false,
       importDialogVisible: false,
     };
@@ -68,6 +69,7 @@ class ScanConfigComponent extends React.Component {
     this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
     this.closeCreateConfigDialog = this.closeCreateConfigDialog.bind(this);
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
+    this.closeEditConfigDialog = this.closeEditConfigDialog.bind(this);
     this.openEditConfigFamilyDialog =
       this.openEditConfigFamilyDialog.bind(this);
     this.closeEditConfigFamilyDialog =
@@ -79,12 +81,18 @@ class ScanConfigComponent extends React.Component {
 
   openEditConfigDialog(config) {
     this.loadEditScanConfigSettings(config).then(state => {
-      this.edit_dialog.show(state, {
+      this.setState({
+        ...state,
+        base: config.base,
+        editConfigDialogVisible: true,
         title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
       });
-
-      this.loadScanners(this.edit_dialog);
+      this.loadScanners();
     });
+  }
+
+  closeEditConfigDialog() {
+    this.setState({editConfigDialogVisible: false});
   }
 
   openCreateConfigDialog() {
@@ -301,18 +309,27 @@ class ScanConfigComponent extends React.Component {
     } = this.props;
 
     const {
+      base,
+      comment,
       config,
       config_name,
       createConfigDialogVisible,
+      editConfigDialogVisible,
       editConfigFamilyDialogVisible,
       editConfigFamilyDialogTitle,
+      families,
       family_name,
       id,
       importDialogVisible,
+      name,
       nvts,
       scanner_id,
+      scanner_preference_values,
       scanners,
+      select,
       selected,
+      title,
+      trend,
     } = this.state;
 
     return (
@@ -349,14 +366,25 @@ class ScanConfigComponent extends React.Component {
                   onSave={save}
                 />
               }
-              <EditScanConfigDialog
-                ref={ref => this.edit_dialog = ref}
-                scanner_id={scanner_id}
-                scanners={scanners}
-                onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
-                onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-                onSave={save}
-              />
+              {editConfigDialogVisible &&
+                <EditScanConfigDialog
+                  base={base}
+                  comment={comment}
+                  config={config}
+                  families={families}
+                  name={name}
+                  scanner_id={scanner_id}
+                  scanner_preference_values={scanner_preference_values}
+                  scanners={scanners}
+                  select={select}
+                  title={title}
+                  trend={trend}
+                  onClose={this.closeEditConfigDialog}
+                  onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
+                  onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
+                  onSave={save}
+                />
+              }
             </Wrapper>
           )}
         </EntityComponent>

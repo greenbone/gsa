@@ -30,7 +30,7 @@ import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 import PropTypes from '../../utils/proptypes.js';
 import {render_options} from '../../utils/render.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import {noop_convert} from '../../components/form/form.js';
@@ -488,7 +488,7 @@ class EditDialog extends React.Component {
 
   render() {
     const {
-      comment,
+      comment = '',
       config,
       families,
       name,
@@ -496,81 +496,114 @@ class EditDialog extends React.Component {
       scanner_preference_values,
       scanners,
       select,
+      title,
       trend,
+      visible = true,
+      onClose,
       onEditConfigFamilyClick,
       onEditNvtDetailsClick,
-      onValueChange,
+      onSave,
     } = this.props;
+
+    const uncontrolledData = {
+      base: config.scan_config_type,
+      comment,
+      name,
+      scanner_id,
+    };
+
+    const controlledData = {
+      id: config.id,
+      scanner_preference_values,
+      select,
+      trend,
+    };
+
     return (
-      <Layout flex="column">
+      <SaveDialog
+        visible={visible}
+        title={title}
+        onClose={onClose}
+        onSave={onSave}
+        defaultValues={uncontrolledData}
+        values={controlledData}
+      >
+        {({
+          values: state,
+          onValueChange,
+        }) => {
+          return (
+            <Layout flex="column">
 
-        <FormGroup title={_('Name')}>
-          <TextField
-            name="name"
-            grow="1"
-            value={name}
-            size="30"
-            onChange={onValueChange}
-            maxLength="80"/>
-        </FormGroup>
+              <FormGroup title={_('Name')}>
+                <TextField
+                  name="name"
+                  grow="1"
+                  value={state.name}
+                  size="30"
+                  onChange={onValueChange}
+                  maxLength="80"/>
+              </FormGroup>
 
-        <FormGroup title={_('Comment')}>
-          <TextField
-            name="comment"
-            value={comment}
-            grow="1"
-            size="30"
-            maxLength="400"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup title={_('Comment')}>
+                <TextField
+                  name="comment"
+                  value={state.comment}
+                  grow="1"
+                  size="30"
+                  maxLength="400"
+                  onChange={onValueChange}/>
+              </FormGroup>
 
-        {!config.isInUse() &&
-          config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
-          <FormGroup title={_('Scanner')}>
-            <Select
-              name="scanner_id"
-              value={scanner_id}
-              onChange={onValueChange}
-            >
-              {render_options(scanners)}
-            </Select>
-          </FormGroup>
-        }
+              {!config.isInUse() &&
+                config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
+                <FormGroup title={_('Scanner')}>
+                  <Select
+                    name="scanner_id"
+                    value={state.scanner_id}
+                    onChange={onValueChange}
+                  >
+                    {render_options(scanners)}
+                  </Select>
+                </FormGroup>
+              }
 
-        {!config.isInUse() &&
-          config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-          <NvtFamilies
-            config={config}
-            families={families}
-            trend={trend}
-            select={select}
-            onEditConfigFamilyClick={onEditConfigFamilyClick}
-            onValueChange={onValueChange}
-          />
-        }
+              {!config.isInUse() &&
+                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                <NvtFamilies
+                  config={config}
+                  families={families}
+                  trend={trend}
+                  select={select}
+                  onEditConfigFamilyClick={onEditConfigFamilyClick}
+                  onValueChange={onValueChange}
+                />
+              }
 
-        {!config.isInUse() &&
-          <ScannerPreferences
-            values={scanner_preference_values}
-            preferences={config.preferences.scanner}
-            onValueChange={onValueChange}
-          />
-        }
+              {!config.isInUse() &&
+                <ScannerPreferences
+                  values={scanner_preference_values}
+                  preferences={config.preferences.scanner}
+                  onValueChange={onValueChange}
+                />
+              }
 
-        {!config.isInUse() &&
-          config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-          <NvtPreferences
-            config={config}
-            preferences={config.preferences.nvt}
-            onValueChange={onValueChange}
-            onEditNvtDetailsClick={onEditNvtDetailsClick}
-          />
-        }
-
-      </Layout>
+              {!config.isInUse() &&
+                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                <NvtPreferences
+                  config={config}
+                  preferences={config.preferences.nvt}
+                  onValueChange={onValueChange}
+                  onEditNvtDetailsClick={onEditNvtDetailsClick}
+                />
+              }
+            </Layout>
+          );
+        }}
+      </SaveDialog>
     );
   }
-}
+};
 
 EditDialog.propTypes = {
   comment: PropTypes.string,
@@ -581,17 +614,15 @@ EditDialog.propTypes = {
   scanner_preference_values: PropTypes.object,
   scanners: PropTypes.array,
   select: PropTypes.object,
+  title: PropTypes.string.isRequired,
   trend: PropTypes.object,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onEditNvtDetailsClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
 };
 
-export default withDialog({
-  footer: _('Save'),
-  defaultState: {
-    comment: '',
-  },
-})(EditDialog);
+export default EditDialog;
 
 // vim: set ts=2 sw=2 tw=80:
