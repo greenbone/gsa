@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -28,7 +29,7 @@ import {is_defined, map} from 'gmp/utils';
 import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -542,7 +543,8 @@ class EditDialog extends React.Component {
                   value={state.name}
                   size="30"
                   onChange={onValueChange}
-                  maxLength="80"/>
+                  maxLength="80"
+                />
               </FormGroup>
 
               <FormGroup title={_('Comment')}>
@@ -552,7 +554,8 @@ class EditDialog extends React.Component {
                   grow="1"
                   size="30"
                   maxLength="400"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               {!config.isInUse() &&
@@ -560,11 +563,10 @@ class EditDialog extends React.Component {
                 <FormGroup title={_('Scanner')}>
                   <Select
                     name="scanner_id"
+                    items={render_select_items(scanners)}
                     value={state.scanner_id}
                     onChange={onValueChange}
-                  >
-                    {render_options(scanners)}
-                  </Select>
+                  />
                 </FormGroup>
               }
 
