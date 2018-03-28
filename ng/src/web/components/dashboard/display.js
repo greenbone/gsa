@@ -78,10 +78,14 @@ const DisplayContent = glamorous.div('display-content', {
 });
 
 const DisplayTitle = glamorous.div('display-title', {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  display: 'block',
   flexGrow: 1,
+  flexShrink: 1,
+  whiteSpace: 'nowrap',
+  wordBreak: 'keep-all',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  textAlign: 'center',
 });
 
 const Display = ({
