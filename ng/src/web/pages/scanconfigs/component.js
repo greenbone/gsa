@@ -82,14 +82,17 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditConfigDialog(config) {
-    this.loadEditScanConfigSettings(config).then(state => {
-      this.setState({
-        ...state,
-        base: config.base,
-        editConfigDialogVisible: true,
-        title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
-      });
-      this.loadScanners();
+    Promise.all([
+      this.loadEditScanConfigSettings(config),
+      this.loadScanners(),
+    ]).then(([scanConfigState, scannerState]) => {
+        this.setState({
+          ...scannerState,
+          ...scanConfigState,
+          base: config.base,
+          editConfigDialogVisible: true,
+          title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
+        });
     });
   }
 
@@ -99,7 +102,10 @@ class ScanConfigComponent extends React.Component {
 
   openCreateConfigDialog() {
     this.loadScanners()
-      .then(() => this.setState({createConfigDialogVisible: true}));
+      .then(state => this.setState({
+        ...state,
+        createConfigDialogVisible: true,
+      }));
   }
 
   closeCreateConfigDialog() {
@@ -182,10 +188,10 @@ class ScanConfigComponent extends React.Component {
       let {data: scanners} = response;
       scanners = scanners.filter(scanner =>
         scanner.scanner_type === OSP_SCANNER_TYPE);
-      this.setState({
+      return {
         scanners,
         scanner_id: select_save_id(scanners),
-      });
+      };
     });
   }
 
