@@ -28,9 +28,9 @@ import _ from 'gmp/locale.js';
 import {is_empty} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
@@ -46,72 +46,99 @@ import {
 } from 'gmp/models/scanconfig.js';
 
 const Dialog = ({
+    base = EMPTY_SCAN_CONFIG_ID,
+    comment = '',
+    name = _('Unnamed'),
+    scanner_id,
+    scanners,
+    title = _('New Scan Config'),
+    visible = true,
+    onClose,
+    onSave,
+  }) => {
+
+  const data = {
     base,
     comment,
     name,
     scanner_id,
-    scanners,
-    onValueChange,
-  }) => {
+  };
+
   return (
-    <Layout flex="column">
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      defaultValues={data}
+    >
+      {({
+        values: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
 
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          grow="1"
-          value={name}
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"
+              />
+            </FormGroup>
 
-      <FormGroup title={_('Comment')}>
-        <TextField
-          name="comment"
-          value={comment}
-          grow="1"
-          size="30"
-          maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-      <FormGroup title={_('Base')} flex="column">
-        <Divider flex="column">
-          <Radio
-            name="base"
-            value={EMPTY_SCAN_CONFIG_ID}
-            checked={base === EMPTY_SCAN_CONFIG_ID}
-            title={_('Empty, static and fast')}
-            onChange={onValueChange}
-          />
-          <Radio
-            name="base"
-            value={FULL_AND_FAST_SCAN_CONFIG_ID}
-            checked={base === FULL_AND_FAST_SCAN_CONFIG_ID}
-            title={_('Full and fast')}
-            onChange={onValueChange}
-          />
-        </Divider>
-        {!is_empty(scanners) &&
-          <Divider>
-            <Radio
-              name="base"
-              value="0"
-              checked={base === '0'}
-              onChange={onValueChange}
-            />
-            <Select
-              value={scanner_id}
-              name="scanner_id"
-              onChange={onValueChange}>
-              {render_options(scanners)}
-            </Select>
-          </Divider>
-        }
-      </FormGroup>
-
-    </Layout>
+            <FormGroup title={_('Base')} flex="column">
+              <Divider flex="column">
+                <Radio
+                  name="base"
+                  value={EMPTY_SCAN_CONFIG_ID}
+                  checked={state.base === EMPTY_SCAN_CONFIG_ID}
+                  title={_('Empty, static and fast')}
+                  onChange={onValueChange}
+                />
+                <Radio
+                  name="base"
+                  value={FULL_AND_FAST_SCAN_CONFIG_ID}
+                  checked={state.base === FULL_AND_FAST_SCAN_CONFIG_ID}
+                  title={_('Full and fast')}
+                  onChange={onValueChange}
+                />
+                {!is_empty(scanners) &&
+                  <Divider>
+                    <Radio
+                      name="base"
+                      value="0"
+                      checked={state.base === '0'}
+                      onChange={onValueChange}
+                    />
+                    <Select
+                      value={state.scanner_id}
+                      name="scanner_id"
+                      items={render_select_items(scanners)}
+                      onChange={onValueChange}
+                    />
+                  </Divider>
+                }
+              </Divider>
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -123,17 +150,12 @@ Dialog.propTypes = {
   name: PropTypes.string,
   scanner_id: PropTypes.id,
   scanners: PropTypes.array,
-  onValueChange: PropTypes.func,
+  title: PropTypes.string,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
-export default withDialog({
-  title: _('New Scan Config'),
-  footer: _('Save'),
-  defaultState: {
-    base: EMPTY_SCAN_CONFIG_ID,
-    comment: '',
-    name: _('Unnamed'),
-  },
-})(Dialog);
+export default Dialog;
 
 // vim: set ts=2 sw=2 tw=80:
