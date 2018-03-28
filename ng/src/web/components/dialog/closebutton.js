@@ -36,6 +36,8 @@ let StyledCloseButton = glamorous.div({
   display: 'flex',
   border: '1px solid ' + Theme.darkGreen,
   fontWeight: 'bold',
+  fontSize: '12px',
+  fontFamily: Theme.Font.default,
   color: Theme.darkGreen,
   cursor: 'pointer',
   background: Theme.lighGreen,
