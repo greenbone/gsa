@@ -36,8 +36,9 @@ import PropTypes from '../../utils/proptypes.js';
 import Layout from '../layout/layout';
 
 import EmptyRow from './emptyrow';
-import Item from './item';
+import Item, {GRID_ITEM_MARGIN} from './item';
 import Row from './row';
+import AutoSize from '../layout/autosize.js';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
@@ -207,39 +208,53 @@ class Grid extends React.Component {
         onDragEnd={this.handleDragEnd}
         onDragStart={this.handleDragStart}
       >
-        <Layout flex="column">
-          {items.map((row, i) => {
-            const rowFull = is_defined(maxItemsPerRow) &&
-              maxItemsPerRow <= row.items.length;
-            const disabled = rowFull && dragSourceRowId !== row.id;
-            return (
-              <Row
-                key={row.id}
-                id={row.id}
-                dropDisabled={disabled}
-                height={row.height}
-                onResize={height => this.handleRowResize(row, height)}
-              >
-                {row.items.map((item, index) => (
-                  <Item
-                    key={item.id}
-                    id={item.id}
-                    index={index}
+        <AutoSize>
+          {({width: fullWidth}) => (
+            <Layout flex="column" grow="1">
+              {items.map((row, i) => {
+                const rowFull = is_defined(maxItemsPerRow) &&
+                  maxItemsPerRow <= row.items.length;
+                const disabled = rowFull && dragSourceRowId !== row.id;
+                const {height = DEFAULT_ROW_HEIGHT} = row;
+                const itemHeight = height - GRID_ITEM_MARGIN.top -
+                  GRID_ITEM_MARGIN.bottom;
+                const {length: itemCount} = row.items;
+                const itemWidth = fullWidth / itemCount -
+                  row.items.length *
+                  (GRID_ITEM_MARGIN.left + GRID_ITEM_MARGIN.right);
+                return (
+                  <Row
+                    key={row.id}
+                    id={row.id}
+                    dropDisabled={disabled}
+                    height={height}
+                    onResize={h => this.handleRowResize(row, h)}
                   >
-                    {children({
-                      id: item.id,
-                      props: item.props,
-                      remove: () => this.handleRemoveItem(item.id),
-                    })}
-                  </Item>
-                ))}
-              </Row>
-            );
-          })}
-          <EmptyRow
-            active={isDragging}
-          />
-        </Layout>
+                    {row.items.map((item, index) => (
+                      <Item
+                        key={item.id}
+                        id={item.id}
+                        index={index}
+                      >
+                        {children({
+                          id: item.id,
+                          props: item.props,
+                          height: itemHeight,
+                          width: itemWidth,
+                          remove: () => this.handleRemoveItem(item.id),
+                        })}
+                      </Item>
+                    ))}
+                  </Row>
+                );
+              })}
+              <EmptyRow
+                active={isDragging}
+              />
+            </Layout>
+          )}
+
+        </AutoSize>
       </DragDropContext>
     );
   }
