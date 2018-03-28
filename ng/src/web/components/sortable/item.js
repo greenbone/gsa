@@ -38,6 +38,9 @@ export const GRID_ITEM_MARGIN = {
 const GridItem = glamorous.div('grid-item', {
   display: 'flex',
   flexGrow: 1,
+  flexShrink: 1,
+  flexBasis: 0,
+  overflow: 'hidden',
   userSelect: 'none',
   marginTop: GRID_ITEM_MARGIN.top + 'px',
   marginBottom: GRID_ITEM_MARGIN.bottom + 'px',
