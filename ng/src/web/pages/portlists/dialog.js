@@ -52,7 +52,7 @@ const PortListsDialog = ({
   name = _('Unnamed'),
   port_list,
   port_range = 'T:1-5,7,9,U:1-3,5,7,9',
-  title,
+  title = _('New Port List'),
   visible = true,
   onClose,
   onDeletePortRangeClick,
