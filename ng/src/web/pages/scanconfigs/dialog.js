@@ -61,6 +61,7 @@ const Dialog = ({
     base,
     comment,
     name,
+    scanner_id,
   };
 
   return (

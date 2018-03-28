@@ -98,8 +98,8 @@ class ScanConfigComponent extends React.Component {
   }
 
   openCreateConfigDialog() {
-    this.setState({createConfigDialogVisible: true});
-    this.loadScanners();
+    this.loadScanners()
+      .then(() => this.setState({createConfigDialogVisible: true}));
   }
 
   closeCreateConfigDialog() {
@@ -178,7 +178,7 @@ class ScanConfigComponent extends React.Component {
   loadScanners(dialog) {
     const {gmp} = this.props;
 
-    gmp.scanners.getAll().then(response => {
+    return gmp.scanners.getAll().then(response => {
       let {data: scanners} = response;
       scanners = scanners.filter(scanner =>
         scanner.scanner_type === OSP_SCANNER_TYPE);
