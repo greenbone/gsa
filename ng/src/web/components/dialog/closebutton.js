@@ -65,7 +65,7 @@ const CloseButton = ({
     size={size}
     title={title}
   >
-    × {/* Javascript unicode: \u00D7 */}
+    ×{/* Javascript unicode: \u00D7 */}
   </StyledCloseButton>
 );
 
