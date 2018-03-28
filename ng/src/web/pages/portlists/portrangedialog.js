@@ -41,7 +41,7 @@ const PortRangeDialog = ({
   port_list,
   port_type = 'tcp',
   title = _('New Port Range'),
-  visible,
+  visible = true,
   onClose,
   onSave,
 }) => {
@@ -116,7 +116,7 @@ PortRangeDialog.propTypes = {
   port_list: PropTypes.model,
   port_type: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

@@ -196,28 +196,31 @@ class PortListComponent extends React.Component {
               edit: this.openPortListDialog,
               import: this.openImportDialog,
             })}
-            <PortListsDialog
-              comment={comment}
-              name={name}
-              port_list={port_list}
-              title={title}
-              visible={portListDialogVisible}
-              onClose={this.closePortListDialog}
-              onDeletePortRangeClick={this.handleDeletePortRange}
-              onNewPortRangeClick={this.openNewPortRangeDialog}
-              onSave={save}
-            />
-            <ImportPortListDialog
-              visible={importDialogVisible}
-              onClose={this.closeImportDialog}
-              onSave={this.handleImportPortList}
-            />
-            <PortRangeDialog
-              port_list={port_list}
-              visible={portRangeDialogVisible}
-              onClose={this.closeNewPortRangeDialog}
-              onSave={this.handleSavePortRange}
-            />
+            {portListDialogVisible &&
+              <PortListsDialog
+                comment={comment}
+                name={name}
+                port_list={port_list}
+                title={title}
+                onClose={this.closePortListDialog}
+                onDeletePortRangeClick={this.handleDeletePortRange}
+                onNewPortRangeClick={this.openNewPortRangeDialog}
+                onSave={save}
+              />
+            }
+            {importDialogVisible &&
+              <ImportPortListDialog
+                onClose={this.closeImportDialog}
+                onSave={this.handleImportPortList}
+              />
+            }
+            {portRangeDialogVisible &&
+              <PortRangeDialog
+                port_list={port_list}
+                onClose={this.closeNewPortRangeDialog}
+                onSave={this.handleSavePortRange}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
