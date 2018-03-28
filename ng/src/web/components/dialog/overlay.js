@@ -27,7 +27,7 @@ import Theme from '../../utils/theme';
 
 const DialogOverlay = glamorous.div({
   position: 'fixed',
-  fontFamily: 'Trebuchet MS, Tahoma, Verdana, Arial, sans-serif',
+  fontFamily: Theme.Font.dialog,
   fontSize: '1.1em',
   top: 0,
   right: 0,
