@@ -166,11 +166,8 @@ class Grid extends React.Component {
         {id: destrowId, items: destrowItems});
     }
 
-    // remove possible empty last row
-    const lastRow = items[items.length - 1];
-    if (lastRow.items.length === 0) {
-      items.pop();
-    }
+    // remove empty rows
+    items = items.filter(row => row.items.length > 0);
 
     this.notifyChange(items);
   }
