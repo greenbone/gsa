@@ -221,7 +221,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/scrollablecontent.js
      ${NG_SRC_DIR}/src/web/components/dialog/title.js
      ${NG_SRC_DIR}/src/web/components/dialog/savedialog.js
-     ${NG_SRC_DIR}/src/web/components/dialog/withDialog.js
      ${NG_SRC_DIR}/src/web/components/folding/folding.js
      ${NG_SRC_DIR}/src/web/components/footnote/footnote.js
      ${NG_SRC_DIR}/src/web/components/form/button.js
