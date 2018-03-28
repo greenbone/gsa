@@ -41,7 +41,13 @@ import Row from './row';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
-export const createRow = items => ({id: uuid(), items});
+const DEFAULT_ROW_HEIGHT = 250;
+
+export const createRow = (items, height = DEFAULT_ROW_HEIGHT) => ({
+  id: uuid(),
+  height,
+  items,
+});
 
 export const createItem = props => {
   const id = uuid();
@@ -72,6 +78,7 @@ const itemPropType = PropTypes.shape({
 const rowPropType = PropTypes.shape({
   id: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(itemPropType).isRequired,
+  height: PropTypes.number,
 });
 
 class Grid extends React.Component {
