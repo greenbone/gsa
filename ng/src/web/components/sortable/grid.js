@@ -42,12 +42,13 @@ import Row from './row';
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
 export const createRow = items => ({id: uuid(), items});
-export const createItem = callback => {
+
+export const createItem = props => {
   const id = uuid();
 
   return {
     id,
-    content: callback(id),
+    props,
   };
 };
 
@@ -63,10 +64,21 @@ const updateRow = (row, data) => {
   };
 };
 
+const itemPropType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  props: PropTypes.any.isRequired,
+});
+
+const rowPropType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(itemPropType).isRequired,
+});
+
 class Grid extends React.Component {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+    children: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(rowPropType),
     maxItemsPerRow: PropTypes.numberOrNumberString,
     onChange: PropTypes.func,
   }
@@ -182,7 +194,7 @@ class Grid extends React.Component {
 
   render() {
     const {isDragging, dragSourceRowId} = this.state;
-    const {maxItemsPerRow, items} = this.props;
+    const {maxItemsPerRow, items = [], children} = this.props;
     return (
       <DragDropContext
         onDragEnd={this.handleDragEnd}
@@ -207,7 +219,11 @@ class Grid extends React.Component {
                     id={item.id}
                     index={index}
                   >
-                    {item.content}
+                    {children({
+                      id: item.id,
+                      props: item.props,
+                      remove: () => this.handleRemoveItem(item.id),
+                    })}
                   </Item>
                 ))}
               </Row>

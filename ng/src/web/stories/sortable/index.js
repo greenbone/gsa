@@ -111,7 +111,7 @@ const Item = glamorous.span({
 
 const getItems = (row, count) =>
   Array.from({length: count}, (v, k) => k).map(k =>
-    createItem(id => <Item>{`row ${row} item ${k}`}</Item>)
+    createItem({row, k})
   );
 
 storiesOf('Sortable/Grid', module)
@@ -125,7 +125,14 @@ storiesOf('Sortable/Grid', module)
       <ItemController
         items={items}
       >
-        <Grid />
+        <Grid>
+          {({props}) => {
+            const {row, k} = props;
+            return (
+              <Item>{`row ${row} item ${k}`}</Item>
+            );
+          }}
+        </Grid>
       </ItemController>
     );
   })
@@ -140,7 +147,14 @@ storiesOf('Sortable/Grid', module)
       >
         <Grid
           maxItemsPerRow="5"
-        />
+        >
+          {({props}) => {
+            const {row, k} = props;
+            return (
+              <Item>{`row ${row} item ${k}`}</Item>
+            );
+          }}
+        </Grid>
       </ItemController>
     );
   });
