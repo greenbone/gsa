@@ -102,55 +102,51 @@ NvtPreferenceDisplay.propTypes = {
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
-class NvtPreferences extends React.Component {
-
-  render() {
-    const {
-      config,
-      preferences,
-      onEditNvtDetailsClick,
-    } = this.props;
-    return (
-      <Section
-        foldable
-        title={_('Network Vulnerability Test Preferences')}
-      >
-        <Table fixed>
-          <TableHeader>
-            <TableRow>
-              <TableHead width="30%">
-                {_('NVT')}
-              </TableHead>
-              <TableHead width="30%">
-                {_('Name')}
-              </TableHead>
-              <TableHead width="30%">
-                {_('Value')}
-              </TableHead>
-              <TableHead width="10%">
-                {_('Actions')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {
-              map(preferences, pref => {
-                return (
-                  <NvtPreferenceDisplay
-                    key={pref.nvt.name + pref.name}
-                    config={config}
-                    preference={pref}
-                    onEditNvtDetailsClick={onEditNvtDetailsClick}
-                  />
-                );
-              })
-            }
-          </TableBody>
-        </Table>
-      </Section>
-    );
-  }
-}
+const NvtPreferences = ({
+  config,
+  preferences,
+  onEditNvtDetailsClick,
+}) => {
+  return (
+    <Section
+      foldable
+      title={_('Network Vulnerability Test Preferences')}
+    >
+      <Table fixed>
+        <TableHeader>
+          <TableRow>
+            <TableHead width="30%">
+              {_('NVT')}
+            </TableHead>
+            <TableHead width="30%">
+              {_('Name')}
+            </TableHead>
+            <TableHead width="30%">
+              {_('Value')}
+            </TableHead>
+            <TableHead width="10%">
+              {_('Actions')}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {
+            map(preferences, pref => {
+              return (
+                <NvtPreferenceDisplay
+                  key={pref.nvt.name + pref.name}
+                  config={config}
+                  preference={pref}
+                  onEditNvtDetailsClick={onEditNvtDetailsClick}
+                />
+              );
+            })
+          }
+        </TableBody>
+      </Table>
+    </Section>
+  );
+};
 
 NvtPreferences.propTypes = {
   config: PropTypes.model.isRequired,
@@ -485,126 +481,122 @@ NvtFamilies.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-class EditDialog extends React.Component {
+const EditDialog = ({
+  comment = '',
+  config,
+  families,
+  name,
+  scanner_id,
+  scanner_preference_values,
+  scanners,
+  select,
+  title,
+  trend,
+  visible = true,
+  onClose,
+  onEditConfigFamilyClick,
+  onEditNvtDetailsClick,
+  onSave,
+}) => {
 
-  render() {
-    const {
-      comment = '',
-      config,
-      families,
-      name,
-      scanner_id,
-      scanner_preference_values,
-      scanners,
-      select,
-      title,
-      trend,
-      visible = true,
-      onClose,
-      onEditConfigFamilyClick,
-      onEditNvtDetailsClick,
-      onSave,
-    } = this.props;
+  const uncontrolledData = {
+    base: config.scan_config_type,
+    comment,
+    name,
+    scanner_id,
+  };
 
-    const uncontrolledData = {
-      base: config.scan_config_type,
-      comment,
-      name,
-      scanner_id,
-    };
+  const controlledData = {
+    id: config.id,
+    scanner_preference_values,
+    select,
+    trend,
+  };
 
-    const controlledData = {
-      id: config.id,
-      scanner_preference_values,
-      select,
-      trend,
-    };
+  return (
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      defaultValues={uncontrolledData}
+      values={controlledData}
+    >
+      {({
+        values: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
 
-    return (
-      <SaveDialog
-        visible={visible}
-        title={title}
-        onClose={onClose}
-        onSave={onSave}
-        defaultValues={uncontrolledData}
-        values={controlledData}
-      >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
-          return (
-            <Layout flex="column">
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"
+              />
+            </FormGroup>
 
-              <FormGroup title={_('Name')}>
-                <TextField
-                  name="name"
-                  grow="1"
-                  value={state.name}
-                  size="30"
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            {!config.isInUse() &&
+              config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
+              <FormGroup title={_('Scanner')}>
+                <Select
+                  name="scanner_id"
+                  items={render_select_items(scanners)}
+                  value={state.scanner_id}
                   onChange={onValueChange}
-                  maxLength="80"
                 />
               </FormGroup>
+            }
 
-              <FormGroup title={_('Comment')}>
-                <TextField
-                  name="comment"
-                  value={state.comment}
-                  grow="1"
-                  size="30"
-                  maxLength="400"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+            {!config.isInUse() &&
+              config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+              <NvtFamilies
+                config={config}
+                families={families}
+                trend={trend}
+                select={select}
+                onEditConfigFamilyClick={onEditConfigFamilyClick}
+                onValueChange={onValueChange}
+              />
+            }
 
-              {!config.isInUse() &&
-                config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
-                <FormGroup title={_('Scanner')}>
-                  <Select
-                    name="scanner_id"
-                    items={render_select_items(scanners)}
-                    value={state.scanner_id}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-              }
+            {!config.isInUse() &&
+              <ScannerPreferences
+                values={scanner_preference_values}
+                preferences={config.preferences.scanner}
+                onValueChange={onValueChange}
+              />
+            }
 
-              {!config.isInUse() &&
-                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                <NvtFamilies
-                  config={config}
-                  families={families}
-                  trend={trend}
-                  select={select}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
-                  onValueChange={onValueChange}
-                />
-              }
-
-              {!config.isInUse() &&
-                <ScannerPreferences
-                  values={scanner_preference_values}
-                  preferences={config.preferences.scanner}
-                  onValueChange={onValueChange}
-                />
-              }
-
-              {!config.isInUse() &&
-                config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                <NvtPreferences
-                  config={config}
-                  preferences={config.preferences.nvt}
-                  onValueChange={onValueChange}
-                  onEditNvtDetailsClick={onEditNvtDetailsClick}
-                />
-              }
-            </Layout>
-          );
-        }}
-      </SaveDialog>
-    );
-  }
+            {!config.isInUse() &&
+              config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+              <NvtPreferences
+                config={config}
+                preferences={config.preferences.nvt}
+                onValueChange={onValueChange}
+                onEditNvtDetailsClick={onEditNvtDetailsClick}
+              />
+            }
+          </Layout>
+        );
+      }}
+    </SaveDialog>
+  );
 };
 
 EditDialog.propTypes = {
