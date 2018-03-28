@@ -57,6 +57,7 @@ const withIconSize = (defaultSize = 'small') => Component => {
     return {
       height,
       width,
+      lineHeight: height,
       '& *': {
         height: 'inherit',
         width: 'inherit',
