@@ -45,6 +45,7 @@ let StyledCloseButton = glamorous.div({
   padding: '0',
   alignItems: 'center',
   justifyContent: 'center',
+  flexShrink: 0,
 
   ':hover': {
     color: '#fff',
