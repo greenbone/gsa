@@ -46,16 +46,12 @@ import Section from '../../components/section/section.js';
 
 import PortRangesTable from './portrangestable.js';
 
-const DEFAULTS = {
-  name: _('Unnamed'),
-  comment: '',
-  from_file: NO_VALUE,
-  port_range: 'T:1-5,7,9,U:1-3,5,7,9',
-};
-
 const PortListsDialog = ({
-  from_file,
+  comment = '',
+  from_file = NO_VALUE,
+  name = _('Unnamed'),
   port_list,
+  port_range = 'T:1-5,7,9,U:1-3,5,7,9',
   title,
   visible = true,
   onClose,
@@ -76,8 +72,11 @@ const PortListsDialog = ({
   );
 
   const data = {
-    ...DEFAULTS,
     ...port_list,
+    comment,
+    from_file,
+    name,
+    port_range,
   };
 
   return (
@@ -165,8 +164,11 @@ const PortListsDialog = ({
 
 
 PortListsDialog.propTypes = {
+  comment: PropTypes.string,
   from_file: PropTypes.yesno,
+  name: PropTypes.string,
   port_list: PropTypes.model,
+  port_range: PropTypes.string,
   title: PropTypes.string,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
