@@ -55,6 +55,11 @@ const Theme = {
     higher: 1,
     default: 0,
   },
+
+  Font: {
+    default: 'small Verdana, sans-serif',
+    dialog: 'Trebuchet MS, Tahoma, Verdana, Arial, sans-serif',
+  },
 };
 
 export default Theme;
