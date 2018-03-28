@@ -39,6 +39,7 @@ import CloseButton from '../dialog/closebutton';
  */
 const HeaderContainer = glamorous.div('display-header-container', {
   position: 'relative',
+  zIndex: Theme.Layers.higher,
 });
 
 const Header = glamorous.div('display-header', {
