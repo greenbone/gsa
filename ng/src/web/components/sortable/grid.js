@@ -110,6 +110,14 @@ class Grid extends React.Component {
     });
   }
 
+  handleRemoveItem(itemId) {
+    let {items} = this.props;
+
+    items = removeItem(items, itemId);
+
+    this.notifyChange(items);
+  }
+
   handleDragEnd(result) {
     this.setState({
       isDragging: false,
