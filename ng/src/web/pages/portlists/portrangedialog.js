@@ -37,12 +37,9 @@ import TextField from '../../components/form/textfield.js';
 
 import Layout from '../../components/layout/layout.js';
 
-const DEFAULTS = {
-  port_type: 'tcp',
-};
-
 const PortRangeDialog = ({
   port_list,
+  port_type = 'tcp',
   title = _('New Port Range'),
   visible,
   onClose,
@@ -50,8 +47,8 @@ const PortRangeDialog = ({
 }) => {
 
   const data = {
-    ...DEFAULTS,
     ...port_list,
+    port_type,
   };
 
   return (
@@ -117,6 +114,7 @@ const PortRangeDialog = ({
 
 PortRangeDialog.propTypes = {
   port_list: PropTypes.model,
+  port_type: PropTypes.string,
   title: PropTypes.string,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
