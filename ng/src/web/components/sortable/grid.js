@@ -54,7 +54,7 @@ export const createItem = callback => {
 export const removeItem = (rows, itemId) => rows.map(row => ({
   ...row,
   items: row.items.filter(item => item.id !== itemId),
-}));
+})).filter(row => row.items.length > 0);
 
 const updateRow = (row, data) => {
   return {
