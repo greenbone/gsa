@@ -38,27 +38,27 @@ import Wrapper from '../../components/layout/wrapper.js';
 import FilterDialog from './dialog.js';
 
 const FILTER_OPTIONS = [
-  ['agents', 'Agent', _('Agent')],
-  ['alerts', 'Alert', _('Alert')],
-  ['assets', 'Asset', _('Asset')],
-  ['credentials', 'Credential', _('Credential')],
-  ['filters', 'Filter', _('Filter')],
-  ['groups', 'Group', _('Group')],
-  ['notes', 'Note', _('Note')],
-  ['overrides', 'Override', _('Override')],
-  ['permissions', 'Permission', _('Permission')],
-  ['port_lists', 'Port List', _('Port List')],
-  ['reports', 'Report', _('Report')],
-  ['report_formats', 'Report Format', _('Report Format')],
-  ['results', 'Result', _('Result')],
-  ['roles', 'Role', _('Role')],
-  ['schedules', 'Schedule', _('Schedule')],
-  ['info', 'SecInfo', _('SecInfo')],
-  ['configs', 'Scan Config', _('Scan Config')],
-  ['tags', 'Tag', _('Tag')],
-  ['targets', 'Target', _('Target')],
-  ['tasks', 'Task', _('Task')],
-  ['users', 'User', _('User')],
+  ['agents', _('Agent')],
+  ['alerts', _('Alert')],
+  ['assets', _('Asset')],
+  ['credentials', _('Credential')],
+  ['filters', _('Filter')],
+  ['groups', _('Group')],
+  ['notes', _('Note')],
+  ['overrides', _('Override')],
+  ['permissions', _('Permission')],
+  ['port_lists', _('Port List')],
+  ['reports', _('Report')],
+  ['report_formats', _('Report Format')],
+  ['results', _('Result')],
+  ['roles', _('Role')],
+  ['schedules', _('Schedule')],
+  ['info', _('SecInfo')],
+  ['configs', _('Scan Config')],
+  ['tags', _('Tag')],
+  ['targets', _('Target')],
+  ['tasks', _('Task')],
+  ['users', _('User')],
 ];
 
 const filter_types = (caps, name) => {
@@ -67,7 +67,7 @@ const filter_types = (caps, name) => {
 
 const includes_type = (types, type) => {
   for (const option of types) {
-    if (option[1] === type) {
+    if (option[0] === type) {
       return true;
     }
   }
@@ -101,7 +101,7 @@ class FilterComponent extends React.Component {
     if (is_defined(filter)) {
       let {filter_type} = filter;
       if (!includes_type(types, filter_type)) {
-        filter_type = first(types, [])[1];
+        filter_type = first(types, [])[0];
       }
 
       const title = _('Edit Filter {{name}}', {name: shorten(filter.name)});
@@ -118,7 +118,7 @@ class FilterComponent extends React.Component {
       });
     }
     else {
-      const type = first(types, [])[1]; // eslint-disable-line prefer-destructuring
+      const type = first(types, [])[0]; // eslint-disable-line prefer-destructuring
 
       this.setState({
         comment: undefined,
