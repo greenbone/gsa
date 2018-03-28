@@ -35,7 +35,7 @@ import EntityComponent from '../../entity/component.js';
 import Wrapper from '../../components/layout/wrapper.js';
 
 import ImportPortListDialog from './importdialog.js';
-import PortListDialog from './dialog.js';
+import PortListsDialog from './dialog.js';
 import PortRangeDialog from './portrangedialog.js';
 
 class PortListComponent extends React.Component {
@@ -67,7 +67,9 @@ class PortListComponent extends React.Component {
       gmp.portlist.get(entity).then(response => {
         const port_list = response.data;
         this.setState({
+          comment: port_list.comment,
           port_list,
+          name: port_list.name,
           portListDialogVisible: true,
           title: _('Edit Port List {{name}}', {name: shorten(port_list.name)}),
         });
@@ -75,6 +77,8 @@ class PortListComponent extends React.Component {
     }
     else {
       this.setState({
+        comment: undefined,
+        name: undefined,
         port_list: undefined,
         portListDialogVisible: true,
         title: _('New Port List'),
@@ -158,7 +162,9 @@ class PortListComponent extends React.Component {
     } = this.props;
 
     const {
+      comment,
       importDialogVisible,
+      name,
       port_list,
       portListDialogVisible,
       portRangeDialogVisible,
@@ -190,7 +196,9 @@ class PortListComponent extends React.Component {
               edit: this.openPortListDialog,
               import: this.openImportDialog,
             })}
-            <PortListDialog
+            <PortListsDialog
+              comment={comment}
+              name={name}
               port_list={port_list}
               title={title}
               visible={portListDialogVisible}
