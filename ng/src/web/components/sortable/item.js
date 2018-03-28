@@ -35,7 +35,7 @@ export const GRID_ITEM_MARGIN = {
   right: 8,
 };
 
-const GridItem = glamorous.div({
+const GridItem = glamorous.div('grid-item', {
   display: 'flex',
   flexGrow: 1,
   userSelect: 'none',
