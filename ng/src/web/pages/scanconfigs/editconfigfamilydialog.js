@@ -157,7 +157,7 @@ class EditDialogComponent extends React.Component {
       nvts,
       selected,
       title,
-      visible,
+      visible = true,
       onClose,
       onEditNvtDetailsClick,
       onSave,
@@ -168,8 +168,6 @@ class EditDialogComponent extends React.Component {
       config_name,
       family_name,
       id,
-      nvts,
-      selected,
     };
 
     return (
@@ -178,10 +176,11 @@ class EditDialogComponent extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={data}
+        defaultValues={{selected}}
+        values={data}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
 
@@ -194,7 +193,7 @@ class EditDialogComponent extends React.Component {
                       {_('Config')}
                     </TableData>
                     <TableData>
-                      {state.name}
+                      {config_name}
                     </TableData>
                   </TableRow>
                   <TableRow>
@@ -202,7 +201,7 @@ class EditDialogComponent extends React.Component {
                       {_('Family')}
                     </TableData>
                     <TableData>
-                      {state.family}
+                      {family_name}
                     </TableData>
                   </TableRow>
                 </TableBody>
@@ -270,7 +269,7 @@ EditDialogComponent.propTypes = {
   nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
