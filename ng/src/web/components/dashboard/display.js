@@ -32,6 +32,8 @@ import PropTypes from '../../utils/proptypes';
 
 import CloseButton from '../dialog/closebutton';
 
+export const DISPLAY_HEADER_HEIGHT = 20;
+
 /*
  * Position the Menu relative to this element
  *
@@ -40,6 +42,7 @@ import CloseButton from '../dialog/closebutton';
 const HeaderContainer = glamorous.div('display-header-container', {
   position: 'relative',
   zIndex: Theme.Layers.higher,
+  height: DISPLAY_HEADER_HEIGHT + 'px',
 });
 
 const Header = glamorous.div('display-header', {
