@@ -67,7 +67,8 @@ const PortListsDialog = ({
       <NewIcon
         value={port_list}
         title={_('Add Port Range')}
-        onClick={onNewPortRangeClick}/>
+        onClick={onNewPortRangeClick}
+      />
     </div>
   );
 
@@ -101,7 +102,8 @@ const PortListsDialog = ({
                 grow="1"
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -111,7 +113,8 @@ const PortListsDialog = ({
                 grow="1"
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             {!is_edit &&
@@ -123,14 +126,17 @@ const PortListsDialog = ({
                       name="from_file"
                       value="0"
                       onChange={onValueChange}
-                      checked={from_file !== '1'}/>
+                      checked={from_file !== '1'}
+                    />
                     <TextField
                       grow="1"
                       name="port_range"
                       value={state.port_range}
                       disabled={from_file === '1'}
                       onChange={onValueChange}
-                      size="30" maxLength="400"/>
+                      size="30"
+                      maxLength="400"
+                    />
                   </Divider>
                   <Divider>
                     <Radio
@@ -138,10 +144,12 @@ const PortListsDialog = ({
                       name="from_file"
                       value="1"
                       onChange={onValueChange}
-                      checked={from_file === '1'}/>
+                      checked={from_file === '1'}
+                    />
                     <FileField
                       name="file"
-                      onChange={onValueChange}/>
+                      onChange={onValueChange}
+                    />
                   </Divider>
                 </Divider>
               </FormGroup>
@@ -151,7 +159,8 @@ const PortListsDialog = ({
                 {is_defined(port_list) &&
                   <PortRangesTable
                     portRanges={port_list.port_ranges}
-                    onDeleteClick={onDeletePortRangeClick}/>
+                    onDeleteClick={onDeletePortRangeClick}
+                  />
                 }
               </Section>
             }

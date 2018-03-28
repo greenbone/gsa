@@ -76,7 +76,8 @@ const PortRangeDialog = ({
                 size="30"
                 convert={parse_int}
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('End')}>
@@ -87,7 +88,8 @@ const PortRangeDialog = ({
                 size="30"
                 maxLength="80"
                 convert={parse_int}
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Protocol')} flex>
@@ -96,13 +98,15 @@ const PortRangeDialog = ({
                 name="port_type"
                 value="tcp"
                 onChange={onValueChange}
-                checked={state.port_type === 'tcp'}/>
+                checked={state.port_type === 'tcp'}
+              />
               <Radio
                 title={_('UDP')}
                 name="port_type"
                 value="udp"
                 onChange={onValueChange}
-                checked={state.port_type === 'udp'}/>
+                checked={state.port_type === 'udp'}
+              />
             </FormGroup>
           </Layout>
         );
