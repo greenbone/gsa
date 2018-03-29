@@ -96,7 +96,7 @@ storiesOf('Sortable/Grid', module)
   })
   .add('max 5 items per row', () => {
     const items = [
-      {...createRow(getItems(0, 3)), height: '400px'},
+      createRow(getItems(0, 3), 400),
       createRow(getItems(1, 5)),
     ];
     return (
