@@ -62,7 +62,7 @@ class PortListCommand extends EntityCommand {
 
   createPortRange(args) {
     const {id, port_range_start, port_range_end, port_type} = args;
-    return this.httpPost({
+    return this.action({
       cmd: 'create_port_range',
       id,
       port_range_start,
