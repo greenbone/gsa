@@ -76,7 +76,6 @@ const getItems = (row, count) =>
 storiesOf('Sortable/Grid', module)
   .add('default', () => {
     const items = [
-      createRow([]),
       createRow(getItems(1, 10)),
       createRow(getItems(2, 5)),
     ];
