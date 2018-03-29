@@ -52,11 +52,12 @@ const PortListsDialog = ({
   name = _('Unnamed'),
   port_list,
   port_range = 'T:1-5,7,9,U:1-3,5,7,9',
+  tmp_port_ranges = [],
   title = _('New Port List'),
   visible = true,
   onClose,
-  onDeletePortRangeClick,
   onNewPortRangeClick,
+  onTmpDeletePortRange,
   onSave,
 }) => {
 
@@ -87,6 +88,7 @@ const PortListsDialog = ({
       onClose={onClose}
       onSave={onSave}
       defaultValues={data}
+      values={{tmp_port_ranges}}
     >
       {({
         values: state,
@@ -158,8 +160,8 @@ const PortListsDialog = ({
               <Section title={_('Port Ranges')} extra={newrangeicon}>
                 {is_defined(port_list) &&
                   <PortRangesTable
-                    portRanges={port_list.port_ranges}
-                    onDeleteClick={onDeletePortRangeClick}
+                    portRanges={state.tmp_port_ranges}
+                    onDeleteClick={onTmpDeletePortRange}
                   />
                 }
               </Section>
@@ -171,7 +173,6 @@ const PortListsDialog = ({
   );
 };
 
-
 PortListsDialog.propTypes = {
   comment: PropTypes.string,
   from_file: PropTypes.yesno,
@@ -179,11 +180,13 @@ PortListsDialog.propTypes = {
   port_list: PropTypes.model,
   port_range: PropTypes.string,
   title: PropTypes.string,
+  tmp_port_ranges: PropTypes.array,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onDeletePortRangeClick: PropTypes.func,
   onNewPortRangeClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
+  onTmpDeletePortRange: PropTypes.func.isRequired,
 };
 
 
