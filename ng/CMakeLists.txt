@@ -184,8 +184,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
      ${NG_SRC_DIR}/src/web/components/dashboard/dashboard.js
      ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
-     ${NG_SRC_DIR}/src/web/components/dashboard/display.js
-     ${NG_SRC_DIR}/src/web/components/dashboard/displaymenu.js
      ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/components/dashboard/withDashboard.js
@@ -208,6 +206,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/line.js
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/task.js
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/topology.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/displaymenu.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js
