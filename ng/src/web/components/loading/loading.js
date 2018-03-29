@@ -47,7 +47,7 @@ const StyledLayout = glamorous(Layout)({
 
 const Loading = () => {
   return (
-    <StyledLayout align="center">
+    <StyledLayout align={['center', 'center']}>
       <Loader/>
     </StyledLayout>
   );
