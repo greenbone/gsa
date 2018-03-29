@@ -228,7 +228,7 @@ class LineChart extends React.Component {
   }
 
   updateData({
-    data,
+    data = [],
     width,
     height,
   }) {
