@@ -32,6 +32,8 @@ import PropTypes from '../../utils/proptypes';
 
 import CloseButton from '../dialog/closebutton';
 
+export const DISPLAY_HEADER_HEIGHT = 20;
+
 /*
  * Position the Menu relative to this element
  *
@@ -39,12 +41,15 @@ import CloseButton from '../dialog/closebutton';
  */
 const HeaderContainer = glamorous.div('display-header-container', {
   position: 'relative',
+  zIndex: Theme.Layers.higher,
+  height: DISPLAY_HEADER_HEIGHT + 'px',
+  display: 'flex',
 });
 
 const Header = glamorous.div('display-header', {
   display: 'flex',
-  flexGrow: 0,
-  flexShrink: 0,
+  flexGrow: 1,
+  flexShrink: 1,
   backgroundColor: Theme.green,
   border: '1px solid ' + Theme.darkGreen,
   color: 'white',
@@ -52,36 +57,45 @@ const Header = glamorous.div('display-header', {
   padding: '0px 5px',
   fontWeight: 'bold',
   userSelect: 'none',
+  overflow: 'hidden',
 });
 
 const HeaderContent = glamorous.div('display-header-content', {
   display: 'flex',
   padding: '1px 0',
   flexGrow: 1,
+  flexShrink: 1,
   alignItems: 'center',
   justifyContent: 'space-between',
+  overflow: 'hidden',
 });
 
 const DisplayView = glamorous.div('display-view', {
   display: 'flex',
   flexDirection: 'column',
   flexGrow: 1,
+  flexShrink: 1,
+  flexBasis: 0,
   backgroundColor: Theme.dialogGray,
-  overflow: 'auto',
+  overflow: 'hidden',
 });
 
 const DisplayContent = glamorous.div('display-content', {
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   flexGrow: 1,
+  flexShrink: 1,
+  flexBasis: 0,
 });
 
 const DisplayTitle = glamorous.div('display-title', {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  display: 'block',
   flexGrow: 1,
+  flexShrink: 1,
+  whiteSpace: 'nowrap',
+  wordBreak: 'keep-all',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  textAlign: 'center',
 });
 
 const Display = ({

@@ -1,0 +1,120 @@
+/* Greenbone Security Assistant
+ *
+ * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2018 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+import React from 'react';
+
+import glamorous from 'glamorous';
+
+import {storiesOf} from '@storybook/react';
+
+import PropTypes from 'web/utils/proptypes';
+
+import Grid, {createItem, createRow} from 'web/components/sortable/grid.js';
+
+class ItemController extends React.Component {
+
+  static propTypes = {
+    items: PropTypes.array,
+  };
+
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      items: this.props.items,
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(items) {
+    this.setState({items});
+  }
+
+  render() {
+    const {children} = this.props;
+    const {items} = this.state;
+
+    return React.cloneElement(React.Children.only(children), {
+      items,
+      onChange: this.handleChange,
+    });
+  }
+}
+
+const Item = glamorous.span({
+  flexGrow: '1',
+  backgroundColor: 'blue',
+  padding: '5px',
+  color: 'white',
+});
+
+const getItems = (row, count) =>
+  Array.from({length: count}, (v, k) => k).map(k =>
+    createItem({row, k})
+  );
+
+storiesOf('Sortable/Grid', module)
+  .add('default', () => {
+    const items = [
+      createRow(getItems(1, 10)),
+      createRow(getItems(2, 5)),
+    ];
+    return (
+      <ItemController
+        items={items}
+      >
+        <Grid>
+          {({props}) => {
+            const {row, k} = props;
+            return (
+              <Item>{`row ${row} item ${k}`}</Item>
+            );
+          }}
+        </Grid>
+      </ItemController>
+    );
+  })
+  .add('max 5 items per row', () => {
+    const items = [
+      createRow(getItems(0, 3), 400),
+      createRow(getItems(1, 5)),
+    ];
+    return (
+      <ItemController
+        items={items}
+      >
+        <Grid
+          maxItemsPerRow="5"
+        >
+          {({props}) => {
+            const {row, k} = props;
+            return (
+              <Item>{`row ${row} item ${k}`}</Item>
+            );
+          }}
+        </Grid>
+      </ItemController>
+    );
+  });
+
+// vim: set ts=2 sw=2 tw=80:

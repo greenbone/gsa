@@ -20,8 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {combineReducers} from 'redux';
 
-import './resizer';
-import './grid';
+import dashboardDataReducer from '../components/dashboard2/data/reducers';
+
+const rootReducer = combineReducers({
+  dashboardData: dashboardDataReducer,
+});
+
+export default rootReducer;
 
 // vim: set ts=2 sw=2 tw=80:

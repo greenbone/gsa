@@ -20,8 +20,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const DASHBOARD_DATA_LOADING_SUCCESS = 'DASHBOARD_DATA_LOADING_SUCCESS';
+export const DASHBOARD_DATA_LOADING_REQUEST = 'DASHBOARD_DATA_LOADING_REQUEST';
+export const DASHBOARD_DATA_LOADING_ERROR = 'DASHBOARD_DATA_LOADING_ERROR';
 
-import './resizer';
-import './grid';
+export const receivedDashboardData = (id, data) => ({
+  type: DASHBOARD_DATA_LOADING_SUCCESS,
+  id,
+  data,
+});
+
+export const receivedDashboardError = (id, error) => ({
+  type: DASHBOARD_DATA_LOADING_ERROR,
+  error,
+});
+
+export const requestDashboardData = id => ({
+  type: DASHBOARD_DATA_LOADING_REQUEST,
+  id,
+});
 
 // vim: set ts=2 sw=2 tw=80:

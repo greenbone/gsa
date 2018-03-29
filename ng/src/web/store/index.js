@@ -20,8 +20,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {createStore, applyMiddleware} from 'redux';
 
-import './resizer';
-import './grid';
+import thunk from 'redux-thunk';
 
+import {createLogger} from 'redux-logger';
+
+import rootReducer from './reducers';
+
+const configureStore = () => {
+  const middlewares = [thunk];
+
+  if (process.env.NODE_ENV !== 'production') {
+    middlewares.push(createLogger());
+  }
+
+  return createStore(
+    rootReducer,
+    applyMiddleware(...middlewares)
+  );
+};
+
+export default configureStore;
 // vim: set ts=2 sw=2 tw=80:

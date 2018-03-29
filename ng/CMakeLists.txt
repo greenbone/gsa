@@ -184,8 +184,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
      ${NG_SRC_DIR}/src/web/components/dashboard/dashboard.js
      ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
-     ${NG_SRC_DIR}/src/web/components/dashboard/display.js
-     ${NG_SRC_DIR}/src/web/components/dashboard/displaymenu.js
      ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/components/dashboard/withDashboard.js
@@ -208,6 +206,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/line.js
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/task.js
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/topology.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/chartdisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/dashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/displaymenu.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/actions.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/loader.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/reducers.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/selectors.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js
@@ -674,6 +680,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/row.js
      ${NG_SRC_DIR}/src/web/pages/vulns/table.js
+     ${NG_SRC_DIR}/src/web/store/index.js
+     ${NG_SRC_DIR}/src/web/store/reducers.js
      ${NG_SRC_DIR}/src/web/utils/cert.js
      ${NG_SRC_DIR}/src/web/utils/compose.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js

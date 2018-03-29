@@ -108,8 +108,9 @@ Line.propTypes = {
 const Legend = ({
   data,
   children,
+  innerRef,
 }) => (
-  <StyledLegend>
+  <StyledLegend innerRef={innerRef}>
     {data.map((d, i) => (
       <ToolTip
         key={i}
@@ -146,6 +147,7 @@ Legend.propTypes = {
     label: PropTypes.any,
     toolTip: PropTypes.elementOrString,
   })).isRequired,
+  innerRef: PropTypes.func,
 };
 
 export default Legend;

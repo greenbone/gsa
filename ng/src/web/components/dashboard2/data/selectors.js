@@ -20,8 +20,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {is_defined} from 'gmp/utils/index';
 
-import './resizer';
-import './grid';
+export const getData = state => is_defined(state) ? state.data : undefined;
+
+export const getIsLoading = state =>
+  is_defined(state) ? state.isLoading : false;
+
+export const getError = state =>
+  is_defined(state) ? state.error : undefined;
+
+export const getById = (state, id) => is_defined(state) ?
+  state[id] : undefined;
+
+export const getDashboardData = rootState => rootState.dashboardData;
+
+export const getDashboardDataById = (rootState, id) => {
+  const state = getDashboardData(rootState);
+  if (is_defined(state)) {
+    return getById(state, id);
+  }
+  return undefined;
+};
 
 // vim: set ts=2 sw=2 tw=80:

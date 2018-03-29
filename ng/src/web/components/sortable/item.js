@@ -28,11 +28,24 @@ import {Draggable} from 'react-beautiful-dnd';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const GridItem = glamorous.div({
+export const GRID_ITEM_MARGIN = {
+  top: 5,
+  bottom: 5,
+  left: 8,
+  right: 8,
+};
+
+const GridItem = glamorous.div('grid-item', {
   display: 'flex',
   flexGrow: 1,
+  flexShrink: 1,
+  flexBasis: 0,
+  overflow: 'hidden',
   userSelect: 'none',
-  margin: '5px 8px',
+  marginTop: GRID_ITEM_MARGIN.top + 'px',
+  marginBottom: GRID_ITEM_MARGIN.bottom + 'px',
+  marginLeft: GRID_ITEM_MARGIN.left + 'px',
+  marginRight: GRID_ITEM_MARGIN.right + 'px',
 });
 
 const Item = ({

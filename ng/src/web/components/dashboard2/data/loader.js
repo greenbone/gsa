@@ -20,8 +20,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {
+  receivedDashboardData,
+  receivedDashboardError,
+  requestDashboardData,
+} from './actions';
 
-import './resizer';
-import './grid';
+import {getDashboardDataById, getIsLoading} from './selectors';
+
+const loader = (id, func) => props => (dispatch, getState) => {
+  const rootState = getState();
+  const state = getDashboardDataById(rootState, id);
+
+  if (getIsLoading(state)) {
+    // we are already loading data
+    return Promise.resolve();
+  }
+
+  dispatch(requestDashboardData(id));
+
+  const promise = func(props);
+  return promise.then(
+    data => dispatch(receivedDashboardData(id, data)),
+    error => dispatch(receivedDashboardError(id, error)),
+  );
+};
+
+export default loader;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -41,10 +41,12 @@ import Axis from './axis';
 import Svg from './svg';
 import Group from './group';
 
+const LEGEND_MARGIN = 20;
+
 const margin = {
-  top: 55,
+  top: 35,
   right: 60,
-  bottom: 25,
+  bottom: 55,
   left: 60,
 };
 
@@ -141,6 +143,10 @@ class LineChart extends React.Component {
     this.handleMouseMove = this.handleMouseMove.bind(this);
   }
 
+  componentDidMount() {
+    this.setState(this.updateData(this.props));
+  }
+
   componentWillReceiveProps(next) {
     this.setState(this.updateData(next));
   }
@@ -222,10 +228,15 @@ class LineChart extends React.Component {
   }
 
   updateData({
-    data,
+    data = [],
     width,
     height,
   }) {
+    if (this.legend) {
+      const {width: legendWidth} = this.legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
+    }
+
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
@@ -267,6 +278,8 @@ class LineChart extends React.Component {
       xValues,
       xMin,
       xMax,
+      width,
+      height,
     };
   }
 
@@ -431,10 +444,10 @@ class LineChart extends React.Component {
       y2Scale,
       maxHeight,
       maxWidth,
-    } = this.state;
-    const {
       height,
       width,
+    } = this.state;
+    const {
       xAxisLabel,
       yAxisLabel,
       y2AxisLabel,
@@ -560,7 +573,10 @@ class LineChart extends React.Component {
           </Group>
         </Svg>
         {hasLines &&
-          <Legend data={[...lineData.y, ...lineData.y2]}>
+          <Legend
+            innerRef={ref => this.legend = ref}
+            data={[...lineData.y, ...lineData.y2]}
+          >
             {({d, toolTipProps}) => (
               <Item {...toolTipProps}>
                 <LegendLine
