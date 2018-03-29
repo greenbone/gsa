@@ -22,43 +22,30 @@
  */
 import React from 'react';
 
-import {Provider, connect} from 'react-redux';
+import {Provider} from 'react-redux';
 
 import {storiesOf} from '@storybook/react';
 
 import configureStore from 'web/store';
 
 import Dashboard from 'web/components/dashboard2/dashboard';
-import Display, {
-  DISPLAY_HEADER_HEIGHT,
-} from 'web/components/dashboard2/display';
-import * as fromDashboardData from 'web/components/dashboard2/data/selectors';
+import ChartDisplay from 'web/components/dashboard2/chartdisplay';
 import loader from 'web/components/dashboard2/data/loader';
 
 import compose from '../../utils/compose';
-import withGmp from '../../utils/withGmp';
 import {withComponentDefaults} from '../../utils/withComponentDefaults';
 
 import LineChart from '../../components/chart/line';
-import Loading from '../../components/loading/loading';
 
-let Chart = ({
-  isLoading,
-  data,
-  height,
-  width,
-  id,
-  onRemoveClick,
-}) => (
-  <Display
-    title={isLoading ? 'Loading' : 'Fake Data (' + id + ')'}
-    onRemoveClick={onRemoveClick}
+let Chart = props => (
+  <ChartDisplay
+    {...props}
+    title={({id}) => 'Fake Data (' + id + ')'}
   >
-    {isLoading ?
-      <Loading/> :
+    {({width, height, data}) => (
       <LineChart
         width={width}
-        height={height - DISPLAY_HEADER_HEIGHT}
+        height={height}
         data={data}
         yAxisLabel="Tomatoes"
         y2AxisLabel="Apples"
@@ -81,27 +68,14 @@ let Chart = ({
           }],
         }}
       />
-    }
-
-  </Display>
+    )}
+  </ChartDisplay>
 );
-
-const mapStateToProps = (rootState, {dataId}) => {
-  const state = fromDashboardData.getDashboardDataById(rootState, dataId);
-  return {
-    data: fromDashboardData.getData(state),
-    isLoading: fromDashboardData.getIsLoading(state),
-  };
-};
 
 Chart = compose(
   withComponentDefaults({
     dataId: 'test-data',
   }),
-  withGmp,
-  connect(
-    mapStateToProps,
-  ),
 )(Chart);
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
