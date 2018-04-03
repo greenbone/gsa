@@ -49,6 +49,7 @@ import PortRangesTable from './portrangestable.js';
 const PortListsDialog = ({
   comment = '',
   from_file = NO_VALUE,
+  id,
   name = _('Unnamed'),
   port_list,
   port_range = 'T:1-5,7,9,U:1-3,5,7,9',
@@ -74,7 +75,7 @@ const PortListsDialog = ({
   );
 
   const data = {
-    ...port_list,
+    id,
     comment,
     from_file,
     name,
@@ -176,6 +177,7 @@ const PortListsDialog = ({
 PortListsDialog.propTypes = {
   comment: PropTypes.string,
   from_file: PropTypes.yesno,
+  id: PropTypes.string,
   name: PropTypes.string,
   port_list: PropTypes.model,
   port_range: PropTypes.string,

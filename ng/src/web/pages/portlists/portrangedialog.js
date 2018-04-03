@@ -38,7 +38,7 @@ import TextField from '../../components/form/textfield.js';
 import Layout from '../../components/layout/layout.js';
 
 const PortRangeDialog = ({
-  port_list,
+  id,
   port_type = 'tcp',
   title = _('New Port Range'),
   visible = true,
@@ -47,7 +47,7 @@ const PortRangeDialog = ({
 }) => {
 
   const data = {
-    ...port_list,
+    id,
     port_type,
   };
 

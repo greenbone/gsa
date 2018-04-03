@@ -77,6 +77,7 @@ class PortListComponent extends React.Component {
         this.deleted_port_ranges = [];
         this.setState({
           comment: port_list.comment,
+          id: port_list.id,
           port_list,
           name: port_list.name,
           portListDialogVisible: true,
@@ -90,6 +91,7 @@ class PortListComponent extends React.Component {
       this.deleted_port_ranges = [];
       this.setState({
         comment: undefined,
+        id: undefined,
         name: undefined,
         port_list: undefined,
         portListDialogVisible: true,
@@ -262,6 +264,7 @@ class PortListComponent extends React.Component {
 
     const {
       comment,
+      id,
       importDialogVisible,
       name,
       port_list,
@@ -299,6 +302,7 @@ class PortListComponent extends React.Component {
             {portListDialogVisible &&
               <PortListsDialog
                 comment={comment}
+                id={id}
                 name={name}
                 port_list={port_list}
                 title={title}
@@ -318,7 +322,7 @@ class PortListComponent extends React.Component {
             }
             {portRangeDialogVisible &&
               <PortRangeDialog
-                port_list={port_list}
+                id={id}
                 onClose={this.closeNewPortRangeDialog}
                 onSave={this.handleTmpAddPortRange}
               />
