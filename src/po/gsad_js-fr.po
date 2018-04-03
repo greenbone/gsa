@@ -427,7 +427,7 @@ msgstr "Histogramme horizontal"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:275
 msgid "<br/>({{assets}} Host(s) with average severity {{severity}})"
-msgid "<br/>({{assets}} Hôte(s) avec une moyenne de sévérité {{severity}})"
+msgstr "<br/>({{assets}} Hôte(s) avec une moyenne de sévérité {{severity}})"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_line_chart.js:79
 msgid "Loading line chart ..."
