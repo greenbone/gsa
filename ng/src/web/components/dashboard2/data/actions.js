@@ -32,6 +32,7 @@ export const receivedDashboardData = (id, data) => ({
 
 export const receivedDashboardError = (id, error) => ({
   type: DASHBOARD_DATA_LOADING_ERROR,
+  id,
   error,
 });
 
