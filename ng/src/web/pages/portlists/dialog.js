@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {NO_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {is_defined} from 'gmp/utils';
 
 import Divider from '../../components/layout/divider.js';
@@ -46,6 +46,9 @@ import Section from '../../components/section/section.js';
 
 import PortRangesTable from './portrangestable.js';
 
+const FROM_FILE = YES_VALUE;
+const NOT_FROM_FILE = NO_VALUE;
+
 const PortListsDialog = ({
   comment = '',
   from_file = NO_VALUE,
@@ -53,7 +56,7 @@ const PortListsDialog = ({
   name = _('Unnamed'),
   port_list,
   port_range = 'T:1-5,7,9,U:1-3,5,7,9',
-  tmp_port_ranges = [],
+  port_ranges = [],
   title = _('New Port List'),
   visible = true,
   onClose,
@@ -89,7 +92,7 @@ const PortListsDialog = ({
       onClose={onClose}
       onSave={onSave}
       defaultValues={data}
-      values={{tmp_port_ranges}}
+      values={{port_ranges}}
     >
       {({
         values: state,
@@ -127,15 +130,15 @@ const PortListsDialog = ({
                     <Radio
                       title={_('Manual')}
                       name="from_file"
-                      value="0"
+                      value={NOT_FROM_FILE}
                       onChange={onValueChange}
-                      checked={from_file !== '1'}
+                      checked={from_file !== FROM_FILE}
                     />
                     <TextField
                       grow="1"
                       name="port_range"
                       value={state.port_range}
-                      disabled={from_file === '1'}
+                      disabled={from_file === FROM_FILE}
                       onChange={onValueChange}
                       size="30"
                       maxLength="400"
@@ -145,9 +148,9 @@ const PortListsDialog = ({
                     <Radio
                       title={_('From file')}
                       name="from_file"
-                      value="1"
+                      value={FROM_FILE}
                       onChange={onValueChange}
-                      checked={from_file === '1'}
+                      checked={from_file === FROM_FILE}
                     />
                     <FileField
                       name="file"
@@ -161,7 +164,7 @@ const PortListsDialog = ({
               <Section title={_('Port Ranges')} extra={newrangeicon}>
                 {is_defined(port_list) &&
                   <PortRangesTable
-                    portRanges={state.tmp_port_ranges}
+                    portRanges={state.port_ranges}
                     onDeleteClick={onTmpDeletePortRange}
                   />
                 }
@@ -181,8 +184,8 @@ PortListsDialog.propTypes = {
   name: PropTypes.string,
   port_list: PropTypes.model,
   port_range: PropTypes.string,
+  port_ranges: PropTypes.array,
   title: PropTypes.string,
-  tmp_port_ranges: PropTypes.array,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onDeletePortRangeClick: PropTypes.func,
