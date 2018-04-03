@@ -67,7 +67,7 @@ let ChartDisplay = ({
 
 ChartDisplay.propTypes = {
   children: PropTypes.func.isRequired,
-  data: PropTypes.object,
+  data: PropTypes.any,
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
