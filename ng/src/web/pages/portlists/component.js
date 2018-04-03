@@ -81,7 +81,7 @@ class PortListComponent extends React.Component {
           port_list,
           name: port_list.name,
           portListDialogVisible: true,
-          tmp_port_ranges: port_list.port_ranges,
+          port_ranges: port_list.port_ranges,
           title: _('Edit Port List {{name}}', {name: shorten(port_list.name)}),
         });
       });
@@ -177,7 +177,7 @@ class PortListComponent extends React.Component {
   }
 
   handleTmpAddPortRange(values) {
-    const {tmp_port_ranges} = this.state;
+    const {port_ranges} = this.state;
     const {
       port_range_end,
       port_range_start,
@@ -198,7 +198,7 @@ class PortListComponent extends React.Component {
 
     // check if new port range overlaps with existing and temporarily existing
     // ones, only relevant if protocol_type is the same
-    for (const range of tmp_port_ranges) {
+    for (const range of port_ranges) {
       const start = parse_int(range.start);
       const end = parse_int(range.end);
       if (range.protocol_type === port_type &&
@@ -226,14 +226,14 @@ class PortListComponent extends React.Component {
       isTmp: true,
     };
 
-    tmp_port_ranges.push(newRange);
+    port_ranges.push(newRange);
     this.created_port_ranges.push(newRange);
-    this.setState({tmp_port_ranges});
+    this.setState({port_ranges});
   }
 
   handleTmpDeletePortRange(port_range) {
-    const {tmp_port_ranges} = this.state;
-    let new_port_ranges = tmp_port_ranges;
+    const {port_ranges} = this.state;
+    let new_port_ranges = port_ranges;
 
     if (port_range.isTmp) {
       this.created_port_ranges = this.created_port_ranges
@@ -243,8 +243,8 @@ class PortListComponent extends React.Component {
       this.deleted_port_ranges.push(port_range);
     }
 
-    new_port_ranges = tmp_port_ranges.filter(range => range !== port_range);
-    this.setState({tmp_port_ranges: new_port_ranges});
+    new_port_ranges = port_ranges.filter(range => range !== port_range);
+    this.setState({port_ranges: new_port_ranges});
   }
 
   render() {
@@ -271,7 +271,7 @@ class PortListComponent extends React.Component {
       portListDialogVisible,
       portRangeDialogVisible,
       title,
-      tmp_port_ranges,
+      port_ranges,
     } = this.state;
 
     return (
@@ -306,7 +306,7 @@ class PortListComponent extends React.Component {
                 name={name}
                 port_list={port_list}
                 title={title}
-                tmp_port_ranges={tmp_port_ranges}
+                port_ranges={port_ranges}
                 onClose={this.closePortListDialog}
                 onNewPortRangeClick={this.openNewPortRangeDialog}
                 onSave={(...args) => this.handleSavePortList(save, ...args)}
