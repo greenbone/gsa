@@ -26,17 +26,17 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from '../../../utils/proptypes';
 
-import Loading from '../../components/loading/loading';
-
-import * as fromDashboardData from 'web/components/dashboard2/data/selectors';
+import Loading from '../../../components/loading/loading';
 
 import Display, {
   DISPLAY_HEADER_HEIGHT,
-} from 'web/components/dashboard2/display';
+} from '../display';
 
-let ChartDisplay = ({
+import * as fromDashboardData from './selectors';
+
+let DataDisplay = ({
   children,
   data,
   height,
@@ -65,9 +65,9 @@ let ChartDisplay = ({
   );
 };
 
-ChartDisplay.propTypes = {
+DataDisplay.propTypes = {
   children: PropTypes.func.isRequired,
-  data: PropTypes.object,
+  data: PropTypes.any,
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
@@ -84,8 +84,8 @@ const mapStateToProps = (rootState, {dataId}) => {
   };
 };
 
-ChartDisplay = connect(mapStateToProps)(ChartDisplay);
+DataDisplay = connect(mapStateToProps)(DataDisplay);
 
-export default ChartDisplay;
+export default DataDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

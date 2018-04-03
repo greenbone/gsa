@@ -44,7 +44,7 @@ const dashboardData = (state = {}, action) => {
     case DASHBOARD_DATA_LOADING_ERROR:
       return {
         isLoading: false,
-        error: action.message,
+        error: action.error,
       };
     default:
       return state;
@@ -59,6 +59,7 @@ const dashboardDataById = (state = {}, action) => {
   switch (action.type) {
     case DASHBOARD_DATA_LOADING_REQUEST:
     case DASHBOARD_DATA_LOADING_SUCCESS:
+    case DASHBOARD_DATA_LOADING_ERROR:
       return {
         ...state,
         [action.id]: dashboardData(getById(state, action.id), action),
