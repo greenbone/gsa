@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {NO_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {is_defined} from 'gmp/utils';
 
 import Divider from '../../components/layout/divider.js';
@@ -46,21 +46,22 @@ import Section from '../../components/section/section.js';
 
 import PortRangesTable from './portrangestable.js';
 
-const DEFAULTS = {
-  name: _('Unnamed'),
-  comment: '',
-  from_file: NO_VALUE,
-  port_range: 'T:1-5,7,9,U:1-3,5,7,9',
-};
+const FROM_FILE = YES_VALUE;
+const NOT_FROM_FILE = NO_VALUE;
 
 const PortListsDialog = ({
-  from_file,
+  comment = '',
+  from_file = NO_VALUE,
+  id,
+  name = _('Unnamed'),
   port_list,
-  title,
+  port_range = 'T:1-5,7,9,U:1-3,5,7,9',
+  port_ranges = [],
+  title = _('New Port List'),
   visible = true,
   onClose,
-  onDeletePortRangeClick,
   onNewPortRangeClick,
+  onTmpDeletePortRange,
   onSave,
 }) => {
 
@@ -71,13 +72,17 @@ const PortListsDialog = ({
       <NewIcon
         value={port_list}
         title={_('Add Port Range')}
-        onClick={onNewPortRangeClick}/>
+        onClick={onNewPortRangeClick}
+      />
     </div>
   );
 
   const data = {
-    ...DEFAULTS,
-    ...port_list,
+    id,
+    comment,
+    from_file,
+    name,
+    port_range,
   };
 
   return (
@@ -86,10 +91,11 @@ const PortListsDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
+      defaultValues={data}
+      values={{port_ranges}}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -102,7 +108,8 @@ const PortListsDialog = ({
                 grow="1"
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -112,7 +119,8 @@ const PortListsDialog = ({
                 grow="1"
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             {!is_edit &&
@@ -122,27 +130,32 @@ const PortListsDialog = ({
                     <Radio
                       title={_('Manual')}
                       name="from_file"
-                      value="0"
+                      value={NOT_FROM_FILE}
                       onChange={onValueChange}
-                      checked={from_file !== '1'}/>
+                      checked={from_file !== FROM_FILE}
+                    />
                     <TextField
                       grow="1"
                       name="port_range"
                       value={state.port_range}
-                      disabled={from_file === '1'}
+                      disabled={from_file === FROM_FILE}
                       onChange={onValueChange}
-                      size="30" maxLength="400"/>
+                      size="30"
+                      maxLength="400"
+                    />
                   </Divider>
                   <Divider>
                     <Radio
                       title={_('From file')}
                       name="from_file"
-                      value="1"
+                      value={FROM_FILE}
                       onChange={onValueChange}
-                      checked={from_file === '1'}/>
+                      checked={from_file === FROM_FILE}
+                    />
                     <FileField
                       name="file"
-                      onChange={onValueChange}/>
+                      onChange={onValueChange}
+                    />
                   </Divider>
                 </Divider>
               </FormGroup>
@@ -151,8 +164,9 @@ const PortListsDialog = ({
               <Section title={_('Port Ranges')} extra={newrangeicon}>
                 {is_defined(port_list) &&
                   <PortRangesTable
-                    portRanges={port_list.port_ranges}
-                    onDeleteClick={onDeletePortRangeClick}/>
+                    portRanges={state.port_ranges}
+                    onDeleteClick={onTmpDeletePortRange}
+                  />
                 }
               </Section>
             }
@@ -163,16 +177,21 @@ const PortListsDialog = ({
   );
 };
 
-
 PortListsDialog.propTypes = {
+  comment: PropTypes.string,
   from_file: PropTypes.yesno,
+  id: PropTypes.string,
+  name: PropTypes.string,
   port_list: PropTypes.model,
+  port_range: PropTypes.string,
+  port_ranges: PropTypes.array,
   title: PropTypes.string,
   visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onDeletePortRangeClick: PropTypes.func,
   onNewPortRangeClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
+  onTmpDeletePortRange: PropTypes.func.isRequired,
 };
 
 

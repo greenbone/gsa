@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +69,7 @@ const PortRangesTable = ({
       </TableHeader>
       <TableBody>
         {portRanges.map(range => (
-          <TableRow key={range.id}>
+          <TableRow key={range.start + range.protocol_type}>
             <TableData>
               {range.start}
             </TableData>

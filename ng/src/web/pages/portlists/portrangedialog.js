@@ -37,21 +37,18 @@ import TextField from '../../components/form/textfield.js';
 
 import Layout from '../../components/layout/layout.js';
 
-const DEFAULTS = {
-  port_type: 'tcp',
-};
-
 const PortRangeDialog = ({
-  port_list,
+  id,
+  port_type = 'tcp',
   title = _('New Port Range'),
-  visible,
+  visible = true,
   onClose,
   onSave,
 }) => {
 
   const data = {
-    ...DEFAULTS,
-    ...port_list,
+    id,
+    port_type,
   };
 
   return (
@@ -60,10 +57,10 @@ const PortRangeDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
+      defaultValues={data}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -76,7 +73,8 @@ const PortRangeDialog = ({
                 size="30"
                 convert={parse_int}
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('End')}>
@@ -87,7 +85,8 @@ const PortRangeDialog = ({
                 size="30"
                 maxLength="80"
                 convert={parse_int}
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Protocol')} flex>
@@ -96,13 +95,15 @@ const PortRangeDialog = ({
                 name="port_type"
                 value="tcp"
                 onChange={onValueChange}
-                checked={state.port_type === 'tcp'}/>
+                checked={state.port_type === 'tcp'}
+              />
               <Radio
                 title={_('UDP')}
                 name="port_type"
                 value="udp"
                 onChange={onValueChange}
-                checked={state.port_type === 'udp'}/>
+                checked={state.port_type === 'udp'}
+              />
             </FormGroup>
           </Layout>
         );
@@ -113,8 +114,9 @@ const PortRangeDialog = ({
 
 PortRangeDialog.propTypes = {
   port_list: PropTypes.model,
+  port_type: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
