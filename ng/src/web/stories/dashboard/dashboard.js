@@ -29,7 +29,8 @@ import {storiesOf} from '@storybook/react';
 import configureStore from 'web/store';
 
 import Dashboard from 'web/components/dashboard2/dashboard';
-import ChartDisplay from 'web/components/dashboard2/chartdisplay';
+
+import DataDisplay from 'web/components/dashboard2/data/display';
 import loader from 'web/components/dashboard2/data/loader';
 
 import compose from '../../utils/compose';
@@ -38,7 +39,7 @@ import {withComponentDefaults} from '../../utils/withComponentDefaults';
 import LineChart from '../../components/chart/line';
 
 let Chart = props => (
-  <ChartDisplay
+  <DataDisplay
     {...props}
     title={({id}) => 'Fake Data (' + id + ')'}
   >
@@ -69,7 +70,7 @@ let Chart = props => (
         }}
       />
     )}
-  </ChartDisplay>
+  </DataDisplay>
 );
 
 Chart = compose(
