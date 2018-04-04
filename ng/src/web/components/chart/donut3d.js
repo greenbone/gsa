@@ -270,7 +270,7 @@ const Donut3DChart = ({
               x,
               y,
             }) => {
-              const {color, toolTip} = arcData;
+              const {color = Theme.lightGray, toolTip} = arcData;
               const darker = d3color(color).darker();
               return (
                 <ToolTip
