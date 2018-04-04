@@ -26,7 +26,8 @@ import {css} from 'glamor';
 
 import glamorous from 'glamorous';
 
-import {scaleLinear} from '@vx/scale';
+import {scaleLinear} from 'd3-scale';
+
 import {Line, LinePath} from '@vx/shape';
 
 import {is_defined} from 'gmp/utils/identity';
@@ -249,24 +250,21 @@ class LineChart extends React.Component {
     const xMax = Math.max(...xValues);
 
     const xDomain = data.length > 1 ? [xMin, xMax] : [xMin - 1, xMax + 1];
-    const xScale = scaleLinear({
-      range: [0, maxWidth],
-      domain: xDomain,
-    });
+    const xScale = scaleLinear()
+      .range([0, maxWidth])
+      .domain(xDomain);
 
-    const yScale = scaleLinear({
-      range: [maxHeight, 0],
-      domain: [0, yMax],
-      nice: true,
-    });
+    const yScale = scaleLinear()
+      .range([maxHeight, 0])
+      .domain([0, yMax])
+      .nice(true);
 
     // change y2Domain only to not overlap single data points for y and y2
     const y2Domain = data.length > 1 ? [0, y2Max] : [0, y2Max * 2];
-    const y2Scale = scaleLinear({
-      range: [maxHeight, 0],
-      domain: y2Domain,
-      nice: true,
-    });
+    const y2Scale = scaleLinear()
+      .range([maxHeight, 0])
+      .domain(y2Domain)
+      .nice(true);
 
     return {
       data,

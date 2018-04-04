@@ -25,7 +25,8 @@ import React from 'react';
 import moment from 'moment';
 
 import {LinearGradient} from '@vx/gradient';
-import {scaleBand, scaleUtc} from '@vx/scale';
+
+import {scaleBand, scaleUtc} from 'd3-scale';
 
 import _, {datetime} from 'gmp/locale';
 
@@ -191,16 +192,14 @@ const ScheduleChart = ({
 
   const yValues = data.map(d => d.label);
 
-  const xScale = scaleUtc({
-    range: [0, maxWidth],
-    domain: [today.toDate(), end.toDate()],
-  });
+  const xScale = scaleUtc()
+    .range([0, maxWidth])
+    .domain([today.toDate(), end.toDate()]);
 
-  const yScale = scaleBand({
-    range: [0, maxHeight],
-    domain: yValues,
-    padding: 0.125,
-  });
+  const yScale = scaleBand()
+    .range([0, maxHeight])
+    .domain(yValues)
+    .padding(0.125);
 
   const starts = [];
   const futureRuns = [];

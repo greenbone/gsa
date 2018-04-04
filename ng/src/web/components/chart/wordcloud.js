@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {scaleLinear} from '@vx/scale';
+import {scaleLinear} from 'd3-scale';
 
 import d3cloud from 'd3-cloud';
 
@@ -82,10 +82,9 @@ class WordCloudChart extends React.Component {
     const min = Math.min(...values);
     const max = Math.max(...values);
 
-    const wordScale = scaleLinear({
-      domain: [min, max],
-      range: [MIN_FONT_SIZE, MAX_FONT_SIZE],
-    });
+    const wordScale = scaleLinear()
+      .domain([min, max])
+      .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
 
     const words = data.map(word => ({
       size: wordScale(word.value),

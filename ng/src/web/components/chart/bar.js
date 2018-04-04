@@ -23,7 +23,7 @@
 import React from 'react';
 
 import {Bar} from '@vx/shape';
-import {scaleBand, scaleLinear} from '@vx/scale';
+import {scaleBand, scaleLinear} from 'd3-scale';
 
 import {shorten} from 'gmp/utils/index';
 
@@ -75,23 +75,21 @@ const BarChart = ({
   const maxWidth = width - marginLeft - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
 
-  const xScale = scaleBand({
-    rangeRound: horizontal ? [0, maxHeight] : [0, maxWidth],
-    domain: xValues,
-    padding: 0.125,
-  });
+  const xScale = scaleBand()
+    .rangeRound(horizontal ? [0, maxHeight] : [0, maxWidth])
+    .domain(xValues)
+    .padding(0.125);
 
-  const yScale = scaleLinear({
-    range: horizontal ? [0, maxWidth] : [maxHeight, 0],
-    domain: [0, yMax],
+  const yScale = scaleLinear()
+    .range(horizontal ? [0, maxWidth] : [maxHeight, 0])
+    .domain([0, yMax])
 
     /*
       nice seems to round first and last value.
       see https://github.com/d3/d3-scale/blob/master/README.md#continuous_nice
       the old version did call nice(10) which isn't possible with vx at the moment.
     */
-    nice: true,
-  });
+    .nice(true);
 
   return (
     <Layout align={['start', 'start']}>
