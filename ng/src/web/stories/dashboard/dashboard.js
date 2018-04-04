@@ -30,6 +30,10 @@ import configureStore from 'web/store';
 
 import Dashboard from 'web/components/dashboard2/dashboard';
 
+import MenuEntry from 'web/components/menu/menuentry';
+
+import DisplayMenu from 'web/components/dashboard2/displaymenu';
+
 import DataDisplay from 'web/components/dashboard2/data/display';
 import loader from 'web/components/dashboard2/data/loader';
 
@@ -42,6 +46,12 @@ let Chart = props => (
   <DataDisplay
     {...props}
     title={({id}) => 'Fake Data (' + id + ')'}
+    menu={
+      <DisplayMenu>
+        <MenuEntry>Download Stuff</MenuEntry>
+        <MenuEntry>Do Something</MenuEntry>
+      </DisplayMenu>
+    }
   >
     {({width, height, data}) => (
       <LineChart
