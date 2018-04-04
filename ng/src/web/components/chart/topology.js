@@ -36,7 +36,7 @@ import {
 
 import {color} from 'd3-color';
 
-import {scaleLinear} from '@vx/scale';
+import {scaleLinear} from 'd3-scale';
 
 import {is_defined} from 'gmp/utils/index';
 
@@ -69,8 +69,8 @@ const Circle = glamorous.circle({
 
 const severityColorsGradientScale = type => {
   const severity_levels = getSeverityLevels(type);
-  return scaleLinear({
-    domain: [
+  return scaleLinear()
+    .domain([
       FALSE_POSITIVE_VALUE,
       severity_levels.max_log,
       severity_levels.min_low,
@@ -82,8 +82,8 @@ const severityColorsGradientScale = type => {
       severity_levels.min_high,
       (severity_levels.min_high + HIGH_VALUE) / 2,
       HIGH_VALUE,
-    ],
-    range: [
+    ])
+    .range([
       'grey',    // False Positive
       'silver',  // Log
       '#b1cee9', // minimum Low
@@ -95,8 +95,7 @@ const severityColorsGradientScale = type => {
       '#eb5200', // minimum High
       '#D80000', // middle High
       '#ff0000', // maximum High
-    ],
-  });
+    ]);
 };
 
 const hostStrokeColor = (host, severityClass) => {
