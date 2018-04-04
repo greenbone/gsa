@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -52,6 +53,7 @@ const Item = ({
   children,
   index,
   id,
+  ...props
 }) => (
   <Draggable
     draggableId={id}
@@ -62,11 +64,14 @@ const Item = ({
         <GridItem
           innerRef={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           isDragging={snapshot.isDragging}
           style={provided.draggableProps.style}
         >
-          {children}
+          {children({
+            ...props,
+            id,
+            dragHandleProps: provided.dragHandleProps,
+          })}
         </GridItem>
         {provided.placeholder}
       </React.Fragment>
@@ -75,6 +80,7 @@ const Item = ({
 );
 
 Item.propTypes = {
+  children: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
 };

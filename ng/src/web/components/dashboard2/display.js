@@ -99,13 +99,14 @@ const DisplayTitle = glamorous.div('display-title', {
 
 const Display = ({
   children,
+  dragHandleProps,
   menu,
   title,
   onRemoveClick,
 }) => {
   return (
     <DisplayView>
-      <HeaderContainer>
+      <HeaderContainer {...dragHandleProps}>
         <Header>
           {menu}
           <HeaderContent>
@@ -128,6 +129,7 @@ const Display = ({
 };
 
 Display.propTypes = {
+  dragHandleProps: PropTypes.object,
   menu: PropTypes.element,
   title: PropTypes.string,
   onRemoveClick: PropTypes.func.isRequired,

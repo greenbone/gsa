@@ -47,6 +47,7 @@ let DataDisplay = ({
   title,
   width,
   onRemoveClick,
+  ...props
 }) => {
   height = height - DISPLAY_HEADER_HEIGHT;
   return (
@@ -54,6 +55,7 @@ let DataDisplay = ({
       menu={menu}
       title={isLoading ? _('Loading') : title({data, id})}
       onRemoveClick={onRemoveClick}
+      {...props}
     >
       {isLoading ?
         <Loading/> :
