@@ -38,7 +38,7 @@ import {color} from 'd3-color';
 
 import {scaleLinear} from 'd3-scale';
 
-import {is_defined} from 'gmp/utils/index';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
