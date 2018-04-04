@@ -42,7 +42,7 @@ import {is_defined} from 'gmp/utils/index';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
-import {get_severity_levels} from '../../utils/render';
+import {getSeverityLevels} from '../../utils/severity';
 
 import Group from './group';
 
@@ -63,7 +63,7 @@ const Circle = glamorous.circle({
   cursor: 'pointer',
 });
 
-const severity_levels = get_severity_levels();
+const severity_levels = getSeverityLevels();
 
 const severityColorsGradientScale = scaleLinear({
   domain: [

@@ -86,41 +86,6 @@ export const render_select_items = (
 
 export const cvss_number_format = d3.format('0.1f');
 
-export function get_severity_levels(type) {
-  if (type === 'classic') {
-    return {
-      max_high: 10.0,
-      min_high: 5.1,
-      max_medium: 5.0,
-      min_medium: 2.1,
-      max_low: 2.0,
-      min_low: 0.1,
-      max_log: 0.0,
-    };
-  }
-  if (type === 'pci-dss') {
-    return {
-      max_high: 10.0,
-      min_high: 4.0,
-      max_medium: 3.9,
-      min_medium: 3.9,
-      max_low: 3.9,
-      min_low: 3.9,
-      max_log: 3.9,
-    };
-  }
-
-  return {
-    max_high: 10.0,
-    min_high: 7.0,
-    max_medium: 6.9,
-    min_medium: 4.0,
-    max_low: 3.9,
-    min_low: 0.1,
-    max_log: 0.0,
-  };
-}
-
 export function render_nvt_name(oid, name, length = 70) {
   if (!is_defined(name)) {
     return '';

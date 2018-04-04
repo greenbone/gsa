@@ -33,11 +33,11 @@ import {parse_float, parse_int} from 'gmp/parser.js';
 
 import Logger from 'gmp/log.js';
 
-import {get_severity_levels} from '../../../utils/render.js';
+import {getSeverityLevels} from '../../../utils/severity';
 
 const log = Logger.getLogger('web.dashboard.legacy.helper');
 
-const severity_levels = get_severity_levels();
+const severity_levels = getSeverityLevels();
 
 const DATE_REGEX = /^\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])T([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?([+-](0\d|1[0-4]):[0-5]\d|Z|)$/; // eslint-disable-line max-len
 
