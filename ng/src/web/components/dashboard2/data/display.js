@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -42,6 +43,7 @@ let DataDisplay = ({
   height,
   id,
   isLoading = false,
+  menu,
   title,
   width,
   onRemoveClick,
@@ -49,6 +51,7 @@ let DataDisplay = ({
   height = height - DISPLAY_HEADER_HEIGHT;
   return (
     <Display
+      menu={menu}
       title={isLoading ? _('Loading') : title({data, id})}
       onRemoveClick={onRemoveClick}
     >
@@ -71,6 +74,7 @@ DataDisplay.propTypes = {
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
+  menu: PropTypes.element,
   title: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,
