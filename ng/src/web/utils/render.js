@@ -33,15 +33,6 @@ import Wrapper from '../components/layout/wrapper.js';
 
 const log = logger.getLogger('web.render');
 
-export const LOG = _('Log');
-export const LOW = _('Low');
-export const MEDIUM = _('Medium');
-export const HIGH = _('High');
-export const NONE = _('None');
-export const FALSE_POSITIVE = _('False Positive');
-export const ERROR = _('Error');
-export const DEBUG = _('Debug');
-
 export const N_A = _('N/A');
 
 export const UNSET_VALUE = '0';
@@ -94,66 +85,6 @@ export const render_select_items = (
 };
 
 export const cvss_number_format = d3.format('0.1f');
-
-export function cvss_risk_factor(score, type) {
-  if (type === 'classic') {
-    if (score === 0) {
-      return LOG;
-    }
-    if (score > 0 && score <= 2) {
-      return LOW;
-    }
-    if (score > 2 && score <= 5) {
-      return MEDIUM;
-    }
-    if (score > 5 && score <= 10) {
-      return HIGH;
-    }
-    return NONE;
-  }
-  if (type === 'pci-dss') {
-    if (score === 0 && score < 4) {
-      return LOG;
-    }
-    else if (score >= 4) {
-      return HIGH;
-    }
-    return NONE;
-  }
-
-  if (score === 0) {
-    return LOG;
-  }
-  else if (score > 0 && score < 4) {
-    return LOW;
-  }
-  else if (score >= 4 && score < 7) {
-    return MEDIUM;
-  }
-  else if (score >= 7 && score <= 10) {
-    return HIGH;
-  }
-  return NONE;
-}
-
-export function result_cvss_risk_factor(score) {
-  if (score > 0) {
-    return cvss_risk_factor(score);
-  }
-  if (score === 0) {
-    return LOG;
-  }
-  if (score === -1) {
-    return FALSE_POSITIVE;
-  }
-  if (score === -2) {
-    return DEBUG;
-  }
-  if (score === -3) {
-    return ERROR;
-  }
-  return N_A;
-}
 
 export function get_severity_levels(type) {
   if (type === 'classic') {

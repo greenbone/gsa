@@ -29,7 +29,10 @@ import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import {result_cvss_risk_factor} from '../../utils/render.js';
+import {
+  translatedResultSeverityRiskFactor,
+  LOG_VALUE,
+} from '../../utils/severity';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -100,9 +103,9 @@ const NoteDetails = ({
               </TableData>
               <TableData>
                 {is_defined(severity) ? (
-                  severity > 0 ?
+                  severity > LOG_VALUE ?
                     _('> 0.0') :
-                    result_cvss_risk_factor(severity)
+                    translatedResultSeverityRiskFactor(severity)
                 ) : _('Any')
                 }
               </TableData>

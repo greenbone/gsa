@@ -46,12 +46,27 @@ import {
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
+import {
+  FALSE_POSITIVE_VALUE,
+  LOG_VALUE,
+  HIGH_VALUE,
+  MEDIUM_VALUE,
+  LOW_VALUE,
+} from '../../utils/severity';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
 import EntityComponent from '../../entity/component.js';
 
 import OverrideDialog from './dialog.js';
+
+const SEVERITIES_LIST = [
+  HIGH_VALUE,
+  MEDIUM_VALUE,
+  LOW_VALUE,
+  LOG_VALUE,
+  FALSE_POSITIVE_VALUE,
+];
 
 class OverrideComponent extends React.Component {
 
@@ -81,7 +96,7 @@ class OverrideComponent extends React.Component {
       let new_severity_from_list;
       let new_severity;
 
-      if ([10, 5, 2, 0, -1].includes(override.new_severity)) {
+      if (SEVERITIES_LIST.includes(override.new_severity)) {
         new_severity_from_list = override.new_severity;
       }
       else {

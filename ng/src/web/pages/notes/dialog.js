@@ -52,10 +52,13 @@ import Layout from '../../components/layout/layout';
 import PropTypes from '../../utils/proptypes';
 import {
   render_nvt_name,
-  result_cvss_risk_factor,
   render_select_items,
   cvss_number_format,
 } from '../../utils/render.js';
+import {
+  LOG_VALUE,
+  translatedResultSeverityRiskFactor,
+} from '../../utils/severity';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Text from '../../components/form/text.js';
@@ -284,7 +287,7 @@ const NoteDialog = ({
               />
               {is_defined(severity) &&
                 <Layout flex>
-                  {severity > 0 ?
+                  {severity > LOG_VALUE ?
                     <Radio
                       name="severity"
                       title={' > ' +
@@ -296,7 +299,7 @@ const NoteDialog = ({
                     /> :
                     <Radio
                       name="severity"
-                      title={result_cvss_risk_factor(severity)}
+                      title={translatedResultSeverityRiskFactor(severity)}
                       checked={state.severity === severity}
                       convert={parse_float}
                       value={severity}
