@@ -147,7 +147,7 @@ const BarChart = ({
           ))}
         </Group>
       </Svg>
-      {data.length > 0 &&
+      {displayLegend && data.length > 0 &&
         <Legend
           innerRef={ref => this.legend = ref}
           data={data}
@@ -176,6 +176,7 @@ BarChart.propTypes = {
     color: PropTypes.toString.isRequired,
     toolTip: PropTypes.elementOrString,
   })).isRequired,
+  displayLegend: PropTypes.bool,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
   width: PropTypes.number.isRequired,
