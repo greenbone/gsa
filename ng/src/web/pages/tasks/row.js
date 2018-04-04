@@ -179,12 +179,14 @@ const Row = ({
         {render_report(entity.last_report, links)}
       </TableData>
       <TableData flex align="center">
-        {entity.last_report &&
+        {!entity.isContainer() && is_defined(entity.last_report) &&
           <SeverityBar severity={entity.last_report.severity}/>
         }
       </TableData>
       <TableData flex align="center">
-        <Trend name={entity.trend}/>
+        {!entity.isContainer() &&
+          <Trend name={entity.trend} />
+        }
       </TableData>
       {render_component(actions, {
         links,
