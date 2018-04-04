@@ -332,6 +332,8 @@ Donut3DChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     color: PropTypes.toString.isRequired,
     value: PropTypes.numberOrNumberString.isRequired,
+    label: PropTypes.any,
+    toolTip: PropTypes.elementOrString,
   })),
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
