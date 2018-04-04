@@ -42,7 +42,11 @@ import {is_defined} from 'gmp/utils/index';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
-import {getSeverityLevels} from '../../utils/severity';
+import {
+  getSeverityLevels,
+  FALSE_POSITIVE_VALUE,
+  HIGH_VALUE,
+} from '../../utils/severity';
 
 import Group from './group';
 
@@ -67,7 +71,7 @@ const severityColorsGradientScale = type => {
   const severity_levels = getSeverityLevels(type);
   return scaleLinear({
     domain: [
-      -1.0,
+      FALSE_POSITIVE_VALUE,
       severity_levels.max_log,
       severity_levels.min_low,
       (severity_levels.min_low + severity_levels.max_low) / 2,
@@ -76,8 +80,8 @@ const severityColorsGradientScale = type => {
       (severity_levels.min_medium + severity_levels.max_medium) / 2,
       severity_levels.max_medium,
       severity_levels.min_high,
-      (severity_levels.min_high + 10.0) / 2,
-      10.0,
+      (severity_levels.min_high + HIGH_VALUE) / 2,
+      HIGH_VALUE,
     ],
     range: [
       'grey',    // False Positive
