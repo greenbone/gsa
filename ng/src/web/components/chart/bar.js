@@ -54,7 +54,7 @@ const tickFormat = val => {
 };
 
 const BarChart = ({
-  data,
+  data = [],
   height,
   width,
   xLabel,

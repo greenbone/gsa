@@ -294,7 +294,9 @@ class LineChart extends React.Component {
       xScale,
     } = this.state;
 
-    const lines = lineData.y.length + lineData.y2.length;
+    const {y: lineDataY = [], y2: lineDataY2 = []} = lineData;
+
+    const lines = lineDataY.length + lineDataY2.length;
 
     if (!displayInfo || !is_defined(infoX) || lines === 0) {
       return null;
@@ -347,7 +349,7 @@ class LineChart extends React.Component {
             >
               {value.label}
             </Text>
-            {lineData.y.map((line, i) => (
+            {lineDataY.map((line, i) => (
               <Group
                 top={i * LINE_HEIGHT}
                 key={i}
@@ -368,9 +370,9 @@ class LineChart extends React.Component {
               </Group>
             ))}
             <Group
-              top={LINE_HEIGHT * lineData.y.length}
+              top={LINE_HEIGHT * lineDataY.length}
             >
-              {lineData.y2.map((line, i) => (
+              {lineDataY2.map((line, i) => (
                 <Group
                   top={i * LINE_HEIGHT}
                   key={i}
@@ -454,7 +456,8 @@ class LineChart extends React.Component {
     const hasValue = data.length > 0;
     const hasValues = data.length > 1;
     const hasOneValue = data.length === 1;
-    const lines = lineData.y.length + lineData.y2.length;
+    const {y: lineDataY = [], y2: lineDataY2 = []} = lineData;
+    const lines = lineDataY.length + lineDataY2.length;
     const hasLines = lines > 0;
     return (
       <Layout align={['start', 'start']}>
@@ -472,7 +475,7 @@ class LineChart extends React.Component {
             top={margin.top}
             left={margin.left}
           >
-            {lineData.y.length > 0 &&
+            {lineDataY.length > 0 &&
               <Axis
                 orientation="left"
                 scale={yScale}
@@ -488,7 +491,7 @@ class LineChart extends React.Component {
               top={maxHeight}
               label={xAxisLabel}
             />
-            {lineData.y2.length > 0 &&
+            {lineDataY2.length > 0 &&
               <Axis
                 orientation="right"
                 scale={y2Scale}
@@ -500,7 +503,7 @@ class LineChart extends React.Component {
             }
             {hasValues &&
               <Group>
-                {lineData.y.map((line, i) => (
+                {lineDataY.map((line, i) => (
                   <LinePath
                     key={i}
                     data={data}
@@ -516,7 +519,7 @@ class LineChart extends React.Component {
                     yScale={yScale}
                   />
                 ))}
-                {lineData.y2.map((line, i) => (
+                {lineDataY2.map((line, i) => (
                   <LinePath
                     key={i}
                     data={data}
@@ -536,7 +539,7 @@ class LineChart extends React.Component {
             }
             {hasOneValue &&
               <Group>
-                {lineData.y.map((line, i) => {
+                {lineDataY.map((line, i) => {
                   const x = xScale(data[0].x);
                   const y = yScale(data[0].y[i]);
                   return (
@@ -550,7 +553,7 @@ class LineChart extends React.Component {
                     />
                   );
                 })}
-                {lineData.y2.map((line, i) => {
+                {lineDataY2.map((line, i) => {
                   const x = xScale(data[0].x);
                   const y = y2Scale(data[0].y2[i]);
                   return (
