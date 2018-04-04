@@ -109,7 +109,7 @@ const DisplayMenu = ({
 );
 
 DisplayMenu.propTypes = {
-  children: PropTypes.func.isRequired,
+  children: PropTypes.array.isRequired,
 };
 
 export default DisplayMenu;
