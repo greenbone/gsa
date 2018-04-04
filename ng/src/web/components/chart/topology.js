@@ -42,7 +42,11 @@ import {is_defined} from 'gmp/utils/index';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
-import {get_severity_levels} from '../../utils/render';
+import {
+  getSeverityLevels,
+  FALSE_POSITIVE_VALUE,
+  HIGH_VALUE,
+} from '../../utils/severity';
 
 import Group from './group';
 
@@ -63,49 +67,52 @@ const Circle = glamorous.circle({
   cursor: 'pointer',
 });
 
-const severity_levels = get_severity_levels();
+const severityColorsGradientScale = type => {
+  const severity_levels = getSeverityLevels(type);
+  return scaleLinear({
+    domain: [
+      FALSE_POSITIVE_VALUE,
+      severity_levels.max_log,
+      severity_levels.min_low,
+      (severity_levels.min_low + severity_levels.max_low) / 2,
+      severity_levels.max_low,
+      severity_levels.min_medium,
+      (severity_levels.min_medium + severity_levels.max_medium) / 2,
+      severity_levels.max_medium,
+      severity_levels.min_high,
+      (severity_levels.min_high + HIGH_VALUE) / 2,
+      HIGH_VALUE,
+    ],
+    range: [
+      'grey',    // False Positive
+      'silver',  // Log
+      '#b1cee9', // minimum Low
+      '#87CEEB', // middle Low
+      '#a5e59d', // maximum Low
+      '#ffde00', // minimum Medium
+      '#FFA500', // middle Medium
+      '#f57b00', // maximum Medium
+      '#eb5200', // minimum High
+      '#D80000', // middle High
+      '#ff0000', // maximum High
+    ],
+  });
+};
 
-const severityColorsGradientScale = scaleLinear({
-  domain: [
-    -1.0,
-    severity_levels.max_log,
-    severity_levels.min_low,
-    (severity_levels.min_low + severity_levels.max_low) / 2,
-    severity_levels.max_low,
-    severity_levels.min_medium,
-    (severity_levels.min_medium + severity_levels.max_medium) / 2,
-    severity_levels.max_medium,
-    severity_levels.min_high,
-    (severity_levels.min_high + 10.0) / 2,
-    10.0,
-  ],
-  range: [
-    'grey',    // False Positive
-    'silver',  // Log
-    '#b1cee9', // minimum Low
-    '#87CEEB', // middle Low
-    '#a5e59d', // maximum Low
-    '#ffde00', // minimum Medium
-    '#FFA500', // middle Medium
-    '#f57b00', // maximum Medium
-    '#eb5200', // minimum High
-    '#D80000', // middle High
-    '#ff0000', // maximum High
-  ],
-});
-
-const hostStrokeColor = host => {
+const hostStrokeColor = (host, severityClass) => {
   if (host.isScanner) {
     return Theme.green;
   }
   if (is_defined(host.uuid)) {
-    return color(severityColorsGradientScale(host.severity)).darker();
+    return color(
+      severityColorsGradientScale(host.severity, severityClass)
+    ).darker();
   }
   return Theme.lightGray;
 };
 
-const hostFillColor = host => is_defined(host.uuid) ?
-  severityColorsGradientScale(host.severity) : Theme.white;
+const hostFillColor = (host, severityClass) => is_defined(host.uuid) ?
+  severityColorsGradientScale(host.severity, severityClass) : Theme.white;
 
 const SCROLL_STEP = 0.1;
 
@@ -346,7 +353,7 @@ class HostsTopologyChart extends React.Component {
   }
 
   render() {
-    const {width, height} = this.props;
+    const {width, height, severityClass} = this.props;
     const {
       hosts,
       links,
@@ -404,8 +411,8 @@ class HostsTopologyChart extends React.Component {
                 }
                 <Circle
                   r={radius}
-                  fill={hostFillColor(host)}
-                  stroke={hostStrokeColor(host)}
+                  fill={hostFillColor(host, severityClass)}
+                  stroke={hostStrokeColor(host, severityClass)}
                   strokeWidth={host.isScanner ?
                     SCANNER_STROKE_WIDTH : DEFAULT_STROKE_WIDTH}
                   cx={host.x}
@@ -440,6 +447,7 @@ HostsTopologyChart.propTypes = {
     links: PropTypes.arrayOf(LinkType),
   }).isRequired,
   height: PropTypes.number.isRequired,
+  severityClass: PropTypes.severityClass,
   width: PropTypes.number.isRequired,
 };
 

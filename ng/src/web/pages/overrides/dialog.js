@@ -36,7 +36,6 @@ import {
   DEFAULT_OID_VALUE,
   RESULT_ANY,
   TASK_ANY,
-  SEVERITY_FALSE_POSITIVE,
   ACTIVE_YES_UNTIL_VALUE,
   ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_NO_VALUE,
@@ -50,10 +49,22 @@ import Layout from '../../components/layout/layout.js';
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_nvt_name,
-  result_cvss_risk_factor,
   render_select_items,
   cvss_number_format,
 } from '../../utils/render.js';
+import {
+  FALSE_POSITIVE_VALUE,
+  LOG_VALUE,
+  HIGH_VALUE,
+  MEDIUM_VALUE,
+  LOW_VALUE,
+  _FALSE_POSITIVE,
+  _LOG,
+  _LOW,
+  _MEDIUM,
+  _HIGH,
+  translatedResultSeverityRiskFactor,
+} from '../../utils/severity';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -74,7 +85,7 @@ const OverrideDialog = ({
   hosts_manual = '',
   id,
   new_severity,
-  new_severity_from_list = SEVERITY_FALSE_POSITIVE,
+  new_severity_from_list = FALSE_POSITIVE_VALUE,
   nvt_name,
   oid,
   override,
@@ -119,20 +130,20 @@ const OverrideDialog = ({
   };
 
   let severity_from_list_items = [{
-    label: _('High'),
-    value: 10.0,
+    value: HIGH_VALUE,
+    label: _HIGH,
   }, {
-    value: 5.0,
-    label: _('Medium'),
+    value: MEDIUM_VALUE,
+    label: _MEDIUM,
   }, {
-    value: 2.0,
-    label: _('Low'),
+    value: LOW_VALUE,
+    label: _LOW,
   }, {
-    value: 0.0,
-    label: _('Log'),
+    value: LOG_VALUE,
+    label: _LOG,
   }, {
-    value: SEVERITY_FALSE_POSITIVE,
-    label: _('False Positive'),
+    value: FALSE_POSITIVE_VALUE,
+    label: _FALSE_POSITIVE,
   }];
 
   if (is_edit) {
@@ -324,7 +335,7 @@ const OverrideDialog = ({
                     /> :
                     <Radio
                       name="severity"
-                      title={result_cvss_risk_factor(severity)}
+                      title={translatedResultSeverityRiskFactor(severity)}
                       checked={state.severity === severity}
                       convert={parse_float}
                       value={severity}

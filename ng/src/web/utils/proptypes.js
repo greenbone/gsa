@@ -39,6 +39,12 @@ import CollectionCounts from 'gmp/collection/collectioncounts.js';
 import Filter from 'gmp/models/filter.js';
 import Settings from 'gmp/models/settings.js';
 
+import {
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_PCI_DSS,
+} from './severity';
 
 export const component = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
@@ -157,6 +163,13 @@ const toStringValidator = (props, prop_name, component_name) => {
 
 export const toString = mayRequire(toStringValidator);
 
+export const severityClass = ReactPropTypes.objectOf([
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_PCI_DSS,
+]);
+
 export default {
   bool: ReactPropTypes.bool,
   any: ReactPropTypes.any,
@@ -197,6 +210,7 @@ export default {
   idOrZero,
   set,
   settings,
+  severityClass,
   stringOrFalse,
   timeunit,
   toString,

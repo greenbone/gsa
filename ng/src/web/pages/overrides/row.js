@@ -27,7 +27,12 @@ import _ from 'gmp/locale.js';
 import {shorten, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component, result_cvss_risk_factor} from '../../utils/render.js';
+import {render_component} from '../../utils/render.js';
+import {
+  extraRiskFactor,
+  translateRiskFactor,
+  LOG_VALUE,
+} from '../../utils/severity';
 
 import {withEntityActions} from '../../entities/actions.js';
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
@@ -48,8 +53,8 @@ import TableData from '../../components/table/data.js';
 
 const render_severity = severity => {
   if (is_defined(severity)) {
-    if (severity <= 0) {
-      return _(result_cvss_risk_factor(severity));
+    if (severity <= LOG_VALUE) {
+      return translateRiskFactor(extraRiskFactor(severity));
     }
     return '> ' + (severity - 0.1).toFixed(1);
   }

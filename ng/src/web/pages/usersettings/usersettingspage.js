@@ -49,6 +49,12 @@ import TableRow from '../../components/table/row.js';
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 import Languages, {BROWSER_LANGUAGE} from '../../utils/languages';
+import {
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_PCI_DSS,
+} from '../../utils/severity';
 
 import withCapabilities from '../../utils/withCapabilities.js';
 import withGmp from '../../utils/withGmp.js';
@@ -58,10 +64,10 @@ import SettingsDialog from './dialog.js';
 const CA_CERT_ID = '9ac801ea-39f8-11e6-bbaa-28d24461215b';
 
 const SEVERITY_CLASSES = [
-  {id: 'nist', name: 'NVD Vulnerability Severity Ratings'},
-  {id: 'bsi', name: 'BSI Schwachstellenampel (Germany)'},
-  {id: 'classic', name: 'OpenVAS Classic'},
-  {id: 'pci-dss', name: 'PCI-DSS'},
+  {id: SEVERITY_CLASS_NIST, name: 'NVD Vulnerability Severity Ratings'},
+  {id: SEVERITY_CLASS_BSI, name: 'BSI Schwachstellenampel (Germany)'},
+  {id: SEVERITY_CLASS_CLASSIC, name: 'OpenVAS Classic'},
+  {id: SEVERITY_CLASS_PCI_DSS, name: 'PCI-DSS'},
 ];
 
 const Heading = glamorous.h4({marginBottom: '5px'});
