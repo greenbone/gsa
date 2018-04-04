@@ -37,6 +37,8 @@ import Legend from './legend';
 import ToolTip from './tooltip';
 import Svg from './svg';
 
+const LEGEND_MARGIN = 20;
+
 const margin = {
   top: 40,
   right: 20,
@@ -55,12 +57,18 @@ const tickFormat = val => {
 
 const BarChart = ({
   data = [],
+  displayLegend = true,
   height,
   width,
   xLabel,
   yLabel,
   horizontal = false,
 }) => {
+  if (this.legend) {
+    const {width: legendWidth} = this.legend.getBoundingClientRect();
+    width = width - legendWidth - LEGEND_MARGIN;
+  }
+
   const xValues = data.map(d => d.x);
   const yValues = data.map(d => d.y);
   const yMax = Math.max(...yValues);
@@ -140,7 +148,10 @@ const BarChart = ({
         </Group>
       </Svg>
       {data.length > 0 &&
-        <Legend data={data} />
+        <Legend
+          innerRef={ref => this.legend = ref}
+          data={data}
+        />
       }
     </Layout>
   );
