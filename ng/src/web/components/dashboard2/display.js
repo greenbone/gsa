@@ -84,7 +84,6 @@ const DisplayContent = glamorous.div('display-content', {
   display: 'flex',
   flexGrow: 1,
   flexShrink: 1,
-  flexBasis: 0,
 });
 
 const DisplayTitle = glamorous.div('display-title', {
