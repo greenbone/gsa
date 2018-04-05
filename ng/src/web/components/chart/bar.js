@@ -97,7 +97,7 @@ const BarChart = ({
       see https://github.com/d3/d3-scale/blob/master/README.md#continuous_nice
       the old version did call nice(10) which isn't possible with vx at the moment.
     */
-    .nice(true);
+    .nice();
 
   return (
     <Layout align={['start', 'start']}>

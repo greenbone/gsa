@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +41,8 @@ import VulnsCharts from './charts.js';
 import VulnsFilterDialog from './filterdialog.js';
 import VulnsTable from './table.js';
 
+import VulnerabilitiesDashboard from './dashboard/index.js';
+
 const Dashboard = withDashboard({
   configPrefId: '43690dcb-3174-4d84-aa88-58c1936c7f5c',
   defaultControllersString: 'vuln-by-cvss|vuln-by-severity-class',
@@ -60,6 +63,7 @@ const ToolBarIcons = () => {
 
 export default withEntitiesContainer('vuln', {
   dashboard: Dashboard,
+  dashboard2: VulnerabilitiesDashboard,
   filterEditDialog: VulnsFilterDialog,
   filtersFilter: VULNS_FILTER_FILTER,
   table: VulnsTable,

@@ -41,6 +41,14 @@ class VulnerabilitiesCommand extends EntitiesCommand {
   getEntitiesResponse(root) {
     return root.get_vulns.get_vulns_response;
   }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'vuln',
+      group_column: 'severity',
+      filter,
+    });
+  }
 }
 
 register_command('vuln', VulnerabilityCommand);
