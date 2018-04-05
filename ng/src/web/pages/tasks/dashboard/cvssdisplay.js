@@ -28,7 +28,7 @@ import {is_defined} from 'gmp/utils/identity';
 import {for_each} from 'gmp/utils/array';
 import {is_empty} from 'gmp/utils/string';
 
-import {parse_int} from 'gmp/parser';
+import {parse_int, parse_float} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -105,14 +105,20 @@ const transformCvssData = (data = {}, {severityClass}) => {
     .map(key => {
       const count = cvssData[key];
       const perc = percent(count, sum);
-      const value = parse_int(key); // use parse into to floor values e.g. 4.6 => 4
+
+      const value = Math.ceil(parse_float(key));
+
       const riskFactor = resultSeverityRiskFactor(value, severityClass);
       const label = translateRiskFactor(riskFactor);
+
+      const toolTip = value > 0 ?
+        `${value - 1}.1 - ${value}.0 (${label}): ${perc}% (${count})` :
+        `${label}: ${perc}% (${count})`;
       return {
         x: getSeverityClassLabel(value),
         y: count,
         label,
-        toolTip: `${label}: ${perc}% (${count})`,
+        toolTip,
         color: riskFactorColorScale(riskFactor),
       };
     });
