@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -56,6 +57,7 @@ const ToolTipContainer = glamorous.div({
   pointerEvents: 'none',
   display: 'flex',
   flexDirection: 'column',
+  zIndex: Theme.Layer.onTop,
 }, ({top = 0, left = 0, visible = false}) => ({
   top,
   left,
@@ -110,8 +112,9 @@ class ToolTip extends React.Component {
 
     const rect = this.target.getBoundingClientRect();
     return {
-      top: rect.top - this.tooltip.offsetHeight,
-      left: rect.left + (rect.width - this.tooltip.offsetWidth) / 2,
+      top: rect.top - this.tooltip.offsetHeight + window.scrollY,
+      left: rect.left + (rect.width - this.tooltip.offsetWidth) / 2 +
+        window.scrollX,
     };
   }
 
