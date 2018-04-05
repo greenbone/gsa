@@ -237,14 +237,12 @@ class Grid extends React.Component {
                         key={item.id}
                         id={item.id}
                         index={index}
+                        props={item.props}
+                        height={itemHeight}
+                        width={itemWidth}
+                        remove={() => this.handleRemoveItem(item.id)}
                       >
-                        {children({
-                          id: item.id,
-                          props: item.props,
-                          height: itemHeight,
-                          width: itemWidth,
-                          remove: () => this.handleRemoveItem(item.id),
-                        })}
+                        {children}
                       </Item>
                     ))}
                   </Row>
@@ -265,4 +263,3 @@ class Grid extends React.Component {
 export default Grid;
 
 // vim: set ts=2 sw=2 tw=80:
-

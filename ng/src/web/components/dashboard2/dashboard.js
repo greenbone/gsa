@@ -105,11 +105,12 @@ class Dashboard extends React.Component {
         maxItemsPerRow={maxItemsPerRow}
         onChange={this.handleItemsChange}
       >
-        {({id, props, height, width, remove}) => {
+        {({dragHandleProps, id, props, height, width, remove}) => {
           const {id: elementId} = props;
           const Component = components[elementId];
           return is_defined(Component) ? (
             <Component
+              dragHandleProps={dragHandleProps}
               height={height}
               width={width}
               id={id}
@@ -128,4 +129,3 @@ export default compose(
 )(Dashboard);
 
 // vim: set ts=2 sw=2 tw=80:
-
