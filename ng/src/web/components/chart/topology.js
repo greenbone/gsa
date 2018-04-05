@@ -43,7 +43,7 @@ import {is_defined} from 'gmp/utils/identity';
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
 import {
-  getSeverityLevels,
+  getSeverityLevelsOld as getSeverityLevels,
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
 } from '../../utils/severity';
