@@ -35,6 +35,7 @@ import {
 import TasksStatusDisplay from './statusdisplay';
 import TasksSeverityDisplay from './severityclassdisplay';
 import TasksSchedulesDisplay from './schedulesdisplay';
+import TasksCvssDisplay from './cvssdisplay';
 
 const TaskDashboard = ({
   filter,
@@ -49,11 +50,13 @@ const TaskDashboard = ({
       'tasks-status': TasksStatusDisplay,
       'tasks-severity-class': TasksSeverityDisplay,
       'tasks-schedules': TasksSchedulesDisplay,
+      'tasks-cvss': TasksCvssDisplay,
     }}
     defaultContent={[
       [
         'tasks-status',
         'tasks-severity-class',
+        'tasks-cvss',
       ],
       [
         'tasks-schedules',
