@@ -48,6 +48,7 @@ import MenuEntry from '../../components/menu/menuentry.js';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import TaskComponent from './component.js';
+import TaskDashboard from './dashboard';
 
 const Dashboard = withDashboard({
   hideFilterSelect: true,
@@ -158,6 +159,9 @@ const Page = ({
       <EntitiesPage
         {...props}
         dashboard={Dashboard}
+        dashboard2={dashboardProps => (
+          <TaskDashboard {...dashboardProps} />
+        )}
         filterEditDialog={TaskFilterDialog}
         sectionIcon="task.svg"
         table={Table}
