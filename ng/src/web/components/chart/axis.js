@@ -30,6 +30,11 @@ import PropTypes from '../../utils/proptypes';
 
 const lineCss = css({
   shapeRendering: 'crispEdges',
+  strokeWidth: 0.8,
+  '& line': {
+    shapeRendering: 'crispEdges',
+    strokeWidth: 0.8,
+  },
 });
 
 const DEFAULT_TICK_PROPS = {
