@@ -36,9 +36,9 @@ import {
 
 import {color} from 'd3-color';
 
-import {scaleLinear} from '@vx/scale';
+import {scaleLinear} from 'd3-scale';
 
-import {is_defined} from 'gmp/utils/index';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
@@ -69,8 +69,8 @@ const Circle = glamorous.circle({
 
 const severityColorsGradientScale = type => {
   const severity_levels = getSeverityLevels(type);
-  return scaleLinear({
-    domain: [
+  return scaleLinear()
+    .domain([
       FALSE_POSITIVE_VALUE,
       severity_levels.max_log,
       severity_levels.min_low,
@@ -82,8 +82,8 @@ const severityColorsGradientScale = type => {
       severity_levels.min_high,
       (severity_levels.min_high + HIGH_VALUE) / 2,
       HIGH_VALUE,
-    ],
-    range: [
+    ])
+    .range([
       'grey',    // False Positive
       'silver',  // Log
       '#b1cee9', // minimum Low
@@ -95,24 +95,8 @@ const severityColorsGradientScale = type => {
       '#eb5200', // minimum High
       '#D80000', // middle High
       '#ff0000', // maximum High
-    ],
-  });
+    ]);
 };
-
-const hostStrokeColor = (host, severityClass) => {
-  if (host.isScanner) {
-    return Theme.green;
-  }
-  if (is_defined(host.uuid)) {
-    return color(
-      severityColorsGradientScale(host.severity, severityClass)
-    ).darker();
-  }
-  return Theme.lightGray;
-};
-
-const hostFillColor = (host, severityClass) => is_defined(host.uuid) ?
-  severityColorsGradientScale(host.severity, severityClass) : Theme.white;
 
 const SCROLL_STEP = 0.1;
 
@@ -137,6 +121,11 @@ class HostsTopologyChart extends React.Component {
       dragging: false,
     };
 
+    this.colorScale = severityColorsGradientScale(this.props.severityClass);
+
+    this.hostFillColor = this.hostFillColor.bind(this);
+    this.hostStrokeColor = this.hostStrokeColor.bind(this);
+
     this.handleMouseWheel = this.handleMouseWheel.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMousUp = this.handleMousUp.bind(this);
@@ -146,6 +135,22 @@ class HostsTopologyChart extends React.Component {
   componentDidMount() {
     this.updateData(this.props.data);
   }
+
+  hostFillColor(host) {
+    return is_defined(host.uuid) ? this.colorScale(host.severity) : Theme.white;
+  }
+
+  hostStrokeColor(host) {
+    if (host.isScanner) {
+      return Theme.green;
+    }
+
+    if (is_defined(host.uuid)) {
+      return color(this.colorScale(host.severity)).darker();
+    }
+
+    return Theme.lightGray;
+  };
 
   /**
    * Zoom chart at pixel coordinates to the scale factor
@@ -353,7 +358,7 @@ class HostsTopologyChart extends React.Component {
   }
 
   render() {
-    const {width, height, severityClass} = this.props;
+    const {width, height} = this.props;
     const {
       hosts,
       links,
@@ -411,8 +416,8 @@ class HostsTopologyChart extends React.Component {
                 }
                 <Circle
                   r={radius}
-                  fill={hostFillColor(host, severityClass)}
-                  stroke={hostStrokeColor(host, severityClass)}
+                  fill={this.hostFillColor(host)}
+                  stroke={this.hostStrokeColor(host)}
                   strokeWidth={host.isScanner ?
                     SCANNER_STROKE_WIDTH : DEFAULT_STROKE_WIDTH}
                   cx={host.x}

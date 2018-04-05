@@ -27,6 +27,8 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../../utils/proptypes';
 
 import Loading from '../../../components/loading/loading';
@@ -40,6 +42,7 @@ import * as fromDashboardData from './selectors';
 let DataDisplay = ({
   children,
   data,
+  dataTransform,
   height,
   id,
   isLoading = false,
@@ -50,6 +53,10 @@ let DataDisplay = ({
   ...props
 }) => {
   height = height - DISPLAY_HEADER_HEIGHT;
+
+  if (is_defined(dataTransform)) {
+    data = dataTransform(data, props);
+  }
   return (
     <Display
       menu={menu}
@@ -73,6 +80,7 @@ let DataDisplay = ({
 DataDisplay.propTypes = {
   children: PropTypes.func.isRequired,
   data: PropTypes.any,
+  dataTransform: PropTypes.func,
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,

@@ -23,7 +23,7 @@
 import React from 'react';
 
 import {Bar} from '@vx/shape';
-import {scaleBand, scaleLinear} from '@vx/scale';
+import {scaleBand, scaleLinear} from 'd3-scale';
 
 import {shorten} from 'gmp/utils/index';
 
@@ -36,6 +36,8 @@ import Group from './group';
 import Legend from './legend';
 import ToolTip from './tooltip';
 import Svg from './svg';
+
+const LEGEND_MARGIN = 20;
 
 const margin = {
   top: 40,
@@ -54,13 +56,19 @@ const tickFormat = val => {
 };
 
 const BarChart = ({
-  data,
+  data = [],
+  displayLegend = true,
   height,
   width,
   xLabel,
   yLabel,
   horizontal = false,
 }) => {
+  if (this.legend) {
+    const {width: legendWidth} = this.legend.getBoundingClientRect();
+    width = width - legendWidth - LEGEND_MARGIN;
+  }
+
   const xValues = data.map(d => d.x);
   const yValues = data.map(d => d.y);
   const yMax = Math.max(...yValues);
@@ -75,23 +83,21 @@ const BarChart = ({
   const maxWidth = width - marginLeft - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
 
-  const xScale = scaleBand({
-    rangeRound: horizontal ? [0, maxHeight] : [0, maxWidth],
-    domain: xValues,
-    padding: 0.125,
-  });
+  const xScale = scaleBand()
+    .rangeRound(horizontal ? [0, maxHeight] : [0, maxWidth])
+    .domain(xValues)
+    .padding(0.125);
 
-  const yScale = scaleLinear({
-    range: horizontal ? [0, maxWidth] : [maxHeight, 0],
-    domain: [0, yMax],
+  const yScale = scaleLinear()
+    .range(horizontal ? [0, maxWidth] : [maxHeight, 0])
+    .domain([0, yMax])
 
     /*
       nice seems to round first and last value.
       see https://github.com/d3/d3-scale/blob/master/README.md#continuous_nice
       the old version did call nice(10) which isn't possible with vx at the moment.
     */
-    nice: true,
-  });
+    .nice(true);
 
   return (
     <Layout align={['start', 'start']}>
@@ -141,8 +147,11 @@ const BarChart = ({
           ))}
         </Group>
       </Svg>
-      {data.length > 0 &&
-        <Legend data={data} />
+      {displayLegend && data.length > 0 &&
+        <Legend
+          innerRef={ref => this.legend = ref}
+          data={data}
+        />
       }
     </Layout>
   );
@@ -167,6 +176,7 @@ BarChart.propTypes = {
     color: PropTypes.toString.isRequired,
     toolTip: PropTypes.elementOrString,
   })).isRequired,
+  displayLegend: PropTypes.bool,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
   width: PropTypes.number.isRequired,

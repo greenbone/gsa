@@ -81,6 +81,7 @@ class EntitiesPage extends React.Component {
       loading,
       sectionIcon,
       dashboard: DashboardComponent,
+      dashboard2,
     } = this.props;
 
     let {
@@ -107,6 +108,9 @@ class EntitiesPage extends React.Component {
         >
           {DashboardComponent &&
             <DashboardComponent filter={filter}/>
+          }
+          {is_defined(dashboard2) &&
+            dashboard2({filter})
           }
           {loading && !is_defined(entities) ?
             this.renderLoading() :
@@ -246,6 +250,7 @@ class EntitiesPage extends React.Component {
 EntitiesPage.propTypes = {
   createFilterType: PropTypes.string,
   dashboard: PropTypes.componentOrFalse,
+  dashboard2: PropTypes.func,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
   filter: PropTypes.filter,

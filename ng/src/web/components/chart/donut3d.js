@@ -39,6 +39,8 @@ import Legend from './legend';
 import Svg from './svg';
 import Group from './group';
 
+const LEGEND_MARGIN = 20;
+
 const margin = {
   top: 20,
   right: 20,
@@ -219,6 +221,11 @@ const Donut3DChart = ({
   height,
   width,
 }) => {
+  if (this.legend) {
+    const {width: legendWidth} = this.legend.getBoundingClientRect();
+    width = width - legendWidth - LEGEND_MARGIN;
+  }
+
   const horizontalMargin = margin.left + margin.right;
   const verticalMargin = margin.top + margin.left;
 
@@ -263,7 +270,7 @@ const Donut3DChart = ({
               x,
               y,
             }) => {
-              const {color, toolTip} = arcData;
+              const {color = Theme.lightGray, toolTip} = arcData;
               const darker = d3color(color).darker();
               return (
                 <ToolTip
@@ -312,7 +319,10 @@ const Donut3DChart = ({
         }
       </Svg>
       {data.length > 0 &&
-        <Legend data={data}/>
+        <Legend
+          data={data}
+          innerRef={ref => this.legend = ref}
+        />
       }
     </Layout>
   );
@@ -322,6 +332,8 @@ Donut3DChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     color: PropTypes.toString.isRequired,
     value: PropTypes.numberOrNumberString.isRequired,
+    label: PropTypes.any,
+    toolTip: PropTypes.elementOrString,
   })),
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,

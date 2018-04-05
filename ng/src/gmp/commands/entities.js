@@ -145,6 +145,18 @@ class EntitiesCommand extends HttpCommand {
       return this.delete(entities, extra_params);
     }).then(response => response.setData(deleted));
   }
+
+  transformAggregates(response) {
+    return response.setData(
+      response.data.get_aggregate.get_aggregates_response.aggregate);
+  }
+
+  getAggregates(params = {}) {
+    return this.httpGet({
+      ...params,
+      cmd: 'get_aggregate',
+    }).then(this.transformAggregates);
+  }
 }
 
 export default EntitiesCommand;
