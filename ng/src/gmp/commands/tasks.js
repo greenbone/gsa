@@ -298,6 +298,22 @@ class TasksCommand extends EntitiesCommand {
   getEntitiesResponse(root) {
     return root.get_tasks.get_tasks_response;
   }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'task',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getStatusAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'task',
+      group_column: 'status',
+      filter,
+    });
+  }
 }
 
 register_command('task', TaskCommand);
