@@ -22,25 +22,15 @@
  */
 import React from 'react';
 
-import {scaleOrdinal} from 'd3-scale';
-
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {is_empty} from 'gmp/utils/string';
 
-import {parse_int} from 'gmp/parser';
+import {parse_float} from 'gmp/parser';
 
 import {
-  ERROR,
-  DEBUG,
-  FALSE_POSITIVE,
-  LOG,
-  LOW,
-  MEDIUM,
-  HIGH,
-  NA,
   NA_VALUE,
   resultSeverityRiskFactor,
   translateRiskFactor,
@@ -54,29 +44,7 @@ import DataDisplay from '../../../components/dashboard2/data/display';
 
 import {TASKS_SEVERITY} from './loaders';
 
-import {EMPTY, totalCount, percent} from './common';
-
-const severityClassColorScale = scaleOrdinal()
-  .domain([
-    ERROR,
-    DEBUG,
-    FALSE_POSITIVE,
-    LOG,
-    LOW,
-    MEDIUM,
-    HIGH,
-    NA,
-  ])
-  .range([
-    '#800000',
-    '#008080',
-    '#808080',
-    '#DDDDDD',
-    'skyblue',
-    'orange',
-    '#D80000',
-    'silver',
-  ]);
+import {EMPTY, totalCount, percent, riskFactorColorScale} from './common';
 
 const transformSeverityData = (data = {}, {severityClass}) => {
   const {group: groups} = data;
@@ -95,7 +63,7 @@ const transformSeverityData = (data = {}, {severityClass}) => {
       value = NA_VALUE;
     }
     else {
-      value = parse_int(value);
+      value = parse_float(value);
     }
 
     const perc = percent(count, sum);
@@ -107,7 +75,7 @@ const transformSeverityData = (data = {}, {severityClass}) => {
       value: count,
       label,
       toolTip: `${label}: ${perc}% (${count})`,
-      color: severityClassColorScale(riskFactor),
+      color: riskFactorColorScale(riskFactor),
     };
   });
 
