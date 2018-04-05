@@ -57,7 +57,7 @@ const ToolTipContainer = glamorous.div({
   pointerEvents: 'none',
   display: 'flex',
   flexDirection: 'column',
-  zIndex: Theme.Layer.onTop,
+  zIndex: Theme.Layers.onTop,
 }, ({top = 0, left = 0, visible = false}) => ({
   top,
   left,
