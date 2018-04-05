@@ -139,7 +139,62 @@ export const SEVERITY_CLASS_PCI_DSS = 'pci-dss';
 export const SEVERITY_CLASS_NIST = 'nist';
 export const SEVERITY_CLASS_BSI = 'bsi';
 
+/*
+ * The severity levels define the lower limit
+ *
+ * The lower limit is included in the range. E.g.
+ *
+ * {
+ *   high: 6.5,
+ *   medium: 3.0,
+ *   low: 1.0,
+ * }
+ *
+ * defines
+ *  - log range from 0 to 1.0 including 0 and excluding 1.0 => [0, 1.0[
+ *  - low range from 1.0 to 3.0 including 1.0 and excluding 3.0 => [1.0, 3.0[
+ *  - medium range from 3.0 to 6.5 including 3.0 and excluding 6.5 => [3.0, 6.5[
+ *  - high range from 6.5 to 10 [6.5, 10]
+ */
+const SEVERITY_LEVELS_CLASSIC = {
+  high: 5.1,
+  medium: 2.1,
+  low: 0.1,
+};
+
+/*
+ The original version form xslt used
+  {
+    high: 4.0,
+    medium: 3.9,
+    low: 3.9,
+  }
+  for PCI-DSS
+*/
+const SEVERITY_LEVELS_PCI_DSS = {
+  high: 7.0,
+  medium: 4.0,
+  low: 0.1,
+};
+
+const SEVERITY_LEVELS_DEFAULT = {
+  high: 7.0,
+  medium: 4.0,
+  low: 0.1,
+};
+
 export const getSeverityLevels = type => {
+  switch (type) {
+    case SEVERITY_CLASS_CLASSIC:
+      return SEVERITY_LEVELS_CLASSIC;
+    case SEVERITY_CLASS_PCI_DSS:
+      return SEVERITY_LEVELS_PCI_DSS;
+    default:
+      return SEVERITY_LEVELS_DEFAULT;
+  }
+};
+
+export const getSeverityLevelsOld = type => {
   if (type === SEVERITY_CLASS_CLASSIC) {
     return {
       max_high: 10.0,

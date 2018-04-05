@@ -649,6 +649,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/component.js
      ${NG_SRC_DIR}/src/web/pages/tasks/containerdialog.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/common.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/schedulesdisplay.js

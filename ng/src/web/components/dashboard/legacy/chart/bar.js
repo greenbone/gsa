@@ -27,7 +27,9 @@ import d3tip from 'd3-tip';
 import _ from 'gmp/locale.js';
 import {is_defined, is_date} from 'gmp/utils';
 
-import {getSeverityLevels} from '../../../../utils/severity';
+import {
+  getSeverityLevelsOld as getSeverityLevels,
+} from '../../../../utils/severity';
 
 import {
   array_sum,

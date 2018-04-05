@@ -25,28 +25,47 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
+import {for_each} from 'gmp/utils/array';
 import {is_empty} from 'gmp/utils/string';
 
-import {parse_float} from 'gmp/parser';
+import {parse_int} from 'gmp/parser';
 
 import {
   NA_VALUE,
+  LOG_VALUE,
+  FALSE_POSITIVE_VALUE,
+  ERROR_VALUE,
+  _NA,
+  _LOG,
+  _ERROR,
+  _FALSE_POSITIVE,
   resultSeverityRiskFactor,
   translateRiskFactor,
 } from '../../../utils/severity';
 
-import PropTypes from '../../../utils/proptypes';
-
-import DonutChart from '../../../components/chart/donut3d';
+import BarChart from '../../../components/chart/bar';
 
 import DataDisplay from '../../../components/dashboard2/data/display';
 
 import {TASKS_SEVERITY} from './loaders';
-
 import {EMPTY, totalCount, percent, riskFactorColorScale} from './common';
 
-const transformSeverityData = (data = {}, {severityClass}) => {
+const getSeverityClassLabel = value => {
+  switch (value) {
+    case NA_VALUE:
+      return _NA;
+    case LOG_VALUE:
+      return _LOG;
+    case ERROR_VALUE:
+      return _ERROR;
+    case FALSE_POSITIVE_VALUE:
+      return _FALSE_POSITIVE;
+    default:
+      return value;
+  }
+};
+
+const transformCvssData = (data = {}, {severityClass}) => {
   const {group: groups} = data;
 
   if (!is_defined(groups)) {
@@ -54,51 +73,67 @@ const transformSeverityData = (data = {}, {severityClass}) => {
   };
 
   const sum = totalCount(groups);
+  const cvssData = {
+    [NA_VALUE]: 0,
+    [LOG_VALUE]: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
+    8: 0,
+    9: 0,
+    10: 0,
+  };
 
-  const tdata = map(groups, group => {
-    const {count} = group;
-
-    let {value} = group;
+  for_each(groups, group => {
+    let {value, count = 0} = group;
     if (is_empty(value)) {
       value = NA_VALUE;
     }
-    else {
-      value = parse_float(value);
-    }
+    count = parse_int(count);
 
-    const perc = percent(count, sum);
-    const riskFactor = resultSeverityRiskFactor(value, severityClass);
-    const label = translateRiskFactor(riskFactor);
-
-    // TODO add severity class ranges (e.g. 9.1 - 10 High) to label
-    return {
-      value: count,
-      label,
-      toolTip: `${label}: ${perc}% (${count})`,
-      color: riskFactorColorScale(riskFactor),
-    };
+    cvssData[value] = count;
   });
+
+  const tdata = Object.keys(cvssData)
+    .sort((a, b) => {
+      return a - b;
+    })
+    .map(key => {
+      const count = cvssData[key];
+      const perc = percent(count, sum);
+      const value = parse_int(key); // use parse into to floor values e.g. 4.6 => 4
+      const riskFactor = resultSeverityRiskFactor(value, severityClass);
+      const label = translateRiskFactor(riskFactor);
+      return {
+        x: getSeverityClassLabel(value),
+        y: count,
+        label,
+        toolTip: `${label}: ${perc}% (${count})`,
+        color: riskFactorColorScale(riskFactor),
+      };
+    });
 
   tdata.total = sum;
 
   return tdata;
 };
 
-const TasksSeverityDisplay = ({
-  severityClass,
-  ...props
-}) => (
+const TasksCvssDisplay = props => (
   <DataDisplay
     {...props}
-    severityClass={severityClass}
-    dataTransform={transformSeverityData}
+    dataTransform={transformCvssData}
     dataId={TASKS_SEVERITY}
-    title={({data}) =>
-      _('Tasks by Severity Class (Total: {{count}})',
+    title={({data = {}}) =>
+      _('Tasks by CVSS (Total: {{count}})',
         {count: data.total})}
   >
     {({width, height, data}) => (
-      <DonutChart
+      <BarChart
+        displayLegend={false}
         width={width}
         height={height}
         data={data}
@@ -107,10 +142,6 @@ const TasksSeverityDisplay = ({
   </DataDisplay>
 );
 
-TasksSeverityDisplay.propTypes = {
-  severityClass: PropTypes.severityClass,
-};
-
-export default TasksSeverityDisplay;
+export default TasksCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

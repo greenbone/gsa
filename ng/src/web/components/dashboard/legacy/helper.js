@@ -33,7 +33,9 @@ import {parse_float, parse_int} from 'gmp/parser.js';
 
 import Logger from 'gmp/log.js';
 
-import {getSeverityLevels} from '../../../utils/severity';
+import {
+  getSeverityLevelsOld as getSeverityLevels,
+} from '../../../utils/severity';
 
 const log = Logger.getLogger('web.dashboard.legacy.helper');
 
