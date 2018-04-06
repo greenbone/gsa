@@ -22,6 +22,8 @@
  */
 import _ from 'gmp/locale';
 
+import {is_defined} from 'gmp/utils/identity';
+
 export const _LOG = _('Log');
 export const _LOW = _('Low');
 export const _MEDIUM = _('Medium');
@@ -52,44 +54,23 @@ export const DEBUG_VALUE = -2;
 export const ERROR_VALUE = -3;
 
 export const severityRiskFactor = (value, type) => {
-  if (type === 'classic') {
-    if (value === 0) {
-      return LOG;
-    }
-    if (value > 0 && value <= 2) {
-      return LOW;
-    }
-    if (value > 2 && value <= 5) {
-      return MEDIUM;
-    }
-    if (value > 5 && value <= 10) {
-      return HIGH;
-    }
-    return NA;
-  }
+  const {low, medium, high} = getSeverityLevels(type);
 
-  if (type === 'pci-dss') {
-    if (value === 0 && value < 4) {
-      return LOG;
-    }
-    else if (value >= 4) {
-      return HIGH;
-    }
-    return NA;
-  }
-
-  if (value === 0) {
+  if (value >= LOG_VALUE && is_defined(low) && value < low) {
     return LOG;
   }
-  else if (value > 0 && value < 4) {
+  if (value >= low && is_defined(medium) && value < medium) {
     return LOW;
   }
-  else if (value >= 4 && value < 7) {
+
+  if (value >= medium && is_defined(high) && value < high) {
     return MEDIUM;
   }
-  else if (value >= 7 && value <= 10) {
+
+  if (is_defined(high) && value >= high) {
     return HIGH;
   }
+
   return NA;
 };
 

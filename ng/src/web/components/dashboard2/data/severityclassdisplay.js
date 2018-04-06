@@ -22,58 +22,31 @@
  */
 import React from 'react';
 
-import {scaleOrdinal} from 'd3-scale';
-
-import {interpolateHcl} from 'd3-interpolate';
-
-import _ from 'gmp/locale';
-
 import {is_defined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
+import {is_empty} from 'gmp/utils/string';
 
-import DonutChart from '../../../components/chart/donut3d';
+import {parse_float} from 'gmp/parser';
+
+import {
+  NA_VALUE,
+  resultSeverityRiskFactor,
+  translateRiskFactor,
+} from '../../../utils/severity';
+
+import PropTypes from '../../../utils/proptypes';
+
+import DonutChart from '../../chart/donut3d';
 
 import DataDisplay from '../../../components/dashboard2/data/display';
 import {
   EMPTY,
   totalCount,
   percent,
-} from '../../../components/dashboard2/data/utils';
+  riskFactorColorScale,
+} from './utils';
 
-import {TASKS_STATUS} from './loaders';
-
-const red = interpolateHcl('#d62728', '#ff9896');
-const green = interpolateHcl('#2ca02c', '#98df8a');
-const blue = interpolateHcl('#aec7e8', '#1f77b4');
-const orange = interpolateHcl('#ff7f0e', '#ffbb78');
-
-const taskStatusColorScale = scaleOrdinal()
-  .domain([
-    'Delete Requested',
-    'Ultimate Delete Requested',
-    'Internal Error',
-    'New',
-    'Requested',
-    'Running',
-    'Stop Requested',
-    'Stopped',
-    'Done',
-    'N/A',
-  ])
-  .range([
-    red(1.0),
-    red(0.5),
-    red(0.0),
-    green(1.0),
-    green(0.5),
-    green(0.0),
-    orange(1.0),
-    orange(0.0),
-    blue(0.5),
-    'silver',
-  ]);
-
-const transformStatusData = (data = {}) => {
+const transformSeverityData = (data = {}, {severityClass}) => {
   const {group: groups} = data;
 
   if (!is_defined(groups)) {
@@ -83,13 +56,26 @@ const transformStatusData = (data = {}) => {
   const sum = totalCount(groups);
 
   const tdata = map(groups, group => {
-    const {count, value} = group;
+    const {count} = group;
+
+    let {value} = group;
+    if (is_empty(value)) {
+      value = NA_VALUE;
+    }
+    else {
+      value = parse_float(value);
+    }
+
     const perc = percent(count, sum);
+    const riskFactor = resultSeverityRiskFactor(value, severityClass);
+    const label = translateRiskFactor(riskFactor);
+
+    // TODO add severity class ranges (e.g. 9.1 - 10 High) to label
     return {
       value: count,
-      label: value,
-      toolTip: `${value}: ${perc}% (${count})`,
-      color: taskStatusColorScale(value),
+      label,
+      toolTip: `${label}: ${perc}% (${count})`,
+      color: riskFactorColorScale(riskFactor),
     };
   });
 
@@ -98,13 +84,18 @@ const transformStatusData = (data = {}) => {
   return tdata;
 };
 
-const TasksStatusDisplay = props => (
+const SeverityClassDisplay = ({
+  severityClass,
+  dataId,
+  title,
+  ...props
+}) => (
   <DataDisplay
     {...props}
-    dataTransform={transformStatusData}
-    dataId={TASKS_STATUS}
-    title={({data}) =>
-      _('Tasks by Status (Total: {{count}})', {count: data.total})}
+    severityClass={severityClass}
+    dataTransform={transformSeverityData}
+    dataId={dataId}
+    title={title}
   >
     {({width, height, data}) => (
       <DonutChart
@@ -116,6 +107,12 @@ const TasksStatusDisplay = props => (
   </DataDisplay>
 );
 
-export default TasksStatusDisplay;
+SeverityClassDisplay.propTypes = {
+  dataId: PropTypes.string.isRequired,
+  severityClass: PropTypes.severityClass,
+  title: PropTypes.func.isRequired,
+};
+
+export default SeverityClassDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
