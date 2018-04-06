@@ -20,8 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-import {loadFunc} from '../../../components/dashboard2/data/loader';
+import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
 
 export const VULNS_SEVERITY = 'vulns-severity';
 
@@ -29,4 +30,15 @@ export const vulnsSeverityLoader = loadFunc(
   ({gmp}) => gmp.vulns.getSeverityAggregates().then(r => r.data),
   VULNS_SEVERITY);
 
+export const VulnsSeverityLoader = props => (
+  <Loader
+    {...props}
+    dataId={VULNS_SEVERITY}
+    load={vulnsSeverityLoader}
+    subscriptions={[
+      'vulns.timer',
+      'vulns.changed',
+    ]}
+  />
+);
 // vim: set ts=2 sw=2 tw=80:
