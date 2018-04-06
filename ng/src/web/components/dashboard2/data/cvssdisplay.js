@@ -127,14 +127,12 @@ const transformCvssData = (data = {}, {severityClass}) => {
 };
 
 const CvssDisplay = ({
-  dataId,
   title,
   ...props
 }) => (
   <DataDisplay
     {...props}
     dataTransform={transformCvssData}
-    dataId={dataId}
     title={title}
   >
     {({width, height, data}) => (
@@ -149,7 +147,6 @@ const CvssDisplay = ({
 );
 
 CvssDisplay.propTypes = {
-  dataId: PropTypes.string.isRequired,
   title: PropTypes.func.isRequired,
 };
 
