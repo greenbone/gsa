@@ -26,16 +26,22 @@ import React from 'react';
 import EntitiesContainer from './container.js';
 
 import CacheProvider from '../components/provider/cacheprovider.js';
+import SubscriptionProvider from '../components/provider/subscriptionprovider';
 
 const withEntitiesContainer = (gmpname, options = {}) => component => {
   const EntitiesContainerWrapper = props => (
     <CacheProvider name={gmpname}>
-      <EntitiesContainer
-        {...options}
-        {...props}
-        gmpname={gmpname}
-        component={component}
-      />
+      <SubscriptionProvider>
+        {({notify}) => (
+          <EntitiesContainer
+            {...options}
+            {...props}
+            notify={notify}
+            gmpname={gmpname}
+            component={component}
+          />
+        )}
+      </SubscriptionProvider>
     </CacheProvider>
   );
   return EntitiesContainerWrapper;

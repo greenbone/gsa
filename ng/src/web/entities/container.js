@@ -71,7 +71,7 @@ class EntitiesContainer extends React.Component {
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
     };
 
-    const {gmpname, gmp} = this.props;
+    const {gmpname, gmp, notify} = this.props;
 
     let entities_command_name;
 
@@ -86,8 +86,10 @@ class EntitiesContainer extends React.Component {
 
     this.entities_command = gmp[entities_command_name];
 
-    this.load = this.load.bind(this);
-    this.reload = this.reload.bind(this);
+    this.notifyTimer = notify(`${entities_command_name}.timer`);
+    this.notifyChanged = notify(`${entities_command_name}.changed`);
+
+    this.handleChanged = this.handleChanged.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -254,6 +256,7 @@ class EntitiesContainer extends React.Component {
 
     this.timer = undefined;
     this.reload();
+    this.notifyTimer();
   }
 
   cancelLastRequest() {
@@ -265,6 +268,11 @@ class EntitiesContainer extends React.Component {
   cancelLoading() {
     this.cancelLastRequest();
     this.clearTimer(); // remove possible running timer
+  }
+
+  handleChanged() {
+    this.reload();
+    this.notifyChanged();
   }
 
   handleSelectionTypeChange(selection_type) {
@@ -444,7 +452,7 @@ class EntitiesContainer extends React.Component {
           selectionType={selection_type}
           sortBy={sortBy}
           sortDir={sortDir}
-          onChanged={this.reload}
+          onChanged={this.handleChanged}
           onDownloaded={onDownload}
           onError={this.handleError}
           onFilterChanged={this.handleFilterChanged}
@@ -482,6 +490,7 @@ EntitiesContainer.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
+  notify: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
