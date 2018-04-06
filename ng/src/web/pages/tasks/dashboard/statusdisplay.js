@@ -40,7 +40,7 @@ import {
   percent,
 } from '../../../components/dashboard2/data/utils';
 
-import {TASKS_STATUS} from './loaders';
+import {TaskStatusLoader} from './loaders';
 
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');
@@ -99,21 +99,25 @@ const transformStatusData = (data = {}) => {
 };
 
 const TasksStatusDisplay = props => (
-  <DataDisplay
-    {...props}
-    dataTransform={transformStatusData}
-    dataId={TASKS_STATUS}
-    title={({data}) =>
-      _('Tasks by Status (Total: {{count}})', {count: data.total})}
-  >
-    {({width, height, data}) => (
-      <DonutChart
-        width={width}
-        height={height}
+  <TaskStatusLoader>
+    {({data}) => (
+      <DataDisplay
+        {...props}
         data={data}
-      />
+        dataTransform={transformStatusData}
+        title={({data: tdata}) =>
+          _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
+      >
+        {({width, height, data: tdata}) => (
+          <DonutChart
+            width={width}
+            height={height}
+            data={tdata}
+          />
+        )}
+      </DataDisplay>
     )}
-  </DataDisplay>
+  </TaskStatusLoader>
 );
 
 export default TasksStatusDisplay;

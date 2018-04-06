@@ -26,16 +26,20 @@ import _ from 'gmp/locale';
 
 import CvssDisplay from '../../../components/dashboard2/data/cvssdisplay';
 
-import {TASKS_SEVERITY} from './loaders';
+import {TasksSeverityLoader} from './loaders';
 
 const TasksCvssDisplay = props => (
-  <CvssDisplay
-    {...props}
-    dataId={TASKS_SEVERITY}
-    title={({data = {}}) =>
-      _('Tasks by CVSS (Total: {{count}})',
-        {count: data.total})}
-  />
+  <TasksSeverityLoader>
+    {({data}) => (
+      <CvssDisplay
+        {...props}
+        data={data}
+        title={({data: tdata = {}}) =>
+          _('Tasks by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </TasksSeverityLoader>
 );
 
 export default TasksCvssDisplay;

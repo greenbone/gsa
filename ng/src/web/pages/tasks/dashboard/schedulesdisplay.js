@@ -30,7 +30,7 @@ import ScheduleChart from '../../../components/chart/schedule';
 
 import DataDisplay from '../../../components/dashboard2/data/display';
 
-import {TASKS_SCHEDULES} from './loaders';
+import {TasksSchedulesLoader} from './loaders';
 
 const transformScheduleData = (data = []) => {
   return data
@@ -49,20 +49,24 @@ const transformScheduleData = (data = []) => {
 };
 
 const TasksSchedulesDisplay = props => (
-  <DataDisplay
-    {...props}
-    dataTransform={transformScheduleData}
-    dataId={TASKS_SCHEDULES}
-    title={() => _('Next Scheduled Tasks')}
-  >
-    {({width, height, data}) => (
-      <ScheduleChart
-        width={width}
-        height={height}
+  <TasksSchedulesLoader>
+    {({data}) => (
+      <DataDisplay
+        {...props}
         data={data}
-      />
+        dataTransform={transformScheduleData}
+        title={() => _('Next Scheduled Tasks')}
+      >
+        {({width, height, data: tdata}) => (
+          <ScheduleChart
+            width={width}
+            height={height}
+            data={tdata}
+          />
+        )}
+      </DataDisplay>
     )}
-  </DataDisplay>
+  </TasksSchedulesLoader>
 );
 
 export default TasksSchedulesDisplay;

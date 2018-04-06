@@ -26,16 +26,20 @@ import _ from 'gmp/locale';
 
 import SeverityClassDisplay from '../../../components/dashboard2/data/severityclassdisplay'; // eslint-disable-line max-len
 
-import {TASKS_SEVERITY} from './loaders';
+import {TasksSeverityLoader} from './loaders';
 
 const TasksSeverityDisplay = props => (
-  <SeverityClassDisplay
-    {...props}
-    dataId={TASKS_SEVERITY}
-    title={({data}) =>
-      _('Tasks by Severity Class (Total: {{count}})',
-        {count: data.total})}
-  />
+  <TasksSeverityLoader>
+    {({data}) => (
+      <SeverityClassDisplay
+        {...props}
+        data={data}
+        title={({data: tdata}) =>
+          _('Tasks by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </TasksSeverityLoader>
 );
 
 export default TasksSeverityDisplay;
