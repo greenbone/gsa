@@ -28,24 +28,25 @@ import {
 
 import {getDashboardDataById, getIsLoading} from './selectors';
 
-const loader = (id, func) => props => (dispatch, getState) => {
+export const loadFunc = (func, id) => ({dataId = id, ...props}) =>
+  (dispatch, getState) => {
   const rootState = getState();
-  const state = getDashboardDataById(rootState, id);
+  const state = getDashboardDataById(rootState, dataId);
 
   if (getIsLoading(state)) {
     // we are already loading data
     return Promise.resolve();
   }
 
-  dispatch(requestDashboardData(id));
+  dispatch(requestDashboardData(dataId));
 
   const promise = func(props);
   return promise.then(
-    data => dispatch(receivedDashboardData(id, data)),
-    error => dispatch(receivedDashboardError(id, error)),
+    data => dispatch(receivedDashboardData(dataId, data)),
+    error => dispatch(receivedDashboardError(dataId, error)),
   );
 };
 
-export default loader;
+export default loadFunc;
 
 // vim: set ts=2 sw=2 tw=80:

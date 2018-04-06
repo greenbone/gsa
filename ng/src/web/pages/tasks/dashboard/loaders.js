@@ -20,23 +20,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import loader from '../../../components/dashboard2/data/loader';
+import {loadFunc} from '../../../components/dashboard2/data/loader';
 
 export const TASKS_STATUS = 'tasks-status';
 export const TASKS_SEVERITY = 'tasks-severity';
 export const TASKS_SCHEDULES = 'tasks-schedules';
 
-export const tasksStatusLoader = loader(TASKS_STATUS,
-  ({gmp}) => gmp.tasks.getStatusAggregates().then(r => r.data));
+export const tasksStatusLoader = loadFunc(
+  ({gmp}) => gmp.tasks.getStatusAggregates().then(r => r.data),
+  TASKS_STATUS);
 
-export const tasksSeverityLoader = loader(TASKS_SEVERITY,
-  ({gmp}) => gmp.tasks.getSeverityAggregates().then(r => r.data));
+export const tasksSeverityLoader = loadFunc(
+  ({gmp}) => gmp.tasks.getSeverityAggregates().then(r => r.data),
+  TASKS_SEVERITY);
 
-export const tasksSchedulesLoader = loader(TASKS_SCHEDULES,
+export const tasksSchedulesLoader = loadFunc(
   ({gmp}) => gmp.tasks.getAll({
     ignore_pagination: 1,
     no_filter_history: 1,
     schedules_only: 1,
-  }).then(r => r.data));
+  }).then(r => r.data),
+  TASKS_SCHEDULES);
 
 // vim: set ts=2 sw=2 tw=80:

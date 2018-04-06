@@ -21,11 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import loader from '../../../components/dashboard2/data/loader';
+import {loadFunc} from '../../../components/dashboard2/data/loader';
 
 export const VULNS_SEVERITY = 'vulns-severity';
 
-export const vulnsSeverityLoader = loader(VULNS_SEVERITY,
-  ({gmp}) => gmp.vulns.getSeverityAggregates().then(r => r.data));
+export const vulnsSeverityLoader = loadFunc(
+  ({gmp}) => gmp.vulns.getSeverityAggregates().then(r => r.data),
+  VULNS_SEVERITY);
 
 // vim: set ts=2 sw=2 tw=80:
