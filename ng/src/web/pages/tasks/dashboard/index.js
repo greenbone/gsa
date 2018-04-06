@@ -26,12 +26,6 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {
-  tasksStatusLoader,
-  tasksSeverityLoader,
-  tasksSchedulesLoader,
-} from './loaders';
-
 import TasksStatusDisplay from './statusdisplay';
 import TasksSeverityDisplay from './severityclassdisplay';
 import TasksSchedulesDisplay from './schedulesdisplay';
@@ -41,11 +35,6 @@ const TaskDashboard = ({
   filter,
 }) => (
   <Dashboard
-    loaders={[
-      tasksStatusLoader,
-      tasksSeverityLoader,
-      tasksSchedulesLoader,
-    ]}
     components={{
       'tasks-status': TasksStatusDisplay,
       'tasks-severity-class': TasksSeverityDisplay,

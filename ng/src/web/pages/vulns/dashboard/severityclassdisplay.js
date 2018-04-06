@@ -27,16 +27,20 @@ import _ from 'gmp/locale';
 
 import SeverityClassDisplay from '../../../components/dashboard2/data/severityclassdisplay'; // eslint-disable-line max-len
 
-import {VULNS_SEVERITY} from './loaders';
+import {VulnsSeverityLoader} from './loaders';
 
 const VulnsSeverityDisplay = props => (
-  <SeverityClassDisplay
-    {...props}
-    dataId={VULNS_SEVERITY}
-    title={({data}) =>
-      _('Vulnerabilities by Severity Class (Total: {{count}})',
-        {count: data.total})}
-  />
+  <VulnsSeverityLoader>
+    {({data}) => (
+      <SeverityClassDisplay
+        {...props}
+        data={data}
+        title={({data: tdata}) =>
+          _('Vulnerabilities by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </VulnsSeverityLoader>
 );
 
 export default VulnsSeverityDisplay;

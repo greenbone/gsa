@@ -23,8 +23,6 @@
  */
 import React from 'react';
 
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
@@ -37,9 +35,7 @@ import Display, {
   DISPLAY_HEADER_HEIGHT,
 } from '../display';
 
-import * as fromDashboardData from './selectors';
-
-let DataDisplay = ({
+const DataDisplay = ({
   children,
   data,
   dataTransform,
@@ -89,16 +85,6 @@ DataDisplay.propTypes = {
   width: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,
 };
-
-const mapStateToProps = (rootState, {dataId}) => {
-  const state = fromDashboardData.getDashboardDataById(rootState, dataId);
-  return {
-    data: fromDashboardData.getData(state),
-    isLoading: fromDashboardData.getIsLoading(state),
-  };
-};
-
-DataDisplay = connect(mapStateToProps)(DataDisplay);
 
 export default DataDisplay;
 

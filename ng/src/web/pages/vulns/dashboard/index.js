@@ -27,8 +27,6 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {vulnsSeverityLoader} from './loaders';
-
 import VulnsCvssDisplay from './cvssdisplay';
 import VulnsSeverityDisplay from './severityclassdisplay';
 
@@ -36,9 +34,6 @@ const VulnerabilitiesDashboard = ({
   filter,
 }) => (
   <Dashboard
-    loaders={[
-      vulnsSeverityLoader,
-    ]}
     components={{
       'vulns-cvss': VulnsCvssDisplay,
       'vulns-severity-class': VulnsSeverityDisplay,

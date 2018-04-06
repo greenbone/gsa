@@ -1,10 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,23 +22,24 @@
  */
 import React from 'react';
 
-import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
+import PropTypes from './proptypes.js';
 
-export const VULNS_SEVERITY = 'vulns-severity';
+const withSubscription = Component => {
 
-export const vulnsSeverityLoader = loadFunc(
-  ({gmp}) => gmp.vulns.getSeverityAggregates().then(r => r.data),
-  VULNS_SEVERITY);
+  const SubscriptionWrapper = (props, context) => (
+    <Component
+      {...props}
+      subscribe={context.subscribe}
+    />
+  );
 
-export const VulnsSeverityLoader = props => (
-  <Loader
-    {...props}
-    dataId={VULNS_SEVERITY}
-    load={vulnsSeverityLoader}
-    subscriptions={[
-      'vulns.timer',
-      'vulns.changed',
-    ]}
-  />
-);
+  SubscriptionWrapper.contextTypes = {
+    subscribe: PropTypes.func.isRequired,
+  };
+
+  return SubscriptionWrapper;
+};
+
+export default withSubscription;
+
 // vim: set ts=2 sw=2 tw=80:

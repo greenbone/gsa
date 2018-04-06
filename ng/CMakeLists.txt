@@ -317,6 +317,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
+     ${NG_SRC_DIR}/src/web/components/provider/subscriptionprovider.js
      ${NG_SRC_DIR}/src/web/components/section/header.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
@@ -709,6 +710,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/withContext.js
      ${NG_SRC_DIR}/src/web/utils/withGmp.js
      ${NG_SRC_DIR}/src/web/utils/withPrefix.js
+     ${NG_SRC_DIR}/src/web/utils/withSubscription.js
      ${NG_SRC_DIR}/src/web/utils/withUserName.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/modifytaskwizard.js

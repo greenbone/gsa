@@ -98,7 +98,6 @@ const transformSeverityData = (
 
 const SeverityClassDisplay = ({
   severityClass,
-  dataId,
   title,
   ...props
 }) => (
@@ -106,7 +105,6 @@ const SeverityClassDisplay = ({
     {...props}
     severityClass={severityClass}
     dataTransform={transformSeverityData}
-    dataId={dataId}
     title={title}
   >
     {({width, height, data}) => (
@@ -120,7 +118,6 @@ const SeverityClassDisplay = ({
 );
 
 SeverityClassDisplay.propTypes = {
-  dataId: PropTypes.string.isRequired,
   severityClass: PropTypes.severityClass,
   title: PropTypes.func.isRequired,
 };

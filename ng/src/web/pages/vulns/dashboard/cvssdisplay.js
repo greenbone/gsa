@@ -27,16 +27,20 @@ import _ from 'gmp/locale';
 
 import CvssDisplay from '../../../components/dashboard2/data/cvssdisplay';
 
-import {VULNS_SEVERITY} from './loaders';
+import {VulnsSeverityLoader} from './loaders';
 
 const VulnsSeverityDisplay = props => (
-  <CvssDisplay
-    {...props}
-    dataId={VULNS_SEVERITY}
-    title={({data}) =>
-      _('Vulnerabilities by CVSS (Total: {{count}})',
-        {count: data.total})}
-  />
+  <VulnsSeverityLoader>
+    {({data}) => (
+      <CvssDisplay
+        {...props}
+        data={data}
+        title={({data: tdata}) =>
+          _('Vulnerabilities by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </VulnsSeverityLoader>
 );
 
 export default VulnsSeverityDisplay;

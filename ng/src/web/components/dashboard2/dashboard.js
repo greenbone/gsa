@@ -24,24 +24,17 @@ import 'core-js/fn/object/entries';
 
 import React from 'react';
 
-import {connect} from 'react-redux';
-
 import {is_defined} from 'gmp/utils/identity';
 
 import Grid, {createRow, createItem} from '../sortable/grid.js';
 
-import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
 
 class Dashboard extends React.Component {
 
   static propTypes = {
     components: PropTypes.object,
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-    dispatch: PropTypes.func.isRequired,
-    gmp: PropTypes.gmp.isRequired,
-    loaders: PropTypes.arrayOf(PropTypes.func),
     maxItemsPerRow: PropTypes.number,
   }
 
@@ -56,16 +49,7 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.load();
     this.createItems();
-  }
-
-  load() {
-    const {loaders = [], dispatch, gmp} = this.props;
-
-    for (const loader of loaders) {
-      dispatch(loader({gmp}));
-    }
   }
 
   createItems() {
@@ -123,9 +107,6 @@ class Dashboard extends React.Component {
   }
 }
 
-export default compose(
-  withGmp,
-  connect(),
-)(Dashboard);
+export default Dashboard;
 
 // vim: set ts=2 sw=2 tw=80:
