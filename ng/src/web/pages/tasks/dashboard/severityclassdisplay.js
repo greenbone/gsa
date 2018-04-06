@@ -41,10 +41,15 @@ import PropTypes from '../../../utils/proptypes';
 import DonutChart from '../../../components/chart/donut3d';
 
 import DataDisplay from '../../../components/dashboard2/data/display';
+import {
+  EMPTY,
+  totalCount,
+  percent,
+  riskFactorColorScale,
+} from '../../../components/dashboard2/data/utils';
 
 import {TASKS_SEVERITY} from './loaders';
 
-import {EMPTY, totalCount, percent, riskFactorColorScale} from './common';
 
 const transformSeverityData = (data = {}, {severityClass}) => {
   const {group: groups} = data;

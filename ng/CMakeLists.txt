@@ -210,10 +210,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard2/display.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/displaymenu.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/actions.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/display.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/loader.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/reducers.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/selectors.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/utils.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js
@@ -648,7 +650,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/charts.js
      ${NG_SRC_DIR}/src/web/pages/tasks/component.js
      ${NG_SRC_DIR}/src/web/pages/tasks/containerdialog.js
-     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/common.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/loaders.js

@@ -34,9 +34,13 @@ import {map} from 'gmp/utils/array';
 import DonutChart from '../../../components/chart/donut3d';
 
 import DataDisplay from '../../../components/dashboard2/data/display';
+import {
+  EMPTY,
+  totalCount,
+  percent,
+} from '../../../components/dashboard2/data/utils';
 
 import {TASKS_STATUS} from './loaders';
-import {EMPTY, totalCount, percent} from './common';
 
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');
