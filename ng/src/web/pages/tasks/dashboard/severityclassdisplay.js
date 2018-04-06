@@ -24,97 +24,19 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
-import {is_empty} from 'gmp/utils/string';
-
-import {parse_float} from 'gmp/parser';
-
-import {
-  NA_VALUE,
-  resultSeverityRiskFactor,
-  translateRiskFactor,
-} from '../../../utils/severity';
-
-import PropTypes from '../../../utils/proptypes';
-
-import DonutChart from '../../../components/chart/donut3d';
-
-import DataDisplay from '../../../components/dashboard2/data/display';
-import {
-  EMPTY,
-  totalCount,
-  percent,
-  riskFactorColorScale,
-} from '../../../components/dashboard2/data/utils';
+import SeverityClassDisplay from '../../../components/dashboard2/data/severityclassdisplay'; // eslint-disable-line max-len
 
 import {TASKS_SEVERITY} from './loaders';
 
-
-const transformSeverityData = (data = {}, {severityClass}) => {
-  const {group: groups} = data;
-
-  if (!is_defined(groups)) {
-    return EMPTY;
-  };
-
-  const sum = totalCount(groups);
-
-  const tdata = map(groups, group => {
-    const {count} = group;
-
-    let {value} = group;
-    if (is_empty(value)) {
-      value = NA_VALUE;
-    }
-    else {
-      value = parse_float(value);
-    }
-
-    const perc = percent(count, sum);
-    const riskFactor = resultSeverityRiskFactor(value, severityClass);
-    const label = translateRiskFactor(riskFactor);
-
-    // TODO add severity class ranges (e.g. 9.1 - 10 High) to label
-    return {
-      value: count,
-      label,
-      toolTip: `${label}: ${perc}% (${count})`,
-      color: riskFactorColorScale(riskFactor),
-    };
-  });
-
-  tdata.total = sum;
-
-  return tdata;
-};
-
-const TasksSeverityDisplay = ({
-  severityClass,
-  ...props
-}) => (
-  <DataDisplay
+const TasksSeverityDisplay = props => (
+  <SeverityClassDisplay
     {...props}
-    severityClass={severityClass}
-    dataTransform={transformSeverityData}
     dataId={TASKS_SEVERITY}
     title={({data}) =>
       _('Tasks by Severity Class (Total: {{count}})',
         {count: data.total})}
-  >
-    {({width, height, data}) => (
-      <DonutChart
-        width={width}
-        height={height}
-        data={data}
-      />
-    )}
-  </DataDisplay>
+  />
 );
-
-TasksSeverityDisplay.propTypes = {
-  severityClass: PropTypes.severityClass,
-};
 
 export default TasksSeverityDisplay;
 
