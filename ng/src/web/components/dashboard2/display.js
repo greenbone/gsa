@@ -44,6 +44,7 @@ const HeaderContainer = glamorous.div('display-header-container', {
   zIndex: Theme.Layers.higher,
   height: DISPLAY_HEADER_HEIGHT + 'px',
   display: 'flex',
+  flexShrink: 0,
 });
 
 const Header = glamorous.div('display-header', {

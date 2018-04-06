@@ -22,8 +22,6 @@
  */
 import {scaleOrdinal} from 'd3-scale';
 
-import {map} from 'gmp/utils/array';
-
 import {parse_int} from 'gmp/parser';
 
 import {
@@ -37,9 +35,13 @@ import {
   NA,
 } from '../../../utils/severity';
 
-export const totalCount = groups =>
-  map(groups, group => parse_int(group.count))
+export const totalCount = (groups = []) => {
+  if (groups.length === 0) {
+    return 0;
+  }
+  return groups.map(group => parse_int(group.count))
     .reduce((prev, cur) => prev + cur);
+};
 
 export const EMPTY = [];
 EMPTY.total = 0;

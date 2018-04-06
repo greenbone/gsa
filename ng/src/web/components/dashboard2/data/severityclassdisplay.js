@@ -23,10 +23,8 @@
 import React from 'react';
 
 import {is_defined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
-import {is_empty} from 'gmp/utils/string';
 
-import {parse_float} from 'gmp/parser';
+import {parse_severity, parse_int} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -46,7 +44,10 @@ import {
   riskFactorColorScale,
 } from './utils';
 
-const transformSeverityData = (data = {}, {severityClass}) => {
+const transformSeverityData = (
+  data = {},
+  {severityClass: severityClassType}
+) => {
   const {group: groups} = data;
 
   if (!is_defined(groups)) {
@@ -55,22 +56,33 @@ const transformSeverityData = (data = {}, {severityClass}) => {
 
   const sum = totalCount(groups);
 
-  const tdata = map(groups, group => {
-    const {count} = group;
-
+  const severityClasses = groups.reduce((allSeverityClasses, group) => {
     let {value} = group;
-    if (is_empty(value)) {
+
+    value = parse_severity(value);
+    if (!is_defined(value)) {
       value = NA_VALUE;
     }
-    else {
-      value = parse_float(value);
-    }
 
+    const riskFactor = resultSeverityRiskFactor(value, severityClassType);
+    const severityClass = allSeverityClasses[riskFactor] || {};
+
+    let {count = 0, label = translateRiskFactor(riskFactor)} = severityClass;
+    count += parse_int(group.count);
+
+    allSeverityClasses[riskFactor] = {
+      count,
+      label,
+      riskFactor,
+    };
+
+    return allSeverityClasses;
+  }, {});
+
+  const tdata = Object.values(severityClasses).map(severityClass => {
+    const {count, label, riskFactor} = severityClass;
     const perc = percent(count, sum);
-    const riskFactor = resultSeverityRiskFactor(value, severityClass);
-    const label = translateRiskFactor(riskFactor);
-
-    // TODO add severity class ranges (e.g. 9.1 - 10 High) to label
+    // TODO add severity class ranges (e.g. 9.1 - 10 High) to tooltip
     return {
       value: count,
       label,
