@@ -20,7 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {loadFunc} from '../../../components/dashboard2/data/loader';
+import React from 'react';
+
+import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
 
 export const TASKS_STATUS = 'tasks-status';
 export const TASKS_SEVERITY = 'tasks-severity';
@@ -41,5 +43,38 @@ export const tasksSchedulesLoader = loadFunc(
     schedules_only: 1,
   }).then(r => r.data),
   TASKS_SCHEDULES);
+
+export const TaskStatusLoader = props => (
+  <Loader
+    dataId={TASKS_STATUS}
+    load={tasksStatusLoader}
+    subscriptions={[
+      'tasks.timer',
+      'tasks.changed',
+    ]}
+  />
+);
+
+export const TasksSchedulesLoader = props => (
+  <Loader
+    dataId={TASKS_SCHEDULES}
+    load={tasksSchedulesLoader}
+    subscriptions={[
+      'tasks.timer',
+      'tasks.changed',
+    ]}
+  />
+);
+
+export const TasksSeverityLoader = props => (
+  <Loader
+    dataId={TASKS_SEVERITY}
+    load={tasksSeverityLoader}
+    subscriptions={[
+      'tasks.timer',
+      'tasks.changed',
+    ]}
+  />
+);
 
 // vim: set ts=2 sw=2 tw=80:
