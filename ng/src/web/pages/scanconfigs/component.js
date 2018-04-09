@@ -161,7 +161,7 @@ class ScanConfigComponent extends React.Component {
     const {gmp} = this.props;
     return gmp.scanconfig.saveScanConfigFamily(data).then(() => {
       return this.loadEditScanConfigSettings(data.config);
-    }).then(state => this.setState({state}));
+    }).then(state => this.setState({...state}));
   }
 
   handleSaveConfigNvt(values) {
@@ -241,6 +241,7 @@ class ScanConfigComponent extends React.Component {
 
   loadEditScanConfigFamilySettings(config, name) {
     const {gmp} = this.props;
+    const {select} = this.state;
 
     return gmp.scanconfig.editScanConfigFamilySettings({
       id: config.id,
@@ -251,9 +252,16 @@ class ScanConfigComponent extends React.Component {
       const {nvts} = data;
       const selected = {};
 
-      for_each(nvts, nvt => {
-        selected[nvt.oid] = nvt.selected;
-      });
+      if (select[name]) {
+        for_each(nvts, nvt => {
+          selected[nvt.oid] = YES_VALUE;
+        });
+      }
+      else {
+        for_each(nvts, nvt => {
+          selected[nvt.oid] = nvt.selected;
+        });
+      }
 
       const state = {
         config: data.config,
