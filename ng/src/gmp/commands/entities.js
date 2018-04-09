@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_string} from '../utils/identity';
+import {is_defined, is_string, is_array} from '../utils/identity';
 import {map} from '../utils/array';
 
 import logger from '../log.js';
@@ -147,8 +147,24 @@ class EntitiesCommand extends HttpCommand {
   }
 
   transformAggregates(response) {
-    return response.setData(
-      response.data.get_aggregate.get_aggregates_response.aggregate);
+    const {aggregate} = response.data.get_aggregate.get_aggregates_response;
+
+    const ret = {
+      ...aggregate,
+    };
+
+    // ensure groups is always an array
+    let {group: groups = []} = aggregate;
+
+    if (!is_array(groups)) {
+       groups = [groups];
+    }
+
+    ret.groups = groups;
+
+    delete ret.group;
+
+    return response.setData(ret);
   }
 
   getAggregates(params = {}) {

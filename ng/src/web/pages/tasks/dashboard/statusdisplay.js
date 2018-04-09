@@ -28,14 +28,11 @@ import {interpolateHcl} from 'd3-interpolate';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
 
 import DonutChart from '../../../components/chart/donut3d';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
 import {
-  EMPTY,
   totalCount,
   percent,
 } from '../../../components/dashboard2/display/utils';
@@ -74,15 +71,11 @@ const taskStatusColorScale = scaleOrdinal()
   ]);
 
 const transformStatusData = (data = {}) => {
-  const {group: groups} = data;
-
-  if (!is_defined(groups)) {
-    return EMPTY;
-  };
+  const {groups = []} = data;
 
   const sum = totalCount(groups);
 
-  const tdata = map(groups, group => {
+  const tdata = groups.map(group => {
     const {count, value} = group;
     const perc = percent(count, sum);
     return {
