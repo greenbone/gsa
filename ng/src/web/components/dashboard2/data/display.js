@@ -50,6 +50,8 @@ const DataDisplay = ({
 }) => {
   height = height - DISPLAY_HEADER_HEIGHT;
 
+  isLoading = isLoading && !is_defined(data);
+
   if (is_defined(dataTransform)) {
     data = dataTransform(data, props);
   }
