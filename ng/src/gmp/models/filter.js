@@ -191,6 +191,23 @@ class Filter extends Model {
   }
 
   /**
+   * Merges all terms from filter into this Filter
+   *
+   *
+   * @private
+   *
+   * @param {Filter} filter  Terms from filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+  _merge(filter) {
+    if (is_defined(filter)) {
+      this._addTerm(...filter.getAllTerms());
+    }
+    return this;
+  }
+
+  /**
    * Calls passed function for each FilterTerm in this Filter
    *
    * @param {function} func  Function to call for each FilterTerm.
