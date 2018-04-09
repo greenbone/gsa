@@ -24,6 +24,8 @@ import React from 'react';
 
 import {color as d3color} from 'd3-color';
 
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
 
@@ -229,6 +231,7 @@ class Donut3DChart extends React.Component {
     const {
       data = [],
       height,
+      onDataClick,
     } = this.props;
 
     if (this.legend) {
@@ -291,6 +294,8 @@ class Donut3DChart extends React.Component {
                       <Group
                         onMouseEnter={show}
                         onMouseLeave={hide}
+                        onClick={is_defined(onDataClick) ?
+                          () => onDataClick(arcData) : undefined}
                       >
                         <PieInnerPath
                           startAngle={startAngle}
@@ -348,6 +353,7 @@ Donut3DChart.propTypes = {
   })),
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
+  onDataClick: PropTypes.func,
 };
 
 export default Donut3DChart;
