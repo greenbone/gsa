@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import PropTypes from '../../../utils/proptypes';
+
 import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
 
 export const TASKS_STATUS = 'tasks-status';
@@ -29,42 +31,54 @@ export const TASKS_SEVERITY = 'tasks-severity';
 export const TASKS_SCHEDULES = 'tasks-schedules';
 
 export const tasksStatusLoader = loadFunc(
-  ({gmp}) => gmp.tasks.getStatusAggregates().then(r => r.data),
+  ({gmp, filter}) => gmp.tasks.getStatusAggregates({filter}).then(r => r.data),
   TASKS_STATUS);
 
 export const tasksSeverityLoader = loadFunc(
-  ({gmp}) => gmp.tasks.getSeverityAggregates().then(r => r.data),
+  ({gmp, filter}) => gmp.tasks.getSeverityAggregates({filter})
+    .then(r => r.data),
   TASKS_SEVERITY);
 
 export const tasksSchedulesLoader = loadFunc(
-  ({gmp}) => gmp.tasks.getAll({
+  ({gmp, filter}) => gmp.tasks.getAll({
+    filter,
     ignore_pagination: 1,
     no_filter_history: 1,
     schedules_only: 1,
   }).then(r => r.data),
   TASKS_SCHEDULES);
 
+const loaderPropTypes = {
+  children: PropTypes.func,
+  filter: PropTypes.filter,
+};
+
 export const TaskStatusLoader = ({
   children,
+  filter,
 }) => (
   <Loader
     dataId={TASKS_STATUS}
+    filter={filter}
     load={tasksStatusLoader}
     subscriptions={[
       'tasks.timer',
       'tasks.changed',
     ]}
-    children={children}
   >
     {children}
   </Loader>
 );
 
+TaskStatusLoader.propTypes = loaderPropTypes;
+
 export const TasksSchedulesLoader = ({
   children,
+  filter,
 }) => (
   <Loader
     dataId={TASKS_SCHEDULES}
+    filter={filter}
     load={tasksSchedulesLoader}
     subscriptions={[
       'tasks.timer',
@@ -75,11 +89,15 @@ export const TasksSchedulesLoader = ({
   </Loader>
 );
 
+TasksSchedulesLoader.propTypes = loaderPropTypes;
+
 export const TasksSeverityLoader = ({
   children,
+  filter,
 }) => (
   <Loader
     dataId={TASKS_SEVERITY}
+    filter={filter}
     load={tasksSeverityLoader}
     subscriptions={[
       'tasks.timer',
@@ -89,5 +107,7 @@ export const TasksSeverityLoader = ({
     {children}
   </Loader>
 );
+
+TasksSeverityLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:

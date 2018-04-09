@@ -26,6 +26,8 @@ import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import PropTypes from '../../../utils/proptypes';
+
 import ScheduleChart from '../../../components/chart/schedule';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
@@ -48,8 +50,13 @@ const transformScheduleData = (data = []) => {
     });
 };
 
-const TasksSchedulesDisplay = props => (
-  <TasksSchedulesLoader>
+const TasksSchedulesDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksSchedulesLoader
+    filter={filter}
+  >
     {({data}) => (
       <DataDisplay
         {...props}
@@ -68,6 +75,10 @@ const TasksSchedulesDisplay = props => (
     )}
   </TasksSchedulesLoader>
 );
+
+TasksSchedulesDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
 export default TasksSchedulesDisplay;
 
