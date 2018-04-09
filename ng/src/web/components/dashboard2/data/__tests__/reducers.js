@@ -43,6 +43,7 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardData({}, action)).toEqual({
       [id]: {
         isLoading: true,
+        error: null,
       },
     });
   });
@@ -56,6 +57,7 @@ describe('dashboard data reducers tests', () => {
       [id]: {
         isLoading: false,
         data,
+        error: null,
       },
     });
   });
