@@ -149,7 +149,11 @@ class LineChart extends React.Component {
   }
 
   componentWillReceiveProps(next) {
-    this.setState(this.updateData(next));
+    const {width, height, data} = this.props;
+
+    if (width !== next.width || height !== next.height || data !== next.data) {
+      this.setState(this.updateData(next));
+    }
   }
 
   hideInfo() {
