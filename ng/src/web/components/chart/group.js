@@ -22,7 +22,15 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../utils/proptypes';
+
+const StyledGroup = glamorous.g(({onClick}) => is_defined(onClick) ? {
+  cursor: 'pointer',
+} : undefined);
 
 const Group = ({
   left = 0,
@@ -30,7 +38,7 @@ const Group = ({
   scale = 1,
   ...props
 }) => (
-  <g
+  <StyledGroup
     transform={`translate(${left}, ${top}),scale(${scale})`}
     {...props}
   />
