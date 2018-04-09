@@ -24,7 +24,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import CvssDisplay from '../../../components/dashboard2/data/cvssdisplay';
+import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
 
 import {TasksSeverityLoader} from './loaders';
 

@@ -28,7 +28,7 @@ import {is_defined} from 'gmp/utils/identity';
 
 import ScheduleChart from '../../../components/chart/schedule';
 
-import DataDisplay from '../../../components/dashboard2/data/display';
+import DataDisplay from '../../../components/dashboard2/display/datadisplay';
 
 import {TasksSchedulesLoader} from './loaders';
 

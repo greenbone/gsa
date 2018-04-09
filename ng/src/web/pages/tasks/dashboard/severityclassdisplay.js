@@ -24,7 +24,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import SeverityClassDisplay from '../../../components/dashboard2/data/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
 
 import {TasksSeverityLoader} from './loaders';
 

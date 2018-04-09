@@ -36,7 +36,8 @@ import PropTypes from '../../../utils/proptypes';
 
 import DonutChart from '../../chart/donut3d';
 
-import DataDisplay from '../../../components/dashboard2/data/display';
+import DataDisplay from './datadisplay';
+
 import {
   EMPTY,
   totalCount,
