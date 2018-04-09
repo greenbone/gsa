@@ -22,8 +22,6 @@
  */
 import React from 'react';
 
-import {is_defined} from 'gmp/utils/identity';
-import {for_each} from 'gmp/utils/array';
 import {is_empty} from 'gmp/utils/string';
 
 import {parse_int, parse_float} from 'gmp/parser';
@@ -46,7 +44,7 @@ import BarChart from '../../chart/bar';
 
 import DataDisplay from './datadisplay';
 
-import {EMPTY, totalCount, percent, riskFactorColorScale} from './utils';
+import {totalCount, percent, riskFactorColorScale} from './utils';
 
 const getSeverityClassLabel = value => {
   switch (value) {
@@ -64,13 +62,10 @@ const getSeverityClassLabel = value => {
 };
 
 const transformCvssData = (data = {}, {severityClass}) => {
-  const {group: groups} = data;
-
-  if (!is_defined(groups)) {
-    return EMPTY;
-  };
+  const {groups = []} = data;
 
   const sum = totalCount(groups);
+
   const cvssData = {
     [NA_VALUE]: 0,
     [LOG_VALUE]: 0,
@@ -86,7 +81,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
     10: 0,
   };
 
-  for_each(groups, group => {
+  groups.forEach(group => {
     let {value, count = 0} = group;
     if (is_empty(value)) {
       value = NA_VALUE;

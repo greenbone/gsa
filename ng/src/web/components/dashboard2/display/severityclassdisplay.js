@@ -39,7 +39,6 @@ import DonutChart from '../../chart/donut3d';
 import DataDisplay from './datadisplay';
 
 import {
-  EMPTY,
   totalCount,
   percent,
   riskFactorColorScale,
@@ -49,11 +48,7 @@ const transformSeverityData = (
   data = {},
   {severityClass: severityClassType}
 ) => {
-  const {group: groups} = data;
-
-  if (!is_defined(groups)) {
-    return EMPTY;
-  };
+  const {groups = []} = data;
 
   const sum = totalCount(groups);
 
