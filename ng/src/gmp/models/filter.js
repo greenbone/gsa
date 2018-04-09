@@ -126,7 +126,7 @@ class Filter extends Model {
   }
 
   /**
-   * Add a FilterTerm to this Filter
+   * Add FilterTerm to this Filter
    *
    * Adds the passed FilterTerm to the list of filtertems in this Filter.
    *
@@ -136,8 +136,8 @@ class Filter extends Model {
    *
    * @return {Filter} This filter
    */
-  _addTerm(term) {
-    this.terms.push(term);
+  _addTerm(...terms) {
+    this.terms.push(...terms);
     return this;
   }
 
