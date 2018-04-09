@@ -28,6 +28,7 @@ import {interpolateHcl} from 'd3-interpolate';
 
 import _ from 'gmp/locale';
 
+import PropTypes from '../../../utils/proptypes';
 
 import DonutChart from '../../../components/chart/donut3d';
 
@@ -91,8 +92,13 @@ const transformStatusData = (data = {}) => {
   return tdata;
 };
 
-const TasksStatusDisplay = props => (
-  <TaskStatusLoader>
+const TasksStatusDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TaskStatusLoader
+    filter={filter}
+  >
     {({data}) => (
       <DataDisplay
         {...props}
@@ -112,6 +118,10 @@ const TasksStatusDisplay = props => (
     )}
   </TaskStatusLoader>
 );
+
+TasksStatusDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
 export default TasksStatusDisplay;
 

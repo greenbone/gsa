@@ -35,6 +35,7 @@ const TaskDashboard = ({
   filter,
 }) => (
   <Dashboard
+    filter={filter}
     components={{
       'tasks-status': TasksStatusDisplay,
       'tasks-severity-class': TasksSeverityDisplay,

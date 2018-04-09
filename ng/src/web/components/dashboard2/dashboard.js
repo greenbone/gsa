@@ -35,6 +35,7 @@ class Dashboard extends React.Component {
   static propTypes = {
     components: PropTypes.object,
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    filter: PropTypes.filter,
     maxItemsPerRow: PropTypes.number,
   }
 
@@ -81,7 +82,7 @@ class Dashboard extends React.Component {
 
   render() {
     const {items} = this.state;
-    const {maxItemsPerRow, components = {}} = this.props;
+    const {maxItemsPerRow, filter, components = {}} = this.props;
 
     return (
       <Grid
@@ -94,6 +95,7 @@ class Dashboard extends React.Component {
           const Component = components[elementId];
           return is_defined(Component) ? (
             <Component
+              filter={filter}
               dragHandleProps={dragHandleProps}
               height={height}
               width={width}

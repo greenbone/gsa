@@ -24,12 +24,19 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import PropTypes from '../../../utils/proptypes';
+
 import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
 
 import {TasksSeverityLoader} from './loaders';
 
-const TasksSeverityDisplay = props => (
-  <TasksSeverityLoader>
+const TasksSeverityDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksSeverityLoader
+    filter={filter}
+  >
     {({data}) => (
       <SeverityClassDisplay
         {...props}
@@ -41,6 +48,10 @@ const TasksSeverityDisplay = props => (
     )}
   </TasksSeverityLoader>
 );
+
+TasksSeverityDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
 export default TasksSeverityDisplay;
 
