@@ -216,117 +216,128 @@ EmptyDonut.propTypes = {
   top: PropTypes.number.isRequired,
 };
 
-const Donut3DChart = ({
-  data = [],
-  height,
-  width,
-}) => {
-  if (this.legend) {
-    const {width: legendWidth} = this.legend.getBoundingClientRect();
-    width = width - legendWidth - LEGEND_MARGIN;
+class Donut3DChart extends React.Component {
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.data !== this.props.data ||
+      nextProps.width !== this.props.width ||
+      nextProps.height !== this.props.height;
   }
 
-  const horizontalMargin = margin.left + margin.right;
-  const verticalMargin = margin.top + margin.left;
+  render() {
+    let {width} = this.props;
+    const {
+      data = [],
+      height,
+    } = this.props;
 
-  const donutHeight = Math.min(height, width) / 8;
+    if (this.legend) {
+      const {width: legendWidth} = this.legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
+    }
 
-  const innerRadius = 0.5;
+    const horizontalMargin = margin.left + margin.right;
+    const verticalMargin = margin.top + margin.left;
 
-  const centerX = width / 2;
-  const centerY = height / 2 - donutHeight / 2;
-  const outerRadiusX = width / 2 - horizontalMargin;
-  const outerRadiusY = (Math.min(height / 2, width / 2) - donutHeight / 2) -
-    verticalMargin;
-  const innerRadiusX = outerRadiusX * innerRadius;
-  const innerRadiusY = outerRadiusY * innerRadius;
+    const donutHeight = Math.min(height, width) / 8;
 
-  const props = {
-    outerRadiusX,
-    outerRadiusY,
-    donutHeight,
-    innerRadiusX,
-    innerRadiusY,
-  };
-  return (
-    <Layout align={['start', 'start']}>
-      <Svg width={width} height={height}>
-        {data.length > 0 ?
-          <Pie
-            data={data}
-            pieSort={null}
-            pieValue={d => d.value}
-            arcsSort={sortArcsByStartAngle}
-            top={centerY}
-            left={centerX}
-            {...props}
-          >
-            {({
-              data: arcData,
-              index,
-              startAngle,
-              endAngle,
-              path: arcPath,
-              x,
-              y,
-            }) => {
-              const {color = Theme.lightGray, toolTip} = arcData;
-              const darker = d3color(color).darker();
-              return (
-                <ToolTip
-                  key={index}
-                  content={toolTip}
-                >
-                  {({targetRef, hide, show}) => (
-                    <Group
-                      onMouseEnter={show}
-                      onMouseLeave={hide}
-                    >
-                      <PieInnerPath
-                        startAngle={startAngle}
-                        endAngle={endAngle}
-                        color={darker}
-                        {...props}
-                      />
-                      <PieTopPath
-                        color={color}
-                        path={arcPath}
-                      />
-                      <PieOuterPath
-                        startAngle={startAngle}
-                        endAngle={endAngle}
-                        color={darker}
-                        {...props}
-                      />
-                      <Label
-                        x={x}
-                        y={y}
-                        innerRef={targetRef}
+    const innerRadius = 0.5;
+
+    const centerX = width / 2;
+    const centerY = height / 2 - donutHeight / 2;
+    const outerRadiusX = width / 2 - horizontalMargin;
+    const outerRadiusY = (Math.min(height / 2, width / 2) - donutHeight / 2) -
+      verticalMargin;
+    const innerRadiusX = outerRadiusX * innerRadius;
+    const innerRadiusY = outerRadiusY * innerRadius;
+
+    const props = {
+      outerRadiusX,
+      outerRadiusY,
+      donutHeight,
+      innerRadiusX,
+      innerRadiusY,
+    };
+    return (
+      <Layout align={['start', 'start']}>
+        <Svg width={width} height={height}>
+          {data.length > 0 ?
+            <Pie
+              data={data}
+              pieSort={null}
+              pieValue={d => d.value}
+              arcsSort={sortArcsByStartAngle}
+              top={centerY}
+              left={centerX}
+              {...props}
+            >
+              {({
+                data: arcData,
+                index,
+                startAngle,
+                endAngle,
+                path: arcPath,
+                x,
+                y,
+              }) => {
+                const {color = Theme.lightGray, toolTip} = arcData;
+                const darker = d3color(color).darker();
+                return (
+                  <ToolTip
+                    key={index}
+                    content={toolTip}
+                  >
+                    {({targetRef, hide, show}) => (
+                      <Group
+                        onMouseEnter={show}
+                        onMouseLeave={hide}
                       >
-                        {arcData.value}
-                      </Label>
-                    </Group>
-                  )}
-                </ToolTip>
-              );
-            }}
-          </Pie> :
-          <EmptyDonut
-            left={centerX}
-            top={centerY}
-            {...props}
+                        <PieInnerPath
+                          startAngle={startAngle}
+                          endAngle={endAngle}
+                          color={darker}
+                          {...props}
+                        />
+                        <PieTopPath
+                          color={color}
+                          path={arcPath}
+                        />
+                        <PieOuterPath
+                          startAngle={startAngle}
+                          endAngle={endAngle}
+                          color={darker}
+                          {...props}
+                        />
+                        <Label
+                          x={x}
+                          y={y}
+                          innerRef={targetRef}
+                        >
+                          {arcData.value}
+                        </Label>
+                      </Group>
+                    )}
+                  </ToolTip>
+                );
+              }}
+            </Pie> :
+            <EmptyDonut
+              left={centerX}
+              top={centerY}
+              {...props}
+            />
+          }
+        </Svg>
+        {data.length > 0 &&
+          <Legend
+            data={data}
+            innerRef={ref => this.legend = ref}
           />
         }
-      </Svg>
-      {data.length > 0 &&
-        <Legend
-          data={data}
-          innerRef={ref => this.legend = ref}
-        />
-      }
-    </Layout>
-  );
-};
+      </Layout>
+    );
+  }
+}
 
 Donut3DChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
