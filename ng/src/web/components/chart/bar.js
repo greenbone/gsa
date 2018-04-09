@@ -55,107 +55,119 @@ const tickFormat = val => {
   return val;
 };
 
-const BarChart = ({
-  data = [],
-  displayLegend = true,
-  height,
-  width,
-  xLabel,
-  yLabel,
-  horizontal = false,
-}) => {
-  if (this.legend) {
-    const {width: legendWidth} = this.legend.getBoundingClientRect();
-    width = width - legendWidth - LEGEND_MARGIN;
+class BarChart extends React.Component {
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.width !== nextProps.width ||
+      this.props.height !== nextProps.height ||
+      this.props.data !== nextProps.data;
   }
 
-  const xValues = data.map(d => d.x);
-  const yValues = data.map(d => d.y);
-  const yMax = Math.max(...yValues);
+  render() {
+    const {
+      data = [],
+      displayLegend = true,
+      height,
+      xLabel,
+      yLabel,
+      horizontal = false,
+    } = this.props;
+    let {width} = this.props;
 
-  const maxLabelLength = Math.max(...xValues.map(val => val.toString().length));
+    if (this.legend) {
+      const {width: legendWidth} = this.legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
+    }
 
-  // adjust left margin for label length on horizontal bars
-  // 4px for each letter is just a randomly choosen value
-  const marginLeft = horizontal ? margin.left +
-    Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
+    const xValues = data.map(d => d.x);
+    const yValues = data.map(d => d.y);
+    const yMax = Math.max(...yValues);
 
-  const maxWidth = width - marginLeft - margin.right;
-  const maxHeight = height - margin.top - margin.bottom;
+    const maxLabelLength = Math.max(...xValues.map(
+      val => val.toString().length));
 
-  const xScale = scaleBand()
-    .rangeRound(horizontal ? [0, maxHeight] : [0, maxWidth])
-    .domain(xValues)
-    .padding(0.125);
+    // adjust left margin for label length on horizontal bars
+    // 4px for each letter is just a randomly choosen value
+    const marginLeft = horizontal ? margin.left +
+      Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
 
-  const yScale = scaleLinear()
-    .range(horizontal ? [0, maxWidth] : [maxHeight, 0])
-    .domain([0, yMax])
+    const maxWidth = width - marginLeft - margin.right;
+    const maxHeight = height - margin.top - margin.bottom;
 
-    /*
-      nice seems to round first and last value.
-      see https://github.com/d3/d3-scale/blob/master/README.md#continuous_nice
-      the old version did call nice(10) which isn't possible with vx at the moment.
-    */
-    .nice();
+    const xScale = scaleBand()
+      .rangeRound(horizontal ? [0, maxHeight] : [0, maxWidth])
+      .domain(xValues)
+      .padding(0.125);
 
-  return (
-    <Layout align={['start', 'start']}>
-      <Svg width={width} height={height}>
-        <Group top={margin.top} left={marginLeft}>
-          <Axis
-            orientation="left"
-            scale={horizontal ? xScale : yScale}
-            top={0}
-            left={0}
-            label={horizontal ? xLabel : yLabel}
-            numTicks={10}
-            tickFormat={horizontal ? tickFormat : undefined}
+    const yScale = scaleLinear()
+      .range(horizontal ? [0, maxWidth] : [maxHeight, 0])
+      .domain([0, yMax])
+
+      /*
+        nice seems to round first and last value.
+        see https://github.com/d3/d3-scale/blob/master/README.md#continuous_nice
+        the old version did call nice(10) which isn't possible with vx at the moment.
+      */
+      .nice();
+
+    return (
+      <Layout align={['start', 'start']}>
+        <Svg width={width} height={height}>
+          <Group top={margin.top} left={marginLeft}>
+            <Axis
+              orientation="left"
+              scale={horizontal ? xScale : yScale}
+              top={0}
+              left={0}
+              label={horizontal ? xLabel : yLabel}
+              numTicks={10}
+              tickFormat={horizontal ? tickFormat : undefined}
+            />
+            <Axis
+              orientation="bottom"
+              scale={horizontal ? yScale : xScale}
+              top={maxHeight}
+              label={horizontal ? yLabel : xLabel}
+            />
+            {data.map((d, i) => (
+              <ToolTip
+                key={i}
+                content={d.toolTip}
+              >
+                {({targetRef, hide, show}) => (
+                  <Bar
+                    innerRef={targetRef}
+                    fill={d.color}
+                    x={horizontal ? 1 : xScale(d.x)}
+                    y={horizontal ? xScale(d.x) : yScale(d.y)}
+                    height={
+                      horizontal ?
+                        xScale.bandwidth() :
+                        maxHeight - yScale(d.y)
+                    }
+                    width={
+                      horizontal ?
+                        yScale(d.y) :
+                        xScale.bandwidth()
+                    }
+                    onMouseEnter={() => show}
+                    onMouseLeave={() => hide}
+                  />
+                )}
+              </ToolTip>
+            ))}
+          </Group>
+        </Svg>
+        {displayLegend && data.length > 0 &&
+          <Legend
+            innerRef={ref => this.legend = ref}
+            data={data}
           />
-          <Axis
-            orientation="bottom"
-            scale={horizontal ? yScale : xScale}
-            top={maxHeight}
-            label={horizontal ? yLabel : xLabel}
-          />
-          {data.map((d, i) => (
-            <ToolTip
-              key={i}
-              content={d.toolTip}
-            >
-              {({targetRef, hide, show}) => (
-                <Bar
-                  innerRef={targetRef}
-                  fill={d.color}
-                  x={horizontal ? 1 : xScale(d.x)}
-                  y={horizontal ? xScale(d.x) : yScale(d.y)}
-                  height={
-                    horizontal ?
-                      xScale.bandwidth() :
-                      maxHeight - yScale(d.y)
-                  }
-                  width={
-                    horizontal ?
-                      yScale(d.y) :
-                      xScale.bandwidth()
-                  }
-                  onMouseEnter={() => show}
-                  onMouseLeave={() => hide}
-                />
-              )}
-            </ToolTip>
-          ))}
-        </Group>
-      </Svg>
-      {displayLegend && data.length > 0 &&
-        <Legend
-          innerRef={ref => this.legend = ref}
-          data={data}
-        />
-      }
-    </Layout>
-  );
-};
+        }
+      </Layout>
+    );
+  }
+}
 
 BarChart.propTypes = {
   /*
