@@ -43,9 +43,6 @@ export const totalCount = (groups = []) => {
     .reduce((prev, cur) => prev + cur);
 };
 
-export const EMPTY = [];
-EMPTY.total = 0;
-
 export const percent = (count, sum) =>
   (parse_int(count) / sum * 100).toFixed(1);
 
