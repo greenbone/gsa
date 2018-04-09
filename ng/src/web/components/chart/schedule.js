@@ -177,191 +177,200 @@ Triangle.propTypes = {
   y: PropTypes.number,
 };
 
-const ScheduleChart = ({
-  data = [],
-  height,
-  width,
-  xAxisLabel,
-  yAxisLabel,
-}) => {
-  const maxWidth = width - margin.left - margin.right;
-  const maxHeight = height - margin.top - margin.bottom;
+class ScheduleChart extends React.Component {
 
-  const today = moment();
-  const end = today.clone().add(7, 'days');
-
-  const yValues = data.map(d => d.label);
-
-  const xScale = scaleUtc()
-    .range([0, maxWidth])
-    .domain([today.toDate(), end.toDate()]);
-
-  const yScale = scaleBand()
-    .range([0, maxHeight])
-    .domain(yValues)
-    .padding(0.125);
-
-  const starts = [];
-  const futureRuns = [];
-
-  for (const d of data) {
-    const {
-      period = 0,
-      periods = 0,
-      periodMonth = 0,
-      start,
-      label,
-    } = d;
-
-    let futureRun = 1;
-
-    // check if start date is in this week
-    if (start.isSameOrBefore(end)) {
-      starts.push(cloneSchedule(d));
-
-      futureRun = 0;
-
-      /* eslint-disable max-depth */
-      if (periods > 0 || (periods === 0 && period > 0)) {
-        let newStart = start.clone().add(period, 'seconds');
-
-        if (periods === 0) {
-          while (newStart.isSameOrBefore(end)) {
-            starts.push(cloneSchedule(d, newStart));
-            newStart = newStart.clone();
-            newStart.add(period, 'seconds');
-          }
-        }
-        else {
-          for (let j = 0; j < periods; j++) {
-            if (newStart.isSameOrBefore(end)) {
-              starts.push(cloneSchedule(d, newStart));
-            }
-            else {
-              futureRun++;
-            }
-            newStart = newStart.clone();
-            newStart.add(period, 'seconds');
-          }
-        }
-      }
-      /* eslint-enable max-depth */
-    }
-
-    if (periods === 0 && (period > 0 || periodMonth > 0)) {
-      futureRun = Number.POSITIVE_INFINITY;
-    }
-
-    if (futureRun > 0) {
-      futureRuns.push({
-        label,
-        futureRun,
-      });
-    }
+  shouldComponentUpdate(nextProps) {
+    return nextProps.data !== this.props.data ||
+      nextProps.width !== this.props.width ||
+      nextProps.height !== this.props.height;
   }
-  const bandwidth = yScale.bandwidth();
-  return (
-    <Layout align={['start', 'start']}>
-      <Svg
-        width={width}
-        height={height}
-      >
-        <Group top={margin.top} left={margin.left}>
-          <Axis
-            orientation="left"
-            scale={yScale}
-            top={0}
-            left={0}
-            label={yAxisLabel}
-            rangePadding={0}
-          />
-          <Axis
-            orientation="bottom"
-            scale={xScale}
-            top={maxHeight}
-            label={yAxisLabel}
-            numTicks={7}
-            rangePadding={0}
-          />
-          <StrokeGradient/>
-          <FillGradient/>
-          {starts.map((d, i) => {
-            const {
-              duration = 0,
-              period = 0,
-              start,
-              label,
-            } = d;
 
-            const startX = xScale(start);
+  render() {
+    const {
+      data = [],
+      height,
+      width,
+      yAxisLabel,
+    } = this.props;
 
-            let endDate = start.clone();
-            const hasDuration = duration > 0;
-            if (hasDuration) {
-              endDate.add(d.duration, 'seconds');
+    const maxWidth = width - margin.left - margin.right;
+    const maxHeight = height - margin.top - margin.bottom;
+
+    const today = moment();
+    const end = today.clone().add(7, 'days');
+
+    const yValues = data.map(d => d.label);
+
+    const xScale = scaleUtc()
+      .range([0, maxWidth])
+      .domain([today.toDate(), end.toDate()]);
+
+    const yScale = scaleBand()
+      .range([0, maxHeight])
+      .domain(yValues)
+      .padding(0.125);
+
+    const starts = [];
+    const futureRuns = [];
+
+    for (const d of data) {
+      const {
+        period = 0,
+        periods = 0,
+        periodMonth = 0,
+        start,
+        label,
+      } = d;
+
+      let futureRun = 1;
+
+      // check if start date is in this week
+      if (start.isSameOrBefore(end)) {
+        starts.push(cloneSchedule(d));
+
+        futureRun = 0;
+
+        /* eslint-disable max-depth */
+        if (periods > 0 || (periods === 0 && period > 0)) {
+          let newStart = start.clone().add(period, 'seconds');
+
+          if (periods === 0) {
+            while (newStart.isSameOrBefore(end)) {
+              starts.push(cloneSchedule(d, newStart));
+              newStart = newStart.clone();
+              newStart.add(period, 'seconds');
             }
-            else if (period > 0) {
-              endDate.add(Math.min(period, ONE_DAY), 'seconds');
+          }
+          else {
+            for (let j = 0; j < periods; j++) {
+              if (newStart.isSameOrBefore(end)) {
+                starts.push(cloneSchedule(d, newStart));
+              }
+              else {
+                futureRun++;
+              }
+              newStart = newStart.clone();
+              newStart.add(period, 'seconds');
             }
-            else {
-              endDate.add(1, 'day');
-            }
+          }
+        }
+        /* eslint-enable max-depth */
+      }
 
-            if (endDate.isAfter(end)) {
-              endDate = end;
-            }
+      if (periods === 0 && (period > 0 || periodMonth > 0)) {
+        futureRun = Number.POSITIVE_INFINITY;
+      }
 
-            const endX = xScale(endDate.toDate());
-            const rwidth = endX - startX;
-            return (
-              <ToolTip
-                key={i}
-                content={d.toolTip}
-              >
-                {({targetRef, show, hide}) => (
-                  <rect
-                    ref={targetRef}
-                    y={yScale(label)}
-                    x={startX}
-                    height={bandwidth}
-                    width={rwidth}
-                    fill={
-                      hasDuration ?
-                        Theme.lightGreen :
-                        fillGradientUrl
-                    }
-                    stroke={
-                      hasDuration ?
-                        Theme.darkGreen :
-                        strokeGradientUrl
-                    }
-                    onMouseEnter={show}
-                    onMouseLeave={hide}
-                  />
-                )}
-              </ToolTip>
-
-            );
-          })}
-        </Group>
-        <Group
-          left={width - TRIANGLE_WIDTH}
-          top={margin.top}
+      if (futureRun > 0) {
+        futureRuns.push({
+          label,
+          futureRun,
+        });
+      }
+    }
+    const bandwidth = yScale.bandwidth();
+    return (
+      <Layout align={['start', 'start']}>
+        <Svg
+          width={width}
+          height={height}
         >
-          {futureRuns.map((run, i) => (
-            <Triangle
-              key={i}
-              y={yScale(run.label)}
-              height={bandwidth}
-              toolTip={getFutureRunLabel(run.futureRun)}
+          <Group top={margin.top} left={margin.left}>
+            <Axis
+              orientation="left"
+              scale={yScale}
+              top={0}
+              left={0}
+              label={yAxisLabel}
+              rangePadding={0}
             />
-          ))}
-        </Group>
-      </Svg>
-    </Layout>
-  );
+            <Axis
+              orientation="bottom"
+              scale={xScale}
+              top={maxHeight}
+              label={yAxisLabel}
+              numTicks={7}
+              rangePadding={0}
+            />
+            <StrokeGradient/>
+            <FillGradient/>
+            {starts.map((d, i) => {
+              const {
+                duration = 0,
+                period = 0,
+                start,
+                label,
+              } = d;
 
-};
+              const startX = xScale(start);
+
+              let endDate = start.clone();
+              const hasDuration = duration > 0;
+              if (hasDuration) {
+                endDate.add(d.duration, 'seconds');
+              }
+              else if (period > 0) {
+                endDate.add(Math.min(period, ONE_DAY), 'seconds');
+              }
+              else {
+                endDate.add(1, 'day');
+              }
+
+              if (endDate.isAfter(end)) {
+                endDate = end;
+              }
+
+              const endX = xScale(endDate.toDate());
+              const rwidth = endX - startX;
+              return (
+                <ToolTip
+                  key={i}
+                  content={d.toolTip}
+                >
+                  {({targetRef, show, hide}) => (
+                    <rect
+                      ref={targetRef}
+                      y={yScale(label)}
+                      x={startX}
+                      height={bandwidth}
+                      width={rwidth}
+                      fill={
+                        hasDuration ?
+                          Theme.lightGreen :
+                          fillGradientUrl
+                      }
+                      stroke={
+                        hasDuration ?
+                          Theme.darkGreen :
+                          strokeGradientUrl
+                      }
+                      onMouseEnter={show}
+                      onMouseLeave={hide}
+                    />
+                  )}
+                </ToolTip>
+
+              );
+            })}
+          </Group>
+          <Group
+            left={width - TRIANGLE_WIDTH}
+            top={margin.top}
+          >
+            {futureRuns.map((run, i) => (
+              <Triangle
+                key={i}
+                y={yScale(run.label)}
+                height={bandwidth}
+                toolTip={getFutureRunLabel(run.futureRun)}
+              />
+            ))}
+          </Group>
+        </Svg>
+      </Layout>
+    );
+  }
+}
 
 ScheduleChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
@@ -374,7 +383,6 @@ ScheduleChart.propTypes = {
   })).isRequired,
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
-  xAxisLabel: PropTypes.string,
   yAxisLabel: PropTypes.string,
 };
 

@@ -34,46 +34,86 @@ import Loading from '../../../components/loading/loading';
 import Display, {
   DISPLAY_HEADER_HEIGHT,
 } from '../display';
+import {exclude_object_props} from 'gmp/utils/index';
 
-const DataDisplay = ({
-  children,
-  data,
-  dataTransform,
-  height,
-  id,
-  isLoading = false,
-  menu,
-  title,
-  width,
-  onRemoveClick,
-  ...props
-}) => {
-  height = height - DISPLAY_HEADER_HEIGHT;
+const ownProps = [
+  'title',
+  'dataTransform',
+  'data',
+  'isLoading',
+  'menu',
+  'height',
+  'width',
+  'id',
+  'onRemoveClick',
+];
 
-  isLoading = isLoading && !is_defined(data);
+class DataDisplay extends React.Component {
 
-  if (is_defined(dataTransform)) {
-    data = dataTransform(data, props);
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      data: this.getTransformedData(this.props),
+    };
   }
-  return (
-    <Display
-      menu={menu}
-      title={isLoading ? _('Loading') : title({data, id})}
-      onRemoveClick={onRemoveClick}
-      {...props}
-    >
-      {isLoading ?
-        <Loading/> :
-        children({
-          id,
-          data,
-          width,
-          height,
-        })
-      }
-    </Display>
-  );
-};
+
+  getTransformedData(props) {
+    const {data, dataTransform, ...other} = props;
+
+    const tprops = exclude_object_props(other, ownProps);
+
+    return is_defined(dataTransform) ?
+      dataTransform(data, tprops) : data;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.data !== nextProps.data) {
+      this.setState({data: this.getTransformedData(nextProps)});
+    }
+  }
+
+  render() {
+    const {data} = this.state;
+    let {
+      height,
+      isLoading,
+    } = this.props;
+    const {
+      children,
+      menu,
+      id,
+      width,
+      title,
+      onRemoveClick,
+      ...props
+    } = this.props;
+
+    height = height - DISPLAY_HEADER_HEIGHT;
+
+    isLoading = isLoading && !is_defined(data);
+
+    const otherProps = exclude_object_props(props, ownProps);
+    return (
+      <Display
+        menu={menu}
+        title={isLoading ? _('Loading') : title({data, id})}
+        onRemoveClick={onRemoveClick}
+        {...otherProps}
+      >
+        {isLoading ?
+          <Loading/> :
+          children({
+            id,
+            data,
+            width,
+            height,
+          })
+        }
+      </Display>
+    );
+  }
+}
 
 DataDisplay.propTypes = {
   children: PropTypes.func.isRequired,
