@@ -98,6 +98,12 @@ class Loader extends React.Component {
     dispatch(load(props));
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.filter !== prevProps.filter) {
+      this.load();
+    }
+  }
+
   render() {
     const {children, data, isLoading} = this.props;
     return is_defined(children) && children({data, isLoading});
@@ -105,9 +111,11 @@ class Loader extends React.Component {
 }
 
 Loader.propTypes = {
+  children: PropTypes.func,
   data: PropTypes.any,
   dataId: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
+  filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool.isRequired,
   load: PropTypes.func.isRequired,
