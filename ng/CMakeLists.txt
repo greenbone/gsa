@@ -686,6 +686,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/usersettings/dialog.js
      ${NG_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/charts.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/vulns/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/row.js
