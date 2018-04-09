@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-20 08:49+0100\n"
-"PO-Revision-Date: 2018-02-20 09:05+0200\n"
-"Last-Translator: Björn <bjoern.ricks@greenbone.net>\n"
+"PO-Revision-Date: 2018-04-09 12:43+0200\n"
+"Last-Translator: Steffen <steffen.waterkamp@greenbone.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.3\n"
-"X-POOTLE-MTIME: 1519113900.890957\n"
+"X-POOTLE-MTIME: 1523274223.521018\n"
 
 #: ng/src/gmp/models/scanner.js:53
 msgid "OSP Scanner"
@@ -238,9 +238,8 @@ msgstr "CVEs"
 #: ng/src/web/components/bar/menubar.js:208
 #: ng/src/web/pages/alerts/secinfoeventpart.js:67
 #: ng/src/web/pages/cpes/listpage.js:61
-#, fuzzy
 msgid "CPEs"
-msgstr "CVEs"
+msgstr "CPEs"
 
 #: ng/src/web/components/bar/menubar.js:212
 #: ng/src/web/pages/ovaldefs/listpage.js:61
@@ -302,9 +301,8 @@ msgstr "Alarme"
 
 #: ng/src/web/components/bar/menubar.js:267
 #: ng/src/web/pages/schedules/listpage.js:99 ng/src/web/utils/render.js:352
-#, fuzzy
 msgid "Schedules"
-msgstr "Termine"
+msgstr "Zeitpläne"
 
 #: ng/src/web/components/bar/menubar.js:273
 #: ng/src/web/pages/reportformats/listpage.js:104
@@ -432,8 +430,9 @@ msgid "Error"
 msgstr "Fehler"
 
 #: ng/src/web/components/notification/dialognotification.js:63
+#, fuzzy
 msgid "Success"
-msgstr ""
+msgstr "Erfolg"
 
 #: ng/src/web/components/notification/dialognotification.js:66
 #: ng/src/web/pages/alerts/snmpmethodpart.js:66
@@ -581,11 +580,11 @@ msgstr "Herstelleraktualisierungen vertrauen"
 
 #: ng/src/web/components/powerfilter/autofpgroup.js:56
 msgid "Full CVE match"
-msgstr ""
+msgstr "Vollständige CVE Übereinstimmung"
 
 #: ng/src/web/components/powerfilter/autofpgroup.js:64
 msgid "Partial CVE match"
-msgstr ""
+msgstr "Teilweise CVE Übereinstimmung"
 
 #: ng/src/web/components/powerfilter/withFilterDialog.js:152
 #: ng/src/web/components/powerfilter/powerfilter.js:246
@@ -698,7 +697,7 @@ msgstr "Lade Liniediagramm ..."
 
 #: ng/src/web/components/dashboard/legacy/chart/line.js:173
 msgid "Line Chart"
-msgstr ""
+msgstr "Liniendiagramm"
 
 #: ng/src/web/components/dashboard/legacy/chart/donut.js:245
 msgid "Inactive"
@@ -1106,11 +1105,15 @@ msgid "You are leaving GSA"
 msgstr "Sie verlassen GSA"
 
 #: ng/src/web/components/link/externallink.js:78
+#, fuzzy
 msgid ""
 "This dialog will open a new window for {{- to}} if you click on \"follow link"
 "\". Following this link is on your own responsibility. Greenbone does not "
 "endorse the content you will see there."
 msgstr ""
+"Dieser Dialog öffnet ein neues Fenster für {{-to}}, wenn Sie auf \"Link "
+"folgen\" klicken. Diesem Link zu folgen liegt in Ihrer Verantwortung. "
+"Greenbone hat keinen Einfluss auf den Inhalt, den Sie dort sehen werden."
 
 #: ng/src/web/components/pagination/pagination.js:75
 #: ng/src/web/components/pagination/pagination.js:83
@@ -1248,27 +1251,28 @@ msgstr ""
 #: ng/src/web/pages/schedules/details.js:111
 #: ng/src/web/pages/tasks/details.js:315
 msgid "Period"
-msgstr ""
+msgstr "Zeitintervall"
 
 #: ng/src/web/pages/schedules/table.js:38
 #: ng/src/web/pages/schedules/dialog.js:137
 #: ng/src/web/pages/schedules/details.js:120
+#, fuzzy
 msgid "Duration"
-msgstr ""
+msgstr "Laufzeit"
 
 #: ng/src/web/pages/schedules/table.js:42
 msgid "No schedules available"
-msgstr ""
+msgstr "Keine Zeitpläne verfügbar"
 
 #: ng/src/web/pages/schedules/listpage.js:54
 #: ng/src/web/pages/schedules/detailspage.js:75
 msgid "Help: Schedules"
-msgstr ""
+msgstr "Hilfe: Zeitpläne"
 
 #: ng/src/web/pages/schedules/listpage.js:57
 #: ng/src/web/pages/schedules/dialog.js:176
 msgid "New Schedule"
-msgstr ""
+msgstr "Neuer Zeitplan"
 
 #: ng/src/web/pages/schedules/dialog.js:46
 #, fuzzy
@@ -1351,15 +1355,15 @@ msgstr "Unbenannt"
 #: ng/src/web/pages/tasks/dialog.js:283 ng/src/web/pages/tasks/details.js:260
 #: ng/src/web/pages/tags/component.js:146 ng/src/web/utils/render.js:350
 msgid "Schedule"
-msgstr ""
+msgstr "Zeitplan"
 
 #: ng/src/web/pages/schedules/row.js:76
 msgid "Clone Schedule"
-msgstr ""
+msgstr "Zeitplan klonen"
 
 #: ng/src/web/pages/schedules/row.js:81
 msgid "Export Schedule"
-msgstr ""
+msgstr "Zeitplan exportieren"
 
 #: ng/src/web/pages/schedules/details.js:132
 msgid "Tasks using this Schedule"
@@ -1367,7 +1371,7 @@ msgstr ""
 
 #: ng/src/web/pages/schedules/detailspage.js:78
 msgid "Schedules List"
-msgstr ""
+msgstr "Liste der Zeitpläne"
 
 #: ng/src/web/pages/schedules/detailspage.js:101
 msgid "Export Schedule as XML"
@@ -1402,7 +1406,7 @@ msgstr ""
 #: ng/src/web/pages/certbund/detailspage.js:271
 #: ng/src/web/pages/results/detailspage.js:409
 msgid "Information"
-msgstr ""
+msgstr "Informationen"
 
 #: ng/src/web/pages/schedules/component.js:71
 msgid "Edit Schedule {{name}}"
@@ -1411,11 +1415,11 @@ msgstr ""
 #: ng/src/web/pages/schedules/render.js:27 ng/src/web/pages/tasks/dialog.js:297
 #: ng/src/web/pages/tasks/details.js:320
 msgid "Once"
-msgstr ""
+msgstr "Einmalig"
 
 #: ng/src/web/pages/schedules/render.js:30
 msgid "One month"
-msgstr ""
+msgstr "Ein Monat"
 
 #: ng/src/web/pages/schedules/render.js:33
 msgid "{{number}} months"
@@ -1475,11 +1479,11 @@ msgstr ""
 
 #: ng/src/web/pages/filters/detailspage.js:74
 msgid "Help: Filter Details"
-msgstr ""
+msgstr "Hilfe: Filter Details"
 
 #: ng/src/web/pages/filters/detailspage.js:77
 msgid "Filter List"
-msgstr ""
+msgstr "Filterliste"
 
 #: ng/src/web/pages/filters/detailspage.js:100
 msgid "Export Filter as XML"
@@ -1728,7 +1732,7 @@ msgstr "Assets-Dashboard"
 #: ng/src/web/pages/notes/table.js:60 ng/src/web/pages/notes/dialog.js:331
 #: ng/src/web/pages/notes/filterdialog.js:29
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: ng/src/web/pages/overrides/table.js:84
 #: ng/src/web/pages/overrides/dialog.js:191
