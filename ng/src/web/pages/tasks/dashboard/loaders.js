@@ -44,7 +44,9 @@ export const tasksSchedulesLoader = loadFunc(
   }).then(r => r.data),
   TASKS_SCHEDULES);
 
-export const TaskStatusLoader = props => (
+export const TaskStatusLoader = ({
+  children,
+}) => (
   <Loader
     dataId={TASKS_STATUS}
     load={tasksStatusLoader}
@@ -52,10 +54,15 @@ export const TaskStatusLoader = props => (
       'tasks.timer',
       'tasks.changed',
     ]}
-  />
+    children={children}
+  >
+    {children}
+  </Loader>
 );
 
-export const TasksSchedulesLoader = props => (
+export const TasksSchedulesLoader = ({
+  children,
+}) => (
   <Loader
     dataId={TASKS_SCHEDULES}
     load={tasksSchedulesLoader}
@@ -63,10 +70,14 @@ export const TasksSchedulesLoader = props => (
       'tasks.timer',
       'tasks.changed',
     ]}
-  />
+  >
+    {children}
+  </Loader>
 );
 
-export const TasksSeverityLoader = props => (
+export const TasksSeverityLoader = ({
+  children,
+}) => (
   <Loader
     dataId={TASKS_SEVERITY}
     load={tasksSeverityLoader}
@@ -74,7 +85,9 @@ export const TasksSeverityLoader = props => (
       'tasks.timer',
       'tasks.changed',
     ]}
-  />
+  >
+    {children}
+  </Loader>
 );
 
 // vim: set ts=2 sw=2 tw=80:

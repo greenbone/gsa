@@ -30,15 +30,18 @@ export const vulnsSeverityLoader = loadFunc(
   ({gmp}) => gmp.vulns.getSeverityAggregates().then(r => r.data),
   VULNS_SEVERITY);
 
-export const VulnsSeverityLoader = props => (
+export const VulnsSeverityLoader = ({
+  children,
+}) => (
   <Loader
-    {...props}
     dataId={VULNS_SEVERITY}
     load={vulnsSeverityLoader}
     subscriptions={[
       'vulns.timer',
       'vulns.changed',
     ]}
-  />
+  >
+    {children}
+  </Loader>
 );
 // vim: set ts=2 sw=2 tw=80:
