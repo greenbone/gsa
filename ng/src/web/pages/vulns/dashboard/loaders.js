@@ -22,19 +22,24 @@
  */
 import React from 'react';
 
+import PropTypes from '../../../utils/proptypes';
+
 import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
 
 export const VULNS_SEVERITY = 'vulns-severity';
 
 export const vulnsSeverityLoader = loadFunc(
-  ({gmp}) => gmp.vulns.getSeverityAggregates().then(r => r.data),
+  ({gmp, filter}) => gmp.vulns.getSeverityAggregates({filter})
+    .then(r => r.data),
   VULNS_SEVERITY);
 
 export const VulnsSeverityLoader = ({
+  filter,
   children,
 }) => (
   <Loader
     dataId={VULNS_SEVERITY}
+    filter={filter}
     load={vulnsSeverityLoader}
     subscriptions={[
       'vulns.timer',
@@ -44,4 +49,9 @@ export const VulnsSeverityLoader = ({
     {children}
   </Loader>
 );
+
+VulnsSeverityLoader.propTypes = {
+  filter: PropTypes.filter,
+};
+
 // vim: set ts=2 sw=2 tw=80:

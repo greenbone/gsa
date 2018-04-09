@@ -24,12 +24,19 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import PropTypes from '../../../utils/proptypes';
+
 import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
 
 import {TasksSeverityLoader} from './loaders';
 
-const TasksCvssDisplay = props => (
-  <TasksSeverityLoader>
+const TasksCvssDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksSeverityLoader
+    filter={filter}
+  >
     {({data}) => (
       <CvssDisplay
         {...props}
@@ -41,6 +48,10 @@ const TasksCvssDisplay = props => (
     )}
   </TasksSeverityLoader>
 );
+
+TasksCvssDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
 export default TasksCvssDisplay;
 

@@ -25,12 +25,19 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import PropTypes from '../../../utils/proptypes';
+
 import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
 
 import {VulnsSeverityLoader} from './loaders';
 
-const VulnsSeverityDisplay = props => (
-  <VulnsSeverityLoader>
+const VulnsSeverityDisplay = ({
+  filter,
+  ...props
+}) => (
+  <VulnsSeverityLoader
+    filter={filter}
+  >
     {({data}) => (
       <CvssDisplay
         {...props}
@@ -42,6 +49,10 @@ const VulnsSeverityDisplay = props => (
     )}
   </VulnsSeverityLoader>
 );
+
+VulnsSeverityDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
 export default VulnsSeverityDisplay;
 

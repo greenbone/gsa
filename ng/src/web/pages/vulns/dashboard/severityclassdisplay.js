@@ -25,12 +25,19 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import PropTypes from '../../../utils/proptypes';
+
 import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
 
 import {VulnsSeverityLoader} from './loaders';
 
-const VulnsSeverityDisplay = props => (
-  <VulnsSeverityLoader>
+const VulnsSeverityDisplay = ({
+  filter,
+  ...props
+}) => (
+  <VulnsSeverityLoader
+    filter={filter}
+  >
     {({data}) => (
       <SeverityClassDisplay
         {...props}
@@ -42,6 +49,10 @@ const VulnsSeverityDisplay = props => (
     )}
   </VulnsSeverityLoader>
 );
+
+VulnsSeverityDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
 export default VulnsSeverityDisplay;
 
