@@ -177,7 +177,7 @@ class Filter extends Model {
    *
    * @return {Filter} This filter with merged terms.
    */
-  _merge(filter) {
+  _mergeExtraKeywords(filter) {
     if (is_defined(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
@@ -594,7 +594,7 @@ class Filter extends Model {
    */
   mergeExtraKeywords(filter) {
     const f = this.copy();
-    return f._merge(filter);
+    return f._mergeExtraKeywords(filter);
   }
 
   /**
@@ -631,7 +631,7 @@ class Filter extends Model {
     const f = new Filter();
 
     f.parseString(filterstring);
-    f._merge(filter);
+    f._mergeExtraKeywords(filter);
 
     return f;
   }
