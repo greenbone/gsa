@@ -44,9 +44,9 @@ import PropTypes from '../../../utils/proptypes';
 
 import BarChart from '../../chart/bar';
 
-import DataDisplay from './display';
+import DataDisplay from './datadisplay';
 
-import {EMPTY, totalCount, percent, riskFactorColorScale} from './utils.js';
+import {EMPTY, totalCount, percent, riskFactorColorScale} from './utils';
 
 const getSeverityClassLabel = value => {
   switch (value) {

@@ -33,12 +33,12 @@ import {map} from 'gmp/utils/array';
 
 import DonutChart from '../../../components/chart/donut3d';
 
-import DataDisplay from '../../../components/dashboard2/data/display';
+import DataDisplay from '../../../components/dashboard2/display/datadisplay';
 import {
   EMPTY,
   totalCount,
   percent,
-} from '../../../components/dashboard2/data/utils';
+} from '../../../components/dashboard2/display/utils';
 
 import {TaskStatusLoader} from './loaders';
 

@@ -27,10 +27,10 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import Theme from '../../utils/theme';
-import PropTypes from '../../utils/proptypes';
+import Theme from '../../../utils/theme';
+import PropTypes from '../../../utils/proptypes';
 
-import CloseButton from '../dialog/closebutton';
+import CloseButton from '../../dialog/closebutton';
 
 export const DISPLAY_HEADER_HEIGHT = 20;
 

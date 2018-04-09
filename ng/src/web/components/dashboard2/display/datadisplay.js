@@ -26,6 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
+import {exclude_object_props} from 'gmp/utils/object';
 
 import PropTypes from '../../../utils/proptypes';
 
@@ -33,8 +34,7 @@ import Loading from '../../../components/loading/loading';
 
 import Display, {
   DISPLAY_HEADER_HEIGHT,
-} from '../display';
-import {exclude_object_props} from 'gmp/utils/index';
+} from './display';
 
 const ownProps = [
   'title',
