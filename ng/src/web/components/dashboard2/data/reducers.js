@@ -34,15 +34,20 @@ const dashboardData = (state = {}, action) => {
   switch (action.type) {
     case DASHBOARD_DATA_LOADING_REQUEST:
       return {
+        ...state,
         isLoading: true,
+        error: null,
       };
     case DASHBOARD_DATA_LOADING_SUCCESS:
       return {
+        ...state,
         isLoading: false,
         data: action.data,
+        error: null,
       };
     case DASHBOARD_DATA_LOADING_ERROR:
       return {
+        ...state,
         isLoading: false,
         error: action.error,
       };
