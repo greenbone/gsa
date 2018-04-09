@@ -592,4 +592,26 @@ describe('Filter merge extra keywords', () => {
 
 });
 
+describe('filter and', () => {
+  test('filters should be concatenated with and', () => {
+    const filter1 = Filter.fromString('foo=1');
+    const filter2 = Filter.fromString('bar=2');
+    expect(filter1.and(filter2).toFilterString()).toBe('foo=1 and bar=2');
+  });
+
+  test('empty filters should be concatenated without and', () => {
+    const filter1 = Filter.fromString('');
+    const filter2 = Filter.fromString('bar=2');
+    expect(filter1.and(filter2).toFilterString()).toBe('bar=2');
+  });
+
+  test('filters with only extra keywords should be concatenated ' +
+    'without and', () => {
+    const filter1 = Filter.fromString('apply_overrides=1 min_qod=70');
+    const filter2 = Filter.fromString('bar=2');
+    expect(filter1.and(filter2).toFilterString()).toBe(
+      'apply_overrides=1 min_qod=70 bar=2');
+  });
+});
+
 // vim: set ts=2 sw=2 tw=80:

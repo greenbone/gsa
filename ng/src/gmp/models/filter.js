@@ -29,7 +29,7 @@ import {for_each, map} from '../utils/array';
 import Model from '../model.js';
 
 import convert from './filter/convert.js';
-import FilterTerm from './filter/filterterm.js';
+import FilterTerm, {AND} from './filter/filterterm.js';
 import {EXTRA_KEYWORDS} from './filter/keywords.js';
 
 export const UNKOWN_FILTER_ID = '0';
@@ -552,6 +552,23 @@ class Filter extends Model {
     filter.delete(filter.getSortOrder());
 
     return filter;
+  }
+
+  /**
+   * Merge other filter with an and operation
+   *
+   * @param {Filter} filter  Filter to be merged with and operation
+   *
+   * @return {Filter} This filter
+   */
+  and(filter) {
+    const nonExtraTerms = this.getAllTerms().filter(
+      term => !EXTRA_KEYWORDS.includes(term.keyword));
+
+    if (nonExtraTerms.length > 0) {
+      this._addTerm(AND);
+    }
+    return this._merge(filter);
   }
 
   /**
