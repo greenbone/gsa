@@ -51,7 +51,10 @@ export const Item = glamorous.div('legend-item', {
   flexDirection: 'row',
   alignItems: 'center',
   margin: '5px 0',
-});
+},
+({onClick}) => is_defined(onClick) ? {
+  cursor: 'pointer',
+} : undefined);
 
 export const Label = glamorous.div('legend-label', {
   display: 'flex',
