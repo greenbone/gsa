@@ -32,7 +32,7 @@ import convert from './filter/convert.js';
 import FilterTerm, {AND} from './filter/filterterm.js';
 import {EXTRA_KEYWORDS} from './filter/keywords.js';
 
-export const UNKOWN_FILTER_ID = '0';
+export const UNKNOWN_FILTER_ID = '0';
 
 /**
  * Represents a filter

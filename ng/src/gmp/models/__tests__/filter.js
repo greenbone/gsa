@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Filter, {UNKOWN_FILTER_ID} from '../filter.js';
+import Filter, {UNKNOWN_FILTER_ID} from '../filter.js';
 
 describe('Filter parse from string tests', () => {
 
@@ -340,9 +340,9 @@ describe('Filter equal', () => {
 
   test('filter with unknown filter id should not equal', () => {
     const filter1 = Filter.fromString('abc=1');
-    filter1.id = UNKOWN_FILTER_ID;
+    filter1.id = UNKNOWN_FILTER_ID;
     const filter2 = Filter.fromString('def=1');
-    filter2.id = UNKOWN_FILTER_ID;
+    filter2.id = UNKNOWN_FILTER_ID;
     expect(filter1.equals(filter2)).toEqual(false);
   });
 
