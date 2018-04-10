@@ -232,6 +232,7 @@ class Donut3DChart extends React.Component {
       data = [],
       height,
       onDataClick,
+      onLegendItemClick,
     } = this.props;
 
     if (this.legend) {
@@ -337,6 +338,7 @@ class Donut3DChart extends React.Component {
           <Legend
             data={data}
             innerRef={ref => this.legend = ref}
+            onItemClick={onLegendItemClick}
           />
         }
       </Layout>
@@ -354,6 +356,7 @@ Donut3DChart.propTypes = {
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   onDataClick: PropTypes.func,
+  onLegendItemClick: PropTypes.func,
 };
 
 export default Donut3DChart;
