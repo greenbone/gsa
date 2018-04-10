@@ -447,7 +447,7 @@ describe('Filter getTerm', () => {
 });
 
 describe('Filter getTerms', () => {
-  test('should return empty array for unkown keyword', () => {
+  test('should return empty array for unknown keyword', () => {
     const filter = Filter.fromString('abc=1');
     const terms = filter.getTerms('def');
 

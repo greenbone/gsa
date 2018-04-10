@@ -35,7 +35,7 @@ describe('includes_id function tests', () => {
     expect(includes_id(list, 3)).toBe(true);
   });
 
-  test('should return false for unkown id', () => {
+  test('should return false for unknown id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
     expect(includes_id(list, 4)).toBe(false);
