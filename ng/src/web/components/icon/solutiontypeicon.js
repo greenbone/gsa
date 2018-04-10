@@ -61,7 +61,7 @@ const SolutionType = ({
       break;
     case '':
       title = '';
-      img = 'os_unkown.svg';
+      img = 'os_unknown.svg';
       break;
     default:
       return null;
