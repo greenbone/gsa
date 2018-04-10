@@ -684,6 +684,18 @@ class Filter extends Model {
     return f;
   }
 
+  /**
+   * Creates a new Filter from FilterTerms
+   *
+   * @param {FilterTerm} term  FilterTerms to set for the new Filter
+   *
+   * @returns {Filter} The new Filter
+   */
+  static fromTerm(...term) {
+    const f = new Filter();
+    return f._addTerm(...term);
+  }
+
 }
 
 export const ALL_FILTER = new Filter().all();
