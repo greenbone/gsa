@@ -131,6 +131,10 @@ class FilterTerm {
   }
 }
 
+export const AND = FilterTerm.fromString('and');
+export const OR = FilterTerm.fromString('or');
+export const NOT = FilterTerm.fromString('not');
+
 export default FilterTerm;
 
 // vim: set ts=2 sw=2 tw=80:
