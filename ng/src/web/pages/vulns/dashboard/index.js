@@ -32,8 +32,10 @@ import VulnsSeverityDisplay from './severityclassdisplay';
 
 const VulnerabilitiesDashboard = ({
   filter,
+  onFilterChanged,
 }) => (
   <Dashboard
+    filter={filter}
     components={{
       'vulns-cvss': VulnsCvssDisplay,
       'vulns-severity-class': VulnsSeverityDisplay,
@@ -44,11 +46,13 @@ const VulnerabilitiesDashboard = ({
         'vulns-severity-class',
       ],
     ]}
+    onFilterChanged={onFilterChanged}
   />
 );
 
 VulnerabilitiesDashboard.propTypes = {
   filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func,
 };
 
 export default VulnerabilitiesDashboard;
