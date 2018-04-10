@@ -362,6 +362,16 @@ describe('Filter equal', () => {
       'and status="Stopped"');
     expect(filter1.equals(filter2)).toEqual(false);
   });
+
+  test('filter with realistic more complex term should equal', () => {
+    const filter1 = Filter.fromString(
+      'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name ' +
+      'and status="Stopped"');
+    const filter2 = Filter.fromString(
+      'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name ' +
+      'and status="Stopped"');
+    expect(filter1.equals(filter2)).toEqual(true);
+  });
 });
 
 describe('Filter get', () => {
