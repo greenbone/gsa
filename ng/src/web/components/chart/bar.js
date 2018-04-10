@@ -73,6 +73,7 @@ class BarChart extends React.Component {
       yLabel,
       horizontal = false,
       onDataClick,
+      onLegendItemClick,
     } = this.props;
     let {width} = this.props;
 
@@ -169,6 +170,7 @@ class BarChart extends React.Component {
           <Legend
             innerRef={ref => this.legend = ref}
             data={data}
+            onItemClick={onLegendItemClick}
           />
         }
       </Layout>
@@ -202,6 +204,7 @@ BarChart.propTypes = {
   xLabel: PropTypes.string,
   yLabel: PropTypes.string,
   onDataClick: PropTypes.func,
+  onLegendItemClick: PropTypes.func,
 };
 
 export default BarChart;
