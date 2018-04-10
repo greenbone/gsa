@@ -22,6 +22,7 @@
  */
 
 import Filter, {UNKNOWN_FILTER_ID} from '../filter.js';
+import FilterTerm from '../filter/filterterm.js';
 
 describe('Filter parse from string tests', () => {
 
@@ -629,6 +630,40 @@ describe('filter and', () => {
     const filter2 = Filter.fromString('bar=2');
     expect(filter1.and(filter2).toFilterString()).toBe(
       'apply_overrides=1 min_qod=70 bar=2');
+  });
+});
+
+describe('filter hasTerm', () => {
+  test('filter should include terms', () => {
+    const filter = Filter.fromString(
+      'apply_overrides=1 min_qod=70 severity>0');
+
+    const term1 = FilterTerm.fromString('apply_overrides=1');
+    const term2 = FilterTerm.fromString('min_qod=70');
+    const term3 = FilterTerm.fromString('severity>0');
+    const term4 = FilterTerm.fromString('apply_overrides=666'); // special keyword
+
+    expect(filter.hasTerm(term1)).toBe(true);
+    expect(filter.hasTerm(term2)).toBe(true);
+    expect(filter.hasTerm(term3)).toBe(true);
+    expect(filter.hasTerm(term4)).toBe(true);
+  });
+
+  test('filter should not include terms', () => {
+    const filter = Filter.fromString(
+      'apply_overrides=1 min_qod=70 severity>0');
+
+    const term1 = FilterTerm.fromString('apply_overrides>1'); // special keyword
+    const term2 = FilterTerm.fromString('min_qod=78');
+    const term3 = FilterTerm.fromString('severity>1');
+    const term4 = FilterTerm.fromString('abc=70');
+    const term5 = FilterTerm.fromString('severity<0');
+
+    expect(filter.hasTerm(term1)).toBe(false);
+    expect(filter.hasTerm(term2)).toBe(false);
+    expect(filter.hasTerm(term3)).toBe(false);
+    expect(filter.hasTerm(term4)).toBe(false);
+    expect(filter.hasTerm(term5)).toBe(false);
   });
 });
 

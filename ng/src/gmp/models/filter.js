@@ -284,6 +284,18 @@ class Filter extends Model {
   }
 
   /**
+   * Check if a filter term is included in this filter
+   *
+   * @param {FilterTerm} term  FilterTerm to find in the filter
+   *
+   * @return {Boolean}
+   */
+  hasTerm(term) {
+    const terms = this.getTerms(term.keyword);
+    return terms.findIndex(cterm => cterm.equals(term)) !== -1;
+  }
+
+  /**
    * Get all FilterTerms for a keyword
    *
    * @param {String} key FilterTerm keyword to search for
