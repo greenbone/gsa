@@ -112,6 +112,7 @@ const Legend = ({
   data,
   children,
   innerRef,
+  onItemClick,
 }) => (
   <StyledLegend innerRef={innerRef}>
     {data.map((d, i) => (
@@ -128,11 +129,14 @@ const Legend = ({
                 onMouseEnter: show,
                 onMouseLeave: hide,
               },
+              onItemClick,
             }) :
             <Item
               innerRef={targetRef}
               onMouseEnter={show}
               onMouseLeave={hide}
+              onClick={is_defined(onItemClick) ?
+                () => onItemClick(d) : undefined}
             >
               <Rect color={d.color}/>
               <Label>{d.label}</Label>
@@ -151,6 +155,7 @@ Legend.propTypes = {
     toolTip: PropTypes.elementOrString,
   })).isRequired,
   innerRef: PropTypes.func,
+  onItemClick: PropTypes.func,
 };
 
 export default Legend;
