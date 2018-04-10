@@ -25,7 +25,8 @@ import React from 'react';
 import {Bar} from '@vx/shape';
 import {scaleBand, scaleLinear} from 'd3-scale';
 
-import {shorten} from 'gmp/utils/index';
+import {shorten} from 'gmp/utils/string';
+import {is_defined} from 'gmp/utils/identity';
 
 import Layout from '../layout/layout';
 
@@ -71,6 +72,7 @@ class BarChart extends React.Component {
       xLabel,
       yLabel,
       horizontal = false,
+      onDataClick,
     } = this.props;
     let {width} = this.props;
 
@@ -135,24 +137,29 @@ class BarChart extends React.Component {
                 content={d.toolTip}
               >
                 {({targetRef, hide, show}) => (
-                  <Bar
-                    innerRef={targetRef}
-                    fill={d.color}
-                    x={horizontal ? 1 : xScale(d.x)}
-                    y={horizontal ? xScale(d.x) : yScale(d.y)}
-                    height={
-                      horizontal ?
-                        xScale.bandwidth() :
-                        maxHeight - yScale(d.y)
-                    }
-                    width={
-                      horizontal ?
-                        yScale(d.y) :
-                        xScale.bandwidth()
-                    }
-                    onMouseEnter={() => show}
-                    onMouseLeave={() => hide}
-                  />
+                  <Group
+                    onClick={is_defined(onDataClick) ?
+                      () => onDataClick(d) : undefined}
+                  >
+                    <Bar
+                      innerRef={targetRef}
+                      fill={d.color}
+                      x={horizontal ? 1 : xScale(d.x)}
+                      y={horizontal ? xScale(d.x) : yScale(d.y)}
+                      height={
+                        horizontal ?
+                          xScale.bandwidth() :
+                          maxHeight - yScale(d.y)
+                      }
+                      width={
+                        horizontal ?
+                          yScale(d.y) :
+                          xScale.bandwidth()
+                      }
+                      onMouseEnter={() => show}
+                      onMouseLeave={() => hide}
+                    />
+                  </Group>
                 )}
               </ToolTip>
             ))}
@@ -194,6 +201,7 @@ BarChart.propTypes = {
   width: PropTypes.number.isRequired,
   xLabel: PropTypes.string,
   yLabel: PropTypes.string,
+  onDataClick: PropTypes.func,
 };
 
 export default BarChart;
