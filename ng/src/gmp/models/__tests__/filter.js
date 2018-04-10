@@ -348,10 +348,18 @@ describe('Filter equal', () => {
 
   test('filter with an and term should not equal', () => {
     const filter1 = Filter.fromString(
+      'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name');
+    const filter2 = Filter.fromString(
+      'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name and');
+    expect(filter1.equals(filter2)).toEqual(false);
+  });
+
+  test('filter with different realistic terms should not equal', () => {
+    const filter1 = Filter.fromString(
+      'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name');
+    const filter2 = Filter.fromString(
       'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name ' +
       'and status="Stopped"');
-    const filter2 = Filter.fromString(
-      'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name');
     expect(filter1.equals(filter2)).toEqual(false);
   });
 });
