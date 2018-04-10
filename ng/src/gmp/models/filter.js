@@ -284,6 +284,18 @@ class Filter extends Model {
   }
 
   /**
+   * Check if a filter term is included in this filter
+   *
+   * @param {FilterTerm} term  FilterTerm to find in the filter
+   *
+   * @return {Boolean}
+   */
+  hasTerm(term) {
+    const terms = this.getTerms(term.keyword);
+    return terms.findIndex(cterm => cterm.equals(term)) !== -1;
+  }
+
+  /**
    * Get all FilterTerms for a keyword
    *
    * @param {String} key FilterTerm keyword to search for
@@ -670,6 +682,18 @@ class Filter extends Model {
     f._mergeExtraKeywords(filter);
 
     return f;
+  }
+
+  /**
+   * Creates a new Filter from FilterTerms
+   *
+   * @param {FilterTerm} term  FilterTerms to set for the new Filter
+   *
+   * @returns {Filter} The new Filter
+   */
+  static fromTerm(...term) {
+    const f = new Filter();
+    return f._addTerm(...term);
   }
 
 }

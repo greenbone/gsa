@@ -99,6 +99,38 @@ describe('FilterTerm equals', () => {
 
 });
 
+describe('FilterTerm fromString', () => {
+  test('should parse single value', () => {
+    const term = FilterTerm.fromString('abc');
+
+    expect(term.keyword).toBeUndefined();
+    expect(term.value).toEqual('abc');
+    expect(term.relation).toBeUndefined();
+  });
+
+  test('should parse term with relation', () => {
+    const term = FilterTerm.fromString('abc=22');
+
+    expect(term.keyword).toEqual('abc');
+    expect(term.value).toEqual('22');
+    expect(term.relation).toEqual('=');
+  });
+
+  test('should parse special keywords', () => {
+    const term1 = FilterTerm.fromString('apply_overrides=22');
+
+    expect(term1.keyword).toEqual('apply_overrides');
+    expect(term1.value).toEqual(1);
+    expect(term1.relation).toEqual('=');
+
+    const term2 = FilterTerm.fromString('notes>4');
+
+    expect(term2.keyword).toEqual('notes');
+    expect(term2.value).toEqual(1);
+    expect(term2.relation).toEqual('>');
+  });
+});
+
 describe('Compound statement parsing', () => {
 
   test('should parse and', () => {
