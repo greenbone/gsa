@@ -32,7 +32,7 @@
     "d3-interpolate": "^1.1.6",
     "d3-shape": "^1.2.0",
     "d3-tip": "^0.7.1",
-    "downshift": "^1.24.0",
+    "downshift": "^1.31.6",
     "glamor": "^2.20.40",
     "glamorous": "4.11.2",
     "i18next": "10.2.2",
