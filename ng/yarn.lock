@@ -206,13 +206,14 @@
   version "9.3.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.3.0.tgz#3a129cda7c4e5df2409702626892cb4b96546dd5"
 
-"@vx/axis@^0.0.158":
-  version "0.0.158"
-  resolved "https://registry.yarnpkg.com/@vx/axis/-/axis-0.0.158.tgz#880340f57c6b0c3b4842f2326da76cb3cdf14fdf"
+"@vx/axis@^0.0.160":
+  version "0.0.160"
+  resolved "https://registry.yarnpkg.com/@vx/axis/-/axis-0.0.160.tgz#b6a59e1ea2984474e8afcf01dfbf6c6ac8d1d763"
   dependencies:
     "@vx/group" "0.0.153"
     "@vx/point" "0.0.153"
-    "@vx/shape" "0.0.158"
+    "@vx/shape" "^0.0.160"
+    "@vx/text" "0.0.159"
     classnames "^2.2.5"
     prop-types "^15.6.0"
 
@@ -239,9 +240,9 @@
   version "0.0.153"
   resolved "https://registry.yarnpkg.com/@vx/point/-/point-0.0.153.tgz#c0623f72804026a5afe7e1602bb27cd7b0847afc"
 
-"@vx/shape@0.0.158", "@vx/shape@^0.0.158":
-  version "0.0.158"
-  resolved "https://registry.yarnpkg.com/@vx/shape/-/shape-0.0.158.tgz#700582c7574b523d6ba1d9b9bd784d7bbb2e37fb"
+"@vx/shape@^0.0.160":
+  version "0.0.160"
+  resolved "https://registry.yarnpkg.com/@vx/shape/-/shape-0.0.160.tgz#407e33cec672c343aa451d734f395dda2cc1acb4"
   dependencies:
     "@vx/curve" "0.0.153"
     "@vx/group" "0.0.153"
@@ -250,6 +251,14 @@
     d3-path "^1.0.5"
     d3-shape "^1.2.0"
     prop-types "^15.5.10"
+
+"@vx/text@0.0.159":
+  version "0.0.159"
+  resolved "https://registry.yarnpkg.com/@vx/text/-/text-0.0.159.tgz#5aa26ea0136f13d1a3d99cb104e0ce36bb179496"
+  dependencies:
+    classnames "^2.2.5"
+    lodash "^4.17.4"
+    reduce-css-calc "^1.3.0"
 
 abab@^1.0.3:
   version "1.0.4"
@@ -7343,7 +7352,7 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-reduce-css-calc@^1.2.6:
+reduce-css-calc@^1.2.6, reduce-css-calc@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/reduce-css-calc/-/reduce-css-calc-1.3.0.tgz#747c914e049614a4c9cfbba629871ad1d2927716"
   dependencies:

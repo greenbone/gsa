@@ -20,9 +20,9 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@vx/axis": "^0.0.158",
+    "@vx/axis": "^0.0.160",
     "@vx/gradient": "^0.0.153",
-    "@vx/shape": "^0.0.158",
+    "@vx/shape": "^0.0.160",
     "core-js": "^2.5.3",
     "d3": "^3.5.17",
     "d3-cloud": "^1.2.4",
