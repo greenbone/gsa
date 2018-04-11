@@ -135,10 +135,10 @@ class TasksStatusDisplay extends React.Component {
       <TaskStatusLoader
         filter={filter}
       >
-        {({data}) => (
+        {loaderProps => (
           <DataDisplay
             {...props}
-            data={data}
+            {...loaderProps}
             dataTransform={transformStatusData}
             title={({data: tdata}) =>
               _('Tasks by Status (Total: {{count}})', {count: tdata.total})}

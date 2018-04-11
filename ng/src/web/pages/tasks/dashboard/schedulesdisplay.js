@@ -57,10 +57,10 @@ const TasksSchedulesDisplay = ({
   <TasksSchedulesLoader
     filter={filter}
   >
-    {({data}) => (
+    {loaderProps => (
       <DataDisplay
         {...props}
-        data={data}
+        {...loaderProps}
         dataTransform={transformScheduleData}
         title={() => _('Next Scheduled Tasks')}
       >

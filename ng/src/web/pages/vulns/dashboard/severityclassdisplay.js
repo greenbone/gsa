@@ -38,10 +38,10 @@ const VulnsSeverityDisplay = ({
   <VulnsSeverityLoader
     filter={filter}
   >
-    {({data}) => (
+    {loaderProps => (
       <SeverityClassDisplay
         {...props}
-        data={data}
+        {...loaderProps}
         title={({data: tdata}) =>
           _('Vulnerabilities by Severity Class (Total: {{count}})',
             {count: tdata.total})}

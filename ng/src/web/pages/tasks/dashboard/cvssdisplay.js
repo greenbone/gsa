@@ -37,11 +37,11 @@ const TasksCvssDisplay = ({
   <TasksSeverityLoader
     filter={filter}
   >
-    {({data}) => (
+    {loaderProps => (
       <CvssDisplay
         {...props}
+        {...loaderProps}
         filter={filter}
-        data={data}
         title={({data: tdata = {}}) =>
           _('Tasks by CVSS (Total: {{count}})',
             {count: tdata.total})}
