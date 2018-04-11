@@ -103,7 +103,7 @@ const transformSeverityData = (
 
     switch (riskFactor) {
       case HIGH:
-        toolTip = `${format(high)} - 10.0 (${label})`;
+        toolTip = `${label} (${format(high)} - 10.0)`;
         filterValue = {
           start: high,
           end: 10,
@@ -111,7 +111,7 @@ const transformSeverityData = (
         break;
       case MEDIUM:
         limit = format(high - 0.1);
-        toolTip = `${format(medium)} - ${limit} (${label})`;
+        toolTip = `${label} (${format(medium)} - ${limit})`;
         filterValue = {
           start: medium,
           end: limit,
@@ -119,7 +119,7 @@ const transformSeverityData = (
         break;
       case LOW:
         limit = format(medium - 0.1);
-        toolTip = `${format(low)} - ${limit} (${label})`;
+        toolTip = `${label} (${format(low)} - ${limit})`;
         filterValue = {
           start: low,
           end: limit,
