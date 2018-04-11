@@ -30,6 +30,14 @@ import {
   NA_VALUE,
   resultSeverityRiskFactor,
   translateRiskFactor,
+  getSeverityLevels,
+  LOG,
+  FALSE_POSITIVE,
+  ERROR,
+  NA,
+  HIGH,
+  MEDIUM,
+  LOW,
 } from '../../../utils/severity';
 
 import PropTypes from '../../../utils/proptypes';
@@ -43,6 +51,8 @@ import {
   percent,
   riskFactorColorScale,
 } from './utils';
+
+const format = value => value.toFixed(1);
 
 const transformSeverityData = (
   data = {},
@@ -63,26 +73,54 @@ const transformSeverityData = (
     const riskFactor = resultSeverityRiskFactor(value, severityClassType);
     const severityClass = allSeverityClasses[riskFactor] || {};
 
-    let {count = 0, label = translateRiskFactor(riskFactor)} = severityClass;
+    let {count = 0} = severityClass;
     count += parse_int(group.count);
 
     allSeverityClasses[riskFactor] = {
       count,
-      label,
       riskFactor,
     };
 
     return allSeverityClasses;
   }, {});
 
+  const {high, medium, low} = getSeverityLevels(severityClassType);
+
   const tdata = Object.values(severityClasses).map(severityClass => {
-    const {count, label, riskFactor} = severityClass;
+    const {count, riskFactor} = severityClass;
     const perc = percent(count, sum);
-    // TODO add severity class ranges (e.g. 9.1 - 10 High) to tooltip
+    const label = translateRiskFactor(riskFactor);
+
+    let toolTip;
+    let limit;
+
+    switch (riskFactor) {
+      case HIGH:
+        toolTip = `${format(high)} - 10.0 (${label})`;
+        break;
+      case MEDIUM:
+        limit = format(high - 0.1);
+        toolTip = `${format(medium)} - ${limit} (${label})`;
+        break;
+      case LOW:
+        limit = format(medium - 0.1);
+        toolTip = `${format(low)} - ${limit} (${label})`;
+        break;
+      case LOG:
+      case FALSE_POSITIVE:
+      case ERROR:
+      case NA:
+      default:
+        toolTip = `${label}`;
+        break;
+    }
+
+    toolTip = `${toolTip}: ${perc}% (${count})`;
+
     return {
       value: count,
       label,
-      toolTip: `${label}: ${perc}% (${count})`,
+      toolTip,
       color: riskFactorColorScale(riskFactor),
     };
   });
