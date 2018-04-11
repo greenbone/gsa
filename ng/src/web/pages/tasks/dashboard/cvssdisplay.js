@@ -40,6 +40,7 @@ const TasksCvssDisplay = ({
     {({data}) => (
       <CvssDisplay
         {...props}
+        filter={filter}
         data={data}
         title={({data: tdata = {}}) =>
           _('Tasks by CVSS (Total: {{count}})',

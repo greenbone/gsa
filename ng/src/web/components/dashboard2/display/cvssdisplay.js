@@ -23,6 +23,7 @@
 import React from 'react';
 
 import {is_empty} from 'gmp/utils/string';
+import {is_defined} from 'gmp/utils/identity';
 
 import {parse_int, parse_float} from 'gmp/parser';
 
@@ -45,6 +46,8 @@ import BarChart from '../../chart/bar';
 import DataDisplay from './datadisplay';
 
 import {totalCount, percent, riskFactorColorScale} from './utils';
+import FilterTerm from 'gmp/models/filter/filterterm';
+import Filter from 'gmp/models/filter';
 
 const getSeverityClassLabel = value => {
   switch (value) {
@@ -104,15 +107,36 @@ const transformCvssData = (data = {}, {severityClass}) => {
       const riskFactor = resultSeverityRiskFactor(value, severityClass);
       const label = translateRiskFactor(riskFactor);
 
-      const toolTip = value > 0 ?
-        `${value - 1}.1 - ${value}.0 (${label}): ${perc}% (${count})` :
-        `${label}: ${perc}% (${count})`;
+      let toolTip;
+      let filterValue;
+
+      if (value > 0) {
+        const start = value - 1;
+        const end = value;
+
+        filterValue = {
+          start,
+          end,
+        };
+
+        toolTip = `${start}.1 - ${end}.0 (${label}): ${perc}% (${count})`;
+      }
+      else {
+        if (value === 0) {
+          filterValue = {
+            start: 0,
+            end: 0,
+          };
+        }
+        toolTip = `${label}: ${perc}% (${count})`;
+      }
       return {
         x: getSeverityClassLabel(value),
         y: count,
         label,
         toolTip,
         color: riskFactorColorScale(riskFactor),
+        filterValue,
       };
     });
 
@@ -121,28 +145,100 @@ const transformCvssData = (data = {}, {severityClass}) => {
   return tdata;
 };
 
-const CvssDisplay = ({
-  title,
-  ...props
-}) => (
-  <DataDisplay
-    {...props}
-    dataTransform={transformCvssData}
-    title={title}
-  >
-    {({width, height, data}) => (
-      <BarChart
-        displayLegend={false}
-        width={width}
-        height={height}
-        data={data}
-      />
-    )}
-  </DataDisplay>
-);
+class CvssDisplay extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.handleDataClick = this.handleDataClick.bind(this);
+  }
+
+  handleDataClick(data) {
+    const {onFilterChanged, filter} = this.props;
+
+    if (!is_defined(onFilterChanged)) {
+      return;
+    }
+
+    const {filterValue = {}} = data;
+    const {start, end} = filterValue;
+
+    let statusFilter;
+
+    if (is_defined(start) && start > 0 && end < 10) {
+      const startTerm = FilterTerm.fromString(`severity>${start}`);
+
+      // use end + 0.1 as upper limit
+      // this is a bit hackish and only works for severity
+      // it would be better if gvmd does support <=
+      const endVal = (end + 0.1).toFixed(1);
+      const endTerm = FilterTerm.fromString(`severity<${endVal}`);
+
+      if (is_defined(filter) && filter.hasTerm(startTerm) &&
+        filter.hasTerm(endTerm)) {
+        return;
+      }
+
+      statusFilter = Filter.fromTerm(startTerm).and(Filter.fromTerm(endTerm));
+    }
+    else {
+      let statusTerm;
+
+      if (is_defined(start)) {
+
+        if (start > 0) {
+          statusTerm = FilterTerm.fromString(`severity>${start}`);
+        }
+        else {
+          statusTerm = FilterTerm.fromString(`severity=${start}`);
+        }
+      }
+      else {
+        statusTerm = FilterTerm.fromString(`severity=""`);
+      }
+
+      if (is_defined(filter) && filter.hasTerm(statusTerm)) {
+        return;
+      }
+
+      statusFilter = Filter.fromTerm(statusTerm);
+    }
+
+    const newFilter = is_defined(filter) ? filter.copy().and(statusFilter) :
+      statusFilter;
+
+    onFilterChanged(newFilter);
+  }
+
+  render() {
+    const {
+      title,
+      ...props
+    } = this.props;
+    return (
+      <DataDisplay
+        {...props}
+        dataTransform={transformCvssData}
+        title={title}
+      >
+        {({width, height, data}) => (
+          <BarChart
+            displayLegend={false}
+            width={width}
+            height={height}
+            data={data}
+            onDataClick={this.handleDataClick}
+          />
+        )}
+      </DataDisplay>
+    );
+  }
+}
 
 CvssDisplay.propTypes = {
+  filter: PropTypes.filter,
   title: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
 };
 
 export default CvssDisplay;

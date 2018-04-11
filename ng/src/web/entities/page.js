@@ -82,6 +82,7 @@ class EntitiesPage extends React.Component {
       sectionIcon,
       dashboard: DashboardComponent,
       dashboard2,
+      onFilterChanged,
     } = this.props;
 
     let {
@@ -110,7 +111,7 @@ class EntitiesPage extends React.Component {
             <DashboardComponent filter={filter}/>
           }
           {is_defined(dashboard2) &&
-            dashboard2({filter})
+            dashboard2({filter, onFilterChanged})
           }
           {loading && !is_defined(entities) ?
             this.renderLoading() :
