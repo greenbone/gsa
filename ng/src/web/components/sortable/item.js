@@ -60,21 +60,18 @@ const Item = ({
     index={index}
   >
     {(provided, snapshot) => ( // eslint-disable-line no-shadow
-      <React.Fragment>
-        <GridItem
-          innerRef={provided.innerRef}
-          {...provided.draggableProps}
-          isDragging={snapshot.isDragging}
-          style={provided.draggableProps.style}
-        >
-          {children({
-            ...props,
-            id,
-            dragHandleProps: provided.dragHandleProps,
-          })}
-        </GridItem>
-        {provided.placeholder}
-      </React.Fragment>
+      <GridItem
+        innerRef={provided.innerRef}
+        {...provided.draggableProps}
+        isDragging={snapshot.isDragging}
+        style={provided.draggableProps.style}
+      >
+        {children({
+          ...props,
+          id,
+          dragHandleProps: provided.dragHandleProps,
+        })}
+      </GridItem>
     )}
   </Draggable>
 );
