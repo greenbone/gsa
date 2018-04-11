@@ -61,7 +61,7 @@ const check_by_type = {
   note: entity => {
     return {restorable: true, deletable: true};
   },
-  override: enitity => {
+  override: entity => {
     return {restorable: true, deletable: true};
   },
   permission: entity => {

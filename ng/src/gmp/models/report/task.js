@@ -28,7 +28,7 @@ import {parse_progress} from '../../parser.js';
 import Model from '../../model.js';
 
 /*
- * Use own task model for reports to avoid cyclic dependcies
+ * Use own task model for reports to avoid cyclic dependencies
  */
 
 class ReportTask extends Model {

@@ -191,7 +191,7 @@ module.exports = {
     'no-new-require': 'error', // disallow new require: var appHeader = new require('app-header');
     'no-path-concat': 'error',
     'no-proto': 'error', // disallow use of __proto__
-    // disbale no-return-assign until there is an option for disabling this rule
+    // disable no-return-assign until there is an option for disabling this rule
     // for arrow functions. it's causing warning for all react refs currently
     // https://github.com/eslint/eslint/issues/5150
     // 'no-return-assign': 'warn', // disallow assignment in return Statement
@@ -225,7 +225,7 @@ module.exports = {
       'never',
     ],
     'object-shorthand': 'off', // don't require {a} instead of {a: a}
-    'one-var': [ // require every variable to be declared on seperate statement
+    'one-var': [ // require every variable to be declared on separate statement
       'warn',
       'never',
     ],
@@ -237,7 +237,7 @@ module.exports = {
     'prefer-arrow-callback': 'off',
     'prefer-const': [ // enforce using const instead of let (and var)
       'warn', {
-        destructuring: 'all', // enforce const for destuction only if all vars can be const
+        destructuring: 'all', // enforce const for destruction only if all vars can be const
         ignoreReadBeforeAssign: false,
       },
     ],
@@ -255,7 +255,7 @@ module.exports = {
     'prefer-rest-params': 'error', // require using the rest parameters instead of arguments
     'prefer-spread': 'warn', // prefer spread operator Xyz.func(...args) instead of Xyz.func.apply(Xyz, args)
     'prefer-template': 'off',
-    'quote-props': [ // allow quotes for object properties ony if required e.g. {'a-b': 1}
+    'quote-props': [ // allow quotes for object properties only if required e.g. {'a-b': 1}
       'warn',
       'as-needed',
     ],
@@ -346,7 +346,7 @@ module.exports = {
       'multiline',
     ],
     'react/jsx-indent': ['warn', 2], // Validate JSX indentation
-    'react/jsx-indent-props': ['warn', 2], // Validate JSX prop intentation
+    'react/jsx-indent-props': ['warn', 2], // Validate JSX prop indentation
     'react/jsx-key': 'warn', // Warn if an element that likely requires a key prop
     'react/jsx-max-props-per-line': [ // Limit maximum of props on a single line in JSX to 2
       'warn', {

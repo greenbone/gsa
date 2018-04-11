@@ -182,7 +182,7 @@ describe('for_each function tests', () => {
 });
 
 describe('filter function tests', () => {
-  test('should return emtpy array', () => {
+  test('should return empty array', () => {
     expect(filter(undefined, item => true)).toEqual([]);
     expect(filter(null, item => true)).toEqual([]);
     expect(filter([], item => true)).toEqual([]);

@@ -127,7 +127,7 @@ class ScanConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  editScanConfigSettings({id}) { // should be removed in future an splitted into several api calls
+  editScanConfigSettings({id}) { // should be removed in future and split into several api calls
     return this.httpGet({
       cmd: 'edit_config',
       id,

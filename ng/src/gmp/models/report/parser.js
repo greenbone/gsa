@@ -124,7 +124,7 @@ export const parse_tls_certificates = (report, filter) => {
 
         // currently cert data starts with x509:
         // not sure if there are other types of certs
-        // therefore keep orginal data
+        // therefore keep original data
 
         cert._data = value;
 

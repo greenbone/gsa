@@ -87,7 +87,7 @@ const ip_to_number = original => {
 
   // TODO support ipv6
 
-  return original; // use original value for comparision
+  return original; // use original value for comparison
 };
 
 const get_value = (convert_func, value, property, undefined_val) => {

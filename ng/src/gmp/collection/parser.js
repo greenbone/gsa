@@ -50,7 +50,7 @@ export function parse_info_counts(response) {
   //  or by using the same pattern (with 's') for info
 
   const infos = response.info;
-  // its getting even uglier... if no entites are returned we get a single info
+  // its getting even uglier... if no entities are returned we get a single info
   // element for start and max counts.
   let es = is_array(infos) ? infos[infos.length - 1] : infos;
   let ec = response.info_count;

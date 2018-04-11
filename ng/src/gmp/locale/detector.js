@@ -37,7 +37,7 @@ const DEFAULT_OPTIONS = {
     lookupQuerystring: 'lang',
     lookupLocalStorage: LANGUAGE_KEY,
     // don't let BrowserDetector set language in localStorage
-    // we wan't to be able to use navigator instead of localStorage always
+    // we want to be able to use navigator instead of localStorage always
     caches: [],
 };
 

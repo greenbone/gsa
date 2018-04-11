@@ -223,7 +223,7 @@ class Http {
 
   handleRequestError(resolve, reject, xhr, options) {
     const rej = new Rejection(xhr, Rejection.REASON_ERROR,
-      _('An error occured during making the request. Most likely the web ' +
+      _('An error occurred during making the request. Most likely the web ' +
         'server does not respond.'));
     try {
       reject(this.transformRejection(rej, options));
