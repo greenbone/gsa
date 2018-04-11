@@ -28,6 +28,10 @@ import {interpolateHcl} from 'd3-interpolate';
 
 import _ from 'gmp/locale';
 
+import Filter from 'gmp/models/filter';
+
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../../utils/proptypes';
 
 import DonutChart from '../../../components/chart/donut3d';
@@ -39,6 +43,7 @@ import {
 } from '../../../components/dashboard2/display/utils';
 
 import {TaskStatusLoader} from './loaders';
+import FilterTerm from 'gmp/models/filter/filterterm';
 
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');
@@ -84,6 +89,7 @@ const transformStatusData = (data = {}) => {
       label: value,
       toolTip: `${value}: ${perc}% (${count})`,
       color: taskStatusColorScale(value),
+      filterValue: value,
     };
   });
 
@@ -92,35 +98,70 @@ const transformStatusData = (data = {}) => {
   return tdata;
 };
 
-const TasksStatusDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TaskStatusLoader
-    filter={filter}
-  >
-    {({data}) => (
-      <DataDisplay
-        {...props}
-        data={data}
-        dataTransform={transformStatusData}
-        title={({data: tdata}) =>
-          _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
+class TasksStatusDisplay extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.handleDataClick = this.handleDataClick.bind(this);
+  }
+
+  handleDataClick(data) {
+    const {onFilterChanged, filter} = this.props;
+    const {filterValue} = data;
+
+    if (is_defined(filterValue) && is_defined(onFilterChanged)) {
+      const statusTerm = FilterTerm.fromString(`status="${filterValue}"`);
+
+      if (is_defined(filter) && filter.hasTerm(statusTerm)) {
+        return;
+      }
+
+      const statusFilter = Filter.fromTerm(statusTerm);
+      const newFilter = is_defined(filter) ? filter.copy().and(statusFilter) :
+        statusFilter;
+
+      onFilterChanged(newFilter);
+    }
+  }
+
+  render() {
+    const {
+      filter,
+      onFilterChanged,
+      ...props
+    } = this.props;
+    return (
+      <TaskStatusLoader
+        filter={filter}
       >
-        {({width, height, data: tdata}) => (
-          <DonutChart
-            width={width}
-            height={height}
-            data={tdata}
-          />
+        {({data}) => (
+          <DataDisplay
+            {...props}
+            data={data}
+            dataTransform={transformStatusData}
+            title={({data: tdata}) =>
+              _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
+          >
+            {({width, height, data: tdata}) => (
+              <DonutChart
+                width={width}
+                height={height}
+                data={tdata}
+                onDataClick={this.handleDataClick}
+                onLegendItemClick={this.handleDataClick}
+              />
+            )}
+          </DataDisplay>
         )}
-      </DataDisplay>
-    )}
-  </TaskStatusLoader>
-);
+      </TaskStatusLoader>
+    );
+  }
+}
 
 TasksStatusDisplay.propTypes = {
   filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
 };
 
 export default TasksStatusDisplay;

@@ -37,6 +37,7 @@ class Dashboard extends React.Component {
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
     filter: PropTypes.filter,
     maxItemsPerRow: PropTypes.number,
+    onFilterChanged: PropTypes.func,
   }
 
   constructor(props) {
@@ -82,7 +83,12 @@ class Dashboard extends React.Component {
 
   render() {
     const {items} = this.state;
-    const {maxItemsPerRow, filter, components = {}} = this.props;
+    const {
+      maxItemsPerRow,
+      filter,
+      components = {},
+      onFilterChanged,
+    } = this.props;
 
     return (
       <Grid
@@ -101,6 +107,7 @@ class Dashboard extends React.Component {
               width={width}
               id={id}
               onRemoveClick={remove}
+              onFilterChanged={onFilterChanged}
             />
           ) : null;
         }}

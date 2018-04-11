@@ -33,6 +33,7 @@ import TasksCvssDisplay from './cvssdisplay';
 
 const TaskDashboard = ({
   filter,
+  onFilterChanged,
 }) => (
   <Dashboard
     filter={filter}
@@ -52,11 +53,13 @@ const TaskDashboard = ({
         'tasks-schedules',
       ],
     ]}
+    onFilterChanged={onFilterChanged}
   />
 );
 
 TaskDashboard.propTypes = {
   filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func,
 };
 
 export default TaskDashboard;
