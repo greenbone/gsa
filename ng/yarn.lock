@@ -4463,17 +4463,17 @@ hyphenate-style-name@^1.0.1, hyphenate-style-name@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
 
-i18next-browser-languagedetector@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-2.1.0.tgz#1b0e17b09507f84e7a1fa761539a07544f92a0df"
+i18next-browser-languagedetector@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-2.2.0.tgz#5f41abe61964a56dce70102ab31c3ed5d5866edc"
 
 i18next-xhr-backend@1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/i18next-xhr-backend/-/i18next-xhr-backend-1.5.1.tgz#50282610780c6a696d880dfa7f4ac1d01e8c3ad5"
 
-i18next@10.2.2:
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-10.2.2.tgz#1f2dc55ca2e8d7e071f7aff9f78654ef7f003c0e"
+i18next@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.1.1.tgz#df3a683542d7756a8aa8d6b884b61141239c394a"
 
 iconv-lite@0.4, iconv-lite@0.4.19, iconv-lite@^0.4.17, iconv-lite@~0.4.13:
   version "0.4.19"
