@@ -76,6 +76,7 @@ class DataDisplay extends React.Component {
   render() {
     const {data: transformedData} = this.state;
     let {
+      data: originalData,
       height,
       isLoading,
     } = this.props;
@@ -91,7 +92,7 @@ class DataDisplay extends React.Component {
 
     height = height - DISPLAY_HEADER_HEIGHT;
 
-    isLoading = isLoading && !is_defined(transformedData);
+    isLoading = isLoading && !is_defined(originalData);
 
     const otherProps = exclude_object_props(props, ownProps);
     return (
