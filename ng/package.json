@@ -1,13 +1,13 @@
 {
   "name": "gsa",
   "version": "0.1.0",
-  "description": "Greenbone Security Assistent Next Generation",
+  "description": "Greenbone Security Assistant Next Generation",
   "keywords": [
     "openvas",
     "gmp",
     "gsa",
     "greenbone",
-    "greenbone security assistent"
+    "greenbone security assistant"
   ],
   "repository": {
     "type": "git",

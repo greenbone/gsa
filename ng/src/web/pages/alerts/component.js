@@ -459,7 +459,7 @@ class AlertComponent extends React.Component {
       }
     }, () => {
       if (is_defined(onTestError)) {
-        onTestError(_('An error occured during Testing the alert {{name}}',
+        onTestError(_('An error occurred during Testing the alert {{name}}',
           alert));
       }
     });

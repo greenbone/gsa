@@ -90,7 +90,7 @@ class BarChart extends React.Component {
       val => val.toString().length));
 
     // adjust left margin for label length on horizontal bars
-    // 4px for each letter is just a randomly choosen value
+    // 4px for each letter is just a randomly chosen value
     const marginLeft = horizontal ? margin.left +
       Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
 

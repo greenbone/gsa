@@ -366,7 +366,7 @@ class Filter extends Model {
    }
 
   /**
-   * Check wether this Filter contains a FilterTerm with the passed keyword
+   * Check whether this Filter contains a FilterTerm with the passed keyword
    *
    * @param {String} key  Keyword to search for
    *

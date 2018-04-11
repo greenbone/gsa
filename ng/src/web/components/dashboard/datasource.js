@@ -75,7 +75,7 @@ class DataSource extends React.Component {
     const newfilter = props.filter ? props.filter.simple() : undefined;
 
     // TODO charts should decide themself if they need to redraw if a filter has
-    // changed in future. This should be changed when the charts a completly
+    // changed in future. This should be changed when the charts a completely
     // converted to react. Until now we compare the filter without first, rows
     // and sort/sort-reverse params.
     const equals = filter ? filter.equals(newfilter) :
