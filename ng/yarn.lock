@@ -8898,9 +8898,9 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-x2js@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.1.1.tgz#f7c4e6077c29470f2b0dd6714805871b25667119"
+x2js@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.2.1.tgz#d7d9eb3ab14a31a98068b9eba1bb1b9397c96714"
   dependencies:
     xmldom "^0.1.19"
 
