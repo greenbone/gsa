@@ -38,11 +38,11 @@ const VulnsSeverityDisplay = ({
   <VulnsSeverityLoader
     filter={filter}
   >
-    {({data}) => (
+    {loaderProps => (
       <CvssDisplay
         {...props}
+        {...loaderProps}
         filter={filter}
-        data={data}
         title={({data: tdata}) =>
           _('Vulnerabilities by CVSS (Total: {{count}})',
             {count: tdata.total})}

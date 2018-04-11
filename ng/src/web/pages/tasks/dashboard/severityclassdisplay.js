@@ -37,10 +37,11 @@ const TasksSeverityDisplay = ({
   <TasksSeverityLoader
     filter={filter}
   >
-    {({data}) => (
+    {loaderProps => (
       <SeverityClassDisplay
         {...props}
-        data={data}
+        {...loaderProps}
+        filter={filter}
         title={({data: tdata}) =>
           _('Tasks by Severity Class (Total: {{count}})',
             {count: tdata.total})}

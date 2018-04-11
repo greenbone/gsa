@@ -74,8 +74,9 @@ class DataDisplay extends React.Component {
   }
 
   render() {
-    const {data} = this.state;
+    const {data: transformedData} = this.state;
     let {
+      data: originalData,
       height,
       isLoading,
     } = this.props;
@@ -91,13 +92,13 @@ class DataDisplay extends React.Component {
 
     height = height - DISPLAY_HEADER_HEIGHT;
 
-    isLoading = isLoading && !is_defined(data);
+    isLoading = isLoading && !is_defined(originalData);
 
     const otherProps = exclude_object_props(props, ownProps);
     return (
       <Display
         menu={menu}
-        title={isLoading ? _('Loading') : title({data, id})}
+        title={isLoading ? _('Loading') : title({data: transformedData, id})}
         onRemoveClick={onRemoveClick}
         {...otherProps}
       >
@@ -105,7 +106,7 @@ class DataDisplay extends React.Component {
           <Loading/> :
           children({
             id,
-            data,
+            data: transformedData,
             width,
             height,
           })
