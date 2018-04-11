@@ -26,6 +26,9 @@ import {is_defined} from 'gmp/utils/identity';
 
 import {parse_severity, parse_int} from 'gmp/parser';
 
+import FilterTerm from 'gmp/models/filter/filterterm';
+import Filter from 'gmp/models/filter';
+
 import {
   NA_VALUE,
   resultSeverityRiskFactor,
@@ -38,6 +41,9 @@ import {
   HIGH,
   MEDIUM,
   LOW,
+  LOG_VALUE,
+  FALSE_POSITIVE_VALUE,
+  ERROR_VALUE,
 } from '../../../utils/severity';
 
 import PropTypes from '../../../utils/proptypes';
@@ -93,25 +99,57 @@ const transformSeverityData = (
 
     let toolTip;
     let limit;
+    let filterValue;
 
     switch (riskFactor) {
       case HIGH:
         toolTip = `${format(high)} - 10.0 (${label})`;
+        filterValue = {
+          start: high,
+          end: 10,
+        };
         break;
       case MEDIUM:
         limit = format(high - 0.1);
         toolTip = `${format(medium)} - ${limit} (${label})`;
+        filterValue = {
+          start: medium,
+          end: limit,
+        };
         break;
       case LOW:
         limit = format(medium - 0.1);
         toolTip = `${format(low)} - ${limit} (${label})`;
+        filterValue = {
+          start: low,
+          end: limit,
+        };
         break;
       case LOG:
-      case FALSE_POSITIVE:
-      case ERROR:
-      case NA:
-      default:
         toolTip = `${label}`;
+        filterValue = {
+          start: LOG_VALUE,
+        };
+        break;
+      case FALSE_POSITIVE:
+        toolTip = `${label}`;
+        filterValue = {
+          start: FALSE_POSITIVE_VALUE,
+        };
+        break;
+      case ERROR:
+        toolTip = `${label}`;
+        filterValue = {
+          start: ERROR_VALUE,
+        };
+        break;
+      case NA:
+        toolTip = `${label}`;
+        filterValue = {
+          start: NA_VALUE,
+        };
+        break;
+      default:
         break;
     }
 
@@ -122,6 +160,7 @@ const transformSeverityData = (
       label,
       toolTip,
       color: riskFactorColorScale(riskFactor),
+      filterValue,
     };
   });
 
@@ -130,30 +169,90 @@ const transformSeverityData = (
   return tdata;
 };
 
-const SeverityClassDisplay = ({
-  severityClass,
-  title,
-  ...props
-}) => (
-  <DataDisplay
-    {...props}
-    severityClass={severityClass}
-    dataTransform={transformSeverityData}
-    title={title}
-  >
-    {({width, height, data}) => (
-      <DonutChart
-        width={width}
-        height={height}
-        data={data}
-      />
-    )}
-  </DataDisplay>
-);
+class SeverityClassDisplay extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    this.handleDataClick = this.handleDataClick.bind(this);
+  }
+
+  handleDataClick(data) {
+    const {onFilterChanged, filter} = this.props;
+    const {filterValue} = data;
+
+
+    let severityFilter;
+    if (!is_defined(onFilterChanged)) {
+      return;
+    }
+
+    const {start, end} = filterValue;
+    if (start > 0 && end < 10) {
+      const startTerm = FilterTerm.fromString(`severity>${start}`);
+      const endTerm = FilterTerm.fromString(`severity<${end}`);
+
+      if (is_defined(filter) && filter.hasTerm(startTerm) &&
+        filter.hasTerm(endTerm)) {
+        return;
+      }
+
+      severityFilter = Filter.fromTerm(startTerm)
+        .and(Filter.fromTerm(endTerm));
+    }
+    else {
+      let severityTerm;
+      if (start > 0) {
+        severityTerm = FilterTerm.fromString(`severity>${start}`);
+      }
+      else if (start === NA_VALUE) {
+        severityTerm = FilterTerm.fromString('severity=""');
+      }
+      else {
+        severityTerm = FilterTerm.fromString(`severity=${start}`);
+      }
+
+      if (is_defined(filter) && filter.hasTerm(severityTerm)) {
+        return;
+      }
+
+      severityFilter = Filter.fromTerm(severityTerm);
+    }
+
+    const newFilter = is_defined(filter) ? filter.copy().and(severityFilter) :
+      severityFilter;
+
+    onFilterChanged(newFilter);
+  }
+
+  render() {
+    const {
+      ...props
+    } = this.props;
+    return (
+      <DataDisplay
+        {...props}
+        dataTransform={transformSeverityData}
+      >
+        {({width, height, data}) => (
+          <DonutChart
+            width={width}
+            height={height}
+            data={data}
+            onDataClick={this.handleDataClick}
+            onLegendItemClick={this.handleDataClick}
+          />
+        )}
+      </DataDisplay>
+    );
+  }
+}
 
 SeverityClassDisplay.propTypes = {
+  filter: PropTypes.filter,
   severityClass: PropTypes.severityClass,
   title: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
 };
 
 export default SeverityClassDisplay;
