@@ -50,8 +50,8 @@ const FilterDialog = ({
 }) => {
 
   const filterOptions = types.map(option => ({
-    value: option[1],
-    label: option[2],
+    value: option[0],
+    label: option[1],
   }));
 
   return (
