@@ -42,7 +42,7 @@
     "jquery-ui": "^1.12.0",
     "moment": "^2.22.0",
     "moment-timezone": "^0.5.14",
-    "prop-types": "^15.5.10",
+    "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-beautiful-dnd": "^4.0.1",
     "react-datepicker": "^1.1.0",
