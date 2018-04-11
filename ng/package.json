@@ -67,8 +67,8 @@
     "build-storybook": "NODE_PATH=src build-storybook -s public -c src/web/stories"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^3.3.9",
-    "@storybook/react": "^3.3.9",
+    "@storybook/addon-actions": "^3.4.1",
+    "@storybook/react": "^3.4.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "react-test-renderer": "^16.2.0"
