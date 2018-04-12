@@ -183,6 +183,7 @@ class EntitiesCommand extends HttpCommand {
   getAggregates({
     textColumns = [],
     sort = [],
+    maxGroups,
     ...params
   } = {}) {
 
@@ -197,6 +198,9 @@ class EntitiesCommand extends HttpCommand {
       requestParams[`sort_stats:${i}`] = stat;
     });
 
+    if (is_defined(maxGroups)) {
+      requestParams.max_groups = maxGroups;
+    }
 
     return this.httpGet({
       ...requestParams,
