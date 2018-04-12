@@ -46,6 +46,7 @@ const DEFAULT_TICK_PROPS = {
 };
 
 const left = () => ({
+  dx: -0.25 * FONT_SIZE,
   dy: 0.25 * FONT_SIZE,
   textAnchor: 'end',
   ...DEFAULT_TICK_PROPS,
@@ -53,6 +54,7 @@ const left = () => ({
 
 const right = () => ({
   dy: 0.25 * FONT_SIZE,
+  dx: 0.25 * FONT_SIZE,
   textAnchor: 'start',
   ...DEFAULT_TICK_PROPS,
 });
