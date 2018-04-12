@@ -314,6 +314,19 @@ class TasksCommand extends EntitiesCommand {
       filter,
     });
   }
+
+  getHighResultsAggregates({filter} = {}) {
+    return this.getAggregates({
+      filter,
+      aggregate_type: 'task',
+      group_column: 'uuid',
+      textColumns: [
+        'name',
+        'high_per_host',
+        'severity',
+      ],
+    });
+  }
 }
 
 register_command('task', TaskCommand);
