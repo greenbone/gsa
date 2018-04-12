@@ -20,11 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import {is_defined, is_string, is_array} from '../utils/identity';
-import {map} from '../utils/array';
-
 import logger from '../log.js';
+
+import {is_defined, is_string} from '../utils/identity';
+import {map, for_each} from '../utils/array';
 
 import {parse_collection_list} from '../collection/parser.js';
 
@@ -154,21 +153,41 @@ class EntitiesCommand extends HttpCommand {
     };
 
     // ensure groups is always an array
-    let {group: groups = []} = aggregate;
+    const {group: groups = []} = aggregate;
 
-    if (!is_array(groups)) {
-       groups = [groups];
-    }
+    ret.groups = map(groups, group => {
+      const {text} = group;
 
-    ret.groups = groups;
+      const newGroup = {
+        ...group,
+      };
+
+      if (is_defined(text)) {
+        newGroup.text = {};
+
+        for_each(text, t => {
+          const name = t._column;
+          const value = t.__text;
+          newGroup.text[name] = value;
+        });
+      }
+
+      return newGroup;
+    });
 
     delete ret.group;
 
     return response.setData(ret);
   }
 
-  getAggregates(params = {}) {
+  getAggregates({textColumns = [], ...params} = {}) {
+
+    const columns = {};
+
+    textColumns.forEach((column, i) => columns[`text_columns:${i}`] = column);
+
     return this.httpGet({
+      ...columns,
       ...params,
       cmd: 'get_aggregate',
     }).then(this.transformAggregates);
