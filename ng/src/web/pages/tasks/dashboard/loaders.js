@@ -29,6 +29,7 @@ import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
 export const TASKS_STATUS = 'tasks-status';
 export const TASKS_SEVERITY = 'tasks-severity';
 export const TASKS_SCHEDULES = 'tasks-schedules';
+export const TASKS_HIGH_RESULTS = 'tasks-high-results';
 
 export const tasksStatusLoader = loadFunc(
   ({gmp, filter}) => gmp.tasks.getStatusAggregates({filter}).then(r => r.data),
@@ -47,6 +48,11 @@ export const tasksSchedulesLoader = loadFunc(
     schedules_only: 1,
   }).then(r => r.data),
   TASKS_SCHEDULES);
+
+export const tasksHighResultsLoader = loadFunc(
+  ({gmp, filter}) => gmp.tasks.getHighResultsAggregates({filter})
+    .then(r => r.data),
+  TASKS_HIGH_RESULTS);
 
 const loaderPropTypes = {
   children: PropTypes.func,
@@ -109,5 +115,24 @@ export const TasksSeverityLoader = ({
 );
 
 TasksSeverityLoader.propTypes = loaderPropTypes;
+
+export const TasksHighResultsLoader = ({
+  children,
+  filter,
+}) => (
+  <Loader
+    dataId={TASKS_HIGH_RESULTS}
+    filter={filter}
+    load={tasksHighResultsLoader}
+    subscriptions={[
+      'tasks.timer',
+      'tasks.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+TasksHighResultsLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:
