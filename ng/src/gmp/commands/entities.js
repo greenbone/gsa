@@ -20,11 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import {is_defined, is_string, is_array} from '../utils/identity';
-import {map} from '../utils/array';
-
 import logger from '../log.js';
+
+import {is_defined, is_string} from '../utils/identity';
+import {map, for_each} from '../utils/array';
 
 import {parse_collection_list} from '../collection/parser.js';
 
