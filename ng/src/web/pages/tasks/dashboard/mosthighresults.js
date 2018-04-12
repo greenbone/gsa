@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import {withRouter} from 'react-router';
+
 import {format as d3format} from 'd3-format';
 
 import _ from 'gmp/locale';
@@ -53,7 +55,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       return parse_float(high_per_host) > 0;
     })
     .map(group => {
-      const {text} = group;
+      const {text, value: id} = group;
       const {name} = text;
       const high_per_host = parse_float(text.high_per_host);
       const severity = parse_severity(text.severity);
@@ -64,6 +66,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
         label: name,
         color: riskFactorColorScale(riskFactor),
         toolTip: `${name}: ${format(high_per_host)}`,
+        id,
       };
     });
 };
@@ -77,7 +80,9 @@ class TasksMostHighResultsDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    // TODO
+    const {router} = this.props;
+
+    router.push(`/ng/task/${data.id}`);
   }
 
   render() {
@@ -115,9 +120,10 @@ class TasksMostHighResultsDisplay extends React.Component {
 
 TasksMostHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
+  router: PropTypes.object.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-export default TasksMostHighResultsDisplay;
+export default withRouter(TasksMostHighResultsDisplay);
 
 // vim: set ts=2 sw=2 tw=80:
