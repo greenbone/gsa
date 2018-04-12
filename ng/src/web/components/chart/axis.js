@@ -30,10 +30,10 @@ import PropTypes from '../../utils/proptypes';
 
 const lineCss = css({
   shapeRendering: 'crispEdges',
-  strokeWidth: 0.8,
+  strokeWidth: 0.99,
   '& line': {
     shapeRendering: 'crispEdges',
-    strokeWidth: 0.8,
+    strokeWidth: 0.99,
   },
 });
 
