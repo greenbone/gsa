@@ -50,7 +50,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {
   render_nvt_name,
   render_select_items,
-  cvss_number_format,
+  severityFormat,
 } from '../../utils/render.js';
 import {
   FALSE_POSITIVE_VALUE,
@@ -327,7 +327,7 @@ const OverrideDialog = ({
                     <Radio
                       name="severity"
                       title={' > ' +
-                        cvss_number_format(severity - 0.1)}
+                        severityFormat(severity - 0.1)}
                       checked={true}
                       convert={parse_float}
                       value={severity}
