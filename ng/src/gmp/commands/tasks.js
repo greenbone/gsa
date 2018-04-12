@@ -315,7 +315,7 @@ class TasksCommand extends EntitiesCommand {
     });
   }
 
-  getHighResultsAggregates({filter} = {}) {
+  getHighResultsAggregates({filter, max} = {}) {
     return this.getAggregates({
       filter,
       aggregate_type: 'task',
@@ -324,7 +324,17 @@ class TasksCommand extends EntitiesCommand {
         'name',
         'high_per_host',
         'severity',
+        'modified',
       ],
+      sort: [{
+        field: 'high_per_host',
+        direction: 'descending',
+        stat: 'max',
+      }, {
+        field: 'modified',
+        direction: 'descending',
+      }],
+      maxGroups: max,
     });
   }
 }

@@ -28,7 +28,7 @@ import {parse_float} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
-  cvss_number_format,
+  severityFormat,
 } from '../../utils/render.js';
 
 import {
@@ -64,7 +64,7 @@ const SeverityBar = ({severity}) => {
     text = title;
   }
   else {
-    text = cvss_number_format(cvss) + ' (' + title + ')';
+    text = severityFormat(cvss) + ' (' + title + ')';
   }
 
   let type;

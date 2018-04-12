@@ -30,11 +30,13 @@ import _ from 'gmp/locale';
 
 import {parse_float, parse_severity} from 'gmp/parser';
 
-import {resultSeverityRiskFactor} from '../../../utils/severity';
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../../utils/proptypes';
+import {severityFormat} from '../../../utils/render';
+import {resultSeverityRiskFactor, _NA} from '../../../utils/severity';
 
-
-import BarChart from '../../../components/chart/bar';
+import BubbleChart from '../../../components/chart/bubble';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
 import {
@@ -60,18 +62,20 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       const high_per_host = parse_float(text.high_per_host);
       const severity = parse_severity(text.severity);
       const riskFactor = resultSeverityRiskFactor(severity, severityClass);
+      const displaySeverity = is_defined(severity) ?
+        severityFormat(severity) : _NA;
+      const displayHighHost = format(high_per_host);
       return {
-        y: high_per_host,
-        x: name,
+        value: high_per_host,
         label: name,
         color: riskFactorColorScale(riskFactor),
-        toolTip: `${name}: ${format(high_per_host)}`,
+        toolTip: `${name}: ${displayHighHost} (Severity ${displaySeverity})`,
         id,
       };
     });
 };
 
-class TasksMostHighResultsDisplay extends React.Component {
+class TasksHighResultsDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -99,12 +103,10 @@ class TasksMostHighResultsDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformHighResultsData}
-            title={() => _('Tasks with most High Results per Host')}
+            title={() => _('Tasks: High Results per Host')}
           >
             {({width, height, data: tdata}) => (
-              <BarChart
-                horizontal
-                displayLegend={false}
+              <BubbleChart
                 width={width}
                 height={height}
                 data={tdata}
@@ -118,12 +120,12 @@ class TasksMostHighResultsDisplay extends React.Component {
   }
 }
 
-TasksMostHighResultsDisplay.propTypes = {
+TasksHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-export default withRouter(TasksMostHighResultsDisplay);
+export default withRouter(TasksHighResultsDisplay);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -180,14 +180,30 @@ class EntitiesCommand extends HttpCommand {
     return response.setData(ret);
   }
 
-  getAggregates({textColumns = [], ...params} = {}) {
+  getAggregates({
+    textColumns = [],
+    sort = [],
+    maxGroups,
+    ...params
+  } = {}) {
 
-    const columns = {};
+    const requestParams = {};
 
-    textColumns.forEach((column, i) => columns[`text_columns:${i}`] = column);
+    textColumns.forEach((column, i) =>
+      requestParams[`text_columns:${i}`] = column);
+
+    sort.forEach(({field, direction = 'ascending', stat = 'value'}, i) => {
+      requestParams[`sort_fields:${i}`] = field;
+      requestParams[`sort_orders:${i}`] = direction;
+      requestParams[`sort_stats:${i}`] = stat;
+    });
+
+    if (is_defined(maxGroups)) {
+      requestParams.max_groups = maxGroups;
+    }
 
     return this.httpGet({
-      ...columns,
+      ...requestParams,
       ...params,
       cmd: 'get_aggregate',
     }).then(this.transformAggregates);

@@ -49,9 +49,13 @@ export const tasksSchedulesLoader = loadFunc(
   }).then(r => r.data),
   TASKS_SCHEDULES);
 
+const MAX_HIGH_RESULT_TASKS_COUNT = 10;
+
 export const tasksHighResultsLoader = loadFunc(
-  ({gmp, filter}) => gmp.tasks.getHighResultsAggregates({filter})
-    .then(r => r.data),
+  ({gmp, filter}) => gmp.tasks.getHighResultsAggregates({
+    filter,
+    max: MAX_HIGH_RESULT_TASKS_COUNT,
+  }).then(r => r.data),
   TASKS_HIGH_RESULTS);
 
 const loaderPropTypes = {
