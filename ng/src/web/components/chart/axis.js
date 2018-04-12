@@ -85,6 +85,8 @@ const Axis = ({
   labelOffset = orientation === 'bottom' || orientation === 'top' ? 8 : 36,
   tickLabelProps = TICK_LABEL_PROPS_FUNC[orientation],
   tickLength = DEFAULT_TICK_LENGTH,
+  rangePadding = orientation === 'bottom' || orientation === 'top' ?
+    tickLength : -tickLength,
   ...props
 }) => (
   <VxAxis
@@ -93,6 +95,7 @@ const Axis = ({
     tickClassName={`${lineCss}`}
     labelOffset={labelOffset}
     orientation={orientation}
+    rangePadding={rangePadding}
     tickLabelProps={tickLabelProps}
     tickLength={tickLength}
     tickComponent={({formattedValue, ...tickProps}) => (
