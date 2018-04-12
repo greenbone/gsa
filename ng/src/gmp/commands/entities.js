@@ -153,13 +153,27 @@ class EntitiesCommand extends HttpCommand {
     };
 
     // ensure groups is always an array
-    let {group: groups = []} = aggregate;
+    const {group: groups = []} = aggregate;
 
-    if (!is_array(groups)) {
-       groups = [groups];
-    }
+    ret.groups = map(groups, group => {
+      const {text} = group;
 
-    ret.groups = groups;
+      const newGroup = {
+        ...group,
+      };
+
+      if (is_defined(text)) {
+        newGroup.text = {};
+
+        for_each(text, t => {
+          const name = t._column;
+          const value = t.__text;
+          newGroup.text[name] = value;
+        });
+      }
+
+      return newGroup;
+    });
 
     delete ret.group;
 
