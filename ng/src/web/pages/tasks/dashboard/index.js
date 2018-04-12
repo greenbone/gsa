@@ -31,6 +31,7 @@ import TasksSeverityDisplay from './severityclassdisplay';
 import TasksSchedulesDisplay from './schedulesdisplay';
 import TasksCvssDisplay from './cvssdisplay';
 import TasksMostHighResultsDisplay from './mosthighresults';
+import TasksHighResultsDisplay from './highresults';
 
 const TaskDashboard = ({
   filter,
@@ -44,6 +45,7 @@ const TaskDashboard = ({
       'tasks-schedules': TasksSchedulesDisplay,
       'tasks-cvss': TasksCvssDisplay,
       'tasks-most-high-results': TasksMostHighResultsDisplay,
+      'tasks-high-results': TasksHighResultsDisplay,
     }}
     defaultContent={[
       [
@@ -54,6 +56,7 @@ const TaskDashboard = ({
       [
         'tasks-schedules',
         'tasks-most-high-results',
+        'tasks-high-results',
       ],
     ]}
     onFilterChanged={onFilterChanged}
