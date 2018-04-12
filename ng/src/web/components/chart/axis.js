@@ -30,6 +30,8 @@ import PropTypes from '../../utils/proptypes';
 
 const FONT_SIZE = 10;
 
+const DEFAULT_TICK_LENGTH = 8;
+
 const lineCss = css({
   shapeRendering: 'crispEdges',
   strokeWidth: 0.99,
@@ -77,8 +79,6 @@ const TICK_LABEL_PROPS_FUNC = {
   top,
   bottom,
 };
-
-const DEFAULT_TICK_LENGTH = 8;
 
 const Axis = ({
   orientation = 'bottom',
