@@ -32,9 +32,9 @@ import Dashboard from 'web/components/dashboard2/dashboard';
 
 import MenuEntry from 'web/components/menu/menuentry';
 
-import DisplayMenu from 'web/components/dashboard2/displaymenu';
+import DisplayMenu from 'web/components/dashboard2/display/displaymenu';
 
-import DataDisplay from 'web/components/dashboard2/data/display';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import loader from 'web/components/dashboard2/data/loader';
 
 import compose from '../../utils/compose';
