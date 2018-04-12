@@ -41,6 +41,7 @@ const BubbleChart = ({
   data,
   width,
   height,
+  onDataClick,
 }) => {
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
@@ -74,6 +75,7 @@ const BubbleChart = ({
                     top={y}
                     onMouseEnter={show}
                     onMouseLeave={hide}
+                    onClick={() => onDataClick(d)}
                   >
                     <circle
                       fill={d.color}
@@ -119,6 +121,7 @@ BubbleChart.propTypes = {
   })),
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
+  onDataClick: PropTypes.func,
 };
 
 export default BubbleChart;
