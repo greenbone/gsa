@@ -25,10 +25,10 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes';
-import Theme from '../../utils/theme';
+import PropTypes from '../../../utils/proptypes';
+import Theme from '../../../utils/theme';
 
-import ArrowIcon from '../icon/arrowicon';
+import ArrowIcon from '../../icon/arrowicon';
 
 const Div = glamorous.div('display-menu-container', {
   display: 'none',
