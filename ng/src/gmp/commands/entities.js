@@ -167,8 +167,14 @@ class EntitiesCommand extends HttpCommand {
     return response.setData(ret);
   }
 
-  getAggregates(params = {}) {
+  getAggregates({textColumns = [], ...params} = {}) {
+
+    const columns = {};
+
+    textColumns.forEach((column, i) => columns[`text_columns:${i}`] = column);
+
     return this.httpGet({
+      ...columns,
       ...params,
       cmd: 'get_aggregate',
     }).then(this.transformAggregates);
