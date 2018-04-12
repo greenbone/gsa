@@ -29,8 +29,8 @@ import {action} from '@storybook/addon-actions';
 
 import MenuEntry from 'web/components/menu/menuentry';
 
-import Display from 'web/components/dashboard2/display';
-import DisplayMenu from 'web/components/dashboard2/displaymenu';
+import Display from 'web/components/dashboard2/display/display';
+import DisplayMenu from 'web/components/dashboard2/display/displaymenu';
 
 const removeaction = action('on remove click');
 

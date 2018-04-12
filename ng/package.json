@@ -28,6 +28,7 @@
     "d3-cloud": "^1.2.5",
     "d3-color": "^1.0.3",
     "d3-force": "^1.1.0",
+    "d3-format": "^1.2.2",
     "d3-hierarchy": "^1.1.5",
     "d3-interpolate": "^1.1.6",
     "d3-shape": "^1.2.0",
