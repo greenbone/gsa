@@ -28,43 +28,43 @@ import {Axis as VxAxis} from '@vx/axis';
 
 import PropTypes from '../../utils/proptypes';
 
+const FONT_SIZE = 10;
+
 const lineCss = css({
   shapeRendering: 'crispEdges',
-  strokeWidth: 0.8,
+  strokeWidth: 0.99,
   '& line': {
     shapeRendering: 'crispEdges',
-    strokeWidth: 0.8,
+    strokeWidth: 0.99,
   },
 });
 
 const DEFAULT_TICK_PROPS = {
   fill: 'black',
   fontFamily: 'Arial',
-  fontSize: 10,
+  fontSize: FONT_SIZE,
 };
 
 const left = () => ({
-  dx: '-0.25em',
-  dy: '0.25em',
+  dy: 0.25 * FONT_SIZE,
   textAnchor: 'end',
   ...DEFAULT_TICK_PROPS,
 });
 
 const right = () => ({
-  dx: '0.25em',
-  dy: '0.25em',
+  dy: 0.25 * FONT_SIZE,
   textAnchor: 'start',
   ...DEFAULT_TICK_PROPS,
 });
 
 const top = () => ({
-  dy: '-0.25em',
+  dy: -0.25 * FONT_SIZE,
   textAnchor: 'middle',
   ...DEFAULT_TICK_PROPS,
 });
 
 const bottom = () => ({
-  dy: '0.25em',
+  dy: 0.25 * FONT_SIZE,
   textAnchor: 'middle',
   ...DEFAULT_TICK_PROPS,
 });
@@ -83,9 +83,6 @@ const Axis = ({
   labelOffset = orientation === 'bottom' || orientation === 'top' ? 8 : 36,
   tickLabelProps = TICK_LABEL_PROPS_FUNC[orientation],
   tickLength = DEFAULT_TICK_LENGTH,
-  rangePadding = orientation === 'bottom' || orientation === 'top' ?
-    tickLength :
-    -tickLength,
   ...props
 }) => (
   <VxAxis
@@ -96,7 +93,9 @@ const Axis = ({
     orientation={orientation}
     tickLabelProps={tickLabelProps}
     tickLength={tickLength}
-    rangePadding={rangePadding}
+    tickComponent={({formattedValue, ...tickProps}) => (
+      <text {...tickProps}>{formattedValue}</text>
+    )}
   />
 );
 
