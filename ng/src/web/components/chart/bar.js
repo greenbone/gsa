@@ -98,7 +98,7 @@ class BarChart extends React.Component {
     const maxHeight = height - margin.top - margin.bottom;
 
     const xScale = scaleBand()
-      .rangeRound(horizontal ? [0, maxHeight] : [0, maxWidth])
+      .rangeRound(horizontal ? [maxHeight, 0] : [0, maxWidth])
       .domain(xValues)
       .padding(0.125);
 

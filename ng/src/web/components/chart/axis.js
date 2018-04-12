@@ -30,6 +30,8 @@ import PropTypes from '../../utils/proptypes';
 
 const FONT_SIZE = 10;
 
+const DEFAULT_TICK_LENGTH = 8;
+
 const lineCss = css({
   shapeRendering: 'crispEdges',
   strokeWidth: 0.99,
@@ -46,6 +48,7 @@ const DEFAULT_TICK_PROPS = {
 };
 
 const left = () => ({
+  dx: -0.25 * FONT_SIZE,
   dy: 0.25 * FONT_SIZE,
   textAnchor: 'end',
   ...DEFAULT_TICK_PROPS,
@@ -53,6 +56,7 @@ const left = () => ({
 
 const right = () => ({
   dy: 0.25 * FONT_SIZE,
+  dx: 0.25 * FONT_SIZE,
   textAnchor: 'start',
   ...DEFAULT_TICK_PROPS,
 });
@@ -76,13 +80,13 @@ const TICK_LABEL_PROPS_FUNC = {
   bottom,
 };
 
-const DEFAULT_TICK_LENGTH = 8;
-
 const Axis = ({
   orientation = 'bottom',
   labelOffset = orientation === 'bottom' || orientation === 'top' ? 8 : 36,
   tickLabelProps = TICK_LABEL_PROPS_FUNC[orientation],
   tickLength = DEFAULT_TICK_LENGTH,
+  rangePadding = orientation === 'bottom' || orientation === 'top' ?
+    tickLength : -tickLength,
   ...props
 }) => (
   <VxAxis
@@ -91,6 +95,7 @@ const Axis = ({
     tickClassName={`${lineCss}`}
     labelOffset={labelOffset}
     orientation={orientation}
+    rangePadding={rangePadding}
     tickLabelProps={tickLabelProps}
     tickLength={tickLength}
     tickComponent={({formattedValue, ...tickProps}) => (
