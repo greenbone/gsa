@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import d3 from 'd3';
+import {format} from 'd3-format';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
@@ -84,7 +84,7 @@ export const render_select_items = (
   return is_defined(items) ? [default_item, ...items] : [default_item];
 };
 
-export const cvss_number_format = d3.format('0.1f');
+export const cvss_number_format = format('0.1f');
 
 export function render_nvt_name(oid, name, length = 70) {
   if (!is_defined(name)) {
