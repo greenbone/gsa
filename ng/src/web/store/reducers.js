@@ -22,10 +22,10 @@
  */
 import {combineReducers} from 'redux';
 
-import dashboardDataReducer from '../components/dashboard2/data/reducers';
+import dashboardData from '../components/dashboard2/data/reducers';
 
 const rootReducer = combineReducers({
-  dashboardData: dashboardDataReducer,
+  dashboardData,
 });
 
 export default rootReducer;
