@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -29,6 +30,7 @@ import {LinearGradient} from '@vx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
 
 import _, {datetime} from 'gmp/locale';
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
@@ -48,6 +50,12 @@ const margin = {
   right: 40,
   bottom: 40,
   left: 60,
+};
+
+const MAX_LABEL_LENGTH = 25;
+
+const tickFormat = val => {
+  return shorten(val.toString(), MAX_LABEL_LENGTH);
 };
 
 const STROKE_GRADIENT_ID = 'green_stroke_gradient';
@@ -193,13 +201,21 @@ class ScheduleChart extends React.Component {
       yAxisLabel,
     } = this.props;
 
-    const maxWidth = width - margin.left - margin.right;
+    const yValues = data.map(d => d.label);
+
+    const maxLabelLength = Math.max(...yValues.map(
+      val => val.toString().length));
+
+    // adjust left margin for label length on horizontal bars
+    // 4px for each letter is just a randomly chosen value
+    const marginLeft = margin.left +
+    Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4;
+
+    const maxWidth = width - marginLeft - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
     const today = moment();
     const end = today.clone().add(7, 'days');
-
-    const yValues = data.map(d => d.label);
 
     const xScale = scaleUtc()
       .range([0, maxWidth])
@@ -275,7 +291,7 @@ class ScheduleChart extends React.Component {
           width={width}
           height={height}
         >
-          <Group top={margin.top} left={margin.left}>
+          <Group top={margin.top} left={marginLeft}>
             <Axis
               orientation="left"
               scale={yScale}
@@ -283,6 +299,7 @@ class ScheduleChart extends React.Component {
               left={0}
               label={yAxisLabel}
               rangePadding={0}
+              tickFormat={tickFormat}
             />
             <Axis
               orientation="bottom"
