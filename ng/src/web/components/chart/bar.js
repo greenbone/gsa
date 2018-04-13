@@ -51,10 +51,7 @@ const MAX_LABEL_LENGTH = 25;
 const LABEL_HEIGHT = 10;
 
 const tickFormat = val => {
-  if (val.toString().length > MAX_LABEL_LENGTH) {
-    return shorten(val.toString(), MAX_LABEL_LENGTH);
-  }
-  return val;
+  return shorten(val.toString(), MAX_LABEL_LENGTH);
 };
 
 class BarChart extends React.Component {
