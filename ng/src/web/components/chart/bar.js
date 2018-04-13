@@ -48,6 +48,7 @@ const margin = {
 };
 
 const MAX_LABEL_LENGTH = 25;
+const LABEL_HEIGHT = 10;
 
 const tickFormat = val => {
   if (val.toString().length > MAX_LABEL_LENGTH) {
@@ -95,7 +96,12 @@ class BarChart extends React.Component {
       Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
 
     const maxWidth = width - marginLeft - margin.right;
-    const maxHeight = height - margin.top - margin.bottom;
+    let maxHeight = height - margin.top - margin.bottom;
+
+    if (is_defined(xLabel)) {
+      // adjust height for x axis label
+      maxHeight = maxHeight - LABEL_HEIGHT;
+    }
 
     const xScale = scaleBand()
       .rangeRound(horizontal ? [maxHeight, 0] : [0, maxWidth])
