@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import {is_empty} from 'gmp/utils/string';
 import {is_defined} from 'gmp/utils/identity';
 
@@ -213,6 +215,8 @@ class CvssDisplay extends React.Component {
   render() {
     const {
       title,
+      yLabel,
+      xLabel = _('Severity'),
       ...props
     } = this.props;
     return (
@@ -227,6 +231,8 @@ class CvssDisplay extends React.Component {
             width={width}
             height={height}
             data={data}
+            xLabel={xLabel}
+            yLabel={yLabel}
             onDataClick={this.handleDataClick}
           />
         )}
@@ -238,6 +244,8 @@ class CvssDisplay extends React.Component {
 CvssDisplay.propTypes = {
   filter: PropTypes.filter,
   title: PropTypes.func.isRequired,
+  xLabel: PropTypes.string,
+  yLabel: PropTypes.string,
   onFilterChanged: PropTypes.func.isRequired,
 };
 

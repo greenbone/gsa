@@ -48,6 +48,7 @@ const margin = {
 };
 
 const MAX_LABEL_LENGTH = 25;
+const LABEL_HEIGHT = 10;
 
 const tickFormat = val => {
   if (val.toString().length > MAX_LABEL_LENGTH) {
@@ -95,7 +96,12 @@ class BarChart extends React.Component {
       Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
 
     const maxWidth = width - marginLeft - margin.right;
-    const maxHeight = height - margin.top - margin.bottom;
+    let maxHeight = height - margin.top - margin.bottom;
+
+    if (is_defined(xLabel)) {
+      // adjust height for x axis label
+      maxHeight = maxHeight - LABEL_HEIGHT;
+    }
 
     const xScale = scaleBand()
       .rangeRound(horizontal ? [maxHeight, 0] : [0, maxWidth])
@@ -122,7 +128,7 @@ class BarChart extends React.Component {
               scale={horizontal ? xScale : yScale}
               top={0}
               left={0}
-              label={horizontal ? xLabel : yLabel}
+              label={yLabel}
               numTicks={10}
               tickFormat={horizontal ? tickFormat : undefined}
             />
@@ -130,7 +136,7 @@ class BarChart extends React.Component {
               orientation="bottom"
               scale={horizontal ? yScale : xScale}
               top={maxHeight}
-              label={horizontal ? yLabel : xLabel}
+              label={xLabel}
             />
             {data.map((d, i) => (
               <ToolTip
