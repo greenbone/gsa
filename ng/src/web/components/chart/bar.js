@@ -128,7 +128,7 @@ class BarChart extends React.Component {
               scale={horizontal ? xScale : yScale}
               top={0}
               left={0}
-              label={horizontal ? xLabel : yLabel}
+              label={yLabel}
               numTicks={10}
               tickFormat={horizontal ? tickFormat : undefined}
             />
@@ -136,7 +136,7 @@ class BarChart extends React.Component {
               orientation="bottom"
               scale={horizontal ? yScale : xScale}
               top={maxHeight}
-              label={horizontal ? yLabel : xLabel}
+              label={xLabel}
             />
             {data.map((d, i) => (
               <ToolTip
