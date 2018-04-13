@@ -108,6 +108,7 @@ class TasksMostHighResultsDisplay extends React.Component {
                 width={width}
                 height={height}
                 data={tdata}
+                xLabel={_('Results per Host')}
                 onDataClick={this.handleDataClick}
               />
             )}
