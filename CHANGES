@@ -1,3 +1,31 @@
+SUMMARY OF RELEASE CHANGES FOR GREENBONE SECURITY ASSISTANT
+===========================================================
+
+For detailed code changes, please visit
+ https://github.com/greenbone/gsa/commits/master
+or get the entire source code repository and view log history:
+$ git clone https://github.com/greenbone/gsa.git
+$ cd gsa && git log
+
+
+gsa 8.0+beta1 (2018-XX-XX)
+
+This is the first beta release of the gsa module 8.0 for the Greenbone
+Vulnerability Management (GVM) framework.
+
+This release introduce an entirely newly implemented user interface,
+switching from xslt-generated web pages per request to a single
+page application.
+
+Apart from this, the module covers a number of significant advances
+and clean-ups compared to the previous gsa module.
+
+Many thanks to everyone who has contributed to this release:
+TODO
+
+Main changes compared to the 7.0 series:
+TODO
+
 gsa 7.0.0 (2016-11-09)
 
 This is the first release of the Greenbone Security Assistant (GSA) 7.0 module
