@@ -35,10 +35,11 @@ const VulnerabilitiesDashboard = ({
   onFilterChanged,
 }) => (
   <Dashboard
+    id="43690dcb-3174-4d84-aa88-58c1936c7f5c"
     filter={filter}
     components={{
-      'vulns-cvss': VulnsCvssDisplay,
-      'vulns-severity-class': VulnsSeverityDisplay,
+      'vuln-by-cvss': VulnsCvssDisplay,
+      'vuln-by-severity-class': VulnsSeverityDisplay,
     }}
     defaultContent={[
       [
