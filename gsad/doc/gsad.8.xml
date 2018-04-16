@@ -37,7 +37,7 @@
   <description>
     <p>
       The Greenbone Security Assistant Daemon (gsad) is a stand-alone web server
-      that acts as the layer between the single page application Greenbone
+      that acts as the layer between the front-end application Greenbone
       Security Assistant (GSA) and the central Greenbone Vulnerability Manager Daemon
       (gvmd).
     </p>
