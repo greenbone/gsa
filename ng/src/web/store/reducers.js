@@ -23,9 +23,11 @@
 import {combineReducers} from 'redux';
 
 import dashboardData from '../components/dashboard2/data/reducers';
+import dashboardSettings from '../components/dashboard2/settings/reducers';
 
 const rootReducer = combineReducers({
   dashboardData,
+  dashboardSettings,
 });
 
 export default rootReducer;
