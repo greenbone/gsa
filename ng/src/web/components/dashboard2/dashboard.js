@@ -94,7 +94,11 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadSettings();
+    const {id, defaultContent} = this.props;
+    const defaults = is_defined(id) && is_defined(defaultContent) ?
+      convertDefaults(id, defaultContent) : undefined;
+
+    this.props.loadSettings(defaults);
   }
 
   handleItemsChange(items) {
@@ -150,14 +154,9 @@ const convertDefaults = (id, defaultContent) => ({
   })),
 });
 
-const mapDispatchToProps = (dispatch, {id, defaultContent, gmp}) => {
-  const defaults = is_defined(id) && is_defined(defaultContent) ?
-    convertDefaults(id, defaultContent) : undefined;
-
-  return {
-    loadSettings: () => dispatch(loadSettings(gmp, defaults)),
-  };
-};
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  loadSettings: defaults => dispatch(loadSettings(ownProps)(defaults)),
+});
 
 export default compose(
   withGmp,

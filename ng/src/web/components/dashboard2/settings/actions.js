@@ -61,7 +61,7 @@ export const requestDashboardSettings = () => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
 });
 
-export const loadSettings = (gmp, defaults) =>
+export const loadSettings = ({gmp}) => defaults =>
   (dispatch, getState) => {
 
   const rootState = getState();
