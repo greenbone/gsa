@@ -2,7 +2,7 @@ INSTALLATION INSTRUCTIONS FOR GREENBONE SECURITY ASSISTANT
 ==========================================================
 
 Please note: The reference system used by most of the developers is Debian
-GNU/Linux 'Jessie' 8. The build might fail on any other system. Also it is
+GNU/Linux 'Stretch' 9. The build might fail on any other system. Also it is
 necessary to install dependent development packages.
 
 
