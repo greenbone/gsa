@@ -108,6 +108,7 @@ class UserCommand extends EntityCommand {
   }
 
   currentChartPreferences(options = {}) {
+    // FIXME remove after legacy dashboards are obsolete
     return this.httpGet({
       cmd: 'get_my_settings',
     }, options,
@@ -115,6 +116,32 @@ class UserCommand extends EntityCommand {
       const prefs = response.data.chart_preferences.chart_preference;
       log.debug('ChartPreferences loaded', prefs);
       return response.setData(new ChartPreferences(prefs));
+    });
+  }
+
+  currentDashboardSettings(options = {}) {
+    return this.httpGet({
+      cmd: 'get_my_settings',
+    }, options,
+    ).then(response => {
+      const prefs = response.data.chart_preferences.chart_preference;
+
+      log.debug('DashboardSettings loaded', prefs);
+
+      const settings = {};
+
+      for_each(prefs, pref => {
+        const {_id: id, value} = pref;
+
+        try {
+          settings[id] = JSON.parse(value);
+        }
+        catch (e) {
+          log.warn('Could not parse dashboard setting', pref);
+        }
+      });
+
+      return response.setData(settings);
     });
   }
 

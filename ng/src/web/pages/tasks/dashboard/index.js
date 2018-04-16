@@ -39,24 +39,20 @@ const TaskDashboard = ({
 }) => (
   <Dashboard
     filter={filter}
+    id="3d5db3c7-5208-4b47-8c28-48efc621b1e0"
     components={{
-      'tasks-status': TasksStatusDisplay,
-      'tasks-severity-class': TasksSeverityDisplay,
-      'tasks-schedules': TasksSchedulesDisplay,
-      'tasks-cvss': TasksCvssDisplay,
-      'tasks-most-high-results': TasksMostHighResultsDisplay,
-      'tasks-high-results': TasksHighResultsDisplay,
+      'task-by-status': TasksStatusDisplay,
+      'task-by-severity-class': TasksSeverityDisplay,
+      'task-by-schedules': TasksSchedulesDisplay,
+      'task-by-cvss': TasksCvssDisplay,
+      'task-by-most-high-results': TasksMostHighResultsDisplay,
+      'task-by-high-results': TasksHighResultsDisplay,
     }}
     defaultContent={[
       [
-        'tasks-status',
-        'tasks-severity-class',
-        'tasks-cvss',
-      ],
-      [
-        'tasks-schedules',
-        'tasks-most-high-results',
-        'tasks-high-results',
+        'task-by-severity-class',
+        'task-by-most-high-results',
+        'task-by-status',
       ],
     ]}
     onFilterChanged={onFilterChanged}

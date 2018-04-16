@@ -24,11 +24,39 @@ import 'core-js/fn/object/entries';
 
 import React from 'react';
 
-import {is_defined} from 'gmp/utils/identity';
+import {connect} from 'react-redux';
+
+import {is_defined, has_value} from 'gmp/utils/identity';
 
 import Grid, {createRow, createItem} from '../sortable/grid.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withGmp from '../../utils/withGmp';
+import compose from '../../utils/compose';
+
+import {loadSettings} from './settings/actions.js';
+import DashboardSettings from './settings/selectors.js';
+
+const createItems = props => {
+  const {components = {}, content} = props;
+
+  return content.map(({height, items}) => {
+    const rowItems = items.map(name => {
+
+      const component = components[name];
+      if (!is_defined(component)) {
+        return undefined;
+      }
+
+      return createItem({name});
+    }).filter(is_defined);
+
+    if (rowItems.length > 0) {
+      return createRow(rowItems, height);
+    }
+    return undefined;
+  }).filter(is_defined);
+};
 
 class Dashboard extends React.Component {
 
@@ -36,6 +64,8 @@ class Dashboard extends React.Component {
     components: PropTypes.object,
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
     filter: PropTypes.filter,
+    id: PropTypes.id.isRequired,
+    loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
     onFilterChanged: PropTypes.func,
   }
@@ -45,36 +75,26 @@ class Dashboard extends React.Component {
 
     this.state = {
       items: [],
+      content: undefined,
     };
 
     this.handleItemsChange = this.handleItemsChange.bind(this);
   }
 
-  componentDidMount() {
-    this.createItems();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.content === nextProps.content) {
+      return null;
+    }
+
+    const {content} = nextProps;
+    return {
+      items: has_value(content) ? createItems(nextProps) : [],
+      content: content,
+    };
   }
 
-  createItems() {
-    const {components = {}, defaultContent = [[]]} = this.props;
-
-    const items = defaultContent.map(row => {
-      const rowItems = row.map(id => {
-
-        const component = components[id];
-        if (!is_defined(component)) {
-          return undefined;
-        }
-
-        return createItem({id});
-      }).filter(is_defined);
-
-      if (rowItems.length > 0) {
-        return createRow(rowItems);
-      }
-      return undefined;
-    }).filter(is_defined);
-
-    this.setState({items});
+  componentDidMount() {
+    this.props.loadSettings();
   }
 
   handleItemsChange(items) {
@@ -97,8 +117,8 @@ class Dashboard extends React.Component {
         onChange={this.handleItemsChange}
       >
         {({dragHandleProps, id, props, height, width, remove}) => {
-          const {id: elementId} = props;
-          const Component = components[elementId];
+          const {name} = props;
+          const Component = components[name];
           return is_defined(Component) ? (
             <Component
               filter={filter}
@@ -116,6 +136,32 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = (rootState, {id}) => {
+  const settings = DashboardSettings(rootState);
+  return {
+    isLoading: settings.getIsLoading(),
+    content: settings.getContentById(id),
+  };
+};
+
+const convertDefaults = (id, defaultContent) => ({
+  [id]: defaultContent.map(row => ({
+    items: row,
+  })),
+});
+
+const mapDispatchToProps = (dispatch, {id, defaultContent, gmp}) => {
+  const defaults = is_defined(id) && is_defined(defaultContent) ?
+    convertDefaults(id, defaultContent) : undefined;
+
+  return {
+    loadSettings: () => dispatch(loadSettings(gmp, defaults)),
+  };
+};
+
+export default compose(
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(Dashboard);
 
 // vim: set ts=2 sw=2 tw=80:
