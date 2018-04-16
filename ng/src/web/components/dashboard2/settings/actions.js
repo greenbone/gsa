@@ -29,6 +29,23 @@ export const DASHBOARD_SETTINGS_LOADING_REQUEST =
 export const DASHBOARD_SETTINGS_LOADING_ERROR =
   'DASHBOARD_SETTINGS_LOADING_ERROR';
 
+const settingsV1toDashboardContent = settings => {
+  const {data: rows} = settings;
+  return rows.map(({height, data}) => ({
+    height,
+    items: data.map(item => item.name),
+  }));
+};
+
+const convertContent = settings => {
+  const content = {};
+
+  Object.entries(settings).forEach(([id, value]) => {
+    content[id] = settingsV1toDashboardContent(value);
+  });
+
+  return content;
+};
 export const receivedDashboardSettings = (data, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   settings: data,
@@ -59,7 +76,8 @@ export const loadSettings = (gmp, defaults) =>
 
   const promise = gmp.user.currentDashboardSettings();
   return promise.then(
-    response => dispatch(receivedDashboardSettings(response.data, defaults)),
+    response => dispatch(receivedDashboardSettings(
+      convertContent(response.data), defaults)),
     error => dispatch(receivedDashboardError(error)),
   );
 };

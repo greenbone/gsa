@@ -67,39 +67,26 @@ describe('dashboard data reducers tests', () => {
 
   test('should handle receive dashboard settings', () => {
     const data = {
-      a1: {
-        data: [{
-          height: 100,
-          data: [{
-            name: 'foo',
-          }, {
-            name: 'bar',
-          }],
-        }],
-      },
+      a1: [{
+        height: 100,
+        items: ['foo', 'bar'],
+      }],
     };
     const action = receivedDashboardSettings(data);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
-      content: {
-        a1: [{
-          height: 100,
-          items: [
-            'foo',
-            'bar',
-          ],
-        }],
-      },
+      content: data,
     });
   });
 
   test('should reset isLoading and error in received dashboard settings', () => {
     const data = {
-      a1: {
-        data: [],
-      },
+      a1: [{
+        height: 100,
+        items: ['foo', 'bar'],
+      }],
     };
     const action = receivedDashboardSettings(data);
 
@@ -107,9 +94,7 @@ describe('dashboard data reducers tests', () => {
       isLoading: true,
       error: 'an previous error',
     }, action)).toEqual({
-      content: {
-        a1: [],
-      },
+      content: data,
       isLoading: false,
       error: null,
     });
@@ -123,16 +108,10 @@ describe('dashboard data reducers tests', () => {
     };
 
     const data = {
-      a1: {
-        data: [{
-          height: 100,
-          data: [{
-            name: 'foo',
-          }, {
-            name: 'bar',
-          }],
-        }],
-      },
+      a1: [{
+        height: 100,
+        items: ['foo', 'bar'],
+      }],
     };
     const action = receivedDashboardSettings(data, defaults);
 
@@ -140,19 +119,8 @@ describe('dashboard data reducers tests', () => {
       isLoading: false,
       error: null,
       content: {
-        a2: [{
-          items: [
-            'abc',
-            'def',
-          ],
-        }],
-        a1: [{
-          height: 100,
-          items: [
-            'foo',
-            'bar',
-          ],
-        }],
+        ...defaults,
+        ...data,
       },
     });
   });
@@ -165,31 +133,17 @@ describe('dashboard data reducers tests', () => {
     };
 
     const data = {
-      a1: {
-        data: [{
-          height: 100,
-          data: [{
-            name: 'foo',
-          }, {
-            name: 'bar',
-          }],
-        }],
-      },
+      a1: [{
+        height: 100,
+        items: ['foo', 'bar'],
+      }],
     };
     const action = receivedDashboardSettings(data, defaults);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
-      content: {
-        a1: [{
-          height: 100,
-          items: [
-            'foo',
-            'bar',
-          ],
-        }],
-      },
+      content: data,
     });
   });
 
@@ -203,16 +157,10 @@ describe('dashboard data reducers tests', () => {
     };
 
     const data = {
-      a1: {
-        data: [{
-          height: 100,
-          data: [{
-            name: 'foo',
-          }, {
-            name: 'bar',
-          }],
-        }],
-      },
+      a1: [{
+        height: 100,
+        items: ['foo', 'bar'],
+      }],
     };
     const action = receivedDashboardSettings(data);
 
@@ -244,31 +192,17 @@ describe('dashboard data reducers tests', () => {
     };
 
     const data = {
-      a1: {
-        data: [{
-          height: 100,
-          data: [{
-            name: 'foo',
-          }, {
-            name: 'bar',
-          }],
-        }],
-      },
+      a1: [{
+        height: 100,
+        items: ['foo', 'bar'],
+      }],
     };
     const action = receivedDashboardSettings(data);
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
       error: null,
-      content: {
-        a1: [{
-          height: 100,
-          items: [
-            'foo',
-            'bar',
-          ],
-        }],
-      },
+      content: data,
     });
   });
 
