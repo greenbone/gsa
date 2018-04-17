@@ -32,20 +32,11 @@ import {
   receivedDashboardSettingsLoadingError,
 } from '../actions';
 
-describe('action tests', () => {
+describe('receive settings action tests', () => {
 
   test('should create an action to request dashboard settings', () => {
     expect(requestDashboardSettings()).toEqual({
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
-    });
-  });
-
-  test('should create an action to receive dashboard settings', () => {
-    const data = {foo: 'bar'};
-
-    expect(receivedDashboardSettings(data)).toEqual({
-      items: data,
-      type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
 
@@ -59,8 +50,23 @@ describe('action tests', () => {
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
+});
 
-  test('should create an action to receive an error', () => {
+describe('received settings action tests', () => {
+
+  test('should create an action after receiving dashboard settings', () => {
+    const data = {foo: 'bar'};
+
+    expect(receivedDashboardSettings(data)).toEqual({
+      items: data,
+      type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
+    });
+  });
+});
+
+describe('received settings loading error action tests', () => {
+
+  test('should create an action to receive an error during loading', () => {
     const error = 'An error occured';
 
     expect(receivedDashboardSettingsLoadingError(error)).toEqual({
