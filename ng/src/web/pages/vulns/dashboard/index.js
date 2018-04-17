@@ -28,6 +28,7 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import VulnsCvssDisplay from './cvssdisplay';
+import VulnsHostsDisplay from './hostsdisplay';
 import VulnsSeverityDisplay from './severityclassdisplay';
 
 const VulnerabilitiesDashboard = ({
@@ -39,12 +40,14 @@ const VulnerabilitiesDashboard = ({
     filter={filter}
     components={{
       'vuln-by-cvss': VulnsCvssDisplay,
+      'vuln-by-hosts': VulnsHostsDisplay,
       'vuln-by-severity-class': VulnsSeverityDisplay,
     }}
     defaultContent={[
       [
-        'vulns-cvss',
-        'vulns-severity-class',
+        'vuln-by-cvss',
+        'vuln-by-hosts',
+        'vuln-by-severity-class',
       ],
     ]}
     onFilterChanged={onFilterChanged}
