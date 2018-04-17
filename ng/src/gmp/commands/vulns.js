@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -46,6 +47,14 @@ class VulnerabilitiesCommand extends EntitiesCommand {
     return this.getAggregates({
       aggregate_type: 'vuln',
       group_column: 'severity',
+      filter,
+    });
+  }
+
+  getHostAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'vuln',
+      group_column: 'hosts',
       filter,
     });
   }
