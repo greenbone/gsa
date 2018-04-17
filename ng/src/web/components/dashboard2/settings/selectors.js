@@ -28,22 +28,10 @@ class DashboardSetting {
     this.state = rootState;
   }
 
-  get() {
-    return this.state;
-  }
-
-  getById(id) {
-    if (has_value(this.state.settings)) {
-      const settings = this.state.settings[id];
-      return is_defined(settings) ? settings : null;
-    }
-    return undefined;
-  }
-
-  getContentById(id) {
-    if (has_value(this.state.content)) {
-      const content = this.state.content[id];
-      return is_defined(content) ? content : null;
+  getItemsById(id) {
+    if (is_defined(this.state) && has_value(this.state.items)) {
+      const items = this.state.items[id];
+      return is_defined(items) ? items : null;
     }
     return undefined;
   }

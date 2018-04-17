@@ -55,7 +55,7 @@ export const createItem = props => {
 
   return {
     id,
-    props,
+    ...props,
   };
 };
 
@@ -73,7 +73,6 @@ const updateRow = (row, data) => {
 
 const itemPropType = PropTypes.shape({
   id: PropTypes.string.isRequired,
-  props: PropTypes.any.isRequired,
 });
 
 const rowPropType = PropTypes.shape({
@@ -82,11 +81,13 @@ const rowPropType = PropTypes.shape({
   height: PropTypes.number,
 });
 
+export const itemsPropType = PropTypes.arrayOf(rowPropType);
+
 class Grid extends React.Component {
 
   static propTypes = {
     children: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(rowPropType),
+    items: itemsPropType,
     maxItemsPerRow: PropTypes.numberOrNumberString,
     onChange: PropTypes.func,
   }
@@ -232,19 +233,22 @@ class Grid extends React.Component {
                     height={height}
                     onResize={h => this.handleRowResize(row, h)}
                   >
-                    {rowItems.map((item, index) => (
-                      <Item
-                        key={item.id}
-                        id={item.id}
-                        index={index}
-                        props={item.props}
-                        height={itemHeight}
-                        width={itemWidth}
-                        remove={() => this.handleRemoveItem(item.id)}
-                      >
-                        {children}
-                      </Item>
-                    ))}
+                    {rowItems.map((item, index) => {
+                      const {id, ...props} = item;
+                      return (
+                        <Item
+                          key={id}
+                          id={id}
+                          index={index}
+                          props={props}
+                          height={itemHeight}
+                          width={itemWidth}
+                          remove={() => this.handleRemoveItem(id)}
+                        >
+                          {children}
+                        </Item>
+                      );
+                    })}
                   </Row>
                 );
               })}

@@ -27,36 +27,21 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {is_defined, has_value} from 'gmp/utils/identity';
+import {debounce} from 'gmp/utils/event.js';
 
-import Grid, {createRow, createItem} from '../sortable/grid.js';
+import Grid, {createRow, createItem, itemsPropType} from '../sortable/grid.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
 import compose from '../../utils/compose';
 
-import {loadSettings} from './settings/actions.js';
+import {loadSettings, saveSettings} from './settings/actions.js';
 import DashboardSettings from './settings/selectors.js';
 
-const createItems = props => {
-  const {components = {}, content} = props;
-
-  return content.map(({height, items}) => {
-    const rowItems = items.map(name => {
-
-      const component = components[name];
-      if (!is_defined(component)) {
-        return undefined;
-      }
-
-      return createItem({name});
-    }).filter(is_defined);
-
-    if (rowItems.length > 0) {
-      return createRow(rowItems, height);
-    }
-    return undefined;
-  }).filter(is_defined);
-};
+const convertDefaults = (id, defaultContent) => ({
+  [id]: defaultContent.map(row => createRow(
+    row.map(item => createItem({name: item})))),
+});
 
 class Dashboard extends React.Component {
 
@@ -65,8 +50,10 @@ class Dashboard extends React.Component {
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
     filter: PropTypes.filter,
     id: PropTypes.id.isRequired,
+    items: itemsPropType,
     loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
+    saveSettings: PropTypes.func.isRequired,
     onFilterChanged: PropTypes.func,
   }
 
@@ -74,35 +61,42 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      items: [],
-      content: undefined,
+      items: undefined,
     };
 
     this.handleItemsChange = this.handleItemsChange.bind(this);
+    this.save = debounce(this.save, 500);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.content === nextProps.content) {
-      return null;
-    }
-
-    const {content} = nextProps;
-    return {
-      items: has_value(content) ? createItems(nextProps) : [],
-      content: content,
-    };
+    return prevState.items === nextProps.items ?
+      null : {items: nextProps.items};
   }
 
   componentDidMount() {
-    this.props.loadSettings();
+    const {id, defaultContent} = this.props;
+    const defaults = is_defined(id) && is_defined(defaultContent) ?
+      convertDefaults(id, defaultContent) : undefined;
+
+    this.props.loadSettings(defaults);
   }
 
   handleItemsChange(items) {
     this.setState({items});
+
+    this.save(items);
+  }
+
+  save(items) {
+    const {id} = this.props;
+
+    this.props.saveSettings(id, items);
   }
 
   render() {
-    const {items} = this.state;
+    const {
+      items,
+    } = this.state;
     const {
       maxItemsPerRow,
       filter,
@@ -112,7 +106,7 @@ class Dashboard extends React.Component {
 
     return (
       <Grid
-        items={items}
+        items={has_value(items) ? items : []}
         maxItemsPerRow={maxItemsPerRow}
         onChange={this.handleItemsChange}
       >
@@ -140,24 +134,14 @@ const mapStateToProps = (rootState, {id}) => {
   const settings = DashboardSettings(rootState);
   return {
     isLoading: settings.getIsLoading(),
-    content: settings.getContentById(id),
+    items: settings.getItemsById(id),
   };
 };
 
-const convertDefaults = (id, defaultContent) => ({
-  [id]: defaultContent.map(row => ({
-    items: row,
-  })),
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  loadSettings: defaults => dispatch(loadSettings(ownProps)(defaults)),
+  saveSettings: (id, items) => dispatch(saveSettings(ownProps)(id, items)),
 });
-
-const mapDispatchToProps = (dispatch, {id, defaultContent, gmp}) => {
-  const defaults = is_defined(id) && is_defined(defaultContent) ?
-    convertDefaults(id, defaultContent) : undefined;
-
-  return {
-    loadSettings: () => dispatch(loadSettings(gmp, defaults)),
-  };
-};
 
 export default compose(
   withGmp,

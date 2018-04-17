@@ -26,32 +26,23 @@ import {
   DASHBOARD_SETTINGS_LOADING_ERROR,
   DASHBOARD_SETTINGS_LOADING_REQUEST,
   DASHBOARD_SETTINGS_LOADING_SUCCESS,
+  DASHBOARD_SETTINGS_SAVING_REQUEST,
 } from './actions';
 
 import {combineReducers} from 'redux';
 
-
-const convertContent = settings => {
-  const content = {};
-
-  Object.entries(settings).forEach(([id, value]) => {
-    const {data: rows} = value;
-    content[id] = rows.map(({height, data}) => ({
-      height,
-      items: data.map(item => item.name),
-    }));
-  });
-
-  return content;
-};
-
-const content = (state = null, action) => {
+const items = (state = null, action) => {
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
       return {
         ...state,
         ...action.defaults,
-        ...convertContent(action.settings),
+        ...action.items,
+      };
+    case DASHBOARD_SETTINGS_SAVING_REQUEST:
+      return {
+        ...state,
+        [action.id]: action.items,
       };
     default:
       return state;
@@ -84,7 +75,7 @@ const isLoading = (state = false, action) => {
 
 const dashboardSettings = combineReducers({
   isLoading,
-  content,
+  items,
   error,
 });
 

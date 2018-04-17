@@ -27,25 +27,22 @@ import {
   DASHBOARD_SETTINGS_LOADING_ERROR,
   DASHBOARD_SETTINGS_LOADING_REQUEST,
   DASHBOARD_SETTINGS_LOADING_SUCCESS,
+  DASHBOARD_SETTINGS_SAVING_REQUEST,
+  DASHBOARD_SETTINGS_SAVING_SUCCESS,
+  DASHBOARD_SETTINGS_SAVING_ERROR,
   receivedDashboardSettings,
   requestDashboardSettings,
-  receivedDashboardError,
+  receivedDashboardSettingsLoadingError,
+  saveDashboardSettings,
+  savedDashboardSettings,
+  saveDashboardSettingsError,
 } from '../actions';
 
-describe('action tests', () => {
+describe('receive settings action tests', () => {
 
   test('should create an action to request dashboard settings', () => {
     expect(requestDashboardSettings()).toEqual({
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
-    });
-  });
-
-  test('should create an action to receive dashboard settings', () => {
-    const data = {foo: 'bar'};
-
-    expect(receivedDashboardSettings(data)).toEqual({
-      settings: data,
-      type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
 
@@ -54,20 +51,69 @@ describe('action tests', () => {
     const defaults = {abc: 'def'};
 
     expect(receivedDashboardSettings(data, defaults)).toEqual({
-      settings: data,
+      items: data,
       defaults,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
+});
 
-  test('should create an action to receive an error', () => {
+describe('received settings action tests', () => {
+
+  test('should create an action after receiving dashboard settings', () => {
+    const data = {foo: 'bar'};
+
+    expect(receivedDashboardSettings(data)).toEqual({
+      items: data,
+      type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
+    });
+  });
+});
+
+describe('received settings loading error action tests', () => {
+
+  test('should create an action to receive an error during loading', () => {
     const error = 'An error occured';
 
-    expect(receivedDashboardError(error)).toEqual({
+    expect(receivedDashboardSettingsLoadingError(error)).toEqual({
       error,
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
     });
   });
 });
 
+describe('save settings action tests', () => {
+
+  test('should create an action to save dashboard settings', () => {
+    const id = 'a1';
+    const items = ['a', 'b'];
+
+    expect(saveDashboardSettings(id, items)).toEqual({
+      type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      id,
+      items,
+    });
+  });
+});
+
+describe('saved settings action tests', () => {
+
+  test('should create an action after dashboard settings have been saved', () => {
+    expect(savedDashboardSettings()).toEqual({
+      type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+    });
+  });
+});
+
+describe('save settings error action tests', () => {
+
+  test('should create an action if an error has occurred during saving', () => {
+    const error = 'An error';
+
+    expect(saveDashboardSettingsError(error)).toEqual({
+      type: DASHBOARD_SETTINGS_SAVING_ERROR,
+      error,
+    });
+  });
+});
 // vim: set ts=2 sw=2 tw=80:
