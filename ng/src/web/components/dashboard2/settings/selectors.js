@@ -40,10 +40,10 @@ class DashboardSetting {
     return undefined;
   }
 
-  getContentById(id) {
-    if (has_value(this.state.content)) {
-      const content = this.state.content[id];
-      return is_defined(content) ? content : null;
+  getItemsById(id) {
+    if (has_value(this.state.items)) {
+      const items = this.state.items[id];
+      return is_defined(items) ? items : null;
     }
     return undefined;
   }

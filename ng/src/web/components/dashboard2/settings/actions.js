@@ -48,7 +48,7 @@ const convertContent = settings => {
 };
 export const receivedDashboardSettings = (data, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
-  settings: data,
+  items: data,
   defaults,
 });
 

@@ -30,13 +30,13 @@ import {
 
 import {combineReducers} from 'redux';
 
-const content = (state = null, action) => {
+const items = (state = null, action) => {
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
       return {
         ...state,
         ...action.defaults,
-        ...action.settings,
+        ...action.items,
       };
     default:
       return state;
@@ -69,7 +69,7 @@ const isLoading = (state = false, action) => {
 
 const dashboardSettings = combineReducers({
   isLoading,
-  content,
+  items,
   error,
 });
 

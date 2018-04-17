@@ -36,7 +36,7 @@ describe('dashboard data reducers tests', () => {
   test('should return the initial state', () => {
     const state = dashboardSettings(undefined, {});
     expect(state).toEqual({
-      content: null,
+      items: null,
       isLoading: false,
       error: null,
     });
@@ -46,7 +46,7 @@ describe('dashboard data reducers tests', () => {
     const action = requestDashboardSettings();
 
     expect(dashboardSettings({}, action)).toEqual({
-      content: null,
+      items: null,
       isLoading: true,
       error: null,
     });
@@ -59,7 +59,7 @@ describe('dashboard data reducers tests', () => {
       isLoading: false,
       error: 'an previous error',
     }, action)).toEqual({
-      content: null,
+      items: null,
       isLoading: true,
       error: null,
     });
@@ -77,7 +77,7 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
-      content: data,
+      items: data,
     });
   });
 
@@ -94,7 +94,7 @@ describe('dashboard data reducers tests', () => {
       isLoading: true,
       error: 'an previous error',
     }, action)).toEqual({
-      content: data,
+      items: data,
       isLoading: false,
       error: null,
     });
@@ -118,7 +118,7 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
-      content: {
+      items: {
         ...defaults,
         ...data,
       },
@@ -143,13 +143,13 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
-      content: data,
+      items: data,
     });
   });
 
   test('should handle receive dashboard settings and keep state', () => {
     const state = {
-      content: {
+      items: {
         a2: [{
           items: ['abc', 'def'],
         }],
@@ -167,7 +167,7 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
       error: null,
-      content: {
+      items: {
         a2: [{
           items: ['abc', 'def'],
         }],
@@ -184,7 +184,7 @@ describe('dashboard data reducers tests', () => {
 
   test('should handle receive dashboard settings and override state', () => {
     const state = {
-      content: {
+      items: {
         a1: [{
           items: ['abc', 'def'],
         }],
@@ -211,7 +211,7 @@ describe('dashboard data reducers tests', () => {
     const action = receivedDashboardSettingsLoadingError(error);
 
     expect(dashboardSettings({}, action)).toEqual({
-      content: null,
+      items: null,
       isLoading: false,
       error,
     });
@@ -224,7 +224,7 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardSettings({
       isLoading: true,
     }, action)).toEqual({
-      content: null,
+      items: null,
       isLoading: false,
       error,
     });
@@ -237,7 +237,7 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardSettings({
       error: 'An old error',
     }, action)).toEqual({
-      content: null,
+      items: null,
       isLoading: false,
       error,
     });
@@ -247,7 +247,7 @@ describe('dashboard data reducers tests', () => {
     const error = 'An error occured';
     const action = receivedDashboardSettingsLoadingError(error);
 
-    const content = {
+    const items = {
       a1: [],
       a2: [{
         items: ['foo', 'bar'],
@@ -255,9 +255,9 @@ describe('dashboard data reducers tests', () => {
     };
 
     expect(dashboardSettings({
-      content,
+      items,
     }, action)).toEqual({
-      content,
+      items,
       isLoading: false,
       error,
     });

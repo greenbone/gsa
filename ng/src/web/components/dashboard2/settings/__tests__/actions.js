@@ -44,7 +44,7 @@ describe('action tests', () => {
     const data = {foo: 'bar'};
 
     expect(receivedDashboardSettings(data)).toEqual({
-      settings: data,
+      items: data,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
@@ -54,7 +54,7 @@ describe('action tests', () => {
     const defaults = {abc: 'def'};
 
     expect(receivedDashboardSettings(data, defaults)).toEqual({
-      settings: data,
+      items: data,
       defaults,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
