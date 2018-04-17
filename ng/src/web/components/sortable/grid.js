@@ -55,7 +55,7 @@ export const createItem = props => {
 
   return {
     id,
-    props,
+    ...props,
   };
 };
 
@@ -73,7 +73,6 @@ const updateRow = (row, data) => {
 
 const itemPropType = PropTypes.shape({
   id: PropTypes.string.isRequired,
-  props: PropTypes.any.isRequired,
 });
 
 const rowPropType = PropTypes.shape({
@@ -232,19 +231,22 @@ class Grid extends React.Component {
                     height={height}
                     onResize={h => this.handleRowResize(row, h)}
                   >
-                    {rowItems.map((item, index) => (
-                      <Item
-                        key={item.id}
-                        id={item.id}
-                        index={index}
-                        props={item.props}
-                        height={itemHeight}
-                        width={itemWidth}
-                        remove={() => this.handleRemoveItem(item.id)}
-                      >
-                        {children}
-                      </Item>
-                    ))}
+                    {rowItems.map((item, index) => {
+                      const {id, ...props} = item;
+                      return (
+                        <Item
+                          key={id}
+                          id={id}
+                          index={index}
+                          props={props}
+                          height={itemHeight}
+                          width={itemWidth}
+                          remove={() => this.handleRemoveItem(id)}
+                        >
+                          {children}
+                        </Item>
+                      );
+                    })}
                   </Row>
                 );
               })}
