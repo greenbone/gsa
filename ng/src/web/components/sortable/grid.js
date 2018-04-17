@@ -81,11 +81,13 @@ const rowPropType = PropTypes.shape({
   height: PropTypes.number,
 });
 
+export const itemsPropType = PropTypes.arrayOf(rowPropType);
+
 class Grid extends React.Component {
 
   static propTypes = {
     children: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(rowPropType),
+    items: itemsPropType,
     maxItemsPerRow: PropTypes.numberOrNumberString,
     onChange: PropTypes.func,
   }
