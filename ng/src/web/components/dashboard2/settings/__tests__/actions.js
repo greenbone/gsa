@@ -29,7 +29,7 @@ import {
   DASHBOARD_SETTINGS_LOADING_SUCCESS,
   receivedDashboardSettings,
   requestDashboardSettings,
-  receivedDashboardError,
+  receivedDashboardSettingsLoadingError,
 } from '../actions';
 
 describe('action tests', () => {
@@ -63,7 +63,7 @@ describe('action tests', () => {
   test('should create an action to receive an error', () => {
     const error = 'An error occured';
 
-    expect(receivedDashboardError(error)).toEqual({
+    expect(receivedDashboardSettingsLoadingError(error)).toEqual({
       error,
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
     });

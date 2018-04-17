@@ -52,7 +52,7 @@ export const receivedDashboardSettings = (data, defaults) => ({
   defaults,
 });
 
-export const receivedDashboardError = error => ({
+export const receivedDashboardSettingsLoadingError = error => ({
   type: DASHBOARD_SETTINGS_LOADING_ERROR,
   error,
 });
@@ -78,7 +78,7 @@ export const loadSettings = ({gmp}) => defaults =>
   return promise.then(
     response => dispatch(receivedDashboardSettings(
       convertContent(response.data), defaults)),
-    error => dispatch(receivedDashboardError(error)),
+    error => dispatch(receivedDashboardSettingsLoadingError(error)),
   );
 };
 

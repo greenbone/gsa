@@ -28,7 +28,7 @@ import dashboardSettings from '../reducers';
 import {
   receivedDashboardSettings,
   requestDashboardSettings,
-  receivedDashboardError,
+  receivedDashboardSettingsLoadingError,
 } from '../actions';
 
 describe('dashboard data reducers tests', () => {
@@ -202,13 +202,13 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
       error: null,
-      content: data,
+      items: data,
     });
   });
 
   test('should handle receive dashboard error', () => {
     const error = 'An error occured';
-    const action = receivedDashboardError(error);
+    const action = receivedDashboardSettingsLoadingError(error);
 
     expect(dashboardSettings({}, action)).toEqual({
       content: null,
@@ -219,7 +219,7 @@ describe('dashboard data reducers tests', () => {
 
   test('should reset isLoading in receive dashboard error', () => {
     const error = 'An error occured';
-    const action = receivedDashboardError(error);
+    const action = receivedDashboardSettingsLoadingError(error);
 
     expect(dashboardSettings({
       isLoading: true,
@@ -232,7 +232,7 @@ describe('dashboard data reducers tests', () => {
 
   test('should reset old error in receive dashboard error', () => {
     const error = 'An error occured';
-    const action = receivedDashboardError(error);
+    const action = receivedDashboardSettingsLoadingError(error);
 
     expect(dashboardSettings({
       error: 'An old error',
@@ -245,7 +245,7 @@ describe('dashboard data reducers tests', () => {
 
   test('should keep state in receive dashboard error', () => {
     const error = 'An error occured';
-    const action = receivedDashboardError(error);
+    const action = receivedDashboardSettingsLoadingError(error);
 
     const content = {
       a1: [],
