@@ -29,9 +29,10 @@ import {
   receivedDashboardSettings,
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
+  saveDashboardSettings,
 } from '../actions';
 
-describe('dashboard data reducers tests', () => {
+describe('dashboard settings reducers tests for loading', () => {
 
   test('should return the initial state', () => {
     const state = dashboardSettings(undefined, {});
@@ -260,6 +261,85 @@ describe('dashboard data reducers tests', () => {
       items,
       isLoading: false,
       error,
+    });
+  });
+});
+
+describe('dashboard settings reducers test for saving', () => {
+
+  test('should init state during saving settings', () => {
+    const id = 'a1';
+    const items = [{
+      height: 100,
+      items: ['foo', 'bar'],
+    }];
+
+    expect(dashboardSettings(undefined, saveDashboardSettings(id, items))).toEqual({
+      error: null,
+      isLoading: false,
+      items: {
+        a1: [{
+          height: 100,
+          items: ['foo', 'bar'],
+        }],
+      },
+    });
+  });
+
+  test('should update state during saving settings', () => {
+    const state = {
+      items: {
+        a2: [{
+          items: ['abc', 'def'],
+        }],
+      },
+    };
+
+    const id = 'a1';
+    const items = [{
+      height: 100,
+      items: ['foo', 'bar'],
+    }];
+
+    expect(dashboardSettings(state, saveDashboardSettings(id, items))).toEqual({
+      error: null,
+      isLoading: false,
+      items: {
+        a1: [{
+          height: 100,
+          items: ['foo', 'bar'],
+        }],
+        a2: [{
+          items: ['abc', 'def'],
+        }],
+      },
+    });
+  });
+
+  test('should override state during saving settings', () => {
+    const state = {
+      items: {
+        a1: [{
+          items: ['abc', 'def'],
+        }],
+      },
+    };
+
+    const id = 'a1';
+    const items = [{
+      height: 100,
+      items: ['foo', 'bar'],
+    }];
+
+    expect(dashboardSettings(state, saveDashboardSettings(id, items))).toEqual({
+      error: null,
+      isLoading: false,
+      items: {
+        a1: [{
+          height: 100,
+          items: ['foo', 'bar'],
+        }],
+      },
     });
   });
 });
