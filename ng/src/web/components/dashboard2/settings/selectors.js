@@ -28,18 +28,6 @@ class DashboardSetting {
     this.state = rootState;
   }
 
-  get() {
-    return this.state;
-  }
-
-  getById(id) {
-    if (has_value(this.state.settings)) {
-      const settings = this.state.settings[id];
-      return is_defined(settings) ? settings : null;
-    }
-    return undefined;
-  }
-
   getItemsById(id) {
     if (has_value(this.state.items)) {
       const items = this.state.items[id];
