@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import getDashboardSettings from './selectors';
+import {createRow, createItem} from '../../sortable/grid';
 
 export const DASHBOARD_SETTINGS_LOADING_SUCCESS =
   'DASHBOARD_SETTINGS_LOADING_SUCCESS';
@@ -29,23 +30,17 @@ export const DASHBOARD_SETTINGS_LOADING_REQUEST =
 export const DASHBOARD_SETTINGS_LOADING_ERROR =
   'DASHBOARD_SETTINGS_LOADING_ERROR';
 
-const settingsV1toDashboardContent = settings => {
-  const {data: rows} = settings;
-  return rows.map(({height, data}) => ({
-    height,
-    items: data.map(item => item.name),
-  }));
-};
 
-const convertContent = settings => {
+const settingsV1toDashboardItems = settings => {
   const content = {};
-
   Object.entries(settings).forEach(([id, value]) => {
-    content[id] = settingsV1toDashboardContent(value);
+    const {data: rows} = value;
+    content[id] = rows.map(({height, data: items}) =>
+      createRow(items.map(item => createItem({name: item.name})), height));
   });
-
   return content;
 };
+
 export const receivedDashboardSettings = (data, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   items: data,
@@ -77,7 +72,7 @@ export const loadSettings = ({gmp}) => defaults =>
   const promise = gmp.user.currentDashboardSettings();
   return promise.then(
     response => dispatch(receivedDashboardSettings(
-      convertContent(response.data), defaults)),
+      settingsV1toDashboardItems(response.data), defaults)),
     error => dispatch(receivedDashboardSettingsLoadingError(error)),
   );
 };
