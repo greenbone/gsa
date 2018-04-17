@@ -32,7 +32,7 @@ import {
   saveDashboardSettings,
 } from '../actions';
 
-describe('dashboard settings reducers tests for loading', () => {
+describe('dashboard settings reducers tests for initial state', () => {
 
   test('should return the initial state', () => {
     const state = dashboardSettings(undefined, {});
@@ -40,9 +40,13 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error: null,
+      defaults: {},
     });
   });
 
+});
+
+describe('dashboard settings reducers tests for loading requests', () => {
   test('should handle request dashboard settings', () => {
     const action = requestDashboardSettings();
 
@@ -50,6 +54,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: true,
       error: null,
+      defaults: {},
     });
   });
 
@@ -63,8 +68,43 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: true,
       error: null,
+      defaults: {},
     });
   });
+
+  test('should handle request dashboard settings with id', () => {
+    const id = 'a1';
+    const action = requestDashboardSettings(id);
+
+    expect(dashboardSettings({}, action)).toEqual({
+      items: null,
+      isLoading: true,
+      error: null,
+      defaults: {
+        a1: undefined,
+      },
+    });
+  });
+
+  test('should handle request dashboard settings with id and defaults', () => {
+    const id = 'a1';
+    const defaults = {foo: 'bar'};
+    const action = requestDashboardSettings(id, defaults);
+
+    expect(dashboardSettings({}, action)).toEqual({
+      items: null,
+      isLoading: true,
+      error: null,
+      defaults: {
+        a1: {
+          foo: 'bar',
+        },
+      },
+    });
+  });
+});
+
+describe('dashboard settings reducers tests for loading success', () => {
 
   test('should handle receive dashboard settings', () => {
     const id = 'a1';
@@ -80,6 +120,7 @@ describe('dashboard settings reducers tests for loading', () => {
       isLoading: false,
       error: null,
       items: data,
+      defaults: {},
     });
   });
 
@@ -101,6 +142,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: data,
       isLoading: false,
       error: null,
+      defaults: {},
     });
   });
 
@@ -123,6 +165,7 @@ describe('dashboard settings reducers tests for loading', () => {
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
+      defaults: {},
       items: {
         [id]: defaults.items,
         a1: [{
@@ -153,6 +196,7 @@ describe('dashboard settings reducers tests for loading', () => {
       isLoading: false,
       error: null,
       items: data,
+      defaults: {},
     });
   });
 
@@ -189,6 +233,7 @@ describe('dashboard settings reducers tests for loading', () => {
           ],
         }],
       },
+      defaults: {},
     });
   });
 
@@ -214,6 +259,7 @@ describe('dashboard settings reducers tests for loading', () => {
       isLoading: false,
       error: null,
       items: data,
+      defaults: {},
     });
   });
 
@@ -225,6 +271,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 
@@ -238,6 +285,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 
@@ -251,6 +299,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 
@@ -271,6 +320,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 });
@@ -293,6 +343,7 @@ describe('dashboard settings reducers test for saving', () => {
           items: ['foo', 'bar'],
         }],
       },
+      defaults: {},
     });
   });
 
@@ -323,6 +374,7 @@ describe('dashboard settings reducers test for saving', () => {
           items: ['abc', 'def'],
         }],
       },
+      defaults: {},
     });
   });
 
@@ -350,6 +402,7 @@ describe('dashboard settings reducers test for saving', () => {
           items: ['foo', 'bar'],
         }],
       },
+      defaults: {},
     });
   });
 });
