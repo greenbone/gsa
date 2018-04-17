@@ -30,6 +30,12 @@ export const DASHBOARD_SETTINGS_LOADING_REQUEST =
 export const DASHBOARD_SETTINGS_LOADING_ERROR =
   'DASHBOARD_SETTINGS_LOADING_ERROR';
 
+export const DASHBOARD_SETTINGS_SAVING_SUCCESS =
+  'DASHBOARD_SETTINGS_SAVING_SUCCESS';
+export const DASHBOARD_SETTINGS_SAVING_ERROR =
+  'DASHBOARD_SETTINGS_SAVING_ERROR';
+export const DASHBOARD_SETTINGS_SAVING_REQUEST =
+  'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
 const settingsV1toDashboardItems = settings => {
   const content = {};
@@ -40,6 +46,18 @@ const settingsV1toDashboardItems = settings => {
   });
   return content;
 };
+
+const dashboardItems2SettingsV1 = items => ({
+  version: 1,
+  data: items.map(({height, items: rowItems}) => ({
+    height,
+    type: 'row',
+    data: rowItems.map(({id, ...other}) => ({
+      ...other,
+      type: 'chart',
+    })),
+  })),
+});
 
 export const receivedDashboardSettings = (data, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
@@ -54,6 +72,21 @@ export const receivedDashboardSettingsLoadingError = error => ({
 
 export const requestDashboardSettings = () => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
+});
+
+export const savedDashboardSettings = () => ({
+  type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+});
+
+export const saveDashboardSettingsError = error => ({
+  type: DASHBOARD_SETTINGS_SAVING_ERROR,
+  error,
+});
+
+export const saveDashboardSettings = (id, items) => ({
+  type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+  items,
+  id,
 });
 
 export const loadSettings = ({gmp}) => defaults =>
@@ -75,6 +108,19 @@ export const loadSettings = ({gmp}) => defaults =>
       settingsV1toDashboardItems(response.data), defaults)),
     error => dispatch(receivedDashboardSettingsLoadingError(error)),
   );
+};
+
+export const saveSettings = ({gmp}) => (id, items) => (dispatch, getState) => {
+
+  dispatch(saveDashboardSettings(id, items));
+
+  const settings = dashboardItems2SettingsV1(items);
+
+  return gmp.user.saveDashboardSetting({id, settings})
+    .then(
+      response => dispatch(savedDashboardSettings()),
+      error => dispatch(saveDashboardSettingsError(error)),
+    );
 };
 
 // vim: set ts=2 sw=2 tw=80:

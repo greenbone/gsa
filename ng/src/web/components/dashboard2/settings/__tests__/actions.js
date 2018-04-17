@@ -27,9 +27,15 @@ import {
   DASHBOARD_SETTINGS_LOADING_ERROR,
   DASHBOARD_SETTINGS_LOADING_REQUEST,
   DASHBOARD_SETTINGS_LOADING_SUCCESS,
+  DASHBOARD_SETTINGS_SAVING_REQUEST,
+  DASHBOARD_SETTINGS_SAVING_SUCCESS,
+  DASHBOARD_SETTINGS_SAVING_ERROR,
   receivedDashboardSettings,
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
+  saveDashboardSettings,
+  savedDashboardSettings,
+  saveDashboardSettingsError,
 } from '../actions';
 
 describe('receive settings action tests', () => {
@@ -76,4 +82,38 @@ describe('received settings loading error action tests', () => {
   });
 });
 
+describe('save settings action tests', () => {
+
+  test('should create an action to save dashboard settings', () => {
+    const id = 'a1';
+    const items = ['a', 'b'];
+
+    expect(saveDashboardSettings(id, items)).toEqual({
+      type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      id,
+      items,
+    });
+  });
+});
+
+describe('saved settings action tests', () => {
+
+  test('should create an action after dashboard settings have been saved', () => {
+    expect(savedDashboardSettings()).toEqual({
+      type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+    });
+  });
+});
+
+describe('save settings error action tests', () => {
+
+  test('should create an action if an error has occurred during saving', () => {
+    const error = 'An error';
+
+    expect(saveDashboardSettingsError(error)).toEqual({
+      type: DASHBOARD_SETTINGS_SAVING_ERROR,
+      error,
+    });
+  });
+});
 // vim: set ts=2 sw=2 tw=80:
