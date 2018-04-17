@@ -32,7 +32,7 @@ import {
   saveDashboardSettings,
 } from '../actions';
 
-describe('dashboard settings reducers tests for loading', () => {
+describe('dashboard settings reducers tests for initial state', () => {
 
   test('should return the initial state', () => {
     const state = dashboardSettings(undefined, {});
@@ -40,9 +40,13 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error: null,
+      defaults: {},
     });
   });
 
+});
+
+describe('dashboard settings reducers tests for loading requests', () => {
   test('should handle request dashboard settings', () => {
     const action = requestDashboardSettings();
 
@@ -50,6 +54,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: true,
       error: null,
+      defaults: {},
     });
   });
 
@@ -63,33 +68,72 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: true,
       error: null,
+      defaults: {},
     });
   });
 
+  test('should handle request dashboard settings with id', () => {
+    const id = 'a1';
+    const action = requestDashboardSettings(id);
+
+    expect(dashboardSettings({}, action)).toEqual({
+      items: null,
+      isLoading: true,
+      error: null,
+      defaults: {
+        a1: undefined,
+      },
+    });
+  });
+
+  test('should handle request dashboard settings with id and defaults', () => {
+    const id = 'a1';
+    const defaults = {foo: 'bar'};
+    const action = requestDashboardSettings(id, defaults);
+
+    expect(dashboardSettings({}, action)).toEqual({
+      items: null,
+      isLoading: true,
+      error: null,
+      defaults: {
+        a1: {
+          foo: 'bar',
+        },
+      },
+    });
+  });
+});
+
+describe('dashboard settings reducers tests for loading success', () => {
+
   test('should handle receive dashboard settings', () => {
+    const id = 'a1';
     const data = {
       a1: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(data);
+    const action = receivedDashboardSettings(id, data);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
       items: data,
+      defaults: {},
     });
   });
 
   test('should reset isLoading and error in received dashboard settings', () => {
+    const id = 'a1';
     const data = {
       a1: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(data);
+
+    const action = receivedDashboardSettings(id, data);
 
     expect(dashboardSettings({
       isLoading: true,
@@ -98,12 +142,14 @@ describe('dashboard settings reducers tests for loading', () => {
       items: data,
       isLoading: false,
       error: null,
+      defaults: {},
     });
   });
 
   test('should handle receive dashboard settings with defaults', () => {
+    const id = 'a2';
     const defaults = {
-      a2: [{
+      items: [{
         items: ['abc', 'def'],
       }],
     };
@@ -114,41 +160,48 @@ describe('dashboard settings reducers tests for loading', () => {
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(data, defaults);
+    const action = receivedDashboardSettings(id, data, defaults);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
+      defaults: {},
       items: {
-        ...defaults,
-        ...data,
+        [id]: defaults.items,
+        a1: [{
+          height: 100,
+          items: ['foo', 'bar'],
+        }],
       },
     });
   });
 
   test('should handle receive dashboard settings and override defaults', () => {
+    const id = 'a1';
     const defaults = {
-      a1: [{
+      items: [{
         items: ['abc', 'def'],
       }],
     };
 
     const data = {
-      a1: [{
+      [id]: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(data, defaults);
+    const action = receivedDashboardSettings(id, data, defaults);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
       items: data,
+      defaults: {},
     });
   });
 
   test('should handle receive dashboard settings and keep state', () => {
+    const id = 'a1';
     const state = {
       items: {
         a2: [{
@@ -158,12 +211,12 @@ describe('dashboard settings reducers tests for loading', () => {
     };
 
     const data = {
-      a1: [{
+      [id]: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(data);
+    const action = receivedDashboardSettings(id, data);
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
@@ -180,30 +233,33 @@ describe('dashboard settings reducers tests for loading', () => {
           ],
         }],
       },
+      defaults: {},
     });
   });
 
   test('should handle receive dashboard settings and override state', () => {
+    const id = 'a1';
     const state = {
       items: {
-        a1: [{
+        [id]: [{
           items: ['abc', 'def'],
         }],
       },
     };
 
     const data = {
-      a1: [{
+      [id]: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(data);
+    const action = receivedDashboardSettings(id, data);
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
       error: null,
       items: data,
+      defaults: {},
     });
   });
 
@@ -215,6 +271,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 
@@ -228,6 +285,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 
@@ -241,6 +299,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items: null,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 
@@ -261,6 +320,7 @@ describe('dashboard settings reducers tests for loading', () => {
       items,
       isLoading: false,
       error,
+      defaults: {},
     });
   });
 });
@@ -283,6 +343,7 @@ describe('dashboard settings reducers test for saving', () => {
           items: ['foo', 'bar'],
         }],
       },
+      defaults: {},
     });
   });
 
@@ -313,6 +374,7 @@ describe('dashboard settings reducers test for saving', () => {
           items: ['abc', 'def'],
         }],
       },
+      defaults: {},
     });
   });
 
@@ -340,6 +402,7 @@ describe('dashboard settings reducers test for saving', () => {
           items: ['foo', 'bar'],
         }],
       },
+      defaults: {},
     });
   });
 });

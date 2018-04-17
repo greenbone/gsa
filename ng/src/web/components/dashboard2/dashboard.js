@@ -38,10 +38,9 @@ import compose from '../../utils/compose';
 import {loadSettings, saveSettings} from './settings/actions.js';
 import DashboardSettings from './settings/selectors.js';
 
-const convertDefaults = (id, defaultContent) => ({
-  [id]: defaultContent.map(row => createRow(
-    row.map(item => createItem({name: item})))),
-});
+const convertDefaultContent = defaultContent =>
+  defaultContent.map(row => createRow(
+    row.map(item => createItem({name: item}))));
 
 class Dashboard extends React.Component {
 
@@ -75,10 +74,11 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     const {id, defaultContent} = this.props;
-    const defaults = is_defined(id) && is_defined(defaultContent) ?
-      convertDefaults(id, defaultContent) : undefined;
+    const defaults = {
+      items: convertDefaultContent(defaultContent),
+    };
 
-    this.props.loadSettings(defaults);
+    this.props.loadSettings(id, defaults);
   }
 
   handleItemsChange(items) {
@@ -139,7 +139,8 @@ const mapStateToProps = (rootState, {id}) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  loadSettings: defaults => dispatch(loadSettings(ownProps)(defaults)),
+  loadSettings: (id, defaults) =>
+    dispatch(loadSettings(ownProps)(id, defaults)),
   saveSettings: (id, items) => dispatch(saveSettings(ownProps)(id, items)),
 });
 

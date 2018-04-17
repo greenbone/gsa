@@ -47,12 +47,14 @@ describe('receive settings action tests', () => {
   });
 
   test('should create an action to receive dashboard settings with defaults', () => {
+    const id = 'a1';
     const data = {foo: 'bar'};
     const defaults = {abc: 'def'};
 
-    expect(receivedDashboardSettings(data, defaults)).toEqual({
+    expect(receivedDashboardSettings(id, data, defaults)).toEqual({
       items: data,
       defaults,
+      id,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
@@ -61,10 +63,12 @@ describe('receive settings action tests', () => {
 describe('received settings action tests', () => {
 
   test('should create an action after receiving dashboard settings', () => {
+    const id = 'a1';
     const data = {foo: 'bar'};
 
-    expect(receivedDashboardSettings(data)).toEqual({
+    expect(receivedDashboardSettings(id, data)).toEqual({
       items: data,
+      id,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
