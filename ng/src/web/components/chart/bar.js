@@ -196,7 +196,7 @@ BarChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     x: PropTypes.toString.isRequired,
     y: PropTypes.number.isRequired,
-    label: PropTypes.any.isRequired,
+    label: PropTypes.any,
     color: PropTypes.toString.isRequired,
     toolTip: PropTypes.elementOrString,
   })).isRequired,
