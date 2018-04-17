@@ -36,6 +36,8 @@ import {
   saveDashboardSettings,
   savedDashboardSettings,
   saveDashboardSettingsError,
+  resetDashboardSettings,
+  DASHBOARD_SETTINGS_RESET_DEFAULTS,
 } from '../actions';
 
 describe('receive settings action tests', () => {
@@ -117,6 +119,20 @@ describe('save settings error action tests', () => {
     expect(saveDashboardSettingsError(error)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_ERROR,
       error,
+    });
+  });
+});
+
+describe('reset dashboard settings action tests', () => {
+
+  test('should create an action to reset settings', () => {
+    const id = 'a1';
+    const defaults = {foo: 'bar'};
+
+    expect(resetDashboardSettings(id, defaults)).toEqual({
+      type: DASHBOARD_SETTINGS_RESET_DEFAULTS,
+      defaults,
+      id,
     });
   });
 });

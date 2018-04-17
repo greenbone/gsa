@@ -37,6 +37,9 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
+export const DASHBOARD_SETTINGS_RESET_DEFAULTS =
+  'DASHBOARD_SETTINGS_RESET_DEFAULTS';
+
 const settingsV1toDashboardItems = settings => {
   const content = {};
   Object.entries(settings).forEach(([id, value]) => {
@@ -92,6 +95,12 @@ export const saveDashboardSettings = (id, items) => ({
   id,
 });
 
+export const resetDashboardSettings = (id, defaults) => ({
+  type: DASHBOARD_SETTINGS_RESET_DEFAULTS,
+  id,
+  defaults,
+});
+
 export const loadSettings = ({gmp}) => (id, defaults) =>
   (dispatch, getState) => {
 
@@ -124,6 +133,16 @@ export const saveSettings = ({gmp}) => (id, items) => (dispatch, getState) => {
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
     );
+};
+
+export const resetSettings = ({gmp}) => id =>
+  (dispatch, getState) => {
+
+  const rootState = getState();
+  const settings = getDashboardSettings(rootState);
+  const defaults = settings.getDefaultsById(id);
+
+  dispatch(resetDashboardSettings(id, defaults));
 };
 
 // vim: set ts=2 sw=2 tw=80:
