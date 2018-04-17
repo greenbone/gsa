@@ -26,7 +26,13 @@ import PropTypes from '../../../utils/proptypes';
 
 import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
 
+const loaderPropTypes = {
+  children: PropTypes.func,
+  filter: PropTypes.filter,
+};
+
 export const VULNS_SEVERITY = 'vulns-severity';
+export const VULNS_HOSTS = 'vulns-hosts';
 
 export const vulnsSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.vulns.getSeverityAggregates({filter})
@@ -50,8 +56,30 @@ export const VulnsSeverityLoader = ({
   </Loader>
 );
 
-VulnsSeverityLoader.propTypes = {
-  filter: PropTypes.filter,
-};
+VulnsSeverityLoader.propTypes = loaderPropTypes;
+
+export const vulnsHostsLoader = loadFunc(
+  ({gmp, filter}) => gmp.vulns.getHostAggregates({filter})
+    .then(r => r.data),
+  VULNS_HOSTS);
+
+export const VulnsHostsLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={VULNS_HOSTS}
+    filter={filter}
+    load={vulnsHostsLoader}
+    subscriptions={[
+      'vulns.timer',
+      'vulns.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+VulnsHostsLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:
