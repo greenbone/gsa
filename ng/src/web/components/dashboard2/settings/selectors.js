@@ -36,6 +36,14 @@ class DashboardSetting {
     return undefined;
   }
 
+  getDefaultsById(id) {
+    if (is_defined(this.state) && has_value(this.state.defaults)) {
+      const defaults = this.state.defaults[id];
+      return is_defined(defaults) ? defaults : {};
+    }
+    return {};
+  }
+
   getError() {
     return is_defined(this.state) ? this.state.error : undefined;
   }
