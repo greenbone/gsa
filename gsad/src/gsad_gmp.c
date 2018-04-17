@@ -25905,6 +25905,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
 
   gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
                                      strlen (*pref_value));
+  gchar *html;
   gchar* response = NULL;
   entity_t entity;
   int ret;
@@ -25973,26 +25974,12 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "Diagnostics: Internal Error.",
                              response_data);
     }
-
-  if (gmp_success (entity))
-    {
-      free_entity (entity);
-      g_free (response);
-      return g_strdup ("<save_chart_preference_response"
-                       " status=\"200\" status_text=\"OK\"/>");
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      gchar* ret_response
-        = g_strdup_printf ("<save_chart_preference_response"
-                           " status=\"%s\" status_text=\"%s\"/>",
-                           entity_attribute (entity, "status"),
-                           entity_attribute (entity, "status_text"));
-      free_entity (entity);
-      g_free (response);
-      return ret_response;
-    }
+  html = response_from_entity (connection, credentials, params, entity,
+                              "Save Chart Preferences",
+                              response_data);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 
