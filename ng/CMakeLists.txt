@@ -687,6 +687,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/charts.js
      ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/hostsdisplay.js
      ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/severityclassdisplay.js
