@@ -27,6 +27,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {is_defined, has_value} from 'gmp/utils/identity';
+import {debounce} from 'gmp/utils/event.js';
 
 import Grid, {createRow, createItem, itemsPropType} from '../sortable/grid.js';
 
@@ -34,7 +35,7 @@ import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
 import compose from '../../utils/compose';
 
-import {loadSettings} from './settings/actions.js';
+import {loadSettings, saveSettings} from './settings/actions.js';
 import DashboardSettings from './settings/selectors.js';
 
 const convertDefaults = (id, defaultContent) => ({
@@ -52,6 +53,7 @@ class Dashboard extends React.Component {
     items: itemsPropType,
     loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
+    saveSettings: PropTypes.func.isRequired,
     onFilterChanged: PropTypes.func,
   }
 
@@ -63,6 +65,7 @@ class Dashboard extends React.Component {
     };
 
     this.handleItemsChange = this.handleItemsChange.bind(this);
+    this.save = debounce(this.save, 500);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -80,6 +83,14 @@ class Dashboard extends React.Component {
 
   handleItemsChange(items) {
     this.setState({items});
+
+    this.save(items);
+  }
+
+  save(items) {
+    const {id} = this.props;
+
+    this.props.saveSettings(id, items);
   }
 
   render() {
@@ -129,6 +140,7 @@ const mapStateToProps = (rootState, {id}) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   loadSettings: defaults => dispatch(loadSettings(ownProps)(defaults)),
+  saveSettings: (id, items) => dispatch(saveSettings(ownProps)(id, items)),
 });
 
 export default compose(
