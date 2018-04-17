@@ -59,9 +59,10 @@ const dashboardItems2SettingsV1 = items => ({
   })),
 });
 
-export const receivedDashboardSettings = (data, defaults) => ({
+export const receivedDashboardSettings = (id, data, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   items: data,
+  id,
   defaults,
 });
 
@@ -70,8 +71,10 @@ export const receivedDashboardSettingsLoadingError = error => ({
   error,
 });
 
-export const requestDashboardSettings = () => ({
+export const requestDashboardSettings = (id, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
+  id,
+  defaults,
 });
 
 export const savedDashboardSettings = () => ({
@@ -89,7 +92,7 @@ export const saveDashboardSettings = (id, items) => ({
   id,
 });
 
-export const loadSettings = ({gmp}) => defaults =>
+export const loadSettings = ({gmp}) => (id, defaults) =>
   (dispatch, getState) => {
 
   const rootState = getState();
@@ -100,11 +103,11 @@ export const loadSettings = ({gmp}) => defaults =>
     return Promise.resolve();
   }
 
-  dispatch(requestDashboardSettings());
+  dispatch(requestDashboardSettings(id, defaults));
 
   const promise = gmp.user.currentDashboardSettings();
   return promise.then(
-    response => dispatch(receivedDashboardSettings(
+    response => dispatch(receivedDashboardSettings(id,
       settingsV1toDashboardItems(response.data), defaults)),
     error => dispatch(receivedDashboardSettingsLoadingError(error)),
   );

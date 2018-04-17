@@ -34,9 +34,10 @@ import {combineReducers} from 'redux';
 const items = (state = null, action) => {
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
+      const {defaults = {}} = action;
       return {
         ...state,
-        ...action.defaults,
+        [action.id]: defaults.items,
         ...action.items,
       };
     case DASHBOARD_SETTINGS_SAVING_REQUEST:
