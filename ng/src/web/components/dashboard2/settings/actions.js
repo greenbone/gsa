@@ -124,14 +124,14 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
   );
 };
 
-export const saveSettings = ({gmp}) => (id, {items}) =>
+export const saveSettings = ({gmp}) => (id, settings) =>
   (dispatch, getState) => {
 
-  dispatch(saveDashboardSettings(id, {items}));
+  dispatch(saveDashboardSettings(id, settings));
 
-  const settingsV1 = dashboardSettings2SettingsV1(items);
+  const settingsV1 = dashboardSettings2SettingsV1(settings);
 
-  return gmp.user.saveDashboardSetting({id, settingsV1})
+  return gmp.user.saveDashboardSetting(id, settingsV1)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
