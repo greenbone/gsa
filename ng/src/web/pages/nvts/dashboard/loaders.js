@@ -32,6 +32,7 @@ const loaderPropTypes = {
 };
 
 export const NVT_FAMILY = 'nvt-family';
+export const NVT_SEVERITY_CLASS = 'nvt-severity-class';
 
 export const nvtFamilyLoader = loadFunc(
   ({gmp, filter}) => gmp.nvts.getFamilyAggregates({filter})
@@ -56,5 +57,29 @@ export const NvtsFamilyLoader = ({
 );
 
 NvtsFamilyLoader.propTypes = loaderPropTypes;
+
+export const nvtSeverityLoader = loadFunc(
+  ({gmp, filter}) => gmp.nvts.getSeverityAggregates({filter})
+    .then(r => r.data),
+  NVT_SEVERITY_CLASS);
+
+export const NvtsSeverityLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={NVT_SEVERITY_CLASS}
+    filter={filter}
+    load={nvtSeverityLoader}
+    subscriptions={[
+      'nvts.timer',
+      'nvts.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+NvtsSeverityLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:
