@@ -501,7 +501,7 @@ init_validator ()
                          "|(save_alert)"
                          "|(save_asset)"
                          "|(save_auth)"
-                         "|(save_chart_preference)"
+                         "|(save_setting)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -567,8 +567,8 @@ init_validator ()
   openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
-  openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
-  openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "setting_id", "^(.*){0,400}$");
+  openvas_validator_add (validator, "setting_value", "^(.*){0,1000}$");
   openvas_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
@@ -1590,18 +1590,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_alert)
   ELSE (save_asset)
   ELSE (save_auth)
-  else if (!strcmp (cmd, "save_chart_preference"))
-    {
-      gchar *pref_id, *pref_value;
-
-      res = save_chart_preference_gmp (&connection,
-                                       credentials,
-                                       con_info->params,
-                                       &pref_id, &pref_value,
-                                       response_data);
-      if (pref_id && pref_value)
-        user_set_chart_pref (credentials->token, pref_id, pref_value);
-    }
+  ELSE (save_setting)
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)

@@ -25855,61 +25855,41 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
 }
 
 /**
- * @brief Save chart preferences.
+ * @brief Save user setting
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  pref_id        Preference ID.
- * @param[in]  pref_value     Preference value.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return SAVE_CHART_PREFERENCE GMP response.
+ * @return An action response.
  */
 char*
-save_chart_preference_gmp (gvm_connection_t *connection,
-                           credentials_t* credentials, params_t *params,
-                           gchar **pref_id, gchar **pref_value,
-                           cmd_response_data_t* response_data)
+save_setting_gmp (gvm_connection_t *connection,
+                  credentials_t* credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  *pref_id = g_strdup (params_value (params, "chart_preference_id"));
-  *pref_value = g_strdup (params_value (params, "chart_preference_value"));
+  const gchar *setting_id = params_value (params, "setting_id");
+  const gchar *setting_value = params_value (params, "setting_value");
 
-  gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
-                                     strlen (*pref_value));
+  CHECK_PARAM_INVALID (setting_id, "Save Chart Preferences", "get_users");
+  CHECK_PARAM_INVALID (setting_value, "Save Chart Preferences", "get_users");
+
+  gchar* value_64 = g_base64_encode ((guchar*)setting_value,
+                                     strlen (setting_value));
   gchar *html;
   gchar* response = NULL;
-  entity_t entity;
+  entity_t entity = NULL;
   int ret;
 
   cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
 
-  if (*pref_id == NULL)
-    {
-      response = g_strdup
-        ("<save_chart_preference_response"
-         " status=\"400\" status_text=\"Invalid or missing name\"/>");
-    }
-  if (*pref_value == NULL)
-    {
-      response = g_strdup
-        ("<save_chart_preference_response"
-         " status=\"400\" status_text=\"Invalid or missing value\"/>");
-    }
-
-  if (response)
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return response;
-    }
-
-  response = NULL;
-  entity = NULL;
   ret = gmpf (connection, credentials, &response, &entity, response_data,
               "<modify_setting setting_id=\"%s\">"
               "<value>%s</value>"
               "</modify_setting>",
-              *pref_id, value_64);
+              setting_id, value_64);
+
   g_free (value_64);
   switch (ret)
     {
@@ -25947,7 +25927,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              response_data);
     }
   html = response_from_entity (connection, credentials, params, entity,
-                              "Save Chart Preferences",
+                              "Save Setting",
                               response_data);
   free_entity (entity);
   g_free (response);
