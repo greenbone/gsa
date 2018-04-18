@@ -93,11 +93,14 @@ describe('save settings action tests', () => {
   test('should create an action to save dashboard settings', () => {
     const id = 'a1';
     const items = ['a', 'b'];
+    const settings = {
+      items,
+    };
 
-    expect(saveDashboardSettings(id, items)).toEqual({
+    expect(saveDashboardSettings(id, settings)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_REQUEST,
       id,
-      items,
+      settings,
     });
   });
 });

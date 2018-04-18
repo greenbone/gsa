@@ -89,9 +89,9 @@ export const saveDashboardSettingsError = error => ({
   error,
 });
 
-export const saveDashboardSettings = (id, items) => ({
+export const saveDashboardSettings = (id, settings) => ({
   type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-  items,
+  settings,
   id,
 });
 
@@ -122,9 +122,10 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
   );
 };
 
-export const saveSettings = ({gmp}) => (id, items) => (dispatch, getState) => {
+export const saveSettings = ({gmp}) => (id, {items}) =>
+  (dispatch, getState) => {
 
-  dispatch(saveDashboardSettings(id, items));
+  dispatch(saveDashboardSettings(id, {items}));
 
   const settings = dashboardItems2SettingsV1(items);
 

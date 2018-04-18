@@ -334,8 +334,11 @@ describe('dashboard settings reducers test for saving', () => {
       height: 100,
       items: ['foo', 'bar'],
     }];
+    const settings = {
+      items,
+    };
 
-    expect(dashboardSettings(undefined, saveDashboardSettings(id, items))).toEqual({
+    expect(dashboardSettings(undefined, saveDashboardSettings(id, settings))).toEqual({
       error: null,
       isLoading: false,
       items: {
@@ -362,8 +365,11 @@ describe('dashboard settings reducers test for saving', () => {
       height: 100,
       items: ['foo', 'bar'],
     }];
+    const settings = {
+      items,
+    };
 
-    expect(dashboardSettings(state, saveDashboardSettings(id, items))).toEqual({
+    expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
       error: null,
       isLoading: false,
       items: {
@@ -393,8 +399,11 @@ describe('dashboard settings reducers test for saving', () => {
       height: 100,
       items: ['foo', 'bar'],
     }];
+    const settings = {
+      items,
+    };
 
-    expect(dashboardSettings(state, saveDashboardSettings(id, items))).toEqual({
+    expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
       error: null,
       isLoading: false,
       items: {

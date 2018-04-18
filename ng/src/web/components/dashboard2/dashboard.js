@@ -90,7 +90,7 @@ class Dashboard extends React.Component {
   save(items) {
     const {id} = this.props;
 
-    this.props.saveSettings(id, items);
+    this.props.saveSettings(id, {items});
   }
 
   render() {
@@ -141,7 +141,8 @@ const mapStateToProps = (rootState, {id}) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   loadSettings: (id, defaults) =>
     dispatch(loadSettings(ownProps)(id, defaults)),
-  saveSettings: (id, items) => dispatch(saveSettings(ownProps)(id, items)),
+  saveSettings: (id, settings) =>
+    dispatch(saveSettings(ownProps)(id, settings)),
 });
 
 export default compose(
