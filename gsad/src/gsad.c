@@ -412,7 +412,6 @@ init_validator ()
                          "|(get_aggregate)"
                          "|(get_asset)"
                          "|(get_assets)"
-                         "|(get_assets_chart)"
                          "|(get_config)"
                          "|(get_config_family)"
                          "|(get_config_nvt)"
@@ -420,6 +419,7 @@ init_validator ()
                          "|(get_feeds)"
                          "|(get_credential)"
                          "|(get_credentials)"
+                         "|(get_dashboard_settings)"
                          "|(get_filter)"
                          "|(get_filters)"
                          "|(get_alert)"
@@ -458,7 +458,6 @@ init_validator ()
                          "|(get_targets)"
                          "|(get_task)"
                          "|(get_tasks)"
-                         "|(get_tasks_chart)"
                          "|(get_trash)"
                          "|(get_user)"
                          "|(get_users)"
@@ -501,7 +500,7 @@ init_validator ()
                          "|(save_alert)"
                          "|(save_asset)"
                          "|(save_auth)"
-                         "|(save_chart_preference)"
+                         "|(save_setting)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -567,8 +566,8 @@ init_validator ()
   openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
-  openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
-  openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "setting_id", "^(.*){0,400}$");
+  openvas_validator_add (validator, "setting_value", "^(.*){0,1000}$");
   openvas_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
@@ -1590,18 +1589,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_alert)
   ELSE (save_asset)
   ELSE (save_auth)
-  else if (!strcmp (cmd, "save_chart_preference"))
-    {
-      gchar *pref_id, *pref_value;
-
-      res = save_chart_preference_gmp (&connection,
-                                       credentials,
-                                       con_info->params,
-                                       &pref_id, &pref_value,
-                                       response_data);
-      if (pref_id && pref_value)
-        user_set_chart_pref (credentials->token, pref_id, pref_value);
-    }
+  ELSE (save_setting)
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
@@ -2081,10 +2069,9 @@ exec_gmp_get (http_connection_t *con,
   ELSE (new_alert)
   ELSE (new_group)
   ELSE (new_role)
-  ELSE (get_assets_chart)
+  ELSE (get_dashboard_settings)
   ELSE (get_task)
   ELSE (get_tasks)
-  ELSE (get_tasks_chart)
   ELSE (delete_user_confirm)
   ELSE (edit_agent)
   ELSE (edit_alert)
@@ -2342,9 +2329,7 @@ exec_gmp_get (http_connection_t *con,
   if (get_guest_password()
       && strcmp (credentials->username, get_guest_username()) == 0
       && cmd
-      && (strcmp (cmd, "get_aggregate") == 0
-          || strcmp (cmd, "get_assets_chart") == 0
-          || strcmp (cmd, "get_tasks_chart") == 0))
+      && strcmp (cmd, "get_aggregate") == 0)
     {
       add_guest_chart_content_security_headers (response);
     }

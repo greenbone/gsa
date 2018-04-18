@@ -110,10 +110,11 @@ class UserCommand extends EntityCommand {
   currentChartPreferences(options = {}) {
     // FIXME remove after legacy dashboards are obsolete
     return this.httpGet({
-      cmd: 'get_my_settings',
+      cmd: 'get_dashboard_settings',
     }, options,
     ).then(response => {
-      const prefs = response.data.chart_preferences.chart_preference;
+      const {setting: prefs} = response.data.get_dashboard_settings
+        .get_settings_response;
       log.debug('ChartPreferences loaded', prefs);
       return response.setData(new ChartPreferences(prefs));
     });
@@ -121,10 +122,11 @@ class UserCommand extends EntityCommand {
 
   currentDashboardSettings(options = {}) {
     return this.httpGet({
-      cmd: 'get_my_settings',
+      cmd: 'get_dashboard_settings',
     }, options,
     ).then(response => {
-      const prefs = response.data.chart_preferences.chart_preference;
+      const {setting: prefs} = response.data.get_dashboard_settings
+        .get_settings_response;
 
       log.debug('DashboardSettings loaded', prefs);
 
@@ -148,9 +150,9 @@ class UserCommand extends EntityCommand {
   saveDashboardSetting({id, settings}) {
     log.debug('Saving dashboard settings', id, settings);
     return this.action({
-      chart_preference_id: id,
-      chart_preference_value: JSON.stringify(settings),
-      cmd: 'save_chart_preference',
+      setting_id: id,
+      setting_value: JSON.stringify(settings),
+      cmd: 'save_setting',
     });
   }
 
