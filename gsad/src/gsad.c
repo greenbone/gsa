@@ -412,7 +412,6 @@ init_validator ()
                          "|(get_aggregate)"
                          "|(get_asset)"
                          "|(get_assets)"
-                         "|(get_assets_chart)"
                          "|(get_config)"
                          "|(get_config_family)"
                          "|(get_config_nvt)"
@@ -459,7 +458,6 @@ init_validator ()
                          "|(get_targets)"
                          "|(get_task)"
                          "|(get_tasks)"
-                         "|(get_tasks_chart)"
                          "|(get_trash)"
                          "|(get_user)"
                          "|(get_users)"
@@ -2071,11 +2069,9 @@ exec_gmp_get (http_connection_t *con,
   ELSE (new_alert)
   ELSE (new_group)
   ELSE (new_role)
-  ELSE (get_assets_chart)
   ELSE (get_dashboard_settings)
   ELSE (get_task)
   ELSE (get_tasks)
-  ELSE (get_tasks_chart)
   ELSE (delete_user_confirm)
   ELSE (edit_agent)
   ELSE (edit_alert)
@@ -2333,9 +2329,7 @@ exec_gmp_get (http_connection_t *con,
   if (get_guest_password()
       && strcmp (credentials->username, get_guest_username()) == 0
       && cmd
-      && (strcmp (cmd, "get_aggregate") == 0
-          || strcmp (cmd, "get_assets_chart") == 0
-          || strcmp (cmd, "get_tasks_chart") == 0))
+      && strcmp (cmd, "get_aggregate") == 0)
     {
       add_guest_chart_content_security_headers (response);
     }

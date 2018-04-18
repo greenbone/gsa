@@ -165,18 +165,11 @@ static char *get_asset (gvm_connection_t *, credentials_t *, params_t *,
 static char *get_assets (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_assets_chart (gvm_connection_t *, credentials_t *,
-                               params_t *, const char *, cmd_response_data_t*);
-
-
 static char *get_task (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
 static char *get_tasks (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
-
-static char *get_tasks_chart (gvm_connection_t *, credentials_t *,
-                              params_t *, const char *, cmd_response_data_t*);
 
 static char *get_trash (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
@@ -1511,10 +1504,6 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
   if (strcmp (next, "get_assets") == 0)
     return get_assets (connection, credentials, params, response, response_data);
 
-  if (strcmp (next, "get_assets_chart") == 0)
-    return get_assets_chart (connection, credentials, params, response,
-                             response_data);
-
   if (strcmp (next, "get_config") == 0)
     return get_config (connection, credentials, params, response, 0,
                        response_data);
@@ -1589,9 +1578,6 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
 
   if (strcmp (next, "get_tasks") == 0)
     return get_tasks (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_tasks_chart") == 0)
-    return get_tasks_chart (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -5435,42 +5421,6 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params
                cmd_response_data_t* response_data)
 {
   return get_tasks (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Get a tasks chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[out] response_data     Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                 const char *extra_xml, cmd_response_data_t* response_data)
-{
-  return envelope_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
-                       response_data);
-}
-
-/**
- * @brief Get a tasks chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                     cmd_response_data_t* response_data)
-{
-  return get_tasks_chart (connection, credentials, params, NULL, response_data);
 }
 
 
@@ -27389,44 +27339,6 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   return html;
 }
 
-/**
- * @brief Get an assets chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
-                  params_t *params, const char *extra_xml,
-                  cmd_response_data_t* response_data)
-{
-  return envelope_gmp (connection, credentials, params,
-                       g_strdup ("<get_assets_chart/>"), response_data);
-}
-
-/**
- * @brief Get an assets chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_assets_chart_gmp (gvm_connection_t *connection, credentials_t *
-                      credentials, params_t *params,
-                      cmd_response_data_t* response_data)
-{
-  return get_assets_chart (connection, credentials, params, NULL,
-                           response_data);
-}
 
 
 /* Manager communication. */
