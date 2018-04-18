@@ -30,6 +30,7 @@ import Dashboard from '../../../components/dashboard2/dashboard';
 import NvtsCvssDisplay from './cvssdisplay';
 import NvtsFamilyDisplay from './familydisplay';
 import NvtsSeverityDisplay from './severityclassdisplay';
+import NvtsQodDisplay from './qoddisplay';
 
 const NvtsDashboard = ({
   filter,
@@ -42,12 +43,14 @@ const NvtsDashboard = ({
       'nvt-by-cvss': NvtsCvssDisplay,
       'nvt-by-family': NvtsFamilyDisplay,
       'nvt-by-severity-class': NvtsSeverityDisplay,
+      'nvt-by-qod': NvtsQodDisplay,
     }}
     defaultContent={[
       [
         'nvt-by-cvss',
         'nvt-by-family',
         'nvt-by-severity-class',
+        'nvt-by-qod',
       ],
     ]}
     onFilterChanged={onFilterChanged}
