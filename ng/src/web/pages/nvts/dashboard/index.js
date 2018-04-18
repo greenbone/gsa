@@ -27,6 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import NvtsCvssDisplay from './cvssdisplay';
 import NvtsFamilyDisplay from './familydisplay';
 import NvtsSeverityDisplay from './severityclassdisplay';
 
@@ -38,11 +39,13 @@ const NvtsDashboard = ({
     id="f68d9369-1945-477b-968f-121c6029971b"
     filter={filter}
     components={{
+      'nvt-by-cvss': NvtsCvssDisplay,
       'nvt-by-family': NvtsFamilyDisplay,
       'nvt-by-severity-class': NvtsSeverityDisplay,
     }}
     defaultContent={[
       [
+        'nvt-by-cvss',
         'nvt-by-family',
         'nvt-by-severity-class',
       ],
