@@ -56,7 +56,7 @@ const transformFamilyData = (data = {}, {severityClass}) => {
         ': ' + severityFormat(severity) + ')';
 
       return {
-        value: count,
+        value: parse_float(count),
         color: riskFactorColorScale(riskFactor),
         label: value,
         toolTip,
