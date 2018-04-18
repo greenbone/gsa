@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -156,7 +157,7 @@ class EntitiesCommand extends HttpCommand {
     const {group: groups = []} = aggregate;
 
     ret.groups = map(groups, group => {
-      const {text} = group;
+      const {stats, text} = group;
 
       const newGroup = {
         ...group,
@@ -171,6 +172,16 @@ class EntitiesCommand extends HttpCommand {
           newGroup.text[name] = value;
         });
       }
+      if (is_defined(stats)) {
+        newGroup.stats = {};
+
+        for_each(stats, s => {
+          const name = s._column;
+          const nStat = {...s};
+          delete nStat._column;
+          newGroup.stats[name] = nStat;
+        });
+      }
 
       return newGroup;
     });
@@ -181,6 +192,7 @@ class EntitiesCommand extends HttpCommand {
   }
 
   getAggregates({
+    dataColumns = [],
     textColumns = [],
     sort = [],
     maxGroups,
@@ -188,6 +200,9 @@ class EntitiesCommand extends HttpCommand {
   } = {}) {
 
     const requestParams = {};
+
+    dataColumns.forEach((column, i) =>
+      requestParams[`data_columns:${i}`] = column);
 
     textColumns.forEach((column, i) =>
       requestParams[`text_columns:${i}`] = column);
