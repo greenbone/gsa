@@ -146,12 +146,12 @@ void gsad_add_content_type_header (http_response_t *response,
 int handler_create_response (http_connection_t *connection,
                              gchar *data,
                              cmd_response_data_t *response_data,
-                             const gchar *sid, int allow_caching);
+                             const gchar *sid);
 
 int handler_send_response (http_connection_t *connection,
                            http_response_t *response,
                            cmd_response_data_t *response_data,
-                           const gchar *sid, int allow_caching);
+                           const gchar *sid);
 
 int handler_send_not_found (http_connection_t *connection,
                             const gchar *url);
@@ -185,7 +185,7 @@ int send_response (http_connection_t *connection, const char *content,
                    int status_code, const gchar *sid,
                    content_type_t content_type,
                    const char *content_disposition,
-                   size_t content_length, int allow_caching);
+                   size_t content_length);
 
 int send_redirect_to_urn (http_connection_t *connection, const char *urn,
                           user_t *user);
