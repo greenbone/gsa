@@ -283,7 +283,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
       return MHD_NO;
     }
 
-  add_caching_headers (response, 0);
+  add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
@@ -329,7 +329,7 @@ send_response (http_connection_t *connection, const char *content,
       return MHD_NO;
     }
 
-  add_caching_headers (response, 0);
+  add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
@@ -389,7 +389,7 @@ handler_send_response (http_connection_t *connection,
     }
 
   if (response_data->allow_caching == 0)
-    add_caching_headers (response, 0);
+    add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
 
@@ -1036,22 +1036,19 @@ add_cors_headers (http_response_t *response)
 }
 
 /**
- * @brief Add header to manage caching to a HTTP response.
+ * @brief Add header to forbid caching to a HTTP response.
  *
  * @param[in]  response       The HTTP response to add the headers to.
  * @param[in]  allow_caching  1 to allow caching, 0 to forbid.
  */
 void
-add_caching_headers (http_response_t *response, int allow_caching)
+add_forbid_caching_headers (http_response_t *response)
 {
-  if (allow_caching == FALSE)
-    {
-      MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
-      MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
-                               "no-cache, no-store");
-      MHD_add_response_header (response, MHD_HTTP_HEADER_PRAGMA,
-                               "no-cache");
-    }
+  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
+                           "no-cache, no-store");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_PRAGMA,
+                           "no-cache");
 }
 
 gboolean
