@@ -165,18 +165,11 @@ static char *get_asset (gvm_connection_t *, credentials_t *, params_t *,
 static char *get_assets (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_assets_chart (gvm_connection_t *, credentials_t *,
-                               params_t *, const char *, cmd_response_data_t*);
-
-
 static char *get_task (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
 static char *get_tasks (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
-
-static char *get_tasks_chart (gvm_connection_t *, credentials_t *,
-                              params_t *, const char *, cmd_response_data_t*);
 
 static char *get_trash (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
@@ -373,26 +366,6 @@ gmp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
   manager_port = port_manager;
 }
 
-/**
- * @brief Traverse a chart preference tree and output xml elements.
- *
- * @param id     ID of the preference.
- * @param value  Preference value.
- * @param buffer GString buffer to output elements to.
- *
- * @return always 0
- */
-static gboolean
-print_chart_pref (gchar *id, gchar *value, GString* buffer)
-{
-  g_string_append_printf (buffer,
-                          "<chart_preference id=\"%s\">"
-                          "<value>%s</value>"
-                          "</chart_preference>",
-                          id,
-                          value);
-  return 0;
-}
 
 /**
  *  @brief Structure to search a key by value
@@ -516,7 +489,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  "<role>%s</role>"
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
-                                 "<charts>%d</charts>"
                                  "<guest>%d</guest>"
                                  "<client_address>%s</client_address>"
                                  "<backend_operation>%.2f</backend_operation>",
@@ -536,7 +508,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  credentials->role,
                                  credentials->severity,
                                  credentials->language,
-                                 credentials->charts,
                                  credentials->guest,
                                  credentials->client_address,
                                  (double) ((tv.tv_sec
@@ -547,12 +518,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  / 1000000.0);
   g_string_append (string, res);
   g_free (res);
-
-  g_string_append (string, "<chart_preferences>");
-  g_tree_foreach (credentials->chart_prefs,
-                  (GTraverseFunc)print_chart_pref,
-                  string);
-  g_string_append (string, "</chart_preferences>");
 
   if (credentials->pw_warning)
     {
@@ -1539,10 +1504,6 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
   if (strcmp (next, "get_assets") == 0)
     return get_assets (connection, credentials, params, response, response_data);
 
-  if (strcmp (next, "get_assets_chart") == 0)
-    return get_assets_chart (connection, credentials, params, response,
-                             response_data);
-
   if (strcmp (next, "get_config") == 0)
     return get_config (connection, credentials, params, response, 0,
                        response_data);
@@ -1617,9 +1578,6 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
 
   if (strcmp (next, "get_tasks") == 0)
     return get_tasks (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_tasks_chart") == 0)
-    return get_tasks_chart (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -5463,42 +5421,6 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params
                cmd_response_data_t* response_data)
 {
   return get_tasks (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Get a tasks chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[out] response_data     Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                 const char *extra_xml, cmd_response_data_t* response_data)
-{
-  return envelope_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
-                       response_data);
-}
-
-/**
- * @brief Get a tasks chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                     cmd_response_data_t* response_data)
-{
-  return get_tasks_chart (connection, credentials, params, NULL, response_data);
 }
 
 
@@ -25881,63 +25803,97 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   g_free (response);
   return html;
 }
+/**
+ * @brief Get all dashboard settings
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_dashboard_settings_gmp (gvm_connection_t *connection,
+                            credentials_t * credentials, params_t *params,
+                            cmd_response_data_t* response_data)
+{
+  GString *xml;
+
+  xml = g_string_new ("<get_dashboard_settings>");
+
+  if (gvm_connection_sendf_xml (connection,
+                              "<get_settings"
+                              " filter='name~\"Dashboard\"'/>"))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "dashboard settings"
+                            "Diagnostics: Failure to send command to manager "
+                            "daemon.",
+                            response_data);
+    }
+
+  if (read_string_c (connection, &xml))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the "
+                           "dashboard settings"
+                           "Diagnostics: Failure to receive response from "
+                           "manager daemon.",
+                            response_data);
+    }
+
+  g_string_append (xml, "</get_dashboard_settings>");
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
+}
 
 /**
- * @brief Save chart preferences.
+ * @brief Save user setting
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  pref_id        Preference ID.
- * @param[in]  pref_value     Preference value.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return SAVE_CHART_PREFERENCE GMP response.
+ * @return An action response.
  */
 char*
-save_chart_preference_gmp (gvm_connection_t *connection,
-                           credentials_t* credentials, params_t *params,
-                           gchar **pref_id, gchar **pref_value,
-                           cmd_response_data_t* response_data)
+save_setting_gmp (gvm_connection_t *connection,
+                  credentials_t* credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  *pref_id = g_strdup (params_value (params, "chart_preference_id"));
-  *pref_value = g_strdup (params_value (params, "chart_preference_value"));
+  const gchar *setting_id = params_value (params, "setting_id");
+  const gchar *setting_value = params_value (params, "setting_value");
 
-  gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
-                                     strlen (*pref_value));
+  CHECK_PARAM_INVALID (setting_id, "Save Chart Preferences", "get_users");
+  CHECK_PARAM_INVALID (setting_value, "Save Chart Preferences", "get_users");
+
+  gchar* value_64 = g_base64_encode ((guchar*)setting_value,
+                                     strlen (setting_value));
   gchar *html;
   gchar* response = NULL;
-  entity_t entity;
+  entity_t entity = NULL;
   int ret;
 
   cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
 
-  if (*pref_id == NULL)
-    {
-      response = g_strdup
-        ("<save_chart_preference_response"
-         " status=\"400\" status_text=\"Invalid or missing name\"/>");
-    }
-  if (*pref_value == NULL)
-    {
-      response = g_strdup
-        ("<save_chart_preference_response"
-         " status=\"400\" status_text=\"Invalid or missing value\"/>");
-    }
-
-  if (response)
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return response;
-    }
-
-  response = NULL;
-  entity = NULL;
   ret = gmpf (connection, credentials, &response, &entity, response_data,
               "<modify_setting setting_id=\"%s\">"
               "<value>%s</value>"
               "</modify_setting>",
-              *pref_id, value_64);
+              setting_id, value_64);
+
   g_free (value_64);
   switch (ret)
     {
@@ -25975,7 +25931,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              response_data);
     }
   html = response_from_entity (connection, credentials, params, entity,
-                              "Save Chart Preferences",
+                              "Save Setting",
                               response_data);
   free_entity (entity);
   g_free (response);
@@ -27383,44 +27339,6 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   return html;
 }
 
-/**
- * @brief Get an assets chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
-                  params_t *params, const char *extra_xml,
-                  cmd_response_data_t* response_data)
-{
-  return envelope_gmp (connection, credentials, params,
-                       g_strdup ("<get_assets_chart/>"), response_data);
-}
-
-/**
- * @brief Get an assets chart, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_assets_chart_gmp (gvm_connection_t *connection, credentials_t *
-                      credentials, params_t *params,
-                      cmd_response_data_t* response_data)
-{
-  return get_assets_chart (connection, credentials, params, NULL,
-                           response_data);
-}
 
 
 /* Manager communication. */
@@ -27507,15 +27425,13 @@ openvas_connection_open (gvm_connection_t *connection,
  * @param[out] capabilities  Capabilities of manager.
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
- * @param[out] chart_prefs   Chart preferences.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_gmp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
-                  gchar **capabilities, gchar **language, gchar **pw_warning,
-                  GTree **chart_prefs)
+                  gchar **capabilities, gchar **language, gchar **pw_warning)
 {
   gvm_connection_t connection;
   int auth;
@@ -27620,69 +27536,6 @@ authenticate_gmp (const gchar * username, const gchar * password,
           return -1;
         }
 
-      /* Get the chart preferences */
-
-      ret = gvm_connection_sendf (&connection,
-                                  "<get_settings"
-                                  " filter='name~\"Dashboard\"'/>");
-      if (ret)
-        {
-          gvm_connection_close (&connection);
-          return 2;
-        }
-
-      /* Read the response */
-      entity = NULL;
-      if (read_entity_and_text_c (&connection, &entity, &response))
-        {
-          gvm_connection_close (&connection);
-          return 2;
-        }
-
-      /* Check the response. */
-      status = entity_attribute (entity, "status");
-      if (status == NULL
-          || strlen (status) == 0)
-        {
-          g_free (response);
-          free_entity (entity);
-          return -1;
-        }
-      first = status[0];
-      if (first == '2')
-        {
-          entities_t entities = entity->entities;
-          entity_t child_entity;
-          *chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                          NULL, g_free, g_free);
-
-          while ((child_entity = first_entity (entities)))
-            {
-              if (strcmp (entity_name (child_entity), "setting") == 0)
-                {
-                  const char *setting_id
-                    = entity_attribute (child_entity, "id");
-                  const char *setting_value
-                    = entity_text (entity_child (child_entity, "value"));
-
-                  if (setting_id && setting_value)
-                    g_tree_insert (*chart_prefs,
-                                   g_strdup (setting_id),
-                                   g_strdup (setting_value));
-                }
-              entities = next_entities (entities);
-            }
-          free_entity (entity);
-          g_free (response);
-        }
-      else
-        {
-          free_entity (entity);
-          g_free (response);
-          gvm_connection_close (&connection);
-          return -1;
-        }
-
       gvm_connection_close (&connection);
       return 0;
     }
@@ -27718,7 +27571,6 @@ login (http_connection_t *con,
   gchar *severity;
   gchar *language;
   gchar *pw_warning;
-  GTree *chart_prefs;
 
   const char *password = params_value (params, "password");
   const char *login = params_value(params, "login");
@@ -27736,8 +27588,7 @@ login (http_connection_t *con,
                               &severity,
                               &capabilities,
                               &language,
-                              &pw_warning,
-                              &chart_prefs);
+                              &pw_warning);
       if (ret)
         {
           int status;
@@ -27765,8 +27616,7 @@ login (http_connection_t *con,
         {
           user_t *user;
           user = user_add (login, password, timezone, severity, role,
-                           capabilities, language, pw_warning, chart_prefs,
-                           client_address);
+                           capabilities, language, pw_warning, client_address);
 
           g_message ("Authentication success for '%s' from %s",
                      login ?: "",
