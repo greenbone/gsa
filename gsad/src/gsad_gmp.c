@@ -373,26 +373,6 @@ gmp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
   manager_port = port_manager;
 }
 
-/**
- * @brief Traverse a chart preference tree and output xml elements.
- *
- * @param id     ID of the preference.
- * @param value  Preference value.
- * @param buffer GString buffer to output elements to.
- *
- * @return always 0
- */
-static gboolean
-print_chart_pref (gchar *id, gchar *value, GString* buffer)
-{
-  g_string_append_printf (buffer,
-                          "<chart_preference id=\"%s\">"
-                          "<value>%s</value>"
-                          "</chart_preference>",
-                          id,
-                          value);
-  return 0;
-}
 
 /**
  *  @brief Structure to search a key by value
@@ -516,7 +496,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  "<role>%s</role>"
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
-                                 "<charts>%d</charts>"
                                  "<guest>%d</guest>"
                                  "<client_address>%s</client_address>"
                                  "<backend_operation>%.2f</backend_operation>",
@@ -536,7 +515,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  credentials->role,
                                  credentials->severity,
                                  credentials->language,
-                                 credentials->charts,
                                  credentials->guest,
                                  credentials->client_address,
                                  (double) ((tv.tv_sec
@@ -547,12 +525,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  / 1000000.0);
   g_string_append (string, res);
   g_free (res);
-
-  g_string_append (string, "<chart_preferences>");
-  g_tree_foreach (credentials->chart_prefs,
-                  (GTraverseFunc)print_chart_pref,
-                  string);
-  g_string_append (string, "</chart_preferences>");
 
   if (credentials->pw_warning)
     {
