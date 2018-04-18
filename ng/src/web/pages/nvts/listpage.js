@@ -36,6 +36,8 @@ import NvtsCharts from './charts.js';
 import NvtsFilterDialog from './filterdialog.js';
 import NvtsTable from './table.js';
 
+import NvtsDashboard from './dashboard/index.js';
+
 const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: 'f68d9369-1945-477b-968f-121c6029971b',
@@ -55,6 +57,7 @@ const ToolBarIcons = props => {
 
 export default withEntitiesContainer('nvt', {
   dashboard: Dashboard,
+  dashboard2: NvtsDashboard,
   filterEditDialog: NvtsFilterDialog,
   sectionIcon: 'nvt.svg',
   table: NvtsTable,
