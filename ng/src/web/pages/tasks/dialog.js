@@ -26,17 +26,21 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {classes, is_defined, map, select_save_id} from 'gmp/utils';
+import {is_defined, map, select_save_id} from 'gmp/utils';
 
 import {
   NO_VALUE,
   YES_VALUE,
 } from 'gmp/parser.js';
 
+import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task.js';
+
 import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+  CVE_SCANNER_TYPE,
 } from 'gmp/models/scanner.js';
 
 import {
@@ -47,9 +51,10 @@ import {
 } from 'gmp/models/scanconfig.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import MultiSelect from '../../components/form/multiselect.js';
 import Select from '../../components/form/select.js';
@@ -145,10 +150,89 @@ ScannerSelect.propTypes = {
   onChange: PropTypes.func,
 };
 
+const DEFAULT_MAX_CHECKS = 4;
+const DEFAULT_MAX_HOSTS = 20;
+const DEFAULT_MIN_QOD = 70;
+const DEFAULT_HOSTS_ORDERING = 'sequential';
+
 const TaskDialog = ({
+  add_tag = NO_VALUE,
+  alert_ids = [],
+  alerts = [],
+  alterable = NO_VALUE,
+  apply_overrides = YES_VALUE,
+  auto_delete = AUTO_DELETE_KEEP,
+  auto_delete_data = AUTO_DELETE_DEFAULT_VALUE,
+  capabilities,
+  comment = '',
+  config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
+  hosts_ordering = DEFAULT_HOSTS_ORDERING,
+  in_assets = YES_VALUE,
+  max_checks = DEFAULT_MAX_CHECKS,
+  max_hosts = DEFAULT_MAX_HOSTS,
+  min_qod = DEFAULT_MIN_QOD,
+  name = _('Unnamed'),
+  scan_configs = {
+    [OPENVAS_SCAN_CONFIG_TYPE]: [],
+    [OSP_SCAN_CONFIG_TYPE]: [],
+  },
+  scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
+  scanners = [{
+    id: OPENVAS_DEFAULT_SCANNER_ID,
+    scanner_type: OPENVAS_SCANNER_TYPE,
+  }],
+  schedule_id = UNSET_VALUE,
+  schedule_periods = NO_VALUE,
+  schedules = [],
+  source_iface = '',
+  tag_name,
+  tags = [],
+  tag_value,
+  target_id,
+  targets,
+  task,
+  title = _('New Task'),
+  visible = true,
+  onAlertsChange,
+  onClose,
+  onNewAlertClick,
+  onNewScheduleClick,
+  onNewTargetClick,
+  onSave,
+  onScheduleChange,
+  onTargetChange,
+  ...data
+}) => {
+  const scanner = get_scanner(scanners, scanner_id);
+  const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
+
+  const tag_items = map(tags, tag => ({
+    value: tag.name,
+    label: tag.name,
+  }));
+
+  const target_items = render_select_items(targets);
+
+  const schedule_items = render_select_items(schedules, UNSET_VALUE);
+
+  const osp_scan_config_items = render_select_items(
+    scan_configs[OSP_SCAN_CONFIG_TYPE]);
+
+  const openvas_scan_config_items = render_select_items(
+    scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
+      // Skip the "empty" config
+      return config.id !== EMPTY_SCAN_CONFIG_ID;
+    }));
+
+  const alert_items = render_select_items(alerts);
+
+  const change_task = task ? task.isChangeable() : true;
+
+  const has_tags = tag_items.length > 0;
+
+  const uncontrolledData = {
+    ...data,
     add_tag,
-    alert_ids,
-    alerts,
     alterable,
     apply_overrides,
     auto_delete,
@@ -161,324 +245,322 @@ const TaskDialog = ({
     max_hosts,
     min_qod,
     name,
-    scan_configs,
+    scanner_type,
     scanner_id,
-    scanners,
-    schedule_id,
-    schedule_periods,
-    schedules,
     source_iface,
     tag_name,
     tags,
     tag_value,
+  };
+
+  const controlledData = {
     target_id,
-    targets,
-    task,
-    onNewAlertClick,
-    onNewScheduleClick,
-    onNewTargetClick,
-    onValueChange,
-  }, {capabilities}) => {
-  const scanner = get_scanner(scanners, scanner_id);
+    alert_ids,
+    schedule_id,
+  };
 
-  const is_osp_scanner = is_defined(scanner) &&
-    scanner.scanner_type === OSP_SCANNER_TYPE;
-
-  const use_openvas_scan_config = is_defined(scanner) &&
-    (scanner.scanner_type === OPENVAS_SCANNER_TYPE ||
-      scanner.scanner_type === SLAVE_SCANNER_TYPE);
-
-  const tag_items = map(tags, tag => ({
-    value: tag.name,
-    label: tag.name,
-  }));
-
-  const target_items = render_select_items(targets);
-
-  const schedule_items = render_select_items(schedules, UNSET_VALUE);
-
-  const osp_scan_config_items = is_osp_scanner && render_select_items(
-    scan_configs[OSP_SCAN_CONFIG_TYPE]);
-
-  const openvas_scan_config_items = use_openvas_scan_config &&
-    render_select_items(
-      scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
-        // Skip the "empty" config
-        return config.id !== EMPTY_SCAN_CONFIG_ID;
-      }));
-
-  const alert_items = render_select_items(alerts);
-
-  const change_task = task ? task.isChangeable() : true;
-
-  const osp_config_id = select_save_id(scan_configs[OSP_SCAN_CONFIG_TYPE],
-    config_id);
-  const openvas_config_id = select_save_id(
-    scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id);
-
-  const has_tags = tag_items.length > 0;
   return (
-    <Layout flex="column">
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      defaultValues={uncontrolledData}
+      values={controlledData}
+    >
+      {({
+        values: state,
+        onValueChange,
+      }) => {
+        const osp_config_id = select_save_id(
+          scan_configs[OSP_SCAN_CONFIG_TYPE], state.config_id);
+        const openvas_config_id = select_save_id(
+          scan_configs[OPENVAS_SCAN_CONFIG_TYPE], state.config_id);
 
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          grow="1"
-          value={name}
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+        const is_osp_scanner = state.scanner_type === OSP_SCANNER_TYPE;
 
-      <FormGroup title={_('Comment')}>
-        <TextField
-          name="comment"
-          value={comment}
-          grow="1"
-          size="30" maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
+        const use_openvas_scan_config =
+          state.scanner_type === OPENVAS_SCANNER_TYPE ||
+          state.scanner_type === SLAVE_SCANNER_TYPE;
+        return (
+          <Layout flex="column">
 
-      <FormGroup title={_('Scan Targets')}>
-        <Divider>
-          <Select
-            name="target_id"
-            disabled={!change_task}
-            value={target_id}
-            items={target_items}
-            onChange={onValueChange}
-          />
-          {change_task &&
-            <Layout flex box>
-              <NewIcon
-                onClick={onNewTargetClick}
-                title={_('Create a new target')}/>
-            </Layout>
-          }
-        </Divider>
-      </FormGroup>
-
-      <FormGroup
-        condition={capabilities.mayOp('get_alerts')}
-        title={_('Alerts')}>
-        <Divider>
-          <MultiSelect
-            name="alert_ids"
-            multiple="multiple"
-            id="alert_ids"
-            value={alert_ids}
-            items={alert_items}
-            onChange={onValueChange}
-          />
-          <Layout flex box>
-            <NewIcon
-              title={_('Create a new alert')}
-              onClick={onNewAlertClick}/>
-          </Layout>
-        </Divider>
-      </FormGroup>
-
-      <FormGroup
-        condition={capabilities.mayOp('get_schedules')}
-        title={_('Schedule')}>
-        <Divider>
-          <Select
-            name="schedule_id"
-            value={schedule_id}
-            items={schedule_items}
-            onChange={onValueChange}
-          />
-          <Checkbox
-            name="schedule_periods"
-            checked={schedule_periods === YES_VALUE}
-            checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
-            onChange={onValueChange}
-            title={_('Once')}/>
-          <Layout flex box>
-            <NewIcon
-              title={_('Create a new schedule')}
-              onClick={onNewScheduleClick}/>
-          </Layout>
-        </Divider>
-      </FormGroup>
-
-
-      <AddResultsToAssetsGroup
-        inAssets={in_assets}
-        onChange={onValueChange}/>
-
-      <Layout
-        flex="column"
-        offset="2"
-        className={classes('offset-container',
-          in_assets === YES_VALUE ? '' : 'disabled')}>
-        <FormGroup title={_('Apply Overrides')}>
-          <YesNoRadio
-            name="apply_overrides"
-            value={apply_overrides}
-            disabled={in_assets !== YES_VALUE}
-            onChange={onValueChange}/>
-        </FormGroup>
-
-        <FormGroup
-          title={_('Min QoD')}>
-          <Spinner
-            name="min_qod"
-            value={min_qod}
-            size="4"
-            onChange={onValueChange}
-            disabled={in_assets !== YES_VALUE}
-            type="int"
-            min="0" max="100"/>
-          <Layout box>%</Layout>
-        </FormGroup>
-      </Layout>
-
-      <FormGroup
-        title={_('Alterable Task')}
-        condition={change_task}>
-        <YesNoRadio
-          name="alterable"
-          value={alterable}
-          disabled={task && !task.isNew()}
-          onChange={onValueChange}/>
-      </FormGroup>
-
-      <AutoDeleteReportsGroup
-        autoDelete={auto_delete}
-        autoDeleteData={auto_delete_data}
-        onChange={onValueChange}/>
-
-      <ScannerSelect
-        scanConfigs={scan_configs}
-        scanners={scanners}
-        scannerId={scanner_id}
-        changeTask={change_task}
-        onChange={onValueChange}
-      />
-
-      {use_openvas_scan_config &&
-        <Layout
-          offset="2"
-          className="offset-container">
-          <Layout
-            flex="column"
-            grow="1">
-            <FormGroup
-              titleSize="4"
-              title={_('Scan Config')}>
-              <Select
-                name="config_id"
-                value={openvas_config_id}
-                disabled={!change_task}
-                items={openvas_scan_config_items}
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                size="30"
+                maxLength="80"
+                value={state.name}
                 onChange={onValueChange}
               />
             </FormGroup>
-            <FormGroup
-              titleSize="4"
-              title={_('Network Source Interface')}>
-              <TextField
-                name="source_iface"
-                value={source_iface}
-                onChange={onValueChange}/>
-            </FormGroup>
-            <FormGroup
-              titleSize="4"
-              title={_('Order for target hosts')}>
-              <Select
-                name="hosts_ordering"
-                value={hosts_ordering}
-                items={[{
-                    value: 'sequential',
-                    label: _('Sequential'),
-                  }, {
-                    value: 'random',
-                    label: _('Random'),
-                  }, {
-                    value: 'reverse',
-                    label: _('Reverse'),
-                  },
-                ]}
-                onChange={onValueChange}
-               />
-            </FormGroup>
-            <FormGroup
-              titleSize="4"
-              title={_('Maximum concurrently executed NVTs per host')}>
-              <Spinner
-                name="max_checks"
-                value={max_checks}
-                min="0" size="10"
-                maxLength="10"
-                onChange={onValueChange}/>
-            </FormGroup>
-            <FormGroup
-              titleSize="4"
-              title={_('Maximum concurrently scanned hosts')}>
-              <Spinner
-                name="max_hosts"
-                value={max_hosts}
-                type="int" min="0"
-                size="10"
-                maxLength="10"
-                onChange={onValueChange}/>
-            </FormGroup>
-          </Layout>
-        </Layout>
-      }
 
-      {is_osp_scanner &&
-        <Layout
-          float
-          offset="2"
-          className="offset-container">
-          <FormGroup
-            titleSize="4"
-            title={_('Scan Config')}>
-            <Select
-              name="config_id"
-              value={osp_config_id}
-              items={osp_scan_config_items}
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                grow="1"
+                size="30"
+                maxLength="400"
+                value={state.comment}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            <FormGroup title={_('Scan Targets')}>
+              <Divider>
+                <Select
+                  name="target_id"
+                  disabled={!change_task}
+                  items={target_items}
+                  value={state.target_id}
+                  onChange={onTargetChange}
+                />
+                {change_task &&
+                  <Layout flex>
+                    <NewIcon
+                      title={_('Create a new target')}
+                      onClick={onNewTargetClick}
+                    />
+                  </Layout>
+                }
+              </Divider>
+            </FormGroup>
+
+            <FormGroup
+              condition={capabilities.mayOp('get_alerts')}
+              title={_('Alerts')}
+            >
+              <Divider>
+                <MultiSelect
+                  name="alert_ids"
+                  items={alert_items}
+                  value={state.alert_ids}
+                  onChange={onAlertsChange}
+                />
+                <Layout flex>
+                  <NewIcon
+                    title={_('Create a new alert')}
+                    onClick={onNewAlertClick}
+                  />
+                </Layout>
+              </Divider>
+            </FormGroup>
+
+            <FormGroup
+              condition={capabilities.mayOp('get_schedules')}
+              title={_('Schedule')}
+            >
+              <Divider>
+                <Select
+                  name="schedule_id"
+                  value={state.schedule_id}
+                  items={schedule_items}
+                  onChange={onScheduleChange}
+                />
+                <Checkbox
+                  name="schedule_periods"
+                  checked={state.schedule_periods === YES_VALUE}
+                  checkedValue={YES_VALUE}
+                  unCheckedValue={NO_VALUE}
+                  title={_('Once')}
+                  onChange={onValueChange}
+                />
+                <Layout flex>
+                  <NewIcon
+                    title={_('Create a new schedule')}
+                    onClick={onNewScheduleClick}
+                  />
+                </Layout>
+              </Divider>
+            </FormGroup>
+
+
+            <AddResultsToAssetsGroup
+              inAssets={state.in_assets}
               onChange={onValueChange}
             />
-          </FormGroup>
-        </Layout>
-      }
 
-      {capabilities.mayAccess('tags') && capabilities.mayCreate('task') &&
-        has_tags &&
-        <h3>{_('Tag')}</h3>
-      }
-      <FormGroup
-        condition={capabilities.mayAccess('tags') &&
-        capabilities.mayCreate('task') && has_tags}>
-        <Divider>
-          <Checkbox
-            name="add_tag"
-            onChange={onValueChange}
-            checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
-            checked={add_tag === YES_VALUE}
-            title={_('Add Tag:')}/>
-          <Select
-            name="tag_name"
-            value={tag_name}
-            items={tag_items}
-            onChange={onValueChange}
-          />
-          <Text>
-            {_('with Value')}
-          </Text>
-          <TextField
-            name="tag_value"
-            value={tag_value}
-            onChange={onValueChange}/>
-        </Divider>
-      </FormGroup>
+            <FormGroup title={_('Apply Overrides')}>
+              <YesNoRadio
+                name="apply_overrides"
+                disabled={state.in_assets !== YES_VALUE}
+                value={state.apply_overrides}
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-    </Layout>
+            <FormGroup
+              title={_('Min QoD')}
+            >
+              <Spinner
+                name="min_qod"
+                size="4"
+                disabled={state.in_assets !== YES_VALUE}
+                type="int"
+                min="0"
+                max="100"
+                value={state.min_qod}
+                onChange={onValueChange}
+              />
+              <Layout box>%</Layout>
+            </FormGroup>
+
+            <FormGroup
+              title={_('Alterable Task')}
+              condition={change_task}
+            >
+              <YesNoRadio
+                name="alterable"
+                disabled={task && !task.isNew()}
+                value={state.alterable}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            <AutoDeleteReportsGroup
+              autoDelete={state.auto_delete}
+              autoDeleteData={state.auto_delete_data}
+              onChange={onValueChange}
+            />
+
+            <ScannerSelect
+              scanConfigs={scan_configs}
+              scanners={scanners}
+              scannerId={state.scanner_id}
+              changeTask={change_task}
+              onChange={onValueChange}
+            />
+
+            {use_openvas_scan_config &&
+              <Layout
+                flex="column"
+                grow="1"
+              >
+                <FormGroup
+                  titleSize="2"
+                  title={_('Scan Config')}
+                >
+                  <Select
+                    name="config_id"
+                    disabled={!change_task}
+                    items={openvas_scan_config_items}
+                    value={openvas_config_id}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Network Source Interface')}
+                >
+                  <TextField
+                    name="source_iface"
+                    value={state.source_iface}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Order for target hosts')}
+                >
+                  <Select
+                    name="hosts_ordering"
+                    items={[{
+                        value: 'sequential',
+                        label: _('Sequential'),
+                      }, {
+                        value: 'random',
+                        label: _('Random'),
+                      }, {
+                        value: 'reverse',
+                        label: _('Reverse'),
+                      },
+                    ]}
+                    value={state.hosts_ordering}
+                    onChange={onValueChange}
+                   />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Maximum concurrently executed NVTs per host')}
+                >
+                  <Spinner
+                    name="max_checks"
+                    size="10"
+                    min="0"
+                    maxLength="10"
+                    value={state.max_checks}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+                <FormGroup
+                  titleSize="4"
+                  title={_('Maximum concurrently scanned hosts')}
+                >
+                  <Spinner
+                    name="max_hosts"
+                    type="int"
+                    min="0"
+                    size="10"
+                    maxLength="10"
+                    value={state.max_hosts}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+              </Layout>
+            }
+
+            {is_osp_scanner &&
+              <FormGroup
+                titleSize="2"
+                title={_('Scan Config')}
+              >
+                <Select
+                  name="config_id"
+                  items={osp_scan_config_items}
+                  value={osp_config_id}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            }
+
+            {capabilities.mayAccess('tags') && capabilities.mayCreate('task') &&
+              has_tags &&
+              <h3>{_('Tag')}</h3>
+            }
+            <FormGroup
+              condition={capabilities.mayAccess('tags') &&
+              capabilities.mayCreate('task') && has_tags}
+            >
+              <Divider>
+                <Checkbox
+                  title={_('Add Tag:')}
+                  name="add_tag"
+                  checkedValue={YES_VALUE}
+                  unCheckedValue={NO_VALUE}
+                  checked={state.add_tag === YES_VALUE}
+                  onChange={onValueChange}
+                />
+                <Select
+                  name="tag_name"
+                  items={tag_items}
+                  value={state.tag_name}
+                  onChange={onValueChange}
+                />
+                <Text>
+                  {_('with Value')}
+                </Text>
+                <TextField
+                  name="tag_value"
+                  value={state.tag_value}
+                  onChange={onValueChange}
+                />
+              </Divider>
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -492,6 +574,7 @@ TaskDialog.propTypes = {
     'keep', 'no',
   ]),
   auto_delete_data: PropTypes.number,
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   config_id: PropTypes.idOrZero,
   hosts_ordering: PropTypes.oneOf([
@@ -502,7 +585,11 @@ TaskDialog.propTypes = {
   max_hosts: PropTypes.number,
   min_qod: PropTypes.number,
   name: PropTypes.string,
-  scan_configs: PropTypes.object,
+  scan_configs: PropTypes.shape({
+    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
+    [CVE_SCANNER_TYPE]: PropTypes.array,
+    [OSP_SCANNER_TYPE]: PropTypes.array,
+  }),
   scanner_id: PropTypes.idOrZero,
   scanners: PropTypes.array,
   schedule_id: PropTypes.idOrZero,
@@ -515,42 +602,18 @@ TaskDialog.propTypes = {
   target_id: PropTypes.idOrZero,
   targets: PropTypes.array,
   task: PropTypes.model,
-  onNewAlertClick: PropTypes.func,
-  onNewScheduleClick: PropTypes.func,
-  onNewTargetClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  title: PropTypes.string,
+  visible: PropTypes.bool,
+  onAlertsChange: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onNewAlertClick: PropTypes.func.isRequired,
+  onNewScheduleClick: PropTypes.func.isRequired,
+  onNewTargetClick: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onScheduleChange: PropTypes.func.isRequired,
+  onTargetChange: PropTypes.func.isRequired,
 };
 
-TaskDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withDialog({
-  title: _('New Task'),
-  footer: _('Save'),
-  defaultState: {
-    add_tag: NO_VALUE,
-    alert_ids: [],
-    alerts: [],
-    alterable: NO_VALUE,
-    apply_overrides: YES_VALUE,
-    auto_delete_data: 5,
-    auto_delete: 'keep',
-    hosts_ordering: 'sequential',
-    in_assets: YES_VALUE,
-    max_checks: 4,
-    max_hosts: 20,
-    min_qod: 70,
-    name: _('Unnamed'),
-    scan_configs: {
-      [OPENVAS_SCAN_CONFIG_TYPE]: [],
-      [OSP_SCAN_CONFIG_TYPE]: [],
-    },
-    scanner_type: OPENVAS_SCANNER_TYPE,
-    schedule_id: UNSET_VALUE,
-    schedule_periods: NO_VALUE,
-    target_id: UNSET_VALUE,
-  },
-})(TaskDialog);
+export default withCapabilities(TaskDialog);
 
 // vim: set ts=2 sw=2 tw=80:

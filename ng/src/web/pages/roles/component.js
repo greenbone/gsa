@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,48 +40,63 @@ class RoleComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      dialogVisible: false,
+      error: undefined,
+    };
+
     this.handleCreatePermission = this.handleCreatePermission.bind(this);
     this.handleCreateSuperPermission =
       this.handleCreateSuperPermission.bind(this);
     this.handleDeletePermission = this.handleDeletePermission.bind(this);
+    this.handleErrorWasSent = this.handleErrorWasSent.bind(this);
 
+    this.closeRoleDialog = this.closeRoleDialog.bind(this);
     this.openRoleDialog = this.openRoleDialog.bind(this);
   }
 
   openRoleDialog(role) {
     const {gmp} = this.props;
 
+    let allUsers = [];
+    gmp.users.getAll().then(response => {
+      allUsers = response.data;
+      this.setState({allUsers});
+    });
+
     if (is_defined(role)) {
-      this.dialog.show({
-        id: role.id,
-        name: role.name,
-        comment: role.comment,
+      this.setState({
+        allUsers,
+        dialogVisible: true,
         in_use: role.isInUse(),
-        users: role.users,
-      }, {
+        role,
         title: _('Edit Role {{name}}', role),
       });
 
       gmp.role.editRoleSettings(role).then(response => {
         const settings = response.data;
-
-        this.dialog.setValues({
+        this.setState({
           permissions: settings.permissions,
-          all_groups: settings.groups,
-          all_permissions: settings.all_permissions,
-          group_id: first(settings.groups).id,
-          permission_name: first(settings.all_permissions).name,
+          allGroups: settings.groups,
+          allPermissions: settings.all_permissions,
+          groupId: first(settings.groups).id,
+          permissionName: first(settings.all_permissions).name,
         });
       });
 
     }
     else {
-      this.dialog.show();
+      this.setState({
+        allUsers,
+        dialogVisible: true,
+        role,
+        title: _('New Role'),
+      });
     }
+  }
 
-    gmp.users.getAll().then(response => {
-      this.dialog.setValue('all_users', response.data);
-    });
+  closeRoleDialog() {
+    this.setState({dialogVisible: false});
   }
 
   handleCreateSuperPermission({role_id, group_id}) {
@@ -94,7 +110,7 @@ class RoleComponent extends React.Component {
       subject_type: 'role',
     });
 
-    this.loadSettings(promise, role_id);
+    return this.loadSettings(promise, role_id);
   }
 
   handleCreatePermission({role_id, name}) {
@@ -106,29 +122,35 @@ class RoleComponent extends React.Component {
       subject_type: 'role',
     });
 
-    this.loadSettings(promise, role_id);
+    return this.loadSettings(promise, role_id);
   }
 
   handleDeletePermission({role_id, permission_id}) {
     const {gmp} = this.props;
 
-    this.loadSettings(gmp.permission.delete({id: permission_id}), role_id);
+    return this.loadSettings(gmp.permission
+      .delete({id: permission_id}), role_id);
+  }
+
+  handleErrorWasSent() {
+    this.setState({error: undefined});
   }
 
   loadSettings(promise, role_id) {
     const {gmp} = this.props;
 
-    promise
+    return promise
       .then(() => gmp.role.editRoleSettings({id: role_id}))
       .then(response => {
         const settings = response.data;
-
-        this.dialog.setValues({
+        this.setState({
           permissions: settings.permissions,
           all_permissions: settings.all_permissions,
           permission_name: first(settings.all_permissions).name,
         });
-      }).catch(error => this.dialog.setError(error));
+      }).catch(error => {
+        this.setState({error});
+      });
   }
 
   render() {
@@ -145,6 +167,20 @@ class RoleComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      allUsers,
+      allGroups,
+      allPermissions,
+      dialogVisible,
+      error,
+      groupId,
+      permissionName,
+      permissions,
+      role,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="role"
@@ -169,13 +205,25 @@ class RoleComponent extends React.Component {
               create: this.openRoleDialog,
               edit: this.openRoleDialog,
             })}
-            <RoleDialog
-              ref={ref => this.dialog = ref}
-              onSave={save}
-              onCreatePermission={this.handleCreatePermission}
-              onCreateSuperPermission={this.handleCreateSuperPermission}
-              onDeletePermission={this.handleDeletePermission}
-            />
+            {dialogVisible &&
+              <RoleDialog
+                all_users={allUsers}
+                all_groups={allGroups}
+                all_permissions={allPermissions}
+                externalError={error}
+                group_id={groupId}
+                permission_name={permissionName}
+                permissions={permissions}
+                role={role}
+                title={title}
+                onClose={this.closeRoleDialog}
+                onSave={save}
+                onCreatePermission={this.handleCreatePermission}
+                onCreateSuperPermission={this.handleCreateSuperPermission}
+                onDeletePermission={this.handleDeletePermission}
+                onExternalErrorSet={this.handleErrorWasSent}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

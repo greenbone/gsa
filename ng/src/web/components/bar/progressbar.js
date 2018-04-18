@@ -26,6 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 const ProgressBarBox = glamorous.div({
   height: '12px',
@@ -44,7 +45,7 @@ const ProgressBarBox = glamorous.div({
 });
 
 const Content = glamorous.div({
-  zIndex: 3,
+  zIndex: Theme.Layers.higher,
   fontWeight: 'bold',
   color: '#FFFFFF',
   fontSize: '9px',
@@ -85,6 +86,9 @@ const Progress = glamorous.div(
       background = 'gray';
     }
 
+    if (progress > 100) {
+      progress = 100;
+    }
     return {
       width: progress + '%',
       background,

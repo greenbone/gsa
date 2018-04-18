@@ -79,7 +79,7 @@ const Actions = ({
       name="permission"
       entity={entity}
       value={entity}
-      mayClone={entity.scanner_type !== CVE_SCANNER_TYPE}
+      mayClone={entity.isClonable()}
       onClick={onScannerCloneClick}/>
     <ExportIcon
       value={entity}

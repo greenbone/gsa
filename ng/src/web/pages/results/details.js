@@ -46,13 +46,16 @@ import TableRow from '../../components/table/row.js';
 
 import References from '../nvts/references.js';
 import Solution from '../nvts/solution.js';
+import P from '../nvts/preformatted';
 
+/*
+ security and log messages from nvts are converted to results
+ results should preserve newlines AND whitespaces for formatting
+*/
 const Pre = glamorous.pre({
   whiteSpace: 'pre-wrap',
   wordWrap: 'normal',
 });
-
-const P = Pre.withComponent('div');
 
 const ResultDetails = ({
     className,
@@ -162,7 +165,7 @@ const ResultDetails = ({
                           id={oid}
                           textOnly={!links}
                         >
-                          {render_nvt_name(nvt)}
+                          {render_nvt_name(oid, nvt.name)}
                           {' OID: ' + oid}
                         </DetailsLink>
                       )}

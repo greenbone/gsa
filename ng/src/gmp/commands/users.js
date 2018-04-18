@@ -56,18 +56,21 @@ class UserCommand extends EntityCommand {
       const settings = new Settings();
       const {data} = response;
 
-      for_each(data.auth_settings.describe_auth_response.group, group => {
-        const values = {};
+      if (is_defined(data.auth_settings) &&
+       is_defined(data.auth_settings.describe_auth_response)) {
+        for_each(data.auth_settings.describe_auth_response.group, group => {
+          const values = {};
 
-        for_each(group.auth_conf_setting, setting => {
-          values[setting.key] = setting.value;
-          if (is_defined(setting.certificate_info)) {
-            values.certificate_info = setting.certificate_info;
-          }
+          for_each(group.auth_conf_setting, setting => {
+            values[setting.key] = setting.value;
+            if (is_defined(setting.certificate_info)) {
+              values.certificate_info = setting.certificate_info;
+            }
+          });
+
+          settings.set(group._name, values);
         });
-
-        settings.set(group._name, values);
-      });
+      }
 
       return response.setData(settings);
     });
@@ -105,6 +108,7 @@ class UserCommand extends EntityCommand {
   }
 
   currentChartPreferences(options = {}) {
+    // FIXME remove after legacy dashboards are obsolete
     return this.httpGet({
       cmd: 'get_my_settings',
     }, options,
@@ -115,12 +119,38 @@ class UserCommand extends EntityCommand {
     });
   }
 
-  currentLanguages() {
+  currentDashboardSettings(options = {}) {
     return this.httpGet({
       cmd: 'get_my_settings',
-    }).then(response => {
-      return response.setData(
-        response.data.get_my_settings.gsa_languages.language);
+    }, options,
+    ).then(response => {
+      const prefs = response.data.chart_preferences.chart_preference;
+
+      log.debug('DashboardSettings loaded', prefs);
+
+      const settings = {};
+
+      for_each(prefs, pref => {
+        const {_id: id, value} = pref;
+
+        try {
+          settings[id] = JSON.parse(value);
+        }
+        catch (e) {
+          log.warn('Could not parse dashboard setting', pref);
+        }
+      });
+
+      return response.setData(settings);
+    });
+  }
+
+  saveDashboardSetting({id, settings}) {
+    log.debug('Saving dashboard settings', id, settings);
+    return this.action({
+      chart_preference_id: id,
+      chart_preference_value: JSON.stringify(settings),
+      cmd: 'save_chart_preference',
     });
   }
 
@@ -173,7 +203,7 @@ class UserCommand extends EntityCommand {
     ifaces_allow,
     name,
     old_name,
-    password,
+    password = '', // needs to be included in httpPost, should be optional in gsad
     role_ids,
   }) {
     if (auth_method === AUTH_METHOD_LDAP) {
@@ -219,6 +249,7 @@ class UserCommand extends EntityCommand {
   }
 
   saveSettings(data) {
+    log.debug('Saving settings', data);
     return this.httpPost({
       cmd: 'save_my_settings',
       text: data.timezone,

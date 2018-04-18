@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,7 +147,7 @@ class ReportDetails extends React.Component {
   load({
     id = this.state.id,
     delta_id = this.state.delta_id,
-    filter = this.state.filter,
+    filter,
     force,
   } = {}) {
     return this.loadInternal({
@@ -265,7 +265,7 @@ class ReportDetails extends React.Component {
 
   reload() {
     // reload data from backend
-    this.load({force: true});
+    this.load({force: true, filter: this.state.filter});
   }
 
   getRefreshInterval() {

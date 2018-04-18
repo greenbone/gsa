@@ -43,7 +43,7 @@ css({
 
   body: {
     margin: '0',
-    font: 'small Verdana, sans-serif',
+    fontFamily: Theme.Font.default,
     fontSize: '12px',
     color: Theme.black,
   },

@@ -184,8 +184,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
      ${NG_SRC_DIR}/src/web/components/dashboard/dashboard.js
      ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
-     ${NG_SRC_DIR}/src/web/components/dashboard/display.js
-     ${NG_SRC_DIR}/src/web/components/dashboard/displaymenu.js
      ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/components/dashboard/withDashboard.js
@@ -208,6 +206,17 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/line.js
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/task.js
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/topology.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/dashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datadisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/displaymenu.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/utils.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/actions.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/loader.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/reducers.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/selectors.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js
@@ -221,7 +230,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/scrollablecontent.js
      ${NG_SRC_DIR}/src/web/components/dialog/title.js
      ${NG_SRC_DIR}/src/web/components/dialog/savedialog.js
-     ${NG_SRC_DIR}/src/web/components/dialog/withDialog.js
      ${NG_SRC_DIR}/src/web/components/folding/folding.js
      ${NG_SRC_DIR}/src/web/components/footnote/footnote.js
      ${NG_SRC_DIR}/src/web/components/form/button.js
@@ -309,6 +317,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
+     ${NG_SRC_DIR}/src/web/components/provider/subscriptionprovider.js
      ${NG_SRC_DIR}/src/web/components/section/header.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
@@ -378,7 +387,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/condition.js
      ${NG_SRC_DIR}/src/web/pages/alerts/details.js
      ${NG_SRC_DIR}/src/web/pages/alerts/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/pages/alerts/emailmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/event.js
@@ -492,6 +500,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/nvts/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/nvts/listpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/preferences.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/preformatted.js
      ${NG_SRC_DIR}/src/web/pages/nvts/references.js
      ${NG_SRC_DIR}/src/web/pages/nvts/row.js
      ${NG_SRC_DIR}/src/web/pages/nvts/solution.js
@@ -632,7 +641,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/targets/component.js
      ${NG_SRC_DIR}/src/web/pages/targets/details.js
      ${NG_SRC_DIR}/src/web/pages/targets/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/targets/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/targets/dialog.js
      ${NG_SRC_DIR}/src/web/pages/targets/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/targets/listpage.js
@@ -644,6 +652,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/charts.js
      ${NG_SRC_DIR}/src/web/pages/tasks/component.js
      ${NG_SRC_DIR}/src/web/pages/tasks/containerdialog.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/schedulesdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/statusdisplay.js
      ${NG_SRC_DIR}/src/web/pages/tasks/details.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dialog.js
@@ -672,10 +686,17 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/usersettings/dialog.js
      ${NG_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/charts.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/hostsdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/vulns/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/row.js
      ${NG_SRC_DIR}/src/web/pages/vulns/table.js
+     ${NG_SRC_DIR}/src/web/store/index.js
+     ${NG_SRC_DIR}/src/web/store/reducers.js
      ${NG_SRC_DIR}/src/web/utils/cert.js
      ${NG_SRC_DIR}/src/web/utils/compose.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js
@@ -684,6 +705,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/proptypes.js
      ${NG_SRC_DIR}/src/web/utils/render.js
      ${NG_SRC_DIR}/src/web/utils/selectiontype.js
+     ${NG_SRC_DIR}/src/web/utils/severity.js
      ${NG_SRC_DIR}/src/web/utils/theme.js
      ${NG_SRC_DIR}/src/web/utils/state.js
      ${NG_SRC_DIR}/src/web/utils/urls.js
@@ -693,6 +715,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/withContext.js
      ${NG_SRC_DIR}/src/web/utils/withGmp.js
      ${NG_SRC_DIR}/src/web/utils/withPrefix.js
+     ${NG_SRC_DIR}/src/web/utils/withSubscription.js
      ${NG_SRC_DIR}/src/web/utils/withUserName.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/modifytaskwizard.js
@@ -707,8 +730,6 @@ set (NG_JS_SRC_FILES
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
-     ${NG_SRC_DIR}/src/web/components/form/css/form.css
-     ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
      )
 
 set (NG_FILES
@@ -749,6 +770,9 @@ install (FILES public/robots.txt
 install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
 
 install (DIRECTORY
-         build/static
-         build/img
+         ${NG_BUILD_DIR}/static
+         ${NG_BUILD_DIR}/img
          DESTINATION ${NG_DEST_DIR})
+
+## Translations
+add_subdirectory (po)

@@ -57,7 +57,7 @@
 #include "gsad_settings.h" /* for vendor_version_get */
 #include "gsad_http.h" /* for gsad_message, logout_xml */
 #include "gsad_base.h" /* for set_language_code */
-#include "xslt_i18n.h"
+#include "gsad_i18n.h"
 
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>
@@ -6237,7 +6237,7 @@ get_credential_gmp (gvm_connection_t *connection,
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  html           Result. Required.
  * @param[out]  login          Login name return.  NULL to skip.  Only set on
  *                             success with credential_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
@@ -6986,7 +6986,7 @@ delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  html           Result.  Required.
  * @param[out]  filename       Agent filename return.  NULL to skip.  Only set
  *                             on success with agent_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
@@ -15210,7 +15210,8 @@ static char *
 get_note (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
-  return get_one (connection, "note", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "note", credentials, params, extra_xml,
+                  "result=\"1\"", response_data);
 }
 
 /**
@@ -15944,8 +15945,8 @@ static char *
 get_override (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one (connection, "override", credentials, params, extra_xml, NULL,
-                  response_data);
+  return get_one (connection, "override", credentials, params, extra_xml,
+                  "result=\"1\"", response_data);
 }
 
 /**
@@ -18824,8 +18825,6 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
-  buffer_languages_xml (xml);
-
   g_string_append (xml, "</get_my_settings>");
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE),
@@ -19039,8 +19038,6 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            response_data);
     }
-
-  buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
   return envelope_gmp (connection, credentials, params,
@@ -25908,6 +25905,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
 
   gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
                                      strlen (*pref_value));
+  gchar *html;
   gchar* response = NULL;
   entity_t entity;
   int ret;
@@ -25976,26 +25974,12 @@ save_chart_preference_gmp (gvm_connection_t *connection,
                              "Diagnostics: Internal Error.",
                              response_data);
     }
-
-  if (gmp_success (entity))
-    {
-      free_entity (entity);
-      g_free (response);
-      return g_strdup ("<save_chart_preference_response"
-                       " status=\"200\" status_text=\"OK\"/>");
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      gchar* ret_response
-        = g_strdup_printf ("<save_chart_preference_response"
-                           " status=\"%s\" status_text=\"%s\"/>",
-                           entity_attribute (entity, "status"),
-                           entity_attribute (entity, "status_text"));
-      free_entity (entity);
-      g_free (response);
-      return ret_response;
-    }
+  html = response_from_entity (connection, credentials, params, entity,
+                              "Save Chart Preferences",
+                              response_data);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 
@@ -27708,6 +27692,116 @@ authenticate_gmp (const gchar * username, const gchar * password,
       return 1;
     }
 }
+
+/**
+ * @brief Login and create a session
+ *
+ * @param[in]   con             HTTP Connection
+ * @param[in]   params          Request paramters
+ * @param[out]  response_data   Extra data return for the HTTP response
+ * @param[in]   client_address  Client address
+ *
+ * @return MHD_YES on success. MHD_NO on errors.
+ */
+int
+login (http_connection_t *con,
+       params_t *params,
+       cmd_response_data_t *response_data,
+       const char *client_address)
+{
+  int ret;
+  authentication_reason_t auth_reason;
+  credentials_t *credentials;
+  gchar *timezone;
+  gchar *role;
+  gchar *capabilities;
+  gchar *severity;
+  gchar *language;
+  gchar *pw_warning;
+  GTree *chart_prefs;
+
+  const char *password = params_value (params, "password");
+  const char *login = params_value(params, "login");
+
+  if ((password == NULL)
+      && (params_original_value (params, "password") == NULL))
+    password = "";
+
+  if (login && password)
+    {
+      ret = authenticate_gmp (login,
+                              password,
+                              &role,
+                              &timezone,
+                              &severity,
+                              &capabilities,
+                              &language,
+                              &pw_warning,
+                              &chart_prefs);
+      if (ret)
+        {
+          int status;
+          if (ret == -1)
+            status = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          if (ret == 2)
+            status = MHD_HTTP_SERVICE_UNAVAILABLE;
+          else
+            status = MHD_HTTP_UNAUTHORIZED;
+
+          auth_reason =
+                  ret == 2
+                    ? GMP_SERVICE_DOWN
+                    : (ret == -1
+                        ? LOGIN_ERROR
+                        : LOGIN_FAILED);
+
+          g_warning ("Authentication failure for '%s' from %s",
+                     login ?: "",
+                     client_address);
+          return handler_send_reauthentication(con, status,
+                                               auth_reason);
+        }
+      else
+        {
+          user_t *user;
+          user = user_add (login, password, timezone, severity, role,
+                           capabilities, language, pw_warning, chart_prefs,
+                           client_address);
+
+          g_message ("Authentication success for '%s' from %s",
+                     login ?: "",
+                     client_address);
+
+          credentials = credentials_new (user, language, client_address);
+
+          char *data = envelope_gmp (NULL, credentials, params, g_strdup(""), response_data);
+
+          ret = handler_create_response (con, data, response_data, user->cookie);
+
+          user_release (user);
+
+          credentials_free (credentials);
+
+          g_free (timezone);
+          g_free (severity);
+          g_free (capabilities);
+          g_free (language);
+          g_free (role);
+          g_free (pw_warning);
+
+          return ret;
+        }
+    }
+  else
+    {
+      g_warning ("Authentication failure for '%s' from %s",
+                 login ?: "",
+                 client_address);
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
+    }
+}
+
 
 /**
  * @brief Connect to Greenbone Vulnerability Manager daemon.

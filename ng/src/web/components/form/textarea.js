@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,36 +22,35 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
-import {classes} from 'gmp/utils';
+import glamorous from 'glamorous';
 
 import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
 
-const TextAreaComponent = ({className, value = '', ...props}) => {
-  className = classes('form-control', className);
-  return (
-    <textarea
-      {...props}
-      value={value}
-      className={className}
-    />
-  );
-};
-
-TextAreaComponent.propTypes = {
-  className: PropTypes.string,
-  value: PropTypes.any,
-};
+const StyledTextArea = glamorous.textarea({
+  display: 'block',
+  height: 'auto',
+  color: Theme.darkGray,
+  backgroundColor: Theme.white,
+  backgroundImage: 'none',
+  border: '1px solid ' + Theme.inputBorderGray,
+  borderRadius: '4px',
+  padding: '1px 8px',
+},
+  ({disabled}) => disabled ? {cursor: 'not-allowed'} : null,
+  ({disabled, readonly}) => readonly || disabled ? {
+    backgroundColor: Theme.dialogGray,
+    opacity: 1,
+  } : null,
+);
 
 export default compose(
   withLayout(),
   withChangeHandler(),
-)(TextAreaComponent);
+)(StyledTextArea);
 
 // vim: set ts=2 sw=2 tw=80:

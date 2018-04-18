@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -23,89 +24,118 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 import Select from '../../components/form/select.js';
 
 const FilterDialog = ({
-    comment,
-    name,
-    term,
-    type,
-    types,
-    onValueChange,
-  }) => {
+  comment = '',
+  id,
+  name = _('Unnamed'),
+  term = '',
+  title = _('New Filter'),
+  type,
+  types,
+  visible = true,
+  onClose,
+  onSave,
+}) => {
+
+  const filterOptions = types.map(option => ({
+    value: option[0],
+    label: option[1],
+  }));
+
   return (
-    <Layout flex="column">
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          grow="1"
-          value={name}
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      defaultValues={{
+        comment,
+        id,
+        name,
+        term,
+        type,
+      }}
+    >
+      {({
+        values: state,
+        onValueChange,
+      }) => {
 
-      <FormGroup title={_('Comment')}>
-        <TextField
-          name="comment"
-          grow="1"
-          value={comment}
-          size="30"
-          maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
+        return (
+          <Layout flex="column">
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"
+              />
+            </FormGroup>
 
-      <FormGroup title={_('Term')}>
-        <TextField
-          name="term"
-          grow="1"
-          value={term}
-          size="30"
-          onChange={onValueChange}/>
-      </FormGroup>
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                grow="1"
+                value={state.comment}
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-      <FormGroup title={_('Type')}>
-        <Select
-          name="type"
-          onChange={onValueChange}
-          value={type}>
-          {
-            types.map(option => (
-              <option key={option[1]} value={option[1]}>{option[2]}</option>
-            ))
-          }
-        </Select>
-      </FormGroup>
-    </Layout>
+            <FormGroup title={_('Term')}>
+              <TextField
+                name="term"
+                grow="1"
+                value={state.term}
+                size="30"
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            <FormGroup title={_('Type')}>
+              <Select
+                name="type"
+                items={filterOptions}
+                onChange={onValueChange}
+                value={state.type}
+              />
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
 FilterDialog.propTypes = {
   comment: PropTypes.string,
+  filter: PropTypes.model,
+  id: PropTypes.string,
   name: PropTypes.string,
   term: PropTypes.string,
+  title: PropTypes.string,
   type: PropTypes.string,
   types: PropTypes.array.isRequired,
-  onValueChange: PropTypes.func,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
-export default withDialog({
-  title: _('New Filter'),
-  footer: _('Save'),
-  defaultState: {
-    comment: '',
-    name: _('Unnamed'),
-  },
-})(FilterDialog);
+export default FilterDialog;
 
 // vim: set ts=2 sw=2 tw=80:

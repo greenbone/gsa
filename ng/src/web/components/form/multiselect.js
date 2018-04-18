@@ -182,6 +182,7 @@ class MultiSelect extends React.Component {
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
     } = this.props;
+
     const {
       search,
       selectedItems,
@@ -191,8 +192,11 @@ class MultiSelect extends React.Component {
       items = option_items(children);
     }
 
+    disabled = disabled || !is_defined(items) || items.length === 0;
+
     const displayedItems = is_defined(items) ?
       items.filter(case_insensitive_filter(search)) : [];
+
     return (
       <Downshift
         selectedItem={selectedItems}
@@ -207,6 +211,7 @@ class MultiSelect extends React.Component {
           inputValue,
           isOpen,
           openMenu,
+          selectItem,
         }) => {
           return (
             <SelectContainer
@@ -218,6 +223,7 @@ class MultiSelect extends React.Component {
               <Box
                 isOpen={isOpen}
                 disabled={disabled}
+                innerRef={ref => this.box = ref}
               >
                 <Layout grow="1" wrap>
                   {!is_empty(selectedItems) && selectedItems.map(
@@ -232,15 +238,19 @@ class MultiSelect extends React.Component {
                       down: !isOpen,
                       onClick: isOpen ? undefined : event => {
                         event.preventDefault(); // don't call default handler from downshift
-                        openMenu(() => this.input.focus()); // set focus to input field after menu is opened
+                        openMenu(() =>
+                          is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                       },
                     })}
                     size="small"
                   />
                 </Layout>
               </Box>
-              {isOpen && items.length > 0 && !disabled &&
-                <Menu position={menuPosition}>
+              {isOpen && !disabled &&
+                <Menu
+                  position={menuPosition}
+                  target={this.box}
+                >
                   <Input
                     {...getInputProps({
                       value: search,
@@ -257,6 +267,7 @@ class MultiSelect extends React.Component {
                           isSelected={selectedItems.includes(itemValue)}
                           isActive={i === highlightedIndex}
                           key={itemValue}
+                          onMouseDown={() => selectItem(itemValue)}
                         >
                           {itemLabel}
                         </Item>

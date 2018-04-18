@@ -24,6 +24,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import {Provider as StoreProvider} from 'react-redux';
+
 import {
   browserHistory,
   IndexRoute,
@@ -35,6 +37,8 @@ import {
 import CacheFactory from 'gmp/cache.js';
 import Gmp from 'gmp';
 import PromiseFactory from 'gmp/promise.js';
+import {subscribe} from 'gmp/locale/lang';
+import {is_defined} from 'gmp/utils/identity';
 
 import HttpInterceptor from 'gmp/http/interceptor.js';
 
@@ -43,6 +47,8 @@ import GmpProvider from './components/provider/gmpprovider.js';
 
 import PropTypes from './utils/proptypes.js';
 import globalcss from './utils/globalcss.js';
+
+import configureStore from './store';
 
 import AssetsPage from './pages/assetspage.js';
 import HomePage from './pages/homepage.js';
@@ -125,6 +131,8 @@ const caches = new CacheFactory();
 
 const gmp = new Gmp({caches, ...config});
 
+const store = configureStore();
+
 window.gmp = gmp;
 
 globalcss({
@@ -166,6 +174,23 @@ class App extends React.Component {
     super(props);
 
     gmp.addHttpInterceptor(new AppHttpInterceptor(this));
+
+    this.renderOnLanguageChange = this.renderOnLanguageChange.bind(this);
+
+  }
+
+  componentDidMount() {
+    this.unsubscribe = subscribe(this.renderOnLanguageChange);
+  }
+
+  componentWillUnmount() {
+    if (is_defined(this.unsubscribe)) {
+      this.unsubscribe();
+    }
+  }
+
+  renderOnLanguageChange() {
+    this.forceUpdate();
   }
 
   toLoginPage() {
@@ -182,7 +207,9 @@ class App extends React.Component {
     return (
       <GmpProvider gmp={gmp}>
         <CacheFactoryProvider caches={caches}>
-          {this.props.children}
+          <StoreProvider store={store}>
+            {this.props.children}
+          </StoreProvider>
         </CacheFactoryProvider>
       </GmpProvider>
     );

@@ -65,7 +65,7 @@ class Page extends React.Component {
       log.debug('User capabilities', capabilities);
       this.setState({capabilities});
     }).catch(rejection => {
-      log.error('An error occured during fetching capabilities', rejection);
+      log.error('An error occurred during fetching capabilities', rejection);
       // use empty capabilities
       this.setState({capabilities: new Capabilities()});
     });

@@ -68,8 +68,6 @@
 #include <gcrypt.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
-#include <langinfo.h>
-#include <locale.h>
 #include <netinet/in.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
@@ -104,7 +102,11 @@
 #include "gsad_settings.h"
 #include "gsad_user.h"
 #include "validator.h"
-#include "xslt_i18n.h"
+#include "gsad_i18n.h"
+
+#ifdef GIT_REV_AVAILABLE
+#include "gitrevision.h"
+#endif
 
 #undef G_LOG_DOMAIN
 /**
@@ -1328,8 +1330,8 @@ exec_gmp_post (http_connection_t *con,
   int ret;
   user_t *user;
   credentials_t *credentials;
-  gchar *res = NULL, *new_sid, *url;
-  const gchar *cmd, *caller, *language, *password;
+  gchar *res = NULL, *new_sid;
+  const gchar *cmd, *caller, *language;
   authentication_reason_t auth_reason;
   gvm_connection_t connection;
   cmd_response_data_t *response_data;
@@ -1338,89 +1340,14 @@ exec_gmp_post (http_connection_t *con,
 
   cmd = params_value (con_info->params, "cmd");
 
+  response_data = cmd_response_data_new ();
+
   if (cmd && !strcmp (cmd, "login"))
     {
-      password = params_value (con_info->params, "password");
-      if ((password == NULL)
-          && (params_original_value (con_info->params, "password") == NULL))
-        password = "";
-
-      if (params_value (con_info->params, "login")
-          && password)
-        {
-          gchar *timezone, *role, *capabilities, *severity, *language;
-          gchar *pw_warning;
-          GTree *chart_prefs;
-          ret = authenticate_gmp (params_value (con_info->params, "login"),
-                                  password,
-                                  &role,
-                                  &timezone,
-                                  &severity,
-                                  &capabilities,
-                                  &language,
-                                  &pw_warning,
-                                  &chart_prefs);
-          if (ret)
-            {
-              int status;
-              if (ret == -1 || ret == 2)
-                status = MHD_HTTP_SERVICE_UNAVAILABLE;
-              else
-                status = MHD_HTTP_UNAUTHORIZED;
-
-              auth_reason =
-                     ret == 2
-                       ? GMP_SERVICE_DOWN
-                       : (ret == -1
-                           ? LOGIN_ERROR
-                           : LOGIN_FAILED);
-
-              g_warning ("Authentication failure for '%s' from %s",
-                         params_value (con_info->params, "login") ?: "",
-                         client_address);
-              return handler_send_reauthentication(con, status,
-                                                   auth_reason);
-            }
-          else
-            {
-              user_t *user;
-              user = user_add (params_value (con_info->params, "login"),
-                               password, timezone, severity, role, capabilities,
-                               language, pw_warning, chart_prefs, client_address);
-              /* Redirect to get_tasks. */
-              url = g_strdup_printf ("%s&token=%s",
-                                     params_value (con_info->params, "text"),
-                                     user->token);
-              ret = send_redirect_to_urn (con, url, user);
-              user_release (user);
-
-              g_message ("Authentication success for '%s' from %s",
-                         params_value (con_info->params, "login") ?: "",
-                         client_address);
-
-              g_free (url);
-              g_free (timezone);
-              g_free (severity);
-              g_free (capabilities);
-              g_free (language);
-              g_free (role);
-              g_free (pw_warning);
-              return ret;
-            }
-        }
-      else
-        {
-          g_warning ("Authentication failure for '%s' from %s",
-                     params_value (con_info->params, "login") ?: "",
-                     client_address);
-          return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                               LOGIN_FAILED);
-        }
+      return login (con, con_info->params, response_data, client_address);
     }
 
   /* Check the session. */
-
-  response_data = cmd_response_data_new ();
 
   if (params_value (con_info->params, "token") == NULL)
     {
@@ -2136,8 +2063,6 @@ exec_gmp_get (http_connection_t *con,
     {
       watcher_data = NULL;
     }
-
-  /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
   /* Check cmd and precondition, start respective GMP command(s). */
 
@@ -2995,8 +2920,6 @@ int
 main (int argc, char **argv)
 {
   gchar *rc_name;
-  gchar *old_locale;
-  char *locale;
   int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
   int gsad_manager_port = DEFAULT_GVM_PORT;
@@ -3210,8 +3133,8 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
-#ifdef GSAD_SVN_REVISION
-      printf ("SVN revision %i\n", GSAD_SVN_REVISION);
+#ifdef GSAD_GIT_REVISION
+      printf ("GIT revision %s\n", GSAD_GIT_REVISION);
 #endif
       if (debug_tls)
         {
@@ -3287,10 +3210,10 @@ main (int argc, char **argv)
       }
   }
 
-#ifdef GSAD_SVN_REVISION
-  g_message ("Starting GSAD version %s (SVN revision %i)\n",
+#ifdef GSAD_GIT_REVISION
+  g_message ("Starting GSAD version %s (GIT revision %s)\n",
              GSAD_VERSION,
-             GSAD_SVN_REVISION);
+             GSAD_GIT_REVISION);
 #else
   g_message ("Starting GSAD version %s\n",
              GSAD_VERSION);
@@ -3343,51 +3266,6 @@ main (int argc, char **argv)
           exit (EXIT_FAILURE);
         }
     }
-
-  /* Set and test the base locale for XSLt gettext */
-  old_locale = g_strdup (setlocale (LC_ALL, NULL));
-
-  locale = setlocale (LC_ALL, "");
-  if (locale == NULL)
-    {
-      g_warning ("%s: "
-                 "Failed to set locale according to environment variables,"
-                 " gettext translations are disabled.",
-                 __FUNCTION__);
-      set_ext_gettext_enabled (0);
-    }
-  else if (strcmp (locale, "C") == 0)
-    {
-      g_message ("%s: Locale for gettext extensions set to \"C\","
-                 " gettext translations are disabled.",
-                 __FUNCTION__);
-      set_ext_gettext_enabled (0);
-    }
-  else
-    {
-      if (strcasestr (locale, "en_") != locale)
-          {
-            g_warning ("%s: Locale defined by environment variables"
-                       " is not an \"en_...\" one.",
-                      __FUNCTION__);
-            set_ext_gettext_enabled (0);
-          }
-
-      if (strcasecmp (nl_langinfo (CODESET), "UTF-8"))
-        g_warning ("%s: Locale defined by environment variables"
-                   " does not use UTF-8 encoding.",
-                   __FUNCTION__);
-
-      g_debug ("%s: gettext translation extensions are enabled"
-               " (using locale \"%s\").",
-               __FUNCTION__, locale);
-      set_ext_gettext_enabled (1);
-    }
-
-  setlocale (LC_ALL, old_locale);
-  g_free (old_locale);
-
-  init_language_lists ();
 
   if (gsad_redirect_port_string)
     {

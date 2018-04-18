@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +44,9 @@ class ScheduleComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
   }
 
@@ -52,9 +56,10 @@ class ScheduleComponent extends React.Component {
     if (is_defined(schedule)) {
       const date = schedule.first_time;
 
-      this.schedule_dialog.show({
+      this.setState({
         comment: schedule.comment,
         date,
+        dialogVisible: true,
         duration: schedule.simple_duration.value,
         duration_unit: is_defined(schedule.simple_duration.unit) ?
           schedule.simple_duration.unit : 'hour',
@@ -65,23 +70,33 @@ class ScheduleComponent extends React.Component {
         period: schedule.simple_period.value,
         period_unit: is_defined(schedule.simple_period.unit) ?
           schedule.simple_period.unit : 'hour',
-        schedule,
-        timezone: schedule.timezone,
-      }, {
         title: _('Edit Schedule {{name}}', {name: schedule.name}),
       });
     }
     else {
       const {timezone} = gmp.globals;
       const now = moment().tz(timezone);
-
-      this.schedule_dialog.show({
+      this.setState({
+        comment: undefined,
+        dialogVisible: true,
+        duration: undefined,
+        duration_unit: undefined,
+        id: undefined,
+        name: undefined,
+        period: undefined,
+        period_unit: undefined,
+        schedule: undefined,
         timezone,
+        title: undefined,
         minute: now.minutes(),
         hour: now.hours(),
         date: now,
       });
     }
+  }
+
+  closeScheduleDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -98,6 +113,24 @@ class ScheduleComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      comment,
+      date,
+      hour,
+      dialogVisible,
+      duration,
+      duration_unit,
+      id,
+      minute,
+      name,
+      period,
+      period_unit,
+      schedule,
+      timezone,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="schedule"
@@ -122,10 +155,25 @@ class ScheduleComponent extends React.Component {
               create: this.openScheduleDialog,
               edit: this.openScheduleDialog,
             })}
-            <ScheduleDialog
-              ref={ref => this.schedule_dialog = ref}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <ScheduleDialog
+                comment={comment}
+                date={date}
+                duration={duration}
+                duration_unit={duration_unit}
+                hour={hour}
+                id={id}
+                minute={minute}
+                name={name}
+                period={period}
+                period_unit={period_unit}
+                schedule={schedule}
+                timezone={timezone}
+                title={title}
+                onClose={this.closeScheduleDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

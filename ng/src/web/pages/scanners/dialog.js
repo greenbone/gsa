@@ -25,13 +25,13 @@
 import React from 'react';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined, filter, select_save_id} from 'gmp/utils';
+import {is_defined, filter, map, select_save_id} from 'gmp/utils';
 import {parse_int} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FootNote from '../../components/footnote/footnote.js';
 
@@ -49,7 +49,6 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import {
-  OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
   scanner_type_name,
@@ -61,10 +60,14 @@ import {
 } from 'gmp/models/credential.js';
 
 const scanner_types = [
-  OPENVAS_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
 ];
+
+const scannerTypesOptions = map(scanner_types, scannerType => ({
+  label: scanner_type_name(scannerType),
+  value: scannerType,
+}));
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -127,32 +130,48 @@ class ScannerDialog extends React.Component {
   }
 
   handleTypeChange(value, name) {
-    const {onValueChange, credentials, credential_id} = this.props;
+    const {credentials, credential_id, onScannerTypeChange} = this.props;
 
-    if (onValueChange) {
+    if (onScannerTypeChange) {
       value = parse_int(value);
       const scan_credentials = filter_credentials(credentials, value);
 
-      onValueChange(value, name);
-      onValueChange(select_save_id(scan_credentials, credential_id),
+      onScannerTypeChange(value, name);
+      onScannerTypeChange(select_save_id(scan_credentials, credential_id),
         'credential_id');
     }
   }
 
   render() {
     const {
+      ca_pub,
+      comment = '',
       scanner,
-      name,
-      comment,
-      credentials,
       credential_id,
-      host,
-      port,
-      type,
+      credentials,
+      host = 'localhost',
+      id,
+      name = _('Unnamed'),
+      port = '9391',
+      title = _('New Scanner'),
+      type = OSP_SCANNER_TYPE,
+      visible = true,
       which_cert,
+      onClose,
+      onCredentialChange,
       onNewCredentialClick,
-      onValueChange,
+      onSave,
     } = this.props;
+
+    const data = {
+      ca_pub,
+      comment,
+      host,
+      id,
+      name,
+      port,
+      which_cert,
+    };
 
     const scanner_credentials = filter_credentials(credentials, type);
     const is_edit = is_defined(scanner);
@@ -162,156 +181,164 @@ class ScannerDialog extends React.Component {
       scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
     return (
-      <Layout flex="column">
+      <SaveDialog
+        visible={visible}
+        title={title}
+        onClose={onClose}
+        onSave={onSave}
+        defaultValues={data}
+        values={{
+          credential_id,
+          type,
+        }}
+      >
+        {({
+          values: state,
+          onValueChange,
+        }) => {
+          return (
+            <Layout flex="column">
 
-        <FormGroup title={_('Name')}>
-          <TextField
-            name="name"
-            grow="1"
-            value={name}
-            size="30"
-            onChange={onValueChange}
-            maxLength="80"/>
-        </FormGroup>
+              <FormGroup title={_('Name')}>
+                <TextField
+                  name="name"
+                  grow="1"
+                  value={state.name}
+                  size="30"
+                  onChange={onValueChange}
+                  maxLength="80"/>
+              </FormGroup>
 
-        <FormGroup title={_('Comment')}>
-          <TextField
-            name="comment"
-            value={comment}
-            grow="1"
-            size="30"
-            maxLength="400"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup title={_('Comment')}>
+                <TextField
+                  name="comment"
+                  value={state.comment}
+                  grow="1"
+                  size="30"
+                  maxLength="400"
+                  onChange={onValueChange}/>
+              </FormGroup>
 
-        <FormGroup title={_('Host')}>
-          <TextField
-            name="host"
-            value={host}
-            disabled={in_use}
-            grow="1"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup title={_('Host')}>
+                <TextField
+                  name="host"
+                  value={state.host}
+                  disabled={in_use}
+                  grow="1"
+                  onChange={onValueChange}/>
+              </FormGroup>
 
-        <FormGroup title={_('Port')}>
-          <TextField
-            name="port"
-            value={port}
-            disabled={in_use}
-            grow="1"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup title={_('Port')}>
+                <TextField
+                  name="port"
+                  value={state.port}
+                  disabled={in_use}
+                  grow="1"
+                  onChange={onValueChange}/>
+              </FormGroup>
 
-        <FormGroup title={_('Type')}>
-          <Select
-            name="type"
-            value={type}
-            disabled={in_use}
-            onChange={this.handleTypeChange}>
-            {
-              scanner_types.map(stype => {
-                return (
-                  <option key={stype} value={stype}>
-                    {scanner_type_name(stype)}
-                  </option>
-                );
-              })
-            }
-          </Select>
-        </FormGroup>
+              <FormGroup title={_('Type')}>
+                <Select
+                  name="type"
+                  value={state.type}
+                  items={scannerTypesOptions}
+                  disabled={in_use}
+                  onChange={this.handleTypeChange}
+                />
+              </FormGroup>
 
-        <FormGroup title={_('CA Certificate')} flex="column">
-          <Layout flex box>
-            <Divider>
-              {is_edit &&
+              <FormGroup title={_('CA Certificate')} flex="column">
                 <Layout flex box>
-                  {is_defined(scanner.ca_pub) &&
-                    <Radio
-                      title={_('Existing')}
-                      name="which_cert"
-                      value="existing"
-                      checked={which_cert === 'existing'}
-                      onChange={onValueChange}
-                    />
-                  }
-                  <Radio
-                    title={_('Default')}
-                    name="which_cert"
-                    value="default"
-                    checked={which_cert === 'default'}
-                    onChange={onValueChange}
-                  />
-                  <Radio
-                    title={_('New:')}
-                    name="which_cert"
-                    value="new"
-                    checked={which_cert === 'new'}
-                    onChange={onValueChange}
-                  />
+                  <Divider>
+                    {is_edit &&
+                      <Layout flex box>
+                        {is_defined(state.ca_pub) &&
+                          <Radio
+                            title={_('Existing')}
+                            name="which_cert"
+                            value="existing"
+                            checked={state.which_cert === 'existing'}
+                            onChange={onValueChange}
+                          />
+                        }
+                        <Radio
+                          title={_('Default')}
+                          name="which_cert"
+                          value="default"
+                          checked={state.which_cert === 'default'}
+                          onChange={onValueChange}
+                        />
+                        <Radio
+                          title={_('New:')}
+                          name="which_cert"
+                          value="new"
+                          checked={state.which_cert === 'new'}
+                          onChange={onValueChange}
+                        />
+                      </Layout>
+                    }
+                    <FileField
+                      disabled={is_edit && state.which_cert !== 'new'}
+                      name="ca_pub"
+                      onChange={onValueChange}/>
+                  </Divider>
                 </Layout>
-              }
-              <FileField
-                disabled={is_edit && which_cert !== 'new'}
-                name="ca_pub"
-                onChange={onValueChange}/>
-            </Divider>
-          </Layout>
-          {is_edit && is_defined(scanner.ca_pub) &&
-            <CertStatus info={scanner.ca_pub.info}/>
-          }
-        </FormGroup>
+                {is_edit && is_defined(state.ca_pub) &&
+                  <CertStatus info={state.ca_pub.info}/>
+                }
+              </FormGroup>
 
-        <FormGroup title={_('Credential')} flex="column">
-          <Divider>
-            <Select
-              name="credential_id"
-              value={credential_id}
-              onChange={onValueChange}>
-              {render_options(scanner_credentials)}
-            </Select>
-            <Layout flex box>
-              <NewIcon
-                value={type}
-                title={_('Create a new Credential')}
-                onClick={onNewCredentialClick}/>
+              <FormGroup title={_('Credential')} flex="column">
+                <Divider>
+                  <Select
+                    name="credential_id"
+                    items={render_select_items(scanner_credentials)}
+                    value={credential_id}
+                    onChange={onCredentialChange}/>
+                  <Layout flex box>
+                    <NewIcon
+                      value={type}
+                      title={_('Create a new Credential')}
+                      onClick={onNewCredentialClick}/>
+                  </Layout>
+                </Divider>
+                {show_cred_info &&
+                  <CertStatus info={scanner.credential.certificate_info}/>
+                }
+              </FormGroup>
+
             </Layout>
-          </Divider>
-          {show_cred_info &&
-            <CertStatus info={scanner.credential.certificate_info}/>
-          }
-        </FormGroup>
-
-      </Layout>
+          );
+        }}
+      </SaveDialog>
     );
   }
 }
 
 ScannerDialog.propTypes = {
+  ca_pub: PropTypes.string,
   comment: PropTypes.string,
   credential_id: PropTypes.id,
   credentials: PropTypes.array,
   host: PropTypes.string,
+  id: PropTypes.string,
   name: PropTypes.string,
   port: PropTypes.string,
   scanner: PropTypes.model,
-  type: PropTypes.oneOf(scanner_types).isRequired,
+  title: PropTypes.string,
+  type: PropTypes.oneOf(scanner_types),
+  visible: PropTypes.bool,
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),
+  onClose: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
+  onScannerTypeChange: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
 
-export default withDialog({
-  title: _('New Scanner'),
-  footer: _('Save'),
-  defaultState: {
-    name: _('Unnamed'),
-    comment: '',
-    host: 'localhost',
-    port: '9391',
-    type: OPENVAS_SCANNER_TYPE,
-  },
-})(ScannerDialog);
+export default ScannerDialog;
 
 // vim: set ts=2 sw=2 tw=80:

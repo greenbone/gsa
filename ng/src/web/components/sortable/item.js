@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -28,40 +29,55 @@ import {Draggable} from 'react-beautiful-dnd';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const GridItem = glamorous.div({
+export const GRID_ITEM_MARGIN = {
+  top: 5,
+  bottom: 5,
+  left: 8,
+  right: 8,
+};
+
+const GridItem = glamorous.div('grid-item', {
   display: 'flex',
   flexGrow: 1,
+  flexShrink: 1,
+  flexBasis: 0,
+  overflow: 'hidden',
   userSelect: 'none',
-  margin: '5px 8px',
+  marginTop: GRID_ITEM_MARGIN.top + 'px',
+  marginBottom: GRID_ITEM_MARGIN.bottom + 'px',
+  marginLeft: GRID_ITEM_MARGIN.left + 'px',
+  marginRight: GRID_ITEM_MARGIN.right + 'px',
 });
 
 const Item = ({
   children,
   index,
   id,
+  ...props
 }) => (
   <Draggable
     draggableId={id}
     index={index}
   >
     {(provided, snapshot) => ( // eslint-disable-line no-shadow
-      <React.Fragment>
-        <GridItem
-          innerRef={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          isDragging={snapshot.isDragging}
-          style={provided.draggableProps.style}
-        >
-          {children}
-        </GridItem>
-        {provided.placeholder}
-      </React.Fragment>
+      <GridItem
+        innerRef={provided.innerRef}
+        {...provided.draggableProps}
+        isDragging={snapshot.isDragging}
+        style={provided.draggableProps.style}
+      >
+        {children({
+          ...props,
+          id,
+          dragHandleProps: provided.dragHandleProps,
+        })}
+      </GridItem>
     )}
   </Draggable>
 );
 
 Item.propTypes = {
+  children: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
 };

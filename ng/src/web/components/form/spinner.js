@@ -54,6 +54,11 @@ const StyledSpinner = glamorous.span({
 );
 
 const StyledInput = glamorous.input({
+  /* use font and line settings from parents not from browser default */
+  fontamily: 'inherit',
+  fontSize: 'inherit',
+  lineHeight: 'inherit',
+
   border: 'none',
   background: 'none',
   color: 'inherit',

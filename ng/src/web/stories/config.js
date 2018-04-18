@@ -37,6 +37,8 @@ function loadStories() {
   require('./datepicker');
   require('./powerfilter');
   require('./dashboard');
+  require('./menu');
+  require('./chart');
 }
 
 configure(loadStories, module);

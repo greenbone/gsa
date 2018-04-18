@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ import glamorous from 'glamorous';
 import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 const BadgeContainer = glamorous.div({
   position: 'relative',
@@ -52,7 +53,7 @@ const BadgeIcon = glamorous.span({
   borderRadius: '10px',
   minWidth: '10px',
   padding: '3px 5px',
-  zIndex: 1,
+  zIndex: Theme.Layers.higher,
 },
   ({
     backgroundColor = '#99CE48',

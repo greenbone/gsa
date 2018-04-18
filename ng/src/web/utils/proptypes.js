@@ -39,6 +39,12 @@ import CollectionCounts from 'gmp/collection/collectioncounts.js';
 import Filter from 'gmp/models/filter.js';
 import Settings from 'gmp/models/settings.js';
 
+import {
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_PCI_DSS,
+} from './severity';
 
 export const component = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
@@ -53,6 +59,11 @@ export const componentOrFalse = ReactPropTypes.oneOfType([
 export const componentOrElement = ReactPropTypes.oneOfType([
   component,
   ReactPropTypes.element,
+]);
+
+export const elementOrString = ReactPropTypes.oneOfType([
+  ReactPropTypes.element,
+  ReactPropTypes.string,
 ]);
 
 export const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
@@ -103,7 +114,7 @@ export const settings = ReactPropTypes.instanceOf(Settings);
 export const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
 export const cache = ReactPropTypes.instanceOf(Cache);
 
-const mayRequire = validator => {
+export const mayRequire = validator => {
   const wrapper = (...props) => {
     return validator(...props);
   };
@@ -123,7 +134,7 @@ const momentDateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   if (is_defined(value) && !moment.isMoment(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '`. Note a valid moment date. Value is ' + value);
+      ' `' + component_name + '`. Not a valid moment date. Value is ' + value);
   }
   return undefined;
 };
@@ -139,6 +150,24 @@ export const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.oneOf([
     'small', 'medium', 'large', 'default',
   ]),
+]);
+
+const toStringValidator = (props, prop_name, component_name) => {
+  const value = props[prop_name];
+  if (is_defined(value) && !is_defined(value.toString)) {
+    return new Error('Invalid prop `' + prop_name + '` supplied to' +
+      ' `' + component_name + '`. Prop ' + prop_name + ' can not be ' +
+      'converted to String. Value is `' + value + '`.');
+  }
+};
+
+export const toString = mayRequire(toStringValidator);
+
+export const severityClass = ReactPropTypes.objectOf([
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_PCI_DSS,
 ]);
 
 export default {
@@ -166,6 +195,7 @@ export default {
   component,
   componentOrFalse,
   componentOrElement,
+  elementOrString,
   entitycommand,
   entitiescommand,
   filter,
@@ -180,8 +210,10 @@ export default {
   idOrZero,
   set,
   settings,
+  severityClass,
   stringOrFalse,
   timeunit,
+  toString,
   yesno,
 };
 

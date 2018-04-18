@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +32,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 
@@ -95,9 +96,8 @@ class Nvt extends React.Component {
               _('default') :
               timeout
           }
-          {!(is_empty(default_timeout)) ?
-              ' (' + default_timeout + ')' :
-              ''
+          {is_empty(default_timeout) ?
+            '' : ' (' + default_timeout + ')'
           }
         </TableData>
         <TableData>
@@ -141,106 +141,140 @@ class EditDialogComponent extends React.Component {
   }
 
   handleSelectedChange(value, name) {
-    const {selected, onValueChange} = this.props;
+    const {selected} = this.props;
 
     selected[name] = value;
 
-    onValueChange(selected, 'selected');
+    this.setState({selected});
   }
 
   render() {
     const {
       config,
+      config_name,
+      family_name,
+      id,
       nvts,
       selected,
+      title,
+      visible = true,
+      onClose,
       onEditNvtDetailsClick,
+      onSave,
     } = this.props;
-    return (
-      <Layout flex="column">
-        <SimpleTable>
-          <TableBody>
-            <TableRow>
-              <TableData>
-                {_('Config')}
-              </TableData>
-              <TableData>
-                {config.name}
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>
-                {_('Family')}
-              </TableData>
-              <TableData>
-                {config.family}
-              </TableData>
-            </TableRow>
-          </TableBody>
-        </SimpleTable>
 
-        <Section title={_('Edit Network Vulnerability Tests')}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('OID')}
-                </TableHead>
-                <TableHead>
-                  {_('Severity')}
-                </TableHead>
-                <TableHead>
-                  {_('Timeout')}
-                </TableHead>
-                <TableHead>
-                  {_('Prefs')}
-                </TableHead>
-                <TableHead>
-                  {_('Selected')}
-                </TableHead>
-                <TableHead>
-                  {_('Actions')}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {
-                map(nvts, nvt => {
-                  let {oid} = nvt;
-                  return (
-                    <Nvt
-                      key={oid}
-                      nvt={nvt}
-                      config={config}
-                      selected={selected[oid]}
-                      onSelectedChange={this.handleSelectedChange}
-                      onEditNvtDetailsClick={onEditNvtDetailsClick}
-                    />
-                  );
-                })
-              }
-            </TableBody>
-          </Table>
-        </Section>
-      </Layout>
+    const data = {
+      config,
+      config_name,
+      family_name,
+      id,
+    };
+
+    return (
+      <SaveDialog
+        visible={visible}
+        title={title}
+        onClose={onClose}
+        onSave={onSave}
+        defaultValues={{selected}}
+        values={data}
+      >
+        {({
+          values: state,
+          onValueChange,
+        }) => {
+
+          return (
+            <Layout flex="column">
+              <SimpleTable>
+                <TableBody>
+                  <TableRow>
+                    <TableData>
+                      {_('Config')}
+                    </TableData>
+                    <TableData>
+                      {config_name}
+                    </TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>
+                      {_('Family')}
+                    </TableData>
+                    <TableData>
+                      {family_name}
+                    </TableData>
+                  </TableRow>
+                </TableBody>
+              </SimpleTable>
+
+              <Section title={_('Edit Network Vulnerability Tests')}>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>
+                        {_('Name')}
+                      </TableHead>
+                      <TableHead>
+                        {_('OID')}
+                      </TableHead>
+                      <TableHead>
+                        {_('Severity')}
+                      </TableHead>
+                      <TableHead>
+                        {_('Timeout')}
+                      </TableHead>
+                      <TableHead>
+                        {_('Prefs')}
+                      </TableHead>
+                      <TableHead>
+                        {_('Selected')}
+                      </TableHead>
+                      <TableHead>
+                        {_('Actions')}
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {
+                      map(nvts, nvt => {
+                        const {oid} = nvt;
+                        return (
+                          <Nvt
+                            key={oid}
+                            nvt={nvt}
+                            config={config}
+                            selected={selected[oid]}
+                            onSelectedChange={this.handleSelectedChange}
+                            onEditNvtDetailsClick={onEditNvtDetailsClick}
+                          />
+                        );
+                      })
+                    }
+                  </TableBody>
+                </Table>
+              </Section>
+            </Layout>
+          );
+        }}
+      </SaveDialog>
     );
   }
 }
 
 EditDialogComponent.propTypes = {
   config: PropTypes.model.isRequired,
+  config_name: PropTypes.string,
+  family_name: PropTypes.string,
+  id: PropTypes.string,
   nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
+  title: PropTypes.string,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
 };
 
-export default withDialog({
-  footer: _('Save'),
-  defaultState: {
-  },
-})(EditDialogComponent);
+export default EditDialogComponent;
 
 // vim: set ts=2 sw=2 tw=80:

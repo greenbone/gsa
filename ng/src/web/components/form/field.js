@@ -22,44 +22,42 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
 import glamorous from 'glamorous';
 
-import {classes} from 'gmp/utils';
-
 import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
 
 const StyledInput = glamorous.input({
+  /* use font and line settings from parents not from browser default */
+  fontamily: 'inherit',
+  fontSize: 'inherit',
+  lineHeight: 'inherit',
+  display: 'block',
+  height: '22px',
+  color: Theme.darkGray,
+  backgroundColor: Theme.white,
+  backgroundImage: 'none',
+  border: '1px solid ' + Theme.inputBorderGray,
+  borderRadius: '4px',
+  padding: '1px 8px',
   // "hack" to overshadow default color in Chrome's autofilled input fields
   '&:-webkit-autofill': {
     boxShadow: '0 0 0 1000px white inset',
   },
-});
-
-const FieldComponent = ({className, value = '', ...props}) => {
-  className = classes('form-control', className);
-  return (
-    <StyledInput
-      {...props}
-      className={className}
-      value={value}
-    />
-  );
-};
-
-FieldComponent.propTypes = {
-  className: PropTypes.string,
-  value: PropTypes.any,
-};
+}, ({disabled}) => disabled ? {cursor: 'not-allowed'} : null,
+  ({disabled, readonly}) => readonly || disabled ? {
+    backgroundColor: Theme.dialogGray,
+    opacity: 1,
+  } : null,
+);
 
 export default compose(
   withLayout(),
   withChangeHandler(),
-)(FieldComponent);
+)(StyledInput);
 
 // vim: set ts=2 sw=2 tw=80:

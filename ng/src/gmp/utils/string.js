@@ -51,7 +51,7 @@ export function shorten(text, length = 60) {
  * @param {String} separator  String to search for splitting
  * @param {Number} limit      Split only limit times
  *
- * @returns {Array} Splitted String as an array
+ * @returns {Array} Split String as an array
  */
 export function split(string, separator, limit) {
   if (is_defined(limit) && limit <= 0) {

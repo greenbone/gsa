@@ -2,6 +2,7 @@
  *
  * Authors:
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -20,11 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils/identity';
 import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -54,6 +55,25 @@ const UserSettingsDialog = ({
   optionLists,
   capabilities,
 }) => {
+  const {
+    alertsList,
+    credentialsList,
+    filtersList,
+    languagesList,
+    portlistsList,
+    reportformatsList,
+    scanconfigsList,
+    scannersList,
+    schedulesList,
+    severitiesList,
+    targetsList,
+  } = optionLists;
+
+  const languageItems = languagesList.map(([code, name, native_name]) => ({
+    value: code,
+    label: is_defined(native_name) ? `${name} | ${native_name}` : name,
+  }));
+
   return (
     <SaveDialog
       visible={visible}
@@ -118,21 +138,6 @@ const UserSettingsDialog = ({
           allsecinfofilter,
           autocacherebuild,
         } = state;
-
-        const {
-          alertsList,
-          credentialsList,
-          filtersList,
-          languagesList,
-          portlistsList,
-          reportformatsList,
-          scanconfigsList,
-          scannersList,
-          schedulesList,
-          severitiesList,
-          targetsList,
-        } = optionLists;
-
         return (
           <Layout flex="column">
             <h2>{_('General Settings')}</h2>
@@ -182,12 +187,8 @@ const UserSettingsDialog = ({
               <Select
                 name="userinterfacelanguage"
                 value={userinterfacelanguage}
+                items={languageItems}
                 onChange={onValueChange}>
-                {languagesList.map(language => (
-                  <option key={language.code} value={language.code}>
-                    {language.name} &#124; {language.native_name}
-                  </option>
-                ))}
               </Select>
             </FormGroup>
 

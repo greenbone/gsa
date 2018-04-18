@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, shorten, select_save_id} from 'gmp/utils';
+import {is_defined, shorten, has_id} from 'gmp/utils';
 
 import {
   SLAVE_SCANNER_TYPE,
@@ -41,7 +42,7 @@ import Wrapper from '../../components/layout/wrapper.js';
 
 import EntityComponent from '../../entity/component.js';
 
-import CredentialDialog from '../credentials/dialog.js';
+import CredentialsDialog from '../credentials/dialog.js';
 
 import ScannerDialog from './dialog.js';
 
@@ -50,58 +51,89 @@ class ScannerComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.openCredentialDialog = this.openCredentialDialog.bind(this);
+    this.state = {
+      credentialDialogVisible: false,
+      scannerDialogVisible: false,
+    };
+
+    this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
+    this.closeScannerDialog = this.closeScannerDialog.bind(this);
+    this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.openScannerDialog = this.openScannerDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
+    this.handleCredentialChange = this.handleCredentialChange.bind(this);
     this.handleDownloadCertificate = this.handleDownloadCertificate.bind(this);
     this.handleDownloadCredential = this.handleDownloadCredential.bind(this);
+    this.handleScannerTypeChange = this.handleScannerTypeChange.bind(this);
     this.handleVerifyScanner = this.handleVerifyScanner.bind(this);
   }
 
   openScannerDialog(scanner) {
     const {gmp} = this.props;
-
+    const credPromise = gmp.credentials.getAll().then(response => {
+      return response.data;
+    });
     if (is_defined(scanner)) {
-      gmp.scanner.get(scanner).then(response => {
+      Promise.all([credPromise, gmp.scanner.get(scanner)])
+      .then(([credentials, response]) => {
         scanner = response.data;
-        const state = {
-          comment: scanner.comment,
-          id: scanner.id,
-          name: scanner.name,
-          type: scanner.scanner_type,
-          host: scanner.host,
-          port: scanner.port,
+
+        const title = _('Edit Scanner {{name}}', {name: shorten(scanner.name)});
+        this.setState({
           ca_pub: is_defined(scanner.ca_pub) ?
             scanner.ca_pub.certificate : undefined,
+          comment: scanner.comment,
+          credentials,
+          credential_id: has_id(scanner.credential) ?
+            scanner.credential.id : undefined,
+          host: scanner.host,
+          id: scanner.id,
+          name: scanner.name,
+          scannerDialogVisible: true,
           scanner,
+          title,
+          type: scanner.scanner_type,
           which_cert: is_defined(scanner.ca_pub) ? 'existing' : 'default',
-        };
-        this.scanner_dialog.show(state, {
-          title: _('Edit scanner {{name}}', {name: shorten(scanner.name)}),
         });
       });
     }
     else {
-      this.scanner_dialog.show({});
-    }
-
-    gmp.credentials.getAll().then(response => {
-      const {data: credentials} = response;
-      this.credentials = credentials;
-      const credential_id = is_defined(scanner) &&
-        is_defined(scanner.credential) ? scanner.credential.id : undefined;
-      this.scanner_dialog.setValues({
+      credPromise.then(credentials =>
+      this.setState({
+        ca_pub: undefined,
+        comment: undefined,
+        credential_id: undefined,
         credentials,
-        credential_id: select_save_id(credentials, credential_id),
-      });
-    });
+        host: undefined,
+        id: undefined,
+        name: undefined,
+        port: undefined,
+        scanner: undefined,
+        scannerDialogVisible: true,
+        title: undefined,
+        type: SLAVE_SCANNER_TYPE,
+        which_cert: undefined,
+      }));
+    }
   }
 
-  openCredentialDialog(type) {
+  closeScannerDialog() {
+    this.setState({scannerDialogVisible: false});
+  }
+
+  openCredentialsDialog(type) {
     const base = type === SLAVE_SCANNER_TYPE ?
       USERNAME_PASSWORD_CREDENTIAL_TYPE :
       CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-    this.credential_dialog.show({types: [base], base});
+    this.setState({
+      base,
+      credentialDialogVisible: true,
+      credentialTypes: [base],
+    });
+  }
+
+  closeCredentialsDialog() {
+    this.setState({credentialDialogVisible: false});
   }
 
   handleVerifyScanner(scanner) {
@@ -122,15 +154,21 @@ class ScannerComponent extends React.Component {
 
   handleCreateCredential(data) {
     const {gmp} = this.props;
+    let credential;
     return gmp.credential.create(data).then(response => {
-      const {credentials} = this;
-      const credential = response.data;
-      credentials.push(credential);
-      this.scanner_dialog.setValues({
-        credentials,
-        credential_id: credential.id,
-      });
-    });
+        credential = response.data;
+      })
+      .then(() => gmp.credentials.getAll())
+      .then(response =>
+        this.setState({
+          credentials: response.data,
+          credential_id: credential.id,
+        })
+      );
+  }
+
+  handleCredentialChange(credential_id) {
+    this.setState({credential_id});
   }
 
   handleDownloadCertificate(scanner) {
@@ -152,6 +190,10 @@ class ScannerComponent extends React.Component {
     }).then(onCredentialDownloaded, onCredentialDownloadError);
   }
 
+  handleScannerTypeChange(value, name) {
+    this.setState({[name]: value});
+  }
+
   render() {
     const {
       children,
@@ -166,6 +208,23 @@ class ScannerComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      ca_pub,
+      comment,
+      credential_id,
+      credentialDialogVisible,
+      credentials,
+      credentialTypes,
+      id,
+      name,
+      scannerDialogVisible,
+      scanner,
+      title,
+      type,
+      which_cert,
+    } = this.state;
+
     return (
       <EntityComponent
         name="scanner"
@@ -193,15 +252,32 @@ class ScannerComponent extends React.Component {
               downloadcertificate: this.handleDownloadCertificate,
               downloadcredential: this.handleDownloadCredential,
             })}
-            <ScannerDialog
-              ref={ref => this.scanner_dialog = ref}
-              onNewCredentialClick={this.openCredentialDialog}
-              onSave={save}
-            />
-            <CredentialDialog
-              ref={ref => this.credentials_dialog = ref}
-              onSave={this.handleCreateCredential}
-            />
+            {scannerDialogVisible &&
+              <ScannerDialog
+                ca_pub={ca_pub}
+                comment={comment}
+                credentials={credentials}
+                credential_id={credential_id}
+                id={id}
+                name={name}
+                scanner={scanner}
+                title={title}
+                type={type}
+                which_cert={which_cert}
+                onClose={this.closeScannerDialog}
+                onCredentialChange={this.handleCredentialChange}
+                onNewCredentialClick={this.openCredentialsDialog}
+                onSave={save}
+                onScannerTypeChange={this.handleScannerTypeChange}
+              />
+            }
+            {credentialDialogVisible &&
+              <CredentialsDialog
+                types={credentialTypes}
+                onClose={this.closeCredentialsDialog}
+                onSave={this.handleCreateCredential}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

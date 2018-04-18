@@ -30,12 +30,14 @@ import _ from 'gmp/locale.js';
 import Theme from '../../utils/theme.js';
 
 import PropTypes from '../../utils/proptypes';
-import withIconSize from 'web/components/icon/withIconSize';
+import withIconSize from '../icon/withIconSize';
 
 let StyledCloseButton = glamorous.div({
   display: 'flex',
-  border: '1px solid' + Theme.darkGreen,
+  border: '1px solid ' + Theme.darkGreen,
   fontWeight: 'bold',
+  fontSize: '12px',
+  fontFamily: Theme.Font.default,
   color: Theme.darkGreen,
   cursor: 'pointer',
   background: Theme.lighGreen,
@@ -43,6 +45,7 @@ let StyledCloseButton = glamorous.div({
   padding: '0',
   alignItems: 'center',
   justifyContent: 'center',
+  flexShrink: 0,
 
   ':hover': {
     color: '#fff',
@@ -62,7 +65,7 @@ const CloseButton = ({
     size={size}
     title={title}
   >
-    × {/* Javascript unicode: \u00D7 */}
+    ×{/* Javascript unicode: \u00D7 */}
   </StyledCloseButton>
 );
 

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +30,7 @@ import {is_defined, shorten, first} from 'gmp/utils';
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose';
 import withGmp from '../../utils/withGmp.js';
-import withCapabilties from '../../utils/withCapabilities.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
@@ -42,6 +43,9 @@ class TagComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeTagDialog = this.closeTagDialog.bind(this);
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
@@ -162,38 +166,45 @@ class TagComponent extends React.Component {
 
     if (is_defined(tag)) {
       const {resource = {}} = tag;
-
-      this.tag_dialog.show({
-        ...options,
-        id: tag.id,
-        tag,
-        name: tag.name,
-        comment: tag.comment,
-        value: tag.value,
+      this.setState({
         active: tag.active,
+        comment: tag.comment,
+        dialogVisible: true,
+        name: tag.name,
+        tag,
         resource_id: resource.id,
         resource_type: is_defined(resource.entity_type) ?
           resource.entity_type :
           first(resource_types, [])[0],
         resource_types,
-      }, {
-        title: _('Edit tag {{name}}', {name: shorten(tag.name)}),
+        title: _('Edit Tag {{name}}', {name: shorten(tag.name)}),
+        value: tag.value,
+        ...options,
       });
     }
     else {
-      this.tag_dialog.show({
+      this.setState({
+        active: undefined,
+        comment: undefined,
+        name: undefined,
+        resource_id: undefined,
+        resource_type: undefined,
         resource_types,
+        tag: undefined,
+        dialogVisible: true,
+        title: undefined,
+        value: undefined,
+        ...options,
       });
     }
   }
 
-  openCreateTagDialog(options = {}) {
-    const resource_types = this.getResourceTypes();
+  closeTagDialog() {
+    this.setState({dialogVisible: false});
+  }
 
-    this.tag_dialog.show({
-      ...options,
-      resource_types,
-    });
+  openCreateTagDialog(options = {}) {
+    this.openTagDialog(undefined, options);
   }
 
   render() {
@@ -210,6 +221,21 @@ class TagComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      active,
+      comment,
+      name,
+      resource_id,
+      resource_type,
+      resource_types = [],
+      tag,
+      dialogVisible,
+      title,
+      value,
+      ...options
+    } = this.state;
+
     return (
       <EntityComponent
         name="tag"
@@ -237,10 +263,22 @@ class TagComponent extends React.Component {
               enable: this.handleEnableTag,
               disable: this.handleDisableTag,
             })}
-            <TagDialog
-              ref={ref => this.tag_dialog = ref}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <TagDialog
+                active={active}
+                comment={comment}
+                name={name}
+                resource_id={resource_id}
+                resource_type={resource_type}
+                resource_types={resource_types}
+                tag={tag}
+                title={title}
+                value={value}
+                onClose={this.closeTagDialog}
+                onSave={save}
+                {...options}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
@@ -272,7 +310,7 @@ TagComponent.propTypes = {
 
 export default compose(
   withGmp,
-  withCapabilties,
+  withCapabilities,
 )(TagComponent);
 
 // vim: set ts=2 sw=2 tw=80:

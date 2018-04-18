@@ -25,8 +25,13 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils/index.js';
+
 import PropTypes from '../utils/proptypes.js';
-import {result_cvss_risk_factor} from '../utils/render.js';
+import {
+  LOG_VALUE,
+  translatedResultSeverityRiskFactor,
+} from '../utils/severity';
 
 import EntityBox from '../entity/box.js';
 
@@ -42,20 +47,20 @@ const OverrideBox = ({
 }) => {
   let severity;
   let new_severity = '';
-  if (override.severity === 0) {
+  if (!is_defined(override.severity)) {
     severity = _('Any');
   }
-  else if (override.severity > 0.0) {
+  else if (override.severity > LOG_VALUE) {
     severity = _('Severity > 0.0');
   }
   else {
-    severity = result_cvss_risk_factor(override.severity);
+    severity = translatedResultSeverityRiskFactor(override.severity);
   }
 
-  if (override.new_severity > 0) {
+  if (override.new_severity > LOG_VALUE) {
     new_severity = override.new_severity + ': ';
   }
-  new_severity += result_cvss_risk_factor(override.new_severity);
+  new_severity += translatedResultSeverityRiskFactor(override.new_severity);
 
   const toolbox = detailsLink ? (
     <IconDivider>

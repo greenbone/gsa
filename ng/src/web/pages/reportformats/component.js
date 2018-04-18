@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +42,11 @@ class ReportFormatComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeReportFormatDialog = this.closeReportFormatDialog.bind(this);
     this.handleVerify = this.handleVerify.bind(this);
+    this.handleSave = this.handleSave.bind(this);
     this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
   }
 
@@ -79,24 +84,39 @@ class ReportFormatComponent extends React.Component {
           Promise.resolve(undefined);
 
         p2.then(formats => {
-          this.reportformat_dialog.show({
-            active: format.active,
+          this.setState({
+            dialogVisible: true,
             formats,
-            id: format.id,
             id_lists,
-            name: format.name,
             preferences,
             reportformat: format,
-            summary: format.summary,
-          }, {
             title: _('Edit Report Format {{name}}', {name: format.name}),
           });
         });
       });
     }
     else {
-      this.reportformat_dialog.show({});
+      this.setState({
+        dialogVisible: true,
+        reportformat: undefined,
+        title: _('Import Report Format'),
+      });
     }
+  }
+
+  closeReportFormatDialog() {
+    this.setState({dialogVisible: false});
+  }
+
+  handleSave(data) {
+    const {gmp} = this.props;
+    if (is_defined(data.id)) {
+      const {onSaved, onSaveError} = this.props;
+      return gmp.reportformat.save(data).then(onSaved, onSaveError);
+    }
+
+    const {onImported, onImportError} = this.props;
+    return gmp.reportformat.import(data).then(onImported, onImportError);
   }
 
   render() {
@@ -104,44 +124,44 @@ class ReportFormatComponent extends React.Component {
       children,
       onCloned,
       onCloneError,
-      onCreated,
-      onCreateError,
       onDeleted,
       onDeleteError,
       onDownloaded,
       onDownloadError,
-      onSaved,
-      onSaveError,
     } = this.props;
+
+    const {
+      dialogVisible,
+      reportformat,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="reportformat"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
         onCloned={onCloned}
         onCloneError={onCloneError}
         onDeleted={onDeleted}
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
-        onSaved={onSaved}
-        onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {other => (
           <Wrapper>
             {children({
               ...other,
-              create: this.openReportFormatDialog,
+              import: this.openReportFormatDialog,
               edit: this.openReportFormatDialog,
               verify: this.handleVerify,
             })}
-            <ReportFormatDialog
-              ref={ref => this.reportformat_dialog = ref}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <ReportFormatDialog
+                reportformat={reportformat}
+                title={title}
+                onClose={this.closeReportFormatDialog}
+                onSave={this.handleSave}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
@@ -154,12 +174,12 @@ ReportFormatComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onImportError: PropTypes.func,
+  onImported: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onVerified: PropTypes.func,

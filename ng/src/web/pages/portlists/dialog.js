@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {is_defined} from 'gmp/utils';
 
 import Divider from '../../components/layout/divider.js';
@@ -32,7 +33,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -45,16 +46,25 @@ import Section from '../../components/section/section.js';
 
 import PortRangesTable from './portrangestable.js';
 
+const FROM_FILE = YES_VALUE;
+const NOT_FROM_FILE = NO_VALUE;
+
 const PortListsDialog = ({
-  name,
-  comment,
-  from_file,
-  port_range,
+  comment = '',
+  from_file = NO_VALUE,
+  id,
+  name = _('Unnamed'),
   port_list,
-  onDeletePortRangeClick,
+  port_range = 'T:1-5,7,9,U:1-3,5,7,9',
+  port_ranges = [],
+  title = _('New Port List'),
+  visible = true,
+  onClose,
   onNewPortRangeClick,
-  onValueChange,
+  onTmpDeletePortRange,
+  onSave,
 }) => {
+
   const is_edit = is_defined(port_list);
 
   const newrangeicon = (
@@ -62,98 +72,129 @@ const PortListsDialog = ({
       <NewIcon
         value={port_list}
         title={_('Add Port Range')}
-        onClick={onNewPortRangeClick}/>
+        onClick={onNewPortRangeClick}
+      />
     </div>
   );
+
+  const data = {
+    id,
+    comment,
+    from_file,
+    name,
+    port_range,
+  };
+
   return (
-    <Layout flex="column">
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      defaultValues={data}
+      values={{port_ranges}}
+    >
+      {({
+        values: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
 
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          value={name}
-          grow="1"
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
-
-      <FormGroup title={_('Comment')}>
-        <TextField
-          name="comment"
-          value={comment}
-          grow="1"
-          size="30"
-          maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
-
-      {!is_edit &&
-        <FormGroup title={_('Port Ranges')} flex="column">
-          <Divider flex="column">
-            <Divider>
-              <Radio
-                title={_('Manual')}
-                name="from_file"
-                value="0"
-                onChange={onValueChange}
-                checked={from_file !== '1'}/>
+            <FormGroup title={_('Name')}>
               <TextField
+                name="name"
+                value={state.name}
                 grow="1"
-                name="port_range"
-                value={port_range}
-                disabled={from_file === '1'}
+                size="30"
                 onChange={onValueChange}
-                size="30" maxLength="400"/>
-            </Divider>
-            <Divider>
-              <Radio
-                title={_('From file')}
-                name="from_file"
-                value="1"
+                maxLength="80"
+              />
+            </FormGroup>
+
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                maxLength="400"
                 onChange={onValueChange}
-                checked={from_file === '1'}/>
-              <FileField
-                name="file"
-                onChange={onValueChange}/>
-            </Divider>
-          </Divider>
-        </FormGroup>
-      }
-      {is_edit &&
-        <Section title={_('Port Ranges')} extra={newrangeicon}>
-          {is_defined(port_list) &&
-            <PortRangesTable
-              portRanges={port_list.port_ranges}
-              onDeleteClick={onDeletePortRangeClick}/>
-          }
-        </Section>
-      }
-    </Layout>
+              />
+            </FormGroup>
+
+            {!is_edit &&
+              <FormGroup title={_('Port Ranges')} flex="column">
+                <Divider flex="column">
+                  <Divider>
+                    <Radio
+                      title={_('Manual')}
+                      name="from_file"
+                      value={NOT_FROM_FILE}
+                      onChange={onValueChange}
+                      checked={from_file !== FROM_FILE}
+                    />
+                    <TextField
+                      grow="1"
+                      name="port_range"
+                      value={state.port_range}
+                      disabled={from_file === FROM_FILE}
+                      onChange={onValueChange}
+                      size="30"
+                      maxLength="400"
+                    />
+                  </Divider>
+                  <Divider>
+                    <Radio
+                      title={_('From file')}
+                      name="from_file"
+                      value={FROM_FILE}
+                      onChange={onValueChange}
+                      checked={from_file === FROM_FILE}
+                    />
+                    <FileField
+                      name="file"
+                      onChange={onValueChange}
+                    />
+                  </Divider>
+                </Divider>
+              </FormGroup>
+            }
+            {is_edit &&
+              <Section title={_('Port Ranges')} extra={newrangeicon}>
+                {is_defined(port_list) &&
+                  <PortRangesTable
+                    portRanges={state.port_ranges}
+                    onDeleteClick={onTmpDeletePortRange}
+                  />
+                }
+              </Section>
+            }
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
 PortListsDialog.propTypes = {
   comment: PropTypes.string,
   from_file: PropTypes.yesno,
+  id: PropTypes.string,
   name: PropTypes.string,
   port_list: PropTypes.model,
   port_range: PropTypes.string,
+  port_ranges: PropTypes.array,
+  title: PropTypes.string,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
   onDeletePortRangeClick: PropTypes.func,
   onNewPortRangeClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
+  onTmpDeletePortRange: PropTypes.func.isRequired,
 };
 
 
-export default withDialog({
-  title: _('New Port List'),
-  footer: _('Save'),
-  defaultState: {
-    name: _('Unnamed'),
-    comment: '',
-    from_file: 0,
-    port_range: 'T:1-5,7,9,U:1-3,5,7,9',
-  },
-})(PortListsDialog);
+export default PortListsDialog;
 
 // vim: set ts=2 sw=2 tw=80:

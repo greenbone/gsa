@@ -1,3 +1,31 @@
+SUMMARY OF RELEASE CHANGES FOR GREENBONE SECURITY ASSISTANT
+===========================================================
+
+For detailed code changes, please visit
+ https://github.com/greenbone/gsa/commits/master
+or get the entire source code repository and view log history:
+$ git clone https://github.com/greenbone/gsa.git
+$ cd gsa && git log
+
+
+gsa 8.0+beta1 (2018-XX-XX)
+
+This is the first beta release of the gsa module 8.0 for the Greenbone
+Vulnerability Management (GVM) framework.
+
+This release introduces an entirely newly implemented user interface,
+switching from xslt-generated web pages per request to a single
+page application.
+
+Apart from this, the module covers a number of significant advances
+and clean-ups compared to the previous gsa module.
+
+Many thanks to everyone who has contributed to this release:
+TODO
+
+Main changes compared to the 7.0 series:
+TODO
+
 gsa 7.0.0 (2016-11-09)
 
 This is the first release of the Greenbone Security Assistant (GSA) 7.0 module
@@ -11,7 +39,7 @@ The new GSA also introduces the explicit asset management for hosts and
 operating systems.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Hani Benhabiles, Björn Ricks, Matthew Mundell, Timo Pollmeier,
+BenoÃ®t Allard, Hani Benhabiles, BjÃ¶rn Ricks, Matthew Mundell, Timo Pollmeier,
 Jan-Oliver Wagner and Michael Wiegand.
 
 Main changes compared to the 6.0 series:
@@ -85,7 +113,7 @@ workflows, using JS technologies for dialogs, widgets and various other
 elements.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier,
+BenoÃ®t Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier,
 Jan-Oliver Wagner and Michael Wiegand.
 
 Main changes since 6.1+beta2:
@@ -137,7 +165,7 @@ systems. Several new charts were introduced and a considerable number of
 other new features.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier,
+BenoÃ®t Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier,
 Jan-Oliver Wagner, Michael Wiegand and Winland Q. Yang
 
 Main changes since 6.1+beta1:
@@ -181,7 +209,7 @@ adds support for CVE scanning. It also contains a number of internal
 improvements and minor bugfixes.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Hani Benhabiles, Sven Haardiek, Ilmar Habibulin, Matthew Mundell,
+BenoÃ®t Allard, Hani Benhabiles, Sven Haardiek, Ilmar Habibulin, Matthew Mundell,
 Timo Pollmeier, Jan-Oliver Wagner and Michael Wiegand.
 
 Main changes since 6.0 series:
@@ -229,7 +257,7 @@ well as bulk actions and contains a number of other new features and
 improvements. Please see the comprehensive list below for more details.
 
 Many thanks to everyone who has contributed to this release:
-Michal Ambroz, Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier and Michael
+Michal Ambroz, BenoÃ®t Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier and Michael
 Wiegand.
 
 Main changes compared to the 5.0 series:
@@ -401,7 +429,7 @@ processing from spawning an external process to using libxslt and restores
 compatibility with older GLib versions.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier and Michael
+BenoÃ®t Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier and Michael
 Wiegand.
 
 Main changes since 6.0+beta2:
@@ -503,7 +531,7 @@ and the switch from "threat" to "severity" concept. For a complete list of
 changes, please refer to the list below.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Hani Benhabiles, Michael Meyer, Matthew Mundell, Timo Pollmeier,
+BenoÃ®t Allard, Hani Benhabiles, Michael Meyer, Matthew Mundell, Timo Pollmeier,
 Jan-Oliver Wagner and Michael Wiegand.
 
 Main changes since 4.0.x:
@@ -549,7 +577,7 @@ for role editing. It also improves the handling of signals and libmicrohttpd
 error messages.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver
+BenoÃ®t Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier, Jan-Oliver
 Wagner and Michael Wiegand.
 
 Main changes since 5.0+beta12:
@@ -613,7 +641,7 @@ This release extends the German translation as well as makes the interface
 more consistent with the commands available to the user.
 
 Many thanks to everyone who has contributed to this release:
-Benoît Allard, Timo Pollmeier and Matthew Mundell.
+BenoÃ®t Allard, Timo Pollmeier and Matthew Mundell.
 
 Main changes since 5.0+beta9:
 * Add Slave and Network	Source Interface fields to the report summary.
@@ -690,7 +718,7 @@ This release adds the setting for user interface language and Alive Test
 to Target management.
 
 Many thanks to everyone who has contributed to this release:
-Matthew Mundell, Jan-Oliver Wagner, Timo Pollmeier and Benoît Allard.
+Matthew Mundell, Jan-Oliver Wagner, Timo Pollmeier and BenoÃ®t Allard.
 
 Main changes since 5.0+beta5:
 * Add Alive Test to Create Target, Modify Target and Target Details.
@@ -711,7 +739,7 @@ This release adds internationalization support to the GSA, support for different
 interface.
 
 Many thanks to everyone who has contributed to this release:
-Matthew Mundell, Jan-Oliver Wagner, Timo Pollmeier and Benoît Allard.
+Matthew Mundell, Jan-Oliver Wagner, Timo Pollmeier and BenoÃ®t Allard.
 
 Main changes since 5.0+beta4:
 * Add --face to support switching between different layouts.

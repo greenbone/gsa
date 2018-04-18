@@ -24,20 +24,17 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {classes} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import Icon from './icon.js';
 
-const GreenboneIcon = ({className, size = 'default', ...props}) => {
-  className = classes(className, 'greenbone-icon');
+const GreenboneIcon = ({size = 'default', ...props}) => {
   return (
     <Icon
       {...props}
       size={size}
       alt={_('Greenbone Security Assistant')}
-      className={className}
       img="greenbone.svg"
     />
   );
@@ -45,7 +42,6 @@ const GreenboneIcon = ({className, size = 'default', ...props}) => {
 
 GreenboneIcon.propTypes = {
   size: PropTypes.iconSize,
-  className: PropTypes.string,
 };
 
 export default GreenboneIcon;

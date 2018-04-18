@@ -29,7 +29,9 @@ import d3tip from 'd3-tip';
 import _ from 'gmp/locale.js';
 import {has_value, is_array, is_date, is_defined, is_string} from 'gmp/utils';
 
-import {get_severity_levels} from '../../../../utils/render.js';
+import {
+  getSeverityLevelsOld as getSeverityLevels,
+} from '../../../../utils/severity.js';
 
 import {
   array_sum,
@@ -127,7 +129,7 @@ class HorizontalBarChartGenerator extends BarChartGenerator {
 
     this.z_fields = gen_params.z_fields;
 
-    const severity_levels = get_severity_levels();
+    const severity_levels = getSeverityLevels();
 
     if (!has_value(gen_params.chart_template) ||
       gen_params.chart_template === '') {

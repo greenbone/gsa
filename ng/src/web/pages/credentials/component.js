@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +26,10 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined, shorten} from 'gmp/utils';
 
 import {
   ALL_CREDENTIAL_TYPES,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -46,34 +46,53 @@ class CredentialsComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeCredentialDialog = this.closeCredentialDialog.bind(this);
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
   }
 
   openCredentialsDialog(credential) {
-    if (credential) {
-      this.credentials_dialog.show({
+    if (is_defined(credential)) {
+      const title = _('Edit Credential {{name}}',
+        {name: shorten(credential.name)});
+
+      this.setState({
         allow_insecure: credential.allow_insecure,
-        auth_algorithm: credential.auth_algorithm,
-        base: credential.credential_type,
         comment: credential.comment,
         credential,
-        credential_login: credential.login,
-        id: credential.id,
+        base: credential.credential_type,
+        auth_algorithm: credential.auth_algorithm,
         name: credential.name,
+        credential_login: credential.login,
         privacy_algorithm: is_defined(credential.privacy) ?
           credential.privacy.algorithm : undefined,
         types: [credential.credential_type],
-      }, {
-        title: _('Edit Credential {{name}}', {name: credential.name}),
+        dialogVisible: true,
+        title,
       });
     }
     else {
-      this.credentials_dialog.show({
+      // reset all values in state to not show values from last edit
+      this.setState({
+        allow_insecure: undefined,
+        comment: undefined,
+        credential: undefined,
+        base: undefined,
+        auth_algorithm: undefined,
+        name: undefined,
+        credential_login: undefined,
+        privacy_algorithm: undefined,
         types: ALL_CREDENTIAL_TYPES,
-        base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+        dialogVisible: true,
+        title: _('New Credential'),
       });
     }
+  }
+
+  closeCredentialDialog() {
+    this.setState({dialogVisible: false});
   }
 
   handleDownloadInstaller(credential, format) {
@@ -106,6 +125,12 @@ class CredentialsComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      dialogVisible,
+      ...dialogProps
+    } = this.state;
+
     return (
       <EntityComponent
         name="credential"
@@ -131,10 +156,15 @@ class CredentialsComponent extends React.Component {
               edit: this.openCredentialsDialog,
               downloadinstaller: this.handleDownloadInstaller,
             })}
-            <CredentialsDialog
-              ref={ref => this.credentials_dialog = ref}
-              onSave={save}
-            />
+
+            {dialogVisible &&
+              <CredentialsDialog
+                {...dialogProps}
+                visible={dialogVisible}
+                onClose={this.closeCredentialDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

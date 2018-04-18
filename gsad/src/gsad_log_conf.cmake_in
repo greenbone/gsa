@@ -4,25 +4,36 @@
 #          group to include debug may reveal passwords in the logs.
 
 [gsad main]
-prepend=%t %p
+prepend=%t %s %p
+separator=:
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
 file=${GVM_LOG_DIR}/gsad.log
 level=127
 
-[gsad  omp]
-prepend=%t %p
+[gsad  gmp]
+prepend=%t %s %p
+separator=:
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
 file=${GVM_LOG_DIR}/gsad.log
 level=127
 
-[gsad xslt]
-prepend=%t %p
+[gsad i18n]
+prepend=%t %s %p
+separator=:
+prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
+file=${GVM_LOG_DIR}/gsad.log
+level=127
+
+[gsad http]
+prepend=%t %s %p
+separator=:
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
 file=${GVM_LOG_DIR}/gsad.log
 level=127
 
 [*]
-prepend=%t %p
+prepend=%t %s %p
+separator=:
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
 file=${GVM_LOG_DIR}/gsad.log
 level=0

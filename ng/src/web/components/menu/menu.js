@@ -25,9 +25,10 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined, has_value} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import Link from '../link/link.js';
 
@@ -82,7 +83,7 @@ const StyledMenuEntry = glamorous.li('menu-entry', {
 
 const MenuList = glamorous.ul('menu-list', {
   width: '255px',
-  zIndex: '6',
+  zIndex: Theme.Layers.onTop,
   position: 'absolute',
   display: 'none',
   background: '#FAFAFA',
@@ -147,11 +148,11 @@ const Menu = ({
     link = React.cloneElement(child, {title});
   }
 
-  const menuentries = React.Children.map(children, child => (
-    <StyledMenuEntry>
+  const menuentries = React.Children.map(children, child => has_value(child) ? (
+    <StyledMenuEntry key={child.key}>
       {child}
     </StyledMenuEntry>
-  ));
+  ) : child);
 
   return (
     <StyledMenu>

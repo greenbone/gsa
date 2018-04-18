@@ -32,9 +32,6 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 
 ## Install
 
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/language_names.tsv
-         DESTINATION ${GSA_DATA_DIR})
-
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
 

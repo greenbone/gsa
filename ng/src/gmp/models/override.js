@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'moment';
 
 import {is_defined, is_model_element} from '../utils/identity';
 import {map} from '../utils/array';
@@ -36,6 +37,25 @@ import {
 } from '../parser.js';
 
 import Nvt from './nvt.js';
+
+export const MANUAL = '1';
+export const ANY = '0';
+
+export const ACTIVE_NO_VALUE = '0';
+export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
+export const ACTIVE_YES_ALWAYS_VALUE = '-1';
+export const ACTIVE_YES_UNTIL_VALUE = '-2';
+
+export const DEFAULT_DAYS = 30;
+export const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
+
+export const TASK_ANY = '';
+export const TASK_SELECTED = '0';
+
+export const RESULT_ANY = '';
+export const RESULT_UUID = '0';
+
+export const SEVERITY_FALSE_POSITIVE = -1;
 
 class Override extends Model {
 
@@ -76,6 +96,13 @@ class Override extends Model {
 
     if (is_empty(elem.port)) {
       delete ret.port;
+    }
+
+    if (is_defined(elem.end_time) && elem.end_time.length > 0) {
+      ret.end_time = moment(elem.end_time);
+    }
+    else {
+      delete ret.end_time;
     }
 
     return ret;

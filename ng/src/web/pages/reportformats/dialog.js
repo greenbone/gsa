@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +29,7 @@ import {is_defined, is_array, has_value, map} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -54,6 +55,12 @@ const ReportFormatListParam = ({
     name,
     onValueChange,
   }) => {
+
+  const formatOptions = map(formats, format => ({
+    label: format.name,
+    value: format.id,
+  }));
+
   return (
     <TableRow>
       <TableData>
@@ -62,19 +69,10 @@ const ReportFormatListParam = ({
       <TableData>
         <MultiSelect
           name={name}
+          items={formatOptions}
           value={idList}
           onChange={onValueChange}
-        >
-          {map(formats, format => {
-            return (
-              <option
-                key={format.id}
-                value={format.id}>
-                {format.name}
-              </option>
-            );
-          })}
-        </MultiSelect>
+        />
       </TableData>
     </TableRow>
   );
@@ -128,22 +126,19 @@ const Param = ({
     );
   }
   else if (type === 'selection') {
+
+    const typeOptions = map(value.options, opt => ({
+      label: opt.name,
+      value: opt.value,
+    }));
+
     field = (
       <Select
         name={name}
+        items={typeOptions}
         value={is_array(field_value) ? field_value : [field_value]}
         onChange={onPrefChange}
-      >
-        {
-          value.options.map(opt => (
-            <option
-              key={opt.value}
-              value={opt.value}>
-              {opt.name}
-            </option>
-          ))
-        }
-      </Select>
+      />
     );
   }
   else {
@@ -204,101 +199,131 @@ class Dialog extends React.Component {
     id_lists[name] = value;
 
     if (onValueChange) {
-      onValueChange(id_lists, 'is_lists');
+      onValueChange(id_lists, 'id_lists');
     }
   }
 
   render() {
     const {
-      active,
       formats,
       id_lists,
-      name,
       preferences,
       reportformat,
-      summary,
-      onValueChange,
+      title = _('Import Report Format'),
+      visible = true,
+      onClose,
+      onSave,
     } = this.props;
 
     if (is_defined(reportformat)) {
       return (
-        <Layout flex="column">
-          <FormGroup title={_('Name')}>
-            <TextField
-              grow="1"
-              name="name"
-              value={name}
-              maxLength="80"
-              onChange={onValueChange}
-            />
-          </FormGroup>
+        <SaveDialog
+          visible={visible}
+          title={title}
+          onClose={onClose}
+          onSave={onSave}
+          defaultValues={reportformat}
+        >
+          {({
+            values: state,
+            onValueChange,
+          }) => {
+            return (
+              <Layout flex="column">
+                <FormGroup title={_('Name')}>
+                  <TextField
+                    grow="1"
+                    name="name"
+                    value={state.name}
+                    maxLength="80"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-          <FormGroup title={_('Summary')}>
-            <TextField
-              grow="1"
-              name="summary"
-              value={summary}
-              maxLength="400"
-              onChange={onValueChange}
-            />
-          </FormGroup>
+                <FormGroup title={_('Summary')}>
+                  <TextField
+                    grow="1"
+                    name="summary"
+                    value={state.summary}
+                    maxLength="400"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-          <FormGroup title={_('Active')}>
-            <YesNoRadio
-              name="active"
-              value={active}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+                <FormGroup title={_('Active')}>
+                  <YesNoRadio
+                    name="active"
+                    value={state.active}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-          {reportformat.params.length > 0 &&
-            <h2>Parameters</h2>
-          }
-          {reportformat.params.length > 0 &&
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead width="25%">{_('Name')}</TableHead>
-                  <TableHead width="75%">{_('Value')}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {reportformat.params.map(param => {
-                  if (param.type === 'report_format_list') {
-                    return (
-                      <ReportFormatListParam
-                        key={param.name}
-                        formats={formats}
-                        idList={id_lists[param.name]}
-                        name={param.name}
-                        onValueChange={this.handleIdListChange}
-                      />
-                    );
-                  }
-                  return (
-                    <Param
-                      key={param.name}
-                      value={param}
-                      data={preferences}
-                      onPrefChange={this.handlePrefChange}
-                    />
-                  );
-                })}
-              </TableBody>
-            </Table>
-          }
-        </Layout>
+                {reportformat.params.length > 0 &&
+                  <h2>Parameters</h2>
+                }
+                {reportformat.params.length > 0 &&
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead width="25%">{_('Name')}</TableHead>
+                        <TableHead width="75%">{_('Value')}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {reportformat.params.map(param => {
+                        if (param.type === 'report_format_list') {
+                          return (
+                            <ReportFormatListParam
+                              key={param.name}
+                              formats={formats}
+                              idList={id_lists[param.name]}
+                              name={param.name}
+                              onValueChange={this.handleIdListChange}
+                            />
+                          );
+                        }
+                        return (
+                          <Param
+                            key={param.name}
+                            value={param}
+                            data={preferences}
+                            onPrefChange={this.handlePrefChange}
+                          />
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                }
+              </Layout>
+            );
+          }}
+        </SaveDialog>
       );
     }
-
     return (
-      <Layout flex="column">
-        <FormGroup title={_('Import XML Report Format')}>
-          <FileField
-            name="xml_file"
-            onChange={onValueChange}/>
-        </FormGroup>
-      </Layout>
+      <SaveDialog
+        visible={visible}
+        title={title}
+        onClose={onClose}
+        onSave={onSave}
+        initialData={{}}
+      >
+        {({
+          data: state,
+          onValueChange,
+        }) => {
+
+          return (
+            <Layout flex="column">
+              <FormGroup title={_('Import XML Report Format')} titleSize="3">
+                <FileField
+                  name="xml_file"
+                  onChange={onValueChange}/>
+              </FormGroup>
+            </Layout>
+          );
+        }}
+      </SaveDialog>
     );
   }
 }
@@ -311,14 +336,13 @@ Dialog.propTypes = {
   preferences: PropTypes.object,
   reportformat: PropTypes.model,
   summary: PropTypes.string,
+  title: PropTypes.string,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
 
-export default withDialog({
-  title: _('New Report Format'),
-  footer: _('Save'),
-  defaultState: {
-  },
-})(Dialog);
+export default Dialog;
 
 // vim: set ts=2 sw=2 tw=80:

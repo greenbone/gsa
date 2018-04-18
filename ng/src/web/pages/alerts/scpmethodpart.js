@@ -26,12 +26,17 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {
+  SSH_CREDENTIAL_TYPES,
+  ssh_credential_filter,
+} from 'gmp/models/credential.js';
+
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -42,38 +47,39 @@ import TextArea from '../../components/form/textarea.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 const ScpMethodPart = ({
-    prefix,
-    credentials,
-    reportFormats,
-    scpCredential,
-    scpHost,
-    scpKnownHosts,
-    scpPath,
-    scpReportFormat,
-    onChange,
-    onNewCredentialClick,
-  }) => {
-  const scp_credential_opts = render_options(credentials);
-  const scp_report_format_opts = render_options(reportFormats);
-
+  prefix,
+  credentials = [],
+  reportFormats,
+  scpCredential,
+  scpHost,
+  scpKnownHosts,
+  scpPath,
+  scpReportFormat,
+  onChange,
+  onCredentialChange,
+  onNewCredentialClick,
+}) => {
+  credentials = credentials.filter(ssh_credential_filter);
   return (
     <Layout
       flex="column"
-      box
-      grow="1">
+      grow="1"
+    >
       <FormGroup title={_('Credential')}>
         <Divider>
           <Select
             name={prefix + 'scp_credential'}
             value={scpCredential}
-            onChange={onChange}>
-            {scp_credential_opts}
-          </Select>
+            items={render_select_items(credentials)}
+            onChange={onCredentialChange}
+          />
           <Layout>
             <NewIcon
-              value={['up']}
+              size="small"
+              value={SSH_CREDENTIAL_TYPES}
               title={_('Create a credential')}
-              onClick={onNewCredentialClick}/>
+              onClick={onNewCredentialClick}
+            />
           </Layout>
         </Divider>
       </FormGroup>
@@ -83,33 +89,37 @@ const ScpMethodPart = ({
           grow="1"
           name={prefix + 'scp_host'}
           value={scpHost}
+          maxLength="256"
           onChange={onChange}
-          maxLength="256"/>
+        />
       </FormGroup>
 
       <FormGroup title={_('Known Hosts')}>
         <TextArea
-          rows="3" cols="50"
+          grow="1"
+          rows="3"
+          cols="50"
           name={prefix + 'scp_known_hosts'}
           value={scpKnownHosts}
           onChange={onChange}
-          grow="1"/>
+        />
       </FormGroup>
 
       <FormGroup title={_('Path')}>
         <TextField
           name={prefix + 'scp_path'}
           value={scpPath}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Report')}>
         <Select
           name={prefix + 'scp_report_format'}
           value={scpReportFormat}
-          onChange={onChange}>
-          {scp_report_format_opts}
-        </Select>
+          items={render_select_items(reportFormats)}
+          onChange={onChange}
+        />
       </FormGroup>
     </Layout>
   );
@@ -124,8 +134,9 @@ ScpMethodPart.propTypes = {
   scpKnownHosts: PropTypes.string.isRequired,
   scpPath: PropTypes.string.isRequired,
   scpReportFormat: PropTypes.id,
-  onChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
 export default withPrefix(ScpMethodPart);

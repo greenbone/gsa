@@ -42,9 +42,24 @@ const Theme = {
   darkRed: '#a94442', // used by: dialog errors font
   blue: '#0000ff', // used by: links
   dialogGray: '#eeeeee', // used by: dialog and dashboard display backgrounds
+  inputBorderGray: '#aaaaaa', // used by: form field, (Multi-)Select
+  mediumBlue: '#5897fb', // used by active/hovered items in Select
 
   /* source ? */
   darkGreen: '#519032',
+
+  Layers: {
+    aboveAll: 500,
+    onTop: 100,
+    belowAll: -100,
+    higher: 1,
+    default: 0,
+  },
+
+  Font: {
+    default: 'Verdana, sans-serif',
+    dialog: 'Trebuchet MS, Tahoma, Verdana, Arial, sans-serif',
+  },
 };
 
 export default Theme;

@@ -50,7 +50,9 @@ class StickyContainer extends React.Component {
 
   componentDidMount() {
     for (const name of EVENTS) {
-      window.addEventListener(name, this.notify);
+      // use passive event handlers see
+      // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Improving_scrolling_performance_with_passive_listeners
+      window.addEventListener(name, this.notify, {passive: true});
     }
   }
 

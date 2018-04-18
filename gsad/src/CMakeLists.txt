@@ -102,7 +102,7 @@ target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
                        ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
 
-add_library (gsad_xslt_ext STATIC xslt_i18n.c)
+add_library (gsad_i18n_ext STATIC gsad_i18n.c)
 target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
                        ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
@@ -118,7 +118,7 @@ add_executable (gsad
                 gsad_http_handler.c
                 validator.c)
 
-target_link_libraries (gsad gsad_gmp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
+target_link_libraries (gsad gsad_gmp gsad_base gsad_i18n_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (SERVE_STATIC_ASSETS)
@@ -131,6 +131,27 @@ endif (SERVE_STATIC_ASSETS)
 if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION="${GSAD_VERSION}")
 endif (GSAD_VERSION)
+
+if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
+  # If we got GIT_REVISION at configure time,
+  # assume we can get it at build time as well
+  if (GIT_REVISION)
+    # a custom target that is always built
+    add_custom_target (revisiontag ALL)
+
+    # creates gitrevision.h using cmake script
+    add_custom_command (TARGET revisiontag COMMAND ${CMAKE_COMMAND}
+                        -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+                        -P ${CMAKE_SOURCE_DIR}/cmake/GetGit.cmake)
+
+    # explicitly say that the executable depends on custom target
+    add_dependencies (gsad revisiontag)
+
+    # include the output directory, where the gitrevision.h file is generated
+    include_directories (${CMAKE_CURRENT_BINARY_DIR})
+    add_definitions (-DGIT_REV_AVAILABLE)
+  endif (GIT_REVISION)
+endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
 if (GVM_SERVER_CERTIFICATE)
   add_definitions (-DGVM_SERVER_CERTIFICATE="${GVM_SERVER_CERTIFICATE}")
@@ -195,8 +216,5 @@ add_custom_target (ctags COMMENT "Building tags..."
                    COMMAND ctags ${C_FILES})
 add_custom_target (tags COMMENT "Building tags files...")
 add_dependencies (tags etags ctags)
-
-## gettext translations
-add_subdirectory (po)
 
 ## End

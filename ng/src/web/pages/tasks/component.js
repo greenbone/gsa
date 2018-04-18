@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,7 @@ import moment from 'moment-timezone';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
+import {NO_VALUE} from 'gmp/parser';
 import {first, for_each, map} from 'gmp/utils/array';
 import {is_array, is_defined} from 'gmp/utils/identity';
 import {includes_id, select_save_id} from 'gmp/utils/id';
@@ -42,6 +44,9 @@ import {
 } from 'gmp/models/scanner.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
+import withGmp from '../../utils/withGmp';
+import compose from '../../utils/compose';
 import {UNSET_VALUE} from '../../utils/render';
 
 import Wrapper from '../../components/layout/wrapper.js';
@@ -54,7 +59,7 @@ import AdvancedTaskWizard from '../../wizard/advancedtaskwizard.js';
 import ModifyTaskWizard from '../../wizard/modifytaskwizard.js';
 import TaskWizard from '../../wizard/taskwizard.js';
 
-import TaskDialog from './dialogcontainer.js';
+import TaskDialogContainer from './dialogcontainer.js';
 import ContainerTaskDialog from './containerdialog.js';
 
 const log = logger.getLogger('web.tasks.component');
@@ -80,7 +85,16 @@ class TaskComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const {gmp} = this.context;
+    this.state = {
+      advancedTaskWizardVisible: false,
+      containerTaskDialogVisible: false,
+      modifyTaskWizardVisible: false,
+      reportImportDialogVisible: false,
+      taskDialogVisible: false,
+      taskWizardVisible: false,
+    };
+
+    const {gmp} = this.props;
 
     this.cmd = gmp.task;
 
@@ -97,12 +111,18 @@ class TaskComponent extends React.Component {
     this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
 
     this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
+    this.closeAdvancedTaskWizard = this.closeAdvancedTaskWizard.bind(this);
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
+    this.closeContainerTaskDialog = this.closeContainerTaskDialog.bind(this);
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
+    this.closeReportImportDialog = this.closeReportImportDialog.bind(this);
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
+    this.closeModifyTaskWizard = this.closeModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
+    this.closeTaskDialog = this.closeTaskDialog.bind(this);
     this.openTaskWizard = this.openTaskWizard.bind(this);
+    this.closeTaskWizard = this.closeTaskWizard.bind(this);
   }
 
   handleSaveContainerTask(data) {
@@ -118,8 +138,7 @@ class TaskComponent extends React.Component {
   }
 
   handleReportImport(data) {
-    const {gmp} = this.context;
-    const {onReportImported, onReportImportError} = this.props;
+    const {onReportImported, onReportImportError, gmp} = this.props;
 
     return gmp.report.import(data).then(onReportImported, onReportImportError);
   }
@@ -143,24 +162,25 @@ class TaskComponent extends React.Component {
   }
 
   handleSaveTaskWizard(data) {
-    const {gmp} = this.context;
-    const {onTaskWizardSaved, onTaskWizardError} = this.props;
+    const {onTaskWizardSaved, onTaskWizardError, gmp} = this.props;
 
     return gmp.wizard.runQuickFirstScan(data).then(onTaskWizardSaved,
       onTaskWizardError);
   }
 
   handleSaveAdvancedTaskWizard(data) {
-    const {gmp} = this.context;
-    const {onAdvancedTaskWizardSaved, onAdvancedTaskWizardError} = this.props;
+    const {
+      gmp,
+      onAdvancedTaskWizardSaved,
+      onAdvancedTaskWizardError,
+    } = this.props;
 
     return gmp.wizard.runQuickTask(data).then(onAdvancedTaskWizardSaved,
       onAdvancedTaskWizardError);
   }
 
   handleSaveModifyTaskWizard(data) {
-    const {gmp} = this.context;
-    const {onModifyTaskWizardSaved, onModifyTaskWizardError} = this.props;
+    const {onModifyTaskWizardSaved, onModifyTaskWizardError, gmp} = this.props;
 
     return gmp.wizard.runModifyTask(data).then(onModifyTaskWizardSaved,
       onModifyTaskWizardError);
@@ -168,22 +188,26 @@ class TaskComponent extends React.Component {
 
   handleTaskWizardNewClick() {
     this.openTaskDialog();
-    this.task_wizard.close();
+    this.closeTaskWizard();
   }
 
   openContainerTaskDialog(task) {
-    this.container_dialog.show({
+    this.setState({
+      containerTaskDialogVisible: true,
       task,
-      name: task ? task.name : _('unnamed'),
+      name: task ? task.name : _('Unnamed'),
       comment: task ? task.comment : '',
       id: task ? task.id : undefined,
       in_assets: task ? task.in_assets : undefined,
       auto_delete: task ? task.auto_delete : undefined,
       auto_delete_data: task ? task.auto_delete_data : undefined,
-    }, {
       title: task ? _('Edit Container Task {{name}}', task) :
         _('New Container Task'),
     });
+  }
+
+  closeContainerTaskDialog() {
+    this.setState({containerTaskDialogVisible: false});
   }
 
   openTaskDialog(task) {
@@ -195,29 +219,29 @@ class TaskComponent extends React.Component {
     }
   }
 
-  openStandardTaskDialog(task) {
-    const {capabilities, gmp} = this.context;
+  closeTaskDialog() {
+    this.setState({taskDialogVisible: false});
+  }
 
-    if (task) {
+  openStandardTaskDialog(task) {
+    const {capabilities, gmp} = this.props;
+
+    if (is_defined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
         const {targets, scan_configs, alerts, scanners, schedules} = settings;
 
-        log.debug('Loaded edit task dialog settings', settings);
+        log.debug('Loaded edit task dialog settings', task, settings);
 
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
-        let schedule_id;
-        if (capabilities.mayAccess('schedules') &&
-          is_defined(task.schedule)) {
-          schedule_id = task.schedule.id;
-        }
-        else {
-          schedule_id = UNSET_VALUE;
-        }
+        const schedule_id = capabilities.mayAccess('schedules') &&
+          is_defined(task.schedule) ?
+            task.schedule.id : UNSET_VALUE;
+
         const data = {};
         if (task.isChangeable()) {
-          data.config_id = task.config.id;
+          data.config_id = is_defined(task.config) ? task.config.id : undefined;
           data.scanner_id = task.scanner.id;
           data.target_id = task.target.id;
         }
@@ -237,7 +261,8 @@ class TaskComponent extends React.Component {
           });
         }
 
-        this.task_dialog.show({
+        this.setState({
+          taskDialogVisible: true,
           alert_ids: map(task.alerts, alert => alert.id),
           alerts,
           alterable: task.alterable,
@@ -245,19 +270,21 @@ class TaskComponent extends React.Component {
           auto_delete: task.auto_delete,
           auto_delete_data: task.auto_delete_data,
           comment: task.comment,
+          hosts_ordering: task.hosts_ordering,
           id: task.id,
           in_assets: task.in_assets,
+          max_checks: task.max_checks,
+          max_hosts: task.max_hosts,
           min_qod: task.min_qod,
           name: task.name,
           scan_configs: sorted_scan_configs,
-          scanner_type: task.scanner.scanner_type,
           scanners,
           schedule_id,
           schedules,
+          source_iface: task.source_iface,
           targets,
-          task: task,
+          task,
           ...data,
-        }, {
           title: _('Edit Task {{name}}', task),
         });
       });
@@ -292,20 +319,34 @@ class TaskComponent extends React.Component {
 
         const alert_ids = is_defined(alert_id) ? [alert_id] : [];
 
-        this.task_dialog.show({
+        this.setState({
+          taskDialogVisible: true,
           alert_ids,
           alerts,
+          alterable: undefined,
+          apply_overrides: undefined,
+          auto_delete: undefined,
+          auto_delete_data: undefined,
+          comment: undefined,
           config_id,
+          hosts_ordering: undefined,
+          id: undefined,
+          in_assets: undefined,
+          max_checks: undefined,
+          max_hosts: undefined,
+          min_qod: undefined,
+          name: undefined,
+          scan_configs: sorted_scan_configs,
           scanners,
           scanner_id,
-          scan_configs: sorted_scan_configs,
           schedule_id,
           schedules,
+          source_iface: undefined,
           tag_name: first(tags).name,
           tags,
           target_id,
           targets,
-        }, {
+          task: undefined,
           title: _('New Task'),
         });
       });
@@ -313,20 +354,24 @@ class TaskComponent extends React.Component {
   }
 
   openReportImportDialog(task) {
-    this.import_report_dialog.show({
+    this.setState({
+      reportImportDialogVisible: true,
       task_id: task.id,
       tasks: [task],
     });
   }
 
-  openTaskWizard() {
-    const {gmp} = this.context;
+  closeReportImportDialog() {
+    this.setState({reportImportDialogVisible: false});
+  }
 
-    this.task_wizard.show({});
+  openTaskWizard() {
+    const {gmp} = this.props;
 
     gmp.wizard.task().then(response => {
       const settings = response.data;
-      this.task_wizard.setValues({
+      this.setState({
+        taskWizardVisible: true,
         hosts: settings.client_address,
         port_list_id: settings.get('Default Port List').value,
         alert_id: settings.get('Default Alert').value,
@@ -339,8 +384,12 @@ class TaskComponent extends React.Component {
     });
   }
 
+  closeTaskWizard() {
+    this.setState({taskWizardVisible: false});
+  }
+
   openAdvancedTaskWizard() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
@@ -361,7 +410,8 @@ class TaskComponent extends React.Component {
 
       const now = moment().tz(settings.timezone);
 
-      this.advanced_task_wizard.show({
+      this.setState({
+        advancedTaskWizardVisible: true,
         credentials,
         scan_configs: settings.scan_configs,
         date: now,
@@ -382,23 +432,32 @@ class TaskComponent extends React.Component {
     });
   }
 
+  closeAdvancedTaskWizard() {
+    this.setState({advancedTaskWizardVisible: false});
+  }
+
   openModifyTaskWizard() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.wizard.modifyTask().then(response => {
       const settings = response.data;
       const now = moment().tz(settings.timezone);
 
-      this.modify_task_wizard.show({
+      this.setState({
+        modifyTaskWizardVisible: true,
         date: now,
         tasks: settings.tasks,
-        reschedule: '0',
+        reschedule: NO_VALUE,
         task_id: select_save_id(settings.tasks),
         start_minute: now.minutes(),
         start_hour: now.hours(),
         start_timezone: settings.timezone,
       });
     });
+  }
+
+  closeModifyTaskWizard() {
+    this.setState({modifyTaskWizardVisible: false});
   }
 
   render() {
@@ -415,6 +474,55 @@ class TaskComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      advancedTaskWizardVisible,
+      alert_id,
+      alert_ids,
+      alerts,
+      alterable,
+      apply_overrides,
+      auto_delete,
+      auto_delete_data,
+      config_id,
+      containerTaskDialogVisible,
+      comment,
+      credentials,
+      date,
+      esxi_credential,
+      hosts,
+      id,
+      in_assets,
+      min_qod,
+      modifyTaskWizardVisible,
+      name,
+      port_list_id,
+      reportImportDialogVisible,
+      reschedule,
+      scan_configs,
+      scanner_id,
+      scanner_type,
+      scanners,
+      schedule_id,
+      schedules,
+      slave_id,
+      ssh_credential,
+      smb_credential,
+      start_minute,
+      start_hour,
+      start_timezone,
+      target_hosts,
+      targets,
+      task_id,
+      task_name,
+      task,
+      tasks,
+      taskDialogVisible,
+      taskWizardVisible,
+      title = _('Edit Task {{name}}', task),
+      ...data
+    } = this.state;
+
     return (
       <Wrapper>
         <EntityComponent
@@ -448,40 +556,125 @@ class TaskComponent extends React.Component {
                 modifytaskwizard: this.openModifyTaskWizard,
                 taskwizard: this.openTaskWizard,
               })}
-              <TaskDialog
-                ref={ref => this.task_dialog = ref}
-                onSave={save}
-              />
+
+              {taskDialogVisible &&
+                <TaskDialogContainer
+                  alert_ids={alert_ids}
+                  alerts={alerts}
+                  alterable={alterable}
+                  apply_overrides={apply_overrides}
+                  auto_delete={auto_delete}
+                  auto_delete_data={auto_delete_data}
+                  comment={comment}
+                  config_id={config_id}
+                  id={id}
+                  in_assets={in_assets}
+                  min_qod={min_qod}
+                  name={name}
+                  scan_configs={scan_configs}
+                  scanner_type={scanner_type}
+                  scanners={scanners}
+                  scanner_id={scanner_id}
+                  schedule_id={schedule_id}
+                  schedules={schedules}
+                  targets={targets}
+                  task={task}
+                  title={title}
+                  {...data}
+                  onClose={this.closeTaskDialog}
+                  onSave={save}
+                />
+              }
             </Wrapper>
           )}
         </EntityComponent>
 
-        <ContainerTaskDialog
-          ref={ref => this.container_dialog = ref}
-          onSave={this.handleSaveContainerTask}/>
+        {containerTaskDialogVisible &&
+          <ContainerTaskDialog
+            task={task}
+            name={name}
+            comment={comment}
+            id={id}
+            in_assets={in_assets}
+            auto_delete={auto_delete}
+            auto_delete_data={auto_delete_data}
+            title={title}
+            onClose={this.closeContainerTaskDialog}
+            onSave={this.handleSaveContainerTask}
+          />
+        }
 
-        <TaskWizard
-          ref={ref => this.task_wizard = ref}
-          onSave={this.handleSaveTaskWizard}
-          onNewClick={this.handleTaskWizardNewClick}/>
-        <AdvancedTaskWizard
-          ref={ref => this.advanced_task_wizard = ref}
-          onSave={this.handleSaveAdvancedTaskWizard}/>
-        <ModifyTaskWizard
-          ref={ref => this.modify_task_wizard = ref}
-          onSave={this.handleSaveModifyTaskWizard}/>
+        {taskWizardVisible &&
+          <TaskWizard
+            hosts={hosts}
+            port_list_id={port_list_id}
+            alert_id={alert_id}
+            config_id={config_id}
+            ssh_credential={ssh_credential}
+            smb_credential={smb_credential}
+            esxi_credential={esxi_credential}
+            scanner_id={scanner_id}
+            onClose={this.closeTaskWizard}
+            onSave={this.handleSaveTaskWizard}
+            onNewClick={this.handleTaskWizardNewClick}
+          />
+        }
 
-        <ImportReportDialog
-          ref={ref => this.import_report_dialog = ref}
-          newContainerTask={false}
-          onSave={this.handleReportImport}/>
+        {advancedTaskWizardVisible &&
+          <AdvancedTaskWizard
+            credentials={credentials}
+            scan_configs={scan_configs}
+            date={date}
+            task_name={task_name}
+            target_hosts={target_hosts}
+            port_list_id={port_list_id}
+            alert_id={alert_id}
+            config_id={config_id}
+            ssh_credential={ssh_credential}
+            smb_credential={smb_credential}
+            esxi_credential={esxi_credential}
+            scanner_id={scanner_id}
+            slave_id={slave_id}
+            start_minute={start_minute}
+            start_hour={start_hour}
+            start_timezone={start_timezone}
+            onClose={this.closeAdvancedTaskWizard}
+            onSave={this.handleSaveAdvancedTaskWizard}
+          />
+        }
+
+        {modifyTaskWizardVisible &&
+          <ModifyTaskWizard
+            date={date}
+            tasks={tasks}
+            reschedule={reschedule}
+            task_id={task_id}
+            start_minute={start_minute}
+            start_hour={start_hour}
+            start_timezone={start_timezone}
+            onClose={this.closeModifyTaskWizard}
+            onSave={this.handleSaveModifyTaskWizard}
+          />
+        }
+
+        {reportImportDialogVisible &&
+          <ImportReportDialog
+            newContainerTask={false}
+            task_id={task_id}
+            tasks={tasks}
+            onClose={this.closeReportImportDialog}
+            onSave={this.handleReportImport}
+          />
+        }
       </Wrapper>
     );
   }
 }
 
 TaskComponent.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
   onAdvancedTaskWizardSaved: PropTypes.func,
   onCloneError: PropTypes.func,
@@ -512,9 +705,7 @@ TaskComponent.propTypes = {
   onTaskWizardSaved: PropTypes.func,
 };
 
-TaskComponent.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default TaskComponent;
+export default compose(
+  withGmp,
+  withCapabilities,
+)(TaskComponent);

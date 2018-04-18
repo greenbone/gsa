@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.aterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +32,7 @@ import Promise from 'gmp/promise.js';
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose.js';
 import withGmp from '../../utils/withGmp.js';
-import withCapabilties from '../../utils/withCapabilities.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import Wrapper from '../../components/layout/wrapper.js';
 
@@ -44,6 +45,9 @@ class PermissionsComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closePermissionDialog = this.closePermissionDialog.bind(this);
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
 
@@ -62,14 +66,18 @@ class PermissionsComponent extends React.Component {
 
       state = {
         id: permission.id,
-        permission,
         name: permission.name,
         comment: permission.comment,
-        subject_type,
+        group_id: undefined,
+        permission,
         resource_id: is_defined(permission.resource) ?
           permission.resource.id : '',
         resource_type: is_defined(permission.resource) ?
           permission.resource.entity_type : '',
+        role_id: undefined,
+        subject_type,
+        title: _('Edit Permission {{name}}', {name: permission.name}),
+        user_id: undefined,
       };
 
       switch (subject_type) {
@@ -90,7 +98,18 @@ class PermissionsComponent extends React.Component {
       };
     }
     else {
-      state = {};
+      state = {
+        comment: undefined,
+        id: undefined,
+        name: undefined,
+        resource_type: undefined,
+        resource_id: undefined,
+        subject_type: undefined,
+        user_id: undefined,
+        group_id: undefined,
+        role_id: undefined,
+        title: undefined,
+      };
     }
 
     state.fixedResource = fixed;
@@ -130,11 +149,15 @@ class PermissionsComponent extends React.Component {
       groups_promise = Promise.resolve();
     }
 
-    this.permission_dialog.show(state, opts);
+    this.setState({
+      ...state,
+      dialogVisible: true,
+      ...opts,
+    });
 
     users_promise.then(response => {
       const {data: users} = response;
-      this.permission_dialog.setValues({
+      this.setState({
         user_id: select_save_id(users, state.user_id),
         users,
       });
@@ -142,7 +165,7 @@ class PermissionsComponent extends React.Component {
 
     roles_promise.then(response => {
       const {data: roles} = response;
-      this.permission_dialog.setValues({
+      this.setState({
         role_id: select_save_id(roles, state.role_id),
         roles,
       });
@@ -150,11 +173,15 @@ class PermissionsComponent extends React.Component {
 
     groups_promise.then(response => {
       const {data: groups} = response;
-      this.permission_dialog.setValues({
+      this.setState({
         group_id: select_save_id(groups, state.group_id),
         groups,
       });
     });
+  }
+
+  closePermissionDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -171,6 +198,25 @@ class PermissionsComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      dialogVisible,
+      comment,
+      fixedResource,
+      id,
+      group_id,
+      groups,
+      name,
+      permission,
+      resource_id,
+      resource_type,
+      role_id,
+      roles,
+      subject_type,
+      title,
+      user_id,
+      users,
+    } = this.state;
 
     return (
       <EntityComponent
@@ -197,7 +243,23 @@ class PermissionsComponent extends React.Component {
               edit: this.openPermissionDialog,
             })}
             <PermissionDialog
-              ref={ref => this.permission_dialog = ref}
+              comment={comment}
+              fixedResource={fixedResource}
+              group_id={group_id}
+              groups={groups}
+              id={id}
+              name={name}
+              permission={permission}
+              resource_id={resource_id}
+              resource_type={resource_type}
+              role_id={role_id}
+              roles={roles}
+              subject_type={subject_type}
+              title={title}
+              user_id={user_id}
+              users={users}
+              visible={dialogVisible}
+              onClose={this.closePermissionDialog}
               onSave={save}
             />
           </Wrapper>
@@ -225,7 +287,7 @@ PermissionsComponent.propTypes = {
 
 export default compose(
   withGmp,
-  withCapabilties,
+  withCapabilities,
 )(PermissionsComponent);
 
 // vim: set ts=2 sw=2 tw=80:

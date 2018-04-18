@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,25 +24,30 @@
 
 import React from 'react';
 
-import {is_defined, map} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {is_defined, map, shorten} from 'gmp/utils';
 
-import SelectionType from '../../utils/selectiontype.js';
+import PropTypes from '../../utils/proptypes';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import SelectionType from '../../utils/selectiontype';
 
-import EntityComponent from '../../entity/component.js';
+import Wrapper from '../../components/layout/wrapper';
 
-import TargetComponent from '../targets/component.js';
+import EntityComponent from '../../entity/component';
 
-import HostDialog from './dialog.js';
+import TargetComponent from '../targets/component';
+
+import HostDialog from './dialog';
 
 class HostComponent extends React.Component {
 
   constructor(...args) {
     super(...args);
 
+    this.state = {dialogVisible: false};
+
+    this.closeHostDialog = this.closeHostDialog.bind(this);
     this.handleIdentifierDelete = this.handleIdentifierDelete.bind(this);
     this.openHostDialog = this.openHostDialog.bind(this);
     this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
@@ -57,12 +63,21 @@ class HostComponent extends React.Component {
   }
 
   openHostDialog(host) {
-    this.hosts_dialog.show({
+    let title;
+
+    if (is_defined(host)) {
+      title = _('Edit Host {{name}}', {name: shorten(host.name)});
+    }
+
+    this.setState({
+      dialogVisible: true,
       host,
-      id: is_defined(host) ? host.id : undefined,
-      name: is_defined(host) ? host.name : '127.0.0.1',
-      comment: is_defined(host) ? host.comment : '',
+      title,
     });
+  }
+
+  closeHostDialog() {
+    this.setState({dialogVisible: false});
   }
 
   openCreateTargetDialog(host) {
@@ -116,6 +131,13 @@ class HostComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      dialogVisible,
+      host,
+      title,
+    } = this.state;
+
     return (
       <EntityComponent
         name="host"
@@ -144,7 +166,10 @@ class HostComponent extends React.Component {
               createtargetfromhost: this.openCreateTargetDialog,
             })}
             <HostDialog
-              ref={ref => this.hosts_dialog = ref}
+              host={host}
+              title={title}
+              visible={dialogVisible}
+              onClose={this.closeHostDialog}
               onSave={save}
             />
           </Wrapper>

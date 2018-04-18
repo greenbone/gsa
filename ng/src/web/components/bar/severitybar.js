@@ -28,13 +28,18 @@ import {parse_float} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
-  cvss_number_format,
-  result_cvss_risk_factor,
-  N_A,
+  severityFormat,
+} from '../../utils/render.js';
+
+import {
+  resultSeverityRiskFactor,
+  _NA,
   LOG,
   MEDIUM,
   HIGH,
-} from '../../utils/render.js';
+  translateRiskFactor,
+  LOG_VALUE,
+} from '../../utils/severity';
 
 import ProgressBar from './progressbar.js';
 
@@ -45,21 +50,21 @@ const SeverityBar = ({severity}) => {
 
   if (is_defined(severity)) {
     cvss = parse_float(severity);
-    threat = result_cvss_risk_factor(cvss);
-    title = threat;
+    threat = resultSeverityRiskFactor(cvss);
+    title = translateRiskFactor(threat);
   }
   else {
-    title = N_A;
+    title = _NA;
   }
 
   const fill = is_defined(cvss) && cvss > 0 ? cvss * 10 : 0;
 
   let text;
-  if (!is_defined(cvss) || cvss < 0 || isNaN(cvss)) {
+  if (!is_defined(cvss) || cvss < LOG_VALUE) {
     text = title;
   }
   else {
-    text = cvss_number_format(cvss) + ' (' + title + ')';
+    text = severityFormat(cvss) + ' (' + title + ')';
   }
 
   let type;

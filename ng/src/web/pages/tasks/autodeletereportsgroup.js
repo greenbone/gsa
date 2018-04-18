@@ -26,55 +26,56 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
 import Spinner from '../../components/form/spinner.js';
-import Text from '../../components/form/text.js';
 
 import Divider from '../../components/layout/divider.js';
 
 const AutoDeleteReportsGroup = ({
-    autoDelete,
-    autoDeleteData,
-    onChange,
-  }) => {
-  return (
-    <FormGroup title={_('Auto Delete Reports')} flex="column">
+  autoDelete = AUTO_DELETE_KEEP,
+  autoDeleteData,
+  onChange,
+}) => (
+  <FormGroup title={_('Auto Delete Reports')} flex="column">
+    <Radio
+      title={_('Do not automatically delete reports')}
+      name="auto_delete"
+      value={AUTO_DELETE_NO}
+      onChange={onChange}
+      checked={autoDelete !== AUTO_DELETE_KEEP}
+    />
+    <Divider>
       <Radio
-        title={_('Do not automatically delete reports')}
         name="auto_delete"
-        value="no"
+        value="keep"
         onChange={onChange}
-        checked={autoDelete !== 'keep'}/>
-      <Divider>
-        <Radio
-          name="auto_delete"
-          value="keep"
-          onChange={onChange}
-          title={_('Automatically delete oldest reports but always' +
-            ' keep newest')}
-          checked={autoDelete === 'keep'}>
-        </Radio>
-        <Spinner
-          type="int"
-          min="1"
-          name="auto_delete_data"
-          value={autoDeleteData}
-          disabled={autoDelete !== 'keep'}
-          onChange={onChange}/>
-        <Text>
-          {_('reports')}
-        </Text>
-      </Divider>
-    </FormGroup>
-  );
-};
+        title={_('Automatically delete oldest reports but always' +
+          ' keep newest')}
+        checked={autoDelete === AUTO_DELETE_KEEP}
+      />
+      <Spinner
+        type="int"
+        min="1"
+        name="auto_delete_data"
+        value={autoDeleteData}
+        disabled={autoDelete !== AUTO_DELETE_KEEP}
+        onChange={onChange}
+      />
+      <span>
+        {_('reports')}
+      </span>
+    </Divider>
+  </FormGroup>
+);
 
 AutoDeleteReportsGroup.propTypes = {
   autoDelete: PropTypes.oneOf([
-    'keep', 'no',
+    AUTO_DELETE_KEEP, AUTO_DELETE_NO,
   ]),
   autoDeleteData: PropTypes.number,
   onChange: PropTypes.func,

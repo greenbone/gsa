@@ -35,7 +35,7 @@ SOURCE_DIR=$3
 mkdir -p `dirname $POT_FILE`
 
 cd "$SOURCE_BASEDIR" || exit 2
-SOURCES_ABS=`find -L $SOURCE_DIR -name "*.js" -not -path "*/node_modules/*" -not -path "*/build/*"`
+SOURCES_ABS=`find -L $SOURCE_DIR -name "*.js" -not -path "*/node_modules/*" -not -path "*/build/*" -not -path "*/__tests__/*"`
 
 SOURCES=""
 for SOURCE_FILE in $SOURCES_ABS

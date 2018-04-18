@@ -20,11 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log.js';
 
 import {is_defined, is_string} from '../utils/identity';
-import {map} from '../utils/array';
-
-import logger from '../log.js';
+import {map, for_each} from '../utils/array';
 
 import {parse_collection_list} from '../collection/parser.js';
 
@@ -144,6 +143,70 @@ class EntitiesCommand extends HttpCommand {
       deleted = entities.getEntries();
       return this.delete(entities, extra_params);
     }).then(response => response.setData(deleted));
+  }
+
+  transformAggregates(response) {
+    const {aggregate} = response.data.get_aggregate.get_aggregates_response;
+
+    const ret = {
+      ...aggregate,
+    };
+
+    // ensure groups is always an array
+    const {group: groups = []} = aggregate;
+
+    ret.groups = map(groups, group => {
+      const {text} = group;
+
+      const newGroup = {
+        ...group,
+      };
+
+      if (is_defined(text)) {
+        newGroup.text = {};
+
+        for_each(text, t => {
+          const name = t._column;
+          const value = t.__text;
+          newGroup.text[name] = value;
+        });
+      }
+
+      return newGroup;
+    });
+
+    delete ret.group;
+
+    return response.setData(ret);
+  }
+
+  getAggregates({
+    textColumns = [],
+    sort = [],
+    maxGroups,
+    ...params
+  } = {}) {
+
+    const requestParams = {};
+
+    textColumns.forEach((column, i) =>
+      requestParams[`text_columns:${i}`] = column);
+
+    sort.forEach(({field, direction = 'ascending', stat = 'value'}, i) => {
+      requestParams[`sort_fields:${i}`] = field;
+      requestParams[`sort_orders:${i}`] = direction;
+      requestParams[`sort_stats:${i}`] = stat;
+    });
+
+    if (is_defined(maxGroups)) {
+      requestParams.max_groups = maxGroups;
+    }
+
+    return this.httpGet({
+      ...requestParams,
+      ...params,
+      cmd: 'get_aggregate',
+    }).then(this.transformAggregates);
   }
 }
 

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,15 +62,11 @@ const Condition = ({
 
   if (condition.type === CONDITION_TYPE_FILTER_COUNT_CHANGED) {
     const count = parse_int(condition.data.count.value);
-    const direction =
-      condition.data.direction.value === CONDITION_DIRECTION_DECREASED ?
-      'fewer' : 'more';
 
     // FIXME this is not translateable
-    return _('Filter matches at least {{count}} {{direction}} {{result}} ' +
-      'then the previous scan', {
+    return _('Filter matches at least {{count}} more {{result}} ' +
+      'than the previous scan', {
         count,
-        direction,
         result: count > 0 ? 'results' : 'result',
       });
   }

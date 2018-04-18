@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -23,7 +24,10 @@
 
 import React from 'react';
 
+import 'core-js/fn/array/includes';
+
 import _ from 'gmp/locale.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {is_defined, map} from 'gmp/utils';
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -41,8 +45,9 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import FileField from '../../components/form/filefield.js';
@@ -52,6 +57,7 @@ import Radio from '../../components/form/radio.js';
 import Select from '../../components/form/select.js';
 import TextField from '../../components/form/textfield.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
+import {first} from 'gmp/utils/array.js';
 
 const type_names = {
   up: _('Username + Password'),
@@ -68,22 +74,64 @@ class CredentialsDialog extends React.Component {
     this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
-  handleTypeChange(base) {
-    let {autogenerate, onValueChange} = this.props;
+  handleTypeChange(base, autogenerate, onValueChange) {
     if (base !== USERNAME_PASSWORD_CREDENTIAL_TYPE &&
       base !== USERNAME_SSH_KEY_CREDENTIAL_TYPE) {
       // autogenerate is only possible with username+password and username+ssh
-      autogenerate = 0;
+      autogenerate = NO_VALUE;
     }
-
-    if (onValueChange) {
+   if (onValueChange) {
       onValueChange(base, 'base');
       onValueChange(autogenerate, 'autogenerate');
-    }
+   }
   }
 
   render() {
+    let {
+      base,
+    } = this.props;
+
     const {
+      credential,
+      title = _('New Credential'),
+      types = [],
+      visible = true,
+      allow_insecure = NO_VALUE,
+      auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
+      autogenerate = NO_VALUE,
+      change_community = NO_VALUE,
+      change_passphrase = NO_VALUE,
+      change_password = NO_VALUE,
+      change_privacy_password = NO_VALUE,
+      comment = '',
+      community = '',
+      credential_login = '',
+      name = _('Unnamed'),
+      passphrase = '',
+      password = '',
+      privacy_algorithm = SNMP_PRIVACY_ALGORITHM_AES,
+      privacy_password = '',
+      onClose,
+      onSave,
+    } = this.props;
+
+    const typeOptions = map(types, type => ({
+      label: type_names[type],
+      value: type,
+    }));
+
+    const is_edit = is_defined(credential);
+
+    if (!is_defined(base)) {
+      if (types.includes(USERNAME_PASSWORD_CREDENTIAL_TYPE)) {
+        base = USERNAME_PASSWORD_CREDENTIAL_TYPE;
+      }
+      else {
+        base = first(types);
+      }
+    }
+
+    const data = {
       allow_insecure,
       auth_algorithm,
       autogenerate,
@@ -94,227 +142,266 @@ class CredentialsDialog extends React.Component {
       change_privacy_password,
       comment,
       community,
-      credential,
       credential_login,
       name,
       passphrase,
       password,
       privacy_algorithm,
       privacy_password,
-      types,
-      onValueChange,
-    } = this.props;
-
-    const type_opts = map(types, type => {
-      return (
-        <option value={type} key={type}>{type_names[type]}</option>
-      );
-    });
-
-    const is_edit = is_defined(credential);
+      id: is_defined(credential) ? credential.id : undefined,
+    };
 
     return (
-      <Layout flex="column">
+      <SaveDialog
+        visible={visible}
+        title={title}
+        onClose={onClose}
+        onSave={onSave}
+        defaultValues={data}
+      >
+        {({
+          values: state,
+          onValueChange,
+        }) => {
+          return (
+            <Layout flex="column">
 
-        <FormGroup title={_('Name')}>
-          <TextField
-            name="name"
-            grow="1"
-            value={name}
-            size="30"
-            onChange={onValueChange}
-            maxLength="80"/>
-        </FormGroup>
+              <FormGroup title={_('Name')}>
+                <TextField
+                  name="name"
+                  grow="1"
+                  size="30"
+                  maxLength="80"
+                  value={state.name}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup title={_('Comment')}>
-          <TextField
-            name="comment"
-            grow="1"
-            value={comment}
-            size="30"
-            maxLength="400"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup title={_('Comment')}>
+                <TextField
+                  name="comment"
+                  grow="1"
+                  size="30"
+                  maxLength="400"
+                  value={state.comment}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup title={_('Type')}>
-          <Select
-            onChange={this.handleTypeChange}
-            disabled={is_edit}
-            value={base}>
-            {type_opts}
-          </Select>
-        </FormGroup>
+              <FormGroup title={_('Type')}>
+                <Select
+                  disabled={is_edit}
+                  items={typeOptions}
+                  value={state.base}
+                  onChange={value => this.handleTypeChange(
+                    value, state.autogenerate, onValueChange)}
+                />
+              </FormGroup>
 
-        <FormGroup title={_('Allow insecure use')}>
-          <YesNoRadio
-            name="allow_insecure"
-            value={allow_insecure}
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup title={_('Allow insecure use')}>
+                <YesNoRadio
+                  name="allow_insecure"
+                  value={state.allow_insecure}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Auto-generate')}
-          condition={(base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-            base === USERNAME_SSH_KEY_CREDENTIAL_TYPE) && !is_edit}>
-          <YesNoRadio
-            name="autogenerate"
-            value={autogenerate}
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('Auto-generate')}
+                condition={(state.base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+                  state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE) && !is_edit}
+              >
+                <YesNoRadio
+                  name="autogenerate"
+                  value={state.autogenerate}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('SNMP Community')}
-          condition={base === SNMP_CREDENTIAL_TYPE}>
-          {is_edit &&
-            <Checkbox
-              name="change_community"
-              checked={change_community === '1'}
-              checkedValue="1"
-              unCheckedValue="0"
-              title={_('Replace existing SNMP community with')}
-              onChange={onValueChange}/>
-          }
-          <PasswordField
-            name="community"
-            value={community}
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('SNMP Community')}
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
+                {is_edit &&
+                  <Checkbox
+                    name="change_community"
+                    checked={state.change_community === YES_VALUE}
+                    checkedValue={YES_VALUE}
+                    unCheckedValue={NO_VALUE}
+                    title={_('Replace existing SNMP community with')}
+                    onChange={onValueChange}
+                  />
+                }
+                <PasswordField
+                  name="community"
+                  value={state.community}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Username')}
-          flex
-          condition={
-            base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-            base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-            base === SNMP_CREDENTIAL_TYPE
-          }>
-          <TextField
-            name="credential_login"
-            value={credential_login}
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('Username')}
+                flex
+                condition={
+                  state.base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+                  state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+                  state.base === SNMP_CREDENTIAL_TYPE
+                }
+              >
+                <TextField
+                  name="credential_login"
+                  value={state.credential_login}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Password')}
-          condition={base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-              base === SNMP_CREDENTIAL_TYPE}>
-          <Divider>
-            {is_edit &&
-              <Checkbox
-                name="change_password"
-                checked={change_password === '1'}
-                checkedValue="1"
-                unCheckedValue="0"
-                title={_('Replace existing password with')}
-                onChange={onValueChange}/>
-            }
-            <PasswordField
-              name="password"
-              value={password}
-              autoComplete="new-password"
-              disabled={autogenerate === 1}
-              onChange={onValueChange}/>
-          </Divider>
-        </FormGroup>
+              <FormGroup
+                title={_('Password')}
+                condition={state.base === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+                    state.base === SNMP_CREDENTIAL_TYPE}
+              >
+                <Divider>
+                  {is_edit &&
+                    <Checkbox
+                      name="change_password"
+                      checked={state.change_password === YES_VALUE}
+                      checkedValue={YES_VALUE}
+                      unCheckedValue={NO_VALUE}
+                      title={_('Replace existing password with')}
+                      onChange={onValueChange}
+                    />
+                  }
+                  <PasswordField
+                    name="password"
+                    autoComplete="new-password"
+                    disabled={state.autogenerate === YES_VALUE}
+                    value={state.password}
+                    onChange={onValueChange}
+                  />
+                </Divider>
+              </FormGroup>
 
-        <FormGroup
-          title={_('Passphrase')}
-          condition={base === USERNAME_SSH_KEY_CREDENTIAL_TYPE}>
-          {is_edit &&
-            <Checkbox
-              name="change_passphrase"
-              checked={change_passphrase === '1'}
-              checkedValue="1"
-              unCheckedValue="0"
-              title={_('Replace existing passphrase with')}
-              onChange={onValueChange}/>
-          }
-          <PasswordField
-            name="passphrase"
-            value={passphrase}
-            autoComplete="new-password"
-            disabled={autogenerate === 1}
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('Passphrase')}
+                condition={state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE}
+              >
+                {is_edit &&
+                  <Checkbox
+                    name="change_passphrase"
+                    checked={state.change_passphrase === YES_VALUE}
+                    checkedValue={YES_VALUE}
+                    unCheckedValue={NO_VALUE}
+                    title={_('Replace existing passphrase with')}
+                    onChange={onValueChange}
+                  />
+                }
+                <PasswordField
+                  name="passphrase"
+                  autoComplete="new-password"
+                  disabled={state.autogenerate === YES_VALUE}
+                  value={state.passphrase}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Privacy Password')}
-          condition={base === SNMP_CREDENTIAL_TYPE}>
-          {is_edit &&
-            <Checkbox
-              name="change_privacy_password"
-              checked={change_privacy_password === '1'}
-              checkedValue="1"
-              unCheckedValue="0"
-              title={_('Replace existing privacy password with')}
-              onChange={onValueChange}/>
-          }
-          <PasswordField
-            name="privacy_password"
-            autoComplete="new-password"
-            value={privacy_password}
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('Privacy Password')}
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
+                {is_edit &&
+                  <Checkbox
+                    name="change_privacy_password"
+                    checked={state.change_privacy_password === YES_VALUE}
+                    checkedValue={YES_VALUE}
+                    unCheckedValue={NO_VALUE}
+                    title={_('Replace existing privacy password with')}
+                    onChange={onValueChange}
+                  />
+                }
+                <PasswordField
+                  name="privacy_password"
+                  autoComplete="new-password"
+                  value={state.privacy_password}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Certificate')}
-          condition={base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE}>
-          <FileField
-            name="certificate"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('Certificate')}
+                condition={state.base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE}
+              >
+                <FileField
+                  name="certificate"
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Private Key')}
-          condition={
-            base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-            base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE
-          }>
-          <FileField
-            name="private_key"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('Private Key')}
+                condition={
+                  state.base === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+                  state.base === CLIENT_CERTIFICATE_CREDENTIAL_TYPE
+                }
+              >
+                <FileField
+                  name="private_key"
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Auth Algorithm')}
-          condition={base === SNMP_CREDENTIAL_TYPE}>
-          <Radio
-            value={SNMP_AUTH_ALGORITHM_MD5}
-            title="MD5"
-            checked={auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
-            name="auth_algorithm"
-            onChange={onValueChange}/>
-          <Radio
-            value={SNMP_AUTH_ALGORITHM_SHA1}
-            title="SHA1"
-            checked={auth_algorithm === SNMP_AUTH_ALGORITHM_SHA1}
-            name="auth_algorithm"
-            onChange={onValueChange}/>
-        </FormGroup>
+              <FormGroup
+                title={_('Auth Algorithm')}
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
+                <Radio
+                  title="MD5"
+                  checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
+                  name="auth_algorithm"
+                  value={SNMP_AUTH_ALGORITHM_MD5}
+                  onChange={onValueChange}
+                />
+                <Radio
+                  title="SHA1"
+                  checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_SHA1}
+                  name="auth_algorithm"
+                  value={SNMP_AUTH_ALGORITHM_SHA1}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-        <FormGroup
-          title={_('Privacy Algorithm')}
-          condition={base === SNMP_CREDENTIAL_TYPE}>
-          <Radio
-            value={SNMP_PRIVACY_ALGORITHM_AES}
-            title="AES"
-            checked={privacy_algorithm === SNMP_PRIVACY_ALGORITHM_AES}
-            name="privacy_algorithm"
-            onChange={onValueChange}/>
-          <Radio
-            value={SNMP_PRIVACY_ALGORITHM_DES}
-            title="DES"
-            checked={privacy_algorithm === SNMP_PRIVACY_ALGORITHM_DES}
-            name="privacy_algorithm"
-            onChange={onValueChange}/>
-          <Radio
-            value={SNMP_PRIVACY_ALOGRITHM_NONE}
-            title={_('None')}
-            checked={privacy_algorithm === SNMP_PRIVACY_ALOGRITHM_NONE}
-            name="privacy_algorithm"
-            onChange={onValueChange}/>
-        </FormGroup>
-      </Layout>
+              <FormGroup
+                title={_('Privacy Algorithm')}
+                condition={state.base === SNMP_CREDENTIAL_TYPE}
+              >
+                <Radio
+                  title="AES"
+                  checked={
+                    state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_AES}
+                  name="privacy_algorithm"
+                  value={SNMP_PRIVACY_ALGORITHM_AES}
+                  onChange={onValueChange}
+                />
+                <Radio
+                  title="DES"
+                  checked={
+                    state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_DES}
+                  name="privacy_algorithm"
+                  value={SNMP_PRIVACY_ALGORITHM_DES}
+                  onChange={onValueChange}
+                />
+                <Radio
+                  title={_('None')}
+                  checked={
+                    state.privacy_algorithm === SNMP_PRIVACY_ALOGRITHM_NONE}
+                  name="privacy_algorithm"
+                  value={SNMP_PRIVACY_ALOGRITHM_NONE}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            </Layout>
+          );
+        }}
+      </SaveDialog>
     );
   }
 }
@@ -334,6 +421,7 @@ CredentialsDialog.propTypes = {
   ]),
   autogenerate: PropTypes.yesno,
   base: pwtypes,
+  capabilities: PropTypes.capabilities.isRequired,
   change_community: PropTypes.yesno,
   change_passphrase: PropTypes.yesno,
   change_password: PropTypes.yesno,
@@ -351,37 +439,15 @@ CredentialsDialog.propTypes = {
     SNMP_PRIVACY_ALOGRITHM_NONE,
   ]),
   privacy_password: PropTypes.string,
+  title: PropTypes.string,
   types: PropTypes.arrayOf(
     pwtypes
   ),
-  onValueChange: PropTypes.func,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
-CredentialsDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withDialog({
-  title: _('New Credential'),
-  footer: _('Save'),
-  defaultState: {
-    allow_insecure: 0,
-    auth_algorithm: SNMP_AUTH_ALGORITHM_SHA1,
-    autogenerate: 0,
-    base: USERNAME_PASSWORD_CREDENTIAL_TYPE,
-    change_community: '0',
-    change_passphrase: '0',
-    change_password: '0',
-    change_privacy_password: '0',
-    comment: '',
-    community: '',
-    credential_login: '',
-    name: _('Unnamed'),
-    passphrase: '',
-    password: '',
-    privacy_algorithm: SNMP_PRIVACY_ALGORITHM_AES,
-    privacy_password: '',
-  },
-})(CredentialsDialog);
+export default withCapabilities(CredentialsDialog);
 
 // vim: set ts=2 sw=2 tw=80:

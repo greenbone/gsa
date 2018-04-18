@@ -37,17 +37,17 @@ import TextField from '../../components/form/textfield.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
+const DEFAULTS = {name: _('Unnamed')};
+
 const AgentDialog = ({
     agent,
     title = _('New Agent'),
-    visible,
+    visible = true,
     onClose,
     onSave,
   }) => {
 
   const is_edit = is_defined(agent);
-
-  const defaults = {name: _('Unnamed')};
 
   return (
     <SaveDialog
@@ -55,10 +55,10 @@ const AgentDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{...defaults, ...agent}}
+      defaultValues={{...DEFAULTS, ...agent}}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
 
@@ -72,7 +72,8 @@ const AgentDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -91,7 +92,7 @@ const AgentDialog = ({
                 <FileField
                   name="installer"
                   onChange={onValueChange}
-              />
+                />
               </FormGroup>
             }
 

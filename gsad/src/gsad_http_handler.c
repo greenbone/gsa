@@ -30,7 +30,7 @@
 #include "gsad_http_handler.h"
 #include "gsad_gmp.h" /* for get_system_report_gmp */
 #include "validator.h" /* for openvas_validate */
-#include "xslt_i18n.h" /* for accept_language_to_env_fmt */
+#include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h" /* for get_guest_usernmae */
 #include "gsad_base.h" /* for ctime_r_strip_newline */
 
@@ -806,7 +806,7 @@ init_http_handlers()
   anon_url_handlers = url_handler_new ("^/$", handle_redirect_to_login_page);
 
 #ifdef SERVE_STATIC_ASSETS
-  url_handler_add (anon_url_handlers, "^/(img|js|css)/.+$",
+  url_handler_add (anon_url_handlers, "^/(img|js|css|locales)/.+$",
                    handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/robots.txt$",
                    handle_static_file);

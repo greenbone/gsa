@@ -298,6 +298,45 @@ class TasksCommand extends EntitiesCommand {
   getEntitiesResponse(root) {
     return root.get_tasks.get_tasks_response;
   }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'task',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getStatusAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'task',
+      group_column: 'status',
+      filter,
+    });
+  }
+
+  getHighResultsAggregates({filter, max} = {}) {
+    return this.getAggregates({
+      filter,
+      aggregate_type: 'task',
+      group_column: 'uuid',
+      textColumns: [
+        'name',
+        'high_per_host',
+        'severity',
+        'modified',
+      ],
+      sort: [{
+        field: 'high_per_host',
+        direction: 'descending',
+        stat: 'max',
+      }, {
+        field: 'modified',
+        direction: 'descending',
+      }],
+      maxGroups: max,
+    });
+  }
 }
 
 register_command('task', TaskCommand);

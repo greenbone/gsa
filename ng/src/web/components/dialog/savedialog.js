@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,15 @@ class SaveDialogContent extends React.Component {
     this.handleErrorClose = this.handleErrorClose.bind(this);
   }
 
+  componentWillReceiveProps(next) {
+    const {externalError} = next;
+    if (is_defined(externalError)) {
+      const {onExternalErrorSet} = this.props;
+      this.setError(externalError);
+      onExternalErrorSet();
+    }
+  }
+
   handleSaveClick(state) {
     const {onSave} = this.props;
 
@@ -92,69 +101,85 @@ class SaveDialogContent extends React.Component {
 
   render() {
     const {
+      buttonTitle,
       children,
-      initialData = {},
+      defaultValues,
       moveProps,
       heightProps,
       title,
+      values,
     } = this.props;
     const {
       error,
     } = this.state;
     return (
-      <State {...initialData}>
+      <State {...defaultValues}>
         {({
           state,
           onValueChange,
-        }) => (
-          <DialogContent>
-            <DialogTitle
-              title={title}
-              onCloseClick={this.handleClose}
-              {...moveProps}
-            />
-            {error &&
-              <DialogError
-                error={error}
-                onCloseClick={this.handleErrorClose}
+        }) => {
+          const childValues = {...state, ...values};
+          return (
+            <DialogContent>
+              <DialogTitle
+                title={title}
+                onCloseClick={this.handleClose}
+                {...moveProps}
               />
-            }
-            <ScrollableContent
-              {...heightProps}
-            >
-              {children({
-                data: state,
-                onValueChange,
-              })}
-            </ScrollableContent>
-            <DialogFooter
-              title={_('Save')}
-              loading={this.state.loading}
-              onClick={() => this.handleSaveClick(state)}
-            />
-          </DialogContent>
-        )}
+              {error &&
+                <DialogError
+                  error={error}
+                  onCloseClick={this.handleErrorClose}
+                />
+              }
+              <ScrollableContent
+                {...heightProps}
+              >
+                {children({
+                  data: state, // TODO should be removed in future. savedialogs should switch to use values
+                  values: childValues,
+                  onValueChange,
+                })}
+              </ScrollableContent>
+              <DialogFooter
+                title={buttonTitle}
+                loading={this.state.loading}
+                onClick={() => this.handleSaveClick(childValues)}
+              />
+            </DialogContent>
+          );
+         }}
       </State>
     );
   }
 }
 
 SaveDialogContent.propTypes = {
+  buttonTitle: PropTypes.string,
   close: PropTypes.func.isRequired,
+  defaultValues: PropTypes.object,
+  externalError: PropTypes.object,
   heightProps: PropTypes.object,
-  initialData: PropTypes.object,
   moveProps: PropTypes.object,
   title: PropTypes.string.isRequired,
+  values: PropTypes.object,
+  onExternalErrorSet: PropTypes.func,
   onSave: PropTypes.func.isRequired,
+  onValueChange: PropTypes.func,
 };
 
 const SaveDialog = ({
+  buttonTitle = _('Save'),
   children,
-  width,
+  initialData,
+  defaultValues = initialData,
+  externalError,
   title,
   visible,
-  initialData,
+  values,
+  width,
   onClose,
+  onExternalErrorSet,
   onSave,
 }) => {
   return (
@@ -169,11 +194,15 @@ const SaveDialog = ({
         heightProps,
       }) => (
         <SaveDialogContent
+          buttonTitle={buttonTitle}
           close={close}
-          initialData={initialData}
+          defaultValues={defaultValues}
+          externalError={externalError}
           moveProps={moveProps}
           heightProps={heightProps}
           title={title}
+          values={values}
+          onErrorSent={onExternalErrorSet}
           onSave={onSave}
         >
           {children}
@@ -184,11 +213,16 @@ const SaveDialog = ({
 };
 
 SaveDialog.propTypes = {
-  initialData: PropTypes.object,
+  buttonTitle: PropTypes.string,
+  defaultValues: PropTypes.object, // default values for uncontrolled values
+  externalError: PropTypes.object, // for errors from outside SaveDialog
+  initialData: PropTypes.object, // should not be used anymore. use defaultValues instead.
   title: PropTypes.string.isRequired,
+  values: PropTypes.object, // should be used for controlled values
   visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  onExternalErrorSet: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 

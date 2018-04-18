@@ -27,7 +27,9 @@ import d3tip from 'd3-tip';
 import _ from 'gmp/locale.js';
 import {is_defined, is_date} from 'gmp/utils';
 
-import {get_severity_levels} from '../../../../utils/render.js';
+import {
+  getSeverityLevelsOld as getSeverityLevels,
+} from '../../../../utils/severity';
 
 import {
   array_sum,
@@ -81,7 +83,7 @@ class BarChartGenerator extends AggregateChartGenerator {
   evaluateParams(gen_params) {
     super.evaluateParams(gen_params);
 
-    const severity_levels = get_severity_levels();
+    const severity_levels = getSeverityLevels();
 
     if (gen_params.chart_template === 'info_by_cvss' ||
       gen_params.chart_template === 'recent_info_by_cvss') {

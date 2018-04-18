@@ -2,7 +2,7 @@ INSTALLATION INSTRUCTIONS FOR GREENBONE SECURITY ASSISTANT
 ==========================================================
 
 Please note: The reference system used by most of the developers is Debian
-GNU/Linux 'Jessie' 8. The build might fail on any other system. Also it is
+GNU/Linux 'Stretch' 9. The build might fail on any other system. Also it is
 necessary to install dependent development packages.
 
 
@@ -186,12 +186,20 @@ The value of "level" can be
      64  Information.
     128  Debug.  (Lots of output.)
 
-Enabling any level includes all the levels above it.  So enabling Information
+Enabling any level includes all the levels above it. So enabling Information
 will include Warnings, Critical situations and Errors.
 
 To get absolutely all logging, set the level to 128 for all domains in the
 configuration file.
 
+Logging to "syslog" can be enabled in each domain like:
+
+    [gsad main]
+    prepend=%t %p
+    prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
+    file=syslog
+    syslog_facility=daemon
+    level=128
 
 Setting up translations
 -----------------------

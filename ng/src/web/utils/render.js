@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import d3 from 'd3';
+import {format} from 'd3-format';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
@@ -32,15 +32,6 @@ import {is_defined, is_empty, map, shorten, split} from 'gmp/utils';
 import Wrapper from '../components/layout/wrapper.js';
 
 const log = logger.getLogger('web.render');
-
-export const LOG = _('Log');
-export const LOW = _('Low');
-export const MEDIUM = _('Medium');
-export const HIGH = _('High');
-export const NONE = _('None');
-export const FALSE_POSITIVE = _('False Positive');
-export const ERROR = _('Error');
-export const DEBUG = _('Debug');
 
 export const N_A = _('N/A');
 
@@ -93,115 +84,20 @@ export const render_select_items = (
   return is_defined(items) ? [default_item, ...items] : [default_item];
 };
 
-export const cvss_number_format = d3.format('0.1f');
+export const severityFormat = format('0.1f');
 
-export function cvss_risk_factor(score, type) {
-  if (type === 'classic') {
-    if (score === 0) {
-      return LOG;
-    }
-    if (score > 0 && score <= 2) {
-      return LOW;
-    }
-    if (score > 2 && score <= 5) {
-      return MEDIUM;
-    }
-    if (score > 5 && score <= 10) {
-      return HIGH;
-    }
-    return NONE;
-  }
-  if (type === 'pci-dss') {
-    if (score === 0 && score < 4) {
-      return LOG;
-    }
-    else if (score >= 4) {
-      return HIGH;
-    }
-    return NONE;
-  }
-
-  if (score === 0) {
-    return LOG;
-  }
-  else if (score > 0 && score < 4) {
-    return LOW;
-  }
-  else if (score >= 4 && score < 7) {
-    return MEDIUM;
-  }
-  else if (score >= 7 && score <= 10) {
-    return HIGH;
-  }
-  return NONE;
-}
-
-export function result_cvss_risk_factor(score) {
-  if (score > 0) {
-    return cvss_risk_factor(score);
-  }
-  if (score === 0) {
-    return LOG;
-  }
-  if (score === -1) {
-    return FALSE_POSITIVE;
-  }
-  if (score === -2) {
-    return DEBUG;
-  }
-  if (score === -3) {
-    return ERROR;
-  }
-  return N_A;
-}
-
-export function get_severity_levels(type) {
-  if (type === 'classic') {
-    return {
-      max_high: 10.0,
-      min_high: 5.1,
-      max_medium: 5.0,
-      min_medium: 2.1,
-      max_low: 2.0,
-      min_low: 0.1,
-      max_log: 0.0,
-    };
-  }
-  if (type === 'pci-dss') {
-    return {
-      max_high: 10.0,
-      min_high: 4.0,
-      max_medium: 3.9,
-      min_medium: 3.9,
-      max_low: 3.9,
-      min_low: 3.9,
-      max_log: 3.9,
-    };
-  }
-
-  return {
-    max_high: 10.0,
-    min_high: 7.0,
-    max_medium: 6.9,
-    min_medium: 4.0,
-    max_low: 3.9,
-    min_low: 0.1,
-    max_log: 0.0,
-  };
-}
-
-export function render_nvt_name(nvt, length = 70) {
-  if (!is_defined(nvt) || !is_defined(nvt.name)) {
+export function render_nvt_name(oid, name, length = 70) {
+  if (!is_defined(name)) {
     return '';
   }
 
-  if (nvt.name.length < length) {
-    return nvt.name;
+  if (name.length < length) {
+    return name;
   }
 
   return (
-    <abbr title={nvt.name + ' (' + nvt.oid + ')'}>
-      {shorten(nvt.name, length)}
+    <abbr title={name + ' (' + oid + ')'}>
+      {shorten(name, length)}
     </abbr>
   );
 }

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,45 +39,58 @@ class UserComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      dialogVisible: false,
+    };
+
+    this.closeUserDialog = this.closeUserDialog.bind(this);
     this.openUserDialog = this.openUserDialog.bind(this);
   }
 
   openUserDialog(user) {
     const {gmp} = this.context;
 
+    gmp.groups.getAll({
+      filter: 'permission=modify_group', //  list only groups current user may modify
+    }).then(resp =>
+      this.setState({groups: resp.data}));
+
+    gmp.roles.getAll()
+      .then(resp => this.setState({roles: resp.data}));
+
     gmp.user.currentAuthSettings().then(response => {
       if (is_defined(user)) {
         const group_ids = user.groups.map(group => group.id);
         const role_ids = user.roles.map(role => role.id);
 
-        this.user_dialog.show({
-          id: user.id,
-          name: user.name,
-          old_name: user.name,
-          auth_method: user.auth_method,
+        this.setState({
+          dialogVisible: true,
           access_hosts: user.hosts.addresses,
           access_ifaces: user.ifaces.addresses,
-          comment: user.comment,
           group_ids: group_ids,
           hosts_allow: user.hosts.allow,
           ifaces_allow: user.ifaces.allow,
+          old_name: user.name,
           role_ids: role_ids,
           settings: response.data,
-        }, {
           title: _('Edit User {{name}}', user),
+          user,
         });
       }
       else {
-        this.user_dialog.show({settings: response.data});
+        this.setState({
+          comment: undefined,
+          dialogVisible: true,
+          settings: response.data,
+          title: undefined,
+          user: undefined,
+        });
       }
-
-      gmp.groups.getAll({
-        filter: 'permission=modify_group', //  list only groups current user may modify
-      }).then(resp =>
-        this.user_dialog.setValue('groups', resp.data));
-      gmp.roles.getAll()
-        .then(resp => this.user_dialog.setValue('roles', resp.data));
     });
+  }
+
+  closeUserDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -93,6 +107,23 @@ class UserComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
+
+    const {
+      access_hosts,
+      access_ifaces,
+      dialogVisible,
+      group_ids,
+      groups,
+      hosts_allow,
+      ifaces_allow,
+      old_name,
+      role_ids,
+      roles,
+      settings,
+      title,
+      user,
+    } = this.state;
+
     return (
       <EntityComponent
         name="user"
@@ -117,10 +148,24 @@ class UserComponent extends React.Component {
               create: this.openUserDialog,
               edit: this.openUserDialog,
             })}
-            <UserDialog
-              ref={ref => this.user_dialog = ref}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <UserDialog
+                access_hosts={access_hosts}
+                access_ifaces={access_ifaces}
+                group_ids={group_ids}
+                groups={groups}
+                hosts_allow={hosts_allow}
+                ifaces_allow={ifaces_allow}
+                old_name={old_name}
+                role_ids={role_ids}
+                roles={roles}
+                settings={settings}
+                title={title}
+                user={user}
+                onClose={this.closeUserDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

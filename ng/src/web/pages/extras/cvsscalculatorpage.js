@@ -57,6 +57,7 @@ const ToolBarIcons = () => (
   <ManualIcon
     page="vulnerabilitymanagement"
     anchor="cvss"
+    size="medium"
     title={_('Help: CVSS Base Score Calculator')}
   />
 );

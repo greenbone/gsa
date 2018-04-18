@@ -26,9 +26,11 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {NO_VALUE} from 'gmp/parser';
+
 import PropTypes from '../../utils/proptypes.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import Select from '../../components/form/select.js';
 import Spinner from '../../components/form/spinner.js';
@@ -41,115 +43,164 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 const TimeUnitSelect = props => {
+  const unitOptions = [
+    {value: 'hour', label: _('hour(s)')},
+    {value: 'day', label: _('day(s)')},
+    {value: 'week', label: _('week(s)')},
+    {value: 'month', label: _('month(s)')},
+  ];
   return (
-    <Select {...props} defaultValue="hour">
-      <option value="hour">{_('hour(s)')}</option>
-      <option value="day">{_('day(s)')}</option>
-      <option value="week">{_('week(s)')}</option>
-      <option value="month">{_('month(s)')}</option>
-    </Select>
+    <Select
+      {...props}
+      items={unitOptions}
+    />
   );
 };
 
 const ScheduleDialog = ({
+  comment = '',
+  date,
+  duration = NO_VALUE,
+  duration_unit = 'hour',
+  hour,
+  id,
+  minute,
+  name = _('Unnamed'),
+  period = NO_VALUE,
+  period_unit = 'hour',
+  timezone = 'UTC',
+  title = _('New Schedule'),
+  visible = true,
+  onClose,
+  onSave,
+}) => {
+
+  const data = {
     comment,
     date,
     duration,
     duration_unit,
     hour,
+    id,
     minute,
     name,
     period,
     period_unit,
     timezone,
-    onValueChange,
-  }) => {
+  };
+
   return (
-    <Layout flex="column">
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      defaultValues={data}
+    >
+      {({
+        values: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
 
-      <FormGroup title={_('Name')}>
-        <TextField
-          name="name"
-          grow="1"
-          value={name}
-          size="30"
-          onChange={onValueChange}
-          maxLength="80"/>
-      </FormGroup>
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"
+              />
+            </FormGroup>
 
-      <FormGroup title={_('Comment')}>
-        <TextField
-          name="comment"
-          value={comment}
-          grow="1"
-          size="30" maxLength="400"
-          onChange={onValueChange}/>
-      </FormGroup>
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-      <FormGroup title={_('First Time')}>
-        <DatePicker
-          name="date"
-          value={date}
-          onChange={onValueChange}/>
-        <Divider>
-          <Spinner
-            name="hour"
-            type="int"
-            min="0"
-            max="23"
-            size="2"
-            value={hour}
-            onChange={onValueChange}/> h
-          <Spinner
-            name="minute"
-            type="int"
-            min="0"
-            max="59"
-            size="2"
-            value={minute}
-            onChange={onValueChange}/> m
-        </Divider>
-      </FormGroup>
+            <FormGroup title={_('First Time')}>
+              <DatePicker
+                name="date"
+                value={state.date}
+                onChange={onValueChange}
+              />
+              <Divider>
+                <Spinner
+                  name="hour"
+                  type="int"
+                  min="0"
+                  max="23"
+                  size="2"
+                  value={state.hour}
+                  onChange={onValueChange}
+                /> h
+                <Spinner
+                  name="minute"
+                  type="int"
+                  min="0"
+                  max="59"
+                  size="2"
+                  value={state.minute}
+                  onChange={onValueChange}
+                /> m
+              </Divider>
+            </FormGroup>
 
-      <FormGroup title={_('Timezone')}>
-        <TimeZoneSelect
-          name="timezone"
-          value={timezone}
-          onChange={onValueChange}/>
-      </FormGroup>
+            <FormGroup title={_('Timezone')}>
+              <TimeZoneSelect
+                name="timezone"
+                value={state.timezone}
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-      <FormGroup title={_('Period')}>
-        <Divider>
-          <Spinner
-            name="period"
-            type="int"
-            min="0"
-            size="3"
-            value={period}
-            onChange={onValueChange}/>
-          <TimeUnitSelect
-            name="period_unit"
-            value={period_unit}
-            onChange={onValueChange}/>
-        </Divider>
-      </FormGroup>
+            <FormGroup title={_('Period')}>
+              <Divider>
+                <Spinner
+                  name="period"
+                  type="int"
+                  min="0"
+                  size="3"
+                  value={state.period}
+                  onChange={onValueChange}
+                />
+                <TimeUnitSelect
+                  name="period_unit"
+                  value={state.period_unit}
+                  onChange={onValueChange}
+                />
+              </Divider>
+            </FormGroup>
 
-      <FormGroup title={_('Duration')}>
-        <Divider>
-          <Spinner
-            name="duration"
-            type="int"
-            min="0"
-            size="3"
-            value={duration}
-            onChange={onValueChange}/>
-          <TimeUnitSelect
-            name="duration_unit"
-            value={duration_unit}
-            onChange={onValueChange}/>
-        </Divider>
-      </FormGroup>
-    </Layout>
+            <FormGroup title={_('Duration')}>
+              <Divider>
+                <Spinner
+                  name="duration"
+                  type="int"
+                  min="0"
+                  size="3"
+                  value={state.duration}
+                  onChange={onValueChange}
+                />
+                <TimeUnitSelect
+                  name="duration_unit"
+                  value={state.duration_unit}
+                  onChange={onValueChange}
+                />
+              </Divider>
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
   );
 };
 
@@ -163,27 +214,19 @@ ScheduleDialog.propTypes = {
   duration: PropTypes.number,
   duration_unit: PropTypes.timeunit,
   hour: PropTypes.number,
+  id: PropTypes.string,
   minute: PropTypes.number,
   name: PropTypes.string,
   period: PropTypes.number,
   period_unit: PropTypes.timeunit,
+  schedule: PropTypes.model,
   timezone: PropTypes.string,
-  onValueChange: PropTypes.func,
+  title: PropTypes.string,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
-
-export default withDialog({
-  title: _('New Schedule'),
-  footer: _('Save'),
-  defaultState: {
-    comment: '',
-    duration: 0,
-    duration_unit: 'hour',
-    name: _('Unnamed'),
-    period: 0,
-    period_unit: 'hour',
-    timezone: 'UTC',
-  },
-})(ScheduleDialog);
+export default ScheduleDialog;
 
 // vim: set ts=2 sw=2 tw=80:
