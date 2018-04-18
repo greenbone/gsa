@@ -40,17 +40,19 @@ export const DASHBOARD_SETTINGS_SAVING_REQUEST =
 export const DASHBOARD_SETTINGS_RESET_DEFAULTS =
   'DASHBOARD_SETTINGS_RESET_DEFAULTS';
 
-const settingsV1toDashboardItems = settings => {
-  const content = {};
+const settingsV1toDashboardSettings = settings => {
+  const items = {};
   Object.entries(settings).forEach(([id, value]) => {
     const {data: rows} = value;
-    content[id] = rows.map(({height, data: items}) =>
-      createRow(items.map(item => createItem({name: item.name})), height));
+    items[id] = rows.map(({height, data}) =>
+      createRow(data.map(item => createItem({name: item.name})), height));
   });
-  return content;
+  return {
+    items,
+  };
 };
 
-const dashboardItems2SettingsV1 = items => ({
+const dashboardSettings2SettingsV1 = ({items}) => ({
   version: 1,
   data: items.map(({height, items: rowItems}) => ({
     height,
@@ -62,10 +64,10 @@ const dashboardItems2SettingsV1 = items => ({
   })),
 });
 
-export const receivedDashboardSettings = (id, data, defaults) => ({
+export const receivedDashboardSettings = (id, settings, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
-  items: data,
   id,
+  settings,
   defaults,
 });
 
@@ -117,7 +119,7 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
   const promise = gmp.user.currentDashboardSettings();
   return promise.then(
     response => dispatch(receivedDashboardSettings(id,
-      settingsV1toDashboardItems(response.data), defaults)),
+      settingsV1toDashboardSettings(response.data), defaults)),
     error => dispatch(receivedDashboardSettingsLoadingError(error)),
   );
 };
@@ -127,9 +129,9 @@ export const saveSettings = ({gmp}) => (id, {items}) =>
 
   dispatch(saveDashboardSettings(id, {items}));
 
-  const settings = dashboardItems2SettingsV1(items);
+  const settingsV1 = dashboardSettings2SettingsV1(items);
 
-  return gmp.user.saveDashboardSetting({id, settings})
+  return gmp.user.saveDashboardSetting({id, settingsV1})
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),

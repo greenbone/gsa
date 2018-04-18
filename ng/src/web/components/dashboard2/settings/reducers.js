@@ -56,7 +56,7 @@ const items = (state = null, action) => {
       return {
         ...state,
         [id]: actionDefaults.items,
-        ...action.items,
+        ...settings.items,
       };
     case DASHBOARD_SETTINGS_SAVING_REQUEST:
       return {

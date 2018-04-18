@@ -109,38 +109,45 @@ describe('dashboard settings reducers tests for loading success', () => {
 
   test('should handle receive dashboard settings', () => {
     const id = 'a1';
-    const data = {
+    const items = {
       a1: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(id, data);
+    const settings = {
+      items,
+    };
+
+    const action = receivedDashboardSettings(id, settings);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
-      items: data,
+      items,
       defaults: {},
     });
   });
 
   test('should reset isLoading and error in received dashboard settings', () => {
     const id = 'a1';
-    const data = {
+    const items = {
       a1: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
+    const settings = {
+      items,
+    };
 
-    const action = receivedDashboardSettings(id, data);
+    const action = receivedDashboardSettings(id, settings);
 
     expect(dashboardSettings({
       isLoading: true,
       error: 'an previous error',
     }, action)).toEqual({
-      items: data,
+      items,
       isLoading: false,
       error: null,
       defaults: {},
@@ -155,20 +162,26 @@ describe('dashboard settings reducers tests for loading success', () => {
       }],
     };
 
-    const data = {
+    const items = {
       a1: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(id, data, defaults);
+    const settings = {
+      items,
+    };
+
+    const action = receivedDashboardSettings(id, settings, defaults);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
       defaults: {},
       items: {
-        [id]: defaults.items,
+        [id]: [{
+          items: ['abc', 'def'],
+        }],
         a1: [{
           height: 100,
           items: ['foo', 'bar'],
@@ -185,18 +198,22 @@ describe('dashboard settings reducers tests for loading success', () => {
       }],
     };
 
-    const data = {
+    const items = {
       [id]: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(id, data, defaults);
+    const settings = {
+      items,
+    };
+
+    const action = receivedDashboardSettings(id, settings, defaults);
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
       error: null,
-      items: data,
+      items,
       defaults: {},
     });
   });
@@ -211,13 +228,17 @@ describe('dashboard settings reducers tests for loading success', () => {
       },
     };
 
-    const data = {
+    const items = {
       [id]: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(id, data);
+    const settings = {
+      items,
+    };
+
+    const action = receivedDashboardSettings(id, settings);
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
@@ -248,18 +269,22 @@ describe('dashboard settings reducers tests for loading success', () => {
       },
     };
 
-    const data = {
+    const items = {
       [id]: [{
         height: 100,
         items: ['foo', 'bar'],
       }],
     };
-    const action = receivedDashboardSettings(id, data);
+    const settings = {
+      items,
+    };
+
+    const action = receivedDashboardSettings(id, settings);
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
       error: null,
-      items: data,
+      items,
       defaults: {},
     });
   });
