@@ -283,9 +283,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
       return MHD_NO;
     }
 
-  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
-  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
-
+  add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
@@ -331,6 +329,7 @@ send_response (http_connection_t *connection, const char *content,
       return MHD_NO;
     }
 
+  add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
@@ -347,7 +346,6 @@ send_response (http_connection_t *connection, const char *content,
  * @param[in]  response       Response.
  * @param[in]  response_data  Response data struct. Response data will be freed.
  * @param[in]  sid            Session ID, or NULL. "0" to remove session.
- *
  * @return MHD_YES on success, else MHD_NO.
  */
 int
@@ -390,6 +388,8 @@ handler_send_response (http_connection_t *connection,
                                content_disposition);
     }
 
+  if (response_data->allow_caching == 0)
+    add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
 
@@ -1033,6 +1033,22 @@ add_cors_headers (http_response_t *response)
     MHD_add_response_header (response, "Access-Control-Allow-Credentials",
                              "true");
   }
+}
+
+/**
+ * @brief Add header to forbid caching to a HTTP response.
+ *
+ * @param[in]  response       The HTTP response to add the headers to.
+ * @param[in]  allow_caching  1 to allow caching, 0 to forbid.
+ */
+void
+add_forbid_caching_headers (http_response_t *response)
+{
+  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
+                           "no-cache, no-store");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_PRAGMA,
+                           "no-cache");
 }
 
 gboolean

@@ -34,18 +34,6 @@
 #include <microhttpd.h> /* for MHD_HTTP_OK */
 
 /**
- * @brief Response information for commands.
- */
-struct cmd_response_data {
-  int http_status_code;        ///> HTTP status code.
-  gchar *redirect;             ///> Redirect URL or NULL.
-  content_type_t content_type; ///> Content type. Default is text/html
-  gchar *content_type_string;  ///> Content type as string. Default is NULL.
-  gsize content_length;        ///> Content length of the response
-  gchar *content_disposition;  ///> Content disposition
-};
-
-/**
  * @brief Initializes a cmd_response_data_t struct.
  *
  * @param[in]  data  The cmd_response_data_t struct to initialize
@@ -53,6 +41,7 @@ struct cmd_response_data {
 static void
 cmd_response_data_init (cmd_response_data_t* data)
 {
+  data->allow_caching = 0;
   data->http_status_code = MHD_HTTP_OK;
   data->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   data->content_type_string = NULL;
