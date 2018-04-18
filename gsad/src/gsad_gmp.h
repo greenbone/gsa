@@ -578,14 +578,11 @@ char * get_vulns_gmp (gvm_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * save_auth_gmp (gvm_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
-char * save_setting_gmp (gvm_connection_t *, credentials_t *,
-                         params_t *, cmd_response_data_t*);
+char * save_chart_preference_gmp (gvm_connection_t *, credentials_t *,
+                                  params_t *, gchar **, gchar **,
+                                  cmd_response_data_t*);
 char * auth_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
-char *
-get_dashboard_settings_gmp (gvm_connection_t *,
-                            credentials_t *, params_t *,
-                            cmd_response_data_t*);
 
 char * process_bulk_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
