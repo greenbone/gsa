@@ -509,6 +509,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/familydisplay.js
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/os/charts.js
      ${NG_SRC_DIR}/src/web/pages/os/component.js
      ${NG_SRC_DIR}/src/web/pages/os/detailspage.js
