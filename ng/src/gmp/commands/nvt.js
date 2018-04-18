@@ -62,6 +62,14 @@ class NvtsCommand extends InfoEntitiesCommand {
       filter,
     });
   }
+
+  getQodAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'nvt',
+      group_column: 'qod',
+      filter,
+    });
+  }
 }
 
 register_command('nvt', NvtCommand);
