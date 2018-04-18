@@ -420,6 +420,7 @@ init_validator ()
                          "|(get_feeds)"
                          "|(get_credential)"
                          "|(get_credentials)"
+                         "|(get_dashboard_settings)"
                          "|(get_filter)"
                          "|(get_filters)"
                          "|(get_alert)"
@@ -2071,6 +2072,7 @@ exec_gmp_get (http_connection_t *con,
   ELSE (new_group)
   ELSE (new_role)
   ELSE (get_assets_chart)
+  ELSE (get_dashboard_settings)
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (get_tasks_chart)

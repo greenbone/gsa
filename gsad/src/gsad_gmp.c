@@ -25853,6 +25853,60 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   g_free (response);
   return html;
 }
+/**
+ * @brief Get all dashboard settings
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_dashboard_settings_gmp (gvm_connection_t *connection,
+                            credentials_t * credentials, params_t *params,
+                            cmd_response_data_t* response_data)
+{
+  GString *xml;
+
+  xml = g_string_new ("<get_dashboard_settings>");
+
+  if (gvm_connection_sendf_xml (connection,
+                              "<get_settings"
+                              " filter='name~\"Dashboard\"'/>"))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "dashboard settings"
+                            "Diagnostics: Failure to send command to manager "
+                            "daemon.",
+                            response_data);
+    }
+
+  if (read_string_c (connection, &xml))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the "
+                           "dashboard settings"
+                           "Diagnostics: Failure to receive response from "
+                           "manager daemon.",
+                            response_data);
+    }
+
+  g_string_append (xml, "</get_dashboard_settings>");
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
+}
 
 /**
  * @brief Save user setting
