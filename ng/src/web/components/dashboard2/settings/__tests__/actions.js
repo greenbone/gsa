@@ -36,8 +36,6 @@ import {
   saveDashboardSettings,
   savedDashboardSettings,
   saveDashboardSettingsError,
-  resetDashboardSettings,
-  DASHBOARD_SETTINGS_RESET_DEFAULTS,
 } from '../actions';
 
 describe('receive settings action tests', () => {
@@ -132,17 +130,4 @@ describe('save settings error action tests', () => {
   });
 });
 
-describe('reset dashboard settings action tests', () => {
-
-  test('should create an action to reset settings', () => {
-    const id = 'a1';
-    const defaults = {foo: 'bar'};
-
-    expect(resetDashboardSettings(id, defaults)).toEqual({
-      type: DASHBOARD_SETTINGS_RESET_DEFAULTS,
-      defaults,
-      id,
-    });
-  });
-});
 // vim: set ts=2 sw=2 tw=80:

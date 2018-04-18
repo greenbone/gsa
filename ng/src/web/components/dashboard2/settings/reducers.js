@@ -27,7 +27,6 @@ import {
   DASHBOARD_SETTINGS_LOADING_REQUEST,
   DASHBOARD_SETTINGS_LOADING_SUCCESS,
   DASHBOARD_SETTINGS_SAVING_REQUEST,
-  DASHBOARD_SETTINGS_RESET_DEFAULTS,
 } from './actions';
 
 import {combineReducers} from 'redux';
@@ -62,11 +61,6 @@ const items = (state = null, action) => {
       return {
         ...state,
         [id]: settings.items,
-      };
-    case DASHBOARD_SETTINGS_RESET_DEFAULTS:
-      return {
-        ...state,
-        [id]: actionDefaults.items,
       };
     default:
       return state;
