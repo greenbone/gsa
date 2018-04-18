@@ -81,4 +81,20 @@ export const vulnsByHostsColorScale = scaleLinear()
     '#D63900',
   ]);
 
+export const qodColorScale = scaleOrdinal()
+  .domain([1, 30, 50, 70, 76, 80, 95, 97, 98, 99, 100])
+  .range([
+    '#011f4b',
+    '#023061',
+    '#024277',
+    '#01558e',
+    '#3c70a5',
+    '#6c92bb',
+    '#97b5d1',
+    '#a9c9ce',
+    '#87bc99',
+    '#61ae65',
+    '#2ca02c',
+  ]);
+
 // vim: set ts=2 sw=2 tw=80:
