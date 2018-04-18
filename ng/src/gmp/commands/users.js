@@ -150,9 +150,9 @@ class UserCommand extends EntityCommand {
   saveDashboardSetting({id, settings}) {
     log.debug('Saving dashboard settings', id, settings);
     return this.action({
-      chart_preference_id: id,
-      chart_preference_value: JSON.stringify(settings),
-      cmd: 'save_chart_preference',
+      setting_id: id,
+      setting_value: JSON.stringify(settings),
+      cmd: 'save_setting',
     });
   }
 
