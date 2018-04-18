@@ -54,6 +54,14 @@ class NvtsCommand extends InfoEntitiesCommand {
       dataColumns: ['severity'],
     });
   }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'nvt',
+      group_column: 'severity',
+      filter,
+    });
+  }
 }
 
 register_command('nvt', NvtCommand);
