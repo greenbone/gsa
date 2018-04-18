@@ -27513,15 +27513,13 @@ openvas_connection_open (gvm_connection_t *connection,
  * @param[out] capabilities  Capabilities of manager.
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
- * @param[out] chart_prefs   Chart preferences.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_gmp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
-                  gchar **capabilities, gchar **language, gchar **pw_warning,
-                  GTree **chart_prefs)
+                  gchar **capabilities, gchar **language, gchar **pw_warning)
 {
   gvm_connection_t connection;
   int auth;
@@ -27626,69 +27624,6 @@ authenticate_gmp (const gchar * username, const gchar * password,
           return -1;
         }
 
-      /* Get the chart preferences */
-
-      ret = gvm_connection_sendf (&connection,
-                                  "<get_settings"
-                                  " filter='name~\"Dashboard\"'/>");
-      if (ret)
-        {
-          gvm_connection_close (&connection);
-          return 2;
-        }
-
-      /* Read the response */
-      entity = NULL;
-      if (read_entity_and_text_c (&connection, &entity, &response))
-        {
-          gvm_connection_close (&connection);
-          return 2;
-        }
-
-      /* Check the response. */
-      status = entity_attribute (entity, "status");
-      if (status == NULL
-          || strlen (status) == 0)
-        {
-          g_free (response);
-          free_entity (entity);
-          return -1;
-        }
-      first = status[0];
-      if (first == '2')
-        {
-          entities_t entities = entity->entities;
-          entity_t child_entity;
-          *chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                          NULL, g_free, g_free);
-
-          while ((child_entity = first_entity (entities)))
-            {
-              if (strcmp (entity_name (child_entity), "setting") == 0)
-                {
-                  const char *setting_id
-                    = entity_attribute (child_entity, "id");
-                  const char *setting_value
-                    = entity_text (entity_child (child_entity, "value"));
-
-                  if (setting_id && setting_value)
-                    g_tree_insert (*chart_prefs,
-                                   g_strdup (setting_id),
-                                   g_strdup (setting_value));
-                }
-              entities = next_entities (entities);
-            }
-          free_entity (entity);
-          g_free (response);
-        }
-      else
-        {
-          free_entity (entity);
-          g_free (response);
-          gvm_connection_close (&connection);
-          return -1;
-        }
-
       gvm_connection_close (&connection);
       return 0;
     }
@@ -27724,7 +27659,6 @@ login (http_connection_t *con,
   gchar *severity;
   gchar *language;
   gchar *pw_warning;
-  GTree *chart_prefs;
 
   const char *password = params_value (params, "password");
   const char *login = params_value(params, "login");
@@ -27742,8 +27676,7 @@ login (http_connection_t *con,
                               &severity,
                               &capabilities,
                               &language,
-                              &pw_warning,
-                              &chart_prefs);
+                              &pw_warning);
       if (ret)
         {
           int status;
@@ -27771,8 +27704,7 @@ login (http_connection_t *con,
         {
           user_t *user;
           user = user_add (login, password, timezone, severity, role,
-                           capabilities, language, pw_warning, chart_prefs,
-                           client_address);
+                           capabilities, language, pw_warning, client_address);
 
           g_message ("Authentication success for '%s' from %s",
                      login ?: "",
