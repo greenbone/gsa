@@ -33,12 +33,14 @@ import NvtsSeverityDisplay from './severityclassdisplay';
 import NvtsQodDisplay from './qoddisplay';
 import NvtsQodTypeDisplay from './qodtypedisplay';
 
+export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
+
 const NvtsDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
-    id="f68d9369-1945-477b-968f-121c6029971b"
+    id={NVTS_DASHBOARD_ID}
     filter={filter}
     components={{
       'nvt-by-cvss': NvtsCvssDisplay,
@@ -56,6 +58,9 @@ const NvtsDashboard = ({
         'nvt-by-qod',
       ],
     ]}
+    defaultDisplay="nvt-by-cvss"
+    maxItemsPerRow={4}
+    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );
