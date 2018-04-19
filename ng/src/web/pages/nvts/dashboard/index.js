@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,55 +20,58 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
 import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import TasksStatusDisplay from './statusdisplay';
-import TasksSeverityDisplay from './severityclassdisplay';
-import TasksSchedulesDisplay from './schedulesdisplay';
-import TasksCvssDisplay from './cvssdisplay';
-import TasksMostHighResultsDisplay from './mosthighresults';
-import TasksHighResultsDisplay from './highresults';
+import NvtsCvssDisplay from './cvssdisplay';
+import NvtsFamilyDisplay from './familydisplay';
+import NvtsSeverityDisplay from './severityclassdisplay';
+import NvtsQodDisplay from './qoddisplay';
+import NvtsQodTypeDisplay from './qodtypedisplay';
 
-export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
+export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
 
-const TaskDashboard = ({
+const NvtsDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
-    id={TASK_DASHBOARD_ID}
+    id={NVTS_DASHBOARD_ID}
     filter={filter}
     components={{
-      'task-by-status': TasksStatusDisplay,
-      'task-by-severity-class': TasksSeverityDisplay,
-      'task-by-schedules': TasksSchedulesDisplay,
-      'task-by-cvss': TasksCvssDisplay,
-      'task-by-most-high-results': TasksMostHighResultsDisplay,
-      'task-by-high-results': TasksHighResultsDisplay,
+      'nvt-by-cvss': NvtsCvssDisplay,
+      'nvt-by-family': NvtsFamilyDisplay,
+      'nvt-by-severity-class': NvtsSeverityDisplay,
+      'nvt-by-qod': NvtsQodDisplay,
+      'nvt-by-qod_type': NvtsQodTypeDisplay,
     }}
     defaultContent={[
       [
-        'task-by-severity-class',
-        'task-by-most-high-results',
-        'task-by-status',
+        'nvt-by-cvss',
+        'nvt-by-family',
+        'nvt-by-severity-class',
+      ],
+      [
+        'nvt-by-qod',
+        'nvt-by-qod_type',
       ],
     ]}
-    defaultDisplay="task-by-cvss"
+    defaultDisplay="nvt-by-cvss"
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );
 
-TaskDashboard.propTypes = {
+NvtsDashboard.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func,
 };
 
-export default TaskDashboard;
+export default NvtsDashboard;
 
 // vim: set ts=2 sw=2 tw=80:

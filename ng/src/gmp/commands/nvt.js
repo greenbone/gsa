@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -43,6 +44,39 @@ class NvtsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'nvt', Nvt, info_filter);
+  }
+
+  getFamilyAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'nvt',
+      group_column: 'family',
+      filter,
+      dataColumns: ['severity'],
+    });
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'nvt',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getQodAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'nvt',
+      group_column: 'qod',
+      filter,
+    });
+  }
+
+  getQodTypeAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'nvt',
+      group_column: 'qod_type',
+      filter,
+    });
   }
 }
 

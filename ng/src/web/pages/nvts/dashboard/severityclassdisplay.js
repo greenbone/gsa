@@ -23,46 +23,38 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import PropTypes from '../../../utils/proptypes';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
 
-import VulnsCvssDisplay from './cvssdisplay';
-import VulnsHostsDisplay from './hostsdisplay';
-import VulnsSeverityDisplay from './severityclassdisplay';
+import {NvtsSeverityLoader} from './loaders';
 
-export const VULNS_DASHBOARD_ID = '43690dcb-3174-4d84-aa88-58c1936c7f5c';
-
-const VulnerabilitiesDashboard = ({
+const NvtsSeverityDisplay = ({
   filter,
-  onFilterChanged,
+  ...props
 }) => (
-  <Dashboard
-    id={VULNS_DASHBOARD_ID}
+  <NvtsSeverityLoader
     filter={filter}
-    components={{
-      'vuln-by-cvss': VulnsCvssDisplay,
-      'vuln-by-hosts': VulnsHostsDisplay,
-      'vuln-by-severity-class': VulnsSeverityDisplay,
-    }}
-    defaultContent={[
-      [
-        'vuln-by-cvss',
-        'vuln-by-severity-class',
-      ],
-    ]}
-    defaultDisplay="vuln-by-cvss"
-    maxItemsPerRow={4}
-    maxRows={4}
-    onFilterChanged={onFilterChanged}
-  />
+  >
+    {loaderProps => (
+      <SeverityClassDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        title={({data: tdata}) =>
+          _('NVTs by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </NvtsSeverityLoader>
 );
 
-VulnerabilitiesDashboard.propTypes = {
+NvtsSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
 };
 
-export default VulnerabilitiesDashboard;
+export default NvtsSeverityDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

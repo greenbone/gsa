@@ -47,11 +47,13 @@ class Dashboard extends React.Component {
   static propTypes = {
     components: PropTypes.object,
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    defaultDisplay: PropTypes.string.isRequired,
     filter: PropTypes.filter,
     id: PropTypes.id.isRequired,
     items: itemsPropType,
     loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
+    maxRows: PropTypes.number,
     saveSettings: PropTypes.func.isRequired,
     onFilterChanged: PropTypes.func,
   }
@@ -73,9 +75,19 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    const {id, defaultContent} = this.props;
+    const {
+      id,
+      defaultDisplay,
+      defaultContent,
+      maxItemsPerRow,
+      maxRows,
+    } = this.props;
+
     const defaults = {
       items: convertDefaultContent(defaultContent),
+      defaultDisplay,
+      maxItemsPerRow,
+      maxRows,
     };
 
     this.props.loadSettings(id, defaults);
@@ -90,7 +102,7 @@ class Dashboard extends React.Component {
   save(items) {
     const {id} = this.props;
 
-    this.props.saveSettings(id, items);
+    this.props.saveSettings(id, {items});
   }
 
   render() {
@@ -99,6 +111,7 @@ class Dashboard extends React.Component {
     } = this.state;
     const {
       maxItemsPerRow,
+      maxRows,
       filter,
       components = {},
       onFilterChanged,
@@ -108,6 +121,7 @@ class Dashboard extends React.Component {
       <Grid
         items={has_value(items) ? items : []}
         maxItemsPerRow={maxItemsPerRow}
+        maxRows={maxRows}
         onChange={this.handleItemsChange}
       >
         {({dragHandleProps, id, props, height, width, remove}) => {
@@ -141,7 +155,8 @@ const mapStateToProps = (rootState, {id}) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   loadSettings: (id, defaults) =>
     dispatch(loadSettings(ownProps)(id, defaults)),
-  saveSettings: (id, items) => dispatch(saveSettings(ownProps)(id, items)),
+  saveSettings: (id, settings) =>
+    dispatch(saveSettings(ownProps)(id, settings)),
 });
 
 export default compose(

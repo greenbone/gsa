@@ -33,6 +33,8 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter.js';
@@ -41,7 +43,7 @@ import VulnsCharts from './charts.js';
 import VulnsFilterDialog from './filterdialog.js';
 import VulnsTable from './table.js';
 
-import VulnerabilitiesDashboard from './dashboard/index.js';
+import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
 
 const Dashboard = withDashboard({
   configPrefId: '43690dcb-3174-4d84-aa88-58c1936c7f5c',
@@ -70,4 +72,7 @@ export default withEntitiesContainer('vuln', {
   title: _('Vulnerabilities'),
   sectionIcon: 'vulnerability.svg',
   toolBarIcons: ToolBarIcons,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
+  ),
 })(EntitiesPage);

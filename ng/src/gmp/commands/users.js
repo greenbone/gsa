@@ -147,7 +147,7 @@ class UserCommand extends EntityCommand {
     });
   }
 
-  saveDashboardSetting({id, settings}) {
+  saveDashboardSetting(id, settings) {
     log.debug('Saving dashboard settings', id, settings);
     return this.action({
       setting_id: id,
