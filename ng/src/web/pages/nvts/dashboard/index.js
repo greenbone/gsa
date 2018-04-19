@@ -53,9 +53,11 @@ const NvtsDashboard = ({
       [
         'nvt-by-cvss',
         'nvt-by-family',
-        'nvt-by-qod_type',
         'nvt-by-severity-class',
+      ],
+      [
         'nvt-by-qod',
+        'nvt-by-qod_type',
       ],
     ]}
     defaultDisplay="nvt-by-cvss"
