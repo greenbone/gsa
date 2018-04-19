@@ -58,6 +58,12 @@ class DataDisplay extends React.Component {
     };
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.height !== this.props.height ||
+      nextProps.width !== this.props.width ||
+      nextProps.data !== this.props.data;
+  }
+
   getTransformedData(props) {
     const {data, dataTransform, ...other} = props;
 
