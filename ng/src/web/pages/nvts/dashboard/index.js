@@ -31,6 +31,7 @@ import NvtsCvssDisplay from './cvssdisplay';
 import NvtsFamilyDisplay from './familydisplay';
 import NvtsSeverityDisplay from './severityclassdisplay';
 import NvtsQodDisplay from './qoddisplay';
+import NvtsQodTypeDisplay from './qodtypedisplay';
 
 const NvtsDashboard = ({
   filter,
@@ -44,11 +45,13 @@ const NvtsDashboard = ({
       'nvt-by-family': NvtsFamilyDisplay,
       'nvt-by-severity-class': NvtsSeverityDisplay,
       'nvt-by-qod': NvtsQodDisplay,
+      'nvt-by-qod_type': NvtsQodTypeDisplay,
     }}
     defaultContent={[
       [
         'nvt-by-cvss',
         'nvt-by-family',
+        'nvt-by-qod_type',
         'nvt-by-severity-class',
         'nvt-by-qod',
       ],
