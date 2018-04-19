@@ -8,7 +8,7 @@
 # Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2009 - 2017 Greenbone Networks GmbH
+# Copyright (C) 2009 - 2018 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ endif (NOT PKG_CONFIG_FOUND)
 ## Check for existence of required libraries
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
-pkg_check_modules (GLIB REQUIRED glib-2.0>=2.32)
+pkg_check_modules (GLIB REQUIRED glib-2.0>=2.42)
 pkg_check_modules (LIBGVM_BASE REQUIRED libgvm_base>=1.0.0)
 pkg_check_modules (LIBGVM_UTIL REQUIRED libgvm_util>=1.0.0)
 pkg_check_modules (LIBGVM_GMP REQUIRED libgvm_gmp>=1.0.0)

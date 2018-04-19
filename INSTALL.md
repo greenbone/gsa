@@ -17,7 +17,7 @@ Prerequisites:
 * gnutls >= 3.2.15
 * libgcrypt
 * cmake >= 3.0
-* glib-2.0 >= 2.32
+* glib-2.0 >= 2.42
 * libxml
 * libmicrohttpd >= 0.9.0
 * pkg-config
