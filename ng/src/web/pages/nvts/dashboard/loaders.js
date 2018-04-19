@@ -34,6 +34,7 @@ const loaderPropTypes = {
 export const NVT_FAMILY = 'nvt-family';
 export const NVT_SEVERITY_CLASS = 'nvt-severity-class';
 export const NVT_QOD = 'nvt-qod';
+export const NVT_QOD_TYPE = 'nvt-qod-type';
 
 export const nvtFamilyLoader = loadFunc(
   ({gmp, filter}) => gmp.nvts.getFamilyAggregates({filter})
@@ -106,5 +107,29 @@ export const NvtsQodLoader = ({
 );
 
 NvtsQodLoader.propTypes = loaderPropTypes;
+
+export const nvtQodTypeLoader = loadFunc(
+  ({gmp, filter}) => gmp.nvts.getQodTypeAggregates({filter})
+    .then(r => r.data),
+  NVT_QOD_TYPE);
+
+export const NvtsQodTypeLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={NVT_QOD_TYPE}
+    filter={filter}
+    load={nvtQodTypeLoader}
+    subscriptions={[
+      'nvts.timer',
+      'nvts.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+NvtsQodTypeLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:
