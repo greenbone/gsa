@@ -52,6 +52,7 @@ class Dashboard extends React.Component {
     items: itemsPropType,
     loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
+    maxRows: PropTypes.number,
     saveSettings: PropTypes.func.isRequired,
     onFilterChanged: PropTypes.func,
   }
@@ -99,6 +100,7 @@ class Dashboard extends React.Component {
     } = this.state;
     const {
       maxItemsPerRow,
+      maxRows,
       filter,
       components = {},
       onFilterChanged,
@@ -108,6 +110,7 @@ class Dashboard extends React.Component {
       <Grid
         items={has_value(items) ? items : []}
         maxItemsPerRow={maxItemsPerRow}
+        maxRows={maxRows}
         onChange={this.handleItemsChange}
       >
         {({dragHandleProps, id, props, height, width, remove}) => {
