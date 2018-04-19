@@ -88,7 +88,7 @@ class Grid extends React.Component {
   static propTypes = {
     children: PropTypes.func.isRequired,
     items: itemsPropType,
-    maxItemsPerRow: PropTypes.numberOrNumberString,
+    maxItemsPerRow: PropTypes.number,
     onChange: PropTypes.func,
   }
 
