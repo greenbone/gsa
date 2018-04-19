@@ -38,6 +38,8 @@ import NewIconMenu from './icons/newiconmenu.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls.js';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -49,6 +51,7 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import TaskComponent from './component.js';
 import TaskDashboard from './dashboard';
+import {TASK_DASHBOARD_ID} from './dashboard/index.js';
 
 const Dashboard = withDashboard({
   hideFilterSelect: true,
@@ -161,6 +164,9 @@ const Page = ({
         dashboard={Dashboard}
         dashboard2={dashboardProps => (
           <TaskDashboard {...dashboardProps} />
+        )}
+        dashboardControls={() => (
+          <DashboardControls dashboardId={TASK_DASHBOARD_ID} />
         )}
         filterEditDialog={TaskFilterDialog}
         sectionIcon="task.svg"

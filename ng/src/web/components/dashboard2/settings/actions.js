@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {is_defined} from 'gmp/utils/identity';
+
 import getDashboardSettings from './selectors';
 import {createRow, createItem} from '../../sortable/grid';
 
@@ -37,20 +39,19 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
-export const DASHBOARD_SETTINGS_RESET_DEFAULTS =
-  'DASHBOARD_SETTINGS_RESET_DEFAULTS';
-
-const settingsV1toDashboardItems = settings => {
-  const content = {};
+const settingsV1toDashboardSettings = settings => {
+  const items = {};
   Object.entries(settings).forEach(([id, value]) => {
     const {data: rows} = value;
-    content[id] = rows.map(({height, data: items}) =>
-      createRow(items.map(item => createItem({name: item.name})), height));
+    items[id] = rows.map(({height, data}) =>
+      createRow(data.map(item => createItem({name: item.name})), height));
   });
-  return content;
+  return {
+    items,
+  };
 };
 
-const dashboardItems2SettingsV1 = items => ({
+const dashboardSettings2SettingsV1 = ({items}) => ({
   version: 1,
   data: items.map(({height, items: rowItems}) => ({
     height,
@@ -62,10 +63,10 @@ const dashboardItems2SettingsV1 = items => ({
   })),
 });
 
-export const receivedDashboardSettings = (id, data, defaults) => ({
+export const receivedDashboardSettings = (id, settings, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
-  items: data,
   id,
+  settings,
   defaults,
 });
 
@@ -89,16 +90,10 @@ export const saveDashboardSettingsError = error => ({
   error,
 });
 
-export const saveDashboardSettings = (id, items) => ({
+export const saveDashboardSettings = (id, settings) => ({
   type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-  items,
+  settings,
   id,
-});
-
-export const resetDashboardSettings = (id, defaults) => ({
-  type: DASHBOARD_SETTINGS_RESET_DEFAULTS,
-  id,
-  defaults,
 });
 
 export const loadSettings = ({gmp}) => (id, defaults) =>
@@ -117,18 +112,19 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
   const promise = gmp.user.currentDashboardSettings();
   return promise.then(
     response => dispatch(receivedDashboardSettings(id,
-      settingsV1toDashboardItems(response.data), defaults)),
+      settingsV1toDashboardSettings(response.data), defaults)),
     error => dispatch(receivedDashboardSettingsLoadingError(error)),
   );
 };
 
-export const saveSettings = ({gmp}) => (id, items) => (dispatch, getState) => {
+export const saveSettings = ({gmp}) => (id, settings) =>
+  (dispatch, getState) => {
 
-  dispatch(saveDashboardSettings(id, items));
+  dispatch(saveDashboardSettings(id, settings));
 
-  const settings = dashboardItems2SettingsV1(items);
+  const settingsV1 = dashboardSettings2SettingsV1(settings);
 
-  return gmp.user.saveDashboardSetting({id, settings})
+  return gmp.user.saveDashboardSetting(id, settingsV1)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
@@ -142,7 +138,61 @@ export const resetSettings = ({gmp}) => id =>
   const settings = getDashboardSettings(rootState);
   const defaults = settings.getDefaultsById(id);
 
-  dispatch(resetDashboardSettings(id, defaults));
+  dispatch(saveDashboardSettings(id, defaults));
+
+  const settingsV1 = dashboardSettings2SettingsV1(defaults);
+  return gmp.user.saveDashboardSetting(id, settingsV1)
+    .then(
+      response => dispatch(savedDashboardSettings()),
+      error => dispatch(saveDashboardSettingsError(error)),
+    );
+};
+
+export const addDefaultDisplay = ({gmp}) => id => (dispatch, getState) => {
+  const rootState = getState();
+  const settings = getDashboardSettings(rootState);
+  const defaults = settings.getDefaultsById(id);
+  const currentItems = settings.getItemsById(id);
+  const {defaultDisplay, maxItemsPerRow, maxRows} = defaults;
+
+  if (!is_defined(defaultDisplay)) {
+    return;
+  }
+
+  const lastRow = currentItems[currentItems.length - 1];
+
+  let items;
+  if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
+    if (is_defined(maxRows) && currentItems.length >= maxRows) {
+      // dashboard is full
+      return;
+    }
+    const newRow = createRow([createItem({name: defaultDisplay})]);
+    items = [...currentItems, newRow];
+  }
+  else {
+    const newRow = {
+      ...lastRow,
+      items: [...lastRow.items, createItem({name: defaultDisplay})],
+    };
+    items = [...currentItems];
+    items.pop();
+    items.push(newRow);
+  }
+
+  const newSettings = {
+    ...defaults,
+    items,
+  };
+
+  dispatch(saveDashboardSettings(id, newSettings));
+
+  const settingsV1 = dashboardSettings2SettingsV1(newSettings);
+  return gmp.user.saveDashboardSetting(id, settingsV1)
+    .then(
+      response => dispatch(savedDashboardSettings()),
+      error => dispatch(saveDashboardSettingsError(error)),
+    );
 };
 
 // vim: set ts=2 sw=2 tw=80:

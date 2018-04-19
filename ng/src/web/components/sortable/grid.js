@@ -88,7 +88,8 @@ class Grid extends React.Component {
   static propTypes = {
     children: PropTypes.func.isRequired,
     items: itemsPropType,
-    maxItemsPerRow: PropTypes.numberOrNumberString,
+    maxItemsPerRow: PropTypes.number,
+    maxRows: PropTypes.number,
     onChange: PropTypes.func,
   }
 
@@ -203,7 +204,8 @@ class Grid extends React.Component {
 
   render() {
     const {isDragging, dragSourceRowId} = this.state;
-    const {maxItemsPerRow, items = [], children} = this.props;
+    const {maxItemsPerRow, maxRows, items = [], children} = this.props;
+    const showEmptyRow = !is_defined(maxRows) || items.length < maxRows;
     return (
       <DragDropContext
         onDragEnd={this.handleDragEnd}
@@ -252,9 +254,11 @@ class Grid extends React.Component {
                   </Row>
                 );
               })}
-              <EmptyRow
-                active={isDragging}
-              />
+              {showEmptyRow &&
+                <EmptyRow
+                  active={isDragging}
+                />
+              }
             </Layout>
           )}
 

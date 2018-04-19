@@ -33,13 +33,15 @@ import TasksCvssDisplay from './cvssdisplay';
 import TasksMostHighResultsDisplay from './mosthighresults';
 import TasksHighResultsDisplay from './highresults';
 
+export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
+
 const TaskDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
+    id={TASK_DASHBOARD_ID}
     filter={filter}
-    id="3d5db3c7-5208-4b47-8c28-48efc621b1e0"
     components={{
       'task-by-status': TasksStatusDisplay,
       'task-by-severity-class': TasksSeverityDisplay,
@@ -55,6 +57,9 @@ const TaskDashboard = ({
         'task-by-status',
       ],
     ]}
+    defaultDisplay="task-by-cvss"
+    maxItemsPerRow={4}
+    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );

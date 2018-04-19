@@ -36,8 +36,6 @@ import {
   saveDashboardSettings,
   savedDashboardSettings,
   saveDashboardSettingsError,
-  resetDashboardSettings,
-  DASHBOARD_SETTINGS_RESET_DEFAULTS,
 } from '../actions';
 
 describe('receive settings action tests', () => {
@@ -52,9 +50,12 @@ describe('receive settings action tests', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
     const defaults = {abc: 'def'};
-
-    expect(receivedDashboardSettings(id, data, defaults)).toEqual({
+    const settings = {
       items: data,
+    };
+
+    expect(receivedDashboardSettings(id, settings, defaults)).toEqual({
+      settings,
       defaults,
       id,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
@@ -67,9 +68,12 @@ describe('received settings action tests', () => {
   test('should create an action after receiving dashboard settings', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
-
-    expect(receivedDashboardSettings(id, data)).toEqual({
+    const settings = {
       items: data,
+    };
+
+    expect(receivedDashboardSettings(id, settings)).toEqual({
+      settings,
       id,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
@@ -93,11 +97,14 @@ describe('save settings action tests', () => {
   test('should create an action to save dashboard settings', () => {
     const id = 'a1';
     const items = ['a', 'b'];
+    const settings = {
+      items,
+    };
 
-    expect(saveDashboardSettings(id, items)).toEqual({
+    expect(saveDashboardSettings(id, settings)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_REQUEST,
       id,
-      items,
+      settings,
     });
   });
 });
@@ -123,17 +130,4 @@ describe('save settings error action tests', () => {
   });
 });
 
-describe('reset dashboard settings action tests', () => {
-
-  test('should create an action to reset settings', () => {
-    const id = 'a1';
-    const defaults = {foo: 'bar'};
-
-    expect(resetDashboardSettings(id, defaults)).toEqual({
-      type: DASHBOARD_SETTINGS_RESET_DEFAULTS,
-      defaults,
-      id,
-    });
-  });
-});
 // vim: set ts=2 sw=2 tw=80:

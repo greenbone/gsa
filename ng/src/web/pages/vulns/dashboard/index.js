@@ -31,12 +31,14 @@ import VulnsCvssDisplay from './cvssdisplay';
 import VulnsHostsDisplay from './hostsdisplay';
 import VulnsSeverityDisplay from './severityclassdisplay';
 
+export const VULNS_DASHBOARD_ID = '43690dcb-3174-4d84-aa88-58c1936c7f5c';
+
 const VulnerabilitiesDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
-    id="43690dcb-3174-4d84-aa88-58c1936c7f5c"
+    id={VULNS_DASHBOARD_ID}
     filter={filter}
     components={{
       'vuln-by-cvss': VulnsCvssDisplay,
@@ -46,10 +48,12 @@ const VulnerabilitiesDashboard = ({
     defaultContent={[
       [
         'vuln-by-cvss',
-        'vuln-by-hosts',
         'vuln-by-severity-class',
       ],
     ]}
+    defaultDisplay="vuln-by-cvss"
+    maxItemsPerRow={4}
+    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );
