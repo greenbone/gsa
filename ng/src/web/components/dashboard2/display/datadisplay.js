@@ -54,17 +54,23 @@ class DataDisplay extends React.Component {
     super(...args);
 
     this.state = {
-      data: this.getTransformedData(this.props),
+      data: DataDisplay.getTransformedData(this.props),
+      originalData: this.props.data,
     };
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.height !== this.props.height ||
-      nextProps.width !== this.props.width ||
-      nextProps.data !== this.props.data;
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.originalData !== nextProps.data) {
+      // data has changed update transformed data
+      return {
+        data: DataDisplay.getTransformedData(nextProps),
+        originalData: nextProps.data,
+      };
+    }
+    return null;
   }
 
-  getTransformedData(props) {
+  static getTransformedData(props) {
     const {data, dataTransform, ...other} = props;
 
     const tprops = exclude_object_props(other, ownProps);
@@ -73,10 +79,10 @@ class DataDisplay extends React.Component {
       dataTransform(data, tprops) : data;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      this.setState({data: this.getTransformedData(nextProps)});
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.height !== this.props.height ||
+      nextProps.width !== this.props.width ||
+      nextState.data !== this.state.data;
   }
 
   render() {
