@@ -39,6 +39,7 @@ import {
   percent,
   qodColorScale,
 } from '../../../components/dashboard2/display/utils';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {NvtsQodLoader} from './loaders';
 
@@ -130,6 +131,14 @@ NvtsQodDisplay.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
 };
+
+const DISPLAY_ID = 'nvt-by-qod';
+
+NvtsQodDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, NvtsQodDisplay, {
+  title: _('NVTs by QoD'),
+});
 
 export default NvtsQodDisplay;
 

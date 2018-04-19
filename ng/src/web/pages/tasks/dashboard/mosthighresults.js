@@ -42,6 +42,7 @@ import {
 } from '../../../components/dashboard2/display/utils';
 
 import {TasksHighResultsLoader} from './loaders';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const format = d3format('0.2f');
 
@@ -125,6 +126,17 @@ TasksMostHighResultsDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-export default withRouter(TasksMostHighResultsDisplay);
+const DISPLAY_ID = 'task-by-most-high-results';
+
+const TasksMostHighResultsDisplayWithRouter = withRouter(
+  TasksMostHighResultsDisplay);
+
+TasksMostHighResultsDisplayWithRouter.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, TasksMostHighResultsDisplayWithRouter, {
+  title: _('Tasks with most High Results per Host'),
+});
+
+export default TasksMostHighResultsDisplayWithRouter;
 
 // vim: set ts=2 sw=2 tw=80:

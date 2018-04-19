@@ -40,18 +40,18 @@ const VulnerabilitiesDashboard = ({
   <Dashboard
     id={VULNS_DASHBOARD_ID}
     filter={filter}
-    components={{
-      'vuln-by-cvss': VulnsCvssDisplay,
-      'vuln-by-hosts': VulnsHostsDisplay,
-      'vuln-by-severity-class': VulnsSeverityDisplay,
-    }}
+    permittedDisplays={[
+      VulnsCvssDisplay.displayId,
+      VulnsHostsDisplay.displayId,
+      VulnsSeverityDisplay.displayId,
+    ]}
     defaultContent={[
       [
-        'vuln-by-cvss',
-        'vuln-by-severity-class',
+        VulnsCvssDisplay.displayId,
+        VulnsSeverityDisplay.displayId,
       ],
     ]}
-    defaultDisplay="vuln-by-cvss"
+    defaultDisplay={VulnsCvssDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

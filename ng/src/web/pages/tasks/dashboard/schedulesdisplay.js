@@ -31,6 +31,7 @@ import PropTypes from '../../../utils/proptypes';
 import ScheduleChart from '../../../components/chart/schedule';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {TasksSchedulesLoader} from './loaders';
 
@@ -79,6 +80,14 @@ const TasksSchedulesDisplay = ({
 TasksSchedulesDisplay.propTypes = {
   filter: PropTypes.filter,
 };
+
+const DISPLAY_ID = 'task-by-schedules';
+
+TasksSchedulesDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, TasksSchedulesDisplay, {
+  title: _('Next Scheduled Tasks'),
+});
 
 export default TasksSchedulesDisplay;
 

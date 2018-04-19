@@ -39,6 +39,7 @@ import {resultSeverityRiskFactor, _NA} from '../../../utils/severity';
 import BubbleChart from '../../../components/chart/bubble';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 import {
   riskFactorColorScale,
 } from '../../../components/dashboard2/display/utils';
@@ -126,6 +127,16 @@ TasksHighResultsDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-export default withRouter(TasksHighResultsDisplay);
+const TasksHighResultsDisplayWithRouter = withRouter(TasksHighResultsDisplay);
+
+const DISPLAY_ID = 'task-by-high-results';
+
+TasksHighResultsDisplayWithRouter.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, TasksHighResultsDisplayWithRouter, {
+  title: _('Tasks: High Results per Host'),
+});
+
+export default TasksHighResultsDisplayWithRouter;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -31,7 +31,7 @@ export const registerDisplay = (id, component, {title}) => {
     title,
   };
 
-  log.debug('Registered', id, registry);
+  log.debug('Registered display', id);
 };
 
 export const getDisplay = id => registry[id];

@@ -28,10 +28,11 @@ import _ from 'gmp/locale';
 import PropTypes from '../../../utils/proptypes';
 
 import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {VulnsSeverityLoader} from './loaders';
 
-const VulnsSeverityDisplay = ({
+const VulnsCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -52,10 +53,18 @@ const VulnsSeverityDisplay = ({
   </VulnsSeverityLoader>
 );
 
-VulnsSeverityDisplay.propTypes = {
+VulnsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-export default VulnsSeverityDisplay;
+const DISPLAY_ID = 'vuln-by-cvss';
+
+VulnsCvssDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, VulnsCvssDisplay, {
+  title: _('Vulnerabilities by CVSS'),
+});
+
+export default VulnsCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
