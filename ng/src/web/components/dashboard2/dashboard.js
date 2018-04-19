@@ -47,6 +47,7 @@ class Dashboard extends React.Component {
   static propTypes = {
     components: PropTypes.object,
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    defaultDisplay: PropTypes.string.isRequired,
     filter: PropTypes.filter,
     id: PropTypes.id.isRequired,
     items: itemsPropType,
@@ -74,9 +75,19 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    const {id, defaultContent} = this.props;
+    const {
+      id,
+      defaultDisplay,
+      defaultContent,
+      maxItemsPerRow,
+      maxRows,
+    } = this.props;
+
     const defaults = {
       items: convertDefaultContent(defaultContent),
+      defaultDisplay,
+      maxItemsPerRow,
+      maxRows,
     };
 
     this.props.loadSettings(id, defaults);
