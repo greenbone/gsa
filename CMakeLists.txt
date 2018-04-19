@@ -8,7 +8,7 @@
 # Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2009 - 2017 Greenbone Networks GmbH
+# Copyright (C) 2009 - 2018 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,11 +24,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
-message ("-- Configuring greenbone-security-assistant...")
+cmake_minimum_required (VERSION 3.0)
 
-project (greenbone-security-assistant C)
+message ("-- Configuring Greenbone Security Assistant...")
 
-cmake_minimum_required (VERSION 2.8)
+project (greenbone-security-assistant
+         VERSION 8.0.0
+         LANGUAGES C)
+
 
 if (POLICY CMP0005)
   cmake_policy (SET CMP0005 NEW)
@@ -51,13 +54,6 @@ if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
     endif (GIT_FOUND)
   endif (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
 endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-
-## Project version
-# The following three variables should be set through the project command once
-# we require CMake >= 3.0
-set (PROJECT_VERSION_MAJOR 7)
-set (PROJECT_VERSION_MINOR 1)
-set (PROJECT_VERSION_PATCH 0)
 
 # Set beta version if this is a beta release series,
 # unset if this is a stable release series.

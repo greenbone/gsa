@@ -16,7 +16,7 @@ Prerequisites:
 * libgvm_base, libgvm_util, libgvm_gmp >= 1.0.0
 * gnutls >= 3.2.15
 * libgcrypt
-* cmake >= 2.8
+* cmake >= 3.0
 * glib-2.0 >= 2.32
 * libxml
 * libmicrohttpd >= 0.9.0
