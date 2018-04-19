@@ -37,23 +37,16 @@
 
 #include "gsad_content_type.h" /* for content_type_t */
 
-/**
- * @brief Response information for commands.
- */
-struct cmd_response_data {
-  int allow_caching;           ///> Whether the response may be cached.
-  int http_status_code;        ///> HTTP status code.
-  gchar *redirect;             ///> Redirect URL or NULL.
-  content_type_t content_type; ///> Content type. Default is text/html
-  gchar *content_type_string;  ///> Content type as string. Default is NULL.
-  gsize content_length;        ///> Content length of the response
-  gchar *content_disposition;  ///> Content disposition
-};
 typedef struct cmd_response_data cmd_response_data_t;
 
 cmd_response_data_t * cmd_response_data_new ();
 
 void cmd_response_data_free (cmd_response_data_t* data);
+
+void cmd_response_data_set_allow_caching (cmd_response_data_t *data,
+                                          int allow_caching);
+
+int cmd_response_data_get_allow_caching (cmd_response_data_t *data);
 
 void cmd_response_data_set_content_type (cmd_response_data_t *data,
                                          content_type_t content_type);

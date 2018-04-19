@@ -350,7 +350,7 @@ handle_static_file (http_connection_t *connection, const char * method,
   char *default_file = "index.html";
 
   response_data = cmd_response_data_new ();
-  response_data->allow_caching = 1;
+  cmd_response_data_set_allow_caching (response_data, 1);
 
   /** @todo validation, URL length restriction (allows you to view ANY
     *       file that the user running the gsad might look at!) */
@@ -737,7 +737,7 @@ handle_index_ng (http_connection_t *connection,
   cmd_response_data_t *response_data;
 
   response_data = cmd_response_data_new ();
-  response_data->allow_caching = 1;
+  cmd_response_data_set_allow_caching (response_data, 1);
 
   response = file_content_response (connection, url,
                                     "ng/index.html",
@@ -772,7 +772,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
   g_debug ("Requesting url %s for static ng path %s", url, path);
 
   response_data = cmd_response_data_new ();
-  response_data->allow_caching = 1;
+  cmd_response_data_set_allow_caching (response_data, 1);
 
   response = file_content_response (connection, url, path, response_data);
 
