@@ -44,9 +44,9 @@ cmd_response_data_t * cmd_response_data_new ();
 void cmd_response_data_free (cmd_response_data_t* data);
 
 void cmd_response_data_set_allow_caching (cmd_response_data_t *data,
-                                          int allow_caching);
+                                          gboolean allow_caching);
 
-int cmd_response_data_get_allow_caching (cmd_response_data_t *data);
+gboolean cmd_response_data_is_allow_caching (cmd_response_data_t *data);
 
 void cmd_response_data_set_content_type (cmd_response_data_t *data,
                                          content_type_t content_type);

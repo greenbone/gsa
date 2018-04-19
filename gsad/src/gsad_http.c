@@ -389,7 +389,7 @@ handler_send_response (http_connection_t *connection,
                                content_disposition);
     }
 
-  if (cmd_response_data_get_allow_caching (response_data) == 0)
+  if (cmd_response_data_is_allow_caching (response_data) == FALSE)
     add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);

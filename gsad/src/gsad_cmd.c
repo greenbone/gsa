@@ -37,7 +37,7 @@
  * @brief Response information for commands.
  */
 struct cmd_response_data {
-  int allow_caching;           ///> Whether the response may be cached.
+  gboolean allow_caching;      ///> Whether the response may be cached.
   int http_status_code;        ///> HTTP status code.
   gchar *redirect;             ///> Redirect URL or NULL.
   content_type_t content_type; ///> Content type. Default is text/html
@@ -54,7 +54,7 @@ struct cmd_response_data {
 static void
 cmd_response_data_init (cmd_response_data_t* data)
 {
-  data->allow_caching = 0;
+  data->allow_caching = FALSE;
   data->http_status_code = MHD_HTTP_OK;
   data->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   data->content_type_string = NULL;
@@ -118,9 +118,9 @@ cmd_response_data_free (cmd_response_data_t* data)
  */
 void
 cmd_response_data_set_allow_caching (cmd_response_data_t *data,
-                                     int allow_caching)
+                                     gboolean allow_caching)
 {
-  data->allow_caching = allow_caching;
+  data->allow_caching = (allow_caching != FALSE);
 }
 
 /**
@@ -130,8 +130,8 @@ cmd_response_data_set_allow_caching (cmd_response_data_t *data,
  *
  * @return The allow_caching flag
  */
-int
-cmd_response_data_get_allow_caching (cmd_response_data_t *data)
+gboolean
+cmd_response_data_is_allow_caching (cmd_response_data_t *data)
 {
   return data->allow_caching;
 }
