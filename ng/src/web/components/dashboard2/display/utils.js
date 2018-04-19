@@ -21,6 +21,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/keys';
+
+import _ from 'gmp/locale';
+
 import {scaleOrdinal, scaleLinear} from 'd3-scale';
 
 import {parse_int} from 'gmp/parser';
@@ -81,6 +85,23 @@ export const vulnsByHostsColorScale = scaleLinear()
     '#D63900',
   ]);
 
+export const QOD_TYPES = {
+  '': _('None'),
+  general_note: _('General note'),
+  executable_version: _('Executable version'),
+  package: _('Package check'),
+  registry: _('Registry check'),
+  remote_active: _('Remote active'),
+  remote_analysis: _('Remote analysis'),
+  remote_app: _('Remote app'),
+  remote_banner: _('Remote banner'),
+  remote_probe: _('Remote probe'),
+  remote_banner_unreliable: _('Unreliable rem. banner'),
+  executable_version_unreliable: _('Unreliable exec. version'),
+  remote_vul: _('Remote vulnerability'),
+  exploit: _('Exploit'),
+};
+
 export const qodColorScale = scaleOrdinal()
   .domain([1, 30, 50, 70, 76, 80, 95, 97, 98, 99, 100])
   .range([
@@ -95,6 +116,25 @@ export const qodColorScale = scaleOrdinal()
     '#87bc99',
     '#61ae65',
     '#2ca02c',
+  ]);
+
+export const qodTypeColorScale = scaleOrdinal()
+  .domain(Object.keys(QOD_TYPES))
+  .range([
+    'silver',  // ''
+    '#555555', // general_note
+    '#011f4b', // executable_version
+    '#596d8a', // package
+    '#a9c9ce', // registry
+    '#98df8a', // remote_active
+    '#80c674', // remote_analysis
+    '#69af5f', // remote_app
+    '#53984a', // remote_banner
+    '#3c8136', // remote_probe
+    '#e6e600', // remote_banner_unreliable
+    '#ffff99', // executable_version_unreliable
+    '#ff9933', // remote_vul
+    '#d62728', // Exploit
   ]);
 
 // vim: set ts=2 sw=2 tw=80:
