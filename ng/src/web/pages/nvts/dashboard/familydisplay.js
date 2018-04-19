@@ -52,8 +52,12 @@ const transformFamilyData = (data = {}, {severityClass}) => {
       const {count, value} = family;
       const severity = parse_severity(family.stats.severity.mean);
       const riskFactor = resultSeverityRiskFactor(severity, severityClass);
-      const toolTip = value + ': ' + count + ' (' + _('severity') +
-        ': ' + severityFormat(severity) + ')';
+      const toolTip = _('{{value}}: {{count}} (severity: {{severity}})',
+        {
+          value: value,
+          count: count,
+          severity: severityFormat(severity),
+        });
 
       return {
         value: parse_float(count),
