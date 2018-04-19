@@ -30,13 +30,15 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import NvtsCharts from './charts.js';
 import NvtsFilterDialog from './filterdialog.js';
 import NvtsTable from './table.js';
 
-import NvtsDashboard from './dashboard/index.js';
+import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard/index.js';
 
 const Dashboard = withDashboard({
   hideFilterSelect: true,
@@ -58,6 +60,9 @@ const ToolBarIcons = props => {
 export default withEntitiesContainer('nvt', {
   dashboard: Dashboard,
   dashboard2: NvtsDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={NVTS_DASHBOARD_ID}/>
+  ),
   filterEditDialog: NvtsFilterDialog,
   sectionIcon: 'nvt.svg',
   table: NvtsTable,
