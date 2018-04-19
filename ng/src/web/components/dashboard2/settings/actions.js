@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {is_defined} from 'gmp/utils/identity';
+
 import getDashboardSettings from './selectors';
 import {createRow, createItem} from '../../sortable/grid';
 
@@ -139,6 +141,53 @@ export const resetSettings = ({gmp}) => id =>
   dispatch(saveDashboardSettings(id, defaults));
 
   const settingsV1 = dashboardSettings2SettingsV1(defaults);
+  return gmp.user.saveDashboardSetting(id, settingsV1)
+    .then(
+      response => dispatch(savedDashboardSettings()),
+      error => dispatch(saveDashboardSettingsError(error)),
+    );
+};
+
+export const addDefaultDisplay = ({gmp}) => id => (dispatch, getState) => {
+  const rootState = getState();
+  const settings = getDashboardSettings(rootState);
+  const defaults = settings.getDefaultsById(id);
+  const currentItems = settings.getItemsById(id);
+  const {defaultDisplay, maxItemsPerRow, maxRows} = defaults;
+
+  if (!is_defined(defaultDisplay)) {
+    return;
+  }
+
+  const lastRow = currentItems[currentItems.length - 1];
+
+  let items;
+  if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
+    if (is_defined(maxRows) && currentItems.length >= maxRows) {
+      // dashboard is full
+      return;
+    }
+    const newRow = createRow([createItem({name: defaultDisplay})]);
+    items = [...currentItems, newRow];
+  }
+  else {
+    const newRow = {
+      ...lastRow,
+      items: [...lastRow.items, createItem({name: defaultDisplay})],
+    };
+    items = [...currentItems];
+    items.pop();
+    items.push(newRow);
+  }
+
+  const newSettings = {
+    ...defaults,
+    items,
+  };
+
+  dispatch(saveDashboardSettings(id, newSettings));
+
+  const settingsV1 = dashboardSettings2SettingsV1(newSettings);
   return gmp.user.saveDashboardSetting(id, settingsV1)
     .then(
       response => dispatch(savedDashboardSettings()),
