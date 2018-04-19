@@ -57,6 +57,9 @@ const TaskDashboard = ({
         'task-by-status',
       ],
     ]}
+    defaultDisplay="task-by-cvss"
+    maxItemsPerRow={4}
+    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );
