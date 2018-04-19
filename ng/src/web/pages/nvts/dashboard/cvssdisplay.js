@@ -28,6 +28,7 @@ import _ from 'gmp/locale';
 import PropTypes from '../../../utils/proptypes';
 
 import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
 
@@ -55,6 +56,14 @@ const NvtsCvssDisplay = ({
 NvtsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
+
+const DISPLAY_ID = 'nvt-by-cvss';
+
+NvtsCvssDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, NvtsCvssDisplay, {
+  title: _('NVTs by CVSS'),
+});
 
 export default NvtsCvssDisplay;
 

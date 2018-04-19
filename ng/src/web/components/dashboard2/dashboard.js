@@ -26,6 +26,8 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
+import Logger from 'gmp/log';
+
 import {is_defined, has_value} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event.js';
 
@@ -38,6 +40,10 @@ import compose from '../../utils/compose';
 import {loadSettings, saveSettings} from './settings/actions.js';
 import DashboardSettings from './settings/selectors.js';
 
+import {getDisplay} from './registry';
+
+const log = Logger.getLogger('web.components.dashboard');
+
 const convertDefaultContent = defaultContent =>
   defaultContent.map(row => createRow(
     row.map(item => createItem({name: item}))));
@@ -45,7 +51,6 @@ const convertDefaultContent = defaultContent =>
 class Dashboard extends React.Component {
 
   static propTypes = {
-    components: PropTypes.object,
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
     defaultDisplay: PropTypes.string.isRequired,
     filter: PropTypes.filter,
@@ -54,12 +59,27 @@ class Dashboard extends React.Component {
     loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
     maxRows: PropTypes.number,
+    permittedDisplays: PropTypes.arrayOf(PropTypes.string).isRequired,
     saveSettings: PropTypes.func.isRequired,
     onFilterChanged: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
+
+    const {permittedDisplays = []} = this.props;
+
+    this.components = {};
+    permittedDisplays.forEach(name => {
+      const display = getDisplay(name);
+
+      if (is_defined(display)) {
+        this.components[name] = display.component;
+      }
+      else {
+        log.warn('Unknown Dashboard display', name);
+      }
+    });
 
     this.state = {
       items: undefined,
@@ -113,7 +133,6 @@ class Dashboard extends React.Component {
       maxItemsPerRow,
       maxRows,
       filter,
-      components = {},
       onFilterChanged,
     } = this.props;
 
@@ -126,7 +145,7 @@ class Dashboard extends React.Component {
       >
         {({dragHandleProps, id, props, height, width, remove}) => {
           const {name} = props;
-          const Component = components[name];
+          const Component = this.components[name];
           return is_defined(Component) ? (
             <Component
               filter={filter}

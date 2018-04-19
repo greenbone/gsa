@@ -42,22 +42,22 @@ const TaskDashboard = ({
   <Dashboard
     id={TASK_DASHBOARD_ID}
     filter={filter}
-    components={{
-      'task-by-status': TasksStatusDisplay,
-      'task-by-severity-class': TasksSeverityDisplay,
-      'task-by-schedules': TasksSchedulesDisplay,
-      'task-by-cvss': TasksCvssDisplay,
-      'task-by-most-high-results': TasksMostHighResultsDisplay,
-      'task-by-high-results': TasksHighResultsDisplay,
-    }}
+    permittedDisplays={[
+      TasksStatusDisplay.displayId,
+      TasksSeverityDisplay.displayId,
+      TasksSchedulesDisplay.displayId,
+      TasksCvssDisplay.displayId,
+      TasksMostHighResultsDisplay.displayId,
+      TasksHighResultsDisplay.displayId,
+    ]}
     defaultContent={[
       [
-        'task-by-severity-class',
-        'task-by-most-high-results',
-        'task-by-status',
+        TasksSeverityDisplay.displayId,
+        TasksMostHighResultsDisplay.displayId,
+        TasksStatusDisplay.displayId,
       ],
     ]}
-    defaultDisplay="task-by-cvss"
+    defaultDisplay={TasksCvssDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}
