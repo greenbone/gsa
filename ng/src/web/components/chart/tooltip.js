@@ -43,6 +43,8 @@ const ToolTipText = glamorous.div({
   lineHeight: 1,
 });
 
+ToolTipText.displayName = 'ToolTipText';
+
 const ToolTipArrow = glamorous.div({
   display: 'flex',
   justifyContent: 'center',
@@ -51,6 +53,8 @@ const ToolTipArrow = glamorous.div({
   fontSize: '10px',
   color: Theme.darkGray,
 });
+
+ToolTipArrow.displayName = 'ToolTipArrow';
 
 const ToolTipContainer = glamorous.div({
   position: 'absolute',
@@ -63,6 +67,8 @@ const ToolTipContainer = glamorous.div({
   left,
   opacity: visible ? 1 : 0,
 }));
+
+ToolTipContainer.displayName = 'ToolTipContainer';
 
 const ToolTipDisplay = ({children, ...props}) => (
   <ToolTipContainer {...props}>
