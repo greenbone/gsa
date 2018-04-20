@@ -38,13 +38,18 @@ const margin = {
 };
 
 const BubbleChart = ({
-  data,
+  data = [],
   width,
   height,
   onDataClick,
 }) => {
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
+
+  if (data.length === 0) {
+    // TODO should render empty placeholder
+    return null;
+  }
 
   const bubbles = pack();
   bubbles.size([maxWidth, maxHeight]);
