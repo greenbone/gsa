@@ -220,25 +220,59 @@ EmptyDonut.propTypes = {
 
 class Donut3DChart extends React.Component {
 
-  shouldComponentUpdate(nextProps) {
+  constructor(...args) {
+    super(...args);
+
+    this.legendRef = React.createRef();
+
+    this.state = {
+      width: this.getWidth(),
+    };
+  }
+
+  getWidth() {
+    const {width} = this.props;
+    const {current: legend} = this.legendRef;
+
+    if (legend === null) {
+      return width;
+    }
+
+    const {width: legendWidth} = legend.getBoundingClientRect();
+    return width - legendWidth - LEGEND_MARGIN;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
     return nextProps.data !== this.props.data ||
       nextProps.width !== this.props.width ||
-      nextProps.height !== this.props.height;
+      nextProps.height !== this.props.height ||
+      nextState.width !== this.state.width;
+  }
+
+  update() {
+    const width = this.getWidth();
+
+    if (width !== this.state.width) {
+      this.setState({width});
+    }
+  }
+
+  componentDidUpdate() {
+    this.update();
+  }
+
+  componentDidMount() {
+    this.update();
   }
 
   render() {
-    let {width} = this.props;
+    const {width} = this.state;
     const {
       data = [],
       height,
       onDataClick,
       onLegendItemClick,
     } = this.props;
-
-    if (this.legend) {
-      const {width: legendWidth} = this.legend.getBoundingClientRect();
-      width = width - legendWidth - LEGEND_MARGIN;
-    }
 
     const horizontalMargin = margin.left + margin.right;
     const verticalMargin = margin.top + margin.left;
@@ -337,7 +371,7 @@ class Donut3DChart extends React.Component {
         {data.length > 0 &&
           <Legend
             data={data}
-            innerRef={ref => this.legend = ref}
+            innerRef={this.legendRef}
             onItemClick={onLegendItemClick}
           />
         }
