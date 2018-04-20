@@ -43,6 +43,8 @@ const ToolTipText = glamorous.div({
   lineHeight: 1,
 });
 
+ToolTipText.displayName = 'ToolTipText';
+
 const ToolTipArrow = glamorous.div({
   display: 'flex',
   justifyContent: 'center',
@@ -52,17 +54,17 @@ const ToolTipArrow = glamorous.div({
   color: Theme.darkGray,
 });
 
+ToolTipArrow.displayName = 'ToolTipArrow';
+
 const ToolTipContainer = glamorous.div({
   position: 'absolute',
   pointerEvents: 'none',
   display: 'flex',
   flexDirection: 'column',
   zIndex: Theme.Layers.onTop,
-}, ({top = 0, left = 0, visible = false}) => ({
-  top,
-  left,
-  opacity: visible ? 1 : 0,
-}));
+});
+
+ToolTipContainer.displayName = 'ToolTipContainer';
 
 const ToolTipDisplay = ({children, ...props}) => (
   <ToolTipContainer {...props}>
@@ -89,7 +91,9 @@ class ToolTip extends React.Component {
 
     this.hide = this.hide.bind(this);
     this.show = this.show.bind(this);
-    this.setTargetRef = this.setTargetRef.bind(this);
+
+    this.target = React.createRef();
+    this.tooltip = React.createRef();
   }
 
   show() {
@@ -100,22 +104,28 @@ class ToolTip extends React.Component {
     this.setState({visible: false});
   }
 
-  setTargetRef(ref) {
-    this.target = ref;
-  }
+  setPosition() {
+    const target = this.target.current;
+    const tooltip = this.tooltip.current;
 
-  position() {
-    if (!has_value(this.target) || !has_value(this.tooltip)) {
-      // initial rendering
-      return {};
+    if (!has_value(target) || !has_value(tooltip)) {
+      // ensure both refs have been set to not crash
+      return;
     }
 
-    const rect = this.target.getBoundingClientRect();
-    return {
-      top: rect.top - this.tooltip.offsetHeight + window.scrollY,
-      left: rect.left + (rect.width - this.tooltip.offsetWidth) / 2 +
-        window.scrollX,
-    };
+    const rect = target.getBoundingClientRect();
+    const top = rect.top - tooltip.offsetHeight + window.scrollY;
+    const left = rect.left + (rect.width - tooltip.offsetWidth) / 2 +
+        window.scrollX;
+
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${left}px`;
+  }
+
+  componentDidUpdate() {
+    if (this.state.visible) {
+      this.setPosition();
+    }
   }
 
   render() {
@@ -123,12 +133,10 @@ class ToolTip extends React.Component {
     const {visible} = this.state;
     return (
       <React.Fragment>
-        {content &&
+        {content && visible &&
           <Portal>
             <ToolTipDisplay
-              {...this.position()}
-              visible={visible}
-              innerRef={ref => this.tooltip = ref}
+              innerRef={this.tooltip}
             >
               {content}
             </ToolTipDisplay>
@@ -137,7 +145,7 @@ class ToolTip extends React.Component {
         {children({
           show: this.show,
           hide: this.hide,
-          targetRef: this.setTargetRef,
+          targetRef: this.target,
         })}
       </React.Fragment>
     );

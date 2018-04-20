@@ -22,7 +22,6 @@
  */
 import React from 'react';
 
-import {Bar} from '@vx/shape';
 import {scaleBand, scaleLinear} from 'd3-scale';
 
 import {shorten} from 'gmp/utils/string';
@@ -145,8 +144,8 @@ class BarChart extends React.Component {
                     onClick={is_defined(onDataClick) ?
                       () => onDataClick(d) : undefined}
                   >
-                    <Bar
-                      innerRef={targetRef}
+                    <rect
+                      ref={targetRef}
                       fill={d.color}
                       x={horizontal ? 1 : xScale(d.x)}
                       y={horizontal ? xScale(d.x) : yScale(d.y)}

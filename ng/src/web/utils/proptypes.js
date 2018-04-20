@@ -170,6 +170,14 @@ export const severityClass = ReactPropTypes.objectOf([
   SEVERITY_CLASS_PCI_DSS,
 ]);
 
+export const ref = ReactPropTypes.oneOfType([
+  ReactPropTypes.func,
+  // React.createRef() returns an object with a current property
+  ReactPropTypes.shape({
+    current: ReactPropTypes.any,
+  }),
+]);
+
 export default {
   bool: ReactPropTypes.bool,
   any: ReactPropTypes.any,
@@ -208,6 +216,7 @@ export default {
   icon,
   id,
   idOrZero,
+  ref,
   set,
   settings,
   severityClass,

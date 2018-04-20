@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import equal from 'fast-deep-equal';
+
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
@@ -60,7 +62,7 @@ class DataDisplay extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.originalData !== nextProps.data) {
+    if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
       return {
         data: DataDisplay.getTransformedData(nextProps),

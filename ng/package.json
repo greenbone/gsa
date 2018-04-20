@@ -34,6 +34,7 @@
     "d3-shape": "^1.2.0",
     "d3-tip": "^0.7.1",
     "downshift": "^1.31.6",
+    "fast-deep-equal": "^1.1.0",
     "glamor": "^2.20.40",
     "glamorous": "^4.12.2",
     "i18next": "^11.1.1",
