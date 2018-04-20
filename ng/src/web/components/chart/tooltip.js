@@ -129,7 +129,7 @@ class ToolTip extends React.Component {
     const {visible} = this.state;
     return (
       <React.Fragment>
-        {content &&
+        {content && visible &&
           <Portal>
             <ToolTipDisplay
               {...this.position()}
