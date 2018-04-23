@@ -521,6 +521,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/os/listpage.js
      ${NG_SRC_DIR}/src/web/pages/os/row.js
      ${NG_SRC_DIR}/src/web/pages/os/table.js
+     ${NG_SRC_DIR}/src/web/pages/os/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/os/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/os/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/os/dashboard/vulnscoredisplay.js
