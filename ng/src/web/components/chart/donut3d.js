@@ -270,6 +270,7 @@ class Donut3DChart extends React.Component {
     const {
       data = [],
       height,
+      svgRef,
       onDataClick,
       onLegendItemClick,
     } = this.props;
@@ -298,7 +299,11 @@ class Donut3DChart extends React.Component {
     };
     return (
       <Layout align={['start', 'start']}>
-        <Svg width={width} height={height}>
+        <Svg
+          width={width}
+          height={height}
+          innerRef={svgRef}
+        >
           {data.length > 0 ?
             <Pie
               data={data}
@@ -388,6 +393,7 @@ Donut3DChart.propTypes = {
     toolTip: PropTypes.elementOrString,
   })),
   height: PropTypes.number.isRequired,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   onDataClick: PropTypes.func,
   onLegendItemClick: PropTypes.func,

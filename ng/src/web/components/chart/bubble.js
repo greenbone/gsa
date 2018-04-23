@@ -41,6 +41,7 @@ const BubbleChart = ({
   data = [],
   width,
   height,
+  svgRef,
   onDataClick,
 }) => {
   const maxWidth = width - margin.left - margin.right;
@@ -60,7 +61,11 @@ const BubbleChart = ({
 
   const nodes = bubbles(root).leaves();
   return (
-    <Svg width={width} height={height}>
+    <Svg
+      width={width}
+      height={height}
+      innerRef={svgRef}
+    >
       <Group
         top={margin.top}
         left={margin.left}
@@ -125,6 +130,7 @@ BubbleChart.propTypes = {
     toolTip: PropTypes.elementOrString,
   })),
   height: PropTypes.number.isRequired,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   onDataClick: PropTypes.func,
 };

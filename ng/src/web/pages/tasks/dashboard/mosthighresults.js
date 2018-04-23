@@ -102,8 +102,9 @@ class TasksMostHighResultsDisplay extends React.Component {
             dataTransform={transformHighResultsData}
             title={() => _('Tasks with most High Results per Host')}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <BarChart
+                svgRef={svgRef}
                 horizontal
                 displayLegend={false}
                 width={width}

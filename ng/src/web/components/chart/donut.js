@@ -90,11 +90,16 @@ const DonutChart = ({
   data,
   height,
   width,
+  svgRef,
 }) => {
   const radius = (height - margin.top) / 2;
   return (
     <Layout align={['start', 'start']}>
-      <Svg width={width} height={height}>
+      <Svg
+        width={width}
+        height={height}
+        svgRef={svgRef}
+      >
         <Pie
           data={data}
           top={height / 2}
@@ -135,6 +140,7 @@ DonutChart.propTypes = {
     label: PropTypes.any.isRequired,
   })).isRequired,
   height: PropTypes.number.isRequired,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
 };
 

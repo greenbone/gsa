@@ -119,8 +119,9 @@ class OsVulnScoreDisplay extends React.Component {
             dataTransform={transformVulnScoreData}
             title={() => _('Operating Systems by Vulnerability Score')}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <BarChart
+                svgRef={svgRef}
                 horizontal
                 displayLegend={false}
                 width={width}

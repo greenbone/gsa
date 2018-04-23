@@ -125,8 +125,9 @@ class NvtsFamilyDisplay extends React.Component {
             title={({data: tdata}) =>
             _('NVTS by Family (Total: {{count}})', {count: tdata.total})}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <BubbleChart
+                svgRef={svgRef}
                 data={tdata}
                 height={height}
                 width={width}

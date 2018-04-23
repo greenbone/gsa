@@ -109,13 +109,18 @@ class WordCloudChart extends React.Component {
     const {
       width,
       height,
+      svgRef,
     } = this.props;
 
     const {
       words,
     } = this.state;
     return (
-      <Svg width={width} height={height}>
+      <Svg
+        width={width}
+        height={height}
+        svgRef={svgRef}
+      >
         <Group
           top={height / 2 + margin.top}
           left={width / 2 + margin.left}
@@ -148,6 +153,7 @@ WordCloudChart.propTypes = {
     label: PropTypes.toString.isRequired,
   })),
   height: PropTypes.number.isRequired,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
 };
 

@@ -196,8 +196,9 @@ class VulnsHostsDisplay extends React.Component {
             _('Vulnerabilities by Hosts (Total: {{count}})',
               {count: tdata.total})}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <BarChart
+                svgRef={svgRef}
                 data={tdata}
                 displayLegend={false}
                 height={height}
