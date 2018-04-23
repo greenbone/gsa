@@ -25,7 +25,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import {debounce} from 'gmp/utils/event';
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -52,13 +52,17 @@ class AutoSize extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {};
+
     this.handleResize = debounce(this.handleResize.bind(this), 100);
+
+    this.containerRef = React.createRef();
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize, {passive: true});
 
-    this.forceUpdate(); // force re-render to provide size
+    this.setState(this.getSize());
   }
 
   componentWillUnmount() {
@@ -66,31 +70,43 @@ class AutoSize extends React.Component {
   }
 
   handleResize() {
-    this.forceUpdate();
+    this.setState(this.getSize());
   }
 
   getSize() {
-    if (!has_value(this.container)) {
+    const {current: container} = this.containerRef;
+
+    if (container === null) {
       return {};
     }
 
-    const {width, height} = this.container.getBoundingClientRect();
+    const {width, height} = container.getBoundingClientRect();
     return {
       width,
       height,
     };
   }
 
+  componentDidUpdate() {
+    const size = this.getSize();
+
+    if (size.width !== this.state.width ||
+      size.height !== this.state.height) {
+
+      this.setState(size);
+    }
+  }
+
   render() {
     const {children} = this.props;
 
-    const {width, height} = this.getSize();
+    const {width, height} = this.state;
 
     // only call children if height and width are defined
     const shouldCallChildren = is_defined(height) && is_defined(width);
     return (
       <Container
-        innerRef={ref => this.container = ref}
+        innerRef={this.containerRef}
       >
         {shouldCallChildren && children({width, height})}
       </Container>
