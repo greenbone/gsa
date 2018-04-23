@@ -12,17 +12,30 @@ $ cd gsa && git log
 This is the first beta release of the gsa module 8.0 for the Greenbone
 Vulnerability Management (GVM) framework.
 
-This release introduces an entirely newly implemented user interface,
-switching from xslt-generated web pages per request to a single
-page application.
+This release introduces an entirely re-written version of GSA with an overhauled
+new user interface technology, switching from XSLT-generated web pages per
+request to a single page JavaScript application. The XSLT got removed
+completely and was replaced by a modern JS application allowing to add features
+and usability improvements faster and easier in future.
+
+The web server daemon (gsad) got a big code cleanup and improvements. Due to
+changing to a JS application it doesn't generate any HTML code anymore. Now gsad
+only ships static files and acts as some kind of http proxy between the JS
+based GSA and gvmd.
 
 Apart from this, the module covers a number of significant advances
 and clean-ups compared to the previous gsa module.
 
 Many thanks to everyone who has contributed to this release:
+Steffen Waterkamp, Björn Ricks, Jan-Oliver Wagner and Michael Wiegand.
 TODO
 
 Main changes compared to the 7.0 series:
+  * nodejs >= 6 is required to generate the new JS based version of GSA
+  * npm or yarn is required for installing the JavaScript dependencies
+  * libxslt is no longer required because all XSLT has been removed
+  * The its "face" got removed
+  * The extra help pages got replaced by links to the documentation
 TODO
 
 ## gsa 7.0.0 (2016-11-09)
