@@ -69,6 +69,7 @@ class BarChart extends React.Component {
       xLabel,
       yLabel,
       horizontal = false,
+      svgRef,
       onDataClick,
       onLegendItemClick,
     } = this.props;
@@ -117,7 +118,11 @@ class BarChart extends React.Component {
 
     return (
       <Layout align={['start', 'start']}>
-        <Svg width={width} height={height}>
+        <Svg
+          innerRef={svgRef}
+          width={width}
+          height={height}
+        >
           <Group top={margin.top} left={marginLeft}>
             <Axis
               orientation="left"
@@ -202,6 +207,7 @@ BarChart.propTypes = {
   displayLegend: PropTypes.bool,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   xLabel: PropTypes.string,
   yLabel: PropTypes.string,
