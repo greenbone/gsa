@@ -10,20 +10,20 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ checksum "./ng/package.json"  }}
+            - v1-deps-{{ checksum "./ng/yarn.lock"  }}
             - v1-deps
       - run:
           working_directory: ~/gsa/ng
           name: Install JavaScript dependencies
           command: yarn
       - save_cache:
-          key: v1-deps-{{ checksum "./ng/package.json"  }}
+          key: v1-deps-{{ checksum "./ng/yarn.lock"  }}
           paths:
             - ./ng/node_modules
       - run:
           working_directory: ~/gsa/ng
           name: Run JavaScript tests
-          command: yarn test --coverage
+          command: yarn test:coverage
       - run:
           working_directory: ~/gsa/ng
           name: Submit test coverage to codecov.io
@@ -51,13 +51,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ checksum "./ng/package.json"  }}
+            - v1-deps-{{ checksum "./ng/yarn.lock"  }}
             - v1-deps
       - run:
           name: Configure and compile
           command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_GSAD=1 .. && make install
       - save_cache:
-          key: v1-deps-{{ checksum "./ng/package.json"  }}
+          key: v1-deps-{{ checksum "./ng/yarn.lock"  }}
           paths:
             - ./ng/node_modules
 workflows:
