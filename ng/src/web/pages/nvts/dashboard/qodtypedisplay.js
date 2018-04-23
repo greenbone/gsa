@@ -111,8 +111,9 @@ class NvtsQodTypeDisplay extends React.Component {
             title={({data: tdata}) => _('NVTs by QoD-Type (Total: {{count}})',
               {count: tdata.total})}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <DonutChart
+                svgRef={svgRef}
                 data={tdata}
                 height={height}
                 width={width}

@@ -144,8 +144,9 @@ class TasksStatusDisplay extends React.Component {
             title={({data: tdata}) =>
               _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <DonutChart
+                svgRef={svgRef}
                 width={width}
                 height={height}
                 data={tdata}
