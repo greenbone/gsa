@@ -159,8 +159,8 @@ class BarChart extends React.Component {
                           yScale(d.y) :
                           xScale.bandwidth()
                       }
-                      onMouseEnter={() => show}
-                      onMouseLeave={() => hide}
+                      onMouseEnter={show}
+                      onMouseLeave={hide}
                     />
                   </Group>
                 )}
