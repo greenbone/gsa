@@ -28,6 +28,7 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import OsCvssDisplay from './cvssdisplay';
+import OsSeverityClassDisplay from './severityclassdisplay';
 import OsVulnScoreDisplay from './vulnscoredisplay';
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
@@ -40,11 +41,13 @@ const OsDashboard = ({
     id={OS_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
-      OsVulnScoreDisplay.displayId,
       OsCvssDisplay.displayId,
+      OsSeverityClassDisplay.displayId,
+      OsVulnScoreDisplay.displayId,
     ]}
     defaultContent={[
       [
+        OsSeverityClassDisplay.displayId,
         OsCvssDisplay.displayId,
         OsVulnScoreDisplay.displayId,
       ],
