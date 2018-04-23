@@ -23,7 +23,7 @@ jobs:
       - run:
           working_directory: ~/gsa/ng
           name: Run JavaScript tests
-          command: yarn test --coverage
+          command: yarn test:coverage
       - run:
           working_directory: ~/gsa/ng
           name: Submit test coverage to codecov.io
