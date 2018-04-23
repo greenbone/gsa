@@ -61,7 +61,7 @@
   },
   "scripts": {
     "test": "NODE_PATH=src react-scripts test --env=jsdom",
-    "test:coverage": "NODE_PATH=src react-scripts test --env=jsdom --coverage",
+    "test:coverage": "NODE_PATH=src react-scripts test --env=jsdom --coverage --maxWorkers 2",
     "lint": "NODE_PATH=src eslint src",
     "start": "NODE_PATH=src react-scripts start",
     "build": "NODE_PATH=src react-scripts build",
