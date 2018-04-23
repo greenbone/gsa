@@ -49,6 +49,14 @@ class OperatingSystemsCommand extends EntitiesCommand {
     return root.get_assets.get_assets_response;
   }
 
+  getAverageSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'os',
+      group_column: 'average_severity',
+      filter,
+    });
+  }
+
   getVulnScoreAggregates({filter, max} = {}) {
     return this.getAggregates({
       filter,
