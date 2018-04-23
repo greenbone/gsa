@@ -31,8 +31,34 @@ const loaderPropTypes = {
   filter: PropTypes.filter,
 };
 
+export const OS_SEVERITY = 'os-severity';
 export const OS_VULN_SCORE = 'os-by-most-vulnerable';
 const OS_MAX_GROUPS = 10;
+
+export const osAverageSeverityLoader = loadFunc(
+  ({gmp, filter}) => gmp.operatingsystems.getAverageSeverityAggregates({filter})
+    .then(r => r.data),
+  OS_SEVERITY);
+
+export const OsAverageSeverityLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={OS_SEVERITY}
+    filter={filter}
+    load={osAverageSeverityLoader}
+    subscriptions={[
+      'os.timer',
+      'os.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+OsAverageSeverityLoader.propTypes = loaderPropTypes;
+
 
 export const osVulnScoreLoader = loadFunc(
   ({gmp, filter}) => gmp.operatingsystems.getVulnScoreAggregates(
