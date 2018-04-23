@@ -1,5 +1,4 @@
-SUMMARY OF RELEASE CHANGES FOR GREENBONE SECURITY ASSISTANT
-===========================================================
+# SUMMARY OF RELEASE CHANGES FOR GREENBONE SECURITY ASSISTANT
 
 For detailed code changes, please visit
  https://github.com/greenbone/gsa/commits/master
@@ -8,25 +7,38 @@ $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
 
-gsa 8.0+beta1 (2018-XX-XX)
+## gsa 8.0+beta1 (2018-XX-XX)
 
 This is the first beta release of the gsa module 8.0 for the Greenbone
 Vulnerability Management (GVM) framework.
 
-This release introduces an entirely newly implemented user interface,
-switching from xslt-generated web pages per request to a single
-page application.
+This release introduces an entirely re-written version of GSA with an overhauled
+new user interface technology, switching from XSLT-generated web pages per
+request to a single page JavaScript application. The XSLT got removed
+completely and was replaced by a modern JS application allowing to add features
+and usability improvements faster and easier in future.
+
+The web server daemon (gsad) got a big code cleanup and improvements. Due to
+changing to a JS application it doesn't generate any HTML code anymore. Now gsad
+only ships static files and acts as some kind of http proxy between the JS
+based GSA and gvmd.
 
 Apart from this, the module covers a number of significant advances
 and clean-ups compared to the previous gsa module.
 
 Many thanks to everyone who has contributed to this release:
+Steffen Waterkamp, Björn Ricks, Jan-Oliver Wagner and Michael Wiegand.
 TODO
 
 Main changes compared to the 7.0 series:
+  * nodejs >= 6 is required to generate the new JS based version of GSA
+  * npm or yarn is required for installing the JavaScript dependencies
+  * libxslt is no longer required because all XSLT has been removed
+  * The its "face" got removed
+  * The extra help pages got replaced by links to the documentation
 TODO
 
-gsa 7.0.0 (2016-11-09)
+## gsa 7.0.0 (2016-11-09)
 
 This is the first release of the Greenbone Security Assistant (GSA) 7.0 module
 for the Open Vulnerability Assessment System release 9 (OpenVAS-9). It is the
@@ -81,7 +93,7 @@ Main changes compared to 6.1+beta4:
 * Reduced memory consumption and fixed memory leaks.
 
 
-gsa 6.1+beta4 (2016-04-15)
+## gsa 6.1+beta4 (2016-04-15)
 
 This is the fourth beta release of the upcoming version 6.1 of the
 Greenbone Security Assistant (GSA). It will be part of the upcoming
@@ -101,7 +113,7 @@ Main changes since 6.1+beta3:
 * Reduce memory usage during XSL transformations.
 
 
-gsa 6.1+beta3 (2016-04-14)
+## gsa 6.1+beta3 (2016-04-14)
 
 This is the third beta release of the upcoming version 6.1 of the
 Greenbone Security Assistant (GSA). It will be part of the upcoming
@@ -151,7 +163,7 @@ Main changes since 6.1+beta2:
 * Various code improvements.
 
 
-gsa 6.1+beta2 (2015-10-21)
+## gsa 6.1+beta2 (2015-10-21)
 
 This is the second beta release of the upcoming version 6.1 of the
 Greenbone Security Assistant (GSA). It is the web client that makes the
@@ -198,7 +210,7 @@ Main changes since 6.1+beta1:
   management.
 
 
-gsa 6.1+beta1 (2015-07-17)
+## gsa 6.1+beta1 (2015-07-17)
 
 This is the first beta version of the upcoming 6.1 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -218,7 +230,7 @@ Main changes since 6.0 series:
 * Updated documentation.
 
 
-gsa 6.0.1 (2015-04-01)
+## gsa 6.0.1 (2015-04-01)
 
 This is the first maintenance release of the Greenbone Security Assistant (GSA)
 6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
@@ -243,7 +255,7 @@ Main changes compared to 6.0.0:
 * Various minor bugfixes.
 
 
-gsa 6.0.0 (2015-03-17)
+## gsa 6.0.0 (2015-03-17)
 
 This is the first release of the Greenbone Security Assistant (GSA) 6.0 module
 for the Open Vulnerability Assessment System release 8 (OpenVAS-8). It is the
@@ -318,7 +330,7 @@ Main changes compared to 6.0+beta6:
 * Documentation has been updated.
 
 
-gsa 6.0+beta6 (2015-02-11)
+## gsa 6.0+beta6 (2015-02-11)
 
 This is the sixth beta version of the upcoming 6.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -356,7 +368,7 @@ Main changes since 6.0+beta5:
 * Documentation has been updated.
 
 
-gsa 6.0+beta5 (2015-01-12)
+## gsa 6.0+beta5 (2015-01-12)
 
 This is the fifth beta version of the upcoming 6.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -387,7 +399,7 @@ Main changes since 6.0+beta4:
 * Numerous small improvements and bugfixes.
 
 
-gsa 6.0+beta4 (2014-11-21)
+## gsa 6.0+beta4 (2014-11-21)
 
 This is the fourth beta version of the upcoming 6.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -416,7 +428,7 @@ Main changes since 6.0+beta3:
 * Numerous small improvements and bugfixes.
 
 
-gsa 6.0+beta3 (2014-10-14)
+## gsa 6.0+beta3 (2014-10-14)
 
 This is the third beta version of the upcoming 6.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -444,7 +456,7 @@ Main changes since 6.0+beta2:
 * Documentation has been updated.
 
 
-gsa 6.0+beta2 (2014-09-23)
+## gsa 6.0+beta2 (2014-09-23)
 
 This is the second beta version of the upcoming 6.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -476,7 +488,7 @@ Main changes since 6.0+beta1:
 * Numerous small improvements and bugfixes.
 
 
-gsa 6.0+beta1 (2014-08-23)
+## gsa 6.0+beta1 (2014-08-23)
 
 This is the first beta version of the upcoming 6.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -496,11 +508,11 @@ Main changes since 5.0 series:
 * New: For Task objects there is now a scanner selection. Scanner-specific
   settings are grouped with the respective scanner type. Apart from the
   classic OpenVAS Scanner now a OSP-based OVAL Scanner "ovaldi" is an optional
-  scanner type.  
+  scanner type.
 * New: Scan Configuration editor for OSP-based scanner type "ovaldi".
 * New: Chart types "bar-chart" and "donut", based on the d3 library, for
   each of the SecInfo object types.  These are used for showing severity
-  and severity classes. 
+  and severity classes.
 * New: SecInfo dashboard showing 4 charts that can be indivually be configured
   regarding type, object type and filter.
 * New: SecInfo object type "CERT-Bund", a german CERT.
@@ -517,7 +529,7 @@ Main changes since 5.0 series:
 * Various small fixes and improvements.
 
 
-gsa 5.0.0 (2014-04-23)
+## gsa 5.0.0 (2014-04-23)
 
 This is the first release of the Greenbone Security Assistant (GSA) 5.0 module
 for the Open Vulnerability Assessment System release 7 (OpenVAS-7).
@@ -565,7 +577,7 @@ And additionally changes compared to last release candidate 5.0+beta13:
 * Improved package configuration.
 * Various bug-fixes, cleanups and improvements, especially for consistency.
 
-gsa 5.0+beta13 (2014-04-10)
+## gsa 5.0+beta13 (2014-04-10)
 
 This is the thirteenth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set of
@@ -589,7 +601,7 @@ Main changes since 5.0+beta12:
 * Support for the alternative face "IT-Schwachstellenampel" has been added.
 
 
-gsa 5.0+beta12 (2014-03-28)
+## gsa 5.0+beta12 (2014-03-28)
 
 This is the twelfth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set of
@@ -608,7 +620,7 @@ Main changes since 5.0+beta10:
 * Code cleanup.
 
 
-gsa 5.0+beta11 (2014-03-26)
+## gsa 5.0+beta11 (2014-03-26)
 
 This is the eleventh beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set of
@@ -631,7 +643,7 @@ Main changes since 5.0+beta10:
 * Code cleanup.
 
 
-gsa 5.0+beta10 (2014-03-18)
+## gsa 5.0+beta10 (2014-03-18)
 
 this is the tenth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set of
@@ -649,7 +661,7 @@ Main changes since 5.0+beta9:
 * Code cleanup.
 
 
-gsa 5.0+beta9 (2014-03-12)
+## gsa 5.0+beta9 (2014-03-12)
 
 This is the ninth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set of
@@ -667,7 +679,7 @@ Main changes since 5.0+beta8:
 * Code cleanup.
 
 
-gsa 5.0+beta8 (2014-03-06)
+## gsa 5.0+beta8 (2014-03-06)
 
 This is the eighth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set of
@@ -689,7 +701,7 @@ Main changes since 5.0+beta7:
 * Code cleanup.
 
 
-gsa 5.0+beta7 (2014-02-27)
+## gsa 5.0+beta7 (2014-02-27)
 
 This is the seventh beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set of
@@ -708,7 +720,7 @@ Main changes since 5.0+beta6:
 * Code cleanup and various small bug-fixes.
 
 
-gsa 5.0+beta6 (2014-02-16)
+## gsa 5.0+beta6 (2014-02-16)
 
 This is the sixth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set
@@ -728,7 +740,7 @@ Main changes since 5.0+beta5:
 * Code cleanup and various small bug-fixes.
 
 
-gsa 5.0+beta5 (2014-01-28)
+## gsa 5.0+beta5 (2014-01-28)
 
 This is the fifth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is a web client that makes the full feature set
@@ -750,7 +762,7 @@ Main changes since 5.0+beta4:
 * Code cleanup.
 
 
-gsa 5.0+beta4 (2014-01-13)
+## gsa 5.0+beta4 (2014-01-13)
 
 This is the fourth beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -772,7 +784,7 @@ Main changes since 5.0+beta3:
 * Code cleanup.
 
 
-gsa 5.0+beta3 (2013-11-22)
+## gsa 5.0+beta3 (2013-11-22)
 
 This is the third beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -799,7 +811,7 @@ Main changes since 5.0+beta2:
 * Code cleanup.
 
 
-gsa 5.0+beta2 (2013-09-30)
+## gsa 5.0+beta2 (2013-09-30)
 
 This is the second beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -826,7 +838,7 @@ Main changes since 5.0+beta1:
 * Code cleanup.
 
 
-gsa 5.0+beta1 (2013-07-01)
+## gsa 5.0+beta1 (2013-07-01)
 
 This is the first beta version of the upcoming 5.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -858,7 +870,7 @@ Main changes since 4.0 series:
 * Code cleanup.
 
 
-gsa 4.0+beta5 (2013-02-22)
+## gsa 4.0+beta5 (2013-02-22)
 
 This is the fifth beta version of the upcoming 4.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -883,7 +895,7 @@ Main changes since 4.0+beta4:
 * Exporting and editing is now supported for more objects.
 
 
-gsa 4.0+beta4 (2012-11-05)
+## gsa 4.0+beta4 (2012-11-05)
 
 This is the fourth beta version of the upcoming 4.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -906,7 +918,7 @@ Main changes since 4.0+beta3:
 * CPE Management has been improved.
 
 
-gsa 4.0+beta3 (2012-05-04)
+## gsa 4.0+beta3 (2012-05-04)
 
 This is the third beta version of the upcoming 4.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -923,7 +935,7 @@ Main changes since 4.0+beta3:
 * Several small inconsistencies in the user interfaces have been addressed.
 
 
-gsa 4.0+beta2 (2012-04-25)
+## gsa 4.0+beta2 (2012-04-25)
 
 This is the second beta version of the upcoming 4.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -943,7 +955,7 @@ Main changes since 4.0+beta2:
 * Support for new features in OpenVAS Manager 4.0+beta2 has been added.
 
 
-gsa 4.0+beta1 (2012-04-16)
+## gsa 4.0+beta1 (2012-04-16)
 
 This is the first beta version of the upcoming 4.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -966,7 +978,7 @@ Main changes since 3.0 series:
   by corresponding dialogs.
 
 
-gsa 3.0.0 (2012-03-26)
+## gsa 3.0.0 (2012-03-26)
 
 This is the first release of the Greenbone Security Assistant (GSA) 3.0 module
 for the Open Vulnerability Assessment System release 5 (OpenVAS-5).
@@ -1032,7 +1044,7 @@ And additionally changes compared to last release candidate 3.0+rc1:
 * Allows ',' as separator for observer lists.
 
 
-gsa 3.0+rc1 (2012-03-15)
+## gsa 3.0+rc1 (2012-03-15)
 
 This is the first release candidate of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1052,7 +1064,7 @@ Main changes since 3.0+beta8:
 * Various bug fixes.
 
 
-gsa 3.0+beta8 (2011-12-02)
+## gsa 3.0+beta8 (2011-12-02)
 
 This is the eigth beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1071,7 +1083,7 @@ Main changes since 3.0+beta7:
 * Input validation has been improved.
 
 
-gsa 3.0+beta7 (2011-11-23)
+## gsa 3.0+beta7 (2011-11-23)
 
 This is the seventh beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1091,7 +1103,7 @@ Main changes since 3.0+beta6:
   were applied has been fixed.
 
 
-gsa 3.0+beta6 (2011-11-16)
+## gsa 3.0+beta6 (2011-11-16)
 
 This is the sixth beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1118,7 +1130,7 @@ Main changes since 3.0+beta5:
   been fixed.
 
 
-gsa 3.0+beta5 (2011-10-11)
+## gsa 3.0+beta5 (2011-10-11)
 
 This is the fifth beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1143,7 +1155,7 @@ Main changes since 3.0+beta4:
 * Support for individual time zones for users has been added.
 
 
-gsa 3.0+beta4 (2011-07-21)
+## gsa 3.0+beta4 (2011-07-21)
 
 This is the fourth beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1164,7 +1176,7 @@ Main changes since 3.0+beta3:
   scan configs to tasks.
 
 
-gsa 3.0+beta3 (2011-06-24)
+## gsa 3.0+beta3 (2011-06-24)
 
 This is the third beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1191,7 +1203,7 @@ Main changes since 3.0+beta2:
 * Support for viewing individual result details has been added.
 
 
-gsa 3.0+beta2 (2011-05-19)
+## gsa 3.0+beta2 (2011-05-19)
 
 This is the second beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1212,7 +1224,7 @@ Main changes since 3.0+beta1:
   expected behavior.
 
 
-gsa 3.0+beta1 (2011-05-05)
+## gsa 3.0+beta1 (2011-05-05)
 
 This is the first beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
@@ -1238,7 +1250,7 @@ Main changes since 2.0 series:
   added.
 
 
-gsa 2.0.1 (2011-03-02)
+## gsa 2.0.1 (2011-03-02)
 
 This is the first maintenance release of the Greenbone Security Assistant (GSA)
 2.0 module for the Open Vulnerability Assessment System release 4 (OpenVAS-4).
@@ -1258,7 +1270,7 @@ Main changes since 2.0.0:
 * GSA now does XSL transformation in a separate process by default.
 
 
-gsa 2.0.0 (2011-02-21)
+## gsa 2.0.0 (2011-02-21)
 
 This is the first release of the Greenbone Security Assistant (GSA) 2.0 module
 for the Open Vulnerability Assessment System release 4 (OpenVAS-4).
@@ -1305,7 +1317,7 @@ Main changes since 2.0+rc5:
 * GSA now checks for required libxml threading support.
 
 
-gsa 2.0+rc5 (2011-02-18)
+## gsa 2.0+rc5 (2011-02-18)
 
 This is the fifth release candidate for the upcoming 2.0 release of the
 Greenbone Security Assistant (GSA). It is the web client that makes the full
@@ -1325,7 +1337,7 @@ Main changes since 2.0+rc4:
 * The handling of POST requests after a relogin has been improved.
 
 
-gsa 2.0+rc4 (2011-02-17)
+## gsa 2.0+rc4 (2011-02-17)
 
 This is the fourth release candidate for the upcoming 2.0 release of the
 Greenbone Security Assistant (GSA). It is the web client that makes the full
@@ -1351,7 +1363,7 @@ Main changes since 2.0+rc3:
 * Cookie base session identification has been added.
 
 
-gsa 2.0+rc3 (2011-02-04)
+## gsa 2.0+rc3 (2011-02-04)
 
 This is the third release candidate for the upcoming 2.0 release of the
 Greenbone Security Assistant (GSA). It is the web client that makes the full
@@ -1374,7 +1386,7 @@ Main changes since 2.0+rc2:
 * GSA now provides a manual page for the gsad binary.
 
 
-gsa 2.0+rc2 (2011-01-21)
+## gsa 2.0+rc2 (2011-01-21)
 
 This is the second release candidate for the upcoming 2.0 release of the
 Greenbone Security Assistant (GSA). It is the web client that makes the full
@@ -1397,7 +1409,7 @@ Main changes since 2.0+rc1:
   (9392) if those are unavailable.
 
 
-gsa 2.0+rc1 (2010-12-21)
+## gsa 2.0+rc1 (2010-12-21)
 
 This is the first release candidate for the upcoming 2.0 release of the
 Greenbone Security Assistant (GSA). It is the web client that makes the full
@@ -1422,7 +1434,7 @@ Main changes since 2.0+beta1:
 * Support for setting the port range for a target has been added.
 
 
-gsa 2.0+beta1 (2010-11-19)
+## gsa 2.0+beta1 (2010-11-19)
 
 This is the first beta version of the upcoming 2.0 release of the
 Greenbone Security Assistant (GSA). It is the web client that makes
@@ -1450,7 +1462,7 @@ Central new features of Greenbone Security Assistant 2.0:
 * GSA now builds with libmicrohttpd 0.9.2 and above.
 
 
-gsa 1.0.0 (2010-08-02)
+## gsa 1.0.0 (2010-08-02)
 
 This is the 1.0.0 release of GSA (Greenbone Security Assistant), an OMP web client
 for the Open Vulnerability Assessment System (OpenVAS).
@@ -1491,7 +1503,7 @@ Main changes since 1.0.0.rc1:
   circumstances has been fixed.
 
 
-gsa 1.0.0.rc1 (2010-07-16)
+## gsa 1.0.0.rc1 (2010-07-16)
 
 This is the first release candidate of the optional gsa module for the Open
 Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
@@ -1509,7 +1521,7 @@ Main changes since 1.0.0-beta6:
 * Support for agents has been improved.
 
 
-gsa 1.0.0-beta7 (2010-05-28)
+## gsa 1.0.0-beta7 (2010-05-28)
 
 This is the seventh beta release of the optional gsa module for the Open
 Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
@@ -1536,7 +1548,7 @@ Main changes since 1.0.0-beta6:
 * Support for filtering results based on CVSS scores has been fixed.
 
 
-gsa 1.0.0-beta6 (2010-04-15)
+## gsa 1.0.0-beta6 (2010-04-15)
 
 This is the sixth beta release of the optional gsa module for the Open
 Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
@@ -1557,7 +1569,7 @@ Main changes since 1.0.0-beta5:
 * The gsad binary is now installed to /usr/sbin instead of /usr/bin.
 
 
-gsa 1.0.0-beta5 (2010-03-04)
+## gsa 1.0.0-beta5 (2010-03-04)
 
 This is the fifth beta release of the optional gsa module for the Open
 Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
@@ -1575,7 +1587,7 @@ Main changes since 1.0.0-beta4:
   as well as of some report types.
 
 
-gsa 1.0.0-beta4 (2010-02-05)
+## gsa 1.0.0-beta4 (2010-02-05)
 
 This is the fourth beta release of the optional gsa module for the Open
 Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
@@ -1591,7 +1603,7 @@ Main changes since 1.0.0-beta3:
 * A bug in the report pagination has been fixed.
 
 
-gsa 1.0.0-beta3 (2010-01-27)
+## gsa 1.0.0-beta3 (2010-01-27)
 
 This is the third beta release of the optional gsa module
 for the Open Vulnerability Assessment System (OpenVAS) leading up to the
@@ -1608,7 +1620,7 @@ Main changes since 1.0.0-beta2:
 * Add option to run in chroot.
 
 
-gsa 1.0.0-beta2 (2010-01-27)
+## gsa 1.0.0-beta2 (2010-01-27)
 
 This is the second beta release of the optional gsa module
 for the Open Vulnerability Assessment System (OpenVAS) leading up to the
@@ -1619,7 +1631,7 @@ Matthew Mundell, Jan-Oliver Wagner and Felix Wolfsteller.
 
 Main changes since 1.0.0-beta1:
 
-* Integrated online help extended. 
+* Integrated online help extended.
 * Improved handling of feed management.
 * Added support for administrator feature to edit
   scanner settings.
@@ -1633,7 +1645,7 @@ Main changes since 1.0.0-beta1:
   "--mlisten".
 
 
-gsa 1.0.0-beta1 (2010-01-12)
+## gsa 1.0.0-beta1 (2010-01-12)
 
 This is the first beta release of the optional gsa module
 for the Open Vulnerability Assessment System (OpenVAS) leading up to the
@@ -1641,4 +1653,3 @@ upcoming gsa 1.0.
 
 Many thanks to everyone who has contributed to this release:
 Matthew Mundell, Jan-Oliver Wagner, Felix Wolfsteller and Michael Wiegand.
-
