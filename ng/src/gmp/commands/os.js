@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +47,32 @@ class OperatingSystemsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_assets.get_assets_response;
+  }
+
+  getVulnScoreAggregates({filter, max} = {}) {
+    return this.getAggregates({
+      filter,
+      aggregate_type: 'os',
+      group_column: 'uuid',
+      textColumns: [
+        'name',
+        'hosts',
+        'modified',
+      ],
+      dataColumns: [
+        'average_severity',
+        'average_severity_score',
+      ],
+      sort: [{
+        field: 'average_severity_score',
+        direction: 'descending',
+        stat: 'max',
+      }, {
+        field: 'modified',
+        direction: 'descending',
+      }],
+      maxGroups: max,
+    });
   }
 }
 
