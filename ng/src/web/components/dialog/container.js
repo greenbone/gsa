@@ -41,12 +41,6 @@ const DialogContainer = glamorous.div(
   ({height}) => ({
     height: is_defined(height) ? height : 'auto',
   }),
-  ({posX, posY}) => (is_defined(posX) || is_defined(posY) ? {
-    position: 'absolute',
-    top: posY,
-    left: posX,
-    margin: 0,
-  } : undefined),
 );
 
 DialogContainer.displayName = 'DialogContainer';
