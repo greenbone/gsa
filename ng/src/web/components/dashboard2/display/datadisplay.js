@@ -65,6 +65,7 @@ const ownProps = [
 const Download = glamorous.a({
   color: Theme.black,
   textDecoration: 'none',
+  display: 'none',
   '&:link': {
     color: Theme.black,
     textDecoration: 'none',
@@ -168,6 +169,8 @@ class DataDisplay extends React.Component {
     this.downloadSvgUrl = this.createSvgUrl();
 
     download.setAttribute('href', this.downloadSvgUrl);
+    download.setAttribute('download', 'chart.svg');
+    download.click();
   }
 
   handleDataTable() {
@@ -283,9 +286,7 @@ class DataDisplay extends React.Component {
             }
             {hasSvg &&
               <MenuEntry onClick={this.handleDownloadSvg}>
-                <Download download="chart.svg" innerRef={this.downloadRef}>
-                  {_('Download SVG')}
-                </Download>
+                {_('Download SVG')}
               </MenuEntry>
             }
           </DisplayMenu>
@@ -304,6 +305,8 @@ class DataDisplay extends React.Component {
             svgRef: this.svgRef,
           })
         }
+        <Download innerRef={this.downloadRef}>
+        </Download>
       </Display>
     );
   }
