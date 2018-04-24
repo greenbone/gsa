@@ -351,6 +351,7 @@ class ScanConfigComponent extends React.Component {
       name,
       nvt,
       nvts,
+      preference_values,
       scanner_id,
       scanner_preference_values,
       scanners,
@@ -444,7 +445,7 @@ class ScanConfigComponent extends React.Component {
             family_name={family_name}
             manual_timeout={manual_timeout}
             nvt={nvt}
-            preference_values={scanner_preference_values}
+            preference_values={preference_values}
             timeout={timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.closeEditNvtDetailsDialog}
