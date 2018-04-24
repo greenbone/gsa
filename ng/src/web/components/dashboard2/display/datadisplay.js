@@ -253,6 +253,8 @@ class DataDisplay extends React.Component {
       menu,
       id,
       width,
+      headerTitles,
+      dataRow,
       onRemoveClick,
       ...props
     } = this.props;
@@ -264,23 +266,29 @@ class DataDisplay extends React.Component {
     isLoading = isLoading && !is_defined(originalData);
 
     const otherProps = exclude_object_props(props, ownProps);
+    const hasData = is_defined(dataRow) && is_defined(headerTitles);
     return (
       <Display
         menu={
-          hasSvg ?
-            <DisplayMenu>
+          <DisplayMenu>
+            {hasData &&
               <MenuEntry onClick={this.handleDataTable}>
                 {_('Show Table')}
               </MenuEntry>
+            }
+            {hasSvg &&
               <MenuEntry onClick={this.handleOpenCopyableSvg}>
                 {_('Show copyable SVG')}
               </MenuEntry>
+            }
+            {hasSvg &&
               <MenuEntry onClick={this.handleDownloadSvg}>
                 <Download download="chart.svg" innerRef={this.downloadRef}>
                   {_('Download SVG')}
                 </Download>
               </MenuEntry>
-            </DisplayMenu> : null
+            }
+          </DisplayMenu>
         }
         title={isLoading ? _('Loading') : title}
         onRemoveClick={onRemoveClick}
