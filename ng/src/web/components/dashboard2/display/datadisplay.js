@@ -77,21 +77,26 @@ class DataDisplay extends React.Component {
     this.svgRef = React.createRef();
     this.downloadRef = React.createRef();
 
+    const data = DataDisplay.getTransformedData(this.props);
     this.state = {
-      data: DataDisplay.getTransformedData(this.props),
+      data,
       originalData: this.props.data,
+      title: this.props.title({data, id: this.props.id}),
     };
 
     this.handleOpenCopyableSvg = this.handleOpenCopyableSvg.bind(this);
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
+    this.handleDataTable = this.handleDataTable.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
+      const data = DataDisplay.getTransformedData(nextProps);
       return {
-        data: DataDisplay.getTransformedData(nextProps),
+        data,
         originalData: nextProps.data,
+        title: nextProps.title({data, id: nextProps.id}),
       };
     }
     return null;
@@ -178,7 +183,7 @@ class DataDisplay extends React.Component {
   }
 
   render() {
-    const {data: transformedData} = this.state;
+    const {data: transformedData, title} = this.state;
     let {
       data: originalData,
       height,
@@ -189,7 +194,6 @@ class DataDisplay extends React.Component {
       menu,
       id,
       width,
-      title,
       onRemoveClick,
       ...props
     } = this.props;
@@ -216,7 +220,7 @@ class DataDisplay extends React.Component {
               </MenuEntry>
             </DisplayMenu> : null
         }
-        title={isLoading ? _('Loading') : title({data: transformedData, id})}
+        title={isLoading ? _('Loading') : title}
         onRemoveClick={onRemoveClick}
         {...otherProps}
       >
