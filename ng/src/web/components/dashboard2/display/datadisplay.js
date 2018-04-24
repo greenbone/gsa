@@ -301,13 +301,13 @@ class DataDisplay extends React.Component {
     isLoading = isLoading && !is_defined(originalData);
 
     const otherProps = exclude_object_props(props, ownProps);
-    const hasData = is_defined(dataRow) && is_defined(headerTitles);
+    const showDataMenus = is_defined(dataRow) && is_defined(headerTitles);
     return (
       <Display
         menu={
-          hasData && hasSvg ?
+          showDataMenus && hasSvg ?
             <DisplayMenu>
-              {hasData &&
+              {showDataMenus &&
                 <MenuEntry onClick={this.handleDataTable}>
                   {_('Show Table')}
                 </MenuEntry>
@@ -317,7 +317,7 @@ class DataDisplay extends React.Component {
                   {_('Show copyable SVG')}
                 </MenuEntry>
               }
-              {hasData &&
+              {showDataMenus &&
                 <MenuEntry onClick={this.handleDownloadCsv}>
                   {_('Download CSV')}
                 </MenuEntry>
