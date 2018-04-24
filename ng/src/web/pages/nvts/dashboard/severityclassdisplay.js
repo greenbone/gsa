@@ -28,6 +28,7 @@ import _ from 'gmp/locale';
 import PropTypes from '../../../utils/proptypes';
 
 import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
 
@@ -54,6 +55,14 @@ const NvtsSeverityDisplay = ({
 NvtsSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
+
+const DISPLAY_ID = 'nvt-by-severity-class';
+
+NvtsSeverityDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, NvtsSeverityDisplay, {
+  title: _('NVTs by Severity Class'),
+});
 
 export default NvtsSeverityDisplay;
 

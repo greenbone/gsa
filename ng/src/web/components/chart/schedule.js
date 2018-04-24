@@ -197,6 +197,7 @@ class ScheduleChart extends React.Component {
     const {
       data = [],
       height,
+      svgRef,
       width,
       yAxisLabel,
     } = this.props;
@@ -290,6 +291,7 @@ class ScheduleChart extends React.Component {
         <Svg
           width={width}
           height={height}
+          svgRef={svgRef}
         >
           <Group top={margin.top} left={marginLeft}>
             <Axis
@@ -399,6 +401,7 @@ ScheduleChart.propTypes = {
     periodMonth: PropTypes.number,
   })).isRequired,
   height: PropTypes.number.isRequired,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   yAxisLabel: PropTypes.string,
 };

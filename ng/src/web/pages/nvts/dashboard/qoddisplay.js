@@ -39,6 +39,7 @@ import {
   percent,
   qodColorScale,
 } from '../../../components/dashboard2/display/utils';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {NvtsQodLoader} from './loaders';
 
@@ -111,8 +112,9 @@ class NvtsQodDisplay extends React.Component {
             title={({data: tdata}) => _('NVTs by QoD (Total: {{count}})',
               {count: tdata.total})}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <DonutChart
+                svgRef={svgRef}
                 data={tdata}
                 height={height}
                 width={width}
@@ -130,6 +132,14 @@ NvtsQodDisplay.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
 };
+
+const DISPLAY_ID = 'nvt-by-qod';
+
+NvtsQodDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, NvtsQodDisplay, {
+  title: _('NVTs by QoD'),
+});
 
 export default NvtsQodDisplay;
 

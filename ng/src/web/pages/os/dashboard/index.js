@@ -23,47 +23,47 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from '../../../utils/proptypes';
 
-import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {VulnsSeverityLoader} from './loaders';
+import OsCvssDisplay from './cvssdisplay';
+import OsSeverityClassDisplay from './severityclassdisplay';
+import OsVulnScoreDisplay from './vulnscoredisplay';
 
-const VulnsSeverityDisplay = ({
+export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
+
+const OsDashboard = ({
   filter,
-  ...props
+  onFilterChanged,
 }) => (
-  <VulnsSeverityLoader
+  <Dashboard
+    id={OS_DASHBOARD_ID}
     filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Vulnerabilities by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </VulnsSeverityLoader>
+    permittedDisplays={[
+      OsCvssDisplay.displayId,
+      OsSeverityClassDisplay.displayId,
+      OsVulnScoreDisplay.displayId,
+    ]}
+    defaultContent={[
+      [
+        OsSeverityClassDisplay.displayId,
+        OsCvssDisplay.displayId,
+        OsVulnScoreDisplay.displayId,
+      ],
+    ]}
+    defaultDisplay={OsVulnScoreDisplay.displayId}
+    maxItemsPerRow={4}
+    maxRows={4}
+    onFilterChanged={onFilterChanged}
+  />
 );
 
-VulnsSeverityDisplay.propTypes = {
+OsDashboard.propTypes = {
   filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func,
 };
 
-const DISPLAY_ID = 'vuln-by-severity-class';
-
-VulnsSeverityDisplay.displayId = DISPLAY_ID;
-
-registerDisplay(DISPLAY_ID, VulnsSeverityDisplay, {
-  title: _('Vulnerabilities by Severity Class'),
-});
-
-export default VulnsSeverityDisplay;
+export default OsDashboard;
 
 // vim: set ts=2 sw=2 tw=80:

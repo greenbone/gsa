@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,10 +21,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
-
 import {withRouter} from 'react-router';
 
-import {format as d3format} from 'd3-format';
+import glamorous from 'glamorous';
+import moment from 'moment';
 
 import _ from 'gmp/locale';
 
@@ -33,7 +33,6 @@ import {parse_float, parse_severity} from 'gmp/parser';
 import {resultSeverityRiskFactor} from '../../../utils/severity';
 import PropTypes from '../../../utils/proptypes';
 
-
 import BarChart from '../../../components/chart/bar';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
@@ -41,38 +40,56 @@ import {
   riskFactorColorScale,
 } from '../../../components/dashboard2/display/utils';
 
-import {TasksHighResultsLoader} from './loaders';
+import {OsVulnScoreLoader} from './loaders';
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
-const format = d3format('0.2f');
+const ToolTip = glamorous.div({
+    fontWeight: 'normal',
+    textAlign: 'center',
+    lineHeight: '1.2em',
+  });
 
-const transformHighResultsData = (data = {}, {severityClass}) => {
+const transformVulnScoreData = (data = {}, {severityClass}) => {
   const {groups = []} = data;
-
-  return groups
+  const tdata = groups
     .filter(group => {
-      const {text = {}} = group;
-      const {high_per_host = 0} = text;
-      return parse_float(high_per_host) > 0;
+      const {stats = {}} = group;
+      const {average_severity_score = 0} = stats;
+      return parse_float(average_severity_score.max) > 0;
     })
     .map(group => {
-      const {text, value: id} = group;
-      const {name} = text;
-      const high_per_host = parse_float(text.high_per_host);
-      const severity = parse_severity(text.severity);
-      const riskFactor = resultSeverityRiskFactor(severity, severityClass);
+      const {stats, text, value: id} = group;
+      const {hosts, modified, name} = text;
+      const {average_severity, average_severity_score} = stats;
+      const averageSeverity = parse_severity(average_severity.mean);
+      const riskFactor = resultSeverityRiskFactor(averageSeverity);
+      const modifiedDate = moment(modified).format('lll');
+      const toolTip = (
+        <ToolTip>
+          <b>{name}:</b><br/>
+          {average_severity_score.max}<br/>
+          {_('{{hosts}} Host(s) with average severity {{avgSev}}',
+            {
+              hosts: parse_float(hosts),
+              avgSev: parse_float(averageSeverity),
+            })}<br/>
+          <b>{_('Updated: ')}</b>{modifiedDate}
+        </ToolTip>
+      );
+
       return {
-        y: high_per_host,
+        y: parse_float(average_severity_score.max),
         x: name,
         label: name,
         color: riskFactorColorScale(riskFactor),
-        toolTip: `${name}: ${format(high_per_host)}`,
+        toolTip,
         id,
       };
     });
+  return tdata.reverse();
 };
 
-class TasksMostHighResultsDisplay extends React.Component {
+class OsVulnScoreDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -83,7 +100,7 @@ class TasksMostHighResultsDisplay extends React.Component {
   handleDataClick(data) {
     const {router} = this.props;
 
-    router.push(`/ng/task/${data.id}`);
+    router.push(`/ng/operatingsystem/${data.id}`);
   }
 
   render() {
@@ -92,15 +109,15 @@ class TasksMostHighResultsDisplay extends React.Component {
       ...props
     } = this.props;
     return (
-      <TasksHighResultsLoader
+      <OsVulnScoreLoader
         filter={filter}
       >
         {loaderProps => (
           <DataDisplay
             {...props}
             {...loaderProps}
-            dataTransform={transformHighResultsData}
-            title={() => _('Tasks with most High Results per Host')}
+            dataTransform={transformVulnScoreData}
+            title={() => _('Operating Systems by Vulnerability Score')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
@@ -110,34 +127,33 @@ class TasksMostHighResultsDisplay extends React.Component {
                 width={width}
                 height={height}
                 data={tdata}
-                xLabel={_('Results per Host')}
+                xLabel={_('Vulnerability (Severity) Score')}
                 onDataClick={this.handleDataClick}
               />
             )}
           </DataDisplay>
         )}
-      </TasksHighResultsLoader>
+      </OsVulnScoreLoader>
     );
   }
 }
 
-TasksMostHighResultsDisplay.propTypes = {
+OsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'task-by-most-high-results';
+const DISPLAY_ID = 'os-by-most-vulnerable';
 
-const TasksMostHighResultsDisplayWithRouter = withRouter(
-  TasksMostHighResultsDisplay);
+const OsVulnScoreDisplayWithRouter = withRouter(OsVulnScoreDisplay);
 
-TasksMostHighResultsDisplayWithRouter.displayId = DISPLAY_ID;
+OsVulnScoreDisplayWithRouter.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, TasksMostHighResultsDisplayWithRouter, {
-  title: _('Tasks with most High Results per Host'),
+registerDisplay(DISPLAY_ID, OsVulnScoreDisplayWithRouter, {
+  title: _('Operating Systems by Vulnerability Score'),
 });
 
-export default TasksMostHighResultsDisplayWithRouter;
+export default OsVulnScoreDisplayWithRouter;
 
 // vim: set ts=2 sw=2 tw=80:

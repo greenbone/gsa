@@ -200,6 +200,8 @@ void add_guest_chart_content_security_headers (http_response_t *response);
 
 void add_cors_headers (http_response_t *response);
 
+void add_forbid_caching_headers (http_response_t *response);
+
 /* helper functions required in gsad_http */
 http_response_t *
 file_content_response (http_connection_t *connection, const char *url,

@@ -39,6 +39,7 @@ import DataDisplay from '../../../components/dashboard2/display/datadisplay';
 import {
   riskFactorColorScale,
 } from '../../../components/dashboard2/display/utils';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {NvtsFamilyLoader} from './loaders';
 
@@ -124,8 +125,9 @@ class NvtsFamilyDisplay extends React.Component {
             title={({data: tdata}) =>
             _('NVTS by Family (Total: {{count}})', {count: tdata.total})}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <BubbleChart
+                svgRef={svgRef}
                 data={tdata}
                 height={height}
                 width={width}
@@ -143,6 +145,14 @@ NvtsFamilyDisplay.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
 };
+
+const DISPLAY_ID = 'nvt-by-family';
+
+NvtsFamilyDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, NvtsFamilyDisplay, {
+  title: _('NVTS by Family'),
+});
 
 export default NvtsFamilyDisplay;
 

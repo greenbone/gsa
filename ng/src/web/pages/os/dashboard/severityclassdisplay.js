@@ -30,13 +30,13 @@ import PropTypes from '../../../utils/proptypes';
 import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import {VulnsSeverityLoader} from './loaders';
+import {OsAverageSeverityLoader} from './loaders';
 
-const VulnsSeverityDisplay = ({
+const OsSeverityClassDisplay = ({
   filter,
   ...props
 }) => (
-  <VulnsSeverityLoader
+  <OsAverageSeverityLoader
     filter={filter}
   >
     {loaderProps => (
@@ -45,25 +45,25 @@ const VulnsSeverityDisplay = ({
         {...loaderProps}
         filter={filter}
         title={({data: tdata}) =>
-          _('Vulnerabilities by Severity Class (Total: {{count}})',
+          _('Operating Systems by Severity Class (Total: {{count}})',
             {count: tdata.total})}
       />
     )}
-  </VulnsSeverityLoader>
+  </OsAverageSeverityLoader>
 );
 
-VulnsSeverityDisplay.propTypes = {
+OsSeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'vuln-by-severity-class';
+const DISPLAY_ID = 'os-by-severity-class';
 
-VulnsSeverityDisplay.displayId = DISPLAY_ID;
+OsSeverityClassDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, VulnsSeverityDisplay, {
-  title: _('Vulnerabilities by Severity Class'),
+registerDisplay(DISPLAY_ID, OsSeverityClassDisplay, {
+  title: _('Operating Systems by Severity Class'),
 });
 
-export default VulnsSeverityDisplay;
+export default OsSeverityClassDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -2,10 +2,9 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,30 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import Logger from 'gmp/log';
 
-import glamorous from 'glamorous';
+const log = Logger.getLogger('web.components.dashboard.registry');
+const registry = {};
 
-import {is_defined} from 'gmp/utils';
+export const registerDisplay = (id, component, {title}) => {
+  registry[id] = {
+    component,
+    title,
+  };
 
-const DialogContainer = glamorous.div(
-  {
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '10% auto',
-    border: 0,
-    outline: '0',
-  },
-  ({width}) => ({
-    width: is_defined(width) ? width : '400px',
-  }),
-  ({height}) => ({
-    height: is_defined(height) ? height : 'auto',
-  }),
-);
+  log.debug('Registered display', id);
+};
 
-DialogContainer.displayName = 'DialogContainer';
-
-export default DialogContainer;
+export const getDisplay = id => registry[id];
 
 // vim: set ts=2 sw=2 tw=80:

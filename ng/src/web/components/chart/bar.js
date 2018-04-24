@@ -22,7 +22,6 @@
  */
 import React from 'react';
 
-import {Bar} from '@vx/shape';
 import {scaleBand, scaleLinear} from 'd3-scale';
 
 import {shorten} from 'gmp/utils/string';
@@ -70,6 +69,7 @@ class BarChart extends React.Component {
       xLabel,
       yLabel,
       horizontal = false,
+      svgRef,
       onDataClick,
       onLegendItemClick,
     } = this.props;
@@ -118,7 +118,11 @@ class BarChart extends React.Component {
 
     return (
       <Layout align={['start', 'start']}>
-        <Svg width={width} height={height}>
+        <Svg
+          innerRef={svgRef}
+          width={width}
+          height={height}
+        >
           <Group top={margin.top} left={marginLeft}>
             <Axis
               orientation="left"
@@ -145,8 +149,8 @@ class BarChart extends React.Component {
                     onClick={is_defined(onDataClick) ?
                       () => onDataClick(d) : undefined}
                   >
-                    <Bar
-                      innerRef={targetRef}
+                    <rect
+                      ref={targetRef}
                       fill={d.color}
                       x={horizontal ? 1 : xScale(d.x)}
                       y={horizontal ? xScale(d.x) : yScale(d.y)}
@@ -160,8 +164,8 @@ class BarChart extends React.Component {
                           yScale(d.y) :
                           xScale.bandwidth()
                       }
-                      onMouseEnter={() => show}
-                      onMouseLeave={() => hide}
+                      onMouseEnter={show}
+                      onMouseLeave={hide}
                     />
                   </Group>
                 )}
@@ -203,6 +207,7 @@ BarChart.propTypes = {
   displayLegend: PropTypes.bool,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   xLabel: PropTypes.string,
   yLabel: PropTypes.string,

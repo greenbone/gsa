@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import PropTypes from '../../../utils/proptypes';
 
 import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {TasksSeverityLoader} from './loaders';
 
@@ -53,6 +54,14 @@ const TasksSeverityDisplay = ({
 TasksSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
+
+const DISPLAY_ID = 'task-by-severity-class';
+
+TasksSeverityDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, TasksSeverityDisplay, {
+  title: _('Tasks by Severity Class'),
+});
 
 export default TasksSeverityDisplay;
 

@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import PropTypes from '../../../utils/proptypes';
 
 import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {TasksSeverityLoader} from './loaders';
 
@@ -54,6 +55,14 @@ const TasksCvssDisplay = ({
 TasksCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
+
+const DISPLAY_ID = 'task-by-cvss';
+
+TasksCvssDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, TasksCvssDisplay, {
+  title: _('Tasks by CVSS'),
+});
 
 export default TasksCvssDisplay;
 

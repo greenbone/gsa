@@ -154,7 +154,7 @@ Legend.propTypes = {
     label: PropTypes.any,
     toolTip: PropTypes.elementOrString,
   })).isRequired,
-  innerRef: PropTypes.func,
+  innerRef: PropTypes.ref,
   onItemClick: PropTypes.func,
 };
 

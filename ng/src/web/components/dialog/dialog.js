@@ -69,8 +69,6 @@ class Dialog extends React.Component {
   defaultState() {
     const {width, height} = this.props;
     return {
-      posX: undefined,
-      posY: undefined,
       width: is_defined(width) ? width : DEFAULT_DIALOG_WIDTH,
       height: is_defined(height) ? height : DEFAULT_DIALOG_HEIGHT,
     };
@@ -84,6 +82,13 @@ class Dialog extends React.Component {
     if (onClose) {
       onClose();
     }
+  }
+
+  setDialogPosition(x, y) {
+    this.dialog.style.position = 'absolute';
+    this.dialog.style.left = `${x}px`;
+    this.dialog.style.top = `${y}px`;
+    this.dialog.style.margin = '0';
   }
 
   onOuterClick(event) {
@@ -106,6 +111,11 @@ class Dialog extends React.Component {
       this.relX = event.pageX - box.left;
       this.relY = event.pageY - box.top;
 
+      const left = box.left + window.scrollX;
+      const top = box.top + window.scrollY;
+
+      this.setDialogPosition(left, top);
+
       document.addEventListener('mousemove', this.onMouseMoveMove);
       document.addEventListener('mouseup', this.onMouseUp);
       event.preventDefault();
@@ -120,8 +130,8 @@ class Dialog extends React.Component {
       this.height = Math.round(box.height);
       this.mousePosX = event.pageX;
       this.mousePosY = event.pageY;
-      this.fixedPosX = box.left;
-      this.fixedPosY = box.top;
+
+      this.setDialogPosition(box.left, box.top);
 
       document.addEventListener('mousemove', this.onMouseMoveResize);
       document.addEventListener('mouseup', this.onMouseUp);
@@ -130,10 +140,11 @@ class Dialog extends React.Component {
   }
 
   onMouseMoveMove(event) {
-    this.setState({
-      posX: event.pageX - this.relX,
-      posY: event.pageY - this.relY,
-    });
+    const left = event.pageX - this.relX;
+    const top = event.pageY - this.relY;
+
+    this.setDialogPosition(left, top);
+
     event.preventDefault();
   }
 
@@ -151,11 +162,10 @@ class Dialog extends React.Component {
     }
 
     this.setState({
-      posX: this.fixedPosX,
-      posY: this.fixedPosY,
       width: newWidth,
       height: newHeight,
     });
+
     event.preventDefault();
   }
 
@@ -168,8 +178,6 @@ class Dialog extends React.Component {
 
   render() {
     let {
-      posX,
-      posY,
       height,
       width,
     } = this.state;
@@ -202,8 +210,6 @@ class Dialog extends React.Component {
             tabIndex="1"
             width={width}
             height={height}
-            posX={posX}
-            posY={posY}
             innerRef={ref => this.dialog = ref}>
             {children({
               close: this.handleClose,

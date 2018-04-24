@@ -27,43 +27,44 @@ import _ from 'gmp/locale';
 
 import PropTypes from '../../../utils/proptypes';
 
-import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
+import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import {VulnsSeverityLoader} from './loaders';
+import {OsAverageSeverityLoader} from './loaders';
 
-const VulnsSeverityDisplay = ({
+const OsCvssDisplay = ({
   filter,
   ...props
 }) => (
-  <VulnsSeverityLoader
+  <OsAverageSeverityLoader
     filter={filter}
   >
     {loaderProps => (
-      <SeverityClassDisplay
+      <CvssDisplay
         {...props}
         {...loaderProps}
+        yLabel={_('# of Vulnerabilities')}
         filter={filter}
         title={({data: tdata}) =>
-          _('Vulnerabilities by Severity Class (Total: {{count}})',
+          _('Operating Systems by CVSS (Total: {{count}})',
             {count: tdata.total})}
       />
     )}
-  </VulnsSeverityLoader>
+  </OsAverageSeverityLoader>
 );
 
-VulnsSeverityDisplay.propTypes = {
+OsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'vuln-by-severity-class';
+const DISPLAY_ID = 'os-by-cvss';
 
-VulnsSeverityDisplay.displayId = DISPLAY_ID;
+OsCvssDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, VulnsSeverityDisplay, {
-  title: _('Vulnerabilities by Severity Class'),
+registerDisplay(DISPLAY_ID, OsCvssDisplay, {
+  title: _('Operating Systems by CVSS'),
 });
 
-export default VulnsSeverityDisplay;
+export default OsCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

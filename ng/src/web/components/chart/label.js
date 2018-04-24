@@ -45,7 +45,7 @@ const Label = ({
 );
 
 Label.propTypes = {
-  innerRef: PropTypes.func,
+  innerRef: PropTypes.ref,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
 };

@@ -225,8 +225,9 @@ class CvssDisplay extends React.Component {
         dataTransform={transformCvssData}
         title={title}
       >
-        {({width, height, data}) => (
+        {({width, height, data, svgRef}) => (
           <BarChart
+            svgRef={svgRef}
             displayLegend={false}
             width={width}
             height={height}

@@ -42,25 +42,25 @@ const NvtsDashboard = ({
   <Dashboard
     id={NVTS_DASHBOARD_ID}
     filter={filter}
-    components={{
-      'nvt-by-cvss': NvtsCvssDisplay,
-      'nvt-by-family': NvtsFamilyDisplay,
-      'nvt-by-severity-class': NvtsSeverityDisplay,
-      'nvt-by-qod': NvtsQodDisplay,
-      'nvt-by-qod_type': NvtsQodTypeDisplay,
-    }}
+    permittedDisplays={[
+      NvtsCvssDisplay.displayId,
+      NvtsFamilyDisplay.displayId,
+      NvtsSeverityDisplay.displayId,
+      NvtsQodDisplay.displayId,
+      NvtsQodTypeDisplay.displayId,
+    ]}
     defaultContent={[
       [
-        'nvt-by-cvss',
-        'nvt-by-family',
-        'nvt-by-severity-class',
+        NvtsCvssDisplay.displayId,
+        NvtsFamilyDisplay.displayId,
+        NvtsSeverityDisplay.displayId,
       ],
       [
-        'nvt-by-qod',
-        'nvt-by-qod_type',
+        NvtsQodDisplay.displayId,
+        NvtsQodTypeDisplay.displayId,
       ],
     ]}
-    defaultDisplay="nvt-by-cvss"
+    defaultDisplay={NvtsCvssDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

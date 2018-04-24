@@ -40,6 +40,7 @@ import {
   vulnsByHostsColorScale,
   percent,
 } from '../../../components/dashboard2/display/utils';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {VulnsHostsLoader} from './loaders';
 
@@ -195,8 +196,9 @@ class VulnsHostsDisplay extends React.Component {
             _('Vulnerabilities by Hosts (Total: {{count}})',
               {count: tdata.total})}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <BarChart
+                svgRef={svgRef}
                 data={tdata}
                 displayLegend={false}
                 height={height}
@@ -215,9 +217,16 @@ class VulnsHostsDisplay extends React.Component {
 
 VulnsHostsDisplay.propTypes = {
   filter: PropTypes.filter,
-  router: PropTypes.object.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
+
+const DISPLAY_ID = 'vuln-by-hosts';
+
+VulnsHostsDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, VulnsHostsDisplay, {
+  title: _('Vulnerabilities by Hosts'),
+});
 
 export default VulnsHostsDisplay;
 
