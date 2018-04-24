@@ -104,7 +104,9 @@ TableHead.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-export default glamorous(TableHead)({
+export default glamorous(TableHead, {
+  displayName: 'TableHead',
+})({
   backgroundColor: '#3A3A3A',
   color: '#FFFFFF',
   fontWeight: 'bold',
