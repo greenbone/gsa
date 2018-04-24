@@ -305,28 +305,29 @@ class DataDisplay extends React.Component {
     return (
       <Display
         menu={
-          <DisplayMenu>
-            {hasData &&
-              <MenuEntry onClick={this.handleDataTable}>
-                {_('Show Table')}
-              </MenuEntry>
-            }
-            {hasSvg &&
-              <MenuEntry onClick={this.handleOpenCopyableSvg}>
-                {_('Show copyable SVG')}
-              </MenuEntry>
-            }
-            {hasData &&
-              <MenuEntry onClick={this.handleDownloadCsv}>
-                {_('Download CSV')}
-              </MenuEntry>
-            }
-            {hasSvg &&
-              <MenuEntry onClick={this.handleDownloadSvg}>
-                {_('Download SVG')}
-              </MenuEntry>
-            }
-          </DisplayMenu>
+          hasData && hasSvg ?
+            <DisplayMenu>
+              {hasData &&
+                <MenuEntry onClick={this.handleDataTable}>
+                  {_('Show Table')}
+                </MenuEntry>
+              }
+              {hasSvg &&
+                <MenuEntry onClick={this.handleOpenCopyableSvg}>
+                  {_('Show copyable SVG')}
+                </MenuEntry>
+              }
+              {hasData &&
+                <MenuEntry onClick={this.handleDownloadCsv}>
+                  {_('Download CSV')}
+                </MenuEntry>
+              }
+              {hasSvg &&
+                <MenuEntry onClick={this.handleDownloadSvg}>
+                  {_('Download SVG')}
+                </MenuEntry>
+              }
+            </DisplayMenu> : null
         }
         title={isLoading ? _('Loading') : title}
         onRemoveClick={onRemoveClick}
