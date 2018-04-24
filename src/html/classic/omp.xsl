@@ -9648,6 +9648,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:variable>
 
+  <xsl:variable name="sort_fields">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'sort_fields:')]">
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'sort_fields:')]">
+       <xsl:value-of select="value"/><xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'sort_fields:')]))">,</xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="sort_orders">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'sort_orders:')]">
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'sort_orders:')]">
+       <xsl:value-of select="value"/><xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'sort_orders:')]))">,</xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="sort_stats">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'sort_stats:')]">
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'sort_stats:')]">
+       <xsl:value-of select="value"/><xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'sort_stats:')]))">,</xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
   <xsl:variable name="text_columns">
     <xsl:if test="/envelope/params/_param[starts-with (name, 'text_columns:')]">
       <xsl:for-each select="/envelope/params/_param[starts-with (name, 'text_columns:')]">
@@ -9694,6 +9718,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-sort-field="{/envelope/params/sort_field}"
       data-sort-stat="{/envelope/params/sort_stat}"
       data-sort-order="{/envelope/params/sort_order}"
+      data-sort-fields="{$sort_fields}"
+      data-sort-stats="{$sort_stats}"
+      data-sort-orders="{$sort_orders}"
       data-first-group="{/envelope/params/first_group}"
       data-max-groups="{/envelope/params/max_groups}"
       data-aggregate-mode="{/envelope/params/aggregate_mode}"
