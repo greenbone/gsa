@@ -57,6 +57,8 @@ const ownProps = [
   'height',
   'width',
   'id',
+  'headerTitles',
+  'dataRow',
   'onRemoveClick',
 ];
 
