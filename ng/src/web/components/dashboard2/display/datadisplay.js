@@ -76,6 +76,8 @@ const Download = glamorous.a({
   },
 });
 
+const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
+
 class DataDisplay extends React.Component {
 
   constructor(...args) {
@@ -94,6 +96,7 @@ class DataDisplay extends React.Component {
     this.handleOpenCopyableSvg = this.handleOpenCopyableSvg.bind(this);
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDataTable = this.handleDataTable.bind(this);
+    this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -161,6 +164,13 @@ class DataDisplay extends React.Component {
     }
   }
 
+  cleanupDownloadCsv() {
+    if (is_defined(this.downloadCsvUrl)) {
+      URL.revokeObjectURL(this.downloadCsvUrl);
+      this.downloadCsvUrl = undefined;
+    }
+  }
+
   handleDownloadSvg() {
     const {current: download} = this.downloadRef;
 
@@ -170,6 +180,28 @@ class DataDisplay extends React.Component {
 
     download.setAttribute('href', this.downloadSvgUrl);
     download.setAttribute('download', 'chart.svg');
+    download.click();
+  }
+
+  handleDownloadCsv() {
+    const {current: download} = this.downloadRef;
+
+    const {headerTitles, dataRow} = this.props;
+    const {data, title} = this.state;
+
+    this.cleanupDownloadCsv();
+
+    const csv_data = [
+      escapeCsv(title),
+      headerTitles.map(t => escapeCsv(t)).join(','),
+      ...data.map(row => dataRow({row}).map(val => escapeCsv(val)).join(',')),
+    ].join('\n');
+
+    const csv_blob = new Blob([csv_data], {type: 'text/csv'});
+    this.downloadCsvUrl = URL.createObjectURL(csv_blob);
+
+    download.setAttribute('href', this.downloadCsvUrl);
+    download.setAttribute('download', 'data.csv');
     download.click();
   }
 
@@ -282,6 +314,11 @@ class DataDisplay extends React.Component {
             {hasSvg &&
               <MenuEntry onClick={this.handleOpenCopyableSvg}>
                 {_('Show copyable SVG')}
+              </MenuEntry>
+            }
+            {hasData &&
+              <MenuEntry onClick={this.handleDownloadCsv}>
+                {_('Download CSV')}
               </MenuEntry>
             }
             {hasSvg &&
