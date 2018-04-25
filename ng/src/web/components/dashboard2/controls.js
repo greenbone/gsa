@@ -122,6 +122,7 @@ class DashboardControls extends React.Component {
           <SaveDialog
             title={_('Add new Chart Display')}
             buttonTitle={_('Add')}
+            minHeight={163}
             width="500px"
             defaultValues={{
               displayId: first(displays).id,
@@ -138,6 +139,7 @@ class DashboardControls extends React.Component {
                   name="displayId"
                   items={displayItems}
                   value={values.displayId}
+                  width="auto"
                   onChange={onValueChange}
                 />
               </FormGroup>
