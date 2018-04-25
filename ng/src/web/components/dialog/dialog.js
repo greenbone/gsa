@@ -185,15 +185,10 @@ class Dialog extends React.Component {
     const {
       children,
       resizable = true,
-      visible,
     } = this.props;
 
     if (!resizable) {
       height = 'auto';
-    }
-
-    if (!visible) {
-      return null;
     }
 
     const maxHeight = is_defined(height) ?
@@ -233,7 +228,6 @@ class Dialog extends React.Component {
 Dialog.propTypes = {
   height: PropTypes.numberOrNumberString,
   resizable: PropTypes.bool,
-  visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
 };

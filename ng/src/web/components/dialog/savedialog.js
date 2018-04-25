@@ -175,7 +175,6 @@ const SaveDialog = ({
   defaultValues = initialData,
   externalError,
   title,
-  visible,
   values,
   width,
   onClose,
@@ -184,7 +183,6 @@ const SaveDialog = ({
 }) => {
   return (
     <Dialog
-      visible={visible}
       width={width}
       onClose={onClose}
     >
@@ -219,7 +217,6 @@ SaveDialog.propTypes = {
   initialData: PropTypes.object, // should not be used anymore. use defaultValues instead.
   title: PropTypes.string.isRequired,
   values: PropTypes.object, // should be used for controlled values
-  visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onExternalErrorSet: PropTypes.func,
