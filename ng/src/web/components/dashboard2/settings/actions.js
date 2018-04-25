@@ -148,16 +148,17 @@ export const resetSettings = ({gmp}) => id =>
     );
 };
 
-export const addDefaultDisplay = ({gmp}) => id => (dispatch, getState) => {
-  const rootState = getState();
-  const settings = getDashboardSettings(rootState);
-  const defaults = settings.getDefaultsById(id);
-  const currentItems = settings.getItemsById(id) || [];
-  const {defaultDisplay, maxItemsPerRow, maxRows} = defaults;
-
-  if (!is_defined(defaultDisplay)) {
+export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
+  (dispatch, getState) => {
+  if (!is_defined(displayId) || !is_defined(dashboardId)) {
     return;
   }
+
+  const rootState = getState();
+  const settings = getDashboardSettings(rootState);
+  const defaults = settings.getDefaultsById(dashboardId);
+  const currentItems = settings.getItemsById(dashboardId) || [];
+  const {maxItemsPerRow, maxRows} = defaults;
 
   const lastRow = is_array(currentItems) && currentItems.length > 0 ?
     currentItems[currentItems.length - 1] : {items: []};
@@ -168,13 +169,13 @@ export const addDefaultDisplay = ({gmp}) => id => (dispatch, getState) => {
       // dashboard is full
       return;
     }
-    const newRow = createRow([createItem({name: defaultDisplay})]);
+    const newRow = createRow([createItem({name: displayId})]);
     items = [...currentItems, newRow];
   }
   else {
     const newRow = {
       ...lastRow,
-      items: [...lastRow.items, createItem({name: defaultDisplay})],
+      items: [...lastRow.items, createItem({name: displayId})],
     };
     items = [...currentItems];
     items.pop();
@@ -186,10 +187,10 @@ export const addDefaultDisplay = ({gmp}) => id => (dispatch, getState) => {
     items,
   };
 
-  dispatch(saveDashboardSettings(id, newSettings));
+  dispatch(saveDashboardSettings(dashboardId, newSettings));
 
   const settingsV1 = dashboardSettings2SettingsV1(newSettings);
-  return gmp.user.saveDashboardSetting(id, settingsV1)
+  return gmp.user.saveDashboardSetting(dashboardId, settingsV1)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),

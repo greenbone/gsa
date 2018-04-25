@@ -45,6 +45,7 @@ const OsCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of Vulnerabilities')}
         filter={filter}
+        dataTitles={[_('Severity'), _('# of Operating Systems')]}
         title={({data: tdata}) =>
           _('Operating Systems by CVSS (Total: {{count}})',
             {count: tdata.total})}

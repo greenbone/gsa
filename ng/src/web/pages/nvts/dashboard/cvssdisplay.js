@@ -45,6 +45,7 @@ const NvtsCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of NVTs')}
         filter={filter}
+        dataTitles={[_('Severity'), _('# of NVTs')]}
         title={({data: tdata}) =>
           _('NVTs by CVSS (Total: {{count}})',
             {count: tdata.total})}

@@ -42,6 +42,7 @@ const TasksSeverityDisplay = ({
       <SeverityClassDisplay
         {...props}
         {...loaderProps}
+        dataTitles={[_('Severity'), _('# of Tasks')]}
         filter={filter}
         title={({data: tdata}) =>
           _('Tasks by Severity Class (Total: {{count}})',

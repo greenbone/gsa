@@ -50,7 +50,9 @@ Table.propTypes = {
   header: PropTypes.element,
 };
 
-export default glamorous(Table)(
+export default glamorous(Table, {
+  displayName: 'Table',
+})(
   'table',
   {
     border: 0,
