@@ -63,6 +63,13 @@ export const mayRequire = validator => {
   return wrapper;
 };
 
+export const deprecated = (validator, message = '') =>
+  (props, prop_name, component_name, ...rest) => {
+  warning(is_defined(props[prop_name]),
+    `'${prop_name}' is deprecated on ${component_name}. ${message}`);
+  return validator(props, prop_name, component_name, ...rest);
+};
+
 const component = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
   ReactPropTypes.object,
