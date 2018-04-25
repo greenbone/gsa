@@ -57,7 +57,7 @@ const ownProps = [
   'height',
   'width',
   'id',
-  'headerTitles',
+  'dataTitles',
   'dataRow',
   'onRemoveClick',
 ];
@@ -186,14 +186,14 @@ class DataDisplay extends React.Component {
   handleDownloadCsv() {
     const {current: download} = this.downloadRef;
 
-    const {headerTitles, dataRow} = this.props;
+    const {dataTitles, dataRow} = this.props;
     const {data, title} = this.state;
 
     this.cleanupDownloadCsv();
 
     const csv_data = [
       escapeCsv(title),
-      headerTitles.map(t => escapeCsv(t)).join(','),
+      dataTitles.map(t => escapeCsv(t)).join(','),
       ...data.map(row => dataRow({row}).map(val => escapeCsv(val)).join(',')),
     ].join('\n');
 
@@ -206,14 +206,14 @@ class DataDisplay extends React.Component {
   }
 
   handleDataTable() {
-    const {headerTitles, dataRow} = this.props;
+    const {dataTitles, dataRow} = this.props;
     const {data, title} = this.state;
 
     const table = (
       <React.Fragment>
         <h1>{title}</h1>
         <DataTable
-          header={headerTitles}
+          header={dataTitles}
           row={dataRow}
           data={data}
         />
@@ -288,7 +288,7 @@ class DataDisplay extends React.Component {
       menu,
       id,
       width,
-      headerTitles,
+      dataTitles,
       dataRow,
       onRemoveClick,
       ...props
@@ -301,7 +301,7 @@ class DataDisplay extends React.Component {
     isLoading = isLoading && !is_defined(originalData);
 
     const otherProps = exclude_object_props(props, ownProps);
-    const showDataMenus = is_defined(dataRow) && is_defined(headerTitles);
+    const showDataMenus = is_defined(dataRow) && is_defined(dataTitles);
     return (
       <Display
         menu={
@@ -354,8 +354,8 @@ DataDisplay.propTypes = {
   children: PropTypes.func.isRequired,
   data: PropTypes.any,
   dataRow: PropTypes.func,
+  dataTitles: PropTypes.arrayOf(PropTypes.string),
   dataTransform: PropTypes.func,
-  headerTitles: PropTypes.arrayOf(PropTypes.string),
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
