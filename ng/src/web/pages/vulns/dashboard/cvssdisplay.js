@@ -45,6 +45,7 @@ const VulnsCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of Vulnerabilities')}
         filter={filter}
+        dataTitles={[_('Severity'), _('# of Vulnerabilties')]}
         title={({data: tdata}) =>
           _('Vulnerabilities by CVSS (Total: {{count}})',
             {count: tdata.total})}

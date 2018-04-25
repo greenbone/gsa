@@ -22,6 +22,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {styleSheet} from 'glamor';
 
 import glamorous from 'glamorous';
 
@@ -43,6 +46,7 @@ import Display, {
   DISPLAY_HEADER_HEIGHT,
 } from './display';
 import DisplayMenu from './displaymenu';
+import DataTable from './datatable';
 
 const ownProps = [
   'title',
@@ -53,12 +57,15 @@ const ownProps = [
   'height',
   'width',
   'id',
+  'dataTitles',
+  'dataRow',
   'onRemoveClick',
 ];
 
 const Download = glamorous.a({
   color: Theme.black,
   textDecoration: 'none',
+  display: 'none',
   '&:link': {
     color: Theme.black,
     textDecoration: 'none',
@@ -69,6 +76,8 @@ const Download = glamorous.a({
   },
 });
 
+const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
+
 class DataDisplay extends React.Component {
 
   constructor(...args) {
@@ -77,21 +86,27 @@ class DataDisplay extends React.Component {
     this.svgRef = React.createRef();
     this.downloadRef = React.createRef();
 
+    const data = DataDisplay.getTransformedData(this.props);
     this.state = {
-      data: DataDisplay.getTransformedData(this.props),
+      data,
       originalData: this.props.data,
+      title: this.props.title({data, id: this.props.id}),
     };
 
     this.handleOpenCopyableSvg = this.handleOpenCopyableSvg.bind(this);
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
+    this.handleDataTable = this.handleDataTable.bind(this);
+    this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
+      const data = DataDisplay.getTransformedData(nextProps);
       return {
-        data: DataDisplay.getTransformedData(nextProps),
+        data,
         originalData: nextProps.data,
+        title: nextProps.title({data, id: nextProps.id}),
       };
     }
     return null;
@@ -149,6 +164,13 @@ class DataDisplay extends React.Component {
     }
   }
 
+  cleanupDownloadCsv() {
+    if (is_defined(this.downloadCsvUrl)) {
+      URL.revokeObjectURL(this.downloadCsvUrl);
+      this.downloadCsvUrl = undefined;
+    }
+  }
+
   handleDownloadSvg() {
     const {current: download} = this.downloadRef;
 
@@ -157,6 +179,83 @@ class DataDisplay extends React.Component {
     this.downloadSvgUrl = this.createSvgUrl();
 
     download.setAttribute('href', this.downloadSvgUrl);
+    download.setAttribute('download', 'chart.svg');
+    download.click();
+  }
+
+  handleDownloadCsv() {
+    const {current: download} = this.downloadRef;
+
+    const {dataTitles, dataRow} = this.props;
+    const {data, title} = this.state;
+
+    this.cleanupDownloadCsv();
+
+    const csv_data = [
+      escapeCsv(title),
+      dataTitles.map(t => escapeCsv(t)).join(','),
+      ...data.map(row => dataRow({row}).map(val => escapeCsv(val)).join(',')),
+    ].join('\n');
+
+    const csv_blob = new Blob([csv_data], {type: 'text/csv'});
+    this.downloadCsvUrl = URL.createObjectURL(csv_blob);
+
+    download.setAttribute('href', this.downloadCsvUrl);
+    download.setAttribute('download', 'data.csv');
+    download.click();
+  }
+
+  handleDataTable() {
+    const {dataTitles, dataRow} = this.props;
+    const {data, title} = this.state;
+
+    const table = (
+      <React.Fragment>
+        <h1>{title}</h1>
+        <DataTable
+          header={dataTitles}
+          row={dataRow}
+          data={data}
+        />
+      </React.Fragment>
+    );
+
+    const {document} = window.open('', '_blank');
+
+    // create new empty div element and add it to the body
+    const body = document.querySelector('body');
+    const div = document.createElement('div');
+    body.appendChild(div);
+
+    // create new style element and add it to the head
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(''));
+    const head = document.querySelector('head');
+    head.appendChild(style);
+
+    // add a title to the new document
+    const titleEl = document.createElement('title');
+    titleEl.appendChild(document.createTextNode(
+      _('Greenbone Security Assistant - Chart data table')
+    ));
+    head.appendChild(titleEl);
+
+    ReactDOM.render(table, div, () => {
+      // this is called after successful rendering
+
+      // get all generated css style rules
+      const cssRules = styleSheet.rules();
+
+      for (const {cssText} of cssRules) {
+        // css styles added with insertRule aren't editable
+        // therefore only use insertRule in production because it is faster
+        process.env.NODE_ENV === 'development' ?
+          style.appendChild(document.createTextNode(cssText)) :
+          style.sheet.insertRule(cssText);
+      }
+    });
+
   }
 
   componentWillUnmount() {
@@ -178,7 +277,7 @@ class DataDisplay extends React.Component {
   }
 
   render() {
-    const {data: transformedData} = this.state;
+    const {data: transformedData, title} = this.state;
     let {
       data: originalData,
       height,
@@ -189,7 +288,8 @@ class DataDisplay extends React.Component {
       menu,
       id,
       width,
-      title,
+      dataTitles,
+      dataRow,
       onRemoveClick,
       ...props
     } = this.props;
@@ -201,22 +301,35 @@ class DataDisplay extends React.Component {
     isLoading = isLoading && !is_defined(originalData);
 
     const otherProps = exclude_object_props(props, ownProps);
+    const showDataMenus = is_defined(dataRow) && is_defined(dataTitles);
     return (
       <Display
         menu={
-          hasSvg ?
+          showDataMenus || hasSvg ?
             <DisplayMenu>
-              <MenuEntry onClick={this.handleOpenCopyableSvg}>
-                {_('Show copyable SVG')}
-              </MenuEntry>
-              <MenuEntry onClick={this.handleDownloadSvg}>
-                <Download download="chart.svg" innerRef={this.downloadRef}>
+              {showDataMenus &&
+                <MenuEntry onClick={this.handleDataTable}>
+                  {_('Show Table')}
+                </MenuEntry>
+              }
+              {hasSvg &&
+                <MenuEntry onClick={this.handleOpenCopyableSvg}>
+                  {_('Show copyable SVG')}
+                </MenuEntry>
+              }
+              {showDataMenus &&
+                <MenuEntry onClick={this.handleDownloadCsv}>
+                  {_('Download CSV')}
+                </MenuEntry>
+              }
+              {hasSvg &&
+                <MenuEntry onClick={this.handleDownloadSvg}>
                   {_('Download SVG')}
-                </Download>
-              </MenuEntry>
+                </MenuEntry>
+              }
             </DisplayMenu> : null
         }
-        title={isLoading ? _('Loading') : title({data: transformedData, id})}
+        title={isLoading ? _('Loading') : title}
         onRemoveClick={onRemoveClick}
         {...otherProps}
       >
@@ -230,6 +343,8 @@ class DataDisplay extends React.Component {
             svgRef: this.svgRef,
           })
         }
+        <Download innerRef={this.downloadRef}>
+        </Download>
       </Display>
     );
   }
@@ -238,6 +353,8 @@ class DataDisplay extends React.Component {
 DataDisplay.propTypes = {
   children: PropTypes.func.isRequired,
   data: PropTypes.any,
+  dataRow: PropTypes.func,
+  dataTitles: PropTypes.arrayOf(PropTypes.string),
   dataTransform: PropTypes.func,
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,

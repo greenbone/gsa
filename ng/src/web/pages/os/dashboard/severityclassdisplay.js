@@ -44,6 +44,7 @@ const OsSeverityClassDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
+        dataTitles={[_('Severity Class'), _('# of Operating Systems')]}
         title={({data: tdata}) =>
           _('Operating Systems by Severity Class (Total: {{count}})',
             {count: tdata.total})}
