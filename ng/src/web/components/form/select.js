@@ -227,7 +227,10 @@ class Select extends React.Component {
 
 Select.propTypes = {
   disabled: PropTypes.bool,
-  items: PropTypes.arrayOf(PropTypes.object),
+  items: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+  })),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   value: selectValue,
