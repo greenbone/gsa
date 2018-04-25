@@ -117,6 +117,11 @@ class OsVulnScoreDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformVulnScoreData}
+            dataTitles={[
+              _('Operating System Name'),
+              _('Max. average Severity Score'),
+            ]}
+            dataRow={({row}) => [row.x, row.y]}
             title={() => _('Operating Systems by Vulnerability Score')}
           >
             {({width, height, data: tdata, svgRef}) => (

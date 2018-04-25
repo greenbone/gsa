@@ -225,6 +225,7 @@ class CvssDisplay extends React.Component {
     return (
       <DataDisplay
         {...props}
+        dataRow={({row}) => [row.x, row.y]}
         dataTransform={transformCvssData}
         title={title}
       >

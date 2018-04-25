@@ -123,6 +123,12 @@ class NvtsFamilyDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            dataTitles={[
+              _('Operating System'),
+              _('Max. average Severity Score'),
+              _('Severity'),
+            ]}
+            dataRow={({row}) => [row.label, row.value, row.severity]}
             dataTransform={transformFamilyData}
             title={({data: tdata}) =>
             _('NVTS by Family (Total: {{count}})', {count: tdata.total})}

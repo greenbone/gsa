@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import _, {datetime} from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -62,6 +62,8 @@ const TasksSchedulesDisplay = ({
       <DataDisplay
         {...props}
         {...loaderProps}
+        dataTitles={[_('Task Name'), _('Next Schedule Time')]}
+        dataRow={({row}) => [row.label, datetime(row.start)]}
         dataTransform={transformScheduleData}
         title={() => _('Next Scheduled Tasks')}
       >
