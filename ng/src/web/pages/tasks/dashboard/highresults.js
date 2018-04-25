@@ -69,6 +69,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       return {
         value: high_per_host,
         label: name,
+        severity: displaySeverity,
         color: riskFactorColorScale(riskFactor),
         toolTip: `${name}: ${displayHighHost} (Severity ${displaySeverity})`,
         id,
