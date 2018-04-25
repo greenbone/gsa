@@ -53,11 +53,12 @@ const transformFamilyData = (data = {}, {severityClass}) => {
       const {count, value} = family;
       const severity = parse_severity(family.stats.severity.mean);
       const riskFactor = resultSeverityRiskFactor(severity, severityClass);
+      const formattedSeverity = severityFormat(severity);
       const toolTip = _('{{value}}: {{count}} (severity: {{severity}})',
         {
           value: value,
           count: count,
-          severity: severityFormat(severity),
+          severity: formattedSeverity,
         });
 
       return {
@@ -65,6 +66,7 @@ const transformFamilyData = (data = {}, {severityClass}) => {
         color: riskFactorColorScale(riskFactor),
         label: value,
         toolTip,
+        severity: formattedSeverity,
         filterValue: value,
       };
     });
