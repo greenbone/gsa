@@ -88,15 +88,16 @@ class ExternalLink extends React.Component {
         >
           {children}
         </a>
-        <LinkConfirmationDialog
-          visible={dialogvisible}
-          onClose={this.handleCloseDialog}
-          onResumeClick={this.handleOpenLink}
-          text={dialogtext}
-          title={dialogtitle}
-          to={to}
-          width="500px"
-        />
+        {dialogvisible &&
+          <LinkConfirmationDialog
+            onClose={this.handleCloseDialog}
+            onResumeClick={this.handleOpenLink}
+            text={dialogtext}
+            title={dialogtitle}
+            to={to}
+            width="500px"
+          />
+        }
       </span>
     );
   };

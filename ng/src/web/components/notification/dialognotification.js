@@ -94,32 +94,33 @@ class DialogNotification extends React.Component {
           showMessage: this.handleShowMessage,
           showSuccessMessage: this.handleShowSuccessMessage,
         })}
-        <Dialog
-          width="400px"
-          visible={this.isDialogOpen()}
-          onClose={this.handleDialogClose}
-        >
-          {({
-            close,
-            moveProps,
-            heightProps,
-          }) => (
-            <DialogContent>
-              <DialogTitle
-                title={title}
-                onCloseClick={close}
-                {...moveProps}
-              />
-              <ScrollableContent {...heightProps}>
-                {message}
-              </ScrollableContent>
-              <DialogFooter
-                title={_('Close')}
-                onClick={close}
-              />
-            </DialogContent>
-          )}
-        </Dialog>
+        {this.isDialogOpen() &&
+          <Dialog
+            width="400px"
+            onClose={this.handleDialogClose}
+          >
+            {({
+              close,
+              moveProps,
+              heightProps,
+            }) => (
+              <DialogContent>
+                <DialogTitle
+                  title={title}
+                  onCloseClick={close}
+                  {...moveProps}
+                />
+                <ScrollableContent {...heightProps}>
+                  {message}
+                </ScrollableContent>
+                <DialogFooter
+                  title={_('Close')}
+                  onClick={close}
+                />
+              </DialogContent>
+            )}
+          </Dialog>
+        }
       </Wrapper>
     );
   }
