@@ -46,6 +46,22 @@ import {
   SEVERITY_CLASS_PCI_DSS,
 } from './severity';
 
+export const mayRequire = validator => {
+  const wrapper = (...props) => {
+    return validator(...props);
+  };
+
+  wrapper.isRequired = (props, prop_name, component_name) => {
+    if (is_defined(props[prop_name])) {
+      return validator(props, prop_name, component_name);
+    }
+    return new Error('Prop `' + prop_name + '` supplied to' +
+      ' `' + component_name + '` is required.');
+  };
+
+  return wrapper;
+};
+
 const component = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
   ReactPropTypes.object,
@@ -113,22 +129,6 @@ const settings = ReactPropTypes.instanceOf(Settings);
 
 const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
 const cache = ReactPropTypes.instanceOf(Cache);
-
-export const mayRequire = validator => {
-  const wrapper = (...props) => {
-    return validator(...props);
-  };
-
-  wrapper.isRequired = (props, prop_name, component_name) => {
-    if (is_defined(props[prop_name])) {
-      return validator(props, prop_name, component_name);
-    }
-    return new Error('Prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '` is required.');
-  };
-
-  return wrapper;
-};
 
 const momentDateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
