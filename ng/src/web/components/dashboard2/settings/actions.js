@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {is_defined, is_array} from 'gmp/utils/identity';
 
 import getDashboardSettings from './selectors';
 import {createRow, createItem} from '../../sortable/grid';
@@ -152,14 +152,15 @@ export const addDefaultDisplay = ({gmp}) => id => (dispatch, getState) => {
   const rootState = getState();
   const settings = getDashboardSettings(rootState);
   const defaults = settings.getDefaultsById(id);
-  const currentItems = settings.getItemsById(id);
+  const currentItems = settings.getItemsById(id) || [];
   const {defaultDisplay, maxItemsPerRow, maxRows} = defaults;
 
   if (!is_defined(defaultDisplay)) {
     return;
   }
 
-  const lastRow = currentItems[currentItems.length - 1];
+  const lastRow = is_array(currentItems) && currentItems.length > 0 ?
+    currentItems[currentItems.length - 1] : {items: []};
 
   let items;
   if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
