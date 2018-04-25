@@ -46,73 +46,73 @@ import {
   SEVERITY_CLASS_PCI_DSS,
 } from './severity';
 
-export const component = ReactPropTypes.oneOfType([
+const component = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
   ReactPropTypes.object,
 ]);
 
-export const componentOrFalse = ReactPropTypes.oneOfType([
+const componentOrFalse = ReactPropTypes.oneOfType([
   component,
   ReactPropTypes.oneOf([false]),
 ]);
 
-export const componentOrElement = ReactPropTypes.oneOfType([
+const componentOrElement = ReactPropTypes.oneOfType([
   component,
   ReactPropTypes.element,
 ]);
 
-export const elementOrString = ReactPropTypes.oneOfType([
+const elementOrString = ReactPropTypes.oneOfType([
   ReactPropTypes.element,
   ReactPropTypes.string,
 ]);
 
-export const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
+const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
 
-export const numberOrNumberString = ReactPropTypes.oneOfType([
+const numberOrNumberString = ReactPropTypes.oneOfType([
   ReactPropTypes.number,
   numberString,
 ]);
 
-export const icon = ReactPropTypes.oneOfType([
+const icon = ReactPropTypes.oneOfType([
   ReactPropTypes.string,
   ReactPropTypes.element,
 ]);
 
-export const yesno = ReactPropTypes.oneOf([
+const yesno = ReactPropTypes.oneOf([
   1, 0,
 ]);
 
-export const id = ReactPropTypes.string; // TODO improve checking for uuid
+const id = ReactPropTypes.string; // TODO improve checking for uuid
 
-export const idOrZero = ReactPropTypes.oneOfType([
+const idOrZero = ReactPropTypes.oneOfType([
   id,
   ReactPropTypes.oneOf([0]),
 ]);
 
-export const stringOrFalse = ReactPropTypes.oneOfType([
+const stringOrFalse = ReactPropTypes.oneOfType([
   ReactPropTypes.string,
   ReactPropTypes.oneOf([false]),
 ]);
 
-export const counts = ReactPropTypes.instanceOf(CollectionCounts);
+const counts = ReactPropTypes.instanceOf(CollectionCounts);
 
-export const set = ReactPropTypes.instanceOf(Set);
+const set = ReactPropTypes.instanceOf(Set);
 
-export const filter = ReactPropTypes.instanceOf(Filter);
+const filter = ReactPropTypes.instanceOf(Filter);
 
-export const model = ReactPropTypes.instanceOf(Model);
+const model = ReactPropTypes.instanceOf(Model);
 
-export const entitycommand = ReactPropTypes.instanceOf(EntityCommand);
-export const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
+const entitycommand = ReactPropTypes.instanceOf(EntityCommand);
+const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
 
-export const capabilities = ReactPropTypes.instanceOf(Capabilities);
+const capabilities = ReactPropTypes.instanceOf(Capabilities);
 
-export const gmp = ReactPropTypes.instanceOf(Gmp);
+const gmp = ReactPropTypes.instanceOf(Gmp);
 
-export const settings = ReactPropTypes.instanceOf(Settings);
+const settings = ReactPropTypes.instanceOf(Settings);
 
-export const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
-export const cache = ReactPropTypes.instanceOf(Cache);
+const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
+const cache = ReactPropTypes.instanceOf(Cache);
 
 export const mayRequire = validator => {
   const wrapper = (...props) => {
@@ -139,13 +139,13 @@ const momentDateValidator = (props, prop_name, component_name) => {
   return undefined;
 };
 
-export const momentDate = mayRequire(momentDateValidator);
+const momentDate = mayRequire(momentDateValidator);
 
-export const timeunit = ReactPropTypes.oneOf([
+const timeunit = ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
 ]);
 
-export const iconSize = ReactPropTypes.oneOfType([
+const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.array,
   ReactPropTypes.oneOf([
     'small', 'medium', 'large', 'default',
@@ -161,16 +161,16 @@ const toStringValidator = (props, prop_name, component_name) => {
   }
 };
 
-export const toString = mayRequire(toStringValidator);
+const toString = mayRequire(toStringValidator);
 
-export const severityClass = ReactPropTypes.objectOf([
+const severityClass = ReactPropTypes.objectOf([
   SEVERITY_CLASS_BSI,
   SEVERITY_CLASS_CLASSIC,
   SEVERITY_CLASS_NIST,
   SEVERITY_CLASS_PCI_DSS,
 ]);
 
-export const ref = ReactPropTypes.oneOfType([
+const ref = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
   // React.createRef() returns an object with a current property
   ReactPropTypes.shape({
