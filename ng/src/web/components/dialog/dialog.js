@@ -210,7 +210,8 @@ class Dialog extends React.Component {
             tabIndex="1"
             width={width}
             height={height}
-            innerRef={ref => this.dialog = ref}>
+            innerRef={ref => this.dialog = ref}
+          >
             {children({
               close: this.handleClose,
               moveProps: {
