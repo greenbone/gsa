@@ -108,6 +108,8 @@ class NvtsQodTypeDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformQodTypeData}
+            dataTitles={[_('QoD-Type'), _('# of NVTs')]}
+            dataRow={({row}) => [row.label, row.value]}
             title={({data: tdata}) => _('NVTs by QoD-Type (Total: {{count}})',
               {count: tdata.total})}
           >

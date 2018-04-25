@@ -192,6 +192,8 @@ class VulnsHostsDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformHostsData}
+            dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
+            dataRow={({row}) => [row.id, row.y]}
             title={({data: tdata}) =>
             _('Vulnerabilities by Hosts (Total: {{count}})',
               {count: tdata.total})}

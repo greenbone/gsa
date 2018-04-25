@@ -44,6 +44,7 @@ const VulnsSeverityDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
+        dataTitles={[_('Severity Class'), _('# of Vulnerabilities')]}
         title={({data: tdata}) =>
           _('Vulnerabilities by Severity Class (Total: {{count}})',
             {count: tdata.total})}

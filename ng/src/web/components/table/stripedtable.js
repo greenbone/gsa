@@ -25,7 +25,9 @@ import Table from './table.js';
 
 import glamorous from 'glamorous';
 
-const StripedTable = glamorous(Table)({
+const StripedTable = glamorous(Table, {
+  displayName: 'StripedTable',
+})('striped-table', {
   '& th, & td': {
     padding: '4px',
   },

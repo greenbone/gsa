@@ -233,6 +233,7 @@ class SeverityClassDisplay extends React.Component {
       <DataDisplay
         {...props}
         dataTransform={transformSeverityData}
+        dataRow={({row}) => [row.label, row.value]}
       >
         {({width, height, data, svgRef}) => (
           <DonutChart

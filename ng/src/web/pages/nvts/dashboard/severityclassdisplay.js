@@ -44,6 +44,7 @@ const NvtsSeverityDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
+        dataTitles={[_('Severity Class'), _('# of NVTs')]}
         title={({data: tdata}) =>
           _('NVTs by Severity Class (Total: {{count}})',
             {count: tdata.total})}
