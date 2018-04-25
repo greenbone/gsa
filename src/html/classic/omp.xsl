@@ -16018,7 +16018,17 @@ should not have received it.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td><xsl:value-of select="hosts"/></td>
+    <td>
+      <xsl:variable name="max" select="500"/>
+      <xsl:choose>
+        <xsl:when test="string-length(hosts) &gt; $max">
+          <xsl:value-of select="substring (hosts, 0, $max)"/>...
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="hosts"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td><xsl:value-of select="max_hosts"/></td>
     <td>
       <xsl:choose>
@@ -16201,7 +16211,17 @@ should not have received it.
       </tr>
       <tr>
         <td><xsl:value-of select="gsa:i18n ('Hosts')"/>:</td>
-        <td><xsl:value-of select="hosts"/></td>
+        <td>
+          <xsl:variable name="max" select="1000"/>
+          <xsl:choose>
+            <xsl:when test="string-length(hosts) &gt; $max">
+              <xsl:value-of select="substring (hosts, 0, $max)"/>...
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="hosts"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
       </tr>
       <tr>
         <td><xsl:value-of select="gsa:i18n ('Exclude Hosts')"/>:</td>
