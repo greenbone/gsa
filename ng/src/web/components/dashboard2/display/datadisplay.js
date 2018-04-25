@@ -305,7 +305,7 @@ class DataDisplay extends React.Component {
     return (
       <Display
         menu={
-          showDataMenus && hasSvg ?
+          showDataMenus || hasSvg ?
             <DisplayMenu>
               {showDataMenus &&
                 <MenuEntry onClick={this.handleDataTable}>
