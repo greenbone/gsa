@@ -99,9 +99,11 @@ const DisplayMenu = ({
     <Div>
       <List>
         {React.Children.map(children, child => (
-          <Entry>
-            {child}
-          </Entry>
+          child ? (
+            <Entry>
+              {child}
+            </Entry>
+          ) : null
         ))}
       </List>
     </Div>
