@@ -24,7 +24,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_empty} from 'gmp/utils/string';
 import {is_defined} from 'gmp/utils/identity';
 
 import {parse_int, parse_float, parse_severity} from 'gmp/parser';
