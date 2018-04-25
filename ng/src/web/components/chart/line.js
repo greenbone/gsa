@@ -26,7 +26,7 @@ import {css} from 'glamor';
 
 import glamorous from 'glamorous';
 
-import {scaleLinear} from 'd3-scale';
+import {scaleLinear, scaleUtc} from 'd3-scale';
 
 import {Line, LinePath} from '@vx/shape';
 
@@ -106,11 +106,15 @@ class LineChart extends React.Component {
 
    static propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({
-      x: PropTypes.number.isRequired,
+      x: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.momentDate,
+      ]).isRequired,
       y: PropTypes.number.isRequired,
       y2: PropTypes.number.isRequired,
     })),
     height: PropTypes.number.isRequired,
+    timeline: PropTypes.bool,
     width: PropTypes.number.isRequired,
     xAxisLabel: PropTypes.string,
     y2AxisLabel: PropTypes.string,
@@ -213,7 +217,7 @@ class LineChart extends React.Component {
       return xMin;
     }
 
-    const values = [...xValues].sort(); // sort copy of x values
+    const values = [...xValues].sort((a, b) => a - b); // sort copy of x values
 
     const xV = xScale.invert(px); // x value for pixel position
 
@@ -229,6 +233,7 @@ class LineChart extends React.Component {
     data = [],
     width,
     height,
+    timeline = false,
   }) {
     if (this.legend) {
       const {width: legendWidth} = this.legend.getBoundingClientRect();
@@ -238,18 +243,25 @@ class LineChart extends React.Component {
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
-    const xValues = data.map(d => d.x);
-    const yValues = [].concat(...data.map(d => d.y));
-    const y2Values = [].concat(...data.map(d => d.y2));
+    const xValues = data.map(d => timeline ? d.x.toDate() : d.x);
+    const yValues = data.map(d => d.y);
+    const y2Values = data.map(d => d.y2);
     const yMax = Math.max(...yValues);
     const y2Max = Math.max(...y2Values);
     const xMin = Math.min(...xValues);
     const xMax = Math.max(...xValues);
 
-    const xDomain = data.length > 1 ? [xMin, xMax] : [xMin - 1, xMax + 1];
-    const xScale = scaleLinear()
-      .range([0, maxWidth])
-      .domain(xDomain);
+    const xDomain = timeline || data.length > 1 ?
+      [xMin, xMax] :
+      [xMin - 1, xMax + 1];
+
+    const xScale = timeline ?
+      scaleUtc()
+        .range([0, maxWidth])
+        .domain(xDomain) :
+      scaleLinear()
+        .range([0, maxWidth])
+        .domain(xDomain);
 
     const yScale = scaleLinear()
       .range([maxHeight, 0])
@@ -280,6 +292,7 @@ class LineChart extends React.Component {
 
   renderInfo() {
     const {
+      timeline,
       yLine,
       y2Line,
     } = this.props;
@@ -298,7 +311,8 @@ class LineChart extends React.Component {
       return null;
     }
 
-    const value = data.find(d => d.x === infoX);
+    const findFunc = timeline ? d => d.x.isSame(infoX) : d => d.x === infoX;
+    const value = data.find(findFunc);
     const {label, y, y2} = value;
 
     const x = xScale(infoX);
