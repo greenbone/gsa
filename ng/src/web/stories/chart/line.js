@@ -30,23 +30,23 @@ import LineChart from 'web/components/chart/line';
 const linedata = [{
   label: 'Foo',
   x: 1,
-  y: [3, 5, 1],
-  y2: [5],
+  y: 3,
+  y2: 5,
 }, {
   label: 'Ipsum',
   x: 2,
-  y: [2, 5, 4],
-  y2: [4],
+  y: 2,
+  y2: 4,
 }, {
   label: 'Bar',
   x: 2.4,
-  y: [1, 2, 5],
-  y2: [4],
+  y: 1,
+  y2: 4,
 }, {
   label: 'Lorem',
   x: 3,
-  y: [5, 1, 7],
-  y2: [7],
+  y: 5,
+  y2: 7,
 },
 ];
 
@@ -60,23 +60,14 @@ storiesOf('Chart/Line', module)
         data={linedata}
         yAxisLabel="Tomatoes"
         y2AxisLabel="Apples"
-        lineData={{
-          y: [{
-            color: 'red',
-            label: 'Tomatoes',
-          }, {
-            color: 'yellow',
-            label: 'Bananas',
-          }, {
-            color: 'silver',
-            label: 'Pears',
-            dashArray: '3,5',
-          }],
-          y2: [{
-            color: 'green',
-            label: 'Apples',
-            dashArray: '3,1',
-          }],
+        yLine={{
+          color: 'red',
+          label: 'Tomatoes',
+        }}
+        y2Line={{
+          color: 'green',
+          label: 'Apples',
+          dashArray: '3,1',
         }}
         onRangeSelected={action('range selected')}
       />
@@ -90,22 +81,17 @@ storiesOf('Chart/Line', module)
         data={[{
           label: 'Lorem',
           x: 1,
-          y: [5, 7],
-          y2: [7],
+          y: 5,
+          y2: 7,
         }]}
-        lineData={{
-          y: [{
-            color: 'red',
-            label: 'Tomatoes',
-          }, {
-            color: 'blue',
-            label: 'Bananas',
-          }],
-          y2: [{
-            color: 'green',
-            label: 'Apples',
-            dashArray: '3,1',
-          }],
+        yLine={{
+          color: 'red',
+          label: 'Tomatoes',
+        }}
+        y2Line={{
+          color: 'green',
+          label: 'Apples',
+          dashArray: '3,1',
         }}
         yAxisLabel="Tomatoes"
         y2AxisLabel="Apples"
@@ -119,19 +105,14 @@ storiesOf('Chart/Line', module)
         width={500}
         height={300}
         data={[]}
-        lineData={{
-          y: [{
-            color: 'red',
-            label: 'Tomatoes',
-          }, {
-            color: 'blue',
-            label: 'Bananas',
-          }],
-          y2: [{
-            color: 'green',
-            label: 'Apples',
-            dashArray: '3,1',
-          }],
+        yLine={{
+          color: 'red',
+          label: 'Tomatoes',
+        }}
+        y2Line={{
+          color: 'green',
+          label: 'Apples',
+          dashArray: '3,1',
         }}
         yAxisLabel="Tomatoes"
         y2AxisLabel="Apples"
