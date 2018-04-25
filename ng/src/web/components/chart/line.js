@@ -299,8 +299,10 @@ class LineChart extends React.Component {
     }
 
     const value = data.find(d => d.x === infoX);
+    const {label, y, y2} = value;
+
     const x = xScale(infoX);
-    const infoWidth = 100;
+    const infoWidth = Math.max(label.length * 8 + 20, 100); // 8px per letter is just an assumption
     const infoHeight = LINE_HEIGHT + lines * LINE_HEIGHT;
     const itemMargin = 5;
     const lineY = LINE_HEIGHT / 2;
@@ -343,7 +345,7 @@ class LineChart extends React.Component {
               y={0}
               fontWeight="bold"
             >
-              {value.label}
+              {label}
             </Text>
             <Group>
               <Line
@@ -357,7 +359,7 @@ class LineChart extends React.Component {
                 x={infoWidth}
                 y={LINE_HEIGHT - 1}
               >
-                {value.y}
+                {y}
               </Text>
             </Group>
             <Group
@@ -374,7 +376,7 @@ class LineChart extends React.Component {
                 x={infoWidth}
                 y={LINE_HEIGHT - 1}
               >
-                {value.y2}
+                {y2}
               </Text>
             </Group>
           </Group>
