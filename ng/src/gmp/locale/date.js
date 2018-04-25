@@ -102,7 +102,7 @@ export function interval(seconds = 0) {
     return translate('One second');
   }
 
-  return translate('{{number} seconds', {number: seconds});
+  return translate('{{number}} seconds', {number: seconds});
 }
 
 export const duration = (start, end) => {

@@ -210,6 +210,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard2/dashboard.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/datadisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datatable.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/display.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/displaymenu.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/severityclassdisplay.js

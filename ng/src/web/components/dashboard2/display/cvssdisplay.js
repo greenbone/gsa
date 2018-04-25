@@ -24,10 +24,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_empty} from 'gmp/utils/string';
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_int, parse_float} from 'gmp/parser';
+import {parse_int, parse_float, parse_severity} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -88,12 +87,16 @@ const transformCvssData = (data = {}, {severityClass}) => {
 
   groups.forEach(group => {
     let {value, count = 0} = group;
-    if (is_empty(value)) {
-      value = NA_VALUE;
-    }
+
+    const severity = parse_severity(value);
+
+    const cvss = is_defined(severity) ? Math.ceil(severity) : NA_VALUE;
+
     count = parse_int(count);
 
-    cvssData[value] = count;
+    const currentCount = cvssData[cvss] || 0;
+
+    cvssData[cvss] = currentCount + count;
   });
 
   const tdata = Object.keys(cvssData)
@@ -104,7 +107,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
       const count = cvssData[key];
       const perc = percent(count, sum);
 
-      const value = Math.ceil(parse_float(key));
+      const value = parse_float(key);
 
       const riskFactor = resultSeverityRiskFactor(value, severityClass);
       const label = translateRiskFactor(riskFactor);
@@ -222,6 +225,7 @@ class CvssDisplay extends React.Component {
     return (
       <DataDisplay
         {...props}
+        dataRow={({row}) => [row.x, row.y]}
         dataTransform={transformCvssData}
         title={title}
       >

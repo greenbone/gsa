@@ -69,6 +69,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       return {
         value: high_per_host,
         label: name,
+        severity: displaySeverity,
         color: riskFactorColorScale(riskFactor),
         toolTip: `${name}: ${displayHighHost} (Severity ${displaySeverity})`,
         id,
@@ -103,6 +104,8 @@ class TasksHighResultsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
+            dataRow={({row}) => [row.label, row.value, row.severity]}
             dataTransform={transformHighResultsData}
             title={() => _('Tasks: High Results per Host')}
           >

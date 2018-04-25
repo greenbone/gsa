@@ -44,6 +44,7 @@ const TasksCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of Tasks')}
         filter={filter}
+        dataTitles={[_('Severity'), _('# of Tasks')]}
         title={({data: tdata = {}}) =>
           _('Tasks by CVSS (Total: {{count}})',
             {count: tdata.total})}

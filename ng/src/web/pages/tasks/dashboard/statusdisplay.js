@@ -141,6 +141,8 @@ class TasksStatusDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformStatusData}
+            dataTitles={[_('Status'), _('# of Tasks')]}
+            dataRow={({row}) => [row.label, row.value]}
             title={({data: tdata}) =>
               _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
           >
