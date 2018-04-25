@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import {KeyCode, has_value, is_defined} from 'gmp/utils';
+import {KeyCode, is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -44,6 +44,8 @@ class Dialog extends React.Component {
 
   constructor(...args) {
     super(...args);
+
+    this.dialogRef = React.createRef();
 
     this.handleClose = this.handleClose.bind(this);
 
@@ -85,10 +87,12 @@ class Dialog extends React.Component {
   }
 
   setDialogPosition(x, y) {
-    this.dialog.style.position = 'absolute';
-    this.dialog.style.left = `${x}px`;
-    this.dialog.style.top = `${y}px`;
-    this.dialog.style.margin = '0';
+    const {current: dialog} = this.dialogRef;
+
+    dialog.style.position = 'absolute';
+    dialog.style.left = `${x}px`;
+    dialog.style.top = `${y}px`;
+    dialog.style.margin = '0';
   }
 
   onOuterClick(event) {
@@ -106,8 +110,9 @@ class Dialog extends React.Component {
   }
 
   onMouseDownMove(event) {
-    if ((event.buttons & 1) && has_value(this.dialog)) { // eslint-disable-line no-bitwise
-      const box = this.dialog.getBoundingClientRect();
+    const {current: dialog} = this.dialogRef;
+    if ((event.buttons & 1) && dialog !== null) { // eslint-disable-line no-bitwise
+      const box = dialog.getBoundingClientRect();
       this.relX = event.pageX - box.left;
       this.relY = event.pageY - box.top;
 
@@ -124,7 +129,8 @@ class Dialog extends React.Component {
 
   onMouseDownResize(event) {
     if (event.buttons & 1) { // eslint-disable-line no-bitwise
-      const box = this.dialog.getBoundingClientRect();
+      const {current: dialog} = this.dialogRef;
+      const box = dialog.getBoundingClientRect();
 
       this.width = Math.round(box.width);
       this.height = Math.round(box.height);
@@ -210,7 +216,7 @@ class Dialog extends React.Component {
             tabIndex="1"
             width={width}
             height={height}
-            innerRef={ref => this.dialog = ref}
+            innerRef={this.dialogRef}
           >
             {children({
               close: this.handleClose,
