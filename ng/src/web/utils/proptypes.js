@@ -45,15 +45,16 @@ import {
   SEVERITY_CLASS_NIST,
   SEVERITY_CLASS_PCI_DSS,
 } from './severity';
+import warning from './warning';
 
 export const mayRequire = validator => {
   const wrapper = (...props) => {
     return validator(...props);
   };
 
-  wrapper.isRequired = (props, prop_name, component_name) => {
+  wrapper.isRequired = (props, prop_name, component_name, ...rest) => {
     if (is_defined(props[prop_name])) {
-      return validator(props, prop_name, component_name);
+      return validator(props, prop_name, component_name, ...rest);
     }
     return new Error('Prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '` is required.');
