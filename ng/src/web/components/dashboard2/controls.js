@@ -27,25 +27,40 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 
 import {is_defined, is_array} from 'gmp/utils/identity';
+import {first} from 'gmp/utils/array';
 
 import compose from '../../utils/compose.js';
 import withGmp from '../../utils/withGmp.js';
 import PropTypes from '../../utils/proptypes.js';
 
+import SaveDialog from '../dialog/savedialog';
+
+import FormGroup from '../form/formgroup';
+import Select from '../form/select';
+
 import IconDivider from '../layout/icondivider';
 
 import NewIcon from '../icon/newicon';
 import Icon from '../icon/icon';
-import {resetSettings, addDefaultDisplay} from './settings/actions';
+
+import {resetSettings, addDisplay} from './settings/actions';
 import getDashboardSettings from './settings/selectors';
+
+import {getDisplay} from './registry';
 
 class DashboardControls extends React.Component {
 
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      showNewDialog: false,
+    };
+
     this.handleNewClick = this.handleNewClick.bind(this);
     this.handleResetClick = this.handleResetClick.bind(this);
+    this.handleNewDialoClose = this.handleNewDialoClose.bind(this);
+    this.handleNewDisplay = this.handleNewDisplay.bind(this);
   }
 
   handleResetClick() {
@@ -58,29 +73,78 @@ class DashboardControls extends React.Component {
   }
 
   handleNewClick() {
+    this.setState({showNewDialog: true});
+  }
+
+  handleNewDialoClose() {
+    this.setState({showNewDialog: false});
+  }
+
+  handleNewDisplay({displayId}) {
     const {
       dashboardId,
-      onNewClick,
+      onNewDisplay,
     } = this.props;
 
-    onNewClick(dashboardId);
+    if (is_defined(onNewDisplay)) {
+      onNewDisplay(dashboardId, displayId);
+    }
   }
 
   render() {
-    const {canAdd} = this.props;
+    const {showNewDialog} = this.state;
+    const {canAdd, displayIds = []} = this.props;
+
+    const displays = displayIds.map(name => getDisplay(name));
+    const displayItems = displays.map(display => ({
+      label: display.title,
+      value: display.id,
+    }));
     return (
-      <IconDivider>
-        <NewIcon
-          active={canAdd}
-          title={canAdd ? _('Add new Chart') : _('Dashboard limit reached')}
-          onClick={canAdd ? this.handleNewClick : undefined}
-        />
-        <Icon
-          img="first.svg"
-          title={_('Reset to Defaults')}
-          onClick={this.handleResetClick}
-        />
-      </IconDivider>
+      <React.Fragment>
+        <IconDivider>
+          <NewIcon
+            active={canAdd}
+            title={
+              canAdd ?
+                _('Add new Chart Display') :
+                _('Dashboard limit reached')
+            }
+            onClick={canAdd ? this.handleNewClick : undefined}
+          />
+          <Icon
+            img="first.svg"
+            title={_('Reset to Defaults')}
+            onClick={this.handleResetClick}
+          />
+        </IconDivider>
+        {showNewDialog &&
+          <SaveDialog
+            title={_('Add new Chart Display')}
+            buttonTitle={_('Add')}
+            width="500px"
+            defaultValues={{
+              displayId: first(displays).id,
+            }}
+            onClose={this.handleNewDialoClose}
+            onSave={this.handleNewDisplay}
+          >
+            {({values, onValueChange}) => (
+              <FormGroup
+                title={_('Choose Display')}
+                titleSize={4}
+              >
+                <Select
+                  name="displayId"
+                  items={displayItems}
+                  value={values.displayId}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            )}
+          </SaveDialog>
+        }
+      </React.Fragment>
     );
   }
 }
@@ -88,7 +152,8 @@ class DashboardControls extends React.Component {
 DashboardControls.propTypes = {
   canAdd: PropTypes.bool.isRequired,
   dashboardId: PropTypes.id.isRequired,
-  onNewClick: PropTypes.func.isRequired,
+  displayIds: PropTypes.arrayOf(PropTypes.string),
+  onNewDisplay: PropTypes.func.isRequired,
   onResetClick: PropTypes.func.isRequired,
 };
 
@@ -107,12 +172,13 @@ const mapStateToProps = (rootState, {dashboardId}) => {
   const defaults = settings.getDefaultsById(dashboardId);
   return {
     canAdd: canAdd(items, defaults),
+    displayIds: defaults.permittedDisplays,
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onResetClick: (...args) => dispatch(resetSettings(ownProps)(...args)),
-  onNewClick: (...args) => dispatch(addDefaultDisplay(ownProps)(...args)),
+  onNewDisplay: (...args) => dispatch(addDisplay(ownProps)(...args)),
 });
 
 export default compose(
