@@ -26,7 +26,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined, is_array} from 'gmp/utils/identity';
 
 import compose from '../../utils/compose.js';
 import withGmp from '../../utils/withGmp.js';
@@ -93,7 +93,8 @@ DashboardControls.propTypes = {
 };
 
 const canAdd = (items, {maxItemsPerRow, maxRows}) => {
-  if (has_value(items) && is_defined(maxItemsPerRow) && is_defined(maxRows)) {
+  if (is_array(items) && items.length > 0 &&
+    is_defined(maxItemsPerRow) && is_defined(maxRows)) {
     const lastRow = items[items.length - 1];
     return lastRow.items.length < maxItemsPerRow || items.length < maxRows;
   }
