@@ -149,16 +149,21 @@ class Dialog extends React.Component {
   }
 
   onMouseMoveResize(event) {
+    const {
+      minHeight = DEFAULT_DIALOG_MIN_HEIGHT,
+      minWidth = DEFAULT_DIALOG_MIN_WIDTH,
+    } = this.props;
+
     const differenceX = this.mousePosX - event.pageX;
     const differenceY = this.mousePosY - event.pageY;
     let newWidth = this.width - differenceX;
     let newHeight = this.height - differenceY;
 
-    if (newWidth < DEFAULT_DIALOG_MIN_WIDTH) {
-      newWidth = DEFAULT_DIALOG_MIN_WIDTH;
+    if (newWidth < minWidth) {
+      newWidth = minWidth;
     }
-    if (newHeight < DEFAULT_DIALOG_MIN_HEIGHT) {
-      newHeight = DEFAULT_DIALOG_MIN_HEIGHT;
+    if (newHeight < minHeight) {
+      newHeight = minHeight;
     }
 
     this.setState({
@@ -227,6 +232,8 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   height: PropTypes.numberOrNumberString,
+  minHeight: PropTypes.numberOrNumberString,
+  minWidth: PropTypes.numberOrNumberString,
   resizable: PropTypes.bool,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,

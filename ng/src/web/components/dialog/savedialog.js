@@ -174,6 +174,8 @@ const SaveDialog = ({
   initialData,
   defaultValues = initialData,
   externalError,
+  minHeight,
+  minWidth,
   title,
   values,
   width,
@@ -184,6 +186,8 @@ const SaveDialog = ({
   return (
     <Dialog
       width={width}
+      minHeight={minHeight}
+      minWidth={minWidth}
       onClose={onClose}
     >
       {({
@@ -215,6 +219,8 @@ SaveDialog.propTypes = {
   defaultValues: PropTypes.object, // default values for uncontrolled values
   externalError: PropTypes.object, // for errors from outside SaveDialog
   initialData: PropTypes.object, // should not be used anymore. use defaultValues instead.
+  minHeight: PropTypes.numberOrNumberString,
+  minWidth: PropTypes.numberOrNumberString,
   title: PropTypes.string.isRequired,
   values: PropTypes.object, // should be used for controlled values
   width: PropTypes.string,
