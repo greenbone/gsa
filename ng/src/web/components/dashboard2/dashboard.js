@@ -97,7 +97,7 @@ class Dashboard extends React.Component {
   componentDidMount() {
     const {
       id,
-      defaultDisplay,
+      permittedDisplays,
       defaultContent,
       maxItemsPerRow,
       maxRows,
@@ -105,7 +105,7 @@ class Dashboard extends React.Component {
 
     const defaults = {
       items: convertDefaultContent(defaultContent),
-      defaultDisplay,
+      permittedDisplays,
       maxItemsPerRow,
       maxRows,
     };
