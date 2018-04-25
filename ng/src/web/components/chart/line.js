@@ -114,6 +114,7 @@ class LineChart extends React.Component {
       y2: PropTypes.number.isRequired,
     })),
     height: PropTypes.number.isRequired,
+    numTicks: PropTypes.number,
     timeline: PropTypes.bool,
     width: PropTypes.number.isRequired,
     xAxisLabel: PropTypes.string,
@@ -448,6 +449,7 @@ class LineChart extends React.Component {
       width,
     } = this.state;
     const {
+      numTicks,
       xAxisLabel,
       yAxisLabel,
       y2AxisLabel,
@@ -489,6 +491,7 @@ class LineChart extends React.Component {
               scale={xScale}
               top={maxHeight}
               label={xAxisLabel}
+              numTicks={numTicks}
             />
             {y2Line &&
               <Axis
