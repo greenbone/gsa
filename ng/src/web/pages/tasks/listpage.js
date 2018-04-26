@@ -31,12 +31,9 @@ import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import TaskFilterDialog from './filterdialog.js';
-import TaskCharts from './charts.js';
 import Table from './table.js';
 
 import NewIconMenu from './icons/newiconmenu.js';
-
-import withDashboard from '../../components/dashboard/withDashboard.js';
 
 import DashboardControls from '../../components/dashboard2/controls.js';
 
@@ -52,14 +49,6 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 import TaskComponent from './component.js';
 import TaskDashboard from './dashboard';
 import {TASK_DASHBOARD_ID} from './dashboard/index.js';
-
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
-  defaultControllersString: 'task-by-severity-class|' +
-    'task-by-most-high-results|task-by-status',
-  defaultControllerString: 'task-by-cvss',
-})(TaskCharts);
 
 const ToolBarIcons = ({
     onAdvancedTaskWizardClick,
@@ -161,7 +150,6 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard={Dashboard}
         dashboard2={dashboardProps => (
           <TaskDashboard {...dashboardProps} />
         )}
