@@ -95,7 +95,8 @@ class DashboardControls extends React.Component {
     const {showNewDialog} = this.state;
     const {canAdd, displayIds = []} = this.props;
 
-    const displays = displayIds.map(name => getDisplay(name));
+    const displays = displayIds.map(name =>
+      getDisplay(name)).filter(is_defined);
     const displayItems = displays.map(display => ({
       label: display.title,
       value: display.id,
