@@ -27,6 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import CvesCvssDisplay from './cvssdisplay';
 import CvesSeverityClassDisplay from './severityclassdisplay';
 
 export const CVES_DASHBOARD_ID = '815ddd2e-8654-46c7-a05b-d73224102240';
@@ -39,10 +40,12 @@ const CvesDashboard = ({
     id={CVES_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      CvesCvssDisplay.displayId,
       CvesSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
       [
+        CvesCvssDisplay.displayId,
         CvesSeverityClassDisplay.displayId,
       ],
     ]}
