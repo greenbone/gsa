@@ -28,6 +28,7 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import CpesCvssDisplay from './cvssdisplay';
+import CpesSeverityClassDisplay from './severityclassdisplay';
 
 export const CPES_DASHBOARD_ID = '9cff9b4d-b164-43ce-8687-f2360afc7500';
 
@@ -40,10 +41,12 @@ const CpesDashboard = ({
     filter={filter}
     permittedDisplays={[
       CpesCvssDisplay.displayId,
+      CpesSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
       [
         CpesCvssDisplay.displayId,
+        CpesSeverityClassDisplay.displayId,
       ],
     ]}
     defaultDisplay={CpesCvssDisplay.displayId}
