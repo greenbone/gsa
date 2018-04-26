@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.wateramp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -43,6 +44,14 @@ class CpesCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'cpe', Cpe, info_filter);
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'cpe',
+      group_column: 'severity',
+      filter,
+    });
   }
 }
 
