@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +37,8 @@ import {goto_details} from '../../entity/component.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
@@ -43,6 +46,8 @@ import HostsCharts from './charts.js';
 import HostsFilterDialog from './filterdialog.js';
 import HostsTable from './table.js';
 import HostComponent from './component.js';
+
+import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -129,6 +134,10 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('host', {
+  dashboard2: HostsDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
+  ),
   filtersFilter: ASSETS_FILTER_FILTER,
 })(Page);
 
