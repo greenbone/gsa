@@ -40,7 +40,7 @@ import {
   riskFactorColorScale,
 } from '../../../components/dashboard2/display/utils';
 
-import {OsVulnScoreLoader} from './loaders';
+import {HostsVulnScoreLoader} from './loaders';
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const ToolTip = glamorous.div({
@@ -54,31 +54,30 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
   const tdata = groups
     .filter(group => {
       const {stats = {}} = group;
-      const {average_severity_score = 0} = stats;
-      return parse_float(average_severity_score.max) > 0;
+      const {severity = 0} = stats;
+      return parse_float(severity.max) > 0;
     })
     .map(group => {
       const {stats, text, value: id} = group;
-      const {hosts, modified, name} = text;
-      const {average_severity, average_severity_score} = stats;
-      const averageSeverity = parse_severity(average_severity.mean);
+      const {modified, name} = text;
+      const {severity} = stats;
+      const averageSeverity = parse_severity(severity.mean);
       const riskFactor = resultSeverityRiskFactor(averageSeverity);
       const modifiedDate = moment(modified).format('lll');
       const toolTip = (
         <ToolTip>
           <b>{name}:</b><br/>
-          {average_severity_score.max}<br/>
-          {_('{{hosts}} Host(s) with average severity {{avgSev}}',
+          {_('{{sevMax}}: ({{riskFactor}})',
             {
-              hosts: parse_float(hosts),
-              avgSev: parse_float(averageSeverity),
+              sevMax: severity.max,
+              riskFactor,
             })}<br/>
           <b>{_('Updated: ')}</b>{modifiedDate}
         </ToolTip>
       );
 
       return {
-        y: parse_float(average_severity_score.max),
+        y: parse_float(severity.max),
         x: name,
         label: name,
         color: riskFactorColorScale(riskFactor),
@@ -89,7 +88,7 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
   return tdata.reverse();
 };
 
-class OsVulnScoreDisplay extends React.Component {
+class HostsVulnScoreDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -100,7 +99,7 @@ class OsVulnScoreDisplay extends React.Component {
   handleDataClick(data) {
     const {router} = this.props;
 
-    router.push(`/ng/operatingsystem/${data.id}`);
+    router.push(`/ng/host/${data.id}`);
   }
 
   render() {
@@ -109,7 +108,7 @@ class OsVulnScoreDisplay extends React.Component {
       ...props
     } = this.props;
     return (
-      <OsVulnScoreLoader
+      <HostsVulnScoreLoader
         filter={filter}
       >
         {loaderProps => (
@@ -118,11 +117,11 @@ class OsVulnScoreDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformVulnScoreData}
             dataTitles={[
-              _('Operating System Name'),
+              _('Host Name'),
               _('Max. average Severity Score'),
             ]}
             dataRow={({row}) => [row.x, row.y]}
-            title={() => _('Most Vulnerable Operating Systems')}
+            title={() => _('Most Vulnerable Hosts')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
@@ -138,27 +137,27 @@ class OsVulnScoreDisplay extends React.Component {
             )}
           </DataDisplay>
         )}
-      </OsVulnScoreLoader>
+      </HostsVulnScoreLoader>
     );
   }
 }
 
-OsVulnScoreDisplay.propTypes = {
+HostsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'os-by-most-vulnerable';
+const DISPLAY_ID = 'host-by-most-vulnerable';
 
-const OsVulnScoreDisplayWithRouter = withRouter(OsVulnScoreDisplay);
+const HostsVulnScoreDisplayWithRouter = withRouter(HostsVulnScoreDisplay);
 
-OsVulnScoreDisplayWithRouter.displayId = DISPLAY_ID;
+HostsVulnScoreDisplayWithRouter.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, OsVulnScoreDisplayWithRouter, {
-  title: _('Operating Systems by Vulnerability Score'),
+registerDisplay(DISPLAY_ID, HostsVulnScoreDisplayWithRouter, {
+  title: _('Hosts by Vulnerability Score'),
 });
 
-export default OsVulnScoreDisplayWithRouter;
+export default HostsVulnScoreDisplayWithRouter;
 
 // vim: set ts=2 sw=2 tw=80:

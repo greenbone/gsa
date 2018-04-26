@@ -484,9 +484,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/hosts/listpage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/row.js
      ${NG_SRC_DIR}/src/web/pages/hosts/table.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/topologydisplay.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/vulnscoredisplay.js
      ${NG_SRC_DIR}/src/web/pages/ldap/ldappage.js
      ${NG_SRC_DIR}/src/web/pages/loginpage.js
      ${NG_SRC_DIR}/src/web/pages/notes/charts.js

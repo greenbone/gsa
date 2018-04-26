@@ -27,7 +27,10 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import HostsCvssDisplay from './cvssdisplay';
+import HostsSeverityClassDisplay from './severityclassdisplay';
 import HostsTopologyDisplay from './topologydisplay';
+import HostsVulnScoreDisplay from './vulnscoredisplay';
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
@@ -39,14 +42,20 @@ const HostsDashboard = ({
     id={HOSTS_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      HostsCvssDisplay.displayId,
+      HostsSeverityClassDisplay.displayId,
       HostsTopologyDisplay.displayId,
+      HostsVulnScoreDisplay.displayId,
     ]}
     defaultContent={[
       [
+        HostsCvssDisplay.displayId,
+        HostsSeverityClassDisplay.displayId,
         HostsTopologyDisplay.displayId,
+        HostsVulnScoreDisplay.displayId,
       ],
     ]}
-    defaultDisplay={HostsTopologyDisplay.displayId}
+    defaultDisplay={HostsSeverityClassDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}
