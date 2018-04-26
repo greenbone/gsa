@@ -57,7 +57,7 @@ CertBundSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'cert-bund-adv-by-severity-class';
+const DISPLAY_ID = 'cert_bund_adv-by-severity-class';
 
 CertBundSeverityDisplay.displayId = DISPLAY_ID;
 

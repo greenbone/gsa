@@ -58,7 +58,7 @@ CertBundCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'cert-bund-adv-by-cvss';
+const DISPLAY_ID = 'cert_bund_adv-by-cvss';
 
 CertBundCvssDisplay.displayId = DISPLAY_ID;
 
