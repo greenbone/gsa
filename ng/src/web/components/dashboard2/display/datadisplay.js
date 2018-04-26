@@ -147,7 +147,15 @@ class DataDisplay extends React.Component {
   }
 
   handleOpenCopyableSvg() {
+    const {title} = this.state;
     const {document} = window.open('', '_blank');
+
+    const head = document.querySelector('head');
+
+    // add a title to the new document
+    const titleEl = document.createElement('title');
+    titleEl.appendChild(document.createTextNode(title));
+    head.appendChild(titleEl);
 
     const body = document.querySelector('body');
     const img = document.createElement('img');
