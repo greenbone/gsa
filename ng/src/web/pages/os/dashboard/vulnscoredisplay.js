@@ -122,7 +122,7 @@ class OsVulnScoreDisplay extends React.Component {
               _('Max. average Severity Score'),
             ]}
             dataRow={({row}) => [row.x, row.y]}
-            title={() => _('Operating Systems by Vulnerability Score')}
+            title={() => _('Most Vulnerable Operating Systems')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
