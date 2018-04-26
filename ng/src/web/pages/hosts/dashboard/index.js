@@ -28,6 +28,7 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import HostsTopologyDisplay from './topologydisplay';
+import HostsSeverityClassDisplay from './severityclassdisplay';
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
@@ -39,10 +40,12 @@ const HostsDashboard = ({
     id={HOSTS_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      HostsSeverityClassDisplay.displayId,
       HostsTopologyDisplay.displayId,
     ]}
     defaultContent={[
       [
+        HostsSeverityClassDisplay.displayId,
         HostsTopologyDisplay.displayId,
       ],
     ]}
