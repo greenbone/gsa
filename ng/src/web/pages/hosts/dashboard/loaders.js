@@ -32,6 +32,9 @@ const loaderPropTypes = {
 };
 export const HOSTS_SEVERITY = 'hosts-severity';
 export const HOSTS_TOPOLOGY = 'hosts-topology';
+export const HOSTS_VULN_SCORE = 'hosts-vuln-score';
+
+const HOSTS_MAX_GROUPS = 10;
 
 export const hostsSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.hosts.getSeverityAggregates({filter})
@@ -80,3 +83,30 @@ export const HostsTopologyLoader = ({
 );
 
 HostsTopologyLoader.propTypes = loaderPropTypes;
+
+export const hostsVulnScoreLoader = loadFunc(
+  ({gmp, filter}) => gmp.hosts.getVulnScoreAggregates(
+    {filter, max: HOSTS_MAX_GROUPS})
+    .then(r => r.data),
+  HOSTS_VULN_SCORE);
+
+export const HostsVulnScoreLoader = ({
+  children,
+  filter,
+}) => (
+  <Loader
+    dataId={HOSTS_VULN_SCORE}
+    filter={filter}
+    load={hostsVulnScoreLoader}
+    subscripions={[
+      'hosts.timer',
+      'hosts.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+HostsVulnScoreLoader.propTypes = loaderPropTypes;
+
+// vim: set ts=2 sw=2 tw=80:
