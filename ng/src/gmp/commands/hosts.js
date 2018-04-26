@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,6 +86,30 @@ class HostsCommand extends EntitiesCommand {
       aggregate_type: 'host',
       group_column: 'severity',
       filter,
+    });
+  }
+
+  getVulnScoreAggregates({filter, max} = {}) {
+    return this.getAggregates({
+      filter,
+      aggregate_type: 'host',
+      group_column: 'uuid',
+      textColumns: [
+        'name',
+        'modified',
+      ],
+      dataColumns: [
+        'severity',
+      ],
+      sort: [{
+        field: 'severity',
+        direction: 'descending',
+        stat: 'max',
+      }, {
+        field: 'modified',
+        direction: 'descending',
+      }],
+      maxGroups: max,
     });
   }
 }
