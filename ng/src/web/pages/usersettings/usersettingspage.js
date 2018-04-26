@@ -1068,13 +1068,14 @@ class UserSettings extends React.Component {
           </TableBody>
         </Table>
 
-        <SettingsDialog
-          visible = {dialogvisible}
-          onClose={this.handleCloseDialog}
-          onSave={this.handleSaveSettings}
-          data={initial_data}
-          optionLists={option_lists}
-        />
+        {dialogvisible &&
+          <SettingsDialog
+            onClose={this.handleCloseDialog}
+            onSave={this.handleSaveSettings}
+            data={initial_data}
+            optionLists={option_lists}
+          />
+        }
       </Layout>
     );
   }

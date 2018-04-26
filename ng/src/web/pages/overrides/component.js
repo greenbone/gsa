@@ -239,33 +239,34 @@ class OverrideComponent extends React.Component {
               create: this.openCreateOverrideDialog,
               edit: this.openOverrideDialog,
             })}
-            <OverrideDialog
-              visible={dialogVisible}
-              active={active}
-              custom_severity={custom_severity}
-              hosts={hosts}
-              hosts_manual={hosts_manual}
-              id={id}
-              new_severity={new_severity}
-              new_severity_from_list={new_severity_from_list}
-              nvt_name={nvt_name}
-              oid={oid}
-              override={override}
-              port={port}
-              port_manual={port_manual}
-              result_id={result_id}
-              result_name={result_name}
-              result_uuid={result_uuid}
-              severity={severity}
-              task_id={task_id}
-              task_uuid={task_uuid}
-              tasks={tasks}
-              text={text}
-              title={title}
-              onClose={this.closeOverrideDialog}
-              onSave={save}
-              {...initial}
-            />
+            {dialogVisible &&
+              <OverrideDialog
+                active={active}
+                custom_severity={custom_severity}
+                hosts={hosts}
+                hosts_manual={hosts_manual}
+                id={id}
+                new_severity={new_severity}
+                new_severity_from_list={new_severity_from_list}
+                nvt_name={nvt_name}
+                oid={oid}
+                override={override}
+                port={port}
+                port_manual={port_manual}
+                result_id={result_id}
+                result_name={result_name}
+                result_uuid={result_uuid}
+                severity={severity}
+                task_id={task_id}
+                task_uuid={task_uuid}
+                tasks={tasks}
+                text={text}
+                title={title}
+                onClose={this.closeOverrideDialog}
+                onSave={save}
+                {...initial}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
