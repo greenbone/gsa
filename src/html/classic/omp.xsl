@@ -8809,37 +8809,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     CREDENTIAL -->
 
 <xsl:template name="credential-download-icons">
-  <xsl:param name="type" select="''"/>
+  <xsl:param name="formats" select="''"/>
 
-  <xsl:if test="$type='usk'">
+  <xsl:if test="count($formats/format[text() = 'rpm'])">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
       title="{gsa:i18n ('Download RPM package', 'Action Verb')}"
       class="icon icon-sm">
       <img src="/img/rpm.svg" alt="{gsa:i18n ('Download RPM', 'Action Verb')}"/>
     </a>
   </xsl:if>
-  <xsl:if test="$type='usk'">
+  <xsl:if test="count($formats/format[text() = 'deb'])">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
       title="{gsa:i18n ('Download Debian package', 'Action Verb')}"
       class="icon icon-sm">
       <img src="/img/deb.svg" alt="{gsa:i18n ('Download Deb', 'Action Verb')}"/>
     </a>
   </xsl:if>
-  <xsl:if test="$type='up'">
+  <xsl:if test="count($formats/format[text() = 'exe'])">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
       title="{gsa:i18n ('Download Exe package', 'Action Verb')}"
       class="icon icon-sm">
       <img src="/img/exe.svg" alt="{gsa:i18n ('Download Exe', 'Action Verb')}"/>
     </a>
   </xsl:if>
-  <xsl:if test="$type='usk'">
+  <xsl:if test="count($formats/format[text() = 'key'])">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
       title="{gsa:i18n ('Download Public Key', 'Action Verb')}"
       class="icon icon-sm">
       <img src="/img/key.svg" alt="{gsa:i18n ('Download Public Key', 'Action Verb')}"/>
     </a>
   </xsl:if>
-  <xsl:if test="$type='cc'">
+  <xsl:if test="count($formats/format[text() = 'pem'])">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=pem&amp;token={/envelope/token}"
       title="{gsa:i18n ('Download Certificate', 'Action Verb')}"
       class="icon icon-sm">
@@ -8900,7 +8900,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
           <xsl:call-template name="credential-download-icons">
-            <xsl:with-param name="type" select="type"/>
+            <xsl:with-param name="formats" select="formats"/>
           </xsl:call-template>
         </td>
       </xsl:otherwise>
@@ -8961,7 +8961,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="type" select="'credential'"/>
     </xsl:call-template>
     <xsl:call-template name="credential-download-icons">
-      <xsl:with-param name="type" select="type"/>
+      <xsl:with-param name="formats" select="formats"/>
     </xsl:call-template>
   </div>
 
