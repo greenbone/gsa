@@ -30,8 +30,32 @@ const loaderPropTypes = {
   children: PropTypes.func,
   filter: PropTypes.filter,
 };
-
+export const HOSTS_SEVERITY = 'hosts-severity';
 export const HOSTS_TOPOLOGY = 'hosts-topology';
+
+export const hostsSeverityLoader = loadFunc(
+  ({gmp, filter}) => gmp.hosts.getSeverityAggregates({filter})
+    .then(r => r.data),
+  HOSTS_SEVERITY);
+
+export const HostsSeverityLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={HOSTS_SEVERITY}
+    filter={filter}
+    load={hostsSeverityLoader}
+    subscriptions={[
+      'hosts.timer',
+      'hosts.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+HostsSeverityLoader.propTypes = loaderPropTypes;
 
 export const hostsTopologyLoader = loadFunc(
   ({gmp, filter}) => gmp.hosts.getAll({filter})
