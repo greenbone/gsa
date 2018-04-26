@@ -433,6 +433,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/certbund/row.js
      ${NG_SRC_DIR}/src/web/pages/certbund/table.js
      ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/cpes/charts.js
      ${NG_SRC_DIR}/src/web/pages/cpes/details.js
      ${NG_SRC_DIR}/src/web/pages/cpes/detailspage.js
