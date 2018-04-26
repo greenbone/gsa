@@ -432,6 +432,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/certbund/row.js
      ${NG_SRC_DIR}/src/web/pages/certbund/table.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/severityclassdisplay.js
