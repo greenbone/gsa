@@ -220,16 +220,17 @@ class UsersPage extends React.Component {
           />
         )}
         </UserComponent>
-        <ConfirmDeleteDialog
-          deleteUsers={deleteUsers}
-          id={id}
-          title={title}
-          username={username}
-          users={users}
-          visible={confirmDeleteDialogVisible}
-          onClose={this.closeConfirmDeleteDialog}
-          onSave={this.handleDeleteUser}
-        />
+        {confirmDeleteDialogVisible &&
+          <ConfirmDeleteDialog
+            deleteUsers={deleteUsers}
+            id={id}
+            title={title}
+            username={username}
+            users={users}
+            onClose={this.closeConfirmDeleteDialog}
+            onSave={this.handleDeleteUser}
+          />
+        }
       </Wrapper>
     );
   }

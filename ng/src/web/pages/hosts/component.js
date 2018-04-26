@@ -165,13 +165,14 @@ class HostComponent extends React.Component {
               createtargetfromselection: this.openCreateTargetSelectionDialog,
               createtargetfromhost: this.openCreateTargetDialog,
             })}
-            <HostDialog
-              host={host}
-              title={title}
-              visible={dialogVisible}
-              onClose={this.closeHostDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <HostDialog
+                host={host}
+                title={title}
+                onClose={this.closeHostDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

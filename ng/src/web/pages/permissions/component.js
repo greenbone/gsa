@@ -242,26 +242,27 @@ class PermissionsComponent extends React.Component {
               create: this.openPermissionDialog,
               edit: this.openPermissionDialog,
             })}
-            <PermissionDialog
-              comment={comment}
-              fixedResource={fixedResource}
-              group_id={group_id}
-              groups={groups}
-              id={id}
-              name={name}
-              permission={permission}
-              resource_id={resource_id}
-              resource_type={resource_type}
-              role_id={role_id}
-              roles={roles}
-              subject_type={subject_type}
-              title={title}
-              user_id={user_id}
-              users={users}
-              visible={dialogVisible}
-              onClose={this.closePermissionDialog}
-              onSave={save}
-            />
+            {dialogVisible &&
+              <PermissionDialog
+                comment={comment}
+                fixedResource={fixedResource}
+                group_id={group_id}
+                groups={groups}
+                id={id}
+                name={name}
+                permission={permission}
+                resource_id={resource_id}
+                resource_type={resource_type}
+                role_id={role_id}
+                roles={roles}
+                subject_type={subject_type}
+                title={title}
+                user_id={user_id}
+                users={users}
+                onClose={this.closePermissionDialog}
+                onSave={save}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>

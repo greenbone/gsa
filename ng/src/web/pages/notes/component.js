@@ -203,28 +203,29 @@ class NoteComponent extends React.Component {
               create: this.openCreateNoteDialog,
               edit: this.openNoteDialog,
             })}
-            <NoteDialog
-              visible={dialogVisible}
-              active={active}
-              hosts={hosts}
-              hosts_manual={hosts_manual}
-              id={id}
-              oid={oid}
-              note={note}
-              nvt_name={nvt_name}
-              port={port}
-              result_id={result_id}
-              result_uuid={result_uuid}
-              severity={severity}
-              task_id={task_id}
-              task_uuid={task_uuid}
-              tasks={tasks}
-              text={text}
-              title={title}
-              onClose={this.closeNoteDialog}
-              onSave={save}
-              {...initial}
-            />
+            {dialogVisible &&
+              <NoteDialog
+                active={active}
+                hosts={hosts}
+                hosts_manual={hosts_manual}
+                id={id}
+                oid={oid}
+                note={note}
+                nvt_name={nvt_name}
+                port={port}
+                result_id={result_id}
+                result_uuid={result_uuid}
+                severity={severity}
+                task_id={task_id}
+                task_uuid={task_uuid}
+                tasks={tasks}
+                text={text}
+                title={title}
+                onClose={this.closeNoteDialog}
+                onSave={save}
+                {...initial}
+              />
+            }
           </Wrapper>
         )}
       </EntityComponent>
