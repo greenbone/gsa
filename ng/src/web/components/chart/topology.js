@@ -370,8 +370,8 @@ class HostsTopologyChart extends React.Component {
   render() {
     const {width, height} = this.props;
     const {
-      hosts,
-      links,
+      hosts = [],
+      links = [],
       scale,
       translateX,
       translateY,
