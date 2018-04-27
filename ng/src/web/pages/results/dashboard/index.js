@@ -27,6 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import ResultsCvssDisplay from './cvssdisplay';
 import ResultsSeverityDisplay from './severityclassdisplay';
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
@@ -39,11 +40,13 @@ const ResultsDashboard = ({
     id={RESULTS_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      ResultsCvssDisplay.displayId,
       ResultsSeverityDisplay.displayId,
     ]}
     defaultContent={[
       [
         ResultsSeverityDisplay.displayId,
+        ResultsCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}
