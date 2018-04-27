@@ -1,11 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,41 +20,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-import {is_defined} from '../utils/identity';
+import PropTypes from '../../../utils/proptypes';
 
-import InfoEntitiesCommand from './infoentities.js';
-import InfoEntityCommand from './infoentity.js';
+import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
 
-import register_command from '../command.js';
+const loaderPropTypes = {
+  children: PropTypes.func,
+  filter: PropTypes.filter,
+};
 
-import Cve from '../models/cve.js';
+export const CVE_SEVERITY_CLASS = 'cve-severity-class';
 
-const info_filter = info => is_defined(info.cve);
+export const cveSeverityLoader = loadFunc(
+  ({gmp, filter}) => gmp.cves.getSeverityAggregates({filter})
+    .then(r => r.data),
+  CVE_SEVERITY_CLASS);
 
-class CveCommand extends InfoEntityCommand {
+export const CvesSeverityLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={CVE_SEVERITY_CLASS}
+    filter={filter}
+    load={cveSeverityLoader}
+    subscriptions={[
+      'cves.timer',
+      'cves.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
 
-  constructor(http) {
-    super(http, 'cve', Cve);
-  }
-}
-
-class CvesCommand extends InfoEntitiesCommand {
-
-  constructor(http) {
-    super(http, 'cve', Cve, info_filter);
-  }
-
-  getSeverityAggregates({filter} = {}) {
-    return this.getAggregates({
-      aggregate_type: 'cve',
-      group_column: 'severity',
-      filter,
-    });
-  }
-}
-
-register_command('cve', CveCommand);
-register_command('cves', CvesCommand);
+CvesSeverityLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:
