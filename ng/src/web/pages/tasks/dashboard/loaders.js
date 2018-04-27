@@ -22,9 +22,10 @@
  */
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
-import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
+import Loader, {
+  loadFunc,
+  loaderPropTypes,
+} from '../../../components/dashboard2/data/loader';
 
 export const TASKS_STATUS = 'tasks-status';
 export const TASKS_SEVERITY = 'tasks-severity';
@@ -57,11 +58,6 @@ export const tasksHighResultsLoader = loadFunc(
     max: MAX_HIGH_RESULT_TASKS_COUNT,
   }).then(r => r.data),
   TASKS_HIGH_RESULTS);
-
-const loaderPropTypes = {
-  children: PropTypes.func,
-  filter: PropTypes.filter,
-};
 
 export const TaskStatusLoader = ({
   children,

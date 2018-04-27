@@ -22,14 +22,10 @@
  */
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
-import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
-
-const loaderPropTypes = {
-  children: PropTypes.func,
-  filter: PropTypes.filter,
-};
+import Loader, {
+  loadFunc,
+  loaderPropTypes,
+} from '../../../components/dashboard2/data/loader';
 
 export const OS_SEVERITY = 'os-severity';
 export const OS_VULN_SCORE = 'os-by-most-vulnerable';

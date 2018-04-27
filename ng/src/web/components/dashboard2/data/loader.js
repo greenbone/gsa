@@ -39,6 +39,11 @@ import {
 
 import {getDashboardDataById, getIsLoading, getData} from './selectors';
 
+export const loaderPropTypes = {
+  children: PropTypes.func,
+  filter: PropTypes.filter,
+};
+
 export const loadFunc = (func, id) => ({dataId = id, ...props}) =>
   (dispatch, getState) => {
   const rootState = getState();
