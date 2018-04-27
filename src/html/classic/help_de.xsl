@@ -19,7 +19,7 @@ Authors:
 Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 Copyright:
-Copyright (C) 2014, 2016 Greenbone Networks GmbH
+Copyright (C) 2014, 2016, 2018 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -613,6 +613,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_task.html?token={/envelope/token}">New Task</a></li>
                 <li> <a href="task_details.html?token={/envelope/token}">Task Details and Reports</a></li>
                 <li> <a href="view_report.html?token={/envelope/token}">View Report</a></li>
+                <li> <a href="results.html?token={/envelope/token}">Results</a> </li>
                   <ul>
                     <li> <a href="result_details.html?token={/envelope/token}">Result Details</a></li>
                   </ul>
@@ -631,6 +632,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Assets </li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
+              <ul>
+                <li> <a href="new_host.html?token={/envelope/token}">New Host</a></li>
+                <li> <a href="host_details.html?token={/envelope/token}">Host Details</a></li>
+              </ul>
+            <li> <a href="oss.html?token={/envelope/token}">Operating Systems</a></li>
+              <ul>
+                <li> <a href="os_details.html?token={/envelope/token}">Operating System Details</a></li>
+              </ul>
+            <li> <a href="hosts_classic.html?token={/envelope/token}">Hosts (Classic)</a></li>
           </ul>
           <li> SecInfo </li>
           <ul>
@@ -649,6 +659,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL Definitions</a></li>
               <ul>
                 <li> <a href="ovaldef_details.html?token={/envelope/token}">OVAL Definition Details</a></li>
+              </ul>
+            <li> <a href="cert_bund_advs.html?token={/envelope/token}">CERT-Bund Advisories</a></li>
+              <ul>
+                <li> <a href="cert_bund_adv_details.html?token={/envelope/token}">CERT-Bund Advisory Details</a></li>
               </ul>
             <li> <a href="dfn_cert_advs.html?token={/envelope/token}">DFN-CERT Advisories</a></li>
               <ul>
@@ -670,7 +684,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </ul>
             <li> <a href="targets.html?token={/envelope/token}">Targets</a></li>
               <ul>
-                <li> <a href="new_target.html?token={/envelope/token}">New Target</a></li>
+                <li> <a href="new_target.html?token={/envelope/token}">New/Edit Target</a></li>
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
             <li> <a href="credentials.html?token={/envelope/token}">Credentials</a></li>
@@ -706,6 +720,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="permissions.html?token={/envelope/token}">Permissions</a></li>
               <ul>
                 <li> <a href="new_permission.html?token={/envelope/token}">New Permission</a></li>
+                <li> <a href="new_permissions.html?token={/envelope/token}">Create Multiple Permissions</a></li>
                 <li> <a href="permission_details.html?token={/envelope/token}">Permission Details</a></li>
               </ul>
             <li> <a href="port_lists.html?token={/envelope/token}">Port Lists</a></li>
@@ -717,11 +732,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="new_report_format.html?token={/envelope/token}">New Report Format</a></li>
                 <li> <a href="report_format_details.html?token={/envelope/token}">Report Format Details</a></li>
-              </ul>
-            <li> <a href="slaves.html?token={/envelope/token}">Slaves</a></li>
-              <ul>
-                <li> <a href="new_slave.html?token={/envelope/token}">New Slave</a></li>
-                <li> <a href="slave_details.html?token={/envelope/token}">Slave Details</a></li>
               </ul>
           </ul>
           <li> Administration</li>
@@ -738,21 +748,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </ul>
             <li> <a href="roles.html?token={/envelope/token}">Roles</a></li>
               <ul>
+                <li> <a href="new_role.html?token={/envelope/token}">New Role</a></li>
                 <li> <a href="role_details.html?token={/envelope/token}">Role Details</a></li>
               </ul>
-            <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
-            <li> <a href="scap_management.html?token={/envelope/token}">SCAP Feed Management</a></li>
-            <li> <a href="cert_management.html?token={/envelope/token}">CERT Feed Management</a></li>
+            <li> <a href="feed_management.html?token={/envelope/token}">Feed</a></li>
           </ul>
           <li> Miscellaneous</li>
           <ul>
+            <li> <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a></li>
             <li> <a href="trashcan.html?token={/envelope/token}">Trashcan</a></li>
             <li> <a href="my_settings.html?token={/envelope/token}">My Settings</a></li>
             <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
             <li> <a href="cvss_calculator.html?token={/envelope/token}">CVSS Calculator</a></li>
+            <li> <a href="filtering.html?token={/envelope/token}">Filtering</a></li>
             <li> <a href="powerfilter.html?token={/envelope/token}">Powerfilter</a></li>
             <li> <a href="user-tags.html?token={/envelope/token}">User Tags list</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
+            <li> <a href="qod.html?token={/envelope/token}">Quality of Detection (QoD)</a></li>
             <li> Protocol Documentation</li>
               <ul>
                 <li> <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}">OMP (OpenVAS Management Protocol)</a></li>
