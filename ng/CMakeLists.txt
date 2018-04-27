@@ -640,6 +640,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/results/listpage.js
      ${NG_SRC_DIR}/src/web/pages/results/row.js
      ${NG_SRC_DIR}/src/web/pages/results/table.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/roles/component.js
      ${NG_SRC_DIR}/src/web/pages/roles/details.js
      ${NG_SRC_DIR}/src/web/pages/roles/detailspage.js
