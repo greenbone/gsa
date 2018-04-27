@@ -44,9 +44,9 @@ const DfnCertSeverityDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
-        dataTitles={[_('Severity Class'), _('# of DFN_CERT Advisories')]}
+        dataTitles={[_('Severity Class'), _('# of DFN-CERT Advisories')]}
         title={({data: tdata}) =>
-          _('DFN_CERT Advisories by Severity Class (Total: {{count}})',
+          _('DFN-CERT Advisories by Severity Class (Total: {{count}})',
             {count: tdata.total})}
       />
     )}
