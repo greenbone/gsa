@@ -356,10 +356,12 @@ class HostsTopologyChart extends React.Component {
 
     this.simulation = forceSimulation(hosts)
       .force('link', linkForce)
-      .force('charge', forceManyBody().strength(-10))
+      .force('charge', forceManyBody().strength(-20))
       .force('center', forceCenter(width / 2, height / 2))
       .force('gravityX', gravityXForce)
       .force('gravityY', gravityYForce)
+      .alphaMin(0.1)
+      .alphaDecay(0.02276278) // alphaMin and alphaDecay result in ~100 ticks
       .on('tick', () => {
         this.setState({hosts, links});
       });
