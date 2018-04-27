@@ -23,46 +23,48 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import PropTypes from '../../../utils/proptypes';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import OsCvssDisplay from './cvssdisplay';
-import OsSeverityClassDisplay from './severityclassdisplay';
-import OsVulnScoreDisplay from './vulnscoredisplay';
+import {CpesSeverityLoader} from './loaders';
 
-export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
-
-const OsDashboard = ({
+const CpesSeverityDisplay = ({
   filter,
-  onFilterChanged,
+  ...props
 }) => (
-  <Dashboard
-    id={OS_DASHBOARD_ID}
+  <CpesSeverityLoader
     filter={filter}
-    permittedDisplays={[
-      OsCvssDisplay.displayId,
-      OsSeverityClassDisplay.displayId,
-      OsVulnScoreDisplay.displayId,
-    ]}
-    defaultContent={[
-      [
-        OsSeverityClassDisplay.displayId,
-        OsCvssDisplay.displayId,
-        OsVulnScoreDisplay.displayId,
-      ],
-    ]}
-    maxItemsPerRow={4}
-    maxRows={4}
-    onFilterChanged={onFilterChanged}
-  />
+  >
+    {loaderProps => (
+      <SeverityClassDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of CPEs')]}
+        title={({data: tdata}) =>
+          _('CPEs by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </CpesSeverityLoader>
 );
 
-OsDashboard.propTypes = {
+CpesSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
 };
 
-export default OsDashboard;
+const DISPLAY_ID = 'cpe-by-severity-class';
+
+CpesSeverityDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, CpesSeverityDisplay, {
+  title: _('CPEs by Severity Class'),
+});
+
+export default CpesSeverityDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

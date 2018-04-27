@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,41 +20,36 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
 import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import TasksStatusDisplay from './statusdisplay';
-import TasksSeverityDisplay from './severityclassdisplay';
-import TasksSchedulesDisplay from './schedulesdisplay';
-import TasksCvssDisplay from './cvssdisplay';
-import TasksMostHighResultsDisplay from './mosthighresults';
-import TasksHighResultsDisplay from './highresults';
+import OvaldefClassDisplay from './classdisplay';
+import OvaldefCvssDisplay from './cvssdisplay';
+import OvaldefSeverityClassDisplay from './severityclassdisplay';
 
-export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
+export const OVALDEF_DASHBOARD_ID = '9563efc0-9f4e-4d1f-8f8d-0205e32b90a4';
 
-const TaskDashboard = ({
+const OvaldefDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
-    id={TASK_DASHBOARD_ID}
+    id={OVALDEF_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
-      TasksStatusDisplay.displayId,
-      TasksSeverityDisplay.displayId,
-      TasksSchedulesDisplay.displayId,
-      TasksCvssDisplay.displayId,
-      TasksMostHighResultsDisplay.displayId,
-      TasksHighResultsDisplay.displayId,
+      OvaldefClassDisplay.displayId,
+      OvaldefCvssDisplay.displayId,
+      OvaldefSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
       [
-        TasksSeverityDisplay.displayId,
-        TasksMostHighResultsDisplay.displayId,
-        TasksStatusDisplay.displayId,
+        OvaldefSeverityClassDisplay.displayId,
+        OvaldefCvssDisplay.displayId,
+        OvaldefClassDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}
@@ -63,11 +58,11 @@ const TaskDashboard = ({
   />
 );
 
-TaskDashboard.propTypes = {
+OvaldefDashboard.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func,
 };
 
-export default TaskDashboard;
+export default OvaldefDashboard;
 
 // vim: set ts=2 sw=2 tw=80:

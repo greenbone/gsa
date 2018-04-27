@@ -27,56 +27,56 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const OS_SEVERITY = 'os-severity';
-export const OS_VULN_SCORE = 'os-by-most-vulnerable';
-const OS_MAX_GROUPS = 10;
+export const OVALDEF_CLASS = 'ovaldef-class';
 
-export const osAverageSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.operatingsystems.getAverageSeverityAggregates({filter})
+export const ovaldefClassLoader = loadFunc(
+  ({gmp, filter}) => gmp.ovaldefs.getClassAggregates({filter})
     .then(r => r.data),
-  OS_SEVERITY);
+  OVALDEF_CLASS);
 
-export const OsAverageSeverityLoader = ({
+export const OvaldefClassLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={OS_SEVERITY}
+    dataId={OVALDEF_CLASS}
     filter={filter}
-    load={osAverageSeverityLoader}
+    load={ovaldefClassLoader}
     subscriptions={[
-      'os.timer',
-      'os.changed',
+      'ovaldef.timer',
+      'ovaldef.changed',
     ]}
   >
     {children}
   </Loader>
 );
 
-OsAverageSeverityLoader.propTypes = loaderPropTypes;
+OvaldefClassLoader.propTypes = loaderPropTypes;
 
+export const OVALDEF_SEVERITY_CLASS = 'ovaldef-severity-class';
 
-export const osVulnScoreLoader = loadFunc(
-  ({gmp, filter}) => gmp.operatingsystems.getVulnScoreAggregates(
-    {filter, max: OS_MAX_GROUPS})
+export const ovaldefSeverityLoader = loadFunc(
+  ({gmp, filter}) => gmp.ovaldefs.getSeverityAggregates({filter})
     .then(r => r.data),
-  OS_VULN_SCORE);
+  OVALDEF_SEVERITY_CLASS);
 
-export const OsVulnScoreLoader = ({
-  children,
+export const OvaldefSeverityLoader = ({
   filter,
+  children,
 }) => (
   <Loader
-    dataId={OS_VULN_SCORE}
+    dataId={OVALDEF_SEVERITY_CLASS}
     filter={filter}
-    load={osVulnScoreLoader}
-    subscripions={[
-      'os.timer',
-      'os.changed',
+    load={ovaldefSeverityLoader}
+    subscriptions={[
+      'ovaldef.timer',
+      'ovaldef.changed',
     ]}
   >
     {children}
   </Loader>
 );
 
-OsVulnScoreLoader.propTypes = loaderPropTypes;
+OvaldefSeverityLoader.propTypes = loaderPropTypes;
+
+// vim: set ts=2 sw=2 tw=80:

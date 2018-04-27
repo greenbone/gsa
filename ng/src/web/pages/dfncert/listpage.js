@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Seffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +34,14 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import DfnCertCharts from './charts.js';
 import DfnCertTable from './table.js';
+
+import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard/index.js';
 
 const ToolBarIcons = props => {
   return (
@@ -57,6 +62,10 @@ const Dashboard = withDashboard({
 
 export default withEntitiesContainer('dfncertadv', {
   dashboard: Dashboard,
+  dashboard2: DfnCertDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
+  ),
   filterEditDialog: FilterDialog,
   sectionIcon: 'dfn_cert_adv.svg',
   table: DfnCertTable,

@@ -22,14 +22,11 @@
  */
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
+import Loader, {
+  loadFunc,
+  loaderPropTypes,
+} from '../../../components/dashboard2/data/loader';
 
-import Loader, {loadFunc} from '../../../components/dashboard2/data/loader';
-
-const loaderPropTypes = {
-  children: PropTypes.func,
-  filter: PropTypes.filter,
-};
 export const HOSTS_SEVERITY = 'hosts-severity';
 export const HOSTS_TOPOLOGY = 'hosts-topology';
 export const HOSTS_VULN_SCORE = 'hosts-vuln-score';

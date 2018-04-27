@@ -137,4 +137,22 @@ export const qodTypeColorScale = scaleOrdinal()
     '#d62728', // Exploit
   ]);
 
+export const OVAL_CLASS_TYPES = {
+  compliance: _('Compliance'),
+  inventory: _('Inventory'),
+  miscellaneous: _('Miscellaneous'),
+  patch: _('Patch'),
+  vulnerability: _('Vulnerability'),
+};
+
+export const ovalClassColorScale = scaleOrdinal()
+  .domain(Object.keys(OVAL_CLASS_TYPES))
+  .range([
+    '#a9c9ce', // compliance
+    '#024277', // inventory
+    '#2ca02c', // miscellaneous
+    '#a9c9ce', // patch
+    'orange', // vulnerability
+  ]);
+
 // vim: set ts=2 sw=2 tw=80:

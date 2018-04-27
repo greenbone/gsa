@@ -34,6 +34,8 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 
@@ -46,6 +48,8 @@ import ReportCharts from './charts.js';
 import ReportFilterDialog from './filterdialog.js';
 import ImportReportDialog from './importdialog.js';
 import ReportsTable from './table.js';
+
+import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
 
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -237,6 +241,10 @@ Page.contextTypes = {
 export default withEntitiesContainer('report', {
   filtersFilter: REPORTS_FILTER_FILTER,
   dashboard: Dashboard,
+  dashboard2: ReportsDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
+  ),
   title: _('Reports'),
   sectionIcon: 'report.svg',
   filterEditDialog: ReportFilterDialog,

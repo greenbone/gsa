@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,11 +31,15 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import CveCharts from './charts.js';
 import CveFilterDialog from './filterdialog.js';
 import CvesTable from './table.js';
+
+import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard/index.js';
 
 const ToolBarIcons = props => {
   return (
@@ -55,6 +60,10 @@ const Dashboard = withDashboard({
 
 export default withEntitiesContainer('cve', {
   dashboard: Dashboard,
+  dashboard2: CvesDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
+  ),
   filterEditDialog: CveFilterDialog,
   sectionIcon: 'cve.svg',
   table: CvesTable,

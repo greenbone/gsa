@@ -443,6 +443,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cpes/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cpes/row.js
      ${NG_SRC_DIR}/src/web/pages/cpes/table.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/cves/charts.js
      ${NG_SRC_DIR}/src/web/pages/cves/details.js
      ${NG_SRC_DIR}/src/web/pages/cves/detailspage.js
@@ -450,6 +454,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cves/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cves/row.js
      ${NG_SRC_DIR}/src/web/pages/cves/table.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/charts.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/details.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/detailspage.js
@@ -457,6 +465,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/dfncert/row.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/extras/cvsscalculatorpage.js
      ${NG_SRC_DIR}/src/web/pages/extras/feedstatuspage.js
      ${NG_SRC_DIR}/src/web/pages/extras/trashactions.js
@@ -544,6 +556,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/listpage.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/row.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/table.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/classdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/overrides/charts.js
      ${NG_SRC_DIR}/src/web/pages/overrides/component.js
      ${NG_SRC_DIR}/src/web/pages/overrides/details.js
@@ -611,6 +628,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/table.js
      ${NG_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js
      ${NG_SRC_DIR}/src/web/pages/reports/vulnerabilitiestable.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/results/charts.js
      ${NG_SRC_DIR}/src/web/pages/results/delta.js
      ${NG_SRC_DIR}/src/web/pages/results/details.js

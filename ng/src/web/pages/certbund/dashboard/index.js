@@ -49,7 +49,6 @@ const CertBundDashboard = ({
         CertBundCvssDisplay.displayId,
       ],
     ]}
-    defaultDisplay={CertBundSeverityClassDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

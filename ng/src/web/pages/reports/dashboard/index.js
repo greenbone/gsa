@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,41 +20,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
 import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import TasksStatusDisplay from './statusdisplay';
-import TasksSeverityDisplay from './severityclassdisplay';
-import TasksSchedulesDisplay from './schedulesdisplay';
-import TasksCvssDisplay from './cvssdisplay';
-import TasksMostHighResultsDisplay from './mosthighresults';
-import TasksHighResultsDisplay from './highresults';
+import ReportsCvssDisplay from './cvssdisplay';
+import ReportsSeverityDisplay from './severityclassdisplay';
 
-export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
+export const REPORTS_DASHBOARD_ID = 'e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071';
 
-const TaskDashboard = ({
+const ReportsDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
-    id={TASK_DASHBOARD_ID}
+    id={REPORTS_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
-      TasksStatusDisplay.displayId,
-      TasksSeverityDisplay.displayId,
-      TasksSchedulesDisplay.displayId,
-      TasksCvssDisplay.displayId,
-      TasksMostHighResultsDisplay.displayId,
-      TasksHighResultsDisplay.displayId,
+      ReportsCvssDisplay.displayId,
+      ReportsSeverityDisplay.displayId,
     ]}
     defaultContent={[
       [
-        TasksSeverityDisplay.displayId,
-        TasksMostHighResultsDisplay.displayId,
-        TasksStatusDisplay.displayId,
+        ReportsSeverityDisplay.displayId,
+        ReportsCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}
@@ -63,11 +55,11 @@ const TaskDashboard = ({
   />
 );
 
-TaskDashboard.propTypes = {
+ReportsDashboard.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func,
 };
 
-export default TaskDashboard;
+export default ReportsDashboard;
 
 // vim: set ts=2 sw=2 tw=80:

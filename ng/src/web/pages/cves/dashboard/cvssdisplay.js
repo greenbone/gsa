@@ -23,46 +23,49 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import PropTypes from '../../../utils/proptypes';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import OsCvssDisplay from './cvssdisplay';
-import OsSeverityClassDisplay from './severityclassdisplay';
-import OsVulnScoreDisplay from './vulnscoredisplay';
+import {CvesSeverityLoader} from './loaders';
 
-export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
-
-const OsDashboard = ({
+const CvesCvssDisplay = ({
   filter,
-  onFilterChanged,
+  ...props
 }) => (
-  <Dashboard
-    id={OS_DASHBOARD_ID}
+  <CvesSeverityLoader
     filter={filter}
-    permittedDisplays={[
-      OsCvssDisplay.displayId,
-      OsSeverityClassDisplay.displayId,
-      OsVulnScoreDisplay.displayId,
-    ]}
-    defaultContent={[
-      [
-        OsSeverityClassDisplay.displayId,
-        OsCvssDisplay.displayId,
-        OsVulnScoreDisplay.displayId,
-      ],
-    ]}
-    maxItemsPerRow={4}
-    maxRows={4}
-    onFilterChanged={onFilterChanged}
-  />
+  >
+    {loaderProps => (
+      <CvssDisplay
+        {...props}
+        {...loaderProps}
+        yLabel={_('# of CVEs')}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of CVEs')]}
+        title={({data: tdata}) =>
+          _('CVEs by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </CvesSeverityLoader>
 );
 
-OsDashboard.propTypes = {
+CvesCvssDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
 };
 
-export default OsDashboard;
+const DISPLAY_ID = 'cve-by-cvss';
+
+CvesCvssDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, CvesCvssDisplay, {
+  title: _('CVEs by CVSS'),
+});
+
+export default CvesCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

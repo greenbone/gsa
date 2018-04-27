@@ -23,46 +23,49 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import PropTypes from '../../../utils/proptypes';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import OsCvssDisplay from './cvssdisplay';
-import OsSeverityClassDisplay from './severityclassdisplay';
-import OsVulnScoreDisplay from './vulnscoredisplay';
+import {DfnCertSeverityLoader} from './loaders';
 
-export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
-
-const OsDashboard = ({
+const DfnCertCvssDisplay = ({
   filter,
-  onFilterChanged,
+  ...props
 }) => (
-  <Dashboard
-    id={OS_DASHBOARD_ID}
+  <DfnCertSeverityLoader
     filter={filter}
-    permittedDisplays={[
-      OsCvssDisplay.displayId,
-      OsSeverityClassDisplay.displayId,
-      OsVulnScoreDisplay.displayId,
-    ]}
-    defaultContent={[
-      [
-        OsSeverityClassDisplay.displayId,
-        OsCvssDisplay.displayId,
-        OsVulnScoreDisplay.displayId,
-      ],
-    ]}
-    maxItemsPerRow={4}
-    maxRows={4}
-    onFilterChanged={onFilterChanged}
-  />
+  >
+    {loaderProps => (
+      <CvssDisplay
+        {...props}
+        {...loaderProps}
+        yLabel={_('# of DFN-CERT Advisories')}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of DFN-CERT Advisories')]}
+        title={({data: tdata}) =>
+          _('DFN-CERT Advisories by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </DfnCertSeverityLoader>
 );
 
-OsDashboard.propTypes = {
+DfnCertCvssDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
 };
 
-export default OsDashboard;
+const DISPLAY_ID = 'dfncert-by-cvss';
+
+DfnCertCvssDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, DfnCertCvssDisplay, {
+  title: _('DFN-CERT Advisories by CVSS'),
+});
+
+export default DfnCertCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

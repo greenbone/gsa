@@ -23,46 +23,49 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import PropTypes from '../../../utils/proptypes';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import OsCvssDisplay from './cvssdisplay';
-import OsSeverityClassDisplay from './severityclassdisplay';
-import OsVulnScoreDisplay from './vulnscoredisplay';
+import {ReportsSeverityLoader} from './loaders';
 
-export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
-
-const OsDashboard = ({
+const ReportsCvssDisplay = ({
   filter,
-  onFilterChanged,
+  ...props
 }) => (
-  <Dashboard
-    id={OS_DASHBOARD_ID}
+  <ReportsSeverityLoader
     filter={filter}
-    permittedDisplays={[
-      OsCvssDisplay.displayId,
-      OsSeverityClassDisplay.displayId,
-      OsVulnScoreDisplay.displayId,
-    ]}
-    defaultContent={[
-      [
-        OsSeverityClassDisplay.displayId,
-        OsCvssDisplay.displayId,
-        OsVulnScoreDisplay.displayId,
-      ],
-    ]}
-    maxItemsPerRow={4}
-    maxRows={4}
-    onFilterChanged={onFilterChanged}
-  />
+  >
+    {loaderProps => (
+      <CvssDisplay
+        {...props}
+        {...loaderProps}
+        yLabel={_('# of Reports')}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of Reports')]}
+        title={({data: tdata}) =>
+          _('Reports by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </ReportsSeverityLoader>
 );
 
-OsDashboard.propTypes = {
+ReportsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
 };
 
-export default OsDashboard;
+const DISPLAY_ID = 'report-by-cvss';
+
+ReportsCvssDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, ReportsCvssDisplay, {
+  title: _('Reports by CVSS'),
+});
+
+export default ReportsCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
