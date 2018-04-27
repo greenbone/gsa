@@ -52,7 +52,6 @@ const OsDashboard = ({
         OsVulnScoreDisplay.displayId,
       ],
     ]}
-    defaultDisplay={OsVulnScoreDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

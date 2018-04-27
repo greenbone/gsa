@@ -49,7 +49,6 @@ const CpesDashboard = ({
         CpesSeverityClassDisplay.displayId,
       ],
     ]}
-    defaultDisplay={CpesCvssDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

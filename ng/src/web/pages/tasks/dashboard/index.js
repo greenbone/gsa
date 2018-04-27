@@ -57,7 +57,6 @@ const TaskDashboard = ({
         TasksStatusDisplay.displayId,
       ],
     ]}
-    defaultDisplay={TasksCvssDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}
