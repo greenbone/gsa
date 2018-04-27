@@ -27,6 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import DfnCertCvssDisplay from './cvssdisplay';
 import DfnCertSeverityClassDisplay from './severityclassdisplay';
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
@@ -39,10 +40,12 @@ const DfnCertDashboard = ({
     id={DFNCERT_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      DfnCertCvssDisplay.displayId,
       DfnCertSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
       [
+        DfnCertCvssDisplay.displayId,
         DfnCertSeverityClassDisplay.displayId,
       ],
     ]}
