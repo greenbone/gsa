@@ -139,6 +139,8 @@ class HostsTopologyChart extends React.Component {
   componentWillUnmount() {
     if (is_defined(this.simulation)) {
       this.simulation.stop();
+      this.simulation.on('tick', null);
+      this.simulation.on('end', null);
     }
   }
 
