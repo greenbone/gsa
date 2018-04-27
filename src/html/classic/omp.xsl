@@ -36822,7 +36822,8 @@ should not have received it.
 <!-- AUTHENTICATION DESCRIPTION -->
 
 <xsl:template match="group" mode="ldapauth">
-  <div class="section-box" id="ldap-box">
+  <div class="section-box ajax-post" id="ldap-box"
+      data-button="form #save_button" data-reload="window">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="save_auth"/>
@@ -36831,6 +36832,15 @@ should not have received it.
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <!-- group name is e.g. of method:ldap -->
       <input type="hidden" name="group" value="{@name}"/>
+      <!-- Auth type name for next page -->
+      <input type="hidden" name="name" value="ldap"/>
+
+      <div class="error-dialog">
+        <div class="text-center">
+          <xsl:value-of select="gsa:i18n ('LDAP authentication config could not be modified.')"/>
+        </div>
+      </div>
+
       <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Setting')"/></td>
@@ -36885,7 +36895,8 @@ should not have received it.
         </tr>
         <tr>
           <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="{gsa:i18n ('Save')}"/>
+            <input type="submit" name="submit" id="save_button"
+                   value="{gsa:i18n ('Save')}"/>
           </td>
         </tr>
       </table>
@@ -36894,7 +36905,8 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="group" mode="radiusauth">
-  <div class="section-box" id="radius-box">
+  <div class="section-box ajax-post" id="radius-box"
+      data-button="form #save_button" data-reload="window">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="save_auth"/>
@@ -36903,6 +36915,15 @@ should not have received it.
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <!-- group name is e.g. of method:radius_connect -->
       <input type="hidden" name="group" value="{@name}"/>
+      <!-- Auth type name for next page -->
+      <input type="hidden" name="name" value="radius"/>
+
+      <div class="error-dialog">
+        <div class="text-center">
+          <xsl:value-of select="gsa:i18n ('Radius authentication config could not be modified.')"/>
+        </div>
+      </div>
+
       <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Setting')"/></td>
@@ -36937,7 +36958,8 @@ should not have received it.
           </tr>
         <tr>
           <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="{gsa:i18n ('Save')}"/>
+            <input type="submit" name="submit" id="save_button"
+                   value="{gsa:i18n ('Save')}"/>
           </td>
         </tr>
       </table>

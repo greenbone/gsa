@@ -1366,7 +1366,8 @@ next_page_url (credentials_t *credentials, params_t *params,
           || (strstr (param_name, "_id")
                 == param_name + strlen (param_name) - strlen ("_id"))
           || (strcmp (param_name, "name") == 0
-              && strcasecmp (prev_action, "Run Wizard") == 0)
+              && (strcasecmp (prev_action, "Run Wizard") == 0
+                  || strcasecmp (next_cmd, "auth_settings") == 0))
           || (strcmp (param_name, "get_name") == 0
               && strcasecmp (next_cmd, "wizard_get") == 0))
         {
@@ -25975,7 +25976,7 @@ save_auth_omp (openvas_connection_t *connection, credentials_t* credentials,
 
   html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, NULL,
+                               NULL, "auth_settings",
                                NULL, "modify_auth",
                                "Save Authentication Configuration",
                                response_data);

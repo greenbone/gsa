@@ -1559,6 +1559,9 @@
           if (reload === 'next') {
             reload_next(response);
           }
+          else if (reload === 'window') {
+            location.reload();
+          }
         },
         function(jqXHR) {
           if (jqXHR.status == 0 && jqXHR.readyState == 0) {
