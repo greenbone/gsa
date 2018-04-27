@@ -27,6 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import OvaldefClassDisplay from './classdisplay';
 import OvaldefCvssDisplay from './cvssdisplay';
 import OvaldefSeverityClassDisplay from './severityclassdisplay';
 
@@ -40,6 +41,7 @@ const OvaldefDashboard = ({
     id={OVALDEF_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      OvaldefClassDisplay.displayId,
       OvaldefCvssDisplay.displayId,
       OvaldefSeverityClassDisplay.displayId,
     ]}
@@ -47,6 +49,7 @@ const OvaldefDashboard = ({
       [
         OvaldefSeverityClassDisplay.displayId,
         OvaldefCvssDisplay.displayId,
+        OvaldefClassDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}
