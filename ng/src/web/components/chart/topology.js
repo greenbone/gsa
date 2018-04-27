@@ -38,6 +38,8 @@ import {color} from 'd3-color';
 
 import {scaleLinear} from 'd3-scale';
 
+import equal from 'fast-deep-equal';
+
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
@@ -136,15 +138,90 @@ class HostsTopologyChart extends React.Component {
     this.handleMousMove = this.handleMousMove.bind(this);
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const {data = {}} = nextProps;
+    let {hosts = [], links = []} = data;
+
+    if (equal(prevState.originalHosts, hosts)) {
+      return null;
+    }
+
+    const newHosts = hosts;
+
+    if (hosts.length > MAX_HOSTS) {
+      const removeHosts = hosts.slice(MAX_HOSTS, hosts.length - 1);
+      // remove all links using these hosts
+      const linksSet = new Set(links);
+      for (const host of removeHosts) {
+        for (const link of host.links) {
+          linksSet.delete(link);
+        }
+      }
+
+      links = [...linksSet];
+      hosts = hosts.slice(0, MAX_HOSTS);
+    }
+
+    let {simulation, linkForce} = prevState;
+
+    if (is_defined(simulation)) {
+      simulation.nodes(hosts);
+      linkForce.links(links);
+    }
+    else {
+      const initSim = HostsTopologyChart.initSimulation(hosts, links);
+      simulation = initSim.simulation;
+      linkForce = initSim.linkForce;
+    }
+
+    return {
+      originalHosts: newHosts,
+      hostsCount: newHosts.length,
+      hosts,
+      links,
+      simulation,
+      linkForce,
+    };
+  }
+
+  static initSimulation(hosts, links) {
+    const linkForce = forceLink(links)
+      .id(l => l.id)
+      .strength(0.2);
+
+    const gravityXForce = forceX().strength(0.03);
+    const gravityYForce = forceY().strength(0.03);
+
+    const simulation = forceSimulation(hosts)
+      .stop()
+      .force('link', linkForce)
+      .force('charge', forceManyBody().strength(-20))
+      .force('gravityX', gravityXForce)
+      .force('gravityY', gravityYForce)
+      .alphaMin(0.1)
+      .alphaDecay(0.02276278); // alphaMin and alphaDecay result in ~100 ticks
+
+    return {simulation, linkForce};
+  }
+
+
   componentDidMount() {
-    this.updateData(this.props.data);
+    const {width, height} = this.props;
+    const {simulation} = this.state;
+
+    simulation
+      .force('center', forceCenter(width / 2, height / 2))
+      .on('tick', () => this.forceUpdate())
+      .restart();
   }
 
   componentWillUnmount() {
-    if (is_defined(this.simulation)) {
-      this.simulation.stop();
-      this.simulation.on('tick', null);
-      this.simulation.on('end', null);
+    const {simulation} = this.state;
+
+    if (is_defined(simulation)) {
+      simulation.stop();
+      simulation.on('tick', null);
+      simulation.on('end', null);
     }
   }
 
@@ -289,7 +366,7 @@ class HostsTopologyChart extends React.Component {
 
   handleMousUp(event) {
     if (is_defined(this.draggingHost)) {
-      this.simulation.alphaTarget(0);
+      this.state.simulation.alphaTarget(0);
 
       this.draggingHost.fx = undefined;
       this.draggingHost.fy = undefined;
@@ -334,58 +411,12 @@ class HostsTopologyChart extends React.Component {
   handleHostDragStart(event, host) {
     event.stopPropagation();
 
-    this.simulation.alphaTarget(0.3).restart();
+    this.state.simulation.alphaTarget(0.3).restart();
 
     host.fx = host.x;
     host.fy = host.y;
 
     this.draggingHost = host;
-  }
-
-  updateData(data = {}) {
-    const {width, height} = this.props;
-
-    let {hosts = [], links = []} = data;
-
-    this.setState({hostsCount: hosts.length});
-
-    if (hosts.length === 0) {
-      this.setState({hosts: [], links: []});
-      return;
-    }
-
-    if (hosts.length > MAX_HOSTS) {
-      const removeHosts = hosts.slice(MAX_HOSTS, hosts.length - 1);
-      // remove all links using these hosts
-      const linksSet = new Set(links);
-      for (const host of removeHosts) {
-        for (const link of host.links) {
-          linksSet.delete(link);
-        }
-      }
-
-      links = [...linksSet];
-      hosts = hosts.slice(0, MAX_HOSTS);
-    }
-
-    const linkForce = forceLink(links)
-      .id(l => l.id)
-      .strength(0.2);
-
-    const gravityXForce = forceX().strength(0.03);
-    const gravityYForce = forceY().strength(0.03);
-
-    this.simulation = forceSimulation(hosts)
-      .force('link', linkForce)
-      .force('charge', forceManyBody().strength(-20))
-      .force('center', forceCenter(width / 2, height / 2))
-      .force('gravityX', gravityXForce)
-      .force('gravityY', gravityYForce)
-      .alphaMin(0.1)
-      .alphaDecay(0.02276278) // alphaMin and alphaDecay result in ~100 ticks
-      .on('tick', () => {
-        this.setState({hosts, links});
-      });
   }
 
   render() {
