@@ -19,7 +19,7 @@ Authors:
 Winland Q. Yang <winland0704@126.com>
 
 Copyright:
-Copyright (C) 2014, 2016 Greenbone Networks GmbH
+Copyright (C) 2014, 2016-2018 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -266,7 +266,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table><tr><td valign="top">
 
       <h1>Greenbone Security Assistant（绿骨安全助手）</h1>
-      <h3>版本 5.0.0 </h3>
+      <h3>
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/vendor_version) &gt; 0">
+            <xsl:value-of select="/envelope/vendor_version"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>版本 </xsl:text>
+            <xsl:value-of select="/envelope/version"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
 
       <p>
       绿骨安全助手 GSA（ Greenbone Security Assistant）是开放漏洞评估系统 OpenVAS（Open Vulnerability Assessment System）的基于网页的用户图形界面。      
@@ -275,7 +285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      版权 2009-2017 归属于 <a href="http://www.greenbone.net" target="_blank">Greenbone Networks GmbH</a>
+      版权 2009-2018 归属于 <a href="http://www.greenbone.net" target="_blank">Greenbone Networks GmbH</a>
       </p>
 
       <p>

@@ -21,7 +21,7 @@ Authors:
 Ilmar S. Habibulin <ilmarh@aha.ru>
 
 Copyright:
-Copyright (C) 2015-2016 Greenbone Networks GmbH
+Copyright (C) 2015-2018 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -371,7 +371,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table><tr><td valign="top">
 
       <h1>Greenbone Security Assistant</h1>
-      <h3>Version 6.0.3</h3>
+      <h3>
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/vendor_version) &gt; 0">
+            <xsl:value-of select="/envelope/vendor_version"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>Version </xsl:text>
+            <xsl:value-of select="/envelope/version"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
 
       <p>
       Greenbone Security Assistant (GSA) это веб интерфейс к Open Vulnerability Assessment System (OpenVAS).
@@ -381,7 +391,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      Copyright 2009-2017 by <a href="http://www.greenbone.net" target="_blank">Greenbone Networks GmbH</a>
+      Copyright 2009-2018 by <a href="http://www.greenbone.net" target="_blank">Greenbone Networks GmbH</a>
       </p>
 
       <p>
