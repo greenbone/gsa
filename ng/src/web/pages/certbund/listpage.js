@@ -30,11 +30,15 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import CertBundCharts from './charts.js';
 import CertBundFilterDialog from './filterdialog.js';
 import CertBundTable from './table.js';
+
+import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard/index.js';
 
 const ToolBarIcons = props => {
   return (
@@ -55,6 +59,10 @@ const Dashboard = withDashboard({
 
 export default withEntitiesContainer('certbundadv', {
   dashboard: Dashboard,
+  dashboard2: CertBundDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>
+  ),
   filterEditDialog: CertBundFilterDialog,
   sectionIcon: 'cert_bund_adv.svg',
   table: CertBundTable,
