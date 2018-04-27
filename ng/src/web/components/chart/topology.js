@@ -47,6 +47,7 @@ import {
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
 } from '../../utils/severity';
+import {setRef} from '../../utils/render';
 
 import Group from './group';
 
@@ -368,7 +369,7 @@ class HostsTopologyChart extends React.Component {
   }
 
   render() {
-    const {width, height} = this.props;
+    const {width, height, svgRef} = this.props;
     const {
       hosts = [],
       links = [],
@@ -386,7 +387,7 @@ class HostsTopologyChart extends React.Component {
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMousUp}
         onMouseMove={this.handleMousMove}
-        innerRef={ref => this.svg = ref}
+        innerRef={setRef(ref => this.svg = ref, svgRef)}
       >
         <Group
           left={translateX}
@@ -472,6 +473,7 @@ HostsTopologyChart.propTypes = {
   }).isRequired,
   height: PropTypes.number.isRequired,
   severityClass: PropTypes.severityClass,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
 };
 
