@@ -465,6 +465,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/dfncert/row.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/severityclassdisplay.js
