@@ -33,7 +33,7 @@ import {debounce} from 'gmp/utils/event.js';
 
 import Grid, {createRow, createItem, itemsPropType} from '../sortable/grid.js';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes';
 import withGmp from '../../utils/withGmp';
 import compose from '../../utils/compose';
 
@@ -52,7 +52,6 @@ class Dashboard extends React.Component {
 
   static propTypes = {
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-    defaultDisplay: PropTypes.string.isRequired,
     filter: PropTypes.filter,
     id: PropTypes.id.isRequired,
     items: itemsPropType,

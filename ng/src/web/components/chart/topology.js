@@ -38,6 +38,8 @@ import {color} from 'd3-color';
 
 import {scaleLinear} from 'd3-scale';
 
+import _ from 'gmp/locale';
+
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
@@ -47,8 +49,10 @@ import {
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
 } from '../../utils/severity';
+import {setRef} from '../../utils/render';
 
 import Group from './group';
+import {Layout} from '../layout/layout';
 
 const MAX_HOSTS = 1000;
 
@@ -134,6 +138,14 @@ class HostsTopologyChart extends React.Component {
 
   componentDidMount() {
     this.updateData(this.props.data);
+  }
+
+  componentWillUnmount() {
+    if (is_defined(this.simulation)) {
+      this.simulation.stop();
+      this.simulation.on('tick', null);
+      this.simulation.on('end', null);
+    }
   }
 
   hostFillColor(host) {
@@ -330,12 +342,29 @@ class HostsTopologyChart extends React.Component {
     this.draggingHost = host;
   }
 
-  updateData(data) {
+  updateData(data = {}) {
     const {width, height} = this.props;
-    let {hosts} = data;
-    const {links} = data;
+
+    let {hosts = [], links = []} = data;
+
+    this.setState({hostsCount: hosts.length});
+
+    if (hosts.length === 0) {
+      this.setState({hosts: [], links: []});
+      return;
+    }
 
     if (hosts.length > MAX_HOSTS) {
+      const removeHosts = hosts.slice(MAX_HOSTS, hosts.length - 1);
+      // remove all links using these hosts
+      const linksSet = new Set(links);
+      for (const host of removeHosts) {
+        for (const link of host.links) {
+          linksSet.delete(link);
+        }
+      }
+
+      links = [...linksSet];
       hosts = hosts.slice(0, MAX_HOSTS);
     }
 
@@ -348,90 +377,116 @@ class HostsTopologyChart extends React.Component {
 
     this.simulation = forceSimulation(hosts)
       .force('link', linkForce)
-      .force('charge', forceManyBody().strength(-10))
+      .force('charge', forceManyBody().strength(-20))
       .force('center', forceCenter(width / 2, height / 2))
       .force('gravityX', gravityXForce)
       .force('gravityY', gravityYForce)
+      .alphaMin(0.1)
+      .alphaDecay(0.02276278) // alphaMin and alphaDecay result in ~100 ticks
       .on('tick', () => {
         this.setState({hosts, links});
       });
   }
 
   render() {
-    const {width, height} = this.props;
+    const {width, height, svgRef} = this.props;
     const {
-      hosts,
-      links,
+      hosts = [],
+      links = [],
       scale,
       translateX,
       translateY,
       dragging,
+      hostsCount,
     } = this.state;
     return (
-      <Svg
-        dragging={dragging}
-        width={width}
-        height={height}
-        onWheel={this.handleMouseWheel}
-        onMouseDown={this.handleMouseDown}
-        onMouseUp={this.handleMousUp}
-        onMouseMove={this.handleMousMove}
-        innerRef={ref => this.svg = ref}
-      >
-        <Group
-          left={translateX}
-          top={translateY}
-          scale={scale}
+      <Layout flex="column">
+        {hostsCount > MAX_HOSTS &&
+          <Layout align={['center', 'center']}>
+            <p>{_('The current number of {{hostsCount}} hosts exceeds the ' +
+                  'maximum of {{maxHosts}}. Please apply a more specific ' +
+                  'filter.', {hostsCount, maxHosts: MAX_HOSTS})}</p>
+          </Layout>
+        }
+        <Svg
+          dragging={dragging}
+          width={width}
+          height={height}
+          onWheel={this.handleMouseWheel}
+          onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMousUp}
+          onMouseMove={this.handleMousMove}
+          innerRef={setRef(ref => this.svg = ref, svgRef)}
         >
-          {links.map(link => {
-            return (
-              <line
-                key={link.index}
-                stroke={Theme.green}
-                x1={link.source.x}
-                y1={link.source.y}
-                x2={link.target.x}
-                y2={link.target.y}
-              />
-            );
-          })}
-          {hosts.map(host => {
-            const radius = host.isScanner ? SCANNER_RADIUS : HOST_RADIUS;
-            return (
-              <React.Fragment
-                key={host.id}
-              >
-                {scale > TEXT_SCALE_THRESHOLD &&
-                  <text
-                    fontWeight="normal"
-                    textAnchor="middle"
-                    dominantBaseline="hanging"
-                    fontSize="6px"
-                    fill={is_defined(host.uuid) ? Theme.black : Theme.lightGray}
-                    x={host.x}
-                    y={host.y + 1 + radius}
-                  >
-                    {host.name}
-                  </text>
-                }
-                <Circle
-                  r={radius}
-                  fill={this.hostFillColor(host)}
-                  stroke={this.hostStrokeColor(host)}
-                  strokeWidth={host.isScanner ?
-                    SCANNER_STROKE_WIDTH : DEFAULT_STROKE_WIDTH}
-                  cx={host.x}
-                  cy={host.y}
-                  onMouseDown={event => this.handleHostDragStart(event, host)}
+          <Group
+            left={translateX}
+            top={translateY}
+            scale={scale}
+          >
+            {links.map(link => {
+              return (
+                <line
+                  key={link.index}
+                  stroke={Theme.green}
+                  x1={link.source.x}
+                  y1={link.source.y}
+                  x2={link.target.x}
+                  y2={link.target.y}
                 />
-              </React.Fragment>
-            );
-          })}
-        </Group>
-      </Svg>
+              );
+            })}
+            {hosts.map(host => {
+              const radius = host.isScanner ? SCANNER_RADIUS : HOST_RADIUS;
+              return (
+                <React.Fragment
+                  key={host.id}
+                >
+                  {scale > TEXT_SCALE_THRESHOLD &&
+                    <text
+                      fontWeight="normal"
+                      textAnchor="middle"
+                      dominantBaseline="hanging"
+                      fontSize="6px"
+                      fill={is_defined(host.uuid) ?
+                        Theme.black : Theme.lightGray}
+                      x={host.x}
+                      y={host.y + 1 + radius}
+                    >
+                      {host.name}
+                    </text>
+                  }
+                  <Circle
+                    r={radius}
+                    fill={this.hostFillColor(host)}
+                    stroke={this.hostStrokeColor(host)}
+                    strokeWidth={host.isScanner ?
+                      SCANNER_STROKE_WIDTH : DEFAULT_STROKE_WIDTH}
+                    cx={host.x}
+                    cy={host.y}
+                    onMouseDown={event => this.handleHostDragStart(event, host)}
+                  />
+                </React.Fragment>
+              );
+            })}
+          </Group>
+        </Svg>
+      </Layout>
     );
   }
 }
+
+const LinkType = PropTypes.shape({
+  // d3 is mutating the original link object. Therefore allow object for source and target
+  // actually the target and source objects are of HostType ...
+  source: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
+  target: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
+});
 
 const HostType = PropTypes.shape({
   id: PropTypes.string.isRequired,
@@ -439,11 +494,7 @@ const HostType = PropTypes.shape({
   severity: PropTypes.number,
   name: PropTypes.string,
   isScanner: PropTypes.bool,
-});
-
-const LinkType = PropTypes.shape({
-  source: PropTypes.string.isRequired,
-  target: PropTypes.string.isRequired,
+  links: PropTypes.arrayOf(LinkType).isRequired,
 });
 
 HostsTopologyChart.propTypes = {
@@ -453,6 +504,7 @@ HostsTopologyChart.propTypes = {
   }).isRequired,
   height: PropTypes.number.isRequired,
   severityClass: PropTypes.severityClass,
+  svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
 };
 
