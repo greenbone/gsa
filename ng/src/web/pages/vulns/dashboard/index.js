@@ -51,7 +51,6 @@ const VulnerabilitiesDashboard = ({
         VulnsSeverityDisplay.displayId,
       ],
     ]}
-    defaultDisplay={VulnsCvssDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

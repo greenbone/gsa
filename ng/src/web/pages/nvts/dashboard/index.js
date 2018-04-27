@@ -60,7 +60,6 @@ const NvtsDashboard = ({
         NvtsQodTypeDisplay.displayId,
       ],
     ]}
-    defaultDisplay={NvtsCvssDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

@@ -49,7 +49,6 @@ const CvesDashboard = ({
         CvesSeverityClassDisplay.displayId,
       ],
     ]}
-    defaultDisplay={CvesSeverityClassDisplay.displayId}
     maxItemsPerRow={4}
     maxRows={4}
     onFilterChanged={onFilterChanged}

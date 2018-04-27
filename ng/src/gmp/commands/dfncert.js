@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -43,6 +44,14 @@ class DfnCertAdvsCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'dfn_cert_adv', DfnCertAdv, info_filter);
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'dfn_cert_adv',
+      group_column: 'severity',
+      filter,
+    });
   }
 }
 

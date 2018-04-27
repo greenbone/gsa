@@ -20,46 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
+import Loader, {
+  loadFunc,
+  loaderPropTypes,
+} from '../../../components/dashboard2/data/loader';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+export const DFNCERT_SEVERITY_CLASS = 'dfncert-severity-class';
 
-import CpesCvssDisplay from './cvssdisplay';
-import CpesSeverityClassDisplay from './severityclassdisplay';
+export const dfnCertSeverityLoader = loadFunc(
+  ({gmp, filter}) => gmp.dfncertadvs.getSeverityAggregates({filter})
+    .then(r => r.data),
+  DFNCERT_SEVERITY_CLASS);
 
-export const CPES_DASHBOARD_ID = '9cff9b4d-b164-43ce-8687-f2360afc7500';
-
-const CpesDashboard = ({
+export const DfnCertSeverityLoader = ({
   filter,
-  onFilterChanged,
+  children,
 }) => (
-  <Dashboard
-    id={CPES_DASHBOARD_ID}
+  <Loader
+    dataId={DFNCERT_SEVERITY_CLASS}
     filter={filter}
-    permittedDisplays={[
-      CpesCvssDisplay.displayId,
-      CpesSeverityClassDisplay.displayId,
+    load={dfnCertSeverityLoader}
+    subscriptions={[
+      'dfn_cert_advs.timer',
+      'dfn_cert_advs.changed',
     ]}
-    defaultContent={[
-      [
-        CpesCvssDisplay.displayId,
-        CpesSeverityClassDisplay.displayId,
-      ],
-    ]}
-    maxItemsPerRow={4}
-    maxRows={4}
-    onFilterChanged={onFilterChanged}
-  />
+  >
+    {children}
+  </Loader>
 );
 
-CpesDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
-
-export default CpesDashboard;
+DfnCertSeverityLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:

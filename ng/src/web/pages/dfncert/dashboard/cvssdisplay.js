@@ -23,43 +23,49 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import PropTypes from '../../../utils/proptypes';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
+import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import CpesCvssDisplay from './cvssdisplay';
-import CpesSeverityClassDisplay from './severityclassdisplay';
+import {DfnCertSeverityLoader} from './loaders';
 
-export const CPES_DASHBOARD_ID = '9cff9b4d-b164-43ce-8687-f2360afc7500';
-
-const CpesDashboard = ({
+const DfnCertCvssDisplay = ({
   filter,
-  onFilterChanged,
+  ...props
 }) => (
-  <Dashboard
-    id={CPES_DASHBOARD_ID}
+  <DfnCertSeverityLoader
     filter={filter}
-    permittedDisplays={[
-      CpesCvssDisplay.displayId,
-      CpesSeverityClassDisplay.displayId,
-    ]}
-    defaultContent={[
-      [
-        CpesCvssDisplay.displayId,
-        CpesSeverityClassDisplay.displayId,
-      ],
-    ]}
-    maxItemsPerRow={4}
-    maxRows={4}
-    onFilterChanged={onFilterChanged}
-  />
+  >
+    {loaderProps => (
+      <CvssDisplay
+        {...props}
+        {...loaderProps}
+        yLabel={_('# of DFN-CERT Advisories')}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of DFN-CERT Advisories')]}
+        title={({data: tdata}) =>
+          _('DFN-CERT Advisories by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </DfnCertSeverityLoader>
 );
 
-CpesDashboard.propTypes = {
+DfnCertCvssDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
 };
 
-export default CpesDashboard;
+const DISPLAY_ID = 'dfncert-by-cvss';
+
+DfnCertCvssDisplay.displayId = DISPLAY_ID;
+
+registerDisplay(DISPLAY_ID, DfnCertCvssDisplay, {
+  title: _('DFN-CERT Advisories by CVSS'),
+});
+
+export default DfnCertCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
