@@ -46,6 +46,14 @@ class OvaldefsCommand extends InfoEntitiesCommand {
     super(http, 'ovaldef', Ovaldef, info_filter);
   }
 
+  getClassAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'ovaldef',
+      group_column: 'class',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'ovaldef',
