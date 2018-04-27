@@ -136,6 +136,12 @@ class HostsTopologyChart extends React.Component {
     this.updateData(this.props.data);
   }
 
+  componentWillUnmount() {
+    if (is_defined(this.simulation)) {
+      this.simulation.stop();
+    }
+  }
+
   hostFillColor(host) {
     return is_defined(host.uuid) ? this.colorScale(host.severity) : Theme.white;
   }
