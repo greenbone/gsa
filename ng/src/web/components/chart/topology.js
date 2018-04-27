@@ -38,6 +38,8 @@ import {color} from 'd3-color';
 
 import {scaleLinear} from 'd3-scale';
 
+import equal from 'fast-deep-equal';
+
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
@@ -111,6 +113,15 @@ const TEXT_SCALE_THRESHOLD = 1;
 const DEFAULT_STROKE_WIDTH = 1;
 const SCANNER_STROKE_WIDTH = 2;
 
+const copyArray = array => is_defined(array) ? array.map(current => ({
+  ...current,
+})) : undefined;
+
+const copyHosts = hosts => hosts.map(host => ({
+  ...host,
+  links: copyArray(host.links),
+}));
+
 class HostsTopologyChart extends React.Component {
 
   constructor(...args) {
@@ -136,15 +147,94 @@ class HostsTopologyChart extends React.Component {
     this.handleMousMove = this.handleMousMove.bind(this);
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const {data = {}} = nextProps;
+    let {hosts = [], links = []} = data;
+
+    if (equal(prevState.originalHosts, hosts)) {
+      return null;
+    }
+
+    const originalHosts = hosts;
+
+    if (hosts.length > MAX_HOSTS) {
+      const removeHosts = hosts.slice(MAX_HOSTS, hosts.length - 1);
+      // remove all links using these hosts
+      const linksSet = new Set(links);
+      for (const host of removeHosts) {
+        for (const link of host.links) {
+          linksSet.delete(link);
+        }
+      }
+
+      links = [...linksSet];
+      hosts = hosts.slice(0, MAX_HOSTS);
+    }
+
+    let {simulation, linkForce} = prevState;
+
+    // always pass a copy of the hosts and links to d3 because it mutates them
+    const hostsCopy = copyHosts(hosts);
+    const linksCopy = copyArray(links);
+
+    if (is_defined(simulation)) {
+      simulation.nodes(hostsCopy);
+      linkForce.links(linksCopy);
+    }
+    else {
+      const initSim = HostsTopologyChart.initSimulation(hostsCopy, linksCopy);
+      simulation = initSim.simulation;
+      linkForce = initSim.linkForce;
+    }
+
+    return {
+      originalHosts,
+      hostsCount: originalHosts.length,
+      hosts: hostsCopy,
+      links: linksCopy,
+      simulation,
+      linkForce,
+    };
+  }
+
+  static initSimulation(hosts, links) {
+    const linkForce = forceLink(links)
+      .id(l => l.id)
+      .strength(0.2);
+
+    const gravityXForce = forceX().strength(0.03);
+    const gravityYForce = forceY().strength(0.03);
+
+    const simulation = forceSimulation(hosts)
+      .stop()
+      .force('link', linkForce)
+      .force('charge', forceManyBody().strength(-20))
+      .force('gravityX', gravityXForce)
+      .force('gravityY', gravityYForce)
+      .alphaMin(0.1)
+      .alphaDecay(0.02276278); // alphaMin and alphaDecay result in ~100 ticks
+
+    return {simulation, linkForce};
+  }
+
+
   componentDidMount() {
-    this.updateData(this.props.data);
+    const {width, height} = this.props;
+    const {simulation} = this.state;
+
+    simulation
+      .force('center', forceCenter(width / 2, height / 2))
+      .on('tick', () => this.forceUpdate())
+      .restart();
   }
 
   componentWillUnmount() {
-    if (is_defined(this.simulation)) {
-      this.simulation.stop();
-      this.simulation.on('tick', null);
-      this.simulation.on('end', null);
+    const {simulation} = this.state;
+
+    if (is_defined(simulation)) {
+      simulation.stop();
+      simulation.on('tick', null);
+      simulation.on('end', null);
     }
   }
 
@@ -289,7 +379,7 @@ class HostsTopologyChart extends React.Component {
 
   handleMousUp(event) {
     if (is_defined(this.draggingHost)) {
-      this.simulation.alphaTarget(0);
+      this.state.simulation.alphaTarget(0);
 
       this.draggingHost.fx = undefined;
       this.draggingHost.fy = undefined;
@@ -334,58 +424,12 @@ class HostsTopologyChart extends React.Component {
   handleHostDragStart(event, host) {
     event.stopPropagation();
 
-    this.simulation.alphaTarget(0.3).restart();
+    this.state.simulation.alphaTarget(0.3).restart();
 
     host.fx = host.x;
     host.fy = host.y;
 
     this.draggingHost = host;
-  }
-
-  updateData(data = {}) {
-    const {width, height} = this.props;
-
-    let {hosts = [], links = []} = data;
-
-    this.setState({hostsCount: hosts.length});
-
-    if (hosts.length === 0) {
-      this.setState({hosts: [], links: []});
-      return;
-    }
-
-    if (hosts.length > MAX_HOSTS) {
-      const removeHosts = hosts.slice(MAX_HOSTS, hosts.length - 1);
-      // remove all links using these hosts
-      const linksSet = new Set(links);
-      for (const host of removeHosts) {
-        for (const link of host.links) {
-          linksSet.delete(link);
-        }
-      }
-
-      links = [...linksSet];
-      hosts = hosts.slice(0, MAX_HOSTS);
-    }
-
-    const linkForce = forceLink(links)
-      .id(l => l.id)
-      .strength(0.2);
-
-    const gravityXForce = forceX().strength(0.03);
-    const gravityYForce = forceY().strength(0.03);
-
-    this.simulation = forceSimulation(hosts)
-      .force('link', linkForce)
-      .force('charge', forceManyBody().strength(-20))
-      .force('center', forceCenter(width / 2, height / 2))
-      .force('gravityX', gravityXForce)
-      .force('gravityY', gravityYForce)
-      .alphaMin(0.1)
-      .alphaDecay(0.02276278) // alphaMin and alphaDecay result in ~100 ticks
-      .on('tick', () => {
-        this.setState({hosts, links});
-      });
   }
 
   render() {
@@ -476,16 +520,8 @@ class HostsTopologyChart extends React.Component {
 }
 
 const LinkType = PropTypes.shape({
-  // d3 is mutating the original link object. Therefore allow object for source and target
-  // actually the target and source objects are of HostType ...
-  source: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]).isRequired,
-  target: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]).isRequired,
+  source: PropTypes.string.isRequired,
+  target: PropTypes.string.isRequired,
 });
 
 const HostType = PropTypes.shape({
