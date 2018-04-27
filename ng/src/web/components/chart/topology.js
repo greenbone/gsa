@@ -113,6 +113,15 @@ const TEXT_SCALE_THRESHOLD = 1;
 const DEFAULT_STROKE_WIDTH = 1;
 const SCANNER_STROKE_WIDTH = 2;
 
+const copyArray = array => is_defined(array) ? array.map(current => ({
+  ...current,
+})) : undefined;
+
+const copyHosts = hosts => hosts.map(host => ({
+  ...host,
+  links: copyArray(host.links),
+}));
+
 class HostsTopologyChart extends React.Component {
 
   constructor(...args) {
@@ -146,7 +155,7 @@ class HostsTopologyChart extends React.Component {
       return null;
     }
 
-    const newHosts = hosts;
+    const originalHosts = hosts;
 
     if (hosts.length > MAX_HOSTS) {
       const removeHosts = hosts.slice(MAX_HOSTS, hosts.length - 1);
@@ -164,21 +173,25 @@ class HostsTopologyChart extends React.Component {
 
     let {simulation, linkForce} = prevState;
 
+    // always pass a copy of the hosts and links to d3 because it mutates them
+    const hostsCopy = copyHosts(hosts);
+    const linksCopy = copyArray(links);
+
     if (is_defined(simulation)) {
-      simulation.nodes(hosts);
-      linkForce.links(links);
+      simulation.nodes(hostsCopy);
+      linkForce.links(linksCopy);
     }
     else {
-      const initSim = HostsTopologyChart.initSimulation(hosts, links);
+      const initSim = HostsTopologyChart.initSimulation(hostsCopy, linksCopy);
       simulation = initSim.simulation;
       linkForce = initSim.linkForce;
     }
 
     return {
-      originalHosts: newHosts,
-      hostsCount: newHosts.length,
-      hosts,
-      links,
+      originalHosts,
+      hostsCount: originalHosts.length,
+      hosts: hostsCopy,
+      links: linksCopy,
       simulation,
       linkForce,
     };
