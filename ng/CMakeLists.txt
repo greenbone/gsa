@@ -557,6 +557,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/row.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/table.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/overrides/charts.js
      ${NG_SRC_DIR}/src/web/pages/overrides/component.js
      ${NG_SRC_DIR}/src/web/pages/overrides/details.js
