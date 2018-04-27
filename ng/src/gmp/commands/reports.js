@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -43,6 +44,14 @@ class ReportsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_reports.get_reports_response;
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'report',
+      group_column: 'severity',
+      filter,
+    });
   }
 }
 
