@@ -27,44 +27,45 @@ import _ from 'gmp/locale';
 
 import PropTypes from '../../../utils/proptypes';
 
-import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
+import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import {DfnCertSeverityLoader} from './loaders';
+import {OvaldefSeverityLoader} from './loaders';
 
-const DfnCertSeverityDisplay = ({
+const OvaldefCvssDisplay = ({
   filter,
   ...props
 }) => (
-  <DfnCertSeverityLoader
+  <OvaldefSeverityLoader
     filter={filter}
   >
     {loaderProps => (
-      <SeverityClassDisplay
+      <CvssDisplay
         {...props}
         {...loaderProps}
+        yLabel={_('# of OVAL Definitions')}
         filter={filter}
-        dataTitles={[_('Severity Class'), _('# of DFN-CERT Advisories')]}
+        dataTitles={[_('Severity'), _('# of OVAL Definitions')]}
         title={({data: tdata}) =>
-          _('DFN-CERT Advisories by Severity Class (Total: {{count}})',
+          _('OVAL Definitions by CVSS (Total: {{count}})',
             {count: tdata.total})}
       />
     )}
-  </DfnCertSeverityLoader>
+  </OvaldefSeverityLoader>
 );
 
-DfnCertSeverityDisplay.propTypes = {
+OvaldefCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'dfn_cert_adv-by-severity-class';
+const DISPLAY_ID = 'ovaldef-by-cvss';
 
-DfnCertSeverityDisplay.displayId = DISPLAY_ID;
+OvaldefCvssDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, DfnCertSeverityDisplay, {
-  title: _('DFN-CERT Advisories by Severity Class'),
+registerDisplay(DISPLAY_ID, OvaldefCvssDisplay, {
+  title: _('OVAL Definitions by CVSS'),
 });
 
-export default DfnCertSeverityDisplay;
+export default OvaldefCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -23,48 +23,46 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from '../../../utils/proptypes';
 
-import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {DfnCertSeverityLoader} from './loaders';
+import OvaldefClassDisplay from './classdisplay';
+import OvaldefCvssDisplay from './cvssdisplay';
+import OvaldefSeverityClassDisplay from './severityclassdisplay';
 
-const DfnCertSeverityDisplay = ({
+export const OVALDEF_DASHBOARD_ID = '9563efc0-9f4e-4d1f-8f8d-0205e32b90a4';
+
+const OvaldefDashboard = ({
   filter,
-  ...props
+  onFilterChanged,
 }) => (
-  <DfnCertSeverityLoader
+  <Dashboard
+    id={OVALDEF_DASHBOARD_ID}
     filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of DFN-CERT Advisories')]}
-        title={({data: tdata}) =>
-          _('DFN-CERT Advisories by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </DfnCertSeverityLoader>
+    permittedDisplays={[
+      OvaldefClassDisplay.displayId,
+      OvaldefCvssDisplay.displayId,
+      OvaldefSeverityClassDisplay.displayId,
+    ]}
+    defaultContent={[
+      [
+        OvaldefSeverityClassDisplay.displayId,
+        OvaldefCvssDisplay.displayId,
+        OvaldefClassDisplay.displayId,
+      ],
+    ]}
+    maxItemsPerRow={4}
+    maxRows={4}
+    onFilterChanged={onFilterChanged}
+  />
 );
 
-DfnCertSeverityDisplay.propTypes = {
+OvaldefDashboard.propTypes = {
   filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func,
 };
 
-const DISPLAY_ID = 'dfn_cert_adv-by-severity-class';
-
-DfnCertSeverityDisplay.displayId = DISPLAY_ID;
-
-registerDisplay(DISPLAY_ID, DfnCertSeverityDisplay, {
-  title: _('DFN-CERT Advisories by Severity Class'),
-});
-
-export default DfnCertSeverityDisplay;
+export default OvaldefDashboard;
 
 // vim: set ts=2 sw=2 tw=80:

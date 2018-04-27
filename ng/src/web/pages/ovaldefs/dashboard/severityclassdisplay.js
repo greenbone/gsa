@@ -30,13 +30,13 @@ import PropTypes from '../../../utils/proptypes';
 import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import {DfnCertSeverityLoader} from './loaders';
+import {OvaldefSeverityLoader} from './loaders';
 
-const DfnCertSeverityDisplay = ({
+const OvaldefSeverityDisplay = ({
   filter,
   ...props
 }) => (
-  <DfnCertSeverityLoader
+  <OvaldefSeverityLoader
     filter={filter}
   >
     {loaderProps => (
@@ -44,27 +44,27 @@ const DfnCertSeverityDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
-        dataTitles={[_('Severity Class'), _('# of DFN-CERT Advisories')]}
+        dataTitles={[_('Severity Class'), _('# of OVAL Definitions')]}
         title={({data: tdata}) =>
-          _('DFN-CERT Advisories by Severity Class (Total: {{count}})',
+          _('OVAL Definitions by Severity Class (Total: {{count}})',
             {count: tdata.total})}
       />
     )}
-  </DfnCertSeverityLoader>
+  </OvaldefSeverityLoader>
 );
 
-DfnCertSeverityDisplay.propTypes = {
+OvaldefSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'dfn_cert_adv-by-severity-class';
+const DISPLAY_ID = 'ovaldef-by-severity-class';
 
-DfnCertSeverityDisplay.displayId = DISPLAY_ID;
+OvaldefSeverityDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, DfnCertSeverityDisplay, {
-  title: _('DFN-CERT Advisories by Severity Class'),
+registerDisplay(DISPLAY_ID, OvaldefSeverityDisplay, {
+  title: _('OVAL Definitions by Severity Class'),
 });
 
-export default DfnCertSeverityDisplay;
+export default OvaldefSeverityDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
