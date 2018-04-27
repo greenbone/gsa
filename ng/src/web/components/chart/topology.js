@@ -443,17 +443,26 @@ class HostsTopologyChart extends React.Component {
   }
 }
 
+const LinkType = PropTypes.shape({
+  // d3 is mutating the original link object. Therefore allow object for source and target
+  // actually the target and source objects are of HostType ...
+  source: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
+  target: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
+});
+
 const HostType = PropTypes.shape({
   id: PropTypes.string.isRequired,
   uuid: PropTypes.id,
   severity: PropTypes.number,
   name: PropTypes.string,
   isScanner: PropTypes.bool,
-});
-
-const LinkType = PropTypes.shape({
-  source: PropTypes.string.isRequired,
-  target: PropTypes.string.isRequired,
+  links: PropTypes.arrayOf(LinkType).isRequired,
 });
 
 HostsTopologyChart.propTypes = {
