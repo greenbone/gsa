@@ -30,6 +30,7 @@ import logger from 'gmp/log.js';
 import {is_defined, is_empty, map, shorten, split} from 'gmp/utils';
 
 import Wrapper from '../components/layout/wrapper.js';
+import {is_function, is_object} from 'gmp/utils/index.js';
 
 const log = logger.getLogger('web.render');
 
@@ -531,6 +532,17 @@ export const render_section_title = (counts, title) => {
     title,
     ...counts,
   });
+};
+
+export const setRef = (...refs) => ref => {
+  for (const rf of refs) {
+    if (is_function(rf)) {
+      rf(ref);
+    }
+    else if (is_object(rf) && is_defined(rf.current)) {
+      rf.current = ref;
+    }
+  }
 };
 
 // vim: set ts=2 sw=2 tw=80:
