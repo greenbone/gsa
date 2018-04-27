@@ -35,67 +35,88 @@ import {HostsTopologyLoader} from './loaders';
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const transformTopologyData = (data = []) => {
-  let tdata = {};
-
   if (!has_value(data)) {
-    return tdata;
+    return {};
   }
 
   const hostsObject = {};
+  const routes = new Set();
   const links = [];
 
   data.forEach(host => {
-    const {name, severity, isScanner} = host;
-    const {traceroute} = host.details;
+    const {name, severity, isScanner, details, id} = host;
+    const {traceroute} = details;
+
     hostsObject[name] = {
       id: name,
+      uuid: id,
       name,
       severity,
       isScanner,
+      links: [],
     };
+
     if (is_defined(traceroute)) {
       const splitTraceroute = traceroute.value.split(',');
 
       for (let i = splitTraceroute.length - 1; i > 0; i--) {
         const source = splitTraceroute[i];
-        const target = splitTraceroute[i - 1];
-        if (target !== '* * *' && source !== '* * *') {
-          if (!is_defined(hostsObject[source])) {
-            hostsObject[source] = {
-              id: source,
-              name: source,
-            };
-          }
-          if (!is_defined(hostsObject[target])) {
-            hostsObject[target] = {
-              id: target,
-              name: target,
-            };
-          }
-          links.push({
-            source: source,
-            target: target,
-          });
+        let target = splitTraceroute[i - 1];
+
+        if (target === '* * *' && source === '* * *') {
+          continue;
         }
-        else if (target === '* * *' && i > 1) {
-          if (!is_defined(hostsObject[source])) {
-            hostsObject[source] = {
-              id: source,
-              name: source,
-            };
-          }
-          links.push({
-            source: source,
-            target: splitTraceroute[i - 2],
-          });
+
+        if (target === '* * *' && i > 1) {
+          target = splitTraceroute[i - 2];
         }
+
+        const route = `${source}>${target}`;
+
+        if (routes.has(route)) {
+          continue;
+        }
+
+        routes.add(route);
+
+        const newLink = {
+          source,
+          target,
+        };
+
+        const sourceHost = hostsObject[source];
+
+        if (is_defined(sourceHost)) {
+          sourceHost.links.push(newLink);
+        }
+        else {
+          hostsObject[source] = {
+            id: source,
+            name: source,
+            links: [newLink],
+          };
+        }
+
+        const targetHost = hostsObject[target];
+
+        if (is_defined(targetHost)) {
+          targetHost.links.push(newLink);
+        }
+        else {
+          hostsObject[target] = {
+            id: target,
+            name: target,
+            links: [newLink],
+          };
+        }
+
+        links.push(newLink);
       }
     };
   });
-  const hosts = Object.keys(hostsObject).map(host => hostsObject[host]);
-  tdata = {hosts, links};
 
-  return tdata;
+  const hosts = Object.values(hostsObject);
+  return {hosts, links};
 };
 
 class HostsTopologyDisplay extends React.Component {
