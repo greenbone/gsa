@@ -27,6 +27,32 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
+export const OVALDEF_CLASS = 'ovaldef-class';
+
+export const ovaldefClassLoader = loadFunc(
+  ({gmp, filter}) => gmp.ovaldefs.getClassAggregates({filter})
+    .then(r => r.data),
+  OVALDEF_CLASS);
+
+export const OvaldefClassLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={OVALDEF_CLASS}
+    filter={filter}
+    load={ovaldefClassLoader}
+    subscriptions={[
+      'ovaldef.timer',
+      'ovaldef.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+OvaldefClassLoader.propTypes = loaderPropTypes;
+
 export const OVALDEF_SEVERITY_CLASS = 'ovaldef-severity-class';
 
 export const ovaldefSeverityLoader = loadFunc(
