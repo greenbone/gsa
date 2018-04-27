@@ -128,8 +128,9 @@ class HostsTopologyDisplay extends React.Component {
             dataTransform={transformTopologyData}
             title={() => _('Hosts Topology')}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <TopologyChart
+                svgRef={svgRef}
                 width={width}
                 height={height}
                 data={tdata}
