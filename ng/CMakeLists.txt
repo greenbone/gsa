@@ -644,6 +644,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/results/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/results/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/results/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/wordclouddisplay.js
      ${NG_SRC_DIR}/src/web/pages/roles/component.js
      ${NG_SRC_DIR}/src/web/pages/roles/details.js
      ${NG_SRC_DIR}/src/web/pages/roles/detailspage.js
