@@ -291,7 +291,7 @@ class ScheduleChart extends React.Component {
         <Svg
           width={width}
           height={height}
-          svgRef={svgRef}
+          innerRef={svgRef}
         >
           <Group top={margin.top} left={marginLeft}>
             <Axis
