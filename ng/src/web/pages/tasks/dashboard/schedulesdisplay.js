@@ -67,8 +67,9 @@ const TasksSchedulesDisplay = ({
         dataTransform={transformScheduleData}
         title={() => _('Next Scheduled Tasks')}
       >
-        {({width, height, data: tdata}) => (
+        {({width, height, data: tdata, svgRef}) => (
           <ScheduleChart
+            svgRef={svgRef}
             width={width}
             height={height}
             data={tdata}
