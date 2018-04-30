@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import Table from '../../table/stripedtable';
 import TableHeader from '../../table/header';
 import TableHead from '../../table/head';
@@ -32,36 +34,44 @@ import TableBody from '../../table/body';
 
 import PropTypes from '../../../utils/proptypes';
 
+const Margin = glamorous.div({
+  margin: 10,
+  display: 'flex',
+  flexGrow: 1,
+});
+
 const DataTable = ({
   header = [],
   data = [],
   row: rowFunc,
 }) => (
-  <Table>
-    <TableHeader>
-      <TableRow>
-        {header.map((head, i) => (
-          <TableHead key={i}>
-            {head}
-          </TableHead>
-        ))}
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      {data.map((row, i) => {
-        const rowData = rowFunc({row});
-        return (
-          <TableRow key={i}>
-            {rowData.map((value, j) => (
-              <TableData key={j}>
-                {value}
-              </TableData>
-            ))}
-          </TableRow>
-        );
-      })}
-    </TableBody>
-  </Table>
+  <Margin>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          {header.map((head, i) => (
+            <TableHead key={i}>
+              {head}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((row, i) => {
+          const rowData = rowFunc({row});
+          return (
+            <TableRow key={i}>
+              {rowData.map((value, j) => (
+                <TableData key={j}>
+                  {value}
+                </TableData>
+              ))}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+  </Margin>
 );
 
 DataTable.propTypes = {
