@@ -25,6 +25,7 @@ import React from 'react';
 import {pack, hierarchy} from 'd3-hierarchy';
 
 import PropTypes from '../../utils/proptypes';
+import Theme from '../../utils/theme';
 
 import Group from './group';
 import Svg from './svg';
@@ -47,10 +48,7 @@ const BubbleChart = ({
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
 
-  if (data.length === 0) {
-    // TODO should render empty placeholder
-    return null;
-  }
+  const hasBubbles = data.length > 0;
 
   const bubbles = pack();
   bubbles.size([maxWidth, maxHeight]);
@@ -70,53 +68,62 @@ const BubbleChart = ({
         top={margin.top}
         left={margin.left}
       >
-        {nodes.map((node, i) => {
-          const {data: d, x, y, r} = node;
-          return (
-            <ToolTip
-              key={i}
-              content={d.toolTip}
-            >
-              {({targetRef, hide, show}) => {
-                const clippathId = 'clippath-' + i;
-                return (
-                  <Group
-                    left={x}
-                    top={y}
-                    onMouseEnter={show}
-                    onMouseLeave={hide}
-                    onClick={() => onDataClick(d)}
-                  >
-                    <circle
-                      fill={d.color}
-                      r={r}
-                    />
-
-                    <clipPath
-                      id={clippathId}
+        {hasBubbles ?
+          nodes.map((node, i) => {
+            const {data: d, x, y, r} = node;
+            return (
+              <ToolTip
+                key={i}
+                content={d.toolTip}
+              >
+                {({targetRef, hide, show}) => {
+                  const clippathId = 'clippath-' + i;
+                  return (
+                    <Group
+                      left={x}
+                      top={y}
+                      onMouseEnter={show}
+                      onMouseLeave={hide}
+                      onClick={() => onDataClick(d)}
                     >
-                      {/* cut of text overflowing the circle */}
                       <circle
+                        fill={d.color}
                         r={r}
                       />
-                    </clipPath>
 
-                    <text
-                      ref={targetRef}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fontWeight="normal"
-                      fontSize="10px"
-                      clipPath={`url(#${clippathId})`}
-                    >
-                      {d.label}
-                    </text>
-                  </Group>
-                );
-              }}
-            </ToolTip>
-          );
-        })}
+                      <clipPath
+                        id={clippathId}
+                      >
+                        {/* cut of text overflowing the circle */}
+                        <circle
+                          r={r}
+                        />
+                      </clipPath>
+
+                      <text
+                        ref={targetRef}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fontWeight="normal"
+                        fontSize="10px"
+                        clipPath={`url(#${clippathId})`}
+                      >
+                        {d.label}
+                      </text>
+                    </Group>
+                  );
+                }}
+              </ToolTip>
+            );
+          }) : (
+            <circle
+              fill={Theme.lightGray}
+              r={maxHeight / 2}
+              cx={maxWidth / 2}
+              cy={maxHeight / 2}
+            />
+          )
+        }
       </Group>
     </Svg>
   );
