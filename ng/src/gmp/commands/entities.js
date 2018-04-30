@@ -195,6 +195,7 @@ class EntitiesCommand extends HttpCommand {
     dataColumns = [],
     textColumns = [],
     sort = [],
+    aggregateMode,
     maxGroups,
     ...params
   } = {}) {
@@ -212,6 +213,10 @@ class EntitiesCommand extends HttpCommand {
       requestParams[`sort_orders:${i}`] = direction;
       requestParams[`sort_stats:${i}`] = stat;
     });
+
+    if (is_defined(aggregateMode)) {
+      requestParams.aggregate_mode = aggregateMode;
+    }
 
     if (is_defined(maxGroups)) {
       requestParams.max_groups = maxGroups;
