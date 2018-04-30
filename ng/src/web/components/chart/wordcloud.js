@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -90,6 +91,7 @@ class WordCloudChart extends React.Component {
       size: wordScale(word.value),
       text: word.label,
       color: word.color,
+      filterValue: word.filterValue,
     }));
 
     const cloud = d3cloud();
@@ -110,6 +112,7 @@ class WordCloudChart extends React.Component {
       width,
       height,
       svgRef,
+      onDataClick,
     } = this.props;
 
     const {
@@ -126,19 +129,23 @@ class WordCloudChart extends React.Component {
           left={width / 2 + margin.left}
         >
           {words.map(word => (
-            <text
+            <Group
               key={word.text}
-              fontSize={word.size + 'px'}
-              fontFamily={word.font}
-              fontWeight={word.weight}
-              fill={word.color}
-              textAnchor="middle"
-              transform={
-                'translate(' + [word.x, word.y] + ')rotate(' + word.rotate + ')'
-              }
+              onClick={() => onDataClick(word.filterValue)}
             >
-              {word.text}
-            </text>
+              <text
+                fontSize={word.size + 'px'}
+                fontFamily={word.font}
+                fontWeight={word.weight}
+                fill={word.color}
+                textAnchor="middle"
+                transform={
+                  'translate(' + [word.x, word.y] + ')rotate(' +
+                    word.rotate + ')'}
+              >
+                {word.text}
+              </text>
+            </Group>
           ))}
         </Group>
       </Svg>
@@ -155,6 +162,7 @@ WordCloudChart.propTypes = {
   height: PropTypes.number.isRequired,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
+  onDataClick: PropTypes.func,
 };
 
 export default WordCloudChart;

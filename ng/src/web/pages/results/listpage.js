@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -32,12 +33,16 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
 
+import DashboardControls from '../../components/dashboard2/controls';
+
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';
 
 import ResultsTable from './table.js';
+
+import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -64,6 +69,10 @@ const ToolBarIcons = props => {
 export default withEntitiesContainer('result', {
   filtersFilter: RESULTS_FILTER_FILTER,
   dashboard: Dashboard,
+  dashboard2: ResultsDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
+  ),
   title: _('Results'),
   sectionIcon: 'result.svg',
   toolBarIcons: ToolBarIcons,
