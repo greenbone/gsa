@@ -50,12 +50,12 @@ const BubbleChart = ({
 
   const hasBubbles = data.length > 0;
 
-  const bubbles = pack();
-  bubbles.size([maxWidth, maxHeight]);
-  bubbles.padding(1.5);
+  const bubbles = pack()
+    .size([maxWidth, maxHeight])
+    .padding(1.5);
 
-  const root = hierarchy({children: data});
-  root.sum(d => d.value);
+  const root = hierarchy({children: data})
+    .sum(d => d.value);
 
   const nodes = bubbles(root).leaves();
   return (
