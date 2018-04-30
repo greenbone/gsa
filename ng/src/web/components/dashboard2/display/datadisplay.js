@@ -106,7 +106,11 @@ class DataDisplay extends React.Component {
       return {
         data,
         originalData: nextProps.data,
-        title: nextProps.title({data, id: nextProps.id}),
+        title: nextProps.title({
+          data,
+          id: nextProps.id,
+          isLoading: nextProps.isLoading,
+        }),
       };
     }
     return null;
@@ -337,7 +341,7 @@ class DataDisplay extends React.Component {
               }
             </DisplayMenu> : null
         }
-        title={isLoading ? _('Loading') : title}
+        title={title}
         onRemoveClick={onRemoveClick}
         {...otherProps}
       >
