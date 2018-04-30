@@ -102,7 +102,6 @@ class Loader extends React.Component {
       ...props
     } = this.props;
 
-
     dispatch(load(props));
   }
 
