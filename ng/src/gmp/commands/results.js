@@ -36,6 +36,15 @@ class ResultsCommand extends EntitiesCommand {
     return root.get_results.get_results_response;
   }
 
+  getWordCountsAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'result',
+      group_column: 'vulnerability',
+      aggregate_mode: 'word_counts',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'result',
