@@ -85,7 +85,7 @@ class BarChart extends React.Component {
     const yMax = Math.max(...yValues);
 
     const maxLabelLength = Math.max(...xValues.map(
-      val => val.toString().length));
+      val => val.toString().length), MAX_LABEL_LENGTH);
 
     // adjust left margin for label length on horizontal bars
     // 4px for each letter is just a randomly chosen value

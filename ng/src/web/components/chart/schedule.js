@@ -205,7 +205,7 @@ class ScheduleChart extends React.Component {
     const yValues = data.map(d => d.label);
 
     const maxLabelLength = Math.max(...yValues.map(
-      val => val.toString().length));
+      val => val.toString().length), MAX_LABEL_LENGTH);
 
     // adjust left margin for label length on horizontal bars
     // 4px for each letter is just a randomly chosen value
