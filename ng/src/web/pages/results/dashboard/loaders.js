@@ -79,4 +79,30 @@ export const ResultsWordCountLoader = ({
 
 ResultsWordCountLoader.propTypes = loaderPropTypes;
 
+export const RESULTS_DESCRIPTION_WORDCOUNT = 'results-description-wordcount';
+
+export const resultsDescriptionWordCountLoader = loadFunc(
+  ({gmp, filter}) => gmp.results.getDescriptionWordCountsAggregates({filter})
+    .then(r => r.data),
+  RESULTS_DESCRIPTION_WORDCOUNT);
+
+export const ResultsDescriptionWordCountLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={RESULTS_DESCRIPTION_WORDCOUNT}
+    filter={filter}
+    load={resultsDescriptionWordCountLoader}
+    subscriptions={[
+      'results.timer',
+      'results.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+ResultsDescriptionWordCountLoader.propTypes = loaderPropTypes;
+
 // vim: set ts=2 sw=2 tw=80:
