@@ -53,4 +53,30 @@ export const ResultsSeverityLoader = ({
 
 ResultsSeverityLoader.propTypes = loaderPropTypes;
 
+export const RESULTS_WORDCOUNT = 'results-wordcount';
+
+export const resultsWordCountLoader = loadFunc(
+  ({gmp, filter}) => gmp.results.getWordCountsAggregates({filter})
+    .then(r => r.data),
+  RESULTS_WORDCOUNT);
+
+export const ResultsWordCountLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={RESULTS_WORDCOUNT}
+    filter={filter}
+    load={resultsWordCountLoader}
+    subscriptions={[
+      'results.timer',
+      'results.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+ResultsWordCountLoader.propTypes = loaderPropTypes;
+
 // vim: set ts=2 sw=2 tw=80:
