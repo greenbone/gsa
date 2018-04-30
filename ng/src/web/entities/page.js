@@ -61,7 +61,13 @@ class EntitiesPage extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      showFilterDialog: false,
+    };
+
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
+    this.handleFilterDialogCloseClick =
+      this.handleFilterDialogCloseClick.bind(this);
   }
 
   getSectionTitle() {
@@ -71,9 +77,11 @@ class EntitiesPage extends React.Component {
   }
 
   handleFilterEditClick() {
-    if (this.filter_dialog) {
-      this.filter_dialog.show();
-    }
+    this.setState({showFilterDialog: true});
+  }
+
+  handleFilterDialogCloseClick() {
+    this.setState({showFilterDialog: false});
   }
 
   renderSection() {
@@ -235,16 +243,18 @@ class EntitiesPage extends React.Component {
       filterEditDialog: FilterDialogComponent,
       onFilterChanged,
     } = this.props;
+    const {showFilterDialog} = this.state;
 
-    if (!FilterDialogComponent) {
+    if (!FilterDialogComponent || !showFilterDialog) {
       return null;
     }
 
     return (
       <FilterDialogComponent
         filter={filter}
-        ref={ref => this.filter_dialog = ref}
-        onFilterChanged={onFilterChanged}/>
+        onFilterChanged={onFilterChanged}
+        onCloseClick={this.handleFilterDialogCloseClick}
+      />
     );
   }
 

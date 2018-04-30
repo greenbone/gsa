@@ -43,11 +43,8 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
     constructor(...args) {
       super(...args);
 
-      this.state = {};
+      this.state = this.setFilter(this.props.filter);
 
-      this.setFilter(this.props.filter);
-
-      this.handleClose = this.handleClose.bind(this);
       this.handleSave = this.handleSave.bind(this);
       this.onFilterValueChange = this.onFilterValueChange.bind(this);
       this.onFilterStringChange = this.onFilterStringChange.bind(this);
@@ -58,44 +55,30 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
     setFilter(filter) {
       if (!is_defined(filter)) {
-        return;
+        return {};
       }
 
       this.orig_filter = filter;
 
-      this.setState({
+      return {
         filter: filter.copy(),
         filterstring: filter.toFilterCriteriaString(),
-        visible: false,
-      });
-    }
-
-    show() {
-      const {filter} = this.props;
-
-      this.setFilter(filter);
-
-      this.setState({visible: true});
-    }
-
-    close() {
-      this.setState({visible: false});
+      };
     }
 
     handleSave() {
       let {filter, filterstring} = this.state;
+      const {onFilterChanged, onCloseClick} = this.props;
 
       filter = Filter.fromString(filterstring, filter);
 
-      if (this.props.onFilterChanged && !filter.equals(this.orig_filter)) {
-        this.props.onFilterChanged(filter);
+      if (onFilterChanged && !filter.equals(this.orig_filter)) {
+        onFilterChanged(filter);
       }
 
-      this.close();
-    }
-
-    handleClose() {
-      this.close();
+      if (is_defined(onCloseClick)) {
+        onCloseClick();
+      }
     }
 
     onFilterValueChange(value, name, relation = '=') {
@@ -131,7 +114,8 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
     }
 
     render() {
-      const {filter, filterstring, visible} = this.state;
+      const {onCloseClick} = this.props;
+      const {filter, filterstring} = this.state;
 
       if (!is_defined(filter)) {
         return null;
@@ -139,9 +123,9 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
       return (
         <Dialog
-          visible={visible}
           width="800px"
-          onClose={this.handleClose}>
+          onClose={onCloseClick}
+        >
           {({
             close,
             moveProps,
@@ -181,6 +165,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
   FilterDialogWrapper.propTypes = {
     filter: PropTypes.filter,
+    onCloseClick: PropTypes.func,
     onFilterChanged: PropTypes.func,
   };
 
