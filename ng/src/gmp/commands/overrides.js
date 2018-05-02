@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +110,24 @@ class OverridesCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_overrides.get_overrides_response;
+  }
+
+  getActiveDaysAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'override',
+      group_column: 'active_days',
+      filter,
+      maxGroups: 250,
+    });
+  }
+
+  getWordCountsAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'override',
+      group_column: 'text',
+      aggregate_mode: 'word_counts',
+      filter,
+    });
   }
 };
 

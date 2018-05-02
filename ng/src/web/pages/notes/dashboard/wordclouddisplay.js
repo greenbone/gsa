@@ -35,6 +35,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import WordCloudChart from '../../../components/chart/wordcloud';
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import {randomColor} from '../../../components/dashboard2/display/utils';
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
 import {NotesWordCountLoader} from './loaders';
@@ -47,7 +48,7 @@ const transformWordCountData = (data = {}) => {
       return {
         value: parse_float(count),
         label: value,
-        color: '#' + Math.floor(Math.random() * 0xffffff).toString(16),
+        color: randomColor(),
         filterValue: value,
       };
     });

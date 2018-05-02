@@ -38,7 +38,7 @@ import DataDisplay from '../../../components/dashboard2/display/datadisplay';
 import {randomColor} from '../../../components/dashboard2/display/utils';
 import {registerDisplay} from '../../../components/dashboard2/registry';
 
-import {ResultsWordCountLoader} from './loaders';
+import {OverridesWordCountLoader} from './loaders';
 
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;
@@ -55,7 +55,7 @@ const transformWordCountData = (data = {}) => {
   return tdata;
 };
 
-class ResultsWordCloudDisplay extends React.Component {
+class OverridesWordCloudDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -73,7 +73,7 @@ class ResultsWordCloudDisplay extends React.Component {
     let wordFilter;
 
     if (!is_empty(filterValue)) {
-      const wordTerm = FilterTerm.fromString(`vulnerability~"${filterValue}"`);
+      const wordTerm = FilterTerm.fromString(`text~"${filterValue}"`);
 
       if (is_defined(filter) && filter.hasTerm(wordTerm)) {
         return;
@@ -94,7 +94,7 @@ class ResultsWordCloudDisplay extends React.Component {
     } = this.props;
 
     return (
-      <ResultsWordCountLoader
+      <OverridesWordCountLoader
         filter={filter}
       >
         {loaderProps => (
@@ -103,7 +103,7 @@ class ResultsWordCloudDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformWordCountData}
             title={({data: tdata}) =>
-            _('Results Vulnerability Word Cloud')}
+            _('Overrides Text Word Cloud')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <WordCloudChart
@@ -117,24 +117,24 @@ class ResultsWordCloudDisplay extends React.Component {
             )}
           </DataDisplay>
         )}
-      </ResultsWordCountLoader>
+      </OverridesWordCountLoader>
     );
   }
 }
 
-ResultsWordCloudDisplay.propTypes = {
+OverridesWordCloudDisplay.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'result-by-vuln-words';
+const DISPLAY_ID = 'override-by-text-words';
 
-ResultsWordCloudDisplay.displayId = DISPLAY_ID;
+OverridesWordCloudDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, ResultsWordCloudDisplay, {
-  title: _('Results Vulnerability Word Cloud'),
+registerDisplay(DISPLAY_ID, OverridesWordCloudDisplay, {
+  title: _('Overrides Text Word Cloud'),
 });
 
-export default ResultsWordCloudDisplay;
+export default OverridesWordCloudDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
