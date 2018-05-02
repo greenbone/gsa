@@ -580,6 +580,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/overrides/row.js
      ${NG_SRC_DIR}/src/web/pages/overrides/table.js
      ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/activedaysdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/page.js
      ${NG_SRC_DIR}/src/web/pages/performance/performancepage.js
