@@ -40,7 +40,7 @@ import Loading from '../../../components/loading/loading';
 import MenuEntry from '../../menu/menuentry';
 
 import Display, {
-  DISPLAY_HEADER_HEIGHT,
+  DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
 } from './display';
 import DisplayMenu from './displaymenu';
 
@@ -235,13 +235,13 @@ class DataDisplay extends React.Component {
     let {
       data: originalData,
       height,
+      width,
       isLoading,
     } = this.props;
     const {
       children,
       menu,
       id,
-      width,
       dataTitles,
       dataRow,
       onRemoveClick,
@@ -251,6 +251,7 @@ class DataDisplay extends React.Component {
     const {hasSvg = false} = this.state;
 
     height = height - DISPLAY_HEADER_HEIGHT;
+    width = width - DISPLAY_BORDER_WIDTH;
 
     isLoading = isLoading && !is_defined(originalData);
 
