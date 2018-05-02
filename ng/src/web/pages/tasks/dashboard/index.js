@@ -27,9 +27,15 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import TasksStatusDisplay from './statusdisplay';
-import TasksSeverityDisplay from './severityclassdisplay';
+import {
+  TasksSeverityDisplay,
+  TasksSeverityTableDisplay,
+} from './severityclassdisplay';
 import TasksSchedulesDisplay from './schedulesdisplay';
-import TasksCvssDisplay from './cvssdisplay';
+import {
+  TasksCvssDisplay,
+  TasksCvssTableDisplay,
+ } from './cvssdisplay';
 import TasksMostHighResultsDisplay from './mosthighresults';
 import TasksHighResultsDisplay from './highresults';
 
@@ -49,6 +55,8 @@ const TaskDashboard = ({
       TasksCvssDisplay.displayId,
       TasksMostHighResultsDisplay.displayId,
       TasksHighResultsDisplay.displayId,
+      TasksSeverityTableDisplay.displayId,
+      TasksCvssTableDisplay.displayId,
     ]}
     defaultContent={[
       [

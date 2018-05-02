@@ -27,11 +27,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {TasksSeverityLoader} from './loaders';
 
-const TasksCvssDisplay = ({
+export const TasksCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -44,7 +45,6 @@ const TasksCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of Tasks')}
         filter={filter}
-        dataTitles={[_('Severity'), _('# of Tasks')]}
         title={({data: tdata = {}}) =>
           _('Tasks by CVSS (Total: {{count}})',
             {count: tdata.total})}
@@ -57,14 +57,41 @@ TasksCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'task-by-cvss';
+TasksCvssDisplay.displayId = 'task-by-cvss';
 
-TasksCvssDisplay.displayId = DISPLAY_ID;
+export const TasksCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of Tasks')]}
+        title={({data: tdata = {}}) =>
+          _('Tasks by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </TasksSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, TasksCvssDisplay, {
+TasksCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+TasksCvssTableDisplay.displayId = 'task-by-cvss-table';
+
+registerDisplay(TasksCvssDisplay.displayId, TasksCvssDisplay, {
   title: _('Chart: Tasks by CVSS'),
 });
 
-export default TasksCvssDisplay;
+registerDisplay(TasksCvssTableDisplay.displayId, TasksCvssTableDisplay, {
+  title: _('Table: Tasks by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

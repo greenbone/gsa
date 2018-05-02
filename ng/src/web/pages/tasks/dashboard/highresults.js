@@ -107,7 +107,7 @@ class TasksHighResultsDisplay extends React.Component {
             dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
             dataRow={({row}) => [row.label, row.value, row.severity]}
             dataTransform={transformHighResultsData}
-            title={() => _('Tasks: High Results per Host')}
+            title={() => _('Tasks by High Results per Host')}
           >
             {({width, height, data: tdata}) => (
               <BubbleChart
