@@ -20,10 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
-import _ from 'gmp/locale';
-
 import {is_defined} from 'gmp/utils/identity';
 
 import {parse_int, parse_float, parse_severity} from 'gmp/parser';
@@ -39,16 +35,11 @@ import {
   _FALSE_POSITIVE,
   resultSeverityRiskFactor,
   translateRiskFactor,
-} from '../../../utils/severity';
-import PropTypes from '../../../utils/proptypes';
+} from 'web/utils/severity';
 
-import BarChart from '../../chart/bar';
+import {totalCount, percent, riskFactorColorScale} from '../utils';
 
-import DataDisplay from './datadisplay';
-
-import {totalCount, percent, riskFactorColorScale} from './utils';
-import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+export const cvssDataRow = ({row}) => [row.x, row.y];
 
 const getSeverityClassLabel = value => {
   switch (value) {
@@ -150,110 +141,6 @@ const transformCvssData = (data = {}, {severityClass}) => {
   return tdata;
 };
 
-class CvssDisplay extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.handleDataClick = this.handleDataClick.bind(this);
-  }
-
-  handleDataClick(data) {
-    const {onFilterChanged, filter} = this.props;
-
-    if (!is_defined(onFilterChanged)) {
-      return;
-    }
-
-    const {filterValue = {}} = data;
-    const {start, end} = filterValue;
-
-    let statusFilter;
-
-    if (is_defined(start) && start > 0 && end < 10) {
-      const startTerm = FilterTerm.fromString(`severity>${start}`);
-
-      // use end + 0.1 as upper limit
-      // this is a bit hackish and only works for severity
-      // it would be better if gvmd does support <=
-      const endVal = (end + 0.1).toFixed(1);
-      const endTerm = FilterTerm.fromString(`severity<${endVal}`);
-
-      if (is_defined(filter) && filter.hasTerm(startTerm) &&
-        filter.hasTerm(endTerm)) {
-        return;
-      }
-
-      statusFilter = Filter.fromTerm(startTerm).and(Filter.fromTerm(endTerm));
-    }
-    else {
-      let statusTerm;
-
-      if (is_defined(start)) {
-
-        if (start > 0) {
-          statusTerm = FilterTerm.fromString(`severity>${start}`);
-        }
-        else {
-          statusTerm = FilterTerm.fromString(`severity=${start}`);
-        }
-      }
-      else {
-        statusTerm = FilterTerm.fromString(`severity=""`);
-      }
-
-      if (is_defined(filter) && filter.hasTerm(statusTerm)) {
-        return;
-      }
-
-      statusFilter = Filter.fromTerm(statusTerm);
-    }
-
-    const newFilter = is_defined(filter) ? filter.copy().and(statusFilter) :
-      statusFilter;
-
-    onFilterChanged(newFilter);
-  }
-
-  render() {
-    const {
-      title,
-      yLabel,
-      xLabel = _('Severity'),
-      ...props
-    } = this.props;
-    return (
-      <DataDisplay
-        {...props}
-        dataRow={({row}) => [row.x, row.y]}
-        dataTransform={transformCvssData}
-        title={title}
-      >
-        {({width, height, data, svgRef}) => (
-          <BarChart
-            svgRef={svgRef}
-            displayLegend={false}
-            width={width}
-            height={height}
-            data={data}
-            xLabel={xLabel}
-            yLabel={yLabel}
-            onDataClick={this.handleDataClick}
-          />
-        )}
-      </DataDisplay>
-    );
-  }
-}
-
-CvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-  title: PropTypes.func.isRequired,
-  xLabel: PropTypes.string,
-  yLabel: PropTypes.string,
-  onFilterChanged: PropTypes.func.isRequired,
-};
-
-export default CvssDisplay;
+export default transformCvssData;
 
 // vim: set ts=2 sw=2 tw=80:
