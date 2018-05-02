@@ -51,6 +51,10 @@ export const totalCount = (groups = []) => {
 export const percent = (count, sum) =>
   (parse_int(count) / sum * 100).toFixed(1);
 
+export const randomColor = () => {
+  return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
+};
+
 export const activeDaysColorScale = scaleOrdinal()
   .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
   .range([
