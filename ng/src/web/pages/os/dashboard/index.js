@@ -48,8 +48,8 @@ const OsDashboard = ({
     defaultContent={[
       [
         OsSeverityClassDisplay.displayId,
-        OsCvssDisplay.displayId,
         OsVulnScoreDisplay.displayId,
+        OsCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}

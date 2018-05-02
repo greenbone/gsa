@@ -49,9 +49,8 @@ const ResultsDashboard = ({
     ]}
     defaultContent={[
       [
-        ResultsWordCloudDisplay.displayId,
         ResultsSeverityDisplay.displayId,
-        ResultsDescriptionWordCloudDisplay.displayId,
+        ResultsWordCloudDisplay.displayId,
         ResultsCvssDisplay.displayId,
       ],
     ]}

@@ -46,6 +46,7 @@ const CertBundDashboard = ({
     defaultContent={[
       [
         CertBundSeverityClassDisplay.displayId,
+        // 'cert_bund_adv-by-created', // TODO
         CertBundCvssDisplay.displayId,
       ],
     ]}

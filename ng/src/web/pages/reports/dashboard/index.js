@@ -46,6 +46,7 @@ const ReportsDashboard = ({
     defaultContent={[
       [
         ReportsSeverityDisplay.displayId,
+        // 'report-by-high-results', // TODO
         ReportsCvssDisplay.displayId,
       ],
     ]}
