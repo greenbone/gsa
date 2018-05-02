@@ -53,4 +53,30 @@ export const NotesActiveDaysLoader = ({
 
 NotesActiveDaysLoader.propTypes = loaderPropTypes;
 
+export const NOTES_WORDCOUNT = 'notes-wordcount';
+
+export const notesWordCountLoader = loadFunc(
+  ({gmp, filter}) => gmp.notes.getWordCountsAggregates({filter})
+    .then(r => r.data),
+  NOTES_WORDCOUNT);
+
+export const NotesWordCountLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={NOTES_WORDCOUNT}
+    filter={filter}
+    load={notesWordCountLoader}
+    subscriptions={[
+      'results.timer',
+      'results.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+NotesWordCountLoader.propTypes = loaderPropTypes;
+
 // vim: set ts=2 sw=2 tw=80:
