@@ -525,6 +525,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/notes/dashboard/activedaysdisplay.js
      ${NG_SRC_DIR}/src/web/pages/notes/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/notes/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/notes/dashboard/wordclouddisplay.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
      ${NG_SRC_DIR}/src/web/pages/nvts/component.js
