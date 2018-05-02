@@ -51,6 +51,21 @@ export const totalCount = (groups = []) => {
 export const percent = (count, sum) =>
   (parse_int(count) / sum * 100).toFixed(1);
 
+export const activeDaysColorScale = scaleOrdinal()
+  .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  .range([
+    '#01558e',
+    '#97b5d1',
+    '#8fbfa5',
+    '#7fb290',
+    '#70a47c',
+    '#609769',
+    '#508a55',
+    '#407d42',
+    '#2f712f',
+    '#1b641b',
+  ]);
+
 export const riskFactorColorScale = scaleOrdinal()
   .domain([
     ERROR,

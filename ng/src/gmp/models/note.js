@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -37,6 +38,9 @@ import {
 } from '../parser.js';
 
 import Nvt from './nvt.js';
+
+export const NOTE_ACTIVE_UNLIMITED_VALUE = '-2';
+export const NOTE_INACTIVE_VALUE = '-1';
 
 class Note extends Model {
 
