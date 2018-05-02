@@ -53,4 +53,30 @@ export const OverridesActiveDaysLoader = ({
 
 OverridesActiveDaysLoader.propTypes = loaderPropTypes;
 
+export const OVERRIDES_WORDCOUNT = 'overrides-wordcount';
+
+export const overridesWordCountLoader = loadFunc(
+  ({gmp, filter}) => gmp.overrides.getWordCountsAggregates({filter})
+    .then(r => r.data),
+  OVERRIDES_WORDCOUNT);
+
+export const OverridesWordCountLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={OVERRIDES_WORDCOUNT}
+    filter={filter}
+    load={overridesWordCountLoader}
+    subscriptions={[
+      'results.timer',
+      'results.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+OverridesWordCountLoader.propTypes = loaderPropTypes;
+
 // vim: set ts=2 sw=2 tw=80:
