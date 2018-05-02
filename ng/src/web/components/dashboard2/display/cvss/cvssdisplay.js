@@ -30,6 +30,7 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
+import {NA_VALUE} from 'web/utils/severity';
 
 import BarChart from 'web/components/chart/bar';
 
@@ -81,12 +82,12 @@ class CvssDisplay extends React.Component {
         if (start > 0) {
           statusTerm = FilterTerm.fromString(`severity>${start}`);
         }
+        else if (start === NA_VALUE) {
+          statusTerm = FilterTerm.fromString('severity=""');
+        }
         else {
           statusTerm = FilterTerm.fromString(`severity=${start}`);
         }
-      }
-      else {
-        statusTerm = FilterTerm.fromString(`severity=""`);
       }
 
       if (is_defined(filter) && filter.hasTerm(statusTerm)) {
