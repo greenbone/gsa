@@ -33,6 +33,7 @@ import PropTypes from '../../../utils/proptypes';
 import CloseButton from '../../dialog/closebutton';
 
 export const DISPLAY_HEADER_HEIGHT = 20;
+export const DISPLAY_BORDER_WIDTH = 2;
 
 /*
  * Position the Menu relative to this element
@@ -77,7 +78,7 @@ const DisplayView = glamorous.div('display-view', {
   flexGrow: 1,
   flexShrink: 1,
   flexBasis: 0,
-  backgroundColor: Theme.dialogGray,
+  backgroundColor: Theme.white,
   overflow: 'hidden',
 });
 
@@ -85,6 +86,10 @@ const DisplayContent = glamorous.div('display-content', {
   display: 'flex',
   flexGrow: 1,
   flexShrink: 1,
+  overflowY: 'hidden',
+  borderLeft: '1px solid ' + Theme.lightGray,
+  borderRight: '1px solid ' + Theme.lightGray,
+  borderBottom: '1px solid ' + Theme.lightGray,
 });
 
 const DisplayTitle = glamorous.div('display-title', {

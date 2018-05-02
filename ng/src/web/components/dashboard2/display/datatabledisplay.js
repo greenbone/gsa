@@ -1,6 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
@@ -20,52 +21,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale';
+import PropTypes from '../../../utils/proptypes';
 
-import PropTypes from 'web/utils/proptypes';
+import DataDisplay from './datadisplay';
+import DataTable from './datatable';
 
-import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
-import {registerDisplay} from 'web/components/dashboard2/registry';
-
-import {ResultsSeverityLoader} from './loaders';
-
-const ResultsCvssDisplay = ({
-  filter,
+const DataTableDisplay = ({
+  dataRow,
+  dataTitles,
   ...props
 }) => (
-  <ResultsSeverityLoader
-    filter={filter}
+  <DataDisplay
+    {...props}
+    dataRow={dataRow}
+    dataTitles={dataTitles}
   >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of Results')}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of Results')]}
-        title={({data: tdata}) =>
-          _('Results by CVSS (Total: {{count}})',
-            {count: tdata.total})}
+    {({data}) => (
+      <DataTable
+        header={dataTitles}
+        data={data}
+        row={dataRow}
       />
     )}
-  </ResultsSeverityLoader>
+  </DataDisplay>
 );
 
-ResultsCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
+DataTableDisplay.propTypes = {
+  data: PropTypes.any,
+  dataRow: PropTypes.func.isRequired,
+  dataTitles: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-const DISPLAY_ID = 'result-by-cvss';
-
-ResultsCvssDisplay.displayId = DISPLAY_ID;
-
-registerDisplay(DISPLAY_ID, ResultsCvssDisplay, {
-  title: _('Results by CVSS'),
-});
-
-export default ResultsCvssDisplay;
+export default DataTableDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

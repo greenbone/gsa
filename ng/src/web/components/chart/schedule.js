@@ -50,6 +50,7 @@ const margin = {
   right: 40,
   bottom: 40,
   left: 60,
+  triangle: 10,
 };
 
 const MAX_LABEL_LENGTH = 25;
@@ -373,7 +374,7 @@ class ScheduleChart extends React.Component {
             })}
           </Group>
           <Group
-            left={width - TRIANGLE_WIDTH}
+            left={width - margin.triangle - TRIANGLE_WIDTH}
             top={margin.top}
           >
             {futureRuns.map((run, i) => (

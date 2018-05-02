@@ -173,7 +173,7 @@ const DISPLAY_ID = 'task-by-status';
 TasksStatusDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, TasksStatusDisplay, {
-  title: _('Tasks by Status'),
+  title: _('Chart: Tasks by Status'),
 });
 
 export default TasksStatusDisplay;

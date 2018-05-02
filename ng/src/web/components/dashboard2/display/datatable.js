@@ -38,6 +38,7 @@ const Margin = glamorous.div({
   margin: 10,
   display: 'flex',
   flexGrow: 1,
+  overflowY: 'auto',
 });
 
 const DataTable = ({

@@ -24,14 +24,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {TasksSeverityLoader} from './loaders';
 
-const TasksSeverityDisplay = ({
+export const TasksSeverityDisplay = ({
   filter,
   ...props
 }) => (
@@ -42,7 +43,6 @@ const TasksSeverityDisplay = ({
       <SeverityClassDisplay
         {...props}
         {...loaderProps}
-        dataTitles={[_('Severity'), _('# of Tasks')]}
         filter={filter}
         title={({data: tdata}) =>
           _('Tasks by Severity Class (Total: {{count}})',
@@ -60,10 +60,40 @@ const DISPLAY_ID = 'task-by-severity-class';
 
 TasksSeverityDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, TasksSeverityDisplay, {
-  title: _('Tasks by Severity Class'),
+export const TasksSeverityTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of Tasks')]}
+        title={({data: tdata}) =>
+          _('Tasks by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </TasksSeverityLoader>
+);
+
+TasksSeverityTableDisplay.displayId = 'task-by-severity-class-table';
+
+TasksSeverityTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+registerDisplay(TasksSeverityTableDisplay.displayId,
+  TasksSeverityTableDisplay, {
+  title: _('Table: Tasks by Severity Class'),
 });
 
-export default TasksSeverityDisplay;
+registerDisplay(DISPLAY_ID, TasksSeverityDisplay, {
+  title: _('Chart: Tasks by Severity Class'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

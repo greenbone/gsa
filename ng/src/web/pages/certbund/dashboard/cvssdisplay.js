@@ -25,10 +25,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import CvssDisplay from '../../../components/dashboard2/display/cvssdisplay';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CertBundSeverityLoader} from './loaders';
 

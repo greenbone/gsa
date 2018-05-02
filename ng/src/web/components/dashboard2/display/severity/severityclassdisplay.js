@@ -24,150 +24,18 @@ import React from 'react';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_severity, parse_int} from 'gmp/parser';
-
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
 
-import {
-  NA_VALUE,
-  resultSeverityRiskFactor,
-  translateRiskFactor,
-  getSeverityLevels,
-  LOG,
-  FALSE_POSITIVE,
-  ERROR,
-  NA,
-  HIGH,
-  MEDIUM,
-  LOW,
-  LOG_VALUE,
-  FALSE_POSITIVE_VALUE,
-  ERROR_VALUE,
-} from '../../../utils/severity';
+import {NA_VALUE} from 'web/utils/severity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from '../../chart/donut3d';
+import DonutChart from 'web/components/chart/donut3d';
 
-import DataDisplay from './datadisplay';
+import DataDisplay from '../datadisplay';
 
-import {
-  totalCount,
-  percent,
-  riskFactorColorScale,
-} from './utils';
-
-const format = value => value.toFixed(1);
-
-const transformSeverityData = (
-  data = {},
-  {severityClass: severityClassType}
-) => {
-  const {groups = []} = data;
-
-  const sum = totalCount(groups);
-
-  const severityClasses = groups.reduce((allSeverityClasses, group) => {
-    let {value} = group;
-
-    value = parse_severity(value);
-    if (!is_defined(value)) {
-      value = NA_VALUE;
-    }
-
-    const riskFactor = resultSeverityRiskFactor(value, severityClassType);
-    const severityClass = allSeverityClasses[riskFactor] || {};
-
-    let {count = 0} = severityClass;
-    count += parse_int(group.count);
-
-    allSeverityClasses[riskFactor] = {
-      count,
-      riskFactor,
-    };
-
-    return allSeverityClasses;
-  }, {});
-
-  const {high, medium, low} = getSeverityLevels(severityClassType);
-
-  const tdata = Object.values(severityClasses).map(severityClass => {
-    const {count, riskFactor} = severityClass;
-    const perc = percent(count, sum);
-    const label = translateRiskFactor(riskFactor);
-
-    let toolTip;
-    let limit;
-    let filterValue;
-
-    switch (riskFactor) {
-      case HIGH:
-        toolTip = `${label} (${format(high)} - 10.0)`;
-        filterValue = {
-          start: high,
-          end: 10,
-        };
-        break;
-      case MEDIUM:
-        limit = format(high - 0.1);
-        toolTip = `${label} (${format(medium)} - ${limit})`;
-        filterValue = {
-          start: medium,
-          end: limit,
-        };
-        break;
-      case LOW:
-        limit = format(medium - 0.1);
-        toolTip = `${label} (${format(low)} - ${limit})`;
-        filterValue = {
-          start: low,
-          end: limit,
-        };
-        break;
-      case LOG:
-        toolTip = `${label}`;
-        filterValue = {
-          start: LOG_VALUE,
-        };
-        break;
-      case FALSE_POSITIVE:
-        toolTip = `${label}`;
-        filterValue = {
-          start: FALSE_POSITIVE_VALUE,
-        };
-        break;
-      case ERROR:
-        toolTip = `${label}`;
-        filterValue = {
-          start: ERROR_VALUE,
-        };
-        break;
-      case NA:
-        toolTip = `${label}`;
-        filterValue = {
-          start: NA_VALUE,
-        };
-        break;
-      default:
-        break;
-    }
-
-    toolTip = `${toolTip}: ${perc}% (${count})`;
-
-    return {
-      value: count,
-      label,
-      toolTip,
-      color: riskFactorColorScale(riskFactor),
-      filterValue,
-    };
-  });
-
-  tdata.total = sum;
-
-  return tdata;
-};
+import transformSeverityData from './severityclasstransform';
 
 class SeverityClassDisplay extends React.Component {
 
@@ -233,7 +101,6 @@ class SeverityClassDisplay extends React.Component {
       <DataDisplay
         {...props}
         dataTransform={transformSeverityData}
-        dataRow={({row}) => [row.label, row.value]}
       >
         {({width, height, data, svgRef}) => (
           <DonutChart

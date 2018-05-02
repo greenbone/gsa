@@ -25,10 +25,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import SeverityClassDisplay from '../../../components/dashboard2/display/severityclassdisplay'; // eslint-disable-line max-len
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ResultsSeverityLoader} from './loaders';
 
