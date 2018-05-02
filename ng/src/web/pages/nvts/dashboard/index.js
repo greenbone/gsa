@@ -51,13 +51,9 @@ const NvtsDashboard = ({
     ]}
     defaultContent={[
       [
-        NvtsCvssDisplay.displayId,
-        NvtsFamilyDisplay.displayId,
         NvtsSeverityDisplay.displayId,
-      ],
-      [
-        NvtsQodDisplay.displayId,
-        NvtsQodTypeDisplay.displayId,
+        // 'nvt-by-created', // TODO
+        NvtsFamilyDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}

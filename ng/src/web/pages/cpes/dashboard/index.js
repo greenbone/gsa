@@ -45,8 +45,9 @@ const CpesDashboard = ({
     ]}
     defaultContent={[
       [
-        CpesCvssDisplay.displayId,
         CpesSeverityClassDisplay.displayId,
+        // 'cpe-by-created', // TODO
+        CpesCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}

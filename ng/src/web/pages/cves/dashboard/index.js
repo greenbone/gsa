@@ -45,8 +45,9 @@ const CvesDashboard = ({
     ]}
     defaultContent={[
       [
-        CvesCvssDisplay.displayId,
         CvesSeverityClassDisplay.displayId,
+        // 'cve-by-created', // TODO
+        CvesCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}

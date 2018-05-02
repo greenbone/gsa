@@ -49,10 +49,10 @@ const HostsDashboard = ({
     ]}
     defaultContent={[
       [
-        HostsCvssDisplay.displayId,
         HostsSeverityClassDisplay.displayId,
         HostsTopologyDisplay.displayId,
-        HostsVulnScoreDisplay.displayId,
+        HostsCvssDisplay.displayId,
+        // 'host-by-modification-time', // TODO
       ],
     ]}
     maxItemsPerRow={4}
