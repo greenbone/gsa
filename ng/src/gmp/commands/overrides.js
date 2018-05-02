@@ -120,6 +120,15 @@ class OverridesCommand extends EntitiesCommand {
       maxGroups: 250,
     });
   }
+
+  getWordCountsAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'override',
+      group_column: 'text',
+      aggregate_mode: 'word_counts',
+      filter,
+    });
+  }
 };
 
 register_command('override', OverrideCommand);
