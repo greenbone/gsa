@@ -45,8 +45,9 @@ const DfnCertDashboard = ({
     ]}
     defaultContent={[
       [
-        DfnCertCvssDisplay.displayId,
         DfnCertSeverityClassDisplay.displayId,
+        // 'dfn_cert_adv-by-created', // TODO
+        DfnCertCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}

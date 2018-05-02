@@ -48,8 +48,8 @@ const OvaldefDashboard = ({
     defaultContent={[
       [
         OvaldefSeverityClassDisplay.displayId,
+        // 'ovaldef-by-created', // TODO
         OvaldefCvssDisplay.displayId,
-        OvaldefClassDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}

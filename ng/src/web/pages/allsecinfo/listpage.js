@@ -48,7 +48,8 @@ const ToolBarIcons = props => {
 const Dashboard = withDashboard({
   hideFilterSelect: true,
   configPrefId: '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864',
-  defaultControllersString: '',
+  defaultControllersString: 'allinfo-by-severity-class|allinfo-by-created|' +
+    'allinfo-by-cvss',
   defaultControllerString: 'allinfo-by-cvss',
 })(SecInfoCharts);
 

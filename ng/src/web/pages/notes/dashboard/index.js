@@ -46,6 +46,7 @@ const NotesDashboard = ({
     defaultContent={[
       [
         NotesActiveDaysDisplay.displayId,
+        // 'notes-by-created', // TODO
         NotesWordCloudDisplay.displayId,
       ],
     ]}

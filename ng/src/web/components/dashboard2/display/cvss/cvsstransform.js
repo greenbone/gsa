@@ -118,12 +118,9 @@ const transformCvssData = (data = {}, {severityClass}) => {
         toolTip = `${start}.1 - ${end}.0 (${label}): ${perc}% (${count})`;
       }
       else {
-        if (value === 0) {
-          filterValue = {
-            start: 0,
-            end: 0,
-          };
-        }
+        filterValue = {
+          start: value,
+        };
         toolTip = `${label}: ${perc}% (${count})`;
       }
       return {
