@@ -103,14 +103,23 @@ class NotesCommand extends EntitiesCommand {
     return root.get_notes.get_notes_response;
   }
 
-    getActiveDaysAggregates({filter} = {}) {
-      return this.getAggregates({
-        aggregate_type: 'note',
-        group_column: 'active_days',
-        filter,
-        maxGroups: 250,
-      });
-    }
+  getActiveDaysAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'note',
+      group_column: 'active_days',
+      filter,
+      maxGroups: 250,
+    });
+  }
+
+  getWordCountsAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'note',
+      group_column: 'text',
+      aggregate_mode: 'word_counts',
+      filter,
+    });
+  }
 };
 
 register_command('note', NoteCommand);
