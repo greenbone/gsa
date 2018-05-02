@@ -22,9 +22,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-import {styleSheet} from 'glamor';
 
 import glamorous from 'glamorous';
 
@@ -46,7 +43,6 @@ import Display, {
   DISPLAY_HEADER_HEIGHT,
 } from './display';
 import DisplayMenu from './displaymenu';
-import DataTable from './datatable';
 
 const ownProps = [
   'title',
@@ -95,7 +91,6 @@ class DataDisplay extends React.Component {
 
     this.handleOpenCopyableSvg = this.handleOpenCopyableSvg.bind(this);
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
-    this.handleDataTable = this.handleDataTable.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
   }
 
@@ -217,59 +212,6 @@ class DataDisplay extends React.Component {
     download.click();
   }
 
-  handleDataTable() {
-    const {dataTitles, dataRow} = this.props;
-    const {data, title} = this.state;
-
-    const table = (
-      <React.Fragment>
-        <h1>{title}</h1>
-        <DataTable
-          header={dataTitles}
-          row={dataRow}
-          data={data}
-        />
-      </React.Fragment>
-    );
-
-    const {document} = window.open('', '_blank');
-
-    // create new empty div element and add it to the body
-    const body = document.querySelector('body');
-    const div = document.createElement('div');
-    body.appendChild(div);
-
-    // create new style element and add it to the head
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    style.appendChild(document.createTextNode(''));
-    const head = document.querySelector('head');
-    head.appendChild(style);
-
-    // add a title to the new document
-    const titleEl = document.createElement('title');
-    titleEl.appendChild(document.createTextNode(
-      _('Greenbone Security Assistant - Chart data table')
-    ));
-    head.appendChild(titleEl);
-
-    ReactDOM.render(table, div, () => {
-      // this is called after successful rendering
-
-      // get all generated css style rules
-      const cssRules = styleSheet.rules();
-
-      for (const {cssText} of cssRules) {
-        // css styles added with insertRule aren't editable
-        // therefore only use insertRule in production because it is faster
-        process.env.NODE_ENV === 'development' ?
-          style.appendChild(document.createTextNode(cssText)) :
-          style.sheet.insertRule(cssText);
-      }
-    });
-
-  }
-
   componentWillUnmount() {
     this.cleanupDownloadSvg();
   }
@@ -319,11 +261,6 @@ class DataDisplay extends React.Component {
         menu={
           showDataMenus || hasSvg ?
             <DisplayMenu>
-              {showDataMenus &&
-                <MenuEntry onClick={this.handleDataTable}>
-                  {_('Show Table')}
-                </MenuEntry>
-              }
               {hasSvg &&
                 <MenuEntry onClick={this.handleOpenCopyableSvg}>
                   {_('Show copyable SVG')}
