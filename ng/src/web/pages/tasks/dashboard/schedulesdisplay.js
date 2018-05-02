@@ -89,7 +89,7 @@ const DISPLAY_ID = 'task-by-schedules';
 TasksSchedulesDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, TasksSchedulesDisplay, {
-  title: _('Next Scheduled Tasks'),
+  title: _('Chart: Next Scheduled Tasks'),
 });
 
 export default TasksSchedulesDisplay;

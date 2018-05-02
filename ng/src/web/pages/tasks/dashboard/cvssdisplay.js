@@ -62,7 +62,7 @@ const DISPLAY_ID = 'task-by-cvss';
 TasksCvssDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, TasksCvssDisplay, {
-  title: _('Tasks by CVSS'),
+  title: _('Chart: Tasks by CVSS'),
 });
 
 export default TasksCvssDisplay;

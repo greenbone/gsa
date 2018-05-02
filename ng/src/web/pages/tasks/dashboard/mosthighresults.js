@@ -137,7 +137,7 @@ const TasksMostHighResultsDisplayWithRouter = withRouter(
 TasksMostHighResultsDisplayWithRouter.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, TasksMostHighResultsDisplayWithRouter, {
-  title: _('Tasks with most High Results per Host'),
+  title: _('Chart: Tasks with most High Results per Host'),
 });
 
 export default TasksMostHighResultsDisplayWithRouter;

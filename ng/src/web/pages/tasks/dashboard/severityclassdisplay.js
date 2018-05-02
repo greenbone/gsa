@@ -61,7 +61,7 @@ const DISPLAY_ID = 'task-by-severity-class';
 TasksSeverityDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, TasksSeverityDisplay, {
-  title: _('Tasks by Severity Class'),
+  title: _('Chart: Tasks by Severity Class'),
 });
 
 export default TasksSeverityDisplay;
