@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
@@ -31,6 +33,10 @@ import Pie from './pie';
 import ToolTip from './tooltip';
 import Label from './label';
 import Svg from './svg';
+
+const StyledLayout = glamorous(Layout)({
+  overflow: 'hidden',
+});
 
 const Arc = ({
   path,
@@ -94,7 +100,7 @@ const DonutChart = ({
 }) => {
   const radius = (height - margin.top) / 2;
   return (
-    <Layout align={['start', 'start']}>
+    <StyledLayout align={['start', 'start']}>
       <Svg
         width={width}
         height={height}
@@ -128,7 +134,7 @@ const DonutChart = ({
       {data.length > 0 &&
         <Legend data={data} />
       }
-    </Layout>
+    </StyledLayout>
   );
 };
 

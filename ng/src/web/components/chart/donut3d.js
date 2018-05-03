@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {color as d3color} from 'd3-color';
 
 import {is_defined} from 'gmp/utils/identity';
@@ -42,6 +44,10 @@ import Svg from './svg';
 import Group from './group';
 
 const LEGEND_MARGIN = 20;
+
+const StyledLayout = glamorous(Layout)({
+  overflow: 'hidden',
+});
 
 const margin = {
   top: 20,
@@ -298,7 +304,7 @@ class Donut3DChart extends React.Component {
       innerRadiusY,
     };
     return (
-      <Layout align={['start', 'start']}>
+      <StyledLayout align={['start', 'start']}>
         <Svg
           width={width}
           height={height}
@@ -380,7 +386,7 @@ class Donut3DChart extends React.Component {
             onItemClick={onLegendItemClick}
           />
         }
-      </Layout>
+      </StyledLayout>
     );
   }
 }
