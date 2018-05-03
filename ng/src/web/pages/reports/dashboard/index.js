@@ -29,7 +29,10 @@ import Dashboard from '../../../components/dashboard2/dashboard';
 
 import ReportsCvssDisplay from './cvssdisplay';
 import ReportsSeverityDisplay from './severityclassdisplay';
-import {ReportsHighResultsDisplay} from './highresultsdisplay';
+import {
+  ReportsHighResultsDisplay,
+  ReportsHighResultsTableDisplay,
+} from './highresultsdisplay';
 
 export const REPORTS_DASHBOARD_ID = 'e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071';
 
@@ -44,6 +47,7 @@ const ReportsDashboard = ({
       ReportsCvssDisplay.displayId,
       ReportsHighResultsDisplay.displayId,
       ReportsSeverityDisplay.displayId,
+      ReportsHighResultsTableDisplay.displayId,
     ]}
     defaultContent={[
       [
