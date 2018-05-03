@@ -36,6 +36,7 @@ import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
+import {setRef} from '../../utils/render';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Axis from './axis';
@@ -50,6 +51,9 @@ const margin = {
   bottom: 55,
   left: 60,
 };
+
+const findX = (timeline, value) => d => timeline ?
+  d.x.isSame(value) : d.x === value;
 
 const lineCss = css({
   shapeRendering: 'crispEdges',
@@ -113,8 +117,10 @@ class LineChart extends React.Component {
       y: PropTypes.number.isRequired,
       y2: PropTypes.number.isRequired,
     })),
+    displayLegend: PropTypes.bool,
     height: PropTypes.number.isRequired,
     numTicks: PropTypes.number,
+    svgRef: PropTypes.ref,
     timeline: PropTypes.bool,
     width: PropTypes.number.isRequired,
     xAxisLabel: PropTypes.string,
@@ -185,12 +191,12 @@ class LineChart extends React.Component {
 
   endRangeSelection(event) {
     const {rangeX, infoX, data} = this.state;
-    const {onRangeSelected} = this.props;
+    const {onRangeSelected, timeline = false} = this.props;
 
     if (onRangeSelected) {
       const direction = infoX >= rangeX;
-      const start = {...data.find(d => d.x === rangeX)};
-      const end = {...data.find(d => d.x === infoX)};
+      const start = {...data.find(findX(timeline, rangeX))};
+      const end = {...data.find(findX(timeline, infoX))};
 
       if (direction) {
         onRangeSelected(start, end);
@@ -312,9 +318,12 @@ class LineChart extends React.Component {
       return null;
     }
 
-    const findFunc = timeline ? d => d.x.isSame(infoX) : d => d.x === infoX;
-    const value = data.find(findFunc);
-    const {label, y, y2} = value;
+    const value = data.find(findX(timeline, infoX));
+    if (!is_defined(value)) {
+      return null;
+    }
+
+    const {label = '', y, y2} = value;
 
     const x = xScale(infoX);
     const infoWidth = Math.max(label.length * 8 + 20, 100); // 8px per letter is just an assumption
@@ -449,7 +458,9 @@ class LineChart extends React.Component {
       width,
     } = this.state;
     const {
+      displayLegend = true,
       numTicks,
+      svgRef,
       xAxisLabel,
       yAxisLabel,
       y2AxisLabel,
@@ -465,7 +476,7 @@ class LineChart extends React.Component {
         <Svg
           width={width}
           height={height}
-          innerRef={ref => this.svg = ref}
+          innerRef={setRef(svgRef, ref => this.svg = ref)}
           onMouseLeave={hasValue ? this.hideInfo : undefined}
           onMouseEnter={hasValue ? this.showInfo : undefined}
           onMouseMove={hasValue ? this.handleMouseMove : undefined}
@@ -559,7 +570,7 @@ class LineChart extends React.Component {
             {this.renderRange()}
           </Group>
         </Svg>
-        {hasLines &&
+        {hasLines && displayLegend &&
           <Legend
             innerRef={ref => this.legend = ref}
             data={[yLine, y2Line]}

@@ -53,4 +53,30 @@ export const ReportsSeverityLoader = ({
 
 ReportsSeverityLoader.propTypes = loaderPropTypes;
 
+export const REPORTS_HIGH_RESULTS = 'reports-high-results';
+
+export const reportsHighResultsLoader = loadFunc(
+  ({gmp, filter}) => gmp.reports.getHighResultsAggregates({filter})
+    .then(r => r.data),
+  REPORTS_HIGH_RESULTS);
+
+export const ReportsHighResultsLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={REPORTS_HIGH_RESULTS}
+    filter={filter}
+    load={reportsHighResultsLoader}
+    subscriptions={[
+      'reports.timer',
+      'reports.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+ReportsHighResultsLoader.propTypes = loaderPropTypes;
+
 // vim: set ts=2 sw=2 tw=80:

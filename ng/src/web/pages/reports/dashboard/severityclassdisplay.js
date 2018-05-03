@@ -62,7 +62,7 @@ const DISPLAY_ID = 'report-by-severity-class';
 ReportsSeverityDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, ReportsSeverityDisplay, {
-  title: _('Reports by Severity Class'),
+  title: _('Chart: Reports by Severity Class'),
 });
 
 export default ReportsSeverityDisplay;
