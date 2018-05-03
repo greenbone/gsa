@@ -36,6 +36,7 @@ import Layout from '../layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
+import {setRef} from '../../utils/render';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Axis from './axis';
@@ -119,6 +120,7 @@ class LineChart extends React.Component {
     displayLegend: PropTypes.bool,
     height: PropTypes.number.isRequired,
     numTicks: PropTypes.number,
+    svgRef: PropTypes.ref,
     timeline: PropTypes.bool,
     width: PropTypes.number.isRequired,
     xAxisLabel: PropTypes.string,
@@ -458,6 +460,7 @@ class LineChart extends React.Component {
     const {
       displayLegend = true,
       numTicks,
+      svgRef,
       xAxisLabel,
       yAxisLabel,
       y2AxisLabel,
@@ -473,7 +476,7 @@ class LineChart extends React.Component {
         <Svg
           width={width}
           height={height}
-          innerRef={ref => this.svg = ref}
+          innerRef={setRef(svgRef, ref => this.svg = ref)}
           onMouseLeave={hasValue ? this.hideInfo : undefined}
           onMouseEnter={hasValue ? this.showInfo : undefined}
           onMouseMove={hasValue ? this.handleMouseMove : undefined}
