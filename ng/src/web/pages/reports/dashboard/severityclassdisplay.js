@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ReportsSeverityLoader} from './loaders';
 
-const ReportsSeverityDisplay = ({
+export const ReportsSeverityDisplay = ({
   filter,
   ...props
 }) => (
@@ -44,7 +45,6 @@ const ReportsSeverityDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
-        dataTitles={[_('Severity Class'), _('# of Reports')]}
         title={({data: tdata}) =>
           _('Reports by Severity Class (Total: {{count}})',
             {count: tdata.total})}
@@ -57,14 +57,43 @@ ReportsSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'report-by-severity-class';
+ReportsSeverityDisplay.displayId = 'report-by-severity-class';
 
-ReportsSeverityDisplay.displayId = DISPLAY_ID;
+export const ReportsSeverityTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <ReportsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of Reports')]}
+        title={({data: tdata}) =>
+          _('Reports by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </ReportsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, ReportsSeverityDisplay, {
+ReportsSeverityTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+ReportsSeverityTableDisplay.displayId = 'report-by-severity-class-table';
+
+registerDisplay(ReportsSeverityDisplay.displayId, ReportsSeverityDisplay, {
   title: _('Chart: Reports by Severity Class'),
 });
 
-export default ReportsSeverityDisplay;
+registerDisplay(ReportsSeverityTableDisplay.displayId,
+  ReportsSeverityTableDisplay, {
+    title: _('Table: Reports by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
