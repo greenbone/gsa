@@ -62,8 +62,14 @@ const lineCss = css({
 const LINE_HEIGHT = 15;
 
 const Text = glamorous.text({
+  fontSize: '12px',
+  fill: Theme.white,
+});
+
+const LabelTitle = glamorous.text({
   fontSize: '13px',
   fill: Theme.white,
+  fontFamily: 'monospace',
 });
 
 const lineDataPropType = PropTypes.shape({
@@ -364,13 +370,13 @@ class LineChart extends React.Component {
             left={2 * itemMargin}
             textAnchor="end"
           >
-            <Text
+            <LabelTitle
               x={infoWidth}
               y={0}
               fontWeight="bold"
             >
               {label}
-            </Text>
+            </LabelTitle>
             <Group>
               <Line
                 from={{x: 0, y: lineY}}
