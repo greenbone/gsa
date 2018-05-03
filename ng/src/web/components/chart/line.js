@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import moment from 'moment';
+
 import {css} from 'glamor';
 
 import glamorous from 'glamorous';
@@ -264,9 +266,20 @@ class LineChart extends React.Component {
     const xMin = Math.min(...xValues);
     const xMax = Math.max(...xValues);
 
-    const xDomain = timeline || data.length > 1 ?
-      [xMin, xMax] :
-      [xMin - 1, xMax + 1];
+    let xDomain;
+    if (timeline) {
+      xDomain = data.length > 1 ?
+        [xMin, xMax] :
+        [
+          moment(xMin).subtract(1, 'day').toDate(),
+          moment(xMax).add(1, 'day').toDate(),
+        ];
+    }
+    else {
+      xDomain = data.length > 1 ?
+        [xMin, xMax] :
+        [xMin - 1, xMax + 1];
+    }
 
     const xScale = timeline ?
       scaleUtc()
