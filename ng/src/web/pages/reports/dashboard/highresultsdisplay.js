@@ -71,13 +71,18 @@ export class ReportsHighResultsDisplay extends React.Component {
       return;
     }
 
-    const {x: startDate} = start;
-    const {x: endDate} = end;
+    let {x: startDate} = start;
+    let {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
     let newFilter = is_defined(filter) ? filter.copy() : new Filter();
 
     if (is_defined(startDate)) {
+      if (startDate.isSame(endDate)) {
+        startDate = startDate.clone().subtract(1, 'day');
+        endDate = endDate.clone().add(1, 'day');
+      }
+
       const startTerm = FilterTerm.fromString(
         `date>${startDate.format(dateFormat)}`);
 
@@ -122,7 +127,7 @@ export class ReportsHighResultsDisplay extends React.Component {
                 data={tdata}
                 yAxisLabel={_('Max High')}
                 y2AxisLabel={_('Max High per Host')}
-                xAxisLabel={_('time')}
+                xAxisLabel={_('Time')}
                 yLine={{
                   color: Theme.darkGreen,
                   label: _('Max High'),
