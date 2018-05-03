@@ -34,7 +34,7 @@ import {
   NvtsSeverityTableDisplay,
 } from './severityclassdisplay';
 import {NvtsQodDisplay, NvtsQodTableDisplay} from './qoddisplay';
-import {NvtsQodTypeDisplay} from './qodtypedisplay';
+import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './qodtypedisplay';
 import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './createddisplay';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
@@ -58,6 +58,7 @@ const NvtsDashboard = ({
       NvtsFamilyTableDisplay.displayId,
       NvtsCreatedTableDisplay.displayId,
       NvtsQodTableDisplay.displayId,
+      NvtsQodTypeTableDisplay.displayId,
     ]}
     defaultContent={[
       [
