@@ -27,9 +27,9 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {NvtsCvssDisplay} from './cvssdisplay';
+import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './cvssdisplay';
 import {NvtsFamilyDisplay} from './familydisplay';
-import {NvtsSeverityDisplay} from './severityclassdisplay';
+import {NvtsSeverityDisplay, NvtsSeverityTableDisplay} from './severityclassdisplay';
 import {NvtsQodDisplay} from './qoddisplay';
 import {NvtsQodTypeDisplay} from './qodtypedisplay';
 import {NvtsCreatedDisplay} from './createddisplay';
@@ -50,6 +50,8 @@ const NvtsDashboard = ({
       NvtsQodDisplay.displayId,
       NvtsQodTypeDisplay.displayId,
       NvtsCreatedDisplay.displayId,
+      NvtsCvssTableDisplay.displayId,
+      NvtsSeverityTableDisplay.displayId,
     ]}
     defaultContent={[
       [

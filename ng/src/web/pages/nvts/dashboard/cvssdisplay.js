@@ -28,6 +28,7 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
@@ -45,7 +46,6 @@ export const NvtsCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of NVTs')}
         filter={filter}
-        dataTitles={[_('Severity'), _('# of NVTs')]}
         title={({data: tdata}) =>
           _('NVTs by CVSS (Total: {{count}})',
             {count: tdata.total})}
@@ -58,12 +58,41 @@ NvtsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'nvt-by-cvss';
+NvtsCvssDisplay.displayId = 'nvt-by-cvss';
 
-NvtsCvssDisplay.displayId = DISPLAY_ID;
+export const NvtsCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <NvtsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of NVTs')]}
+        title={({data: tdata = {}}) =>
+          _('NVTs by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </NvtsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, NvtsCvssDisplay, {
+NvtsCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NvtsCvssTableDisplay.displayId = 'nvt-by-cvss-table';
+
+registerDisplay(NvtsCvssDisplay.displayId, NvtsCvssDisplay, {
   title: _('Chart: NVTs by CVSS'),
+});
+
+registerDisplay(NvtsCvssTableDisplay.displayId, NvtsCvssTableDisplay, {
+  title: _('Table: NVTs by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:
