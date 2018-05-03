@@ -32,7 +32,7 @@ import PropTypes from '../../utils/proptypes';
 
 import Resizer from './resizer';
 
-const MIN_HEIGHT = 50;
+const MIN_HEIGHT = 175;
 
 const GridRow = glamorous.div('grid-row', {
   display: 'flex',
