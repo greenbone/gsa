@@ -46,12 +46,12 @@ export const NvtsCreatedDisplay = ({
         filter={filter}
         title={({data: tdata}) =>
           _('NVTs by Creation Time')}
-        yAxisLabel={_('NVTs per Year')}
+        yAxisLabel={_('# of created NVTs')}
         y2AxisLabel={_('Total NVTs')}
         xAxisLabel={_('Time')}
         yLine={{
           color: Theme.darkGreen,
-          label: _('NVTs per Year'),
+          label: _('Created NVTs'),
         }}
         y2Line={{
           color: Theme.darkGreen,
