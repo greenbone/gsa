@@ -28,6 +28,8 @@ import Loader, {
 } from '../../../components/dashboard2/data/loader';
 
 export const OVERRIDES_ACTIVE_DAYS = 'overrides-active-days';
+export const OVERRIDES_CREATED = 'overrides-by-created';
+export const OVERRIDES_WORDCOUNT = 'overrides-wordcount';
 
 export const overridesActiveDaysLoader = loadFunc(
   ({gmp, filter}) => gmp.overrides.getActiveDaysAggregates({filter})
@@ -53,7 +55,30 @@ export const OverridesActiveDaysLoader = ({
 
 OverridesActiveDaysLoader.propTypes = loaderPropTypes;
 
-export const OVERRIDES_WORDCOUNT = 'overrides-wordcount';
+export const overridesCreatedLoader = loadFunc(
+  ({gmp, filter}) => gmp.overrides.getCreatedAggregates({filter})
+    .then(r => r.data),
+  OVERRIDES_CREATED);
+
+export const OverridesCreatedLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={OVERRIDES_CREATED}
+    filter={filter}
+    load={overridesCreatedLoader}
+    subscriptions={[
+      'nvts.timer',
+      'nvts.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+OverridesCreatedLoader.propTypes = loaderPropTypes;
+
 
 export const overridesWordCountLoader = loadFunc(
   ({gmp, filter}) => gmp.overrides.getWordCountsAggregates({filter})

@@ -30,8 +30,6 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
@@ -39,7 +37,6 @@ import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
-import OverridesCharts from './charts.js';
 import FilterDialog from './filterdialog.js';
 import OverridesTable from './table.js';
 import OverrideComponent from './component.js';
@@ -47,15 +44,6 @@ import OverrideComponent from './component.js';
 import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard/index.js';
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter.js';
-
-
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: '054862fe-0781-4527-b1aa-2113bcd16ce7',
-  defaultControllersString: 'override-by-active-days|' +
-    'override-by-created|override-by-text-words',
-  defaultControllerString: 'override-by-active-days',
-})(OverridesCharts);
 
 const ToolBarIcons = ({
   onOverrideCreateClick,
@@ -111,7 +99,6 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard={Dashboard}
         filterEditDialog={FilterDialog}
         sectionIcon="override.svg"
         table={OverridesTable}
