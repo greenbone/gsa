@@ -27,11 +27,11 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
-import SeverityClassTableDisplay from '../../../components/dashboard2/display/severity/severityclasstabledisplay';
 
 export const NvtsSeverityDisplay = ({
   filter,
