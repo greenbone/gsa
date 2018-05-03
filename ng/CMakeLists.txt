@@ -510,6 +510,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/modifieddisplay.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/topologydisplay.js
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/vulnscoredisplay.js
