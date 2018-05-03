@@ -75,7 +75,7 @@ const transformFamilyData = (data = {}, {severityClass}) => {
   return tdata;
 };
 
-class NvtsFamilyDisplay extends React.Component {
+export class NvtsFamilyDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -161,7 +161,5 @@ NvtsFamilyDisplay.displayId = DISPLAY_ID;
 registerDisplay(DISPLAY_ID, NvtsFamilyDisplay, {
   title: _('Chart: NVTS by Family'),
 });
-
-export default NvtsFamilyDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

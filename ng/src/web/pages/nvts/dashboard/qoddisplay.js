@@ -65,7 +65,7 @@ const transformQodData = (data = {}) => {
   return tdata;
 };
 
-class NvtsQodDisplay extends React.Component {
+export class NvtsQodDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -142,7 +142,5 @@ NvtsQodDisplay.displayId = DISPLAY_ID;
 registerDisplay(DISPLAY_ID, NvtsQodDisplay, {
   title: _('Chart: NVTs by QoD'),
 });
-
-export default NvtsQodDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

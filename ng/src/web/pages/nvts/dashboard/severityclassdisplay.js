@@ -32,7 +32,7 @@ import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
 
-const NvtsSeverityDisplay = ({
+export const NvtsSeverityDisplay = ({
   filter,
   ...props
 }) => (

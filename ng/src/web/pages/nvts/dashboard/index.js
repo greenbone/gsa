@@ -27,11 +27,11 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import NvtsCvssDisplay from './cvssdisplay';
-import NvtsFamilyDisplay from './familydisplay';
-import NvtsSeverityDisplay from './severityclassdisplay';
-import NvtsQodDisplay from './qoddisplay';
-import NvtsQodTypeDisplay from './qodtypedisplay';
+import {NvtsCvssDisplay} from './cvssdisplay';
+import {NvtsFamilyDisplay} from './familydisplay';
+import {NvtsSeverityDisplay} from './severityclassdisplay';
+import {NvtsQodDisplay} from './qoddisplay';
+import {NvtsQodTypeDisplay} from './qodtypedisplay';
 import {NvtsCreatedDisplay} from './createddisplay';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';

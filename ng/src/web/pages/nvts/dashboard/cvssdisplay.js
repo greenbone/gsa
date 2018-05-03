@@ -32,7 +32,7 @@ import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
 
-const NvtsCvssDisplay = ({
+export const NvtsCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -65,7 +65,5 @@ NvtsCvssDisplay.displayId = DISPLAY_ID;
 registerDisplay(DISPLAY_ID, NvtsCvssDisplay, {
   title: _('Chart: NVTs by CVSS'),
 });
-
-export default NvtsCvssDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
