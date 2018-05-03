@@ -188,12 +188,12 @@ class LineChart extends React.Component {
 
   endRangeSelection(event) {
     const {rangeX, infoX, data} = this.state;
-    const {onRangeSelected} = this.props;
+    const {onRangeSelected, timeline = false} = this.props;
 
     if (onRangeSelected) {
       const direction = infoX >= rangeX;
-      const start = {...data.find(d => d.x === rangeX)};
-      const end = {...data.find(d => d.x === infoX)};
+      const start = {...data.find(findX(timeline, rangeX))};
+      const end = {...data.find(findX(timeline, infoX))};
 
       if (direction) {
         onRangeSelected(start, end);
