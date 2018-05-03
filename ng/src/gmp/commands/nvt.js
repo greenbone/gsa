@@ -78,6 +78,14 @@ class NvtsCommand extends InfoEntitiesCommand {
       filter,
     });
   }
+
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'nvt',
+      group_column: 'created',
+      filter,
+    });
+  }
 }
 
 register_command('nvt', NvtCommand);
