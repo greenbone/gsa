@@ -159,7 +159,7 @@ const DISPLAY_ID = 'nvt-by-family';
 NvtsFamilyDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, NvtsFamilyDisplay, {
-  title: _('NVTS by Family'),
+  title: _('Chart: NVTS by Family'),
 });
 
 export default NvtsFamilyDisplay;

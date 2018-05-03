@@ -139,7 +139,7 @@ const DISPLAY_ID = 'nvt-by-qod_type';
 NvtsQodTypeDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, NvtsQodTypeDisplay, {
-  title: _('NVTs by QoD-Type'),
+  title: _('Chart: NVTs by QoD-Type'),
 });
 
 export default NvtsQodTypeDisplay;

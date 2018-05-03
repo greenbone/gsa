@@ -62,7 +62,7 @@ const DISPLAY_ID = 'nvt-by-severity-class';
 NvtsSeverityDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, NvtsSeverityDisplay, {
-  title: _('NVTs by Severity Class'),
+  title: _('Chart: NVTs by Severity Class'),
 });
 
 export default NvtsSeverityDisplay;

@@ -63,7 +63,7 @@ const DISPLAY_ID = 'nvt-by-cvss';
 NvtsCvssDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, NvtsCvssDisplay, {
-  title: _('NVTs by CVSS'),
+  title: _('Chart: NVTs by CVSS'),
 });
 
 export default NvtsCvssDisplay;
