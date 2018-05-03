@@ -317,7 +317,11 @@ class LineChart extends React.Component {
     }
 
     const value = data.find(findX(timeline, infoX));
-    const {label, y, y2} = value;
+    if (!is_defined(value)) {
+      return null;
+    }
+
+    const {label = '', y, y2} = value;
 
     const x = xScale(infoX);
     const infoWidth = Math.max(label.length * 8 + 20, 100); // 8px per letter is just an assumption
