@@ -27,11 +27,36 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
+export const HOSTS_MODIFIED = 'hosts-modified';
 export const HOSTS_SEVERITY = 'hosts-severity';
 export const HOSTS_TOPOLOGY = 'hosts-topology';
 export const HOSTS_VULN_SCORE = 'hosts-vuln-score';
 
 const HOSTS_MAX_GROUPS = 10;
+
+export const hostsModifiedLoader = loadFunc(
+  ({gmp, filter}) => gmp.hosts.getModifiedAggregates({filter})
+    .then(r => r.data),
+  HOSTS_MODIFIED);
+
+export const HostsModifiedLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={HOSTS_MODIFIED}
+    filter={filter}
+    load={hostsModifiedLoader}
+    subscriptions={[
+      'hosts.timer',
+      'hosts.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+HostsModifiedLoader.propTypes = loaderPropTypes;
 
 export const hostsSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.hosts.getSeverityAggregates({filter})
