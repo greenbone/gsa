@@ -28,6 +28,7 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import HostsCvssDisplay from './cvssdisplay';
+import HostsModifiedDisplay from './modifieddisplay';
 import HostsSeverityClassDisplay from './severityclassdisplay';
 import HostsTopologyDisplay from './topologydisplay';
 import HostsVulnScoreDisplay from './vulnscoredisplay';
@@ -43,6 +44,7 @@ const HostsDashboard = ({
     filter={filter}
     permittedDisplays={[
       HostsCvssDisplay.displayId,
+      HostsModifiedDisplay.displayId,
       HostsSeverityClassDisplay.displayId,
       HostsTopologyDisplay.displayId,
       HostsVulnScoreDisplay.displayId,
@@ -50,9 +52,12 @@ const HostsDashboard = ({
     defaultContent={[
       [
         HostsSeverityClassDisplay.displayId,
+        HostsModifiedDisplay.displayId,
         HostsTopologyDisplay.displayId,
+      ],
+      [
         HostsCvssDisplay.displayId,
-        // 'host-by-modification-time', // TODO
+        HostsVulnScoreDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}
