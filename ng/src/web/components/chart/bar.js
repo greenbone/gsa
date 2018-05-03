@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {scaleBand, scaleLinear} from 'd3-scale';
 
 import {shorten} from 'gmp/utils/string';
@@ -36,6 +38,10 @@ import Group from './group';
 import Legend from './legend';
 import ToolTip from './tooltip';
 import Svg from './svg';
+
+const StyledLayout = glamorous(Layout)({
+  overflow: 'hidden',
+});
 
 const LEGEND_MARGIN = 20;
 
@@ -117,7 +123,7 @@ class BarChart extends React.Component {
       .nice();
 
     return (
-      <Layout align={['start', 'start']}>
+      <StyledLayout align={['start', 'start']}>
         <Svg
           innerRef={svgRef}
           width={width}
@@ -180,7 +186,7 @@ class BarChart extends React.Component {
             onItemClick={onLegendItemClick}
           />
         }
-      </Layout>
+      </StyledLayout>
     );
   }
 }

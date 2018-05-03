@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -81,6 +82,14 @@ export const lineDataPropType = PropTypes.shape({
   dashArray: PropTypes.string,
 });
 
+const crossPropTypes = {
+  color: PropTypes.toString.isRequired,
+  dashArray: PropTypes.toString,
+  lineWidth: PropTypes.number,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+};
+
 const Cross = ({
   x,
   y,
@@ -106,13 +115,34 @@ const Cross = ({
   </Group>
 );
 
-Cross.propTypes = {
-  color: PropTypes.toString.isRequired,
-  dashArray: PropTypes.toString,
-  lineWidth: PropTypes.number,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-};
+Cross.propTypes = crossPropTypes;
+
+const CrossY2 = ({
+  x,
+  y,
+  color,
+  dashArray,
+  lineWidth = 1,
+}) => (
+  <Group>
+    <Line
+      from={{x: x - 6, y}}
+      to={{x: x + 6, y}}
+      stroke={color}
+      strokeDasharray={[2, 1]}
+      strokeWidth={lineWidth}
+    />
+    <Line
+      from={{x, y: y - 6}}
+      to={{x, y: y + 6}}
+      stroke={color}
+      strokeDasharray={[2, 1]}
+      strokeWidth={lineWidth}
+    />
+  </Group>
+);
+
+CrossY2.propTypes = crossPropTypes;
 
 class LineChart extends React.Component {
 
@@ -289,12 +319,13 @@ class LineChart extends React.Component {
         .range([0, maxWidth])
         .domain(xDomain);
 
+    const yDomain = data.length > 1 ? [0, yMax] : [0, yMax * 2];
+
     const yScale = scaleLinear()
       .range([maxHeight, 0])
-      .domain([0, yMax])
+      .domain(yDomain)
       .nice();
 
-    // change y2Domain only to not overlap single data points for y and y2
     const y2Domain = data.length > 1 ? [0, y2Max] : [0, y2Max * 2];
     const y2Scale = scaleLinear()
       .range([maxHeight, 0])
@@ -575,7 +606,7 @@ class LineChart extends React.Component {
                   />
                 }
                 {is_defined(y2Line) &&
-                  <Cross
+                  <CrossY2
                     x={xScale(data[0].x)}
                     y={y2Scale(data[0].y2)}
                     color={y2Line.color}

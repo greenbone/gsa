@@ -28,6 +28,8 @@ import Loader, {
 } from '../../../components/dashboard2/data/loader';
 
 export const NOTES_ACTIVE_DAYS = 'notes-active-days';
+export const NOTES_CREATED = 'notes-by-created';
+export const NOTES_WORDCOUNT = 'notes-wordcount';
 
 export const notesActiveDaysLoader = loadFunc(
   ({gmp, filter}) => gmp.notes.getActiveDaysAggregates({filter})
@@ -53,7 +55,30 @@ export const NotesActiveDaysLoader = ({
 
 NotesActiveDaysLoader.propTypes = loaderPropTypes;
 
-export const NOTES_WORDCOUNT = 'notes-wordcount';
+export const notesCreatedLoader = loadFunc(
+  ({gmp, filter}) => gmp.notes.getCreatedAggregates({filter})
+    .then(r => r.data),
+  NOTES_CREATED);
+
+export const NotesCreatedLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={NOTES_CREATED}
+    filter={filter}
+    load={notesCreatedLoader}
+    subscriptions={[
+      'nvts.timer',
+      'nvts.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+NotesCreatedLoader.propTypes = loaderPropTypes;
+
 
 export const notesWordCountLoader = loadFunc(
   ({gmp, filter}) => gmp.notes.getWordCountsAggregates({filter})
