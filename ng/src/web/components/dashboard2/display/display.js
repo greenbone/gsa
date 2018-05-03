@@ -79,14 +79,12 @@ const DisplayView = glamorous.div('display-view', {
   flexShrink: 1,
   flexBasis: 0,
   backgroundColor: Theme.white,
-  overflow: 'hidden',
 });
 
 const DisplayContent = glamorous.div('display-content', {
   display: 'flex',
   flexGrow: 1,
   flexShrink: 1,
-  overflowY: 'hidden',
   borderLeft: '1px solid ' + Theme.lightGray,
   borderRight: '1px solid ' + Theme.lightGray,
   borderBottom: '1px solid ' + Theme.lightGray,

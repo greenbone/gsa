@@ -41,7 +41,6 @@ const GridItem = glamorous.div('grid-item', {
   flexGrow: 1,
   flexShrink: 1,
   flexBasis: 0,
-  overflow: 'hidden',
   userSelect: 'none',
   marginTop: GRID_ITEM_MARGIN.top + 'px',
   marginBottom: GRID_ITEM_MARGIN.bottom + 'px',
