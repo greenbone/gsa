@@ -27,7 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import ReportsCvssDisplay from './cvssdisplay';
+import {ReportsCvssDisplay, ReportsCvssTableDisplay} from './cvssdisplay';
 import ReportsSeverityDisplay from './severityclassdisplay';
 import {
   ReportsHighResultsDisplay,
@@ -47,6 +47,7 @@ const ReportsDashboard = ({
       ReportsCvssDisplay.displayId,
       ReportsHighResultsDisplay.displayId,
       ReportsSeverityDisplay.displayId,
+      ReportsCvssTableDisplay.displayId,
       ReportsHighResultsTableDisplay.displayId,
     ]}
     defaultContent={[

@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ReportsSeverityLoader} from './loaders';
 
-const ReportsCvssDisplay = ({
+export const ReportsCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -41,6 +42,33 @@ const ReportsCvssDisplay = ({
   >
     {loaderProps => (
       <CvssDisplay
+        {...props}
+        {...loaderProps}
+        yLabel={_('# of Reports')}
+        filter={filter}
+        title={({data: tdata}) =>
+          _('Reports by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </ReportsSeverityLoader>
+);
+
+ReportsCvssDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+ReportsCvssDisplay.displayId = 'report-by-cvss';
+
+export const ReportsCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <ReportsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
         {...props}
         {...loaderProps}
         yLabel={_('# of Reports')}
@@ -54,18 +82,18 @@ const ReportsCvssDisplay = ({
   </ReportsSeverityLoader>
 );
 
-ReportsCvssDisplay.propTypes = {
+ReportsCvssTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'report-by-cvss';
+ReportsCvssTableDisplay.displayId = 'reports-by-cvss-table';
 
-ReportsCvssDisplay.displayId = DISPLAY_ID;
-
-registerDisplay(DISPLAY_ID, ReportsCvssDisplay, {
+registerDisplay(ReportsCvssDisplay.displayId, ReportsCvssDisplay, {
   title: _('Chart: Reports by CVSS'),
 });
 
-export default ReportsCvssDisplay;
+registerDisplay(ReportsCvssTableDisplay.displayId, ReportsCvssTableDisplay, {
+  title: _('Table: Reports by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
