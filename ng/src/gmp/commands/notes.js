@@ -112,6 +112,15 @@ class NotesCommand extends EntitiesCommand {
     });
   }
 
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'note',
+      group_column: 'created',
+      aggregate_mode: 'count',
+      filter,
+    });
+  }
+
   getWordCountsAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'note',
