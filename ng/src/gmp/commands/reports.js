@@ -53,6 +53,18 @@ class ReportsCommand extends EntitiesCommand {
       filter,
     });
   }
+
+  getHighResultsAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'report',
+      group_column: 'date',
+      dataColumns: [
+        'high',
+        'high_per_host',
+      ],
+      filter,
+    });
+  }
 }
 
 class ReportCommand extends EntityCommand {
