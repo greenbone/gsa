@@ -63,7 +63,7 @@ const DISPLAY_ID = 'report-by-cvss';
 ReportsCvssDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, ReportsCvssDisplay, {
-  title: _('Reports by CVSS'),
+  title: _('Chart: Reports by CVSS'),
 });
 
 export default ReportsCvssDisplay;

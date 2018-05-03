@@ -151,7 +151,7 @@ ReportsHighResultsDisplay.displayId = 'report-by-high-results';
 
 registerDisplay(ReportsHighResultsDisplay.displayId,
   ReportsHighResultsDisplay, {
-    title: _('Chart - Reports with high Results'),
+    title: _('Chart: Reports with high Results'),
   },
 );
 
