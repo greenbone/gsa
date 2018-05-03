@@ -111,7 +111,7 @@ export class ReportsHighResultsDisplay extends React.Component {
             dataTransform={transformHighResults}
             filter={filter}
             title={({data: tdata}) =>
-              _('Reports with high Results')}
+              _('Reports with High Results')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <LineChart
