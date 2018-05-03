@@ -30,16 +30,17 @@ import Filter from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from '../../../components/chart/donut3d';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import DonutChart from 'web/components/chart/donut3d';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   totalCount,
   percent,
   qodColorScale,
-} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsQodLoader} from './loaders';
 
@@ -109,8 +110,6 @@ export class NvtsQodDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformQodData}
-            dataTitles={[_('QoD'), _('# of NVTs')]}
-            dataRow={({row}) => [row.label, row.value]}
             title={({data: tdata}) => _('NVTs by QoD (Total: {{count}})',
               {count: tdata.total})}
           >
@@ -135,12 +134,41 @@ NvtsQodDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'nvt-by-qod';
+NvtsQodDisplay.displayId = 'nvt-by-qod';
 
-NvtsQodDisplay.displayId = DISPLAY_ID;
+export const NvtsQodTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <NvtsQodLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[_('QoD'), _('# of NVTs')]}
+        dataRow={({row}) => [row.label, row.value]}
+        dataTransform={transformQodData}
+        title={({data: tdata}) => _('NVTs by QoD (Total: {{count}})',
+          {count: tdata.total})}
+      />
+    )}
+  </NvtsQodLoader>
+);
 
-registerDisplay(DISPLAY_ID, NvtsQodDisplay, {
+NvtsQodTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NvtsQodTableDisplay.displayId = 'nvt-by-qod-table';
+
+registerDisplay(NvtsQodDisplay.displayId, NvtsQodDisplay, {
   title: _('Chart: NVTs by QoD'),
+});
+
+registerDisplay(NvtsQodTableDisplay.displayId, NvtsQodTableDisplay, {
+  title: _('Table: NVTs by QoD'),
 });
 
 // vim: set ts=2 sw=2 tw=80:
