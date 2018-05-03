@@ -541,6 +541,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/nvts/row.js
      ${NG_SRC_DIR}/src/web/pages/nvts/solution.js
      ${NG_SRC_DIR}/src/web/pages/nvts/table.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/createddisplay.js
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/familydisplay.js
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/index.js
