@@ -74,7 +74,7 @@ const LabelTitle = glamorous.text({
   fontFamily: 'monospace',
 });
 
-const lineDataPropType = PropTypes.shape({
+export const lineDataPropType = PropTypes.shape({
   label: PropTypes.any.isRequired,
   color: PropTypes.toString.isRequired,
   width: PropTypes.number,
@@ -292,14 +292,14 @@ class LineChart extends React.Component {
     const yScale = scaleLinear()
       .range([maxHeight, 0])
       .domain([0, yMax])
-      .nice(true);
+      .nice();
 
     // change y2Domain only to not overlap single data points for y and y2
     const y2Domain = data.length > 1 ? [0, y2Max] : [0, y2Max * 2];
     const y2Scale = scaleLinear()
       .range([maxHeight, 0])
       .domain(y2Domain)
-      .nice(true);
+      .nice();
 
     return {
       data,
