@@ -74,7 +74,7 @@ const LabelTitle = glamorous.text({
   fontFamily: 'monospace',
 });
 
-const lineDataPropType = PropTypes.shape({
+export const lineDataPropType = PropTypes.shape({
   label: PropTypes.any.isRequired,
   color: PropTypes.toString.isRequired,
   width: PropTypes.number,
