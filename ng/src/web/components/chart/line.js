@@ -116,6 +116,7 @@ class LineChart extends React.Component {
       y: PropTypes.number.isRequired,
       y2: PropTypes.number.isRequired,
     })),
+    displayLegend: PropTypes.bool,
     height: PropTypes.number.isRequired,
     numTicks: PropTypes.number,
     timeline: PropTypes.bool,
@@ -451,6 +452,7 @@ class LineChart extends React.Component {
       width,
     } = this.state;
     const {
+      displayLegend = true,
       numTicks,
       xAxisLabel,
       yAxisLabel,
@@ -561,7 +563,7 @@ class LineChart extends React.Component {
             {this.renderRange()}
           </Group>
         </Svg>
-        {hasLines &&
+        {hasLines && displayLegend &&
           <Legend
             innerRef={ref => this.legend = ref}
             data={[yLine, y2Line]}
