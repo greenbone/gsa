@@ -26,20 +26,22 @@ import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
+
 import {parse_float, parse_severity} from 'gmp/parser';
+
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import PropTypes from '../../../utils/proptypes';
-import {severityFormat} from '../../../utils/render';
-import {resultSeverityRiskFactor} from '../../../utils/severity';
+import PropTypes from 'web/utils/proptypes';
+import {severityFormat} from 'web/utils/render';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
 
-import BubbleChart from '../../../components/chart/bubble';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {
-  riskFactorColorScale,
-} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import BubbleChart from 'web/components/chart/bubble';
+
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {riskFactorColorScale} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsFamilyLoader} from './loaders';
 
@@ -123,12 +125,6 @@ export class NvtsFamilyDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            dataTitles={[
-              _('Operating System'),
-              _('Max. average Severity Score'),
-              _('Severity'),
-            ]}
-            dataRow={({row}) => [row.label, row.value, row.severity]}
             dataTransform={transformFamilyData}
             title={({data: tdata}) =>
             _('NVTS by Family (Total: {{count}})', {count: tdata.total})}
@@ -154,12 +150,45 @@ NvtsFamilyDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'nvt-by-family';
+NvtsFamilyDisplay.displayId = 'nvt-by-family';
 
-NvtsFamilyDisplay.displayId = DISPLAY_ID;
+export const NvtsFamilyTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <NvtsFamilyLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[
+          _('NVT Familiy'),
+          _('# of NVTs'),
+          _('Severity'),
+        ]}
+        dataRow={({row}) => [row.label, row.value, row.severity]}
+        dataTransform={transformFamilyData}
+        title={({data: tdata}) =>
+          _('NVTS by Family (Total: {{count}})', {count: tdata.total})}
+      />
+    )}
+  </NvtsFamilyLoader>
+);
 
-registerDisplay(DISPLAY_ID, NvtsFamilyDisplay, {
-  title: _('Chart: NVTS by Family'),
+NvtsFamilyTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NvtsFamilyTableDisplay.displayId = 'nvt-by-family-table';
+
+registerDisplay(NvtsFamilyDisplay.displayId, NvtsFamilyDisplay, {
+  title: _('Chart: NVTs by Family'),
+});
+
+registerDisplay(NvtsFamilyTableDisplay.displayId, NvtsFamilyTableDisplay, {
+  title: _('Table: NVTs by Family'),
 });
 
 // vim: set ts=2 sw=2 tw=80:
