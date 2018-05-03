@@ -51,6 +51,9 @@ const margin = {
   left: 60,
 };
 
+const findX = (timeline, value) => d => timeline ?
+  d.x.isSame(value) : d.x === value;
+
 const lineCss = css({
   shapeRendering: 'crispEdges',
 });
@@ -312,8 +315,7 @@ class LineChart extends React.Component {
       return null;
     }
 
-    const findFunc = timeline ? d => d.x.isSame(infoX) : d => d.x === infoX;
-    const value = data.find(findFunc);
+    const value = data.find(findX(timeline, infoX));
     const {label, y, y2} = value;
 
     const x = xScale(infoX);
