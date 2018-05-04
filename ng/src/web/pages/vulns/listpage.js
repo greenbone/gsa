@@ -31,26 +31,16 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-import VulnsCharts from './charts.js';
 import VulnsFilterDialog from './filterdialog.js';
 import VulnsTable from './table.js';
 
 import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
-
-const Dashboard = withDashboard({
-  configPrefId: '43690dcb-3174-4d84-aa88-58c1936c7f5c',
-  defaultControllersString: 'vuln-by-cvss|vuln-by-severity-class',
-  defaultControllerString: 'vuln-by-cvss',
-  hideFilterSelect: true,
-})(VulnsCharts);
 
 const ToolBarIcons = () => {
   return (
@@ -64,7 +54,6 @@ const ToolBarIcons = () => {
 };
 
 export default withEntitiesContainer('vuln', {
-  dashboard: Dashboard,
   dashboard2: VulnerabilitiesDashboard,
   filterEditDialog: VulnsFilterDialog,
   filtersFilter: VULNS_FILTER_FILTER,
