@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ResultsSeverityLoader} from './loaders';
 
-const ResultsCvssDisplay = ({
+export const ResultsCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -45,7 +46,6 @@ const ResultsCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of Results')}
         filter={filter}
-        dataTitles={[_('Severity'), _('# of Results')]}
         title={({data: tdata}) =>
           _('Results by CVSS (Total: {{count}})',
             {count: tdata.total})}
@@ -58,14 +58,41 @@ ResultsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'result-by-cvss';
+ResultsCvssDisplay.displayId = 'result-by-cvss';
 
-ResultsCvssDisplay.displayId = DISPLAY_ID;
+export const ResultsCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <ResultsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of Results')]}
+        title={({data: tdata}) =>
+          _('Results by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </ResultsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, ResultsCvssDisplay, {
-  title: _('Results by CVSS'),
+ResultsCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+ResultsCvssTableDisplay.displayId = 'result-by-cvss-table';
+
+registerDisplay(ResultsCvssDisplay.displayId, ResultsCvssDisplay, {
+  title: _('Chart: Results by CVSS'),
 });
 
-export default ResultsCvssDisplay;
+registerDisplay(ResultsCvssTableDisplay.displayId, ResultsCvssTableDisplay, {
+  title: _('Table: Results by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

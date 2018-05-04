@@ -31,12 +31,13 @@ import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import WordCloudChart from '../../../components/chart/wordcloud';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {randomColor} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import WordCloudChart from 'web/components/chart/wordcloud';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {randomColor} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ResultsWordCountLoader} from './loaders';
 
@@ -55,7 +56,7 @@ const transformWordCountData = (data = {}) => {
   return tdata;
 };
 
-class ResultsWordCloudDisplay extends React.Component {
+export class ResultsWordCloudDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -127,14 +128,45 @@ ResultsWordCloudDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'result-by-vuln-words';
+ResultsWordCloudDisplay.displayId = 'result-by-vuln-words';
 
-ResultsWordCloudDisplay.displayId = DISPLAY_ID;
+export const ResultsWordCloudTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <ResultsWordCountLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformWordCountData}
+        dataTitles={[
+          _('Vulnerability'),
+          _('Word Count'),
+        ]}
+        dataRow={({row}) => [row.label, row.value]}
+        title={({data: tdata}) =>
+        _('Results Vulnerability Word Cloud')}
+      />
+    )}
+  </ResultsWordCountLoader>
+);
 
-registerDisplay(DISPLAY_ID, ResultsWordCloudDisplay, {
-  title: _('Results Vulnerability Word Cloud'),
+ResultsWordCloudTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+ResultsWordCloudTableDisplay.displayId = 'result-by-vuln-words-table';
+
+registerDisplay(ResultsWordCloudDisplay.displayId, ResultsWordCloudDisplay, {
+  title: _('Chart: Results Vulnerability Word Cloud'),
 });
 
-export default ResultsWordCloudDisplay;
-
+registerDisplay(ResultsWordCloudTableDisplay.displayId,
+  ResultsWordCloudTableDisplay, {
+    title: _('Table: Results Vulnerability Word Cloud'),
+  },
+);
 // vim: set ts=2 sw=2 tw=80:

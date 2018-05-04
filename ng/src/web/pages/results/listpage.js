@@ -31,13 +31,10 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
-import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';
 
 import ResultsTable from './table.js';
@@ -45,14 +42,6 @@ import ResultsTable from './table.js';
 import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
-
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e',
-  defaultControllersString: 'result-by-severity-class|' +
-    'result-by-vuln-words|result-by-cvss',
-  defaultControllerString: 'result-by-cvss',
-})(ResultCharts);
 
 const ToolBarIcons = props => {
   return (
@@ -68,7 +57,6 @@ const ToolBarIcons = props => {
 
 export default withEntitiesContainer('result', {
   filtersFilter: RESULTS_FILTER_FILTER,
-  dashboard: Dashboard,
   dashboard2: ResultsDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />

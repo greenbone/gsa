@@ -31,12 +31,13 @@ import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import WordCloudChart from '../../../components/chart/wordcloud';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {randomColor} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import WordCloudChart from 'web/components/chart/wordcloud';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {randomColor} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ResultsDescriptionWordCountLoader} from './loaders';
 
@@ -55,7 +56,7 @@ const transformWordCountData = (data = {}) => {
   return tdata;
 };
 
-class ResultsDescriptionWordCloudDisplay extends React.Component {
+export class ResultsDescriptionWordCloudDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -127,14 +128,48 @@ ResultsDescriptionWordCloudDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'result-by-desc-words';
+ResultsDescriptionWordCloudDisplay.displayId = 'result-by-desc-words';
 
-ResultsDescriptionWordCloudDisplay.displayId = DISPLAY_ID;
+export const ResultsDescriptionWordCloudTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <ResultsDescriptionWordCountLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformWordCountData}
+        dataTitles={[
+          _('Description'),
+          _('Word Count'),
+        ]}
+        dataRow={({row}) => [row.label, row.value]}
+        title={({data: tdata}) =>
+          _('Results Description Word Cloud')}
+      />
+    )}
+  </ResultsDescriptionWordCountLoader>
+);
 
-registerDisplay(DISPLAY_ID, ResultsDescriptionWordCloudDisplay, {
-  title: _('Results Description Word Cloud'),
-});
+ResultsDescriptionWordCloudTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
-export default ResultsDescriptionWordCloudDisplay;
+ResultsDescriptionWordCloudTableDisplay.displayId = 'result-by-desc-words-table'; // eslint-disable-line max-len
+
+registerDisplay(ResultsDescriptionWordCloudDisplay.displayId,
+  ResultsDescriptionWordCloudDisplay, {
+    title: _('Chart: Results Description Word Cloud'),
+  },
+);
+
+registerDisplay(ResultsDescriptionWordCloudTableDisplay.displayId,
+  ResultsDescriptionWordCloudTableDisplay, {
+    title: _('Table: Results Description Word Cloud'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
