@@ -28,7 +28,10 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './cvssdisplay';
-import ResultsDescriptionWordCloudDisplay from './descriptionwordclouddisplay';
+import {
+  ResultsDescriptionWordCloudDisplay,
+  ResultsDescriptionWordCloudTableDisplay,
+} from './descriptionwordclouddisplay';
 import {
   ResultsSeverityDisplay,
   ResultsSeverityTableDisplay,
@@ -50,6 +53,7 @@ const ResultsDashboard = ({
       ResultsSeverityDisplay.displayId,
       ResultsWordCloudDisplay.displayId,
       ResultsCvssTableDisplay.displayId,
+      ResultsDescriptionWordCloudTableDisplay.displayId,
       ResultsSeverityTableDisplay.displayId,
     ]}
     defaultContent={[
