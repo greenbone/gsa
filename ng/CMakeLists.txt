@@ -450,6 +450,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cpes/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cpes/row.js
      ${NG_SRC_DIR}/src/web/pages/cpes/table.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/createddisplay.js
      ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/loaders.js
