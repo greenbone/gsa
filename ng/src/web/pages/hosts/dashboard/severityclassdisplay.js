@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {HostsSeverityLoader} from './loaders';
 
-const HostsSeverityClassDisplay = ({
+export const HostsSeverityClassDisplay = ({
   filter,
   ...props
 }) => (
@@ -44,7 +45,6 @@ const HostsSeverityClassDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
-        dataTitles={[_('Severity Class'), _('# of Hosts')]}
         title={({data: tdata}) =>
           _('Hosts by Severity Class (Total: {{count}})',
             {count: tdata.total})}
@@ -57,14 +57,44 @@ HostsSeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'host-by-severity-class';
+HostsSeverityClassDisplay.displayId = 'host-by-severity-class';
 
-HostsSeverityClassDisplay.displayId = DISPLAY_ID;
+export const HostsSeverityClassTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <HostsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of Hosts')]}
+        title={({data: tdata}) =>
+          _('Hosts by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </HostsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, HostsSeverityClassDisplay, {
-  title: _('Hosts by Severity Class'),
-});
+HostsSeverityClassTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
-export default HostsSeverityClassDisplay;
+HostsSeverityClassTableDisplay.displayId = 'host-by-severity-class-table';
+
+registerDisplay(HostsSeverityClassDisplay.displayId,
+  HostsSeverityClassDisplay, {
+    title: _('Chart: Hosts by Severity Class'),
+  },
+);
+registerDisplay(HostsSeverityClassTableDisplay.displayId,
+  HostsSeverityClassTableDisplay, {
+    title: _('Table: Hosts by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

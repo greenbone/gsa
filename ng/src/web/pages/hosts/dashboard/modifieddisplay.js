@@ -36,12 +36,14 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import LineChart, {lineDataPropType} from '../../../components/chart/line';
+import LineChart, {lineDataPropType} from 'web/components/chart/line';
 
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {totalCount} from '../../../components/dashboard2/display/utils';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {totalCount} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
+
 import {HostsModifiedLoader} from './loaders';
-import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const transformModified = (data = {}) => {
   const {groups = []} = data;
@@ -61,7 +63,7 @@ const transformModified = (data = {}) => {
   return tdata;
 };
 
-class HostsModifiedDisplay extends React.Component {
+export class HostsModifiedDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -168,14 +170,50 @@ HostsModifiedDisplay.propTypes = {
   onFilterChanged: PropTypes.func,
 };
 
-const DISPLAY_ID = 'host-by-modification-time';
+HostsModifiedDisplay.displayId = 'host-by-modification-time';
 
-HostsModifiedDisplay.displayId = DISPLAY_ID;
+export const HostsModifiedTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <HostsModifiedLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformModified}
+        filter={filter}
+        title={({data: tdata}) =>
+          _('Hosts by Modification Time (Total: {{count}})',
+            {count: tdata.total})
+        }
+        dataTitles={[
+          _('Creation Time'),
+          _('# of Modified Hosts'),
+          _('Total Hosts'),
+        ]}
+        dataRow={({row}) => [row.label, row.y, row.y2]}
+      />
+    )}
+  </HostsModifiedLoader>
+);
 
-registerDisplay(DISPLAY_ID, HostsModifiedDisplay, {
+HostsModifiedTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+HostsModifiedTableDisplay.displayId = 'host-by-modification-time-table';
+
+registerDisplay(HostsModifiedDisplay.displayId, HostsModifiedDisplay, {
   title: _('Chart: Hosts by Modification Time'),
 });
 
-export default HostsModifiedDisplay;
+registerDisplay(HostsModifiedTableDisplay.displayId,
+  HostsModifiedTableDisplay, {
+    title: _('Table: Hosts by Modification Time'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -36,12 +36,13 @@ import PropTypes from '../../../utils/proptypes';
 import BarChart from '../../../components/chart/bar';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   riskFactorColorScale,
 } from '../../../components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {HostsVulnScoreLoader} from './loaders';
-import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const ToolTip = glamorous.div({
     fontWeight: 'normal',
@@ -88,7 +89,7 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
   return tdata.reverse();
 };
 
-class HostsVulnScoreDisplay extends React.Component {
+export class HostsVulnScoreDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -116,11 +117,6 @@ class HostsVulnScoreDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformVulnScoreData}
-            dataTitles={[
-              _('Host Name'),
-              _('Max. average Severity Score'),
-            ]}
-            dataRow={({row}) => [row.x, row.y]}
             title={() => _('Most Vulnerable Hosts')}
           >
             {({width, height, data: tdata, svgRef}) => (
@@ -148,16 +144,48 @@ HostsVulnScoreDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'host-by-most-vulnerable';
+HostsVulnScoreDisplay = withRouter(HostsVulnScoreDisplay);
 
-const HostsVulnScoreDisplayWithRouter = withRouter(HostsVulnScoreDisplay);
+HostsVulnScoreDisplay.displayId = 'host-by-most-vulnerable';
 
-HostsVulnScoreDisplayWithRouter.displayId = DISPLAY_ID;
+export const HostsVulnScoreTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <HostsVulnScoreLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformVulnScoreData}
+        dataTitles={[
+          _('Host Name'),
+          _('Max. average Severity Score'),
+        ]}
+        dataRow={({row}) => [row.x, row.y]}
+        title={() => _('Most Vulnerable Hosts')}
+      />
+    )}
+  </HostsVulnScoreLoader>
+);
 
-registerDisplay(DISPLAY_ID, HostsVulnScoreDisplayWithRouter, {
-  title: _('Hosts by Vulnerability Score'),
-});
+HostsVulnScoreTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
-export default HostsVulnScoreDisplayWithRouter;
+HostsVulnScoreTableDisplay.displayId = 'host-by-most-vulnerable-table';
+
+registerDisplay(HostsVulnScoreDisplay.displayId, HostsVulnScoreDisplay, {
+    title: _('Chart: Hosts by Vulnerability Score'),
+  },
+);
+
+registerDisplay(HostsVulnScoreTableDisplay.displayId,
+  HostsVulnScoreTableDisplay, {
+    title: _('Table: Hosts by Vulnerability Score'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
