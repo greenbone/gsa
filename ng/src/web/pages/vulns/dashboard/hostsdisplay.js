@@ -32,15 +32,16 @@ import Filter from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import BarChart from '../../../components/chart/bar';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import BarChart from 'web/components/chart/bar';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   vulnsByHostsColorScale,
   percent,
-} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {VulnsHostsLoader} from './loaders';
 
@@ -122,7 +123,7 @@ const transformHostsData = (data = {}) => {
   return tdata;
 };
 
-class VulnsHostsDisplay extends React.Component {
+export class VulnsHostsDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -192,8 +193,6 @@ class VulnsHostsDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformHostsData}
-            dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
-            dataRow={({row}) => [row.id, row.y]}
             title={({data: tdata}) =>
             _('Vulnerabilities by Hosts (Total: {{count}})',
               {count: tdata.total})}
@@ -222,14 +221,42 @@ VulnsHostsDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'vuln-by-hosts';
+VulnsHostsDisplay.displayId = 'vuln-by-hosts';
 
-VulnsHostsDisplay.displayId = DISPLAY_ID;
+export const VulnsHostsTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <VulnsHostsLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformHostsData}
+        dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
+        dataRow={({row}) => [row.x, row.y]}
+        title={({data: tdata}) =>
+          _('Vulnerabilities by Hosts (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </VulnsHostsLoader>
+);
 
-registerDisplay(DISPLAY_ID, VulnsHostsDisplay, {
-  title: _('Vulnerabilities by Hosts'),
+VulnsHostsTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+VulnsHostsTableDisplay.displayId = 'vuln-by-hosts-table';
+
+registerDisplay(VulnsHostsDisplay.displayId, VulnsHostsDisplay, {
+  title: _('Chart: Vulnerabilities by Hosts'),
 });
 
-export default VulnsHostsDisplay;
+registerDisplay(VulnsHostsTableDisplay.displayId, VulnsHostsTableDisplay, {
+  title: _('Table: Vulnerabilities by Hosts'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

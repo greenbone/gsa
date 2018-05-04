@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {VulnsSeverityLoader} from './loaders';
 
-const VulnsSeverityDisplay = ({
+export const VulnsSeverityDisplay = ({
   filter,
   ...props
 }) => (
@@ -57,14 +58,43 @@ VulnsSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'vuln-by-severity-class';
+VulnsSeverityDisplay.displayId = 'vuln-by-severity-class';
 
-VulnsSeverityDisplay.displayId = DISPLAY_ID;
+export const VulnsSeverityTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <VulnsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of Vulnerabilities')]}
+        title={({data: tdata}) =>
+          _('Vulnerabilities by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </VulnsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, VulnsSeverityDisplay, {
-  title: _('Vulnerabilities by Severity Class'),
+VulnsSeverityTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+VulnsSeverityTableDisplay.displayId = 'vuln-by-severity-class-table';
+
+registerDisplay(VulnsSeverityDisplay.displayId, VulnsSeverityDisplay, {
+  title: _('Chart: Vulnerabilities by Severity Class'),
 });
 
-export default VulnsSeverityDisplay;
+registerDisplay(VulnsSeverityTableDisplay.displayId,
+  VulnsSeverityTableDisplay, {
+    title: _('Table: Vulnerabilities by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
