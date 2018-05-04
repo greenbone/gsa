@@ -46,6 +46,14 @@ class DfnCertAdvsCommand extends InfoEntitiesCommand {
     super(http, 'dfn_cert_adv', DfnCertAdv, info_filter);
   }
 
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'dfn_cert_adv',
+      group_column: 'created',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'dfn_cert_adv',
