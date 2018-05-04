@@ -423,6 +423,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/listpage.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/row.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/table.js
+     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/createddisplay.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/loaders.js
