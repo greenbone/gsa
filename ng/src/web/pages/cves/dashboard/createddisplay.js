@@ -27,6 +27,9 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
+
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
@@ -68,6 +71,40 @@ CvesCreatedDisplay.propTypes = {
 };
 
 CvesCreatedDisplay.displayId = 'cve-by-created';
+
+
+export const CvesCreatedTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <CvesCreatedLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[
+          _('Creation Time'),
+          _('# of CVEs'),
+          _('Total CVEs'),
+        ]}
+        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataTransform={transformCreated}
+        title={() => _('CVEs by Creation Time')}
+      />
+    )}
+  </CvesCreatedLoader>
+);
+
+CvesCreatedTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+CvesCreatedTableDisplay.displayId = 'cve-by-created-table';
+
+registerDisplay(CvesCreatedTableDisplay.displayId,
+  CvesCreatedTableDisplay, {title: _('Table: CVEs by Creation Time')});
 
 registerDisplay(CvesCreatedDisplay.displayId,
   CvesCreatedDisplay, {title: _('Chart: CVEs by Creation Time')});
