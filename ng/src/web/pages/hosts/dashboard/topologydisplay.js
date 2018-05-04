@@ -178,7 +178,7 @@ const HostsTopologyDisplayWithRouter = withRouter(HostsTopologyDisplay);
 HostsTopologyDisplayWithRouter.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, HostsTopologyDisplayWithRouter, {
-  title: _('Hosts Topology'),
+  title: _('Chart: Hosts Topology'),
 });
 
 export default HostsTopologyDisplayWithRouter;

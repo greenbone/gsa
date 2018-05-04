@@ -155,7 +155,7 @@ const HostsVulnScoreDisplayWithRouter = withRouter(HostsVulnScoreDisplay);
 HostsVulnScoreDisplayWithRouter.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, HostsVulnScoreDisplayWithRouter, {
-  title: _('Hosts by Vulnerability Score'),
+  title: _('Chart: Hosts by Vulnerability Score'),
 });
 
 export default HostsVulnScoreDisplayWithRouter;
