@@ -29,6 +29,7 @@ import Loader, {
 
 export const ALL_SEC_INFOS_CREATED = 'allinfo-by-created';
 export const ALL_SEC_INFOS_SEVERITY_CLASS = 'allinfo-severity-class';
+export const ALL_SEC_INFOS_TYPE = 'allinfo-type';
 
 export const allSecInfoCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.secinfos.getCreatedAggregates({filter})
@@ -77,5 +78,29 @@ export const AllSecInfosSeverityLoader = ({
 );
 
 AllSecInfosSeverityLoader.propTypes = loaderPropTypes;
+
+export const allSecInfosTypeLoader = loadFunc(
+  ({gmp, filter}) => gmp.secinfos.getTypeAggregates({filter})
+    .then(r => r.data),
+  ALL_SEC_INFOS_TYPE);
+
+export const AllSecInfosTypeLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={ALL_SEC_INFOS_TYPE}
+    filter={filter}
+    load={allSecInfosTypeLoader}
+    subscriptions={[
+      'all_sec_info.timer',
+      'all_sec_info.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+AllSecInfosTypeLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:
