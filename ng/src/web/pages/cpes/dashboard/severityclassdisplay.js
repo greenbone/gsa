@@ -27,12 +27,13 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CpesSeverityLoader} from './loaders';
 
-const CpesSeverityDisplay = ({
+export const CpesSeverityClassDisplay = ({
   filter,
   ...props
 }) => (
@@ -53,18 +54,47 @@ const CpesSeverityDisplay = ({
   </CpesSeverityLoader>
 );
 
-CpesSeverityDisplay.propTypes = {
+CpesSeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'cpe-by-severity-class';
+CpesSeverityClassDisplay.displayId = 'cpe-by-severity-class';
 
-CpesSeverityDisplay.displayId = DISPLAY_ID;
+export const CpesSeverityClassTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <CpesSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of CPEs')]}
+        title={({data: tdata = {}}) =>
+          _('CPEs by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </CpesSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, CpesSeverityDisplay, {
-  title: _('CPEs by Severity Class'),
+CpesSeverityClassTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+CpesSeverityClassTableDisplay.displayId = 'cpe-by-severity-table';
+
+registerDisplay(CpesSeverityClassDisplay.displayId, CpesSeverityClassDisplay, {
+  title: _('Chart: CPEs by Severity Class'),
 });
 
-export default CpesSeverityDisplay;
+registerDisplay(CpesSeverityClassTableDisplay.displayId,
+  CpesSeverityClassTableDisplay, {
+    title: _('Table: CPEs by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
