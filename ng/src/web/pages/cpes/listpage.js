@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,13 +29,10 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
-import CpeCharts from './charts.js';
 import CpeFilterDialog from './filterdialog.js';
 import CpesTable from './table.js';
 
@@ -49,16 +47,7 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: '9cff9b4d-b164-43ce-8687-f2360afc7500',
-  defaultControllersString: 'cpe-by-severity-class|cpe-by-created|' +
-    'cpe-by-cvss',
-  defaultControllerString: 'cpe-by-cvss',
-})(CpeCharts);
-
 export default withEntitiesContainer('cpe', {
-  dashboard: Dashboard,
   dashboard2: CpesDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>

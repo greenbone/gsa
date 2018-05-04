@@ -46,6 +46,14 @@ class CpesCommand extends InfoEntitiesCommand {
     super(http, 'cpe', Cpe, info_filter);
   }
 
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'cpe',
+      group_column: 'created',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'cpe',
