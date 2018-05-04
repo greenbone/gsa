@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CpesSeverityLoader} from './loaders';
 
-const CpesCvssDisplay = ({
+export const CpesCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -58,14 +59,41 @@ CpesCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'cpe-by-cvss';
+CpesCvssDisplay.displayId = 'cpe-by-cvss';
 
-CpesCvssDisplay.displayId = DISPLAY_ID;
+export const CpesCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <CpesSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of CPEs')]}
+        title={({data: tdata = {}}) =>
+          _('CPEs by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </CpesSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, CpesCvssDisplay, {
-  title: _('CPEs by CVSS'),
+CpesCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+CpesCvssTableDisplay.displayId = 'cpe-by-cvss-table';
+
+registerDisplay(CpesCvssDisplay.displayId, CpesCvssDisplay, {
+  title: _('Chart: CPEs by CVSS'),
 });
 
-export default CpesCvssDisplay;
+registerDisplay(CpesCvssTableDisplay.displayId, CpesCvssTableDisplay, {
+  title: _('Table: CPEs by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
