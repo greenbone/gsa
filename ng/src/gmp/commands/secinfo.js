@@ -61,6 +61,14 @@ class SecInfosCommand extends InfoEntitiesCommand {
       filter,
     });
   }
+
+  getTypeAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'allinfo',
+      group_column: 'type',
+      filter,
+    });
+  }
 }
 
 register_command('secinfo', SecInfoCommand);
