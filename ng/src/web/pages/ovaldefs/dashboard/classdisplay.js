@@ -34,6 +34,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import DonutChart from '../../../components/chart/donut3d';
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import DataTableDisplay from '../../../components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   totalCount,
   percent,
@@ -65,7 +66,7 @@ const transformClassData = (data = {}) => {
   return tdata;
 };
 
-class OvaldefClassDisplay extends React.Component {
+export class OvaldefClassDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -136,14 +137,42 @@ OvaldefClassDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'ovaldef-by-class';
+OvaldefClassDisplay.displayId = 'ovaldef-by-class';
 
-OvaldefClassDisplay.displayId = DISPLAY_ID;
+export const OvaldefClassTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OvaldefClassLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[_('Class'), _('# of OVAL Definitions')]}
+        dataRow={({row}) => [row.label, row.value]}
+        dataTransform={transformClassData}
+        title={({data: tdata}) =>
+          _('OVAL Definitions by Class (Total: {{count}})',
+          {count: tdata.total})}
+      />
+    )}
+  </OvaldefClassLoader>
+);
 
-registerDisplay(DISPLAY_ID, OvaldefClassDisplay, {
+OvaldefClassTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+OvaldefClassTableDisplay.displayId = 'ovaldef-by-class-table';
+
+registerDisplay(OvaldefClassDisplay.displayId, OvaldefClassDisplay, {
   title: _('Chart: OVAL Definitions by Class'),
 });
 
-export default OvaldefClassDisplay;
+registerDisplay(OvaldefClassTableDisplay.displayId, OvaldefClassTableDisplay, {
+  title: _('Table: OVAL Definitions by Class'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
