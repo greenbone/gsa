@@ -62,7 +62,7 @@ const DISPLAY_ID = 'cert_bund_adv-by-severity-class';
 CertBundSeverityDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, CertBundSeverityDisplay, {
-  title: _('CERT-Bund Advisories by Severity Class'),
+  title: _('Chart: CERT-Bund Advisories by Severity Class'),
 });
 
 export default CertBundSeverityDisplay;
