@@ -33,6 +33,8 @@ import {AllSecInfosCvssDisplay, AllSecInfosCvssTableDisplay}
 from './cvssdisplay';
 import {AllSecInfosSeverityDisplay, AllSecInfosSeverityTableDisplay}
   from './severityclassdisplay';
+import {AllSecInfosTypeDisplay, AllSecInfosTypeTableDisplay}
+  from './typedisplay';
 
 export const ALLSECINFO_DASHBOARD_ID = '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864';
 
@@ -50,6 +52,8 @@ export const AllSecInfoDashboard = ({
       AllSecInfosCvssTableDisplay.displayId,
       AllSecInfosSeverityDisplay.displayId,
       AllSecInfosSeverityTableDisplay.displayId,
+      AllSecInfosTypeDisplay.displayId,
+      AllSecInfosTypeTableDisplay.displayId,
     ]}
     defaultContent={[
       [
