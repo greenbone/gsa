@@ -27,35 +27,39 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {CvesCreatedDisplay, CvesCreatedTableDisplay} from './createddisplay';
-import {CvesCvssDisplay, CvesCvssTableDisplay} from './cvssdisplay';
-import {
-  CvesSeverityClassDisplay,
-  CvesSeverityClassTableDisplay,
-} from './severityclassdisplay';
+import {AllSecInfosCreatedDisplay, AllSecInfosCreatedTableDisplay}
+from './createddisplay';
+import {AllSecInfosCvssDisplay, AllSecInfosCvssTableDisplay}
+from './cvssdisplay';
+import {AllSecInfosSeverityDisplay, AllSecInfosSeverityTableDisplay}
+  from './severityclassdisplay';
+import {AllSecInfosTypeDisplay, AllSecInfosTypeTableDisplay}
+  from './typedisplay';
 
-export const CVES_DASHBOARD_ID = '815ddd2e-8654-46c7-a05b-d73224102240';
+export const ALLSECINFO_DASHBOARD_ID = '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864';
 
-const CvesDashboard = ({
+export const AllSecInfoDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
-    id={CVES_DASHBOARD_ID}
+    id={ALLSECINFO_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
-      CvesCreatedDisplay.displayId,
-      CvesCreatedTableDisplay.displayId,
-      CvesCvssDisplay.displayId,
-      CvesCvssTableDisplay.displayId,
-      CvesSeverityClassDisplay.displayId,
-      CvesSeverityClassTableDisplay.displayId,
+      AllSecInfosCreatedDisplay.displayId,
+      AllSecInfosCreatedTableDisplay.displayId,
+      AllSecInfosCvssDisplay.displayId,
+      AllSecInfosCvssTableDisplay.displayId,
+      AllSecInfosSeverityDisplay.displayId,
+      AllSecInfosSeverityTableDisplay.displayId,
+      AllSecInfosTypeDisplay.displayId,
+      AllSecInfosTypeTableDisplay.displayId,
     ]}
     defaultContent={[
       [
-        CvesSeverityClassDisplay.displayId,
-        CvesCreatedDisplay.displayId,
-        CvesCvssDisplay.displayId,
+        AllSecInfosSeverityDisplay.displayId,
+        AllSecInfosCreatedDisplay.displayId,
+        AllSecInfosCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}
@@ -64,11 +68,9 @@ const CvesDashboard = ({
   />
 );
 
-CvesDashboard.propTypes = {
+AllSecInfoDashboard.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func,
 };
-
-export default CvesDashboard;
 
 // vim: set ts=2 sw=2 tw=80:
