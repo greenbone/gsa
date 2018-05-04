@@ -27,11 +27,8 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {
-  DfnCertsCreatedDisplay,
-  DfnCertsCreatedTableDisplay,
-} from './createddisplay';
-import DfnCertCvssDisplay from './cvssdisplay';
+import {DfnCertsCreatedDisplay, DfnCertsCreatedTableDisplay} from './createddisplay'; // eslint-disable-line max-len
+import {DfnCertCvssDisplay, DfnCertCvssTableDisplay} from './cvssdisplay';
 import DfnCertSeverityClassDisplay from './severityclassdisplay';
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
@@ -47,6 +44,7 @@ const DfnCertDashboard = ({
       DfnCertsCreatedDisplay.displayId,
       DfnCertsCreatedTableDisplay.displayId,
       DfnCertCvssDisplay.displayId,
+      DfnCertCvssTableDisplay.displayId,
       DfnCertSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
