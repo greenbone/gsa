@@ -27,10 +27,12 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import {AllSecInfosCreatedDisplay, AllSecInfosCreatedTableDisplay}
+from './createddisplay';
+import {AllSecInfosCvssDisplay, AllSecInfosCvssTableDisplay}
+from './cvssdisplay';
 import {AllSecInfosSeverityDisplay, AllSecInfosSeverityTableDisplay}
   from './severityclassdisplay';
-import {AllSecInfosCvssDisplay, AllSecInfosCvssTableDisplay}
-  from './cvssdisplay';
 
 export const ALLSECINFO_DASHBOARD_ID = '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864';
 
@@ -42,6 +44,8 @@ export const AllSecInfoDashboard = ({
     id={ALLSECINFO_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      AllSecInfosCreatedDisplay.displayId,
+      AllSecInfosCreatedTableDisplay.displayId,
       AllSecInfosCvssDisplay.displayId,
       AllSecInfosCvssTableDisplay.displayId,
       AllSecInfosSeverityDisplay.displayId,
@@ -50,6 +54,7 @@ export const AllSecInfoDashboard = ({
     defaultContent={[
       [
         AllSecInfosSeverityDisplay.displayId,
+        AllSecInfosCreatedDisplay.displayId,
         AllSecInfosCvssDisplay.displayId,
       ],
     ]}
