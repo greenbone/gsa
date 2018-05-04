@@ -46,7 +46,6 @@ import {registerDisplay} from '../../../components/dashboard2/registry';
 const transformModified = (data = {}) => {
   let {groups = []} = data;
   groups = groups.filter(group => group.subgroup.value === 'High');
-  console.log('groups', groups);
   const sum = totalCount(groups);
   const tdata = groups.map(group => {
     const {value, count, c_count} = group;
