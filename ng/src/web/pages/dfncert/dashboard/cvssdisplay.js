@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {DfnCertSeverityLoader} from './loaders';
 
-const DfnCertCvssDisplay = ({
+export const DfnCertCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -58,14 +59,42 @@ DfnCertCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'dfn_cert_adv-by-cvss';
+DfnCertCvssDisplay.displayId = 'dfn_cert_adv-by-cvss';
 
-DfnCertCvssDisplay.displayId = DISPLAY_ID;
+export const DfnCertCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <DfnCertSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of DFN-CERT Advisories')]}
+        title={({data: tdata = {}}) =>
+          _('DFN-CERT Advisories by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </DfnCertSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, DfnCertCvssDisplay, {
+DfnCertCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+DfnCertCvssTableDisplay.displayId = 'dfn_cert_adv-by-cvss-table';
+
+
+registerDisplay(DfnCertCvssDisplay.displayId, DfnCertCvssDisplay, {
   title: _('Chart: DFN-CERT Advisories by CVSS'),
 });
 
-export default DfnCertCvssDisplay;
+registerDisplay(DfnCertCvssTableDisplay.displayId, DfnCertCvssTableDisplay, {
+  title: _('Table: DFN-CERT Advisories by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
