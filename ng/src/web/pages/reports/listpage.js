@@ -32,8 +32,6 @@ import PropTypes from '../../utils/proptypes.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
@@ -44,7 +42,6 @@ import Wrapper from '../../components/layout/wrapper.js';
 
 import ContainerTaskDialog from '../../pages/tasks/containerdialog.js';
 
-import ReportCharts from './charts.js';
 import ReportFilterDialog from './filterdialog.js';
 import ImportReportDialog from './importdialog.js';
 import ReportsTable from './table.js';
@@ -52,14 +49,6 @@ import ReportsTable from './table.js';
 import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
 
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
-
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: 'e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071',
-  defaultControllersString: 'report-by-severity-class|' +
-    'report-by-high-results|report-by-cvss',
-  defaultControllerString: 'report-by-cvss',
-})(ReportCharts);
 
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
@@ -240,7 +229,6 @@ Page.contextTypes = {
 
 export default withEntitiesContainer('report', {
   filtersFilter: REPORTS_FILTER_FILTER,
-  dashboard: Dashboard,
   dashboard2: ReportsDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
