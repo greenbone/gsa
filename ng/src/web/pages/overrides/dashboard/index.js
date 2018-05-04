@@ -27,7 +27,10 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import OverridesActiveDaysDisplay from './activedaysdisplay';
+import {
+  OverridesActiveDaysDisplay,
+  OverridesActiveDaysTableDisplay,
+} from './activedaysdisplay';
 import OverridesCreatedDisplay from './createddisplay';
 import OverridesWordCloudDisplay from './wordclouddisplay';
 
@@ -44,6 +47,7 @@ const OverridesDashboard = ({
       OverridesActiveDaysDisplay.displayId,
       OverridesCreatedDisplay.displayId,
       OverridesWordCloudDisplay.displayId,
+      OverridesActiveDaysTableDisplay.displayId,
     ]}
     defaultContent={[
       [
