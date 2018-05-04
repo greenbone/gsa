@@ -58,12 +58,12 @@ DfnCertCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'dfncert-by-cvss';
+const DISPLAY_ID = 'dfn_cert_adv-by-cvss';
 
 DfnCertCvssDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, DfnCertCvssDisplay, {
-  title: _('DFN-CERT Advisories by CVSS'),
+  title: _('Chart: DFN-CERT Advisories by CVSS'),
 });
 
 export default DfnCertCvssDisplay;
