@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {HostsSeverityLoader} from './loaders';
 
-const HostsCvssDisplay = ({
+export const HostsCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -45,7 +46,6 @@ const HostsCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of Hosts')}
         filter={filter}
-        dataTitles={[_('Severity'), _('# of Hosts')]}
         title={({data: tdata}) =>
           _('Hosts by CVSS (Total: {{count}})',
             {count: tdata.total})}
@@ -58,14 +58,41 @@ HostsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'host-by-cvss';
+HostsCvssDisplay.displayId = 'host-by-cvss';
 
-HostsCvssDisplay.displayId = DISPLAY_ID;
+export const HostsCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <HostsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of Hosts')]}
+        title={({data: tdata}) =>
+          _('Hosts by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </HostsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, HostsCvssDisplay, {
-  title: _('Hosts by CVSS'),
+HostsCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+HostsCvssTableDisplay.displayId = 'host-by-cvss-table';
+
+registerDisplay(HostsCvssDisplay.displayId, HostsCvssDisplay, {
+  title: _('Chart: Hosts by CVSS'),
 });
 
-export default HostsCvssDisplay;
+registerDisplay(HostsCvssTableDisplay.displayId, HostsCvssTableDisplay, {
+  title: _('Table: Hosts by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
