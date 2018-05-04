@@ -31,12 +31,13 @@ import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import WordCloudChart from '../../../components/chart/wordcloud';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {randomColor} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import WordCloudChart from 'web/components/chart/wordcloud';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {randomColor} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OverridesWordCountLoader} from './loaders';
 
@@ -55,7 +56,7 @@ const transformWordCountData = (data = {}) => {
   return tdata;
 };
 
-class OverridesWordCloudDisplay extends React.Component {
+export class OverridesWordCloudDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -127,14 +128,48 @@ OverridesWordCloudDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'override-by-text-words';
+OverridesWordCloudDisplay.displayId = 'override-by-text-words';
 
-OverridesWordCloudDisplay.displayId = DISPLAY_ID;
+export const OverridesWordCloudTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OverridesWordCountLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformWordCountData}
+        dataRow={({row}) => [row.label, row.value]}
+        dataTitles={[
+          _('Text'),
+          _('Count'),
+        ]}
+        title={({data: tdata}) =>
+          _('Overrides Text Word Cloud')}
+      />
+    )}
+  </OverridesWordCountLoader>
+);
 
-registerDisplay(DISPLAY_ID, OverridesWordCloudDisplay, {
-  title: _('Chart: Overrides Text Word Cloud'),
-});
+OverridesWordCloudTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
-export default OverridesWordCloudDisplay;
+OverridesWordCloudTableDisplay.displayId = 'override-by-text-words-table';
+
+registerDisplay(OverridesWordCloudDisplay.displayId,
+  OverridesWordCloudDisplay, {
+    title: _('Chart: Overrides Text Word Cloud'),
+  },
+);
+
+registerDisplay(OverridesWordCloudTableDisplay.displayId,
+  OverridesWordCloudTableDisplay, {
+    title: _('Table: Overrides Text Word Cloud'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

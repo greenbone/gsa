@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Steffen Waterkamp <steffen.watekamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -27,18 +27,18 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
+import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {OverridesCreatedLoader} from './loaders';
+import {CertBundCreatedLoader} from './loaders';
 
-export const OverridesCreatedDisplay = ({
+export const CertBundCreatedDisplay = ({
   filter,
   ...props
 }) => (
-  <OverridesCreatedLoader
+  <CertBundCreatedLoader
     filter={filter}
   >
     {loaderProps => (
@@ -47,78 +47,68 @@ export const OverridesCreatedDisplay = ({
         {...loaderProps}
         filter={filter}
         title={({data: tdata}) =>
-          _('Overrides by Creation Time')}
-        yAxisLabel={_('# of created Overrides')}
-        y2AxisLabel={_('Total Overrides')}
+          _('CERT-Bund Advisories by Creation Time')}
+        yAxisLabel={_('# of created CERT-Bund Advisories')}
+        y2AxisLabel={_('Total CERT-Bund Advisories')}
         xAxisLabel={_('Time')}
         yLine={{
           color: Theme.darkGreen,
-          label: _('Created Overrides'),
+          label: _('Created CERT-Bund Advs'),
         }}
         y2Line={{
           color: Theme.darkGreen,
           dashArray: '3, 2',
-          label: _('Total Overrides'),
+          label: _('Total CERT-Bund Advs'),
         }}
       />
     )}
-  </OverridesCreatedLoader>
+  </CertBundCreatedLoader>
 );
 
-OverridesCreatedDisplay.propTypes = {
+CertBundCreatedDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-OverridesCreatedDisplay.displayId = 'override-by-created';
+CertBundCreatedDisplay.displayId = 'cert_bund_adv-by-created';
 
-registerDisplay(OverridesCreatedDisplay.displayId,
-  OverridesCreatedDisplay, {
-    title: _('Chart: Overrides by Creation Time'),
-  },
-);
-
-export const OverridesCreatedTableDisplay = ({
+export const CertBundCreatedTableDisplay = ({
   filter,
   ...props
 }) => (
-  <OverridesCreatedLoader
+  <CertBundCreatedLoader
     filter={filter}
   >
     {loaderProps => (
       <DataTableDisplay
         {...props}
         {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Overrides by Creation Time')}
         dataTitles={[
           _('Creation Time'),
-          _('# of created Overrides'),
-          _('Total Overrides'),
+          _('# of CERT-Bund Advisories'),
+          _('Total CERT-Bund Advisories'),
         ]}
         dataRow={({row}) => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
+        title={() => _('CERT-Bund Advisories by Creation Time')}
       />
     )}
-  </OverridesCreatedLoader>
+  </CertBundCreatedLoader>
 );
 
-OverridesCreatedTableDisplay.propTypes = {
+CertBundCreatedTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-OverridesCreatedTableDisplay.displayId = 'override-by-created-table';
+CertBundCreatedTableDisplay.displayId = 'cert_bund_adv-by-created-table';
 
-registerDisplay(OverridesCreatedDisplay.displayId,
-  OverridesCreatedDisplay, {
-    title: _('Chart: Overrides by Creation Time'),
-  },
-);
+registerDisplay(CertBundCreatedTableDisplay.displayId,
+  CertBundCreatedTableDisplay, {
+    title: _('Table: CERT-Bund Advisories by Creation Time'),
+  });
 
-registerDisplay(OverridesCreatedTableDisplay.displayId,
-  OverridesCreatedTableDisplay, {
-    title: _('Table: Overrides by Creation Time'),
-  },
-);
+registerDisplay(CertBundCreatedDisplay.displayId,
+  CertBundCreatedDisplay, {
+    title: _('Chart: CERT-Bund Advisories by Creation Time'),
+  });
 
 // vim: set ts=2 sw=2 tw=80:

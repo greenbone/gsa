@@ -63,7 +63,7 @@ const DISPLAY_ID = 'cert_bund_adv-by-cvss';
 CertBundCvssDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, CertBundCvssDisplay, {
-  title: _('CERT-Bund Advisories by CVSS'),
+  title: _('Chart: CERT-Bund Advisories by CVSS'),
 });
 
 export default CertBundCvssDisplay;

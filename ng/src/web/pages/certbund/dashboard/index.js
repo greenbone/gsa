@@ -27,6 +27,10 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import {
+  CertBundCreatedDisplay,
+  CertBundCreatedTableDisplay,
+} from './createddisplay';
 import CertBundCvssDisplay from './cvssdisplay';
 import CertBundSeverityClassDisplay from './severityclassdisplay';
 
@@ -40,13 +44,15 @@ const CertBundDashboard = ({
     id={CERTBUND_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      CertBundCreatedDisplay.displayId,
+      CertBundCreatedTableDisplay.displayId,
       CertBundCvssDisplay.displayId,
       CertBundSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
       [
         CertBundSeverityClassDisplay.displayId,
-        // 'cert_bund_adv-by-created', // TODO
+        CertBundCreatedDisplay.displayId,
         CertBundCvssDisplay.displayId,
       ],
     ]}

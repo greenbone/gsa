@@ -27,9 +27,18 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import OverridesActiveDaysDisplay from './activedaysdisplay';
-import OverridesCreatedDisplay from './createddisplay';
-import OverridesWordCloudDisplay from './wordclouddisplay';
+import {
+  OverridesActiveDaysDisplay,
+  OverridesActiveDaysTableDisplay,
+} from './activedaysdisplay';
+import {
+  OverridesCreatedDisplay,
+  OverridesCreatedTableDisplay,
+} from './createddisplay';
+import {
+  OverridesWordCloudDisplay,
+  OverridesWordCloudTableDisplay,
+} from './wordclouddisplay';
 
 export const OVERRIDES_DASHBOARD_ID = '054862fe-0781-4527-b1aa-2113bcd16ce7';
 
@@ -44,6 +53,9 @@ const OverridesDashboard = ({
       OverridesActiveDaysDisplay.displayId,
       OverridesCreatedDisplay.displayId,
       OverridesWordCloudDisplay.displayId,
+      OverridesActiveDaysTableDisplay.displayId,
+      OverridesCreatedTableDisplay.displayId,
+      OverridesWordCloudTableDisplay.displayId,
     ]}
     defaultContent={[
       [
