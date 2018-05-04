@@ -29,7 +29,10 @@ import Dashboard from '../../../components/dashboard2/dashboard';
 
 import {CvesCreatedDisplay, CvesCreatedTableDisplay} from './createddisplay';
 import {CvesCvssDisplay, CvesCvssTableDisplay} from './cvssdisplay';
-import CvesSeverityClassDisplay from './severityclassdisplay';
+import {
+  CvesSeverityClassDisplay,
+  CvesSeverityClassTableDisplay,
+} from './severityclassdisplay';
 
 export const CVES_DASHBOARD_ID = '815ddd2e-8654-46c7-a05b-d73224102240';
 
@@ -46,6 +49,7 @@ const CvesDashboard = ({
       CvesCvssDisplay.displayId,
       CvesCvssTableDisplay.displayId,
       CvesSeverityClassDisplay.displayId,
+      CvesSeverityClassTableDisplay.displayId,
     ]}
     defaultContent={[
       [
