@@ -30,17 +30,20 @@ import {parse_int, parse_float} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import FilterTerm from 'gmp/models/filter/filterterm';
+import Filter from 'gmp/models/filter';
+
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import LineChart from 'web/components/chart/line';
 
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ReportsHighResultsLoader} from './loaders';
-import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+
 
 const transformHighResults = (data = {}) => {
   const {groups = []} = data;
@@ -154,11 +157,48 @@ ReportsHighResultsDisplay.propTypes = {
 
 ReportsHighResultsDisplay.displayId = 'report-by-high-results';
 
+export const ReportsHighResultsTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <ReportsHighResultsLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformHighResults}
+        dataTitles={[
+          _('Created Time'),
+          _('Max High'),
+          _('Max High per Host'),
+        ]}
+        dataRow={({row}) => [row.label, row.y, row.y2]}
+        filter={filter}
+        title={({data: tdata}) =>
+          _('Reports with High Results')}
+      />
+    )}
+  </ReportsHighResultsLoader>
+);
+
+ReportsHighResultsTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+ReportsHighResultsTableDisplay.displayId = 'report-by-high-results-table';
+
 registerDisplay(ReportsHighResultsDisplay.displayId,
   ReportsHighResultsDisplay, {
     title: _('Chart: Reports with high Results'),
   },
 );
 
+registerDisplay(ReportsHighResultsTableDisplay.displayId,
+  ReportsHighResultsTableDisplay, {
+    title: _('Table: Reports with high Results'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
