@@ -27,73 +27,77 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
-import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {CpesSeverityLoader} from './loaders';
+import {AllSecInfosSeverityLoader} from './loaders';
 
-export const CpesCvssDisplay = ({
+export const AllSecInfosSeverityDisplay = ({
   filter,
   ...props
 }) => (
-  <CpesSeverityLoader
+  <AllSecInfosSeverityLoader
     filter={filter}
   >
     {loaderProps => (
-      <CvssDisplay
+      <SeverityClassDisplay
         {...props}
         {...loaderProps}
-        yLabel={_('# of CPEs')}
         filter={filter}
-        dataTitles={[_('Severity'), _('# of CPEs')]}
         title={({data: tdata}) =>
-          _('CPEs by CVSS (Total: {{count}})',
+          _('SecInfo Items by Severity Class (Total: {{count}})',
             {count: tdata.total})}
       />
     )}
-  </CpesSeverityLoader>
+  </AllSecInfosSeverityLoader>
 );
 
-CpesCvssDisplay.propTypes = {
+AllSecInfosSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-CpesCvssDisplay.displayId = 'cpe-by-cvss';
+AllSecInfosSeverityDisplay.displayId = 'allinfo-by-severity-class';
 
-export const CpesCvssTableDisplay = ({
+export const AllSecInfosSeverityTableDisplay = ({
   filter,
   ...props
 }) => (
-  <CpesSeverityLoader
+  <AllSecInfosSeverityLoader
     filter={filter}
   >
     {loaderProps => (
-      <CvssTableDisplay
+      <SeverityClassTableDisplay
         {...props}
         {...loaderProps}
         filter={filter}
-        dataTitles={[_('Severity'), _('# of CPEs')]}
+        dataTitles={[_('Severity Class'), _('# of SecInfo Items')]}
         title={({data: tdata = {}}) =>
-          _('CPEs by CVSS (Total: {{count}})',
+          _('SecInfo Items by Severity Class (Total: {{count}})',
             {count: tdata.total})}
       />
     )}
-  </CpesSeverityLoader>
+  </AllSecInfosSeverityLoader>
 );
 
-CpesCvssTableDisplay.propTypes = {
+AllSecInfosSeverityTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-CpesCvssTableDisplay.displayId = 'cpe-by-cvss-table';
+AllSecInfosSeverityTableDisplay.displayId = 'allinfo-by-severity-class-table';
 
-registerDisplay(CpesCvssDisplay.displayId, CpesCvssDisplay, {
-  title: _('Chart: CPEs by CVSS'),
+registerDisplay(
+  AllSecInfosSeverityDisplay.displayId,
+  AllSecInfosSeverityDisplay, {
+    title: _('Chart: SecInfo Items by Severity Class'),
 });
 
-registerDisplay(CpesCvssTableDisplay.displayId, CpesCvssTableDisplay, {
-  title: _('Table: CPEs by CVSS'),
-});
+registerDisplay(AllSecInfosSeverityTableDisplay.displayId,
+  AllSecInfosSeverityTableDisplay, {
+    title: _('Table: SecInfo Items by Severity Class'),
+  },
+);
+
+export default AllSecInfosSeverityDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

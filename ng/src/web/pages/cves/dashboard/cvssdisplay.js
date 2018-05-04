@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CvesSeverityLoader} from './loaders';
 
-const CvesCvssDisplay = ({
+export const CvesCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -62,10 +63,39 @@ const DISPLAY_ID = 'cve-by-cvss';
 
 CvesCvssDisplay.displayId = DISPLAY_ID;
 
+export const CvesCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <CvesSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of CVEs')]}
+        title={({data: tdata = {}}) =>
+          _('CVEs by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </CvesSeverityLoader>
+);
+
+CvesCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+CvesCvssTableDisplay.displayId = 'cve-by-cvss-table';
+
 registerDisplay(DISPLAY_ID, CvesCvssDisplay, {
-  title: _('CVEs by CVSS'),
+  title: _('Chart: CVEs by CVSS'),
 });
 
-export default CvesCvssDisplay;
+registerDisplay(CvesCvssTableDisplay.displayId, CvesCvssTableDisplay, {
+  title: _('Table: CVEs by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
