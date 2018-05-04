@@ -428,6 +428,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/typedisplay.js
      ${NG_SRC_DIR}/src/web/pages/assetspage.js
      ${NG_SRC_DIR}/src/web/pages/credentials/component.js
      ${NG_SRC_DIR}/src/web/pages/credentials/details.js
