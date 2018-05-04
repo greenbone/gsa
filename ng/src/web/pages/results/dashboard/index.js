@@ -29,7 +29,10 @@ import Dashboard from '../../../components/dashboard2/dashboard';
 
 import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './cvssdisplay';
 import ResultsDescriptionWordCloudDisplay from './descriptionwordclouddisplay';
-import ResultsSeverityDisplay from './severityclassdisplay';
+import {
+  ResultsSeverityDisplay,
+  ResultsSeverityTableDisplay,
+} from './severityclassdisplay';
 import ResultsWordCloudDisplay from './wordclouddisplay';
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
@@ -47,6 +50,7 @@ const ResultsDashboard = ({
       ResultsSeverityDisplay.displayId,
       ResultsWordCloudDisplay.displayId,
       ResultsCvssTableDisplay.displayId,
+      ResultsSeverityTableDisplay.displayId,
     ]}
     defaultContent={[
       [
