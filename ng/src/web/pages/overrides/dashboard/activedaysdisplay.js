@@ -191,7 +191,7 @@ const DISPLAY_ID = 'override-by-active-days';
 OverridesActiveDaysDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, OverridesActiveDaysDisplay, {
-  title: _('Overrides by Active Days'),
+  title: _('Chart: Overrides by Active Days'),
 });
 
 export default OverridesActiveDaysDisplay;

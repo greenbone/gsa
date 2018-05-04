@@ -132,7 +132,7 @@ const DISPLAY_ID = 'override-by-text-words';
 OverridesWordCloudDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, OverridesWordCloudDisplay, {
-  title: _('Overrides Text Word Cloud'),
+  title: _('Chart: Overrides Text Word Cloud'),
 });
 
 export default OverridesWordCloudDisplay;
