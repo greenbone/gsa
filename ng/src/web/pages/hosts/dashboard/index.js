@@ -30,7 +30,10 @@ import Dashboard from '../../../components/dashboard2/dashboard';
 import {HostsCvssDisplay, HostsCvssTableDisplay} from './cvssdisplay';
 import HostsModifiedDisplay from './modifieddisplay';
 import HostsModifiedHighDisplay from './modifiedhighdisplay';
-import HostsSeverityClassDisplay from './severityclassdisplay';
+import {
+  HostsSeverityClassDisplay,
+  HostsSeverityClassTableDisplay,
+} from './severityclassdisplay';
 import HostsTopologyDisplay from './topologydisplay';
 import HostsVulnScoreDisplay from './vulnscoredisplay';
 
@@ -51,6 +54,7 @@ const HostsDashboard = ({
       HostsTopologyDisplay.displayId,
       HostsVulnScoreDisplay.displayId,
       HostsCvssTableDisplay.displayId,
+      HostsSeverityClassTableDisplay.displayId,
     ]}
     defaultContent={[
       [
