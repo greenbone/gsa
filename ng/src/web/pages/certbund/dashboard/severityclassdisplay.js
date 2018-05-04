@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CertBundSeverityLoader} from './loaders';
 
-const CertBundSeverityDisplay = ({
+export const CertBundSeverityClassDisplay = ({
   filter,
   ...props
 }) => (
@@ -53,18 +54,49 @@ const CertBundSeverityDisplay = ({
   </CertBundSeverityLoader>
 );
 
-CertBundSeverityDisplay.propTypes = {
+CertBundSeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'cert_bund_adv-by-severity-class';
+CertBundSeverityClassDisplay.displayId = 'cert_bund_adv-by-severity-class';
 
-CertBundSeverityDisplay.displayId = DISPLAY_ID;
+export const CertBundSeverityClassTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <CertBundSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of CERT-Bund Advisories')]}
+        title={({data: tdata = {}}) =>
+          _('CERT-Bund Advisories by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </CertBundSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, CertBundSeverityDisplay, {
+CertBundSeverityClassTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+CertBundSeverityClassTableDisplay.displayId = 'cert_bund_adv-by-severity-table';
+
+registerDisplay(
+  CertBundSeverityClassDisplay.displayId,
+  CertBundSeverityClassDisplay, {
   title: _('Chart: CERT-Bund Advisories by Severity Class'),
 });
 
-export default CertBundSeverityDisplay;
+registerDisplay(CertBundSeverityClassTableDisplay.displayId,
+  CertBundSeverityClassTableDisplay, {
+    title: _('Table: CERT-Bund Advisories by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
