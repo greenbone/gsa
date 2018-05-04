@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -43,6 +44,30 @@ class SecInfosCommand extends InfoEntitiesCommand {
 
   constructor(http) {
     super(http, 'allinfo', SecInfo, info_filter);
+  }
+
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'allinfo',
+      group_column: 'created',
+      filter,
+    });
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'allinfo',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getTypeAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'allinfo',
+      group_column: 'type',
+      filter,
+    });
   }
 }
 
