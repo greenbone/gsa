@@ -32,7 +32,10 @@ import {
   NotesActiveDaysTableDisplay,
 } from './activedaysdisplay';
 import {NotesCreatedDisplay, NotesCreatedTableDisplay} from './createddisplay';
-import NotesWordCloudDisplay from './wordclouddisplay';
+import {
+  NotesWordCloudDisplay,
+  NotesWordCloudTableDisplay,
+} from './wordclouddisplay';
 
 export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4';
 
@@ -49,6 +52,7 @@ const NotesDashboard = ({
       NotesWordCloudDisplay.displayId,
       NotesActiveDaysTableDisplay.displayId,
       NotesCreatedTableDisplay.displayId,
+      NotesWordCloudTableDisplay.displayId,
     ]}
     defaultContent={[
       [
