@@ -45,6 +45,15 @@ class SecInfosCommand extends InfoEntitiesCommand {
   constructor(http) {
     super(http, 'allinfo', SecInfo, info_filter);
   }
+
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'allinfo',
+      group_column: 'created',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'allinfo',
