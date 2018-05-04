@@ -63,7 +63,7 @@ const DISPLAY_ID = 'ovaldef-by-cvss';
 OvaldefCvssDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, OvaldefCvssDisplay, {
-  title: _('OVAL Definitions by CVSS'),
+  title: _('Chart: OVAL Definitions by CVSS'),
 });
 
 export default OvaldefCvssDisplay;
