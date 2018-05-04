@@ -27,6 +27,10 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import {
+  DfnCertsCreatedDisplay,
+  DfnCertsCreatedTableDisplay,
+} from './createddisplay';
 import DfnCertCvssDisplay from './cvssdisplay';
 import DfnCertSeverityClassDisplay from './severityclassdisplay';
 
@@ -40,13 +44,15 @@ const DfnCertDashboard = ({
     id={DFNCERT_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      DfnCertsCreatedDisplay.displayId,
+      DfnCertsCreatedTableDisplay.displayId,
       DfnCertCvssDisplay.displayId,
       DfnCertSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
       [
         DfnCertSeverityClassDisplay.displayId,
-        // 'dfn_cert_adv-by-created', // TODO
+        DfnCertsCreatedDisplay.displayId,
         DfnCertCvssDisplay.displayId,
       ],
     ]}

@@ -62,7 +62,7 @@ const DISPLAY_ID = 'dfn_cert_adv-by-severity-class';
 DfnCertSeverityDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, DfnCertSeverityDisplay, {
-  title: _('DFN-CERT Advisories by Severity Class'),
+  title: _('Chart: DFN-CERT Advisories by Severity Class'),
 });
 
 export default DfnCertSeverityDisplay;
