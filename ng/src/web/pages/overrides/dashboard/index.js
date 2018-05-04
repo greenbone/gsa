@@ -31,7 +31,10 @@ import {
   OverridesActiveDaysDisplay,
   OverridesActiveDaysTableDisplay,
 } from './activedaysdisplay';
-import OverridesCreatedDisplay from './createddisplay';
+import {
+  OverridesCreatedDisplay,
+  OverridesCreatedTableDisplay,
+} from './createddisplay';
 import OverridesWordCloudDisplay from './wordclouddisplay';
 
 export const OVERRIDES_DASHBOARD_ID = '054862fe-0781-4527-b1aa-2113bcd16ce7';
@@ -48,6 +51,7 @@ const OverridesDashboard = ({
       OverridesCreatedDisplay.displayId,
       OverridesWordCloudDisplay.displayId,
       OverridesActiveDaysTableDisplay.displayId,
+      OverridesCreatedTableDisplay.displayId,
     ]}
     defaultContent={[
       [
