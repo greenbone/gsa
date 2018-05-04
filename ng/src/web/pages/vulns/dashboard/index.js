@@ -27,9 +27,12 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import VulnsCvssDisplay from './cvssdisplay';
-import VulnsHostsDisplay from './hostsdisplay';
-import VulnsSeverityDisplay from './severityclassdisplay';
+import {VulnsCvssDisplay, VulnsCvssTableDisplay} from './cvssdisplay';
+import {VulnsHostsDisplay, VulnsHostsTableDisplay} from './hostsdisplay';
+import {
+  VulnsSeverityDisplay,
+  VulnsSeverityTableDisplay,
+} from './severityclassdisplay';
 
 export const VULNS_DASHBOARD_ID = '43690dcb-3174-4d84-aa88-58c1936c7f5c';
 
@@ -44,6 +47,9 @@ const VulnerabilitiesDashboard = ({
       VulnsCvssDisplay.displayId,
       VulnsHostsDisplay.displayId,
       VulnsSeverityDisplay.displayId,
+      VulnsCvssTableDisplay.displayId,
+      VulnsSeverityTableDisplay.displayId,
+      VulnsHostsTableDisplay.displayId,
     ]}
     defaultContent={[
       [
