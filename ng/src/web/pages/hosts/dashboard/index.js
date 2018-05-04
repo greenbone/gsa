@@ -32,7 +32,10 @@ import {
   HostsModifiedDisplay,
   HostsModifiedTableDisplay,
 } from './modifieddisplay';
-import HostsModifiedHighDisplay from './modifiedhighdisplay';
+import {
+  HostsModifiedHighDisplay,
+  HostsModifiedHighTableDisplay,
+} from './modifiedhighdisplay';
 import {
   HostsSeverityClassDisplay,
   HostsSeverityClassTableDisplay,
@@ -59,6 +62,7 @@ const HostsDashboard = ({
       HostsCvssTableDisplay.displayId,
       HostsSeverityClassTableDisplay.displayId,
       HostsModifiedTableDisplay.displayId,
+      HostsModifiedHighTableDisplay.displayId,
     ]}
     defaultContent={[
       [
