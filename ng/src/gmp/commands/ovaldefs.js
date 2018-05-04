@@ -54,6 +54,14 @@ class OvaldefsCommand extends InfoEntitiesCommand {
     });
   }
 
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'ovaldef',
+      group_column: 'created',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'ovaldef',

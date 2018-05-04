@@ -141,7 +141,7 @@ const DISPLAY_ID = 'ovaldef-by-class';
 OvaldefClassDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, OvaldefClassDisplay, {
-  title: _('OVAL Definitions by Class'),
+  title: _('Chart: OVAL Definitions by Class'),
 });
 
 export default OvaldefClassDisplay;

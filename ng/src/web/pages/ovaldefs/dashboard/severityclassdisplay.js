@@ -62,7 +62,7 @@ const DISPLAY_ID = 'ovaldef-by-severity-class';
 OvaldefSeverityDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, OvaldefSeverityDisplay, {
-  title: _('OVAL Definitions by Severity Class'),
+  title: _('Chart: OVAL Definitions by Severity Class'),
 });
 
 export default OvaldefSeverityDisplay;

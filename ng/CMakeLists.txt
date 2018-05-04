@@ -574,6 +574,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/row.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/table.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/classdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/createddisplay.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/loaders.js
