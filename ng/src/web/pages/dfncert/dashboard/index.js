@@ -31,8 +31,11 @@ import {
   DfnCertsCreatedDisplay,
   DfnCertsCreatedTableDisplay,
 } from './createddisplay';
-import DfnCertCvssDisplay from './cvssdisplay';
-import DfnCertSeverityClassDisplay from './severityclassdisplay';
+import {DfnCertCvssDisplay, DfnCertCvssTableDisplay} from './cvssdisplay';
+import {
+  DfnCertSeverityClassDisplay,
+  DfnCertSeverityClassTableDisplay,
+} from './severityclassdisplay';
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
 
@@ -47,7 +50,9 @@ const DfnCertDashboard = ({
       DfnCertsCreatedDisplay.displayId,
       DfnCertsCreatedTableDisplay.displayId,
       DfnCertCvssDisplay.displayId,
+      DfnCertCvssTableDisplay.displayId,
       DfnCertSeverityClassDisplay.displayId,
+      DfnCertSeverityClassTableDisplay.displayId,
     ]}
     defaultContent={[
       [
