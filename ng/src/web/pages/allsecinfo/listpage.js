@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +29,10 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
-import SecInfoCharts from './charts.js';
 import SecInfoFilterDialog from './filterdialog.js';
 import SecInfosTable from './table.js';
 
@@ -51,16 +50,7 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864',
-  defaultControllersString: 'allinfo-by-severity-class|allinfo-by-created|' +
-    'allinfo-by-cvss',
-  defaultControllerString: 'allinfo-by-cvss',
-})(SecInfoCharts);
-
 export default withEntitiesContainer('secinfo', {
-  dashboard: Dashboard,
   dashboard2: AllSecInfoDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={ALLSECINFO_DASHBOARD_ID}/>
