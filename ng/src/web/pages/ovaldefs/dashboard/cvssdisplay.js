@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OvaldefSeverityLoader} from './loaders';
 
-const OvaldefCvssDisplay = ({
+export const OvaldefCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -58,14 +59,41 @@ OvaldefCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'ovaldef-by-cvss';
+OvaldefCvssDisplay.displayId = 'ovaldef-by-cvss';
 
-OvaldefCvssDisplay.displayId = DISPLAY_ID;
+export const OvaldefCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OvaldefSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of OVAL Definitions')]}
+        title={({data: tdata = {}}) =>
+          _('OVAL Definitions by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </OvaldefSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, OvaldefCvssDisplay, {
+OvaldefCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+OvaldefCvssTableDisplay.displayId = 'ovaldef-by-cvss-table';
+
+registerDisplay(OvaldefCvssDisplay.displayId, OvaldefCvssDisplay, {
   title: _('Chart: OVAL Definitions by CVSS'),
 });
 
-export default OvaldefCvssDisplay;
+registerDisplay(OvaldefCvssTableDisplay.displayId, OvaldefCvssTableDisplay, {
+  title: _('Table: OVAL Definitions by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
