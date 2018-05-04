@@ -46,6 +46,14 @@ class CertBundsCommand extends InfoEntitiesCommand {
     super(http, 'cert_bund_adv', CertBundAdv, info_filter);
   }
 
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'cert_bund_adv',
+      group_column: 'created',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'cert_bund_adv',
