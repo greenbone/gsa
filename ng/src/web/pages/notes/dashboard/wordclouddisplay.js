@@ -31,12 +31,13 @@ import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import WordCloudChart from '../../../components/chart/wordcloud';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {randomColor} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import WordCloudChart from 'web/components/chart/wordcloud';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {randomColor} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NotesWordCountLoader} from './loaders';
 
@@ -55,7 +56,7 @@ const transformWordCountData = (data = {}) => {
   return tdata;
 };
 
-class NotesWordCloudDisplay extends React.Component {
+export class NotesWordCloudDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -127,14 +128,46 @@ NotesWordCloudDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'note-by-text-words';
+NotesWordCloudDisplay.displayId = 'note-by-text-words';
 
-NotesWordCloudDisplay.displayId = DISPLAY_ID;
+export const NotesWordCloudTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <NotesWordCountLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformWordCountData}
+        dataRow={({row}) => [row.label, row.value]}
+        dataTitles={[
+          _('Text'),
+          _('Count'),
+        ]}
+        title={({data: tdata}) =>
+        _('Notes Text Word Cloud')}
+      />
+    )}
+  </NotesWordCountLoader>
+);
 
-registerDisplay(DISPLAY_ID, NotesWordCloudDisplay, {
-  title: _('Notes Text Word Cloud'),
+NotesWordCloudTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NotesWordCloudTableDisplay.displayId = 'note-by-text-words-table';
+
+registerDisplay(NotesWordCloudDisplay.displayId, NotesWordCloudDisplay, {
+  title: _('Chart: Notes Text Word Cloud'),
 });
 
-export default NotesWordCloudDisplay;
+registerDisplay(NotesWordCloudTableDisplay.displayId,
+  NotesWordCloudTableDisplay, {
+    title: _('Table: Notes Text Word Cloud'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

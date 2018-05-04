@@ -28,6 +28,8 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NotesCreatedLoader} from './loaders';
@@ -69,12 +71,49 @@ NotesCreatedDisplay.propTypes = {
 
 NotesCreatedDisplay.displayId = 'note-by-created';
 
+export const NotesCreatedTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <NotesCreatedLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        title={({data: tdata}) =>
+          _('Notes by Creation Time')}
+        dataTitles={[
+          _('Creation Time'),
+          _('# of Notes'),
+          _('Total Notes'),
+        ]}
+        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataTransform={transformCreated}
+      />
+    )}
+  </NotesCreatedLoader>
+
+);
+
+NotesCreatedTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NotesCreatedTableDisplay.displayId = 'note-by-created-table';
+
 registerDisplay(NotesCreatedDisplay.displayId,
   NotesCreatedDisplay, {
     title: _('Chart: Notes by Creation Time'),
   },
 );
 
-export default NotesCreatedDisplay;
+registerDisplay(NotesCreatedTableDisplay.displayId,
+  NotesCreatedTableDisplay, {
+    title: _('Table: Notes by Creation Time'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

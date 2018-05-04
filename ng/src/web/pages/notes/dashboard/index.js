@@ -27,9 +27,15 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import NotesActiveDaysDisplay from './activedaysdisplay';
-import NotesCreatedDisplay from './createddisplay';
-import NotesWordCloudDisplay from './wordclouddisplay';
+import {
+  NotesActiveDaysDisplay,
+  NotesActiveDaysTableDisplay,
+} from './activedaysdisplay';
+import {NotesCreatedDisplay, NotesCreatedTableDisplay} from './createddisplay';
+import {
+  NotesWordCloudDisplay,
+  NotesWordCloudTableDisplay,
+} from './wordclouddisplay';
 
 export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4';
 
@@ -44,6 +50,9 @@ const NotesDashboard = ({
       NotesActiveDaysDisplay.displayId,
       NotesCreatedDisplay.displayId,
       NotesWordCloudDisplay.displayId,
+      NotesActiveDaysTableDisplay.displayId,
+      NotesCreatedTableDisplay.displayId,
+      NotesWordCloudTableDisplay.displayId,
     ]}
     defaultContent={[
       [
