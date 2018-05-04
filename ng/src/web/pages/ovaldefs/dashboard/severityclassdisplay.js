@@ -27,12 +27,13 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OvaldefSeverityLoader} from './loaders';
 
-const OvaldefSeverityDisplay = ({
+export const OvaldefSeverityClassDisplay = ({
   filter,
   ...props
 }) => (
@@ -53,18 +54,49 @@ const OvaldefSeverityDisplay = ({
   </OvaldefSeverityLoader>
 );
 
-OvaldefSeverityDisplay.propTypes = {
+OvaldefSeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'ovaldef-by-severity-class';
+OvaldefSeverityClassDisplay.displayId = 'ovaldef-by-severity-class';
 
-OvaldefSeverityDisplay.displayId = DISPLAY_ID;
+export const OvaldefSeverityClassTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OvaldefSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of OVAL Definitions')]}
+        title={({data: tdata = {}}) =>
+          _('OVAL Definitions by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </OvaldefSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, OvaldefSeverityDisplay, {
-  title: _('Chart: OVAL Definitions by Severity Class'),
+OvaldefSeverityClassTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+OvaldefSeverityClassTableDisplay.displayId = 'ovaldef-by-severity-table';
+
+registerDisplay(
+  OvaldefSeverityClassDisplay.displayId,
+  OvaldefSeverityClassDisplay, {
+  title: _('Chart: Oval Definitions by Severity Class'),
 });
 
-export default OvaldefSeverityDisplay;
+registerDisplay(OvaldefSeverityClassTableDisplay.displayId,
+  OvaldefSeverityClassTableDisplay, {
+    title: _('Table: OVAL Definitions by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
