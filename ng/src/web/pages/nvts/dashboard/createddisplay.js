@@ -27,6 +27,8 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
@@ -69,9 +71,45 @@ NvtsCreatedDisplay.propTypes = {
 
 NvtsCreatedDisplay.displayId = 'nvt-by-created';
 
+export const NvtsCreatedTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <NvtCreatedLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[
+          _('Creation Time'),
+          _('# of NVTs'),
+          _('Total NVTs'),
+        ]}
+        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataTransform={transformCreated}
+        title={() => _('NVTs by Creation Time')}
+      />
+    )}
+  </NvtCreatedLoader>
+);
+
+NvtsCreatedTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NvtsCreatedTableDisplay.displayId = 'nvt-by-created-table';
+
 registerDisplay(NvtsCreatedDisplay.displayId,
   NvtsCreatedDisplay, {
     title: _('Chart: NVTs by Creation Time'),
+  },
+);
+
+registerDisplay(NvtsCreatedTableDisplay.displayId,
+  NvtsCreatedTableDisplay, {
+    title: _('Table: NVTs by Creation Time'),
   },
 );
 

@@ -27,12 +27,15 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import NvtsCvssDisplay from './cvssdisplay';
-import NvtsFamilyDisplay from './familydisplay';
-import NvtsSeverityDisplay from './severityclassdisplay';
-import NvtsQodDisplay from './qoddisplay';
-import NvtsQodTypeDisplay from './qodtypedisplay';
-import {NvtsCreatedDisplay} from './createddisplay';
+import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './cvssdisplay';
+import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from './familydisplay';
+import {
+  NvtsSeverityDisplay,
+  NvtsSeverityTableDisplay,
+} from './severityclassdisplay';
+import {NvtsQodDisplay, NvtsQodTableDisplay} from './qoddisplay';
+import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './qodtypedisplay';
+import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './createddisplay';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
 
@@ -50,6 +53,12 @@ const NvtsDashboard = ({
       NvtsQodDisplay.displayId,
       NvtsQodTypeDisplay.displayId,
       NvtsCreatedDisplay.displayId,
+      NvtsCvssTableDisplay.displayId,
+      NvtsSeverityTableDisplay.displayId,
+      NvtsFamilyTableDisplay.displayId,
+      NvtsCreatedTableDisplay.displayId,
+      NvtsQodTableDisplay.displayId,
+      NvtsQodTypeTableDisplay.displayId,
     ]}
     defaultContent={[
       [

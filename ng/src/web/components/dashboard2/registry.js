@@ -22,10 +22,27 @@
  */
 import Logger from 'gmp/log';
 
+import {is_defined} from 'gmp/utils/identity';
+
 const log = Logger.getLogger('web.components.dashboard.registry');
 const registry = {};
 
 export const registerDisplay = (id, component, {title}) => {
+  if (!is_defined(id)) {
+    log.error('Undefined id passed while registering display');
+    return;
+  }
+
+  if (!is_defined(component)) {
+    log.error('Undefined component passed while registering display', id);
+    return;
+  }
+
+  if (!is_defined(title)) {
+    log.error('Undefined title passed while registering display', id);
+    return;
+  }
+
   registry[id] = {
     component,
     title,
