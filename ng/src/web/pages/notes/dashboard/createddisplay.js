@@ -46,7 +46,7 @@ export const NotesCreatedDisplay = ({
         filter={filter}
         title={({data: tdata}) =>
           _('Notes by Creation Time')}
-        yAxisLabel={_('# of created Notes')}
+        yAxisLabel={_('# of Created Notes')}
         y2AxisLabel={_('Total Notes')}
         xAxisLabel={_('Time')}
         yLine={{

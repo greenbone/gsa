@@ -197,6 +197,7 @@ class EntitiesCommand extends HttpCommand {
     sort = [],
     aggregateMode,
     maxGroups,
+    subgroupColumn,
     ...params
   } = {}) {
 
@@ -220,6 +221,10 @@ class EntitiesCommand extends HttpCommand {
 
     if (is_defined(maxGroups)) {
       requestParams.max_groups = maxGroups;
+    }
+
+    if (is_defined(subgroupColumn)) {
+      requestParams.subgroup_column = subgroupColumn;
     }
 
     return this.httpGet({

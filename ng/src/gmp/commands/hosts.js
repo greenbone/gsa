@@ -81,6 +81,15 @@ class HostsCommand extends EntitiesCommand {
     return root.get_assets.get_assets_response;
   }
 
+  getModifiedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'host',
+      group_column: 'modified',
+      subgroup_column: 'severity_level',
+      filter,
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'host',
