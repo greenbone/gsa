@@ -27,7 +27,32 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
+export const ALL_SEC_INFOS_CREATED = 'allinfo-by-created';
 export const ALL_SEC_INFOS_SEVERITY_CLASS = 'allinfo-severity-class';
+
+export const allSecInfoCreatedLoader = loadFunc(
+  ({gmp, filter}) => gmp.secinfos.getCreatedAggregates({filter})
+    .then(r => r.data),
+  ALL_SEC_INFOS_CREATED);
+
+export const AllSecInfosCreatedLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={ALL_SEC_INFOS_CREATED}
+    filter={filter}
+    load={allSecInfoCreatedLoader}
+    subscriptions={[
+      'all_sec_info.timer',
+      'all_sec_info.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+AllSecInfosCreatedLoader.propTypes = loaderPropTypes;
 
 export const allSecInfosSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.secinfos.getSeverityAggregates({filter})
