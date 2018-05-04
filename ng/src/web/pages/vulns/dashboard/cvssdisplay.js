@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {VulnsSeverityLoader} from './loaders';
 
-const VulnsCvssDisplay = ({
+export const VulnsCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -45,7 +46,6 @@ const VulnsCvssDisplay = ({
         {...loaderProps}
         yLabel={_('# of Vulnerabilities')}
         filter={filter}
-        dataTitles={[_('Severity'), _('# of Vulnerabilties')]}
         title={({data: tdata}) =>
           _('Vulnerabilities by CVSS (Total: {{count}})',
             {count: tdata.total})}
@@ -58,14 +58,40 @@ VulnsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'vuln-by-cvss';
+VulnsCvssDisplay.displayId = 'vuln-by-cvss';
 
-VulnsCvssDisplay.displayId = DISPLAY_ID;
+export const VulnsCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <VulnsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of Vulnerabilties')]}
+        title={({data: tdata}) =>
+          _('Vulnerabilities by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </VulnsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, VulnsCvssDisplay, {
-  title: _('Vulnerabilities by CVSS'),
+VulnsCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+VulnsCvssTableDisplay.displayId = 'vuln-by-cvss-table';
+
+registerDisplay(VulnsCvssDisplay.displayId, VulnsCvssDisplay, {
+  title: _('Chart: Vulnerabilities by CVSS'),
 });
-
-export default VulnsCvssDisplay;
+registerDisplay(VulnsCvssTableDisplay.displayId, VulnsCvssTableDisplay, {
+  title: _('Table: Vulnerabilities by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
