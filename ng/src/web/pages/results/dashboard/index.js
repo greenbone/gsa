@@ -36,7 +36,10 @@ import {
   ResultsSeverityDisplay,
   ResultsSeverityTableDisplay,
 } from './severityclassdisplay';
-import ResultsWordCloudDisplay from './wordclouddisplay';
+import {
+  ResultsWordCloudDisplay,
+  ResultsWordCloudTableDisplay,
+ } from './wordclouddisplay';
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
 
@@ -55,6 +58,7 @@ const ResultsDashboard = ({
       ResultsCvssTableDisplay.displayId,
       ResultsDescriptionWordCloudTableDisplay.displayId,
       ResultsSeverityTableDisplay.displayId,
+      ResultsWordCloudTableDisplay.displayId,
     ]}
     defaultContent={[
       [
