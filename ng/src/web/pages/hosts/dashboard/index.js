@@ -27,12 +27,24 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import HostsCvssDisplay from './cvssdisplay';
-import HostsModifiedDisplay from './modifieddisplay';
-import HostsModifiedHighDisplay from './modifiedhighdisplay';
-import HostsSeverityClassDisplay from './severityclassdisplay';
+import {HostsCvssDisplay, HostsCvssTableDisplay} from './cvssdisplay';
+import {
+  HostsModifiedDisplay,
+  HostsModifiedTableDisplay,
+} from './modifieddisplay';
+import {
+  HostsModifiedHighDisplay,
+  HostsModifiedHighTableDisplay,
+} from './modifiedhighdisplay';
+import {
+  HostsSeverityClassDisplay,
+  HostsSeverityClassTableDisplay,
+} from './severityclassdisplay';
 import HostsTopologyDisplay from './topologydisplay';
-import HostsVulnScoreDisplay from './vulnscoredisplay';
+import {
+  HostsVulnScoreDisplay,
+  HostsVulnScoreTableDisplay,
+} from './vulnscoredisplay';
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
@@ -50,6 +62,11 @@ const HostsDashboard = ({
       HostsSeverityClassDisplay.displayId,
       HostsTopologyDisplay.displayId,
       HostsVulnScoreDisplay.displayId,
+      HostsCvssTableDisplay.displayId,
+      HostsSeverityClassTableDisplay.displayId,
+      HostsModifiedTableDisplay.displayId,
+      HostsModifiedHighTableDisplay.displayId,
+      HostsVulnScoreTableDisplay.displayId,
     ]}
     defaultContent={[
       [
