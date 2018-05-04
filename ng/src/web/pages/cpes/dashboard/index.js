@@ -28,7 +28,7 @@ import PropTypes from '../../../utils/proptypes';
 import Dashboard from '../../../components/dashboard2/dashboard';
 
 import {CpesCreatedDisplay, CpesCreatedTableDisplay} from './createddisplay';
-import CpesCvssDisplay from './cvssdisplay';
+import {CpesCvssDisplay, CpesCvssTableDisplay} from './cvssdisplay';
 import CpesSeverityClassDisplay from './severityclassdisplay';
 
 export const CPES_DASHBOARD_ID = '9cff9b4d-b164-43ce-8687-f2360afc7500';
@@ -44,6 +44,7 @@ const CpesDashboard = ({
       CpesCreatedDisplay.displayId,
       CpesCreatedTableDisplay.displayId,
       CpesCvssDisplay.displayId,
+      CpesCvssTableDisplay.displayId,
       CpesSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
