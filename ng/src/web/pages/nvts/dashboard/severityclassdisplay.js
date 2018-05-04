@@ -27,12 +27,13 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
 
-const NvtsSeverityDisplay = ({
+export const NvtsSeverityDisplay = ({
   filter,
   ...props
 }) => (
@@ -44,7 +45,6 @@ const NvtsSeverityDisplay = ({
         {...props}
         {...loaderProps}
         filter={filter}
-        dataTitles={[_('Severity Class'), _('# of NVTs')]}
         title={({data: tdata}) =>
           _('NVTs by Severity Class (Total: {{count}})',
             {count: tdata.total})}
@@ -57,13 +57,44 @@ NvtsSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'nvt-by-severity-class';
+NvtsSeverityDisplay.displayId = 'nvt-by-severity-class';
 
-NvtsSeverityDisplay.displayId = DISPLAY_ID;
+export const NvtsSeverityTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <NvtsSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of NVTs')]}
+        title={({data: tdata = {}}) =>
+          _('NVTs by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </NvtsSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, NvtsSeverityDisplay, {
-  title: _('NVTs by Severity Class'),
+NvtsSeverityTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NvtsSeverityTableDisplay.displayId = 'nvt-by-severity-table';
+
+registerDisplay(NvtsSeverityDisplay.displayId, NvtsSeverityDisplay, {
+  title: _('Chart: NVTs by Severity Class'),
 });
+
+registerDisplay(NvtsSeverityTableDisplay.displayId,
+  NvtsSeverityTableDisplay, {
+    title: _('Table: NVTs by Severity Class'),
+  },
+);
 
 export default NvtsSeverityDisplay;
 
