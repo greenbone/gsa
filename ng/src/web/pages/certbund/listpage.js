@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,13 +29,10 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
-import CertBundCharts from './charts.js';
 import CertBundFilterDialog from './filterdialog.js';
 import CertBundTable from './table.js';
 
@@ -49,16 +47,7 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: 'a6946f44-480f-4f37-8a73-28a4cd5310c4',
-  defaultControllersString: 'cert_bund_adv-by-severity-class|' +
-    'cert_bund_adv-by-created|cert_bund_adv-by-cvss',
-  defaultControllerString: 'cert_bund_adv-by-cvss',
-})(CertBundCharts);
-
 export default withEntitiesContainer('certbundadv', {
-  dashboard: Dashboard,
   dashboard2: CertBundDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>
