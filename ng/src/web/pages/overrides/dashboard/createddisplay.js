@@ -28,6 +28,8 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OverridesCreatedLoader} from './loaders';
@@ -75,6 +77,48 @@ registerDisplay(OverridesCreatedDisplay.displayId,
   },
 );
 
-export default OverridesCreatedDisplay;
+export const OverridesCreatedTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OverridesCreatedLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        title={({data: tdata}) =>
+          _('Overrides by Creation Time')}
+        dataTitles={[
+          _('Creation Time'),
+          _('# of created Overrides'),
+          _('Total Overrides'),
+        ]}
+        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataTransform={transformCreated}
+      />
+    )}
+  </OverridesCreatedLoader>
+);
+
+OverridesCreatedTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+OverridesCreatedTableDisplay.displayId = 'override-by-created-table';
+
+registerDisplay(OverridesCreatedDisplay.displayId,
+  OverridesCreatedDisplay, {
+    title: _('Chart: Overrides by Creation Time'),
+  },
+);
+
+registerDisplay(OverridesCreatedTableDisplay.displayId,
+  OverridesCreatedTableDisplay, {
+    title: _('Table: Overrides by Creation Time'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
