@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {DfnCertSeverityLoader} from './loaders';
 
-const DfnCertSeverityDisplay = ({
+export const DfnCertSeverityClassDisplay = ({
   filter,
   ...props
 }) => (
@@ -53,18 +54,50 @@ const DfnCertSeverityDisplay = ({
   </DfnCertSeverityLoader>
 );
 
-DfnCertSeverityDisplay.propTypes = {
+DfnCertSeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'dfn_cert_adv-by-severity-class';
+DfnCertSeverityClassDisplay.displayId = 'dfn_cert_adv-by-severity-class';
 
-DfnCertSeverityDisplay.displayId = DISPLAY_ID;
+export const DfnCertSeverityClassTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <DfnCertSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of DFN-CERT Advisories')]}
+        title={({data: tdata = {}}) =>
+          _('DFN-CERT Advisories by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </DfnCertSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, DfnCertSeverityDisplay, {
+DfnCertSeverityClassTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+DfnCertSeverityClassTableDisplay.displayId = 'dfn_cert_adv-by-severity-table';
+
+registerDisplay(
+  DfnCertSeverityClassDisplay.displayId,
+  DfnCertSeverityClassDisplay, {
   title: _('Chart: DFN-CERT Advisories by Severity Class'),
 });
 
-export default DfnCertSeverityDisplay;
+registerDisplay(
+  DfnCertSeverityClassTableDisplay.displayId,
+  DfnCertSeverityClassTableDisplay, {
+    title: _('Table: DFN-CERT Advisories by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
