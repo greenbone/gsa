@@ -174,4 +174,24 @@ export const ovalClassColorScale = scaleOrdinal()
     'orange', // vulnerability
   ]);
 
+export const SEC_INFO_TYPES = {
+  cert_bund_adv: _('CERT-Bund Advisories'),
+  cpe: _('CPEs'),
+  cve: _('CVEs'),
+  dfn_cert_adv: _('DFN-CERT Advisories'),
+  nvt: _('NVTs'),
+  ovaldef: _('OVAL Definitions'),
+};
+
+export const secInfoTypeColorScale = scaleOrdinal()
+  .domain(Object.keys(SEC_INFO_TYPES))
+  .range([
+    '#011f4b', // CERT-Bund Advisories
+    '#596d8a', // CPEs
+    '#a9c9ce', // CVEs
+    '#98df8a', // DFN-CERT Advisories
+    '#80c674', // Nvts
+    '#53984a', // OVAL Definitions
+  ]);
+
 // vim: set ts=2 sw=2 tw=80:

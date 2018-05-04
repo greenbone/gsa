@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CertBundSeverityLoader} from './loaders';
 
-const CertBundCvssDisplay = ({
+export const CertBundCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -58,14 +59,42 @@ CertBundCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'cert_bund_adv-by-cvss';
+CertBundCvssDisplay.displayId = 'cert_bund_adv-by-cvss';
 
-CertBundCvssDisplay.displayId = DISPLAY_ID;
+export const CertBundCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <CertBundSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of CERT-Bund Advisories')]}
+        title={({data: tdata = {}}) =>
+          _('CERT-Bund Advisories by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </CertBundSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, CertBundCvssDisplay, {
+CertBundCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+CertBundCvssTableDisplay.displayId = 'cert_bund_adv-by-cvss-table';
+
+
+registerDisplay(CertBundCvssDisplay.displayId, CertBundCvssDisplay, {
   title: _('Chart: CERT-Bund Advisories by CVSS'),
 });
 
-export default CertBundCvssDisplay;
+registerDisplay(CertBundCvssTableDisplay.displayId, CertBundCvssTableDisplay, {
+  title: _('Table: CERT-Bund Advisories by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

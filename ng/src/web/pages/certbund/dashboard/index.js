@@ -31,8 +31,11 @@ import {
   CertBundCreatedDisplay,
   CertBundCreatedTableDisplay,
 } from './createddisplay';
-import CertBundCvssDisplay from './cvssdisplay';
-import CertBundSeverityClassDisplay from './severityclassdisplay';
+import {CertBundCvssDisplay, CertBundCvssTableDisplay} from './cvssdisplay';
+import {
+  CertBundSeverityClassDisplay,
+  CertBundSeverityClassTableDisplay,
+} from './severityclassdisplay';
 
 export const CERTBUND_DASHBOARD_ID = 'a6946f44-480f-4f37-8a73-28a4cd5310c4';
 
@@ -47,7 +50,9 @@ const CertBundDashboard = ({
       CertBundCreatedDisplay.displayId,
       CertBundCreatedTableDisplay.displayId,
       CertBundCvssDisplay.displayId,
+      CertBundCvssTableDisplay.displayId,
       CertBundSeverityClassDisplay.displayId,
+      CertBundSeverityClassTableDisplay.displayId,
     ]}
     defaultContent={[
       [

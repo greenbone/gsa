@@ -27,25 +27,24 @@ import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
-import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from '../../../components/chart/donut3d';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import DataTableDisplay from '../../../components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import DonutChart from 'web/components/chart/donut3d';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   totalCount,
   percent,
-  ovalClassColorScale,
-  OVAL_CLASS_TYPES,
-} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+  secInfoTypeColorScale,
+  SEC_INFO_TYPES,
+} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {OvaldefClassLoader} from './loaders';
+import {AllSecInfosTypeLoader} from './loaders';
 
-const transformClassData = (data = {}) => {
+const transformTypeData = (data = {}) => {
   const {groups = []} = data;
   const sum = totalCount(groups);
 
@@ -53,10 +52,10 @@ const transformClassData = (data = {}) => {
     const {count, value} = group;
     const perc = percent(count, sum);
     return {
-      value: parse_float(count),
-      label: OVAL_CLASS_TYPES[value],
-      toolTip: `${OVAL_CLASS_TYPES[value]}: ${perc}% (${count})`,
-      color: ovalClassColorScale(value),
+      value: count,
+      label: SEC_INFO_TYPES[value],
+      toolTip: `${SEC_INFO_TYPES[value]}: ${perc}% (${count})`,
+      color: secInfoTypeColorScale(value),
       filterValue: value,
     };
   });
@@ -66,7 +65,7 @@ const transformClassData = (data = {}) => {
   return tdata;
 };
 
-export class OvaldefClassDisplay extends React.Component {
+export class AllSecInfosTypeDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -82,15 +81,15 @@ export class OvaldefClassDisplay extends React.Component {
       return;
     }
 
-    const classTerm = FilterTerm.fromString(`class="${filterValue}"`);
+    const typeTerm = FilterTerm.fromString(`type="${filterValue}"`);
 
-    if (is_defined(filter) && filter.hasTerm(classTerm)) {
+    if (is_defined(filter) && filter.hasTerm(typeTerm)) {
       return;
     }
-    const classFilter = Filter.fromTerm(classTerm);
+    const typeFilter = Filter.fromTerm(typeTerm);
 
-    const newFilter = is_defined(filter) ? filter.copy().and(classFilter) :
-      classFilter;
+    const newFilter = is_defined(filter) ? filter.copy().and(typeFilter) :
+      typeFilter;
 
     onFilterChanged(newFilter);
   }
@@ -102,18 +101,16 @@ export class OvaldefClassDisplay extends React.Component {
     } = this.props;
 
     return (
-      <OvaldefClassLoader
+      <AllSecInfosTypeLoader
         filter={filter}
       >
         {loaderProps => (
           <DataDisplay
             {...props}
             {...loaderProps}
-            dataTransform={transformClassData}
-            dataTitles={[_('Class'), _('# of OVAL Definitions')]}
-            dataRow={({row}) => [row.label, row.value]}
+            dataTransform={transformTypeData}
             title={({data: tdata}) =>
-              _('OVAL Definitions by Class (Total: {{count}})',
+              _('SecInfo Items by Type (Total: {{count}})',
               {count: tdata.total})}
           >
             {({width, height, data: tdata, svgRef}) => (
@@ -127,52 +124,53 @@ export class OvaldefClassDisplay extends React.Component {
             )}
           </DataDisplay>
         )}
-      </OvaldefClassLoader>
+      </AllSecInfosTypeLoader>
     );
   }
 }
 
-OvaldefClassDisplay.propTypes = {
+AllSecInfosTypeDisplay.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-OvaldefClassDisplay.displayId = 'ovaldef-by-class';
+AllSecInfosTypeDisplay.displayId = 'allinfo-by-type';
 
-export const OvaldefClassTableDisplay = ({
+export const AllSecInfosTypeTableDisplay = ({
   filter,
   ...props
 }) => (
-  <OvaldefClassLoader
+  <AllSecInfosTypeLoader
     filter={filter}
   >
     {loaderProps => (
       <DataTableDisplay
         {...props}
         {...loaderProps}
-        dataTitles={[_('Class'), _('# of OVAL Definitions')]}
+        dataTitles={[_('Type'), _('# of SecInfo Items')]}
         dataRow={({row}) => [row.label, row.value]}
-        dataTransform={transformClassData}
-        title={({data: tdata}) =>
-          _('OVAL Definitions by Class (Total: {{count}})',
+        dataTransform={transformTypeData}
+        title={({data: tdata}) => _('SecInfo Items by Type (Total: {{count}})',
           {count: tdata.total})}
       />
     )}
-  </OvaldefClassLoader>
+  </AllSecInfosTypeLoader>
 );
 
-OvaldefClassTableDisplay.propTypes = {
+AllSecInfosTypeTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-OvaldefClassTableDisplay.displayId = 'ovaldef-by-class-table';
+AllSecInfosTypeTableDisplay.displayId = 'allinfo-by-qod-type-table';
 
-registerDisplay(OvaldefClassDisplay.displayId, OvaldefClassDisplay, {
-  title: _('Chart: OVAL Definitions by Class'),
+registerDisplay(AllSecInfosTypeDisplay.displayId, AllSecInfosTypeDisplay, {
+  title: _('Chart: SecInfo Items by Type'),
 });
 
-registerDisplay(OvaldefClassTableDisplay.displayId, OvaldefClassTableDisplay, {
-  title: _('Table: OVAL Definitions by Class'),
+registerDisplay(
+  AllSecInfosTypeTableDisplay.displayId,
+  AllSecInfosTypeTableDisplay, {
+  title: _('Table: SecInfo Items by Type'),
 });
 
 // vim: set ts=2 sw=2 tw=80:
