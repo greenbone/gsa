@@ -32,16 +32,17 @@ import {parse_float} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from '../../../components/chart/donut3d';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import DonutChart from 'web/components/chart/donut3d';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   totalCount,
   percent,
   activeDaysColorScale,
-} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OverridesActiveDaysLoader} from './loaders';
 
@@ -110,7 +111,7 @@ const transformActiveDaysData = (data = {}) => {
   return tdata;
 };
 
-class OverridesActiveDaysDisplay extends React.Component {
+export class OverridesActiveDaysDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -186,14 +187,48 @@ OverridesActiveDaysDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'override-by-active-days';
+OverridesActiveDaysDisplay.displayId = 'override-by-active-days';
 
-OverridesActiveDaysDisplay.displayId = DISPLAY_ID;
+export const OverridesActiveDaysTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OverridesActiveDaysLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataRow={({row}) => [row.label, row.value]}
+        dataTitles={[
+          _('Active'),
+          _('# of Overrides'),
+        ]}
+        dataTransform={transformActiveDaysData}
+        title={({data: tdata}) => _('Overrides by Active Days (Total: ' +
+          '{{count}})', {count: tdata.total})}
+      />
+    )}
+  </OverridesActiveDaysLoader>
+);
 
-registerDisplay(DISPLAY_ID, OverridesActiveDaysDisplay, {
-  title: _('Chart: Overrides by Active Days'),
-});
+OverridesActiveDaysTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
 
-export default OverridesActiveDaysDisplay;
+OverridesActiveDaysTableDisplay.displayId = 'override-by-active-days-table';
+
+registerDisplay(OverridesActiveDaysDisplay.displayId,
+  OverridesActiveDaysDisplay, {
+    title: _('Chart: Overrides by Active Days'),
+  },
+);
+
+registerDisplay(OverridesActiveDaysTableDisplay.displayId,
+  OverridesActiveDaysTableDisplay, {
+    title: _('Table: Overrides by Active Days'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
