@@ -461,6 +461,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cves/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cves/row.js
      ${NG_SRC_DIR}/src/web/pages/cves/table.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/createddisplay.js
      ${NG_SRC_DIR}/src/web/pages/cves/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/cves/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/cves/dashboard/loaders.js
