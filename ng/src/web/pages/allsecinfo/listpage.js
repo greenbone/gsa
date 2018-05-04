@@ -29,12 +29,18 @@ import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import withDashboard from '../../components/dashboard/withDashboard.js';
+import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
 import SecInfoCharts from './charts.js';
 import SecInfoFilterDialog from './filterdialog.js';
 import SecInfosTable from './table.js';
+
+import {
+  AllSecInfoDashboard,
+  ALLSECINFO_DASHBOARD_ID,
+} from './dashboard/index.js';
 
 const ToolBarIcons = props => {
   return (
@@ -55,6 +61,10 @@ const Dashboard = withDashboard({
 
 export default withEntitiesContainer('secinfo', {
   dashboard: Dashboard,
+  dashboard2: AllSecInfoDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={ALLSECINFO_DASHBOARD_ID}/>
+  ),
   filterEditDialog: SecInfoFilterDialog,
   sectionIcon: 'allinfo.svg',
   table: SecInfosTable,
