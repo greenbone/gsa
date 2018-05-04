@@ -29,13 +29,10 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
-import CveCharts from './charts.js';
 import CveFilterDialog from './filterdialog.js';
 import CvesTable from './table.js';
 
@@ -50,16 +47,7 @@ const ToolBarIcons = props => {
   );
 };
 
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: '815ddd2e-8654-46c7-a05b-d73224102240',
-  defaultControllersString: 'cve-by-severity-class|cve-by-created|' +
-    'cve-by-cvss',
-  defaultControllerString: 'cve-by-cvss',
-})(CveCharts);
-
 export default withEntitiesContainer('cve', {
-  dashboard: Dashboard,
   dashboard2: CvesDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>

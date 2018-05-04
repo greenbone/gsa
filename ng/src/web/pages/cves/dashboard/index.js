@@ -27,6 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
+import {CvesCreatedDisplay, CvesCreatedTableDisplay} from './createddisplay';
 import CvesCvssDisplay from './cvssdisplay';
 import CvesSeverityClassDisplay from './severityclassdisplay';
 
@@ -40,13 +41,15 @@ const CvesDashboard = ({
     id={CVES_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
+      CvesCreatedDisplay.displayId,
+      CvesCreatedTableDisplay.displayId,
       CvesCvssDisplay.displayId,
       CvesSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
       [
         CvesSeverityClassDisplay.displayId,
-        // 'cve-by-created', // TODO
+        CvesCreatedDisplay.displayId,
         CvesCvssDisplay.displayId,
       ],
     ]}
