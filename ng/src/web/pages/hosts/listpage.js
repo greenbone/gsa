@@ -35,14 +35,11 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {goto_details} from '../../entity/component.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
-
 import DashboardControls from '../../components/dashboard2/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import HostsCharts from './charts.js';
 import HostsFilterDialog from './filterdialog.js';
 import HostsTable from './table.js';
 import HostComponent from './component.js';
@@ -76,14 +73,6 @@ ToolBarIcons.propTypes = {
   onHostCreateClick: PropTypes.func.isRequired,
 };
 
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: 'd3f5f2de-a85b-43f2-a817-b127457cc8ba',
-  defaultControllersString: 'host-by-severity-class|host-by-topology|' +
-    'host-by-modification-time',
-  defaultControllerString: 'hosts-by-cvss',
-})(HostsCharts);
-
 const Page = ({
   onChanged,
   onDownloaded,
@@ -109,7 +98,6 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard={Dashboard}
         filterEditDialog={HostsFilterDialog}
         sectionIcon="host.svg"
         table={HostsTable}
