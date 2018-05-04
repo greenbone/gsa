@@ -28,6 +28,32 @@ import Loader, {
 } from '../../../components/dashboard2/data/loader';
 
 export const OVALDEF_CLASS = 'ovaldef-class';
+export const OVALDEF_CREATED = 'ovaldef-by-created';
+
+
+export const ovaldefCreatedLoader = loadFunc(
+  ({gmp, filter}) => gmp.ovaldefs.getCreatedAggregates({filter})
+    .then(r => r.data),
+  OVALDEF_CREATED);
+
+export const OvaldefCreatedLoader = ({
+  filter,
+  children,
+}) => (
+  <Loader
+    dataId={OVALDEF_CREATED}
+    filter={filter}
+    load={ovaldefCreatedLoader}
+    subscriptions={[
+      'ovaldefs.timer',
+      'ovaldefs.changed',
+    ]}
+  >
+    {children}
+  </Loader>
+);
+
+OvaldefCreatedLoader.propTypes = loaderPropTypes;
 
 export const ovaldefClassLoader = loadFunc(
   ({gmp, filter}) => gmp.ovaldefs.getClassAggregates({filter})

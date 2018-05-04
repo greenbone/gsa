@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Steffen Waterkamp <steffen.watekamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -27,18 +27,19 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
+
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
+import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {NotesCreatedLoader} from './loaders';
+import {OvaldefCreatedLoader} from './loaders';
 
-export const NotesCreatedDisplay = ({
+export const OvaldefsCreatedDisplay = ({
   filter,
   ...props
 }) => (
-  <NotesCreatedLoader
+  <OvaldefCreatedLoader
     filter={filter}
   >
     {loaderProps => (
@@ -47,73 +48,68 @@ export const NotesCreatedDisplay = ({
         {...loaderProps}
         filter={filter}
         title={({data: tdata}) =>
-          _('Notes by Creation Time')}
-        yAxisLabel={_('# of Created Notes')}
-        y2AxisLabel={_('Total Notes')}
+          _('OVAL Definitions by Creation Time')}
+        yAxisLabel={_('# of created OVAL Definitions')}
+        y2AxisLabel={_('Total OVAL Definitions')}
         xAxisLabel={_('Time')}
         yLine={{
           color: Theme.darkGreen,
-          label: _('Created Notes'),
+          label: _('Created OVAL Defs'),
         }}
         y2Line={{
           color: Theme.darkGreen,
           dashArray: '3, 2',
-          label: _('Total Notes'),
+          label: _('Total OVAL Defs'),
         }}
       />
     )}
-  </NotesCreatedLoader>
+  </OvaldefCreatedLoader>
 );
 
-NotesCreatedDisplay.propTypes = {
+OvaldefsCreatedDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-NotesCreatedDisplay.displayId = 'note-by-created';
+OvaldefsCreatedDisplay.displayId = 'ovaldef-by-created';
 
-export const NotesCreatedTableDisplay = ({
+export const OvaldefsCreatedTableDisplay = ({
   filter,
   ...props
 }) => (
-  <NotesCreatedLoader
+  <OvaldefCreatedLoader
     filter={filter}
   >
     {loaderProps => (
       <DataTableDisplay
         {...props}
         {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Notes by Creation Time')}
         dataTitles={[
           _('Creation Time'),
-          _('# of Notes'),
-          _('Total Notes'),
+          _('# of OVAL Definitions'),
+          _('Total OVAL Definitions'),
         ]}
         dataRow={({row}) => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
+        title={() => _('OVAL Definitions by Creation Time')}
       />
     )}
-  </NotesCreatedLoader>
-
+  </OvaldefCreatedLoader>
 );
 
-NotesCreatedTableDisplay.propTypes = {
+OvaldefsCreatedTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-NotesCreatedTableDisplay.displayId = 'note-by-created-table';
+OvaldefsCreatedTableDisplay.displayId = 'ovaldef-by-created-table';
 
-registerDisplay(NotesCreatedDisplay.displayId,
-  NotesCreatedDisplay, {
-    title: _('Chart: Notes by Creation Time'),
-  },
-);
+registerDisplay(OvaldefsCreatedTableDisplay.displayId,
+  OvaldefsCreatedTableDisplay, {
+    title: _('Table: OVAL Definitions by Creation Time'),
+  });
 
-registerDisplay(NotesCreatedTableDisplay.displayId,
-  NotesCreatedTableDisplay, {
-    title: _('Table: Notes by Creation Time'),
-  },
-);
+registerDisplay(OvaldefsCreatedDisplay.displayId,
+  OvaldefsCreatedDisplay, {
+    title: _('Chart: OVAL Definitions by Creation Time'),
+  });
 
 // vim: set ts=2 sw=2 tw=80:

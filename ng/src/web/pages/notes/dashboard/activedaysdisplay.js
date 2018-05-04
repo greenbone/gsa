@@ -36,16 +36,17 @@ import {parse_float} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from '../../../components/chart/donut3d';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import DonutChart from 'web/components/chart/donut3d';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   totalCount,
   percent,
   activeDaysColorScale,
-} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+} from 'web/components/dashboard2/display/utils';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NotesActiveDaysLoader} from './loaders';
 
@@ -111,7 +112,7 @@ const transformActiveDaysData = (data = {}) => {
   return tdata;
 };
 
-class NotesActiveDaysDisplay extends React.Component {
+export class NotesActiveDaysDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -187,14 +188,47 @@ NotesActiveDaysDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'note-by-active-days';
+NotesActiveDaysDisplay.displayId = 'note-by-active-days';
 
-NotesActiveDaysDisplay.displayId = DISPLAY_ID;
+export const NotesActiveDaysTableDisplay = ({
+  filter,
+  ...props
+}) => (
 
-registerDisplay(DISPLAY_ID, NotesActiveDaysDisplay, {
-  title: _('Notes by Active Days'),
+  <NotesActiveDaysLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[
+          _('Active'),
+          _('# of Notes'),
+        ]}
+        dataRow={({row}) => [row.label, row.value]}
+        dataTransform={transformActiveDaysData}
+        title={({data: tdata}) => _('Notes by Active Days (Total: ' +
+          '{{count}})', {count: tdata.total})}
+      />
+    )}
+  </NotesActiveDaysLoader>
+);
+
+NotesActiveDaysTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+NotesActiveDaysTableDisplay.displayId = 'note-by-active-days-table';
+
+registerDisplay(NotesActiveDaysDisplay.displayId, NotesActiveDaysDisplay, {
+  title: _('Chart: Notes by Active Days'),
 });
 
-export default NotesActiveDaysDisplay;
+registerDisplay(NotesActiveDaysTableDisplay.displayId,
+  NotesActiveDaysTableDisplay, {
+    title: _('Table: Notes by Active Days'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

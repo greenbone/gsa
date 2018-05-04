@@ -170,7 +170,7 @@ export const ovalClassColorScale = scaleOrdinal()
     '#a9c9ce', // compliance
     '#024277', // inventory
     '#2ca02c', // miscellaneous
-    '#a9c9ce', // patch
+    '#8fbfa5', // patch
     'orange', // vulnerability
   ]);
 
