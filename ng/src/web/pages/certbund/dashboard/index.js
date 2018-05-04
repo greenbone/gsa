@@ -27,11 +27,8 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {
-  CertBundCreatedDisplay,
-  CertBundCreatedTableDisplay,
-} from './createddisplay';
-import CertBundCvssDisplay from './cvssdisplay';
+import {CertBundCreatedDisplay, CertBundCreatedTableDisplay} from './createddisplay'; // eslint-disable-line max-len
+import {CertBundCvssDisplay, CertBundCvssTableDisplay} from './cvssdisplay';
 import CertBundSeverityClassDisplay from './severityclassdisplay';
 
 export const CERTBUND_DASHBOARD_ID = 'a6946f44-480f-4f37-8a73-28a4cd5310c4';
@@ -47,6 +44,7 @@ const CertBundDashboard = ({
       CertBundCreatedDisplay.displayId,
       CertBundCreatedTableDisplay.displayId,
       CertBundCvssDisplay.displayId,
+      CertBundCvssTableDisplay.displayId,
       CertBundSeverityClassDisplay.displayId,
     ]}
     defaultContent={[
