@@ -27,7 +27,10 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import NotesActiveDaysDisplay from './activedaysdisplay';
+import {
+  NotesActiveDaysDisplay,
+  NotesActiveDaysTableDisplay,
+} from './activedaysdisplay';
 import NotesCreatedDisplay from './createddisplay';
 import NotesWordCloudDisplay from './wordclouddisplay';
 
@@ -44,6 +47,7 @@ const NotesDashboard = ({
       NotesActiveDaysDisplay.displayId,
       NotesCreatedDisplay.displayId,
       NotesWordCloudDisplay.displayId,
+      NotesActiveDaysTableDisplay.displayId,
     ]}
     defaultContent={[
       [
