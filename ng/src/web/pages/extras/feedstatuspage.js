@@ -238,7 +238,7 @@ class FeedStatus extends React.Component {
               </TableData>
               <TableData>
                 <IconDivider>
-                  <Link to="certbundadvs">
+                  <Link to="certbunds">
                     <IconDivider align={['start', 'center']}>
                       <Icon
                         img="cert_bund_adv.svg"

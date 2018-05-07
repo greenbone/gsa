@@ -47,7 +47,7 @@ const ToolBarIcons = props => {
   );
 };
 
-export default withEntitiesContainer('certbundadv', {
+export default withEntitiesContainer('certbund', {
   dashboard2: CertBundDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>

@@ -63,7 +63,7 @@ class CertBundsCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('certbundadv', CertBundCommand);
-register_command('certbundadvs', CertBundsCommand);
+register_command('certbund', CertBundCommand);
+register_command('certbunds', CertBundsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

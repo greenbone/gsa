@@ -64,8 +64,8 @@ import AgentDetailsPage from './pages/agents/detailspage.js';
 import AlertsPage from './pages/alerts/listpage.js';
 import AlertDetailsPage from './pages/alerts/detailspage.js';
 import AllSecInfosPage from './pages/allsecinfo/listpage.js';
-import CertBundAdvsPage from './pages/certbund/listpage.js';
-import CertBundAdvDetailsPage from './pages/certbund/detailspage.js';
+import CertBundsPage from './pages/certbund/listpage.js';
+import CertBundDetailsPage from './pages/certbund/detailspage.js';
 import CpesPage from './pages/cpes/listpage.js';
 import CpeDetailsPage from './pages/cpes/detailspage.js';
 import CredentialsPage from './pages/credentials/listpage.js';
@@ -295,8 +295,8 @@ ReactDOM.render(
           path="ovaldefs"
           component={OvaldefsPage}/>
         <Route
-          path="certbundadvs"
-          component={CertBundAdvsPage}/>
+          path="certbunds"
+          component={CertBundsPage}/>
         <Route
           path="dfncertadvs"
           component={DfnCertAdvsPage}/>
@@ -411,8 +411,8 @@ ReactDOM.render(
           component={OvaldefDetailsPage}
         />
         <Route
-          path="certbundadv/:id"
-          component={CertBundAdvDetailsPage}
+          path="certbund/:id"
+          component={CertBundDetailsPage}
         />
         <Route
           path="dfncertadv/:id"

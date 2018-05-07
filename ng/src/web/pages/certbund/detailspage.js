@@ -75,7 +75,7 @@ const ToolBarIcons = ({
       />
       <ListIcon
         title={_('CERT-Bund Advisories')}
-        page="certbundadvs"
+        page="certbunds"
       />
     </IconDivider>
     <ExportIcon
@@ -221,7 +221,7 @@ Details.propTypes = {
 const CertBundAdvPage = props => (
   <EntityContainer
     {...props}
-    name="certbundadv"
+    name="certbund"
     resourceType="cert_bund_adv"
   >
     {({
@@ -231,7 +231,7 @@ const CertBundAdvPage = props => (
       ...cprops
     }) => (
       <EntityComponent
-        name="certbundadv"
+        name="certbund"
         onDownloaded={onDownloaded}
         onDownloadError={onError}
       >

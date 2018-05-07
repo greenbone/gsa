@@ -111,7 +111,7 @@ const details_page = entity => {
     case 'dfn_cert_adv':
       return 'dfncertadv';
     case 'cert_bund_adv':
-      return 'certbundadv';
+      return 'certbund';
     default:
       return entity.info_type;
   }
