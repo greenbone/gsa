@@ -77,7 +77,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
     });
 };
 
-class TasksHighResultsDisplay extends React.Component {
+export class TasksHighResultsDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -104,8 +104,6 @@ class TasksHighResultsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
-            dataRow={({row}) => [row.label, row.value, row.severity]}
             dataTransform={transformHighResultsData}
             title={() => _('Tasks by High Results per Host')}
           >
@@ -130,16 +128,44 @@ TasksHighResultsDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const TasksHighResultsDisplayWithRouter = withRouter(TasksHighResultsDisplay);
+TasksHighResultsDisplay = withRouter(TasksHighResultsDisplay);
 
-const DISPLAY_ID = 'task-by-high-results';
+TasksHighResultsDisplay.displayId = 'task-by-high-results';
 
-TasksHighResultsDisplayWithRouter.displayId = DISPLAY_ID;
+export const TasksHighResultsTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksHighResultsLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
+        dataRow={({row}) => [row.label, row.value, row.severity]}
+        dataTransform={transformHighResultsData}
+        title={() => _('Tasks by High Results per Host')}
+      />
+    )}
+  </TasksHighResultsLoader>
+);
 
-registerDisplay(DISPLAY_ID, TasksHighResultsDisplayWithRouter, {
+TasksHighResultsTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+TasksHighResultsTableDisplay.displayId = 'task-by-high-results-table';
+
+registerDisplay(TasksHighResultsDisplay.displayId, TasksHighResultsDisplay, {
   title: _('Chart: Tasks by High Results per Host'),
 });
 
-export default TasksHighResultsDisplayWithRouter;
+registerDisplay(TasksHighResultsTableDisplay.displayId,
+  TasksHighResultsTableDisplay, {
+    title: _('Table: Tasks by High Results per Host'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

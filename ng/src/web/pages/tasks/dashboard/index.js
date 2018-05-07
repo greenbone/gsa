@@ -26,18 +26,27 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import TasksStatusDisplay from './statusdisplay';
+import {TasksStatusDisplay, TasksStatusTableDisplay} from './statusdisplay';
 import {
   TasksSeverityDisplay,
   TasksSeverityTableDisplay,
 } from './severityclassdisplay';
-import TasksSchedulesDisplay from './schedulesdisplay';
+import {
+  TasksSchedulesDisplay,
+  TasksSchedulesTableDisplay,
+} from './schedulesdisplay';
 import {
   TasksCvssDisplay,
   TasksCvssTableDisplay,
  } from './cvssdisplay';
-import TasksMostHighResultsDisplay from './mosthighresults';
-import TasksHighResultsDisplay from './highresults';
+import {
+  TasksMostHighResultsDisplay,
+  TasksMostHighResultsTableDisplay,
+} from './mosthighresults';
+import {
+  TasksHighResultsDisplay,
+  TasksHighResultsTableDisplay,
+} from './highresults';
 
 export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
 
@@ -57,6 +66,10 @@ const TaskDashboard = ({
       TasksHighResultsDisplay.displayId,
       TasksSeverityTableDisplay.displayId,
       TasksCvssTableDisplay.displayId,
+      TasksStatusTableDisplay.displayId,
+      TasksSchedulesTableDisplay.displayId,
+      TasksHighResultsTableDisplay.displayId,
+      TasksMostHighResultsTableDisplay.displayId,
     ]}
     defaultContent={[
       [

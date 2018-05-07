@@ -26,12 +26,13 @@ import _, {datetime} from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import ScheduleChart from '../../../components/chart/schedule';
+import ScheduleChart from 'web/components/chart/schedule';
 
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {TasksSchedulesLoader} from './loaders';
 
@@ -51,7 +52,7 @@ const transformScheduleData = (data = []) => {
     });
 };
 
-const TasksSchedulesDisplay = ({
+export const TasksSchedulesDisplay = ({
   filter,
   ...props
 }) => (
@@ -62,8 +63,6 @@ const TasksSchedulesDisplay = ({
       <DataDisplay
         {...props}
         {...loaderProps}
-        dataTitles={[_('Task Name'), _('Next Schedule Time')]}
-        dataRow={({row}) => [row.label, datetime(row.start)]}
         dataTransform={transformScheduleData}
         title={() => _('Next Scheduled Tasks')}
       >
@@ -84,14 +83,42 @@ TasksSchedulesDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'task-by-schedules';
+TasksSchedulesDisplay.displayId = 'task-by-schedules';
 
-TasksSchedulesDisplay.displayId = DISPLAY_ID;
+export const TasksSchedulesTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksSchedulesLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[_('Task Name'), _('Next Schedule Time')]}
+        dataRow={({row}) => [row.label, datetime(row.start)]}
+        dataTransform={transformScheduleData}
+        title={() => _('Next Scheduled Tasks')}
+      />
+    )}
+  </TasksSchedulesLoader>
+);
 
-registerDisplay(DISPLAY_ID, TasksSchedulesDisplay, {
+TasksSchedulesTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+TasksSchedulesTableDisplay.displayId = 'task-by-schedules-table';
+
+registerDisplay(TasksSchedulesDisplay.displayId, TasksSchedulesDisplay, {
   title: _('Chart: Next Scheduled Tasks'),
 });
 
-export default TasksSchedulesDisplay;
+registerDisplay(TasksSchedulesTableDisplay.displayId,
+  TasksSchedulesTableDisplay, {
+    title: _('Table: Next Scheduled Tasks'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
