@@ -20,27 +20,50 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/index';
+import {is_defined} from 'gmp/utils/identity';
 
-export const getData = state => is_defined(state) ? state.data : undefined;
+class DashboardData {
 
-export const getIsLoading = state =>
-  is_defined(state) ? state.isLoading : false;
-
-export const getError = state =>
-  is_defined(state) ? state.error : undefined;
-
-export const getById = (state, id) => is_defined(state) ?
-  state[id] : undefined;
-
-export const getDashboardData = rootState => rootState.dashboardData;
-
-export const getDashboardDataById = (rootState, id) => {
-  const state = getDashboardData(rootState);
-  if (is_defined(state)) {
-    return getById(state, id);
+  constructor(rootState) {
+    this.state = rootState;
   }
-  return undefined;
+
+  _getById(id, filter) {
+    if (is_defined(this.state)) {
+      const state = this.state[id];
+      if (!is_defined(state)) {
+        return undefined;
+      }
+      const filterString = is_defined(filter) ? filter.toFilterString() :
+        'default';
+      return state[filterString];
+    }
+    return undefined;
+  }
+
+  getIsLoading(id, filter) {
+    const state = this._getById(id, filter);
+    return is_defined(state) ? state.isLoading : false;
+  }
+
+  getError(id, filter) {
+    const state = this._getById(id, filter);
+    return is_defined(state) ? state.error : undefined;
+  }
+
+  getData(id, filter) {
+    const state = this._getById(id, filter);
+    return is_defined(state) ? state.data : undefined;
+  }
+}
+
+const getDashboardData = rootState => {
+  const dashboardData = is_defined(rootState) ?
+    rootState.dashboardData : undefined;
+
+  return new DashboardData(dashboardData);
 };
+
+export default getDashboardData;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -37,7 +37,7 @@ import {
   requestDashboardData,
 } from './actions';
 
-import {getDashboardDataById, getIsLoading, getData} from './selectors';
+import getDashboardData from './selectors';
 
 export const loaderPropTypes = {
   children: PropTypes.func,
@@ -47,19 +47,21 @@ export const loaderPropTypes = {
 export const loadFunc = (func, id) => ({dataId = id, ...props}) =>
   (dispatch, getState) => {
   const rootState = getState();
-  const state = getDashboardDataById(rootState, dataId);
+  const state = getDashboardData(rootState);
 
-  if (getIsLoading(state)) {
+  const {filter} = props;
+
+  if (state.getIsLoading(dataId, filter)) {
     // we are already loading data
     return Promise.resolve();
   }
 
-  dispatch(requestDashboardData(dataId));
+  dispatch(requestDashboardData(dataId, filter));
 
   const promise = func(props);
   return promise.then(
-    data => dispatch(receivedDashboardData(dataId, data)),
-    error => dispatch(receivedDashboardError(dataId, error)),
+    data => dispatch(receivedDashboardData(dataId, data, filter)),
+    error => dispatch(receivedDashboardError(dataId, error, filter)),
   );
 };
 
@@ -130,11 +132,11 @@ Loader.propTypes = {
   subscriptions: PropTypes.arrayOf(PropTypes.string),
 };
 
-const mapStateToProps = (rootState, {dataId}) => {
-  const state = getDashboardDataById(rootState, dataId);
+const mapStateToProps = (rootState, {dataId, filter}) => {
+  const state = getDashboardData(rootState);
   return {
-    data: getData(state),
-    isLoading: getIsLoading(state),
+    data: state.getData(dataId, filter),
+    isLoading: state.getIsLoading(dataId, filter),
   };
 };
 
