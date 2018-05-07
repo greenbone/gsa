@@ -42,7 +42,7 @@ import {
 } from 'web/components/dashboard2/display/utils';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {AllSecInfosTypeLoader} from './loaders';
+import {SecInfosTypeLoader} from './loaders';
 
 const transformTypeData = (data = {}) => {
   const {groups = []} = data;
@@ -65,7 +65,7 @@ const transformTypeData = (data = {}) => {
   return tdata;
 };
 
-export class AllSecInfosTypeDisplay extends React.Component {
+export class SecInfosTypeDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -101,7 +101,7 @@ export class AllSecInfosTypeDisplay extends React.Component {
     } = this.props;
 
     return (
-      <AllSecInfosTypeLoader
+      <SecInfosTypeLoader
         filter={filter}
       >
         {loaderProps => (
@@ -124,23 +124,23 @@ export class AllSecInfosTypeDisplay extends React.Component {
             )}
           </DataDisplay>
         )}
-      </AllSecInfosTypeLoader>
+      </SecInfosTypeLoader>
     );
   }
 }
 
-AllSecInfosTypeDisplay.propTypes = {
+SecInfosTypeDisplay.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-AllSecInfosTypeDisplay.displayId = 'allinfo-by-type';
+SecInfosTypeDisplay.displayId = 'allinfo-by-type';
 
-export const AllSecInfosTypeTableDisplay = ({
+export const SecInfosTypeTableDisplay = ({
   filter,
   ...props
 }) => (
-  <AllSecInfosTypeLoader
+  <SecInfosTypeLoader
     filter={filter}
   >
     {loaderProps => (
@@ -154,22 +154,22 @@ export const AllSecInfosTypeTableDisplay = ({
           {count: tdata.total})}
       />
     )}
-  </AllSecInfosTypeLoader>
+  </SecInfosTypeLoader>
 );
 
-AllSecInfosTypeTableDisplay.propTypes = {
+SecInfosTypeTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-AllSecInfosTypeTableDisplay.displayId = 'allinfo-by-qod-type-table';
+SecInfosTypeTableDisplay.displayId = 'allinfo-by-qod-type-table';
 
-registerDisplay(AllSecInfosTypeDisplay.displayId, AllSecInfosTypeDisplay, {
+registerDisplay(SecInfosTypeDisplay.displayId, SecInfosTypeDisplay, {
   title: _('Chart: SecInfo Items by Type'),
 });
 
 registerDisplay(
-  AllSecInfosTypeTableDisplay.displayId,
-  AllSecInfosTypeTableDisplay, {
+  SecInfosTypeTableDisplay.displayId,
+  SecInfosTypeTableDisplay, {
   title: _('Table: SecInfo Items by Type'),
 });
 

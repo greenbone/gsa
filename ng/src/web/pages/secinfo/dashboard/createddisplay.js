@@ -32,13 +32,13 @@ import transformCreated from 'web/components/dashboard2/display/created/createdt
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {AllSecInfosCreatedLoader} from './loaders';
+import {SecInfosCreatedLoader} from './loaders';
 
-export const AllSecInfosCreatedDisplay = ({
+export const SecInfosCreatedDisplay = ({
   filter,
   ...props
 }) => (
-  <AllSecInfosCreatedLoader
+  <SecInfosCreatedLoader
     filter={filter}
   >
     {loaderProps => (
@@ -62,20 +62,20 @@ export const AllSecInfosCreatedDisplay = ({
         }}
       />
     )}
-  </AllSecInfosCreatedLoader>
+  </SecInfosCreatedLoader>
 );
 
-AllSecInfosCreatedDisplay.propTypes = {
+SecInfosCreatedDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-AllSecInfosCreatedDisplay.displayId = 'allinfo-by-created';
+SecInfosCreatedDisplay.displayId = 'allinfo-by-created';
 
-export const AllSecInfosCreatedTableDisplay = ({
+export const SecInfosCreatedTableDisplay = ({
   filter,
   ...props
 }) => (
-  <AllSecInfosCreatedLoader
+  <SecInfosCreatedLoader
     filter={filter}
   >
     {loaderProps => (
@@ -92,23 +92,23 @@ export const AllSecInfosCreatedTableDisplay = ({
         title={() => _('SecInfo Items by Creation Time')}
       />
     )}
-  </AllSecInfosCreatedLoader>
+  </SecInfosCreatedLoader>
 );
 
-AllSecInfosCreatedTableDisplay.propTypes = {
+SecInfosCreatedTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-AllSecInfosCreatedTableDisplay.displayId = 'allinfo-by-created-table';
+SecInfosCreatedTableDisplay.displayId = 'allinfo-by-created-table';
 
-registerDisplay(AllSecInfosCreatedDisplay.displayId,
-  AllSecInfosCreatedDisplay, {
+registerDisplay(SecInfosCreatedDisplay.displayId,
+  SecInfosCreatedDisplay, {
     title: _('Chart: SecInfo Items by Creation Time'),
   },
 );
 
-registerDisplay(AllSecInfosCreatedTableDisplay.displayId,
-  AllSecInfosCreatedTableDisplay, {
+registerDisplay(SecInfosCreatedTableDisplay.displayId,
+  SecInfosCreatedTableDisplay, {
     title: _('Table: SecInfo Items by Creation Time'),
   },
 );

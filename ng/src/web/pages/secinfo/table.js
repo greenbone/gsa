@@ -37,7 +37,7 @@ import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
-import AllsecinfoDetails from './details.js';
+import SecinfoDetails from './details.js';
 import Row from './row.js';
 
 const Header = ({
@@ -122,10 +122,10 @@ export default createEntitiesTable({
   emptyTitle: _('No SecInfo Information available'),
   row: Row,
   header: withEntitiesHeader(true)(Header),
-  rowDetails: withRowDetails(details_page)(AllsecinfoDetails),
+  rowDetails: withRowDetails(details_page)(SecinfoDetails),
   footer: createEntitiesFooter({
     span: 10,
-    download: 'allsecinfo.xml',
+    download: 'secinfo.xml',
   }),
 });
 

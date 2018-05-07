@@ -31,13 +31,13 @@ import SeverityClassTableDisplay from 'web/components/dashboard2/display/severit
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {AllSecInfosSeverityLoader} from './loaders';
+import {SecInfosSeverityLoader} from './loaders';
 
-export const AllSecInfosSeverityDisplay = ({
+export const SecInfosSeverityDisplay = ({
   filter,
   ...props
 }) => (
-  <AllSecInfosSeverityLoader
+  <SecInfosSeverityLoader
     filter={filter}
   >
     {loaderProps => (
@@ -50,20 +50,20 @@ export const AllSecInfosSeverityDisplay = ({
             {count: tdata.total})}
       />
     )}
-  </AllSecInfosSeverityLoader>
+  </SecInfosSeverityLoader>
 );
 
-AllSecInfosSeverityDisplay.propTypes = {
+SecInfosSeverityDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-AllSecInfosSeverityDisplay.displayId = 'allinfo-by-severity-class';
+SecInfosSeverityDisplay.displayId = 'allinfo-by-severity-class';
 
-export const AllSecInfosSeverityTableDisplay = ({
+export const SecInfosSeverityTableDisplay = ({
   filter,
   ...props
 }) => (
-  <AllSecInfosSeverityLoader
+  <SecInfosSeverityLoader
     filter={filter}
   >
     {loaderProps => (
@@ -77,27 +77,27 @@ export const AllSecInfosSeverityTableDisplay = ({
             {count: tdata.total})}
       />
     )}
-  </AllSecInfosSeverityLoader>
+  </SecInfosSeverityLoader>
 );
 
-AllSecInfosSeverityTableDisplay.propTypes = {
+SecInfosSeverityTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-AllSecInfosSeverityTableDisplay.displayId = 'allinfo-by-severity-class-table';
+SecInfosSeverityTableDisplay.displayId = 'allinfo-by-severity-class-table';
 
 registerDisplay(
-  AllSecInfosSeverityDisplay.displayId,
-  AllSecInfosSeverityDisplay, {
+  SecInfosSeverityDisplay.displayId,
+  SecInfosSeverityDisplay, {
     title: _('Chart: SecInfo Items by Severity Class'),
 });
 
-registerDisplay(AllSecInfosSeverityTableDisplay.displayId,
-  AllSecInfosSeverityTableDisplay, {
+registerDisplay(SecInfosSeverityTableDisplay.displayId,
+  SecInfosSeverityTableDisplay, {
     title: _('Table: SecInfo Items by Severity Class'),
   },
 );
 
-export default AllSecInfosSeverityDisplay;
+export default SecInfosSeverityDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

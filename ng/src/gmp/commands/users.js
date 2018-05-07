@@ -301,7 +301,7 @@ class UserCommand extends EntityCommand {
       'settings_filter:adb6ffc8-e50e-4aab-9c31-13c741eb8a16': data.ovalfilter,
       'settings_filter:e4cf514a-17e2-4ab9-9c90-336f15e24750': data.certbundfilter,
       'settings_filter:312350ed-bc06-44f3-8b3f-ab9eb828b80b': data.dfncertfilter,
-      'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.allsecinfofilter,
+      'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.secinfofilter,
       /* eslint-enable max-len */
       auto_cache_rebuild: data.autocacherebuild,
     });

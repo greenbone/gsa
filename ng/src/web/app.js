@@ -63,7 +63,7 @@ import AgentsPage from './pages/agents/listpage.js';
 import AgentDetailsPage from './pages/agents/detailspage.js';
 import AlertsPage from './pages/alerts/listpage.js';
 import AlertDetailsPage from './pages/alerts/detailspage.js';
-import AllSecInfosPage from './pages/allsecinfo/listpage.js';
+import SecInfosPage from './pages/secinfo/listpage.js';
 import CertBundsPage from './pages/certbund/listpage.js';
 import CertBundDetailsPage from './pages/certbund/detailspage.js';
 import CpesPage from './pages/cpes/listpage.js';
@@ -302,7 +302,7 @@ ReactDOM.render(
           component={DfnCertsPage}/>
         <Route
           path="secinfos"
-          component={AllSecInfosPage}/>
+          component={SecInfosPage}/>
         <Route
           path="portlists"
           component={PortListsPage}/>

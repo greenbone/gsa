@@ -135,7 +135,7 @@ const UserSettingsDialog = ({
           ovalfilter,
           certbundfilter,
           dfncertfilter,
-          allsecinfofilter,
+          secinfofilter,
           autocacherebuild,
         } = state;
         return (
@@ -666,8 +666,8 @@ const UserSettingsDialog = ({
 
                 <FormGroup title={_('All SecInfo Filter')} titleSize="3">
                   <Select
-                    name="allsecinfofilter"
-                    value={allsecinfofilter}
+                    name="secinfofilter"
+                    value={secinfofilter}
                     size="30"
                     onChange={onValueChange}>
                     {render_options(filtersList.secinfo, '')}

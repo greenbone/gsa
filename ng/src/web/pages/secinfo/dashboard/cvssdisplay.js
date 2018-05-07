@@ -31,13 +31,13 @@ import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
-import {AllSecInfosSeverityLoader} from './loaders';
+import {SecInfosSeverityLoader} from './loaders';
 
-export const AllSecInfosCvssDisplay = ({
+export const SecInfosCvssDisplay = ({
   filter,
   ...props
 }) => (
-  <AllSecInfosSeverityLoader
+  <SecInfosSeverityLoader
     filter={filter}
   >
     {loaderProps => (
@@ -51,20 +51,20 @@ export const AllSecInfosCvssDisplay = ({
             {count: tdata.total})}
       />
     )}
-  </AllSecInfosSeverityLoader>
+  </SecInfosSeverityLoader>
 );
 
-AllSecInfosCvssDisplay.propTypes = {
+SecInfosCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-AllSecInfosCvssDisplay.displayId = 'allinfo-by-cvss';
+SecInfosCvssDisplay.displayId = 'allinfo-by-cvss';
 
-export const AllSecInfosCvssTableDisplay = ({
+export const SecInfosCvssTableDisplay = ({
   filter,
   ...props
 }) => (
-  <AllSecInfosSeverityLoader
+  <SecInfosSeverityLoader
     filter={filter}
   >
     {loaderProps => (
@@ -78,22 +78,22 @@ export const AllSecInfosCvssTableDisplay = ({
             {count: tdata.total})}
       />
     )}
-  </AllSecInfosSeverityLoader>
+  </SecInfosSeverityLoader>
 );
 
-AllSecInfosCvssTableDisplay.propTypes = {
+SecInfosCvssTableDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-AllSecInfosCvssTableDisplay.displayId = 'allinfo-by-cvss-table';
+SecInfosCvssTableDisplay.displayId = 'allinfo-by-cvss-table';
 
-registerDisplay(AllSecInfosCvssDisplay.displayId, AllSecInfosCvssDisplay, {
+registerDisplay(SecInfosCvssDisplay.displayId, SecInfosCvssDisplay, {
   title: _('Chart: SecInfo Items by CVSS'),
 });
 
 registerDisplay(
-  AllSecInfosCvssTableDisplay.displayId,
-  AllSecInfosCvssTableDisplay, {
+  SecInfosCvssTableDisplay.displayId,
+  SecInfosCvssTableDisplay, {
   title: _('Table: SecInfo Items by CVSS'),
 });
 

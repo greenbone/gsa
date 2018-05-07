@@ -27,80 +27,80 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const ALL_SEC_INFOS_CREATED = 'allinfo-by-created';
-export const ALL_SEC_INFOS_SEVERITY_CLASS = 'allinfo-severity-class';
-export const ALL_SEC_INFOS_TYPE = 'allinfo-type';
+export const SEC_INFOS_CREATED = 'secinfo-by-created';
+export const SEC_INFOS_SEVERITY_CLASS = 'secinfo-severity-class';
+export const SEC_INFOS_TYPE = 'secinfo-type';
 
-export const allSecInfoCreatedLoader = loadFunc(
+export const secInfoCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.secinfos.getCreatedAggregates({filter})
     .then(r => r.data),
-  ALL_SEC_INFOS_CREATED);
+  SEC_INFOS_CREATED);
 
-export const AllSecInfosCreatedLoader = ({
+export const SecInfosCreatedLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={ALL_SEC_INFOS_CREATED}
+    dataId={SEC_INFOS_CREATED}
     filter={filter}
-    load={allSecInfoCreatedLoader}
+    load={secInfoCreatedLoader}
     subscriptions={[
-      'all_sec_info.timer',
-      'all_sec_info.changed',
+      'secinfos.timer',
+      'secinfos.changed',
     ]}
   >
     {children}
   </Loader>
 );
 
-AllSecInfosCreatedLoader.propTypes = loaderPropTypes;
+SecInfosCreatedLoader.propTypes = loaderPropTypes;
 
-export const allSecInfosSeverityLoader = loadFunc(
+export const secInfosSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.secinfos.getSeverityAggregates({filter})
     .then(r => r.data),
-  ALL_SEC_INFOS_SEVERITY_CLASS);
+  SEC_INFOS_SEVERITY_CLASS);
 
-export const AllSecInfosSeverityLoader = ({
+export const SecInfosSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={ALL_SEC_INFOS_SEVERITY_CLASS}
+    dataId={SEC_INFOS_SEVERITY_CLASS}
     filter={filter}
-    load={allSecInfosSeverityLoader}
+    load={secInfosSeverityLoader}
     subscriptions={[
-      'all_sec_info.timer',
-      'all_sec_info.changed',
+      'secinfos.timer',
+      'secinfos.changed',
     ]}
   >
     {children}
   </Loader>
 );
 
-AllSecInfosSeverityLoader.propTypes = loaderPropTypes;
+SecInfosSeverityLoader.propTypes = loaderPropTypes;
 
-export const allSecInfosTypeLoader = loadFunc(
+export const secInfosTypeLoader = loadFunc(
   ({gmp, filter}) => gmp.secinfos.getTypeAggregates({filter})
     .then(r => r.data),
-  ALL_SEC_INFOS_TYPE);
+  SEC_INFOS_TYPE);
 
-export const AllSecInfosTypeLoader = ({
+export const SecInfosTypeLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={ALL_SEC_INFOS_TYPE}
+    dataId={SEC_INFOS_TYPE}
     filter={filter}
-    load={allSecInfosTypeLoader}
+    load={secInfosTypeLoader}
     subscriptions={[
-      'all_sec_info.timer',
-      'all_sec_info.changed',
+      'secinfos.timer',
+      'secinfos.changed',
     ]}
   >
     {children}
   </Loader>
 );
 
-AllSecInfosTypeLoader.propTypes = loaderPropTypes;
+SecInfosTypeLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:
