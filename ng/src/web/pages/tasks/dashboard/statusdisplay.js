@@ -32,16 +32,17 @@ import Filter from 'gmp/models/filter';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from '../../../components/chart/donut3d';
+import DonutChart from 'web/components/chart/donut3d';
 
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard2/registry';
 import {
   totalCount,
   percent,
-} from '../../../components/dashboard2/display/utils';
+} from 'web/components/dashboard2/display/utils';
 
 import {TaskStatusLoader} from './loaders';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -141,8 +142,6 @@ export class TasksStatusDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformStatusData}
-            dataTitles={[_('Status'), _('# of Tasks')]}
-            dataRow={({row}) => [row.label, row.value]}
             title={({data: tdata}) =>
               _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
           >
@@ -170,8 +169,39 @@ TasksStatusDisplay.propTypes = {
 
 TasksStatusDisplay.displayId = 'task-by-status';
 
+export const TasksStatusTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TaskStatusLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTransform={transformStatusData}
+        dataTitles={[_('Status'), _('# of Tasks')]}
+        dataRow={({row}) => [row.label, row.value]}
+        title={({data: tdata}) =>
+          _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
+      />
+    )}
+  </TaskStatusLoader>
+);
+
+TasksStatusTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+TasksStatusTableDisplay.displayId = 'task-by-status-table';
+
 registerDisplay(TasksStatusDisplay.displayId, TasksStatusDisplay, {
   title: _('Chart: Tasks by Status'),
+});
+
+registerDisplay(TasksStatusTableDisplay.displayId, TasksStatusTableDisplay, {
+  title: _('Table: Tasks by Status'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

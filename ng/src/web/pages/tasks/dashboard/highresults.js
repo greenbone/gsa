@@ -104,8 +104,6 @@ export class TasksHighResultsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
-            dataRow={({row}) => [row.label, row.value, row.severity]}
             dataTransform={transformHighResultsData}
             title={() => _('Tasks by High Results per Host')}
           >
@@ -134,8 +132,40 @@ TasksHighResultsDisplay = withRouter(TasksHighResultsDisplay);
 
 TasksHighResultsDisplay.displayId = 'task-by-high-results';
 
+export const TasksHighResultsTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksHighResultsLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
+        dataRow={({row}) => [row.label, row.value, row.severity]}
+        dataTransform={transformHighResultsData}
+        title={() => _('Tasks by High Results per Host')}
+      />
+    )}
+  </TasksHighResultsLoader>
+);
+
+TasksHighResultsTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+TasksHighResultsTableDisplay.displayId = 'task-by-high-results-table';
+
 registerDisplay(TasksHighResultsDisplay.displayId, TasksHighResultsDisplay, {
   title: _('Chart: Tasks by High Results per Host'),
 });
+
+registerDisplay(TasksHighResultsTableDisplay.displayId,
+  TasksHighResultsTableDisplay, {
+    title: _('Table: Tasks by High Results per Host'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:

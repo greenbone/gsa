@@ -30,19 +30,20 @@ import _ from 'gmp/locale';
 
 import {parse_float, parse_severity} from 'gmp/parser';
 
-import {resultSeverityRiskFactor} from '../../../utils/severity';
-import PropTypes from '../../../utils/proptypes';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
+import PropTypes from 'web/utils/proptypes';
 
 
-import BarChart from '../../../components/chart/bar';
+import BarChart from 'web/components/chart/bar';
 
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard2/registry';
 import {
   riskFactorColorScale,
-} from '../../../components/dashboard2/display/utils';
+} from 'web/components/dashboard2/display/utils';
 
 import {TasksHighResultsLoader} from './loaders';
-import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const format = d3format('0.2f');
 
@@ -134,12 +135,42 @@ TasksMostHighResultsDisplay = withRouter(
 
 TasksMostHighResultsDisplay.displayId = 'task-by-most-high-results';
 
+export const TasksMostHighResultsTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <TasksHighResultsLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[_('Task Name'), _('Max. High per Host')]}
+        dataRow={({row}) => [row.x, row.y]}
+        dataTransform={transformHighResultsData}
+        title={() => _('Tasks with most High Results per Host')}
+      />
+    )}
+  </TasksHighResultsLoader>
+);
+
+TasksMostHighResultsTableDisplay.displayId = 'task-by-most-high-results-table';
+
+TasksMostHighResultsTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
 registerDisplay(TasksMostHighResultsDisplay.displayId,
   TasksMostHighResultsDisplay, {
     title: _('Chart: Tasks with most High Results per Host'),
   },
 );
 
-export default TasksMostHighResultsDisplay;
+registerDisplay(TasksMostHighResultsTableDisplay.displayId,
+  TasksMostHighResultsTableDisplay, {
+    title: _('Table: Tasks with most High Results per Host'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
