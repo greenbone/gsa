@@ -27,7 +27,9 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
+export const RESULTS_DESCRIPTION_WORDCOUNT = 'results-description-wordcount';
 export const RESULTS_SEVERITY = 'results-severity';
+export const RESULTS_WORDCOUNT = 'results-wordcount';
 
 export const resultsSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.results.getSeverityAggregates({filter})
@@ -53,8 +55,6 @@ export const ResultsSeverityLoader = ({
 
 ResultsSeverityLoader.propTypes = loaderPropTypes;
 
-export const RESULTS_WORDCOUNT = 'results-wordcount';
-
 export const resultsWordCountLoader = loadFunc(
   ({gmp, filter}) => gmp.results.getWordCountsAggregates({filter})
     .then(r => r.data),
@@ -78,8 +78,6 @@ export const ResultsWordCountLoader = ({
 );
 
 ResultsWordCountLoader.propTypes = loaderPropTypes;
-
-export const RESULTS_DESCRIPTION_WORDCOUNT = 'results-description-wordcount';
 
 export const resultsDescriptionWordCountLoader = loadFunc(
   ({gmp, filter}) => gmp.results.getDescriptionWordCountsAggregates({filter})

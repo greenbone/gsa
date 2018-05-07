@@ -28,7 +28,7 @@ import Loader, {
 } from '../../../components/dashboard2/data/loader';
 
 export const OVERRIDES_ACTIVE_DAYS = 'overrides-active-days';
-export const OVERRIDES_CREATED = 'overrides-by-created';
+export const OVERRIDES_CREATED = 'overrides-created';
 export const OVERRIDES_WORDCOUNT = 'overrides-wordcount';
 
 export const overridesActiveDaysLoader = loadFunc(
@@ -69,8 +69,8 @@ export const OverridesCreatedLoader = ({
     filter={filter}
     load={overridesCreatedLoader}
     subscriptions={[
-      'nvts.timer',
-      'nvts.changed',
+      'overrides.timer',
+      'overrides.changed',
     ]}
   >
     {children}
@@ -94,8 +94,8 @@ export const OverridesWordCountLoader = ({
     filter={filter}
     load={overridesWordCountLoader}
     subscriptions={[
-      'results.timer',
-      'results.changed',
+      'overrides.timer',
+      'overrides.changed',
     ]}
   >
     {children}

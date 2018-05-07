@@ -27,21 +27,21 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const OVALDEF_CLASS = 'ovaldef-class';
-export const OVALDEF_CREATED = 'ovaldef-by-created';
-
+export const OVALDEFS_CLASS = 'ovaldefs-class';
+export const OVALDEFS_CREATED = 'ovaldefs-created';
+export const OVALDEFS_SEVERITY = 'ovaldefs-severity';
 
 export const ovaldefCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.ovaldefs.getCreatedAggregates({filter})
     .then(r => r.data),
-  OVALDEF_CREATED);
+  OVALDEFS_CREATED);
 
 export const OvaldefCreatedLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={OVALDEF_CREATED}
+    dataId={OVALDEFS_CREATED}
     filter={filter}
     load={ovaldefCreatedLoader}
     subscriptions={[
@@ -58,19 +58,19 @@ OvaldefCreatedLoader.propTypes = loaderPropTypes;
 export const ovaldefClassLoader = loadFunc(
   ({gmp, filter}) => gmp.ovaldefs.getClassAggregates({filter})
     .then(r => r.data),
-  OVALDEF_CLASS);
+  OVALDEFS_CLASS);
 
 export const OvaldefClassLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={OVALDEF_CLASS}
+    dataId={OVALDEFS_CLASS}
     filter={filter}
     load={ovaldefClassLoader}
     subscriptions={[
-      'ovaldef.timer',
-      'ovaldef.changed',
+      'ovaldefs.timer',
+      'ovaldefs.changed',
     ]}
   >
     {children}
@@ -79,24 +79,22 @@ export const OvaldefClassLoader = ({
 
 OvaldefClassLoader.propTypes = loaderPropTypes;
 
-export const OVALDEF_SEVERITY_CLASS = 'ovaldef-severity-class';
-
 export const ovaldefSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.ovaldefs.getSeverityAggregates({filter})
     .then(r => r.data),
-  OVALDEF_SEVERITY_CLASS);
+  OVALDEFS_SEVERITY);
 
 export const OvaldefSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={OVALDEF_SEVERITY_CLASS}
+    dataId={OVALDEFS_SEVERITY}
     filter={filter}
     load={ovaldefSeverityLoader}
     subscriptions={[
-      'ovaldef.timer',
-      'ovaldef.changed',
+      'ovaldefs.timer',
+      'ovaldefs.changed',
     ]}
   >
     {children}

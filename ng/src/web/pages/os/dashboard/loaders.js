@@ -27,21 +27,21 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const OS_SEVERITY = 'os-severity';
-export const OS_VULN_SCORE = 'os-by-most-vulnerable';
-const OS_MAX_GROUPS = 10;
+export const OSS_SEVERITY = 'oss-severity';
+export const OSS_VULN_SCORE = 'oss-most-vulnerable';
+const OSS_MAX_GROUPS = 10;
 
 export const osAverageSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.operatingsystems.getAverageSeverityAggregates({filter})
     .then(r => r.data),
-  OS_SEVERITY);
+  OSS_SEVERITY);
 
 export const OsAverageSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={OS_SEVERITY}
+    dataId={OSS_SEVERITY}
     filter={filter}
     load={osAverageSeverityLoader}
     subscriptions={[
@@ -58,21 +58,21 @@ OsAverageSeverityLoader.propTypes = loaderPropTypes;
 
 export const osVulnScoreLoader = loadFunc(
   ({gmp, filter}) => gmp.operatingsystems.getVulnScoreAggregates(
-    {filter, max: OS_MAX_GROUPS})
+    {filter, max: OSS_MAX_GROUPS})
     .then(r => r.data),
-  OS_VULN_SCORE);
+  OSS_VULN_SCORE);
 
 export const OsVulnScoreLoader = ({
   children,
   filter,
 }) => (
   <Loader
-    dataId={OS_VULN_SCORE}
+    dataId={OSS_VULN_SCORE}
     filter={filter}
     load={osVulnScoreLoader}
     subscripions={[
-      'os.timer',
-      'os.changed',
+      'operatingsystems.timer',
+      'operatingsystems.changed',
     ]}
   >
     {children}

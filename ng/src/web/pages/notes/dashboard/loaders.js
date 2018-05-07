@@ -28,7 +28,7 @@ import Loader, {
 } from '../../../components/dashboard2/data/loader';
 
 export const NOTES_ACTIVE_DAYS = 'notes-active-days';
-export const NOTES_CREATED = 'notes-by-created';
+export const NOTES_CREATED = 'notes-created';
 export const NOTES_WORDCOUNT = 'notes-wordcount';
 
 export const notesActiveDaysLoader = loadFunc(
@@ -69,8 +69,8 @@ export const NotesCreatedLoader = ({
     filter={filter}
     load={notesCreatedLoader}
     subscriptions={[
-      'nvts.timer',
-      'nvts.changed',
+      'notes.timer',
+      'notes.changed',
     ]}
   >
     {children}
@@ -94,8 +94,8 @@ export const NotesWordCountLoader = ({
     filter={filter}
     load={notesWordCountLoader}
     subscriptions={[
-      'results.timer',
-      'results.changed',
+      'notes.timer',
+      'notes.changed',
     ]}
   >
     {children}
