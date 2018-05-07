@@ -77,7 +77,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
     });
 };
 
-class TasksHighResultsDisplay extends React.Component {
+export class TasksHighResultsDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -130,16 +130,12 @@ TasksHighResultsDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const TasksHighResultsDisplayWithRouter = withRouter(TasksHighResultsDisplay);
+TasksHighResultsDisplay = withRouter(TasksHighResultsDisplay);
 
-const DISPLAY_ID = 'task-by-high-results';
+TasksHighResultsDisplay.displayId = 'task-by-high-results';
 
-TasksHighResultsDisplayWithRouter.displayId = DISPLAY_ID;
-
-registerDisplay(DISPLAY_ID, TasksHighResultsDisplayWithRouter, {
+registerDisplay(TasksHighResultsDisplay.displayId, TasksHighResultsDisplay, {
   title: _('Chart: Tasks by High Results per Host'),
 });
-
-export default TasksHighResultsDisplayWithRouter;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -99,7 +99,7 @@ const transformStatusData = (data = {}) => {
   return tdata;
 };
 
-class TasksStatusDisplay extends React.Component {
+export class TasksStatusDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -168,14 +168,10 @@ TasksStatusDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'task-by-status';
+TasksStatusDisplay.displayId = 'task-by-status';
 
-TasksStatusDisplay.displayId = DISPLAY_ID;
-
-registerDisplay(DISPLAY_ID, TasksStatusDisplay, {
+registerDisplay(TasksStatusDisplay.displayId, TasksStatusDisplay, {
   title: _('Chart: Tasks by Status'),
 });
-
-export default TasksStatusDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

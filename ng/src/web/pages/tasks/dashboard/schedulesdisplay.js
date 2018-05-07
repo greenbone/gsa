@@ -51,7 +51,7 @@ const transformScheduleData = (data = []) => {
     });
 };
 
-const TasksSchedulesDisplay = ({
+export const TasksSchedulesDisplay = ({
   filter,
   ...props
 }) => (
@@ -84,14 +84,10 @@ TasksSchedulesDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'task-by-schedules';
+TasksSchedulesDisplay.displayId = 'task-by-schedules';
 
-TasksSchedulesDisplay.displayId = DISPLAY_ID;
-
-registerDisplay(DISPLAY_ID, TasksSchedulesDisplay, {
+registerDisplay(TasksSchedulesDisplay.displayId, TasksSchedulesDisplay, {
   title: _('Chart: Next Scheduled Tasks'),
 });
-
-export default TasksSchedulesDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
