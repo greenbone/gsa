@@ -54,6 +54,16 @@ const dashboardData = (state = {}, action) => {
     }
 };
 
+const dashboardDataForFilter = (state = {}, action) => {
+  const filterString = is_defined(action.filter) ?
+    action.filter.toFilterString() : 'default';
+
+  return {
+    ...state,
+    [filterString]: dashboardData(state[filterString], action),
+  };
+};
+
 const dashboardDataById = (state = {}, action) => {
   if (!is_defined(action.id)) {
     return state;
@@ -65,7 +75,7 @@ const dashboardDataById = (state = {}, action) => {
     case DASHBOARD_DATA_LOADING_ERROR:
       return {
         ...state,
-        [action.id]: dashboardData(state[action.id], action),
+        [action.id]: dashboardDataForFilter(state[action.id], action),
       };
     default:
       return state;

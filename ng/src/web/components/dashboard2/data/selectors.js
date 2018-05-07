@@ -28,25 +28,31 @@ class DashboardData {
     this.state = rootState;
   }
 
-  _getById(id) {
+  _getById(id, filter) {
     if (is_defined(this.state)) {
-      return this.state[id];
+      const state = this.state[id];
+      if (!is_defined(state)) {
+        return undefined;
+      }
+      const filterString = is_defined(filter) ? filter.toFilterString() :
+        'default';
+      return state[filterString];
     }
     return undefined;
   }
 
-  getIsLoading(id) {
-    const state = this._getById(id);
+  getIsLoading(id, filter) {
+    const state = this._getById(id, filter);
     return is_defined(state) ? state.isLoading : false;
   }
 
-  getError(id) {
-    const state = this._getById(id);
+  getError(id, filter) {
+    const state = this._getById(id, filter);
     return is_defined(state) ? state.error : undefined;
   }
 
-  getData(id) {
-    const state = this._getById(id);
+  getData(id, filter) {
+    const state = this._getById(id, filter);
     return is_defined(state) ? state.data : undefined;
   }
 }
