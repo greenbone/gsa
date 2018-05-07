@@ -73,8 +73,8 @@ import CredentialDetailsPage from './pages/credentials/detailspage.js';
 import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
 import CvssCalculatorPage from './pages/extras/cvsscalculatorpage.js';
-import DfnCertAdvsPage from './pages/dfncert/listpage.js';
-import DfnCertAdvDetailsPage from './pages/dfncert/detailspage.js';
+import DfnCertsPage from './pages/dfncert/listpage.js';
+import DfnCertDetailsPage from './pages/dfncert/detailspage.js';
 import FeedStatusPage from './pages/extras/feedstatuspage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import FilterDetailsPage from './pages/filters/detailspage.js';
@@ -298,8 +298,8 @@ ReactDOM.render(
           path="certbunds"
           component={CertBundsPage}/>
         <Route
-          path="dfncertadvs"
-          component={DfnCertAdvsPage}/>
+          path="dfncerts"
+          component={DfnCertsPage}/>
         <Route
           path="secinfos"
           component={AllSecInfosPage}/>
@@ -415,8 +415,8 @@ ReactDOM.render(
           component={CertBundDetailsPage}
         />
         <Route
-          path="dfncertadv/:id"
-          component={DfnCertAdvDetailsPage}
+          path="dfncert/:id"
+          component={DfnCertDetailsPage}
         />
         <Route
           path="user/:id"

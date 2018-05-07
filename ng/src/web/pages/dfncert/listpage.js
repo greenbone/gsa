@@ -49,7 +49,7 @@ const ToolBarIcons = props => {
   );
 };
 
-export default withEntitiesContainer('dfncertadv', {
+export default withEntitiesContainer('dfncert', {
   dashboard2: DfnCertDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>

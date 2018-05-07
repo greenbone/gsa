@@ -110,13 +110,13 @@ const DfnCertAdvsHeader = withEntitiesHeader(true)(Header);
 
 const DfnCertAdvsFooter = createEntitiesFooter({
   span: 10,
-  download: 'dfncertadvs.xml',
+  download: 'dfncerts.xml',
 });
 
 export default createEntitiesTable({
   emptyTitle: _('No DFN-CERT Advisories available'),
   row: DfnCertAdvRow,
-  rowDetails: withRowDetails('dfncertadv')(DfnCertAdvDetails),
+  rowDetails: withRowDetails('dfncert')(DfnCertAdvDetails),
   header: DfnCertAdvsHeader,
   footer: DfnCertAdvsFooter,
 });

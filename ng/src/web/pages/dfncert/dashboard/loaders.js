@@ -31,7 +31,7 @@ export const DFNCERT_CREATED = 'dfncert-by-created';
 export const DFNCERT_SEVERITY_CLASS = 'dfncert-severity-class';
 
 export const dfnCertsCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.dfncertadvs.getCreatedAggregates({filter})
+  ({gmp, filter}) => gmp.dfncerts.getCreatedAggregates({filter})
     .then(r => r.data),
   DFNCERT_CREATED);
 
@@ -44,8 +44,8 @@ export const DfnCertsCreatedLoader = ({
     filter={filter}
     load={dfnCertsCreatedLoader}
     subscriptions={[
-      'dfn_cert_advs.timer',
-      'dfn_cert_advs.changed',
+      'dfncerts.timer',
+      'dfncerts.changed',
     ]}
   >
     {children}
@@ -55,7 +55,7 @@ export const DfnCertsCreatedLoader = ({
 DfnCertsCreatedLoader.propTypes = loaderPropTypes;
 
 export const dfnCertSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.dfncertadvs.getSeverityAggregates({filter})
+  ({gmp, filter}) => gmp.dfncerts.getSeverityAggregates({filter})
     .then(r => r.data),
   DFNCERT_SEVERITY_CLASS);
 
@@ -68,8 +68,8 @@ export const DfnCertSeverityLoader = ({
     filter={filter}
     load={dfnCertSeverityLoader}
     subscriptions={[
-      'dfn_cert_advs.timer',
-      'dfn_cert_advs.changed',
+      'dfncerts.timer',
+      'dfncerts.changed',
     ]}
   >
     {children}

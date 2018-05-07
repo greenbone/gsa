@@ -109,7 +109,7 @@ Header.propTypes = {
 const details_page = entity => {
   switch (entity.info_type) {
     case 'dfn_cert_adv':
-      return 'dfncertadv';
+      return 'dfncert';
     case 'cert_bund_adv':
       return 'certbund';
     default:

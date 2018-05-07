@@ -247,7 +247,7 @@ class FeedStatus extends React.Component {
                       <span>CERT-Bund Advisories</span>
                     </IconDivider>
                   </Link>
-                  <Link to="dfncertadvs">
+                  <Link to="dfncerts">
                     <IconDivider align={['start', 'center']}>
                       <Icon
                         img="dfn_cert_adv.svg"
