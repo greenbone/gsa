@@ -27,20 +27,20 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const CERTBUND_SEVERITY_CLASS = 'certbund-severity-class';
-export const CERTBUND_CREATED = 'certbund-by-created';
+export const CERTBUNDS_SEVERITY = 'certbunds-severity';
+export const CERTBUNDS_CREATED = 'certbunds-created';
 
 export const certBundCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.certbunds.getCreatedAggregates({filter})
     .then(r => r.data),
-  CERTBUND_CREATED);
+  CERTBUNDS_CREATED);
 
 export const CertBundCreatedLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={CERTBUND_CREATED}
+    dataId={CERTBUNDS_CREATED}
     filter={filter}
     load={certBundCreatedLoader}
     subscriptions={[
@@ -57,14 +57,14 @@ CertBundCreatedLoader.propTypes = loaderPropTypes;
 export const certBundSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.certbunds.getSeverityAggregates({filter})
     .then(r => r.data),
-  CERTBUND_SEVERITY_CLASS);
+  CERTBUNDS_SEVERITY);
 
 export const CertBundSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={CERTBUND_SEVERITY_CLASS}
+    dataId={CERTBUNDS_SEVERITY}
     filter={filter}
     load={certBundSeverityLoader}
     subscriptions={[

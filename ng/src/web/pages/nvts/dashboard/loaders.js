@@ -27,23 +27,23 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const NVT_FAMILY = 'nvt-family';
-export const NVT_SEVERITY_CLASS = 'nvt-severity-class';
-export const NVT_QOD = 'nvt-qod';
-export const NVT_QOD_TYPE = 'nvt-qod-type';
-export const NVT_CREATED = 'nvt-by-created';
+export const NVTS_FAMILY = 'nvt-family';
+export const NVTS_SEVERITY = 'nvt-severity';
+export const NVTS_QOD = 'nvt-qod';
+export const NVTS_QOD_TYPE = 'nvt-qod-type';
+export const NVTS_CREATED = 'nvt-created';
 
 export const nvtFamilyLoader = loadFunc(
   ({gmp, filter}) => gmp.nvts.getFamilyAggregates({filter})
     .then(r => r.data),
-  NVT_FAMILY);
+  NVTS_FAMILY);
 
 export const NvtsFamilyLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={NVT_FAMILY}
+    dataId={NVTS_FAMILY}
     filter={filter}
     load={nvtFamilyLoader}
     subscriptions={[
@@ -60,14 +60,14 @@ NvtsFamilyLoader.propTypes = loaderPropTypes;
 export const nvtSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.nvts.getSeverityAggregates({filter})
     .then(r => r.data),
-  NVT_SEVERITY_CLASS);
+  NVTS_SEVERITY);
 
 export const NvtsSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={NVT_SEVERITY_CLASS}
+    dataId={NVTS_SEVERITY}
     filter={filter}
     load={nvtSeverityLoader}
     subscriptions={[
@@ -84,14 +84,14 @@ NvtsSeverityLoader.propTypes = loaderPropTypes;
 export const nvtQodLoader = loadFunc(
   ({gmp, filter}) => gmp.nvts.getQodAggregates({filter})
     .then(r => r.data),
-  NVT_QOD);
+  NVTS_QOD);
 
 export const NvtsQodLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={NVT_QOD}
+    dataId={NVTS_QOD}
     filter={filter}
     load={nvtQodLoader}
     subscriptions={[
@@ -108,14 +108,14 @@ NvtsQodLoader.propTypes = loaderPropTypes;
 export const nvtQodTypeLoader = loadFunc(
   ({gmp, filter}) => gmp.nvts.getQodTypeAggregates({filter})
     .then(r => r.data),
-  NVT_QOD_TYPE);
+  NVTS_QOD_TYPE);
 
 export const NvtsQodTypeLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={NVT_QOD_TYPE}
+    dataId={NVTS_QOD_TYPE}
     filter={filter}
     load={nvtQodTypeLoader}
     subscriptions={[
@@ -132,14 +132,14 @@ NvtsQodTypeLoader.propTypes = loaderPropTypes;
 export const nvtCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.nvts.getCreatedAggregates({filter})
     .then(r => r.data),
-  NVT_CREATED);
+  NVTS_CREATED);
 
 export const NvtCreatedLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={NVT_CREATED}
+    dataId={NVTS_CREATED}
     filter={filter}
     load={nvtCreatedLoader}
     subscriptions={[

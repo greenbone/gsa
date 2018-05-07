@@ -27,20 +27,20 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const DFNCERT_CREATED = 'dfncert-by-created';
-export const DFNCERT_SEVERITY_CLASS = 'dfncert-severity-class';
+export const DFNCERTS_CREATED = 'dfncerts-created';
+export const DFNCERTS_SEVERITY = 'dfncerts-severity';
 
 export const dfnCertsCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.dfncerts.getCreatedAggregates({filter})
     .then(r => r.data),
-  DFNCERT_CREATED);
+  DFNCERTS_CREATED);
 
 export const DfnCertsCreatedLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={DFNCERT_CREATED}
+    dataId={DFNCERTS_CREATED}
     filter={filter}
     load={dfnCertsCreatedLoader}
     subscriptions={[
@@ -57,14 +57,14 @@ DfnCertsCreatedLoader.propTypes = loaderPropTypes;
 export const dfnCertSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.dfncerts.getSeverityAggregates({filter})
     .then(r => r.data),
-  DFNCERT_SEVERITY_CLASS);
+  DFNCERTS_SEVERITY);
 
 export const DfnCertSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={DFNCERT_SEVERITY_CLASS}
+    dataId={DFNCERTS_SEVERITY}
     filter={filter}
     load={dfnCertSeverityLoader}
     subscriptions={[

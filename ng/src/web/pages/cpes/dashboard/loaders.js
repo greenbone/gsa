@@ -27,20 +27,20 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const CPE_CREATED = 'cpe-by-created';
-export const CPE_SEVERITY_CLASS = 'cpe-severity-class';
+export const CPES_CREATED = 'cpes-created';
+export const CPES_SEVERITY = 'cpes-severity';
 
 export const cpeCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.cpes.getCreatedAggregates({filter})
     .then(r => r.data),
-  CPE_CREATED);
+  CPES_CREATED);
 
 export const CpesCreatedLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={CPE_CREATED}
+    dataId={CPES_CREATED}
     filter={filter}
     load={cpeCreatedLoader}
     subscriptions={[
@@ -57,14 +57,14 @@ CpesCreatedLoader.propTypes = loaderPropTypes;
 export const cpeSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.cpes.getSeverityAggregates({filter})
     .then(r => r.data),
-  CPE_SEVERITY_CLASS);
+  CPES_SEVERITY);
 
 export const CpesSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={CPE_SEVERITY_CLASS}
+    dataId={CPES_SEVERITY}
     filter={filter}
     load={cpeSeverityLoader}
     subscriptions={[

@@ -27,6 +27,7 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
+export const REPORTS_HIGH_RESULTS = 'reports-high-results';
 export const REPORTS_SEVERITY = 'reports-severity';
 
 export const reportsSeverityLoader = loadFunc(
@@ -52,8 +53,6 @@ export const ReportsSeverityLoader = ({
 );
 
 ReportsSeverityLoader.propTypes = loaderPropTypes;
-
-export const REPORTS_HIGH_RESULTS = 'reports-high-results';
 
 export const reportsHighResultsLoader = loadFunc(
   ({gmp, filter}) => gmp.reports.getHighResultsAggregates({filter})

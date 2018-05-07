@@ -27,21 +27,21 @@ import Loader, {
   loaderPropTypes,
 } from '../../../components/dashboard2/data/loader';
 
-export const CVE_SEVERITY_CLASS = 'cve-severity-class';
-export const CVE_CREATED = 'cve-by-created';
+export const CVES_SEVERITY = 'cves-severity';
+export const CVES_CREATED = 'cves-created';
 
 
 export const cveCreatedLoader = loadFunc(
   ({gmp, filter}) => gmp.cves.getCreatedAggregates({filter})
     .then(r => r.data),
-  CVE_CREATED);
+  CVES_CREATED);
 
 export const CvesCreatedLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={CVE_CREATED}
+    dataId={CVES_CREATED}
     filter={filter}
     load={cveCreatedLoader}
     subscriptions={[
@@ -58,14 +58,14 @@ CvesCreatedLoader.propTypes = loaderPropTypes;
 export const cveSeverityLoader = loadFunc(
   ({gmp, filter}) => gmp.cves.getSeverityAggregates({filter})
     .then(r => r.data),
-  CVE_SEVERITY_CLASS);
+  CVES_SEVERITY);
 
 export const CvesSeverityLoader = ({
   filter,
   children,
 }) => (
   <Loader
-    dataId={CVE_SEVERITY_CLASS}
+    dataId={CVES_SEVERITY}
     filter={filter}
     load={cveSeverityLoader}
     subscriptions={[
