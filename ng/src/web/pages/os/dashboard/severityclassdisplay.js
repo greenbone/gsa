@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OsAverageSeverityLoader} from './loaders';
 
-const OsSeverityClassDisplay = ({
+export const OsSeverityClassDisplay = ({
   filter,
   ...props
 }) => (
@@ -57,14 +58,43 @@ OsSeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'os-by-severity-class';
+OsSeverityClassDisplay.displayId = 'os-by-severity-class';
 
-OsSeverityClassDisplay.displayId = DISPLAY_ID;
+export const OsSeverityClassTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OsAverageSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <SeverityClassTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity Class'), _('# of Operating Systems')]}
+        title={({data: tdata = {}}) =>
+          _('Operating Systems by Severity Class (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </OsAverageSeverityLoader>
+);
 
-registerDisplay(DISPLAY_ID, OsSeverityClassDisplay, {
+OsSeverityClassTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+OsSeverityClassTableDisplay.displayId = 'os-by-severity-table';
+
+registerDisplay(OsSeverityClassDisplay.displayId, OsSeverityClassDisplay, {
   title: _('Chart: Operating Systems by Severity Class'),
 });
 
-export default OsSeverityClassDisplay;
+registerDisplay(OsSeverityClassTableDisplay.displayId,
+  OsSeverityClassTableDisplay, {
+    title: _('Table: Operating Systems by Severity Class'),
+  },
+);
 
 // vim: set ts=2 sw=2 tw=80:
