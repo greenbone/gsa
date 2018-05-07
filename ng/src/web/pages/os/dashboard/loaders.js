@@ -45,8 +45,8 @@ export const OsAverageSeverityLoader = ({
     filter={filter}
     load={osAverageSeverityLoader}
     subscriptions={[
-      'os.timer',
-      'os.changed',
+      'operatingsystems.timer',
+      'operatingsystems.changed',
     ]}
   >
     {children}
