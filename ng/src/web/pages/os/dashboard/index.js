@@ -27,7 +27,7 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import OsCvssDisplay from './cvssdisplay';
+import {OsCvssDisplay, OsCvssTableDisplay} from './cvssdisplay';
 import OsSeverityClassDisplay from './severityclassdisplay';
 import OsVulnScoreDisplay from './vulnscoredisplay';
 
@@ -42,6 +42,7 @@ const OsDashboard = ({
     filter={filter}
     permittedDisplays={[
       OsCvssDisplay.displayId,
+      OsCvssTableDisplay.displayId,
       OsSeverityClassDisplay.displayId,
       OsVulnScoreDisplay.displayId,
     ]}
