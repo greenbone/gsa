@@ -37,7 +37,7 @@ import {
   requestDashboardData,
 } from './actions';
 
-import {getDashboardDataById, getIsLoading, getData} from './selectors';
+import getDashboardData from './selectors';
 
 export const loaderPropTypes = {
   children: PropTypes.func,
@@ -47,9 +47,9 @@ export const loaderPropTypes = {
 export const loadFunc = (func, id) => ({dataId = id, ...props}) =>
   (dispatch, getState) => {
   const rootState = getState();
-  const state = getDashboardDataById(rootState, dataId);
+  const state = getDashboardData(rootState);
 
-  if (getIsLoading(state)) {
+  if (state.getIsLoading(dataId)) {
     // we are already loading data
     return Promise.resolve();
   }
@@ -131,10 +131,10 @@ Loader.propTypes = {
 };
 
 const mapStateToProps = (rootState, {dataId}) => {
-  const state = getDashboardDataById(rootState, dataId);
+  const state = getDashboardData(rootState);
   return {
-    data: getData(state),
-    isLoading: getIsLoading(state),
+    data: state.getData(dataId),
+    isLoading: state.getIsLoading(dataId),
   };
 };
 

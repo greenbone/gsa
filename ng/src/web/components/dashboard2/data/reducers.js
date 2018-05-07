@@ -28,8 +28,6 @@ import {
   DASHBOARD_DATA_LOADING_REQUEST,
 } from './actions';
 
-import {getById} from './selectors';
-
 const dashboardData = (state = {}, action) => {
   switch (action.type) {
     case DASHBOARD_DATA_LOADING_REQUEST:
@@ -67,7 +65,7 @@ const dashboardDataById = (state = {}, action) => {
     case DASHBOARD_DATA_LOADING_ERROR:
       return {
         ...state,
-        [action.id]: dashboardData(getById(state, action.id), action),
+        [action.id]: dashboardData(state[action.id], action),
       };
     default:
       return state;
