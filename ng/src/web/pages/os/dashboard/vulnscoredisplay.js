@@ -36,6 +36,7 @@ import PropTypes from '../../../utils/proptypes';
 import BarChart from '../../../components/chart/bar';
 
 import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import DataTableDisplay from '../../../components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   riskFactorColorScale,
 } from '../../../components/dashboard2/display/utils';
@@ -89,7 +90,7 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
   return tdata.reverse();
 };
 
-class OsVulnScoreDisplay extends React.Component {
+export class OsVulnScoreDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -119,7 +120,7 @@ class OsVulnScoreDisplay extends React.Component {
             dataTransform={transformVulnScoreData}
             dataTitles={[
               _('Operating System Name'),
-              _('Max. average Severity Score'),
+              _('Max. Average Severity Score'),
             ]}
             dataRow={({row}) => [row.x, row.y]}
             title={() => _('Most Vulnerable Operating Systems')}
@@ -149,16 +150,52 @@ OsVulnScoreDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const DISPLAY_ID = 'os-by-most-vulnerable';
+OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';
 
-const OsVulnScoreDisplayWithRouter = withRouter(OsVulnScoreDisplay);
+export const OsVulnScoreDisplayWithRouter =
+  withRouter(OsVulnScoreDisplay);
 
-OsVulnScoreDisplayWithRouter.displayId = DISPLAY_ID;
+export const OsVulnScoreTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OsVulnScoreLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <DataTableDisplay
+        {...props}
+        {...loaderProps}
+        dataTitles={[
+          _('Operating Sytem Name'),
+          _('Max. Average Severity Score'),
+        ]}
+        dataRow={({row}) => [row.x, row.y]}
+        dataTransform={transformVulnScoreData}
+        title={({data: tdata}) => _('Most Vulnerable Operating Systems')}
+      />
+    )}
+  </OsVulnScoreLoader>
+);
 
-registerDisplay(DISPLAY_ID, OsVulnScoreDisplayWithRouter, {
+OsVulnScoreTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+};
+
+OsVulnScoreTableDisplay.displayId = 'os-by-most-vulnerable-table';
+
+registerDisplay(
+  OsVulnScoreDisplayWithRouter.displayId,
+  OsVulnScoreDisplayWithRouter, {
   title: _('Chart: Operating Systems by Vulnerability Score'),
 });
 
-export default OsVulnScoreDisplayWithRouter;
+registerDisplay(
+  OsVulnScoreTableDisplay.displayId,
+  OsVulnScoreTableDisplay, {
+    title: _('Table: Operating Systems by Vulnerability Score'),
+  }
+);
 
 // vim: set ts=2 sw=2 tw=80:
