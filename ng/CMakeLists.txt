@@ -417,18 +417,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/details.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/filterdialog.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/listpage.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/row.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/table.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/createddisplay.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/cvssdisplay.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/index.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/loaders.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/severityclassdisplay.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/dashboard/typedisplay.js
      ${NG_SRC_DIR}/src/web/pages/assetspage.js
      ${NG_SRC_DIR}/src/web/pages/credentials/component.js
      ${NG_SRC_DIR}/src/web/pages/credentials/details.js
@@ -714,6 +702,18 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
      ${NG_SRC_DIR}/src/web/pages/schedules/render.js
      ${NG_SRC_DIR}/src/web/pages/schedules/table.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/charts.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/details.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/filterdialog.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/row.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/table.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
      ${NG_SRC_DIR}/src/web/pages/secinfopage.js
      ${NG_SRC_DIR}/src/web/pages/tags/component.js
      ${NG_SRC_DIR}/src/web/pages/tags/details.js

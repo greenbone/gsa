@@ -31,7 +31,7 @@ export const CERTBUND_SEVERITY_CLASS = 'certbund-severity-class';
 export const CERTBUND_CREATED = 'certbund-by-created';
 
 export const certBundCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.certbundadvs.getCreatedAggregates({filter})
+  ({gmp, filter}) => gmp.certbunds.getCreatedAggregates({filter})
     .then(r => r.data),
   CERTBUND_CREATED);
 
@@ -44,8 +44,8 @@ export const CertBundCreatedLoader = ({
     filter={filter}
     load={certBundCreatedLoader}
     subscriptions={[
-      'certbundadvs.timer',
-      'certbundadvs.changed',
+      'certbunds.timer',
+      'certbunds.changed',
     ]}
   >
     {children}
@@ -55,7 +55,7 @@ export const CertBundCreatedLoader = ({
 CertBundCreatedLoader.propTypes = loaderPropTypes;
 
 export const certBundSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.certbundadvs.getSeverityAggregates({filter})
+  ({gmp, filter}) => gmp.certbunds.getSeverityAggregates({filter})
     .then(r => r.data),
   CERTBUND_SEVERITY_CLASS);
 
@@ -68,8 +68,8 @@ export const CertBundSeverityLoader = ({
     filter={filter}
     load={certBundSeverityLoader}
     subscriptions={[
-      'certbundadv.timer',
-      'certbundadv.changed',
+      'certbunds.timer',
+      'certbunds.changed',
     ]}
   >
     {children}

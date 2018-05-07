@@ -214,11 +214,11 @@ const MenuBar = ({
               />
               <MenuEntry
                 title={_('CERT-Bund Advisories')}
-                to="certbundadvs"
+                to="certbunds"
               />
               <MenuEntry
                 title={_('DFN-CERT Advisories')}
-                to="dfncertadvs"
+                to="dfncerts"
               />
             </MenuSection>
             <MenuSection>

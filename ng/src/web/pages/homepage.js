@@ -46,7 +46,7 @@ import CertBundCharts from './certbund/charts.js';
 import CveCharts from './cves/charts.js';
 import CpeCharts from './cpes/charts.js';
 import DfnCertCharts from './dfncert/charts.js';
-import SecinfoCharts from './allsecinfo/charts.js';
+import SecinfoCharts from './secinfo/charts.js';
 
 const Home = () => (
   <CacheProvider name="homedashboard">

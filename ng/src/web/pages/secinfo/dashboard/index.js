@@ -27,39 +27,41 @@ import PropTypes from '../../../utils/proptypes';
 
 import Dashboard from '../../../components/dashboard2/dashboard';
 
-import {AllSecInfosCreatedDisplay, AllSecInfosCreatedTableDisplay}
-from './createddisplay';
-import {AllSecInfosCvssDisplay, AllSecInfosCvssTableDisplay}
-from './cvssdisplay';
-import {AllSecInfosSeverityDisplay, AllSecInfosSeverityTableDisplay}
-  from './severityclassdisplay';
-import {AllSecInfosTypeDisplay, AllSecInfosTypeTableDisplay}
-  from './typedisplay';
+import {
+  SecInfosCreatedDisplay,
+  SecInfosCreatedTableDisplay,
+} from './createddisplay';
+import {SecInfosCvssDisplay, SecInfosCvssTableDisplay} from './cvssdisplay';
+import {
+  SecInfosSeverityDisplay,
+  SecInfosSeverityTableDisplay,
+} from './severityclassdisplay';
+import {SecInfosTypeDisplay, SecInfosTypeTableDisplay} from './typedisplay';
 
-export const ALLSECINFO_DASHBOARD_ID = '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864';
+export const SECINFO_DASHBOARD_ID = '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864';
 
-export const AllSecInfoDashboard = ({
+export const SecInfoDashboard = ({
   filter,
   onFilterChanged,
 }) => (
   <Dashboard
-    id={ALLSECINFO_DASHBOARD_ID}
+    id={SECINFO_DASHBOARD_ID}
     filter={filter}
     permittedDisplays={[
-      AllSecInfosCreatedDisplay.displayId,
-      AllSecInfosCreatedTableDisplay.displayId,
-      AllSecInfosCvssDisplay.displayId,
-      AllSecInfosCvssTableDisplay.displayId,
-      AllSecInfosSeverityDisplay.displayId,
-      AllSecInfosSeverityTableDisplay.displayId,
-      AllSecInfosTypeDisplay.displayId,
-      AllSecInfosTypeTableDisplay.displayId,
+      SecInfosCreatedDisplay.displayId,
+      SecInfosCreatedTableDisplay.displayId,
+      SecInfosCvssDisplay.displayId,
+      SecInfosCvssTableDisplay.displayId,
+      SecInfosSeverityDisplay.displayId,
+      SecInfosSeverityTableDisplay.displayId,
+      SecInfosTypeDisplay.displayId,
+      SecInfosTypeTableDisplay.displayId,
     ]}
     defaultContent={[
       [
-        AllSecInfosSeverityDisplay.displayId,
-        AllSecInfosCreatedDisplay.displayId,
-        AllSecInfosCvssDisplay.displayId,
+        SecInfosSeverityDisplay.displayId,
+        SecInfosCreatedDisplay.displayId,
+        SecInfosCvssDisplay.displayId,
       ],
     ]}
     maxItemsPerRow={4}
@@ -68,7 +70,7 @@ export const AllSecInfoDashboard = ({
   />
 );
 
-AllSecInfoDashboard.propTypes = {
+SecInfoDashboard.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func,
 };

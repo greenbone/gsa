@@ -27,12 +27,12 @@ import PropTypes from '../../utils/proptypes.js';
 
 import CpeDetails from '../cpes/details.js';
 import CveDetails from '../cves/details.js';
-import CertBundAdvDetails from '../certbund/details.js';
-import DfnCertAdvDetails from '../dfncert/details.js';
+import CertBundDetails from '../certbund/details.js';
+import DfnCertDetails from '../dfncert/details.js';
 import NvtDetails from '../nvts/details.js';
 import OvalDefDetails from '../ovaldefs/details.js';
 
-const AllSecinfoDetails = props => {
+const SecinfoDetails = props => {
   switch (props.entity.info_type) {
     case 'nvt':
       return <NvtDetails {...props}/>;
@@ -41,9 +41,9 @@ const AllSecinfoDetails = props => {
     case 'cve':
       return <CveDetails {...props}/>;
     case 'dfn_cert_adv':
-      return <DfnCertAdvDetails {...props}/>;
+      return <DfnCertDetails {...props}/>;
     case 'cert_bund_adv':
-      return <CertBundAdvDetails {...props}/>;
+      return <CertBundDetails {...props}/>;
     case 'ovaldef':
       return <OvalDefDetails {...props}/>;
     default:
@@ -51,10 +51,10 @@ const AllSecinfoDetails = props => {
   }
 };
 
-AllSecinfoDetails.propTypes = {
+SecinfoDetails.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-export default AllSecinfoDetails;
+export default SecinfoDetails;
 
 // vim: set ts=2 sw=2 tw=80:

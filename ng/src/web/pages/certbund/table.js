@@ -110,13 +110,13 @@ const CertBundsHeader = withEntitiesHeader(true)(Header);
 
 const CertBundsFooter = createEntitiesFooter({
   span: 10,
-  download: 'certbundadvs.xml',
+  download: 'certbunds.xml',
 });
 
 export default createEntitiesTable({
   emptyTitle: _('No CERT-Bund Advisories available'),
   row: CertBundRow,
-  rowDetails: withRowDetails('certbundadv')(CertBundDetails),
+  rowDetails: withRowDetails('certbund')(CertBundDetails),
   header: CertBundsHeader,
   footer: CertBundsFooter,
 });

@@ -63,9 +63,9 @@ import AgentsPage from './pages/agents/listpage.js';
 import AgentDetailsPage from './pages/agents/detailspage.js';
 import AlertsPage from './pages/alerts/listpage.js';
 import AlertDetailsPage from './pages/alerts/detailspage.js';
-import AllSecInfosPage from './pages/allsecinfo/listpage.js';
-import CertBundAdvsPage from './pages/certbund/listpage.js';
-import CertBundAdvDetailsPage from './pages/certbund/detailspage.js';
+import SecInfosPage from './pages/secinfo/listpage.js';
+import CertBundsPage from './pages/certbund/listpage.js';
+import CertBundDetailsPage from './pages/certbund/detailspage.js';
 import CpesPage from './pages/cpes/listpage.js';
 import CpeDetailsPage from './pages/cpes/detailspage.js';
 import CredentialsPage from './pages/credentials/listpage.js';
@@ -73,8 +73,8 @@ import CredentialDetailsPage from './pages/credentials/detailspage.js';
 import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
 import CvssCalculatorPage from './pages/extras/cvsscalculatorpage.js';
-import DfnCertAdvsPage from './pages/dfncert/listpage.js';
-import DfnCertAdvDetailsPage from './pages/dfncert/detailspage.js';
+import DfnCertsPage from './pages/dfncert/listpage.js';
+import DfnCertDetailsPage from './pages/dfncert/detailspage.js';
 import FeedStatusPage from './pages/extras/feedstatuspage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import FilterDetailsPage from './pages/filters/detailspage.js';
@@ -295,14 +295,14 @@ ReactDOM.render(
           path="ovaldefs"
           component={OvaldefsPage}/>
         <Route
-          path="certbundadvs"
-          component={CertBundAdvsPage}/>
+          path="certbunds"
+          component={CertBundsPage}/>
         <Route
-          path="dfncertadvs"
-          component={DfnCertAdvsPage}/>
+          path="dfncerts"
+          component={DfnCertsPage}/>
         <Route
           path="secinfos"
-          component={AllSecInfosPage}/>
+          component={SecInfosPage}/>
         <Route
           path="portlists"
           component={PortListsPage}/>
@@ -411,12 +411,12 @@ ReactDOM.render(
           component={OvaldefDetailsPage}
         />
         <Route
-          path="certbundadv/:id"
-          component={CertBundAdvDetailsPage}
+          path="certbund/:id"
+          component={CertBundDetailsPage}
         />
         <Route
-          path="dfncertadv/:id"
-          component={DfnCertAdvDetailsPage}
+          path="dfncert/:id"
+          component={DfnCertDetailsPage}
         />
         <Route
           path="user/:id"

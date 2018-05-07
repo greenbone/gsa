@@ -63,7 +63,7 @@ class DfnCertAdvsCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('dfncertadv', DfnCertAdvCommand);
-register_command('dfncertadvs', DfnCertAdvsCommand);
+register_command('dfncert', DfnCertAdvCommand);
+register_command('dfncerts', DfnCertAdvsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

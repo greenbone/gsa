@@ -38,11 +38,13 @@ import CveCharts from './cves/charts.js';
 import DfnCertCharts from './dfncert/charts.js';
 import NvtCharts from './nvts/charts.js';
 import OvaldefCharts from './ovaldefs/charts.js';
-import AllSecinfoCharts from './allsecinfo/charts.js';
+import SecinfoCharts from './secinfo/charts.js';
 
 const SecinfoPage = () => (
   <CacheProvider name="secinfodashboard">
-    <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
+    <Section
+      title={_('SecInfo Dashboard')}
+      img="allinfo.svg"
       extra={<DashboardControls/>}>
       <Dashboard
         configPrefId="84ab32da-fe69-44d8-8a8f-70034cf28d4e"
@@ -59,7 +61,7 @@ const SecinfoPage = () => (
         <CveCharts/>
         <CpeCharts/>
         <DfnCertCharts/>
-        <AllSecinfoCharts/>
+        <SecinfoCharts/>
       </Dashboard>
     </Section>
   </CacheProvider>

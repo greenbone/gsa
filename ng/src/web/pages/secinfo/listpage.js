@@ -37,8 +37,8 @@ import SecInfoFilterDialog from './filterdialog.js';
 import SecInfosTable from './table.js';
 
 import {
-  AllSecInfoDashboard,
-  ALLSECINFO_DASHBOARD_ID,
+  SecInfoDashboard,
+  SECINFO_DASHBOARD_ID,
 } from './dashboard/index.js';
 
 const ToolBarIcons = props => {
@@ -51,9 +51,9 @@ const ToolBarIcons = props => {
 };
 
 export default withEntitiesContainer('secinfo', {
-  dashboard2: AllSecInfoDashboard,
+  dashboard2: SecInfoDashboard,
   dashboardControls: () => (
-    <DashboardControls dashboardId={ALLSECINFO_DASHBOARD_ID}/>
+    <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>
   ),
   filterEditDialog: SecInfoFilterDialog,
   sectionIcon: 'allinfo.svg',

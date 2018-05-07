@@ -68,7 +68,7 @@ const ToolBarIcons = ({
       />
       <ListIcon
         title={_('DFN-CERT Advisories')}
-        page="dfncertadvs"
+        page="dfncerts"
       />
     </IconDivider>
     <ExportIcon
@@ -157,7 +157,7 @@ Details.propTypes = {
 const DfnCertAdvPage = props => (
   <EntityContainer
     {...props}
-    name="dfncertadv"
+    name="dfncert"
     resourceType="dfn_cert_adv"
   >
     {({
@@ -167,7 +167,7 @@ const DfnCertAdvPage = props => (
       ...cprops
     }) => (
       <EntityComponent
-        name="dfncertadv"
+        name="dfncert"
         onDownloaded={onDownloaded}
         onDownloadError={onError}
       >

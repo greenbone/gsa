@@ -767,7 +767,7 @@ class UserSettings extends React.Component {
         const id = all_possible_settings[item];
         const filter_name = this.getFilterNameById(id);
         filter_settings[item] = filter_name;
-        initial_data.allsecinfofilter = id;
+        initial_data.secinfofilter = id;
       }
       else if (item === 'Default CA Cert (immutable)') {
         const cacert = this.getValueBySettingId(CA_CERT_ID);
@@ -938,7 +938,7 @@ class UserSettings extends React.Component {
       ['OVAL Filter', initial_data.ovalfilter],
       ['CERT-Bund Filter', initial_data.certbundfilter],
       ['DFN-CERT Filter', initial_data.dfncertfilter],
-      ['All SecInfo Filter', initial_data.allsecinfofilter],
+      ['SecInfo Filter', initial_data.secinfofilter],
     ];
 
     return (
