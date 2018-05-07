@@ -62,7 +62,7 @@ const DISPLAY_ID = 'os-by-severity-class';
 OsSeverityClassDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, OsSeverityClassDisplay, {
-  title: _('Operating Systems by Severity Class'),
+  title: _('Chart: Operating Systems by Severity Class'),
 });
 
 export default OsSeverityClassDisplay;

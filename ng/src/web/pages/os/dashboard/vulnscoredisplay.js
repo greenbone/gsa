@@ -156,7 +156,7 @@ const OsVulnScoreDisplayWithRouter = withRouter(OsVulnScoreDisplay);
 OsVulnScoreDisplayWithRouter.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, OsVulnScoreDisplayWithRouter, {
-  title: _('Operating Systems by Vulnerability Score'),
+  title: _('Chart: Operating Systems by Vulnerability Score'),
 });
 
 export default OsVulnScoreDisplayWithRouter;

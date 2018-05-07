@@ -94,7 +94,7 @@ registerDisplay(OsCvssTableDisplay.displayId, OsCvssTableDisplay, {
 });
 
 registerDisplay(OsCvssDisplay.displayId, OsCvssDisplay, {
-  title: _('Operating Systems by CVSS'),
+  title: _('Chart: Operating Systems by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:
