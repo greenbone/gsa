@@ -32,7 +32,9 @@ import {
   OsSeverityClassDisplay,
   OsSeverityClassTableDisplay,
 } from './severityclassdisplay';
-import OsVulnScoreDisplay from './vulnscoredisplay';
+import {
+  OsVulnScoreDisplayWithRouter,
+  OsVulnScoreTableDisplay} from './vulnscoredisplay';
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
 
@@ -48,12 +50,13 @@ const OsDashboard = ({
       OsCvssTableDisplay.displayId,
       OsSeverityClassDisplay.displayId,
       OsSeverityClassTableDisplay.displayId,
-      OsVulnScoreDisplay.displayId,
+      OsVulnScoreDisplayWithRouter.displayId,
+      OsVulnScoreTableDisplay.displayId,
     ]}
     defaultContent={[
       [
         OsSeverityClassDisplay.displayId,
-        OsVulnScoreDisplay.displayId,
+        OsVulnScoreDisplayWithRouter.displayId,
         OsCvssDisplay.displayId,
       ],
     ]}
