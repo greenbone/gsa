@@ -33,12 +33,10 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import withDashboard from '../../components/dashboard/withDashboard.js';
 import DashboardControls from '../../components/dashboard2/controls.js';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 
-import OsCharts from './charts.js';
 import OsFilterDialog from './filterdialog.js';
 import OsTable from './table.js';
 import OsComponent from './component.js';
@@ -46,14 +44,6 @@ import OsComponent from './component.js';
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 import OsDashboard from './dashboard';
 import {OS_DASHBOARD_ID} from './dashboard/index.js';
-
-const Dashboard = withDashboard({
-  hideFilterSelect: true,
-  configPrefId: 'e93b51ed-5881-40e0-bc4f-7d3268a36177',
-  defaultControllersString: 'os-by-severity-class|os-by-most-vulnerable|' +
-    'os-by-cvss',
-  defaultControllerString: 'os-by-cvss',
-})(OsCharts);
 
 const ToolBarIcons = props => {
   return (
@@ -91,7 +81,6 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard={Dashboard}
         dashboard2={dashboardProps => (
           <OsDashboard {...dashboardProps} />
         )}

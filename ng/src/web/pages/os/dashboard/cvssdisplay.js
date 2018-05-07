@@ -28,11 +28,12 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay';  // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OsAverageSeverityLoader} from './loaders';
 
-const OsCvssDisplay = ({
+export const OsCvssDisplay = ({
   filter,
   ...props
 }) => (
@@ -58,14 +59,42 @@ OsCvssDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
-const DISPLAY_ID = 'os-by-cvss';
+OsCvssDisplay.displayId = 'os-by-cvss';
 
-OsCvssDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, OsCvssDisplay, {
-  title: _('Operating Systems by CVSS'),
+export const OsCvssTableDisplay = ({
+  filter,
+  ...props
+}) => (
+  <OsAverageSeverityLoader
+    filter={filter}
+  >
+    {loaderProps => (
+      <CvssTableDisplay
+        {...props}
+        {...loaderProps}
+        filter={filter}
+        dataTitles={[_('Severity'), _('# of Operating Systems')]}
+        title={({data: tdata = {}}) =>
+          _('Operating Systems by CVSS (Total: {{count}})',
+            {count: tdata.total})}
+      />
+    )}
+  </OsAverageSeverityLoader>
+);
+
+OsCvssTableDisplay.propTypes = {
+  filter: PropTypes.filter,
+};
+
+OsCvssTableDisplay.displayId = 'os-by-cvss-table';
+
+registerDisplay(OsCvssTableDisplay.displayId, OsCvssTableDisplay, {
+  title: _('Table: Operating Systems by CVSS'),
 });
 
-export default OsCvssDisplay;
+registerDisplay(OsCvssDisplay.displayId, OsCvssDisplay, {
+  title: _('Chart: Operating Systems by CVSS'),
+});
 
 // vim: set ts=2 sw=2 tw=80:
