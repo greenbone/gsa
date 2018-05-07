@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import Filter from 'gmp/models/filter';
 
 import dashboardData from '../reducers';
 
@@ -50,6 +51,21 @@ describe('dashboard data reducers tests', () => {
     });
   });
 
+  test('should handle request dashboard data with filter', () => {
+    const id = 'a1';
+    const filter = Filter.fromString('name=foo');
+    const action = requestDashboardData(id, filter);
+
+    expect(dashboardData({}, action)).toEqual({
+      [id]: {
+        'name=foo': {
+          isLoading: true,
+          error: null,
+        },
+      },
+    });
+  });
+
   test('should handle receive dashboard data', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
@@ -66,6 +82,23 @@ describe('dashboard data reducers tests', () => {
     });
   });
 
+  test('should handle receive dashboard data with filter', () => {
+    const id = 'a1';
+    const data = {foo: 'bar'};
+    const filter = Filter.fromString('name=foo');
+    const action = receivedDashboardData(id, data, filter);
+
+    expect(dashboardData({}, action)).toEqual({
+      [id]: {
+        'name=foo': {
+          isLoading: false,
+          data,
+          error: null,
+        },
+      },
+    });
+  });
+
   test('should handle receive dashboard error', () => {
     const id = 'a1';
     const error = 'An error occured';
@@ -74,6 +107,22 @@ describe('dashboard data reducers tests', () => {
     expect(dashboardData({}, action)).toEqual({
       [id]: {
         default: {
+          isLoading: false,
+          error,
+        },
+      },
+    });
+  });
+
+  test('should handle receive dashboard error with filter', () => {
+    const id = 'a1';
+    const error = 'An error occured';
+    const filter = Filter.fromString('name=foo');
+    const action = receivedDashboardError(id, error, filter);
+
+    expect(dashboardData({}, action)).toEqual({
+      [id]: {
+        'name=foo': {
           isLoading: false,
           error,
         },

@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import Filter from 'gmp/models/filter';
+
 import {
   DASHBOARD_DATA_LOADING_SUCCESS,
   DASHBOARD_DATA_LOADING_REQUEST,
@@ -40,6 +42,17 @@ describe('action tests', () => {
     });
   });
 
+  test('should create an action to request dashboard data with filter', () => {
+    const id = 'a1';
+    const filter = Filter.fromString('name=foo');
+
+    expect(requestDashboardData(id, filter)).toEqual({
+      id,
+      type: DASHBOARD_DATA_LOADING_REQUEST,
+      filter,
+    });
+  });
+
   test('should create an action to receive dashboard data', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
@@ -51,6 +64,19 @@ describe('action tests', () => {
     });
   });
 
+  test('should create an action to receive dashboard data with filter', () => {
+    const id = 'a1';
+    const data = {foo: 'bar'};
+    const filter = Filter.fromString('name=foo');
+
+    expect(receivedDashboardData(id, data, filter)).toEqual({
+      id,
+      data,
+      type: DASHBOARD_DATA_LOADING_SUCCESS,
+      filter,
+    });
+  });
+
   test('should create an action to receive an error', () => {
     const id = 'a1';
     const error = 'An error occured';
@@ -59,6 +85,19 @@ describe('action tests', () => {
       id,
       error,
       type: DASHBOARD_DATA_LOADING_ERROR,
+    });
+  });
+
+  test('should create an action to receive an error with filter', () => {
+    const id = 'a1';
+    const error = 'An error occured';
+    const filter = Filter.fromString('name=foo');
+
+    expect(receivedDashboardError(id, error, filter)).toEqual({
+      id,
+      error,
+      type: DASHBOARD_DATA_LOADING_ERROR,
+      filter,
     });
   });
 });
