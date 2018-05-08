@@ -15350,6 +15350,7 @@ new_note (openvas_connection_t *connection, credentials_t *credentials,
   if (openvas_connection_sendf (connection,
                                 "<get_results"
                                 " result_id=\"%s\""
+                                " get_counts=\"0\""
                                 " task_id=\"%s\""
                                 " notes_details=\"1\""
                                 " notes=\"1\""
@@ -16031,6 +16032,7 @@ new_override (openvas_connection_t *connection, credentials_t *credentials,
   if (openvas_connection_sendf (connection,
                                 "<get_results"
                                 " result_id=\"%s\""
+                                " get_counts=\"0\""
                                 " task_id=\"%s\""
                                 " notes_details=\"1\""
                                 " notes=\"1\""
