@@ -30,7 +30,7 @@ jobs:
           command: bash <(curl -s https://codecov.io/bash)
   build_gsad:
     docker:
-      - image: wiegandm/gsa-gsad-debian-stretch
+      - image: greenbone/build-env-gsa-master-debian-stretch-gcc-gsad
     steps:
       - run:
           working_directory: ~/gvm-libs
@@ -46,7 +46,7 @@ jobs:
           command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_NG=1 .. && make install
   build_ng:
     docker:
-      - image: wiegandm/gsa-ng-debian-stretch
+      - image: greenbone/build-env-gsa-master-debian-stretch-node6-ng
     steps:
       - checkout
       - restore_cache:
