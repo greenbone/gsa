@@ -147,7 +147,7 @@ export const NvtsQodTypeTableDisplay = ({
         {...props}
         {...loaderProps}
         dataTitles={[_('QoD-Type'), _('# of NVTs')]}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         dataTransform={transformQodTypeData}
         title={({data: tdata}) => _('NVTs by QoD-Type (Total: {{count}})',
           {count: tdata.total})}

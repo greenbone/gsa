@@ -142,7 +142,7 @@ export const NotesWordCloudTableDisplay = ({
         {...props}
         {...loaderProps}
         dataTransform={transformWordCountData}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         dataTitles={[
           _('Text'),
           _('Count'),

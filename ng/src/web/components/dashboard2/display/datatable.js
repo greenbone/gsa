@@ -59,7 +59,7 @@ const DataTable = ({
       </TableHeader>
       <TableBody>
         {data.map((row, i) => {
-          const rowData = rowFunc({row});
+          const rowData = rowFunc(row);
           return (
             <TableRow key={i}>
               {rowData.map((value, j) => (

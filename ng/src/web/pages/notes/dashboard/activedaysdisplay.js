@@ -206,7 +206,7 @@ export const NotesActiveDaysTableDisplay = ({
           _('Active'),
           _('# of Notes'),
         ]}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         dataTransform={transformActiveDaysData}
         title={({data: tdata}) => _('Notes by Active Days (Total: ' +
           '{{count}})', {count: tdata.total})}

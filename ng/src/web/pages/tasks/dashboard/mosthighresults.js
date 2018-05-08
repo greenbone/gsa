@@ -101,7 +101,7 @@ export class TasksMostHighResultsDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTitles={[_('Task Name'), _('Max. High per Host')]}
-            dataRow={({row}) => [row.x, row.y]}
+            dataRow={row => [row.x, row.y]}
             dataTransform={transformHighResultsData}
             title={() => _('Tasks with most High Results per Host')}
           >
@@ -147,7 +147,7 @@ export const TasksMostHighResultsTableDisplay = ({
         {...props}
         {...loaderProps}
         dataTitles={[_('Task Name'), _('Max. High per Host')]}
-        dataRow={({row}) => [row.x, row.y]}
+        dataRow={row => [row.x, row.y]}
         dataTransform={transformHighResultsData}
         title={() => _('Tasks with most High Results per Host')}
       />

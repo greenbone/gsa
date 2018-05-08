@@ -148,7 +148,7 @@ export const SecInfosTypeTableDisplay = ({
         {...props}
         {...loaderProps}
         dataTitles={[_('Type'), _('# of SecInfo Items')]}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         dataTransform={transformTypeData}
         title={({data: tdata}) => _('SecInfo Items by Type (Total: {{count}})',
           {count: tdata.total})}

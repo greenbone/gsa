@@ -87,7 +87,7 @@ export const SecInfosCreatedTableDisplay = ({
           _('# of SecInfo Items'),
           _('Total SecInfo Items'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
         title={() => _('SecInfo Items by Creation Time')}
       />

@@ -89,7 +89,7 @@ export const CpesCreatedTableDisplay = ({
           _('# of CPEs'),
           _('Total CPEs'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
         title={() => _('CPEs by Creation Time')}
       />

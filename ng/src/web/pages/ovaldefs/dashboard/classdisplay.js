@@ -111,7 +111,7 @@ export class OvaldefClassDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformClassData}
             dataTitles={[_('Class'), _('# of OVAL Definitions')]}
-            dataRow={({row}) => [row.label, row.value]}
+            dataRow={row => [row.label, row.value]}
             title={({data: tdata}) =>
               _('OVAL Definitions by Class (Total: {{count}})',
               {count: tdata.total})}
@@ -151,7 +151,7 @@ export const OvaldefClassTableDisplay = ({
         {...props}
         {...loaderProps}
         dataTitles={[_('Class'), _('# of OVAL Definitions')]}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         dataTransform={transformClassData}
         title={({data: tdata}) =>
           _('OVAL Definitions by Class (Total: {{count}})',

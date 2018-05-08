@@ -200,7 +200,7 @@ export const OverridesActiveDaysTableDisplay = ({
       <DataTableDisplay
         {...props}
         {...loaderProps}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         dataTitles={[
           _('Active'),
           _('# of Overrides'),

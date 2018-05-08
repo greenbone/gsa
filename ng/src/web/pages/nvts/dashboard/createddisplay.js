@@ -87,7 +87,7 @@ export const NvtsCreatedTableDisplay = ({
           _('# of NVTs'),
           _('Total NVTs'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
         title={() => _('NVTs by Creation Time')}
       />

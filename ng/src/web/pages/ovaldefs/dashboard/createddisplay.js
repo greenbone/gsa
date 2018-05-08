@@ -88,7 +88,7 @@ export const OvaldefsCreatedTableDisplay = ({
           _('# of OVAL Definitions'),
           _('Total OVAL Definitions'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
         title={() => _('OVAL Definitions by Creation Time')}
       />
