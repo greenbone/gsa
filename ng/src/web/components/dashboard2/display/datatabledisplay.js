@@ -40,9 +40,9 @@ const DataTableDisplay = ({
   >
     {({data}) => (
       <DataTable
-        header={dataTitles}
         data={data}
-        row={dataRow}
+        dataRow={dataRow}
+        dataTitles={dataTitles}
       />
     )}
   </DataDisplay>

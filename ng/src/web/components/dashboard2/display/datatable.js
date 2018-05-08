@@ -42,15 +42,15 @@ const Margin = glamorous.div({
 });
 
 const DataTable = ({
-  header = [],
+  dataTitles = [],
   data = [],
-  row: rowFunc,
+  dataRow: rowFunc,
 }) => (
   <Margin>
     <Table>
       <TableHeader>
         <TableRow>
-          {header.map((head, i) => (
+          {dataTitles.map((head, i) => (
             <TableHead key={i}>
               {head}
             </TableHead>
@@ -77,8 +77,8 @@ const DataTable = ({
 
 DataTable.propTypes = {
   data: PropTypes.array,
-  header: PropTypes.arrayOf(PropTypes.string),
-  row: PropTypes.func.isRequired,
+  dataRow: PropTypes.func.isRequired,
+  dataTitles: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default DataTable;
