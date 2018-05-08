@@ -240,7 +240,7 @@ class DataDisplay extends React.Component {
     } = this.props;
     const {
       children,
-      menu,
+      menuEntries = [],
       id,
       dataTitles,
       dataRow,
@@ -260,8 +260,9 @@ class DataDisplay extends React.Component {
     return (
       <Display
         menu={
-          showDataMenus || hasSvg ?
+          showDataMenus || hasSvg || menuEntries.length > 0 ?
             <DisplayMenu>
+              {menuEntries}
               {hasSvg &&
                 <MenuEntry onClick={this.handleOpenCopyableSvg}>
                   {_('Show copyable SVG')}
@@ -309,7 +310,7 @@ DataDisplay.propTypes = {
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
-  menu: PropTypes.element,
+  menuEntries: PropTypes.arrayOf(PropTypes.element),
   title: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,
