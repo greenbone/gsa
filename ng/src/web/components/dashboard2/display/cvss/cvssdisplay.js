@@ -108,6 +108,7 @@ class CvssDisplay extends React.Component {
       title,
       yLabel,
       xLabel = _('Severity'),
+      onFilterChanged,
       ...props
     } = this.props;
     return (
@@ -125,7 +126,8 @@ class CvssDisplay extends React.Component {
             data={data}
             xLabel={xLabel}
             yLabel={yLabel}
-            onDataClick={this.handleDataClick}
+            onDataClick={is_defined(onFilterChanged) ?
+              this.handleDataClick : undefined}
           />
         )}
       </DataDisplay>
@@ -138,7 +140,7 @@ CvssDisplay.propTypes = {
   title: PropTypes.func.isRequired,
   xLabel: PropTypes.string,
   yLabel: PropTypes.string,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
 
 export default CvssDisplay;
