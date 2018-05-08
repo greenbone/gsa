@@ -39,6 +39,15 @@ import {
 
 export const REPORTS_DASHBOARD_ID = 'e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071';
 
+export const REPORTS_DISPLAYS = [
+  ReportsCvssDisplay.displayId,
+  ReportsHighResultsDisplay.displayId,
+  ReportsSeverityDisplay.displayId,
+  ReportsCvssTableDisplay.displayId,
+  ReportsHighResultsTableDisplay.displayId,
+  ReportsSeverityTableDisplay.displayId,
+];
+
 const ReportsDashboard = ({
   filter,
   onFilterChanged,
@@ -46,14 +55,7 @@ const ReportsDashboard = ({
   <Dashboard
     id={REPORTS_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      ReportsCvssDisplay.displayId,
-      ReportsHighResultsDisplay.displayId,
-      ReportsSeverityDisplay.displayId,
-      ReportsCvssTableDisplay.displayId,
-      ReportsHighResultsTableDisplay.displayId,
-      ReportsSeverityTableDisplay.displayId,
-    ]}
+    permittedDisplays={REPORTS_DISPLAYS}
     defaultContent={[
       [
         ReportsSeverityDisplay.displayId,

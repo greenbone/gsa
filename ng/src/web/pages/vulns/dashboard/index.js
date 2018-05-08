@@ -36,6 +36,15 @@ import {
 
 export const VULNS_DASHBOARD_ID = '43690dcb-3174-4d84-aa88-58c1936c7f5c';
 
+export const VULNS_DISPLAYS = [
+  VulnsCvssDisplay.displayId,
+  VulnsHostsDisplay.displayId,
+  VulnsSeverityDisplay.displayId,
+  VulnsCvssTableDisplay.displayId,
+  VulnsSeverityTableDisplay.displayId,
+  VulnsHostsTableDisplay.displayId,
+];
+
 const VulnerabilitiesDashboard = ({
   filter,
   onFilterChanged,
@@ -43,14 +52,7 @@ const VulnerabilitiesDashboard = ({
   <Dashboard
     id={VULNS_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      VulnsCvssDisplay.displayId,
-      VulnsHostsDisplay.displayId,
-      VulnsSeverityDisplay.displayId,
-      VulnsCvssTableDisplay.displayId,
-      VulnsSeverityTableDisplay.displayId,
-      VulnsHostsTableDisplay.displayId,
-    ]}
+    permittedDisplays={VULNS_DISPLAYS}
     defaultContent={[
       [
         VulnsCvssDisplay.displayId,

@@ -43,6 +43,17 @@ import {
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
 
+export const RESULTS_DISPLAYS = [
+  ResultsCvssDisplay.displayId,
+  ResultsDescriptionWordCloudDisplay.displayId,
+  ResultsSeverityDisplay.displayId,
+  ResultsWordCloudDisplay.displayId,
+  ResultsCvssTableDisplay.displayId,
+  ResultsDescriptionWordCloudTableDisplay.displayId,
+  ResultsSeverityTableDisplay.displayId,
+  ResultsWordCloudTableDisplay.displayId,
+];
+
 const ResultsDashboard = ({
   filter,
   onFilterChanged,
@@ -50,16 +61,7 @@ const ResultsDashboard = ({
   <Dashboard
     id={RESULTS_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      ResultsCvssDisplay.displayId,
-      ResultsDescriptionWordCloudDisplay.displayId,
-      ResultsSeverityDisplay.displayId,
-      ResultsWordCloudDisplay.displayId,
-      ResultsCvssTableDisplay.displayId,
-      ResultsDescriptionWordCloudTableDisplay.displayId,
-      ResultsSeverityTableDisplay.displayId,
-      ResultsWordCloudTableDisplay.displayId,
-    ]}
+    permittedDisplays={RESULTS_DISPLAYS}
     defaultContent={[
       [
         ResultsSeverityDisplay.displayId,

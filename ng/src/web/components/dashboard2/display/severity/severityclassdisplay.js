@@ -95,6 +95,7 @@ class SeverityClassDisplay extends React.Component {
 
   render() {
     const {
+      onFilterChanged,
       ...props
     } = this.props;
     return (
@@ -108,8 +109,10 @@ class SeverityClassDisplay extends React.Component {
             width={width}
             height={height}
             data={data}
-            onDataClick={this.handleDataClick}
-            onLegendItemClick={this.handleDataClick}
+            onDataClick={is_defined(onFilterChanged) ?
+              this.handleDataClick : undefined}
+            onLegendItemClick={is_defined(onFilterChanged) ?
+              this.handleDataClick : undefined}
           />
         )}
       </DataDisplay>
@@ -121,7 +124,7 @@ SeverityClassDisplay.propTypes = {
   filter: PropTypes.filter,
   severityClass: PropTypes.severityClass,
   title: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
 
 export default SeverityClassDisplay;

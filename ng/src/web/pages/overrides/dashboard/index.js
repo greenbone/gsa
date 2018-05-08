@@ -42,6 +42,15 @@ import {
 
 export const OVERRIDES_DASHBOARD_ID = '054862fe-0781-4527-b1aa-2113bcd16ce7';
 
+export const OVERRIDES_DISPLAYS = [
+  OverridesActiveDaysDisplay.displayId,
+  OverridesCreatedDisplay.displayId,
+  OverridesWordCloudDisplay.displayId,
+  OverridesActiveDaysTableDisplay.displayId,
+  OverridesCreatedTableDisplay.displayId,
+  OverridesWordCloudTableDisplay.displayId,
+];
+
 const OverridesDashboard = ({
   filter,
   onFilterChanged,
@@ -49,14 +58,7 @@ const OverridesDashboard = ({
   <Dashboard
     id={OVERRIDES_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      OverridesActiveDaysDisplay.displayId,
-      OverridesCreatedDisplay.displayId,
-      OverridesWordCloudDisplay.displayId,
-      OverridesActiveDaysTableDisplay.displayId,
-      OverridesCreatedTableDisplay.displayId,
-      OverridesWordCloudTableDisplay.displayId,
-    ]}
+    permittedDisplays={OVERRIDES_DISPLAYS}
     defaultContent={[
       [
         OverridesActiveDaysDisplay.displayId,
