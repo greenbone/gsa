@@ -26,10 +26,13 @@ import ReactDOM from 'react-dom';
 
 import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
+import {is_defined} from 'gmp/utils/identity';
 
-import Wrapper from '../layout/wrapper.js';
+import PropTypes from '../../utils/proptypes';
+import Theme from '../../utils/theme';
+
+import Wrapper from '../layout/wrapper';
+import withSubscription from '../../utils/withSubscription';
 
 const Placeholder = glamorous.div(
   ({isSticky, height}) => (
@@ -68,15 +71,15 @@ class Sticky extends React.Component {
   }
 
   componentWillMount() {
-    const {subscribe} = this.context;
+    const {subscribe} = this.props;
 
-    subscribe(this.handleContainerEvent);
+    this.unsubscribe = subscribe('sticky.changed', this.handleContainerEvent);
   }
 
   componentWillUnmount() {
-    const {unsubscribe} = this.context;
-
-    unsubscribe(this.handleContainerEvent);
+    if (is_defined(this.unsubscribe)) {
+      this.unsubscribe();
+    }
   }
 
   handleContainerEvent({
@@ -155,15 +158,10 @@ class Sticky extends React.Component {
 
 Sticky.propTypes = {
   bottomOffset: PropTypes.number,
+  subscribe: PropTypes.func.isRequired,
   topOffset: PropTypes.number,
 };
 
-Sticky.contextTypes = {
-  subscribe: PropTypes.func.isRequired,
-  unsubscribe: PropTypes.func.isRequired,
-};
-
-
-export default Sticky;
+export default withSubscription(Sticky);
 
 // vim: set ts=2 sw=2 tw=80:
