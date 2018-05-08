@@ -39,6 +39,15 @@ import {
 
 export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4';
 
+export const NOTES_DISPLAYS = [
+  NotesActiveDaysDisplay.displayId,
+  NotesCreatedDisplay.displayId,
+  NotesWordCloudDisplay.displayId,
+  NotesActiveDaysTableDisplay.displayId,
+  NotesCreatedTableDisplay.displayId,
+  NotesWordCloudTableDisplay.displayId,
+];
+
 const NotesDashboard = ({
   filter,
   onFilterChanged,
@@ -46,14 +55,7 @@ const NotesDashboard = ({
   <Dashboard
     id={NOTES_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      NotesActiveDaysDisplay.displayId,
-      NotesCreatedDisplay.displayId,
-      NotesWordCloudDisplay.displayId,
-      NotesActiveDaysTableDisplay.displayId,
-      NotesCreatedTableDisplay.displayId,
-      NotesWordCloudTableDisplay.displayId,
-    ]}
+    permittedDisplays={NOTES_DISPLAYS}
     defaultContent={[
       [
         NotesActiveDaysDisplay.displayId,

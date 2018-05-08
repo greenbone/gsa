@@ -50,6 +50,21 @@ import {
 
 export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
 
+export const TASKS_DISPLAYS = [
+  TasksStatusDisplay.displayId,
+  TasksSeverityDisplay.displayId,
+  TasksSchedulesDisplay.displayId,
+  TasksCvssDisplay.displayId,
+  TasksMostHighResultsDisplay.displayId,
+  TasksHighResultsDisplay.displayId,
+  TasksSeverityTableDisplay.displayId,
+  TasksCvssTableDisplay.displayId,
+  TasksStatusTableDisplay.displayId,
+  TasksSchedulesTableDisplay.displayId,
+  TasksHighResultsTableDisplay.displayId,
+  TasksMostHighResultsTableDisplay.displayId,
+];
+
 const TaskDashboard = ({
   filter,
   onFilterChanged,
@@ -57,20 +72,7 @@ const TaskDashboard = ({
   <Dashboard
     id={TASK_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      TasksStatusDisplay.displayId,
-      TasksSeverityDisplay.displayId,
-      TasksSchedulesDisplay.displayId,
-      TasksCvssDisplay.displayId,
-      TasksMostHighResultsDisplay.displayId,
-      TasksHighResultsDisplay.displayId,
-      TasksSeverityTableDisplay.displayId,
-      TasksCvssTableDisplay.displayId,
-      TasksStatusTableDisplay.displayId,
-      TasksSchedulesTableDisplay.displayId,
-      TasksHighResultsTableDisplay.displayId,
-      TasksMostHighResultsTableDisplay.displayId,
-    ]}
+    permittedDisplays={TASKS_DISPLAYS}
     defaultContent={[
       [
         TasksSeverityDisplay.displayId,
