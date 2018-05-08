@@ -41,8 +41,21 @@ import {loadSettings, saveSettings} from './settings/actions.js';
 import DashboardSettings from './settings/selectors.js';
 
 import {getDisplay} from './registry';
+import {exclude_object_props} from 'gmp/utils/index.js';
 
 const log = Logger.getLogger('web.components.dashboard');
+
+const ownPropNames = [
+  'defaultContent',
+  'gmp',
+  'id',
+  'items',
+  'loadSettings',
+  'maxItemsPerRow',
+  'maxRows',
+  'permittedDisplays',
+  'saveSettings',
+];
 
 const convertDefaultContent = defaultContent =>
   defaultContent.map(row => createRow(
@@ -131,10 +144,10 @@ class Dashboard extends React.Component {
     const {
       maxItemsPerRow,
       maxRows,
-      filter,
-      onFilterChanged,
+      ...props
     } = this.props;
 
+    const other = exclude_object_props(props, ownPropNames);
     return (
       <Grid
         items={has_value(items) ? items : []}
@@ -142,18 +155,17 @@ class Dashboard extends React.Component {
         maxRows={maxRows}
         onChange={this.handleItemsChange}
       >
-        {({dragHandleProps, id, props, height, width, remove}) => {
-          const {name} = props;
+        {({dragHandleProps, id, props: itemProps, height, width, remove}) => {
+          const {name} = itemProps;
           const Component = this.components[name];
           return is_defined(Component) ? (
             <Component
-              filter={filter}
+              {...other}
               dragHandleProps={dragHandleProps}
               height={height}
               width={width}
               id={id}
               onRemoveClick={remove}
-              onFilterChanged={onFilterChanged}
             />
           ) : null;
         }}
