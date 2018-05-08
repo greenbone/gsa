@@ -174,7 +174,7 @@ export const ReportsHighResultsTableDisplay = ({
           _('Max High'),
           _('Max High per Host'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         filter={filter}
         title={({data: tdata}) =>
           _('Reports with High Results')}

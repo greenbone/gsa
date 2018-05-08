@@ -89,7 +89,7 @@ export const DfnCertsCreatedTableDisplay = ({
           _('# of DFN-CERT Advisories'),
           _('Total DFN-CERT Advisories'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
         title={() => _('DFN-CERT Advisories by Creation Time')}
       />

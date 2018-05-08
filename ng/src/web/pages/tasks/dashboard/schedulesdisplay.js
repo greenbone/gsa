@@ -97,7 +97,7 @@ export const TasksSchedulesTableDisplay = ({
         {...props}
         {...loaderProps}
         dataTitles={[_('Task Name'), _('Next Schedule Time')]}
-        dataRow={({row}) => [row.label, datetime(row.start)]}
+        dataRow={row => [row.label, datetime(row.start)]}
         dataTransform={transformScheduleData}
         title={() => _('Next Scheduled Tasks')}
       />

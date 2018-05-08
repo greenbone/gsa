@@ -146,7 +146,7 @@ export const ResultsDescriptionWordCloudTableDisplay = ({
           _('Description'),
           _('Word Count'),
         ]}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         title={({data: tdata}) =>
           _('Results Description Word Cloud')}
       />

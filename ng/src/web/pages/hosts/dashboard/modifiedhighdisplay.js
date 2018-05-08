@@ -195,7 +195,7 @@ export const HostsModifiedHighTableDisplay = ({
           _('# of Modified Hosts (High)'),
           _('Total Hosts (High)'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
       />
     )}
   </HostsModifiedLoader>

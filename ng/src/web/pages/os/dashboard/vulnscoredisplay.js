@@ -122,7 +122,7 @@ export class OsVulnScoreDisplay extends React.Component {
               _('Operating System Name'),
               _('Max. Average Severity Score'),
             ]}
-            dataRow={({row}) => [row.x, row.y]}
+            dataRow={row => [row.x, row.y]}
             title={() => _('Most Vulnerable Operating Systems')}
           >
             {({width, height, data: tdata, svgRef}) => (
@@ -170,7 +170,7 @@ export const OsVulnScoreTableDisplay = ({
           _('Operating Sytem Name'),
           _('Max. Average Severity Score'),
         ]}
-        dataRow={({row}) => [row.x, row.y]}
+        dataRow={row => [row.x, row.y]}
         dataTransform={transformVulnScoreData}
         title={({data: tdata}) => _('Most Vulnerable Operating Systems')}
       />

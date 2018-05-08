@@ -89,7 +89,7 @@ export const CvesCreatedTableDisplay = ({
           _('# of CVEs'),
           _('Total CVEs'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
         title={() => _('CVEs by Creation Time')}
       />

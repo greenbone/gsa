@@ -148,7 +148,7 @@ export const NvtsQodTableDisplay = ({
         {...props}
         {...loaderProps}
         dataTitles={[_('QoD'), _('# of NVTs')]}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         dataTransform={transformQodData}
         title={({data: tdata}) => _('NVTs by QoD (Total: {{count}})',
           {count: tdata.total})}
